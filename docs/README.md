@@ -75,6 +75,67 @@ export const Default: Story = () => {
 
 **Note**: Some components might need to connect with Polkadot.js extension. However, the extension API can't be accessed inside storybook's iframe ([example story](/packages/ui/src/accounts/components/SelectAccount/SelectAccount.stories.tsx) that renders warning).
 
+### Tests
+
+Pioneer 2 use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](#query-node-mocks) uses the same setup as the front-end mocks.
+
+#### Polkadot.js API stubs
+
+In order to ease stubbing Polkadot.js API there is a bunch of testing utilities to stub common responses or states:
+
+The most common one is `stubTransction` with helpers to simulate transaction success or failure:
+
+```ts
+import { stubTransactionSuccess } from 'ui/test/_mocks/transactions'
+const api = stubApi()
+
+let transaction: any
+
+beforeEach(() => {
+  // This exposes `tx.balances.transfer` on the api stub.
+  transaction = stubTransaction(api, 'api.tx.balances.transfer')
+})
+
+describe('Transaciton', () => {
+it('Success', () => {
+    stubTransactionSuccess(transaction)
+    // ...
+  })
+
+  it('Data in success events', () => {
+    stubTransactionSuccess(transaction, [createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+    // ...
+  })
+
+  it('Failure', () => {
+    stubTransactionFailure(transfer)
+    // ...
+  })
+})
+```
+
+The other stubs helps with creating balances, `api.query.*` responses, etc.
+
+#### Specific helpers
+
+- To interact with dropdowns use `selectFromDropdown()` helper
+- To interact with Pioneer 2 buttons use `getButton()` test helper which is optimized for [test speed](#slow-tests).
+- Don't run the CKEditor inside tests (JSDom is not fully compatible with contenteditable)
+  ```ts
+  jest.mock('@/common/components/CKEditor', () => ({
+    CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  }))
+
+  describe('Component with CKEditor inside', () => {})
+  ```
+
+#### Slow tests
+
+If you experience a slow test:
+
+- Reduce number of mocked data. The default `seedEntity()` methods loads all the date (with related tables) while most of the tests needs only one or two entities.
+- Look out for `*ByRole()` queries as they are way slower than `*ByText()` or `*ByTestId()` (we use `id` as test-id attribute).
+
 ## CI & integration
 
 The repository has enabled the continuous integration for every commit that lands on `main` as well as for every PR:
