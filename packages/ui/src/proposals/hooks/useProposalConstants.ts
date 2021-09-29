@@ -6,7 +6,7 @@ import { asProposalConstants, ProposalConstants } from '@/proposals/types/consta
 
 import { ProposalType } from '../types'
 
-export const useConstants = (proposalType?: ProposalType): ProposalConstants | null => {
+export const useProposalConstants = (proposalType?: ProposalType): ProposalConstants | null => {
   const { api, isConnected } = useApi()
 
   return useMemo(() => {
