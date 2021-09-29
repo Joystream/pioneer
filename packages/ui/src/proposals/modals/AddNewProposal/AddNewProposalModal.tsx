@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
@@ -51,12 +52,14 @@ import {
 } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants, ProposalType } from '@/proposals/types'
 
+import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
+
 export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
 
-const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
+const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
@@ -69,6 +72,11 @@ export const AddNewProposalModal = () => {
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const transactionsSteps = useMemo(
+    () =>
+      state.context.discussionMode === 'closed' ? [...minimalSteps, { title: 'Set discussion mode' }] : minimalSteps,
+    [state.context.discussionMode]
+  )
 
   const txBaseParams: BaseProposalParams = {
     member_id: activeMember?.id,
@@ -209,6 +217,27 @@ export const AddNewProposalModal = () => {
         signer={activeMember.controllerAccount}
         stake={constants?.requiredStake as BN}
         service={state.children['transaction']}
+        steps={transactionsSteps}
+      />
+    )
+  }
+
+  if (state.matches('discussionTransaction')) {
+    const threadMode = createType('ThreadMode', {
+      closed: state.context.discussionWhitelist.map((member) => createType('MemberId', Number.parseInt(member.id))),
+    })
+    const transaction = api.tx.proposalsDiscussion.changeThreadMode(
+      activeMember.id,
+      state.context.discussionId,
+      threadMode
+    )
+
+    return (
+      <SignModeChangeTransaction
+        onClose={hideModal}
+        transaction={transaction}
+        signer={activeMember.controllerAccount}
+        service={state.children.discussionTransaction}
         steps={transactionsSteps}
       />
     )
