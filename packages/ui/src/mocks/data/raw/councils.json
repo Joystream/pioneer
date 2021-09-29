@@ -1,22 +1,27 @@
 [
   {
     "id": "0",
-    "endedAtBlock": null
+    "electedAtBlock": 490470,
+    "endedAtBlock": 113294
   },
   {
     "id": "1",
-    "endedAtBlock": null
+    "electedAtBlock": 923319,
+    "endedAtBlock": 616712
   },
   {
     "id": "2",
-    "endedAtBlock": null
+    "electedAtBlock": 126117,
+    "endedAtBlock": 332052
   },
   {
     "id": "3",
+    "electedAtBlock": 620474,
     "endedAtBlock": null
   },
   {
     "id": "4",
+    "electedAtBlock": 957055,
     "endedAtBlock": null
   }
 ]

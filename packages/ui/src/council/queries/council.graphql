@@ -12,6 +12,7 @@ fragment CouncilMemberFields on CouncilMember {
 
 fragment ElectedCouncilsFields on ElectedCouncil {
   id
+  electedAtBlock
   councilMembers {
     ...CouncilMemberFields
   }

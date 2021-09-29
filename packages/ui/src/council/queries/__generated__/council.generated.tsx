@@ -18,6 +18,7 @@ export type CouncilMemberFieldsFragment = {
 export type ElectedCouncilsFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
+  electedAtBlock: number
   councilMembers: Array<{ __typename: 'CouncilMember' } & CouncilMemberFieldsFragment>
 }
 
@@ -86,6 +87,7 @@ export const CouncilMemberFieldsFragmentDoc = gql`
 export const ElectedCouncilsFieldsFragmentDoc = gql`
   fragment ElectedCouncilsFields on ElectedCouncil {
     id
+    electedAtBlock
     councilMembers {
       ...CouncilMemberFields
     }
