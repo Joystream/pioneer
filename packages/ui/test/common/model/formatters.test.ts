@@ -5,6 +5,7 @@ import {
   durationFormater,
   formatBlocksToDuration,
   formatDateString,
+  formatNumber,
   formatTokenValue,
   shortenAddress,
 } from '@/common/model/formatters'
@@ -20,6 +21,14 @@ describe('formatters', () => {
       expect(formatTokenValue(new BN('100000'))).toBe('100,000')
       expect(formatTokenValue(new BN('1000000'))).toBe('1,000,000')
       expect(formatTokenValue(new BN('12345678912345679'))).toBe('12,345,678,912,345,679')
+    })
+  })
+
+  describe('formatNumber', () => {
+    it('Default', () => {
+      expect(formatNumber(123456789)).toBe('123,456,789')
+      expect(formatNumber(0)).toBe('0')
+      expect(formatNumber(NaN)).toBe('-')
     })
   })
 

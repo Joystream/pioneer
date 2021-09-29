@@ -9,6 +9,8 @@ export const formatTokenValue = (value: BN | number | undefined) => {
   return new BN(value || 0).toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')
 }
 
+export const formatNumber = (value: number): string => (Number.isNaN(value) ? '-' : value.toLocaleString('en'))
+
 export function shortenAddress(address: string, length = 18) {
   return length >= address.length
     ? address

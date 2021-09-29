@@ -4,7 +4,9 @@ import styled from 'styled-components'
 
 import { TextInlineBig, TextBig } from '@/common/components/typography'
 import { Fonts } from '@/common/constants'
-import { parseNumber, plural } from '@/common/helpers'
+import { plural } from '@/common/helpers'
+import { formatNumber } from '@/common/model/formatters'
+import { toNumber } from '@/common/utils'
 
 import { StatisticItem, StatisticItemProps, StatisticItemSpacedContent, StatisticLabel } from './StatisticItem'
 import { TotalValue } from './TokenValueStat'
@@ -32,12 +34,14 @@ export const MultiValueStat = ({ title, values }: MultiTokenValueStatProps) => (
 
 const StatisticValue = ({ type, value }: Omit<LabelledValue, 'label'>) => {
   switch (type) {
-    case 'blocks':
+    case 'blocks': {
+      const blocks = toNumber(value)
       return (
         <BlocksValue>
-          {parseNumber(value)} <TextInlineBig lighter>block{plural(value)}</TextInlineBig>
+          {formatNumber(blocks)} <TextInlineBig lighter>block{plural(blocks)}</TextInlineBig>
         </BlocksValue>
       )
+    }
 
     case 'token':
     default:
