@@ -35,3 +35,22 @@ The common and domain specific code is split by functionality:
 * `types` - TypeScript types
 * `providers` - React context providers
 
+## Concepts
+
+Most of the Pioneer 2 uses common React app coding patterns. Some however, requires additional explanation.
+
+### Modals
+
+The modals can be created as:
+- locally included component
+- or by requesting to show a global modal using `useModal()` hook:
+
+The global modals should be included in `<GlobalModals />` component. After that can be instantiated from anywhere in the app.
+
+#### Modals with steps
+
+Some modal's flows require a complex state handling. For those the Pioneer 2 app uses transitions defined by xstate.
+
+A helper machine is used for any substrate transactions
+
+![img.png](docs/assets/transaction-machine.png)
