@@ -32,6 +32,49 @@ yarn lint
 yarn lint:fix
 ```
 
+## Tests
+
+The testing strategy involves two stages:
+1. storybook for simple components & manual tests
+2. automated tests for business logic
+
+### The storybook
+
+The project's [storybook](https://storybook.js.org/) is build by the CI and available at [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
+
+To run the local instance (project root or `packages/ui` directory):
+
+```bash
+yarn run storybook
+```
+
+For more complex components, the stories might [query-node mocks](#query-node-mocks) in order to fetch data.
+
+Example story that uses query-node mocks to fetch `members` data:
+
+```tsx
+import { Meta, Story } from '@storybook/react'
+import React from 'react'
+
+import { ComplexComponent } from '@/foo/bar/components/ComplexComponent'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
+export default {
+  title: 'ComplexComponent',
+  component: ComplexComponent,
+} as Meta
+
+export const Default: Story = () => {
+  return (
+    <MockApolloProvider members>
+      <ComplexComponent />
+    </MockApolloProvider>
+  )
+}
+```
+
+**Note**: Some components might need to connect with Polkadot.js extension. However, the extension API can't be accessed inside storybook's iframe ([example story](/packages/ui/src/accounts/components/SelectAccount/SelectAccount.stories.tsx) that renders warning).
+
 ## CI & integration
 
 The repository has enabled the continuous integration for every commit that lands on `main` as well as for every PR:
