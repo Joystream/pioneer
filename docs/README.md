@@ -14,11 +14,26 @@ In order to interact with the Joystream ecostystem
 
 ## Tech stack
 
-The Pioneer 2.0 is build using the latest version of React. The React development assumes:
+The Pioneer 2.0 is build using the latest version of [React](https://reactjs.org/). The React development assumes:
 
-- TypeScript
-- Function components
-- styled components for CSS
+- [TypeScript](https://www.typescriptlang.org/) 4.x –
+- Function components & [hooks](https://reactjs.org/docs/hooks-intro.html)
+- [styled components](https://styled-components.com/docs) for CSS
+
+Libraries
+
+- [Apollo client](https://www.apollographql.com/docs/react/) - to interact with GraphQL
+- [CKEditor 5](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/overview.html) as Markdown editor
+- [xstate](https://xstate.js.org/) state management for complex flows in modals
+- [Yup](https://github.com/jquense/yup#api) validation (partially)
+- [date-fns](https://date-fns.org/docs/Getting-Started) to interact with dates
+- React libraries for: routing, pagination, breadcrumbs, dropzone, etc (see package.json)
+
+### Build tools
+
+The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc).
+
+As the Storybook uses Babel a [shared webpack configuration](packages/ui/dev/webpack.shared.js) for both webpack and storybook was introduced.
 
 ## Coding standards
 
@@ -32,11 +47,12 @@ yarn lint
 yarn lint:fix
 ```
 
-## Tests
+## Testing
 
-The testing strategy involves two stages:
-1. storybook for simple components & manual tests
-2. automated tests for business logic
+The testing strategy:
+
+1. [storybook](#the-storybook) for simple components & manual tests
+2. [automated tests](#integration-tests) for business logic
 
 ### The storybook
 
@@ -75,7 +91,7 @@ export const Default: Story = () => {
 
 **Note**: Some components might need to connect with Polkadot.js extension. However, the extension API can't be accessed inside storybook's iframe ([example story](/packages/ui/src/accounts/components/SelectAccount/SelectAccount.stories.tsx) that renders warning).
 
-### Tests
+### Integration tests
 
 Pioneer 2 use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](#query-node-mocks) uses the same setup as the front-end mocks.
 
@@ -303,8 +319,7 @@ After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:
 
 ## Dependencies
 
-The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details.
-
+The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
 # Tips & Tricks
 
 ## Connecting to the Joystream node using Polkadot app wallet
