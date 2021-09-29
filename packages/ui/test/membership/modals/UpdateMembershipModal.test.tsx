@@ -11,7 +11,7 @@ import { UpdateMembershipModal } from '../../../src/memberships/modals/UpdateMem
 import { Member } from '../../../src/memberships/types'
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
-import { toBalanceOf } from '../../_mocks/chainTypes'
+import { createBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -54,7 +54,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
   beforeEach(() => {
     stubDefaultBalances(api)
-    set(api, 'api.query.members.membershipPrice', () => of(toBalanceOf(100)))
+    set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     stubTransaction(api, 'api.tx.members.updateProfile')
     stubTransaction(api, 'api.tx.members.updateAccounts')

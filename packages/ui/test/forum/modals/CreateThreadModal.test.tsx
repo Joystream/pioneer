@@ -13,7 +13,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
 import { getButton } from '../../_helpers/getButton'
-import { toBalanceOf } from '../../_mocks/chainTypes'
+import { createBalanceOf } from '../../_mocks/chainTypes'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
@@ -37,8 +37,8 @@ describe('CreateThreadModal', () => {
   let tx = {}
   let pathname: string
   const stubDeposits = (values?: { post?: number; thread?: number }) => {
-    stubConst(api, 'forum.postDeposit', toBalanceOf(values?.post ?? 10))
-    stubConst(api, 'forum.threadDeposit', toBalanceOf(values?.thread ?? 10))
+    stubConst(api, 'forum.postDeposit', createBalanceOf(values?.post ?? 10))
+    stubConst(api, 'forum.threadDeposit', createBalanceOf(values?.thread ?? 10))
   }
 
   const useModal: UseModal<any> = {
