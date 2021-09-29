@@ -1,19 +1,22 @@
+import { map } from 'rxjs'
+
 import { useApi } from '@/common/hooks/useApi'
-import { useCouncilStatisticsQuery } from '@/council/queries'
+import { useObservable } from '@/common/hooks/useObservable'
 
 export const useCouncilStatistics = () => {
-  const { api } = useApi()
-  const { loading, data } = useCouncilStatisticsQuery()
+  const { api, connectionState } = useApi()
+
+  const councilSize = api?.consts.council.councilSize
+  const reward = api?.query.council.councilorReward().pipe(map((councilorReward) => councilSize?.mul(councilorReward)))
 
   return {
-    isLoading: loading,
     budget: {
-      amount: data?.budgetSetEvents[0]?.newBudget,
-      PERIOD_LENGTHS: api?.consts.council.budgetRefillPeriod,
+      amount: useObservable(api?.query.council.budget(), [connectionState]),
+      refillPeriod: api?.consts.council.budgetRefillPeriod,
     },
     reward: {
-      amount: data?.councilorRewardUpdatedEvents[0]?.rewardAmount,
-      PERIOD_LENGTHS: api?.consts.council.electedMemberRewardPeriod,
+      amount: useObservable(reward, [connectionState]),
+      period: api?.consts.council.electedMemberRewardPeriod,
     },
   }
 }

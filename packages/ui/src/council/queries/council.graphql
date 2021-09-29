@@ -43,12 +43,3 @@ query GetCurrentElection {
     ...ElectionRoundFields
   }
 }
-
-query CouncilStatistics {
-  budgetSetEvents(orderBy: [createdAt_DESC], limit: 1) {
-    newBudget
-  }
-  councilorRewardUpdatedEvents(orderBy: [createdAt_ASC], limit: 1) {
-    rewardAmount
-  }
-}

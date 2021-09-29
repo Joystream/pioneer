@@ -37,14 +37,14 @@ export const Council = () => {
           title="Budget"
           values={[
             { label: 'Amount', value: budget.amount },
-            { label: 'Period length', value: budget.PERIOD_LENGTHS, type: 'blocks' },
+            { label: 'Period length', value: budget.refillPeriod, type: 'blocks' },
           ]}
         />
         <MultiValueStat
           title="Councilor Reward"
           values={[
             { label: 'Amount', value: reward.amount },
-            { label: 'Period length', value: reward.PERIOD_LENGTHS, type: 'blocks' },
+            { label: 'Period length', value: reward.period, type: 'blocks' },
           ]}
         />
       </Statistics>
