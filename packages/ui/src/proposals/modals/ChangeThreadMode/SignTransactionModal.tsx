@@ -1,6 +1,5 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { ActorRef } from 'xstate'
 
@@ -61,7 +60,7 @@ export const SignTransactionModal = ({ onClose, transaction, signer, service, st
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
-          Sign transaction and Create
+          Sign transaction and change mode
         </ButtonPrimary>
       </ModalFooter>
     </TransactionModal>

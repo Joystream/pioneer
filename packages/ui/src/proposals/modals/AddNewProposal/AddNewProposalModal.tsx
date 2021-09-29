@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
@@ -61,6 +62,8 @@ const isLastStepActive = (steps: Step[]) => {
   return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
 }
 
+const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
+
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
@@ -74,9 +77,7 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
   const transactionsSteps = useMemo(
     () =>
-      state.context.discussionMode === 'closed'
-        ? [{ title: 'Bind account for staking' }, { title: 'Create proposal' }, { title: 'Set discussion mode' }]
-        : [{ title: 'Bind account for staking' }, { title: 'Create proposal' }],
+      state.context.discussionMode === 'closed' ? [...minimalSteps, { title: 'Set discussion mode' }] : minimalSteps,
     [state.context.discussionMode]
   )
 
@@ -86,10 +87,6 @@ export const AddNewProposalModal = () => {
     description: state.context.rationale,
     ...(state.context.stakingAccount ? { staking_account_id: state.context.stakingAccount.address } : {}),
     ...(state.context.triggerBlock ? { exact_execution_block: state.context.triggerBlock } : {}),
-  }
-  const discussionParams = {
-    mode: state.context.discussionMode,
-    whitelist: state.context.discussionWhitelist,
   }
 
   const transaction = useMemo(() => {
@@ -229,8 +226,8 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('discussionTransaction')) {
-    const threadMode = api.createType('ThreadMode', {
-      closed: state.context.discussionWhitelist.map((member) => api.createType('MemberId', member.id)),
+    const threadMode = createType('ThreadMode', {
+      closed: state.context.discussionWhitelist.map((member) => createType('MemberId', Number.parseInt(member.id))),
     })
     const transaction = api.tx.proposalsDiscussion.changeThreadMode(
       activeMember.id,

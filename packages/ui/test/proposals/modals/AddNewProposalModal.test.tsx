@@ -77,6 +77,7 @@ describe('UI: AddNewProposalModal', () => {
   let createProposalTx: any
   let batchTx: any
   let bindAccountTx: any
+  let changeModeTx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -109,6 +110,7 @@ describe('UI: AddNewProposalModal', () => {
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
+    changeModeTx = stubTransaction(api, 'api.tx.proposalsDiscussion.changeThreadMode', 10)
   })
 
   describe('Requirements', () => {
@@ -650,6 +652,54 @@ describe('UI: AddNewProposalModal', () => {
 
       expect(screen.queryByText('Please choose proposal type')).not.toBeNull()
       expect(await getNextStepButton()).not.toBeDisabled()
+    })
+
+    describe('Discussion mode transaction', () => {
+      beforeEach(async () => {
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', true),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+        stubTransactionSuccess(
+          createProposalTx,
+          ['EventParams', registry.createType('ProposalId', 1337)],
+          'proposalsEngine',
+          'ProposalCreated'
+        )
+        await finishWarning()
+        await finishProposalType('fundingRequest')
+        await finishStakingAccount()
+        await finishProposalDetails()
+        await discussionClosed()
+        await finishTriggerAndDiscussion()
+        await SpecificParameters.FundingRequest.finish(100, 'bob')
+
+        fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+      })
+
+      it('Arrives at the transaction modal', async () => {
+        expect(screen.queryByText(/You intend to change the proposal discussion thread mode./i)).not.toBeNull()
+        expect(screen.queryByText(/Sign transaction and change mode/i)).not.toBeNull()
+      })
+
+      it('Success', async () => {
+        stubTransactionSuccess(changeModeTx, 'proposalsDiscussion', '')
+        const button = await getButton(/sign transaction and change mode/i)
+        await fireEvent.click(button as HTMLElement)
+        expect(screen.queryByText('See my Proposal')).not.toBeNull()
+      })
+
+      it('Failure', async () => {
+        stubTransactionFailure(changeModeTx)
+        const button = await getButton(/sign transaction and change mode/i)
+        await fireEvent.click(button as HTMLElement)
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
     })
   })
 
