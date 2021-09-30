@@ -8,14 +8,16 @@ export const useCouncilStatistics = () => {
 
   const councilSize = api?.consts.council.councilSize
   const reward = api?.query.council.councilorReward().pipe(map((councilorReward) => councilSize?.mul(councilorReward)))
+  const budgetAmount = useObservable(api?.query.council.budget(), [connectionState])
+  const rewardAmount = useObservable(reward, [connectionState])
 
   return {
     budget: {
-      amount: useObservable(api?.query.council.budget(), [connectionState]),
+      amount: budgetAmount,
       refillPeriod: api?.consts.council.budgetRefillPeriod,
     },
     reward: {
-      amount: useObservable(reward, [connectionState]),
+      amount: rewardAmount,
       period: api?.consts.council.electedMemberRewardPeriod,
     },
   }
