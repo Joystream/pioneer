@@ -4,7 +4,7 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { MultiValueStat, Statistics } from '@/common/components/statistics'
+import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
@@ -15,7 +15,7 @@ import { CouncilTabs } from './components/CouncilTabs'
 
 export const Council = () => {
   const { council, isLoading } = useElectedCouncil()
-  const { budget, reward } = useCouncilStatistics()
+  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAtBlock)
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
@@ -33,6 +33,7 @@ export const Council = () => {
   const main = (
     <MainPanel ref={sideNeighborRef}>
       <Statistics>
+        <BlockDurationStatistics title="Normal period remaining time" value={idlePeriodRemaining} />
         <MultiValueStat
           title="Budget"
           values={[
