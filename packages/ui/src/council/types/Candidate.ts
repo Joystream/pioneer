@@ -9,8 +9,9 @@ export interface Candidate {
   stakingAccount: string
   rewardAccount: string
   stake: BN
-  note: string
   title: string
+  summary: string
+  description: string[]
   member: Member
 }
 
@@ -19,7 +20,8 @@ export const asCandidate = (fields: CandidateFieldsFragment): Candidate => ({
   stakingAccount: fields.stakingAccountId,
   rewardAccount: fields.rewardAccountId,
   stake: new BN(fields.stake),
-  note: fields.note,
   member: asMember(fields.member),
   title: 'Candidate title',
+  summary: fields.note,
+  description: fields.note.split(' ').slice(0, 5),
 })
