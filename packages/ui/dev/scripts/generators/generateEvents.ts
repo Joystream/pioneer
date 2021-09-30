@@ -1,4 +1,3 @@
-import { RawWorker } from '@/mocks/data'
 import faker from 'faker'
 
 import { Mocks } from './types'
@@ -121,6 +120,11 @@ const generateBudgetSetEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateCouncilorRewardUpdatedEvent = () => ({
+  ...randomBlock(),
+  rewardAmount: 5000 * randomFromRange(1, 10),
+})
+
 const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
   const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
   const member = mocks.members.find((member) => member.id === worker!.membershipId.toString())
@@ -148,6 +152,7 @@ export const eventGenerators = {
   appliedOnOpeningEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
   budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks)),
   budgetSpendingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
+  councilorRewardUpdatedEvents: () => Array.from({ length: 1 }).map(generateCouncilorRewardUpdatedEvent),
   openingCanceledEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
   openingFilledEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
   rewardPaidEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
@@ -169,7 +174,9 @@ export const generateAllEvents = (mocks: Mocks) => {
   return newMocks
 }
 
-export type WorkerStatusEvent = ReturnType<typeof generateWorkerLeavingEvent> | ReturnType<typeof generateTerminatedEvent>
+export type WorkerStatusEvent =
+  | ReturnType<typeof generateWorkerLeavingEvent>
+  | ReturnType<typeof generateTerminatedEvent>
 
 export const generateWorkerLeavingEvent = (workerId: string, groupId: string) => {
   return {

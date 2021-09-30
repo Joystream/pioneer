@@ -1,11 +1,14 @@
 import BN from 'bn.js'
 
 import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, SECONDS_PER_BLOCK } from '../constants'
-import { isNumber } from '../utils'
+import { isDefined, isNumber } from '../utils'
 
 const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
-export const formatTokenValue = (value: BN | number | undefined) => {
+export const formatTokenValue = (value: BN | number | undefined | null) => {
+  if (!isDefined(value) || value === null || Number.isNaN(value)) {
+    return '-'
+  }
   return new BN(value || 0).toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')
 }
 

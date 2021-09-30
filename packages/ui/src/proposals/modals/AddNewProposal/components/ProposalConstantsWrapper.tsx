@@ -3,7 +3,7 @@ import React from 'react'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { displayConstantValue } from '@/common/helpers'
+import { formatTokenValue } from '@/common/model/formatters'
 import { ProposalConstants } from '@/proposals/types/constants'
 
 export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalConstants | null }) => (
@@ -17,7 +17,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Voting period</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.votingPeriod)}</TextInlineMedium> blocks
+          <TextInlineMedium dark>{formatTokenValue(constants?.votingPeriod)}</TextInlineMedium> blocks
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -25,7 +25,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Gracing limit</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.gracePeriod)}</TextInlineMedium> blocks
+          <TextInlineMedium dark>{formatTokenValue(constants?.gracePeriod)}</TextInlineMedium> blocks
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -33,7 +33,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Approval quorum</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.approvalQuorumPercentage)}</TextInlineMedium>%
+          <TextInlineMedium dark>{formatTokenValue(constants?.approvalQuorumPercentage)}</TextInlineMedium>%
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -41,7 +41,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Approval threshold</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.approvalThresholdPercentage)}</TextInlineMedium>%
+          <TextInlineMedium dark>{formatTokenValue(constants?.approvalThresholdPercentage)}</TextInlineMedium>%
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -49,7 +49,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Slashing quorum</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.slashingQuorumPercentage)}</TextInlineMedium>%
+          <TextInlineMedium dark>{formatTokenValue(constants?.slashingQuorumPercentage)}</TextInlineMedium>%
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -57,7 +57,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Slashing threshold</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.slashingThresholdPercentage)}</TextInlineMedium>%
+          <TextInlineMedium dark>{formatTokenValue(constants?.slashingThresholdPercentage)}</TextInlineMedium>%
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -65,7 +65,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Required Stake</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.requiredStake)}</TextInlineMedium> JOY
+          <TextInlineMedium dark>{formatTokenValue(constants?.requiredStake)}</TextInlineMedium> JOY
         </TextMedium>
       </RowGapBlock>
     </Row>
@@ -73,7 +73,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Constitutionality</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{displayConstantValue(constants?.constitutionality)}</TextInlineMedium>
+          <TextInlineMedium dark>{formatTokenValue(constants?.constitutionality)}</TextInlineMedium>
         </TextMedium>
       </RowGapBlock>
     </Row>
