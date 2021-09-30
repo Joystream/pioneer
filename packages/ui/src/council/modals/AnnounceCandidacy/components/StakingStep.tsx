@@ -107,7 +107,7 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
             inputSize="s"
           >
             <InputNumber
-              id="stakeAmount"
+              id="stakingAmount"
               value={fields.stake?.toString()}
               onChange={(event) => setStakeValue(event.target.value)}
             />
