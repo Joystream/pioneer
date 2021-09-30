@@ -2,7 +2,7 @@
 
 ## Development tools
 
-In order to work on Pioneer 2 you'd need following tools for development and testing:
+In order to work on Pioneer 2 you'll need following tools for development and testing:
 
 - [nodejs](https://nodejs.org) `v14.x`
 - [yarn classic](https://classic.yarnpkg.com/en/docs/install) package manager `v1.22.x`

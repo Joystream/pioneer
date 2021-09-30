@@ -6,7 +6,7 @@ We welcome every contribution – either a bug report or a pull request. If you'
 
 To submit a bug report a feature request, please [create an issue on GitHub](https://github.com/Joystream/pioneer/issues/new/choose).
 
-If you're looking an issue to fix look at the issues with a tag of [Good first issue](https://github.com/Joystream/pioneer/labels/good%20first%20issue)
+If you're looking for an issue to fix, take a look at the issues tagged [Good first issue](https://github.com/Joystream/pioneer/labels/good%20first%20issue)
 
 ## Contributing code
 

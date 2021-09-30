@@ -21,7 +21,7 @@ The application is divided to 3 types of building blocks:
 
 Some rules/hints:
 
-- Packages should not import anything from more specific. So code inside `common` cannot import from `accounts` or `app`.
+- More general packages should not import anything from more specific packages. So code inside `common` cannot import from `accounts` or `app`.
 - Domain specific code can import from other domains and `common` as you can display account select component when creating membership.
 - The app folder describes how the application is wired-up.
 

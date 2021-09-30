@@ -81,7 +81,7 @@ it('Success', () => {
 })
 ```
 
-The other stubs helps with creating balances, `api.query.*` responses, etc.
+The other stubs help with creating balances, `api.query.*` responses, etc.
 
 ### Specific helpers
 
