@@ -19,6 +19,8 @@ const locksMap: Record<LockType, ReactElement> = {
   Invitation: <EnvelopeIcon />,
   'Staking Candidate': <LockIcon />,
   Bounty: <LockIcon />,
+  'Gateway Worker': <LockIcon />,
+  'Operations Worker': <LabelIcon />,
 }
 
 export const lockIcon = (type: LockType) => locksMap[type]

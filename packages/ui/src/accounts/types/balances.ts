@@ -16,6 +16,8 @@ export type LockType =
   | 'Invitation'
   | 'Staking Candidate'
   | 'Bounty'
+  | 'Gateway Worker'
+  | 'Operations Worker'
 
 export interface BalanceLock {
   amount: BN
