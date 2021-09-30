@@ -31,7 +31,7 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
   const balances = useMyBalances()
 
   const formInitializer: FormFields = {
-    stake: minStake,
+    stake: stake ?? minStake,
   }
   const { fields, changeField } = useForm<FormFields>(formInitializer, FormSchema)
 
