@@ -1,4 +1,3 @@
-import { fireEvent } from '@testing-library/react'
 import BN from 'bn.js'
 import React, { useEffect } from 'react'
 import * as Yup from 'yup'
@@ -10,7 +9,7 @@ import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { TextInlineSmall, TextMedium, ValueInJoys } from '@/common/components/typography'
 import { useForm } from '@/common/hooks/useForm'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -36,6 +35,10 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
   }
   const { fields, changeField } = useForm<FormFields>(formInitializer, FormSchema)
 
+  useEffect(() => {
+    setStake(fields.stake)
+  }, [])
+
   const isSomeBalanceGteStake = () => {
     return Object.entries(balances).some(([, balance]) => balance.transferable.gte(fields.stake ?? minStake))
   }
@@ -48,11 +51,12 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
 
     return isSomeBalanceGteStake() ? (
       <>
-        Minimum stake amount is <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys>
+        Minimum stake amount is <TextInlineSmall bold>{formatTokenValue(minStake)} JOY</TextInlineSmall>
       </>
     ) : (
       <>
-        You have no <ValueInJoys>{formatTokenValue(fields.stake)}</ValueInJoys> on any of your accounts.
+        You have no <TextInlineSmall bold>{formatTokenValue(fields.stake)} JOY</TextInlineSmall> on any of your
+        accounts.
       </>
     )
   }
@@ -97,6 +101,7 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
           <InputComponent
             label="Staking amount"
             units="JOY"
+            required
             validation={fields.stake && !isValidStake ? 'invalid' : undefined}
             message={getStakeFieldMessage()}
             inputSize="s"
