@@ -1,4 +1,7 @@
 import React from 'react'
+import styled from 'styled-components'
+
+import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
 
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../common/components/Modal'
 import { TokenValue } from '../../../common/components/typography'
@@ -18,10 +21,17 @@ export const OptionAccount = ({ option }: Props) => {
       <AccountInfo account={option} />
       <BalanceInfoInRow>
         <InfoTitle>Transferable balance</InfoTitle>
-        <InfoValue>
+        <InfoValueWithLocks>
           <TokenValue value={balance?.transferable} />
-        </InfoValue>
+          <AccountLocks locks={balance?.locks} />
+        </InfoValueWithLocks>
       </BalanceInfoInRow>
     </>
   )
 }
+
+const InfoValueWithLocks = styled(InfoValue)`
+  ${AccountLocksWrapper} {
+    right: 0;
+  }
+`
