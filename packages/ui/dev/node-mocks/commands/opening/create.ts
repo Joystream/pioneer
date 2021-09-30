@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 
-import { metadataToBytes } from '../../../src/common/model/JoystreamNode'
-import { getSudoAccount } from '../data/addresses'
-import { signAndSend, withApi } from '../lib/api'
+import { metadataToBytes } from '../../../../src/common/model/JoystreamNode'
+import { getSudoAccount } from '../../data/addresses'
+import { signAndSend, withApi } from '../../lib/api'
 
 const opening = async () => {
   await withApi(async (api) => {

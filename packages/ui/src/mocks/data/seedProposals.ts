@@ -3,7 +3,7 @@ import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 import { ProposalStatus } from '@/proposals/types'
 
-import { ProposalMock } from '../../../dev/scripts/generators/generateProposals'
+import { ProposalMock } from '../../../dev/query-node-mocks/generators/generateProposals'
 
 import rawProposals from './raw/proposals.json'
 import { seedProposalDetails } from './seedProposalDetails'

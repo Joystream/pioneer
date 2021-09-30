@@ -1,6 +1,5 @@
 import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
-import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
@@ -9,9 +8,9 @@ import { BN_ZERO } from '@/common/constants'
 import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
-import { createBalance, getBalanceLock, toRuntimeDispatchInfo } from './chainTypes'
+import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
-const getSuccessEvents = (data: number[], section: string, method: string) => [
+const createSuccessEvents = (data: number[], section: string, method: string) => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: { index: '0x0502', data, method, section },
@@ -22,7 +21,7 @@ const getSuccessEvents = (data: number[], section: string, method: string) => [
   },
 ]
 
-const getErrorEvents = () => [
+const createErrorEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: {
@@ -49,7 +48,7 @@ export const stubTransactionResult = (events: any[]) =>
     },
   ])
 
-const getBatchSuccessEvents = () => [
+const createBatchSuccessEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: {
@@ -64,7 +63,7 @@ const getBatchSuccessEvents = () => [
   },
 ]
 
-const getBatchErrorEvents = () => [
+const createBatchErrorEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: {
@@ -77,24 +76,24 @@ const getBatchErrorEvents = () => [
 ]
 
 export const stubTransactionFailure = (transaction: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(getErrorEvents()))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents()))
 }
 
 export const stubTransactionSuccess = (transaction: any, data: any, section = '', method = '') => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(getSuccessEvents(data, section, method)))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createSuccessEvents(data, section, method)))
 }
 
 export const stubBatchTransactionFailure = (transaction: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(getBatchErrorEvents()))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createBatchErrorEvents()))
 }
 
 export const stubBatchTransactionSuccess = (transaction: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(getBatchSuccessEvents()))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createBatchSuccessEvents()))
 }
 
 export const stubTransaction = (api: UseApi, transactionPath: string, fee = 25) => {
   const transaction = {}
-  set(transaction, 'paymentInfo', () => of(toRuntimeDispatchInfo(fee)))
+  set(transaction, 'paymentInfo', () => of(createRuntimeDispatchInfo(fee)))
   set(api, transactionPath, () => transaction)
   return transaction
 }
@@ -202,7 +201,7 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
         frozenFee: new BN(0),
         frozenMisc: new BN(0),
         isVesting: false,
-        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [getBalanceLock(locked!, lockId ?? 11)],
+        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 11)],
         reservedBalance: new BN(0),
         vestedBalance: new BN(0),
         vestedClaimable: new BN(0),
@@ -214,25 +213,4 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
       },
     ])
   )
-}
-
-export const EMPTY_BALANCES: DeriveBalancesAll = {
-  additional: [],
-  accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
-  accountNonce: createType('Index', 1),
-  availableBalance: createBalance(0),
-  freeBalance: createBalance(0),
-  frozenFee: createBalance(0),
-  frozenMisc: createBalance(0),
-  isVesting: false,
-  lockedBalance: createBalance(0),
-  lockedBreakdown: [],
-  reservedBalance: createBalance(0),
-  vestedBalance: createBalance(0),
-  vestedClaimable: createBalance(0),
-  vestingEndBlock: createType('BlockNumber', 1234),
-  vestingLocked: createBalance(0),
-  vestingPerBlock: createBalance(0),
-  vestingTotal: createBalance(0),
-  votingBalance: createBalance(0),
 }

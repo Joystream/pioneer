@@ -12,7 +12,7 @@ import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
-import { toBalanceOf } from '../../_mocks/chainTypes'
+import { createBalanceOf } from '../../_mocks/chainTypes'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -61,7 +61,7 @@ describe('UI: BuyMembershipModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    set(api, 'api.query.members.membershipPrice', () => of(toBalanceOf(100)))
+    set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = stubTransaction(api, 'api.tx.members.buyMembership')
   })

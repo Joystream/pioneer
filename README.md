@@ -6,38 +6,56 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d870546e-6452-42d6-81d2-7a625637d6a4/deploy-status)](https://app.netlify.com/sites/pioneer-2/deploys)
 [![CI](https://github.com/Joystream/pioneer/actions/workflows/CI.yml/badge.svg)](https://github.com/Joystream/pioneer/actions/workflows/CI.yml)
 
-Governance app for Joystream DAO
+Governance application for the Joystream DAO platform.
 
 ## Preview build
 
-The preview build, deployed from the main branch, is available on [https://joystream.github.io/pioneer/](https://joystream.github.io/pioneer/).
+The preview build, deployed from the main branch, is available on [https://pioneer-2.netflify.app/](https://pioneer-2.netflify.app/).
 Components preview and testing from main branch, is available on [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
 
-You can connect to a local development node (should be reachable on `127.0.0.1:9444`).
+The deployed version can interact with two backends:
+
+- Olympia testnet – A deployed Olympia testnet.
+- Local – A local a Joystream node and a mocked version of the query-node.
+
+## Quickstart
+
+After cloning the repository run:
+
+```shell
+## Install npm packages
+yarn
+
+## Build all the sub-packages
+yarn build
+
+## To start local development server
+yarn start
+
+## To start local storybook instance
+yarn storybook
+
+## To run tests
+yarn test
+```
 
 ## Development
 
-Tools/libraries:
+For development documentation see [Dev Readme](docs/README.md)
 
-- React
-  - styled components
-- TypeScript
-- ESLint, Prettier
-- GraphQL to access Hydra query-node
-  - [Mirage JS](https://miragejs.com/) for mocking query-node data
-  - [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
-- Storybook
+## Packages
 
-### Code generation
+The project's monorepo contains packages:
 
-Some GraphQL related tools use code generation to scaffold types and react hooks from GraphQL schemas and queries.
+- [packages/ui](packages/ui) – The main Pioneer 2.0 package
+- [packages/types](packages/types) – A copy of [@joystream/types](https://github.com/Joystream/joystream/tree/olympia/types) checked out from an Olympia dev branch.
+- [packages/metadata-protobuf](packages/metadata-protobuf) – A copy [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/olympia/metadata-protobuf) checked out from an Olympia dev branch.
 
-After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the UI package.
+## Contributing
 
-## Packages & Dependencies
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details
 
-- [packages/ui](packages/ui) The Pioneer 2.0 package
-- [packages/type](packages/types) Copied [@joystream/types](https://github.com/Joystream/joystream/tree/olympia/types) at a compatible Olympia branch.
-- [packages/metadata-protobuf](packages/metadata-protobuf) Copied [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/olympia/metadata-protobuf) at a compatible Olympia branch.
 
-The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` in [package.json](./package.json) for details.
+## License
+
+See [LICENSE](LICENSE) for details

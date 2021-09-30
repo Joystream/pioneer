@@ -15,7 +15,7 @@ import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
 import { getButton } from '../../_helpers/getButton'
-import { toBalanceOf } from '../../_mocks/chainTypes'
+import { createBalanceOf } from '../../_mocks/chainTypes'
 import { mockCategories, mockPosts, mockThreads } from '../../_mocks/forum'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -76,7 +76,7 @@ describe('UI: CreatePostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath, 25)
-    stubConst(api, 'forum.postDeposit', toBalanceOf(10))
+    stubConst(api, 'forum.postDeposit', createBalanceOf(10))
     modalData.isEditable = false
     modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
   })
@@ -90,7 +90,7 @@ describe('UI: CreatePostModal', () => {
     })
 
     it('Cannot afford post deposit', async () => {
-      stubConst(api, 'forum.postDeposit', toBalanceOf(10000))
+      stubConst(api, 'forum.postDeposit', createBalanceOf(10000))
       modalData.isEditable = true
       renderModal()
       expect(await screen.findByText('Insufficient Funds')).toBeDefined()
@@ -112,7 +112,7 @@ describe('UI: CreatePostModal', () => {
   })
 
   it('Displays post deposit', () => {
-    stubConst(api, 'forum.postDeposit', toBalanceOf(101))
+    stubConst(api, 'forum.postDeposit', createBalanceOf(101))
     modalData.isEditable = true
     renderModal()
     expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101')

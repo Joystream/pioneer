@@ -1,7 +1,7 @@
 import { MockMember, RawOpeningMock, RawWorker, seedRandomBlockFields } from '@/mocks/data'
 import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
 
-import { ProposalMock } from '../../../../dev/scripts/generators/generateProposals'
+import { ProposalMock } from '../../../../dev/query-node-mocks/generators/generateProposals'
 import { RawApplication } from '../../../../src/mocks/data/seedApplications'
 
 export const MEMBER_ALICE_DATA: MockMember = {

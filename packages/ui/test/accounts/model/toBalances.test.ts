@@ -5,8 +5,7 @@ import { lockTypes } from '@/accounts/model/lockTypes'
 import { toBalances } from '@/accounts/model/toBalances'
 import { Balances } from '@/accounts/types'
 
-import { createBalance, getBalanceLock } from '../../_mocks/chainTypes'
-import { EMPTY_BALANCES } from '../../_mocks/transactions'
+import { createBalance, createBalanceLock, EMPTY_BALANCES } from '../../_mocks/chainTypes'
 
 describe('toBalances', () => {
   it('Empty', () => {
@@ -46,7 +45,7 @@ describe('toBalances', () => {
         frozenFee: createBalance(200),
         frozenMisc: createBalance(200),
         lockedBalance: createBalance(200),
-        lockedBreakdown: [getBalanceLock(200)],
+        lockedBreakdown: [createBalanceLock(200)],
         votingBalance: createBalance(387),
       },
       {
@@ -73,7 +72,7 @@ describe('toBalances', () => {
         frozenFee: createBalance(200),
         frozenMisc: createBalance(200),
         lockedBalance: createBalance(200),
-        lockedBreakdown: [getBalanceLock(200)],
+        lockedBreakdown: [createBalanceLock(200)],
         votingBalance: createBalance(200),
       },
       {
@@ -101,7 +100,7 @@ describe('toBalances', () => {
         frozenFee: createBalance(10_000),
         frozenMisc: createBalance(10_000),
         lockedBalance: createBalance(10_000),
-        lockedBreakdown: [getBalanceLock(10_000, 1), getBalanceLock(200, 9)],
+        lockedBreakdown: [createBalanceLock(10_000, 1), createBalanceLock(200, 9)],
         votingBalance: createBalance(10_500),
       },
       {

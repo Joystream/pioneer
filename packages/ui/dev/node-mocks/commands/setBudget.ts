@@ -26,7 +26,7 @@ const setBudgetCommand = async (args: SetBudgetArgs) => {
 
 export const setBudgetModule = {
   command: 'set-budget',
-  describe: 'Add & confirm staking account',
+  describe: 'Set membership working group budget',
   handler: setBudgetCommand,
   builder: (argv: yargs.Argv<unknown>) => argv.options(options),
 }

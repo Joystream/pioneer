@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { MembershipMetadata } from '@joystream/metadata-protobuf'
 
-import { metadataToBytes } from '../../../src/common/model/JoystreamNode'
-import memberData from '../../../src/mocks/data/raw/members.json'
-import { getSudoAccount } from '../data/addresses'
-import { signAndSend, withApi } from '../lib/api'
+import { metadataToBytes } from '../../../../src/common/model/JoystreamNode'
+import memberData from '../../../../src/mocks/data/raw/members.json'
+import { getSudoAccount } from '../../data/addresses'
+import { signAndSend, withApi } from '../../lib/api'
 
 export const createMembersCommand = async () => {
   await withApi(async (api) => {

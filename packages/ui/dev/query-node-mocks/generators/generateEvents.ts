@@ -127,7 +127,7 @@ const generateCouncilorRewardUpdatedEvent = () => ({
 
 const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
   const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
-  const member = mocks.members.find((member) => member.id === worker!.membershipId.toString())
+  const member = mocks.members.find((member) => member.id === worker?.membershipId.toString())
 
   return {
     ...randomBlock(),

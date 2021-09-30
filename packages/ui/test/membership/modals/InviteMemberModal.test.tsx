@@ -12,7 +12,7 @@ import { seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
-import { toBalanceOf } from '../../_mocks/chainTypes'
+import { createBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -55,14 +55,14 @@ describe('UI: InviteMemberModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    stubQuery(api, 'membershipWorkingGroup.budget', toBalanceOf(1000))
-    stubQuery(api, 'members.membershipPrice', toBalanceOf(100))
+    stubQuery(api, 'membershipWorkingGroup.budget', createBalanceOf(1000))
+    stubQuery(api, 'members.membershipPrice', createBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
   })
 
   it('Validate Working Group Budget', async () => {
-    stubQuery(api, 'membershipWorkingGroup.budget', toBalanceOf(0))
+    stubQuery(api, 'membershipWorkingGroup.budget', createBalanceOf(0))
 
     renderModal()
 
