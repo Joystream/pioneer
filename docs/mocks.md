@@ -60,7 +60,7 @@ In order to properly mock an `Entity` you should:
 
 * No data fetched from the query
 
-  See if proper query resolver is present.
+  See if proper query resolver is present in the [`@/mocks/server.ts`](packages/ui/src/mocks/server.ts) file.
 
 * No associated data in the mocked response
 

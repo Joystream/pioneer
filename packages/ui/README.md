@@ -17,7 +17,7 @@ The application is divided to 3 types of building blocks:
   * routing
   * pages
   * global providers
-* `mocks` Application specific: routing, pages, etc.
+* `mocks` Query-node mocks.
 
 Some rules/hints:
 
