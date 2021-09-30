@@ -1,4 +1,4 @@
-import { LockType } from '@/accounts/types'
+import { BalanceLock, LockType } from '@/accounts/types'
 
 export const lockTypes: { [key: string]: LockType } = {
   '0x0000000000000000': 'Voting',
@@ -19,3 +19,5 @@ export const lockTypes: { [key: string]: LockType } = {
 }
 
 export const isRecoverable = (type: LockType): boolean => type === 'Council Candidate'
+
+export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => false

@@ -1,16 +1,21 @@
-const areLocksConflicting = () => false
+import BN from 'bn.js'
+
+import { areLocksConflicting } from '@/accounts/model/lockTypes'
 
 describe('areLocksConflicting', () => {
-  it('Staking Candidate', () => {
-    expect(areLocksConflicting()).toBe(false)
+  it('No locks', () => {
+    expect(areLocksConflicting('Storage Worker', [])).toBe(false)
   })
-  it('Invitation')
-  it('Voting')
-  it('Council')
-  it('Council Candidate')
-  it('Councilor')
-  it('Validation')
-  it('Nomination')
-  it('Proposals')
-  it('Worker')
+
+  it('Same lock', () => {
+    expect(
+      areLocksConflicting('Storage Worker', [
+        {
+          amount: new BN(10),
+          type: 'Storage Worker',
+          isRecoverable: false,
+        },
+      ])
+    ).toBe(false)
+  })
 })
