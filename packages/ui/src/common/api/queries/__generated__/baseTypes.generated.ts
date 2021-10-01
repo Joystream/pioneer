@@ -2479,6 +2479,9 @@ export type CandidateWhereInput = {
   note_endsWith?: Maybe<Scalars['String']>
   note_in?: Maybe<Array<Scalars['String']>>
   cycleId?: Maybe<ElectionRoundWhereInput>
+  member_eq?: Maybe<Scalars['ID']>
+  member_in?: Maybe<Array<Scalars['ID']>>
+  member?: Maybe<MembershipWhereInput>
   AND?: Maybe<Array<CandidateWhereInput>>
   OR?: Maybe<Array<CandidateWhereInput>>
 }
