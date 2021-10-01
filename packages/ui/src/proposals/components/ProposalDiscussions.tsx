@@ -142,7 +142,7 @@ const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mod
     padding-bottom: 8px;
 
     & > :nth-child(3n - 1) {
-      justify-self: end;
+      width: 100%;
     }
   }
 
