@@ -68,7 +68,8 @@ export const AddNewProposalModal = () => {
   const [state, send, service] = useMachine(addNewProposalMachine)
   const constants = useProposalConstants(state.context.type)
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
-    constants?.requiredStake.toNumber() || 0
+    constants?.requiredStake.toNumber() || 0,
+    'Proposals'
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)

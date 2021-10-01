@@ -11,6 +11,7 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -37,6 +38,10 @@ export type OpeningParams = Exclude<
 
 const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Apply on opening' }]
 
+const groupToLockId = (groupName: GroupName): LockType => {
+  return 'Forum Worker'
+}
+
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
@@ -44,7 +49,10 @@ export const ApplyForRoleModal = () => {
   const [state, send, service] = useMachine(applyForRoleMachine)
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
-  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
+  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
+    requiredStake,
+    groupToLockId(opening.groupName)
+  )
   const transaction = useMemo(() => {
     if (activeMember && api) {
       return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({

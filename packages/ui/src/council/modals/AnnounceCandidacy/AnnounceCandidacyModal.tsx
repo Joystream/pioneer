@@ -33,7 +33,8 @@ export const AnnounceCandidacyModal = () => {
 
   const constants = useCouncilConstants()
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
-    constants?.election.minStake.toNumber() || 0
+    constants?.election.minStake.toNumber() || 0,
+    'Council Candidate'
   )
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
 
