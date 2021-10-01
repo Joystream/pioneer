@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react'
 import { InView } from 'react-intersection-observer'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
+import { ButtonLink } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Modal, ModalHeader } from '@/common/components/Modal'
@@ -10,6 +11,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useToggle } from '@/common/hooks/useToggle'
 import { formatDateString } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { ForumPostAuthor, ForumPostRow, ForumPostStyles } from '@/forum/components/PostList/PostListItem'
@@ -107,30 +109,37 @@ interface HistoryPostProps {
 
 const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostProps) => {
   const ref = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const limitedPostHeight = 300
+  const [postLong, setPostLong] = useState(false)
   useEffect(() => {
     !!ref.current && insertRef(ref)
-  }, [ref.current])
+    contentRef.current && contentRef.current.getBoundingClientRect().height > limitedPostHeight && setPostLong(true)
+  }, [ref.current, contentRef.current])
+  const [expanded, toggleExpanded] = useToggle()
+
   return (
     <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
-      <HistoryModalPost ref={ref}>
+      <ForumPostStyles ref={ref}>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
           <BlockTime block={asBlock(edit)} layout="reverse" />
         </ForumPostRow>
-        <ForumPostRow>
+        <ContentRow ref={contentRef} postLong={postLong} limitedPostHeight={limitedPostHeight} expanded={expanded}>
           <MarkdownPreview markdown={edit.newText} />
-        </ForumPostRow>
-      </HistoryModalPost>
+        </ContentRow>
+        {postLong && (
+          <ShowMoreButton size="small" onClick={toggleExpanded}>
+            {expanded ? 'Show less' : 'Show more'}
+          </ShowMoreButton>
+        )}
+      </ForumPostStyles>
     </InView>
   )
 }
 
 const HistoryModalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 300px 1fr;
-`
-
-const HistoryModalPost = styled(ForumPostStyles)`
-  padding-bottom: 52px;
 `
 
 const HistoryPostSpacing = styled(RowGapBlock)`
@@ -145,5 +154,25 @@ const HistoryPostSpacing = styled(RowGapBlock)`
       height: 1px;
       background-color: ${Colors.Black[200]};
     }
+
+    ${ForumPostStyles} {
+      padding-bottom: 52px;
+    }
   }
+`
+
+const ContentRow = styled(ForumPostRow)<{ postLong?: boolean; limitedPostHeight?: number; expanded?: boolean }>`
+  overflow: hidden;
+
+  ${({ postLong, limitedPostHeight, expanded }) => {
+    if (postLong) {
+      return css`
+        max-height: ${expanded ? 'unset' : limitedPostHeight + 'px'};
+      `
+    }
+  }};
+`
+
+const ShowMoreButton = styled(ButtonLink)`
+  margin-top: 22px;
 `
