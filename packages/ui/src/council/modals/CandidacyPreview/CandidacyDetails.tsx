@@ -10,14 +10,14 @@ import { SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/commo
 import { StatisticItem, Statistics } from '@/common/components/statistics'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Candidate } from '@/council/types'
-import { useCandidateStats } from '@/memberships/hooks/useCandidateStats'
+import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyStats'
 
 interface Props {
   candidate: Candidate
 }
 
 export const CandidacyDetails = ({ candidate }: Props) => {
-  const stats = useCandidateStats(candidate.member.id)
+  const stats = useMemberCandidacyStats(candidate.member.id)
   return (
     <>
       <Details gap={16}>

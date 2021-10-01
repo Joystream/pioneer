@@ -93,6 +93,7 @@ export const makeServer = (environment = 'development') => {
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               candidates: getWhereResolver('Candidate'),
+              candidatesConnection: getConnectionResolver('CandidateConnection'),
               candidateByUniqueInput: getUniqueResolver('Candidate'),
               councilMembersConnection: getConnectionResolver('CouncilMemberConnection'),
               councilorRewardUpdatedEvents: getWhereResolver('CouncilorRewardUpdatedEvent'),

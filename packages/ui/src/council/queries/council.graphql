@@ -68,4 +68,7 @@ query GetCandidateStats($memberId: ID) {
   councilMembersConnection(where: { member: { id_eq: $memberId } }) {
     totalCount
   }
+  candidatesConnection(where: { member: { id_eq: $memberId } }) {
+    totalCount
+  }
 }

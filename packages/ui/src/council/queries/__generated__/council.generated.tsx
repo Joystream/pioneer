@@ -77,6 +77,7 @@ export type GetCandidateStatsQuery = {
   __typename: 'Query'
   candidacyWithdrawEventsConnection: { __typename: 'CandidacyWithdrawEventConnection'; totalCount: number }
   councilMembersConnection: { __typename: 'CouncilMemberConnection'; totalCount: number }
+  candidatesConnection: { __typename: 'CandidateConnection'; totalCount: number }
 }
 
 export const CouncilMemberFieldsFragmentDoc = gql`
@@ -271,6 +272,9 @@ export const GetCandidateStatsDocument = gql`
       totalCount
     }
     councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+      totalCount
+    }
+    candidatesConnection(where: { member: { id_eq: $memberId } }) {
       totalCount
     }
   }
