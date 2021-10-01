@@ -51,7 +51,7 @@ export const Election = () => {
         <StatisticItem title="Stage" tooltipText="Lorem ipsum...">
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
-        <BlockDurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={remainingPeriod} />
+        <BlockDurationStatistics title="Period remaining length" tooltipText="Lorem ipsum..." value={remainingPeriod} />
         <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
           <TextHuge bold>{election.cycleId} round</TextHuge>
         </StatisticItem>

@@ -33,7 +33,7 @@ export const Council = () => {
   const main = (
     <MainPanel ref={sideNeighborRef}>
       <Statistics>
-        <BlockDurationStatistics title="Normal period remaining time" value={idlePeriodRemaining} />
+        <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
         <MultiValueStat
           title="Budget"
           values={[
