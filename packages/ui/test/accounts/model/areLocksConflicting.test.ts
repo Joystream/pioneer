@@ -17,4 +17,8 @@ describe('areLocksConflicting', () => {
   it('Same lock', () => {
     expect(areLocksConflicting('Storage Worker', [stubLock('Storage Worker')])).toBe(true)
   })
+
+  it('Conflicting lock', () => {
+    expect(areLocksConflicting('Storage Worker', [stubLock('Forum Worker')])).toBe(true)
+  })
 })

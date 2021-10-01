@@ -18,6 +18,64 @@ export const lockTypes: { [key: string]: LockType } = {
   '0x0e0e0e0e0e0e0e0e': 'Operations Worker',
 }
 
+const ANY_WORKER: LockType[] = [
+  'Forum Worker',
+  'Storage Worker',
+  'Content Directory Worker',
+  'Gateway Worker',
+  'Membership Worker',
+  'Operations Worker',
+]
+
+const STAKING_INVITATION_VOTING: LockType[] = ['Staking Candidate', 'Invitation', 'Voting']
+const COMPATIBLE_LOCKS: Record<LockType, Set<LockType>> = {
+  'Staking Candidate': new Set<LockType>([
+    'Invitation',
+    'Voting',
+    'Council Candidate',
+    'Councilor',
+    'Validation',
+    'Nomination',
+    'Proposals',
+    'Bounty',
+    ...ANY_WORKER,
+  ]),
+  Invitation: new Set([
+    'Staking Candidate',
+    'Voting',
+    'Council Candidate',
+    'Councilor',
+    'Validation',
+    'Nomination',
+    'Proposals',
+    'Bounty',
+    ...ANY_WORKER,
+  ]),
+  Voting: new Set([
+    'Staking Candidate',
+    'Invitation',
+    'Council Candidate',
+    'Councilor',
+    'Validation',
+    'Nomination',
+    'Proposals',
+    'Bounty',
+    ...ANY_WORKER,
+  ]),
+  'Council Candidate': new Set([...STAKING_INVITATION_VOTING, 'Councilor']),
+  Councilor: new Set([...STAKING_INVITATION_VOTING, 'Council Candidate']),
+  Validation: new Set(STAKING_INVITATION_VOTING),
+  Nomination: new Set(STAKING_INVITATION_VOTING),
+  Proposals: new Set(STAKING_INVITATION_VOTING),
+  Bounty: new Set(['Staking Candidate', 'Voting']),
+  'Content Directory Worker': new Set(STAKING_INVITATION_VOTING),
+  'Forum Worker': new Set(STAKING_INVITATION_VOTING),
+  'Gateway Worker': new Set(STAKING_INVITATION_VOTING),
+  'Membership Worker': new Set(STAKING_INVITATION_VOTING),
+  'Operations Worker': new Set(STAKING_INVITATION_VOTING),
+  'Storage Worker': new Set(STAKING_INVITATION_VOTING),
+}
+
 export const isRecoverable = (type: LockType): boolean => type === 'Council Candidate'
 
 export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => {
@@ -25,5 +83,5 @@ export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]
     return false
   }
 
-  return existingLocks.some(({ type }) => type === lock)
+  return existingLocks.some(({ type }) => !COMPATIBLE_LOCKS[lock].has(type))
 }
