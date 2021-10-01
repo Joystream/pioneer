@@ -7,7 +7,7 @@ import { significantTimeUnit } from './significantTimeUnit'
 export function blocksToTime(blocks: BN) {
   const seconds = blocks.toNumber() * SECONDS_PER_BLOCK
   if (seconds < 0) {
-    return 'never'
+    return '–'
   }
   const { count, unit } = significantTimeUnit(seconds)
   if (unit) {
