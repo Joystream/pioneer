@@ -81,7 +81,7 @@ export const MemberModal = React.memo(({ member, isLoading, tabs, children, isDe
             </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
-          <MemberInfo member={member} memberSize="l" size="l" />
+          <MemberInfo member={member} memberSize="l" size="l" skipModal />
           <Tabs tabs={tabs} tabsSize="xs" />
         </MemberPanelHeader>
         <SidePaneBody>{children}</SidePaneBody>
