@@ -18,7 +18,7 @@ const locksMap: Record<LockType, ReactElement> = {
   'Membership Worker': <LabelIcon />,
   Invitation: <EnvelopeIcon />,
   'Staking Candidate': <LockIcon />,
-  Bounty: <LockIcon />,
+  Bounties: <LockIcon />,
   'Gateway Worker': <LockIcon />,
   'Operations Worker': <LabelIcon />,
 }

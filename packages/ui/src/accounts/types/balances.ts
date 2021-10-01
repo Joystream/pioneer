@@ -15,7 +15,7 @@ export type LockType =
   | 'Membership Worker'
   | 'Invitation'
   | 'Staking Candidate'
-  | 'Bounty'
+  | 'Bounties'
   | 'Gateway Worker'
   | 'Operations Worker'
 
