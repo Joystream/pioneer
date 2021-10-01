@@ -134,6 +134,8 @@ export const makeServer = (environment = 'development') => {
               workerExitedEvents: getWhereResolver('WorkerExitedEvent'),
               workerRewardAccountUpdatedEvents: getWhereResolver('WorkerRewardAccountUpdatedEvent'),
               workerRewardAmountUpdatedEvents: getWhereResolver('WorkerRewardAmountUpdatedEvent'),
+              candidacyWithdrawEvents: getWhereResolver('CandidacyWithdrawEvent'),
+              candidacyWithdrawEventsConnection: getConnectionResolver('CandidacyWithdrawEventConnection'),
               workerStartedLeavingEvents: getWhereResolver('WorkerStartedLeavingEvent'),
               workerStartedLeavingEventsConnection: getConnectionResolver('WorkerStartedLeavingEventConnection'),
               workers: getWhereResolver('Worker'),

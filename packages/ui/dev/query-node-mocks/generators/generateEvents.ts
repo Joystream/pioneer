@@ -147,6 +147,14 @@ const generateWorkerRewardAmountUpdatedEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateCandidacyWithdrawEvent = (mocks:Mocks) => () => {
+  const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
+  return {
+    ...randomBlock(),
+    memberId: member.id,
+  }
+}
+
 export const eventGenerators = {
   applicationWithdrawnEvents: (mocks: Mocks) => Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks)),
   appliedOnOpeningEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
@@ -163,6 +171,7 @@ export const eventGenerators = {
     Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
   workerRewardAmountUpdatedEvents: (mocks: Mocks) =>
     Array.from({ length: 10 }).map(generateWorkerRewardAmountUpdatedEvent(mocks)),
+  candidacyWithdrawEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateCandidacyWithdrawEvent(mocks))
 }
 
 export const generateAllEvents = (mocks: Mocks) => {
