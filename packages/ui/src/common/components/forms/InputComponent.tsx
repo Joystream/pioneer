@@ -20,7 +20,7 @@ export type InputComponentProps = InputProps &
     copy?: boolean
     textToCopy?: string
     units?: string
-    message?: string
+    message?: React.ReactElement | string
     tooltipText?: string
     tooltipTitle?: string
     tooltipLinkText?: React.ReactElement

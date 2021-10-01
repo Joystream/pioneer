@@ -69,7 +69,7 @@ export const announceCandidacyMachine = createMachine<
       on: {
         NEXT: {
           target: 'rewardAccount',
-          cond: (context) => !!context.stakingAccount,
+          cond: (context) => !!(context.stakingAccount && context.stakingAmount),
         },
         SET_ACCOUNT: {
           actions: assign({
