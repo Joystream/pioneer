@@ -69,10 +69,11 @@ export const AnnounceCandidacyModal = () => {
 
   useEffect((): any => {
     if (state.matches('staking') && state.context.stakingAccount && state.context.stakingAmount) {
-      return setValidNext(true)
+      setValidNext(true)
+      return
     }
 
-    return setValidNext(false)
+    setValidNext(false)
   }, [state, activeMember?.id, stakingStatus])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
