@@ -61,6 +61,12 @@ query GetCandidate($where: CandidateWhereUniqueInput!) {
   }
 }
 
+query GetElectionCandidatesIds ($electionCycleId: Int!) {
+  candidates(where: { cycleId: { cycleId_eq: $electionCycleId } }) {
+    id
+  }
+}
+
 query GetCandidateStats($memberId: ID) {
   candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
     totalCount

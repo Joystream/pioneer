@@ -6,6 +6,7 @@ import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { useCandidate } from '@/council/hooks/useCandidate'
+import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
 import { MemberAccounts } from '@/memberships/components/MemberProfile/MemberAccounts'
 import { MemberModal } from '@/memberships/components/MemberProfile/MemberModal'
@@ -20,9 +21,11 @@ export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('CANDIDACY')
   const { modalData } = useModal<CandidacyPreviewModalCall>()
   const { isLoading, candidate } = useCandidate(modalData.id)
+  const candidates = useElectionCandidatesIds(modalData.cycleId)
+  const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
   return (
     <MemberModal
-      title="Candidate x of y"
+      title={`Candidate ${(candidateIndex ?? -1) + 1} of ${candidates?.length}`}
       tabs={[
         { title: 'Candidacy', active: activeTab === 'CANDIDACY', onClick: () => setActiveTab('CANDIDACY') },
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
