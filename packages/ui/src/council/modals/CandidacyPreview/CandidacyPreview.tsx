@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
+import { CopyButtonTemplate } from '@/common/components/buttons'
+import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
+import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
@@ -19,6 +22,7 @@ export const CandidacyPreview = React.memo(() => {
   const { isLoading, candidate } = useCandidate(modalData.id)
   return (
     <MemberModal
+      title="Candidate x of y"
       tabs={[
         { title: 'Candidacy', active: activeTab === 'CANDIDACY', onClick: () => setActiveTab('CANDIDACY') },
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
@@ -27,7 +31,16 @@ export const CandidacyPreview = React.memo(() => {
       ]}
       member={candidate?.member}
       isLoading={isLoading}
-      isDetailsTab={activeTab === 'DETAILS'}
+      contextButtons={
+        <SidePaneTopButtonsGroup>
+          <CopyButtonTemplate
+            square
+            size="small"
+            textToCopy={`${window.location.host}/#/members/${candidate?.member.id}`}
+            icon={<LinkIcon />}
+          />
+        </SidePaneTopButtonsGroup>
+      }
     >
       {!candidate ? (
         <Loading />
