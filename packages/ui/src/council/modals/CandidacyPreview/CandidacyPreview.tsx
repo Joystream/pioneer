@@ -2,20 +2,22 @@ import React, { useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { useModal } from '@/common/hooks/useModal'
-import { MemberDetails, MemberModalCall } from '@/memberships/components/MemberProfile'
+import { useCandidate } from '@/council/hooks/useCandidate'
+import { MemberDetails } from '@/memberships/components/MemberProfile'
 import { MemberAccounts } from '@/memberships/components/MemberProfile/MemberAccounts'
 import { MemberModal } from '@/memberships/components/MemberProfile/MemberModal'
 import { MemberSideRoles } from '@/memberships/components/MemberProfile/MemberRoles'
-import { useMember } from '@/memberships/hooks/useMembership'
 
 import { CandidacyDetails } from './CandidacyDetails'
+import { CandidacyPreviewModalCall } from './types'
 
 type ProfileTabs = 'CANDIDACY' | 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('CANDIDACY')
-  const { modalData } = useModal<MemberModalCall>()
-  const { isLoading, member } = useMember(modalData.id)
+  const { modalData } = useModal<CandidacyPreviewModalCall>()
+  const { isLoading, candidate } = useCandidate(modalData.id)
+  const member = candidate?.member
   return (
     <MemberModal
       tabs={[
@@ -32,7 +34,7 @@ export const CandidacyPreview = React.memo(() => {
         <Loading />
       ) : (
         <>
-          {activeTab === 'CANDIDACY' && <CandidacyDetails />}
+          {activeTab === 'CANDIDACY' && <CandidacyDetails candidate={candidate} />}
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <MemberSideRoles member={member} />}

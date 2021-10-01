@@ -8,13 +8,18 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
 import { StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { Candidate } from '@/council/types'
 
-export const CandidacyDetails = () => {
+interface Props {
+  candidate: Candidate
+}
+
+export const CandidacyDetails = ({ candidate }: Props) => {
   return (
     <>
       <Details gap={16}>
-        <h1>Candidacy Title</h1>
+        <h1>{candidate.title}</h1>
         <h4>Past elections results</h4>
         <Statistics>
           <StatisticItem title="Successful">1</StatisticItem>
@@ -27,19 +32,25 @@ export const CandidacyDetails = () => {
         </ButtonGhost>
         <TextMedium light>Last message from A 1 hour ago</TextMedium>
         <h4>Candidate summary</h4>
-        <MarkdownPreview markdown={'# TITLE\n\n markdown _markdown_ **markdown** *markdown*'} />
+        <MarkdownPreview markdown={candidate.summary} />
+        <RowGapBlock gap={8}>
+          {candidate.description.map((point, index) => (
+            <TextMedium light key={index}>
+              {point}
+            </TextMedium>
+          ))}
+        </RowGapBlock>
       </Details>
       <SidePaneTable>
         <SidePaneRow>
           <SidePaneLabel text="Staked" />
-          <SidePaneText>150,000 JOY</SidePaneText>
+          <SidePaneText>
+            <TokenValue value={candidate.stake} />
+          </SidePaneText>
         </SidePaneRow>
         <SidePaneRow>
           <SidePaneLabel text="Staking Account" />
-          <UnknownAccountInfo
-            address="5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
-            placeholderName="Staking account"
-          />
+          <UnknownAccountInfo address={candidate.stakingAccount} placeholderName="Staking account" />
         </SidePaneRow>
       </SidePaneTable>
     </>

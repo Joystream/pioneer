@@ -34,6 +34,16 @@ export type ElectionRoundFieldsFragment = {
   candidates: Array<{ __typename: 'Candidate' } & ElectionCandidateFieldsFragment>
 }
 
+export type CandidateFieldsFragment = {
+  __typename: 'Candidate'
+  id: string
+  stakingAccountId: string
+  rewardAccountId: string
+  stake: any
+  note: string
+  member: { __typename: 'Membership' } & MemberFieldsFragment
+}
+
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
   where: Types.ElectedCouncilWhereInput
 }>
@@ -48,6 +58,15 @@ export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: neve
 export type GetCurrentElectionQuery = {
   __typename: 'Query'
   electionRounds: Array<{ __typename: 'ElectionRound' } & ElectionRoundFieldsFragment>
+}
+
+export type GetCandidateQueryVariables = Types.Exact<{
+  where: Types.CandidateWhereUniqueInput
+}>
+
+export type GetCandidateQuery = {
+  __typename: 'Query'
+  candidateByUniqueInput?: Types.Maybe<{ __typename: 'Candidate' } & CandidateFieldsFragment>
 }
 
 export const CouncilMemberFieldsFragmentDoc = gql`
@@ -91,6 +110,19 @@ export const ElectionRoundFieldsFragmentDoc = gql`
     }
   }
   ${ElectionCandidateFieldsFragmentDoc}
+`
+export const CandidateFieldsFragmentDoc = gql`
+  fragment CandidateFields on Candidate {
+    id
+    stakingAccountId
+    rewardAccountId
+    stake
+    note
+    member {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
 `
 export const GetElectedCouncilsDocument = gql`
   query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
@@ -183,3 +215,43 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
   GetCurrentElectionQuery,
   GetCurrentElectionQueryVariables
 >
+export const GetCandidateDocument = gql`
+  query GetCandidate($where: CandidateWhereUniqueInput!) {
+    candidateByUniqueInput(where: $where) {
+      ...CandidateFields
+    }
+  }
+  ${CandidateFieldsFragmentDoc}
+`
+
+/**
+ * __useGetCandidateQuery__
+ *
+ * To run a query within a React component, call `useGetCandidateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCandidateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCandidateQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetCandidateQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCandidateQuery, GetCandidateQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCandidateQuery, GetCandidateQueryVariables>(GetCandidateDocument, options)
+}
+export function useGetCandidateLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCandidateQuery, GetCandidateQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCandidateQuery, GetCandidateQueryVariables>(GetCandidateDocument, options)
+}
+export type GetCandidateQueryHookResult = ReturnType<typeof useGetCandidateQuery>
+export type GetCandidateLazyQueryHookResult = ReturnType<typeof useGetCandidateLazyQuery>
+export type GetCandidateQueryResult = Apollo.QueryResult<GetCandidateQuery, GetCandidateQueryVariables>
