@@ -20,4 +20,10 @@ export const lockTypes: { [key: string]: LockType } = {
 
 export const isRecoverable = (type: LockType): boolean => type === 'Council Candidate'
 
-export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => false
+export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => {
+  if (existingLocks.length < 1) {
+    return false
+  }
+
+  return existingLocks.some(({ type }) => type === lock)
+}
