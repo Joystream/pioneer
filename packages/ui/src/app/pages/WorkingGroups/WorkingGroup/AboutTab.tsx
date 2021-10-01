@@ -30,21 +30,21 @@ export const AboutTab = ({ workingGroup }: Props) => {
           {statistics.spending ? (
             <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
           ) : (
-            <StatisticItem>
+            <StatisticItem centered>
               <Loading />
             </StatisticItem>
           )}
           {statistics.totalHired ? (
             <NumericValueStat title="Total hired" value={statistics.totalHired} />
           ) : (
-            <StatisticItem>
+            <StatisticItem centered>
               <Loading />
             </StatisticItem>
           )}
           {statistics.totalFired ? (
             <NumericValueStat title="Total fired" value={statistics.totalFired} />
           ) : (
-            <StatisticItem>
+            <StatisticItem centered>
               <Loading />
             </StatisticItem>
           )}
