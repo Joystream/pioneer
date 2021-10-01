@@ -47,7 +47,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
     <ApplicationItemWrap past={past}>
       <ApplicationItemInfo>
         <ToggleableItemInfoTop>
-          <ApplicationID title={application.id}>ID: {application.id}</ApplicationID>
+          <ApplicationID title={application.id}>ID: {application.id.replace(/\D/g, '')}</ApplicationID>
           <Subscription>Time left: 6 days 23 minutes</Subscription>
           <BadgeStatus>LEAD</BadgeStatus>
         </ToggleableItemInfoTop>
