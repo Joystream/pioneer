@@ -6,12 +6,13 @@ import { LinkIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { DurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
+import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
 import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
+import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 import { CouncilTabs } from './components/CouncilTabs'
@@ -19,6 +20,7 @@ import { CouncilTabs } from './components/CouncilTabs'
 export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
+  const remainingPeriod = useElectionRemainingPeriod(electionStage)
 
   if (isLoadingElection || isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
@@ -49,7 +51,7 @@ export const Election = () => {
         <StatisticItem title="Stage" tooltipText="Lorem ipsum...">
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
-        <DurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={new Date().toISOString()} />
+        <BlockDurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={remainingPeriod} />
         <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
           <TextHuge bold>{election.cycleId} round</TextHuge>
         </StatisticItem>
