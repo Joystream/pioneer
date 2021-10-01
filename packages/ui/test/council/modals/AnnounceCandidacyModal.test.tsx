@@ -178,6 +178,26 @@ describe('UI: Announce Candidacy Modal', () => {
         expect(await getNextStepButton()).not.toBeDisabled()
       })
     })
+
+    describe('Reward account', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+      })
+
+      it('Not selected', async () => {
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+
+      it('Selected', async () => {
+        await selectFromDropdown(
+          'Select account receiving councilor rewards in case your candidacy is elected',
+          'alice'
+        )
+
+        expect(await getNextStepButton()).not.toBeDisabled()
+      })
+    })
   })
 
   async function fillStakingAmount(value: number) {
@@ -188,18 +208,13 @@ describe('UI: Announce Candidacy Modal', () => {
     })
   }
 
-  async function fillStakingStep(stakingAccount: string, stakingAmount: number) {
+  async function fillStakingStep(stakingAccount: string, stakingAmount: number, goNext?: boolean) {
     await selectFromDropdown('Staking account', stakingAccount)
     await fillStakingAmount(stakingAmount)
-  }
 
-  async function getPreviousStepButton() {
-    return await getButton(/Previous step/i)
-  }
-
-  async function clickPreviousButton() {
-    const button = await getPreviousStepButton()
-    await fireEvent.click(button as HTMLElement)
+    if (goNext) {
+      await clickNextButton()
+    }
   }
 
   async function getNextStepButton() {
@@ -208,7 +223,10 @@ describe('UI: Announce Candidacy Modal', () => {
 
   async function clickNextButton() {
     const button = await getNextStepButton()
-    await fireEvent.click(button as HTMLElement)
+
+    act(() => {
+      fireEvent.click(button as HTMLElement)
+    })
   }
 
   function renderModal() {
