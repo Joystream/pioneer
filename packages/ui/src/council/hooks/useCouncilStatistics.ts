@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { map } from 'rxjs'
 
 import { useApi } from '@/common/hooks/useApi'
@@ -10,7 +11,10 @@ export const useCouncilStatistics = (electedAtBlock?: number) => {
   const currentBlock = useCurrentBlockNumber()
 
   const councilSize = api?.consts.council.councilSize
-  const reward = api?.query.council.councilorReward().pipe(map((councilorReward) => councilSize?.mul(councilorReward)))
+  const reward = useMemo(
+    () => api?.query.council.councilorReward().pipe(map((councilorReward) => councilSize?.mul(councilorReward))),
+    [councilSize]
+  )
   const budgetAmount = useObservable(api?.query.council.budget(), [connectionState])
   const rewardAmount = useObservable(reward, [connectionState])
 
