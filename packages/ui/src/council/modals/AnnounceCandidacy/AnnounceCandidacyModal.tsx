@@ -17,6 +17,7 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
+import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -70,10 +71,11 @@ export const AnnounceCandidacyModal = () => {
   useEffect((): any => {
     if (state.matches('staking') && state.context.stakingAccount && state.context.stakingAmount) {
       setValidNext(true)
-      return
+    } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
+      setValidNext(true)
+    } else {
+      setValidNext(false)
     }
-
-    setValidNext(false)
   }, [state, activeMember?.id, stakingStatus])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
@@ -120,6 +122,12 @@ export const AnnounceCandidacyModal = () => {
                 stake={state.context.stakingAmount}
                 setStake={(amount) => send('SET_AMOUNT', { amount })}
                 account={state.context.stakingAccount}
+                setAccount={(account) => send('SET_ACCOUNT', { account })}
+              />
+            )}
+            {state.matches('rewardAccount') && (
+              <RewardAccountStep
+                account={state.context.rewardAccount}
                 setAccount={(account) => send('SET_ACCOUNT', { account })}
               />
             )}
