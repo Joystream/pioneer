@@ -60,3 +60,12 @@ query GetCandidate($where: CandidateWhereUniqueInput!) {
     ...CandidateFields
   }
 }
+
+query GetCandidateStats($memberId: ID) {
+  candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+    totalCount
+  }
+  councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+    totalCount
+  }
+}
