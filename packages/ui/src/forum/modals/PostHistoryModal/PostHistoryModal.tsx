@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } f
 import { InView } from 'react-intersection-observer'
 import styled from 'styled-components'
 
-import { BlockTime } from '@/common/components/BlockTime'
+import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Modal, ModalHeader } from '@/common/components/Modal'
@@ -115,7 +115,7 @@ const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostPro
       <HistoryModalPost ref={ref}>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-          <BlockTime block={asBlock(edit)} layout="reverse" />
+          <BlockTime block={asBlock(edit)} layout="reverse" lessInfo />
         </ForumPostRow>
         <ForumPostRow>
           <MarkdownPreview markdown={edit.newText} />
@@ -131,6 +131,10 @@ const HistoryModalWrapper = styled(StepperModalWrapper)`
 
 const HistoryModalPost = styled(ForumPostStyles)`
   padding-bottom: 52px;
+
+  ${BlockTimeWrapper} {
+    grid-row-gap: 2px;
+  }
 `
 
 const HistoryPostSpacing = styled(RowGapBlock)`
