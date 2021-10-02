@@ -13,7 +13,12 @@ interface RewardAccountContext extends Required<StakingContext> {
   rewardAccount?: Account
 }
 
-export type AnnounceCandidacyContext = Partial<StakingContext & RewardAccountContext>
+interface TitleAndBulletPointsContext extends Required<RewardAccountContext> {
+  title?: string
+  bulletPoints: string[]
+}
+
+export type AnnounceCandidacyContext = Partial<StakingContext & RewardAccountContext & TitleAndBulletPointsContext>
 
 export type AnnounceCandidacyState =
   | { value: 'requirementsVerification'; context: EmptyObject }
@@ -23,15 +28,16 @@ export type AnnounceCandidacyState =
   | { value: 'staking'; context: Required<StakingContext> }
   | { value: 'rewardAccount'; context: Required<RewardAccountContext> }
   | { value: 'candidateProfile'; context: Required<RewardAccountContext> }
-  | { value: 'candidateProfile.titleAndDescription'; context: Required<RewardAccountContext> }
-  | { value: 'candidateProfile.summaryAndBanner'; context: Required<RewardAccountContext> }
-  | { value: 'candidateProfile.finishCandidateProfile'; context: Required<RewardAccountContext> }
-  | { value: 'success'; context: Required<RewardAccountContext> }
+  | { value: 'candidateProfile.titleAndBulletPoints'; context: Required<TitleAndBulletPointsContext> }
+  | { value: 'candidateProfile.summaryAndBanner'; context: Required<TitleAndBulletPointsContext> }
+  | { value: 'candidateProfile.finishCandidateProfile'; context: Required<TitleAndBulletPointsContext> }
+  | { value: 'success'; context: Required<TitleAndBulletPointsContext> }
   | { value: 'error'; context: AnnounceCandidacyContext }
 
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
+type SetBulletPointsEvent = { type: 'SET_BULLET_POINTS'; bulletPoints: string[] }
 
 type AnnounceCandidacyEvent =
   | { type: 'FAIL' }
@@ -40,6 +46,7 @@ type AnnounceCandidacyEvent =
   | SetAccountEvent
   | SetAmountEvent
   | SetTitleEvent
+  | SetBulletPointsEvent
 
 export const announceCandidacyMachine = createMachine<
   AnnounceCandidacyContext,
@@ -47,7 +54,9 @@ export const announceCandidacyMachine = createMachine<
   AnnounceCandidacyState
 >({
   initial: 'requirementsVerification',
-  context: {},
+  context: {
+    bulletPoints: [],
+  },
   states: {
     requirementsVerification: {
       on: {
@@ -89,7 +98,7 @@ export const announceCandidacyMachine = createMachine<
       on: {
         BACK: '#staking',
         NEXT: {
-          target: 'candidacyProfile',
+          target: 'candidateProfile',
           cond: (context) => !!context.rewardAccount,
         },
         SET_ACCOUNT: {
@@ -99,23 +108,33 @@ export const announceCandidacyMachine = createMachine<
         },
       },
     },
-    candidacyProfile: {
-      initial: 'titleAndDescription',
-      meta: { isStep: true, stepTitle: 'Candidacy profile' },
+    candidateProfile: {
+      initial: 'titleAndBulletPoints',
+      meta: { isStep: true, stepTitle: 'Candidate profile' },
       states: {
-        titleAndDescription: {
-          meta: { isStep: true, stepTitle: 'Title & Description' },
+        titleAndBulletPoints: {
+          meta: { isStep: true, stepTitle: 'Title & Bullet points' },
           on: {
             BACK: '#rewardAccount',
             NEXT: {
               target: 'summaryAndBanner',
+            },
+            SET_TITLE: {
+              actions: assign({
+                title: (context, event) => event.title,
+              }),
+            },
+            SET_BULLET_POINTS: {
+              actions: assign({
+                bulletPoints: (context, event) => event.bulletPoints,
+              }),
             },
           },
         },
         summaryAndBanner: {
           meta: { isStep: true, stepTitle: 'Summary & Banner' },
           on: {
-            BACK: 'titleAndDescription',
+            BACK: 'titleAndBulletPoints',
             NEXT: {
               target: 'finishCandidateProfile',
             },
