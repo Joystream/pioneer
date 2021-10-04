@@ -1,6 +1,5 @@
 import BN from 'bn.js'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { areLocksConflicting } from '@/accounts/model/lockTypes'
 import { LockType } from '@/accounts/types'
@@ -8,7 +7,6 @@ import { BN_ZERO } from '@/common/constants'
 
 export const useHasRequiredStake = (stake: number, lock: LockType) => {
   const balances = useMyBalances()
-  const myAccounts = useMyAccounts()
 
   const compatibleAccounts = Object.entries(balances).filter(
     ([, balances]) => !areLocksConflicting(lock, balances.locks)
@@ -48,9 +46,7 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
     return {
       hasRequiredStake: false,
       accountsWithLockedFounds: null,
-      transferableAccounts: accountsWithTransferableBalance.map(([address]) =>
-        myAccounts.allAccounts.find((account) => account.address === address)
-      ),
+      transferableAccounts: accountsWithTransferableBalance.map(([address]) => address),
     }
   }
 
@@ -69,9 +65,7 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
       if (otherAccountsSum.add(total).gte(requiredStake)) {
         return {
           ...(acc ?? {}),
-          [compatibleAccountAddress]: otherAccounts.map((address) =>
-            myAccounts.allAccounts.find((account) => account.address === address)
-          ),
+          [compatibleAccountAddress]: otherAccounts,
         }
       }
     }

@@ -280,7 +280,7 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: [alice, bobStash, bob],
+      transferableAccounts: [alice.address, bobStash.address, bob.address],
       accountsWithLockedFounds: null,
     })
   })
@@ -334,7 +334,7 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Staking Candidate')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: [alice, bobStash, bob],
+      transferableAccounts: [alice.address, bobStash.address, bob.address],
       accountsWithLockedFounds: null,
     })
   })
@@ -375,7 +375,7 @@ describe('useHasRequiredStake', () => {
       hasRequiredStake: false,
       transferableAccounts: null,
       accountsWithLockedFounds: {
-        [aliceStash.address]: [bobStash, bob],
+        [aliceStash.address]: [bobStash.address, bob.address],
       },
     })
   })
