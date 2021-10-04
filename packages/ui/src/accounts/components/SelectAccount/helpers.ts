@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 
-import { Account, Balances } from '../../types'
+import { areLocksConflicting } from '../../model/lockTypes'
+import { Account, Balances, LockType } from '../../types'
 
 export function filterByText(accounts: Account[], text: string) {
   return accounts.filter(
@@ -8,6 +9,6 @@ export function filterByText(accounts: Account[], text: string) {
   )
 }
 
-export const filterByMinBalance = (minBalance: BN, balances?: Balances) => {
-  return !!balances && balances.transferable.gte(minBalance)
+export const filterByRequiredStake = (requiredStake: BN, stakeLock: LockType, balances?: Balances) => {
+  return !!balances && balances.transferable.gte(requiredStake) && !areLocksConflicting(stakeLock, balances.locks)
 }

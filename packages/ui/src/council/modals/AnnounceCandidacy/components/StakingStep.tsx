@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByMinBalance } from '@/accounts/components/SelectAccount/helpers'
+import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -88,7 +88,9 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
               onChange={(account) => setAccount(account)}
               selected={account}
               minBalance={stake}
-              filter={(account) => filterByMinBalance(fields.stake ?? minStake, balances[account.address])}
+              filter={(account) =>
+                filterByRequiredStake(fields.stake ?? minStake, 'Council Candidate', balances[account.address])
+              }
               disabled={!isSomeBalanceGteStake()}
             />
           </InputComponent>

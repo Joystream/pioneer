@@ -2,6 +2,9 @@ import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
+import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+
 import { SelectAccount } from '../../../accounts/components/SelectAccount'
 import { Account } from '../../../accounts/types'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
@@ -13,7 +16,7 @@ import { useForm } from '../../../common/hooks/useForm'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { AccountSchema } from '../../../memberships/model/validation'
-import { WorkingGroupOpening } from '../../types'
+import { groupToLockId, WorkingGroupOpening } from '../../types'
 
 export interface StakeStepForm {
   account?: Account
@@ -40,6 +43,7 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
     )
     return StakeStepFormSchema
   }, [minStake.toString()])
+  const balances = useMyBalances()
 
   const initializer = {
     account: undefined,
@@ -64,6 +68,14 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
           </RowGapBlock>
           <InputComponent label="Select account for Staking" required inputSize="l">
             <SelectAccount onChange={(account) => changeField('account', account)} selected={fields.account} />
+            <SelectAccount
+              onChange={(account) => changeField('account', account)}
+              selected={fields.account}
+              minBalance={minStake}
+              filter={(account) =>
+                filterByRequiredStake(minStake, groupToLockId(opening.groupName), balances[account.address])
+              }
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>

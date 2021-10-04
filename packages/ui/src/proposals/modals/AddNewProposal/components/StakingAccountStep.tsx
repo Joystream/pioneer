@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByMinBalance } from '@/accounts/components/SelectAccount/helpers'
+import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
@@ -41,7 +41,7 @@ export const StakingAccountStep = ({ requiredStake, account: chosenAccount, setA
               onChange={(account) => setAccount(account)}
               selected={chosenAccount}
               minBalance={requiredStake}
-              filter={(account) => filterByMinBalance(requiredStake, balances[account.address])}
+              filter={(account) => filterByRequiredStake(requiredStake, 'Proposals', balances[account.address])}
             />
           </InputComponent>
         </RowGapBlock>
