@@ -10,7 +10,7 @@ describe('blocksToTime', () => {
 
   it('Negative number of blocks', () => {
     const blocks = new BN(-1)
-    expect(blocksToTime(blocks)).toEqual('never')
+    expect(blocksToTime(blocks)).toEqual('–')
   })
 
   it('A minute', () => {
