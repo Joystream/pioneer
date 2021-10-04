@@ -86,6 +86,16 @@ Also, any The second limitation is that any on-chain action is not represented i
 
 See [mocking](mocks.md) on how to work with local mocks for development and tests.
 
+### Local environment Accounts
+
+The joystream node should be started in a development mode:
+
+```shell
+joystream-node --dev --tmp --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --log runtime
+```
+
+The development version uses well-known accounts to store JOY tokens and where `Alice` is a Sudo account. See [tips on how to add them to the extension](#using-well-known-accounts-with-polkadot-js-extension).
+
 ## Query-node API
 
 To access the archival state of the chain Pioneer 2 fetch such information from the [query-node](https://github.com/Joystream/joystream/tree/query_node/query-node). It is a GraphQL server that allows a convenient API for querying the data.
@@ -152,3 +162,18 @@ For the `olympia_dev` branch the `defs.json` use this [link](https://github.com/
 3. Switch to a network
    1. [local](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944)
    2. [olympia testnet](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Folympia-dev.joystream.app%2Frpc)
+
+## Using well-known accounts with Polkadot-js extension
+
+Substrate defines [well-known accounts](https://substrate.dev/docs/en/knowledgebase/integrate/subkey#well-known-keys) for `Alice`, `Alice_Stash`, `Bob`, `Bob_Stash`, `Charlie`, `Dave`, `Eve` and `Ferdie`.
+
+To add any of the above:
+
+1. Open extension and click plus sign
+2. Select "Import account from pre-existing seed"
+3. Copy the seed from substrate help page as "existing mnemonic seed"
+4. Open advanced and type the derivation path:
+  * For `Alice`, `Bob`, `Charlie`, `Dave`, `Eve` & `Ferdie` use the name as path, e.g. `//Eve`
+  * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`
+
+By default, only `Alice`, `Alice_Stash`, `Bob` and `Bob_Stash` accounts has any funds.
