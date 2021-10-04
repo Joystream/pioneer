@@ -12,20 +12,21 @@ import { BlockInfo, BlockInfoContainer, BlockNetworkInfo } from './BlockInfo'
 export interface BlockTimeProps extends BlockTimeLayoutProps {
   block: Block
   dateLabel?: string
+  lessInfo?: boolean
 }
 
 interface BlockTimeLayoutProps {
   layout?: 'row' | 'column' | 'reverse'
 }
 
-export const BlockTime = React.memo(({ block, layout, dateLabel }: BlockTimeProps) => (
+export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo }: BlockTimeProps) => (
   <BlockTimeWrapper layout={layout}>
     <AboutText>
       {dateLabel && layout == 'row' && dateLabel + ': '}
       {formatDateString(block.timestamp, layout === 'column' ? 's' : 'l')}
     </AboutText>
     {layout == 'row' && <Separator>{' | '}</Separator>}
-    <BlockInfo block={block} />
+    <BlockInfo block={block} lessInfo={lessInfo} />
   </BlockTimeWrapper>
 ))
 

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } f
 import { InView } from 'react-intersection-observer'
 import styled, { css } from 'styled-components'
 
-import { BlockTime } from '@/common/components/BlockTime'
+import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { ButtonLink } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -120,10 +120,10 @@ const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostPro
 
   return (
     <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
-      <ForumPostStyles ref={ref}>
+      <HistoryModalPost ref={ref}>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-          <BlockTime block={asBlock(edit)} layout="reverse" />
+          <BlockTime block={asBlock(edit)} layout="reverse" lessInfo />
         </ForumPostRow>
         <ContentRow ref={contentRef} postLong={postLong} limitedPostHeight={limitedPostHeight} expanded={expanded}>
           <MarkdownPreview markdown={edit.newText} />
@@ -133,13 +133,21 @@ const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostPro
             {expanded ? 'Show less' : 'Show more'}
           </ShowMoreButton>
         )}
-      </ForumPostStyles>
+      </HistoryModalPost>
     </InView>
   )
 }
 
 const HistoryModalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 300px 1fr;
+`
+
+const HistoryModalPost = styled(ForumPostStyles)`
+  padding-bottom: 52px;
+
+  ${BlockTimeWrapper} {
+    grid-row-gap: 2px;
+  }
 `
 
 const HistoryPostSpacing = styled(RowGapBlock)`

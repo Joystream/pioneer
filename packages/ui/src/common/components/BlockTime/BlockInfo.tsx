@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BlockIcon } from '@/common/components/icons'
 import { TextSmall } from '@/common/components/typography'
@@ -9,17 +9,20 @@ import { Block } from '@/common/types'
 
 export interface BlockInfoProp {
   block: Block
+  lessInfo?: boolean
 }
 
-export const BlockInfo = ({ block }: BlockInfoProp) => (
-  <BlockInfoContainer>
+export const BlockInfo = ({ block, lessInfo }: BlockInfoProp) => (
+  <BlockInfoContainer lessInfo={lessInfo}>
     <BlockIcon />
-    <BlockNumber>{formatTokenValue(block.number)}</BlockNumber>
-    <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>
+    <span>
+      {formatTokenValue(block.number)} {lessInfo && 'block'}
+    </span>
+    {!lessInfo && <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>}
   </BlockInfoContainer>
 )
 
-export const BlockInfoContainer = styled.span`
+export const BlockInfoContainer = styled.span<{ lessInfo?: boolean }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 4px;
@@ -27,11 +30,12 @@ export const BlockInfoContainer = styled.span`
   width: fit-content;
   height: fit-content;
   color: ${Colors.Black[400]};
+  ${({ lessInfo }) =>
+    lessInfo &&
+    css`
+      margin-left: auto;
+      font-weight: 700;
+    `};
 `
 
 export const BlockNetworkInfo = styled(TextSmall).attrs({ lighter: true })``
-
-const BlockNumber = styled.span`
-  text-decoration: underline;
-  text-underline-offset: 2px;
-`
