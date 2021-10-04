@@ -4,7 +4,7 @@ import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { Statistics, TokenValueStat } from '@/common/components/statistics'
+import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
@@ -27,9 +27,27 @@ export const AboutTab = ({ workingGroup }: Props) => {
     <ContentWithSidepanel>
       <MainPanel ref={sideNeighborRef}>
         <Statistics>
-          <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
-          {statistics.totalHired ? <NumericValueStat title="Total hired" value={statistics.totalHired} /> : <Loading />}
-          {statistics.totalFired ? <NumericValueStat title="Total fired" value={statistics.totalFired} /> : <Loading />}
+          {statistics.spending ? (
+            <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
+          ) : (
+            <StatisticItem centered>
+              <Loading />
+            </StatisticItem>
+          )}
+          {statistics.totalHired ? (
+            <NumericValueStat title="Total hired" value={statistics.totalHired} />
+          ) : (
+            <StatisticItem centered>
+              <Loading />
+            </StatisticItem>
+          )}
+          {statistics.totalFired ? (
+            <NumericValueStat title="Total fired" value={statistics.totalFired} />
+          ) : (
+            <StatisticItem centered>
+              <Loading />
+            </StatisticItem>
+          )}
         </Statistics>
         <RowGapBlock gap={32}>
           {workingGroup.description && (

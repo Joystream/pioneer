@@ -10,10 +10,11 @@ import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
 
 export interface StatisticItemProps extends StatisticHeaderProps {
   className?: string
+  centered?: boolean
 }
 
-export const StatisticItem: FC<StatisticItemProps> = ({ className, children, ...headerProps }) => (
-  <StatsBlock key={headerProps.title} className={className}>
+export const StatisticItem: FC<StatisticItemProps> = ({ className, children, centered, ...headerProps }) => (
+  <StatsBlock key={headerProps.title} className={className} centered={centered}>
     <StatisticHeader {...headerProps} />
     <StatsContent>{children}</StatsContent>
   </StatsBlock>
