@@ -25,7 +25,7 @@ const renderUseProposalVotes = (voteData: VoteData[], statuses: ProposalStatus[]
 
 const councilSize = 3
 
-jest.mock('../../../src/common/hooks/useCouncilSize', () => ({
+jest.mock('@/council/hooks/useCouncilSize', () => ({
   useCouncilSize: jest.fn(() => councilSize),
 }))
 
