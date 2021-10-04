@@ -34,13 +34,9 @@ function isKeyringLoaded(keyring: Keyring) {
 const loadKeysFromExtension = async (keyring: Keyring) => {
   await web3Enable('Pioneer')
   const injectedAccounts = await web3Accounts()
-  const allAccounts = injectedAccounts.map(({ address, meta }) => ({
-    address,
-    meta: { ...meta, name: `${meta.name} (${meta.source})` },
-  }))
 
   if (!isKeyringLoaded(keyring)) {
-    keyring.loadAll({ isDevelopment: true }, allAccounts)
+    keyring.loadAll({ isDevelopment: false }, injectedAccounts)
   }
 }
 
@@ -49,6 +45,7 @@ const onExtensionLoaded = (onSuccess: () => void, onFail: () => void) => () => {
   const interval = 20
   const timeout = 1000
   let timeElapsed = 0
+
   const intervalId = setInterval(() => {
     if (Object.keys((window as any).injectedWeb3).length) {
       clearInterval(intervalId)
