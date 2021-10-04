@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -18,6 +18,8 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
+import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -29,6 +31,8 @@ import {
   stubQuery,
   stubTransaction,
 } from '../../_mocks/transactions'
+
+configure({ testIdAttribute: 'id' })
 
 describe('UI: Announce Candidacy Modal', () => {
   const api = stubApi()
@@ -106,13 +110,13 @@ describe('UI: Announce Candidacy Modal', () => {
 
       const { queryByText } = renderModal()
 
-      expect(queryByText(/announce candidacy/i)).toBeNull()
+      expect(queryByText(/^announce candidacy/i)).toBeNull()
     })
 
     it('All passed', async () => {
       const { queryByText } = renderModal()
 
-      expect(queryByText(/announce candidacy/i)).not.toBeNull()
+      expect(queryByText(/^announce candidacy/i)).not.toBeNull()
     })
   })
 
@@ -120,7 +124,7 @@ describe('UI: Announce Candidacy Modal', () => {
     it('Renders a modal', async () => {
       const { queryByText } = renderModal()
 
-      expect(queryByText(/announce candidacy/i)).not.toBeNull()
+      expect(queryByText(/^announce candidacy/i)).not.toBeNull()
     })
 
     it('Steps', () => {
@@ -135,15 +139,82 @@ describe('UI: Announce Candidacy Modal', () => {
         { title: 'Summary & Banner', type: 'next', isBaby: true },
       ])
     })
+
+    describe('Staking', () => {
+      it('Default', async () => {
+        const { getByText } = renderModal()
+
+        expect(await getNextStepButton()).toBeDisabled()
+        expect(includesTextWithMarkup(getByText, 'You must stake 10 to announce candidacy')).toBeInTheDocument()
+      })
+
+      describe('Staking amount', () => {
+        it('Lower than minimal stake', async () => {
+          const { getByText } = renderModal()
+
+          await fillStakingAmount(2)
+
+          expect(await getNextStepButton()).toBeDisabled()
+          expect(includesTextWithMarkup(getByText, 'Minimum stake amount is 10 JOY')).toBeInTheDocument()
+        })
+
+        it('Higher than maximal balance', async () => {
+          const { getByText } = renderModal()
+
+          await fillStakingAmount(10000)
+
+          expect(await getNextStepButton()).toBeDisabled()
+          expect(
+            includesTextWithMarkup(getByText, 'You have no 10,000 JOY on any of your accounts.')
+          ).toBeInTheDocument()
+        })
+      })
+
+      it('Valid', async () => {
+        renderModal()
+
+        await fillStakingStep('alice', 15)
+
+        expect(await getNextStepButton()).not.toBeDisabled()
+      })
+    })
+
+    describe('Reward account', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+      })
+
+      it('Not selected', async () => {
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+
+      it('Selected', async () => {
+        await selectFromDropdown(
+          'Select account receiving councilor rewards in case your candidacy is elected',
+          'alice'
+        )
+
+        expect(await getNextStepButton()).not.toBeDisabled()
+      })
+    })
   })
 
-  async function getPreviousStepButton() {
-    return await getButton(/Previous step/i)
+  async function fillStakingAmount(value: number) {
+    const amountInput = await screen.getByTestId('stakingAmount')
+
+    act(() => {
+      fireEvent.change(amountInput, { target: { value } })
+    })
   }
 
-  async function clickPreviousButton() {
-    const button = await getPreviousStepButton()
-    await fireEvent.click(button as HTMLElement)
+  async function fillStakingStep(stakingAccount: string, stakingAmount: number, goNext?: boolean) {
+    await selectFromDropdown('Staking account', stakingAccount)
+    await fillStakingAmount(stakingAmount)
+
+    if (goNext) {
+      await clickNextButton()
+    }
   }
 
   async function getNextStepButton() {
@@ -152,7 +223,10 @@ describe('UI: Announce Candidacy Modal', () => {
 
   async function clickNextButton() {
     const button = await getNextStepButton()
-    await fireEvent.click(button as HTMLElement)
+
+    act(() => {
+      fireEvent.click(button as HTMLElement)
+    })
   }
 
   function renderModal() {

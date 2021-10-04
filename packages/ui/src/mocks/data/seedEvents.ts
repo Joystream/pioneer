@@ -6,6 +6,7 @@ import rawApplicationWithdrawnEvents from './raw/applicationWithdrawnEvents.json
 import rawAppliedOnOpeningEvents from './raw/appliedOnOpeningEvents.json'
 import rawBudgetSetEvents from './raw/budgetSetEvents.json'
 import rawBudgetSpendingEvents from './raw/budgetSpendingEvents.json'
+import rawCandidacyWithdrawEvents from './raw/candidacyWithdrawEvents.json'
 import rawCouncilorRewardUpdatedEvents from './raw/councilorRewardUpdatedEvents.json'
 import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
 import rawOpeningFilledEvents from './raw/openingFilledEvents.json'
@@ -18,6 +19,8 @@ import rawWorkerRewardAmountEvents from './raw/workerRewardAmountUpdatedEvents.j
 
 interface BaseEvent {
   id?: string
+  inBlock?: number
+  network?: string
   createdAt: string
 }
 interface RawApplicationWithdrawnEvent extends BaseEvent {
@@ -94,6 +97,10 @@ interface WorkerRewardAmountUpdated extends BaseEvent {
   newRewardPerBlock: number
 }
 
+interface RawCandidacyWithdrawEvent extends BaseEvent {
+  memberId: string
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -116,6 +123,7 @@ export const eventCategories = {
   WorkerRewardAmountUpdatedEvent: rawWorkerRewardAmountEvents.map((rawEvent: WorkerRewardAmountUpdated) => ({
     ...rawEvent,
   })),
+  CandidacyWithdrawEvent: rawCandidacyWithdrawEvents.map((rawEvent: RawCandidacyWithdrawEvent) => ({ ...rawEvent })),
 }
 
 type EventType = keyof typeof eventCategories

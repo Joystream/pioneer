@@ -11,13 +11,16 @@ import { StatiscticContentColumn, StatsBlock, TwoColumnsStatistic } from '@/comm
 import { TextBig, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
+import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
 import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCardImage'
 
 export interface CandidateCardProps {
+  id: string
   member: Member
   image?: string
   voted?: boolean
@@ -31,6 +34,7 @@ export interface CandidateCardProps {
 }
 
 export const CandidateCard = ({
+  id,
   member,
   image,
   voted,
@@ -42,8 +46,11 @@ export const CandidateCard = ({
   losts = 0,
   isVotingStage,
 }: CandidateCardProps) => {
+  const { showModal } = useModal()
   return (
-    <CandidateCardWrapper>
+    <CandidateCardWrapper
+      onClick={() => showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id } })}
+    >
       <CandidateCardImageWrapper>
         <CandidateCardImage imageUrl={image} />
       </CandidateCardImageWrapper>
@@ -52,7 +59,7 @@ export const CandidateCard = ({
           <CandidateCardMemberInfoWrapper>
             <MemberInfo onlyTop member={member} />
           </CandidateCardMemberInfoWrapper>
-          <CandidateCardTitle as={GhostRouterLink} to="">
+          <CandidateCardTitle as={GhostRouterLink} to="#">
             {title}
           </CandidateCardTitle>
           {infolist && (

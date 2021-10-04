@@ -28,7 +28,6 @@ export const MemberHandle = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer;
   transition: ${Transitions.all};
 `
 
@@ -127,6 +126,7 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
       &:active {
         ${MemberHandle} {
           color: ${Colors.Blue[500]};
+          cursor: pointer;
         }
         ${MemberPhoto} {
           &:after {

@@ -12,6 +12,7 @@ fragment CouncilMemberFields on CouncilMember {
 
 fragment ElectedCouncilsFields on ElectedCouncil {
   id
+  electedAtBlock
   councilMembers {
     ...CouncilMemberFields
   }
@@ -58,5 +59,17 @@ query GetCurrentElection {
 query GetCandidate($where: CandidateWhereUniqueInput!) {
   candidateByUniqueInput(where: $where) {
     ...CandidateFields
+  }
+}
+
+query GetCandidateStats($memberId: ID) {
+  candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+    totalCount
+  }
+  councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+    totalCount
+  }
+  candidatesConnection(where: { member: { id_eq: $memberId } }) {
+    totalCount
   }
 }

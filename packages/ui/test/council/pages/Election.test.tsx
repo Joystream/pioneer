@@ -58,6 +58,7 @@ describe('UI: Election page', () => {
     seedElectedCouncil(
       {
         id: '1',
+        electedAtBlock: 0,
         endedAtBlock: null,
       },
       mockServer.server

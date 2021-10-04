@@ -1,3 +1,5 @@
+import faker from 'faker'
+
 import { Reducer } from '@/common/types/helpers'
 import {
   RawCouncilCandidateMock,
@@ -7,8 +9,7 @@ import {
 } from '@/mocks/data/seedCouncils'
 
 import { saveFile } from '../../helpers/saveFile'
-import { randomBlock, randomFromRange, randomMember, repeat } from '../utils'
-import faker from 'faker'
+import { randomFromRange, randomMember, repeat } from '../utils'
 
 const COUNCILS = 5
 
@@ -31,24 +32,24 @@ interface CouncilData {
 
 const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
   const isFinished = councilIndex !== COUNCILS - 1
+  const hasEnded = councilIndex < COUNCILS - 2
 
   const council = {
     id: String(councilIndex),
-    endedAtBlock: null,
+    electedAtBlock: randomFromRange(10000, 1000000),
+    endedAtBlock: hasEnded ? randomFromRange(10000, 1000000) : null,
   }
 
-  const councilors: RawCouncilorMock[] = isFinished
-    ? repeat(
-      (councilorIndex) => ({
-        id: `${council.id}-${councilorIndex}`,
-        electedInCouncilId: council.id,
-        memberId: randomMember().id,
-        unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
-        stake: randomFromRange(10000, 1000000),
-      }),
-      randomFromRange(5, 8)
-    )
-    : []
+  const councilors: RawCouncilorMock[] = repeat(
+    (councilorIndex) => ({
+      id: `${council.id}-${councilorIndex}`,
+      electedInCouncilId: council.id,
+      memberId: randomMember().id,
+      unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
+      stake: randomFromRange(10000, 1000000),
+    }),
+    isFinished ? randomFromRange(5, 8) : 0
+  )
 
   const candidates: RawCouncilCandidateMock[] = repeat(
     (candidateIndex) => {

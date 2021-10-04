@@ -54,16 +54,16 @@ export const durationFormater = (units = defaultDurationUnits) => (duration: num
 const formatDurationUnit = (duration: number, unit: Intl.RelativeTimeFormatUnit) =>
   duration.toLocaleString('en', { style: 'unit', unit, unitDisplay: 'long' })
 
-const MILISECOND_PER_BLOCK = A_SECOND * SECONDS_PER_BLOCK
+export const MILISECOND_PER_BLOCK = A_SECOND * SECONDS_PER_BLOCK
 export const formatBlocksToDuration = durationFormater([
   [A_DAY / MILISECOND_PER_BLOCK, 'day'],
   [AN_HOUR / MILISECOND_PER_BLOCK, 'hour'],
   [A_MINUTE / MILISECOND_PER_BLOCK, 'minute'],
 ])
 
-export const splitDuration = <T extends [number, any]>(units: T[]) => (duration: number, result: T[] = []): T[] => {
-  if (!units.length) return result
+export const splitDuration = <T extends any>(units: [number, T][]) => (duration: number): [number, T][] => {
+  if (!units.length) return []
   const [[unitValue, unitName], ...submultiples] = units
   const amount = Math.floor(duration / unitValue)
-  return splitDuration(submultiples)(duration - amount * unitValue, [...result, [amount, unitName] as T])
+  return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
 }

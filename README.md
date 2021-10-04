@@ -10,7 +10,7 @@ Governance application for the Joystream DAO platform.
 
 ## Preview build
 
-The preview build, deployed from the main branch, is available on [https://pioneer-2.netflify.app/](https://pioneer-2.netflify.app/).
+The preview build, deployed from the main branch, is available on [https://pioneer-2.netflify.app/](https://pioneer-2.netlify.app/).
 Components preview and testing from main branch, is available on [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
 
 The deployed version can interact with two backends:

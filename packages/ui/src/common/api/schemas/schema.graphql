@@ -2871,6 +2871,9 @@ input CandidateWhereInput {
   note_endsWith: String
   note_in: [String!]
   cycleId: ElectionRoundWhereInput
+  member_eq: ID
+  member_in: [ID!]
+  member: MembershipWhereInput
   AND: [CandidateWhereInput!]
   OR: [CandidateWhereInput!]
 }

@@ -27,7 +27,7 @@ interface Props {
   minBalance?: BN
 }
 
-export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
+export const SelectAccount = React.memo(({ onChange, filter, selected, disabled }: Props) => {
   const { allAccounts } = useMyAccounts()
   const options = allAccounts.filter(filter || (() => true))
 
@@ -52,7 +52,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     <Select
       selected={selected}
       onChange={change}
-      disabled={false}
+      disabled={disabled}
       renderSelected={renderSelected}
       placeholder="Select account or paste account address"
       renderList={(onOptionClick) => <OptionListAccount onChange={onOptionClick} options={filteredOptions} />}

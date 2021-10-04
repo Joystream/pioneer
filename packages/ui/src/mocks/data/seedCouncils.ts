@@ -1,5 +1,3 @@
-import { BlockFieldsMock } from '@/mocks/data/common'
-
 import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
@@ -15,7 +13,8 @@ export interface RawCouncilorMock {
 
 export interface RawCouncilMock {
   id: string
-  endedAtBlock: BlockFieldsMock | null
+  electedAtBlock: number
+  endedAtBlock: number | null
 }
 
 export interface RawCouncilCandidateMock {

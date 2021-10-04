@@ -17,7 +17,6 @@ export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('CANDIDACY')
   const { modalData } = useModal<CandidacyPreviewModalCall>()
   const { isLoading, candidate } = useCandidate(modalData.id)
-  const member = candidate?.member
   return (
     <MemberModal
       tabs={[
@@ -26,18 +25,18 @@ export const CandidacyPreview = React.memo(() => {
         { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
         { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
       ]}
-      member={member}
+      member={candidate?.member}
       isLoading={isLoading}
       isDetailsTab={activeTab === 'DETAILS'}
     >
-      {!member ? (
+      {!candidate ? (
         <Loading />
       ) : (
         <>
           {activeTab === 'CANDIDACY' && <CandidacyDetails candidate={candidate} />}
-          {activeTab === 'DETAILS' && <MemberDetails member={member} />}
-          {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
-          {activeTab === 'ROLES' && <MemberSideRoles member={member} />}
+          {activeTab === 'DETAILS' && <MemberDetails member={candidate.member} />}
+          {activeTab === 'ACCOUNTS' && <MemberAccounts member={candidate.member} />}
+          {activeTab === 'ROLES' && <MemberSideRoles member={candidate.member} />}
         </>
       )}
     </MemberModal>
