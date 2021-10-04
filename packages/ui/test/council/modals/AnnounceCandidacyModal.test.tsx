@@ -134,8 +134,8 @@ describe('UI: Announce Candidacy Modal', () => {
       expect(getSteps(service)).toEqual([
         { title: 'Staking', type: 'next' },
         { title: 'Reward account', type: 'next' },
-        { title: 'Candidacy profile', type: 'next' },
-        { title: 'Title & Description', type: 'next', isBaby: true },
+        { title: 'Candidate profile', type: 'next' },
+        { title: 'Title & Bullet points', type: 'next', isBaby: true },
         { title: 'Summary & Banner', type: 'next', isBaby: true },
       ])
     })
@@ -190,10 +190,42 @@ describe('UI: Announce Candidacy Modal', () => {
       })
 
       it('Selected', async () => {
-        await selectFromDropdown(
-          'Select account receiving councilor rewards in case your candidacy is elected',
-          'alice'
+        await fillRewardAccountStep('alice')
+
+        expect(await getNextStepButton()).not.toBeDisabled()
+      })
+    })
+
+    describe('Title and Bullet Points', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+        await fillRewardAccountStep('alice', true)
+      })
+
+      it('Default', async () => {
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+
+      it('Long title', async () => {
+        await fillTitle(
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
         )
+
+        expect(screen.queryByText(/^maximum length is \d+ symbols/i)).not.toBeNull()
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+
+      it('Long bullet point', async () => {
+        await fillBulletPoint(
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua!Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
+        )
+        expect(screen.queryByText(/^maximum length is \d+ symbols/i)).not.toBeNull()
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+
+      it('Valid', async () => {
+        await fillTitleAndBulletPointsStep('Some title', 'Some bullet point')
 
         expect(await getNextStepButton()).not.toBeDisabled()
       })
@@ -211,6 +243,42 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillStakingStep(stakingAccount: string, stakingAmount: number, goNext?: boolean) {
     await selectFromDropdown('Staking account', stakingAccount)
     await fillStakingAmount(stakingAmount)
+
+    if (goNext) {
+      await clickNextButton()
+    }
+  }
+
+  async function fillRewardAccountStep(rewardAccount: string, goNext?: boolean) {
+    await selectFromDropdown(
+      'Select account receiving councilor rewards in case your candidacy is elected',
+      rewardAccount
+    )
+
+    if (goNext) {
+      await clickNextButton()
+    }
+  }
+
+  async function fillTitle(value: string) {
+    const titleInput = await screen.getByTestId('title')
+
+    act(() => {
+      fireEvent.change(titleInput, { target: { value } })
+    })
+  }
+
+  async function fillBulletPoint(value: string) {
+    const bulletPointInput = await screen.getByTestId('bulletPoint1')
+
+    act(() => {
+      fireEvent.change(bulletPointInput, { target: { value } })
+    })
+  }
+
+  async function fillTitleAndBulletPointsStep(title: string, bulletPoint: string, goNext?: boolean) {
+    await fillTitle(title)
+    await fillBulletPoint(bulletPoint)
 
     if (goNext) {
       await clickNextButton()

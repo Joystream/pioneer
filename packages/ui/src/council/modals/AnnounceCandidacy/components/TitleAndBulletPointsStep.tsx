@@ -84,7 +84,7 @@ export const TitleAndBulletPointsStep = ({
             validation={fields.title && !isValidString(fields.title, 'title') ? 'invalid' : undefined}
             message={getStringMessage(fields.title, 'title')}
           >
-            <InputText value={fields.title} onChange={(event) => setValue('title', event.target.value)} />
+            <InputText id="title" value={fields.title} onChange={(event) => setValue('title', event.target.value)} />
           </InputComponent>
           <InputComponent
             label="Bullet points"
@@ -95,7 +95,11 @@ export const TitleAndBulletPointsStep = ({
             }
             message={getStringMessage(fields.bulletPoint1, 'bulletPoint')}
           >
-            <InputText value={fields.bulletPoint1} onChange={(event) => setValue('bulletPoint1', event.target.value)} />
+            <InputText
+              id="bulletPoint1"
+              value={fields.bulletPoint1}
+              onChange={(event) => setValue('bulletPoint1', event.target.value)}
+            />
           </InputComponent>
           <InputComponent
             inputSize="s"
@@ -104,7 +108,11 @@ export const TitleAndBulletPointsStep = ({
             }
             message={getStringMessage(fields.bulletPoint2, 'bulletPoint')}
           >
-            <InputText value={fields.bulletPoint2} onChange={(event) => setValue('bulletPoint2', event.target.value)} />
+            <InputText
+              id="bulletPoint2"
+              value={fields.bulletPoint2}
+              onChange={(event) => setValue('bulletPoint2', event.target.value)}
+            />
           </InputComponent>
           <InputComponent
             inputSize="s"
@@ -113,7 +121,11 @@ export const TitleAndBulletPointsStep = ({
             }
             message={getStringMessage(fields.bulletPoint3, 'bulletPoint')}
           >
-            <InputText value={fields.bulletPoint3} onChange={(event) => setValue('bulletPoint3', event.target.value)} />
+            <InputText
+              id="bulletPoint3"
+              value={fields.bulletPoint3}
+              onChange={(event) => setValue('bulletPoint3', event.target.value)}
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>
