@@ -1,12 +1,12 @@
-import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
+import { web3Accounts, web3AccountsSubscribe, web3Enable } from '@polkadot/extension-dapp'
 import { Keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime } from 'rxjs/operators'
 
+import { useKeyring } from '@/common/hooks/useKeyring'
+import { useObservable } from '@/common/hooks/useObservable'
 import { error } from '@/common/logger'
 
-import { useKeyring } from '../../../common/hooks/useKeyring'
-import { useObservable } from '../../../common/hooks/useObservable'
 import { Account } from '../../types'
 
 import { AccountsContext } from './context'
@@ -38,6 +38,20 @@ const loadKeysFromExtension = async (keyring: Keyring) => {
   if (!isKeyringLoaded(keyring)) {
     keyring.loadAll({ isDevelopment: false }, injectedAccounts)
   }
+
+  await web3AccountsSubscribe((accounts) => {
+    const current = keyring.getAccounts()
+
+    const addresses = accounts.map(({ address }) => address)
+
+    current.forEach(({ address }) => {
+      if (!addresses.includes(address)) {
+        keyring.forgetAccount(address)
+      }
+    })
+
+    accounts.forEach((injected) => keyring.addExternal(injected.address, injected.meta))
+  })
 }
 
 // Extensions is not always ready on application load, hence the check
