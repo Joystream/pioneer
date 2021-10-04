@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Info } from '@/common/components/Info'
 import { BalanceInfoInRow, InfoTitle, InfoValue, Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { Address } from '@/common/types'
 
 import { MemberRow, ModalBody } from './styles'
 
@@ -15,7 +17,7 @@ export interface MoveFoundsTransferableModalProps {
   onManageAccountsClick: () => void
   requiredStake: number
   balances: AddressToBalanceMap
-  accounts?: Account[]
+  accounts?: Address[]
 }
 
 export const MoveFoundsTransferableModal = ({
@@ -25,6 +27,8 @@ export const MoveFoundsTransferableModal = ({
   accounts,
   balances,
 }: MoveFoundsTransferableModalProps) => {
+  const { allAccounts } = useMyAccounts()
+
   if (!accounts || !accounts.length) {
     return null
   }
@@ -42,13 +46,13 @@ export const MoveFoundsTransferableModal = ({
             <TextMedium bold>Accounts with transferable balances:</TextMedium>
             <RowGapBlock gap={16}>
               <div>
-                {accounts.map((account) => (
-                  <MemberRow key={account.address}>
-                    <AccountInfo account={account} />
+                {accounts.map((address) => (
+                  <MemberRow key={address}>
+                    <AccountInfo account={allAccounts.find((account) => account.address === address) as Account} />
                     <BalanceInfoInRow>
                       <InfoTitle>Transferable balance</InfoTitle>
                       <InfoValue>
-                        <TokenValue value={balances[account.address] && balances[account.address].transferable} />
+                        <TokenValue value={balances[address] && balances[address].transferable} />
                       </InfoValue>
                     </BalanceInfoInRow>
                   </MemberRow>

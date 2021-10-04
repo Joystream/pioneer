@@ -32,7 +32,7 @@ const Template: Story<MoveFoundsTransferableModalProps> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  accounts: [alice, aliceStash, bob, bobStash],
+  accounts: [alice.address, aliceStash.address, bob.address, bobStash.address],
   balances: {
     [alice.address]: balanceMock(),
     [aliceStash.address]: balanceMock(),
