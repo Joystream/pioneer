@@ -74,6 +74,12 @@ export const AnnounceCandidacyModal = () => {
       setValidNext(true)
     } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
       setValidNext(true)
+    } else if (
+      state.matches('candidateProfile.titleAndBulletPoints') &&
+      state.context.title &&
+      state.context.bulletPoints.length
+    ) {
+      setValidNext(true)
     } else {
       setValidNext(false)
     }

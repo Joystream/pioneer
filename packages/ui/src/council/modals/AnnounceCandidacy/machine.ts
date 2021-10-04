@@ -55,6 +55,7 @@ export const announceCandidacyMachine = createMachine<
 >({
   initial: 'requirementsVerification',
   context: {
+    title: '',
     bulletPoints: [],
   },
   states: {
