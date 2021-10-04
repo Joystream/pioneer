@@ -1,15 +1,8 @@
 import { datatype } from 'faker'
 
 import { MockMember } from '@/mocks/data'
-import { BlockFieldsMock } from '@/mocks/data/common'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { RawCouncilMock, RawCouncilorMock } from '@/mocks/data/seedCouncils'
-
-const block: BlockFieldsMock = {
-  inBlock: 1000,
-  createdAt: Date(),
-  network: 'OLYMPIA',
-}
 
 const ALICE: MockMember = rawMembers[0]
 const getMember = (attrs: Partial<MockMember>): MockMember => ({ ...ALICE, ...attrs })
@@ -34,9 +27,9 @@ export const mockMembers: MockMember[] = [
 ]
 
 export const mockCouncils: RawCouncilMock[] = [
-  { id: '0', endedAtBlock: block },
-  { id: '1', endedAtBlock: block },
-  { id: '2', endedAtBlock: null },
+  { id: '0', electedAtBlock: 0, endedAtBlock: 1000 },
+  { id: '1', electedAtBlock: 0, endedAtBlock: 1000 },
+  { id: '2', electedAtBlock: 0, endedAtBlock: null },
 ]
 
 export const mockCouncilors: RawCouncilorMock[] = [

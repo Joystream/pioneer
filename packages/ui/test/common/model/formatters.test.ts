@@ -7,6 +7,7 @@ import {
   formatDateString,
   formatTokenValue,
   shortenAddress,
+  splitDuration,
 } from '@/common/model/formatters'
 
 describe('formatters', () => {
@@ -91,6 +92,48 @@ describe('formatters', () => {
       const blocksPerHour = 600
       const blocksPerDay = blocksPerHour * 24
       expect(formatBlocksToDuration(3 * blocksPerDay + 2 * blocksPerHour + 10)).toBe('3 days 2 hours 1 minute')
+    })
+  })
+
+  describe('splitDuration', () => {
+    it('Default', () => {
+      const format = splitDuration([
+        [A_DAY, 'day'],
+        [AN_HOUR, 'hour'],
+        [A_MINUTE, 'minute'],
+      ])
+      const duration = 3 * A_DAY + 2 * AN_HOUR + A_MINUTE
+
+      expect(format(duration)).toEqual([
+        [3, 'day'],
+        [2, 'hour'],
+        [1, 'minute'],
+      ])
+      expect(format(duration - 30 * A_SECOND)).toEqual([
+        [3, 'day'],
+        [2, 'hour'],
+        [0, 'minute'],
+      ])
+      expect(format(3 * A_DAY)).toEqual([
+        [3, 'day'],
+        [0, 'hour'],
+        [0, 'minute'],
+      ])
+      expect(format(AN_HOUR)).toEqual([
+        [0, 'day'],
+        [1, 'hour'],
+        [0, 'minute'],
+      ])
+      expect(format(0)).toEqual([
+        [0, 'day'],
+        [0, 'hour'],
+        [0, 'minute'],
+      ])
+      expect(format(A_MINUTE - 1)).toEqual([
+        [0, 'day'],
+        [0, 'hour'],
+        [0, 'minute'],
+      ])
     })
   })
 })
