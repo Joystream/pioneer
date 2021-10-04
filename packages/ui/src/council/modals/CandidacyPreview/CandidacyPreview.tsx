@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
-import { ButtonGhost, CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
+import { ModalFooter } from '@/common/components/Modal'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
@@ -71,6 +72,13 @@ export const CandidacyPreview = React.memo(() => {
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>
+      }
+      footer={
+        <ModalFooter>
+          <ButtonsGroup>
+            <ButtonPrimary size="large">Vote</ButtonPrimary>
+          </ButtonsGroup>
+        </ModalFooter>
       }
     >
       {!candidate ? (

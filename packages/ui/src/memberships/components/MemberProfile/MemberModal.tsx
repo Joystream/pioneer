@@ -27,9 +27,10 @@ interface Props {
   contextButtons: ReactNode
   title: string
   children: ReactNode
+  footer?: ReactNode
 }
 
-export const MemberModal = React.memo(({ member, isLoading, tabs, children, contextButtons, title }: Props) => {
+export const MemberModal = React.memo(({ member, isLoading, tabs, children, contextButtons, title, footer }: Props) => {
   const { hideModal } = useModal()
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -67,6 +68,7 @@ export const MemberModal = React.memo(({ member, isLoading, tabs, children, cont
           <Tabs tabs={tabs} tabsSize="xs" />
         </MemberPanelHeader>
         <SidePaneBody>{children}</SidePaneBody>
+        {footer}
       </SidePane>
     </SidePaneGlass>
   )

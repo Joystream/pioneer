@@ -57,7 +57,8 @@ export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
   grid-template-rows: minmax(auto, ${({ topSize }) => (topSize === 's' ? '132px' : '192px')}) 1fr;
   grid-template-areas:
     'sidepaneheader'
-    'sidepanebody';
+    'sidepanebody'
+    'modalfooter';
   grid-area: modal;
   position: relative;
   background-color: ${Colors.White};
