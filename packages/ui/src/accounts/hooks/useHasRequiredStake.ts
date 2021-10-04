@@ -25,45 +25,65 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
   const requiredStake = new BN(stake)
   const hasRequiredStake = !!compatibleAccounts.find(([, balances]) => balances.total.gte(requiredStake))
 
-  let transferableAccounts = null
+  if (hasRequiredStake) {
+    return {
+      hasRequiredStake: true,
+      accountsWithLockedFounds: null,
+      transferableAccounts: null,
+    }
+  }
 
-  if (!hasRequiredStake) {
-    const accountsWithTransferableBalance = Object.entries(balances)
-      .filter(([, balances]) => balances.transferable.gte(BN_ZERO))
-      .sort(([, balancesA], [, balancesB]) => {
-        return balancesB.transferable.sub(balancesA.transferable).toNumber()
-      })
+  const accountsWithTransferableBalance = Object.entries(balances)
+    .filter(([, balances]) => balances.transferable.gt(BN_ZERO))
+    .sort(([, balancesA], [, balancesB]) => {
+      return balancesB.transferable.sub(balancesA.transferable).toNumber()
+    })
 
-    transferableAccounts = compatibleAccounts.reduce((acc, [compatibleAccountAddress, balances]) => {
-      const total = balances.total
+  const transferableTotal = accountsWithTransferableBalance.reduce(
+    (sum, [, { transferable }]) => sum.add(transferable),
+    BN_ZERO
+  )
 
-      let otherAccountsSum = BN_ZERO
-      const otherAccounts = []
+  if (transferableTotal.gte(requiredStake)) {
+    return {
+      hasRequiredStake: false,
+      accountsWithLockedFounds: null,
+      transferableAccounts: accountsWithTransferableBalance.map(([address]) =>
+        myAccounts.allAccounts.find((account) => account.address === address)
+      ),
+    }
+  }
 
-      for (const [address, balances] of accountsWithTransferableBalance) {
-        if (address !== compatibleAccountAddress) {
-          otherAccountsSum = otherAccountsSum.add(balances.transferable)
-          otherAccounts.push(address)
-        }
+  const accountsWithLockedFounds = compatibleAccounts.reduce((acc, [compatibleAccountAddress, balances]) => {
+    const total = balances.total
 
-        if (otherAccountsSum.add(total).gte(requiredStake)) {
-          return {
-            ...(acc ?? {}),
-            [compatibleAccountAddress]: otherAccounts.map((address) =>
-              myAccounts.allAccounts.find((account) => account.address === address)
-            ),
-          }
-        }
+    let otherAccountsSum = BN_ZERO
+    const otherAccounts = []
+
+    for (const [address, balances] of accountsWithTransferableBalance) {
+      if (address !== compatibleAccountAddress) {
+        otherAccountsSum = otherAccountsSum.add(balances.transferable)
+        otherAccounts.push(address)
       }
 
-      return acc
-    }, {})
-  }
+      if (otherAccountsSum.add(total).gte(requiredStake)) {
+        return {
+          ...(acc ?? {}),
+          [compatibleAccountAddress]: otherAccounts.map((address) =>
+            myAccounts.allAccounts.find((account) => account.address === address)
+          ),
+        }
+      }
+    }
+
+    return acc
+  }, {})
 
   return {
     hasRequiredStake,
-    accountsWithLockedFounds: null,
-    transferableAccounts: transferableAccounts && isEmptyObject(transferableAccounts) ? null : transferableAccounts,
+    accountsWithLockedFounds:
+      accountsWithLockedFounds && isEmptyObject(accountsWithLockedFounds) ? null : accountsWithLockedFounds,
+    transferableAccounts: null,
   }
 }
 
