@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import { CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonGhost, CopyButtonTemplate } from '@/common/components/buttons'
+import { ArrowRightIcon } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
+import { isDefined } from '@/common/utils'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
@@ -20,9 +23,13 @@ type ProfileTabs = 'CANDIDACY' | 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('CANDIDACY')
   const { modalData } = useModal<CandidacyPreviewModalCall>()
-  const { isLoading, candidate } = useCandidate(modalData.id)
+  const [candidateId, setCandidateId] = useState(modalData.id)
+  const { isLoading, candidate } = useCandidate(candidateId)
   const candidates = useElectionCandidatesIds(modalData.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
+  const onClickLeft = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex - 1])
+  const onClickRight = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex + 1])
+
   return (
     <MemberModal
       title={`Candidate ${(candidateIndex ?? -1) + 1} of ${candidates?.length}`}
@@ -36,6 +43,20 @@ export const CandidacyPreview = React.memo(() => {
       isLoading={isLoading}
       contextButtons={
         <SidePaneTopButtonsGroup>
+          <ButtonGhost
+            size="small"
+            disabled={!isDefined(candidateIndex) || !candidates || candidateIndex <= 0}
+            onClick={onClickLeft}
+          >
+            <ArrowLeftIcon />
+          </ButtonGhost>
+          <ButtonGhost
+            size="small"
+            disabled={!isDefined(candidateIndex) || !candidates || candidateIndex === candidates.length - 1}
+            onClick={onClickRight}
+          >
+            <ArrowRightIcon />
+          </ButtonGhost>
           <CopyButtonTemplate
             square
             size="small"
@@ -58,3 +79,15 @@ export const CandidacyPreview = React.memo(() => {
     </MemberModal>
   )
 })
+
+const RotatedIcon = styled.div`
+  display: flex;
+  align-items: center;
+  transform: rotate(0.5turn);
+`
+
+const ArrowLeftIcon = () => (
+  <RotatedIcon>
+    <ArrowRightIcon />
+  </RotatedIcon>
+)
