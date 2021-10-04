@@ -11,7 +11,6 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -37,10 +36,6 @@ export type OpeningParams = Exclude<
 >
 
 const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Apply on opening' }]
-
-const groupToLockId = (groupName: GroupName): LockType => {
-  return 'Forum Worker'
-}
 
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
