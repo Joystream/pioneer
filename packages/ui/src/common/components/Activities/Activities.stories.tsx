@@ -200,7 +200,7 @@ const activities: Activity[] = [
     opening: {
       id: '1',
       type: 'LEAD',
-      groupName: 'forumWorkingGroup',
+      groupName: 'forum',
       title: 'Forum Working Group Lead',
     },
     hiredMembers: [
@@ -217,7 +217,7 @@ const activities: Activity[] = [
     opening: {
       id: '1',
       type: 'REGULAR',
-      groupName: 'forumWorkingGroup',
+      groupName: 'forum',
       title: 'Forum Working Group Worker',
     },
     hiredMembers: [
