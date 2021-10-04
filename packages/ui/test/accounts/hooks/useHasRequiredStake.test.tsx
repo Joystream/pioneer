@@ -244,8 +244,8 @@ describe('useHasRequiredStake', () => {
       },
       [bob.address]: {
         ...zeroBalance,
-        total: new BN(100),
-        transferable: new BN(100),
+        total: new BN(50),
+        transferable: new BN(50),
       },
     }
     const { result } = renderUseTotalBalances(1000, 'Voting')
@@ -256,7 +256,7 @@ describe('useHasRequiredStake', () => {
     })
   })
 
-  it.skip('Not enough funds with transferable to an account with locked founds', () => {
+  it('Multiple accounts, no locks, transferable to account without locks', () => {
     balances = {
       [alice.address]: {
         ...zeroBalance,
@@ -265,9 +265,110 @@ describe('useHasRequiredStake', () => {
       },
       [aliceStash.address]: {
         ...zeroBalance,
-        total: new BN(800),
-        locked: new BN(600),
+        total: new BN(10),
+        transferable: new BN(10),
+      },
+      [bob.address]: {
+        ...zeroBalance,
+        total: new BN(200),
         transferable: new BN(200),
+      },
+      [bobStash.address]: {
+        ...zeroBalance,
+        total: new BN(350),
+        transferable: new BN(350),
+      },
+    }
+    const { result } = renderUseTotalBalances(1000, 'Voting')
+    expect(result.current).toStrictEqual({
+      hasRequiredStake: false,
+      transferableAccounts: {
+        [alice.address]: [bobStash, bob],
+        [aliceStash.address]: [alice, bobStash, bob],
+        [bob.address]: [alice, bobStash],
+        [bobStash.address]: [alice, bob],
+      },
+      accountsWithLockedFounds: null,
+    })
+  })
+
+  it('Multiple accounts, with incompatible locks, transferable to account without locks', () => {
+    balances = {
+      [alice.address]: {
+        ...zeroBalance,
+        total: new BN(450),
+
+        transferable: new BN(450),
+      },
+      [aliceStash.address]: {
+        ...zeroBalance,
+        total: new BN(1000),
+        transferable: new BN(10),
+        locked: new BN(990),
+        locks: [
+          {
+            amount: new BN(990),
+            type: 'Staking Candidate',
+            isRecoverable: true,
+          },
+        ],
+      },
+      [bob.address]: {
+        ...zeroBalance,
+        total: new BN(1000),
+        transferable: new BN(200),
+        locked: new BN(800),
+        locks: [
+          {
+            amount: new BN(800),
+            type: 'Staking Candidate',
+            isRecoverable: true,
+          },
+        ],
+      },
+      [bobStash.address]: {
+        ...zeroBalance,
+        total: new BN(1000),
+        transferable: new BN(350),
+        locked: new BN(650),
+        locks: [
+          {
+            amount: new BN(650),
+            type: 'Staking Candidate',
+            isRecoverable: true,
+          },
+        ],
+      },
+    }
+    const { result } = renderUseTotalBalances(1000, 'Staking Candidate')
+    expect(result.current).toStrictEqual({
+      hasRequiredStake: false,
+      transferableAccounts: {
+        [alice.address]: [bobStash, bob],
+      },
+      accountsWithLockedFounds: null,
+    })
+  })
+
+  it.skip('Multiple accounts, compatible lock, transferable to an account with locked founds', () => {
+    balances = {
+      [alice.address]: {
+        ...zeroBalance,
+        total: new BN(500),
+        transferable: new BN(500),
+      },
+      [aliceStash.address]: {
+        ...zeroBalance,
+        total: new BN(800),
+        transferable: new BN(200),
+        locked: new BN(600),
+        locks: [
+          {
+            amount: new BN(600),
+            type: 'Staking Candidate',
+            isRecoverable: true,
+          },
+        ],
       },
       [bob.address]: {
         ...zeroBalance,
@@ -280,7 +381,7 @@ describe('useHasRequiredStake', () => {
         locked: new BN(500),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Staking Candidate')
+    const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       transferableAccounts: null,
