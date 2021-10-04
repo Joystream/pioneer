@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
 import { ProposalVoteKind } from '@/common/api/queries'
-import { useCouncilSize } from '@/common/hooks/useCouncilSize'
 import { Reducer } from '@/common/types/helpers'
 import { groupBy, isDefined, propsEquals, repeat } from '@/common/utils'
+import { useCouncilSize } from '@/council/hooks/useCouncilSize'
 import { ProposalStatusUpdates, ProposalVote } from '@/proposals/types'
 
 export type VoteMap = Map<ProposalVoteKind, ProposalVote[]>

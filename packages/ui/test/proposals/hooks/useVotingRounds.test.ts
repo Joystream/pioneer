@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
 
 import { ProposalVoteKind } from '@/common/api/queries'
-import { useCouncilSize } from '@/common/hooks/useCouncilSize'
+import { useCouncilSize } from '@/council/hooks/useCouncilSize'
 import { getMember } from '@/mocks/helpers'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'

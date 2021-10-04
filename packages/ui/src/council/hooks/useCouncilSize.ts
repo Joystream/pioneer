@@ -1,4 +1,4 @@
-import { useApi } from './useApi'
+import { useApi } from '@/common/hooks/useApi'
 
 export const useCouncilSize = () => {
   const { api } = useApi()
