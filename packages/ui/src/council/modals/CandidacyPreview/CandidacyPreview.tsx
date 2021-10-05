@@ -44,6 +44,7 @@ export const CandidacyPreview = React.memo(() => {
       contextButtons={
         <SidePaneTopButtonsGroup>
           <ButtonGhost
+            title="Previous candidate"
             size="small"
             disabled={!isDefined(candidateIndex) || !candidates || candidateIndex <= 0}
             onClick={onClickLeft}
@@ -51,6 +52,7 @@ export const CandidacyPreview = React.memo(() => {
             <ArrowLeftIcon />
           </ButtonGhost>
           <ButtonGhost
+            title="Next candidate"
             size="small"
             disabled={!isDefined(candidateIndex) || !candidates || candidateIndex === candidates.length - 1}
             onClick={onClickRight}

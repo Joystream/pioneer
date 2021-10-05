@@ -23,6 +23,9 @@ export interface RawCouncilCandidateMock {
   memberId: string
   cycleIdId: string
   stake: number
+  stakingAccountId: string
+  rewardAccountId: string
+  note?: string
 }
 
 export interface RawCouncilElectionMock {
