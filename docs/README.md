@@ -171,7 +171,7 @@ To add any of the above:
 
 1. Open extension and click plus sign
 2. Select "Import account from pre-existing seed"
-3. Copy the seed from substrate help page as "existing mnemonic seed"
+3. Copy the seed from [substrate help page](https://substrate.dev/docs/en/knowledgebase/integrate/subkey#well-known-keys) as "existing mnemonic seed"
 4. Open advanced and type the derivation path:
   * For `Alice`, `Bob`, `Charlie`, `Dave`, `Eve` & `Ferdie` use the name as path, e.g. `//Eve`
   * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`
