@@ -12,15 +12,33 @@ export const useElectionRemainingPeriod = (electionStage: ElectionStage | undefi
 
   const periodLength = useMemo(() => {
     switch (electionStage) {
+      case 'inactive':
+        return api?.consts.council.idlePeriodDuration
       case 'announcing':
         return api?.consts.council.announcingPeriodDuration
+      case 'voting':
+        return api?.consts.referendum?.voteStageDuration
+      case 'revealing':
+        return api?.consts.referendum?.revealStageDuration
+    }
+  }, [api, electionStage])
+
+  const periodStart = useMemo(() => {
+    switch (electionStage) {
+      case 'inactive':
+      case 'announcing':
+        return api?.query.council.stage().pipe(map(({ changed_at }) => changed_at))
+      case 'voting':
+        return api?.query.referendum.stage().pipe(map(({ asVoting }) => asVoting.started))
+      case 'revealing':
+        return api?.query.referendum.stage().pipe(map(({ asRevealing }) => asRevealing.started))
     }
   }, [api, electionStage])
 
   const remainingPeriod = useMemo(() => {
     if (periodLength && currentBlock)
-      return api?.query.council.stage().pipe(map(({ changed_at }) => changed_at.add(periodLength).sub(currentBlock)))
-  }, [api, periodLength, currentBlock])
+      return periodStart?.pipe(map((start) => start.add(periodLength).sub(currentBlock)))
+  }, [periodStart, periodLength, currentBlock])
 
   return useObservable(remainingPeriod, [remainingPeriod])
 }
