@@ -20,6 +20,12 @@ import { CandidacyPreviewModalCall } from './types'
 
 type ProfileTabs = 'CANDIDACY' | 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
+const isPreviousDisabled = (candidateIndex: number | undefined, candidates: string[] | undefined) =>
+  !isDefined(candidateIndex) || !candidates || candidateIndex <= 0
+
+const isNextDisabled = (candidateIndex: number | undefined, candidates: string[] | undefined) =>
+  !isDefined(candidateIndex) || !candidates || candidateIndex === candidates.length - 1 || candidateIndex === -1
+
 export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('CANDIDACY')
   const { modalData } = useModal<CandidacyPreviewModalCall>()
@@ -46,7 +52,7 @@ export const CandidacyPreview = React.memo(() => {
           <ButtonGhost
             title="Previous candidate"
             size="small"
-            disabled={!isDefined(candidateIndex) || !candidates || candidateIndex <= 0}
+            disabled={isPreviousDisabled(candidateIndex, candidates)}
             onClick={onClickLeft}
           >
             <ArrowLeftIcon />
@@ -54,12 +60,7 @@ export const CandidacyPreview = React.memo(() => {
           <ButtonGhost
             title="Next candidate"
             size="small"
-            disabled={
-              !isDefined(candidateIndex) ||
-              candidateIndex === -1 ||
-              !candidates ||
-              candidateIndex === candidates.length - 1
-            }
+            disabled={isNextDisabled(candidateIndex, candidates)}
             onClick={onClickRight}
           >
             <ArrowRightIcon />
