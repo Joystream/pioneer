@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
 import { ButtonGhost, CopyButtonTemplate } from '@/common/components/buttons'
-import { ArrowRightIcon } from '@/common/components/icons'
+import { Arrow } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
@@ -55,7 +54,7 @@ export const CandidacyPreview = React.memo(() => {
             disabled={isPreviousDisabled(candidateIndex, candidates)}
             onClick={onClickLeft}
           >
-            <ArrowLeftIcon />
+            <Arrow direction="left" />
           </ButtonGhost>
           <ButtonGhost
             title="Next candidate"
@@ -63,7 +62,7 @@ export const CandidacyPreview = React.memo(() => {
             disabled={isNextDisabled(candidateIndex, candidates)}
             onClick={onClickRight}
           >
-            <ArrowRightIcon />
+            <Arrow direction="right" />
           </ButtonGhost>
           <CopyButtonTemplate
             square
@@ -87,15 +86,3 @@ export const CandidacyPreview = React.memo(() => {
     </MemberModal>
   )
 })
-
-const RotatedIcon = styled.div`
-  display: flex;
-  align-items: center;
-  transform: rotate(0.5turn);
-`
-
-const ArrowLeftIcon = () => (
-  <RotatedIcon>
-    <ArrowRightIcon />
-  </RotatedIcon>
-)
