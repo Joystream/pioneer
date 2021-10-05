@@ -74,8 +74,8 @@ describe('useHasRequiredStake', () => {
 
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -91,8 +91,8 @@ describe('useHasRequiredStake', () => {
 
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -115,8 +115,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -139,8 +139,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -165,8 +165,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Staking Candidate')
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -191,8 +191,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Staking Candidate')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -221,8 +221,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -251,8 +251,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: null,
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -280,8 +280,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: [alice.address, bobStash.address, bob.address],
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: [alice.address, bobStash.address, bob.address],
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -334,8 +334,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Staking Candidate')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: [alice.address, bobStash.address, bob.address],
-      accountsWithLockedFounds: null,
+      accountsWithTransferableBalance: [alice.address, bobStash.address, bob.address],
+      accountsWithCompatibleLocks: null,
     })
   })
 
@@ -373,8 +373,8 @@ describe('useHasRequiredStake', () => {
     const { result } = renderUseTotalBalances(1000, 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
-      transferableAccounts: null,
-      accountsWithLockedFounds: {
+      accountsWithTransferableBalance: null,
+      accountsWithCompatibleLocks: {
         [aliceStash.address]: [bobStash.address, bob.address],
       },
     })

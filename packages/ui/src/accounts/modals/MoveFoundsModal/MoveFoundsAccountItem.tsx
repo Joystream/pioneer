@@ -22,17 +22,17 @@ interface Props {
 
 export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
   const {
-    modalData: { lockedFoundsAccounts },
+    modalData: { accountsWithCompatibleLocks },
   } = useModal<MoveFundsModalCall>()
   const [isDropped, setIsDropped] = useToggle()
   const { allAccounts } = useMyAccounts()
 
   const totalTransferable = useMemo<number>(() => {
-    if (lockedFoundsAccounts && account) {
-      return lockedFoundsAccounts[account.address].reduce((a, b) => a + balances[b].transferable.toNumber(), 0)
+    if (accountsWithCompatibleLocks && account) {
+      return accountsWithCompatibleLocks[account.address].reduce((a, b) => a + balances[b].transferable.toNumber(), 0)
     }
     return 0
-  }, [lockedFoundsAccounts, account])
+  }, [accountsWithCompatibleLocks, account])
 
   return (
     <>
@@ -50,9 +50,9 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
       </LockedFoundsMemberRow>
       <DropDownToggleStyled isDropped={isDropped}>
         <TextSmall margin="l">Other accounts with transferable balances:</TextSmall>
-        {lockedFoundsAccounts &&
+        {accountsWithCompatibleLocks &&
           account &&
-          lockedFoundsAccounts[account.address].map((subAddress) => (
+          accountsWithCompatibleLocks[account.address].map((subAddress) => (
             <SubAccountRow key={`lockedFoundsAccount-${subAddress}`}>
               <AccountInfo account={allAccounts.find((account) => account.address === subAddress) as Account} />
               <BalanceInfoInRow>

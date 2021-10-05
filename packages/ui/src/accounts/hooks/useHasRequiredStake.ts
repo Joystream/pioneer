@@ -15,8 +15,8 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
   if (compatibleAccounts.length < 1) {
     return {
       hasRequiredStake: false,
-      accountsWithLockedFounds: null,
-      transferableAccounts: null,
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: null,
     }
   }
 
@@ -26,8 +26,8 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
   if (hasRequiredStake) {
     return {
       hasRequiredStake: true,
-      accountsWithLockedFounds: null,
-      transferableAccounts: null,
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: null,
     }
   }
 
@@ -45,8 +45,8 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
   if (transferableTotal.gte(requiredStake)) {
     return {
       hasRequiredStake: false,
-      accountsWithLockedFounds: null,
-      transferableAccounts: accountsWithTransferableBalance.map(([address]) => address),
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: accountsWithTransferableBalance.map(([address]) => address),
     }
   }
 
@@ -75,9 +75,9 @@ export const useHasRequiredStake = (stake: number, lock: LockType) => {
 
   return {
     hasRequiredStake,
-    accountsWithLockedFounds:
+    accountsWithCompatibleLocks:
       accountsWithLockedFounds && isEmptyObject(accountsWithLockedFounds) ? null : accountsWithLockedFounds,
-    transferableAccounts: null,
+    accountsWithTransferableBalance: null,
   }
 }
 

@@ -67,7 +67,7 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const constants = useProposalConstants(state.context.type)
-  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
+  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
     constants?.requiredStake.toNumber() || 0,
     'Proposals'
   )
@@ -186,8 +186,8 @@ export const AddNewProposalModal = () => {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        lockedFoundsAccounts: accountsWithLockedFounds,
-        accounts: transferableAccounts,
+        accountsWithCompatibleLocks,
+        accountsWithTransferableBalance,
         requiredStake: (constants?.requiredStake as BN).toNumber(),
       },
     })

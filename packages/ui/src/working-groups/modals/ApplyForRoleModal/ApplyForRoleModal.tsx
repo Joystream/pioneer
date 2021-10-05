@@ -44,7 +44,7 @@ export const ApplyForRoleModal = () => {
   const [state, send, service] = useMachine(applyForRoleMachine)
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
-  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
+  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
     requiredStake,
     groupToLockId(opening.groupName)
   )
@@ -73,7 +73,11 @@ export const ApplyForRoleModal = () => {
     if (!hasRequiredStake) {
       showModal<MoveFundsModalCall>({
         modal: 'MoveFundsModal',
-        data: { lockedFoundsAccounts: accountsWithLockedFounds, accounts: transferableAccounts, requiredStake },
+        data: {
+          accountsWithCompatibleLocks,
+          accountsWithTransferableBalance,
+          requiredStake,
+        },
       })
 
       return
