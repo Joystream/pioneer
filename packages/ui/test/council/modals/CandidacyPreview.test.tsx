@@ -26,7 +26,7 @@ describe('UI: CandidacyPreview', () => {
     seedMembers(server.server, 2)
     seedMember({ ...MEMBER_ALICE_DATA, id: '2', handle: 'Cindy' }, server.server)
     seedMember({ ...MEMBER_ALICE_DATA, id: '3', handle: 'Dave' }, server.server)
-    ;['0', '1'].map((id) =>
+    ;['0', '1'].forEach((id) =>
       seedElectedCouncil(
         {
           id,
@@ -39,7 +39,7 @@ describe('UI: CandidacyPreview', () => {
         server.server
       )
     )
-    ;[0, 1].map((cycleId) =>
+    ;[0, 1].forEach((cycleId) =>
       seedCouncilElection(
         {
           id: cycleId.toString(),
@@ -50,7 +50,7 @@ describe('UI: CandidacyPreview', () => {
         server.server
       )
     )
-    ;['0', '1', '2'].map((id) =>
+    ;['0', '1', '2'].forEach((id) =>
       seedCouncilCandidate(
         {
           id,
