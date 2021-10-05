@@ -12,8 +12,14 @@ export const useElectionRemainingPeriod = (electionStage: ElectionStage | undefi
 
   const periodLength = useMemo(() => {
     switch (electionStage) {
+      case 'inactive':
+        return api?.consts.council.idlePeriodDuration
       case 'announcing':
         return api?.consts.council.announcingPeriodDuration
+      case 'revealing':
+        return api?.consts.referendum.revealStageDuration
+      case 'voting':
+        return api?.consts.referendum.voteStageDuration
     }
   }, [api, electionStage])
 
