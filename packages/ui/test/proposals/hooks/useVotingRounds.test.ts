@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
 
 import { ProposalVoteKind } from '@/common/api/queries'
-import { useCouncilSize } from '@/common/hooks/useCouncilSize'
+import { useCouncilSize } from '@/council/hooks/useCouncilSize'
 import { getMember } from '@/mocks/helpers'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
@@ -25,7 +25,7 @@ const renderUseProposalVotes = (voteData: VoteData[], statuses: ProposalStatus[]
 
 const councilSize = 3
 
-jest.mock('../../../src/common/hooks/useCouncilSize', () => ({
+jest.mock('@/council/hooks/useCouncilSize', () => ({
   useCouncilSize: jest.fn(() => councilSize),
 }))
 
