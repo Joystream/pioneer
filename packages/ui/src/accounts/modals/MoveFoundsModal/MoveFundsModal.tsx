@@ -12,7 +12,7 @@ import { MoveFoundsTransferableModal } from './MoveFoundsTransferableModal'
 export const MoveFundsModal = () => {
   const {
     hideModal,
-    modalData: { requiredStake, accounts, lockedFoundsAccounts },
+    modalData: { requiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks },
   } = useModal<MoveFundsModalCall>()
   const { push } = useHistory()
   const balances = useMyBalances()
@@ -22,17 +22,17 @@ export const MoveFundsModal = () => {
     push('/profile')
   }
 
-  if (accounts) {
+  if (accountsWithTransferableBalance) {
     return (
       <MoveFoundsTransferableModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
         requiredStake={requiredStake}
         balances={balances}
-        accounts={accounts}
+        accounts={accountsWithTransferableBalance}
       />
     )
-  } else if (lockedFoundsAccounts && Object.keys(lockedFoundsAccounts).length) {
+  } else if (accountsWithCompatibleLocks && Object.keys(accountsWithCompatibleLocks).length) {
     return (
       <MoveFoundsLockedModal
         onClose={hideModal}

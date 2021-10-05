@@ -18,7 +18,9 @@ const locksMap: Record<LockType, ReactElement> = {
   'Membership Worker': <LabelIcon />,
   Invitation: <EnvelopeIcon />,
   'Staking Candidate': <LockIcon />,
-  Bounty: <LockIcon />,
+  Bounties: <LockIcon />,
+  'Gateway Worker': <LockIcon />,
+  'Operations Worker': <LabelIcon />,
 }
 
 export const lockIcon = (type: LockType) => locksMap[type]
@@ -43,7 +45,7 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
   )
 }
 
-const AccountLocksWrapper = styled(ColumnGapBlock)`
+export const AccountLocksWrapper = styled(ColumnGapBlock)`
   position: absolute;
   top: 20px;
   align-items: center;

@@ -12,7 +12,7 @@ import {
 } from '../queries'
 
 import { Reward } from './Reward'
-import { asWorkingGroupName } from './WorkingGroup'
+import { asWorkingGroupName, GroupName } from './WorkingGroup'
 
 type WorkingGroupOpeningType = 'LEAD' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
@@ -20,7 +20,7 @@ type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFill
 export interface BaseOpening {
   id: string
   groupId: string
-  groupName: string
+  groupName: GroupName
   expectedEnding: string
   title: string
   shortDescription: string
@@ -84,7 +84,7 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
     id: fields.id,
     title: `${groupName} Working Group`,
     groupId: fields.groupId,
-    groupName: groupName,
+    groupName: groupName as GroupName,
     budget: fields.group.budget,
     createdAtBlock: asBlock(fields.createdInEvent),
     reward: getReward(fields.rewardPerBlock, fields.group.name),

@@ -26,7 +26,7 @@ export const MoveFoundsLockedModal = ({
 }: MoveFoundsLockedModalProps) => {
   const { allAccounts } = useMyAccounts()
   const {
-    modalData: { lockedFoundsAccounts },
+    modalData: { accountsWithCompatibleLocks },
   } = useModal<MoveFundsModalCall>()
 
   return (
@@ -40,8 +40,8 @@ export const MoveFoundsLockedModal = ({
         <TextMedium margin="s" bold>
           Accounts with locked balances:
         </TextMedium>
-        {lockedFoundsAccounts &&
-          Object.keys(lockedFoundsAccounts).map((address) => (
+        {accountsWithCompatibleLocks &&
+          Object.keys(accountsWithCompatibleLocks).map((address) => (
             <MoveFoundsAccountItem
               key={address}
               account={allAccounts.find((account) => account.address === address)}

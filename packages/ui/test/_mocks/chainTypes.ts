@@ -17,9 +17,12 @@ export const createBalance = (value: number) => {
   return createType('Balance', new BN(value))
 }
 
+export const creteLockIdentifier = (type: number) =>
+  createType('LockIdentifier', new Uint8Array(new Array(8).fill(type)))
+
 export const createBalanceLock = (amount: number, type = 9) =>
   createType('BalanceLock', {
-    id: createType('LockIdentifier', new Uint8Array(new Array(8).fill(type))),
+    id: creteLockIdentifier(type),
     amount: createBalance(amount),
     reasons: createType('Reasons', 'all'),
   })

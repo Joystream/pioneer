@@ -1,75 +1,86 @@
-import { useEffect, useState, useMemo } from 'react'
+import BN from 'bn.js'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
-import { Account } from '@/accounts/types'
-import { Address } from '@/common/types'
+import { areLocksConflicting } from '@/accounts/model/lockTypes'
+import { LockType } from '@/accounts/types'
+import { BN_ZERO } from '@/common/constants'
 
-export const useHasRequiredStake = (stake: number) => {
-  const [hasRequiredStake, setHasRequiredStake] = useState<boolean | undefined>(undefined)
+export const useHasRequiredStake = (stake: number, lock: LockType) => {
   const balances = useMyBalances()
-  const { allAccounts } = useMyAccounts()
-  const { transferable: totalTransferable, locked: totalLocked } = useMyTotalBalances()
-  const totalTransferableToNumber = totalTransferable.toNumber()
-  const totalLockedToNumber = totalLocked.toNumber()
 
-  useEffect(() => {
-    if (Object.keys(balances).length) {
-      setHasRequiredStake(
-        Object.keys(balances)
-          .map((key) => balances[key].transferable)
-          .some((value) => value.toNumber() >= stake)
-      )
+  const compatibleAccounts = Object.entries(balances).filter(
+    ([, balances]) => !areLocksConflicting(lock, balances.locks)
+  )
+
+  if (compatibleAccounts.length < 1) {
+    return {
+      hasRequiredStake: false,
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: null,
     }
-  }, [balances])
+  }
 
-  const accountsWithLockedFounds: { [key in Address]: Account[] } | null = useMemo(() => {
-    if (
-      allAccounts.length &&
-      hasRequiredStake === false &&
-      totalTransferableToNumber <= stake &&
-      totalLockedToNumber > 0 &&
-      totalLockedToNumber + totalTransferableToNumber >= stake
-    ) {
-      return allAccounts.reduce((accounts, currentAccount) => {
-        const accountBalance = balances[currentAccount.address]
-        const subAccounts = allAccounts.filter(
-          (subAccount) =>
-            balances[subAccount.address] &&
-            balances[subAccount.address].transferable.toNumber() > 0 &&
-            subAccount.address !== currentAccount.address
-        )
-        const totalTransferable = subAccounts.reduce((a, b) => a + balances[b.address].transferable.toNumber(), 0)
-        if (
-          !subAccounts.length ||
-          accountBalance.locked.toNumber() <= 0 ||
-          totalTransferable + accountBalance.locked.toNumber() < stake
-        )
-          return { ...accounts }
+  const requiredStake = new BN(stake)
+  const hasRequiredStake = !!compatibleAccounts.find(([, balances]) => balances.total.gte(requiredStake))
+
+  if (hasRequiredStake) {
+    return {
+      hasRequiredStake: true,
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: null,
+    }
+  }
+
+  const accountsWithTransferableBalance = Object.entries(balances)
+    .filter(([, balances]) => balances.transferable.gt(BN_ZERO))
+    .sort(([, balancesA], [, balancesB]) => {
+      return balancesB.transferable.sub(balancesA.transferable).toNumber()
+    })
+
+  const transferableTotal = accountsWithTransferableBalance.reduce(
+    (sum, [, { transferable }]) => sum.add(transferable),
+    BN_ZERO
+  )
+
+  if (transferableTotal.gte(requiredStake)) {
+    return {
+      hasRequiredStake: false,
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: accountsWithTransferableBalance.map(([address]) => address),
+    }
+  }
+
+  const accountsWithLockedFounds = compatibleAccounts.reduce((acc, [compatibleAccountAddress, balances]) => {
+    const total = balances.total
+
+    let otherAccountsSum = BN_ZERO
+    const otherAccounts = []
+
+    for (const [address, balances] of accountsWithTransferableBalance) {
+      if (address !== compatibleAccountAddress) {
+        otherAccountsSum = otherAccountsSum.add(balances.transferable)
+        otherAccounts.push(address)
+      }
+
+      if (otherAccountsSum.add(total).gte(requiredStake)) {
         return {
-          ...{
-            [currentAccount.address]: subAccounts,
-          },
-          ...accounts,
+          ...(acc ?? {}),
+          [compatibleAccountAddress]: otherAccounts,
         }
-      }, {})
+      }
     }
-    return null
-  }, [hasRequiredStake, totalTransferableToNumber, totalLockedToNumber, allAccounts])
 
-  const transferableAccounts: Account[] | null = useMemo(() => {
-    if (allAccounts.length && hasRequiredStake === false && totalTransferableToNumber >= stake) {
-      return allAccounts.filter(
-        (account) => balances[account.address] && balances[account.address].transferable.toNumber() > 0
-      )
-    }
-    return null
-  }, [hasRequiredStake, totalTransferableToNumber, allAccounts, accountsWithLockedFounds])
+    return acc
+  }, {})
 
   return {
     hasRequiredStake,
-    accountsWithLockedFounds,
-    transferableAccounts,
+    accountsWithCompatibleLocks:
+      accountsWithLockedFounds && isEmptyObject(accountsWithLockedFounds) ? null : accountsWithLockedFounds,
+    accountsWithTransferableBalance: null,
   }
+}
+
+const isEmptyObject = (someObject: Record<any, any>) => {
+  return Object.keys(someObject).length <= 0
 }

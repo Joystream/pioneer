@@ -53,7 +53,7 @@ export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment
     : {}),
 })
 
-const KnownWorkingGroups = ['forum', 'storage', 'content directory', 'membership'] as const
+const KnownWorkingGroups = ['forum', 'storage', 'content directory', 'membership', 'gateway', 'operations'] as const
 
 export const asWorkingGroupName = (name: string) => {
   return name
@@ -73,4 +73,6 @@ export const GroupRewardPeriods: Record<GroupName, BN> = {
   storage: new BN(14400 + 20),
   'content directory': new BN(14400 + 30),
   membership: new BN(14400 + 40),
+  gateway: new BN(14400 + 50),
+  operations: new BN(14400 + 60),
 }

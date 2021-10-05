@@ -2,7 +2,6 @@ import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { ISubmittableResult } from '@polkadot/types/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
@@ -23,7 +22,7 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { getGroup } from '@/working-groups/model/getGroup'
 
-import { GroupName } from '../../types'
+import { GroupName, groupToLockId } from '../../types'
 
 import { ApplyForRoleApplicationStep } from './ApplyForRoleApplicationStep'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
@@ -45,7 +44,10 @@ export const ApplyForRoleModal = () => {
   const [state, send, service] = useMachine(applyForRoleMachine)
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
-  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
+  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
+    requiredStake,
+    groupToLockId(opening.groupName)
+  )
   const transaction = useMemo(() => {
     if (activeMember && api) {
       return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
@@ -68,10 +70,14 @@ export const ApplyForRoleModal = () => {
       return
     }
 
-    if (hasRequiredStake === false) {
+    if (!hasRequiredStake) {
       showModal<MoveFundsModalCall>({
         modal: 'MoveFundsModal',
-        data: { lockedFoundsAccounts: accountsWithLockedFounds, accounts: transferableAccounts, requiredStake },
+        data: {
+          accountsWithCompatibleLocks,
+          accountsWithTransferableBalance,
+          requiredStake,
+        },
       })
 
       return
@@ -97,7 +103,7 @@ export const ApplyForRoleModal = () => {
     }
   }, [state, stakingStatus])
 
-  if (!activeMember || !feeInfo || hasRequiredStake === false) {
+  if (!activeMember || !feeInfo || !hasRequiredStake) {
     return null
   }
 
@@ -155,7 +161,7 @@ export const ApplyForRoleModal = () => {
       },
     })
 
-    let transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+    let transaction: SubmittableExtrinsic<'rxjs'>
 
     if (stakingStatus === 'confirmed') {
       transaction = applyOnOpeningTransaction

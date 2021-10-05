@@ -28,6 +28,7 @@ import {
   asWorkingGroupName,
   BudgetSetActivity,
   BudgetSpendingActivity,
+  GroupName,
   OpeningAddedActivity,
   OpeningAnnouncedActivity,
   OpeningCanceledActivity,
@@ -60,7 +61,7 @@ export const asAppliedOnOpeningActivity: GroupActivityCast<
     opening: {
       id: fragment.opening.id,
       type: type,
-      groupName: fragment.group.name,
+      groupName: fragment.group.name as GroupName,
       title: asPositionTitle(fragment.group.name, type),
     },
   }
@@ -79,7 +80,7 @@ export const asApplicationWithdrawnActivity: GroupActivityCast<
     opening: {
       id: fragment.application.opening.id,
       type,
-      groupName: fragment.group.name,
+      groupName: fragment.group.name as GroupName,
       title: asPositionTitle(fragment.group.name, type),
     },
   }
@@ -127,7 +128,7 @@ export const asOpeningActivity: GroupActivityCast<
     opening: {
       id: fragment.opening.id,
       type,
-      groupName: fragment.opening.group.name,
+      groupName: fragment.opening.group.name as GroupName,
       title: asPositionTitle(fragment.opening.group.name, type),
     },
   }
@@ -144,7 +145,7 @@ export const asOpeningFilledActivity: GroupActivityCast<OpeningFilledEventFields
     opening: {
       id: fragment.opening.id,
       type,
-      groupName: fragment.group.name,
+      groupName: fragment.group.name as GroupName,
       title: asPositionTitle(fragment.group.name, type),
     },
     hiredMembers: fragment.workersHired.map(({ membership }) => asMemberDisplayFields(membership)),

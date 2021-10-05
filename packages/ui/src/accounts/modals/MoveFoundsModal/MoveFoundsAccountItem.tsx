@@ -2,6 +2,7 @@ import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { MemberRow } from '@/accounts/modals/MoveFoundsModal/styles'
 import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
@@ -21,16 +22,17 @@ interface Props {
 
 export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
   const {
-    modalData: { lockedFoundsAccounts },
+    modalData: { accountsWithCompatibleLocks },
   } = useModal<MoveFundsModalCall>()
   const [isDropped, setIsDropped] = useToggle()
+  const { allAccounts } = useMyAccounts()
 
   const totalTransferable = useMemo<number>(() => {
-    if (lockedFoundsAccounts && account) {
-      return lockedFoundsAccounts[account.address].reduce((a, b) => a + balances[b.address].transferable.toNumber(), 0)
+    if (accountsWithCompatibleLocks && account) {
+      return accountsWithCompatibleLocks[account.address].reduce((a, b) => a + balances[b].transferable.toNumber(), 0)
     }
     return 0
-  }, [lockedFoundsAccounts, account])
+  }, [accountsWithCompatibleLocks, account])
 
   return (
     <>
@@ -48,11 +50,11 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
       </LockedFoundsMemberRow>
       <DropDownToggleStyled isDropped={isDropped}>
         <TextSmall margin="l">Other accounts with transferable balances:</TextSmall>
-        {lockedFoundsAccounts &&
+        {accountsWithCompatibleLocks &&
           account &&
-          lockedFoundsAccounts[account.address].map((subAccount) => (
-            <SubAccountRow key={`lockedFoundsAccount-${subAccount.address}`}>
-              <AccountInfo account={subAccount} />
+          accountsWithCompatibleLocks[account.address].map((subAddress) => (
+            <SubAccountRow key={`lockedFoundsAccount-${subAddress}`}>
+              <AccountInfo account={allAccounts.find((account) => account.address === subAddress) as Account} />
               <BalanceInfoInRow>
                 <InfoTitle>Transferable balance</InfoTitle>
                 <InfoValue>
