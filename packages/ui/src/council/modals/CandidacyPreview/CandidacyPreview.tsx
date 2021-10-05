@@ -54,7 +54,12 @@ export const CandidacyPreview = React.memo(() => {
           <ButtonGhost
             title="Next candidate"
             size="small"
-            disabled={!isDefined(candidateIndex) || !candidates || candidateIndex === candidates.length - 1}
+            disabled={
+              !isDefined(candidateIndex) ||
+              candidateIndex === -1 ||
+              !candidates ||
+              candidateIndex === candidates.length - 1
+            }
             onClick={onClickRight}
           >
             <ArrowRightIcon />

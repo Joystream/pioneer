@@ -25,25 +25,30 @@ describe('UI: CandidacyPreview', () => {
   beforeAll(async () => {
     seedMembers(server.server, 2)
     seedMember({ ...MEMBER_ALICE_DATA, id: '2', handle: 'Cindy' }, server.server)
-    seedElectedCouncil(
-      {
-        id: '0',
-        endedAtBlock: {
-          inBlock: 100,
-          createdAt: '2021-10-05T10:12:36.972Z',
-          network: 'OLYMPIA',
+    seedMember({ ...MEMBER_ALICE_DATA, id: '3', handle: 'Dave' }, server.server)
+    ;['0', '1'].map((id) =>
+      seedElectedCouncil(
+        {
+          id,
+          endedAtBlock: {
+            inBlock: 100,
+            createdAt: '2021-10-05T10:12:36.972Z',
+            network: 'OLYMPIA',
+          },
         },
-      },
-      server.server
+        server.server
+      )
     )
-    seedCouncilElection(
-      {
-        id: '0',
-        cycleId: 0,
-        isFinished: false,
-        electedCouncilId: '0',
-      },
-      server.server
+    ;[0, 1].map((cycleId) =>
+      seedCouncilElection(
+        {
+          id: cycleId.toString(),
+          cycleId,
+          isFinished: false,
+          electedCouncilId: '0',
+        },
+        server.server
+      )
     )
     ;['0', '1', '2'].map((id) =>
       seedCouncilCandidate(
@@ -59,6 +64,18 @@ describe('UI: CandidacyPreview', () => {
         server.server
       )
     )
+    seedCouncilCandidate(
+      {
+        id: '3',
+        memberId: '3',
+        cycleIdId: '1',
+        stake: 2000,
+        stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+        rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+        note: 'alias est velit ut expedita aliquam itaque eos eaque aliquid',
+      },
+      server.server
+    )
   })
 
   describe('Cycle candidates', () => {
@@ -66,6 +83,7 @@ describe('UI: CandidacyPreview', () => {
       useModal.modalData.id = '0'
       displayModal()
       expect(await screen.findByText(/alice/i)).toBeDefined()
+      expect(await screen.findByText(/candidate 1 of 3/i)).toBeDefined()
       expect(await screen.findByTitle('Previous candidate')).toBeDisabled()
       const nextButton = await screen.findByTitle('Next candidate')
       expect(nextButton).not.toBeDisabled()
@@ -73,12 +91,14 @@ describe('UI: CandidacyPreview', () => {
         fireEvent.click(nextButton)
       })
       expect(await screen.findByText(/bob/i)).toBeDefined()
+      expect(await screen.findByText(/candidate 2 of 3/i)).toBeDefined()
     })
 
     it('Second in list', async () => {
       useModal.modalData.id = '1'
       displayModal()
       expect(await screen.findByText(/bob/i)).toBeDefined()
+      expect(await screen.findByText(/candidate 2 of 3/i)).toBeDefined()
       expect(await screen.findByTitle('Previous candidate')).not.toBeDisabled()
       expect(await screen.findByTitle('Next candidate')).not.toBeDisabled()
     })
@@ -87,6 +107,7 @@ describe('UI: CandidacyPreview', () => {
       useModal.modalData.id = '2'
       displayModal()
       expect(await screen.findByText(/cindy/i)).toBeDefined()
+      expect(await screen.findByText(/candidate 3 of 3/i)).toBeDefined()
       const previousButton = await screen.findByTitle('Previous candidate')
       expect(previousButton).not.toBeDisabled()
       expect(await screen.findByTitle('Next candidate')).toBeDisabled()
@@ -94,6 +115,16 @@ describe('UI: CandidacyPreview', () => {
         fireEvent.click(previousButton)
       })
       expect(await screen.findByText(/bob/i)).toBeDefined()
+      expect(await screen.findByText(/candidate 2 of 3/i)).toBeDefined()
+    })
+
+    it('Candidate from different election', async () => {
+      useModal.modalData.id = '3'
+      displayModal()
+      expect(await screen.findByText(/dave/i)).toBeDefined()
+      expect(await screen.findByText(/candidate 0 of 3/i)).toBeDefined()
+      expect(await screen.findByTitle('Previous candidate')).toBeDisabled()
+      expect(await screen.findByTitle('Next candidate')).toBeDisabled()
     })
   })
 
