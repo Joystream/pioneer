@@ -11,7 +11,6 @@ import { info } from '../logger'
 import { isError, isErrorEvent, toDispatchError } from '../model/apiErrors'
 import { Address } from '../types'
 
-import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
 
 interface UseSignAndSendTransactionParams {
@@ -65,10 +64,8 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
 }
 
 export const useSignAndSendTransaction = ({ transaction, signer, service }: UseSignAndSendTransactionParams) => {
-  const keyring = useKeyring()
-
-  const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const [state, send] = useActor(service)
+  const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const sign = useCallback(() => send('SIGN'), [service])
 
   useEffect(() => {
@@ -76,18 +73,12 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
       return
     }
 
-    const keyringPair = keyring.getPair(signer)
     const fee = paymentInfo.partialFee.toBn()
 
-    if (keyringPair.meta.isInjected) {
-      send('SIGN_EXTERNAL')
-      web3FromAddress(signer).then((extension) => {
-        observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee)
-      })
-    } else {
-      send('SIGN_INTERNAL')
-      observeTransaction(transaction.signAndSend(keyringPair), send, fee)
-    }
+    web3FromAddress(signer).then((extension) => {
+      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee)
+    })
+    send('SIGN_EXTERNAL')
   }, [state.value.toString(), paymentInfo])
 
   return {

@@ -9,7 +9,6 @@ export type TransactionErrorEvent = { type: 'ERROR'; events: EventRecord[]; fee:
 export type TransactionEvent =
   | { type: 'SIGNED' }
   | { type: 'SIGN' }
-  | { type: 'SIGN_INTERNAL' }
   | { type: 'SIGN_EXTERNAL' }
   | { type: 'PENDING' }
   | TransactionSuccessEvent
@@ -52,7 +51,6 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     },
     signing: {
       on: {
-        SIGN_INTERNAL: 'pending',
         SIGN_EXTERNAL: 'signWithExtension',
       },
     },
