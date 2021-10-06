@@ -83,7 +83,7 @@ it('Success', () => {
 
 The other stubs help with creating balances, `api.query.*` responses, etc.
 
-### Specific helpers
+### Specific helpers & mocks
 
 - To interact with dropdowns use `selectFromDropdown()` helper
 - To interact with Pioneer 2 buttons use `getButton()` test helper which is optimized for [test speed](#slow-tests).
@@ -95,6 +95,10 @@ The other stubs help with creating balances, `api.query.*` responses, etc.
 
   describe('Component with CKEditor inside', () => {})
   ```
+
+Additionally, the below node modules are always mocked (see `packages/ui/tests/__mocks__`):
+
+* `@polkadot/extension-dapp` – used by the `useSignAndSendTransaction()` hook
 
 ### Slow tests
 
