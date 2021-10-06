@@ -146,7 +146,7 @@ describe('UI: DeletePostModal', () => {
   })
 
   it('Transaction success', async () => {
-    stubTransactionSuccess(tx, [], 'forum', 'deletePosts')
+    stubTransactionSuccess(tx, 'forum', 'PostDeleted')
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))

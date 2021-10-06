@@ -1,4 +1,4 @@
-import { registry } from '@joystream/types'
+import { createType } from '@joystream/types'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter, Route } from 'react-router-dom'
@@ -165,7 +165,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Transaction success', async () => {
-      stubTransactionSuccess(tx, [undefined, registry.createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+      stubTransactionSuccess(tx, 'forum', 'ThreadCreated', [createType('CategoryId', 0), createType('ThreadId', 1337)])
       await fillAndProceed()
       fireEvent.click(await getButton(/sign and send/i))
 
@@ -173,7 +173,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Proceed to thread on success', async () => {
-      stubTransactionSuccess(tx, [undefined, registry.createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+      stubTransactionSuccess(tx, 'forum', 'ThreadCreated', [createType('CategoryId', 0), createType('ThreadId', 1337)])
       await fillAndProceed()
       fireEvent.click(await getButton(/sign and send/i))
       fireEvent.click(await getButton(/see my thread/i))

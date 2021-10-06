@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -86,7 +87,9 @@ describe('UI: LeaveRoleModal', () => {
 
     it('Transaction success', async () => {
       await renderSignStep()
-      stubTransactionSuccess(transaction, [WORKER.id], 'workingGroup', 'WorkerStartedLeaving')
+      stubTransactionSuccess(transaction, 'forumWorkingGroup', 'WorkerStartedLeaving', [
+        createType('WorkerId', parseInt(WORKER.id)),
+      ])
       fireEvent.click(await getButton('Sign and leave role'))
       expect(await screen.findByText('Success!')).toBeDefined()
     })

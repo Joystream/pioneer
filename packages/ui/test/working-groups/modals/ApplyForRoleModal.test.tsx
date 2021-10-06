@@ -1,4 +1,4 @@
-import { createType, registry } from '@joystream/types'
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -228,7 +228,7 @@ describe('UI: ApplyForRoleModal', () => {
       })
 
       it('Apply on opening step', async () => {
-        stubTransactionSuccess(bindAccountTx, [], 'members', '')
+        stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
         await fillSteps()
 
         await act(async () => {
@@ -240,13 +240,11 @@ describe('UI: ApplyForRoleModal', () => {
       })
 
       it('Apply on opening success', async () => {
-        stubTransactionSuccess(bindAccountTx, [], 'members', '')
-        stubTransactionSuccess(
-          batchTx,
-          ['EventParams', registry.createType('ApplicationId', 1337)],
-          'workingGroup',
-          'AppliedOnOpening'
-        )
+        stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
+        stubTransactionSuccess(batchTx, 'forumWorkingGroup', 'AppliedOnOpening', [
+          undefined,
+          createType('ApplicationId', 1337),
+        ])
         await fillSteps()
         await act(async () => {
           fireEvent.click(screen.getByText(/^Sign transaction/i))
@@ -261,7 +259,7 @@ describe('UI: ApplyForRoleModal', () => {
       })
 
       it('Apply on opening failure', async () => {
-        stubTransactionSuccess(bindAccountTx, [], 'members', '')
+        stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
         stubTransactionFailure(batchTx)
         await fillSteps()
         await act(async () => {
@@ -297,12 +295,10 @@ describe('UI: ApplyForRoleModal', () => {
       })
 
       it('Apply on opening success', async () => {
-        stubTransactionSuccess(
-          batchTx,
-          ['EventParams', registry.createType('ApplicationId', 1337)],
-          'workingGroup',
-          'AppliedOnOpening'
-        )
+        stubTransactionSuccess(batchTx, 'forumWorkingGroup', 'AppliedOnOpening', [
+          undefined,
+          createType('ApplicationId', 1337),
+        ])
         await fillSteps()
         await act(async () => {
           fireEvent.click(screen.getByText(/^Sign transaction/i))
@@ -345,12 +341,10 @@ describe('UI: ApplyForRoleModal', () => {
       })
 
       it('Apply on opening success', async () => {
-        stubTransactionSuccess(
-          applyTransaction,
-          ['EventParams', registry.createType('ApplicationId', 1337)],
-          'workingGroup',
-          'AppliedOnOpening'
-        )
+        stubTransactionSuccess(applyTransaction, 'forumWorkingGroup', 'AppliedOnOpening', [
+          undefined,
+          createType('ApplicationId', 1337),
+        ])
         await fillSteps()
         await act(async () => {
           fireEvent.click(screen.getByText(/^Sign transaction/i))
