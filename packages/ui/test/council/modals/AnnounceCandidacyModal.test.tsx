@@ -7,6 +7,7 @@ import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -21,6 +22,7 @@ import { seedMembers } from '@/mocks/data'
 import { getButton } from '../../_helpers/getButton'
 import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
+import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -34,6 +36,10 @@ import {
 } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
+
+jest.mock('@/common/components/CKEditor', () => ({
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+}))
 
 describe('UI: Announce Candidacy Modal', () => {
   const api = stubApi()
@@ -233,6 +239,25 @@ describe('UI: Announce Candidacy Modal', () => {
     })
   })
 
+  describe('Summary and Banner', () => {
+    beforeEach(async () => {
+      renderModal()
+      await fillStakingStep('alice', 15, true)
+      await fillRewardAccountStep('alice', true)
+      await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+    })
+
+    it('Default', async () => {
+      expect(await getNextStepButton()).toBeDisabled()
+    })
+
+    it('Summary filled', async () => {
+      await fillSummary()
+
+      expect(await getNextStepButton()).not.toBeDisabled()
+    })
+  })
+
   async function fillStakingAmount(value: number) {
     const amountInput = await screen.getByTestId('stakingAmount')
 
@@ -286,8 +311,20 @@ describe('UI: Announce Candidacy Modal', () => {
     }
   }
 
+  async function fillSummary(goNext?: boolean) {
+    const summaryInput = await screen.findByLabelText(/Summary/i)
+
+    act(() => {
+      fireEvent.change(summaryInput, { target: { value: 'Some summary' } })
+    })
+
+    if (goNext) {
+      await clickNextButton()
+    }
+  }
+
   async function getNextStepButton() {
-    return getButton(/Next step/i)
+    return getButton(/(Next step|Announce candidacy)/i)
   }
 
   async function clickNextButton() {

@@ -41,7 +41,7 @@ export const TitleAndBulletPointsStep = ({
   setBulletPoints,
 }: TitleAndBulletPointsStepProps) => {
   const formInitializer: FormFields = {
-    title,
+    title: title || '',
     bulletPoint1: bulletPoints[0] || '',
     bulletPoint2: bulletPoints[1] || '',
     bulletPoint3: bulletPoints[2] || '',

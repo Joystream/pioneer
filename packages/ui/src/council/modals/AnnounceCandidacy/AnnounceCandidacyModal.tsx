@@ -19,6 +19,7 @@ import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
+import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -80,6 +81,8 @@ export const AnnounceCandidacyModal = () => {
       state.context.title &&
       state.context.bulletPoints.length
     ) {
+      setValidNext(true)
+    } else if (state.matches('candidateProfile.summaryAndBanner') && state.context.summary) {
       setValidNext(true)
     } else {
       setValidNext(false)
@@ -145,6 +148,14 @@ export const AnnounceCandidacyModal = () => {
                 setTitle={(title) => send('SET_TITLE', { title })}
                 bulletPoints={state.context.bulletPoints}
                 setBulletPoints={(bulletPoints) => send('SET_BULLET_POINTS', { bulletPoints })}
+              />
+            )}
+            {state.matches('candidateProfile.summaryAndBanner') && (
+              <SummaryAndBannerStep
+                summary={state.context.summary}
+                setSummary={(summary) => send('SET_SUMMARY', { summary })}
+                banner={state.context.banner}
+                setBanner={(banner) => send('SET_BANNER', { banner })}
               />
             )}
           </StepperBody>
