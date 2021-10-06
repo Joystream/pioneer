@@ -70,6 +70,15 @@ export type GetCandidateQuery = {
   candidateByUniqueInput?: Types.Maybe<{ __typename: 'Candidate' } & CandidateFieldsFragment>
 }
 
+export type GetElectionCandidatesIdsQueryVariables = Types.Exact<{
+  electionCycleId: Types.Scalars['Int']
+}>
+
+export type GetElectionCandidatesIdsQuery = {
+  __typename: 'Query'
+  candidates: Array<{ __typename: 'Candidate'; id: string }>
+}
+
 export type GetCandidateStatsQueryVariables = Types.Exact<{
   memberId?: Types.Maybe<Types.Scalars['ID']>
 }>
@@ -268,6 +277,54 @@ export function useGetCandidateLazyQuery(
 export type GetCandidateQueryHookResult = ReturnType<typeof useGetCandidateQuery>
 export type GetCandidateLazyQueryHookResult = ReturnType<typeof useGetCandidateLazyQuery>
 export type GetCandidateQueryResult = Apollo.QueryResult<GetCandidateQuery, GetCandidateQueryVariables>
+export const GetElectionCandidatesIdsDocument = gql`
+  query GetElectionCandidatesIds($electionCycleId: Int!) {
+    candidates(where: { cycleId: { cycleId_eq: $electionCycleId } }) {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetElectionCandidatesIdsQuery__
+ *
+ * To run a query within a React component, call `useGetElectionCandidatesIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetElectionCandidatesIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetElectionCandidatesIdsQuery({
+ *   variables: {
+ *      electionCycleId: // value for 'electionCycleId'
+ *   },
+ * });
+ */
+export function useGetElectionCandidatesIdsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetElectionCandidatesIdsQuery, GetElectionCandidatesIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetElectionCandidatesIdsQuery, GetElectionCandidatesIdsQueryVariables>(
+    GetElectionCandidatesIdsDocument,
+    options
+  )
+}
+export function useGetElectionCandidatesIdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetElectionCandidatesIdsQuery, GetElectionCandidatesIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetElectionCandidatesIdsQuery, GetElectionCandidatesIdsQueryVariables>(
+    GetElectionCandidatesIdsDocument,
+    options
+  )
+}
+export type GetElectionCandidatesIdsQueryHookResult = ReturnType<typeof useGetElectionCandidatesIdsQuery>
+export type GetElectionCandidatesIdsLazyQueryHookResult = ReturnType<typeof useGetElectionCandidatesIdsLazyQuery>
+export type GetElectionCandidatesIdsQueryResult = Apollo.QueryResult<
+  GetElectionCandidatesIdsQuery,
+  GetElectionCandidatesIdsQueryVariables
+>
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
     candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {

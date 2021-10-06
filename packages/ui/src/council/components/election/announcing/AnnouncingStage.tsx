@@ -36,6 +36,7 @@ export const AnnouncingStage = ({ election }: AnnouncingStageProps) => {
       <CandidateCardList
         candidates={candidates.map((candidate) => ({
           id: candidate.id,
+          cycleId: election.cycleId,
           member: candidate.member,
           title: 'Some title',
           ...(candidate.stake && isMyCandidate(myMembers, candidate) ? { stake: new BN(candidate.stake) } : {}),

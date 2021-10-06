@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
 
+import { CopyButtonTemplate } from '@/common/components/buttons'
+import { LinkIcon } from '@/common/components/icons/LinkIcon'
+import { EditSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
+import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { useMember } from '../../hooks/useMembership'
+import { EditMembershipButton } from '../EditMembershipButton'
 
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
@@ -17,8 +23,13 @@ export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('DETAILS')
   const { modalData } = useModal<MemberModalCall>()
   const { isLoading, member } = useMember(modalData.id)
+  const { members } = useMyMemberships()
+  const isMyMember = !!members.find((m) => m.id == member?.id)
+  const isDetailsTab = activeTab === 'DETAILS'
+
   return (
     <MemberModal
+      title="My Profile"
       tabs={[
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
         { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
@@ -26,7 +37,21 @@ export const MemberProfile = React.memo(() => {
       ]}
       member={member}
       isLoading={isLoading}
-      isDetailsTab={activeTab === 'DETAILS'}
+      contextButtons={
+        <SidePaneTopButtonsGroup>
+          {member && isMyMember && isDetailsTab && (
+            <EditMembershipButton member={member} size="small">
+              <EditSymbol />
+            </EditMembershipButton>
+          )}
+          <CopyButtonTemplate
+            square
+            size="small"
+            textToCopy={`${window.location.host}/#/members/${member?.id}`}
+            icon={<LinkIcon />}
+          />
+        </SidePaneTopButtonsGroup>
+      }
     >
       {!member ? (
         <Loading />

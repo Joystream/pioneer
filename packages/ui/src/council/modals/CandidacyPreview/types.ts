@@ -1,3 +1,3 @@
 import { ModalWithDataCall } from '../../../common/providers/modal/types'
 
-export type CandidacyPreviewModalCall = ModalWithDataCall<'CandidacyPreview', { id: string }>
+export type CandidacyPreviewModalCall = ModalWithDataCall<'CandidacyPreview', { id: string; cycleId: number }>
