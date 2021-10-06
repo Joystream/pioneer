@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { InputComponent, InputText } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useForm } from '@/common/hooks/useForm'
@@ -20,11 +21,18 @@ interface FormFields {
   bulletPoint3?: string
 }
 
-type StringType = 'title' | 'bulletPoint'
+const FormSchema = Yup.object().shape({
+  title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.'),
+  bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
+  bulletPoint2: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
+  bulletPoint3: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
+})
 
-const typeLength: { [key in StringType]: number } = { title: 60, bulletPoint: 120 }
-
-const FormSchema = Yup.object().shape({})
+const getBulletPoints = (fields: FormFields) => {
+  return Object.entries(fields)
+    .filter(([field, value]) => field.startsWith('bulletPoint') && value)
+    .map(([, value]) => value)
+}
 
 export const TitleAndBulletPointsStep = ({
   title,
@@ -34,39 +42,16 @@ export const TitleAndBulletPointsStep = ({
 }: TitleAndBulletPointsStepProps) => {
   const formInitializer: FormFields = {
     title,
-    bulletPoint1: bulletPoints[0],
-    bulletPoint2: bulletPoints[1],
-    bulletPoint3: bulletPoints[2],
+    bulletPoint1: bulletPoints[0] || '',
+    bulletPoint2: bulletPoints[1] || '',
+    bulletPoint3: bulletPoints[2] || '',
   }
-  const { fields, changeField } = useForm<FormFields>(formInitializer, FormSchema)
+  const { fields, changeField, validation } = useForm<FormFields>(formInitializer, FormSchema)
 
-  const setValue = (field: keyof FormFields, value: any) => {
-    switch (field) {
-      case 'title':
-        setTitle(!value || isValidString(value, 'title') ? value : undefined)
-        break
-      case 'bulletPoint1':
-      case 'bulletPoint2':
-      case 'bulletPoint3': {
-        const points = [fields.bulletPoint1, fields.bulletPoint2, fields.bulletPoint3].map((point, index) =>
-          index + 1 === Number(field.replace('bulletPoint', '')) ? value : point
-        )
-        const values = points.filter(
-          (bulletPoint) => bulletPoint && !!bulletPoint?.trim() && isValidString(bulletPoint, 'bulletPoint')
-        ) as string[]
-        setBulletPoints(values)
-      }
-    }
-
-    changeField(field, value)
-  }
-
-  const isValidString = (str: string, type: StringType) => str.length <= typeLength[type]
-  const getStringMessage = (str: string | undefined, type: StringType) => {
-    if (str && !isValidString(str, type)) {
-      return `Maximum length is ${typeLength[type]} symbols.`
-    }
-  }
+  useEffect(() => {
+    setTitle(validation.isValid ? fields.title : undefined)
+    setBulletPoints(validation.isValid ? getBulletPoints(fields) : [])
+  }, [validation.isValid, JSON.stringify(fields)])
 
   return (
     <RowGapBlock gap={24}>
@@ -81,52 +66,33 @@ export const TitleAndBulletPointsStep = ({
             label="Profile title"
             required
             inputSize="s"
-            validation={fields.title && !isValidString(fields.title, 'title') ? 'invalid' : undefined}
-            message={getStringMessage(fields.title, 'title')}
+            validation={hasError('title', validation.errors) ? 'invalid' : undefined}
+            message={hasError('title', validation.errors) ? getErrorMessage('title', validation.errors) : undefined}
           >
-            <InputText id="title" value={fields.title} onChange={(event) => setValue('title', event.target.value)} />
+            <InputText id="title" value={fields.title} onChange={(event) => changeField('title', event.target.value)} />
           </InputComponent>
-          <InputComponent
-            label="Bullet points"
-            inputSize="s"
-            required
-            validation={
-              fields.bulletPoint1 && !isValidString(fields.bulletPoint1, 'bulletPoint') ? 'invalid' : undefined
-            }
-            message={getStringMessage(fields.bulletPoint1, 'bulletPoint')}
-          >
-            <InputText
-              id="bulletPoint1"
-              value={fields.bulletPoint1}
-              onChange={(event) => setValue('bulletPoint1', event.target.value)}
-            />
-          </InputComponent>
-          <InputComponent
-            inputSize="s"
-            validation={
-              fields.bulletPoint2 && !isValidString(fields.bulletPoint2, 'bulletPoint') ? 'invalid' : undefined
-            }
-            message={getStringMessage(fields.bulletPoint2, 'bulletPoint')}
-          >
-            <InputText
-              id="bulletPoint2"
-              value={fields.bulletPoint2}
-              onChange={(event) => setValue('bulletPoint2', event.target.value)}
-            />
-          </InputComponent>
-          <InputComponent
-            inputSize="s"
-            validation={
-              fields.bulletPoint3 && !isValidString(fields.bulletPoint3, 'bulletPoint') ? 'invalid' : undefined
-            }
-            message={getStringMessage(fields.bulletPoint3, 'bulletPoint')}
-          >
-            <InputText
-              id="bulletPoint3"
-              value={fields.bulletPoint3}
-              onChange={(event) => setValue('bulletPoint3', event.target.value)}
-            />
-          </InputComponent>
+          {[1, 2, 3].map((index) => {
+            const fieldName = ('bulletPoint' + index) as keyof FormFields
+
+            return (
+              <InputComponent
+                key={index}
+                inputSize="s"
+                label={index === 1 ? 'Bullet points' : undefined}
+                required={index === 1}
+                validation={hasError(fieldName, validation.errors) ? 'invalid' : undefined}
+                message={
+                  hasError(fieldName, validation.errors) ? getErrorMessage(fieldName, validation.errors) : undefined
+                }
+              >
+                <InputText
+                  id={fieldName}
+                  value={fields[fieldName]}
+                  onChange={(event) => changeField(fieldName, event.target.value)}
+                />
+              </InputComponent>
+            )
+          })}
         </RowGapBlock>
       </Row>
     </RowGapBlock>
