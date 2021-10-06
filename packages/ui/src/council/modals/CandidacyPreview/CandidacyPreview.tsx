@@ -67,7 +67,7 @@ export const CandidacyPreview = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={`${window.location.host}/#/council/election?candidate=${candidate?.member.id}&cycle=${modalData.cycleId}`}
+            textToCopy={`${window.location.host}/#/council/election?candidate=${candidate?.id}&cycle=${modalData.cycleId}`}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>

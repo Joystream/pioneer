@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -33,7 +33,7 @@ export const Election = () => {
   useEffect(() => {
     const cycleId = cycle && Number.parseInt(cycle)
     if (candidateId && isNumber(cycleId) && !isNaN(cycleId)) {
-      showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id: candidateId } })
+      showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id: candidateId, cycleId } })
     }
   }, [candidateId, cycle])
 
