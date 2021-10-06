@@ -30,11 +30,8 @@ describe('UI: CandidacyPreview', () => {
       seedElectedCouncil(
         {
           id,
-          endedAtBlock: {
-            inBlock: 100,
-            createdAt: '2021-10-05T10:12:36.972Z',
-            network: 'OLYMPIA',
-          },
+          endedAtBlock: 100,
+          electedAtBlock: 90,
         },
         server.server
       )
