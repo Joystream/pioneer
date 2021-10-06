@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -95,14 +95,18 @@ describe('UI: EditPostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    fireEvent.click(await getButton(/Sign and edit/i))
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and edit/i))
+    })
     expect(screen.queryByText('There was a problem submitting an edit to your post.')).not.toBeNull()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'editPostText')
     renderModal()
-    fireEvent.click(await getButton(/Sign and edit/i))
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and edit/i))
+    })
     expect(screen.queryByText('Your edit has been submitted.')).not.toBeNull()
   })
 

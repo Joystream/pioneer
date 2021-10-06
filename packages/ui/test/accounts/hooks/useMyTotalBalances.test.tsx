@@ -5,11 +5,12 @@ import BN from 'bn.js'
 import React, { ReactNode } from 'react'
 
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
-import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
+import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ApiContext } from '@/common/providers/api/context'
 import { UseApi } from '@/common/providers/api/provider'
 
 import { createBalance } from '../../_mocks/chainTypes'
+import { alice, aliceStash } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubBalances } from '../../_mocks/transactions'
 
@@ -53,24 +54,38 @@ describe('useMyTotalBalances', () => {
     })
 
     expect(result.current).toEqual({
-      locked: new BN(80),
-      locks: new Array(8).fill({
+      locked: new BN(20),
+      locks: new Array(2).fill({
         amount: createBalance(10),
         type: 'Staking Candidate',
         isRecoverable: false,
       }),
       recoverable: new BN(0),
-      total: new BN(880),
-      transferable: new BN(800),
+      total: new BN(220),
+      transferable: new BN(200),
     })
   })
 
   function renderUseTotalBalances() {
     const wrapper = ({ children }: { children: ReactNode }) => (
       <MockKeyringProvider>
-        <AccountsContextProvider>
+        <AccountsContext.Provider
+          value={{
+            allAccounts: [
+              {
+                address: alice.address,
+                name: 'Alice',
+              },
+              {
+                address: aliceStash.address,
+                name: 'AliceStash',
+              },
+            ],
+            hasAccounts: true,
+          }}
+        >
           <ApiContext.Provider value={useApi}>{children}</ApiContext.Provider>
-        </AccountsContextProvider>
+        </AccountsContext.Provider>
       </MockKeyringProvider>
     )
     return renderHook(() => useMyTotalBalances(), { wrapper })

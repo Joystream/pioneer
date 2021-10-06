@@ -1,7 +1,7 @@
 import { registry } from '@joystream/types'
 import { PostsToDeleteMap } from '@joystream/types/src/forum'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -139,14 +139,18 @@ describe('UI: DeletePostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    fireEvent.click(await getButton(/Sign and delete/i))
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and delete/i))
+    })
     expect(await screen.getByText('There was a problem deleting your post.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'deletePosts')
     renderModal()
-    fireEvent.click(await getButton(/Sign and delete/i))
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and delete/i))
+    })
     expect(await screen.getByText('Your post has been deleted.')).toBeDefined()
   })
 

@@ -1,6 +1,6 @@
 import { createType, registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -500,14 +500,19 @@ describe('UI: AddNewProposalModal', () => {
         it('Bind account failure', async () => {
           stubTransactionFailure(bindAccountTx)
 
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          await act(async () => {
+            fireEvent.click(screen.getByText(/^Sign transaction/i))
+          })
 
           expect(await screen.findByText('Failure')).toBeDefined()
         })
 
         it('Create proposal step', async () => {
           stubTransactionSuccess(bindAccountTx, [], 'members', '')
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+          await act(async () => {
+            fireEvent.click(screen.getByText(/^Sign transaction/i))
+          })
 
           expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
@@ -515,7 +520,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal success', async () => {
           stubTransactionSuccess(bindAccountTx, [], 'members', '')
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          await act(async () => {
+            fireEvent.click(screen.getByText(/^Sign transaction/i))
+          })
           stubTransactionSuccess(
             batchTx,
             ['EventParams', registry.createType('ProposalId', 1337)],
@@ -523,17 +530,23 @@ describe('UI: AddNewProposalModal', () => {
             'ProposalCreated'
           )
 
-          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          await act(async () => {
+            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          })
 
           expect(screen.queryByText('See my Proposal')).not.toBeNull()
         })
 
         it('Create proposal failure', async () => {
           stubTransactionSuccess(bindAccountTx, [], 'members', '')
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          await act(async () => {
+            fireEvent.click(screen.getByText(/^Sign transaction/i))
+          })
           stubTransactionFailure(batchTx)
 
-          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          await act(async () => {
+            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          })
 
           expect(await screen.findByText('Failure')).toBeDefined()
         })
@@ -572,7 +585,9 @@ describe('UI: AddNewProposalModal', () => {
             'ProposalCreated'
           )
 
-          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          await act(async () => {
+            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          })
 
           expect(screen.queryByText('See my Proposal')).not.toBeNull()
         })
@@ -580,7 +595,9 @@ describe('UI: AddNewProposalModal', () => {
         it('Create proposal failure', async () => {
           stubTransactionFailure(batchTx)
 
-          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          await act(async () => {
+            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          })
 
           expect(await screen.findByText('Failure')).toBeDefined()
         })
@@ -619,7 +636,9 @@ describe('UI: AddNewProposalModal', () => {
             'ProposalCreated'
           )
 
-          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          await act(async () => {
+            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          })
 
           expect(screen.queryByText('See my Proposal')).not.toBeNull()
         })
@@ -627,7 +646,9 @@ describe('UI: AddNewProposalModal', () => {
         it('Create proposal failure', async () => {
           stubTransactionFailure(createProposalTx)
 
-          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          await act(async () => {
+            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          })
 
           expect(await screen.findByText('Failure')).toBeDefined()
         })
@@ -679,7 +700,9 @@ describe('UI: AddNewProposalModal', () => {
         await finishTriggerAndDiscussion()
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
-        fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+        await act(async () => {
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+        })
       })
 
       it('Arrives at the transaction modal', async () => {
