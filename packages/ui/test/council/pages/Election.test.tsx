@@ -28,12 +28,16 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
     cycleIdId: '1',
     memberId: getMember('bob').id,
     stake: 1000,
+    stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   },
   {
     id: '2',
     cycleIdId: '1',
     memberId: getMember('bob').id,
     stake: 1000,
+    stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   },
 ]
 

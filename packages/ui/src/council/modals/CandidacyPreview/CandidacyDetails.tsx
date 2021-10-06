@@ -35,13 +35,6 @@ export const CandidacyDetails = ({ candidate }: Props) => {
         <TextMedium light>Last message from A 1 hour ago</TextMedium>
         <h4>Candidate summary</h4>
         <MarkdownPreview markdown={candidate.summary} />
-        <RowGapBlock gap={8}>
-          {candidate.description.map((point, index) => (
-            <TextMedium light key={index}>
-              {point}
-            </TextMedium>
-          ))}
-        </RowGapBlock>
       </Details>
       <SidePaneTable>
         <SidePaneRow>

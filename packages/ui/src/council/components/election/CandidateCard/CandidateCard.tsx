@@ -21,6 +21,7 @@ import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCard
 
 export interface CandidateCardProps {
   id: string
+  cycleId: number
   member: Member
   image?: string
   voted?: boolean
@@ -35,6 +36,7 @@ export interface CandidateCardProps {
 
 export const CandidateCard = ({
   id,
+  cycleId,
   member,
   image,
   voted,
@@ -49,7 +51,7 @@ export const CandidateCard = ({
   const { showModal } = useModal()
   return (
     <CandidateCardWrapper
-      onClick={() => showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id } })}
+      onClick={() => showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id, cycleId } })}
     >
       <CandidateCardImageWrapper>
         <CandidateCardImage imageUrl={image} />
