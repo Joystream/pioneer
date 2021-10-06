@@ -30,8 +30,8 @@ describe('UI: CandidacyPreview', () => {
       seedElectedCouncil(
         {
           id,
-          electedAtBlock: 100,
-          endedAtBlock: 200,
+          endedAtBlock: 100,
+          electedAtBlock: 90,
         },
         server.server
       )

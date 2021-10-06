@@ -1,6 +1,6 @@
 import { createType, registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -220,7 +220,9 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionFailure(bindAccountTx)
         await fillSteps()
 
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })
@@ -229,7 +231,9 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionSuccess(bindAccountTx, [], 'members', '')
         await fillSteps()
 
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
         expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
@@ -244,9 +248,13 @@ describe('UI: ApplyForRoleModal', () => {
           'AppliedOnOpening'
         )
         await fillSteps()
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
         expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
@@ -256,9 +264,13 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionSuccess(bindAccountTx, [], 'members', '')
         stubTransactionFailure(batchTx)
         await fillSteps()
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })
@@ -292,7 +304,9 @@ describe('UI: ApplyForRoleModal', () => {
           'AppliedOnOpening'
         )
         await fillSteps()
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
         expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
@@ -302,7 +316,9 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionFailure(batchTx)
         await fillSteps()
 
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })
@@ -336,7 +352,9 @@ describe('UI: ApplyForRoleModal', () => {
           'AppliedOnOpening'
         )
         await fillSteps()
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
         expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
@@ -346,7 +364,9 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionFailure(applyTransaction)
         await fillSteps()
 
-        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        await act(async () => {
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+        })
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })

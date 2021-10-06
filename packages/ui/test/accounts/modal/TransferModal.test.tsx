@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
@@ -62,15 +62,15 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders a modal', async () => {
-    const { findByRole } = renderModal({})
+    renderModal({})
 
-    expect(await findByRole('heading', { name: 'Transfer tokens' })).toBeDefined()
+    expect(await screen.findByRole('heading', { name: 'Transfer tokens' })).toBeDefined()
   })
 
   it('Enables value input', async () => {
-    const { findByLabelText } = renderModal({})
+    renderModal({})
 
-    const input = await findByLabelText(/number of tokens/i)
+    const input = await screen.findByLabelText(/number of tokens/i)
     const useHalfButton = await getButton(/use half/i)
     const useMaxButton = await getButton(/use max/i)
 
@@ -86,40 +86,40 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders an Authorize transaction step', async () => {
-    const { findByLabelText, findByText } = renderModal({ from: alice, to: bob })
+    renderModal({ from: alice, to: bob })
 
-    const input = await findByLabelText('Number of tokens')
+    const input = await screen.findByLabelText('Number of tokens')
     expect(await getButton('Transfer tokens')).toBeDisabled()
 
-    await fireEvent.change(input, { target: { value: '50' } })
+    fireEvent.change(input, { target: { value: '50' } })
 
     const button = await getButton(/transfer tokens/i)
     expect(button).not.toBeDisabled()
 
     fireEvent.click(button)
 
-    expect(await findByText(/Authorize transaction/i)).toBeDefined()
-    expect((await findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
+    expect(await screen.findByText(/Authorize transaction/i)).toBeDefined()
+    expect((await screen.findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
   })
 
   describe('Signed transaction', () => {
     async function renderAndSign() {
-      const rendered = renderModal({ from: alice, to: bob })
-      const { findByLabelText, findByText } = rendered
+      renderModal({ from: alice, to: bob })
 
-      fireEvent.change(await findByLabelText('Number of tokens'), { target: { value: '50' } })
-      fireEvent.click(await findByText('Transfer tokens'))
-      fireEvent.click(await findByText(/^sign transaction and transfer$/i))
+      fireEvent.change(await screen.findByLabelText('Number of tokens'), { target: { value: '50' } })
 
-      return rendered
+      await act(async () => {
+        fireEvent.click(await screen.findByText('Transfer tokens'))
+        fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
+      })
     }
 
     it('Renders wait for transaction step', async () => {
       set(transfer, 'signAndSend', () => of(set({}, 'status.isReady', true)))
 
-      const { findByText } = await renderAndSign()
+      await renderAndSign()
 
-      expect(await findByText('Pending transaction')).toBeDefined()
+      expect(await screen.findByText('Pending transaction')).toBeDefined()
     })
 
     describe('Success', () => {
@@ -128,15 +128,16 @@ describe('UI: TransferModal', () => {
       })
 
       it('Renders transaction success', async () => {
-        const { findByText } = await renderAndSign()
+        await renderAndSign()
 
-        expect(await findByText('Success')).toBeDefined()
+        expect(await screen.findByText('Success')).toBeDefined()
       })
 
       it('Calculates balances before & after', async () => {
-        const { getAllByText } = await renderAndSign()
+        await renderAndSign()
 
-        const [alice, bob] = getAllByText('Transferable balance before:')
+        expect(await screen.findByText('Success')).toBeDefined()
+        const [alice, bob] = screen.getAllByText('Transferable balance before:')
 
         expect(alice?.parentNode?.textContent).toMatch(/Transferable balance before:1,075/)
         expect(bob?.parentNode?.textContent).toMatch(/Transferable balance before:950/)
@@ -148,9 +149,9 @@ describe('UI: TransferModal', () => {
     describe('Failure', () => {
       it('Renders transaction failure', async () => {
         stubTransactionFailure(transfer)
-        const { findByText } = await renderAndSign()
+        await renderAndSign()
 
-        expect(await findByText('Failure')).toBeDefined()
+        expect(await screen.findByText('Failure')).toBeDefined()
       })
     })
   })

@@ -19,12 +19,6 @@ describe('Machine: Transaction machine', () => {
     expect(service.state.matches('signing')).toBeTruthy()
   })
 
-  it('Sign internal', () => {
-    service.send('SIGN')
-    service.send('SIGN_INTERNAL')
-    expect(service.state.matches('pending')).toBeTruthy()
-  })
-
   it('Sign external', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
