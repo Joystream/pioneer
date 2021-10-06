@@ -8,7 +8,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { Arrow } from '@/common/components/icons'
+import { Arrow, WatchIcon } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -117,66 +117,78 @@ export const AnnounceCandidacyModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
-      <ModalHeader onClick={hideModal} title="Announce candidacy" />
-      <StepperModalBody>
-        <StepperProposalWrapper>
-          <Stepper steps={getSteps(service)} />
-          <StepDescriptionColumn>
-            <AnnounceCandidacyConstantsWrapper constants={constants} />
-          </StepDescriptionColumn>
-          <StepperBody>
-            {state.matches('staking') && (
-              <StakingStep
-                candidacyMember={activeMember}
-                minStake={constants?.election.minStake as BN}
-                stake={state.context.stakingAmount}
-                setStake={(amount) => send('SET_AMOUNT', { amount })}
-                account={state.context.stakingAccount}
-                setAccount={(account) => send('SET_ACCOUNT', { account })}
-              />
+    <>
+      <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+        <ModalHeader onClick={hideModal} title="Announce candidacy" />
+        <StepperModalBody>
+          <StepperProposalWrapper>
+            <Stepper steps={getSteps(service)} />
+            <StepDescriptionColumn>
+              <AnnounceCandidacyConstantsWrapper constants={constants} />
+            </StepDescriptionColumn>
+            <StepperBody>
+              {state.matches('staking') && (
+                <StakingStep
+                  candidacyMember={activeMember}
+                  minStake={constants?.election.minStake as BN}
+                  stake={state.context.stakingAmount}
+                  setStake={(amount) => send('SET_AMOUNT', { amount })}
+                  account={state.context.stakingAccount}
+                  setAccount={(account) => send('SET_ACCOUNT', { account })}
+                />
+              )}
+              {state.matches('rewardAccount') && (
+                <RewardAccountStep
+                  account={state.context.rewardAccount}
+                  setAccount={(account) => send('SET_ACCOUNT', { account })}
+                />
+              )}
+              {state.matches('candidateProfile.titleAndBulletPoints') && (
+                <TitleAndBulletPointsStep
+                  title={state.context.title}
+                  setTitle={(title) => send('SET_TITLE', { title })}
+                  bulletPoints={state.context.bulletPoints}
+                  setBulletPoints={(bulletPoints) => send('SET_BULLET_POINTS', { bulletPoints })}
+                />
+              )}
+              {state.matches('candidateProfile.summaryAndBanner') && (
+                <SummaryAndBannerStep
+                  summary={state.context.summary}
+                  setSummary={(summary) => send('SET_SUMMARY', { summary })}
+                  banner={state.context.banner}
+                  setBanner={(banner) => send('SET_BANNER', { banner })}
+                />
+              )}
+            </StepperBody>
+          </StepperProposalWrapper>
+        </StepperModalBody>
+        <ModalFooter twoColumns>
+          <ButtonsGroup align="left">
+            {!state.matches('staking') && (
+              <ButtonGhost onClick={() => send('BACK')} size="medium">
+                <Arrow direction="left" />
+                Previous step
+              </ButtonGhost>
             )}
-            {state.matches('rewardAccount') && (
-              <RewardAccountStep
-                account={state.context.rewardAccount}
-                setAccount={(account) => send('SET_ACCOUNT', { account })}
-              />
+          </ButtonsGroup>
+          <ButtonsGroup align="right">
+            {isLastStepActive(getSteps(service)) && (
+              <>
+                <ButtonGhost disabled={!isValidNext} size="medium">
+                  <WatchIcon /> Preview thumbnail
+                </ButtonGhost>
+                <ButtonGhost disabled={!isValidNext} size="medium">
+                  <WatchIcon /> Preview profile
+                </ButtonGhost>
+              </>
             )}
-            {state.matches('candidateProfile.titleAndBulletPoints') && (
-              <TitleAndBulletPointsStep
-                title={state.context.title}
-                setTitle={(title) => send('SET_TITLE', { title })}
-                bulletPoints={state.context.bulletPoints}
-                setBulletPoints={(bulletPoints) => send('SET_BULLET_POINTS', { bulletPoints })}
-              />
-            )}
-            {state.matches('candidateProfile.summaryAndBanner') && (
-              <SummaryAndBannerStep
-                summary={state.context.summary}
-                setSummary={(summary) => send('SET_SUMMARY', { summary })}
-                banner={state.context.banner}
-                setBanner={(banner) => send('SET_BANNER', { banner })}
-              />
-            )}
-          </StepperBody>
-        </StepperProposalWrapper>
-      </StepperModalBody>
-      <ModalFooter twoColumns>
-        <ButtonsGroup align="left">
-          {!state.matches('staking') && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
-    </Modal>
+            <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+              {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
+              <Arrow direction="right" />
+            </ButtonPrimary>
+          </ButtonsGroup>
+        </ModalFooter>
+      </Modal>
+    </>
   )
 }
