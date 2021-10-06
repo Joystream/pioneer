@@ -4,7 +4,7 @@ import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
 import { Account } from '@/accounts/types'
-import { getEventParam } from '@/common/model/JoystreamNode'
+import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
@@ -521,7 +521,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             actions: assign({
               transactionEvents: (context, event) => event.data.events,
               discussionId: (_, event) =>
-                parseInt(getEventParam(event.data.events, 'ThreadCreated', 0)?.toString() ?? '-1'),
+                parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 1)?.toString() ?? '-1'),
             }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode === 'closed',
           },

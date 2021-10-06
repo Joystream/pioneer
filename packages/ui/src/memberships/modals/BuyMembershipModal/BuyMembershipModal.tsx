@@ -43,7 +43,7 @@ export const BuyMembershipModal = () => {
 
   if (state.matches('success')) {
     const { form, memberId } = state.context
-    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId.toString()} />
+    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
   }
 
   if (state.matches('error')) {

@@ -1,9 +1,9 @@
-import { MemberId } from '@joystream/types/common'
+// import { DecoratedEvents } from '@joystream/types/augment/augment-api-events'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
-import { getEventParam } from '@/common/model/JoystreamNode'
+import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
@@ -47,7 +47,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
           {
             target: 'success',
             actions: assign({
-              memberId: (context, event) => getEventParam<MemberId>(event.data.events, 'MemberRegistered'),
+              memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
             }),
             cond: isTransactionSuccess,
           },

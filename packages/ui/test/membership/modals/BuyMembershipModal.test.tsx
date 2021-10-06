@@ -149,7 +149,7 @@ describe('UI: BuyMembershipModal', () => {
       })
 
       it('Enables the View My Profile button', async () => {
-        stubTransactionSuccess(transaction, [registry.createType('MemberId', 12)], 'members', 'MemberRegistered')
+        stubTransactionSuccess(transaction, [registry.createType('MemberId', 12)], 'members', 'MembershipBought')
         await renderAuthorizeStep()
 
         fireEvent.click(await getButton(/^sign and create a member$/i))
