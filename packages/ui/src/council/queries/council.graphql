@@ -42,6 +42,9 @@ fragment CandidateFields on Candidate {
   member {
     ...MemberFields
   }
+  cycleId {
+    cycleId
+  }
 }
 
 query GetElectedCouncils($where: ElectedCouncilWhereInput!) {

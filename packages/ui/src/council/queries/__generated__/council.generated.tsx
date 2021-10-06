@@ -43,6 +43,7 @@ export type CandidateFieldsFragment = {
   stake: any
   note: string
   member: { __typename: 'Membership' } & MemberFieldsFragment
+  cycleId: { __typename: 'ElectionRound'; cycleId: number }
 }
 
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
@@ -142,6 +143,9 @@ export const CandidateFieldsFragmentDoc = gql`
     note
     member {
       ...MemberFields
+    }
+    cycleId {
+      cycleId
     }
   }
   ${MemberFieldsFragmentDoc}

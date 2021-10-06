@@ -30,7 +30,7 @@ export const CandidacyPreview = React.memo(() => {
   const { modalData } = useModal<CandidacyPreviewModalCall>()
   const [candidateId, setCandidateId] = useState(modalData.id)
   const { isLoading, candidate } = useCandidate(candidateId)
-  const candidates = useElectionCandidatesIds(modalData.cycleId)
+  const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
   const onClickLeft = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex - 1])
   const onClickRight = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex + 1])
@@ -67,7 +67,7 @@ export const CandidacyPreview = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={`${window.location.host}/#/council/election?candidate=${candidate?.id}&cycle=${modalData.cycleId}`}
+            textToCopy={`${window.location.host}/#/council/election?candidate=${candidate?.id}`}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>

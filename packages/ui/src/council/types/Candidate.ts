@@ -13,6 +13,7 @@ export interface Candidate {
   summary: string
   description: string[]
   member: Member
+  cycleId: number
 }
 
 export const asCandidate = (fields: CandidateFieldsFragment): Candidate => ({
@@ -24,4 +25,5 @@ export const asCandidate = (fields: CandidateFieldsFragment): Candidate => ({
   title: 'Candidate title',
   summary: fields.note,
   description: fields.note.split(' ').slice(0, 5),
+  cycleId: fields.cycleId.cycleId,
 })

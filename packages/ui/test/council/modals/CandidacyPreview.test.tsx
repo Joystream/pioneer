@@ -17,7 +17,6 @@ describe('UI: CandidacyPreview', () => {
     modal: null,
     modalData: {
       id: '0',
-      cycleId: 0,
     },
   }
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -113,15 +112,6 @@ describe('UI: CandidacyPreview', () => {
       })
       expect(await screen.findByText(/bob/i)).toBeDefined()
       expect(await screen.findByText(/candidate 2 of 3/i)).toBeDefined()
-    })
-
-    it('Candidate from different election', async () => {
-      useModal.modalData.id = '3'
-      displayModal()
-      expect(await screen.findByText(/dave/i)).toBeDefined()
-      expect(await screen.findByText(/candidate 0 of 3/i)).toBeDefined()
-      expect(await screen.findByTitle('Previous candidate')).toBeDisabled()
-      expect(await screen.findByTitle('Next candidate')).toBeDisabled()
     })
   })
 
