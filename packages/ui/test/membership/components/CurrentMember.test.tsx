@@ -2,12 +2,13 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 
-import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
+import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
 import { seedMember, seedMembers } from '@/mocks/data'
 
+import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
@@ -70,14 +71,36 @@ describe('UI: CurrentMember component', () => {
   function renderComponent() {
     return render(
       <MockKeyringProvider>
-        <AccountsContextProvider>
+        <AccountsContext.Provider
+          value={{
+            hasAccounts: true,
+            allAccounts: [
+              {
+                address: alice.address,
+                name: 'Alice',
+              },
+              {
+                address: aliceStash.address,
+                name: 'AliceStash',
+              },
+              {
+                address: bob.address,
+                name: 'Bob',
+              },
+              {
+                address: bobStash.address,
+                name: 'BobStash',
+              },
+            ],
+          }}
+        >
           <MockQueryNodeProviders>
             <ModalContextProvider>
               <CurrentMember />
               <GlobalModals />
             </ModalContextProvider>
           </MockQueryNodeProviders>
-        </AccountsContextProvider>
+        </AccountsContext.Provider>
       </MockKeyringProvider>
     )
   }
