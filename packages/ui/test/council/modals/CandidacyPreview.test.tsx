@@ -24,27 +24,22 @@ describe('UI: CandidacyPreview', () => {
   beforeAll(async () => {
     seedMembers(server.server, 2)
     seedMember({ ...MEMBER_ALICE_DATA, id: '2', handle: 'Cindy' }, server.server)
-    seedMember({ ...MEMBER_ALICE_DATA, id: '3', handle: 'Dave' }, server.server)
-    ;['0', '1'].forEach((id) =>
-      seedElectedCouncil(
-        {
-          id,
-          endedAtBlock: 100,
-          electedAtBlock: 90,
-        },
-        server.server
-      )
+    seedElectedCouncil(
+      {
+        id: '0',
+        endedAtBlock: 100,
+        electedAtBlock: 90,
+      },
+      server.server
     )
-    ;[0, 1].forEach((cycleId) =>
-      seedCouncilElection(
-        {
-          id: cycleId.toString(),
-          cycleId,
-          isFinished: false,
-          electedCouncilId: '0',
-        },
-        server.server
-      )
+    seedCouncilElection(
+      {
+        id: '0',
+        cycleId: 0,
+        isFinished: false,
+        electedCouncilId: '0',
+      },
+      server.server
     )
     ;['0', '1', '2'].forEach((id) =>
       seedCouncilCandidate(
@@ -59,18 +54,6 @@ describe('UI: CandidacyPreview', () => {
         },
         server.server
       )
-    )
-    seedCouncilCandidate(
-      {
-        id: '3',
-        memberId: '3',
-        cycleIdId: '1',
-        stake: 2000,
-        stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-        rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-        note: 'alias est velit ut expedita aliquam itaque eos eaque aliquid',
-      },
-      server.server
     )
   })
 
