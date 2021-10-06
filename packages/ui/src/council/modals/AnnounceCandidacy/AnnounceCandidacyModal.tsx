@@ -19,6 +19,7 @@ import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
+import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -73,6 +74,12 @@ export const AnnounceCandidacyModal = () => {
     if (state.matches('staking') && state.context.stakingAccount && state.context.stakingAmount) {
       setValidNext(true)
     } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
+      setValidNext(true)
+    } else if (
+      state.matches('candidateProfile.titleAndBulletPoints') &&
+      state.context.title &&
+      state.context.bulletPoints.length
+    ) {
       setValidNext(true)
     } else {
       setValidNext(false)
@@ -130,6 +137,14 @@ export const AnnounceCandidacyModal = () => {
               <RewardAccountStep
                 account={state.context.rewardAccount}
                 setAccount={(account) => send('SET_ACCOUNT', { account })}
+              />
+            )}
+            {state.matches('candidateProfile.titleAndBulletPoints') && (
+              <TitleAndBulletPointsStep
+                title={state.context.title}
+                setTitle={(title) => send('SET_TITLE', { title })}
+                bulletPoints={state.context.bulletPoints}
+                setBulletPoints={(bulletPoints) => send('SET_BULLET_POINTS', { bulletPoints })}
               />
             )}
           </StepperBody>
