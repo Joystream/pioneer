@@ -7,8 +7,8 @@ import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { CKEditorProps } from '@/common/components/CKEditor'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -248,6 +248,8 @@ describe('UI: Announce Candidacy Modal', () => {
     })
 
     it('Default', async () => {
+      expect(await getButton(/Preview thumbnail/i)).toBeDisabled()
+      expect(await getButton(/Preview profile/i)).toBeDisabled()
       expect(await getNextStepButton()).toBeDisabled()
     })
 
@@ -255,6 +257,34 @@ describe('UI: Announce Candidacy Modal', () => {
       await fillSummary()
 
       expect(await getNextStepButton()).not.toBeDisabled()
+      expect(await getButton(/Preview thumbnail/i)).not.toBeDisabled()
+      expect(await getButton(/Preview profile/i)).not.toBeDisabled()
+    })
+
+    it('Thumbnail preview', async () => {
+      await fillSummary()
+
+      const button = await getButton(/Preview thumbnail/i)
+      expect(button).not.toBeDisabled()
+
+      act(() => {
+        fireEvent.click(button as HTMLElement)
+      })
+
+      expect(screen.queryByText(/Candidacy Thumbnail Preview/i)).not.toBeNull()
+    })
+
+    it('Profile preview', async () => {
+      await fillSummary()
+
+      const button = await getButton(/Preview profile/i)
+      expect(button).not.toBeDisabled()
+
+      act(() => {
+        fireEvent.click(button as HTMLElement)
+      })
+
+      expect(screen.queryByText(/Candidacy Profile Preview/i)).not.toBeNull()
     })
   })
 
