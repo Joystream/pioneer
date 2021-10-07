@@ -76,7 +76,7 @@ const COMPATIBLE_LOCKS: Record<LockType, Set<LockType>> = {
   'Storage Worker': new Set(STAKING_INVITATION_VOTING),
 }
 
-export const isRecoverable = (type: LockType): boolean => type === 'Council Candidate'
+export const isRecoverable = (type: LockType): boolean => STAKING_INVITATION_VOTING.includes(type)
 
 export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => {
   if (existingLocks.length < 1) {
