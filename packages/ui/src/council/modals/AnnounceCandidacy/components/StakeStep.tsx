@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -13,6 +13,7 @@ import { TextInlineSmall, TextMedium, ValueInJoys } from '@/common/components/ty
 import { useForm } from '@/common/hooks/useForm'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
+import { AccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 
 interface StakingStepProps {
@@ -24,16 +25,28 @@ interface StakingStepProps {
   setAccount: (account?: Account) => void
 }
 
-type FormFields = Pick<StakingStepProps, 'stake'>
-const FormSchema = Yup.object().shape({})
+type StakeStepFormFields = Pick<StakingStepProps, 'stake'>
 
-export const StakingStep = ({ candidacyMember, minStake, stake, setStake, account, setAccount }: StakingStepProps) => {
+const StakeStepFormSchema = Yup.object().shape({
+  account: AccountSchema.required(),
+  amount: Yup.number().required(),
+})
+
+export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account, setAccount }: StakingStepProps) => {
   const balances = useMyBalances()
+  const schema = useMemo(() => {
+    StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
+      minStake.toNumber(),
+      'You need at least ${min} stake'
+    )
 
-  const formInitializer: FormFields = {
+    return StakeStepFormSchema
+  }, [minStake.toString()])
+
+  const formInitializer: StakeStepFormFields = {
     stake: stake ?? minStake,
   }
-  const { fields, changeField } = useForm<FormFields>(formInitializer, FormSchema)
+  const { changeField, fields } = useForm<StakeStepFormFields>(formInitializer, schema)
 
   useEffect(() => {
     setStake(fields.stake)
@@ -101,7 +114,8 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
             </TextMedium>
           </RowGapBlock>
           <InputComponent
-            label="Staking amount"
+            id="amount-input"
+            label="Select amount for Staking"
             units="JOY"
             required
             validation={fields.stake && !isValidStake ? 'invalid' : undefined}
@@ -109,8 +123,9 @@ export const StakingStep = ({ candidacyMember, minStake, stake, setStake, accoun
             inputSize="s"
           >
             <InputNumber
-              id="stakingAmount"
+              id="amount-input"
               value={fields.stake?.toString()}
+              placeholder={minStake.toString()}
               onChange={(event) => setStakeValue(event.target.value)}
             />
           </InputComponent>

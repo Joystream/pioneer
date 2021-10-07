@@ -4,15 +4,15 @@ import { assign, createMachine } from 'xstate'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-import { StakeStepForm } from './StakeStep'
+import { StakeStepFormFields } from './StakeStep'
 
 interface ApplyForRoleContext {
-  stake?: StakeStepForm
+  stake?: StakeStepFormFields
   answers?: Record<number, string>
   transactionEvents?: EventRecord[]
 }
 
-type ValidStakeState = { stake: Required<StakeStepForm> }
+type ValidStakeState = { stake: Required<StakeStepFormFields> }
 type ValidFormState = ValidStakeState & { answers: Record<number, string> }
 type AfterTransactionState = ValidFormState & { transactionEvents: EventRecord[] }
 
@@ -29,7 +29,7 @@ type ApplyForRoleState =
 
 type ValidStakeStepEvent = {
   type: 'VALID'
-  stake: Required<StakeStepForm>
+  stake: Required<StakeStepFormFields>
 }
 type ValidApplicationStepEvent = {
   type: 'VALID'

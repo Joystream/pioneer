@@ -18,7 +18,7 @@ import { WorkingGroupOpening } from '@/working-groups/types'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
 import { ApplyForRoleEvent } from './machine'
-import { StakeStep, StakeStepForm } from './StakeStep'
+import { StakeStep, StakeStepFormFields } from './StakeStep'
 
 interface Props {
   opening: WorkingGroupOpening
@@ -29,9 +29,9 @@ interface Props {
 export const ApplyForRoleStakeStep = ({ opening, send, steps }: Props) => {
   const { hideModal } = useModal()
   const [isValid, setValid] = useState(false)
-  const [stake, setStake] = useState<StakeStepForm | null>(null)
+  const [stake, setStake] = useState<StakeStepFormFields | null>(null)
 
-  const onStakeStepChange = (isValid: boolean, fields: StakeStepForm) => {
+  const onStakeStepChange = (isValid: boolean, fields: StakeStepFormFields) => {
     setValid(isValid)
     setStake(fields)
   }

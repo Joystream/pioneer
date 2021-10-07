@@ -2,23 +2,28 @@ import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
+import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { Account } from '@/accounts/types'
+import { InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { Row } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { useForm } from '@/common/hooks/useForm'
+import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { formatTokenValue } from '@/common/model/formatters'
+import { AccountSchema } from '@/memberships/model/validation'
 
-import { SelectAccount } from '../../../accounts/components/SelectAccount'
-import { Account } from '../../../accounts/types'
-import { InputComponent, InputNumber } from '../../../common/components/forms'
-import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
-import { Row } from '../../../common/components/Modal'
-import { RowGapBlock } from '../../../common/components/page/PageContent'
-import { TextMedium, ValueInJoys } from '../../../common/components/typography'
-import { useForm } from '../../../common/hooks/useForm'
-import { useNumberInput } from '../../../common/hooks/useNumberInput'
-import { formatTokenValue } from '../../../common/model/formatters'
-import { AccountSchema } from '../../../memberships/model/validation'
 import { groupToLockId, WorkingGroupOpening } from '../../types'
 
-export interface StakeStepForm {
+interface StakeStepProps {
+  opening: WorkingGroupOpening
+  onChange: (isValid: boolean, fields: StakeStepFormFields) => void
+}
+
+export interface StakeStepFormFields {
   account?: Account
   amount?: string
 }
@@ -28,14 +33,9 @@ const StakeStepFormSchema = Yup.object().shape({
   amount: Yup.number().required(),
 })
 
-interface StakeStepProps {
-  opening: WorkingGroupOpening
-  onChange: (isValid: boolean, fields: StakeStepForm) => void
-}
-
 export function StakeStep({ onChange, opening }: StakeStepProps) {
-  const [amount, setAmount] = useNumberInput(0)
   const minStake = opening.stake
+  const balances = useMyBalances()
   const schema = useMemo(() => {
     StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
       minStake.toNumber(),
@@ -43,16 +43,16 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
     )
     return StakeStepFormSchema
   }, [minStake.toString()])
-  const balances = useMyBalances()
+  const [amount, setAmount] = useNumberInput(0)
 
-  const initializer = {
+  const formInitializer = {
     account: undefined,
     amount: undefined,
   }
-  const { changeField, validation, fields } = useForm<StakeStepForm>(initializer, schema)
+  const { changeField, validation, fields } = useForm<StakeStepFormFields>(formInitializer, schema)
   const { isValid, errors } = validation
 
-  useMemo(() => {
+  useEffect(() => {
     changeField('amount', amount)
   }, [amount])
 
@@ -60,6 +60,11 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
 
   return (
     <RowGapBlock gap={24}>
+      <Row>
+        <RowGapBlock gap={8}>
+          <h4>Staking</h4>
+        </RowGapBlock>
+      </Row>
       <Row>
         <RowGapBlock gap={20}>
           <RowGapBlock gap={8}>
@@ -102,7 +107,7 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
             <InputNumber
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
-              placeholder="0"
+              placeholder={minStake.toString()}
               onChange={(event) => setAmount(event.target.value)}
             />
           </InputComponent>

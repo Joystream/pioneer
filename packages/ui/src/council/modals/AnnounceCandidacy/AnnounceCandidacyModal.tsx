@@ -18,7 +18,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
-import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
+import { StakeStep } from '@/council/modals/AnnounceCandidacy/components/StakeStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -124,7 +124,7 @@ export const AnnounceCandidacyModal = () => {
           </StepDescriptionColumn>
           <StepperBody>
             {state.matches('staking') && (
-              <StakingStep
+              <StakeStep
                 candidacyMember={activeMember}
                 minStake={constants?.election.minStake as BN}
                 stake={state.context.stakingAmount}
