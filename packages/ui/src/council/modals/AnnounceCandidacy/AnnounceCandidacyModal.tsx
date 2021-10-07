@@ -1,6 +1,6 @@
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
@@ -30,7 +30,6 @@ export const AnnounceCandidacyModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
-  const [isValidNext, setValidNext] = useState<boolean>(false)
 
   const constants = useCouncilConstants()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
@@ -70,21 +69,21 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
-  useEffect((): any => {
-    if (state.matches('staking') && state.context.stakingAccount && state.context.stakingAmount) {
-      setValidNext(true)
+  const isValidNext = useMemo(() => {
+    if (state.matches('staking') && !!state.context.stakingAccount && state.context.stakingAmount) {
+      return true
     } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
-      setValidNext(true)
+      return true
     } else if (
       state.matches('candidateProfile.titleAndBulletPoints') &&
       state.context.title &&
       state.context.bulletPoints.length
     ) {
-      setValidNext(true)
-    } else {
-      setValidNext(false)
+      return true
     }
-  }, [state, activeMember?.id, stakingStatus])
+
+    return false
+  }, [JSON.stringify(state.value), JSON.stringify(state.context), activeMember?.id, stakingStatus])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
     return null

@@ -242,7 +242,7 @@ describe('UI: Announce Candidacy Modal', () => {
   }
 
   async function fillStakingStep(stakingAccount: string, stakingAmount: number, goNext?: boolean) {
-    await selectFromDropdown('Staking account', stakingAccount)
+    await selectFromDropdown('Select account for Staking', stakingAccount)
     await fillStakingAmount(stakingAmount)
 
     if (goNext) {

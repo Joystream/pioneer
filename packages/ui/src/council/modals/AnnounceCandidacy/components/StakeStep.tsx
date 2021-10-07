@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -11,6 +11,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineSmall, TextMedium, ValueInJoys } from '@/common/components/typography'
 import { useForm } from '@/common/hooks/useForm'
+import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { AccountSchema } from '@/memberships/model/validation'
@@ -39,30 +40,39 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
       minStake.toNumber(),
       'You need at least ${min} stake'
     )
-
     return StakeStepFormSchema
   }, [minStake.toString()])
+  const [amount, setAmount] = useNumberInput(0, stake ?? minStake)
 
   const formInitializer: StakeStepFormFields = {
-    stake: stake ?? minStake,
+    stake: new BN(amount),
   }
   const { changeField, fields } = useForm<StakeStepFormFields>(formInitializer, schema)
 
-  useEffect(() => {
-    setStake(fields.stake)
-  }, [])
-
-  const isSomeBalanceGteStake = () => {
+  const isSomeBalanceGteStake = useMemo(() => {
     return Object.entries(balances).some(([, balance]) => balance.transferable.gte(fields.stake ?? minStake))
-  }
+  }, [fields.stake?.toString(), JSON.stringify(balances)])
 
-  const isValidStake = fields.stake?.gte(minStake) && isSomeBalanceGteStake()
+  const isValidStake = useMemo(() => {
+    return fields.stake?.gte(minStake) && isSomeBalanceGteStake
+  }, [fields.stake?.toString(), isSomeBalanceGteStake])
+
+  useEffect(() => {
+    const stakeValue = new BN(amount)
+    setStake(isValidStake ? stakeValue : undefined)
+    changeField('stake', stakeValue)
+
+    if (!isSomeBalanceGteStake || (account && balances[account.address].transferable.lt(stakeValue))) {
+      setAccount()
+    }
+  }, [amount, isValidStake])
+
   const getStakeFieldMessage = () => {
     if (!fields.stake || isValidStake) {
       return
     }
 
-    return isSomeBalanceGteStake() ? (
+    return isSomeBalanceGteStake ? (
       <>
         Minimum stake amount is <TextInlineSmall bold>{formatTokenValue(minStake)} JOY</TextInlineSmall>
       </>
@@ -73,41 +83,35 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
       </>
     )
   }
-  const setStakeValue = (value: any) => {
-    value = !isNaN(value) ? new BN(value) : fields.stake
 
-    setStake(value && isValidStake ? value : undefined)
-    changeField('stake', value)
-
-    if (!isSomeBalanceGteStake() || (account && balances[account.address].transferable.lt(value))) {
-      setAccount()
-    }
-  }
+  const accountsFilter = useCallback(
+    (account: Account) =>
+      filterByRequiredStake(fields.stake ?? minStake, 'Council Candidate', balances[account.address]),
+    [(fields.stake ?? minStake).toString(), JSON.stringify(balances)]
+  )
 
   return (
     <RowGapBlock gap={24}>
       <Row>
-        <RowGapBlock gap={8}>
-          <h4>Staking</h4>
-        </RowGapBlock>
-      </Row>
-      <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="You are announcing candidacy for membership" inputSize="l" disabled>
+          <InputComponent label="You are announcing candidacy using membership" inputSize="l" disabled>
             <SelectMember onChange={() => true} disabled selected={candidacyMember} />
           </InputComponent>
-          <InputComponent label="Staking account" required inputSize="l" disabled={!isSomeBalanceGteStake()}>
+          <RowGapBlock gap={8}>
+            <h4>1. Select an Account</h4>
+            <TextMedium>First please select an account for staking.</TextMedium>
+          </RowGapBlock>
+          <InputComponent label="Select account for Staking" required inputSize="l" disabled={!isSomeBalanceGteStake}>
             <SelectAccount
               onChange={(account) => setAccount(account)}
               selected={account}
               minBalance={stake}
-              filter={(account) =>
-                filterByRequiredStake(fields.stake ?? minStake, 'Council Candidate', balances[account.address])
-              }
-              disabled={!isSomeBalanceGteStake()}
+              filter={accountsFilter}
+              disabled={!isSomeBalanceGteStake}
             />
           </InputComponent>
           <RowGapBlock gap={8}>
+            <h4>2. Stake</h4>
             <TextMedium>
               You must stake <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to announce candidacy. This stake
               will be returned to you when the lorem ipsum dolor sit amet.
@@ -124,9 +128,9 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
           >
             <InputNumber
               id="amount-input"
-              value={fields.stake?.toString()}
+              value={formatTokenValue(fields.stake)}
               placeholder={minStake.toString()}
-              onChange={(event) => setStakeValue(event.target.value)}
+              onChange={(event) => setAmount(event.target.value)}
             />
           </InputComponent>
         </RowGapBlock>

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -43,7 +43,7 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
     )
     return StakeStepFormSchema
   }, [minStake.toString()])
-  const [amount, setAmount] = useNumberInput(0)
+  const [amount, setAmount] = useNumberInput(0, minStake)
 
   const formInitializer = {
     account: undefined,
@@ -58,17 +58,17 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
 
   useEffect(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
 
+  const accountsFilter = useCallback(
+    (account: Account) => filterByRequiredStake(minStake, groupToLockId(opening.groupName), balances[account.address]),
+    [minStake.toString(), JSON.stringify(balances)]
+  )
+
   return (
     <RowGapBlock gap={24}>
       <Row>
-        <RowGapBlock gap={8}>
-          <h4>Staking</h4>
-        </RowGapBlock>
-      </Row>
-      <Row>
         <RowGapBlock gap={20}>
           <RowGapBlock gap={8}>
-            <h4>Select an account</h4>
+            <h4>1. Select an Account</h4>
             <TextMedium>First please select an account for staking.</TextMedium>
           </RowGapBlock>
           <InputComponent label="Select account for Staking" required inputSize="l">
@@ -77,22 +77,15 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
               onChange={(account) => changeField('account', account)}
               selected={fields.account}
               minBalance={minStake}
-              filter={(account) =>
-                filterByRequiredStake(minStake, groupToLockId(opening.groupName), balances[account.address])
-              }
+              filter={accountsFilter}
             />
           </InputComponent>
-        </RowGapBlock>
-      </Row>
-
-      <Row>
-        <RowGapBlock gap={20}>
           <RowGapBlock gap={8}>
-            <h4>Stake</h4>
+            <h4>2. Stake</h4>
             <TextMedium>
-              You must stake at least <ValueInJoys>{formatTokenValue(minStake.toNumber())}</ValueInJoys> to apply for
-              this role. This stake will be returned to you when the hiring process is complete, whether or not you are
-              hired, and will also be used to rank applications.
+              You must stake at least <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to apply for this role.
+              This stake will be returned to you when the hiring process is complete, whether or not you are hired, and
+              will also be used to rank applications.
             </TextMedium>
           </RowGapBlock>
           <InputComponent
