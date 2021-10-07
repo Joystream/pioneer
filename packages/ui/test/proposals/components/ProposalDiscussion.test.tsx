@@ -40,43 +40,71 @@ describe('UI: Proposal discussion', () => {
 
   beforeEach(() => {
     useMyMemberships.active = undefined
+    useMyMemberships.members = [alice]
   })
 
-  it('Non-whitelisted member', async () => {
-    useMyMemberships.setActive(alice)
-    renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13'] })
-    expect(
-      await screen.findByText(
-        'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-      )
-    ).toBeDefined()
+  describe('Thread mode: closed', () => {
+    it('Non-whitelisted member', async () => {
+      useMyMemberships.setActive(alice)
+      renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13'] })
+      expect(
+        await screen.findByText(
+          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
+        )
+      ).toBeDefined()
+    })
+
+    it('Whitelisted member', async () => {
+      useMyMemberships.setActive(alice)
+      renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
+      expect(
+        screen.queryByText(
+          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
+        )
+      ).toBeNull()
+      expect(await getButton('Create post')).toBeDefined()
+    })
+
+    it('Whitelisted member not selected', async () => {
+      renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
+      expect(await screen.findByText('Please select a whitelisted membership to post in this thread.')).toBeDefined()
+    })
+
+    it('Council member', async () => {
+      useMyMemberships.setActive({ ...alice, isCouncilMember: true })
+      renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111'] })
+      expect(
+        screen.queryByText(
+          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
+        )
+      ).toBeNull()
+      expect(await getButton('Create post')).toBeDefined()
+    })
+
+    it('Council member not selected', async () => {
+      useMyMemberships.members = [{ ...alice, isCouncilMember: true }]
+      renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111'] })
+      expect(await screen.findByText('Please select your council membership to post in this thread.')).toBeDefined()
+    })
   })
 
-  it('Whitelisted member', async () => {
-    useMyMemberships.setActive(alice)
-    renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
-    expect(
-      screen.queryByText(
-        'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-      )
-    ).toBeNull()
-    expect(await getButton('Create post')).toBeDefined()
-  })
+  describe('Thread mode: open', () => {
+    it('Member selected', async () => {
+      useMyMemberships.setActive(alice)
+      renderComponent({ ...baseThread })
+      expect(
+        screen.queryByText(
+          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
+        )
+      ).toBeNull()
+      expect(await getButton('Create post')).toBeDefined()
+    })
 
-  it('Whitelisted member not selected', async () => {
-    renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
-    expect(await screen.findByText('Please select a whitelisted membership.')).toBeDefined()
-  })
-
-  it('Open thread', async () => {
-    useMyMemberships.setActive(alice)
-    renderComponent({ ...baseThread })
-    expect(
-      screen.queryByText(
-        'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-      )
-    ).toBeNull()
-    expect(await getButton('Create post')).toBeDefined()
+    it('Member not selected', async () => {
+      renderComponent({ ...baseThread })
+      expect(screen.queryByText(/Pick an active membership to post in this thread/i)).toBeDefined()
+      expect(screen.queryByText('Create post')).toBeNull()
+    })
   })
 
   const renderComponent = (thread: ProposalDiscussionThread) =>
