@@ -18,7 +18,7 @@ export const CandidacyProfilePreview = ({ candidate, closeModal }: CandidacyProf
 
   return (
     <MemberModal
-      title="Candidacy profile preview"
+      title="Candidacy Profile Preview"
       tabs={[
         { title: 'Candidacy', active: activeTab === 'CANDIDACY', onClick: () => setActiveTab('CANDIDACY') },
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },

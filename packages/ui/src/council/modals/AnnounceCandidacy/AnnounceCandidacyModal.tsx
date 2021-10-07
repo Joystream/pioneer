@@ -18,6 +18,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { CandidacyProfilePreview } from '@/council/modals/AnnounceCandidacy/components/CandidacyProfilePreview'
+import { CandidacyThumbnailPreview } from '@/council/modals/AnnounceCandidacy/components/CandidacyThumbnailPreview'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
 import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
@@ -209,6 +210,12 @@ export const AnnounceCandidacyModal = () => {
         <CandidacyProfilePreview
           candidate={getCandidateForPreview(state.context as Required<AnnounceCandidacyContext>, activeMember)}
           closeModal={() => setShowProfilePreview(false)}
+        />
+      )}
+      {isLastStepActive(getSteps(service)) && showThumbnailPreview && (
+        <CandidacyThumbnailPreview
+          candidate={getCandidateForPreview(state.context as Required<AnnounceCandidacyContext>, activeMember)}
+          closeModal={() => setShowThumbnailPreview(false)}
         />
       )}
     </Modal>

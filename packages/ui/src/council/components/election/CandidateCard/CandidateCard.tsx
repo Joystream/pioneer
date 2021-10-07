@@ -31,6 +31,7 @@ export interface CandidateCardProps {
   wons?: number
   losts?: number
   isVotingStage?: boolean
+  isPreview?: boolean
 }
 
 export const CandidateCard = ({
@@ -45,11 +46,19 @@ export const CandidateCard = ({
   wons = 0,
   losts = 0,
   isVotingStage,
+  isPreview,
 }: CandidateCardProps) => {
   const { showModal } = useModal()
   return (
     <CandidateCardWrapper
-      onClick={() => showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id } })}
+      onClick={() =>
+        !isPreview
+          ? showModal<CandidacyPreviewModalCall>({
+              modal: 'CandidacyPreview',
+              data: { id },
+            })
+          : true
+      }
     >
       <CandidateCardImageWrapper>
         <CandidateCardImage imageUrl={image} />
