@@ -4,7 +4,6 @@ import { ButtonGhost, ButtonPrimary, ButtonsGroup, CopyButtonTemplate } from '@/
 import { Arrow } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
-import { ModalFooter } from '@/common/components/Modal'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
@@ -74,11 +73,9 @@ export const CandidacyPreview = React.memo(() => {
         </SidePaneTopButtonsGroup>
       }
       footer={
-        <ModalFooter>
-          <ButtonsGroup>
-            <ButtonPrimary size="large">Vote</ButtonPrimary>
-          </ButtonsGroup>
-        </ModalFooter>
+        <ButtonsGroup>
+          <ButtonPrimary size="small">Vote</ButtonPrimary>
+        </ButtonsGroup>
       }
     >
       {!candidate ? (

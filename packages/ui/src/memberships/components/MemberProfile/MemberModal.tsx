@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
+import { ModalFooter } from '@/common/components/Modal'
 import {
   SidePane,
   SidePaneBody,
@@ -68,7 +69,7 @@ export const MemberModal = React.memo(({ member, isLoading, tabs, children, cont
           <Tabs tabs={tabs} tabsSize="xs" />
         </MemberPanelHeader>
         <SidePaneBody>{children}</SidePaneBody>
-        {footer}
+        {footer && <ModalFooter>{footer}</ModalFooter>}
       </SidePane>
     </SidePaneGlass>
   )
