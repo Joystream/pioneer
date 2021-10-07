@@ -21,4 +21,12 @@ describe('areLocksConflicting', () => {
   it('Conflicting lock', () => {
     expect(areLocksConflicting('Storage Worker', [stubLock('Forum Worker')])).toBe(true)
   })
+
+  it('Compatible lock', () => {
+    expect(areLocksConflicting('Content Directory Worker', [stubLock('Voting')])).toBe(false)
+  })
+
+  it('Compatible & conflicting locks', () => {
+    expect(areLocksConflicting('Content Directory Worker', [stubLock('Voting'), stubLock('Storage Worker')])).toBe(true)
+  })
 })
