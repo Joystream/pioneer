@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -86,7 +87,7 @@ describe('UI: RecoverBalanceModal', () => {
   })
 
   it('Success', async () => {
-    stubTransactionSuccess(tx, [alice.address, bob.address, 50])
+    stubTransactionSuccess(tx, 'council', 'CandidacyStakeRelease', [createType('MemberId', 0)])
 
     renderModal()
     await fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))

@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { set } from 'lodash'
@@ -124,7 +125,11 @@ describe('UI: TransferModal', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        stubTransactionSuccess(transfer, [alice.address, bob.address, 50])
+        stubTransactionSuccess(transfer, 'balances', 'Transfer', [
+          createType('AccountId', alice.address),
+          createType('AccountId', bob.address),
+          createType('Balance', 50),
+        ])
       })
 
       it('Renders transaction success', async () => {

@@ -1,16 +1,19 @@
 import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
+import { AugmentedEvents } from '@polkadot/api/types'
+import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
 
 import { BN_ZERO } from '@/common/constants'
+import { ExtractTuple } from '@/common/model/JoystreamNode'
 import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
-const createSuccessEvents = (data: number[], section: string, method: string) => [
+const createSuccessEvents = (data: any[], section: string, method: string) => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: { index: '0x0502', data, method, section },
@@ -79,8 +82,20 @@ export const stubTransactionFailure = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents()))
 }
 
-export const stubTransactionSuccess = (transaction: any, data: any, section = '', method = '') => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(createSuccessEvents(data, section, method)))
+type PartialTuple<T extends AnyTuple> = Partial<T>
+
+export const stubTransactionSuccess = <
+  Module extends keyof AugmentedEvents<'rxjs'>,
+  Event extends keyof AugmentedEvents<'rxjs'>[Module]
+>(
+  transaction: any,
+  module: Module,
+  eventName: Event,
+  data?: PartialTuple<ExtractTuple<AugmentedEvents<'rxjs'>[Module][Event]>>
+) => {
+  set(transaction, 'signAndSend', () =>
+    stubTransactionResult(createSuccessEvents((data ?? []) as any[], module, eventName as string))
+  )
 }
 
 export const stubBatchTransactionFailure = (transaction: any) => {

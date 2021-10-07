@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -150,10 +151,10 @@ describe('UI: InviteMemberModal', () => {
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(inviteMemberTx, [1])
+      stubTransactionSuccess(inviteMemberTx, 'members', 'MemberInvited', [createType('MemberId', 1)])
       await fillFormAndProceed()
 
-      await fireEvent.click(screen.getByText(/^sign and create a member$/i))
+      fireEvent.click(screen.getByText(/^sign and create a member$/i))
 
       expect(await screen.findByText('Success')).toBeDefined()
       expect(await screen.findByText(/5 invitations left on the "/i)).toBeDefined()

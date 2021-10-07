@@ -1,4 +1,4 @@
-import { registry } from '@joystream/types'
+import { createType } from '@joystream/types'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter, Route } from 'react-router-dom'
@@ -118,7 +118,7 @@ describe('CreateThreadModal', () => {
       await fillDetails()
       tx = stubTransaction(api, txPath, 10000)
       const next = await getButton(/next step/i)
-      await fireEvent.click(next)
+      fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
@@ -134,7 +134,7 @@ describe('CreateThreadModal', () => {
       await fillDetails()
       tx = stubTransaction(api, txPath, 400)
       const next = await getButton(/next step/i)
-      await fireEvent.click(next)
+      fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
@@ -150,7 +150,7 @@ describe('CreateThreadModal', () => {
       await fillDetails()
       tx = stubTransaction(api, txPath, 101)
       const next = await getButton(/next step/i)
-      await fireEvent.click(next)
+      fireEvent.click(next)
 
       expect(screen.getByText(/^Thread creation and initial post deposit:/i)?.nextSibling?.textContent).toBe('205')
       expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('101')
@@ -159,24 +159,24 @@ describe('CreateThreadModal', () => {
     it('Transaction failure', async () => {
       stubTransactionFailure(tx)
       await fillAndProceed()
-      await fireEvent.click(await getButton(/sign and send/i))
+      fireEvent.click(await getButton(/sign and send/i))
 
       expect(await screen.findByText(/failure/i)).toBeDefined()
     })
 
     it('Transaction success', async () => {
-      stubTransactionSuccess(tx, [registry.createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+      stubTransactionSuccess(tx, 'forum', 'ThreadCreated', [createType('CategoryId', 0), createType('ThreadId', 1337)])
       await fillAndProceed()
-      await fireEvent.click(await getButton(/sign and send/i))
+      fireEvent.click(await getButton(/sign and send/i))
 
       expect(await screen.findByText(/success!/i)).toBeDefined()
     })
 
     it('Proceed to thread on success', async () => {
-      stubTransactionSuccess(tx, [registry.createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+      stubTransactionSuccess(tx, 'forum', 'ThreadCreated', [createType('CategoryId', 0), createType('ThreadId', 1337)])
       await fillAndProceed()
-      await fireEvent.click(await getButton(/sign and send/i))
-      await fireEvent.click(await getButton(/see my thread/i))
+      fireEvent.click(await getButton(/sign and send/i))
+      fireEvent.click(await getButton(/see my thread/i))
 
       expect(pathname).toEqual(`${ForumRoutes.thread}/1337`)
     })
@@ -184,17 +184,17 @@ describe('CreateThreadModal', () => {
 
   async function fillDetails() {
     const topicInput = await screen.findByLabelText(/topic of the thread/i)
-    await fireEvent.change(topicInput, { target: { value: 'topic' } })
+    fireEvent.change(topicInput, { target: { value: 'topic' } })
 
     const descriptionInput = await screen.findByLabelText(/description/i)
-    await fireEvent.change(descriptionInput, { target: { value: 'lorem' } })
+    fireEvent.change(descriptionInput, { target: { value: 'lorem' } })
   }
 
   async function fillAndProceed() {
     renderModal()
     await fillDetails()
     const next = await getButton(/next step/i)
-    await fireEvent.click(next)
+    fireEvent.click(next)
   }
 
   function renderModal() {

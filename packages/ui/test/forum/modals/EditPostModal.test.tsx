@@ -102,7 +102,7 @@ describe('UI: EditPostModal', () => {
   })
 
   it('Transaction success', async () => {
-    stubTransactionSuccess(tx, [], 'forum', 'editPostText')
+    stubTransactionSuccess(tx, 'forum', 'PostTextUpdated')
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))

@@ -1,10 +1,9 @@
 import { ThreadId } from '@joystream/types/common'
 import { EventRecord } from '@polkadot/types/interfaces/system'
-import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
-import { getEventParam } from '@/common/model/JoystreamNode'
+import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
@@ -17,7 +16,7 @@ interface DetailsContext {
 }
 
 interface TransactionContext extends Required<DetailsContext> {
-  newThreadId?: BN
+  newThreadId?: ThreadId
   transactionEvents?: EventRecord[]
 }
 
@@ -83,7 +82,7 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
             target: 'success',
             cond: isTransactionSuccess,
             actions: assign({
-              newThreadId: (_, event) => getEventParam<ThreadId>(event.data.events, 'ThreadCreated'),
+              newThreadId: (_, event) => getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 1),
             }),
           },
           {

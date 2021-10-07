@@ -1,4 +1,4 @@
-import { createType, registry } from '@joystream/types'
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -509,7 +509,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal step', async () => {
-          stubTransactionSuccess(bindAccountTx, [], 'members', '')
+          stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
 
           await act(async () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
@@ -520,16 +520,11 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal success', async () => {
-          stubTransactionSuccess(bindAccountTx, [], 'members', '')
+          stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
           await act(async () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
           })
-          stubTransactionSuccess(
-            batchTx,
-            ['EventParams', registry.createType('ProposalId', 1337)],
-            'proposalsEngine',
-            'ProposalCreated'
-          )
+          stubTransactionSuccess(batchTx, 'proposalsCodex', 'ProposalCreated', [createType('ProposalId', 1337)])
 
           await act(async () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
@@ -539,7 +534,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal failure', async () => {
-          stubTransactionSuccess(bindAccountTx, [], 'members', '')
+          stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
           await act(async () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
           })
@@ -579,12 +574,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal success', async () => {
-          stubTransactionSuccess(
-            batchTx,
-            ['EventParams', registry.createType('ProposalId', 1337)],
-            'proposalsEngine',
-            'ProposalCreated'
-          )
+          stubTransactionSuccess(batchTx, 'proposalsCodex', 'ProposalCreated', [createType('ProposalId', 1337)])
 
           await act(async () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
@@ -630,12 +620,9 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal success', async () => {
-          stubTransactionSuccess(
-            createProposalTx,
-            ['EventParams', registry.createType('ProposalId', 1337)],
-            'proposalsEngine',
-            'ProposalCreated'
-          )
+          stubTransactionSuccess(createProposalTx, 'proposalsCodex', 'ProposalCreated', [
+            createType('ProposalId', 1337),
+          ])
 
           await act(async () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
@@ -687,12 +674,7 @@ describe('UI: AddNewProposalModal', () => {
           })
         )
         stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
-        stubTransactionSuccess(
-          createProposalTx,
-          ['EventParams', registry.createType('ProposalId', 1337)],
-          'proposalsEngine',
-          'ProposalCreated'
-        )
+        stubTransactionSuccess(createProposalTx, 'proposalsCodex', 'ProposalCreated', [createType('ProposalId', 1337)])
         await finishWarning()
         await finishProposalType('fundingRequest')
         await finishStakingAccount()
@@ -712,7 +694,7 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Success', async () => {
-        stubTransactionSuccess(changeModeTx, 'proposalsDiscussion', '')
+        stubTransactionSuccess(changeModeTx, 'proposalsDiscussion', 'ThreadModeChanged')
         const button = await getButton(/sign transaction and change mode/i)
         await fireEvent.click(button as HTMLElement)
         expect(screen.queryByText('See my Proposal')).not.toBeNull()
