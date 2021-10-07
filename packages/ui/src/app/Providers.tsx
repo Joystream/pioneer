@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { QueryNodeProvider } from '@/app/providers/QueryNodeProvider'
 import { ApiContextProvider } from '@/common/providers/api/provider'
 import { KeyringContextProvider } from '@/common/providers/keyring/provider'
@@ -18,16 +19,18 @@ export const Providers = ({ children }: Props) => (
   <KeyringContextProvider>
     <ApiContextProvider>
       <AccountsContextProvider>
-        <QueryNodeProvider>
-          <MembershipContextProvider>
-            <HashRouter>
-              <ModalContextProvider>
-                <GlobalStyle />
-                {children}
-              </ModalContextProvider>
-            </HashRouter>
-          </MembershipContextProvider>
-        </QueryNodeProvider>
+        <BalancesContextProvider>
+          <QueryNodeProvider>
+            <MembershipContextProvider>
+              <HashRouter>
+                <ModalContextProvider>
+                  <GlobalStyle />
+                  {children}
+                </ModalContextProvider>
+              </HashRouter>
+            </MembershipContextProvider>
+          </QueryNodeProvider>
+        </BalancesContextProvider>
       </AccountsContextProvider>
     </ApiContextProvider>
   </KeyringContextProvider>

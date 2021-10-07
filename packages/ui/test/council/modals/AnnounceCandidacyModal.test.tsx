@@ -7,6 +7,7 @@ import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -304,11 +305,13 @@ describe('UI: Announce Candidacy Modal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <ApiContext.Provider value={api}>
-                    <AnnounceCandidacyModal />
-                  </ApiContext.Provider>
-                </MembershipContext.Provider>
+                <ApiContext.Provider value={api}>
+                  <BalancesContextProvider>
+                    <MembershipContext.Provider value={useMyMemberships}>
+                      <AnnounceCandidacyModal />
+                    </MembershipContext.Provider>
+                  </BalancesContextProvider>
+                </ApiContext.Provider>
               </AccountsContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
