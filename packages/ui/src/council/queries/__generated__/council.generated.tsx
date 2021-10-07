@@ -35,7 +35,7 @@ export type ElectionRoundFieldsFragment = {
   candidates: Array<{ __typename: 'Candidate' } & ElectionCandidateFieldsFragment>
 }
 
-export type CandidateFieldsFragment = {
+export type CandidateDetailedFieldsFragment = {
   __typename: 'Candidate'
   id: string
   stakingAccountId: string
@@ -43,7 +43,7 @@ export type CandidateFieldsFragment = {
   stake: any
   note: string
   member: { __typename: 'Membership' } & MemberFieldsFragment
-  cycleId: { __typename: 'ElectionRound'; cycleId: number }
+  cycleId: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
 }
 
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
@@ -68,7 +68,7 @@ export type GetCandidateQueryVariables = Types.Exact<{
 
 export type GetCandidateQuery = {
   __typename: 'Query'
-  candidateByUniqueInput?: Types.Maybe<{ __typename: 'Candidate' } & CandidateFieldsFragment>
+  candidateByUniqueInput?: Types.Maybe<{ __typename: 'Candidate' } & CandidateDetailedFieldsFragment>
 }
 
 export type GetElectionCandidatesIdsQueryVariables = Types.Exact<{
@@ -134,8 +134,8 @@ export const ElectionRoundFieldsFragmentDoc = gql`
   }
   ${ElectionCandidateFieldsFragmentDoc}
 `
-export const CandidateFieldsFragmentDoc = gql`
-  fragment CandidateFields on Candidate {
+export const CandidateDetailedFieldsFragmentDoc = gql`
+  fragment CandidateDetailedFields on Candidate {
     id
     stakingAccountId
     rewardAccountId
@@ -146,6 +146,7 @@ export const CandidateFieldsFragmentDoc = gql`
     }
     cycleId {
       cycleId
+      isFinished
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -244,10 +245,10 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
 export const GetCandidateDocument = gql`
   query GetCandidate($where: CandidateWhereUniqueInput!) {
     candidateByUniqueInput(where: $where) {
-      ...CandidateFields
+      ...CandidateDetailedFields
     }
   }
-  ${CandidateFieldsFragmentDoc}
+  ${CandidateDetailedFieldsFragmentDoc}
 `
 
 /**

@@ -33,7 +33,7 @@ fragment ElectionRoundFields on ElectionRound {
   }
 }
 
-fragment CandidateFields on Candidate {
+fragment CandidateDetailedFields on Candidate {
   id
   stakingAccountId
   rewardAccountId
@@ -44,6 +44,7 @@ fragment CandidateFields on Candidate {
   }
   cycleId {
     cycleId
+    isFinished
   }
 }
 
@@ -61,7 +62,7 @@ query GetCurrentElection {
 
 query GetCandidate($where: CandidateWhereUniqueInput!) {
   candidateByUniqueInput(where: $where) {
-    ...CandidateFields
+    ...CandidateDetailedFields
   }
 }
 

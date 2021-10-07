@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 
 import { ButtonGhost, CopyButtonTemplate } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
@@ -7,6 +8,7 @@ import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
+import { CouncilRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
@@ -32,6 +34,12 @@ export const CandidacyPreview = React.memo(() => {
   const { isLoading, candidate } = useCandidate(candidateId)
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
+  const history = useHistory()
+  useEffect(() => {
+    if (candidate?.cycleFinished && history.location.pathname !== CouncilRoutes.pastElections) {
+      history.push(CouncilRoutes.pastElections)
+    }
+  }, [candidate?.cycleFinished])
   const onClickLeft = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex - 1])
   const onClickRight = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex + 1])
 
