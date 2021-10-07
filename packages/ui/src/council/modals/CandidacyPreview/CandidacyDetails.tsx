@@ -9,11 +9,11 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
 import { StatisticItem, Statistics } from '@/common/components/statistics'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { Candidate } from '@/council/types'
+import { CandidateWithDetails } from '@/council/types'
 import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyStats'
 
 interface Props {
-  candidate: Candidate
+  candidate: CandidateWithDetails
 }
 
 export const CandidacyDetails = ({ candidate }: Props) => {

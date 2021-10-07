@@ -11,6 +11,7 @@ import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
+import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -21,6 +22,7 @@ export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  useCandidatePreviewViaUrlParameter()
 
   if (isLoadingElection || isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
