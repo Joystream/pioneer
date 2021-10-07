@@ -234,7 +234,7 @@ describe('UI: Announce Candidacy Modal', () => {
   })
 
   async function fillStakingAmount(value: number) {
-    const amountInput = await screen.getByTestId('stakingAmount')
+    const amountInput = await screen.getByTestId('amount-input')
 
     act(() => {
       fireEvent.change(amountInput, { target: { value } })
