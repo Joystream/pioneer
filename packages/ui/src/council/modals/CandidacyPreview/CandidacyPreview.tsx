@@ -37,7 +37,7 @@ export const CandidacyPreview = React.memo(() => {
   const history = useHistory()
   useEffect(() => {
     if (candidate?.cycleFinished && history.location.pathname !== CouncilRoutes.pastElections) {
-      history.push(CouncilRoutes.pastElections)
+      history.replace(`${CouncilRoutes.pastElections}?candidate=${candidate.id}`)
     }
   }, [candidate?.cycleFinished])
   const onClickLeft = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex - 1])
@@ -75,7 +75,9 @@ export const CandidacyPreview = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={`${window.location.host}/#/council/election?candidate=${candidate?.id}`}
+            textToCopy={`${window.location.host}/#/council/${
+              candidate?.cycleFinished ? 'past-elections' : 'election'
+            }?candidate=${candidate?.id}`}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>
