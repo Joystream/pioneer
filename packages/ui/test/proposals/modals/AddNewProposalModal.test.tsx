@@ -7,6 +7,7 @@ import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -851,11 +852,13 @@ describe('UI: AddNewProposalModal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <ApiContext.Provider value={api}>
-                    <AddNewProposalModal />
-                  </ApiContext.Provider>
-                </MembershipContext.Provider>
+                <ApiContext.Provider value={api}>
+                  <BalancesContextProvider>
+                    <MembershipContext.Provider value={useMyMemberships}>
+                      <AddNewProposalModal />
+                    </MembershipContext.Provider>
+                  </BalancesContextProvider>
+                </ApiContext.Provider>
               </AccountsContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

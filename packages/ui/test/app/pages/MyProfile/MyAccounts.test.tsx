@@ -6,6 +6,7 @@ import { Route, Router, Switch } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
 import { ApiContext } from '@/common/providers/api/context'
@@ -117,18 +118,20 @@ describe('Page: MyAccounts', () => {
     render(
       <Router history={history}>
         <AccountsContext.Provider value={useAccounts}>
-          <ModalContextProvider>
-            <MockQueryNodeProviders>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <Switch>
-                    <Route path="/profile" component={MyAccounts} />
-                  </Switch>
-                  <GlobalModals />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </MockQueryNodeProviders>
-          </ModalContextProvider>
+          <ApiContext.Provider value={api}>
+            <BalancesContextProvider>
+              <ModalContextProvider>
+                <MockQueryNodeProviders>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <Switch>
+                      <Route path="/profile" component={MyAccounts} />
+                    </Switch>
+                    <GlobalModals />
+                  </MembershipContext.Provider>
+                </MockQueryNodeProviders>
+              </ModalContextProvider>
+            </BalancesContextProvider>
+          </ApiContext.Provider>
         </AccountsContext.Provider>
       </Router>
     )

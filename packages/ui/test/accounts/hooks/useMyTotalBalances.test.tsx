@@ -6,6 +6,7 @@ import React, { ReactNode } from 'react'
 
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { UseApi } from '@/common/providers/api/provider'
 
@@ -84,7 +85,9 @@ describe('useMyTotalBalances', () => {
             hasAccounts: true,
           }}
         >
-          <ApiContext.Provider value={useApi}>{children}</ApiContext.Provider>
+          <ApiContext.Provider value={useApi}>
+            <BalancesContextProvider>{children}</BalancesContextProvider>
+          </ApiContext.Provider>
         </AccountsContext.Provider>
       </MockKeyringProvider>
     )
