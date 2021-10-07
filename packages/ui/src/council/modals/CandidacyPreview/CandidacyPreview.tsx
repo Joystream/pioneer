@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { ButtonGhost, CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
@@ -71,6 +71,11 @@ export const CandidacyPreview = React.memo(() => {
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>
+      }
+      footer={
+        <ButtonsGroup>
+          <ButtonPrimary size="small">Vote</ButtonPrimary>
+        </ButtonsGroup>
       }
     >
       {!candidate ? (

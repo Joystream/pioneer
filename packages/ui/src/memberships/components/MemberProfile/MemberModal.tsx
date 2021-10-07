@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
+import { ModalFooter } from '@/common/components/Modal'
 import {
   SidePane,
   SidePaneBody,
@@ -27,9 +28,10 @@ interface Props {
   contextButtons: ReactNode
   title: string
   children: ReactNode
+  footer?: ReactNode
 }
 
-export const MemberModal = React.memo(({ member, isLoading, tabs, children, contextButtons, title }: Props) => {
+export const MemberModal = React.memo(({ member, isLoading, tabs, children, contextButtons, title, footer }: Props) => {
   const { hideModal } = useModal()
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -67,6 +69,7 @@ export const MemberModal = React.memo(({ member, isLoading, tabs, children, cont
           <Tabs tabs={tabs} tabsSize="xs" />
         </MemberPanelHeader>
         <SidePaneBody>{children}</SidePaneBody>
+        {footer && <ModalFooter>{footer}</ModalFooter>}
       </SidePane>
     </SidePaneGlass>
   )
