@@ -19,7 +19,7 @@ import { MemberSideRoles } from '@/memberships/components/MemberProfile/MemberRo
 import { CandidacyDetails } from './CandidacyDetails'
 import { CandidacyPreviewModalCall } from './types'
 
-type ProfileTabs = 'CANDIDACY' | 'DETAILS' | 'ACCOUNTS' | 'ROLES'
+export type CandidacyPreviewTabs = 'CANDIDACY' | 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 const isPreviousDisabled = (candidateIndex: number | undefined, candidates: string[] | undefined) =>
   !isDefined(candidateIndex) || !candidates || candidateIndex <= 0
@@ -28,7 +28,7 @@ const isNextDisabled = (candidateIndex: number | undefined, candidates: string[]
   !isDefined(candidateIndex) || !candidates || candidateIndex === candidates.length - 1 || candidateIndex === -1
 
 export const CandidacyPreview = React.memo(() => {
-  const [activeTab, setActiveTab] = useState<ProfileTabs>('CANDIDACY')
+  const [activeTab, setActiveTab] = useState<CandidacyPreviewTabs>('CANDIDACY')
   const { modalData } = useModal<CandidacyPreviewModalCall>()
   const [candidateId, setCandidateId] = useState(modalData.id)
   const { isLoading, candidate } = useCandidate(candidateId)
