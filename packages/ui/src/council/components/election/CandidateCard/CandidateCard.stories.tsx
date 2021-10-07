@@ -29,6 +29,7 @@ Default.args = {
     handle: 'Jennifer_123',
     isVerified: true,
     isFoundingMember: true,
+    isCouncilMember: false,
     roles: [],
     inviteCount: 0,
     createdAt: '',

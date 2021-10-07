@@ -11,6 +11,7 @@ fragment MemberFields on Membership {
   }
   isVerified
   isFoundingMember
+  isCouncilMember
   inviteCount
   roles {
     id
