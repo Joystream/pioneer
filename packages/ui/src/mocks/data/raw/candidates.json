@@ -2,7 +2,7 @@
   {
     "id": "0-0",
     "memberId": "33",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 956993,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -11,7 +11,7 @@
   {
     "id": "0-1",
     "memberId": "33",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 183097,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -20,7 +20,7 @@
   {
     "id": "0-2",
     "memberId": "10",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 253172,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -29,7 +29,7 @@
   {
     "id": "0-3",
     "memberId": "21",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 76008,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -38,7 +38,7 @@
   {
     "id": "0-4",
     "memberId": "8",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 917438,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -47,7 +47,7 @@
   {
     "id": "0-5",
     "memberId": "17",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 315767,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -56,7 +56,7 @@
   {
     "id": "0-6",
     "memberId": "9",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 121022,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -65,7 +65,7 @@
   {
     "id": "0-7",
     "memberId": "22",
-    "cycleIdId": "0",
+    "electionRoundId": "0",
     "stake": 238111,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -74,7 +74,7 @@
   {
     "id": "1-0",
     "memberId": "30",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 165474,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -83,7 +83,7 @@
   {
     "id": "1-1",
     "memberId": "30",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 509344,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -92,7 +92,7 @@
   {
     "id": "1-2",
     "memberId": "3",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 670336,
     "stakingAccountId": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
     "rewardAccountId": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
@@ -101,7 +101,7 @@
   {
     "id": "1-3",
     "memberId": "38",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 657730,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -110,7 +110,7 @@
   {
     "id": "1-4",
     "memberId": "46",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 155128,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -119,7 +119,7 @@
   {
     "id": "1-5",
     "memberId": "22",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 179483,
     "stakingAccountId": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
     "rewardAccountId": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
@@ -128,7 +128,7 @@
   {
     "id": "1-6",
     "memberId": "28",
-    "cycleIdId": "1",
+    "electionRoundId": "1",
     "stake": 704351,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -137,7 +137,7 @@
   {
     "id": "2-0",
     "memberId": "22",
-    "cycleIdId": "2",
+    "electionRoundId": "2",
     "stake": 840884,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -146,7 +146,7 @@
   {
     "id": "2-1",
     "memberId": "47",
-    "cycleIdId": "2",
+    "electionRoundId": "2",
     "stake": 880950,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -155,7 +155,7 @@
   {
     "id": "2-2",
     "memberId": "28",
-    "cycleIdId": "2",
+    "electionRoundId": "2",
     "stake": 391099,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -164,7 +164,7 @@
   {
     "id": "2-3",
     "memberId": "5",
-    "cycleIdId": "2",
+    "electionRoundId": "2",
     "stake": 627998,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -173,7 +173,7 @@
   {
     "id": "2-4",
     "memberId": "21",
-    "cycleIdId": "2",
+    "electionRoundId": "2",
     "stake": 585124,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -182,7 +182,7 @@
   {
     "id": "2-5",
     "memberId": "22",
-    "cycleIdId": "2",
+    "electionRoundId": "2",
     "stake": 752618,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -191,7 +191,7 @@
   {
     "id": "3-0",
     "memberId": "33",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 325643,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -200,7 +200,7 @@
   {
     "id": "3-1",
     "memberId": "2",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 612410,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -209,7 +209,7 @@
   {
     "id": "3-2",
     "memberId": "42",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 13899,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -218,7 +218,7 @@
   {
     "id": "3-3",
     "memberId": "41",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 156125,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -227,7 +227,7 @@
   {
     "id": "3-4",
     "memberId": "1",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 998309,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -236,7 +236,7 @@
   {
     "id": "3-5",
     "memberId": "31",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 968161,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -245,7 +245,7 @@
   {
     "id": "3-6",
     "memberId": "25",
-    "cycleIdId": "3",
+    "electionRoundId": "3",
     "stake": 458853,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -254,7 +254,7 @@
   {
     "id": "4-0",
     "memberId": "28",
-    "cycleIdId": "4",
+    "electionRoundId": "4",
     "stake": 495314,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -263,7 +263,7 @@
   {
     "id": "4-1",
     "memberId": "30",
-    "cycleIdId": "4",
+    "electionRoundId": "4",
     "stake": 974419,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -272,7 +272,7 @@
   {
     "id": "4-2",
     "memberId": "31",
-    "cycleIdId": "4",
+    "electionRoundId": "4",
     "stake": 575806,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -281,7 +281,7 @@
   {
     "id": "4-3",
     "memberId": "8",
-    "cycleIdId": "4",
+    "electionRoundId": "4",
     "stake": 172940,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -290,7 +290,7 @@
   {
     "id": "4-4",
     "memberId": "40",
-    "cycleIdId": "4",
+    "electionRoundId": "4",
     "stake": 888114,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
@@ -299,7 +299,7 @@
   {
     "id": "4-5",
     "memberId": "43",
-    "cycleIdId": "4",
+    "electionRoundId": "4",
     "stake": 221788,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",

@@ -46,7 +46,7 @@ describe('UI: CandidacyPreview', () => {
         {
           id,
           memberId: id,
-          cycleIdId: '0',
+          electionRoundId: '0',
           stake: 1000,
           stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
           rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',

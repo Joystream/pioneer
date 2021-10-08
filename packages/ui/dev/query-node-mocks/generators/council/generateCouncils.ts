@@ -57,7 +57,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
       return {
         id: `${council.id}-${candidateIndex}`,
         memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
-        cycleIdId: council.id,
+        electionRoundId: council.id,
         stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
         stakingAccountId: member.controllerAccount,
         rewardAccountId: member.rootAccount,

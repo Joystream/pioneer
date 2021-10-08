@@ -20,7 +20,7 @@ export interface RawCouncilMock {
 export interface RawCouncilCandidateMock {
   id: string
   memberId: string
-  cycleIdId: string
+  electionRoundId: string
   stake: number
   stakingAccountId: string
   rewardAccountId: string
