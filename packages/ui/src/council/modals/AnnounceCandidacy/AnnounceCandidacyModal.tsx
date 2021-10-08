@@ -8,7 +8,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { Arrow, WatchIcon } from '@/common/components/icons'
+import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -17,20 +17,19 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
-import { CandidacyProfilePreview } from '@/council/modals/AnnounceCandidacy/components/CandidacyProfilePreview'
-import { CandidacyThumbnailPreview } from '@/council/modals/AnnounceCandidacy/components/CandidacyThumbnailPreview'
+import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
 import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
-import { AnnounceCandidacyContext, announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
+import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
-const getCandidateForPreview = (context: Required<AnnounceCandidacyContext>, member: Member): CandidateWithDetails => ({
+const getCandidateForPreview = (context: FinalAnnounceCandidacyContext, member: Member): CandidateWithDetails => ({
   id: '0',
   stakingAccount: context.stakingAccount.address,
   rewardAccount: context.rewardAccount.address,
@@ -49,8 +48,6 @@ export const AnnounceCandidacyModal = () => {
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const [isValidNext, setValidNext] = useState<boolean>(false)
-  const [showProfilePreview, setShowProfilePreview] = useState<boolean>(false)
-  const [showThumbnailPreview, setShowThumbnailPreview] = useState<boolean>(false)
 
   const constants = useCouncilConstants()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
@@ -190,15 +187,11 @@ export const AnnounceCandidacyModal = () => {
           )}
         </ButtonsGroup>
         <ButtonsGroup align="right">
-          {isLastStepActive(getSteps(service)) && (
-            <>
-              <ButtonGhost disabled={!isValidNext} onClick={() => setShowThumbnailPreview(true)} size="medium">
-                <WatchIcon /> Preview thumbnail
-              </ButtonGhost>
-              <ButtonGhost disabled={!isValidNext} onClick={() => setShowProfilePreview(true)} size="medium">
-                <WatchIcon /> Preview profile
-              </ButtonGhost>
-            </>
+          {state.matches('candidateProfile.summaryAndBanner') && (
+            <PreviewButtons
+              candidate={getCandidateForPreview(state.context as FinalAnnounceCandidacyContext, activeMember)}
+              disabled={!isValidNext}
+            />
           )}
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
@@ -206,18 +199,6 @@ export const AnnounceCandidacyModal = () => {
           </ButtonPrimary>
         </ButtonsGroup>
       </ModalFooter>
-      {isLastStepActive(getSteps(service)) && showProfilePreview && (
-        <CandidacyProfilePreview
-          candidate={getCandidateForPreview(state.context as Required<AnnounceCandidacyContext>, activeMember)}
-          closeModal={() => setShowProfilePreview(false)}
-        />
-      )}
-      {isLastStepActive(getSteps(service)) && showThumbnailPreview && (
-        <CandidacyThumbnailPreview
-          candidate={getCandidateForPreview(state.context as Required<AnnounceCandidacyContext>, activeMember)}
-          closeModal={() => setShowThumbnailPreview(false)}
-        />
-      )}
     </Modal>
   )
 }

@@ -23,7 +23,7 @@ interface SummaryAndBannerContext extends Required<TitleAndBulletPointsContext> 
   banner?: string
 }
 
-interface FinalAnnounceCandidacyContext extends Required<TitleAndBulletPointsContext> {
+export interface FinalAnnounceCandidacyContext extends Required<TitleAndBulletPointsContext> {
   summary: string
   banner?: string
 }
