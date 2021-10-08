@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -6,9 +7,10 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { MemberRow } from '@/accounts/modals/MoveFoundsModal/styles'
 import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
-import { VotingSymbol, LockSymbol } from '@/common/components/icons/symbols'
+import { LockSymbol } from '@/common/components/icons/symbols'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
-import { TokenValue, TextSmall, TextMedium } from '@/common/components/typography'
+import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { Colors } from '@/common/constants/styles'
 import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
@@ -27,11 +29,14 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
   const [isDropped, setIsDropped] = useToggle()
   const { allAccounts } = useMyAccounts()
 
-  const totalTransferable = useMemo<number>(() => {
+  const totalBalance = useMemo<BN>(() => {
     if (accountsWithCompatibleLocks && account) {
-      return accountsWithCompatibleLocks[account.address].reduce((a, b) => a + balances[b].transferable.toNumber(), 0)
+      return accountsWithCompatibleLocks[account.address]
+        .reduce((a, b) => a.add(balances[b].transferable), BN_ZERO)
+        .add(balances[account.address].total)
     }
-    return 0
+
+    return BN_ZERO
   }, [accountsWithCompatibleLocks, account])
 
   return (
@@ -39,11 +44,16 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
       <LockedFoundsMemberRow key={account?.address}>
         {account && <AccountInfo account={account} />}
         <LockedBalanceInfoRow>
-          <InfoTitle>Locked balance</InfoTitle>
+          <div>
+            <InfoTitle>Locked balance</InfoTitle>
+            <br />
+            <InfoTitle>Total balance</InfoTitle>
+          </div>
           <LockedFoundsInfoValue>
             <LockSymbolStyled />
             <TokenValue value={balances[account?.address as string].locked} />
-            <VotingSymbolStyled />
+            <br />
+            <TokenValue value={balances[account?.address as string].total} />
           </LockedFoundsInfoValue>
         </LockedBalanceInfoRow>
         <LockedFoundsDropDownButton onClick={setIsDropped} isDropped={isDropped} size="medium" />
@@ -58,7 +68,7 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
               <BalanceInfoInRow>
                 <InfoTitle>Transferable balance</InfoTitle>
                 <InfoValue>
-                  <TokenValue value={balances[account.address] && balances[account.address].transferable} />
+                  <TokenValue value={balances[subAddress] && balances[subAddress]?.transferable} />
                 </InfoValue>
               </BalanceInfoInRow>
             </SubAccountRow>
@@ -66,7 +76,7 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
         <div>
           <Divider />
           <BalanceSummary>
-            <TextMedium bold>Total balance:</TextMedium> <BalanceTokenValue value={totalTransferable} />
+            <TextMedium bold>Total balance:</TextMedium> <BalanceTokenValue value={totalBalance} />
           </BalanceSummary>
         </div>
       </DropDownToggleStyled>
@@ -121,12 +131,6 @@ const LockedFoundsInfoValue = styled.div`
 
 const LockedFoundsDropDownButton = styled(DropDownButton)`
   margin-left: auto;
-`
-
-const VotingSymbolStyled = styled(VotingSymbol)`
-  margin-top: 8px;
-  margin-left: auto;
-  display: block;
 `
 
 const LockSymbolStyled = styled(LockSymbol)`
