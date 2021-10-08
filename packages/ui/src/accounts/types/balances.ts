@@ -2,7 +2,13 @@ import BN from 'bn.js'
 
 import { Address } from '@/common/types'
 
+/**
+ * The default Polkadot lock ("staking ")
+ */
+type PolkadotStakingLock = 'Staking'
+
 export type LockType =
+  | PolkadotStakingLock
   | 'Voting'
   | 'Council Candidate'
   | 'Councilor'

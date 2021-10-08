@@ -21,6 +21,7 @@ import {
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
 const locksMap: Record<LockType, ReactElement> = {
+  Staking: <LockIcon />,
   Voting: <VoteIcon />,
   'Council Candidate': <CouncilCandidateIcon />,
   Councilor: <CouncilorIcon />,
@@ -45,7 +46,7 @@ export interface AccountLocksProps {
 }
 
 export const AccountLocks = ({ locks }: AccountLocksProps) => {
-  if (!locks || !locks.length) {
+  if (!locks?.length) {
     return null
   }
 
