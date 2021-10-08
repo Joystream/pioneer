@@ -38,7 +38,7 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   const duration = toNumber(props.value)
 
   return (
-    <BlockDurationStatisticItem {...props}>
+    <MultiStatisticItem {...props}>
       <ItemRow>
         <DurationValue value={duration > A_MINUTE / MILISECOND_PER_BLOCK ? format(duration) : []} />
       </ItemRow>
@@ -51,16 +51,12 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
           </NumberOfBlocks>
         </BlocksInfo>
       </ItemRow>
-    </BlockDurationStatisticItem>
+    </MultiStatisticItem>
   )
 }
 
 const BlocksInfo = styled(ColumnGapBlock)`
   margin-top: 2px;
-`
-
-const BlockDurationStatisticItem = styled(MultiStatisticItem)`
-  padding: 12px 16px 16px;
 `
 
 const ItemRow = styled(StatisticItemSpacedContent)`
