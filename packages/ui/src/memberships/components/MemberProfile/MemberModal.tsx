@@ -28,23 +28,23 @@ interface Props {
   contextButtons?: ReactNode
   title: string
   children: ReactNode
-  inheritedCloseModal?: () => void
+  closeModal?: () => void
   footer?: ReactNode
 }
 
 export const MemberModal = React.memo(
-  ({ member, isLoading, tabs, children, contextButtons, title, inheritedCloseModal, footer }: Props) => {
-    const { hideModal } = useModal()
+  ({ member, isLoading, tabs, children, contextButtons, title, closeModal, footer }: Props) => {
+    const { hideModal: localCloseModal } = useModal()
 
-    const closeModal = () => (inheritedCloseModal ? inheritedCloseModal() : hideModal())
+    const hideModal = closeModal ?? localCloseModal
 
     const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (e.target === e.currentTarget) {
-        closeModal()
+        hideModal()
       }
     }
 
-    useEscape(() => closeModal())
+    useEscape(() => hideModal())
 
     if (isLoading || !member) {
       return (
@@ -67,7 +67,7 @@ export const MemberModal = React.memo(
             <SidePanelTop>
               <SidePaneTitle>{title}</SidePaneTitle>
               {contextButtons}
-              <CloseButton onClick={closeModal} />
+              <CloseButton onClick={hideModal} />
             </SidePanelTop>
             <MemberInfo member={member} memberSize="l" size="l" skipModal />
             <Tabs tabs={tabs} tabsSize="xs" />
