@@ -54,7 +54,7 @@ export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee?.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
