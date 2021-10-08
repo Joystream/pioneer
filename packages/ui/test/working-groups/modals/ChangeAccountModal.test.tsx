@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -89,7 +90,10 @@ describe('UI: ChangeRoleModal', () => {
 
     it('Should render transaction success', async () => {
       await renderSignStep()
-      stubTransactionSuccess(transaction, [worker.id, bob.address], 'workingGroup', 'WorkerRoleAccountUpdated')
+      stubTransactionSuccess(transaction, 'forumWorkingGroup', 'WorkerRoleAccountUpdated', [
+        createType('WorkerId', parseInt(worker.id)),
+        createType('AccountId', bob.address),
+      ])
       fireEvent.click(await getButton('Sign and change role account'))
       expect(await screen.findByText('You have successfully changed the role account.')).toBeDefined()
     })
@@ -114,7 +118,10 @@ describe('UI: ChangeRoleModal', () => {
 
     it('Should render transaction success', async () => {
       await renderSignStep()
-      stubTransactionSuccess(transaction, [worker.id, bob.address], 'workingGroup', 'WorkerRewardAccountUpdated')
+      stubTransactionSuccess(transaction, 'forumWorkingGroup', 'WorkerRewardAccountUpdated', [
+        createType('WorkerId', parseInt(worker.id)),
+        createType('AccountId', bob.address),
+      ])
       fireEvent.click(await getButton('Sign and change reward account'))
       expect(await screen.findByText('You have successfully changed the reward account.')).toBeDefined()
     })

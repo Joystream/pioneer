@@ -54,10 +54,11 @@ export const SidePaneTopButtonsGroup = styled(ButtonsGroup)`
 export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(auto, ${({ topSize }) => (topSize === 's' ? '132px' : '192px')}) 1fr;
+  grid-template-rows: minmax(auto, ${({ topSize }) => (topSize === 's' ? '132px' : '192px')}) 1fr auto;
   grid-template-areas:
     'sidepaneheader'
-    'sidepanebody';
+    'sidepanebody'
+    'modalfooter';
   grid-area: modal;
   position: relative;
   background-color: ${Colors.White};

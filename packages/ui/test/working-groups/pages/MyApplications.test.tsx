@@ -22,6 +22,7 @@ const block: Block = {
 
 const currentApplication: WorkingGroupApplication = {
   id: '1',
+  runtimeId: 1,
   opening: {
     id: '2',
     type: 'LEAD',
@@ -35,6 +36,7 @@ const currentApplication: WorkingGroupApplication = {
 
 const pastApplication: WorkingGroupApplication = {
   id: '2',
+  runtimeId: 2,
   opening: {
     id: '2',
     type: 'REGULAR',

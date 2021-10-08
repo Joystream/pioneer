@@ -1,5 +1,4 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
-import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { useMachine } from '@xstate/react'
@@ -14,7 +13,7 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
+import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
@@ -185,7 +184,8 @@ export const ApplyForRoleModal = () => {
   }
 
   if (state.matches('success')) {
-    const applicationId = getEventParam<ApplicationId>(state.context.transactionEvents, 'AppliedOnOpening', 1)
+    // The types of each working groups are the same, so either will work
+    const applicationId = getDataFromEvent(state.context.transactionEvents, 'forumWorkingGroup', 'AppliedOnOpening', 1)
 
     return (
       <ApplyForRoleSuccessModal

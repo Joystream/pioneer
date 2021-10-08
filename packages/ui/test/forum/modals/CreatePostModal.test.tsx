@@ -105,7 +105,7 @@ describe('UI: CreatePostModal', () => {
   })
 
   it('Transaction success', async () => {
-    stubTransactionSuccess(tx, [], 'forum', 'editPostText')
+    stubTransactionSuccess(tx, 'forum', 'PostTextUpdated')
     renderModal()
     await fireEvent.click(await getButton(/Sign and post/i))
     expect(await screen.getByText('Your post has been submitted.')).toBeDefined()

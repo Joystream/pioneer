@@ -1,2 +1,2 @@
-export * from './getEventParam'
+export * from './getDataFromEvent'
 export * from './metadataToBytes'

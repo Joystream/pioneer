@@ -17,13 +17,30 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
+import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakeStep } from '@/council/modals/AnnounceCandidacy/components/StakeStep'
+import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
-import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
+import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
+import { CandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
+
+const getCandidateForPreview = (context: FinalAnnounceCandidacyContext, member: Member): CandidateWithDetails => ({
+  id: '0',
+  stakingAccount: context.stakingAccount.address,
+  rewardAccount: context.rewardAccount.address,
+  stake: context.stakingAmount,
+  title: context.title,
+  summary: context.summary,
+  description: context.bulletPoints,
+  member,
+  cycleId: 0,
+  cycleFinished: false,
+})
 
 export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
@@ -79,6 +96,8 @@ export const AnnounceCandidacyModal = () => {
       state.context.title &&
       state.context.bulletPoints.length
     ) {
+      return true
+    } else if (state.matches('candidateProfile.summaryAndBanner') && state.context.summary) {
       return true
     }
 
@@ -146,6 +165,14 @@ export const AnnounceCandidacyModal = () => {
                 setBulletPoints={(bulletPoints) => send('SET_BULLET_POINTS', { bulletPoints })}
               />
             )}
+            {state.matches('candidateProfile.summaryAndBanner') && (
+              <SummaryAndBannerStep
+                summary={state.context.summary}
+                setSummary={(summary) => send('SET_SUMMARY', { summary })}
+                banner={state.context.banner}
+                setBanner={(banner) => send('SET_BANNER', { banner })}
+              />
+            )}
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
@@ -159,6 +186,12 @@ export const AnnounceCandidacyModal = () => {
           )}
         </ButtonsGroup>
         <ButtonsGroup align="right">
+          {state.matches('candidateProfile.summaryAndBanner') && (
+            <PreviewButtons
+              candidate={getCandidateForPreview(state.context as FinalAnnounceCandidacyContext, activeMember)}
+              disabled={!isValidNext}
+            />
+          )}
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
             <Arrow direction="right" />

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -21,7 +21,6 @@ import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCard
 
 export interface CandidateCardProps {
   id: string
-  cycleId: number
   member: Member
   image?: string
   voted?: boolean
@@ -32,11 +31,11 @@ export interface CandidateCardProps {
   wons?: number
   losts?: number
   isVotingStage?: boolean
+  isPreview?: boolean
 }
 
 export const CandidateCard = ({
   id,
-  cycleId,
   member,
   image,
   voted,
@@ -47,19 +46,27 @@ export const CandidateCard = ({
   wons = 0,
   losts = 0,
   isVotingStage,
+  isPreview,
 }: CandidateCardProps) => {
   const { showModal } = useModal()
+  const showCandidate = useCallback(() => {
+    if (!isPreview) {
+      showModal<CandidacyPreviewModalCall>({
+        modal: 'CandidacyPreview',
+        data: { id },
+      })
+    }
+  }, [showModal, isPreview])
+
   return (
-    <CandidateCardWrapper
-      onClick={() => showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id, cycleId } })}
-    >
+    <CandidateCardWrapper onClick={showCandidate}>
       <CandidateCardImageWrapper>
         <CandidateCardImage imageUrl={image} />
       </CandidateCardImageWrapper>
       <CandidateCardContentWrapper>
         <CandidateCardContent>
           <CandidateCardMemberInfoWrapper>
-            <MemberInfo onlyTop member={member} />
+            <MemberInfo onlyTop member={member} skipModal={isPreview} />
           </CandidateCardMemberInfoWrapper>
           <CandidateCardTitle as={GhostRouterLink} to="#">
             {title}
