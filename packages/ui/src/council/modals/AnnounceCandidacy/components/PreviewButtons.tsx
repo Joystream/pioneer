@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
