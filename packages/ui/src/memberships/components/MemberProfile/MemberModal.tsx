@@ -25,55 +25,60 @@ interface Props {
   member?: Member
   isLoading?: boolean
   tabs: TabProps[]
-  contextButtons: ReactNode
+  contextButtons?: ReactNode
   title: string
   children: ReactNode
+  closeModal?: () => void
   footer?: ReactNode
 }
 
-export const MemberModal = React.memo(({ member, isLoading, tabs, children, contextButtons, title, footer }: Props) => {
-  const { hideModal } = useModal()
+export const MemberModal = React.memo(
+  ({ member, isLoading, tabs, children, contextButtons, title, closeModal, footer }: Props) => {
+    const { hideModal: localCloseModal } = useModal()
 
-  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      hideModal()
+    const hideModal = closeModal ?? localCloseModal
+
+    const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (e.target === e.currentTarget) {
+        hideModal()
+      }
     }
-  }
 
-  useEscape(() => hideModal())
+    useEscape(() => hideModal())
 
-  if (isLoading || !member) {
+    if (isLoading || !member) {
+      return (
+        <SidePaneGlass onClick={onBackgroundClick}>
+          <SidePane>
+            <SidePaneBody>
+              <EmptyBody>
+                <Loading />
+              </EmptyBody>
+            </SidePaneBody>
+          </SidePane>
+        </SidePaneGlass>
+      )
+    }
+
     return (
       <SidePaneGlass onClick={onBackgroundClick}>
         <SidePane>
-          <SidePaneBody>
-            <EmptyBody>
-              <Loading />
-            </EmptyBody>
-          </SidePaneBody>
+          <MemberPanelHeader>
+            <SidePanelTop>
+              <SidePaneTitle>{title}</SidePaneTitle>
+              {contextButtons}
+              <CloseButton onClick={hideModal} />
+            </SidePanelTop>
+            <MemberInfo member={member} memberSize="l" size="l" skipModal />
+            <Tabs tabs={tabs} tabsSize="xs" />
+          </MemberPanelHeader>
+          <SidePaneBody>{children}</SidePaneBody>
+          {footer && <ModalFooter>{footer}</ModalFooter>}
         </SidePane>
       </SidePaneGlass>
     )
   }
-
-  return (
-    <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane>
-        <MemberPanelHeader>
-          <SidePanelTop>
-            <SidePaneTitle>{title}</SidePaneTitle>
-            {contextButtons}
-            <CloseButton onClick={hideModal} />
-          </SidePanelTop>
-          <MemberInfo member={member} memberSize="l" size="l" skipModal />
-          <Tabs tabs={tabs} tabsSize="xs" />
-        </MemberPanelHeader>
-        <SidePaneBody>{children}</SidePaneBody>
-        {footer && <ModalFooter>{footer}</ModalFooter>}
-      </SidePane>
-    </SidePaneGlass>
-  )
-})
+)
 
 const MemberPanelHeader = styled(SidePaneHeader)`
   ${MemberInfoWrap} {
