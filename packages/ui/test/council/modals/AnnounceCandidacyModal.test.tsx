@@ -289,7 +289,7 @@ describe('UI: Announce Candidacy Modal', () => {
   })
 
   async function fillStakingAmount(value: number) {
-    const amountInput = await screen.getByTestId('stakingAmount')
+    const amountInput = await screen.getByTestId('amount-input')
 
     act(() => {
       fireEvent.change(amountInput, { target: { value } })
@@ -297,7 +297,7 @@ describe('UI: Announce Candidacy Modal', () => {
   }
 
   async function fillStakingStep(stakingAccount: string, stakingAmount: number, goNext?: boolean) {
-    await selectFromDropdown('Staking account', stakingAccount)
+    await selectFromDropdown('Select account for Staking', stakingAccount)
     await fillStakingAmount(stakingAmount)
 
     if (goNext) {
