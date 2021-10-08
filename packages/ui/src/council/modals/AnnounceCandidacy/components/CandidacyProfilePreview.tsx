@@ -26,7 +26,6 @@ export const CandidacyProfilePreview = ({ candidate, closeModal }: CandidacyProf
         { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
       ]}
       member={candidate?.member}
-      contextButtons={<></>}
       inheritedCloseModal={closeModal}
     >
       {activeTab === 'CANDIDACY' && <CandidacyDetails candidate={candidate} />}

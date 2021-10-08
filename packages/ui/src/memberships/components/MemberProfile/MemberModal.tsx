@@ -25,7 +25,7 @@ interface Props {
   member?: Member
   isLoading?: boolean
   tabs: TabProps[]
-  contextButtons: ReactNode
+  contextButtons?: ReactNode
   title: string
   children: ReactNode
   inheritedCloseModal?: () => void
