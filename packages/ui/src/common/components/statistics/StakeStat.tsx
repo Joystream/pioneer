@@ -23,7 +23,7 @@ export const StakeStat = ({ value, minStake }: StakeStatProps) => {
   }
 
   return (
-    <MultiStatisticItem title={title} TooltipIcon={Icon} tooltipText="Some text">
+    <MultiStatisticItem title={title} TooltipIcon={Icon} tooltipText="Some text" moreInnerSpace>
       <StatisticItemSpacedContent>
         <TotalValue value={value} textColor={Colors.Red[400]} />
       </StatisticItemSpacedContent>

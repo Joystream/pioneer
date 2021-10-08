@@ -53,5 +53,5 @@ const Unit = styled.span`
 
 const Separator = styled((props) => <span {...props}>:</span>)`
   display: inline-block;
-  margin: 8px;
+  margin: 0 8px;
 `

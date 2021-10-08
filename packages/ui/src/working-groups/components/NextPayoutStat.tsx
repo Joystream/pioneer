@@ -23,7 +23,7 @@ export const NextPayoutStat = ({ workers }: Props) => {
   return (
     <StatisticItem title="Next payout in">
       <NumericValue>{nextPayout?.gte(BN_ZERO) ? nextPayout?.toString() + ' blocks' : '–'}</NumericValue>
-      <TextMedium lighter>({nextPayout && blocksToTime(nextPayout)})</TextMedium>
+      {nextPayout && <TextMedium lighter>({nextPayout && blocksToTime(nextPayout)})</TextMedium>}
     </StatisticItem>
   )
 }

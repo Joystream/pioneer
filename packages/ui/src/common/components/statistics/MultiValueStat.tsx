@@ -47,8 +47,8 @@ const StatisticValue = ({ type, value }: Omit<LabelledValue, 'label'>) => {
   }
 }
 
-export const MultiStatisticItem = styled(StatisticItem)`
-  padding: 12px 16px 4px;
+export const MultiStatisticItem = styled(StatisticItem)<{ moreInnerSpace?: boolean }>`
+  padding: ${({ moreInnerSpace }) => (moreInnerSpace ? '12px 16px 4px' : '12px 16px 16px')};
 `
 
 const BlocksValue = styled(TextBig)`
