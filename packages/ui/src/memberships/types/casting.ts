@@ -12,6 +12,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   avatar: undefined,
   inviteCount: data.inviteCount,
   isFoundingMember: data.isFoundingMember,
+  isCouncilMember: data.isCouncilMember,
   isVerified: data.isVerified,
   rootAccount: data.rootAccount,
   controllerAccount: data.controllerAccount,

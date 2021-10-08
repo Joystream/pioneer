@@ -9,6 +9,7 @@ interface KnownMember {
   handle: string
   rootAccount: string
   controllerAccount: string
+  isCouncilMember: boolean
 }
 
 export const KNOWN_MEMBERS: KnownMember[] = [
@@ -17,12 +18,14 @@ export const KNOWN_MEMBERS: KnownMember[] = [
     rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     isVerified: true,
+    isCouncilMember: false,
   },
   {
     handle: 'bob',
     rootAccount: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc',
     controllerAccount: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
     isVerified: true,
+    isCouncilMember: true,
   },
 ]
 
@@ -39,6 +42,7 @@ const generateBaseMember = () => ({
   },
   isVerified: Math.random() > 0.5,
   isFoundingMember: nextId < 9,
+  isCouncilMember: Math.random() > 0.9,
   inviteCount: 5,
 })
 

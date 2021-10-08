@@ -31,8 +31,10 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
 
   const initialPost = query.get('post')
   const isAbleToPost =
-    thread.mode === 'open' || (thread.mode === 'closed' && active && thread.whitelistIds?.includes(active.id))
+    thread.mode === 'open' ||
+    (thread.mode === 'closed' && active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
   const isInWhitelist = thread.mode === 'closed' && members.find((member) => thread.whitelistIds?.includes(member.id))
+  const hasCouncilMembership = thread.mode === 'closed' && members.find((member) => member.isCouncilMember)
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const newPostRef = useRef<HTMLDivElement>(null)
@@ -72,8 +74,12 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       )
     }
 
+    if (hasCouncilMembership) {
+      return <TextBig>Please select your council membership to post in this thread.</TextBig>
+    }
+
     if (isInWhitelist) {
-      return <TextBig>Please select a whitelisted membership.</TextBig>
+      return <TextBig>Please select a whitelisted membership to post in this thread.</TextBig>
     }
 
     return (

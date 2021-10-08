@@ -20,6 +20,7 @@ Default.args = {
     handle: 'alice',
     isVerified: false,
     isFoundingMember: false,
+    isCouncilMember: false,
     roles: [],
     inviteCount: 0,
     createdAt: '',

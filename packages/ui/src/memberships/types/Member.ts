@@ -20,6 +20,7 @@ export interface Member {
   roles: MemberRole[]
   isVerified: boolean
   isFoundingMember: boolean
+  isCouncilMember: boolean
   invitedBy?: ID
   referredBy?: ID
   createdAt: string

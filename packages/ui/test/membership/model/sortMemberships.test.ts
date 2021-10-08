@@ -9,6 +9,7 @@ describe('sortMemberships', () => {
     rootAccount: '',
     controllerAccount: '',
     isFoundingMember: false,
+    isCouncilMember: false,
     roles: [],
     isVerified: true,
     inviteCount: 0,
