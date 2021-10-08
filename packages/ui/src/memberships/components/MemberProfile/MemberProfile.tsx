@@ -6,6 +6,7 @@ import { EditSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
+import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { useMember } from '../../hooks/useMembership'
@@ -47,7 +48,7 @@ export const MemberProfile = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={`${window.location.host}/#/members/${member?.id}`}
+            textToCopy={getUrl({ page: 'Members', id: member?.id })}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>

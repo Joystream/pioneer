@@ -16,6 +16,7 @@ import { Badge } from '@/common/components/typography'
 import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
+import { getUrl } from '@/common/utils/getUrl'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
@@ -95,7 +96,7 @@ export const PostListItem = ({
                 <div>
                   <ArrowReplyIcon />{' '}
                   <Badge>
-                    <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+                    <Link to={getUrl('CurrentPage')}>Replies to {repliesTo?.author?.handle}</Link>
                   </Badge>
                 </div>
               </ReplyBadge>

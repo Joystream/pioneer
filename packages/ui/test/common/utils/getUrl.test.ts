@@ -20,24 +20,24 @@ describe('getUrl', () => {
   })
 
   it('Link to a specific module', () => {
-    expect(getUrl({ module: 'MyProfile' })).toEqual('https://pioneer.com/#/profile')
+    expect(getUrl({ page: 'MyProfile' })).toEqual('https://pioneer.com/#/profile')
   })
 
   it('Link to a module with an ID', () => {
-    expect(getUrl({ module: 'Members', id: '2' })).toEqual('https://pioneer.com/#/members/2')
+    expect(getUrl({ page: 'Members', id: '2' })).toEqual('https://pioneer.com/#/members/2')
   })
 
   it('Link to a module with query parameters', () => {
-    expect(getUrl({ module: 'Election', query: { candidate: '12' } })).toEqual(
+    expect(getUrl({ page: 'Election', query: { candidate: '12' } })).toEqual(
       'https://pioneer.com/#/council/election?candidate=12'
     )
-    expect(getUrl({ module: 'Election', query: { candidate: '12', otherParam: '13' } })).toEqual(
+    expect(getUrl({ page: 'Election', query: { candidate: '12', otherParam: '13' } })).toEqual(
       'https://pioneer.com/#/council/election?candidate=12&otherParam=13'
     )
   })
 
   it('Link with every kind of parameters', () => {
-    expect(getUrl({ module: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
+    expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
       'https://pioneer.com/#/members/1?paramOne=12&paramTwo=13&paramThree=14'
     )
   })

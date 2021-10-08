@@ -11,6 +11,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Badge, TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { getUrl } from '@/common/utils/getUrl'
 import { Reply, ReplyBadge } from '@/forum/components/PostList/PostListItem'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumPost } from '@/forum/types'
@@ -54,7 +55,7 @@ export const NewThreadPost = React.forwardRef(
               <div>
                 <ArrowReplyIcon />{' '}
                 <Badge>
-                  <Link to={window.location.href}>Replies to {replyTo.author.handle}</Link>
+                  <Link to={getUrl('CurrentPage')}>Replies to {replyTo.author.handle}</Link>
                 </Badge>
               </div>
               <div>

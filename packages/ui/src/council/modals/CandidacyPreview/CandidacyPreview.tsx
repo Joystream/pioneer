@@ -8,6 +8,7 @@ import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
+import { getUrl } from '@/common/utils/getUrl'
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
@@ -75,9 +76,10 @@ export const CandidacyPreview = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={`${window.location.host}/#/council/${
-              candidate?.cycleFinished ? 'past-elections' : 'election'
-            }?candidate=${candidate?.id}`}
+            textToCopy={getUrl({
+              page: candidate?.cycleFinished ? 'PastElections' : 'Election',
+              query: { candidate: candidate?.id ?? '' },
+            })}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>

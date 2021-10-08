@@ -15,6 +15,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
+import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
@@ -73,7 +74,7 @@ export const ForumThread = () => {
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
-            <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
+            <CopyButtonTemplate size="medium" textToCopy={getUrl('CurrentPage')} icon={<LinkIcon />}>
               Copy link
             </CopyButtonTemplate>
             <WatchlistButton threadId={thread.id} />

@@ -1,14 +1,16 @@
 import { CouncilRoutes } from '@/council/constants'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 
-const modules = {
+const pages = {
   MyProfile: '/profile',
   Members: '/members',
   Election: CouncilRoutes.currentElection,
   PastElections: CouncilRoutes.pastElections,
+  ProposalPreview: ProposalsRoutes.preview,
 }
 
 interface GetUrlParams {
-  module: keyof typeof modules
+  page: keyof typeof pages
   id?: string
   query?: Record<string, string>
 }
@@ -20,7 +22,7 @@ export function getUrl(params: GetUrlParams | 'CurrentPage'): string {
   return (
     window.location.origin +
     '/#' +
-    modules[params.module] +
+    pages[params.page] +
     (params.id ? `/${params.id}` : '') +
     (params.query ? getQuery(params.query) : '')
   )

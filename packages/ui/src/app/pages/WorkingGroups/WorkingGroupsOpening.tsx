@@ -26,6 +26,7 @@ import {
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
@@ -114,7 +115,7 @@ export const WorkingGroupOpening = () => {
             </PreviousPage>
             <ButtonsGroup>
               {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
-                <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
+                <CopyButtonTemplate size="medium" textToCopy={getUrl('CurrentPage')} icon={<LinkIcon />}>
                   Copy link
                 </CopyButtonTemplate>
               )}
