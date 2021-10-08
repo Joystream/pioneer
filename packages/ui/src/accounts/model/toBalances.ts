@@ -18,7 +18,6 @@ export const toBalances = (balances: DeriveBalancesAll): Balances => {
     return {
       amount: lock.amount,
       type: lockType,
-      isRecoverable: isRecoverable(lockType),
     }
   })
 
@@ -26,8 +25,8 @@ export const toBalances = (balances: DeriveBalancesAll): Balances => {
   const locked = lockedBalance.toBn()
   const total = freeBalance.toBn().add(reservedBalance)
 
-  const recoverableLockMax = locks.filter(({ isRecoverable }) => isRecoverable).reduce(max, BN_ZERO)
-  const nonRecoverableMax = locks.filter(({ isRecoverable }) => !isRecoverable).reduce(max, BN_ZERO)
+  const recoverableLockMax = locks.filter(({ type }) => isRecoverable(type)).reduce(max, BN_ZERO)
+  const nonRecoverableMax = locks.filter(({ type }) => !isRecoverable(type)).reduce(max, BN_ZERO)
   const recoverable = recoverableLockMax.lte(nonRecoverableMax) ? BN_ZERO : recoverableLockMax.sub(nonRecoverableMax)
 
   return {

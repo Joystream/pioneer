@@ -17,6 +17,5 @@ Default.args = {
   locks: Object.values(lockTypes).map((lockType) => ({
     type: lockType,
     amount: new BN(10),
-    isRecoverable: false,
   })),
 }

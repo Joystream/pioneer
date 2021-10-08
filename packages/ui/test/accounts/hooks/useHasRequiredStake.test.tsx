@@ -106,8 +106,7 @@ describe('useHasRequiredStake', () => {
         locks: [
           {
             amount: new BN(100),
-            type: 'Staking Candidate',
-            isRecoverable: true,
+            type: 'Storage Worker',
           },
         ],
       },
@@ -131,7 +130,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(100),
             type: 'Voting',
-            isRecoverable: true,
           },
         ],
       },
@@ -208,7 +206,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(100),
             type: 'Staking Candidate',
-            isRecoverable: true,
           },
         ],
       },
@@ -238,7 +235,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(100),
             type: 'Staking Candidate',
-            isRecoverable: true,
           },
         ],
       },
@@ -300,7 +296,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(1000),
             type: 'Staking Candidate',
-            isRecoverable: true,
           },
         ],
       },
@@ -313,7 +308,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(800),
             type: 'Staking Candidate',
-            isRecoverable: true,
           },
         ],
       },
@@ -326,7 +320,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(650),
             type: 'Staking Candidate',
-            isRecoverable: true,
           },
         ],
       },
@@ -355,7 +348,6 @@ describe('useHasRequiredStake', () => {
           {
             amount: new BN(500),
             type: 'Staking Candidate',
-            isRecoverable: true,
           },
         ],
       },

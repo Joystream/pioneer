@@ -28,7 +28,6 @@ export type LockType =
 export interface BalanceLock {
   amount: BN
   type: LockType
-  isRecoverable: boolean
 }
 
 export interface Balances {

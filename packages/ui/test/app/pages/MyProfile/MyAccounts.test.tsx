@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
@@ -16,10 +16,9 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
 import { alice, bob } from '../../../_mocks/keyring'
-import { getMember } from '../../../_mocks/members'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
-import { stubApi, stubBalances, stubDefaultBalances, stubTransaction } from '../../../_mocks/transactions'
+import { stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
 
 const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: RegExp) => {
   const label = within(header).getByText(labelMatcher)
@@ -83,7 +82,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Recoverable locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 1 })
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
 
     renderPage()
 
@@ -95,20 +94,6 @@ describe('Page: MyAccounts', () => {
 
     const recoverAll = within(header).getByRole('button', { name: /recover all/i })
     expect(recoverAll).toBeDefined()
-  })
-
-  it('Recover all button', async () => {
-    useMyMemberships.setActive(getMember('alice'))
-    stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
-    stubBalances(api, { locked: 500, available: 10_000, lockId: 1 })
-
-    renderPage()
-
-    const header = screen.getByRole('banner')
-    const recoverAll = within(header).getByRole('button', { name: /recover all/i })
-    fireEvent.click(recoverAll)
-
-    expect(await screen.findByText(/recover balances/i)).toBeDefined()
   })
 
   function renderPage(path = '/profile') {

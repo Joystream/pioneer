@@ -1,7 +1,6 @@
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import BN from 'bn.js'
 
-import { lockTypes } from '@/accounts/model/lockTypes'
 import { toBalances } from '@/accounts/model/toBalances'
 import { Balances } from '@/accounts/types'
 
@@ -53,8 +52,7 @@ describe('toBalances', () => {
         locks: [
           {
             amount: createBalance(200).toBn(),
-            type: lockTypes['0x0909090909090909'],
-            isRecoverable: false,
+            type: 'Forum Worker',
           },
         ],
         recoverable: new BN(0),
@@ -80,8 +78,7 @@ describe('toBalances', () => {
         locks: [
           {
             amount: createBalance(200).toBn(),
-            type: lockTypes['0x0909090909090909'],
-            isRecoverable: false,
+            type: 'Forum Worker',
           },
         ],
         recoverable: new BN(0),
@@ -100,7 +97,7 @@ describe('toBalances', () => {
         frozenFee: createBalance(10_000),
         frozenMisc: createBalance(10_000),
         lockedBalance: createBalance(10_000),
-        lockedBreakdown: [createBalanceLock(10_000, 1), createBalanceLock(200, 9)],
+        lockedBreakdown: [createBalanceLock(10_000, 'Staking Candidate'), createBalanceLock(200, 'Forum Worker')],
         votingBalance: createBalance(10_500),
       },
       {
@@ -108,13 +105,11 @@ describe('toBalances', () => {
         locks: [
           {
             amount: createBalance(10_000).toBn(),
-            type: lockTypes['0x0101010101010101'],
-            isRecoverable: true,
+            type: 'Staking Candidate',
           },
           {
             amount: createBalance(200).toBn(),
-            type: lockTypes['0x0909090909090909'],
-            isRecoverable: false,
+            type: 'Forum Worker',
           },
         ],
         recoverable: new BN(9_800),

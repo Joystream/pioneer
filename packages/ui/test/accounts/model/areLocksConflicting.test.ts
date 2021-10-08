@@ -6,7 +6,6 @@ import { LockType } from '@/accounts/types'
 const stubLock = (type: LockType) => ({
   amount: new BN(10),
   type: type,
-  isRecoverable: false,
 })
 
 describe('areLocksConflicting', () => {
