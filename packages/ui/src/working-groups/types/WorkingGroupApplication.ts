@@ -9,6 +9,7 @@ import { asWorkingGroupName } from './WorkingGroup'
 
 export interface WorkingGroupApplication {
   id: string
+  runtimeId: number
   opening: {
     id: string
     type: string
@@ -24,8 +25,9 @@ export interface WorkingGroupApplication {
   createdAtBlock: Block
 }
 
-export const asApplication = (fields: WorkingGroupApplicationFieldsFragment) => ({
+export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): WorkingGroupApplication => ({
   id: fields.id,
+  runtimeId: fields.runtimeId,
   opening: {
     id: fields.opening.id,
     type: fields.opening.type,

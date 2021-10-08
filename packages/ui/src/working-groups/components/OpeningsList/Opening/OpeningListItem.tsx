@@ -26,7 +26,7 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
   <ToggleableItemWrap past={past} onClick={onClick}>
     <ToggleableItemInfo>
       <ToggleableItemInfoTop>
-        <Subscription title={`ID: ${opening.id}`}>ID: {opening.id.replace(/\D/g, '')}</Subscription>
+        <Subscription title={`ID: ${opening.id}`}>ID: {opening.runtimeId}</Subscription>
         <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
         {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
       </ToggleableItemInfoTop>
