@@ -23,6 +23,11 @@ interface SummaryAndBannerContext extends Required<TitleAndBulletPointsContext> 
   banner?: string
 }
 
+interface FinalAnnounceCandidacyContext extends Required<TitleAndBulletPointsContext> {
+  summary: string
+  banner?: string
+}
+
 export type AnnounceCandidacyContext = Partial<
   StakingContext & RewardAccountContext & TitleAndBulletPointsContext & SummaryAndBannerContext
 >
@@ -32,13 +37,13 @@ export type AnnounceCandidacyState =
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'requiredStakeVerification'; context: EmptyObject }
   | { value: 'requiredStakeFailed'; context: EmptyObject }
-  | { value: 'staking'; context: Required<StakingContext> }
-  | { value: 'rewardAccount'; context: Required<RewardAccountContext> }
-  | { value: 'candidateProfile'; context: Required<RewardAccountContext> }
-  | { value: 'candidateProfile.titleAndBulletPoints'; context: Required<TitleAndBulletPointsContext> }
-  | { value: 'candidateProfile.summaryAndBanner'; context: Required<SummaryAndBannerContext> }
-  | { value: 'candidateProfile.finishCandidateProfile'; context: Required<SummaryAndBannerContext> }
-  | { value: 'success'; context: Required<SummaryAndBannerContext> }
+  | { value: 'staking'; context: StakingContext }
+  | { value: 'rewardAccount'; context: RewardAccountContext }
+  | { value: 'candidateProfile'; context: RewardAccountContext }
+  | { value: 'candidateProfile.titleAndBulletPoints'; context: TitleAndBulletPointsContext }
+  | { value: 'candidateProfile.summaryAndBanner'; context: SummaryAndBannerContext }
+  | { value: 'candidateProfile.finishCandidateProfile'; context: FinalAnnounceCandidacyContext }
+  | { value: 'success'; context: FinalAnnounceCandidacyContext }
   | { value: 'error'; context: AnnounceCandidacyContext }
 
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
