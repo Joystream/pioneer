@@ -39,7 +39,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Application ID" />
-      <SidePaneText>{application.id}</SidePaneText>
+      <SidePaneText>{application.runtimeId}</SidePaneText>
     </SidePaneRow>
   </SidePaneTable>
 ))

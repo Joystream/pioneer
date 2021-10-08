@@ -1,4 +1,4 @@
-fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
+fragment WorkingGroupMetadataFields on WorkingGroupMetadata {
   about
   description
   status
@@ -27,6 +27,7 @@ fragment WorkerFields on Worker {
 
 fragment PastWorkerFields on Worker {
   id
+  runtimeId
   membership {
     ...MemberFields
   }
@@ -79,7 +80,7 @@ fragment WorkingGroupFields on WorkingGroup {
   name
   budget
   metadata {
-    ...WorkingGroupMetdataFields
+    ...WorkingGroupMetadataFields
   }
   workers {
     stake
@@ -269,6 +270,7 @@ query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
 
 fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   id
+  runtimeId
   opening {
     id
     group {

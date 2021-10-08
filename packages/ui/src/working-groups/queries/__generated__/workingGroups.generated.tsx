@@ -7,7 +7,7 @@ import {
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type WorkingGroupMetdataFieldsFragment = {
+export type WorkingGroupMetadataFieldsFragment = {
   __typename: 'WorkingGroupMetadata'
   about?: Types.Maybe<string>
   description?: Types.Maybe<string>
@@ -36,6 +36,7 @@ export type WorkerFieldsFragment = {
 export type PastWorkerFieldsFragment = {
   __typename: 'Worker'
   id: string
+  runtimeId: number
   createdAt: any
   updatedAt?: Types.Maybe<any>
   membership: { __typename: 'Membership' } & MemberFieldsFragment
@@ -82,7 +83,7 @@ export type WorkingGroupFieldsFragment = {
   id: string
   name: string
   budget: any
-  metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
+  metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetadataFieldsFragment>
   workers: Array<{ __typename: 'Worker'; stake: any }>
   leader?: Types.Maybe<{ __typename: 'Worker'; membershipId: string }>
 }
@@ -308,6 +309,7 @@ export type GetWorkingGroupQuery = {
 export type WorkingGroupApplicationFieldsFragment = {
   __typename: 'WorkingGroupApplication'
   id: string
+  runtimeId: number
   stakingAccount: string
   opening: {
     __typename: 'WorkingGroupOpening'
@@ -440,6 +442,7 @@ export type GetWorkerUnstakingDetailsQuery = {
 export const PastWorkerFieldsFragmentDoc = gql`
   fragment PastWorkerFields on Worker {
     id
+    runtimeId
     membership {
       ...MemberFields
     }
@@ -512,8 +515,8 @@ export const WorkerDetailedFieldsFragmentDoc = gql`
   }
   ${WorkerFieldsFragmentDoc}
 `
-export const WorkingGroupMetdataFieldsFragmentDoc = gql`
-  fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
+export const WorkingGroupMetadataFieldsFragmentDoc = gql`
+  fragment WorkingGroupMetadataFields on WorkingGroupMetadata {
     about
     description
     status
@@ -526,7 +529,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     name
     budget
     metadata {
-      ...WorkingGroupMetdataFields
+      ...WorkingGroupMetadataFields
     }
     workers {
       stake
@@ -535,7 +538,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
       membershipId
     }
   }
-  ${WorkingGroupMetdataFieldsFragmentDoc}
+  ${WorkingGroupMetadataFieldsFragmentDoc}
 `
 export const WorkingGroupDetailedFieldsFragmentDoc = gql`
   fragment WorkingGroupDetailedFields on WorkingGroup {
@@ -628,6 +631,7 @@ export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
+    runtimeId
     opening {
       id
       group {
