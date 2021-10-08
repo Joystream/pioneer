@@ -244,10 +244,19 @@ export type GetOpeningsEventsQueryVariables = Types.Exact<{ [key: string]: never
 export type GetOpeningsEventsQuery = {
   __typename: 'Query'
   events: Array<
+    | { __typename: 'AnnouncingPeriodStartedEvent' }
     | ({ __typename: 'ApplicationWithdrawnEvent' } & ApplicationWithdrawnEventFieldsFragment)
     | ({ __typename: 'AppliedOnOpeningEvent' } & AppliedOnOpeningEventFieldsFragment)
+    | { __typename: 'BudgetBalanceSetEvent' }
+    | { __typename: 'BudgetIncrementUpdatedEvent' }
+    | { __typename: 'BudgetRefillEvent' }
+    | { __typename: 'BudgetRefillPlannedEvent' }
     | ({ __typename: 'BudgetSetEvent' } & BudgetSetEventFieldsFragment)
     | ({ __typename: 'BudgetSpendingEvent' } & BudgetSpendingActivityEventFieldsFragment)
+    | { __typename: 'CandidacyNoteSetEvent' }
+    | { __typename: 'CandidacyStakeReleaseEvent' }
+    | { __typename: 'CandidacyWithdrawEvent' }
+    | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -260,7 +269,11 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
     | { __typename: 'MembershipBoughtEvent' }
     | { __typename: 'MembershipPriceUpdatedEvent' }
+    | { __typename: 'NewCandidateEvent' }
+    | { __typename: 'NewCouncilElectedEvent' }
+    | { __typename: 'NewCouncilNotElectedEvent' }
     | { __typename: 'NewMissedRewardLevelReachedEvent' }
+    | { __typename: 'NotEnoughCandidatesEvent' }
     | ({ __typename: 'OpeningAddedEvent' } & OpeningAddedEventFieldsFragment)
     | ({ __typename: 'OpeningCanceledEvent' } & OpeningCanceledEventFieldsFragment)
     | ({ __typename: 'OpeningFilledEvent' } & OpeningFilledEventFieldsFragment)
@@ -274,10 +287,17 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'ProposalExecutedEvent' }
     | { __typename: 'ProposalStatusUpdatedEvent' }
     | { __typename: 'ProposalVotedEvent' }
+    | { __typename: 'ReferendumFinishedEvent' }
+    | { __typename: 'ReferendumStartedEvent' }
+    | { __typename: 'ReferendumStartedForcefullyEvent' }
     | { __typename: 'ReferralCutUpdatedEvent' }
+    | { __typename: 'RequestFundedEvent' }
+    | { __typename: 'RevealingStageStartedEvent' }
     | { __typename: 'RewardPaidEvent' }
+    | { __typename: 'RewardPaymentEvent' }
     | ({ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment)
     | ({ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment)
+    | { __typename: 'StakeReleasedEvent' }
     | ({ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment)
     | { __typename: 'StakingAccountAddedEvent' }
     | { __typename: 'StakingAccountConfirmedEvent' }
@@ -285,6 +305,9 @@ export type GetOpeningsEventsQuery = {
     | ({ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment)
     | ({ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment)
     | ({ __typename: 'TerminatedWorkerEvent' } & TerminatedWorkerEventFieldsFragment)
+    | { __typename: 'VoteCastEvent' }
+    | { __typename: 'VoteRevealedEvent' }
+    | { __typename: 'VotingPeriodStartedEvent' }
     | ({ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment)
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }

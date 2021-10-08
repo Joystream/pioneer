@@ -42,7 +42,7 @@ fragment CandidateDetailedFields on Candidate {
   member {
     ...MemberFields
   }
-  cycleId {
+  electionRound {
     cycleId
     isFinished
   }
@@ -67,7 +67,7 @@ query GetCandidate($where: CandidateWhereUniqueInput!) {
 }
 
 query GetElectionCandidatesIds ($electionCycleId: Int!) {
-  candidates(where: { cycleId: { cycleId_eq: $electionCycleId } }) {
+  candidates(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
     id
   }
 }

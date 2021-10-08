@@ -26,6 +26,6 @@ export const asCandidateWithDetails = (fields: CandidateDetailedFieldsFragment):
   title: 'Candidate title',
   summary: fields.note,
   description: fields.note.split(' ').slice(0, 5),
-  cycleId: fields.cycleId.cycleId,
-  cycleFinished: fields.cycleId.isFinished,
+  cycleId: fields.electionRound.cycleId,
+  cycleFinished: fields.electionRound.isFinished,
 })

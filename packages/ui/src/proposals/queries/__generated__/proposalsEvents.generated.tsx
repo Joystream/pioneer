@@ -119,10 +119,19 @@ export type GetProposalsEventsQueryVariables = Types.Exact<{ [key: string]: neve
 export type GetProposalsEventsQuery = {
   __typename: 'Query'
   events: Array<
+    | { __typename: 'AnnouncingPeriodStartedEvent' }
     | { __typename: 'ApplicationWithdrawnEvent' }
     | { __typename: 'AppliedOnOpeningEvent' }
+    | { __typename: 'BudgetBalanceSetEvent' }
+    | { __typename: 'BudgetIncrementUpdatedEvent' }
+    | { __typename: 'BudgetRefillEvent' }
+    | { __typename: 'BudgetRefillPlannedEvent' }
     | { __typename: 'BudgetSetEvent' }
     | { __typename: 'BudgetSpendingEvent' }
+    | { __typename: 'CandidacyNoteSetEvent' }
+    | { __typename: 'CandidacyStakeReleaseEvent' }
+    | { __typename: 'CandidacyWithdrawEvent' }
+    | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -135,7 +144,11 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
     | { __typename: 'MembershipBoughtEvent' }
     | { __typename: 'MembershipPriceUpdatedEvent' }
+    | { __typename: 'NewCandidateEvent' }
+    | { __typename: 'NewCouncilElectedEvent' }
+    | { __typename: 'NewCouncilNotElectedEvent' }
     | { __typename: 'NewMissedRewardLevelReachedEvent' }
+    | { __typename: 'NotEnoughCandidatesEvent' }
     | { __typename: 'OpeningAddedEvent' }
     | { __typename: 'OpeningCanceledEvent' }
     | { __typename: 'OpeningFilledEvent' }
@@ -149,10 +162,17 @@ export type GetProposalsEventsQuery = {
     | ({ __typename: 'ProposalExecutedEvent' } & ProposalExecutedEventFieldsFragment)
     | ({ __typename: 'ProposalStatusUpdatedEvent' } & ProposalStatusUpdatedEventFieldsFragment)
     | ({ __typename: 'ProposalVotedEvent' } & ProposalVotedEventFieldsFragment)
+    | { __typename: 'ReferendumFinishedEvent' }
+    | { __typename: 'ReferendumStartedEvent' }
+    | { __typename: 'ReferendumStartedForcefullyEvent' }
     | { __typename: 'ReferralCutUpdatedEvent' }
+    | { __typename: 'RequestFundedEvent' }
+    | { __typename: 'RevealingStageStartedEvent' }
     | { __typename: 'RewardPaidEvent' }
+    | { __typename: 'RewardPaymentEvent' }
     | { __typename: 'StakeDecreasedEvent' }
     | { __typename: 'StakeIncreasedEvent' }
+    | { __typename: 'StakeReleasedEvent' }
     | { __typename: 'StakeSlashedEvent' }
     | { __typename: 'StakingAccountAddedEvent' }
     | { __typename: 'StakingAccountConfirmedEvent' }
@@ -160,6 +180,9 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'StatusTextChangedEvent' }
     | { __typename: 'TerminatedLeaderEvent' }
     | { __typename: 'TerminatedWorkerEvent' }
+    | { __typename: 'VoteCastEvent' }
+    | { __typename: 'VoteRevealedEvent' }
+    | { __typename: 'VotingPeriodStartedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }
