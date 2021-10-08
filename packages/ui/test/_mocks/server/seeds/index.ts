@@ -15,7 +15,6 @@ export const MEMBER_ALICE_DATA: MockMember = {
   },
   isVerified: true,
   isFoundingMember: true,
-  isCouncilMember: false,
   inviteCount: 5,
   entry: {
     __typename: '',

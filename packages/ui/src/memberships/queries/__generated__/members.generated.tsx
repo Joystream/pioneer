@@ -11,7 +11,6 @@ export type MemberFieldsFragment = {
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
-  isCouncilMember: boolean
   inviteCount: number
   createdAt: any
   metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string>; about?: Types.Maybe<string> }
@@ -117,7 +116,6 @@ export const MemberFieldsFragmentDoc = gql`
     }
     isVerified
     isFoundingMember
-    isCouncilMember
     inviteCount
     roles {
       id
