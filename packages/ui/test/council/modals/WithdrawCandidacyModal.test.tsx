@@ -70,7 +70,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   it('Warning', async () => {
     renderModal()
 
-    expect(await screen.findByText('Please remember that this action is irreversible')).toBeDefined()
+    expect(await screen.findByText(/^Please remember that this action is irreversible/i)).toBeDefined()
   })
 
   function renderModal() {
