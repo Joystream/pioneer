@@ -21,7 +21,9 @@ export function getUrl(params: GetUrlParams | 'CurrentPage'): string {
   }
   return (
     window.location.origin +
-    '/#' +
+    window.location.pathname +
+    window.location.search +
+    '#' +
     pages[params.page] +
     (params.id ? `/${params.id}` : '') +
     (params.query && Object.keys(params.query).length ? getQuery(params.query) : '')
