@@ -15,5 +15,9 @@ export const WithdrawCandidacyModal = () => {
     return <WithdrawWarningModal onNext={onNext} onClose={hideModal} />
   }
 
+  if (state.matches('transaction')) {
+    return <div>You intend to withdraw your candidacy</div>
+  }
+
   return null
 }

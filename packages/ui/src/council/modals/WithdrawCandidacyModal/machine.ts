@@ -1,8 +1,11 @@
 import { createMachine } from 'xstate'
 
+import { transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-export type WithdrawCandidacyState = { value: 'warning'; context: EmptyObject }
+export type WithdrawCandidacyState =
+  | { value: 'warning'; context: EmptyObject }
+  | { value: 'transaction'; context: EmptyObject }
 
 type WithdrawCandidacyEvent = { type: 'NEXT' }
 
@@ -12,6 +15,16 @@ export const machine = createMachine<WithdrawCandidacyContext, WithdrawCandidacy
   initial: 'warning',
   context: {},
   states: {
-    warning: {},
+    warning: {
+      on: {
+        NEXT: 'transaction',
+      },
+    },
+    transaction: {
+      id: 'transaction',
+      invoke: {
+        src: transactionMachine,
+      },
+    },
   },
 })

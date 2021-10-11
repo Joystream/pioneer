@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, render, screen } from '@testing-library/react'
+import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -14,6 +14,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
+import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -64,6 +65,14 @@ describe('UI: Withdraw Candidacy Modal', () => {
     renderModal()
 
     expect(await screen.findByText(/^Please remember that this action is irreversible/i)).toBeDefined()
+  })
+
+  it('Transaction sign', async () => {
+    renderModal()
+
+    fireEvent.click(await getButton('Withdraw Candidacy'))
+
+    expect(await screen.findByText(/^You intend to withdraw your candidacy/i)).toBeDefined()
   })
 
   function renderModal() {
