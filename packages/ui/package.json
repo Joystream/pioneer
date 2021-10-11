@@ -8,7 +8,7 @@
     "lint": "yarn lint:prettier --check && yarn lint:eslint",
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write --loglevel warn",
-    "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
+    "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html,graphql}'",
     "node-mocks": "ts-node dev/node-mocks/index.ts",
     "queries:generate": "graphql-codegen --config codegen.config.yml && yarn lint:fix",
     "query-node-mocks": "ts-node dev/query-node-mocks/generateMocks.ts",

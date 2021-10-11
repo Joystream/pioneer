@@ -12,7 +12,7 @@ fragment WorkerFields on Worker {
     ...MemberFields
   }
   group {
-    id,
+    id
     name
   }
   status {
@@ -34,14 +34,14 @@ fragment PastWorkerFields on Worker {
   createdAt
   updatedAt
   status {
-    ...on WorkerStatusLeft {
+    ... on WorkerStatusLeft {
       workerExitedEvent {
         createdAt
         inBlock
         network
       }
     }
-    ...on WorkerStatusTerminated {
+    ... on WorkerStatusTerminated {
       terminatedWorkerEvent {
         createdAt
         inBlock
@@ -101,14 +101,14 @@ fragment WorkingGroupDetailedFields on WorkingGroup {
 }
 
 fragment BudgetSpendingEventFields on BudgetSpendingEvent {
-  id,
-  groupId,
-  reciever,
-  amount,
+  id
+  groupId
+  reciever
+  amount
   rationale
 }
 
-query GetBudgetSpending ($where: BudgetSpendingEventWhereInput) {
+query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
   budgetSpendingEvents(where: $where) {
     ...BudgetSpendingEventFields
   }
@@ -123,47 +123,47 @@ fragment RewardPaidEventFields on RewardPaidEvent {
 
 query GetWorkingGroups {
   workingGroups {
-    ...WorkingGroupFields,
+    ...WorkingGroupFields
   }
 }
 
-query GetWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
   workers(where: $where, offset: $offset, limit: $limit) {
     ...WorkerFields
   }
 }
 
-query GetPastWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int, $orderBy: [WorkerOrderByInput!]) {
+query GetPastWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int, $orderBy: [WorkerOrderByInput!]) {
   workers(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
     ...PastWorkerFields
   }
 }
 
-query GetWorkersCount ($where: WorkerWhereInput) {
+query GetWorkersCount($where: WorkerWhereInput) {
   workersConnection(where: $where) {
     totalCount
   }
 }
 
-query GetDetailedWorkers ($where: WorkerWhereInput) {
+query GetDetailedWorkers($where: WorkerWhereInput) {
   workers(where: $where) {
     ...WorkerDetailedFields
   }
 }
 
-query GetWorker ($where: WorkerWhereUniqueInput!) {
+query GetWorker($where: WorkerWhereUniqueInput!) {
   workerByUniqueInput(where: $where) {
     ...WorkerDetailedFields
   }
 }
 
-query GetGroupDebt ($where: WorkerWhereInput!) {
+query GetGroupDebt($where: WorkerWhereInput!) {
   workers(where: $where) {
     missingRewardAmount
   }
 }
 
-query GetRewards ($where: RewardPaidEventWhereInput) {
+query GetRewards($where: RewardPaidEventWhereInput) {
   rewardPaidEvents(where: $where) {
     ...RewardPaidEventFields
   }
@@ -195,7 +195,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
     createdAt
   }
   metadata {
-    ... WorkingGroupOpeningMetadataFields
+    ...WorkingGroupOpeningMetadataFields
   }
   status {
     __typename
@@ -207,14 +207,14 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
 }
 
 fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
-  ... WorkingGroupOpeningFields
+  ...WorkingGroupOpeningFields
   applications {
     id
     status {
       __typename
     }
     applicant {
-      ... MemberFields
+      ...MemberFields
     }
     status {
       __typename
@@ -236,13 +236,13 @@ query CountWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
 
 query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
   workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
-    ... WorkingGroupOpeningFields
+    ...WorkingGroupOpeningFields
   }
 }
 
 query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
   workingGroupOpeningByUniqueInput(where: $where) {
-    ... WorkingGroupOpeningDetailedFields
+    ...WorkingGroupOpeningDetailedFields
   }
 }
 
@@ -253,10 +253,10 @@ fragment ApplicationQuestionFields on ApplicationFormQuestion {
 }
 
 query GetWorkingGroupOpeningQuestions($id: ID!) {
-  workingGroupOpeningByUniqueInput(where: {id: $id}) {
+  workingGroupOpeningByUniqueInput(where: { id: $id }) {
     metadata {
       applicationFormQuestions {
-        ... ApplicationQuestionFields
+        ...ApplicationQuestionFields
       }
     }
   }
@@ -264,7 +264,7 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
 
 query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
   workingGroupByUniqueInput(where: $where) {
-    ... WorkingGroupDetailedFields
+    ...WorkingGroupDetailedFields
   }
 }
 
@@ -294,7 +294,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
 }
 
 query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-  workingGroupApplications(where: {applicant: {id_in: $applicantId_in}}) {
+  workingGroupApplications(where: { applicant: { id_in: $applicantId_in } }) {
     ...WorkingGroupApplicationFields
   }
 }
@@ -306,14 +306,14 @@ query GetWorkingGroupApplicationIds($where: WorkingGroupApplicationWhereInput) {
 }
 
 query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
-  workingGroupApplicationByUniqueInput(where: $where){
+  workingGroupApplicationByUniqueInput(where: $where) {
     ...WorkingGroupApplicationFields
   }
 }
 
 fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
   question {
-    ... ApplicationQuestionFields
+    ...ApplicationQuestionFields
   }
   answer
 }
@@ -341,7 +341,7 @@ fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
     network
   }
   metadata {
-    ... WorkingGroupOpeningMetadataFields
+    ...WorkingGroupOpeningMetadataFields
   }
 }
 
@@ -367,7 +367,7 @@ query GetWorkerUnstakingDetails($where: WorkerWhereUniqueInput!) {
   workerByUniqueInput(where: $where) {
     status {
       __typename
-      ...on WorkerStatusLeaving {
+      ... on WorkerStatusLeaving {
         workerStartedLeavingEvent {
           createdAt
         }
