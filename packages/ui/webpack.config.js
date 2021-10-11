@@ -71,8 +71,11 @@ module.exports = (env, argv) => {
     devServer: {
       historyApiFallback: true,
       host: '0.0.0.0',
-      stats: 'errors-only',
-      overlay: true,
+      client: {
+        logging: 'error',
+        progress: true,
+        overlay: true,
+      },
     },
   }
 }
