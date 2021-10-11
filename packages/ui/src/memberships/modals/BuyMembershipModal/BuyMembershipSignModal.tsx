@@ -1,7 +1,6 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
-import { useActor } from '@xstate/react'
 import React, { useEffect, useState } from 'react'
 import { ActorRef } from 'xstate'
 
@@ -44,10 +43,9 @@ export const BuyMembershipSignModal = ({
     initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')
   )
   const fromAddress = from.address
-  const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
+  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(fromAddress)
-  const [state, send] = useActor(service)
 
   useEffect(() => {
     if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
@@ -57,7 +55,7 @@ export const BuyMembershipSignModal = ({
     }
   }, [fromAddress, balance])
 
-  const signDisabled = !state.matches('prepare') || !hasFunds
+  const signDisabled = !isReady || !hasFunds
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -97,7 +95,7 @@ export const BuyMembershipSignModal = ({
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={() => send('SIGN')} disabled={signDisabled}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
           Sign and create a member
         </ButtonPrimary>
       </ModalFooter>
