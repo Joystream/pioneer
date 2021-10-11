@@ -1,4 +1,3 @@
-import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
@@ -40,9 +39,12 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
 
   const controllerAccount = accountOrNamed(myAccounts, threadAuthor?.controllerAccount as string, 'Controller Account')
 
-  const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
+  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({
+    transaction,
+    signer: controllerAccount.address,
+    service,
+  })
   const balance = useBalance(controllerAccount.address)
-  const [state, send] = useActor(service)
 
   const hasFunds = useMemo(() => {
     if (balance?.transferable && paymentInfo?.partialFee) {
@@ -50,7 +52,7 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
-  const signDisabled = !state.matches('prepare') || !hasFunds
+  const signDisabled = !isReady || !hasFunds
 
   const getMessage = (fee?: BN) => {
     return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} JOY on your account for this action.`
@@ -89,7 +91,7 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
+        <ButtonPrimary size="medium" disabled={signDisabled} onClick={sign}>
           Sign and save title
           <Arrow direction="right" />
         </ButtonPrimary>

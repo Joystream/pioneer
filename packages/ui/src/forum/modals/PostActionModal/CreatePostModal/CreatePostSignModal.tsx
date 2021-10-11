@@ -1,6 +1,5 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
@@ -44,8 +43,11 @@ export const CreatePostSignModal = ({
   postDeposit,
 }: CreatePostSignModalProps) => {
   const { hideModal } = useModal()
-  const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
-  const [state, send] = useActor(service)
+  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({
+    transaction,
+    signer: controllerAccount.address,
+    service,
+  })
   const balance = useBalance(controllerAccount.address)
 
   const hasFunds = useMemo(() => {
@@ -57,7 +59,7 @@ export const CreatePostSignModal = ({
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee, isEditable])
-  const signDisabled = !state.matches('prepare') || !hasFunds
+  const signDisabled = !isReady || !hasFunds
 
   return (
     <>
@@ -97,7 +99,7 @@ export const CreatePostSignModal = ({
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
             <PreviewPostButton author={author} postText={postText} replyTo={replyTo} />
-            <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
+            <ButtonPrimary size="medium" disabled={signDisabled} onClick={sign}>
               {replyTo ? 'Sign and reply' : 'Sign and post'}
               <Arrow direction="right" />
             </ButtonPrimary>

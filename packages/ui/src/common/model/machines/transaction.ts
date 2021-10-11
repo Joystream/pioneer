@@ -14,17 +14,6 @@ export type TransactionEvent =
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
-const onTransactionError: any = {
-  target: 'error',
-  actions: [
-    assign({
-      events: (context, event: TransactionErrorEvent) => event.events,
-      fee: (context, event: TransactionErrorEvent) => event.fee,
-    }),
-    send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
-  ],
-}
-
 interface TransactionContext {
   events?: EventRecord[]
   fee?: BN
@@ -57,7 +46,16 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     signWithExtension: {
       on: {
         PENDING: 'pending',
-        ERROR: onTransactionError,
+        ERROR: {
+          target: 'error',
+          actions: [
+            assign({
+              events: (_, event) => event.events,
+              fee: (_, event) => event.fee,
+            }),
+            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
+          ],
+        },
       },
     },
     pending: {
@@ -65,26 +63,35 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
         SUCCESS: {
           target: 'success',
           actions: assign({
-            events: (context, event) => event.events,
-            fee: (context, event) => event.fee,
+            events: (_, event) => event.events,
+            fee: (_, event) => event.fee,
           }),
         },
-        ERROR: onTransactionError,
+        ERROR: {
+          target: 'error',
+          actions: [
+            assign({
+              events: (_, event) => event.events,
+              fee: (_, event) => event.fee,
+            }),
+            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
+          ],
+        },
       },
     },
     success: {
       type: 'final',
       data: {
-        events: (context: any, event: any) => event.events,
-        fee: (context: any, event: any) => event.fee,
+        events: (_: TransactionContext, event: TransactionSuccessEvent) => event.events,
+        fee: (_: TransactionContext, event: TransactionSuccessEvent) => event.fee,
         isError: false,
       },
     },
     error: {
       type: 'final',
       data: {
-        events: (context: any, event: any) => event.events,
-        fee: (context: any, event: any) => event.fee,
+        events: (_: TransactionContext, event: TransactionErrorEvent) => event.events,
+        fee: (_: TransactionContext, event: TransactionErrorEvent) => event.fee,
         isError: true,
       },
     },
