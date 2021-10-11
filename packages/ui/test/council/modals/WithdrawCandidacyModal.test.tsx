@@ -25,6 +25,7 @@ import {
   stubCouncilConstants,
   stubDefaultBalances,
   stubTransaction,
+  stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
@@ -92,6 +93,16 @@ describe('UI: Withdraw Candidacy Modal', () => {
     fireEvent.click(await getButton('Sign and send'))
 
     expect(await screen.findByText('Success')).toBeDefined()
+  })
+
+  it('Transaction error', async () => {
+    stubTransactionFailure(tx)
+    renderModal()
+
+    fireEvent.click(await getButton('Withdraw Candidacy'))
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^There was a problem with withdrawing you candidacy/i)).toBeDefined()
   })
 
   function renderModal() {

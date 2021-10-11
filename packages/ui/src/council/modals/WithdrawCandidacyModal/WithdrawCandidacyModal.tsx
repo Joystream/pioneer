@@ -1,6 +1,7 @@
 import { useMachine } from '@xstate/react'
 import React, { useCallback } from 'react'
 
+import { FailureModal } from '@/common/components/FailureModal'
 import { useModal } from '@/common/hooks/useModal'
 import { WithdrawSignModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawSignModal'
 import { WithdrawWarningModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawWarningModal'
@@ -24,6 +25,10 @@ export const WithdrawCandidacyModal = () => {
 
   if (state.matches('success')) {
     return <div>Success</div>
+  }
+
+  if (state.matches('error')) {
+    return <FailureModal onClose={hideModal}>There was a problem with withdrawing you candidacy.</FailureModal>
   }
 
   return null
