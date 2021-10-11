@@ -10,7 +10,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { StatiscticContentColumn, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
@@ -221,25 +221,13 @@ const CandidateCardSummary = styled.div`
 
 const CandidateCardListItem = styled.li`
   display: block;
-  position: relative;
   align-items: center;
   width: 100%;
-  padding-left: 10px;
   font-size: 12px;
   line-height: 18px;
   color: ${Colors.Black[500]};
   ${Overflow.FullDots};
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 6px;
-    width: 4px;
-    height: 4px;
-    border-radius: ${BorderRad.full};
-    background-color: ${Colors.Black[500]};
-  }
+  ${BulletPoint};
 
   & + & {
     margin-top: 6px;
