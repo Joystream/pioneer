@@ -20,9 +20,6 @@ type Query {
   budgetIncrementUpdatedEvents(offset: Int, limit: Int = 50, where: BudgetIncrementUpdatedEventWhereInput, orderBy: [BudgetIncrementUpdatedEventOrderByInput!]): [BudgetIncrementUpdatedEvent!]!
   budgetIncrementUpdatedEventByUniqueInput(where: BudgetIncrementUpdatedEventWhereUniqueInput!): BudgetIncrementUpdatedEvent
   budgetIncrementUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: BudgetIncrementUpdatedEventWhereInput, orderBy: [BudgetIncrementUpdatedEventOrderByInput!]): BudgetIncrementUpdatedEventConnection!
-  budgetPayments(offset: Int, limit: Int = 50, where: BudgetPaymentWhereInput, orderBy: [BudgetPaymentOrderByInput!]): [BudgetPayment!]!
-  budgetPaymentByUniqueInput(where: BudgetPaymentWhereUniqueInput!): BudgetPayment
-  budgetPaymentsConnection(first: Int, after: String, last: Int, before: String, where: BudgetPaymentWhereInput, orderBy: [BudgetPaymentOrderByInput!]): BudgetPaymentConnection!
   budgetRefillEvents(offset: Int, limit: Int = 50, where: BudgetRefillEventWhereInput, orderBy: [BudgetRefillEventOrderByInput!]): [BudgetRefillEvent!]!
   budgetRefillEventByUniqueInput(where: BudgetRefillEventWhereUniqueInput!): BudgetRefillEvent
   budgetRefillEventsConnection(first: Int, after: String, last: Int, before: String, where: BudgetRefillEventWhereInput, orderBy: [BudgetRefillEventOrderByInput!]): BudgetRefillEventConnection!
@@ -35,9 +32,6 @@ type Query {
   budgetSpendingEvents(offset: Int, limit: Int = 50, where: BudgetSpendingEventWhereInput, orderBy: [BudgetSpendingEventOrderByInput!]): [BudgetSpendingEvent!]!
   budgetSpendingEventByUniqueInput(where: BudgetSpendingEventWhereUniqueInput!): BudgetSpendingEvent
   budgetSpendingEventsConnection(first: Int, after: String, last: Int, before: String, where: BudgetSpendingEventWhereInput, orderBy: [BudgetSpendingEventOrderByInput!]): BudgetSpendingEventConnection!
-  budgets(offset: Int, limit: Int = 50, where: BudgetWhereInput, orderBy: [BudgetOrderByInput!]): [Budget!]!
-  budgetByUniqueInput(where: BudgetWhereUniqueInput!): Budget
-  budgetsConnection(first: Int, after: String, last: Int, before: String, where: BudgetWhereInput, orderBy: [BudgetOrderByInput!]): BudgetConnection!
   candidacyNoteSetEvents(offset: Int, limit: Int = 50, where: CandidacyNoteSetEventWhereInput, orderBy: [CandidacyNoteSetEventOrderByInput!]): [CandidacyNoteSetEvent!]!
   candidacyNoteSetEventByUniqueInput(where: CandidacyNoteSetEventWhereUniqueInput!): CandidacyNoteSetEvent
   candidacyNoteSetEventsConnection(first: Int, after: String, last: Int, before: String, where: CandidacyNoteSetEventWhereInput, orderBy: [CandidacyNoteSetEventOrderByInput!]): CandidacyNoteSetEventConnection!
@@ -68,6 +62,12 @@ type Query {
   categoryStickyThreadUpdateEvents(offset: Int, limit: Int = 50, where: CategoryStickyThreadUpdateEventWhereInput, orderBy: [CategoryStickyThreadUpdateEventOrderByInput!]): [CategoryStickyThreadUpdateEvent!]!
   categoryStickyThreadUpdateEventByUniqueInput(where: CategoryStickyThreadUpdateEventWhereUniqueInput!): CategoryStickyThreadUpdateEvent
   categoryStickyThreadUpdateEventsConnection(first: Int, after: String, last: Int, before: String, where: CategoryStickyThreadUpdateEventWhereInput, orderBy: [CategoryStickyThreadUpdateEventOrderByInput!]): CategoryStickyThreadUpdateEventConnection!
+  channelCategories(offset: Int, limit: Int = 50, where: ChannelCategoryWhereInput, orderBy: [ChannelCategoryOrderByInput!]): [ChannelCategory!]!
+  channelCategoryByUniqueInput(where: ChannelCategoryWhereUniqueInput!): ChannelCategory
+  channelCategoriesConnection(first: Int, after: String, last: Int, before: String, where: ChannelCategoryWhereInput, orderBy: [ChannelCategoryOrderByInput!]): ChannelCategoryConnection!
+  channels(offset: Int, limit: Int = 50, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): [Channel!]!
+  channelByUniqueInput(where: ChannelWhereUniqueInput!): Channel
+  channelsConnection(first: Int, after: String, last: Int, before: String, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): ChannelConnection!
   councilMembers(offset: Int, limit: Int = 50, where: CouncilMemberWhereInput, orderBy: [CouncilMemberOrderByInput!]): [CouncilMember!]!
   councilMemberByUniqueInput(where: CouncilMemberWhereUniqueInput!): CouncilMember
   councilMembersConnection(first: Int, after: String, last: Int, before: String, where: CouncilMemberWhereInput, orderBy: [CouncilMemberOrderByInput!]): CouncilMemberConnection!
@@ -117,12 +117,6 @@ type Query {
   fundingRequestDestinationsLists(offset: Int, limit: Int = 50, where: FundingRequestDestinationsListWhereInput, orderBy: [FundingRequestDestinationsListOrderByInput!]): [FundingRequestDestinationsList!]!
   fundingRequestDestinationsListByUniqueInput(where: FundingRequestDestinationsListWhereUniqueInput!): FundingRequestDestinationsList
   fundingRequestDestinationsListsConnection(first: Int, after: String, last: Int, before: String, where: FundingRequestDestinationsListWhereInput, orderBy: [FundingRequestDestinationsListOrderByInput!]): FundingRequestDestinationsListConnection!
-  channelCategories(offset: Int, limit: Int = 50, where: ChannelCategoryWhereInput, orderBy: [ChannelCategoryOrderByInput!]): [ChannelCategory!]!
-  channelCategoryByUniqueInput(where: ChannelCategoryWhereUniqueInput!): ChannelCategory
-  channelCategoriesConnection(first: Int, after: String, last: Int, before: String, where: ChannelCategoryWhereInput, orderBy: [ChannelCategoryOrderByInput!]): ChannelCategoryConnection!
-  channels(offset: Int, limit: Int = 50, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): [Channel!]!
-  channelByUniqueInput(where: ChannelWhereUniqueInput!): Channel
-  channelsConnection(first: Int, after: String, last: Int, before: String, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): ChannelConnection!
   initialInvitationBalanceUpdatedEvents(offset: Int, limit: Int = 50, where: InitialInvitationBalanceUpdatedEventWhereInput, orderBy: [InitialInvitationBalanceUpdatedEventOrderByInput!]): [InitialInvitationBalanceUpdatedEvent!]!
   initialInvitationBalanceUpdatedEventByUniqueInput(where: InitialInvitationBalanceUpdatedEventWhereUniqueInput!): InitialInvitationBalanceUpdatedEvent
   initialInvitationBalanceUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: InitialInvitationBalanceUpdatedEventWhereInput, orderBy: [InitialInvitationBalanceUpdatedEventOrderByInput!]): InitialInvitationBalanceUpdatedEventConnection!
@@ -451,16 +445,7 @@ input AmendConstitutionProposalDetailsWhereUniqueInput {
   id: ID!
 }
 
-type AnnouncingPeriodStartedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type AnnouncingPeriodStartedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -472,6 +457,17 @@ type AnnouncingPeriodStartedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 }
 
 type AnnouncingPeriodStartedEventConnection {
@@ -1313,30 +1309,7 @@ input BaseWhereInput {
 """GraphQL representation of BigInt"""
 scalar BigInt
 
-type Budget implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
-  """Block number at which the next rewards will be paid."""
-  nextRewardPaymentsAt: BigInt!
-}
-
-type BudgetBalanceSetEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type BudgetBalanceSetEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -1348,6 +1321,17 @@ type BudgetBalanceSetEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Budget balance that has been set."""
   balance: BigInt!
@@ -1457,31 +1441,7 @@ input BudgetBalanceSetEventWhereUniqueInput {
   id: ID!
 }
 
-type BudgetConnection {
-  totalCount: Int!
-  edges: [BudgetEdge!]!
-  pageInfo: PageInfo!
-}
-
-input BudgetCreateInput {
-  nextRewardPaymentsAt: BigInt!
-}
-
-type BudgetEdge {
-  node: Budget!
-  cursor: String!
-}
-
-type BudgetIncrementUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type BudgetIncrementUpdatedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -1493,6 +1453,17 @@ type BudgetIncrementUpdatedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Amount that is added to the budget each time it's refilled."""
   amount: BigInt!
@@ -1602,159 +1573,7 @@ input BudgetIncrementUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
-enum BudgetOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  nextRewardPaymentsAt_ASC
-  nextRewardPaymentsAt_DESC
-}
-
-type BudgetPayment implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
-  """Block number at which the payment was done."""
-  paidAtBlock: Int!
-  member: Membership!
-  memberId: String!
-
-  """Account that received the payment"""
-  account: String!
-
-  """Amount that was paid."""
-  amount: BigInt!
-
-  """
-  Amount that couldn't be paid due to insufficient council budget's balance.
-  """
-  unpaidAmount: BigInt!
-}
-
-type BudgetPaymentConnection {
-  totalCount: Int!
-  edges: [BudgetPaymentEdge!]!
-  pageInfo: PageInfo!
-}
-
-input BudgetPaymentCreateInput {
-  paidAtBlock: Float!
-  member: ID!
-  account: String!
-  amount: BigInt!
-  unpaidAmount: BigInt!
-}
-
-type BudgetPaymentEdge {
-  node: BudgetPayment!
-  cursor: String!
-}
-
-enum BudgetPaymentOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  paidAtBlock_ASC
-  paidAtBlock_DESC
-  member_ASC
-  member_DESC
-  account_ASC
-  account_DESC
-  amount_ASC
-  amount_DESC
-  unpaidAmount_ASC
-  unpaidAmount_DESC
-}
-
-input BudgetPaymentUpdateInput {
-  paidAtBlock: Float
-  member: ID
-  account: String
-  amount: BigInt
-  unpaidAmount: BigInt
-}
-
-input BudgetPaymentWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  paidAtBlock_eq: Int
-  paidAtBlock_gt: Int
-  paidAtBlock_gte: Int
-  paidAtBlock_lt: Int
-  paidAtBlock_lte: Int
-  paidAtBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
-  account_eq: String
-  account_contains: String
-  account_startsWith: String
-  account_endsWith: String
-  account_in: [String!]
-  amount_eq: BigInt
-  amount_gt: BigInt
-  amount_gte: BigInt
-  amount_lt: BigInt
-  amount_lte: BigInt
-  amount_in: [BigInt!]
-  unpaidAmount_eq: BigInt
-  unpaidAmount_gt: BigInt
-  unpaidAmount_gte: BigInt
-  unpaidAmount_lt: BigInt
-  unpaidAmount_lte: BigInt
-  unpaidAmount_in: [BigInt!]
-  member: MembershipWhereInput
-  AND: [BudgetPaymentWhereInput!]
-  OR: [BudgetPaymentWhereInput!]
-}
-
-input BudgetPaymentWhereUniqueInput {
-  id: ID!
-}
-
-type BudgetRefillEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type BudgetRefillEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -1766,6 +1585,17 @@ type BudgetRefillEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Balance that has been refilled."""
   balance: BigInt!
@@ -1875,16 +1705,7 @@ input BudgetRefillEventWhereUniqueInput {
   id: ID!
 }
 
-type BudgetRefillPlannedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type BudgetRefillPlannedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -1896,6 +1717,17 @@ type BudgetRefillPlannedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 }
 
 type BudgetRefillPlannedEventConnection {
@@ -2298,49 +2130,6 @@ input BudgetSpendingEventWhereUniqueInput {
   id: ID!
 }
 
-input BudgetUpdateInput {
-  nextRewardPaymentsAt: BigInt
-}
-
-input BudgetWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  nextRewardPaymentsAt_eq: BigInt
-  nextRewardPaymentsAt_gt: BigInt
-  nextRewardPaymentsAt_gte: BigInt
-  nextRewardPaymentsAt_lt: BigInt
-  nextRewardPaymentsAt_lte: BigInt
-  nextRewardPaymentsAt_in: [BigInt!]
-  AND: [BudgetWhereInput!]
-  OR: [BudgetWhereInput!]
-}
-
-input BudgetWhereUniqueInput {
-  id: ID!
-}
-
 """GraphQL representation of Bytes"""
 scalar Bytes
 
@@ -2349,16 +2138,7 @@ type CancelWorkingGroupLeadOpeningProposalDetails {
   opening: WorkingGroupOpening
 }
 
-type CandidacyNoteSetEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CandidacyNoteSetEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -2370,6 +2150,17 @@ type CandidacyNoteSetEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   member: Membership!
   memberId: String!
 
@@ -2487,16 +2278,7 @@ input CandidacyNoteSetEventWhereUniqueInput {
   id: ID!
 }
 
-type CandidacyStakeReleaseEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CandidacyStakeReleaseEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -2508,6 +2290,17 @@ type CandidacyStakeReleaseEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   member: Membership!
   memberId: String!
 }
@@ -2613,16 +2406,7 @@ input CandidacyStakeReleaseEventWhereUniqueInput {
   id: ID!
 }
 
-type CandidacyWithdrawEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CandidacyWithdrawEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -2634,6 +2418,17 @@ type CandidacyWithdrawEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   member: Membership!
   memberId: String!
 }
@@ -2758,11 +2553,24 @@ type Candidate implements BaseGraphQLObject {
   rewardAccountId: String!
   member: Membership!
   memberId: String!
+  electionRound: ElectionRound!
+  electionRoundId: String!
 
-  cycleId: ElectionRound!
-  cycleIdId: String!
+  """Stake locked for the candidacy."""
   stake: BigInt!
+
+  """
+  Reflects if the stake is still locked for candidacy or has been already released by the member.
+  """
+  stakeLocked: Boolean!
+
+  """Reflects if the candidacy was withdrawn before voting started."""
+  candidacyWithdrawn: Boolean!
+
+  """Sum of power of all votes received."""
   votePower: BigInt!
+
+  """Candidacy note."""
   note: String!
 }
 
@@ -2775,8 +2583,11 @@ type CandidateConnection {
 input CandidateCreateInput {
   stakingAccountId: String!
   rewardAccountId: String!
-  cycleId: ID!
+  member: ID!
+  electionRound: ID!
   stake: BigInt!
+  stakeLocked: Boolean!
+  candidacyWithdrawn: Boolean!
   votePower: BigInt!
   note: String!
 }
@@ -2797,10 +2608,16 @@ enum CandidateOrderByInput {
   stakingAccountId_DESC
   rewardAccountId_ASC
   rewardAccountId_DESC
-  cycleId_ASC
-  cycleId_DESC
+  member_ASC
+  member_DESC
+  electionRound_ASC
+  electionRound_DESC
   stake_ASC
   stake_DESC
+  stakeLocked_ASC
+  stakeLocked_DESC
+  candidacyWithdrawn_ASC
+  candidacyWithdrawn_DESC
   votePower_ASC
   votePower_DESC
   note_ASC
@@ -2810,8 +2627,11 @@ enum CandidateOrderByInput {
 input CandidateUpdateInput {
   stakingAccountId: String
   rewardAccountId: String
-  cycleId: ID
+  member: ID
+  electionRound: ID
   stake: BigInt
+  stakeLocked: Boolean
+  candidacyWithdrawn: Boolean
   votePower: BigInt
   note: String
 }
@@ -2851,14 +2671,20 @@ input CandidateWhereInput {
   rewardAccountId_startsWith: String
   rewardAccountId_endsWith: String
   rewardAccountId_in: [String!]
-  cycleId_eq: ID
-  cycleId_in: [ID!]
+  member_eq: ID
+  member_in: [ID!]
+  electionRound_eq: ID
+  electionRound_in: [ID!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
   stake_lt: BigInt
   stake_lte: BigInt
   stake_in: [BigInt!]
+  stakeLocked_eq: Boolean
+  stakeLocked_in: [Boolean!]
+  candidacyWithdrawn_eq: Boolean
+  candidacyWithdrawn_in: [Boolean!]
   votePower_eq: BigInt
   votePower_gt: BigInt
   votePower_gte: BigInt
@@ -2870,10 +2696,8 @@ input CandidateWhereInput {
   note_startsWith: String
   note_endsWith: String
   note_in: [String!]
-  cycleId: ElectionRoundWhereInput
-  member_eq: ID
-  member_in: [ID!]
   member: MembershipWhereInput
+  electionRound: ElectionRoundWhereInput
   AND: [CandidateWhereInput!]
   OR: [CandidateWhereInput!]
 }
@@ -2894,16 +2718,24 @@ type CastVote implements BaseGraphQLObject {
 
   """Hashed vote that was casted before being revealed."""
   commitment: String!
-  cycleId: ElectionRound!
-  cycleIdId: String!
+  electionRound: ElectionRound!
+  electionRoundId: String!
 
   """Stake used to back up the vote."""
   stake: BigInt!
+
+  """
+  Reflects if the stake is still locked for candidacy or has been already released by the member.
+  """
+  stakeLocked: Boolean!
 
   """Account that cast the vote."""
   castBy: String!
   voteFor: Membership
   voteForId: String
+
+  """Vote's power."""
+  votePower: BigInt!
 }
 
 type CastVoteConnection {
@@ -2914,10 +2746,12 @@ type CastVoteConnection {
 
 input CastVoteCreateInput {
   commitment: String!
-  cycleId: ID!
+  electionRound: ID!
   stake: BigInt!
+  stakeLocked: Boolean!
   castBy: String!
   voteFor: ID
+  votePower: BigInt!
 }
 
 type CastVoteEdge {
@@ -2934,22 +2768,28 @@ enum CastVoteOrderByInput {
   deletedAt_DESC
   commitment_ASC
   commitment_DESC
-  cycleId_ASC
-  cycleId_DESC
+  electionRound_ASC
+  electionRound_DESC
   stake_ASC
   stake_DESC
+  stakeLocked_ASC
+  stakeLocked_DESC
   castBy_ASC
   castBy_DESC
   voteFor_ASC
   voteFor_DESC
+  votePower_ASC
+  votePower_DESC
 }
 
 input CastVoteUpdateInput {
   commitment: String
-  cycleId: ID
+  electionRound: ID
   stake: BigInt
+  stakeLocked: Boolean
   castBy: String
   voteFor: ID
+  votePower: BigInt
 }
 
 input CastVoteWhereInput {
@@ -2982,14 +2822,16 @@ input CastVoteWhereInput {
   commitment_startsWith: String
   commitment_endsWith: String
   commitment_in: [String!]
-  cycleId_eq: ID
-  cycleId_in: [ID!]
+  electionRound_eq: ID
+  electionRound_in: [ID!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
   stake_lt: BigInt
   stake_lte: BigInt
   stake_in: [BigInt!]
+  stakeLocked_eq: Boolean
+  stakeLocked_in: [Boolean!]
   castBy_eq: String
   castBy_contains: String
   castBy_startsWith: String
@@ -2997,7 +2839,13 @@ input CastVoteWhereInput {
   castBy_in: [String!]
   voteFor_eq: ID
   voteFor_in: [ID!]
-  cycleId: ElectionRoundWhereInput
+  votePower_eq: BigInt
+  votePower_gt: BigInt
+  votePower_gte: BigInt
+  votePower_lt: BigInt
+  votePower_lte: BigInt
+  votePower_in: [BigInt!]
+  electionRound: ElectionRoundWhereInput
   voteFor: MembershipWhereInput
   AND: [CastVoteWhereInput!]
   OR: [CastVoteWhereInput!]
@@ -3760,6 +3608,300 @@ input CategoryStickyThreadUpdateEventWhereUniqueInput {
   id: ID!
 }
 
+type Channel implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+  category: ChannelCategory
+  categoryId: String
+
+  """Reward account where revenue is sent if set."""
+  rewardAccount: String
+
+  """The title of the Channel"""
+  title: String
+
+  """The description of a Channel"""
+  description: String
+
+  """Channel's cover (background) photo asset. Recommended ratio: 16:9."""
+  coverPhoto: Asset
+
+  """Channel's avatar photo asset."""
+  avatarPhoto: Asset
+
+  """Flag signaling whether a channel is public."""
+  isPublic: Boolean
+
+  """Flag signaling whether a channel is censored."""
+  isCensored: Boolean!
+  language: Language
+  languageId: String
+  videos: [Video!]!
+  createdInBlock: Int!
+}
+
+type ChannelCategoriesByNameFTSOutput {
+  item: ChannelCategoriesByNameSearchResult!
+  rank: Float!
+  isTypeOf: String!
+  highlight: String!
+}
+
+union ChannelCategoriesByNameSearchResult = ChannelCategory
+
+"""Category of media channel"""
+type ChannelCategory implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """The name of the category"""
+  name: String
+  channels: [Channel!]!
+  createdInBlock: Int!
+}
+
+type ChannelCategoryConnection {
+  totalCount: Int!
+  edges: [ChannelCategoryEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ChannelCategoryCreateInput {
+  name: String
+  createdInBlock: Float!
+}
+
+type ChannelCategoryEdge {
+  node: ChannelCategory!
+  cursor: String!
+}
+
+enum ChannelCategoryOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  name_ASC
+  name_DESC
+  createdInBlock_ASC
+  createdInBlock_DESC
+}
+
+input ChannelCategoryUpdateInput {
+  name: String
+  createdInBlock: Float
+}
+
+input ChannelCategoryWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  name_eq: String
+  name_contains: String
+  name_startsWith: String
+  name_endsWith: String
+  name_in: [String!]
+  createdInBlock_eq: Int
+  createdInBlock_gt: Int
+  createdInBlock_gte: Int
+  createdInBlock_lt: Int
+  createdInBlock_lte: Int
+  createdInBlock_in: [Int!]
+  channels_none: ChannelWhereInput
+  channels_some: ChannelWhereInput
+  channels_every: ChannelWhereInput
+  AND: [ChannelCategoryWhereInput!]
+  OR: [ChannelCategoryWhereInput!]
+}
+
+input ChannelCategoryWhereUniqueInput {
+  id: ID!
+}
+
+type ChannelConnection {
+  totalCount: Int!
+  edges: [ChannelEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ChannelCreateInput {
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  category: ID
+  rewardAccount: String
+  title: String
+  description: String
+  coverPhoto: JSONObject!
+  avatarPhoto: JSONObject!
+  isPublic: Boolean
+  isCensored: Boolean!
+  language: ID
+  createdInBlock: Float!
+}
+
+type ChannelEdge {
+  node: Channel!
+  cursor: String!
+}
+
+enum ChannelOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  category_ASC
+  category_DESC
+  rewardAccount_ASC
+  rewardAccount_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  isPublic_ASC
+  isPublic_DESC
+  isCensored_ASC
+  isCensored_DESC
+  language_ASC
+  language_DESC
+  createdInBlock_ASC
+  createdInBlock_DESC
+}
+
+input ChannelUpdateInput {
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  category: ID
+  rewardAccount: String
+  title: String
+  description: String
+  coverPhoto: JSONObject
+  avatarPhoto: JSONObject
+  isPublic: Boolean
+  isCensored: Boolean
+  language: ID
+  createdInBlock: Float
+}
+
+input ChannelWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  ownerMember_eq: ID
+  ownerMember_in: [ID!]
+  ownerCuratorGroup_eq: ID
+  ownerCuratorGroup_in: [ID!]
+  category_eq: ID
+  category_in: [ID!]
+  rewardAccount_eq: String
+  rewardAccount_contains: String
+  rewardAccount_startsWith: String
+  rewardAccount_endsWith: String
+  rewardAccount_in: [String!]
+  title_eq: String
+  title_contains: String
+  title_startsWith: String
+  title_endsWith: String
+  title_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  coverPhoto_json: JSONObject
+  avatarPhoto_json: JSONObject
+  isPublic_eq: Boolean
+  isPublic_in: [Boolean!]
+  isCensored_eq: Boolean
+  isCensored_in: [Boolean!]
+  language_eq: ID
+  language_in: [ID!]
+  createdInBlock_eq: Int
+  createdInBlock_gt: Int
+  createdInBlock_gte: Int
+  createdInBlock_lt: Int
+  createdInBlock_lte: Int
+  createdInBlock_in: [Int!]
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  category: ChannelCategoryWhereInput
+  language: LanguageWhereInput
+  videos_none: VideoWhereInput
+  videos_some: VideoWhereInput
+  videos_every: VideoWhereInput
+  AND: [ChannelWhereInput!]
+  OR: [ChannelWhereInput!]
+}
+
+input ChannelWhereUniqueInput {
+  id: ID!
+}
+
 type CouncilMember implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -3790,6 +3932,9 @@ type CouncilMember implements BaseGraphQLObject {
   Reward amount that should have been paid but couldn't be paid off due to insufficient budget.
   """
   unpaidReward: BigInt!
+
+  """Amount of reward collected by this council member so far."""
+  accumulatedReward: BigInt!
   electedInCouncil: ElectedCouncil!
   electedInCouncilId: String!
 }
@@ -3807,6 +3952,7 @@ input CouncilMemberCreateInput {
   stake: BigInt!
   lastPaymentBlock: BigInt!
   unpaidReward: BigInt!
+  accumulatedReward: BigInt!
   electedInCouncil: ID!
 }
 
@@ -3834,6 +3980,8 @@ enum CouncilMemberOrderByInput {
   lastPaymentBlock_DESC
   unpaidReward_ASC
   unpaidReward_DESC
+  accumulatedReward_ASC
+  accumulatedReward_DESC
   electedInCouncil_ASC
   electedInCouncil_DESC
 }
@@ -3845,6 +3993,7 @@ input CouncilMemberUpdateInput {
   stake: BigInt
   lastPaymentBlock: BigInt
   unpaidReward: BigInt
+  accumulatedReward: BigInt
   electedInCouncil: ID
 }
 
@@ -3903,6 +4052,12 @@ input CouncilMemberWhereInput {
   unpaidReward_lt: BigInt
   unpaidReward_lte: BigInt
   unpaidReward_in: [BigInt!]
+  accumulatedReward_eq: BigInt
+  accumulatedReward_gt: BigInt
+  accumulatedReward_gte: BigInt
+  accumulatedReward_lt: BigInt
+  accumulatedReward_lte: BigInt
+  accumulatedReward_in: [BigInt!]
   electedInCouncil_eq: ID
   electedInCouncil_in: [ID!]
   member: MembershipWhereInput
@@ -3915,16 +4070,7 @@ input CouncilMemberWhereUniqueInput {
   id: ID!
 }
 
-type CouncilorRewardUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CouncilorRewardUpdatedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -3936,6 +4082,17 @@ type CouncilorRewardUpdatedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """New reward amount paid each reward period."""
   rewardAmount: BigInt!
@@ -4219,6 +4376,9 @@ type CouncilStageUpdate implements BaseGraphQLObject {
   changedAt: BigInt!
   electedCouncil: ElectedCouncil
   electedCouncilId: String
+
+  """Election not completed due to insufficient candidates or winners."""
+  electionProblem: ElectionProblem
 }
 
 type CouncilStageUpdateConnection {
@@ -4231,6 +4391,7 @@ input CouncilStageUpdateCreateInput {
   stage: JSONObject!
   changedAt: BigInt!
   electedCouncil: ID
+  electionProblem: JSONObject!
 }
 
 type CouncilStageUpdateEdge {
@@ -4255,6 +4416,7 @@ input CouncilStageUpdateUpdateInput {
   stage: JSONObject
   changedAt: BigInt
   electedCouncil: ID
+  electionProblem: JSONObject
 }
 
 input CouncilStageUpdateWhereInput {
@@ -4291,6 +4453,7 @@ input CouncilStageUpdateWhereInput {
   changedAt_in: [BigInt!]
   electedCouncil_eq: ID
   electedCouncil_in: [ID!]
+  electionProblem_json: JSONObject
   electedCouncil: ElectedCouncilWhereInput
   AND: [CouncilStageUpdateWhereInput!]
   OR: [CouncilStageUpdateWhereInput!]
@@ -4612,6 +4775,61 @@ enum DataObjectOrderByInput {
 
 union DataObjectOwner = DataObjectOwnerMember | DataObjectOwnerChannel | DataObjectOwnerDao | DataObjectOwnerCouncil | DataObjectOwnerWorkingGroup
 
+type DataObjectOwnerChannel {
+  """Related channel"""
+  channel: Channel
+
+  """Variant needs to have at least one property. This value is not used."""
+  dummy: Int
+}
+
+input DataObjectOwnerChannelCreateInput {
+  dummy: Float
+}
+
+input DataObjectOwnerChannelUpdateInput {
+  dummy: Float
+}
+
+input DataObjectOwnerChannelWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+  AND: [DataObjectOwnerChannelWhereInput!]
+  OR: [DataObjectOwnerChannelWhereInput!]
+}
+
+input DataObjectOwnerChannelWhereUniqueInput {
+  id: ID!
+}
+
 type DataObjectOwnerCouncil {
   """Variant needs to have at least one property. This value is not used."""
   dummy: Int
@@ -4713,61 +4931,6 @@ input DataObjectOwnerDaoWhereInput {
 }
 
 input DataObjectOwnerDaoWhereUniqueInput {
-  id: ID!
-}
-
-type DataObjectOwnerChannel {
-  """Related channel"""
-  channel: Channel
-
-  """Variant needs to have at least one property. This value is not used."""
-  dummy: Int
-}
-
-input DataObjectOwnerChannelCreateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerChannelUpdateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerChannelWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [DataObjectOwnerChannelWhereInput!]
-  OR: [DataObjectOwnerChannelWhereInput!]
-}
-
-input DataObjectOwnerChannelWhereUniqueInput {
   id: ID!
 }
 
@@ -5068,7 +5231,9 @@ type ElectedCouncil implements BaseGraphQLObject {
   endedAtBlock: Int
   councilElections: [ElectionRound!]!
   nextCouncilElections: [ElectionRound!]!
-  stage: ReferendumStage!
+
+  """Sign if council is already resigned."""
+  isResigned: Boolean!
 }
 
 type ElectedCouncilConnection {
@@ -5080,7 +5245,7 @@ type ElectedCouncilConnection {
 input ElectedCouncilCreateInput {
   electedAtBlock: Float!
   endedAtBlock: Float
-  stage: JSONObject!
+  isResigned: Boolean!
 }
 
 type ElectedCouncilEdge {
@@ -5099,12 +5264,14 @@ enum ElectedCouncilOrderByInput {
   electedAtBlock_DESC
   endedAtBlock_ASC
   endedAtBlock_DESC
+  isResigned_ASC
+  isResigned_DESC
 }
 
 input ElectedCouncilUpdateInput {
   electedAtBlock: Float
   endedAtBlock: Float
-  stage: JSONObject
+  isResigned: Boolean
 }
 
 input ElectedCouncilWhereInput {
@@ -5144,7 +5311,8 @@ input ElectedCouncilWhereInput {
   endedAtBlock_lt: Int
   endedAtBlock_lte: Int
   endedAtBlock_in: [Int!]
-  stage_json: JSONObject
+  isResigned_eq: Boolean
+  isResigned_in: [Boolean!]
   councilMembers_none: CouncilMemberWhereInput
   councilMembers_some: CouncilMemberWhereInput
   councilMembers_every: CouncilMemberWhereInput
@@ -5162,6 +5330,110 @@ input ElectedCouncilWhereInput {
 }
 
 input ElectedCouncilWhereUniqueInput {
+  id: ID!
+}
+
+union ElectionProblem = ElectionProblemNotEnoughCandidates | ElectionProblemNewCouncilNotElected | VariantNone
+
+type ElectionProblemNewCouncilNotElected {
+  dummy: Int
+}
+
+input ElectionProblemNewCouncilNotElectedCreateInput {
+  dummy: Float
+}
+
+input ElectionProblemNewCouncilNotElectedUpdateInput {
+  dummy: Float
+}
+
+input ElectionProblemNewCouncilNotElectedWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+  AND: [ElectionProblemNewCouncilNotElectedWhereInput!]
+  OR: [ElectionProblemNewCouncilNotElectedWhereInput!]
+}
+
+input ElectionProblemNewCouncilNotElectedWhereUniqueInput {
+  id: ID!
+}
+
+type ElectionProblemNotEnoughCandidates {
+  dummy: Int
+}
+
+input ElectionProblemNotEnoughCandidatesCreateInput {
+  dummy: Float
+}
+
+input ElectionProblemNotEnoughCandidatesUpdateInput {
+  dummy: Float
+}
+
+input ElectionProblemNotEnoughCandidatesWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+  AND: [ElectionProblemNotEnoughCandidatesWhereInput!]
+  OR: [ElectionProblemNotEnoughCandidatesWhereInput!]
+}
+
+input ElectionProblemNotEnoughCandidatesWhereUniqueInput {
   id: ID!
 }
 
@@ -5186,7 +5458,7 @@ type ElectionRound implements BaseGraphQLObject {
   nextElectedCouncil: ElectedCouncil
   nextElectedCouncilId: String
   candidates: [Candidate!]!
-  referendumstagerevealingoptionresultcycleId: [ReferendumStageRevealingOptionResult!]
+  referendumstagerevealingoptionresultelectionRound: [ReferendumStageRevealingOptionResult!]
 }
 
 type ElectionRoundConnection {
@@ -5276,9 +5548,9 @@ input ElectionRoundWhereInput {
   candidates_none: CandidateWhereInput
   candidates_some: CandidateWhereInput
   candidates_every: CandidateWhereInput
-  referendumstagerevealingoptionresultcycleId_none: ReferendumStageRevealingOptionResultWhereInput
-  referendumstagerevealingoptionresultcycleId_some: ReferendumStageRevealingOptionResultWhereInput
-  referendumstagerevealingoptionresultcycleId_every: ReferendumStageRevealingOptionResultWhereInput
+  referendumstagerevealingoptionresultelectionRound_none: ReferendumStageRevealingOptionResultWhereInput
+  referendumstagerevealingoptionresultelectionRound_some: ReferendumStageRevealingOptionResultWhereInput
+  referendumstagerevealingoptionresultelectionRound_every: ReferendumStageRevealingOptionResultWhereInput
   AND: [ElectionRoundWhereInput!]
   OR: [ElectionRoundWhereInput!]
 }
@@ -5332,10 +5604,19 @@ enum EventOrderByInput {
 }
 
 enum EventTypeOptions {
+  AnnouncingPeriodStartedEvent
   ApplicationWithdrawnEvent
   AppliedOnOpeningEvent
+  BudgetBalanceSetEvent
+  BudgetIncrementUpdatedEvent
+  BudgetRefillEvent
+  BudgetRefillPlannedEvent
   BudgetSetEvent
   BudgetSpendingEvent
+  CandidacyNoteSetEvent
+  CandidacyStakeReleaseEvent
+  CandidacyWithdrawEvent
+  CouncilorRewardUpdatedEvent
   InitialInvitationBalanceUpdatedEvent
   InitialInvitationCountUpdatedEvent
   InvitesTransferredEvent
@@ -5348,7 +5629,11 @@ enum EventTypeOptions {
   MemberVerificationStatusUpdatedEvent
   MembershipBoughtEvent
   MembershipPriceUpdatedEvent
+  NewCandidateEvent
+  NewCouncilElectedEvent
+  NewCouncilNotElectedEvent
   NewMissedRewardLevelReachedEvent
+  NotEnoughCandidatesEvent
   OpeningAddedEvent
   OpeningCanceledEvent
   OpeningFilledEvent
@@ -5362,10 +5647,17 @@ enum EventTypeOptions {
   ProposalExecutedEvent
   ProposalStatusUpdatedEvent
   ProposalVotedEvent
+  ReferendumFinishedEvent
+  ReferendumStartedEvent
+  ReferendumStartedForcefullyEvent
   ReferralCutUpdatedEvent
+  RequestFundedEvent
+  RevealingStageStartedEvent
   RewardPaidEvent
+  RewardPaymentEvent
   StakeDecreasedEvent
   StakeIncreasedEvent
+  StakeReleasedEvent
   StakeSlashedEvent
   StakingAccountAddedEvent
   StakingAccountConfirmedEvent
@@ -5373,6 +5665,9 @@ enum EventTypeOptions {
   StatusTextChangedEvent
   TerminatedLeaderEvent
   TerminatedWorkerEvent
+  VoteCastEvent
+  VoteRevealedEvent
+  VotingPeriodStartedEvent
   WorkerExitedEvent
   WorkerRewardAccountUpdatedEvent
   WorkerRewardAmountUpdatedEvent
@@ -6535,300 +6830,6 @@ input FundingRequestDestinationWhereUniqueInput {
 type FundingRequestProposalDetails {
   """Related list of funding request destinations"""
   destinationsList: FundingRequestDestinationsList
-}
-
-type Channel implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-  ownerMember: Membership
-  ownerMemberId: String
-  ownerCuratorGroup: CuratorGroup
-  ownerCuratorGroupId: String
-  category: ChannelCategory
-  categoryId: String
-
-  """Reward account where revenue is sent if set."""
-  rewardAccount: String
-
-  """The title of the Channel"""
-  title: String
-
-  """The description of a Channel"""
-  description: String
-
-  """Channel's cover (background) photo asset. Recommended ratio: 16:9."""
-  coverPhoto: Asset
-
-  """Channel's avatar photo asset."""
-  avatarPhoto: Asset
-
-  """Flag signaling whether a channel is public."""
-  isPublic: Boolean
-
-  """Flag signaling whether a channel is censored."""
-  isCensored: Boolean!
-  language: Language
-  languageId: String
-  videos: [Video!]!
-  createdInBlock: Int!
-}
-
-type ChannelCategoriesByNameFTSOutput {
-  item: ChannelCategoriesByNameSearchResult!
-  rank: Float!
-  isTypeOf: String!
-  highlight: String!
-}
-
-union ChannelCategoriesByNameSearchResult = ChannelCategory
-
-"""Category of media channel"""
-type ChannelCategory implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
-  """The name of the category"""
-  name: String
-  channels: [Channel!]!
-  createdInBlock: Int!
-}
-
-type ChannelCategoryConnection {
-  totalCount: Int!
-  edges: [ChannelCategoryEdge!]!
-  pageInfo: PageInfo!
-}
-
-input ChannelCategoryCreateInput {
-  name: String
-  createdInBlock: Float!
-}
-
-type ChannelCategoryEdge {
-  node: ChannelCategory!
-  cursor: String!
-}
-
-enum ChannelCategoryOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  name_ASC
-  name_DESC
-  createdInBlock_ASC
-  createdInBlock_DESC
-}
-
-input ChannelCategoryUpdateInput {
-  name: String
-  createdInBlock: Float
-}
-
-input ChannelCategoryWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  name_eq: String
-  name_contains: String
-  name_startsWith: String
-  name_endsWith: String
-  name_in: [String!]
-  createdInBlock_eq: Int
-  createdInBlock_gt: Int
-  createdInBlock_gte: Int
-  createdInBlock_lt: Int
-  createdInBlock_lte: Int
-  createdInBlock_in: [Int!]
-  channels_none: ChannelWhereInput
-  channels_some: ChannelWhereInput
-  channels_every: ChannelWhereInput
-  AND: [ChannelCategoryWhereInput!]
-  OR: [ChannelCategoryWhereInput!]
-}
-
-input ChannelCategoryWhereUniqueInput {
-  id: ID!
-}
-
-type ChannelConnection {
-  totalCount: Int!
-  edges: [ChannelEdge!]!
-  pageInfo: PageInfo!
-}
-
-input ChannelCreateInput {
-  ownerMember: ID
-  ownerCuratorGroup: ID
-  category: ID
-  rewardAccount: String
-  title: String
-  description: String
-  coverPhoto: JSONObject!
-  avatarPhoto: JSONObject!
-  isPublic: Boolean
-  isCensored: Boolean!
-  language: ID
-  createdInBlock: Float!
-}
-
-type ChannelEdge {
-  node: Channel!
-  cursor: String!
-}
-
-enum ChannelOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  ownerMember_ASC
-  ownerMember_DESC
-  ownerCuratorGroup_ASC
-  ownerCuratorGroup_DESC
-  category_ASC
-  category_DESC
-  rewardAccount_ASC
-  rewardAccount_DESC
-  title_ASC
-  title_DESC
-  description_ASC
-  description_DESC
-  isPublic_ASC
-  isPublic_DESC
-  isCensored_ASC
-  isCensored_DESC
-  language_ASC
-  language_DESC
-  createdInBlock_ASC
-  createdInBlock_DESC
-}
-
-input ChannelUpdateInput {
-  ownerMember: ID
-  ownerCuratorGroup: ID
-  category: ID
-  rewardAccount: String
-  title: String
-  description: String
-  coverPhoto: JSONObject
-  avatarPhoto: JSONObject
-  isPublic: Boolean
-  isCensored: Boolean
-  language: ID
-  createdInBlock: Float
-}
-
-input ChannelWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  ownerMember_eq: ID
-  ownerMember_in: [ID!]
-  ownerCuratorGroup_eq: ID
-  ownerCuratorGroup_in: [ID!]
-  category_eq: ID
-  category_in: [ID!]
-  rewardAccount_eq: String
-  rewardAccount_contains: String
-  rewardAccount_startsWith: String
-  rewardAccount_endsWith: String
-  rewardAccount_in: [String!]
-  title_eq: String
-  title_contains: String
-  title_startsWith: String
-  title_endsWith: String
-  title_in: [String!]
-  description_eq: String
-  description_contains: String
-  description_startsWith: String
-  description_endsWith: String
-  description_in: [String!]
-  coverPhoto_json: JSONObject
-  avatarPhoto_json: JSONObject
-  isPublic_eq: Boolean
-  isPublic_in: [Boolean!]
-  isCensored_eq: Boolean
-  isCensored_in: [Boolean!]
-  language_eq: ID
-  language_in: [ID!]
-  createdInBlock_eq: Int
-  createdInBlock_gt: Int
-  createdInBlock_gte: Int
-  createdInBlock_lt: Int
-  createdInBlock_lte: Int
-  createdInBlock_in: [Int!]
-  ownerMember: MembershipWhereInput
-  ownerCuratorGroup: CuratorGroupWhereInput
-  category: ChannelCategoryWhereInput
-  language: LanguageWhereInput
-  videos_none: VideoWhereInput
-  videos_some: VideoWhereInput
-  videos_every: VideoWhereInput
-  AND: [ChannelWhereInput!]
-  OR: [ChannelWhereInput!]
-}
-
-input ChannelWhereUniqueInput {
-  id: ID!
 }
 
 type InitialInvitationBalanceUpdatedEvent implements Event & BaseGraphQLObject {
@@ -8638,7 +8639,6 @@ type Membership implements BaseGraphQLObject {
   roles: [Worker!]!
   whitelistedIn: [ProposalDiscussionWhitelist!]!
   channels: [Channel!]!
-  budgetPayments: [BudgetPayment!]!
   councilMembers: [CouncilMember!]!
   referendumStageRevealingOptionResults: [ReferendumStageRevealingOptionResult!]!
   votesRecieved: [CastVote!]!
@@ -8646,6 +8646,7 @@ type Membership implements BaseGraphQLObject {
   candidacynoteseteventmember: [CandidacyNoteSetEvent!]
   candidacystakereleaseeventmember: [CandidacyStakeReleaseEvent!]
   candidacywithdraweventmember: [CandidacyWithdrawEvent!]
+  candidatemember: [Candidate!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
   forumthreadauthor: [ForumThread!]
@@ -9336,9 +9337,6 @@ input MembershipWhereInput {
   channels_none: ChannelWhereInput
   channels_some: ChannelWhereInput
   channels_every: ChannelWhereInput
-  budgetPayments_none: BudgetPaymentWhereInput
-  budgetPayments_some: BudgetPaymentWhereInput
-  budgetPayments_every: BudgetPaymentWhereInput
   councilMembers_none: CouncilMemberWhereInput
   councilMembers_some: CouncilMemberWhereInput
   councilMembers_every: CouncilMemberWhereInput
@@ -9360,6 +9358,9 @@ input MembershipWhereInput {
   candidacywithdraweventmember_none: CandidacyWithdrawEventWhereInput
   candidacywithdraweventmember_some: CandidacyWithdrawEventWhereInput
   candidacywithdraweventmember_every: CandidacyWithdrawEventWhereInput
+  candidatemember_none: CandidateWhereInput
+  candidatemember_some: CandidateWhereInput
+  candidatemember_every: CandidateWhereInput
   forumpostauthor_none: ForumPostWhereInput
   forumpostauthor_some: ForumPostWhereInput
   forumpostauthor_every: ForumPostWhereInput
@@ -9603,16 +9604,7 @@ enum Network {
   OLYMPIA
 }
 
-type NewCandidateEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type NewCandidateEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -9624,6 +9616,17 @@ type NewCandidateEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   member: Membership!
   memberId: String!
 
@@ -9768,16 +9771,7 @@ input NewCandidateEventWhereUniqueInput {
   id: ID!
 }
 
-type NewCouncilElectedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type NewCouncilElectedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -9789,6 +9783,17 @@ type NewCouncilElectedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   electedMembers: [Membership!]!
 }
 
@@ -9889,16 +9894,7 @@ input NewCouncilElectedEventWhereUniqueInput {
   id: ID!
 }
 
-type NewCouncilNotElectedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type NewCouncilNotElectedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -9910,6 +9906,17 @@ type NewCouncilNotElectedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 }
 
 type NewCouncilNotElectedEventConnection {
@@ -10156,16 +10163,7 @@ input NewMissedRewardLevelReachedEventWhereUniqueInput {
   id: ID!
 }
 
-type NotEnoughCandidatesEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type NotEnoughCandidatesEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -10177,6 +10175,17 @@ type NotEnoughCandidatesEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 }
 
 type NotEnoughCandidatesEventConnection {
@@ -12862,11 +12871,6 @@ type ProposalDiscussionThreadEdge {
 
 union ProposalDiscussionThreadMode = ProposalDiscussionThreadModeOpen | ProposalDiscussionThreadModeClosed
 
-type ProposalDiscussionThreadModeClosed {
-  """Whitelist containing members allowed to participate in the discussion"""
-  whitelist: ProposalDiscussionWhitelist
-}
-
 type ProposalDiscussionThreadModeChangedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
@@ -13008,6 +13012,11 @@ input ProposalDiscussionThreadModeChangedEventWhereInput {
 
 input ProposalDiscussionThreadModeChangedEventWhereUniqueInput {
   id: ID!
+}
+
+type ProposalDiscussionThreadModeClosed {
+  """Whitelist containing members allowed to participate in the discussion"""
+  whitelist: ProposalDiscussionWhitelist
 }
 
 type ProposalDiscussionThreadModeOpen {
@@ -13924,16 +13933,7 @@ input ProposalWhereUniqueInput {
   id: ID!
 }
 
-type ReferendumFinishedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ReferendumFinishedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -13945,6 +13945,17 @@ type ReferendumFinishedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   optionResults: [ReferendumStageRevealingOptionResult!]!
 }
 
@@ -14045,8 +14056,6 @@ input ReferendumFinishedEventWhereUniqueInput {
   id: ID!
 }
 
-union ReferendumStage = ReferendumStageInactive | ReferendumStageVoting | ReferendumStageRevealing | VariantNone
-
 type ReferendumStageInactive {
   dummy: Int
 }
@@ -14109,7 +14118,7 @@ type ReferendumStageRevealing {
   intermediateWinners: [ReferendumStageRevealingOptionResult!]
 
   """Index of current election"""
-  cycleId: ElectionRound
+  electionRound: ElectionRound
 }
 
 input ReferendumStageRevealingCreateInput {
@@ -14131,8 +14140,8 @@ type ReferendumStageRevealingOptionResult implements BaseGraphQLObject {
 
   """Sum of votes' power received."""
   votePower: BigInt!
-  cycleId: ElectionRound!
-  cycleIdId: String!
+  electionRound: ElectionRound!
+  electionRoundId: String!
   referendumFinishedEvent: ReferendumFinishedEvent!
   referendumFinishedEventId: String!
 }
@@ -14146,7 +14155,7 @@ type ReferendumStageRevealingOptionResultConnection {
 input ReferendumStageRevealingOptionResultCreateInput {
   optionId: ID!
   votePower: BigInt!
-  cycleId: ID!
+  electionRound: ID!
   referendumFinishedEvent: ID!
 }
 
@@ -14166,8 +14175,8 @@ enum ReferendumStageRevealingOptionResultOrderByInput {
   optionId_DESC
   votePower_ASC
   votePower_DESC
-  cycleId_ASC
-  cycleId_DESC
+  electionRound_ASC
+  electionRound_DESC
   referendumFinishedEvent_ASC
   referendumFinishedEvent_DESC
 }
@@ -14175,7 +14184,7 @@ enum ReferendumStageRevealingOptionResultOrderByInput {
 input ReferendumStageRevealingOptionResultUpdateInput {
   optionId: ID
   votePower: BigInt
-  cycleId: ID
+  electionRound: ID
   referendumFinishedEvent: ID
 }
 
@@ -14212,12 +14221,12 @@ input ReferendumStageRevealingOptionResultWhereInput {
   votePower_lt: BigInt
   votePower_lte: BigInt
   votePower_in: [BigInt!]
-  cycleId_eq: ID
-  cycleId_in: [ID!]
+  electionRound_eq: ID
+  electionRound_in: [ID!]
   referendumFinishedEvent_eq: ID
   referendumFinishedEvent_in: [ID!]
   optionId: MembershipWhereInput
-  cycleId: ElectionRoundWhereInput
+  electionRound: ElectionRoundWhereInput
   referendumFinishedEvent: ReferendumFinishedEventWhereInput
   AND: [ReferendumStageRevealingOptionResultWhereInput!]
   OR: [ReferendumStageRevealingOptionResultWhereInput!]
@@ -14285,7 +14294,7 @@ type ReferendumStageVoting {
   winningTargetCount: BigInt!
 
   """Index of current election"""
-  cycleId: ElectionRound
+  electionRound: ElectionRound
 }
 
 input ReferendumStageVotingCreateInput {
@@ -14343,16 +14352,7 @@ input ReferendumStageVotingWhereUniqueInput {
   id: ID!
 }
 
-type ReferendumStartedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ReferendumStartedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -14364,6 +14364,17 @@ type ReferendumStartedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Amount of winning referendum options."""
   winningTargetCount: BigInt!
@@ -14473,16 +14484,7 @@ input ReferendumStartedEventWhereUniqueInput {
   id: ID!
 }
 
-type ReferendumStartedForcefullyEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ReferendumStartedForcefullyEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -14494,6 +14496,17 @@ type ReferendumStartedForcefullyEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Amount of winning referendum options."""
   winningTargetCount: BigInt!
@@ -14735,16 +14748,7 @@ input ReferralCutUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
-type RequestFundedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type RequestFundedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -14756,6 +14760,17 @@ type RequestFundedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Funding account."""
   account: String!
@@ -14877,16 +14892,7 @@ input RequestFundedEventWhereUniqueInput {
   id: ID!
 }
 
-type RevealingStageStartedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type RevealingStageStartedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -14898,6 +14904,17 @@ type RevealingStageStartedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 }
 
 type RevealingStageStartedEventConnection {
@@ -15165,16 +15182,7 @@ input RewardPaidEventWhereUniqueInput {
   id: ID!
 }
 
-type RewardPaymentEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type RewardPaymentEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -15186,6 +15194,17 @@ type RewardPaymentEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   member: Membership!
   memberId: String!
 
@@ -16312,16 +16331,7 @@ input StakeIncreasedEventWhereUniqueInput {
   id: ID!
 }
 
-type StakeReleasedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type StakeReleasedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -16333,6 +16343,17 @@ type StakeReleasedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Account used to stake the value."""
   stakingAccount: String!
@@ -19348,16 +19369,7 @@ input VideoWhereUniqueInput {
   id: ID!
 }
 
-type VoteCastEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type VoteCastEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -19369,6 +19381,17 @@ type VoteCastEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Account that cast the vote."""
   account: String!
@@ -19637,16 +19660,7 @@ input VoteOnPollEventWhereUniqueInput {
   id: ID!
 }
 
-type VoteRevealedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type VoteRevealedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -19658,6 +19672,17 @@ type VoteRevealedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Account that cast a vote."""
   account: String!
@@ -19787,16 +19812,7 @@ input VoteRevealedEventWhereUniqueInput {
   id: ID!
 }
 
-type VotingPeriodStartedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type VotingPeriodStartedEvent implements Event & BaseGraphQLObject {
   """Hash of the extrinsic which caused the event to be emitted"""
   inExtrinsic: String
 
@@ -19808,6 +19824,17 @@ type VotingPeriodStartedEvent implements BaseGraphQLObject {
 
   """Index of event in block from which it was emitted."""
   indexInBlock: Int!
+
+  """Filtering options for interface implementers"""
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
 
   """Number of candidates in the election."""
   numOfCandidates: BigInt!

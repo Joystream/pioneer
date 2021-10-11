@@ -25,7 +25,7 @@ import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
     id: '1',
-    cycleIdId: '1',
+    electionRoundId: '1',
     memberId: getMember('bob').id,
     stake: 1000,
     stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -33,7 +33,7 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   },
   {
     id: '2',
-    cycleIdId: '1',
+    electionRoundId: '1',
     memberId: getMember('bob').id,
     stake: 1000,
     stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',

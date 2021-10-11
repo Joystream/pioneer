@@ -43,7 +43,7 @@ export type CandidateDetailedFieldsFragment = {
   stake: any
   note: string
   member: { __typename: 'Membership' } & MemberFieldsFragment
-  cycleId: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
+  electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
 }
 
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
@@ -144,7 +144,7 @@ export const CandidateDetailedFieldsFragmentDoc = gql`
     member {
       ...MemberFields
     }
-    cycleId {
+    electionRound {
       cycleId
       isFinished
     }
@@ -284,7 +284,7 @@ export type GetCandidateLazyQueryHookResult = ReturnType<typeof useGetCandidateL
 export type GetCandidateQueryResult = Apollo.QueryResult<GetCandidateQuery, GetCandidateQueryVariables>
 export const GetElectionCandidatesIdsDocument = gql`
   query GetElectionCandidatesIds($electionCycleId: Int!) {
-    candidates(where: { cycleId: { cycleId_eq: $electionCycleId } }) {
+    candidates(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
       id
     }
   }
