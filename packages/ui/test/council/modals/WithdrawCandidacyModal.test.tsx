@@ -20,7 +20,13 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilConstants, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubCouncilConstants,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -39,6 +45,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   }
 
   let useAccounts: UseAccounts
+  let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -58,7 +65,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
 
     stubDefaultBalances(api)
     stubCouncilConstants(api)
-    stubTransaction(api, 'api.tx.council.withdrawCandidacy', 25)
+    tx = stubTransaction(api, 'api.tx.council.withdrawCandidacy', 25)
   })
 
   it('Warning', async () => {
@@ -77,10 +84,13 @@ describe('UI: Withdraw Candidacy Modal', () => {
   })
 
   it('Transaction success', async () => {
+    stubTransactionSuccess(tx, 'council', 'CandidacyWithdraw')
     renderModal()
 
     fireEvent.click(await getButton('Withdraw Candidacy'))
     fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText('Success')).toBeDefined()
   })
 
   function renderModal() {
