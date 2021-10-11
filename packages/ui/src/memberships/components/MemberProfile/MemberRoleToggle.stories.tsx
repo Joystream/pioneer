@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { TemplateBlock, ModalBlock, WhiteBlock } from '@/common/components/storybookParts/previewStyles'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { getReward } from '@/working-groups/model/getReward'
 
@@ -13,14 +14,16 @@ export default {
 } as Meta
 
 const Template: Story<MemberRoleToggleProps> = (args) => (
-  <TemplateBlock>
-    <ModalBlock>
-      <MemberRoleToggle {...args} />
-    </ModalBlock>
-    <WhiteBlock>
-      <MemberRoleToggle {...args} />
-    </WhiteBlock>
-  </TemplateBlock>
+  <MockApolloProvider>
+    <TemplateBlock>
+      <ModalBlock>
+        <MemberRoleToggle {...args} />
+      </ModalBlock>
+      <WhiteBlock>
+        <MemberRoleToggle {...args} />
+      </WhiteBlock>
+    </TemplateBlock>
+  </MockApolloProvider>
 )
 
 export const Default = Template.bind({})

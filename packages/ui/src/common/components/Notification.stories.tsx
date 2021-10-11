@@ -5,7 +5,7 @@ import { Notification, NotificationProps } from './Notification'
 import { Row, TemplateBlock, WhiteBlock, ModalBlock, BlackBlock } from './storybookParts/previewStyles'
 
 export default {
-  title: 'Common/NotificationCopmonent',
+  title: 'Common/NotificationComponent',
   component: Notification,
 } as Meta
 

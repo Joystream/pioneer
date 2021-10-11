@@ -3,6 +3,8 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+
 import { alice, aliceStash, bob, bobStash } from '../../../../test/_mocks/keyring'
 
 import { MoveFoundsTransferableModal, MoveFoundsTransferableModalProps } from './MoveFoundsTransferableModal'
@@ -22,11 +24,16 @@ const balanceMock = () => ({
 
 const Template: Story<MoveFoundsTransferableModalProps> = (args) => {
   return (
-    <>
+    <AccountsContext.Provider
+      value={{
+        hasAccounts: true,
+        allAccounts: args.accounts?.map((address) => ({ address, name: 'Test' })) ?? [],
+      }}
+    >
       <HashRouter>
         <MoveFoundsTransferableModal {...args} />
       </HashRouter>
-    </>
+    </AccountsContext.Provider>
   )
 }
 

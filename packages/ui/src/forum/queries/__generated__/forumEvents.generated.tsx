@@ -47,7 +47,7 @@ export type CategoryCreatedEventFieldsFragment = {
     __typename: 'ForumCategory'
     id: string
     title: string
-    parent?: Types.Maybe<{ __typename: 'ForumCategory'; id: string; title: string }>
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
   }
 }
 
@@ -55,10 +55,50 @@ export type GetForumEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetForumEventsQuery = {
   __typename: 'Query'
-  postAddedEvents: Array<{ __typename: 'PostAddedEvent' } & PostAddedEventFieldsFragment>
-  postTextUpdatedEvents: Array<{ __typename: 'PostTextUpdatedEvent' } & PostTextUpdatedEventFieldsFragment>
-  threadCreatedEvents: Array<{ __typename: 'ThreadCreatedEvent' } & ThreadCreatedEventFieldsFragment>
-  categoryCreatedEvents: Array<{ __typename: 'CategoryCreatedEvent' } & CategoryCreatedEventFieldsFragment>
+  postAddedEvents: Array<{
+    __typename: 'PostAddedEvent'
+    id: string
+    createdAt: any
+    post: {
+      __typename: 'ForumPost'
+      id: string
+      thread: { __typename: 'ForumThread'; id: string }
+      author: { __typename: 'Membership'; id: string; handle: string }
+    }
+  }>
+  postTextUpdatedEvents: Array<{
+    __typename: 'PostTextUpdatedEvent'
+    id: string
+    createdAt: any
+    post: {
+      __typename: 'ForumPost'
+      id: string
+      thread: { __typename: 'ForumThread'; id: string }
+      author: { __typename: 'Membership'; id: string; handle: string }
+    }
+  }>
+  threadCreatedEvents: Array<{
+    __typename: 'ThreadCreatedEvent'
+    id: string
+    createdAt: any
+    thread: {
+      __typename: 'ForumThread'
+      id: string
+      title: string
+      author: { __typename: 'Membership'; id: string; handle: string }
+    }
+  }>
+  categoryCreatedEvents: Array<{
+    __typename: 'CategoryCreatedEvent'
+    id: string
+    createdAt: any
+    category: {
+      __typename: 'ForumCategory'
+      id: string
+      title: string
+      parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+    }
+  }>
 }
 
 export const PostAddedEventFieldsFragmentDoc = gql`

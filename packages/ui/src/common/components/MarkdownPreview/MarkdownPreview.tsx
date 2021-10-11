@@ -1,7 +1,8 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import ReactMarkdown, { PluggableList } from 'react-markdown'
-import { Components, Position } from 'react-markdown/src/ast-to-react'
-import { Root } from 'react-markdown/src/rehype-filter'
+import ReactMarkdown, { Components } from 'react-markdown'
+import { Position } from 'react-markdown/lib/ast-to-react'
+import { PluggableList } from 'react-markdown/lib/react-markdown'
+import { Root } from 'react-markdown/lib/rehype-filter'
 import styled from 'styled-components'
 
 import { TextInlineMedium } from '@/common/components/typography'
@@ -32,13 +33,13 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
   }, [markdown, append])
 
   const components = useMemo((): Components => {
-    const shouldApend = (sourcePosition?: Position | null): boolean =>
+    const shouldAppend = (sourcePosition?: Position | null): boolean =>
       endsWithP.current && sourcePosition?.end?.offset === markdown.length
 
     const p: Components['p'] = ({ children, sourcePosition }) => (
       <p>
         {children}
-        {shouldApend(sourcePosition) && <> {append}</>}
+        {shouldAppend(sourcePosition) && <> {append}</>}
       </p>
     )
 

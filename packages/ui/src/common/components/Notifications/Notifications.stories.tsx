@@ -2,6 +2,8 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
 import { ModalContext } from '../../providers/modal/context'
 import { TemplateBlock } from '../storybookParts/previewStyles'
 
@@ -14,18 +16,20 @@ export default {
 
 const Template: Story = () => (
   <MemoryRouter>
-    <ModalContext.Provider
-      value={{
-        showModal: () => null,
-        hideModal: () => null,
-        modal: '',
-        modalData: {},
-      }}
-    >
-      <TemplateBlock>
-        <Notifications onClose={() => null} isNotificationsPanelOpen={true} />
-      </TemplateBlock>
-    </ModalContext.Provider>
+    <MockApolloProvider members council forum proposals workers workingGroups>
+      <ModalContext.Provider
+        value={{
+          showModal: () => null,
+          hideModal: () => null,
+          modal: '',
+          modalData: {},
+        }}
+      >
+        <TemplateBlock>
+          <Notifications onClose={() => null} isNotificationsPanelOpen={true} />
+        </TemplateBlock>
+      </ModalContext.Provider>
+    </MockApolloProvider>
   </MemoryRouter>
 )
 

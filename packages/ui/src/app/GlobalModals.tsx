@@ -1,5 +1,4 @@
-import React from 'react'
-import { ReactElement } from 'react-markdown'
+import React, { ReactElement } from 'react'
 
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'

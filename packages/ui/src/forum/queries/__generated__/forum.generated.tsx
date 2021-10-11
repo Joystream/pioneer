@@ -1,10 +1,7 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
+import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type ForumBaseCategoryFieldsFragment = {
@@ -16,36 +13,130 @@ export type ForumBaseCategoryFieldsFragment = {
     | { __typename: 'CategoryStatusActive' }
     | {
         __typename: 'CategoryStatusArchived'
-        categoryArchivalStatusUpdatedEvent?: Types.Maybe<{
-          __typename: 'CategoryArchivalStatusUpdatedEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        }>
+        categoryArchivalStatusUpdatedEvent?:
+          | {
+              __typename: 'CategoryArchivalStatusUpdatedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            }
+          | null
+          | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
-  moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
 }
 
 export type ForumCategoryFieldsFragment = {
   __typename: 'ForumCategory'
-  forumcategoryparent?: Types.Maybe<
-    Array<
-      {
+  id: string
+  title: string
+  description: string
+  forumcategoryparent?:
+    | Array<{
         __typename: 'ForumCategory'
+        id: string
+        title: string
         status:
           | { __typename: 'CategoryStatusActive' }
           | { __typename: 'CategoryStatusArchived' }
           | { __typename: 'CategoryStatusRemoved' }
-      } & ForumSubCategoryFieldsFragment
-    >
-  >
-} & ForumBaseCategoryFieldsFragment
+      }>
+    | null
+    | undefined
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?:
+          | {
+              __typename: 'CategoryArchivalStatusUpdatedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            }
+          | null
+          | undefined
+      }
+    | { __typename: 'CategoryStatusRemoved' }
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
+}
 
 export type ForumCategoryWithDetailsFieldsFragment = {
   __typename: 'ForumCategory'
-  forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
-} & ForumBaseCategoryFieldsFragment
+  id: string
+  title: string
+  description: string
+  forumcategoryparent?:
+    | Array<{
+        __typename: 'ForumCategory'
+        id: string
+        title: string
+        description: string
+        forumcategoryparent?:
+          | Array<{
+              __typename: 'ForumCategory'
+              id: string
+              title: string
+              status:
+                | { __typename: 'CategoryStatusActive' }
+                | { __typename: 'CategoryStatusArchived' }
+                | { __typename: 'CategoryStatusRemoved' }
+            }>
+          | null
+          | undefined
+        status:
+          | { __typename: 'CategoryStatusActive' }
+          | {
+              __typename: 'CategoryStatusArchived'
+              categoryArchivalStatusUpdatedEvent?:
+                | {
+                    __typename: 'CategoryArchivalStatusUpdatedEvent'
+                    createdAt: any
+                    inBlock: number
+                    network: Types.Network
+                  }
+                | null
+                | undefined
+            }
+          | { __typename: 'CategoryStatusRemoved' }
+        moderators: Array<{
+          __typename: 'Worker'
+          id: string
+          membership: { __typename: 'Membership'; id: string; handle: string }
+        }>
+      }>
+    | null
+    | undefined
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?:
+          | {
+              __typename: 'CategoryArchivalStatusUpdatedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            }
+          | null
+          | undefined
+      }
+    | { __typename: 'CategoryStatusRemoved' }
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
+}
 
 export type ForumModeratorFieldsFragment = {
   __typename: 'Worker'
@@ -57,39 +148,101 @@ export type ForumSubCategoryFieldsFragment = { __typename: 'ForumCategory'; id: 
 
 export type ForumCategoryBreadcrumbsFieldsFragment = {
   __typename: 'ForumCategory'
-  parent?: Types.Maybe<
-    {
-      __typename: 'ForumCategory'
-      parent?: Types.Maybe<
-        {
-          __typename: 'ForumCategory'
-          parent?: Types.Maybe<
-            {
+  id: string
+  title: string
+  parent?:
+    | {
+        __typename: 'ForumCategory'
+        id: string
+        title: string
+        parent?:
+          | {
               __typename: 'ForumCategory'
-              parent?: Types.Maybe<
-                {
-                  __typename: 'ForumCategory'
-                  parent?: Types.Maybe<
-                    {
-                      __typename: 'ForumCategory'
-                      parent?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>
-                    } & ForumSubCategoryFieldsFragment
-                  >
-                } & ForumSubCategoryFieldsFragment
-              >
-            } & ForumSubCategoryFieldsFragment
-          >
-        } & ForumSubCategoryFieldsFragment
-      >
-    } & ForumSubCategoryFieldsFragment
-  >
-} & ForumSubCategoryFieldsFragment
+              id: string
+              title: string
+              parent?:
+                | {
+                    __typename: 'ForumCategory'
+                    id: string
+                    title: string
+                    parent?:
+                      | {
+                          __typename: 'ForumCategory'
+                          id: string
+                          title: string
+                          parent?:
+                            | {
+                                __typename: 'ForumCategory'
+                                id: string
+                                title: string
+                                parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+                              }
+                            | null
+                            | undefined
+                        }
+                      | null
+                      | undefined
+                  }
+                | null
+                | undefined
+            }
+          | null
+          | undefined
+      }
+    | null
+    | undefined
+}
 
 export type ForumThreadBreadcrumbsFieldsFragment = {
   __typename: 'ForumThread'
   id: string
   title: string
-  category: { __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment
+  category: {
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    parent?:
+      | {
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          parent?:
+            | {
+                __typename: 'ForumCategory'
+                id: string
+                title: string
+                parent?:
+                  | {
+                      __typename: 'ForumCategory'
+                      id: string
+                      title: string
+                      parent?:
+                        | {
+                            __typename: 'ForumCategory'
+                            id: string
+                            title: string
+                            parent?:
+                              | {
+                                  __typename: 'ForumCategory'
+                                  id: string
+                                  title: string
+                                  parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+                                }
+                              | null
+                              | undefined
+                          }
+                        | null
+                        | undefined
+                    }
+                  | null
+                  | undefined
+              }
+            | null
+            | undefined
+        }
+      | null
+      | undefined
+  }
 }
 
 export type ForumThreadFieldsFragment = {
@@ -105,12 +258,10 @@ export type ForumThreadFieldsFragment = {
     | { __typename: 'ThreadStatusActive' }
     | {
         __typename: 'ThreadStatusLocked'
-        threadDeletedEvent?: Types.Maybe<{
-          __typename: 'ThreadDeletedEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        }>
+        threadDeletedEvent?:
+          | { __typename: 'ThreadDeletedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+          | null
+          | undefined
       }
     | { __typename: 'ThreadStatusModerated' }
     | { __typename: 'ThreadStatusRemoved' }
@@ -118,20 +269,78 @@ export type ForumThreadFieldsFragment = {
 
 export type ForumPostFieldsFragment = {
   __typename: 'ForumPost'
-  repliesTo?: Types.Maybe<{ __typename: 'ForumPost' } & ForumPostWithoutReplyFieldsFragment>
-} & ForumPostWithoutReplyFieldsFragment
-
-export type ForumPostWithoutReplyFieldsFragment = {
-  __typename: 'ForumPost'
   id: string
   createdAt: any
-  updatedAt?: Types.Maybe<any>
+  updatedAt?: any | null | undefined
   text: string
   authorId: string
-  author: { __typename: 'Membership' } & MemberFieldsFragment
-  postaddedeventpost?: Types.Maybe<
-    Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
-  >
+  repliesTo?:
+    | {
+        __typename: 'ForumPost'
+        id: string
+        createdAt: any
+        updatedAt?: any | null | undefined
+        text: string
+        authorId: string
+        author: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        postaddedeventpost?:
+          | Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+          | null
+          | undefined
+        status:
+          | { __typename: 'PostStatusActive' }
+          | { __typename: 'PostStatusLocked' }
+          | { __typename: 'PostStatusModerated' }
+          | { __typename: 'PostStatusRemoved' }
+        edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+      }
+    | null
+    | undefined
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+  postaddedeventpost?:
+    | Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+    | null
+    | undefined
   status:
     | { __typename: 'PostStatusActive' }
     | { __typename: 'PostStatusLocked' }
@@ -140,7 +349,65 @@ export type ForumPostWithoutReplyFieldsFragment = {
   edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
 }
 
-export type ForumThreadDetailedFieldsFragment = { __typename: 'ForumThread' } & ForumThreadFieldsFragment
+export type ForumPostWithoutReplyFieldsFragment = {
+  __typename: 'ForumPost'
+  id: string
+  createdAt: any
+  updatedAt?: any | null | undefined
+  text: string
+  authorId: string
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+  postaddedeventpost?:
+    | Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+    | null
+    | undefined
+  status:
+    | { __typename: 'PostStatusActive' }
+    | { __typename: 'PostStatusLocked' }
+    | { __typename: 'PostStatusModerated' }
+    | { __typename: 'PostStatusRemoved' }
+  edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+}
+
+export type ForumThreadDetailedFieldsFragment = {
+  __typename: 'ForumThread'
+  id: string
+  isSticky: boolean
+  categoryId: string
+  title: string
+  authorId: string
+  visiblePostsCount: number
+  createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  status:
+    | { __typename: 'ThreadStatusActive' }
+    | {
+        __typename: 'ThreadStatusLocked'
+        threadDeletedEvent?:
+          | { __typename: 'ThreadDeletedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+          | null
+          | undefined
+      }
+    | { __typename: 'ThreadStatusModerated' }
+    | { __typename: 'ThreadStatusRemoved' }
+}
 
 export type ForumPostParentsFragment = {
   __typename: 'ForumPost'
@@ -153,7 +420,44 @@ export type GetForumCategoriesQueryVariables = Types.Exact<{
 
 export type GetForumCategoriesQuery = {
   __typename: 'Query'
-  forumCategories: Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>
+  forumCategories: Array<{
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    description: string
+    forumcategoryparent?:
+      | Array<{
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          status:
+            | { __typename: 'CategoryStatusActive' }
+            | { __typename: 'CategoryStatusArchived' }
+            | { __typename: 'CategoryStatusRemoved' }
+        }>
+      | null
+      | undefined
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | {
+          __typename: 'CategoryStatusArchived'
+          categoryArchivalStatusUpdatedEvent?:
+            | {
+                __typename: 'CategoryArchivalStatusUpdatedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              }
+            | null
+            | undefined
+        }
+      | { __typename: 'CategoryStatusRemoved' }
+    moderators: Array<{
+      __typename: 'Worker'
+      id: string
+      membership: { __typename: 'Membership'; id: string; handle: string }
+    }>
+  }>
 }
 
 export type GetForumCategoryQueryVariables = Types.Exact<{
@@ -162,7 +466,76 @@ export type GetForumCategoryQueryVariables = Types.Exact<{
 
 export type GetForumCategoryQuery = {
   __typename: 'Query'
-  forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryWithDetailsFieldsFragment>
+  forumCategoryByUniqueInput?:
+    | {
+        __typename: 'ForumCategory'
+        id: string
+        title: string
+        description: string
+        forumcategoryparent?:
+          | Array<{
+              __typename: 'ForumCategory'
+              id: string
+              title: string
+              description: string
+              forumcategoryparent?:
+                | Array<{
+                    __typename: 'ForumCategory'
+                    id: string
+                    title: string
+                    status:
+                      | { __typename: 'CategoryStatusActive' }
+                      | { __typename: 'CategoryStatusArchived' }
+                      | { __typename: 'CategoryStatusRemoved' }
+                  }>
+                | null
+                | undefined
+              status:
+                | { __typename: 'CategoryStatusActive' }
+                | {
+                    __typename: 'CategoryStatusArchived'
+                    categoryArchivalStatusUpdatedEvent?:
+                      | {
+                          __typename: 'CategoryArchivalStatusUpdatedEvent'
+                          createdAt: any
+                          inBlock: number
+                          network: Types.Network
+                        }
+                      | null
+                      | undefined
+                  }
+                | { __typename: 'CategoryStatusRemoved' }
+              moderators: Array<{
+                __typename: 'Worker'
+                id: string
+                membership: { __typename: 'Membership'; id: string; handle: string }
+              }>
+            }>
+          | null
+          | undefined
+        status:
+          | { __typename: 'CategoryStatusActive' }
+          | {
+              __typename: 'CategoryStatusArchived'
+              categoryArchivalStatusUpdatedEvent?:
+                | {
+                    __typename: 'CategoryArchivalStatusUpdatedEvent'
+                    createdAt: any
+                    inBlock: number
+                    network: Types.Network
+                  }
+                | null
+                | undefined
+            }
+          | { __typename: 'CategoryStatusRemoved' }
+        moderators: Array<{
+          __typename: 'Worker'
+          id: string
+          membership: { __typename: 'Membership'; id: string; handle: string }
+        }>
+      }
+    | null
+    | undefined
 }
 
 export type GetForumCategoryBreadcrumbsQueryVariables = Types.Exact<{
@@ -171,7 +544,58 @@ export type GetForumCategoryBreadcrumbsQueryVariables = Types.Exact<{
 
 export type GetForumCategoryBreadcrumbsQuery = {
   __typename: 'Query'
-  forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment>
+  forumCategoryByUniqueInput?:
+    | {
+        __typename: 'ForumCategory'
+        id: string
+        title: string
+        parent?:
+          | {
+              __typename: 'ForumCategory'
+              id: string
+              title: string
+              parent?:
+                | {
+                    __typename: 'ForumCategory'
+                    id: string
+                    title: string
+                    parent?:
+                      | {
+                          __typename: 'ForumCategory'
+                          id: string
+                          title: string
+                          parent?:
+                            | {
+                                __typename: 'ForumCategory'
+                                id: string
+                                title: string
+                                parent?:
+                                  | {
+                                      __typename: 'ForumCategory'
+                                      id: string
+                                      title: string
+                                      parent?:
+                                        | { __typename: 'ForumCategory'; id: string; title: string }
+                                        | null
+                                        | undefined
+                                    }
+                                  | null
+                                  | undefined
+                              }
+                            | null
+                            | undefined
+                        }
+                      | null
+                      | undefined
+                  }
+                | null
+                | undefined
+            }
+          | null
+          | undefined
+      }
+    | null
+    | undefined
 }
 
 export type GetForumCategoryBreadcrumbQueryVariables = Types.Exact<{
@@ -180,9 +604,10 @@ export type GetForumCategoryBreadcrumbQueryVariables = Types.Exact<{
 
 export type GetForumCategoryBreadcrumbQuery = {
   __typename: 'Query'
-  forumCategoryByUniqueInput?: Types.Maybe<
-    { __typename: 'ForumCategory'; parentId?: Types.Maybe<string> } & ForumSubCategoryFieldsFragment
-  >
+  forumCategoryByUniqueInput?:
+    | { __typename: 'ForumCategory'; parentId?: string | null | undefined; id: string; title: string }
+    | null
+    | undefined
 }
 
 export type GetForumThreadBreadcrumbsQueryVariables = Types.Exact<{
@@ -191,7 +616,63 @@ export type GetForumThreadBreadcrumbsQueryVariables = Types.Exact<{
 
 export type GetForumThreadBreadcrumbsQuery = {
   __typename: 'Query'
-  forumThreadByUniqueInput?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadBreadcrumbsFieldsFragment>
+  forumThreadByUniqueInput?:
+    | {
+        __typename: 'ForumThread'
+        id: string
+        title: string
+        category: {
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          parent?:
+            | {
+                __typename: 'ForumCategory'
+                id: string
+                title: string
+                parent?:
+                  | {
+                      __typename: 'ForumCategory'
+                      id: string
+                      title: string
+                      parent?:
+                        | {
+                            __typename: 'ForumCategory'
+                            id: string
+                            title: string
+                            parent?:
+                              | {
+                                  __typename: 'ForumCategory'
+                                  id: string
+                                  title: string
+                                  parent?:
+                                    | {
+                                        __typename: 'ForumCategory'
+                                        id: string
+                                        title: string
+                                        parent?:
+                                          | { __typename: 'ForumCategory'; id: string; title: string }
+                                          | null
+                                          | undefined
+                                      }
+                                    | null
+                                    | undefined
+                                }
+                              | null
+                              | undefined
+                          }
+                        | null
+                        | undefined
+                    }
+                  | null
+                  | undefined
+              }
+            | null
+            | undefined
+        }
+      }
+    | null
+    | undefined
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
@@ -203,7 +684,27 @@ export type GetForumThreadsQueryVariables = Types.Exact<{
 
 export type GetForumThreadsQuery = {
   __typename: 'Query'
-  forumThreads: Array<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
+  forumThreads: Array<{
+    __typename: 'ForumThread'
+    id: string
+    isSticky: boolean
+    categoryId: string
+    title: string
+    authorId: string
+    visiblePostsCount: number
+    createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    status:
+      | { __typename: 'ThreadStatusActive' }
+      | {
+          __typename: 'ThreadStatusLocked'
+          threadDeletedEvent?:
+            | { __typename: 'ThreadDeletedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+            | null
+            | undefined
+        }
+      | { __typename: 'ThreadStatusModerated' }
+      | { __typename: 'ThreadStatusRemoved' }
+  }>
 }
 
 export type GetForumThreadsCountQueryVariables = Types.Exact<{
@@ -228,7 +729,30 @@ export type GetForumThreadQueryVariables = Types.Exact<{
 
 export type GetForumThreadQuery = {
   __typename: 'Query'
-  thread?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadDetailedFieldsFragment>
+  thread?:
+    | {
+        __typename: 'ForumThread'
+        id: string
+        isSticky: boolean
+        categoryId: string
+        title: string
+        authorId: string
+        visiblePostsCount: number
+        createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+        status:
+          | { __typename: 'ThreadStatusActive' }
+          | {
+              __typename: 'ThreadStatusLocked'
+              threadDeletedEvent?:
+                | { __typename: 'ThreadDeletedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+                | null
+                | undefined
+            }
+          | { __typename: 'ThreadStatusModerated' }
+          | { __typename: 'ThreadStatusRemoved' }
+      }
+    | null
+    | undefined
 }
 
 export type GetForumPostsQueryVariables = Types.Exact<{
@@ -240,7 +764,87 @@ export type GetForumPostsQueryVariables = Types.Exact<{
 
 export type GetForumPostsQuery = {
   __typename: 'Query'
-  forumPosts: Array<{ __typename: 'ForumPost' } & ForumPostFieldsFragment>
+  forumPosts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    createdAt: any
+    updatedAt?: any | null | undefined
+    text: string
+    authorId: string
+    repliesTo?:
+      | {
+          __typename: 'ForumPost'
+          id: string
+          createdAt: any
+          updatedAt?: any | null | undefined
+          text: string
+          authorId: string
+          author: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+          postaddedeventpost?:
+            | Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+            | null
+            | undefined
+          status:
+            | { __typename: 'PostStatusActive' }
+            | { __typename: 'PostStatusLocked' }
+            | { __typename: 'PostStatusModerated' }
+            | { __typename: 'PostStatusRemoved' }
+          edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+        }
+      | null
+      | undefined
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    postaddedeventpost?:
+      | Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+      | null
+      | undefined
+    status:
+      | { __typename: 'PostStatusActive' }
+      | { __typename: 'PostStatusLocked' }
+      | { __typename: 'PostStatusModerated' }
+      | { __typename: 'PostStatusRemoved' }
+    edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+  }>
 }
 
 export type GetForumPostEditsQueryVariables = Types.Exact<{
@@ -288,7 +892,13 @@ export type GetForumPostParentsQueryVariables = Types.Exact<{
 
 export type GetForumPostParentsQuery = {
   __typename: 'Query'
-  forumPostByUniqueInput?: Types.Maybe<{ __typename: 'ForumPost' } & ForumPostParentsFragment>
+  forumPostByUniqueInput?:
+    | {
+        __typename: 'ForumPost'
+        thread: { __typename: 'ForumThread'; id: string; category: { __typename: 'ForumCategory'; id: string } }
+      }
+    | null
+    | undefined
 }
 
 export type SearchForumPostQueryVariables = Types.Exact<{
