@@ -29,6 +29,7 @@ export function getUrl(params: GetUrlParams | 'CurrentPage'): string {
 }
 
 const getQuery = (query: Record<string, string>) =>
+  '?' +
   Object.entries(query)
     .map((entry) => `${entry[0]}=${entry[1]}`)
-    .reduce((queries, query, index, array) => queries + query + (index !== array.length - 1 ? '&' : ''), '?')
+    .join('&')
