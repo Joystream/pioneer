@@ -114,7 +114,7 @@ fragment ProposalWithDetailsFields on Proposal {
     }
     mode {
       __typename
-      ...on ProposalDiscussionThreadModeClosed {
+      ... on ProposalDiscussionThreadModeClosed {
         whitelist {
           members {
             id

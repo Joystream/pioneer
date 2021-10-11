@@ -139,51 +139,51 @@ fragment ProposalDiscussionPostDeletedEventFields on ProposalDiscussionPostDelet
 }
 
 query GetProposalsEvents {
-  events (
+  events(
     where: {
       type_in: [
-        ProposalCreatedEvent,
-        ProposalStatusUpdatedEvent,
-        ProposalDecisionMadeEvent,
-        ProposalCancelledEvent,
-        ProposalDiscussionThreadModeChangedEvent,
-        ProposalExecutedEvent,
-        ProposalVotedEvent,
-        ProposalDiscussionPostCreatedEvent,
-        ProposalDiscussionPostUpdatedEvent,
+        ProposalCreatedEvent
+        ProposalStatusUpdatedEvent
+        ProposalDecisionMadeEvent
+        ProposalCancelledEvent
+        ProposalDiscussionThreadModeChangedEvent
+        ProposalExecutedEvent
+        ProposalVotedEvent
+        ProposalDiscussionPostCreatedEvent
+        ProposalDiscussionPostUpdatedEvent
         ProposalDiscussionPostDeletedEvent
       ]
     }
     orderBy: [createdAt_DESC]
   ) {
-    ...on ProposalCreatedEvent {
+    ... on ProposalCreatedEvent {
       ...ProposalCreatedEventFields
     }
-    ...on ProposalCancelledEvent {
+    ... on ProposalCancelledEvent {
       ...ProposalCancelledEventFields
     }
-    ...on ProposalStatusUpdatedEvent {
+    ... on ProposalStatusUpdatedEvent {
       ...ProposalStatusUpdatedEventFields
     }
-    ...on ProposalDecisionMadeEvent {
+    ... on ProposalDecisionMadeEvent {
       ...ProposalDecisionMadeEventFields
     }
-    ...on ProposalDiscussionThreadModeChangedEvent {
+    ... on ProposalDiscussionThreadModeChangedEvent {
       ...ProposalDiscussionModeChangedEventFields
     }
-    ...on ProposalExecutedEvent {
+    ... on ProposalExecutedEvent {
       ...ProposalExecutedEventFields
     }
-    ...on ProposalVotedEvent {
+    ... on ProposalVotedEvent {
       ...ProposalVotedEventFields
     }
-    ...on ProposalDiscussionPostCreatedEvent {
+    ... on ProposalDiscussionPostCreatedEvent {
       ...ProposalDiscussionPostCreatedEventFields
     }
-    ...on ProposalDiscussionPostUpdatedEvent {
+    ... on ProposalDiscussionPostUpdatedEvent {
       ...ProposalDiscussionPostUpdatedEventFields
     }
-    ...on ProposalDiscussionPostDeletedEvent {
+    ... on ProposalDiscussionPostDeletedEvent {
       ...ProposalDiscussionPostDeletedEventFields
     }
   }
