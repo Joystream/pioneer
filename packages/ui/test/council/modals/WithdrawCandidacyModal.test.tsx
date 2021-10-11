@@ -76,6 +76,13 @@ describe('UI: Withdraw Candidacy Modal', () => {
     expect(await getButton('Sign and send')).toBeDefined()
   })
 
+  it('Transaction success', async () => {
+    renderModal()
+
+    fireEvent.click(await getButton('Withdraw Candidacy'))
+    fireEvent.click(await getButton('Sign and send'))
+  })
+
   function renderModal() {
     return render(
       <MemoryRouter>

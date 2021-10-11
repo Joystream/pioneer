@@ -7,7 +7,7 @@ export type WithdrawCandidacyState =
   | { value: 'warning'; context: EmptyObject }
   | { value: 'transaction'; context: EmptyObject }
 
-type WithdrawCandidacyEvent = { type: 'NEXT' }
+export type WithdrawCandidacyEvent = { type: 'NEXT' }
 
 type WithdrawCandidacyContext = EmptyObject
 
