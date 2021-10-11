@@ -46,12 +46,23 @@ describe('getUrl', () => {
     )
   })
 
-  it('With a more complex path before the hash', () => {
-    windowSpy.mockImplementation(() => ({
-      location: new URL('https://pioneer.com/app/index.php?foo=bar&id=11#/domain/1?query=12'),
-    }))
-    expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
-      'https://pioneer.com/app/index.php?foo=bar&id=11#/members/1?paramOne=12&paramTwo=13&paramThree=14'
-    )
+  describe('With a more complex path before the hash', () => {
+    it('With path', () => {
+      windowSpy.mockImplementation(() => ({
+        location: new URL('https://pioneer.com/app/index.php#/domain/1?query=12'),
+      }))
+      expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
+        'https://pioneer.com/app/index.php#/members/1?paramOne=12&paramTwo=13&paramThree=14'
+      )
+    })
+
+    it('With path and search', () => {
+      windowSpy.mockImplementation(() => ({
+        location: new URL('https://pioneer.com/app/index.php?foo=bar&id=11#/domain/1?query=12'),
+      }))
+      expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
+        'https://pioneer.com/app/index.php?foo=bar&id=11#/members/1?paramOne=12&paramTwo=13&paramThree=14'
+      )
+    })
   })
 })
