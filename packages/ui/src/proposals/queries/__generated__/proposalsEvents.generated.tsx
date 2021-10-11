@@ -34,8 +34,8 @@ export type ProposalStatusUpdatedEventFieldsFragment = {
   proposal: { __typename: 'Proposal'; id: string; title: string }
   newStatus:
     | { __typename: 'ProposalStatusDeciding' }
-    | { __typename: 'ProposalStatusGracing' }
     | { __typename: 'ProposalStatusDormant' }
+    | { __typename: 'ProposalStatusGracing' }
 }
 
 export type ProposalDecisionMadeEventFieldsFragment = {
@@ -50,7 +50,7 @@ export type ProposalDiscussionModeChangedEventFieldsFragment = {
   id: string
   createdAt: any
   thread: { __typename: 'ProposalDiscussionThread'; proposal: { __typename: 'Proposal'; id: string; title: string } }
-  newMode: { __typename: 'ProposalDiscussionThreadModeOpen' } | { __typename: 'ProposalDiscussionThreadModeClosed' }
+  newMode: { __typename: 'ProposalDiscussionThreadModeClosed' } | { __typename: 'ProposalDiscussionThreadModeOpen' }
 }
 
 export type ProposalExecutedEventFieldsFragment = {
@@ -152,16 +152,112 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'OpeningAddedEvent' }
     | { __typename: 'OpeningCanceledEvent' }
     | { __typename: 'OpeningFilledEvent' }
-    | ({ __typename: 'ProposalCancelledEvent' } & ProposalCancelledEventFieldsFragment)
-    | ({ __typename: 'ProposalCreatedEvent' } & ProposalCreatedEventFieldsFragment)
-    | ({ __typename: 'ProposalDecisionMadeEvent' } & ProposalDecisionMadeEventFieldsFragment)
-    | ({ __typename: 'ProposalDiscussionPostCreatedEvent' } & ProposalDiscussionPostCreatedEventFieldsFragment)
-    | ({ __typename: 'ProposalDiscussionPostDeletedEvent' } & ProposalDiscussionPostDeletedEventFieldsFragment)
-    | ({ __typename: 'ProposalDiscussionPostUpdatedEvent' } & ProposalDiscussionPostUpdatedEventFieldsFragment)
-    | ({ __typename: 'ProposalDiscussionThreadModeChangedEvent' } & ProposalDiscussionModeChangedEventFieldsFragment)
-    | ({ __typename: 'ProposalExecutedEvent' } & ProposalExecutedEventFieldsFragment)
-    | ({ __typename: 'ProposalStatusUpdatedEvent' } & ProposalStatusUpdatedEventFieldsFragment)
-    | ({ __typename: 'ProposalVotedEvent' } & ProposalVotedEventFieldsFragment)
+    | {
+        __typename: 'ProposalCancelledEvent'
+        id: string
+        createdAt: any
+        proposal: {
+          __typename: 'Proposal'
+          id: string
+          title: string
+          creator: { __typename: 'Membership'; id: string; handle: string }
+        }
+      }
+    | {
+        __typename: 'ProposalCreatedEvent'
+        id: string
+        createdAt: any
+        proposal: {
+          __typename: 'Proposal'
+          id: string
+          title: string
+          creator: { __typename: 'Membership'; id: string; handle: string }
+        }
+      }
+    | {
+        __typename: 'ProposalDecisionMadeEvent'
+        id: string
+        createdAt: any
+        proposal: { __typename: 'Proposal'; id: string; title: string }
+      }
+    | {
+        __typename: 'ProposalDiscussionPostCreatedEvent'
+        id: string
+        createdAt: any
+        post: {
+          __typename: 'ProposalDiscussionPost'
+          id: string
+          author: { __typename: 'Membership'; id: string; handle: string }
+          discussionThread: {
+            __typename: 'ProposalDiscussionThread'
+            proposal: { __typename: 'Proposal'; id: string; title: string }
+          }
+        }
+      }
+    | {
+        __typename: 'ProposalDiscussionPostDeletedEvent'
+        id: string
+        createdAt: any
+        post: {
+          __typename: 'ProposalDiscussionPost'
+          id: string
+          author: { __typename: 'Membership'; id: string; handle: string }
+          discussionThread: {
+            __typename: 'ProposalDiscussionThread'
+            proposal: { __typename: 'Proposal'; id: string; title: string }
+          }
+        }
+      }
+    | {
+        __typename: 'ProposalDiscussionPostUpdatedEvent'
+        id: string
+        createdAt: any
+        post: {
+          __typename: 'ProposalDiscussionPost'
+          id: string
+          author: { __typename: 'Membership'; id: string; handle: string }
+          discussionThread: {
+            __typename: 'ProposalDiscussionThread'
+            proposal: { __typename: 'Proposal'; id: string; title: string }
+          }
+        }
+      }
+    | {
+        __typename: 'ProposalDiscussionThreadModeChangedEvent'
+        id: string
+        createdAt: any
+        thread: {
+          __typename: 'ProposalDiscussionThread'
+          proposal: { __typename: 'Proposal'; id: string; title: string }
+        }
+        newMode:
+          | { __typename: 'ProposalDiscussionThreadModeClosed' }
+          | { __typename: 'ProposalDiscussionThreadModeOpen' }
+      }
+    | {
+        __typename: 'ProposalExecutedEvent'
+        id: string
+        createdAt: any
+        proposal: { __typename: 'Proposal'; id: string; title: string }
+        executionStatus: { __typename: 'ProposalStatusExecuted' } | { __typename: 'ProposalStatusExecutionFailed' }
+      }
+    | {
+        __typename: 'ProposalStatusUpdatedEvent'
+        id: string
+        createdAt: any
+        proposal: { __typename: 'Proposal'; id: string; title: string }
+        newStatus:
+          | { __typename: 'ProposalStatusDeciding' }
+          | { __typename: 'ProposalStatusDormant' }
+          | { __typename: 'ProposalStatusGracing' }
+      }
+    | {
+        __typename: 'ProposalVotedEvent'
+        id: string
+        createdAt: any
+        proposal: { __typename: 'Proposal'; id: string; title: string }
+        voter: { __typename: 'Membership'; id: string; handle: string }
+      }
     | { __typename: 'ReferendumFinishedEvent' }
     | { __typename: 'ReferendumStartedEvent' }
     | { __typename: 'ReferendumStartedForcefullyEvent' }

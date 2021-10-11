@@ -13,7 +13,7 @@ export type MemberFieldsFragment = {
   isFoundingMember: boolean
   inviteCount: number
   createdAt: any
-  metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string>; about?: Types.Maybe<string> }
+  metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -25,28 +25,58 @@ export type MemberFieldsFragment = {
 
 export type MemberWithDetailsFieldsFragment = {
   __typename: 'Membership'
+  id: string
+  rootAccount: string
+  controllerAccount: string
+  handle: string
+  isVerified: boolean
+  isFoundingMember: boolean
+  inviteCount: number
+  createdAt: any
   entry:
-    | {
-        __typename: 'MembershipEntryPaid'
-        membershipBoughtEvent?: Types.Maybe<{
-          __typename: 'MembershipBoughtEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        }>
-      }
+    | { __typename: 'MembershipEntryGenesis'; phantom?: number | null | undefined }
     | {
         __typename: 'MembershipEntryInvited'
-        memberInvitedEvent?: Types.Maybe<{
-          __typename: 'MemberInvitedEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        }>
+        memberInvitedEvent?:
+          | { __typename: 'MemberInvitedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+          | null
+          | undefined
       }
-    | { __typename: 'MembershipEntryGenesis'; phantom?: Types.Maybe<number> }
-  invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
-} & MemberFieldsFragment
+    | {
+        __typename: 'MembershipEntryPaid'
+        membershipBoughtEvent?:
+          | { __typename: 'MembershipBoughtEvent'; createdAt: any; inBlock: number; network: Types.Network }
+          | null
+          | undefined
+      }
+  invitees: Array<{
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }>
+  metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+  roles: Array<{
+    __typename: 'Worker'
+    id: string
+    createdAt: any
+    isLead: boolean
+    group: { __typename: 'WorkingGroup'; name: string }
+  }>
+}
 
 export type GetMembersQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.MembershipWhereInput>
@@ -57,7 +87,25 @@ export type GetMembersQueryVariables = Types.Exact<{
 
 export type GetMembersQuery = {
   __typename: 'Query'
-  memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
+  memberships: Array<{
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }>
 }
 
 export type GetMembersCountQueryVariables = Types.Exact<{
@@ -75,7 +123,67 @@ export type GetMemberQueryVariables = Types.Exact<{
 
 export type GetMemberQuery = {
   __typename: 'Query'
-  membershipByUniqueInput?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFieldsFragment>
+  membershipByUniqueInput?:
+    | {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        entry:
+          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null | undefined }
+          | {
+              __typename: 'MembershipEntryInvited'
+              memberInvitedEvent?:
+                | { __typename: 'MemberInvitedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+                | null
+                | undefined
+            }
+          | {
+              __typename: 'MembershipEntryPaid'
+              membershipBoughtEvent?:
+                | { __typename: 'MembershipBoughtEvent'; createdAt: any; inBlock: number; network: Types.Network }
+                | null
+                | undefined
+            }
+        invitees: Array<{
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }>
+        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+    | null
+    | undefined
 }
 
 export type SearchMembersQueryVariables = Types.Exact<{
@@ -85,7 +193,25 @@ export type SearchMembersQueryVariables = Types.Exact<{
 
 export type SearchMembersQuery = {
   __typename: 'Query'
-  memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
+  memberships: Array<{
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }>
 }
 
 export type GetMemberExtraInfoQueryVariables = Types.Exact<{

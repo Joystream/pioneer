@@ -1,18 +1,15 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
+import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type WorkingGroupMetadataFieldsFragment = {
   __typename: 'WorkingGroupMetadata'
-  about?: Types.Maybe<string>
-  description?: Types.Maybe<string>
-  status?: Types.Maybe<string>
-  statusMessage?: Types.Maybe<string>
+  about?: string | null | undefined
+  description?: string | null | undefined
+  status?: string | null | undefined
+  statusMessage?: string | null | undefined
 }
 
 export type WorkerFieldsFragment = {
@@ -22,9 +19,27 @@ export type WorkerFieldsFragment = {
   applicationId: string
   isLead: boolean
   rewardPerBlock: any
-  missingRewardAmount?: Types.Maybe<any>
+  missingRewardAmount?: any | null | undefined
   stake: any
-  membership: { __typename: 'Membership' } & MemberFieldsFragment
+  membership: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
@@ -38,28 +53,42 @@ export type PastWorkerFieldsFragment = {
   id: string
   runtimeId: number
   createdAt: any
-  updatedAt?: Types.Maybe<any>
-  membership: { __typename: 'Membership' } & MemberFieldsFragment
+  updatedAt?: any | null | undefined
+  membership: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
   status:
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeaving' }
     | {
         __typename: 'WorkerStatusLeft'
-        workerExitedEvent?: Types.Maybe<{
-          __typename: 'WorkerExitedEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        }>
+        workerExitedEvent?:
+          | { __typename: 'WorkerExitedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+          | null
+          | undefined
       }
     | {
         __typename: 'WorkerStatusTerminated'
-        terminatedWorkerEvent?: Types.Maybe<{
-          __typename: 'TerminatedWorkerEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        }>
+        terminatedWorkerEvent?:
+          | { __typename: 'TerminatedWorkerEvent'; createdAt: any; inBlock: number; network: Types.Network }
+          | null
+          | undefined
       }
   entry: { __typename: 'OpeningFilledEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
@@ -69,6 +98,13 @@ export type WorkerDetailedFieldsFragment = {
   roleAccount: string
   rewardAccount: string
   stakeAccount: string
+  id: string
+  runtimeId: number
+  applicationId: string
+  isLead: boolean
+  rewardPerBlock: any
+  missingRewardAmount?: any | null | undefined
+  stake: any
   entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
   application: {
     __typename: 'WorkingGroupApplication'
@@ -76,22 +112,70 @@ export type WorkerDetailedFieldsFragment = {
     openingId: string
     opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
   }
-} & WorkerFieldsFragment
+  membership: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
+  status:
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
+}
 
 export type WorkingGroupFieldsFragment = {
   __typename: 'WorkingGroup'
   id: string
   name: string
   budget: any
-  metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetadataFieldsFragment>
+  metadata?:
+    | {
+        __typename: 'WorkingGroupMetadata'
+        about?: string | null | undefined
+        description?: string | null | undefined
+        status?: string | null | undefined
+        statusMessage?: string | null | undefined
+      }
+    | null
+    | undefined
   workers: Array<{ __typename: 'Worker'; stake: any }>
-  leader?: Types.Maybe<{ __typename: 'Worker'; membershipId: string }>
+  leader?: { __typename: 'Worker'; membershipId: string } | null | undefined
 }
 
 export type WorkingGroupDetailedFieldsFragment = {
   __typename: 'WorkingGroup'
-  leader?: Types.Maybe<{ __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string }>
-} & WorkingGroupFieldsFragment
+  id: string
+  name: string
+  budget: any
+  leader?: { __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string } | null | undefined
+  metadata?:
+    | {
+        __typename: 'WorkingGroupMetadata'
+        about?: string | null | undefined
+        description?: string | null | undefined
+        status?: string | null | undefined
+        statusMessage?: string | null | undefined
+      }
+    | null
+    | undefined
+  workers: Array<{ __typename: 'Worker'; stake: any }>
+}
 
 export type BudgetSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
@@ -99,7 +183,7 @@ export type BudgetSpendingEventFieldsFragment = {
   groupId: string
   reciever: string
   amount: any
-  rationale?: Types.Maybe<string>
+  rationale?: string | null | undefined
 }
 
 export type GetBudgetSpendingQueryVariables = Types.Exact<{
@@ -108,7 +192,14 @@ export type GetBudgetSpendingQueryVariables = Types.Exact<{
 
 export type GetBudgetSpendingQuery = {
   __typename: 'Query'
-  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingEventFieldsFragment>
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    id: string
+    groupId: string
+    reciever: string
+    amount: any
+    rationale?: string | null | undefined
+  }>
 }
 
 export type RewardPaidEventFieldsFragment = {
@@ -123,7 +214,24 @@ export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never 
 
 export type GetWorkingGroupsQuery = {
   __typename: 'Query'
-  workingGroups: Array<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+  workingGroups: Array<{
+    __typename: 'WorkingGroup'
+    id: string
+    name: string
+    budget: any
+    metadata?:
+      | {
+          __typename: 'WorkingGroupMetadata'
+          about?: string | null | undefined
+          description?: string | null | undefined
+          status?: string | null | undefined
+          statusMessage?: string | null | undefined
+        }
+      | null
+      | undefined
+    workers: Array<{ __typename: 'Worker'; stake: any }>
+    leader?: { __typename: 'Worker'; membershipId: string } | null | undefined
+  }>
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
@@ -132,7 +240,44 @@ export type GetWorkersQueryVariables = Types.Exact<{
   limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
-export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
+export type GetWorkersQuery = {
+  __typename: 'Query'
+  workers: Array<{
+    __typename: 'Worker'
+    id: string
+    runtimeId: number
+    applicationId: string
+    isLead: boolean
+    rewardPerBlock: any
+    missingRewardAmount?: any | null | undefined
+    stake: any
+    membership: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    group: { __typename: 'WorkingGroup'; id: string; name: string }
+    status:
+      | { __typename: 'WorkerStatusActive' }
+      | { __typename: 'WorkerStatusLeaving' }
+      | { __typename: 'WorkerStatusLeft' }
+      | { __typename: 'WorkerStatusTerminated' }
+  }>
+}
 
 export type GetPastWorkersQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkerWhereInput>
@@ -143,7 +288,50 @@ export type GetPastWorkersQueryVariables = Types.Exact<{
 
 export type GetPastWorkersQuery = {
   __typename: 'Query'
-  workers: Array<{ __typename: 'Worker' } & PastWorkerFieldsFragment>
+  workers: Array<{
+    __typename: 'Worker'
+    id: string
+    runtimeId: number
+    createdAt: any
+    updatedAt?: any | null | undefined
+    membership: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    status:
+      | { __typename: 'WorkerStatusActive' }
+      | { __typename: 'WorkerStatusLeaving' }
+      | {
+          __typename: 'WorkerStatusLeft'
+          workerExitedEvent?:
+            | { __typename: 'WorkerExitedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+            | null
+            | undefined
+        }
+      | {
+          __typename: 'WorkerStatusTerminated'
+          terminatedWorkerEvent?:
+            | { __typename: 'TerminatedWorkerEvent'; createdAt: any; inBlock: number; network: Types.Network }
+            | null
+            | undefined
+        }
+    entry: { __typename: 'OpeningFilledEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
 }
 
 export type GetWorkersCountQueryVariables = Types.Exact<{
@@ -161,7 +349,51 @@ export type GetDetailedWorkersQueryVariables = Types.Exact<{
 
 export type GetDetailedWorkersQuery = {
   __typename: 'Query'
-  workers: Array<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
+  workers: Array<{
+    __typename: 'Worker'
+    roleAccount: string
+    rewardAccount: string
+    stakeAccount: string
+    id: string
+    runtimeId: number
+    applicationId: string
+    isLead: boolean
+    rewardPerBlock: any
+    missingRewardAmount?: any | null | undefined
+    stake: any
+    entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
+    application: {
+      __typename: 'WorkingGroupApplication'
+      id: string
+      openingId: string
+      opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+    }
+    membership: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    group: { __typename: 'WorkingGroup'; id: string; name: string }
+    status:
+      | { __typename: 'WorkerStatusActive' }
+      | { __typename: 'WorkerStatusLeaving' }
+      | { __typename: 'WorkerStatusLeft' }
+      | { __typename: 'WorkerStatusTerminated' }
+  }>
 }
 
 export type GetWorkerQueryVariables = Types.Exact<{
@@ -170,7 +402,58 @@ export type GetWorkerQueryVariables = Types.Exact<{
 
 export type GetWorkerQuery = {
   __typename: 'Query'
-  workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
+  workerByUniqueInput?:
+    | {
+        __typename: 'Worker'
+        roleAccount: string
+        rewardAccount: string
+        stakeAccount: string
+        id: string
+        runtimeId: number
+        applicationId: string
+        isLead: boolean
+        rewardPerBlock: any
+        missingRewardAmount?: any | null | undefined
+        stake: any
+        entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
+        application: {
+          __typename: 'WorkingGroupApplication'
+          id: string
+          openingId: string
+          opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+        }
+        membership: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        group: { __typename: 'WorkingGroup'; id: string; name: string }
+        status:
+          | { __typename: 'WorkerStatusActive' }
+          | { __typename: 'WorkerStatusLeaving' }
+          | { __typename: 'WorkerStatusLeft' }
+          | { __typename: 'WorkerStatusTerminated' }
+      }
+    | null
+    | undefined
 }
 
 export type GetGroupDebtQueryVariables = Types.Exact<{
@@ -179,7 +462,7 @@ export type GetGroupDebtQueryVariables = Types.Exact<{
 
 export type GetGroupDebtQuery = {
   __typename: 'Query'
-  workers: Array<{ __typename: 'Worker'; missingRewardAmount?: Types.Maybe<any> }>
+  workers: Array<{ __typename: 'Worker'; missingRewardAmount?: any | null | undefined }>
 }
 
 export type GetRewardsQueryVariables = Types.Exact<{
@@ -188,16 +471,22 @@ export type GetRewardsQueryVariables = Types.Exact<{
 
 export type GetRewardsQuery = {
   __typename: 'Query'
-  rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent' } & RewardPaidEventFieldsFragment>
+  rewardPaidEvents: Array<{
+    __typename: 'RewardPaidEvent'
+    id: string
+    amount: any
+    rewardAccount: string
+    createdAt: any
+  }>
 }
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
-  applicationDetails?: Types.Maybe<string>
-  shortDescription?: Types.Maybe<string>
-  description?: Types.Maybe<string>
-  hiringLimit?: Types.Maybe<number>
-  expectedEnding?: Types.Maybe<any>
+  applicationDetails?: string | null | undefined
+  shortDescription?: string | null | undefined
+  description?: string | null | undefined
+  hiringLimit?: number | null | undefined
+  expectedEnding?: any | null | undefined
 }
 
 export type WorkingGroupOpeningFieldsFragment = {
@@ -209,30 +498,76 @@ export type WorkingGroupOpeningFieldsFragment = {
   stakeAmount: any
   rewardPerBlock: any
   unstakingPeriod: number
-  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
-  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+  metadata: {
+    __typename: 'WorkingGroupOpeningMetadata'
+    applicationDetails?: string | null | undefined
+    shortDescription?: string | null | undefined
+    description?: string | null | undefined
+    hiringLimit?: number | null | undefined
+    expectedEnding?: any | null | undefined
+  }
   status:
-    | { __typename: 'OpeningStatusOpen' }
-    | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusCancelled' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusOpen' }
   applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
 }
 
 export type WorkingGroupOpeningDetailedFieldsFragment = {
   __typename: 'WorkingGroupOpening'
+  id: string
+  runtimeId: number
+  groupId: string
+  type: Types.WorkingGroupOpeningType
+  stakeAmount: any
+  rewardPerBlock: any
+  unstakingPeriod: number
   applications: Array<{
     __typename: 'WorkingGroupApplication'
     id: string
     status:
-      | { __typename: 'ApplicationStatusPending' }
       | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusCancelled' }
+      | { __typename: 'ApplicationStatusPending' }
       | { __typename: 'ApplicationStatusRejected' }
       | { __typename: 'ApplicationStatusWithdrawn' }
-      | { __typename: 'ApplicationStatusCancelled' }
-    applicant: { __typename: 'Membership' } & MemberFieldsFragment
+    applicant: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
   }>
-} & WorkingGroupOpeningFieldsFragment
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
+  createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
+  metadata: {
+    __typename: 'WorkingGroupOpeningMetadata'
+    applicationDetails?: string | null | undefined
+    shortDescription?: string | null | undefined
+    description?: string | null | undefined
+    hiringLimit?: number | null | undefined
+    expectedEnding?: any | null | undefined
+  }
+  status:
+    | { __typename: 'OpeningStatusCancelled' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusOpen' }
+}
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
@@ -261,7 +596,31 @@ export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupOpeningsQuery = {
   __typename: 'Query'
-  workingGroupOpenings: Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
+  workingGroupOpenings: Array<{
+    __typename: 'WorkingGroupOpening'
+    id: string
+    runtimeId: number
+    groupId: string
+    type: Types.WorkingGroupOpeningType
+    stakeAmount: any
+    rewardPerBlock: any
+    unstakingPeriod: number
+    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
+    createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      applicationDetails?: string | null | undefined
+      shortDescription?: string | null | undefined
+      description?: string | null | undefined
+      hiringLimit?: number | null | undefined
+      expectedEnding?: any | null | undefined
+    }
+    status:
+      | { __typename: 'OpeningStatusCancelled' }
+      | { __typename: 'OpeningStatusFilled' }
+      | { __typename: 'OpeningStatusOpen' }
+    applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+  }>
 }
 
 export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
@@ -270,16 +629,73 @@ export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupOpeningQuery = {
   __typename: 'Query'
-  workingGroupOpeningByUniqueInput?: Types.Maybe<
-    { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningDetailedFieldsFragment
-  >
+  workingGroupOpeningByUniqueInput?:
+    | {
+        __typename: 'WorkingGroupOpening'
+        id: string
+        runtimeId: number
+        groupId: string
+        type: Types.WorkingGroupOpeningType
+        stakeAmount: any
+        rewardPerBlock: any
+        unstakingPeriod: number
+        applications: Array<{
+          __typename: 'WorkingGroupApplication'
+          id: string
+          status:
+            | { __typename: 'ApplicationStatusAccepted' }
+            | { __typename: 'ApplicationStatusCancelled' }
+            | { __typename: 'ApplicationStatusPending' }
+            | { __typename: 'ApplicationStatusRejected' }
+            | { __typename: 'ApplicationStatusWithdrawn' }
+          applicant: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+        }>
+        group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
+        createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
+        metadata: {
+          __typename: 'WorkingGroupOpeningMetadata'
+          applicationDetails?: string | null | undefined
+          shortDescription?: string | null | undefined
+          description?: string | null | undefined
+          hiringLimit?: number | null | undefined
+          expectedEnding?: any | null | undefined
+        }
+        status:
+          | { __typename: 'OpeningStatusCancelled' }
+          | { __typename: 'OpeningStatusFilled' }
+          | { __typename: 'OpeningStatusOpen' }
+      }
+    | null
+    | undefined
 }
 
 export type ApplicationQuestionFieldsFragment = {
   __typename: 'ApplicationFormQuestion'
   index: number
   type: Types.ApplicationFormQuestionType
-  question?: Types.Maybe<string>
+  question?: string | null | undefined
 }
 
 export type GetWorkingGroupOpeningQuestionsQueryVariables = Types.Exact<{
@@ -288,13 +704,21 @@ export type GetWorkingGroupOpeningQuestionsQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupOpeningQuestionsQuery = {
   __typename: 'Query'
-  workingGroupOpeningByUniqueInput?: Types.Maybe<{
-    __typename: 'WorkingGroupOpening'
-    metadata: {
-      __typename: 'WorkingGroupOpeningMetadata'
-      applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
-    }
-  }>
+  workingGroupOpeningByUniqueInput?:
+    | {
+        __typename: 'WorkingGroupOpening'
+        metadata: {
+          __typename: 'WorkingGroupOpeningMetadata'
+          applicationFormQuestions: Array<{
+            __typename: 'ApplicationFormQuestion'
+            index: number
+            type: Types.ApplicationFormQuestionType
+            question?: string | null | undefined
+          }>
+        }
+      }
+    | null
+    | undefined
 }
 
 export type GetWorkingGroupQueryVariables = Types.Exact<{
@@ -303,7 +727,30 @@ export type GetWorkingGroupQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupQuery = {
   __typename: 'Query'
-  workingGroupByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupDetailedFieldsFragment>
+  workingGroupByUniqueInput?:
+    | {
+        __typename: 'WorkingGroup'
+        id: string
+        name: string
+        budget: any
+        leader?:
+          | { __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string }
+          | null
+          | undefined
+        metadata?:
+          | {
+              __typename: 'WorkingGroupMetadata'
+              about?: string | null | undefined
+              description?: string | null | undefined
+              status?: string | null | undefined
+              statusMessage?: string | null | undefined
+            }
+          | null
+          | undefined
+        workers: Array<{ __typename: 'Worker'; stake: any }>
+      }
+    | null
+    | undefined
 }
 
 export type WorkingGroupApplicationFieldsFragment = {
@@ -318,13 +765,31 @@ export type WorkingGroupApplicationFieldsFragment = {
     rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; name: string }
   }
-  applicant: { __typename: 'Membership' } & MemberFieldsFragment
+  applicant: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
   status:
-    | { __typename: 'ApplicationStatusPending' }
     | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusCancelled' }
+    | { __typename: 'ApplicationStatusPending' }
     | { __typename: 'ApplicationStatusRejected' }
     | { __typename: 'ApplicationStatusWithdrawn' }
-    | { __typename: 'ApplicationStatusCancelled' }
   createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
 
@@ -334,7 +799,45 @@ export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupApplicationsQuery = {
   __typename: 'Query'
-  workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
+  workingGroupApplications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    runtimeId: number
+    stakingAccount: string
+    opening: {
+      __typename: 'WorkingGroupOpening'
+      id: string
+      type: Types.WorkingGroupOpeningType
+      rewardPerBlock: any
+      group: { __typename: 'WorkingGroup'; name: string }
+    }
+    applicant: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    status:
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusCancelled' }
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
+    createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
 }
 
 export type GetWorkingGroupApplicationIdsQueryVariables = Types.Exact<{
@@ -352,15 +855,63 @@ export type GetWorkingGroupApplicationQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupApplicationQuery = {
   __typename: 'Query'
-  workingGroupApplicationByUniqueInput?: Types.Maybe<
-    { __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment
-  >
+  workingGroupApplicationByUniqueInput?:
+    | {
+        __typename: 'WorkingGroupApplication'
+        id: string
+        runtimeId: number
+        stakingAccount: string
+        opening: {
+          __typename: 'WorkingGroupOpening'
+          id: string
+          type: Types.WorkingGroupOpeningType
+          rewardPerBlock: any
+          group: { __typename: 'WorkingGroup'; name: string }
+        }
+        applicant: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        status:
+          | { __typename: 'ApplicationStatusAccepted' }
+          | { __typename: 'ApplicationStatusCancelled' }
+          | { __typename: 'ApplicationStatusPending' }
+          | { __typename: 'ApplicationStatusRejected' }
+          | { __typename: 'ApplicationStatusWithdrawn' }
+        createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
+      }
+    | null
+    | undefined
 }
 
 export type ApplicationFormQuestionAnswerFieldsFragment = {
   __typename: 'ApplicationFormQuestionAnswer'
   answer: string
-  question: { __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment
+  question: {
+    __typename: 'ApplicationFormQuestion'
+    index: number
+    type: Types.ApplicationFormQuestionType
+    question?: string | null | undefined
+  }
 }
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
@@ -369,21 +920,35 @@ export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
 
 export type GetApplicationFormQuestionAnswerQuery = {
   __typename: 'Query'
-  applicationFormQuestionAnswers: Array<
-    { __typename: 'ApplicationFormQuestionAnswer' } & ApplicationFormQuestionAnswerFieldsFragment
-  >
+  applicationFormQuestionAnswers: Array<{
+    __typename: 'ApplicationFormQuestionAnswer'
+    answer: string
+    question: {
+      __typename: 'ApplicationFormQuestion'
+      index: number
+      type: Types.ApplicationFormQuestionType
+      question?: string | null | undefined
+    }
+  }>
 }
 
 export type UpcomingWorkingGroupOpeningFieldsFragment = {
   __typename: 'UpcomingWorkingGroupOpening'
   id: string
   groupId: string
-  expectedStart?: Types.Maybe<any>
-  stakeAmount?: Types.Maybe<any>
-  rewardPerBlock?: Types.Maybe<any>
-  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  expectedStart?: any | null | undefined
+  stakeAmount?: any | null | undefined
+  rewardPerBlock?: any | null | undefined
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
   createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
-  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+  metadata: {
+    __typename: 'WorkingGroupOpeningMetadata'
+    applicationDetails?: string | null | undefined
+    shortDescription?: string | null | undefined
+    description?: string | null | undefined
+    hiringLimit?: number | null | undefined
+    expectedEnding?: any | null | undefined
+  }
 }
 
 export type GetUpcomingWorkingGroupOpeningQueryVariables = Types.Exact<{
@@ -392,9 +957,32 @@ export type GetUpcomingWorkingGroupOpeningQueryVariables = Types.Exact<{
 
 export type GetUpcomingWorkingGroupOpeningQuery = {
   __typename: 'Query'
-  upcomingWorkingGroupOpeningByUniqueInput?: Types.Maybe<
-    { __typename: 'UpcomingWorkingGroupOpening' } & UpcomingWorkingGroupOpeningFieldsFragment
-  >
+  upcomingWorkingGroupOpeningByUniqueInput?:
+    | {
+        __typename: 'UpcomingWorkingGroupOpening'
+        id: string
+        groupId: string
+        expectedStart?: any | null | undefined
+        stakeAmount?: any | null | undefined
+        rewardPerBlock?: any | null | undefined
+        group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
+        createdInEvent: {
+          __typename: 'StatusTextChangedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }
+        metadata: {
+          __typename: 'WorkingGroupOpeningMetadata'
+          applicationDetails?: string | null | undefined
+          shortDescription?: string | null | undefined
+          description?: string | null | undefined
+          hiringLimit?: number | null | undefined
+          expectedEnding?: any | null | undefined
+        }
+      }
+    | null
+    | undefined
 }
 
 export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
@@ -405,9 +993,24 @@ export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
 
 export type GetUpcomingWorkingGroupOpeningsQuery = {
   __typename: 'Query'
-  upcomingWorkingGroupOpenings: Array<
-    { __typename: 'UpcomingWorkingGroupOpening' } & UpcomingWorkingGroupOpeningFieldsFragment
-  >
+  upcomingWorkingGroupOpenings: Array<{
+    __typename: 'UpcomingWorkingGroupOpening'
+    id: string
+    groupId: string
+    expectedStart?: any | null | undefined
+    stakeAmount?: any | null | undefined
+    rewardPerBlock?: any | null | undefined
+    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null | undefined }
+    createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      applicationDetails?: string | null | undefined
+      shortDescription?: string | null | undefined
+      description?: string | null | undefined
+      hiringLimit?: number | null | undefined
+      expectedEnding?: any | null | undefined
+    }
+  }>
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
@@ -422,21 +1025,24 @@ export type GetWorkerUnstakingDetailsQueryVariables = Types.Exact<{
 
 export type GetWorkerUnstakingDetailsQuery = {
   __typename: 'Query'
-  workerByUniqueInput?: Types.Maybe<{
-    __typename: 'Worker'
-    status:
-      | { __typename: 'WorkerStatusActive' }
-      | {
-          __typename: 'WorkerStatusLeaving'
-          workerStartedLeavingEvent?: Types.Maybe<{ __typename: 'WorkerStartedLeavingEvent'; createdAt: any }>
+  workerByUniqueInput?:
+    | {
+        __typename: 'Worker'
+        status:
+          | { __typename: 'WorkerStatusActive' }
+          | {
+              __typename: 'WorkerStatusLeaving'
+              workerStartedLeavingEvent?: { __typename: 'WorkerStartedLeavingEvent'; createdAt: any } | null | undefined
+            }
+          | { __typename: 'WorkerStatusLeft' }
+          | { __typename: 'WorkerStatusTerminated' }
+        application: {
+          __typename: 'WorkingGroupApplication'
+          opening: { __typename: 'WorkingGroupOpening'; unstakingPeriod: number }
         }
-      | { __typename: 'WorkerStatusLeft' }
-      | { __typename: 'WorkerStatusTerminated' }
-    application: {
-      __typename: 'WorkingGroupApplication'
-      opening: { __typename: 'WorkingGroupOpening'; unstakingPeriod: number }
-    }
-  }>
+      }
+    | null
+    | undefined
 }
 
 export const PastWorkerFieldsFragmentDoc = gql`

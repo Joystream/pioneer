@@ -1,10 +1,7 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
+import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type CouncilMemberFieldsFragment = {
@@ -12,27 +9,112 @@ export type CouncilMemberFieldsFragment = {
   id: string
   unpaidReward: any
   stake: any
-  member: { __typename: 'Membership'; councilMembers: Array<{ __typename: 'CouncilMember' }> } & MemberFieldsFragment
+  member: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    councilMembers: Array<{ __typename: 'CouncilMember' }>
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
 }
 
 export type ElectedCouncilsFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   electedAtBlock: number
-  councilMembers: Array<{ __typename: 'CouncilMember' } & CouncilMemberFieldsFragment>
+  councilMembers: Array<{
+    __typename: 'CouncilMember'
+    id: string
+    unpaidReward: any
+    stake: any
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      councilMembers: Array<{ __typename: 'CouncilMember' }>
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  }>
 }
 
 export type ElectionCandidateFieldsFragment = {
   __typename: 'Candidate'
   id: string
   stake: any
-  member: { __typename: 'Membership' } & MemberFieldsFragment
+  member: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
 }
 
 export type ElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   cycleId: number
-  candidates: Array<{ __typename: 'Candidate' } & ElectionCandidateFieldsFragment>
+  candidates: Array<{
+    __typename: 'Candidate'
+    id: string
+    stake: any
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  }>
 }
 
 export type CandidateDetailedFieldsFragment = {
@@ -42,7 +124,25 @@ export type CandidateDetailedFieldsFragment = {
   rewardAccountId: string
   stake: any
   note: string
-  member: { __typename: 'Membership' } & MemberFieldsFragment
+  member: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
   electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
 }
 
@@ -52,14 +152,71 @@ export type GetElectedCouncilsQueryVariables = Types.Exact<{
 
 export type GetElectedCouncilsQuery = {
   __typename: 'Query'
-  electedCouncils: Array<{ __typename: 'ElectedCouncil' } & ElectedCouncilsFieldsFragment>
+  electedCouncils: Array<{
+    __typename: 'ElectedCouncil'
+    id: string
+    electedAtBlock: number
+    councilMembers: Array<{
+      __typename: 'CouncilMember'
+      id: string
+      unpaidReward: any
+      stake: any
+      member: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        councilMembers: Array<{ __typename: 'CouncilMember' }>
+        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+    }>
+  }>
 }
 
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetCurrentElectionQuery = {
   __typename: 'Query'
-  electionRounds: Array<{ __typename: 'ElectionRound' } & ElectionRoundFieldsFragment>
+  electionRounds: Array<{
+    __typename: 'ElectionRound'
+    cycleId: number
+    candidates: Array<{
+      __typename: 'Candidate'
+      id: string
+      stake: any
+      member: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+    }>
+  }>
 }
 
 export type GetCandidateQueryVariables = Types.Exact<{
@@ -68,7 +225,41 @@ export type GetCandidateQueryVariables = Types.Exact<{
 
 export type GetCandidateQuery = {
   __typename: 'Query'
-  candidateByUniqueInput?: Types.Maybe<{ __typename: 'Candidate' } & CandidateDetailedFieldsFragment>
+  candidateByUniqueInput?:
+    | {
+        __typename: 'Candidate'
+        id: string
+        stakingAccountId: string
+        rewardAccountId: string
+        stake: any
+        note: string
+        member: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
+      }
+    | null
+    | undefined
 }
 
 export type GetElectionCandidatesIdsQueryVariables = Types.Exact<{
