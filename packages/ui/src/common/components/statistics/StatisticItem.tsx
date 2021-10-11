@@ -8,13 +8,12 @@ import { ColumnGapBlock } from '../page/PageContent'
 
 import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
 
-export interface StatisticItemProps extends StatisticHeaderProps {
+export interface StatisticItemProps extends StatisticHeaderProps, StatiscticBlockProps {
   className?: string
-  centered?: boolean
 }
 
-export const StatisticItem: FC<StatisticItemProps> = ({ className, children, centered, ...headerProps }) => (
-  <StatsBlock key={headerProps.title} className={className} centered={centered}>
+export const StatisticItem: FC<StatisticItemProps> = ({ className, size, children, centered, ...headerProps }) => (
+  <StatsBlock key={headerProps.title} className={className} size={size} centered={centered}>
     <StatisticHeader {...headerProps} />
     <StatsContent>{children}</StatsContent>
   </StatsBlock>
