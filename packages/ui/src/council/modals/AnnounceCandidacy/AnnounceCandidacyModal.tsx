@@ -8,6 +8,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
@@ -17,14 +18,18 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
+import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyTransaction'
+import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/CandidacyNoteTransaction'
 import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakeStep } from '@/council/modals/AnnounceCandidacy/components/StakeStep'
+import { SuccessModal } from '@/council/modals/AnnounceCandidacy/components/Success'
 import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
@@ -42,6 +47,12 @@ const getCandidateForPreview = (context: FinalAnnounceCandidacyContext, member: 
   cycleFinished: false,
 })
 
+const transactionSteps = [
+  { title: 'Bind account for staking' },
+  { title: 'Announce candidacy' },
+  { title: 'Set candidacy note' },
+]
+
 export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
@@ -55,18 +66,48 @@ export const AnnounceCandidacyModal = () => {
   )
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
 
-  const transaction = useMemo(() => {
+  const confirmStakingAccountTransaction = useMemo(() => {
     if (activeMember && api) {
+      return api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? '')
+    }
+  }, [JSON.stringify(state.context), connectionState, activeMember?.id])
+
+  const announceCandidacyTransaction = useMemo(() => {
+    if (activeMember && api) {
+      return api.tx.council.announceCandidacy(
+        activeMember.id,
+        state.context.stakingAccount?.address ?? '',
+        state.context.rewardAccount?.address ?? '',
+        state.context.stakingAmount ?? 0
+      )
+    }
+  }, [JSON.stringify(state.context), connectionState, activeMember?.id])
+
+  const candidacyNoteTransaction = useMemo(() => {
+    if (activeMember && api) {
+      return api.tx.council.setCandidacyNote(activeMember.id, '')
+    }
+  }, [JSON.stringify(state.context), connectionState, activeMember?.id])
+
+  const transaction = useMemo(() => {
+    if (api && confirmStakingAccountTransaction && candidacyNoteTransaction && announceCandidacyTransaction) {
       if (stakingStatus === 'confirmed') {
-        return api.tx.council.announceCandidacy(activeMember.id, '', '', 0)
+        return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
       }
 
       return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
-        api.tx.council.announceCandidacy(activeMember.id, '', '', 0),
+        confirmStakingAccountTransaction,
+        announceCandidacyTransaction,
+        candidacyNoteTransaction,
       ])
     }
-  }, [JSON.stringify(state.context), connectionState, stakingStatus])
+  }, [
+    connectionState,
+    stakingStatus,
+    confirmStakingAccountTransaction,
+    candidacyNoteTransaction,
+    announceCandidacyTransaction,
+  ])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -84,7 +125,11 @@ export const AnnounceCandidacyModal = () => {
     if (state.matches('requiredStakeVerification')) {
       return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
-  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
+
+    if (state.matches('beforeTransaction')) {
+      return send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+    }
+  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 
   const isValidNext = useMemo(() => {
     if (state.matches('staking') && !!state.context.stakingAccount && state.context.stakingAmount) {
@@ -129,6 +174,56 @@ export const AnnounceCandidacyModal = () => {
     })
 
     return null
+  }
+
+  if (state.matches('bindStakingAccountTransaction')) {
+    return (
+      <BindStakingAccountModal
+        onClose={hideModal}
+        transaction={confirmStakingAccountTransaction}
+        signer={state.context.stakingAccount.address}
+        service={state.children.bindStakingAccount}
+        memberId={activeMember.id}
+        steps={transactionSteps}
+      />
+    )
+  }
+
+  if (state.matches('announceCandidacyTransaction')) {
+    return (
+      <AnnounceCandidacyTransaction
+        onClose={hideModal}
+        transaction={announceCandidacyTransaction}
+        signer={activeMember.controllerAccount}
+        stake={state.context.stakingAmount}
+        service={state.children.transaction}
+        steps={transactionSteps}
+      />
+    )
+  }
+
+  if (state.matches('candidacyNoteTransaction')) {
+    return (
+      <CandidacyNoteTransaction
+        onClose={hideModal}
+        transaction={candidacyNoteTransaction}
+        signer={activeMember.controllerAccount}
+        service={state.children.candidacyNoteTransaction}
+        steps={transactionSteps}
+      />
+    )
+  }
+
+  if (state.matches('success')) {
+    return <SuccessModal onClose={hideModal} />
+  }
+
+  if (state.matches('error')) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem while announcing candidacy.
+      </FailureModal>
+    )
   }
 
   return (

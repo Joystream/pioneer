@@ -1,8 +1,12 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { getDataFromEvent } from '@/common/model/JoystreamNode'
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
+import { AddNewProposalContext, SpecificParametersContext } from '@/proposals/modals/AddNewProposal/machine'
 
 interface StakingContext {
   stakingAccount?: Account
@@ -28,8 +32,12 @@ export interface FinalAnnounceCandidacyContext extends Required<TitleAndBulletPo
   banner?: string
 }
 
+export interface TransactionContext extends FinalAnnounceCandidacyContext {
+  transactionEvents?: EventRecord[]
+}
+
 export type AnnounceCandidacyContext = Partial<
-  StakingContext & RewardAccountContext & TitleAndBulletPointsContext & SummaryAndBannerContext
+  StakingContext & RewardAccountContext & TitleAndBulletPointsContext & SummaryAndBannerContext & TransactionContext
 >
 
 export type AnnounceCandidacyState =
@@ -43,8 +51,12 @@ export type AnnounceCandidacyState =
   | { value: 'candidateProfile.titleAndBulletPoints'; context: TitleAndBulletPointsContext }
   | { value: 'candidateProfile.summaryAndBanner'; context: SummaryAndBannerContext }
   | { value: 'candidateProfile.finishCandidateProfile'; context: FinalAnnounceCandidacyContext }
-  | { value: 'success'; context: FinalAnnounceCandidacyContext }
-  | { value: 'error'; context: AnnounceCandidacyContext }
+  | { value: 'beforeTransaction'; context: TransactionContext }
+  | { value: 'bindStakingAccountTransaction'; context: TransactionContext }
+  | { value: 'announceCandidacyTransaction'; context: TransactionContext }
+  | { value: 'candidacyNoteTransaction'; context: TransactionContext }
+  | { value: 'success'; context: TransactionContext }
+  | { value: 'error'; context: TransactionContext }
 
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
@@ -57,6 +69,8 @@ type AnnounceCandidacyEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
   | { type: 'NEXT' }
+  | { type: 'BOUND' }
+  | { type: 'REQUIRES_STAKING_CANDIDATE' }
   | SetAccountEvent
   | SetAmountEvent
   | SetTitleEvent
@@ -170,7 +184,73 @@ export const announceCandidacyMachine = createMachine<
           type: 'final',
         },
       },
-      onDone: 'error',
+      onDone: 'beforeTransaction',
+    },
+    beforeTransaction: {
+      id: 'beforeTransaction',
+      on: {
+        BOUND: 'announceCandidacyTransaction',
+        REQUIRES_STAKING_CANDIDATE: 'bindStakingAccountTransaction',
+      },
+    },
+    bindStakingAccountTransaction: {
+      invoke: {
+        id: 'bindStakingAccountTransaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'announceCandidacyTransaction',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
+      },
+    },
+    announceCandidacyTransaction: {
+      invoke: {
+        id: 'announceCandidacyTransaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'candidacyNoteTransaction',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
+      },
+    },
+    candidacyNoteTransaction: {
+      invoke: {
+        id: 'candidacyNoteTransaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
+      },
     },
     success: { type: 'final' },
     error: { type: 'final' },
