@@ -21,8 +21,8 @@ export const machine = createMachine<WithdrawCandidacyContext, WithdrawCandidacy
       },
     },
     transaction: {
-      id: 'transaction',
       invoke: {
+        id: 'transaction',
         src: transactionMachine,
       },
     },

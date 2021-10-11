@@ -73,6 +73,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     fireEvent.click(await getButton('Withdraw Candidacy'))
 
     expect(await screen.findByText(/^You intend to withdraw your candidacy/i)).toBeDefined()
+    expect(await getButton('Sign and send')).toBeDefined()
   })
 
   function renderModal() {
