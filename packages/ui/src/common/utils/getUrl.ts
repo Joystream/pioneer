@@ -24,12 +24,12 @@ export function getUrl(params: GetUrlParams | 'CurrentPage'): string {
     '/#' +
     pages[params.page] +
     (params.id ? `/${params.id}` : '') +
-    (params.query ? getQuery(params.query) : '')
+    (params.query && Object.keys(params.query).length ? getQuery(params.query) : '')
   )
 }
 
 const getQuery = (query: Record<string, string>) =>
   '?' +
   Object.entries(query)
-    .map((entry) => `${entry[0]}=${entry[1]}`)
+    .map(([key, value]) => `${key}=${value}`)
     .join('&')

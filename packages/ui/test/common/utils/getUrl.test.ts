@@ -36,6 +36,10 @@ describe('getUrl', () => {
     )
   })
 
+  it('Empty query parameters', () => {
+    expect(getUrl({ page: 'Election', query: {} })).toEqual('https://pioneer.com/#/council/election')
+  })
+
   it('Link with every kind of parameters', () => {
     expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
       'https://pioneer.com/#/members/1?paramOne=12&paramTwo=13&paramThree=14'
