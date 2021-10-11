@@ -81,6 +81,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
 
     expect(await screen.findByText(/^You intend to withdraw your candidacy/i)).toBeDefined()
     expect(await getButton('Sign and send')).toBeDefined()
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
   })
 
   it('Transaction success', async () => {
