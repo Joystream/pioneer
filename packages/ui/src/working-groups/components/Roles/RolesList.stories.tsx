@@ -1,6 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { RolesList, RolesListProps } from '@/working-groups/components/Roles/RolesList'
 import { getReward } from '@/working-groups/model/getReward'
 
@@ -9,7 +11,13 @@ export default {
   component: RolesList,
 } as Meta
 
-const Template: Story<RolesListProps> = (args) => <RolesList {...args} />
+const Template: Story<RolesListProps> = (args) => (
+  <MemoryRouter>
+    <MockApolloProvider>
+      <RolesList {...args} />
+    </MockApolloProvider>
+  </MemoryRouter>
+)
 
 export const Default = Template.bind({})
 Default.args = {
