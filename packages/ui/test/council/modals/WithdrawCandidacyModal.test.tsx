@@ -92,7 +92,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     fireEvent.click(await getButton('Withdraw Candidacy'))
     fireEvent.click(await getButton('Sign and send'))
 
-    expect(await screen.findByText('Success')).toBeDefined()
+    expect(await screen.findByText(/^You have successfully withdraw your candidacy/i)).toBeDefined()
   })
 
   it('Transaction error', async () => {
