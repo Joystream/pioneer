@@ -1,5 +1,4 @@
-import React from 'react'
-import { ReactNode } from 'react-markdown'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { Colors } from '../constants'
