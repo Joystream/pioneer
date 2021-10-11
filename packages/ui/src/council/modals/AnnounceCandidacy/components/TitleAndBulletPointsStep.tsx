@@ -61,7 +61,7 @@ export const TitleAndBulletPointsStep = ({
         </RowGapBlock>
       </Row>
       <Row>
-        <RowGapBlock gap={20}>
+        <RowGapBlock gap={40}>
           <InputComponent
             label="Profile title"
             required
@@ -71,28 +71,30 @@ export const TitleAndBulletPointsStep = ({
           >
             <InputText id="title" value={fields.title} onChange={(event) => changeField('title', event.target.value)} />
           </InputComponent>
-          {[1, 2, 3].map((index) => {
-            const fieldName = ('bulletPoint' + index) as keyof FormFields
+          <RowGapBlock gap={8}>
+            {[1, 2, 3].map((index) => {
+              const fieldName = ('bulletPoint' + index) as keyof FormFields
 
-            return (
-              <InputComponent
-                key={index}
-                inputSize="s"
-                label={index === 1 ? 'Bullet points' : undefined}
-                required={index === 1}
-                validation={hasError(fieldName, validation.errors) ? 'invalid' : undefined}
-                message={
-                  hasError(fieldName, validation.errors) ? getErrorMessage(fieldName, validation.errors) : undefined
-                }
-              >
-                <InputText
-                  id={fieldName}
-                  value={fields[fieldName]}
-                  onChange={(event) => changeField(fieldName, event.target.value)}
-                />
-              </InputComponent>
-            )
-          })}
+              return (
+                <InputComponent
+                  key={index}
+                  inputSize="s"
+                  label={index === 1 ? 'Bullet points' : undefined}
+                  required={index === 1}
+                  validation={hasError(fieldName, validation.errors) ? 'invalid' : undefined}
+                  message={
+                    hasError(fieldName, validation.errors) ? getErrorMessage(fieldName, validation.errors) : undefined
+                  }
+                >
+                  <InputText
+                    id={fieldName}
+                    value={fields[fieldName]}
+                    onChange={(event) => changeField(fieldName, event.target.value)}
+                  />
+                </InputComponent>
+              )
+            })}
+          </RowGapBlock>
         </RowGapBlock>
       </Row>
     </RowGapBlock>

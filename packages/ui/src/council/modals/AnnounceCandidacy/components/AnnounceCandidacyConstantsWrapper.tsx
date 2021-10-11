@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { Label, TextMedium, TextHuge, TextInlineHuge } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { CouncilConstants } from '@/council/types/CouncilConstants'
 
@@ -17,16 +17,19 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
       <Row>
         <RowGapBlock gap={4}>
           <Label>Number of council seats</Label>
-          <TextMedium lighter>
-            <TextInlineMedium dark>{formatTokenValue(constants?.size)}</TextInlineMedium>
-          </TextMedium>
+          <TextHuge dark value bold>
+            {formatTokenValue(constants?.size)}
+          </TextHuge>
         </RowGapBlock>
       </Row>
       <Row>
         <RowGapBlock gap={4}>
           <Label>Announcing period</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{formatTokenValue(constants?.announcingPeriod)}</TextInlineMedium> blocks
+            <TextInlineHuge dark value bold>
+              {formatTokenValue(constants?.announcingPeriod)}
+            </TextInlineHuge>{' '}
+            blocks
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -34,7 +37,10 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
         <RowGapBlock gap={4}>
           <Label>Voting period</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{formatTokenValue(constants?.election.votingPeriod)}</TextInlineMedium> blocks
+            <TextInlineHuge dark value bold>
+              {formatTokenValue(constants?.election.votingPeriod)}
+            </TextInlineHuge>{' '}
+            blocks
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -42,7 +48,10 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
         <RowGapBlock gap={4}>
           <Label>Revealing period</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{formatTokenValue(constants?.election.revealingPeriod)}</TextInlineMedium> blocks
+            <TextInlineHuge dark value bold>
+              {formatTokenValue(constants?.election.revealingPeriod)}
+            </TextInlineHuge>{' '}
+            blocks
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -50,7 +59,10 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
         <RowGapBlock gap={4}>
           <Label>Min. Candidate Stake</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{formatTokenValue(constants?.election.minStake)}</TextInlineMedium> JOY
+            <TextInlineHuge dark value bold>
+              {formatTokenValue(constants?.election.minStake)}
+            </TextInlineHuge>{' '}
+            JOY
           </TextMedium>
         </RowGapBlock>
       </Row>
