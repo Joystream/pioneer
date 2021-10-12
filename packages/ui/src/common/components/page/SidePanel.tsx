@@ -12,24 +12,18 @@ interface SidePanelProps {
   neighbor: React.RefObject<Element>
 }
 
-export const SidePanel = ({ neighbor, className, children }: SidePanelProps) => {
-  return (
-    <SidePanelStyles neighborHeight={neighbor.current?.getBoundingClientRect().height} className={className}>
-      {children}
-    </SidePanelStyles>
-  )
-}
+export const SidePanel = ({ className, children }: SidePanelProps) => (
+  <SidePanelStyles className={className}>{children}</SidePanelStyles>
+)
 
 export const SidePanelStyles = styled.div<{ neighborHeight?: number }>`
-  display: grid;
+  display: flex;
   position: absolute;
   top: 0;
   right: 0;
-  grid-template-columns: 1fr;
+  bottom: 0;
   width: 100%;
   max-width: 280px;
-  height: fit-content;
-  max-height: max(564px, ${({ neighborHeight }) => neighborHeight + 'px'});
   padding-left: 24px;
   overflow: hidden;
   overflow-y: scroll;

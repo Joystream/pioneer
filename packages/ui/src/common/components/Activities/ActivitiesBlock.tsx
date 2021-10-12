@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Warning, WarningProps } from '@/common/components/Warning'
 
 import { Activity } from '../../types'
-import { ContentWithTabs } from '../page/PageContent'
 import { Label } from '../typography'
 
 import { Activities } from '.'
@@ -26,6 +25,9 @@ export const ActivitiesBlock = ({ activities, label, warning, isOwn }: Activitie
   )
 }
 
-const ActivitiesContent = styled(ContentWithTabs)`
-  grid-row-gap: 4px;
+const ActivitiesContent = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 40px 0 8px;
 `
