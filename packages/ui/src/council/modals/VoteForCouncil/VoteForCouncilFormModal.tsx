@@ -17,8 +17,7 @@ import { useCandidate } from '@/council/hooks/useCandidate'
 import { MemberInfo } from '@/memberships/components'
 import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 
-import { VoteForCouncilModalCall } from '.'
-import { StakeEvent } from './machine'
+import { StakeEvent, VoteForCouncilModalCall } from './types'
 
 export interface VoteForCouncilFormModalProps {
   minStake: BN
