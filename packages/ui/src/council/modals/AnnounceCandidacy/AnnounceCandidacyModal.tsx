@@ -1,3 +1,4 @@
+import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
@@ -15,6 +16,7 @@ import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
@@ -85,7 +87,15 @@ export const AnnounceCandidacyModal = () => {
 
   const candidacyNoteTransaction = useMemo(() => {
     if (activeMember && api) {
-      return api.tx.council.setCandidacyNote(activeMember.id, '')
+      return api.tx.council.setCandidacyNote(
+        activeMember.id,
+        metadataToBytes(CouncilCandidacyNoteMetadata, {
+          header: state.context.title,
+          bulletPoints: state.context.bulletPoints,
+          bannerImageUri: state.context.banner,
+          description: state.context.summary,
+        })
+      )
     }
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
