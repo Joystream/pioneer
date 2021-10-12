@@ -15,46 +15,40 @@ import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
 
 describe('WorkingGroup', () => {
-  const mockServer = setupMockServer()
+  const mockServer = setupMockServer({ noCleanupAfterEach: true })
 
-  beforeAll(cryptoWaitReady)
+  beforeAll(async () => {
+    await cryptoWaitReady()
 
-  beforeEach(() => {
     seedMember(MEMBER_ALICE_DATA, mockServer.server)
     seedWorkingGroups(mockServer.server)
     seedOpeningStatuses(mockServer.server)
-  })
-
-  it('Renders page', async () => {
-    renderPage()
-
-    expect(await screen.findByRole('heading', { name: /forum/i })).toBeDefined()
+    seedOpening(OPENING_DATA, mockServer.server)
+    seedUpcomingOpening(UPCOMING_OPENING, mockServer.server)
   })
 
   it('Loads working group by url param', async () => {
     renderPage()
 
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+
+    expect(await screen.findByText(/forum/i, { selector: 'h2' })).toBeDefined()
     expect(await screen.findByText(/current budget/i)).toBeDefined()
   })
 
   it('Loads working group by url param with a hyphen', async () => {
     renderPage('/working-groups/content-directory')
-
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
     expect(await screen.findByText(/current budget/i)).toBeDefined()
   })
 
   it('Openings tab', async () => {
-    seedOpening(OPENING_DATA, mockServer.server)
-    seedUpcomingOpening(UPCOMING_OPENING, mockServer.server)
-
     renderPage()
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
-    expect(await screen.findAllByRole('heading', { name: /^forum Working Group regular$/i })).toHaveLength(2)
-    expect(await screen.findAllByRole('heading', { name: /^forum Working Group$/i })).toHaveLength(2)
+    expect(await screen.findAllByText(/^forum Working Group regular$/i)).toHaveLength(2)
+    expect(await screen.findAllByText(/^forum Working Group$/i)).toHaveLength(2)
   })
 
   function renderPage(path = '/working-groups/forum') {
