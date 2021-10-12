@@ -1764,6 +1764,124 @@ export type CancelWorkingGroupLeadOpeningProposalDetails = {
   opening?: Maybe<WorkingGroupOpening>
 }
 
+export type CandidacyNoteMetadata = BaseGraphQlObject & {
+  __typename: 'CandidacyNoteMetadata'
+  /** Image uri of candidate's banner. */
+  bannerImageUri?: Maybe<Scalars['String']>
+  /** Candidate program in form of bullet points. */
+  bulletPoints: Array<Scalars['String']>
+  candidacynoteseteventnoteMetadata?: Maybe<Array<CandidacyNoteSetEvent>>
+  candidatenoteMetadata?: Maybe<Array<Candidate>>
+  createdAt: Scalars['DateTime']
+  createdById: Scalars['String']
+  deletedAt?: Maybe<Scalars['DateTime']>
+  deletedById?: Maybe<Scalars['String']>
+  /** Candidacy description (Markdown-formatted). */
+  description?: Maybe<Scalars['String']>
+  /** Candidacy header text. */
+  header?: Maybe<Scalars['String']>
+  id: Scalars['ID']
+  updatedAt?: Maybe<Scalars['DateTime']>
+  updatedById?: Maybe<Scalars['String']>
+  version: Scalars['Int']
+}
+
+export type CandidacyNoteMetadataConnection = {
+  __typename: 'CandidacyNoteMetadataConnection'
+  edges: Array<CandidacyNoteMetadataEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+}
+
+export type CandidacyNoteMetadataCreateInput = {
+  bannerImageUri?: Maybe<Scalars['String']>
+  bulletPoints: Array<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  header?: Maybe<Scalars['String']>
+}
+
+export type CandidacyNoteMetadataEdge = {
+  __typename: 'CandidacyNoteMetadataEdge'
+  cursor: Scalars['String']
+  node: CandidacyNoteMetadata
+}
+
+export enum CandidacyNoteMetadataOrderByInput {
+  BannerImageUriAsc = 'bannerImageUri_ASC',
+  BannerImageUriDesc = 'bannerImageUri_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  HeaderAsc = 'header_ASC',
+  HeaderDesc = 'header_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+}
+
+export type CandidacyNoteMetadataUpdateInput = {
+  bannerImageUri?: Maybe<Scalars['String']>
+  bulletPoints?: Maybe<Array<Scalars['String']>>
+  description?: Maybe<Scalars['String']>
+  header?: Maybe<Scalars['String']>
+}
+
+export type CandidacyNoteMetadataWhereInput = {
+  AND?: Maybe<Array<CandidacyNoteMetadataWhereInput>>
+  OR?: Maybe<Array<CandidacyNoteMetadataWhereInput>>
+  bannerImageUri_contains?: Maybe<Scalars['String']>
+  bannerImageUri_endsWith?: Maybe<Scalars['String']>
+  bannerImageUri_eq?: Maybe<Scalars['String']>
+  bannerImageUri_in?: Maybe<Array<Scalars['String']>>
+  bannerImageUri_startsWith?: Maybe<Scalars['String']>
+  candidacynoteseteventnoteMetadata_every?: Maybe<CandidacyNoteSetEventWhereInput>
+  candidacynoteseteventnoteMetadata_none?: Maybe<CandidacyNoteSetEventWhereInput>
+  candidacynoteseteventnoteMetadata_some?: Maybe<CandidacyNoteSetEventWhereInput>
+  candidatenoteMetadata_every?: Maybe<CandidateWhereInput>
+  candidatenoteMetadata_none?: Maybe<CandidateWhereInput>
+  candidatenoteMetadata_some?: Maybe<CandidateWhereInput>
+  createdAt_eq?: Maybe<Scalars['DateTime']>
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  createdById_eq?: Maybe<Scalars['ID']>
+  createdById_in?: Maybe<Array<Scalars['ID']>>
+  deletedAt_all?: Maybe<Scalars['Boolean']>
+  deletedAt_eq?: Maybe<Scalars['DateTime']>
+  deletedAt_gt?: Maybe<Scalars['DateTime']>
+  deletedAt_gte?: Maybe<Scalars['DateTime']>
+  deletedAt_lt?: Maybe<Scalars['DateTime']>
+  deletedAt_lte?: Maybe<Scalars['DateTime']>
+  deletedById_eq?: Maybe<Scalars['ID']>
+  deletedById_in?: Maybe<Array<Scalars['ID']>>
+  description_contains?: Maybe<Scalars['String']>
+  description_endsWith?: Maybe<Scalars['String']>
+  description_eq?: Maybe<Scalars['String']>
+  description_in?: Maybe<Array<Scalars['String']>>
+  description_startsWith?: Maybe<Scalars['String']>
+  header_contains?: Maybe<Scalars['String']>
+  header_endsWith?: Maybe<Scalars['String']>
+  header_eq?: Maybe<Scalars['String']>
+  header_in?: Maybe<Array<Scalars['String']>>
+  header_startsWith?: Maybe<Scalars['String']>
+  id_eq?: Maybe<Scalars['ID']>
+  id_in?: Maybe<Array<Scalars['ID']>>
+  updatedAt_eq?: Maybe<Scalars['DateTime']>
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  updatedById_eq?: Maybe<Scalars['ID']>
+  updatedById_in?: Maybe<Array<Scalars['ID']>>
+}
+
+export type CandidacyNoteMetadataWhereUniqueInput = {
+  id: Scalars['ID']
+}
+
 export type CandidacyNoteSetEvent = BaseGraphQlObject &
   Event & {
     __typename: 'CandidacyNoteSetEvent'
@@ -1784,6 +1902,8 @@ export type CandidacyNoteSetEvent = BaseGraphQlObject &
     network: Network
     /** The note that has been set. */
     note: Scalars['String']
+    noteMetadata: CandidacyNoteMetadata
+    noteMetadataId: Scalars['String']
     /** Filtering options for interface implementers */
     type?: Maybe<EventTypeOptions>
     updatedAt?: Maybe<Scalars['DateTime']>
@@ -1805,6 +1925,7 @@ export type CandidacyNoteSetEventCreateInput = {
   member: Scalars['ID']
   network: Network
   note: Scalars['String']
+  noteMetadata: Scalars['ID']
 }
 
 export type CandidacyNoteSetEventEdge = {
@@ -1828,6 +1949,8 @@ export enum CandidacyNoteSetEventOrderByInput {
   MemberDesc = 'member_DESC',
   NetworkAsc = 'network_ASC',
   NetworkDesc = 'network_DESC',
+  NoteMetadataAsc = 'noteMetadata_ASC',
+  NoteMetadataDesc = 'noteMetadata_DESC',
   NoteAsc = 'note_ASC',
   NoteDesc = 'note_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -1841,6 +1964,7 @@ export type CandidacyNoteSetEventUpdateInput = {
   member?: Maybe<Scalars['ID']>
   network?: Maybe<Network>
   note?: Maybe<Scalars['String']>
+  noteMetadata?: Maybe<Scalars['ID']>
 }
 
 export type CandidacyNoteSetEventWhereInput = {
@@ -1885,6 +2009,9 @@ export type CandidacyNoteSetEventWhereInput = {
   member_in?: Maybe<Array<Scalars['ID']>>
   network_eq?: Maybe<Network>
   network_in?: Maybe<Array<Network>>
+  noteMetadata?: Maybe<CandidacyNoteMetadataWhereInput>
+  noteMetadata_eq?: Maybe<Scalars['ID']>
+  noteMetadata_in?: Maybe<Array<Scalars['ID']>>
   note_contains?: Maybe<Scalars['String']>
   note_endsWith?: Maybe<Scalars['String']>
   note_eq?: Maybe<Scalars['String']>
@@ -2174,6 +2301,8 @@ export type Candidate = BaseGraphQlObject & {
   memberId: Scalars['String']
   /** Candidacy note. */
   note: Scalars['String']
+  noteMetadata: CandidacyNoteMetadata
+  noteMetadataId: Scalars['String']
   /** Account that will receive rewards if candidate's elected to the council. */
   rewardAccountId: Scalars['String']
   /** Stake locked for the candidacy. */
@@ -2201,6 +2330,7 @@ export type CandidateCreateInput = {
   electionRound: Scalars['ID']
   member: Scalars['ID']
   note: Scalars['String']
+  noteMetadata: Scalars['ID']
   rewardAccountId: Scalars['String']
   stake: Scalars['BigInt']
   stakeLocked: Scalars['Boolean']
@@ -2225,6 +2355,8 @@ export enum CandidateOrderByInput {
   ElectionRoundDesc = 'electionRound_DESC',
   MemberAsc = 'member_ASC',
   MemberDesc = 'member_DESC',
+  NoteMetadataAsc = 'noteMetadata_ASC',
+  NoteMetadataDesc = 'noteMetadata_DESC',
   NoteAsc = 'note_ASC',
   NoteDesc = 'note_DESC',
   RewardAccountIdAsc = 'rewardAccountId_ASC',
@@ -2246,6 +2378,7 @@ export type CandidateUpdateInput = {
   electionRound?: Maybe<Scalars['ID']>
   member?: Maybe<Scalars['ID']>
   note?: Maybe<Scalars['String']>
+  noteMetadata?: Maybe<Scalars['ID']>
   rewardAccountId?: Maybe<Scalars['String']>
   stake?: Maybe<Scalars['BigInt']>
   stakeLocked?: Maybe<Scalars['Boolean']>
@@ -2281,6 +2414,9 @@ export type CandidateWhereInput = {
   member?: Maybe<MembershipWhereInput>
   member_eq?: Maybe<Scalars['ID']>
   member_in?: Maybe<Array<Scalars['ID']>>
+  noteMetadata?: Maybe<CandidacyNoteMetadataWhereInput>
+  noteMetadata_eq?: Maybe<Scalars['ID']>
+  noteMetadata_in?: Maybe<Array<Scalars['ID']>>
   note_contains?: Maybe<Scalars['String']>
   note_endsWith?: Maybe<Scalars['String']>
   note_eq?: Maybe<Scalars['String']>
@@ -13584,6 +13720,9 @@ export type Query = {
   budgetSpendingEventByUniqueInput?: Maybe<BudgetSpendingEvent>
   budgetSpendingEvents: Array<BudgetSpendingEvent>
   budgetSpendingEventsConnection: BudgetSpendingEventConnection
+  candidacyNoteMetadata: Array<CandidacyNoteMetadata>
+  candidacyNoteMetadataByUniqueInput?: Maybe<CandidacyNoteMetadata>
+  candidacyNoteMetadataConnection: CandidacyNoteMetadataConnection
   candidacyNoteSetEventByUniqueInput?: Maybe<CandidacyNoteSetEvent>
   candidacyNoteSetEvents: Array<CandidacyNoteSetEvent>
   candidacyNoteSetEventsConnection: CandidacyNoteSetEventConnection
@@ -14164,6 +14303,26 @@ export type QueryBudgetSpendingEventsConnectionArgs = {
   last?: Maybe<Scalars['Int']>
   orderBy?: Maybe<Array<BudgetSpendingEventOrderByInput>>
   where?: Maybe<BudgetSpendingEventWhereInput>
+}
+
+export type QueryCandidacyNoteMetadataArgs = {
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+  orderBy?: Maybe<Array<CandidacyNoteMetadataOrderByInput>>
+  where?: Maybe<CandidacyNoteMetadataWhereInput>
+}
+
+export type QueryCandidacyNoteMetadataByUniqueInputArgs = {
+  where: CandidacyNoteMetadataWhereUniqueInput
+}
+
+export type QueryCandidacyNoteMetadataConnectionArgs = {
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  orderBy?: Maybe<Array<CandidacyNoteMetadataOrderByInput>>
+  where?: Maybe<CandidacyNoteMetadataWhereInput>
 }
 
 export type QueryCandidacyNoteSetEventByUniqueInputArgs = {
