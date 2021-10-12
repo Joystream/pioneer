@@ -6,6 +6,8 @@ import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account, LockType } from '@/accounts/types'
+import { InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
@@ -14,9 +16,6 @@ import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { AccountSchema } from '@/memberships/model/validation'
 import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
-
-import { InputComponent, InputNumber } from '.'
-import { getErrorMessage, hasError } from './FieldError'
 
 const StakeStepFormSchema = Yup.object().shape({
   account: AccountSchema.required(),
