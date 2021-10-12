@@ -1,8 +1,20 @@
 export const ProfileRoutes = {
   profile: '/profile',
   memberships: '/profile/memberships',
-}
+} as const
 
-export const settingsRoute = '/settings'
+export const SettingsRoutes = {
+  settings: '/settings',
+} as const
 
-export const membersRoute = '/members/:id?'
+export const MembersRoutes = {
+  members: '/members/:id?',
+} as const
+
+type ProfileRoutesType = typeof ProfileRoutes
+type SettingsRoutesType = typeof SettingsRoutes
+type MembersRoutesType = typeof MembersRoutes
+
+export interface Routes extends ProfileRoutesType, SettingsRoutesType, MembersRoutesType {}
+
+export type RouteName = Routes[keyof Routes]

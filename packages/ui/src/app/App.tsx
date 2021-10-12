@@ -15,7 +15,7 @@ import { WorkingGroupsModule } from '@/working-groups/WorkingGroupsModule'
 
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
-import { membersRoute, ProfileRoutes, settingsRoute } from './constants/routes'
+import { MembersRoutes, ProfileRoutes, SettingsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
 import { Forum } from './pages/Forum'
 import { Members } from './pages/Members/Members'
@@ -35,8 +35,8 @@ export const App = () => (
         <Route path={ForumRoutes.forum} component={Forum} />
         <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
         <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
-        <Route exact path={membersRoute} component={Members} />
-        <Route exact path={settingsRoute} component={Settings} />
+        <Route exact path={MembersRoutes.members} component={Members} />
+        <Route exact path={SettingsRoutes.settings} component={Settings} />
         <Route exact path="/404" component={NotFound} />
         <Redirect exact from="/" to={ProfileRoutes.profile} />
         <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
