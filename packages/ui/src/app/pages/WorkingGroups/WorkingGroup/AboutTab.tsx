@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
@@ -23,7 +23,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
   const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
 
   return (
-    <ContentWithSidepanel>
+    <ContentWithSidePanel>
       <MainPanel>
         <Statistics>
           {statistics.spending ? (
@@ -77,6 +77,6 @@ export const AboutTab = ({ workingGroup }: Props) => {
       <SidePanel>
         <WorkersList lead={lead} workers={workers} />
       </SidePanel>
-    </ContentWithSidepanel>
+    </ContentWithSidePanel>
   )
 }

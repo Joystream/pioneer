@@ -9,7 +9,7 @@ import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithSidepanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -61,9 +61,9 @@ export const ProposalPreview = () => {
         lastBreadcrumb={id}
         main={
           <RowGapBlock gap={24}>
-            <ContentWithSidepanel>
+            <ContentWithSidePanel>
               <Loading />
-            </ContentWithSidepanel>
+            </ContentWithSidePanel>
           </RowGapBlock>
         }
       />

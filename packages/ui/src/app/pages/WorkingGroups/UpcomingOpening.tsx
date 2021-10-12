@@ -8,7 +8,7 @@ import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -29,9 +29,9 @@ export const UpcomingOpening = () => {
         lastBreadcrumb={id}
         main={
           <RowGapBlock gap={24}>
-            <ContentWithSidepanel>
+            <ContentWithSidePanel>
               <Loading />
-            </ContentWithSidepanel>
+            </ContentWithSidePanel>
           </RowGapBlock>
         }
       />

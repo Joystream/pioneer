@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
@@ -27,7 +27,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
   const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
 
   return (
-    <ContentWithSidepanel>
+    <ContentWithSidePanel>
       <MainPanel>
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
@@ -54,7 +54,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
       <SidePanel>
         <WorkersList lead={lead} workers={workers} />
       </SidePanel>
-    </ContentWithSidepanel>
+    </ContentWithSidePanel>
   )
 }
 

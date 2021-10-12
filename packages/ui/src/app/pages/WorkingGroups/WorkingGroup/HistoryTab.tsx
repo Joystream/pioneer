@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Tabs } from '@/common/components/Tabs'
 import { useGroupActivities } from '@/working-groups/hooks/useGroupActivities'
@@ -25,7 +25,7 @@ export function HistoryTab({ workingGroup }: Props) {
   const { activities } = useGroupActivities(workingGroup.id)
 
   return (
-    <ContentWithSidepanel>
+    <ContentWithSidePanel>
       <MainPanel>
         <RowGapBlock gap={32}>
           <Tabs tabsSize="xs" tabs={tabs} />
@@ -36,6 +36,6 @@ export function HistoryTab({ workingGroup }: Props) {
       <SidePanel>
         <ActivitiesBlock activities={activities} label="Working Groups Activities" />
       </SidePanel>
-    </ContentWithSidepanel>
+    </ContentWithSidePanel>
   )
 }
