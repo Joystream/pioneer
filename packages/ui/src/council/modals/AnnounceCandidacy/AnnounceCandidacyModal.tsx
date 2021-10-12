@@ -18,14 +18,14 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
-import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyTransaction'
-import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/CandidacyNoteTransaction'
 import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
 import { StakeStep } from '@/council/modals/AnnounceCandidacy/components/StakeStep'
 import { SuccessModal } from '@/council/modals/AnnounceCandidacy/components/Success'
 import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
+import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/AnnounceCandidacyTransaction'
+import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
 import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -182,7 +182,7 @@ export const AnnounceCandidacyModal = () => {
         onClose={hideModal}
         transaction={confirmStakingAccountTransaction}
         signer={state.context.stakingAccount.address}
-        service={state.children.bindStakingAccount}
+        service={state.children.bindStakingAccountTransaction}
         memberId={activeMember.id}
         steps={transactionSteps}
       />
@@ -196,7 +196,7 @@ export const AnnounceCandidacyModal = () => {
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}
         stake={state.context.stakingAmount}
-        service={state.children.transaction}
+        service={state.children.announceCandidacyTransaction}
         steps={transactionSteps}
       />
     )
