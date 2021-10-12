@@ -2,8 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { ModalContext } from '@/common/providers/modal/context'
-import { getMockAsOpening } from '@/mocks/data/seedOpenings'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 
 import { WithdrawWarningModal } from './WithdrawWarningModal'
 
@@ -16,18 +15,9 @@ const Template: Story = () => {
   return (
     <>
       <MemoryRouter>
-        <ModalContext.Provider
-          value={{
-            modalData: {
-              opening: getMockAsOpening(),
-            },
-            showModal: () => undefined,
-            hideModal: () => undefined,
-            modal: null,
-          }}
-        >
+        <ModalContextProvider>
           <WithdrawWarningModal onNext={() => undefined} onClose={() => undefined} />
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     </>
   )
