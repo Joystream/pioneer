@@ -30,14 +30,14 @@ export const WithdrawCandidacyModal = () => {
       <Modal onClose={hideModal} modalSize="m">
         <ModalHeader onClick={hideModal} title="Success!" />
         <ModalBody>
-          <TextMedium>You have successfully withdraw your candidacy.</TextMedium>
+          <TextMedium>You have successfully withdrawn your candidacy.</TextMedium>
         </ModalBody>
       </Modal>
     )
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem with withdrawing you candidacy.</FailureModal>
+    return <FailureModal onClose={hideModal}>There was a problem with withdrawing your candidacy.</FailureModal>
   }
 
   return null
