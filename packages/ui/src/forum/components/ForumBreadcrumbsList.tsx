@@ -22,7 +22,7 @@ export const ForumBreadcrumbsList = React.memo(
     }))
     return (
       <BreadcrumbsListComponent>
-        <BreadcrumbsItem url="/forum" isLink={!nonInteractive}>
+        <BreadcrumbsItem url={ForumRoutes.forum} isLink={!nonInteractive}>
           Forum
         </BreadcrumbsItem>
         {crumbs?.map(({ path, breadcrumb, key }, index, { length }) => (
