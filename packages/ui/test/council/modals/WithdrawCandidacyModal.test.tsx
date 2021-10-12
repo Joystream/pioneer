@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, render, screen } from '@testing-library/react'
+import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -14,12 +14,20 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
+import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilConstants, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubCouncilConstants,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -38,6 +46,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   }
 
   let useAccounts: UseAccounts
+  let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -57,13 +66,43 @@ describe('UI: Withdraw Candidacy Modal', () => {
 
     stubDefaultBalances(api)
     stubCouncilConstants(api)
-    stubTransaction(api, 'api.tx.council.withdrawCandidacy', 25)
+    tx = stubTransaction(api, 'api.tx.council.withdrawCandidacy', 25)
   })
 
   it('Warning', async () => {
     renderModal()
 
     expect(await screen.findByText(/^Please remember that this action is irreversible/i)).toBeDefined()
+  })
+
+  it('Transaction sign', async () => {
+    renderModal()
+
+    fireEvent.click(await getButton('Withdraw Candidacy'))
+
+    expect(await screen.findByText(/^You intend to withdraw your candidacy/i)).toBeDefined()
+    expect(await getButton('Sign and send')).toBeDefined()
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+  })
+
+  it('Transaction success', async () => {
+    stubTransactionSuccess(tx, 'council', 'CandidacyWithdraw')
+    renderModal()
+
+    fireEvent.click(await getButton('Withdraw Candidacy'))
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^You have successfully withdrawn your candidacy/i)).toBeDefined()
+  })
+
+  it('Transaction error', async () => {
+    stubTransactionFailure(tx)
+    renderModal()
+
+    fireEvent.click(await getButton('Withdraw Candidacy'))
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^There was a problem with withdrawing your candidacy/i)).toBeDefined()
   })
 
   function renderModal() {
