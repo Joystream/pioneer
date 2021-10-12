@@ -26,11 +26,12 @@ import {
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
-import { MappedStatuses, OpeningStatuses } from '@/working-groups/constants'
+import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-groups/constants'
 import { useOpening } from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
@@ -114,7 +115,11 @@ export const WorkingGroupOpening = () => {
             </PreviousPage>
             <ButtonsGroup>
               {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
-                <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
+                <CopyButtonTemplate
+                  size="medium"
+                  textToCopy={getUrl({ route: WorkingGroupsRoutes.openingById, params: { id: opening.id } })}
+                  icon={<LinkIcon />}
+                >
                   Copy link
                 </CopyButtonTemplate>
               )}

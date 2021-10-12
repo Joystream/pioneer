@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 
+import { MembersRoutes } from '@/app/constants/routes'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { EditSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
+import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { useMember } from '../../hooks/useMembership'
@@ -47,7 +49,7 @@ export const MemberProfile = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={`${window.location.host}/#/members/${member?.id}`}
+            textToCopy={getUrl({ route: MembersRoutes.members, params: { id: member?.id } })}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>

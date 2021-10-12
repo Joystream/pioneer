@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
 import {
@@ -27,7 +28,7 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
   const allItems = useMemo(
     () =>
       breadcrumbs.map(({ id, title }) => (
-        <BreadcrumbsItem key={id} url={`${ForumRoutes.category}/${id}`} isLink={!nonInteractive}>
+        <BreadcrumbsItem key={id} url={generatePath(ForumRoutes.category, { id })} isLink={!nonInteractive}>
           {title}
         </BreadcrumbsItem>
       )),

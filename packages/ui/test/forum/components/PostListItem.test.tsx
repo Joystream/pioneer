@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
+import { generatePath, MemoryRouter } from 'react-router-dom'
 
 import { PostList } from '@/forum/components/PostList/PostList'
 import { ForumRoutes } from '@/forum/constant'
@@ -100,7 +100,7 @@ describe('UI: Post list item', () => {
 
   const renderPost = (isThreadActive: boolean) =>
     render(
-      <MemoryRouter initialEntries={[`${ForumRoutes.thread}/0`]}>
+      <MemoryRouter initialEntries={[generatePath(ForumRoutes.thread, { id: '0' })]}>
         <MembershipContext.Provider value={useMyMemberships}>
           <MockApolloProvider>
             <PostList threadId="0" replyToPost={() => true} isThreadActive={isThreadActive} />

@@ -1,8 +1,14 @@
-const prefix = '/council'
 export const CouncilRoutes = {
-  council: prefix,
-  pastCouncils: `${prefix}/past-councils`,
-  currentElection: `${prefix}/election`,
-  pastElections: `${prefix}/past-elections`,
-  pastVotes: `${prefix}/past-votes`,
+  council: '/council',
+  pastCouncils: '/council/past-councils',
+  currentElection: '/council/election',
+  pastElections: '/council/past-elections',
+  pastVotes: '/council/past-votes',
+} as const
+
+type CouncilRoutesType = typeof CouncilRoutes
+
+declare module '@/app/constants/routes' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Routes extends CouncilRoutesType {}
 }

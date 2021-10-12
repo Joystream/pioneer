@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
-import { Route, Router, Switch } from 'react-router-dom'
+import { generatePath, Route, Router, Switch } from 'react-router-dom'
 
 import { CategoryBreadcrumbs } from '@/forum/components/CategoryBreadcrumbs'
 import { ThreadBreadcrumbs } from '@/forum/components/ThreadBreadcrumbs'
@@ -24,13 +24,13 @@ describe('Forum breadcrumbs', () => {
 
   describe('Category breadcrumbs', () => {
     it('Root category', async () => {
-      renderComponent(`${ForumRoutes.category}/0`)
+      renderComponent(generatePath(ForumRoutes.category, { id: '0' }))
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
     })
 
     it('Nested category', async () => {
-      renderComponent(`${ForumRoutes.category}/3`)
+      renderComponent(generatePath(ForumRoutes.category, { id: '3' }))
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('ab fugiat et quas est')).toBeDefined()
@@ -41,14 +41,14 @@ describe('Forum breadcrumbs', () => {
 
   describe('Thread breadcrumbs', () => {
     it('In root category', async () => {
-      renderComponent(`${ForumRoutes.thread}/0`)
+      renderComponent(generatePath(ForumRoutes.thread, { id: '0' }))
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('Test thread')).toBeDefined()
     })
 
     it('In nested category', async () => {
-      renderComponent(`${ForumRoutes.thread}/1`)
+      renderComponent(generatePath(ForumRoutes.thread, { id: '1' }))
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('ab fugiat et quas est')).toBeDefined()
@@ -64,8 +64,8 @@ describe('Forum breadcrumbs', () => {
       <Router history={history}>
         <MockQueryNodeProviders>
           <Switch>
-            <Route path={`${ForumRoutes.category}/:id`} component={CategoryBreadcrumbs} />
-            <Route path={`${ForumRoutes.thread}/:id`} component={ThreadBreadcrumbs} />
+            <Route path={ForumRoutes.category} component={CategoryBreadcrumbs} />
+            <Route path={ForumRoutes.thread} component={ThreadBreadcrumbs} />
           </Switch>
         </MockQueryNodeProviders>
       </Router>

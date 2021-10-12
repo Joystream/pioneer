@@ -51,7 +51,7 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, s
                   <h4>Application submitted!</h4>
                   <TextMedium>
                     Here is your application id: {applicationId.toString()} You can track the progress of you
-                    application in "<Link to="/working-groups/my-applications">My applications subpage</Link>".
+                    application in "<Link to={WorkingGroupsRoutes.myApplications}>My applications subpage</Link>".
                   </TextMedium>
                 </RowGapBlock>
               </Row>

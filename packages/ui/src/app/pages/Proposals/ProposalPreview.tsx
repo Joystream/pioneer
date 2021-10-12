@@ -17,6 +17,7 @@ import { Label, TextInlineMedium, TextMedium } from '@/common/components/typogra
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
+import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
@@ -25,6 +26,7 @@ import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -81,7 +83,11 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
-              <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
+              <CopyButtonTemplate
+                size="medium"
+                textToCopy={getUrl({ route: ProposalsRoutes.preview, params: { id: proposal.id } })}
+                icon={<LinkIcon />}
+              >
                 Copy link
               </CopyButtonTemplate>
             </ButtonsGroup>

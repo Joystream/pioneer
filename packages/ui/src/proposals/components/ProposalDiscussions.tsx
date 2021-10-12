@@ -1,16 +1,17 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import React, { RefObject, useEffect, useRef, useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge, TextBig } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
-import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
+import { getUrl } from '@/common/utils/getUrl'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ForumPost } from '@/forum/types'
@@ -24,7 +25,6 @@ interface Props {
 }
 
 export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
-  const { origin } = useLocation()
   const query = useRouteQuery()
   const { api } = useApi()
   const { active, members } = useMyMemberships()
@@ -70,6 +70,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           replyTo={replyTo}
           getTransaction={getTransaction}
           removeReply={() => setReplyTo(undefined)}
+          replyToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${replyTo?.id}`}
         />
       )
     }
@@ -111,7 +112,8 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             replyToPost={() => setReplyTo(post)}
             type="proposal"
             isDiscussion
-            link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
+            link={getUrl({ route: ProposalsRoutes.preview, params: { id: proposalId }, query: { post: post.id } })}
+            repliesToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${post.repliesTo?.id}`}
           />
         )
       })}

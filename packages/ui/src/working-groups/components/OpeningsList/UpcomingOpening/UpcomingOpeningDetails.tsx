@@ -1,4 +1,5 @@
 import React from 'react'
+import { generatePath } from 'react-router-dom'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
@@ -50,7 +51,7 @@ export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost to={`${WorkingGroupsRoutes.upcomingOpenings}/${opening.id}`} size="medium">
+          <LinkButtonGhost to={generatePath(WorkingGroupsRoutes.upcomingOpenings, { id: opening.id })} size="medium">
             Learn more
           </LinkButtonGhost>
           <ButtonPrimary size="medium" disabled>

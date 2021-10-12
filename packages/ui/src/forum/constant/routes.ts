@@ -1,11 +1,17 @@
-const prefix = '/forum'
 export const ForumRoutes = {
-  forum: prefix,
-  category: prefix + '/category',
-  archived: prefix + '/archived',
-  thread: prefix + '/thread',
-  overview: prefix + '/overview',
-  latestThreads: prefix + '/latest-threads',
-  topThreads: prefix + '/top-threads',
-  myThreads: prefix + '/my-threads',
+  forum: '/forum',
+  category: '/forum/category/:id/:type?',
+  archived: '/forum/archived',
+  thread: '/forum/thread/:id',
+  overview: '/forum/overview',
+  latestThreads: '/forum/latest-threads',
+  topThreads: '/forum/top-threads',
+  myThreads: '/forum/my-threads',
+} as const
+
+type ForumRoutesType = typeof ForumRoutes
+
+declare module '@/app/constants/routes' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Routes extends ForumRoutesType {}
 }

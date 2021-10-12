@@ -58,6 +58,7 @@ describe('UI: Add new post', () => {
   const props: NewPostProps = {
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
     removeReply: () => true,
+    replyToLink: '',
   }
 
   it('No selected membership', async () => {
