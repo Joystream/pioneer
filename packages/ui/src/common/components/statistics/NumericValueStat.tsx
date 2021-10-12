@@ -1,19 +1,19 @@
-import BN from 'bn.js'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { Colors, Fonts } from '@/common/constants'
+import { formatTokenValue } from '@/common/model/formatters'
 
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
-export interface TokenValueStatProps extends StatisticItemProps {
-  value: number | BN | string
+export interface NumericValueStatProps extends StatisticItemProps {
+  value: Parameters<typeof formatTokenValue>[0]
 }
 
-export const NumericValueStat: FC<TokenValueStatProps> = (props) => {
+export const NumericValueStat: FC<NumericValueStatProps> = (props) => {
   return (
     <StatisticItem {...props}>
-      <NumericValue>{props.value}</NumericValue>
+      <NumericValue>{formatTokenValue(props.value)}</NumericValue>
       {props.children}
     </StatisticItem>
   )

@@ -1,3 +1,5 @@
+import { css } from 'styled-components'
+
 export const Colors = {
   White: '#FFFFFF',
   Grey: '#8C96A6',
@@ -244,5 +246,17 @@ export const RemoveScrollbar = `
 
   &::-webkit-scrollbar {
     display: none;
+  }
+`
+
+export const BulletPoint = css`
+  position: relative;
+  padding-left: 1em;
+
+  &:before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 `
