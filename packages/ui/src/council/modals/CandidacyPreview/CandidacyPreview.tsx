@@ -77,7 +77,7 @@ export const CandidacyPreview = React.memo(() => {
             square
             size="small"
             textToCopy={getUrl({
-              page: candidate?.cycleFinished ? 'PastElections' : 'Election',
+              route: candidate?.cycleFinished ? CouncilRoutes.pastElections : CouncilRoutes.currentElection,
               query: { candidate: candidate?.id ?? '' },
             })}
             icon={<LinkIcon />}

@@ -62,6 +62,7 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
               type="forum"
               replyToPost={() => true}
               link="#"
+              repliesToLink=""
             />
           </Container>
         </MembershipContext.Provider>

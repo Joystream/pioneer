@@ -1,7 +1,7 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import React, { useEffect, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { generatePath, useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
@@ -20,6 +20,7 @@ import { PostList } from '@/forum/components/PostList/PostList'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
+import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -74,7 +75,11 @@ export const ForumThread = () => {
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
-            <CopyButtonTemplate size="medium" textToCopy={getUrl('CurrentPage')} icon={<LinkIcon />}>
+            <CopyButtonTemplate
+              size="medium"
+              textToCopy={getUrl({ route: ForumRoutes.thread, params: { id: thread.id } })}
+              icon={<LinkIcon />}
+            >
               Copy link
             </CopyButtonTemplate>
             <WatchlistButton threadId={thread.id} />
@@ -108,6 +113,7 @@ export const ForumThread = () => {
           replyTo={replyTo}
           removeReply={() => setReplyTo(undefined)}
           getTransaction={getTransaction}
+          replyToLink={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${replyTo?.id}`}
         />
       )}
     </MainPanel>

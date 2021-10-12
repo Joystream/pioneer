@@ -12,6 +12,7 @@ import { camelCaseToText } from '@/common/helpers'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
+import { CouncilRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
@@ -38,7 +39,11 @@ export const Election = () => {
       <PageHeaderRow>
         <PageTitle>Election</PageTitle>
         <ButtonsGroup>
-          <CopyButtonTemplate size="medium" textToCopy={getUrl('CurrentPage')} icon={<LinkIcon />}>
+          <CopyButtonTemplate
+            size="medium"
+            textToCopy={getUrl({ route: CouncilRoutes.currentElection })}
+            icon={<LinkIcon />}
+          >
             Copy link
           </CopyButtonTemplate>
           {electionStage === 'announcing' && <AnnounceCandidacyButton />}

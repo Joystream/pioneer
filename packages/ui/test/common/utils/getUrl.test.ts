@@ -1,4 +1,6 @@
+import { MembersRoutes, ProfileRoutes } from '@/app/constants/routes'
 import { getUrl } from '@/common/utils/getUrl'
+import { CouncilRoutes } from '@/council/constants'
 
 let windowSpy: jest.SpyInstance
 const mockLocation = new URL('https://pioneer.com/#/domain/1?query=12')
@@ -15,35 +17,37 @@ describe('getUrl', () => {
     windowSpy.mockRestore()
   })
 
-  it('Current page url', () => {
-    expect(getUrl('CurrentPage')).toEqual('https://pioneer.com/#/domain/1?query=12')
-  })
-
   it('Link to a specific module', () => {
-    expect(getUrl({ page: 'MyProfile' })).toEqual('https://pioneer.com/#/profile')
+    expect(getUrl({ route: ProfileRoutes.profile })).toEqual('https://pioneer.com/#/profile')
   })
 
   it('Link to a module with an ID', () => {
-    expect(getUrl({ page: 'Members', id: '2' })).toEqual('https://pioneer.com/#/members/2')
+    expect(getUrl({ route: MembersRoutes.members, params: { id: '2' } })).toEqual('https://pioneer.com/#/members/2')
   })
 
   it('Link to a module with query parameters', () => {
-    expect(getUrl({ page: 'Election', query: { candidate: '12' } })).toEqual(
+    expect(getUrl({ route: CouncilRoutes.currentElection, query: { candidate: '12' } })).toEqual(
       'https://pioneer.com/#/council/election?candidate=12'
     )
-    expect(getUrl({ page: 'Election', query: { candidate: '12', otherParam: '13' } })).toEqual(
+    expect(getUrl({ route: CouncilRoutes.currentElection, query: { candidate: '12', otherParam: '13' } })).toEqual(
       'https://pioneer.com/#/council/election?candidate=12&otherParam=13'
     )
   })
 
   it('Empty query parameters', () => {
-    expect(getUrl({ page: 'Election', query: {} })).toEqual('https://pioneer.com/#/council/election')
+    expect(getUrl({ route: CouncilRoutes.currentElection, query: {} })).toEqual(
+      'https://pioneer.com/#/council/election'
+    )
   })
 
   it('Link with every kind of parameters', () => {
-    expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
-      'https://pioneer.com/#/members/1?paramOne=12&paramTwo=13&paramThree=14'
-    )
+    expect(
+      getUrl({
+        route: MembersRoutes.members,
+        params: { id: '1' },
+        query: { paramOne: '12', paramTwo: '13', paramThree: '14' },
+      })
+    ).toEqual('https://pioneer.com/#/members/1?paramOne=12&paramTwo=13&paramThree=14')
   })
 
   describe('With a more complex path before the hash', () => {
@@ -51,18 +55,26 @@ describe('getUrl', () => {
       windowSpy.mockImplementation(() => ({
         location: new URL('https://pioneer.com/app/index.php#/domain/1?query=12'),
       }))
-      expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
-        'https://pioneer.com/app/index.php#/members/1?paramOne=12&paramTwo=13&paramThree=14'
-      )
+      expect(
+        getUrl({
+          route: MembersRoutes.members,
+          params: { id: '1' },
+          query: { paramOne: '12', paramTwo: '13', paramThree: '14' },
+        })
+      ).toEqual('https://pioneer.com/app/index.php#/members/1?paramOne=12&paramTwo=13&paramThree=14')
     })
 
     it('With path and search', () => {
       windowSpy.mockImplementation(() => ({
         location: new URL('https://pioneer.com/app/index.php?foo=bar&id=11#/domain/1?query=12'),
       }))
-      expect(getUrl({ page: 'Members', id: '1', query: { paramOne: '12', paramTwo: '13', paramThree: '14' } })).toEqual(
-        'https://pioneer.com/app/index.php?foo=bar&id=11#/members/1?paramOne=12&paramTwo=13&paramThree=14'
-      )
+      expect(
+        getUrl({
+          route: MembersRoutes.members,
+          params: { id: '1' },
+          query: { paramOne: '12', paramTwo: '13', paramThree: '14' },
+        })
+      ).toEqual('https://pioneer.com/app/index.php?foo=bar&id=11#/members/1?paramOne=12&paramTwo=13&paramThree=14')
     })
   })
 })

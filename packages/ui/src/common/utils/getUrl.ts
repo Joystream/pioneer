@@ -1,31 +1,20 @@
-import { CouncilRoutes } from '@/council/constants'
-import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { ExtractRouteParams, generatePath } from 'react-router'
 
-const pages = {
-  MyProfile: '/profile',
-  Members: '/members',
-  Election: CouncilRoutes.currentElection,
-  PastElections: CouncilRoutes.pastElections,
-  ProposalPreview: ProposalsRoutes.preview,
-}
+import { RouteName } from '@/app/constants/routes'
 
-interface GetUrlParams {
-  page: keyof typeof pages
-  id?: string
+interface GetUrlParams<R extends RouteName> {
+  route: R
+  params?: ExtractRouteParams<R>
   query?: Record<string, string>
 }
 
-export function getUrl(params: GetUrlParams | 'CurrentPage'): string {
-  if (params === 'CurrentPage') {
-    return window.location.href
-  }
+export function getUrl<R extends RouteName>(params: GetUrlParams<R>): string {
   return (
     window.location.origin +
     window.location.pathname +
     window.location.search +
     '#' +
-    pages[params.page] +
-    (params.id ? `/${params.id}` : '') +
+    generatePath(params.route, params.params) +
     (params.query && Object.keys(params.query).length ? getQuery(params.query) : '')
   )
 }

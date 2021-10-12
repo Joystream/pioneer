@@ -26,6 +26,7 @@ import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -82,7 +83,11 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
-              <CopyButtonTemplate size="medium" textToCopy={getUrl('CurrentPage')} icon={<LinkIcon />}>
+              <CopyButtonTemplate
+                size="medium"
+                textToCopy={getUrl({ route: ProposalsRoutes.preview, params: { id: proposal.id } })}
+                icon={<LinkIcon />}
+              >
                 Copy link
               </CopyButtonTemplate>
             </ButtonsGroup>

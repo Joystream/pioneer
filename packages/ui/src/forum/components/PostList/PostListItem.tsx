@@ -16,7 +16,6 @@ import { Badge } from '@/common/components/typography'
 import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
-import { getUrl } from '@/common/utils/getUrl'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
@@ -36,6 +35,7 @@ interface PostListItemProps {
   replyToPost: () => void
   link?: string
   isDiscussion?: boolean
+  repliesToLink: string
 }
 
 export const PostListItem = ({
@@ -48,6 +48,7 @@ export const PostListItem = ({
   link,
   replyToPost,
   isDiscussion,
+  repliesToLink,
 }: PostListItemProps) => {
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postText, setPostText] = useState<string>(text)
@@ -96,7 +97,7 @@ export const PostListItem = ({
                 <div>
                   <ArrowReplyIcon />{' '}
                   <Badge>
-                    <Link to={getUrl('CurrentPage')}>Replies to {repliesTo?.author?.handle}</Link>
+                    <Link to={repliesToLink}>Replies to {repliesTo?.author?.handle}</Link>
                   </Badge>
                 </div>
               </ReplyBadge>

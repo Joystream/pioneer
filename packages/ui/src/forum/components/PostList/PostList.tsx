@@ -1,5 +1,5 @@
 import React, { RefObject, useCallback, useEffect, useMemo } from 'react'
-import { useHistory } from 'react-router-dom'
+import { generatePath, useHistory } from 'react-router-dom'
 
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -23,7 +23,7 @@ interface PostListProps {
 
 export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost }: PostListProps) => {
   const history = useHistory()
-  const { origin, pathname } = useLocation()
+  const { pathname } = useLocation()
   const query = useRouteQuery()
 
   const navigation = { post: query.get('post'), page: query.get('page') }
@@ -60,7 +60,8 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost }: P
           isThreadActive={isThreadActive}
           type="forum"
           replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
-          link={getUrl({ page: 'ForumThread', id: threadId, query: { post: post.id } })}
+          link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
+          repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
         />
       ))}
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />

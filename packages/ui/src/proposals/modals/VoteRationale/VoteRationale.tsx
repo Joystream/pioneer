@@ -41,7 +41,11 @@ export const VoteRationale = React.memo(() => {
 
   useEscape(() => hideModal())
 
-  const getVoteLink = getUrl({ page: 'ProposalPreview', id: vote?.proposalId, query: { showVote: voteId } })
+  const getVoteLink = getUrl({
+    route: ProposalsRoutes.preview,
+    params: { id: vote?.proposalId },
+    query: { showVote: voteId },
+  })
 
   if (isLoading || !vote) {
     return (

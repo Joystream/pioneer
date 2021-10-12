@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { MembersRoutes } from '@/app/constants/routes'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { EditSymbol } from '@/common/components/icons/symbols'
@@ -48,7 +49,7 @@ export const MemberProfile = React.memo(() => {
           <CopyButtonTemplate
             square
             size="small"
-            textToCopy={getUrl({ page: 'Members', id: member?.id })}
+            textToCopy={getUrl({ route: MembersRoutes.members, params: { id: member?.id } })}
             icon={<LinkIcon />}
           />
         </SidePaneTopButtonsGroup>

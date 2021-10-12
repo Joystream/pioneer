@@ -12,6 +12,6 @@ export const WorkingGroupsRoutes = {
 type WorkingGroupsRoutesType = typeof WorkingGroupsRoutes
 
 declare module '@/app/constants/routes' {
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Routes extends WorkingGroupsRoutesType {}
 }
