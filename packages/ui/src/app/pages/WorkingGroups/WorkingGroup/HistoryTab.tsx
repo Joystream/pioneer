@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -23,18 +23,17 @@ export function HistoryTab({ workingGroup }: Props) {
     { title: 'Past workers', active: currentTab === 'WORKERS', onClick: () => setCurrentTab('WORKERS') },
   ]
   const { activities } = useGroupActivities(workingGroup.id)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <ContentWithSidepanel>
-      <MainPanel ref={sideNeighborRef}>
+      <MainPanel>
         <RowGapBlock gap={32}>
           <Tabs tabsSize="xs" tabs={tabs} />
           {currentTab === 'OPENINGS' && <OpeningsHistory groupId={workingGroup?.id} />}
           {currentTab === 'WORKERS' && <WorkersHistory groupId={workingGroup?.id} />}
         </RowGapBlock>
       </MainPanel>
-      <SidePanel neighbor={sideNeighborRef}>
+      <SidePanel>
         <ActivitiesBlock activities={activities} label="Working Groups Activities" />
       </SidePanel>
     </ContentWithSidepanel>

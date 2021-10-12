@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { MainPanel } from '@/common/components/page/PageContent'
@@ -16,7 +16,6 @@ import { CouncilTabs } from './components/CouncilTabs'
 export const Council = () => {
   const { council, isLoading } = useElectedCouncil()
   const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAtBlock)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
@@ -31,7 +30,7 @@ export const Council = () => {
   )
 
   const main = (
-    <MainPanel ref={sideNeighborRef}>
+    <MainPanel>
       <Statistics>
         <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
         <MultiValueStat
@@ -58,7 +57,7 @@ export const Council = () => {
     </MainPanel>
   )
 
-  const sidebar = <SidePanel neighbor={sideNeighborRef} />
+  const sidebar = <SidePanel />
 
   return <PageLayout header={header} main={main} sidebar={sidebar} />
 }

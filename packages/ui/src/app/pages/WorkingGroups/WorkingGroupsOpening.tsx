@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef } from 'react'
+import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -40,7 +40,6 @@ export const WorkingGroupOpening = () => {
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(id)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
   const hiringApplication = useMemo(() => {
     if (opening) {
       return opening.applications.find(({ status }) => status === 'ApplicationStatusAccepted')
@@ -144,12 +143,12 @@ export const WorkingGroupOpening = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <MarkdownPreview markdown={opening.description} />
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ApplicantsList
             allApplicants={opening.applications}
             myApplication={myApplication}

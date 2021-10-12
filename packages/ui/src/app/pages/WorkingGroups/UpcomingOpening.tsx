@@ -1,7 +1,7 @@
-import React, { memo, useRef } from 'react'
+import React, { memo } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -22,7 +22,6 @@ import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
 export const UpcomingOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, opening } = useUpcomingOpening(id)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   if (isLoading || !opening) {
     return (
@@ -92,12 +91,12 @@ export const UpcomingOpening = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <MarkdownPreview markdown={opening.description} />
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ApplicationStatus />
         </SidePanel>
       }

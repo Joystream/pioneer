@@ -9,7 +9,6 @@ import { ActivityItem } from '../Activities/ActivityComponent'
 interface SidePanelProps {
   className?: string
   children?: React.ReactNode
-  neighbor: React.RefObject<Element>
 }
 
 export const SidePanel = ({ className, children }: SidePanelProps) => (
