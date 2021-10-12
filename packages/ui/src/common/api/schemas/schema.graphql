@@ -170,6 +170,21 @@ type Query {
     where: BudgetSpendingEventWhereInput
     orderBy: [BudgetSpendingEventOrderByInput!]
   ): BudgetSpendingEventConnection!
+  candidacyNoteMetadata(
+    offset: Int
+    limit: Int = 50
+    where: CandidacyNoteMetadataWhereInput
+    orderBy: [CandidacyNoteMetadataOrderByInput!]
+  ): [CandidacyNoteMetadata!]!
+  candidacyNoteMetadataByUniqueInput(where: CandidacyNoteMetadataWhereUniqueInput!): CandidacyNoteMetadata
+  candidacyNoteMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CandidacyNoteMetadataWhereInput
+    orderBy: [CandidacyNoteMetadataOrderByInput!]
+  ): CandidacyNoteMetadataConnection!
   candidacyNoteSetEvents(
     offset: Int
     limit: Int = 50
@@ -1086,6 +1101,7 @@ type Query {
   proposalDiscussionPostCreatedEventByUniqueInput(
     where: ProposalDiscussionPostCreatedEventWhereUniqueInput!
   ): ProposalDiscussionPostCreatedEvent
+
   proposalDiscussionPostCreatedEventsConnection(
     first: Int
     after: String
@@ -3863,6 +3879,133 @@ type CancelWorkingGroupLeadOpeningProposalDetails {
   opening: WorkingGroupOpening
 }
 
+type CandidacyNoteMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Candidacy header text.
+  """
+  header: String
+
+  """
+  Candidate program in form of bullet points.
+  """
+  bulletPoints: [String!]!
+
+  """
+  Image uri of candidate's banner.
+  """
+  bannerImageUri: String
+
+  """
+  Candidacy description (Markdown-formatted).
+  """
+  description: String
+  candidacynoteseteventnoteMetadata: [CandidacyNoteSetEvent!]
+  candidatenoteMetadata: [Candidate!]
+}
+
+type CandidacyNoteMetadataConnection {
+  totalCount: Int!
+  edges: [CandidacyNoteMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input CandidacyNoteMetadataCreateInput {
+  header: String
+  bulletPoints: [String!]!
+  bannerImageUri: String
+  description: String
+}
+
+type CandidacyNoteMetadataEdge {
+  node: CandidacyNoteMetadata!
+  cursor: String!
+}
+
+enum CandidacyNoteMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  header_ASC
+  header_DESC
+  bannerImageUri_ASC
+  bannerImageUri_DESC
+  description_ASC
+  description_DESC
+}
+
+input CandidacyNoteMetadataUpdateInput {
+  header: String
+  bulletPoints: [String!]
+  bannerImageUri: String
+  description: String
+}
+
+input CandidacyNoteMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  header_eq: String
+  header_contains: String
+  header_startsWith: String
+  header_endsWith: String
+  header_in: [String!]
+  bannerImageUri_eq: String
+  bannerImageUri_contains: String
+  bannerImageUri_startsWith: String
+  bannerImageUri_endsWith: String
+  bannerImageUri_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  candidacynoteseteventnoteMetadata_none: CandidacyNoteSetEventWhereInput
+  candidacynoteseteventnoteMetadata_some: CandidacyNoteSetEventWhereInput
+  candidacynoteseteventnoteMetadata_every: CandidacyNoteSetEventWhereInput
+  candidatenoteMetadata_none: CandidateWhereInput
+  candidatenoteMetadata_some: CandidateWhereInput
+  candidatenoteMetadata_every: CandidateWhereInput
+  AND: [CandidacyNoteMetadataWhereInput!]
+  OR: [CandidacyNoteMetadataWhereInput!]
+}
+
+input CandidacyNoteMetadataWhereUniqueInput {
+  id: ID!
+}
+
 type CandidacyNoteSetEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -3903,6 +4046,8 @@ type CandidacyNoteSetEvent implements Event & BaseGraphQLObject {
   The note that has been set.
   """
   note: String!
+  noteMetadata: CandidacyNoteMetadata!
+  noteMetadataId: String!
 }
 
 type CandidacyNoteSetEventConnection {
@@ -3918,6 +4063,7 @@ input CandidacyNoteSetEventCreateInput {
   indexInBlock: Float!
   member: ID!
   note: String!
+  noteMetadata: ID!
 }
 
 type CandidacyNoteSetEventEdge {
@@ -3944,6 +4090,8 @@ enum CandidacyNoteSetEventOrderByInput {
   member_DESC
   note_ASC
   note_DESC
+  noteMetadata_ASC
+  noteMetadata_DESC
 }
 
 input CandidacyNoteSetEventUpdateInput {
@@ -3953,6 +4101,7 @@ input CandidacyNoteSetEventUpdateInput {
   indexInBlock: Float
   member: ID
   note: String
+  noteMetadata: ID
 }
 
 input CandidacyNoteSetEventWhereInput {
@@ -4006,7 +4155,10 @@ input CandidacyNoteSetEventWhereInput {
   note_startsWith: String
   note_endsWith: String
   note_in: [String!]
+  noteMetadata_eq: ID
+  noteMetadata_in: [ID!]
   member: MembershipWhereInput
+  noteMetadata: CandidacyNoteMetadataWhereInput
   AND: [CandidacyNoteSetEventWhereInput!]
   OR: [CandidacyNoteSetEventWhereInput!]
 }
@@ -4339,6 +4491,8 @@ type Candidate implements BaseGraphQLObject {
   Candidacy note.
   """
   note: String!
+  noteMetadata: CandidacyNoteMetadata!
+  noteMetadataId: String!
 }
 
 type CandidateConnection {
@@ -4357,6 +4511,7 @@ input CandidateCreateInput {
   candidacyWithdrawn: Boolean!
   votePower: BigInt!
   note: String!
+  noteMetadata: ID!
 }
 
 type CandidateEdge {
@@ -4389,6 +4544,8 @@ enum CandidateOrderByInput {
   votePower_DESC
   note_ASC
   note_DESC
+  noteMetadata_ASC
+  noteMetadata_DESC
 }
 
 input CandidateUpdateInput {
@@ -4401,6 +4558,7 @@ input CandidateUpdateInput {
   candidacyWithdrawn: Boolean
   votePower: BigInt
   note: String
+  noteMetadata: ID
 }
 
 input CandidateWhereInput {
@@ -4463,8 +4621,11 @@ input CandidateWhereInput {
   note_startsWith: String
   note_endsWith: String
   note_in: [String!]
+  noteMetadata_eq: ID
+  noteMetadata_in: [ID!]
   member: MembershipWhereInput
   electionRound: ElectionRoundWhereInput
+  noteMetadata: CandidacyNoteMetadataWhereInput
   AND: [CandidateWhereInput!]
   OR: [CandidateWhereInput!]
 }
