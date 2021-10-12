@@ -1,7 +1,7 @@
 import { createType } from '@joystream/types'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
@@ -178,7 +178,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(await getButton(/sign and send/i))
       fireEvent.click(await getButton(/see my thread/i))
 
-      expect(pathname).toEqual(`${ForumRoutes.thread}/1337`)
+      expect(pathname).toEqual(generatePath(ForumRoutes.thread, { id: '1337' }))
     })
   })
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { generatePath } from 'react-router'
 import styled, { css } from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
@@ -27,7 +28,11 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
   const block = isArchive ? status?.threadDeletedEvent : createdInBlock
 
   return (
-    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`} $isSticky={thread.isSticky}>
+    <ThreadListItemStyles
+      as={GhostRouterLink}
+      to={generatePath(ForumRoutes.thread, { id: thread.id })}
+      $isSticky={thread.isSticky}
+    >
       {thread.isSticky && <ThreadPinIcon />}
 
       <Thread>

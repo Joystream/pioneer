@@ -7,6 +7,7 @@ import { Pagination } from '@/common/components/Pagination'
 import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
+import { getUrl } from '@/common/utils/getUrl'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 import { ForumPost } from '@/forum/types'
@@ -59,7 +60,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost }: P
           isThreadActive={isThreadActive}
           type="forum"
           replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
-          link={`${origin}${ForumRoutes.thread}/${threadId}?post=${post.id}`}
+          link={getUrl({ page: 'ForumThread', id: threadId, query: { post: post.id } })}
         />
       ))}
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />

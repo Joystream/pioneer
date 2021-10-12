@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { generatePath, useHistory } from 'react-router-dom'
 
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -15,7 +15,7 @@ export const CreateThreadSuccessModal = ({ newThreadId }: Props) => {
   const { hideModal } = useModal()
   const history = useHistory()
   const goToThread = () => {
-    history.push(`${ForumRoutes.thread}/${newThreadId}`)
+    history.push(generatePath(ForumRoutes.thread, { id: newThreadId }))
     hideModal()
   }
 

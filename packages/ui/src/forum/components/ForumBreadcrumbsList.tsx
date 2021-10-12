@@ -1,4 +1,5 @@
 import React from 'react'
+import { generatePath } from 'react-router'
 
 import { BreadcrumbsItem } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsItem'
 import { BreadcrumbsListComponent } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsList'
@@ -15,7 +16,7 @@ interface ForumBreadcrumbsProps {
 export const ForumBreadcrumbsList = React.memo(
   ({ categoryBreadcrumbs, threadBreadcrumb, nonInteractive }: ForumBreadcrumbsProps) => {
     const crumbs = categoryBreadcrumbs?.map((crumb) => ({
-      path: `${ForumRoutes.category}/${crumb.id}`,
+      path: generatePath(ForumRoutes.category, { id: crumb.id }),
       breadcrumb: crumb.title,
       key: crumb.id,
     }))
@@ -30,7 +31,7 @@ export const ForumBreadcrumbsList = React.memo(
           </BreadcrumbsItem>
         ))}
         {threadBreadcrumb && (
-          <BreadcrumbsItem url={`${ForumRoutes.thread}/${threadBreadcrumb.id}`}>
+          <BreadcrumbsItem url={generatePath(ForumRoutes.thread, { id: threadBreadcrumb.id })}>
             {threadBreadcrumb.title}
           </BreadcrumbsItem>
         )}

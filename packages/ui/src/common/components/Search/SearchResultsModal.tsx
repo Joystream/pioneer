@@ -1,6 +1,6 @@
 import escapeStringRegexp from 'escape-string-regexp'
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Close, CloseButton } from '@/common/components/buttons'
@@ -82,7 +82,7 @@ export const SearchResultsModal = () => {
                   key={index}
                   pattern={pattern}
                   breadcrumbs={<ThreadItemBreadcrumbs id={thread.categoryId} />}
-                  to={`${ForumRoutes.thread}/${thread.id}?post=${id}`}
+                  to={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${id}`}
                   title={thread.title}
                 >
                   {text}

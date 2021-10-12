@@ -15,12 +15,12 @@ import { WorkingGroupsRoutes } from './constants'
 export const WorkingGroupsModule = () => (
   <Switch>
     <Route exact path={WorkingGroupsRoutes.groups} component={WorkingGroups} />
-    <Route exact path={`${WorkingGroupsRoutes.upcomingOpenings}/:id`} component={UpcomingOpening} />
-    <Route exact path={`${WorkingGroupsRoutes.openings}/:id`} component={WorkingGroupOpening} />
+    <Route exact path={WorkingGroupsRoutes.upcomingOpenings} component={UpcomingOpening} />
+    <Route exact path={WorkingGroupsRoutes.openingById} component={WorkingGroupOpening} />
     <Route exact path={WorkingGroupsRoutes.openings} component={WorkingGroupsOpenings} />
     <Route exact path={WorkingGroupsRoutes.myApplications} component={MyApplications} />
     <Route exact path={WorkingGroupsRoutes.myRoles} component={MyRoles} />
-    <Route exact path={`${WorkingGroupsRoutes.myRoles}/:id`} component={MyRole} />
-    <Route exact path={`${WorkingGroupsRoutes.groups}/:name`} component={WorkingGroup} />
+    <Route exact path={WorkingGroupsRoutes.myRole} component={MyRole} />
+    <Route exact path={WorkingGroupsRoutes.group} component={WorkingGroup} />
   </Switch>
 )

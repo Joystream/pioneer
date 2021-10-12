@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
-import { Route, Switch } from 'react-router-dom'
+import { generatePath, Route, Switch } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -108,13 +108,13 @@ describe('UI: Forum Thread Page', () => {
   function renderPage() {
     return render(
       <MockApiProvider>
-        <MemoryRouter initialEntries={[`${ForumRoutes.thread}/1`]}>
+        <MemoryRouter initialEntries={[generatePath(ForumRoutes.thread, { id: '1' })]}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Switch>
-                    <Route path={`${ForumRoutes.thread}/:id`} component={ForumThreadPage} />
+                    <Route path={ForumRoutes.thread} component={ForumThreadPage} />
                     <Route path="/404" component={NotFound} />
                   </Switch>
                 </MembershipContext.Provider>

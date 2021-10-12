@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
@@ -22,7 +23,7 @@ export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
 
   return (
     <ThreadInfoStyles>
-      <ThreadTitleLink to={`${ForumRoutes.thread}/${thread?.id}`}>{thread.title}</ThreadTitleLink>
+      <ThreadTitleLink to={generatePath(ForumRoutes.thread, { id: thread?.id ?? '' })}>{thread.title}</ThreadTitleLink>
       {isDefined(thread.visiblePostsCount) && (
         <TextExtraSmall lighter>
           {thread.visiblePostsCount} Post{plural(thread.visiblePostsCount)}

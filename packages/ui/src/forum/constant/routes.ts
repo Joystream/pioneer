@@ -2,7 +2,7 @@ export const ForumRoutes = {
   forum: '/forum',
   category: '/forum/category/:id/:type?',
   archived: '/forum/archived',
-  thread: '/forum/thread',
+  thread: '/forum/thread/:id',
   overview: '/forum/overview',
   latestThreads: '/forum/latest-threads',
   topThreads: '/forum/top-threads',
