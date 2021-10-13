@@ -68,6 +68,12 @@ export const AnnounceCandidacyModal = () => {
   )
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
 
+  const addStakingAccountCandidateTransaction = useMemo(() => {
+    if (activeMember && api) {
+      return api.tx.members.addStakingAccountCandidate(activeMember.id)
+    }
+  }, [connectionState, activeMember?.id])
+
   const confirmStakingAccountTransaction = useMemo(() => {
     if (activeMember && api) {
       return api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? '')
@@ -75,15 +81,21 @@ export const AnnounceCandidacyModal = () => {
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
   const announceCandidacyTransaction = useMemo(() => {
-    if (activeMember && api) {
-      return api.tx.council.announceCandidacy(
+    if (activeMember && api && confirmStakingAccountTransaction) {
+      const tx = api.tx.council.announceCandidacy(
         activeMember.id,
         state.context.stakingAccount?.address ?? '',
         state.context.rewardAccount?.address ?? '',
         state.context.stakingAmount ?? 0
       )
+
+      if (stakingStatus === 'confirmed') {
+        return tx
+      }
+
+      return api.tx.utility.batch([confirmStakingAccountTransaction, tx])
     }
-  }, [JSON.stringify(state.context), connectionState, activeMember?.id])
+  }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
 
   const candidacyNoteTransaction = useMemo(() => {
     if (activeMember && api) {
@@ -99,27 +111,35 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
-  const transaction = useMemo(() => {
-    if (api && confirmStakingAccountTransaction && candidacyNoteTransaction && announceCandidacyTransaction) {
-      if (stakingStatus === 'confirmed') {
-        return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
-      }
-
-      return api.tx.utility.batch([
-        confirmStakingAccountTransaction,
-        announceCandidacyTransaction,
-        candidacyNoteTransaction,
-      ])
+  const feeTransaction = useMemo(() => {
+    if (api && candidacyNoteTransaction && announceCandidacyTransaction && addStakingAccountCandidateTransaction) {
+      return api.tx.utility.batch(
+        stakingStatus === 'free'
+          ? [announceCandidacyTransaction, candidacyNoteTransaction]
+          : [addStakingAccountCandidateTransaction, announceCandidacyTransaction, candidacyNoteTransaction]
+      )
     }
-  }, [
-    connectionState,
-    stakingStatus,
-    confirmStakingAccountTransaction,
-    candidacyNoteTransaction,
-    announceCandidacyTransaction,
-  ])
+  }, [connectionState, candidacyNoteTransaction, announceCandidacyTransaction])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
+
+  const isValidNext = useMemo(() => {
+    if (state.matches('staking') && !!state.context.stakingAccount && state.context.stakingAmount) {
+      return true
+    } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
+      return true
+    } else if (
+      state.matches('candidateProfile.titleAndBulletPoints') &&
+      state.context.title &&
+      state.context.bulletPoints.length
+    ) {
+      return true
+    } else if (state.matches('candidateProfile.summaryAndBanner') && state.context.summary) {
+      return true
+    }
+
+    return false
+  }, [JSON.stringify(state.value), JSON.stringify(state.context), activeMember?.id, stakingStatus])
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -141,25 +161,7 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 
-  const isValidNext = useMemo(() => {
-    if (state.matches('staking') && !!state.context.stakingAccount && state.context.stakingAmount) {
-      return true
-    } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
-      return true
-    } else if (
-      state.matches('candidateProfile.titleAndBulletPoints') &&
-      state.context.title &&
-      state.context.bulletPoints.length
-    ) {
-      return true
-    } else if (state.matches('candidateProfile.summaryAndBanner') && state.context.summary) {
-      return true
-    }
-
-    return false
-  }, [JSON.stringify(state.value), JSON.stringify(state.context), activeMember?.id, stakingStatus])
-
-  if (!api || !activeMember || !transaction || !feeInfo) {
+  if (!api || !activeMember || !feeTransaction || !feeInfo) {
     return null
   }
 
@@ -190,7 +192,7 @@ export const AnnounceCandidacyModal = () => {
     return (
       <BindStakingAccountModal
         onClose={hideModal}
-        transaction={confirmStakingAccountTransaction}
+        transaction={addStakingAccountCandidateTransaction}
         signer={state.context.stakingAccount.address}
         service={state.children.bindStakingAccountTransaction}
         memberId={activeMember.id}

@@ -3,10 +3,8 @@ import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
-import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-import { AddNewProposalContext, SpecificParametersContext } from '@/proposals/modals/AddNewProposal/machine'
 
 interface StakingContext {
   stakingAccount?: Account
@@ -216,11 +214,6 @@ export const announceCandidacyMachine = createMachine<
         id: 'announceCandidacyTransaction',
         src: transactionMachine,
         onDone: [
-          {
-            target: 'success',
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            cond: isTransactionSuccess,
-          },
           {
             target: 'candidacyNoteTransaction',
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
