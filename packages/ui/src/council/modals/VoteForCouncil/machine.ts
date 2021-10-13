@@ -14,6 +14,7 @@ type VoteForCouncilState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
+  | { value: 'beforeTransaction'; context: Pick<VoteContext, 'stake'> }
 
 type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
@@ -39,5 +40,7 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
         },
       },
     },
+
+    beforeTransaction: {},
   },
 })
