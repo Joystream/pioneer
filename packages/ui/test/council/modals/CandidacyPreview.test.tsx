@@ -51,6 +51,16 @@ describe('UI: CandidacyPreview', () => {
           stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
           rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
           note: 'alias est velit ut expedita aliquam itaque eos eaque aliquid',
+          noteMetadata: {
+            header: 'molestiae in dolore eveniet',
+            bulletPoints: [
+              'exercitationem nihil autem sint architecto id neque ipsum',
+              'voluptas autem esse mollitia aspernatur labore est modi',
+              'veniam et officia culpa consequuntur non odit iure',
+            ],
+            bannerImageUri: 'https://picsum.photos/500/300',
+            description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
+          },
         },
         server.server
       )

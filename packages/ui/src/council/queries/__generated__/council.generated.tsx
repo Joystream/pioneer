@@ -123,7 +123,6 @@ export type CandidateDetailedFieldsFragment = {
   stakingAccountId: string
   rewardAccountId: string
   stake: any
-  note: string
   member: {
     __typename: 'Membership'
     id: string
@@ -144,6 +143,13 @@ export type CandidateDetailedFieldsFragment = {
     }>
   }
   electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
+  noteMetadata: {
+    __typename: 'CandidacyNoteMetadata'
+    header?: string | null | undefined
+    bulletPoints: Array<string>
+    bannerImageUri?: string | null | undefined
+    description?: string | null | undefined
+  }
 }
 
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
@@ -232,7 +238,6 @@ export type GetCandidateQuery = {
         stakingAccountId: string
         rewardAccountId: string
         stake: any
-        note: string
         member: {
           __typename: 'Membership'
           id: string
@@ -257,6 +262,13 @@ export type GetCandidateQuery = {
           }>
         }
         electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
+        noteMetadata: {
+          __typename: 'CandidacyNoteMetadata'
+          header?: string | null | undefined
+          bulletPoints: Array<string>
+          bannerImageUri?: string | null | undefined
+          description?: string | null | undefined
+        }
       }
     | null
     | undefined
@@ -331,13 +343,18 @@ export const CandidateDetailedFieldsFragmentDoc = gql`
     stakingAccountId
     rewardAccountId
     stake
-    note
     member {
       ...MemberFields
     }
     electionRound {
       cycleId
       isFinished
+    }
+    noteMetadata {
+      header
+      bulletPoints
+      bannerImageUri
+      description
     }
   }
   ${MemberFieldsFragmentDoc}

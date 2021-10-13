@@ -38,13 +38,18 @@ fragment CandidateDetailedFields on Candidate {
   stakingAccountId
   rewardAccountId
   stake
-  note
   member {
     ...MemberFields
   }
   electionRound {
     cycleId
     isFinished
+  }
+  noteMetadata {
+    header
+    bulletPoints
+    bannerImageUri
+    description
   }
 }
 

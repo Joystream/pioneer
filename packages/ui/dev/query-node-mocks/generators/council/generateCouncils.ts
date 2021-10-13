@@ -62,6 +62,12 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
         stakingAccountId: member.controllerAccount,
         rewardAccountId: member.rootAccount,
         note: faker.lorem.words(10),
+        noteMetadata: {
+          header: faker.lorem.words(4),
+          bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),
+          bannerImageUri: 'https://picsum.photos/500/300',
+          description: faker.lorem.words(10),
+        }
       }
     },
     isFinished ? councilors.length : randomFromRange(5, 8)

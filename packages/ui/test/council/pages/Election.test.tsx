@@ -30,6 +30,16 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
     stake: 1000,
     stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
     rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    noteMetadata: {
+      header: 'molestiae in dolore eveniet',
+      bulletPoints: [
+        'exercitationem nihil autem sint architecto id neque ipsum',
+        'voluptas autem esse mollitia aspernatur labore est modi',
+        'veniam et officia culpa consequuntur non odit iure',
+      ],
+      bannerImageUri: 'https://picsum.photos/500/300',
+      description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
+    },
   },
   {
     id: '2',
@@ -38,6 +48,16 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
     stake: 1000,
     stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
     rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    noteMetadata: {
+      header: 'molestiae in dolore eveniet',
+      bulletPoints: [
+        'exercitationem nihil autem sint architecto id neque ipsum',
+        'voluptas autem esse mollitia aspernatur labore est modi',
+        'veniam et officia culpa consequuntur non odit iure',
+      ],
+      bannerImageUri: 'https://picsum.photos/500/300',
+      description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
+    },
   },
 ]
 
