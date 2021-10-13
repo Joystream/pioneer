@@ -1,4 +1,5 @@
 import React from 'react'
+import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
@@ -61,7 +62,8 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
   )
 }
 
-const categoryLink = (id: string, isArchive: boolean) => `${ForumRoutes.category}/${id}${isArchive ? '/archive' : ''}`
+const categoryLink = (id: string, isArchive: boolean) =>
+  generatePath(ForumRoutes.category, { id, type: isArchive ? 'archive' : undefined })
 
 export interface CategoryItemFieldProps {
   categoryId: string

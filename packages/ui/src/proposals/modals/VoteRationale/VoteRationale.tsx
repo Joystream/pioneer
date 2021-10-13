@@ -22,6 +22,7 @@ import {
 } from '@/common/components/SidePane'
 import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
+import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useProposalVote } from '@/proposals/hooks/useProposalVote'
@@ -40,7 +41,11 @@ export const VoteRationale = React.memo(() => {
 
   useEscape(() => hideModal())
 
-  const getVoteLink = `${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}`
+  const getVoteLink = getUrl({
+    route: ProposalsRoutes.preview,
+    params: { id: vote?.proposalId },
+    query: { showVote: voteId },
+  })
 
   if (isLoading || !vote) {
     return (

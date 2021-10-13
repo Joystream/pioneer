@@ -35,6 +35,7 @@ interface PostListItemProps {
   replyToPost: () => void
   link?: string
   isDiscussion?: boolean
+  repliesToLink: string
 }
 
 export const PostListItem = ({
@@ -47,6 +48,7 @@ export const PostListItem = ({
   link,
   replyToPost,
   isDiscussion,
+  repliesToLink,
 }: PostListItemProps) => {
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postText, setPostText] = useState<string>(text)
@@ -95,7 +97,7 @@ export const PostListItem = ({
                 <div>
                   <ArrowReplyIcon />{' '}
                   <Badge>
-                    <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+                    <Link to={repliesToLink}>Replies to {repliesTo?.author?.handle}</Link>
                   </Badge>
                 </div>
               </ReplyBadge>

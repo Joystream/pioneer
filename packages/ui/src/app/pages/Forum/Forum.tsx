@@ -15,9 +15,9 @@ export const Forum = () => {
   return (
     <Switch>
       <Route path={ForumRoutes.forum} exact component={ForumCategories} />
-      <Route path={`${ForumRoutes.category}/:id/:type?`} exact component={ForumCategory} />
+      <Route path={ForumRoutes.category} exact component={ForumCategory} />
       <Route path={ForumRoutes.archived} exact component={ForumArchived} />
-      <Route path={`${ForumRoutes.thread}/:id`} exact component={ForumThread} />
+      <Route path={ForumRoutes.thread} exact component={ForumThread} />
       <Route path={ForumRoutes.overview} exact component={ForumOverview} />
       <Route path={ForumRoutes.latestThreads} exact component={LatestThreads} />
       <Route path={ForumRoutes.myThreads} exact component={ForumMyThreads} />

@@ -25,10 +25,11 @@ export interface NewPostProps {
   getTransaction: GetTransaction
   replyTo?: ForumPost
   removeReply: () => void
+  replyToLink: string
 }
 
 export const NewThreadPost = React.forwardRef(
-  ({ getTransaction, replyTo, removeReply }: NewPostProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+  ({ getTransaction, replyTo, removeReply, replyToLink }: NewPostProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const [postText, setText] = useState('')
     const [isEditable, setEditable] = useState(false)
     const { active } = useMyMemberships()
@@ -54,7 +55,7 @@ export const NewThreadPost = React.forwardRef(
               <div>
                 <ArrowReplyIcon />{' '}
                 <Badge>
-                  <Link to={window.location.href}>Replies to {replyTo.author.handle}</Link>
+                  <Link to={replyToLink}>Replies to {replyTo.author.handle}</Link>
                 </Badge>
               </div>
               <div>

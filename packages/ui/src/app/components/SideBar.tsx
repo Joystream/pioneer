@@ -2,6 +2,7 @@ import { AnimateSharedLayout } from 'framer-motion'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { Notifications, NotificationsButton } from '@/common/components/Notifications'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
@@ -23,6 +24,7 @@ import { CouncilRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 export const SideBar = () => {
   const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
@@ -41,19 +43,19 @@ export const SideBar = () => {
         <AnimateSharedLayout>
           <NavigationLinks>
             <NavigationLinksItem>
-              <NavigationLink to="lorem" disabled>
+              <NavigationLink to="#" disabled>
                 <OverviewIcon />
                 Overview
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/profile">
+              <NavigationLink to={ProfileRoutes.profile}>
                 <MyProfileIcon />
                 My profile
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/working-groups">
+              <NavigationLink to={WorkingGroupsRoutes.groups}>
                 <WorkingGroupsIcon />
                 Working Groups
               </NavigationLink>
@@ -71,13 +73,13 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="lorem" disabled>
+              <NavigationLink to="#" disabled>
                 <ConstitutionIcon />
                 Constitution
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="lorem" disabled>
+              <NavigationLink to="#" disabled>
                 <ValidatorsIcon />
                 Validators
               </NavigationLink>
@@ -89,19 +91,19 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/members">
+              <NavigationLink to={MembersRoutes.members}>
                 <MembersIcon />
                 Members
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="lorem" disabled>
+              <NavigationLink to="#" disabled>
                 <FinancialsIcon />
                 Financials
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/settings">
+              <NavigationLink to={SettingsRoutes.settings}>
                 <SettingsIcon />
                 Settings
               </NavigationLink>

@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
@@ -19,7 +20,7 @@ export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
 
   return (
     <PostInfoStyles>
-      <LatestPostLink to={`${ForumRoutes.thread}/${thread?.id}?post=${post.id}`}>
+      <LatestPostLink to={`${generatePath(ForumRoutes.thread, { id: thread?.id ?? '' })}?post=${post.id}`}>
         Re: {post.text.slice(0, 100)}
       </LatestPostLink>
       <TextInlineExtraSmall as="div" lighter>
