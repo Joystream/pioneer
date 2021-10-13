@@ -13,6 +13,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
+import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
 import { Member } from '@/memberships/types'
@@ -116,7 +117,7 @@ export const CandidateCard = ({
                 ) : voted ? (
                   <ButtonPrimary size="medium">Vote again </ButtonPrimary>
                 ) : (
-                  <ButtonPrimary size="medium">Vote</ButtonPrimary>
+                  <VoteForCouncilButton id={id} />
                 )}
               </CandidateCardControls>
             )}

@@ -8,6 +8,7 @@ import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
+import { VoteForCouncilModal, VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
 import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
@@ -48,6 +49,7 @@ export type ModalNames =
   | ModalName<CreatePostModalCall>
   | ModalName<AnnounceCandidateModalCall>
   | ModalName<CandidacyPreviewModalCall>
+  | ModalName<VoteForCouncilModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -71,6 +73,7 @@ const modals: Record<ModalNames, ReactElement> = {
   CreatePost: <CreatePostModal />,
   AnnounceCandidateModal: <AnnounceCandidacyModal />,
   CandidacyPreview: <CandidacyPreview />,
+  VoteForCouncil: <VoteForCouncilModal />,
 }
 
 export const GlobalModals = () => {
