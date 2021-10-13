@@ -20,6 +20,7 @@ export const CandidacyDetails = ({ candidate }: Props) => {
     <>
       <Details gap={16}>
         <h1>{candidate.title}</h1>
+        {candidate.bannerImageUri && <HeaderImage src={candidate.bannerImageUri} />}
         <h4>Past elections results</h4>
         <CandidateStatistics memberId={candidate.member.id} />
         <h4>Candidacy discussion thread</h4>
@@ -48,4 +49,8 @@ export const CandidacyDetails = ({ candidate }: Props) => {
 
 const Details = styled(RowGapBlock)`
   padding: 24px;
+`
+
+const HeaderImage = styled.img`
+  width: 100%;
 `

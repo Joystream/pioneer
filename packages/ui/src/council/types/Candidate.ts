@@ -12,6 +12,7 @@ export interface CandidateWithDetails {
   title: string
   summary: string
   description: string[]
+  bannerImageUri?: string
   member: Member
   cycleId: number
   cycleFinished: boolean
@@ -23,9 +24,10 @@ export const asCandidateWithDetails = (fields: CandidateDetailedFieldsFragment):
   rewardAccount: fields.rewardAccountId,
   stake: new BN(fields.stake),
   member: asMember(fields.member),
-  title: 'Candidate title',
-  summary: fields.note,
-  description: fields.note.split(' ').slice(0, 5),
+  title: fields.noteMetadata.header ?? 'Candidate',
+  description: fields.noteMetadata.bulletPoints,
+  summary: fields.noteMetadata.description ?? '',
+  bannerImageUri: fields.noteMetadata.bannerImageUri ?? undefined,
   cycleId: fields.electionRound.cycleId,
   cycleFinished: fields.electionRound.isFinished,
 })
