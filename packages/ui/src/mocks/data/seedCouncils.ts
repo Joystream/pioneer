@@ -25,6 +25,12 @@ export interface RawCouncilCandidateMock {
   stakingAccountId: string
   rewardAccountId: string
   note?: string
+  noteMetadata: {
+    header: string
+    bulletPoints: string[]
+    bannerImageUri: string
+    description: string
+  }
 }
 
 export interface RawCouncilElectionMock {
@@ -54,7 +60,10 @@ export const seedCouncilElections = (server: any) => {
 }
 
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) =>
-  server.schema.create('Candidate', data)
+  server.schema.create('Candidate', {
+    ...data,
+    noteMetadata: server.schema.create('CandidacyNoteMetadata', data.noteMetadata),
+  })
 
 export const seedCouncilCandidates = (server: any) => {
   rawCandidates.map((data) => seedCouncilCandidate(data, server))
