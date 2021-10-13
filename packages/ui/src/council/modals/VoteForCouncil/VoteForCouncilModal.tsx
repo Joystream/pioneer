@@ -47,18 +47,20 @@ export const VoteForCouncilModal = () => {
       }
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
 
-  if (activeMember && feeInfo && minStake) {
-    if (state.matches('requirementsFailed')) {
-      return (
-        <InsufficientFundsModal
-          onClose={hideModal}
-          address={activeMember.controllerAccount}
-          amount={feeInfo.transactionFee}
-        />
-      )
-    } else if (state.matches('stake')) {
-      return <VoteForCouncilFormModal minStake={minStake} send={send} />
-    }
+  if (!activeMember || !feeInfo || !minStake) {
+    return null
+  }
+
+  if (state.matches('requirementsFailed')) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
+    )
+  } else if (state.matches('stake')) {
+    return <VoteForCouncilFormModal minStake={minStake} send={send} />
   }
 
   return null
