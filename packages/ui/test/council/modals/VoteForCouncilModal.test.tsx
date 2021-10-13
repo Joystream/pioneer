@@ -50,6 +50,13 @@ describe('UI: Vote for Council Modal', () => {
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
+  const fillStakeStep = async (value: number) => {
+    await selectFromDropdown('Select account for Staking', 'alice')
+    const input = await screen.findByLabelText(/Select amount for staking/i)
+    fireEvent.change(input, { target: { value } })
+  }
+  const getNextStepButton = () => getButton(/Next step/i)
+
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
@@ -66,7 +73,7 @@ describe('UI: Vote for Council Modal', () => {
 
     stubDefaultBalances(api)
     stubCouncilConstants(api, { minStake: 500 })
-    stubTransaction(api, 'api.tx.referendum.vote')
+    stubTransaction(api, 'api.tx.referendum.vote', 25)
   })
 
   describe('Requirements', () => {
@@ -94,8 +101,6 @@ describe('UI: Vote for Council Modal', () => {
   })
 
   describe('Stake step', () => {
-    const getNextStepButton = () => getButton(/Next step/i)
-
     it('Empty fields', async () => {
       renderModal()
 
@@ -106,10 +111,7 @@ describe('UI: Vote for Council Modal', () => {
     it('Too low stake', async () => {
       renderModal()
 
-      await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '50' } })
-
+      fillStakeStep(50)
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
@@ -117,13 +119,22 @@ describe('UI: Vote for Council Modal', () => {
     it('Valid fields', async () => {
       renderModal()
 
-      await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '2000' } })
-
+      await fillStakeStep(2000)
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
     })
+  })
+
+  it('Transaction sign', async () => {
+    renderModal()
+
+    await fillStakeStep(2000)
+    fireEvent.click(await getNextStepButton())
+
+    expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
+    expect(await getButton('Sign and send')).toBeDefined()
+    expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('2,000')
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
   })
 
   function renderModal() {

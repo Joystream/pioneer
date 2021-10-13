@@ -14,6 +14,7 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { VoteForCouncilMachine } from './machine'
 import { VoteForCouncilModalCall } from './types'
 import { VoteForCouncilFormModal } from './VoteForCouncilFormModal'
+import { VoteForCouncilSignModal } from './VoteForCouncilSignModal'
 
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
@@ -61,6 +62,8 @@ export const VoteForCouncilModal = () => {
     )
   } else if (state.matches('stake')) {
     return <VoteForCouncilFormModal minStake={minStake} send={send} />
+  } else if (state.matches('transaction')) {
+    return <VoteForCouncilSignModal stake={state.context.stake} service={state.children.transaction} />
   }
 
   return null

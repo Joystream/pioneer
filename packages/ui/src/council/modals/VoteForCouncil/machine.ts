@@ -14,6 +14,7 @@ type VoteForCouncilState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
+  | { value: 'transaction'; context: Pick<VoteContext, 'stake'> }
   | { value: 'beforeTransaction'; context: Pick<VoteContext, 'stake'> }
 
 type FailEvent = { type: 'FAIL' }
@@ -35,12 +36,17 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
     stake: {
       on: {
         SET_STAKE: {
-          target: 'beforeTransaction',
+          target: 'transaction',
           actions: assign({ stake: (context, event) => event.stake }),
         },
       },
     },
 
-    beforeTransaction: {},
+    transaction: {
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+      },
+    },
   },
 })
