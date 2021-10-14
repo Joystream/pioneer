@@ -132,9 +132,9 @@ describe('UI: Vote for Council Modal', () => {
     fireEvent.click(await getNextStepButton())
 
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
-    expect(await getButton('Sign and send')).toBeDefined()
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('2,000')
     expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+    expect(await getButton('Sign and send')).toBeDefined()
   })
 
   function renderModal() {
