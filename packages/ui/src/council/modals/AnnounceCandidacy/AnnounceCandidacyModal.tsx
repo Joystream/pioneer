@@ -112,12 +112,8 @@ export const AnnounceCandidacyModal = () => {
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
   const feeTransaction = useMemo(() => {
-    if (api && candidacyNoteTransaction && announceCandidacyTransaction && addStakingAccountCandidateTransaction) {
-      return api.tx.utility.batch(
-        stakingStatus === 'free'
-          ? [announceCandidacyTransaction, candidacyNoteTransaction]
-          : [addStakingAccountCandidateTransaction, announceCandidacyTransaction, candidacyNoteTransaction]
-      )
+    if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
+      return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
     }
   }, [connectionState, candidacyNoteTransaction, announceCandidacyTransaction])
 
