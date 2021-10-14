@@ -5,10 +5,10 @@ import { WatchIcon } from '@/common/components/icons'
 import { useToggle } from '@/common/hooks/useToggle'
 import { CandidacyProfilePreview } from '@/council/modals/AnnounceCandidacy/components/CandidacyProfilePreview'
 import { CandidacyThumbnailPreview } from '@/council/modals/AnnounceCandidacy/components/CandidacyThumbnailPreview'
-import { CandidateWithDetails } from '@/council/types'
+import { ElectionCandidateWithDetails } from '@/council/types'
 
 interface PreviewButtonsProps {
-  candidate: CandidateWithDetails
+  candidate: ElectionCandidateWithDetails
   disabled: boolean
 }
 

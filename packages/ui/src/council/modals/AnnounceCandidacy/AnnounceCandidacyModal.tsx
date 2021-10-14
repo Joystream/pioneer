@@ -23,20 +23,26 @@ import { StakeStep } from '@/council/modals/AnnounceCandidacy/components/StakeSt
 import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
-import { CandidateWithDetails } from '@/council/types'
+import { ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
-const getCandidateForPreview = (context: FinalAnnounceCandidacyContext, member: Member): CandidateWithDetails => ({
+const getCandidateForPreview = (
+  context: FinalAnnounceCandidacyContext,
+  member: Member
+): ElectionCandidateWithDetails => ({
   id: '0',
   stakingAccount: context.stakingAccount.address,
   rewardAccount: context.rewardAccount.address,
   stake: context.stakingAmount,
-  title: context.title,
-  summary: context.summary,
-  description: context.bulletPoints,
+  info: {
+    title: context.title,
+    summary: context.summary,
+    bulletPoints: context.bulletPoints,
+    bannerUri: context.banner,
+  },
   member,
   cycleId: 0,
   cycleFinished: false,

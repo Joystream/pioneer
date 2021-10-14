@@ -2,32 +2,45 @@ import BN from 'bn.js'
 
 import { asMember, Member } from '@/memberships/types'
 
-import { CandidateDetailedFieldsFragment } from '../queries'
+import { ElectionCandidateDetailedFieldsFragment, ElectionCandidateFieldsFragment } from '../queries'
 
-export interface CandidateWithDetails {
+export interface ElectionCandidate {
   id: string
+  member: Member
+  stake: BN
+  info: {
+    title: string
+    summary: string
+    bulletPoints: string[]
+    bannerUri?: string
+  }
+}
+
+export interface ElectionCandidateWithDetails extends ElectionCandidate {
   stakingAccount: string
   rewardAccount: string
-  stake: BN
-  title: string
-  summary: string
-  description: string[]
-  bannerImageUri?: string
-  member: Member
   cycleId: number
   cycleFinished: boolean
 }
 
-export const asCandidateWithDetails = (fields: CandidateDetailedFieldsFragment): CandidateWithDetails => ({
+export const asElectionCandidate = (fields: ElectionCandidateFieldsFragment): ElectionCandidate => ({
   id: fields.id,
+  member: asMember(fields.member),
+  stake: new BN(fields.stake),
+  info: {
+    title: fields.noteMetadata.header ?? 'Candidate',
+    summary: fields.noteMetadata.description ?? '',
+    bulletPoints: fields.noteMetadata.bulletPoints,
+    bannerUri: fields.noteMetadata.bannerImageUri ?? undefined,
+  },
+})
+
+export const asElectionCandidateWithDetails = (
+  fields: ElectionCandidateDetailedFieldsFragment
+): ElectionCandidateWithDetails => ({
+  ...asElectionCandidate(fields),
   stakingAccount: fields.stakingAccountId,
   rewardAccount: fields.rewardAccountId,
-  stake: new BN(fields.stake),
-  member: asMember(fields.member),
-  title: fields.noteMetadata.header ?? 'Candidate',
-  description: fields.noteMetadata.bulletPoints,
-  summary: fields.noteMetadata.description ?? '',
-  bannerImageUri: fields.noteMetadata.bannerImageUri ?? undefined,
   cycleId: fields.electionRound.cycleId,
   cycleFinished: fields.electionRound.isFinished,
 })
