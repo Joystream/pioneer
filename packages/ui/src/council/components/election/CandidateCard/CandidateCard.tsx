@@ -27,10 +27,10 @@ export interface CandidateCardProps {
   voted?: boolean
   withdrawable?: boolean
   title: string
-  infolist?: string[]
+  bulletPoints?: string[]
   stake?: BN
-  wons?: number
-  losts?: number
+  wins?: number
+  loses?: number
   isVotingStage?: boolean
   isPreview?: boolean
 }
@@ -42,10 +42,10 @@ export const CandidateCard = ({
   voted,
   withdrawable,
   title,
-  infolist,
+  bulletPoints,
   stake,
-  wons = 0,
-  losts = 0,
+  wins = 0,
+  loses = 0,
   isVotingStage,
   isPreview,
 }: CandidateCardProps) => {
@@ -72,30 +72,30 @@ export const CandidateCard = ({
           <CandidateCardTitle as={GhostRouterLink} to="#">
             {title}
           </CandidateCardTitle>
-          {infolist && (
+          {bulletPoints && (
             <CandidateCardList>
-              {infolist.map((itemText, index) => (
+              {bulletPoints.map((itemText, index) => (
                 <CandidateCardListItem key={index}>{itemText}</CandidateCardListItem>
               ))}
             </CandidateCardList>
           )}
         </CandidateCardContent>
         <CandidateCardSummary>
-          {(wons > 0 || losts > 0) && (
+          {(wins > 0 || loses > 0) && (
             <CandidateCardStatistics>
               <StatsBlock size="m" centered>
                 <TwoColumnsStatistic>
                   <StatiscticContentColumn>
                     <TextBig value bold>
-                      {wons}
+                      {wins}
                     </TextBig>
-                    <Subscription>Past Wons</Subscription>
+                    <Subscription>Past Wins</Subscription>
                   </StatiscticContentColumn>
                   <StatiscticContentColumn>
                     <TextBig value bold>
-                      {losts}
+                      {loses}
                     </TextBig>
-                    <Subscription>Past Losts</Subscription>
+                    <Subscription>Past Loses</Subscription>
                   </StatiscticContentColumn>
                 </TwoColumnsStatistic>
               </StatsBlock>
@@ -128,7 +128,7 @@ export const CandidateCard = ({
         </CandidateCardArrow>
       </CandidateCardContentWrapper>
       {voted && <VotedBadgeStatus inverted>Voted</VotedBadgeStatus>}
-      {wons === 0 && losts === 0 && (
+      {wins === 0 && loses === 0 && (
         <NewcomerBadgeStatus inverted size="l">
           Newcomer
         </NewcomerBadgeStatus>

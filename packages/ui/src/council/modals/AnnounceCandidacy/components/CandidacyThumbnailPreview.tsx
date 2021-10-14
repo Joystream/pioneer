@@ -22,7 +22,7 @@ export const CandidacyThumbnailPreview = ({ candidate, closeModal }: CandidacyTh
             id="0"
             member={candidate.member}
             title={candidate.title}
-            infolist={candidate.description}
+            bulletPoints={candidate.description}
             stake={candidate.stake}
             isPreview
           />

@@ -38,7 +38,7 @@ Default.args = {
   voted: true,
   withdrawable: false,
   title: 'A Presidency for All Americans',
-  infolist: [
+  bulletPoints: [
     'Amet minim mollit non deserunt ullamco est sit liqua dolor',
     'Amet minim mollit non deserunt ullamco est sit liqua dolor',
     'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
@@ -46,6 +46,4 @@ Default.args = {
     'Amet minim mollit non deserunt ullamco est sit liqua dolor',
   ],
   stake: (130000000 as unknown) as BN,
-  wons: undefined,
-  losts: undefined,
 }
