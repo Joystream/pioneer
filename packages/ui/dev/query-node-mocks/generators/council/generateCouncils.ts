@@ -83,16 +83,18 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     electedCouncilId: council.id,
   }
 
-  const votes = repeat(
+  const getCastBy = randomFromWeightedSet(
+    [1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'],
+    [1, '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'],
+    [5, '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU']
+  )
+
+  const votes: RawCouncilVoteMock[] = repeat(
     () => ({
       electionRoundId: council.id,
       stake: randomFromRange(1, 10) * 1000,
       stakeLocked: isFinished ? Math.random() > 0.5 : true,
-      castBy: randomFromWeightedSet(
-        [1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'],
-        [1, '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'],
-        [5, '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU']
-      ),
+      castBy: getCastBy(),
       voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
     }),
     randomFromRange(10, 20)

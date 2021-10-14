@@ -98,8 +98,8 @@ query GetCandidateStats($memberId: ID) {
   }
 }
 
-query GetElectionVotes($electionRoundId: ID) {
-  castVotes(where: { electionRound: { id_eq: $electionRoundId } }) {
+query GetElectionVotes($electionCycleId: Int) {
+  castVotes(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
     ...CastVoteFields
   }
 }

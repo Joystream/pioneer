@@ -324,7 +324,7 @@ export type GetCandidateStatsQuery = {
 }
 
 export type GetElectionVotesQueryVariables = Types.Exact<{
-  electionRoundId?: Types.Maybe<Types.Scalars['ID']>
+  electionCycleId?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetElectionVotesQuery = {
@@ -667,8 +667,8 @@ export type GetCandidateStatsQueryHookResult = ReturnType<typeof useGetCandidate
 export type GetCandidateStatsLazyQueryHookResult = ReturnType<typeof useGetCandidateStatsLazyQuery>
 export type GetCandidateStatsQueryResult = Apollo.QueryResult<GetCandidateStatsQuery, GetCandidateStatsQueryVariables>
 export const GetElectionVotesDocument = gql`
-  query GetElectionVotes($electionRoundId: ID) {
-    castVotes(where: { electionRound: { id_eq: $electionRoundId } }) {
+  query GetElectionVotes($electionCycleId: Int) {
+    castVotes(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
       ...CastVoteFields
     }
   }
@@ -687,7 +687,7 @@ export const GetElectionVotesDocument = gql`
  * @example
  * const { data, loading, error } = useGetElectionVotesQuery({
  *   variables: {
- *      electionRoundId: // value for 'electionRoundId'
+ *      electionCycleId: // value for 'electionCycleId'
  *   },
  * });
  */

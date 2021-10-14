@@ -7,9 +7,16 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProgressBar } from '@/common/components/Progress'
-import { TextInlineBig, TextInlineMedium, TextInlineSmall, ValueInJoys } from '@/common/components/typography'
+import {
+  TextInlineBig,
+  TextInlineMedium,
+  TextInlineSmall,
+  TokenValue,
+  ValueInJoys,
+} from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { Colors } from '@/common/constants'
+import { unknownMember } from '@/council/constants/unknownMember'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -18,9 +25,9 @@ import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 export interface CandidateVoteProps {
   voteOwner: boolean
   revealed: boolean
-  member: Member
+  member?: Member
   stake: BN
-  ownStake: BN
+  voteStake: BN
   votes: number
   revealedVotes: number
   index: number
@@ -31,18 +38,18 @@ export const CandidateVote = ({
   revealed,
   member,
   stake,
-  ownStake,
+  voteStake,
   votes,
   revealedVotes,
   index,
 }: CandidateVoteProps) => {
-  const roundedPercentage = Math.round((100 / Number(stake)) * Number(ownStake))
+  const roundedPercentage = Math.round((100 / Number(stake)) * Number(voteStake))
   return (
     <CandidateVoteWrapper>
       <VoteIndex lighter inter>
         {index}
       </VoteIndex>
-      <MemberInfo onlyTop member={member} />
+      <MemberInfo onlyTop member={member ?? unknownMember} skipModal={!member} />
       <VoteIndicatorWrapper gap={16}>
         <StakeIndicator>
           <ProgressBar start={0} end={roundedPercentage / 100} size="big" />
@@ -54,14 +61,18 @@ export const CandidateVote = ({
           <StakeAndVotesRow>
             <Subscription>Total Stake</Subscription>
             <StatsValue>
-              <ValueInJoys>{stake}</ValueInJoys>
+              <TokenValue value={stake} />
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            <Subscription>My Stake</Subscription>
-            <StatsValue>
-              <ValueInJoys>{ownStake}</ValueInJoys>
-            </StatsValue>
+            {voteOwner && (
+              <>
+                <Subscription>My Stake</Subscription>
+                <StatsValue>
+                  <TokenValue value={voteStake} />
+                </StatsValue>
+              </>
+            )}
           </StakeAndVotesRow>
           <StakeAndVotesRow>
             <Subscription>Total Revealed votes</Subscription>
@@ -77,12 +88,12 @@ export const CandidateVote = ({
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
       <ButtonsGroup>
-        {voteOwner && revealed && (
+        {voteStake && revealed && (
           <ButtonPrimary size="medium" disabled>
             Revealed
           </ButtonPrimary>
         )}
-        {voteOwner && !revealed && <ButtonPrimary size="medium">Reveal</ButtonPrimary>}
+        {voteStake && !revealed && <ButtonPrimary size="medium">Reveal</ButtonPrimary>}
       </ButtonsGroup>
       <CandidateCardArrow>
         <Arrow direction="right" />

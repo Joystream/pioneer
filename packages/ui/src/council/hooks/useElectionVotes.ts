@@ -1,8 +1,8 @@
 import { useGetElectionVotesQuery } from '../queries'
 import { asVote } from '../types/Vote'
 
-export const useElectionVotes = (electionRoundId: string) => {
-  const { data, loading } = useGetElectionVotesQuery({ variables: { electionRoundId } })
+export const useElectionVotes = (electionCycleId: number) => {
+  const { data, loading } = useGetElectionVotesQuery({ variables: { electionCycleId } })
   return {
     votes: data?.castVotes.map(asVote),
     isLoading: loading,
