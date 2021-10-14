@@ -22,7 +22,13 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilConstants, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubCouncilConstants,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -47,6 +53,7 @@ describe('UI: Vote for Council Modal', () => {
   }
 
   let useAccounts: UseAccounts
+  let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -73,7 +80,7 @@ describe('UI: Vote for Council Modal', () => {
 
     stubDefaultBalances(api)
     stubCouncilConstants(api, { minStake: 500 })
-    stubTransaction(api, 'api.tx.referendum.vote', 25)
+    tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
   })
 
   describe('Requirements', () => {
@@ -135,6 +142,18 @@ describe('UI: Vote for Council Modal', () => {
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('2,000')
     expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
     expect(await getButton('Sign and send')).toBeDefined()
+  })
+
+  it('Transaction success', async () => {
+    stubTransactionSuccess(tx, 'referendum', 'VoteCast')
+    renderModal()
+
+    await fillStakeStep(2000)
+    fireEvent.click(await getNextStepButton())
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^You have just successfully voted for the Candidate/i)).toBeDefined()
+    expect(await getButton('See my Announcement')).toBeDefined()
   })
 
   function renderModal() {

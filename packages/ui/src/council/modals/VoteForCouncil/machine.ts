@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import { assign, createMachine } from 'xstate'
 
+import { isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 import { StakeEvent, StakeFormFields } from './types'
@@ -15,7 +16,7 @@ type VoteForCouncilState =
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
   | { value: 'transaction'; context: Pick<VoteContext, 'stake'> }
-  | { value: 'beforeTransaction'; context: Pick<VoteContext, 'stake'> }
+  | { value: 'success'; context: VoteContext }
 
 type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
@@ -37,7 +38,7 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
       on: {
         SET_STAKE: {
           target: 'transaction',
-          actions: assign({ stake: (context, event) => event.stake }),
+          actions: assign({ stake: (_, event) => event.stake }),
         },
       },
     },
@@ -46,7 +47,15 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
       invoke: {
         id: 'transaction',
         src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (_, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
       },
     },
+
+    success: { type: 'final' },
   },
 })

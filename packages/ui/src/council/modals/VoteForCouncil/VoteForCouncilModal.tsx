@@ -15,6 +15,7 @@ import { VoteForCouncilMachine } from './machine'
 import { VoteForCouncilModalCall } from './types'
 import { VoteForCouncilFormModal } from './VoteForCouncilFormModal'
 import { VoteForCouncilSignModal } from './VoteForCouncilSignModal'
+import { VoteForCouncilSuccessModal } from './VoteForCouncilSuccessModal'
 
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
@@ -47,6 +48,10 @@ export const VoteForCouncilModal = () => {
         send(feeInfo.canAfford ? 'PASS' : 'FAIL')
       }
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
+
+  if (state.matches('success')) {
+    return <VoteForCouncilSuccessModal />
+  }
 
   if (!activeMember || !feeInfo || !minStake) {
     return null
