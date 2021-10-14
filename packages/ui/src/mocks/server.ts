@@ -45,6 +45,7 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   workingGroupModel.class.prototype.associations.metadata.opts.inverse = 'metadata'
 
   const workingGroupMetadataModel = schema.modelFor('workingGroupMetadata')
+  // Here should be empty lane
   // "Mirage: The working-group-metadata model has multiple possible inverse associations for the working-group.metadata association."
   workingGroupMetadataModel.class.prototype.associations.group.opts.inverse = 'group'
 
