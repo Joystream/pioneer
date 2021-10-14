@@ -5,6 +5,7 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
@@ -51,6 +52,12 @@ export const VoteForCouncilModal = () => {
 
   if (state.matches('success')) {
     return <VoteForCouncilSuccessModal />
+  } else if (state.matches('error')) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem casting your vote.
+      </FailureModal>
+    )
   }
 
   if (!activeMember || !feeInfo || !minStake) {

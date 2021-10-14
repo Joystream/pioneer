@@ -27,6 +27,7 @@ import {
   stubCouncilConstants,
   stubDefaultBalances,
   stubTransaction,
+  stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
@@ -154,6 +155,17 @@ describe('UI: Vote for Council Modal', () => {
 
     expect(await screen.findByText(/^You have just successfully voted for the Candidate/i)).toBeDefined()
     expect(await getButton('See my Announcement')).toBeDefined()
+  })
+
+  it('Transaction error', async () => {
+    stubTransactionFailure(tx)
+    renderModal()
+
+    await fillStakeStep(2000)
+    fireEvent.click(await getNextStepButton())
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^There was a problem casting your vote./i)).toBeDefined()
   })
 
   function renderModal() {
