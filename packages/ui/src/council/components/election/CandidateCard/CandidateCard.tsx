@@ -6,6 +6,7 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
+import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { StatiscticContentColumn, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, ValueInJoys } from '@/common/components/typography'
@@ -16,6 +17,7 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
+import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyStats'
 import { Member } from '@/memberships/types'
 
 import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCardImage'
@@ -44,8 +46,6 @@ export const CandidateCard = ({
   voted,
   withdrawable,
   stake,
-  wins = 0,
-  loses = 0,
   isVotingStage,
   isPreview,
 }: CandidateCardProps) => {
@@ -58,6 +58,7 @@ export const CandidateCard = ({
       })
     }
   }, [showModal, isPreview])
+  const { isLoading: loadingStats, successful, failed } = useMemberCandidacyStats(member.id)
 
   return (
     <CandidateCardWrapper onClick={showCandidate}>
@@ -81,19 +82,19 @@ export const CandidateCard = ({
           )}
         </CandidateCardContent>
         <CandidateCardSummary>
-          {(wins > 0 || loses > 0) && (
+          {!loadingStats && (successful > 0 || failed > 0) && (
             <CandidateCardStatistics>
               <StatsBlock size="m" centered>
                 <TwoColumnsStatistic>
                   <StatiscticContentColumn>
                     <TextBig value bold>
-                      {wins}
+                      {successful}
                     </TextBig>
                     <Subscription>Past Wins</Subscription>
                   </StatiscticContentColumn>
                   <StatiscticContentColumn>
                     <TextBig value bold>
-                      {loses}
+                      {failed}
                     </TextBig>
                     <Subscription>Past Loses</Subscription>
                   </StatiscticContentColumn>
@@ -128,10 +129,15 @@ export const CandidateCard = ({
         </CandidateCardArrow>
       </CandidateCardContentWrapper>
       {voted && <VotedBadgeStatus inverted>Voted</VotedBadgeStatus>}
-      {wins === 0 && loses === 0 && (
+      {!successful && !failed && !loadingStats && (
         <NewcomerBadgeStatus inverted size="l">
           Newcomer
         </NewcomerBadgeStatus>
+      )}
+      {loadingStats && (
+        <LoadingStatsBlock>
+          <Loading text="Loading stats..." />
+        </LoadingStatsBlock>
       )}
     </CandidateCardWrapper>
   )
@@ -161,6 +167,12 @@ export const StatsValue = styled.span`
 `
 
 const NewcomerBadgeStatus = styled(BadgeStatus)`
+  position: absolute;
+  top: 16px;
+  right: 48px;
+`
+
+const LoadingStatsBlock = styled.div`
   position: absolute;
   top: 16px;
   right: 48px;
