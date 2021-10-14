@@ -165,13 +165,13 @@ For the `olympia_dev` branch the `defs.json` use this [link](https://github.com/
 
 ## Using well-known accounts with Polkadot-js extension
 
-Substrate defines [well-known accounts](https://substrate.dev/docs/en/knowledgebase/integrate/subkey#well-known-keys) for `Alice`, `Alice_Stash`, `Bob`, `Bob_Stash`, `Charlie`, `Dave`, `Eve` and `Ferdie`.
+Substrate defines [well-known accounts](https://docs.substrate.io/v3/tools/subkey#well-known-keys) for `Alice`, `Alice_Stash`, `Bob`, `Bob_Stash`, `Charlie`, `Dave`, `Eve` and `Ferdie`.
 
 To add any of the above:
 
 1. Open extension and click plus sign
 2. Select "Import account from pre-existing seed"
-3. Copy the seed from [substrate help page](https://substrate.dev/docs/en/knowledgebase/integrate/subkey#well-known-keys) as "existing mnemonic seed"
+3. Copy the seed from [substrate help page](https://docs.substrate.io/v3/tools/subkey#well-known-keys) as "existing mnemonic seed"
 4. Open advanced and type the derivation path:
   * For `Alice`, `Bob`, `Charlie`, `Dave`, `Eve` & `Ferdie` use the name as path, e.g. `//Eve`
   * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`
