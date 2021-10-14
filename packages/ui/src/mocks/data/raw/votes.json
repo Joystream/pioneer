@@ -1,0 +1,476 @@
+[
+  {
+    "electionRoundId": "0",
+    "stake": 6000,
+    "stakeLocked": true,
+    "voteForId": "19"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 10000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": false,
+    "voteForId": "33"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 4000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 2000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 6000,
+    "stakeLocked": false,
+    "voteForId": "30"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": false,
+    "voteForId": "0"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 6000,
+    "stakeLocked": false,
+    "voteForId": "33"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": "30"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 2000,
+    "stakeLocked": false,
+    "voteForId": "0"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 2000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": "46"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 2000,
+    "stakeLocked": false,
+    "voteForId": "46"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 4000,
+    "stakeLocked": false,
+    "voteForId": "30"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": false,
+    "voteForId": "30"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 8000,
+    "stakeLocked": true,
+    "voteForId": "21"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 7000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 6000,
+    "stakeLocked": true,
+    "voteForId": "21"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 9000,
+    "stakeLocked": false,
+    "voteForId": "23"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 6000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 2000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 9000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 6000,
+    "stakeLocked": false,
+    "voteForId": "38"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 3000,
+    "stakeLocked": false,
+    "voteForId": "38"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 7000,
+    "stakeLocked": false,
+    "voteForId": "46"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 3000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": "38"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 9000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 6000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 2000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": "29"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 1000,
+    "stakeLocked": true,
+    "voteForId": "29"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 8000,
+    "stakeLocked": false,
+    "voteForId": "13"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 7000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 5000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 3000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 7000,
+    "stakeLocked": false,
+    "voteForId": "29"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 6000,
+    "stakeLocked": true,
+    "voteForId": "28"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 10000,
+    "stakeLocked": false,
+    "voteForId": "31"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 5000,
+    "stakeLocked": true,
+    "voteForId": "19"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 5000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 8000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "voteForId": "42"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 1000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": false,
+    "voteForId": "23"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 10000,
+    "stakeLocked": false,
+    "voteForId": "13"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 6000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 3000,
+    "stakeLocked": false,
+    "voteForId": "48"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "voteForId": "42"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": false,
+    "voteForId": "9"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 8000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 8000,
+    "stakeLocked": false,
+    "voteForId": "42"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 9000,
+    "stakeLocked": false,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 9000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": true,
+    "voteForId": "15"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 10000,
+    "stakeLocked": false,
+    "voteForId": "15"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 3000,
+    "stakeLocked": true,
+    "voteForId": "17"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 1000,
+    "stakeLocked": true,
+    "voteForId": "17"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 9000,
+    "stakeLocked": true,
+    "voteForId": "29"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 1000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 7000,
+    "stakeLocked": true,
+    "voteForId": "27"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 2000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 7000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 2000,
+    "stakeLocked": true,
+    "voteForId": "43"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 6000,
+    "stakeLocked": true,
+    "voteForId": "29"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "voteForId": "17"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "voteForId": "17"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 4000,
+    "stakeLocked": true,
+    "voteForId": "47"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "voteForId": "43"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 1000,
+    "stakeLocked": true,
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "voteForId": "17"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 9000,
+    "stakeLocked": true,
+    "voteForId": null
+  }
+]

@@ -22,6 +22,7 @@ import {
   seedCouncilCandidates,
   seedCouncilElections,
   seedProposalsEvents,
+  seedCouncilVotes,
 } from './data'
 import {
   getConnectionResolver,
@@ -95,6 +96,7 @@ export const makeServer = (environment = 'development') => {
               candidates: getWhereResolver('Candidate'),
               candidatesConnection: getConnectionResolver('CandidateConnection'),
               candidateByUniqueInput: getUniqueResolver('Candidate'),
+              castVotes: getWhereResolver('CastVote'),
               councilMembersConnection: getConnectionResolver('CouncilMemberConnection'),
               councilorRewardUpdatedEvents: getWhereResolver('CouncilorRewardUpdatedEvent'),
               electedCouncils: getWhereResolver('ElectedCouncil'),
@@ -181,6 +183,7 @@ export const makeServer = (environment = 'development') => {
             seedCouncilMembers(server)
             seedCouncilElections(server)
             seedCouncilCandidates(server)
+            seedCouncilVotes(server)
           },
         }),
   })
