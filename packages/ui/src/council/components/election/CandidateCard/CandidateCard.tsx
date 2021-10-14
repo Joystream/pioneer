@@ -23,11 +23,13 @@ import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCard
 export interface CandidateCardProps {
   id: string
   member: Member
-  image?: string
   voted?: boolean
   withdrawable?: boolean
-  title: string
-  bulletPoints?: string[]
+  info: {
+    title: string
+    bulletPoints: string[]
+    bannerUri?: string
+  }
   stake?: BN
   wins?: number
   loses?: number
@@ -38,11 +40,9 @@ export interface CandidateCardProps {
 export const CandidateCard = ({
   id,
   member,
-  image,
+  info,
   voted,
   withdrawable,
-  title,
-  bulletPoints,
   stake,
   wins = 0,
   loses = 0,
@@ -62,7 +62,7 @@ export const CandidateCard = ({
   return (
     <CandidateCardWrapper onClick={showCandidate}>
       <CandidateCardImageWrapper>
-        <CandidateCardImage imageUrl={image} />
+        <CandidateCardImage imageUrl={info.bannerUri} />
       </CandidateCardImageWrapper>
       <CandidateCardContentWrapper>
         <CandidateCardContent>
@@ -70,12 +70,12 @@ export const CandidateCard = ({
             <MemberInfo onlyTop member={member} skipModal={isPreview} />
           </CandidateCardMemberInfoWrapper>
           <CandidateCardTitle as={GhostRouterLink} to="#">
-            {title}
+            {info.title}
           </CandidateCardTitle>
-          {bulletPoints && (
+          {info.bulletPoints.length > 0 && (
             <CandidateCardList>
-              {bulletPoints.map((itemText, index) => (
-                <CandidateCardListItem key={index}>{itemText}</CandidateCardListItem>
+              {info.bulletPoints.map((bulletPoint, index) => (
+                <CandidateCardListItem key={index}>{bulletPoint}</CandidateCardListItem>
               ))}
             </CandidateCardList>
           )}

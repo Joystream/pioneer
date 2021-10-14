@@ -18,14 +18,7 @@ export const CandidacyThumbnailPreview = ({ candidate, closeModal }: CandidacyTh
       <ModalHeader onClick={closeModal} title="Candidacy Thumbnail Preview" />
       <ModalBody>
         <ScrolledModalContainer>
-          <CandidateCard
-            id="0"
-            member={candidate.member}
-            title={candidate.info.title}
-            bulletPoints={candidate.info.bulletPoints}
-            stake={candidate.stake}
-            isPreview
-          />
+          <CandidateCard id="0" member={candidate.member} info={candidate.info} stake={candidate.stake} isPreview />
         </ScrolledModalContainer>
       </ModalBody>
       <ModalFooter>
