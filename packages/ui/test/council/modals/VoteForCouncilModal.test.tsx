@@ -154,7 +154,7 @@ describe('UI: Vote for Council Modal', () => {
     fireEvent.click(await getButton('Sign and send'))
 
     expect(await screen.findByText(/^You have just successfully voted for the Candidate/i)).toBeDefined()
-    expect(await getButton('See my Announcement')).toBeDefined()
+    expect(await getButton('See my Vote')).toBeDefined()
   })
 
   it('Transaction error', async () => {

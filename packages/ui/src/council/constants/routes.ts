@@ -2,6 +2,7 @@ export const CouncilRoutes = {
   council: '/council',
   pastCouncils: '/council/past-councils',
   currentElection: '/council/election',
+  myVotes: '/council/election/my-votes',
   pastElections: '/council/past-elections',
   pastVotes: '/council/past-votes',
 } as const

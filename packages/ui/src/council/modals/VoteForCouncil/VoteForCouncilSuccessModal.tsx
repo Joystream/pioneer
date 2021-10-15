@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { ButtonGhost } from '@/common/components/buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, SuccessModalBody } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { CouncilRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 
@@ -26,7 +27,9 @@ export const VoteForCouncilSuccessModal = () => {
       </SuccessModalBody>
 
       <ModalFooter>
-        <ButtonGhost size="medium">See my Announcement</ButtonGhost>
+        <LinkButtonGhost to={CouncilRoutes.currentElection} size="medium">
+          See my Vote
+        </LinkButtonGhost>
       </ModalFooter>
     </Modal>
   )
