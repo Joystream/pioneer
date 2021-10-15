@@ -5,7 +5,7 @@ export const isErrorEvent = ({ event: { method } }: EventRecord) => {
   return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
 }
 
-export const isError = (events: EventRecord[]): boolean => !!events.find(isErrorEvent)
+export const hasError = (events: EventRecord[]): boolean => !!events.find(isErrorEvent)
 
 export const toDispatchError = (event: EventRecord) => {
   const [dispatchError] = (event.event.data as unknown) as ITuple<[DispatchError]>
