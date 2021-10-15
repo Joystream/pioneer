@@ -1,6 +1,8 @@
+import { ApiRx } from '@polkadot/api'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import React, { ReactNode } from 'react'
 
+import { useApi } from '@/common/hooks/useApi'
 import { isErrorEvent, toDispatchError } from '@/common/model/apiErrors'
 
 import { FailureIcon } from './icons/FailureIcon'
@@ -14,10 +16,12 @@ export interface FailureModalProps {
 
 interface EventErrorMessageProps {
   event: EventRecord
+  api: ApiRx
 }
 
 export const FailureModal = ({ children, onClose, events }: FailureModalProps) => {
-  const errorEvents = events?.filter(isErrorEvent)
+  const { api } = useApi()
+  const errorEvents = events?.filter(isErrorEvent) ?? []
 
   return (
     <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
@@ -28,14 +32,14 @@ export const FailureModal = ({ children, onClose, events }: FailureModalProps) =
           <span className="red-title">Oh no!</span> Failure
         </ModalTitle>
         <ResultText>{children}</ResultText>
-        {!!errorEvents && errorEvents.map((event, i) => <EventErrorMessage key={i} event={event} />)}
+        {!!errorEvents && api && errorEvents.map((event, i) => <EventErrorMessage key={i} event={event} api={api} />)}
       </ResultModalBody>
     </Modal>
   )
 }
 
-const EventErrorMessage = ({ event }: EventErrorMessageProps) => {
-  const registryError = toDispatchError(event)
+const EventErrorMessage = ({ event, api }: EventErrorMessageProps) => {
+  const registryError = toDispatchError(event, api)
 
   if (!registryError) {
     return null

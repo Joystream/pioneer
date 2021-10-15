@@ -8,7 +8,7 @@ import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
 import { info } from '../logger'
-import { hasError, isErrorEvent, toDispatchError } from '../model/apiErrors'
+import { hasError } from '../model/apiErrors'
 import { Address } from '../types'
 
 import { useObservable } from './useObservable'
@@ -32,22 +32,6 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
     if (status.isInBlock) {
       info('Included at block hash', JSON.stringify(status.asInBlock))
       info('Events:')
-
-      events.forEach((event) => {
-        const {
-          event: { data, method, section },
-          phase,
-        } = event
-
-        info('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
-
-        if (isErrorEvent(event)) {
-          const error = toDispatchError(event)
-          const message = error ? `${error.section}.${error.name}` : 'Unknown'
-
-          info(`\t\t Error: %c${message}`, 'color: red')
-        }
-      })
       info(JSON.stringify(events))
 
       send({
