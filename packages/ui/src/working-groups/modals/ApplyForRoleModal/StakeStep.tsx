@@ -75,7 +75,6 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
             <SelectAccount
               onChange={(account) => changeField('account', account)}
               selected={fields.account}
-              minBalance={minStake}
               filter={accountsFilter}
             />
           </InputComponent>
