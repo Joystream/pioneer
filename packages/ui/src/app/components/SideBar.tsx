@@ -1,5 +1,6 @@
 import { AnimateSharedLayout } from 'framer-motion'
 import React, { useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
@@ -91,7 +92,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={MembersRoutes.members}>
+              <NavigationLink to={generatePath(MembersRoutes.members)}>
                 <MembersIcon />
                 Members
               </NavigationLink>
