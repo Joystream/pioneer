@@ -59,11 +59,14 @@ export const seedCouncilElections = (server: any) => {
   rawElections.map((data) => seedCouncilElection(data, server))
 }
 
-export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) =>
-  server.schema.create('Candidate', {
+export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
+  const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
+
+  return server.schema.create('Candidate', {
     ...data,
-    noteMetadata: server.schema.create('CandidacyNoteMetadata', data.noteMetadata),
+    noteMetadata,
   })
+}
 
 export const seedCouncilCandidates = (server: any) => {
   rawCandidates.map((data) => seedCouncilCandidate(data, server))

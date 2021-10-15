@@ -24,6 +24,12 @@ fragment ElectionCandidateFields on Candidate {
     ...MemberFields
   }
   stake
+  noteMetadata {
+    header
+    bulletPoints
+    bannerImageUri
+    description
+  }
 }
 
 fragment ElectionRoundFields on ElectionRound {
@@ -33,23 +39,13 @@ fragment ElectionRoundFields on ElectionRound {
   }
 }
 
-fragment CandidateDetailedFields on Candidate {
-  id
+fragment ElectionCandidateDetailedFields on Candidate {
+  ...ElectionCandidateFields
   stakingAccountId
   rewardAccountId
-  stake
-  member {
-    ...MemberFields
-  }
   electionRound {
     cycleId
     isFinished
-  }
-  noteMetadata {
-    header
-    bulletPoints
-    bannerImageUri
-    description
   }
 }
 
@@ -67,7 +63,7 @@ query GetCurrentElection {
 
 query GetCandidate($where: CandidateWhereUniqueInput!) {
   candidateByUniqueInput(where: $where) {
-    ...CandidateDetailedFields
+    ...ElectionCandidateDetailedFields
   }
 }
 

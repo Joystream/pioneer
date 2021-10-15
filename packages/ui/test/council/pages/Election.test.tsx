@@ -22,6 +22,18 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
 
+const mockCandidateStats = {
+  isLoading: false,
+  total: 0,
+  withdrawn: 0,
+  successful: 0,
+  failed: 0,
+}
+
+jest.mock('../../../src/memberships/hooks/useMemberCandidacyStats', () => ({
+  useMemberCandidacyStats: () => mockCandidateStats,
+}))
+
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
     id: '1',

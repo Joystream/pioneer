@@ -5,10 +5,10 @@ import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ModalFooter, ModalHeader, Modal, ModalBody, ScrolledModalContainer } from '@/common/components/Modal'
 import { CandidateCard } from '@/council/components/election/CandidateCard/CandidateCard'
-import { CandidateWithDetails } from '@/council/types'
+import { ElectionCandidateWithDetails } from '@/council/types'
 
 interface CandidacyThumbnailPreviewProps {
-  candidate: CandidateWithDetails
+  candidate: ElectionCandidateWithDetails
   closeModal: () => void
 }
 
@@ -18,14 +18,7 @@ export const CandidacyThumbnailPreview = ({ candidate, closeModal }: CandidacyTh
       <ModalHeader onClick={closeModal} title="Candidacy Thumbnail Preview" />
       <ModalBody>
         <ScrolledModalContainer>
-          <CandidateCard
-            id="0"
-            member={candidate.member}
-            title={candidate.title}
-            infolist={candidate.description}
-            stake={candidate.stake}
-            isPreview
-          />
+          <CandidateCard id="0" member={candidate.member} info={candidate.info} stake={candidate.stake} isPreview />
         </ScrolledModalContainer>
       </ModalBody>
       <ModalFooter>
