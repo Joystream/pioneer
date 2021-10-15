@@ -8,7 +8,7 @@ import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
 import { info } from '../logger'
-import { hasError } from '../model/apiErrors'
+import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
 import { useObservable } from './useObservable'
@@ -35,7 +35,7 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
       info(JSON.stringify(events))
 
       send({
-        type: hasError(events) ? 'ERROR' : 'SUCCESS',
+        type: hasErrorEvent(events) ? 'ERROR' : 'SUCCESS',
         events,
         fee,
       })

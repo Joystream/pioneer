@@ -1,27 +1,26 @@
-import { ApiRx } from '@polkadot/api'
 import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
+
+import { isModuleEvent } from './isModuleEvent'
 
 export const isErrorEvent = ({ event: { method } }: EventRecord) => {
   return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
 }
 
-export const hasError = (events: EventRecord[]): boolean => !!events.find(isErrorEvent)
+export const hasErrorEvent = (events: EventRecord[]) => !!events.find(isErrorEvent)
 
 const getErrorMeta = (error: DispatchError) => {
   if (error.isModule) {
     return error.registry.findMetaError(error.asModule)
-  } else {
-    return
   }
 }
 
-export const toDispatchError = (event: EventRecord, api: ApiRx) => {
-  if (api.events.utility.BatchInterrupted.is(event.event)) {
+export const toDispatchError = (event: EventRecord) => {
+  if (isModuleEvent(event.event, 'utility', 'BatchInterrupted')) {
     const [, error] = event.event.data
     return getErrorMeta(error)
   }
 
-  if (api.events.system.ExtrinsicFailed.is(event.event)) {
+  if (isModuleEvent(event.event, 'system', 'ExtrinsicFailed')) {
     const [error] = event.event.data
     return getErrorMeta(error)
   }

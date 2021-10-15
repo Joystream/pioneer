@@ -1,7 +1,7 @@
-import { AugmentedEvent, AugmentedEvents } from '@polkadot/api/types'
+import { AugmentedEvents } from '@polkadot/api/types'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 
-export type ExtractTuple<P> = P extends AugmentedEvent<'rxjs', infer T> ? T : never
+import { ExtractTuple } from './types'
 
 export const getDataFromEvent = <
   Module extends keyof AugmentedEvents<'rxjs'>,
