@@ -40,7 +40,7 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   return (
     <MultiStatisticItem {...props}>
       <ItemRow>
-        <DurationValue value={duration > A_MINUTE / MILISECOND_PER_BLOCK ? format(duration) : []} />
+        <DurationValue value={duration > A_MINUTE / MILISECOND_PER_BLOCK ? format(duration) : [['< 1', 'min']]} />
       </ItemRow>
 
       <ItemRow>
