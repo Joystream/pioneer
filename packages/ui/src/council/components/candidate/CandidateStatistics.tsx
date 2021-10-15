@@ -27,10 +27,9 @@ export const CandidateStatistics = ({ memberId }: Props) => {
 }
 
 const ModalStatistics = styled(StatisticsThreeColumns)`
-  gap: normal;
+  grid-gap: 10px;
 `
 
 const Stat = styled(NumericValueStat)`
-  padding: 20px 10px 20px 16px;
-  width: 90px;
+  padding: 20px 12px 20px 16px;
 `
