@@ -43,7 +43,7 @@ export const SideBar = () => {
         <AnimateSharedLayout>
           <NavigationLinks>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <OverviewIcon />
                 Overview
               </NavigationLink>
@@ -73,13 +73,13 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <ConstitutionIcon />
                 Constitution
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <ValidatorsIcon />
                 Validators
               </NavigationLink>
@@ -97,7 +97,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <FinancialsIcon />
                 Financials
               </NavigationLink>
