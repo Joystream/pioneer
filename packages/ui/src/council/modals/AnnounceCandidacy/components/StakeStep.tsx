@@ -13,7 +13,7 @@ import { TextInlineSmall, TextMedium, ValueInJoys } from '@/common/components/ty
 import { useForm } from '@/common/hooks/useForm'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
-import { SelectMember } from '@/memberships/components/SelectMember'
+import { SelectedMember } from '@/memberships/components/SelectMember'
 import { AccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 
@@ -94,9 +94,11 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
     <RowGapBlock gap={24}>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="You are announcing candidacy using membership" inputSize="l" disabled>
-            <SelectMember onChange={() => true} disabled selected={candidacyMember} />
-          </InputComponent>
+          <SelectedMember
+            label="You are announcing your candidacy using the membership"
+            member={candidacyMember}
+            disabled
+          />
           <RowGapBlock gap={8}>
             <h4>1. Select an Account</h4>
             <TextMedium>First please select an account for staking.</TextMedium>
