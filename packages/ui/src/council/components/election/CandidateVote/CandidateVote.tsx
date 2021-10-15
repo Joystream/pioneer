@@ -7,13 +7,7 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProgressBar } from '@/common/components/Progress'
-import {
-  TextInlineBig,
-  TextInlineMedium,
-  TextInlineSmall,
-  TokenValue,
-  ValueInJoys,
-} from '@/common/components/typography'
+import { TextInlineBig, TextInlineMedium, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { Colors } from '@/common/constants'
 import { unknownMember } from '@/council/constants/unknownMember'
@@ -88,12 +82,14 @@ export const CandidateVote = ({
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
       <ButtonsGroup>
-        {voteStake && revealed && (
-          <ButtonPrimary size="medium" disabled>
-            Revealed
-          </ButtonPrimary>
-        )}
-        {voteStake && !revealed && <ButtonPrimary size="medium">Reveal</ButtonPrimary>}
+        {voteOwner &&
+          (revealed ? (
+            <ButtonPrimary size="medium" disabled>
+              Revealed
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary size="medium">Reveal</ButtonPrimary>
+          ))}
       </ButtonsGroup>
       <CandidateCardArrow>
         <Arrow direction="right" />

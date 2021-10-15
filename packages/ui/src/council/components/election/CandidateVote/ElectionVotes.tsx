@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Loading } from '@/common/components/Loading'
 import { NoData } from '@/common/components/NoData'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
@@ -13,6 +14,7 @@ interface Props {
 
 export const ElectionVotes = ({ electionCycleId }: Props) => {
   const { votes, isLoading } = useElectionVotes(electionCycleId)
+  const { allAccounts } = useMyAccounts()
 
   if (isLoading) {
     return <Loading />
@@ -26,8 +28,8 @@ export const ElectionVotes = ({ electionCycleId }: Props) => {
     <CandidateVoteList
       votes={votes.map((vote, index) => ({
         index,
-        voteOwner: false,
-        revealed: false,
+        voteOwner: !!allAccounts.find((account) => account.address === vote.castBy),
+        revealed: !!vote.voteFor,
         member: vote.voteFor,
         stake: new BN(100000),
         voteStake: vote.stake,
