@@ -24,8 +24,6 @@ export const PastProposals = () => {
 
   const { activities } = useProposalsActivities()
 
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
-
   return (
     <PageLayout
       header={
@@ -34,7 +32,7 @@ export const PastProposals = () => {
         </FilterPageHeader>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <ProposalFilters searchSlot={searchSlot} types={types} stages={stages} onApply={setFilters} />
           {isLoading ? (
             <SearchProcess
@@ -47,7 +45,7 @@ export const PastProposals = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ActivitiesBlock activities={activities} label="Proposals Activities" />
         </SidePanel>
       }

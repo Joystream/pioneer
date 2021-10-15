@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef } from 'react'
+import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -10,7 +10,7 @@ import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -41,7 +41,6 @@ export const WorkingGroupOpening = () => {
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(id)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
   const hiringApplication = useMemo(() => {
     if (opening) {
       return opening.applications.find(({ status }) => status === 'ApplicationStatusAccepted')
@@ -59,9 +58,9 @@ export const WorkingGroupOpening = () => {
         lastBreadcrumb={id}
         main={
           <RowGapBlock gap={24}>
-            <ContentWithSidepanel>
+            <ContentWithSidePanel>
               <Loading />
-            </ContentWithSidepanel>
+            </ContentWithSidePanel>
           </RowGapBlock>
         }
       />
@@ -149,12 +148,12 @@ export const WorkingGroupOpening = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <MarkdownPreview markdown={opening.description} />
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ApplicantsList
             allApplicants={opening.applications}
             myApplication={myApplication}

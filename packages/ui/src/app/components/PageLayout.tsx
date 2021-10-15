@@ -58,7 +58,9 @@ const PageMain = styled.main`
 `
 
 const PageSidebar = styled.aside`
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
   width: 100%;
   grid-area: sidebar;
 `

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -17,19 +17,18 @@ import { Statistics, TokenValueStat, StakeStat } from '@/common/components/stati
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { NextPayoutStat } from '@/working-groups/components/NextPayoutStat'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
+import { useWorkerUnstakingPeriodEnd } from '@/working-groups/hooks/useWorkerUnstakingPeriodEnd'
 import { useRoleActivities } from '@/working-groups/hooks/utils/useRoleActivities'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
-
-import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
-import { useWorkerUnstakingPeriodEnd } from '../../../../working-groups/hooks/useWorkerUnstakingPeriodEnd'
-import { getRoleWarning } from '../../../../working-groups/model/getRoleWarning'
+import { getRoleWarning } from '@/working-groups/model/getRoleWarning'
 
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
@@ -65,8 +64,6 @@ export const MyRole = () => {
         data: { workerId: worker.id },
       })
   }, [worker])
-
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const onChangeRoleClick = (): void => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_ROLE_ACCOUNT } })
@@ -133,7 +130,7 @@ export const MyRole = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <ContentWithTabs>
             <RoleAccountHeader>
               <Label>Role Account</Label>
@@ -175,7 +172,7 @@ export const MyRole = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} isOwn={isOwn} />
         </SidePanel>
       }

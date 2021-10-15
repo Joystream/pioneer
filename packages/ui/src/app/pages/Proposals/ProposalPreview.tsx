@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithSidepanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -41,7 +41,6 @@ export const ProposalPreview = () => {
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
 
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
@@ -64,9 +63,9 @@ export const ProposalPreview = () => {
         lastBreadcrumb={id}
         main={
           <RowGapBlock gap={24}>
-            <ContentWithSidepanel>
+            <ContentWithSidePanel>
               <Loading />
-            </ContentWithSidepanel>
+            </ContentWithSidePanel>
           </RowGapBlock>
         }
       />
@@ -125,7 +124,7 @@ export const ProposalPreview = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <RowGapBlock gap={24}>
             <ProposalStatistics voteCount={votes.count} constants={constants} />
 
@@ -141,7 +140,7 @@ export const ProposalPreview = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <RowGapBlock gap={36}>
             <VotesPreview votes={votes} />
 

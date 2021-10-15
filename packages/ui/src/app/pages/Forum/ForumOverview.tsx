@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -16,7 +16,6 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ForumTabs } from './components/ForumTabs'
 
 export const ForumOverview = () => {
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
   const { activities } = useForumActivities()
   const { hasMembers } = useMyMemberships()
 
@@ -28,7 +27,7 @@ export const ForumOverview = () => {
         </ForumPageHeader>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <ThreadsLayout>
             {hasMembers && (
               <>
@@ -41,7 +40,7 @@ export const ForumOverview = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ActivitiesBlock activities={activities} label="Forum Activities" />
         </SidePanel>
       }

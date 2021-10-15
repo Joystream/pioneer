@@ -8,7 +8,7 @@ export const PageContent = styled.div`
   padding: 40px 0 8px;
 `
 
-export const ContentWithSidepanel = styled.div`
+export const ContentWithSidePanel = styled.div`
   display: grid;
   position: relative;
   grid-template-columns: 1fr 280px;

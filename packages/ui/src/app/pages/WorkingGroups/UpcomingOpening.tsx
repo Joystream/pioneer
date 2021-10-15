@@ -1,14 +1,14 @@
-import React, { memo, useRef } from 'react'
+import React, { memo } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -22,7 +22,6 @@ import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
 export const UpcomingOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, opening } = useUpcomingOpening(id)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   if (isLoading || !opening) {
     return (
@@ -30,9 +29,9 @@ export const UpcomingOpening = () => {
         lastBreadcrumb={id}
         main={
           <RowGapBlock gap={24}>
-            <ContentWithSidepanel>
+            <ContentWithSidePanel>
               <Loading />
-            </ContentWithSidepanel>
+            </ContentWithSidePanel>
           </RowGapBlock>
         }
       />
@@ -92,12 +91,12 @@ export const UpcomingOpening = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <MarkdownPreview markdown={opening.description} />
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ApplicationStatus />
         </SidePanel>
       }
