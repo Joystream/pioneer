@@ -41,9 +41,5 @@ const EventErrorMessage = ({ event }: EventErrorMessageProps) => {
     return null
   }
 
-  return (
-    <ResultText>
-      {registryError.section}: {registryError.docs}
-    </ResultText>
-  )
+  return <ResultText>{registryError.docs}</ResultText>
 }
