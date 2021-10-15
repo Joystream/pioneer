@@ -7,8 +7,8 @@ import { ArrowRightIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
-import { TextMedium, TokenValue } from '@/common/components/typography'
-import { Fonts } from '@/common/constants'
+import { TextInlineSmall, TokenValue } from '@/common/components/typography'
+import { Fonts, Overflow } from '@/common/constants'
 import { CandidateStatistics } from '@/council/components/candidate/CandidateStatistics'
 import { ElectionCandidateWithDetails } from '@/council/types'
 
@@ -32,7 +32,11 @@ export const CandidacyDetails = ({ candidate }: Props) => {
         <MessagesButton size="large">
           30 messages <ArrowRightIcon />
         </MessagesButton>
-        <TextMedium light>Last message from A 1 hour ago</TextMedium>
+        <LastMessageInfo>
+          <TextInlineSmall lighter>
+            last message from <TextInlineSmall bold>Agatha</TextInlineSmall> 1 hour ago
+          </TextInlineSmall>
+        </LastMessageInfo>
       </RowGapBlock>
       <RowGapBlock gap={4}>
         <h6>Candidate summary</h6>
@@ -70,5 +74,18 @@ const MessagesButton = styled(ButtonGhost)`
   ${ButtonInnerWrapper} {
     justify-content: space-between;
     width: 100%;
+  }
+`
+
+const LastMessageInfo = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  width: fit-content;
+  margin-top: 4px;
+  ${Overflow.FullDots};
+
+  ${TextInlineSmall} {
+    ${Overflow.FullDots};
   }
 `
