@@ -34,7 +34,7 @@ export const CandidacyDetails = ({ candidate }: Props) => {
         </MessagesButton>
         <LastMessageInfo>
           <TextInlineSmall lighter>
-            last message from <TextInlineSmall bold>Alice</TextInlineSmall> 1 hour ago
+            last message from <TextInlineSmall bold>Agatha</TextInlineSmall> 1 hour ago
           </TextInlineSmall>
         </LastMessageInfo>
       </RowGapBlock>
