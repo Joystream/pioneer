@@ -1,5 +1,6 @@
 import { AnimateSharedLayout } from 'framer-motion'
 import React, { useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
@@ -43,7 +44,7 @@ export const SideBar = () => {
         <AnimateSharedLayout>
           <NavigationLinks>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <OverviewIcon />
                 Overview
               </NavigationLink>
@@ -73,13 +74,13 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <ConstitutionIcon />
                 Constitution
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <ValidatorsIcon />
                 Validators
               </NavigationLink>
@@ -91,13 +92,13 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={MembersRoutes.members}>
+              <NavigationLink to={generatePath(MembersRoutes.members)}>
                 <MembersIcon />
                 Members
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="#" disabled>
+              <NavigationLink to="/inexisting" disabled>
                 <FinancialsIcon />
                 Financials
               </NavigationLink>

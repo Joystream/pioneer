@@ -5,14 +5,14 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../../constants'
 
-interface NavigationLinkProps extends DisabledNavigationLingkProps {
+interface NavigationLinkProps extends DisabledNavigationLinkProps {
   children: React.ReactNode
   exact?: boolean
   className?: string
   to: string
 }
 
-interface DisabledNavigationLingkProps {
+interface DisabledNavigationLinkProps {
   disabled?: boolean
 }
 
@@ -27,7 +27,7 @@ export const NavigationLink = ({ children, exact, className, to, disabled }: Nav
       disabled={disabled}
       activeClassName="active-page"
       onClick={(event) => {
-        if (disabled === true) {
+        if (disabled) {
           event.preventDefault()
         }
       }}
@@ -93,14 +93,14 @@ const NavigationItemLinkChildren = styled.div`
   z-index: 20;
 `
 
-const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
+const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
   display: flex;
   position: relative;
   justify-content: start;
   align-items: center;
   width: 100%;
   height: 48px;
-  padding: 0px 12px 0px 24px;
+  padding: 0 12px 0 24px;
   border-radius: 0 ${BorderRad.s} ${BorderRad.s} 0;
   font-size: 16px;
   font-weight: 400;
