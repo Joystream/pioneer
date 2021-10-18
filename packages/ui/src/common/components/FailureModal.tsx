@@ -1,7 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import React, { ReactNode } from 'react'
 
-import { isErrorEvent, toDispatchError } from '@/common/model/apiErrors'
+import { isErrorEvent, toDispatchError } from '@/common/model/JoystreamNode'
 
 import { FailureIcon } from './icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from './Modal'
@@ -17,7 +17,7 @@ interface EventErrorMessageProps {
 }
 
 export const FailureModal = ({ children, onClose, events }: FailureModalProps) => {
-  const errorEvents = events?.filter(isErrorEvent)
+  const errorEvents = events?.filter(isErrorEvent) ?? []
 
   return (
     <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
@@ -41,9 +41,5 @@ const EventErrorMessage = ({ event }: EventErrorMessageProps) => {
     return null
   }
 
-  return (
-    <ResultText>
-      {registryError.section}: {registryError.docs}
-    </ResultText>
-  )
+  return <ResultText>{registryError.docs}</ResultText>
 }
