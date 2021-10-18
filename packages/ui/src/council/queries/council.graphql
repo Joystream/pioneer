@@ -70,6 +70,18 @@ query GetCurrentElection {
   }
 }
 
+query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
+  electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
+    ...ElectionRoundFields
+  }
+}
+
+query GetPastElectionsCount {
+  electionRoundsConnection(where: { isFinished_eq: true }) {
+    totalCount
+  }
+}
+
 query GetCandidate($where: CandidateWhereUniqueInput!) {
   candidateByUniqueInput(where: $where) {
     ...ElectionCandidateDetailedFields

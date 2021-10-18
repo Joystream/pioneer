@@ -6,17 +6,13 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
+import { TableOrder } from '@/common/types/TableOrder'
 import { PastWorkersList } from '@/working-groups/components/WorkersTableList/PastWorkersList'
 import { usePastWorkersPagination, WorkersOrderKey } from '@/working-groups/hooks/usePastWorkersPagination'
 
-export interface ListOrder {
-  key: WorkersOrderKey
-  isDescending: boolean
-}
-
 export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
-  const [order, setOrder] = useState<ListOrder>({ key: 'DateFinished', isDescending: true })
+  const [order, setOrder] = useState<TableOrder<WorkersOrderKey>>({ key: 'DateFinished', isDescending: true })
 
   const { loadingWorkers, loadingCount, workers, pageCount } = usePastWorkersPagination({
     groupId,
@@ -63,7 +59,7 @@ const pastWorkersColLayout = '1fr 1fr 1fr'
 
 interface SortHeaderProps {
   sortKey: WorkersOrderKey
-  order: ListOrder
+  order: TableOrder<WorkersOrderKey>
   children: ReactNode
   sort: (sortKey: WorkersOrderKey) => void
 }
