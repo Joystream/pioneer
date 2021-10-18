@@ -15,7 +15,7 @@ To run the local instance (project root or `packages/ui` directory):
 yarn run storybook
 ```
 
-For more complex components, the stories might need a [query-node mocks](mocks#query-node-mocks) in order to fetch data.
+For more complex components, the stories might need a [query-node mocks](mocks.md#query-node-mocks) in order to fetch data.
 
 Example story that uses query-node mocks to fetch `members` data:
 
@@ -44,7 +44,7 @@ export const Default: Story = () => {
 
 ## Integration tests
 
-Pioneer 2 use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](mocks#query-node-mocks) uses the same setup as the front-end mocks.
+Pioneer 2 use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](mocks.md#query-node-mocks) uses the same setup as the front-end mocks.
 
 ### Polkadot.js API stubs
 
