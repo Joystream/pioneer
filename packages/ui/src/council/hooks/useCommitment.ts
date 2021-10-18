@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useCandidate } from '@/council/hooks/useCandidate'
 
-interface VoteValue {
+interface VotingAttempt {
   salt: string
   optionId: string
 }
@@ -26,20 +26,20 @@ export const useCommitment = (accountId: string, candidateId: string) => {
     const payload = Buffer.concat([accountId, optionId, salt, cycleId].map(stringToU8a))
 
     return {
-      key: `votes:${cycleId}`,
+      key: `vote:${cycleId}:${accountId}`,
       value: { salt, optionId },
       commitment: blake2AsHex(payload),
     }
-  }, [candidate])
+  }, [accountId, candidate?.id])
 
   const [isVoteStored, setIsVoteStored] = useState(false)
-  const [storedVote, storeVote] = useLocalStorage<VoteValue>(vote?.key)
+  const [votingAttempts, setVotingAttempts] = useLocalStorage<VotingAttempt[]>(vote?.key)
   useEffect(() => {
     if (!vote) return
 
-    storeVote(vote.value)
+    setVotingAttempts([...(votingAttempts ?? []), vote.value])
     setIsVoteStored(true)
-  }, [vote])
+  }, [vote?.key, vote?.value])
 
   return { commitment: vote?.commitment, isVoteStored }
 }
