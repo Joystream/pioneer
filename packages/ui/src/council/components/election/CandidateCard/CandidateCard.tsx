@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
@@ -15,6 +15,7 @@ import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/
 import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
+import { WithdrawButton } from '@/council/components/election/WithdrawButton'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
 import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyStats'
@@ -114,7 +115,7 @@ export const CandidateCard = ({
             {isVotingStage && (
               <CandidateCardControls>
                 {withdrawable ? (
-                  <ButtonSecondary size="medium">Withdraw Candidacy</ButtonSecondary>
+                  <WithdrawButton />
                 ) : voted ? (
                   <ButtonPrimary size="medium">Vote again </ButtonPrimary>
                 ) : (
@@ -258,7 +259,6 @@ const CandidateCardList = styled.ul`
   width: 100%;
   max-width: 100%;
   max-height: 100%;
-  overflow: hidden;
   pointer-events: none;
 `
 
