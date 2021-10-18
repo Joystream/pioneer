@@ -30,8 +30,8 @@ Default.args = {
     createdAt: '',
   },
   revealed: true,
-  sumOfAllStakes: (5000000 as unknown) as BN,
-  totalStake: (500000 as unknown) as BN,
+  sumOfAllStakes: new BN(5000000),
+  totalStake: new BN(500000),
   votes: 20,
   index: 1,
 }
