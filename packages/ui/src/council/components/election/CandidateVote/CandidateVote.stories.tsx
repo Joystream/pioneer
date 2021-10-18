@@ -31,9 +31,8 @@ Default.args = {
   },
   voteOwner: true,
   revealed: true,
-  stake: (5000000 as unknown) as BN,
-  voteStake: (500000 as unknown) as BN,
+  sumOfAllStakes: (5000000 as unknown) as BN,
+  totalStake: (500000 as unknown) as BN,
   votes: 20,
-  revealedVotes: 5,
   index: 1,
 }

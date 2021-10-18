@@ -7,7 +7,7 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProgressBar } from '@/common/components/Progress'
-import { TextInlineBig, TextInlineMedium, TextInlineSmall, TokenValue } from '@/common/components/typography'
+import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { Colors } from '@/common/constants'
 import { unknownMember } from '@/council/constants/unknownMember'
@@ -20,10 +20,9 @@ export interface CandidateVoteProps {
   voteOwner: boolean
   revealed: boolean
   member?: Member
-  stake: BN
-  voteStake: BN
+  sumOfAllStakes: BN
+  totalStake: BN
   votes: number
-  revealedVotes: number
   index: number
 }
 
@@ -31,13 +30,12 @@ export const CandidateVote = ({
   voteOwner,
   revealed,
   member,
-  stake,
-  voteStake,
+  sumOfAllStakes,
+  totalStake,
   votes,
-  revealedVotes,
   index,
 }: CandidateVoteProps) => {
-  const roundedPercentage = Math.round((100 / Number(stake)) * Number(voteStake))
+  const roundedPercentage = Math.round((100 / Number(sumOfAllStakes)) * Number(totalStake))
   return (
     <CandidateVoteWrapper>
       <VoteIndex lighter inter>
@@ -55,7 +53,7 @@ export const CandidateVote = ({
           <StakeAndVotesRow>
             <Subscription>Total Stake</Subscription>
             <StatsValue>
-              <TokenValue value={stake} />
+              <TokenValue value={totalStake} />
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
@@ -63,7 +61,7 @@ export const CandidateVote = ({
               <>
                 <Subscription>My Stake</Subscription>
                 <StatsValue>
-                  <TokenValue value={voteStake} />
+                  <TokenValue value={totalStake} />
                 </StatsValue>
               </>
             )}
@@ -71,12 +69,7 @@ export const CandidateVote = ({
           <StakeAndVotesRow>
             <Subscription>Total Revealed votes</Subscription>
             <StatsValue>
-              <TextInlineBig value>
-                {revealedVotes}
-                <TextInlineMedium inter lighter normalWeight>
-                  /{votes}
-                </TextInlineMedium>
-              </TextInlineBig>
+              <TextInlineBig value>{votes}</TextInlineBig>
             </StatsValue>
           </StakeAndVotesRow>
         </StakeAndVotesGroup>
