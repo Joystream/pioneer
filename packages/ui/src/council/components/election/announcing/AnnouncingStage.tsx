@@ -39,9 +39,8 @@ export const AnnouncingStage = ({ election }: AnnouncingStageProps) => {
           id: candidate.id,
           member: candidate.member,
           info: candidate.info,
-          ...(candidate.stake && isMyCandidate(myMembers, candidate)
-            ? { stake: new BN(candidate.stake), withdrawable: true }
-            : {}),
+          ...(candidate.stake && isMyCandidate(myMembers, candidate) ? { stake: new BN(candidate.stake) } : {}),
+          withdrawable: !!isMyCandidate(myMembers, candidate),
         }))}
       />
     )

@@ -61,6 +61,8 @@ export const CandidateCard = ({
   }, [showModal, isPreview])
   const { isLoading: loadingStats, successful, failed } = useMemberCandidacyStats(member.id)
 
+  const showWithdrawButton = !isVotingStage && withdrawable
+
   return (
     <CandidateCardWrapper onClick={showCandidate}>
       <CandidateCardImageWrapper>
@@ -112,15 +114,14 @@ export const CandidateCard = ({
                 <Subscription>My stake</Subscription>
               </CandidateCardStake>
             )}
+            {showWithdrawButton && (
+              <CandidateCardControls>
+                <WithdrawButton member={member} />
+              </CandidateCardControls>
+            )}
             {isVotingStage && (
               <CandidateCardControls>
-                {withdrawable ? (
-                  <WithdrawButton member={member} />
-                ) : voted ? (
-                  <ButtonPrimary size="medium">Vote again </ButtonPrimary>
-                ) : (
-                  <VoteForCouncilButton id={id} />
-                )}
+                {voted ? <ButtonPrimary size="medium">Vote again </ButtonPrimary> : <VoteForCouncilButton id={id} />}
               </CandidateCardControls>
             )}
           </CandidateCardStakeAndControls>
