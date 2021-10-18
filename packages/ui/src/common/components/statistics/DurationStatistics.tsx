@@ -22,7 +22,7 @@ export const DurationStatistics = (props: DurationStatisticsProps) => {
   const duration = Date.parse(props.value) - (props.from ? Date.parse(props.from) : Date.now())
   return (
     <StatisticItem {...props}>
-      <DurationValue value={duration > A_MINUTE ? format(duration) : []} />
+      <DurationValue value={duration > A_MINUTE ? format(duration) : [['< 1', 'min']]} />
     </StatisticItem>
   )
 }
