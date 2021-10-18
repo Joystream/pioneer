@@ -51,7 +51,7 @@ export const AnnouncingStage = ({ election }: AnnouncingStageProps) => {
         tab={tab}
         onSetTab={(tab) => setTab(tab as AnnouncingStageTab)}
       />
-      {tab === 'candidates' && displayCandidates(tab === 'candidates' ? election.candidates : myCandidates)}
+      {displayCandidates(tab === 'candidates' ? election.candidates : myCandidates)}
     </>
   )
 }
