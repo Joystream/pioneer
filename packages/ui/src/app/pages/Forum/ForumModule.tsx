@@ -11,7 +11,7 @@ import { ForumMyThreads } from './ForumMyThreads'
 import { ForumOverview } from './ForumOverview'
 import { LatestThreads } from './LatestThreads'
 
-export const Forum = () => {
+export const ForumModule = () => {
   return (
     <Switch>
       <Route path={ForumRoutes.forum} exact component={ForumCategories} />

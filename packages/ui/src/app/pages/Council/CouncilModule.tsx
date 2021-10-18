@@ -1,13 +1,13 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
 
-import { Council } from '@/app/pages/Council/Council'
-import { Election } from '@/app/pages/Council/Election'
-import { PastCouncils } from '@/app/pages/Council/PastCouncils'
-import { PastElections } from '@/app/pages/Council/PastElections'
-import { PastVotes } from '@/app/pages/Council/PastVotes'
+import { CouncilRoutes } from '@/council/constants'
 
-import { CouncilRoutes } from '../constants'
+import { Council } from './Council'
+import { Election } from './Election'
+import { PastCouncils } from './PastCouncils'
+import { PastElections } from './PastElections'
+import { PastVotes } from './PastVotes'
 
 export const CouncilModule = () => {
   return (

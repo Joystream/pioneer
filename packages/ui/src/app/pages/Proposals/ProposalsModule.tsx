@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
 
-import { PastProposals } from '@/app/pages/Proposals/PastProposals'
-import { ProposalPreview } from '@/app/pages/Proposals/ProposalPreview'
-import { Proposals } from '@/app/pages/Proposals/Proposals'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 
-import { ProposalsRoutes } from '../constants/routes'
+import { PastProposals } from './PastProposals'
+import { ProposalPreview } from './ProposalPreview'
+import { Proposals } from './Proposals'
 
 export const ProposalsModule = () => {
   return (
