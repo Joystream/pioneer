@@ -28,7 +28,7 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
   const { api } = useApi()
   const { hideModal, modalData } = useModal<VoteForCouncilModalCall>()
 
-  const { commitment, isSaltStored } = useCommitment(stake.account.address, modalData.id)
+  const { commitment, isVoteStored } = useCommitment(stake.account.address, modalData.id)
 
   const transaction = useMemo(() => {
     if (commitment) {
@@ -67,7 +67,7 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
           />
         </TransactionInfoContainer>
 
-        <ButtonPrimary size="medium" disabled={!isReady || !isSaltStored} onClick={sign}>
+        <ButtonPrimary size="medium" disabled={!isReady || !isVoteStored} onClick={sign}>
           Sign and send
           <Arrow direction="right" />
         </ButtonPrimary>

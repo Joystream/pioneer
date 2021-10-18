@@ -23,16 +23,18 @@ function setItem(key: string, value: any) {
   }
 }
 
-export const useLocalStorage = <T>(key: string) => {
-  const [value, setValue] = useState<T | undefined>(() => getItem(key))
+export const useLocalStorage = <T>(key?: string) => {
+  const [value, setValue] = useState<T | undefined>(() => {
+    if (key) return getItem(key)
+  })
 
   useEffect(() => {
-    setValue(getItem(key))
+    if (key) setValue(getItem(key))
   }, [key])
 
   useEffect(() => {
-    setItem(key, value)
-  }, [value, key])
+    if (key) setItem(key, value)
+  }, [value])
 
   return [value, setValue] as const
 }

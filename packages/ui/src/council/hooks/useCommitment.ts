@@ -2,7 +2,13 @@ import { stringToU8a } from '@polkadot/util'
 import { blake2AsHex, randomAsHex } from '@polkadot/util-crypto'
 import { useEffect, useMemo, useState } from 'react'
 
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useCandidate } from '@/council/hooks/useCandidate'
+
+interface VoteValue {
+  salt: string
+  optionId: string
+}
 
 export const useCommitment = (accountId: string, candidateId: string) => {
   const { candidate } = useCandidate(candidateId)
@@ -20,23 +26,20 @@ export const useCommitment = (accountId: string, candidateId: string) => {
     const payload = Buffer.concat([accountId, optionId, salt, cycleId].map(stringToU8a))
 
     return {
-      cycleId,
-      optionId,
-      salt,
+      key: `votes:${cycleId}`,
+      value: { salt, optionId },
       commitment: blake2AsHex(payload),
     }
   }, [candidate])
 
-  const [isSaltStored, setIsSaltStored] = useState(false)
+  const [isVoteStored, setIsVoteStored] = useState(false)
+  const [storedVote, storeVote] = useLocalStorage<VoteValue>(vote?.key)
   useEffect(() => {
     if (!vote) return
 
-    const key = `votes:${vote.cycleId}`
-    const value = JSON.stringify({ optionId: vote.optionId, salt: vote.salt })
-    localStorage.setItem(key, value)
-
-    setIsSaltStored(true)
+    storeVote(vote.value)
+    setIsVoteStored(true)
   }, [vote])
 
-  return { commitment: vote?.commitment, isSaltStored }
+  return { commitment: vote?.commitment, isVoteStored }
 }
