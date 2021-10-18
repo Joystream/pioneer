@@ -115,7 +115,7 @@ export const CandidateCard = ({
             {isVotingStage && (
               <CandidateCardControls>
                 {withdrawable ? (
-                  <WithdrawButton />
+                  <WithdrawButton member={member} />
                 ) : voted ? (
                   <ButtonPrimary size="medium">Vote again </ButtonPrimary>
                 ) : (

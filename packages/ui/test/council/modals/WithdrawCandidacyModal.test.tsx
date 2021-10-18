@@ -8,7 +8,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
-import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalContext } from '@/common/providers/modal/context'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { Member } from '@/memberships/types'
 import { seedMembers } from '@/mocks/data'
@@ -97,19 +97,26 @@ describe('UI: Withdraw Candidacy Modal', () => {
   function renderModal(member: Member) {
     return render(
       <MemoryRouter>
-        <ModalContextProvider>
+        <ModalContext.Provider
+          value={{
+            modal: 'WithdrawCandidacy',
+            modalData: { member },
+            hideModal: () => undefined,
+            showModal: () => undefined,
+          }}
+        >
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
                 <ApiContext.Provider value={api}>
                   <BalancesContextProvider>
-                    <WithdrawCandidacyModal member={member} onClose={() => undefined} />
+                    <WithdrawCandidacyModal />
                   </BalancesContextProvider>
                 </ApiContext.Provider>
               </AccountsContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContextProvider>
+        </ModalContext.Provider>
       </MemoryRouter>
     )
   }

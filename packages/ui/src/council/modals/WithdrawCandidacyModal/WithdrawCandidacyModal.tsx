@@ -4,18 +4,17 @@ import React, { useCallback } from 'react'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
+import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
 import { WithdrawSignModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawSignModal'
 import { WithdrawWarningModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawWarningModal'
-import { Member } from '@/memberships/types'
 
 import { machine } from './machine'
 
-interface Props {
-  onClose: () => void
-  member: Member
-}
-
-export const WithdrawCandidacyModal = ({ onClose, member }: Props) => {
+export const WithdrawCandidacyModal = () => {
+  const { hideModal, modalData } = useModal<WithdrawCandidacyModalCall>()
+  const { member } = modalData
+  const onClose = hideModal
   const [state, send] = useMachine(machine)
   const onNext = useCallback(() => send('NEXT'), [send])
 
