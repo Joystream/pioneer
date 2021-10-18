@@ -9,7 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProgressBar } from '@/common/components/Progress'
 import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { Colors } from '@/common/constants'
+import { BN_ZERO, Colors } from '@/common/constants'
 import { unknownMember } from '@/council/constants/unknownMember'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
@@ -17,21 +17,21 @@ import { Member } from '@/memberships/types'
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 export interface CandidateVoteProps {
-  voteOwner: boolean
   revealed: boolean
   member?: Member
   sumOfAllStakes: BN
   totalStake: BN
+  ownStake: BN
   votes: number
   index: number
 }
 
 export const CandidateVote = ({
-  voteOwner,
   revealed,
   member,
   sumOfAllStakes,
   totalStake,
+  ownStake,
   votes,
   index,
 }: CandidateVoteProps) => {
@@ -57,11 +57,11 @@ export const CandidateVote = ({
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            {voteOwner && (
+            {ownStake.gt(BN_ZERO) && (
               <>
                 <Subscription>My Stake</Subscription>
                 <StatsValue>
-                  <TokenValue value={totalStake} />
+                  <TokenValue value={ownStake} />
                 </StatsValue>
               </>
             )}
@@ -75,7 +75,7 @@ export const CandidateVote = ({
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
       <ButtonsGroup>
-        {voteOwner &&
+        {ownStake.gt(BN_ZERO) &&
           (revealed ? (
             <ButtonPrimary size="medium" disabled>
               Revealed

@@ -29,7 +29,6 @@ Default.args = {
     inviteCount: 0,
     createdAt: '',
   },
-  voteOwner: true,
   revealed: true,
   sumOfAllStakes: (5000000 as unknown) as BN,
   totalStake: (500000 as unknown) as BN,

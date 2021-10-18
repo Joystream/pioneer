@@ -18,6 +18,7 @@ interface CandidateStats {
   candidate: ElectionCandidate
   votesNumber: number
   totalStake: BN
+  ownStake: BN
 }
 
 export const ElectionVotes = ({ election }: Props) => {
@@ -26,13 +27,17 @@ export const ElectionVotes = ({ election }: Props) => {
   const votesPerCandidate = useMemo(() => {
     const candidateStats: Record<string, CandidateStats> = {}
     election.candidates.forEach(
-      (candidate) => (candidateStats[candidate.member.id] = { candidate, votesNumber: 0, totalStake: BN_ZERO })
+      (candidate) =>
+        (candidateStats[candidate.member.id] = { candidate, votesNumber: 0, totalStake: BN_ZERO, ownStake: BN_ZERO })
     )
     votes?.forEach((vote) => {
       const candidate = vote.voteFor && candidateStats[vote.voteFor.id]
       if (candidate) {
         candidate.votesNumber += 1
         candidate.totalStake = candidate.totalStake.add(vote.stake)
+        if (allAccounts.find((account) => account.address === vote.castBy)) {
+          candidate.ownStake = candidate.ownStake.add(vote.stake)
+        }
       }
     })
     return Object.values(candidateStats).sort((a, b) => b.totalStake.sub(a.totalStake).toNumber())
@@ -51,13 +56,13 @@ export const ElectionVotes = ({ election }: Props) => {
   return (
     <CandidateVoteList
       votes={votesPerCandidate.map((candidateStats, index) => ({
-        index: index + 1,
-        voteOwner: false,
         revealed: true,
+        index: index + 1,
         member: candidateStats.candidate.member,
         sumOfAllStakes: sumOfStakes ?? BN_ZERO,
         totalStake: candidateStats.totalStake,
         votes: candidateStats.votesNumber,
+        ownStake: candidateStats.ownStake,
       }))}
     />
   )
