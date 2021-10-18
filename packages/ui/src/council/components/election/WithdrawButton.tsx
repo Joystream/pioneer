@@ -11,7 +11,8 @@ interface Props {
 
 export const WithdrawButton = ({ member }: Props) => {
   const { showModal } = useModal()
-  const onClick = () => {
+  const onClick = (event: React.MouseEvent<Element>) => {
+    event.stopPropagation()
     showModal<WithdrawCandidacyModalCall>({
       modal: 'WithdrawCandidacy',
       data: { member },
