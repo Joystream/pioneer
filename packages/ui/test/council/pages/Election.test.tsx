@@ -17,6 +17,7 @@ import {
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
+import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -146,6 +147,7 @@ describe('UI: Election page', () => {
             expect(queryAllByText(/newcomer/i).length).toBe(2)
           })
         })
+
         describe('My candidates', () => {
           it('No my candidates', async () => {
             TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
@@ -172,6 +174,7 @@ describe('UI: Election page', () => {
 
             expect(queryAllByText(/newcomer/i).length).toBe(1)
             expect(queryAllByText(/my stake/i).length).toBe(1)
+            expect(getButton('Withdraw')).toBeDefined()
           })
         })
       })
