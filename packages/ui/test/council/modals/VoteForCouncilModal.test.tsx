@@ -22,7 +22,14 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilConstants, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubCouncilConstants,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -47,8 +54,16 @@ describe('UI: Vote for Council Modal', () => {
   }
 
   let useAccounts: UseAccounts
+  let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
+
+  const fillStakeStep = async (value: number) => {
+    await selectFromDropdown('Select account for Staking', 'alice')
+    const input = await screen.findByLabelText(/Select amount for staking/i)
+    fireEvent.change(input, { target: { value } })
+  }
+  const getNextStepButton = () => getButton(/Next step/i)
 
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -66,7 +81,7 @@ describe('UI: Vote for Council Modal', () => {
 
     stubDefaultBalances(api)
     stubCouncilConstants(api, { minStake: 500 })
-    stubTransaction(api, 'api.tx.referendum.vote')
+    tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
   })
 
   describe('Requirements', () => {
@@ -94,8 +109,6 @@ describe('UI: Vote for Council Modal', () => {
   })
 
   describe('Stake step', () => {
-    const getNextStepButton = () => getButton(/Next step/i)
-
     it('Empty fields', async () => {
       renderModal()
 
@@ -106,10 +119,7 @@ describe('UI: Vote for Council Modal', () => {
     it('Too low stake', async () => {
       renderModal()
 
-      await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '50' } })
-
+      fillStakeStep(50)
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
@@ -117,13 +127,45 @@ describe('UI: Vote for Council Modal', () => {
     it('Valid fields', async () => {
       renderModal()
 
-      await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '2000' } })
-
+      await fillStakeStep(2000)
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
     })
+  })
+
+  it('Transaction sign', async () => {
+    renderModal()
+
+    await fillStakeStep(2000)
+    fireEvent.click(await getNextStepButton())
+
+    expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
+    expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('2,000')
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+    expect(await getButton('Sign and send')).toBeDefined()
+  })
+
+  it('Transaction success', async () => {
+    stubTransactionSuccess(tx, 'referendum', 'VoteCast')
+    renderModal()
+
+    await fillStakeStep(2000)
+    fireEvent.click(await getNextStepButton())
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^You have just successfully voted for the Candidate/i)).toBeDefined()
+    expect(await getButton('See my Vote')).toBeDefined()
+  })
+
+  it('Transaction error', async () => {
+    stubTransactionFailure(tx)
+    renderModal()
+
+    await fillStakeStep(2000)
+    fireEvent.click(await getNextStepButton())
+    fireEvent.click(await getButton('Sign and send'))
+
+    expect(await screen.findByText(/^There was a problem casting your vote./i)).toBeDefined()
   })
 
   function renderModal() {
