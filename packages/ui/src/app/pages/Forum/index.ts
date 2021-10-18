@@ -1,1 +1,1 @@
-export * from './Forum'
+export * from './ForumModule'
