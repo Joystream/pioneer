@@ -10,7 +10,6 @@ import { ProgressBar } from '@/common/components/Progress'
 import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
-import { unknownMember } from '@/council/constants/unknownMember'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -18,7 +17,7 @@ import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 export interface CandidateVoteProps {
   revealed: boolean
-  member?: Member
+  member: Member
   sumOfAllStakes: BN
   totalStake: BN
   ownStake: BN
@@ -41,7 +40,7 @@ export const CandidateVote = ({
       <VoteIndex lighter inter>
         {index}
       </VoteIndex>
-      <MemberInfo onlyTop member={member ?? unknownMember} skipModal={!member} />
+      <MemberInfo onlyTop member={member} skipModal={!member} />
       <VoteIndicatorWrapper gap={16}>
         <StakeIndicator>
           <ProgressBar start={0} end={roundedPercentage / 100} size="big" />
