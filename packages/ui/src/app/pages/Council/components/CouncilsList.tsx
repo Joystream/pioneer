@@ -1,9 +1,13 @@
+import BN from 'bn.js'
 import React from 'react'
 
-import { List } from '@/common/components/List'
+import { BlockTime } from '@/common/components/BlockTime'
+import { List, TableListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
+import { TokenValue } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Council } from '@/council/types'
+import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
 interface Props {
   isLoading: boolean
@@ -22,7 +26,21 @@ export const CouncilsList = ({ councils, isLoading }: Props) => {
   return (
     <List>
       {councils.map((council) => (
-        <>{council.id}</>
+        <TableListItem $colLayout={'50px 1fr 1fr 1fr 1fr 1fr'}>
+          <Info>#{council.id}</Info>
+          <BlockTime
+            block={{
+              network: 'OLYMPIA',
+              timestamp: new Date().toString(),
+              number: council.electedAtBlock,
+            }}
+            lessInfo
+          />
+          <TokenValue value={new BN(0)} />
+          <TokenValue value={new BN(0)} />
+          <CountInfo count={0} />
+          <CountInfo count={0} />
+        </TableListItem>
       ))}
     </List>
   )
