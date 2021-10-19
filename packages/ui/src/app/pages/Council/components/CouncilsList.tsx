@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { List } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Council } from '@/council/types'
@@ -18,5 +19,11 @@ export const CouncilsList = ({ councils, isLoading }: Props) => {
     return <NotFoundText>There are no past councils</NotFoundText>
   }
 
-  return <>{councils.map(() => 'foo')}</>
+  return (
+    <List>
+      {councils.map((council) => (
+        <>{council.id}</>
+      ))}
+    </List>
+  )
 }
