@@ -2,6 +2,7 @@ import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
 import rawElections from './raw/electionRounds.json'
+import rawVotes from './raw/votes.json'
 
 export interface RawCouncilorMock {
   id: string
@@ -40,6 +41,14 @@ export interface RawCouncilElectionMock {
   electedCouncilId: string
 }
 
+export interface RawCouncilVoteMock {
+  electionRoundId: string
+  stake: number
+  stakeLocked: boolean
+  voteForId: string | null
+  castBy: string
+}
+
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)
 
 export const seedCouncilMembers = (server: any) => {
@@ -70,4 +79,10 @@ export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any)
 
 export const seedCouncilCandidates = (server: any) => {
   rawCandidates.map((data) => seedCouncilCandidate(data, server))
+}
+
+export const seedCounncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)
+
+export const seedCouncilVotes = (server: any) => {
+  rawVotes.map((data) => seedCounncilVote(data, server))
 }

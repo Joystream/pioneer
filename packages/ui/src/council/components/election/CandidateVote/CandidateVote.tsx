@@ -7,82 +7,82 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProgressBar } from '@/common/components/Progress'
-import { TextInlineBig, TextInlineMedium, TextInlineSmall, ValueInJoys } from '@/common/components/typography'
+import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { Colors } from '@/common/constants'
+import { BN_ZERO, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 export interface CandidateVoteProps {
-  voteOwner: boolean
   revealed: boolean
   member: Member
-  stake: BN
+  sumOfAllStakes: BN
+  totalStake: BN
   ownStake: BN
   votes: number
-  revealedVotes: number
   index: number
 }
 
 export const CandidateVote = ({
-  voteOwner,
   revealed,
   member,
-  stake,
+  sumOfAllStakes,
+  totalStake,
   ownStake,
   votes,
-  revealedVotes,
   index,
 }: CandidateVoteProps) => {
-  const roundedPercentage = Math.round((100 / Number(stake)) * Number(ownStake))
+  const roundedPercentage = totalStake.muln(100).divRound(sumOfAllStakes)
+  const userVoted = ownStake.gt(BN_ZERO)
   return (
     <CandidateVoteWrapper>
       <VoteIndex lighter inter>
         {index}
       </VoteIndex>
-      <MemberInfo onlyTop member={member} />
+      <MemberInfo onlyTop member={member} skipModal={!member} />
       <VoteIndicatorWrapper gap={16}>
         <StakeIndicator>
-          <ProgressBar start={0} end={roundedPercentage / 100} size="big" />
+          <ProgressBar start={0} end={roundedPercentage.toNumber() / 100} size="big" />
           <PercentageValue value bold>
-            {roundedPercentage}%
+            {roundedPercentage.toString()}%
           </PercentageValue>
         </StakeIndicator>
         <StakeAndVotesGroup>
           <StakeAndVotesRow>
             <Subscription>Total Stake</Subscription>
             <StatsValue>
-              <ValueInJoys>{stake}</ValueInJoys>
+              <TokenValue value={totalStake} />
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            <Subscription>My Stake</Subscription>
-            <StatsValue>
-              <ValueInJoys>{ownStake}</ValueInJoys>
-            </StatsValue>
+            {userVoted && (
+              <>
+                <Subscription>My Stake</Subscription>
+                <StatsValue>
+                  <TokenValue value={ownStake} />
+                </StatsValue>
+              </>
+            )}
           </StakeAndVotesRow>
           <StakeAndVotesRow>
             <Subscription>Total Revealed votes</Subscription>
             <StatsValue>
-              <TextInlineBig value>
-                {revealedVotes}
-                <TextInlineMedium inter lighter normalWeight>
-                  /{votes}
-                </TextInlineMedium>
-              </TextInlineBig>
+              <TextInlineBig value>{votes}</TextInlineBig>
             </StatsValue>
           </StakeAndVotesRow>
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
       <ButtonsGroup>
-        {voteOwner && revealed && (
-          <ButtonPrimary size="medium" disabled>
-            Revealed
-          </ButtonPrimary>
-        )}
-        {voteOwner && !revealed && <ButtonPrimary size="medium">Reveal</ButtonPrimary>}
+        {userVoted &&
+          (revealed ? (
+            <ButtonPrimary size="medium" disabled>
+              Revealed
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary size="medium">Reveal</ButtonPrimary>
+          ))}
       </ButtonsGroup>
       <CandidateCardArrow>
         <Arrow direction="right" />

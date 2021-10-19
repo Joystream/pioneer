@@ -4,7 +4,7 @@ import { TabProps, Tabs } from '@/common/components/Tabs'
 import { ElectionStage } from '@/council/types/Election'
 
 export type AnnouncingStageTab = 'candidates' | 'myCandidates'
-type VotingRevealingStageTab = 'candidates' | 'myVotes'
+type VotingRevealingStageTab = 'candidates' | 'myVotes' | 'results'
 type ElectionTab = AnnouncingStageTab | VotingRevealingStageTab
 
 interface ElectionTabsProps {
@@ -30,6 +30,14 @@ export const ElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTab }: El
       count: myCandidates,
       active: tab === 'myCandidates',
       onClick: () => onSetTab('myCandidates'),
+    })
+  }
+
+  if (stage === 'revealing') {
+    tabs.push({
+      title: 'Voting results',
+      active: tab === 'results',
+      onClick: () => onSetTab('results'),
     })
   }
 

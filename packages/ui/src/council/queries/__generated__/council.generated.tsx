@@ -166,6 +166,35 @@ export type ElectionCandidateDetailedFieldsFragment = {
   }
 }
 
+export type CastVoteFieldsFragment = {
+  __typename: 'CastVote'
+  stake: any
+  stakeLocked: boolean
+  castBy: string
+  voteFor?:
+    | {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+    | null
+    | undefined
+}
+
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
   where: Types.ElectedCouncilWhereInput
 }>
@@ -315,6 +344,46 @@ export type GetCandidateStatsQuery = {
   candidatesConnection: { __typename: 'CandidateConnection'; totalCount: number }
 }
 
+export type GetElectionVotesQueryVariables = Types.Exact<{
+  electionCycleId?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetElectionVotesQuery = {
+  __typename: 'Query'
+  castVotes: Array<{
+    __typename: 'CastVote'
+    stake: any
+    stakeLocked: boolean
+    castBy: string
+    voteFor?:
+      | {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+      | null
+      | undefined
+  }>
+}
+
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -375,6 +444,17 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
     }
   }
   ${ElectionCandidateFieldsFragmentDoc}
+`
+export const CastVoteFieldsFragmentDoc = gql`
+  fragment CastVoteFields on CastVote {
+    stake
+    stakeLocked
+    castBy
+    voteFor {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
 `
 export const GetElectedCouncilsDocument = gql`
   query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
@@ -603,3 +683,43 @@ export function useGetCandidateStatsLazyQuery(
 export type GetCandidateStatsQueryHookResult = ReturnType<typeof useGetCandidateStatsQuery>
 export type GetCandidateStatsLazyQueryHookResult = ReturnType<typeof useGetCandidateStatsLazyQuery>
 export type GetCandidateStatsQueryResult = Apollo.QueryResult<GetCandidateStatsQuery, GetCandidateStatsQueryVariables>
+export const GetElectionVotesDocument = gql`
+  query GetElectionVotes($electionCycleId: Int) {
+    castVotes(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
+      ...CastVoteFields
+    }
+  }
+  ${CastVoteFieldsFragmentDoc}
+`
+
+/**
+ * __useGetElectionVotesQuery__
+ *
+ * To run a query within a React component, call `useGetElectionVotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetElectionVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetElectionVotesQuery({
+ *   variables: {
+ *      electionCycleId: // value for 'electionCycleId'
+ *   },
+ * });
+ */
+export function useGetElectionVotesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetElectionVotesQuery, GetElectionVotesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetElectionVotesQuery, GetElectionVotesQueryVariables>(GetElectionVotesDocument, options)
+}
+export function useGetElectionVotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetElectionVotesQuery, GetElectionVotesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetElectionVotesQuery, GetElectionVotesQueryVariables>(GetElectionVotesDocument, options)
+}
+export type GetElectionVotesQueryHookResult = ReturnType<typeof useGetElectionVotesQuery>
+export type GetElectionVotesLazyQueryHookResult = ReturnType<typeof useGetElectionVotesLazyQuery>
+export type GetElectionVotesQueryResult = Apollo.QueryResult<GetElectionVotesQuery, GetElectionVotesQueryVariables>

@@ -6,10 +6,11 @@ import {
   RawCouncilElectionMock,
   RawCouncilMock,
   RawCouncilorMock,
+  RawCouncilVoteMock,
 } from '@/mocks/data/seedCouncils'
 
 import { saveFile } from '../../helpers/saveFile'
-import { memberAt, randomFromRange, randomMember, repeat } from '../utils'
+import { memberAt, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
 const COUNCILS = 5
 
@@ -19,6 +20,7 @@ export const generateCouncils = () => {
     councilors: [],
     electionRounds: [],
     candidates: [],
+    votes: [],
   })
   Object.entries(data).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
@@ -28,6 +30,7 @@ interface CouncilData {
   councilors: RawCouncilorMock[]
   electionRounds: RawCouncilElectionMock[]
   candidates: RawCouncilCandidateMock[]
+  votes: RawCouncilVoteMock[]
 }
 
 const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
@@ -85,11 +88,29 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     electedCouncilId: council.id,
   }
 
+  const getCastBy = randomFromWeightedSet(
+    [1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'],
+    [1, '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'],
+    [5, '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU']
+  )
+
+  const votes: RawCouncilVoteMock[] = repeat(
+    () => ({
+      electionRoundId: council.id,
+      stake: randomFromRange(1, 10) * 1000,
+      stakeLocked: isFinished ? Math.random() > 0.5 : true,
+      castBy: getCastBy(),
+      voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
+    }),
+    randomFromRange(10, 20)
+  )
+
   return {
     councils: [...data.councils, council],
     councilors: [...data.councilors, ...councilors],
     electionRounds: [...data.electionRounds, electionRound],
     candidates: [...data.candidates, ...candidates],
+    votes: [...data.votes, ...votes],
   }
 }
 

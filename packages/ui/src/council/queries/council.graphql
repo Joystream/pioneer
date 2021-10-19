@@ -49,6 +49,15 @@ fragment ElectionCandidateDetailedFields on Candidate {
   }
 }
 
+fragment CastVoteFields on CastVote {
+  stake
+  stakeLocked
+  castBy
+  voteFor {
+    ...MemberFields
+  }
+}
+
 query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
   electedCouncils(where: $where) {
     ...ElectedCouncilsFields
@@ -82,5 +91,11 @@ query GetCandidateStats($memberId: ID) {
   }
   candidatesConnection(where: { member: { id_eq: $memberId } }) {
     totalCount
+  }
+}
+
+query GetElectionVotes($electionCycleId: Int) {
+  castVotes(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
+    ...CastVoteFields
   }
 }

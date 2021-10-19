@@ -15,7 +15,7 @@ export default {
 const Template: Story<CandidateVoteProps> = (args) => <CandidateVote {...args} />
 
 export const Default = Template.bind({})
-Default.args = {
+const args: CandidateVoteProps = {
   member: {
     id: '0',
     name: 'Jennifer_123',
@@ -29,11 +29,11 @@ Default.args = {
     inviteCount: 0,
     createdAt: '',
   },
-  voteOwner: true,
   revealed: true,
-  stake: (5000000 as unknown) as BN,
-  ownStake: (500000 as unknown) as BN,
+  sumOfAllStakes: new BN(5000000),
+  totalStake: new BN(500000),
+  ownStake: new BN(32000),
   votes: 20,
-  revealedVotes: 5,
   index: 1,
 }
+Default.args = args
