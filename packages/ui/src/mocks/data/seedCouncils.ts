@@ -62,7 +62,7 @@ export const seedElectedCouncils = (server: any) => {
 }
 
 export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =>
-  server.schema.create('ElectionRound', data)
+  server.schema.create('ElectionRound', { ...data, updatedAt: new Date().toISOString() })
 
 export const seedCouncilElections = (server: any) => {
   rawElections.map((data) => seedCouncilElection(data, server))

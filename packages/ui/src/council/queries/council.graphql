@@ -39,6 +39,14 @@ fragment ElectionRoundFields on ElectionRound {
   }
 }
 
+fragment PastElectionRoundFields on ElectionRound {
+  cycleId
+  updatedAt
+  candidates {
+    stake
+  }
+}
+
 fragment ElectionCandidateDetailedFields on Candidate {
   ...ElectionCandidateFields
   stakingAccountId
@@ -72,7 +80,7 @@ query GetCurrentElection {
 
 query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
   electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
-    ...ElectionRoundFields
+    ...PastElectionRoundFields
   }
 }
 

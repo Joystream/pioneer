@@ -131,6 +131,13 @@ export type ElectionRoundFieldsFragment = {
   }>
 }
 
+export type PastElectionRoundFieldsFragment = {
+  __typename: 'ElectionRound'
+  cycleId: number
+  updatedAt?: any | null | undefined
+  candidates: Array<{ __typename: 'Candidate'; stake: any }>
+}
+
 export type ElectionCandidateDetailedFieldsFragment = {
   __typename: 'Candidate'
   stakingAccountId: string
@@ -286,30 +293,8 @@ export type GetPastElectionsQuery = {
   electionRounds: Array<{
     __typename: 'ElectionRound'
     cycleId: number
-    candidates: Array<{
-      __typename: 'Candidate'
-      id: string
-      stake: any
-      member: {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
-      }
-    }>
+    updatedAt?: any | null | undefined
+    candidates: Array<{ __typename: 'Candidate'; stake: any }>
   }>
 }
 
@@ -478,6 +463,15 @@ export const ElectionRoundFieldsFragmentDoc = gql`
   }
   ${ElectionCandidateFieldsFragmentDoc}
 `
+export const PastElectionRoundFieldsFragmentDoc = gql`
+  fragment PastElectionRoundFields on ElectionRound {
+    cycleId
+    updatedAt
+    candidates {
+      stake
+    }
+  }
+`
 export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
   fragment ElectionCandidateDetailedFields on Candidate {
     ...ElectionCandidateFields
@@ -595,10 +589,10 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
 export const GetPastElectionsDocument = gql`
   query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
     electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
-      ...ElectionRoundFields
+      ...PastElectionRoundFields
     }
   }
-  ${ElectionRoundFieldsFragmentDoc}
+  ${PastElectionRoundFieldsFragmentDoc}
 `
 
 /**

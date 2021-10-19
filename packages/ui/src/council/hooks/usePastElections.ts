@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { ElectionRoundOrderByInput } from '@/common/api/queries'
 import { useGetPastElectionsCountQuery, useGetPastElectionsQuery } from '@/council/queries'
 
-import { asElection } from '../types/Election'
+import { asPastElection } from '../types/PastElection'
 
 export const ELECTION_PER_PAGE = 10
 
@@ -34,7 +34,7 @@ export const usePastElections = ({ page = 1, orderKey, isDescending }: UsePastEl
   const { loading: loadingCount, data: countData } = useGetPastElectionsCountQuery()
 
   const elections = useMemo(
-    () => electionsData && electionsData.electionRounds && electionsData.electionRounds.map(asElection),
+    () => electionsData && electionsData.electionRounds && electionsData.electionRounds.map(asPastElection),
     [electionsData, loadingElections]
   )
   const totalCount = countData?.electionRoundsConnection.totalCount ?? 0

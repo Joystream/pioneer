@@ -8,18 +8,12 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
+import { TableOrder } from '@/common/types/TableOrder'
 import { PastElectionsList } from '@/council/components/election/PastElectionsList/PastElectionsList'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
-import { PastWorkersList } from '@/working-groups/components/WorkersTableList/PastWorkersList'
-import { usePastWorkersPagination, WorkersOrderKey } from '@/working-groups/hooks/usePastWorkersPagination'
 
 import { CouncilTabs } from './components/CouncilTabs'
-
-export interface TableOrder<T> {
-  key: T
-  isDescending: boolean
-}
 
 export const PastElections = () => {
   useCandidatePreviewViaUrlParameter()
@@ -46,26 +40,26 @@ export const PastElections = () => {
 
   const displayMain = () => {
     return (
-      <>
+      <MainPanel>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         <RowGapBlock gap={4}>
-          <ListHeaders $colLayout="1fr 1fr 1fr">
-            <SortHeader order={order} sort={sort} sortKey="cycle">
-              Round
-            </SortHeader>
+          <ListHeaders $colLayout="1fr 1fr 1fr 1fr 1fr">
             <SortHeader order={order} sort={sort} sortKey="cycle">
               Round
             </SortHeader>
             <SortHeader order={order} sort={sort} sortKey="finishedAt">
               Election ended at
             </SortHeader>
+            <ListHeader>Total staked</ListHeader>
+            <ListHeader>Revealed votes</ListHeader>
+            <ListHeader>Total candidates</ListHeader>
           </ListHeaders>
           {isLoading && <Loading />}
           {!isLoading && (!elections || !elections.length) && <TextBig>No elections found</TextBig>}
           {!isLoading && elections && elections.length > 0 && <PastElectionsList elections={elections} />}
         </RowGapBlock>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-      </>
+      </MainPanel>
     )
   }
 

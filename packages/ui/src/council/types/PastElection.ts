@@ -1,0 +1,21 @@
+import BN from 'bn.js'
+
+import { PastElectionRoundFieldsFragment } from '@/council/queries'
+
+export interface PastElection {
+  cycleId: number
+  finishedAt: string
+  totalStake: BN
+  totalCandidates: number
+  revealedVotes: number
+  totalVotes: number
+}
+
+export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
+  cycleId: fields.cycleId,
+  finishedAt: fields.updatedAt,
+  totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
+  totalCandidates: fields.candidates.length,
+  revealedVotes: 1,
+  totalVotes: 10,
+})

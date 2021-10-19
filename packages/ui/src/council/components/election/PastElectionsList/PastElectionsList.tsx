@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { List, ListItem } from '@/common/components/List'
-import { Election } from '@/council/types/Election'
+import { PastElection } from '@/council/types/PastElection'
 
 import { PastElectionsListRow } from './PastElectionsListRow'
 
 export interface PastWorkersListProps {
-  elections: Election[]
+  elections: PastElection[]
 }
 
 export const PastElectionsList = ({ elections }: PastWorkersListProps) => (
