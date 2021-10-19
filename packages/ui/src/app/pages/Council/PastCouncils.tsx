@@ -1,10 +1,9 @@
 import React from 'react'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
-import { Loading } from '@/common/components/Loading'
+import { CouncilsList } from '@/app/pages/Council/components/CouncilsList'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { usePastCouncils } from '@/council/hooks/usePastCouncils'
 
 import { CouncilTabs } from './components/CouncilTabs'
@@ -23,11 +22,7 @@ export const PastCouncils = () => {
 
   const main = (
     <MainPanel>
-      <>
-        {isLoading && <Loading />}
-        {!isLoading &&
-          (councils?.length ? councils.map(() => 'fofo') : <NotFoundText>There are no past councils</NotFoundText>)}
-      </>
+      <CouncilsList isLoading={isLoading} councils={councils} />
     </MainPanel>
   )
 
