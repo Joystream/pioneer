@@ -14,7 +14,7 @@ interface Props {
   councils?: Council[]
 }
 
-export const CouncilsList = ({ councils, isLoading }: Props) => {
+export const PastCouncilsList = ({ councils, isLoading }: Props) => {
   if (isLoading) {
     return <Loading />
   }
