@@ -56,6 +56,9 @@ fragment CastVoteFields on CastVote {
   voteFor {
     ...MemberFields
   }
+  electionRound {
+    cycleId
+  }
 }
 
 query GetElectedCouncils($where: ElectedCouncilWhereInput!) {

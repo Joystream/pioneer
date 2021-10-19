@@ -193,6 +193,7 @@ export type CastVoteFieldsFragment = {
       }
     | null
     | undefined
+  electionRound: { __typename: 'ElectionRound'; cycleId: number }
 }
 
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
@@ -381,6 +382,7 @@ export type GetCouncilVotesQuery = {
         }
       | null
       | undefined
+    electionRound: { __typename: 'ElectionRound'; cycleId: number }
   }>
 }
 
@@ -452,6 +454,9 @@ export const CastVoteFieldsFragmentDoc = gql`
     castBy
     voteFor {
       ...MemberFields
+    }
+    electionRound {
+      cycleId
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -704,7 +709,7 @@ export const GetCouncilVotesDocument = gql`
  * @example
  * const { data, loading, error } = useGetCouncilVotesQuery({
  *   variables: {
- *      electionCycleId: // value for 'electionCycleId'
+ *      where: // value for 'where'
  *   },
  * });
  */
