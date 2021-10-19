@@ -55,7 +55,9 @@ export const seedCouncilMembers = (server: any) => {
   rawCouncilors.map((data) => seedCouncilMember(data, server))
 }
 
-export const seedElectedCouncil = (data: RawCouncilMock, server: any) => server.schema.create('ElectedCouncil', data)
+export const seedElectedCouncil = (data: RawCouncilMock, server: any) => {
+  return server.schema.create('ElectedCouncil', { ...data, isResigned: !!data.endedAtBlock })
+}
 
 export const seedElectedCouncils = (server: any, howMany?: number) => {
   rawCouncils.slice(0, howMany).map((data) => seedElectedCouncil(data, server))

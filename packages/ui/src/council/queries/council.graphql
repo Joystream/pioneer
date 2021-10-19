@@ -58,8 +58,8 @@ fragment CastVoteFields on CastVote {
   }
 }
 
-query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
-  electedCouncils(where: $where) {
+query GetElectedCouncils($where: ElectedCouncilWhereInput!, $order: [ElectedCouncilOrderByInput!]) {
+  electedCouncils(where: $where, orderBy: $order) {
     ...ElectedCouncilsFields
   }
 }

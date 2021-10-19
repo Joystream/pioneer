@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -19,6 +19,8 @@ describe('Past Councils page', () => {
 
   it('Empty', async () => {
     renderPage()
+
+    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
     expect(screen.queryByText('There are no past councils')).toBeDefined()
   })

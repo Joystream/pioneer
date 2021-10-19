@@ -197,6 +197,7 @@ export type CastVoteFieldsFragment = {
 
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
   where: Types.ElectedCouncilWhereInput
+  order?: Types.Maybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
 }>
 
 export type GetElectedCouncilsQuery = {
@@ -457,8 +458,8 @@ export const CastVoteFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
 `
 export const GetElectedCouncilsDocument = gql`
-  query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
-    electedCouncils(where: $where) {
+  query GetElectedCouncils($where: ElectedCouncilWhereInput!, $order: [ElectedCouncilOrderByInput!]) {
+    electedCouncils(where: $where, orderBy: $order) {
       ...ElectedCouncilsFields
     }
   }
@@ -478,6 +479,7 @@ export const GetElectedCouncilsDocument = gql`
  * const { data, loading, error } = useGetElectedCouncilsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      order: // value for 'order'
  *   },
  * });
  */
