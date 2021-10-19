@@ -41,7 +41,7 @@ export const ElectionVotes = ({ election }: Props) => {
       }
     })
     return Object.values(candidateStats).sort((a, b) => b.totalStake.sub(a.totalStake).toNumber())
-  }, [votes])
+  }, [votes?.length])
 
   const sumOfStakes = useMemo(() => votes?.reduce((acc, vote) => acc.add(vote.stake), BN_ZERO), [votes])
 

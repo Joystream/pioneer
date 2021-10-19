@@ -34,7 +34,8 @@ export const CandidateVote = ({
   votes,
   index,
 }: CandidateVoteProps) => {
-  const roundedPercentage = Math.round((100 / Number(sumOfAllStakes)) * Number(totalStake))
+  const roundedPercentage = totalStake.muln(100).divRound(sumOfAllStakes)
+  const userVoted = ownStake.gt(BN_ZERO)
   return (
     <CandidateVoteWrapper>
       <VoteIndex lighter inter>
@@ -43,9 +44,9 @@ export const CandidateVote = ({
       <MemberInfo onlyTop member={member} skipModal={!member} />
       <VoteIndicatorWrapper gap={16}>
         <StakeIndicator>
-          <ProgressBar start={0} end={roundedPercentage / 100} size="big" />
+          <ProgressBar start={0} end={roundedPercentage.toNumber() / 100} size="big" />
           <PercentageValue value bold>
-            {roundedPercentage}%
+            {roundedPercentage.toString()}%
           </PercentageValue>
         </StakeIndicator>
         <StakeAndVotesGroup>
@@ -56,7 +57,7 @@ export const CandidateVote = ({
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            {ownStake.gt(BN_ZERO) && (
+            {userVoted && (
               <>
                 <Subscription>My Stake</Subscription>
                 <StatsValue>
@@ -74,7 +75,7 @@ export const CandidateVote = ({
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
       <ButtonsGroup>
-        {ownStake.gt(BN_ZERO) &&
+        {userVoted &&
           (revealed ? (
             <ButtonPrimary size="medium" disabled>
               Revealed

@@ -12,6 +12,7 @@ import {
   seedMembers,
 } from '@/mocks/data'
 
+import { alice, bob } from '../../_mocks/keyring/signers'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -19,7 +20,7 @@ const VOTE_DATA = {
   electionRoundId: '0',
   stake: 1200,
   stakeLocked: true,
-  castBy: '500000000000000000000000000000000000000000000000',
+  castBy: alice.address,
   voteForId: null,
 }
 
@@ -48,7 +49,7 @@ describe('UI: ElectionVotes', () => {
 
   const useAccounts = {
     hasAccounts: true,
-    allAccounts: [{ name: 'account', address: '5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' }],
+    allAccounts: [{ name: 'account', address: bob.address }],
   }
 
   beforeEach(() => {
@@ -66,7 +67,9 @@ describe('UI: ElectionVotes', () => {
 
   it('No votes revealed', async () => {
     seedCounncilVote(VOTE_DATA, server.server)
+
     renderComponent()
+
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('0')
     expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('0')
@@ -74,7 +77,9 @@ describe('UI: ElectionVotes', () => {
 
   it('Vote revealed', async () => {
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
+
     renderComponent()
+
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('1,337')
     expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('1')
@@ -84,7 +89,9 @@ describe('UI: ElectionVotes', () => {
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
+
     renderComponent()
+
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
     expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('3')
@@ -96,7 +103,9 @@ describe('UI: ElectionVotes', () => {
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
     seedCounncilVote({ ...VOTE_DATA, stake: 7000 }, server.server)
     seedCounncilVote({ ...VOTE_DATA, stake: 3000 }, server.server)
+
     renderComponent()
+
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
     expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('3')
@@ -107,7 +116,9 @@ describe('UI: ElectionVotes', () => {
     seedCounncilVote({ ...VOTE_DATA, voteForId: '1', stake: 2000 }, server.server)
     seedCounncilVote({ ...VOTE_DATA, voteForId: '1', stake: 900 }, server.server)
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
+
     renderComponent()
+
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect(await screen.findByText(/bob/i)).toBeDefined()
     const stakes = await screen.findAllByText(/total stake/i)
@@ -120,11 +131,10 @@ describe('UI: ElectionVotes', () => {
 
   it('Own stake', async () => {
     seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1000 }, server.server)
-    seedCounncilVote(
-      { ...VOTE_DATA, voteForId: '0', stake: 2000, castBy: '5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' },
-      server.server
-    )
+    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000, castBy: bob.address }, server.server)
+
     renderComponent()
+
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('3,000')
     expect((await screen.findByText(/my stake/i)).nextSibling?.textContent).toEqual('2,000')
   })
