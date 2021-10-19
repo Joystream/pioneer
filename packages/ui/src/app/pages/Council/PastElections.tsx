@@ -39,11 +39,19 @@ export const PastElections = () => {
   )
 
   const displayMain = () => {
+    if (isLoading) {
+      return (
+        <MainPanel>
+          <Loading />
+        </MainPanel>
+      )
+    }
+
     return (
       <MainPanel>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         <RowGapBlock gap={4}>
-          <ListHeaders $colLayout="1fr 1fr 1fr 1fr 1fr">
+          <ListHeaders $colLayout={PastElectionsColLayout}>
             <SortHeader order={order} sort={sort} sortKey="cycle">
               Round
             </SortHeader>
@@ -54,9 +62,8 @@ export const PastElections = () => {
             <ListHeader>Revealed votes</ListHeader>
             <ListHeader>Total candidates</ListHeader>
           </ListHeaders>
-          {isLoading && <Loading />}
-          {!isLoading && (!elections || !elections.length) && <TextBig>No elections found</TextBig>}
-          {!isLoading && elections && elections.length > 0 && <PastElectionsList elections={elections} />}
+          {(!elections || !elections.length) && <TextBig>No elections found</TextBig>}
+          {elections && elections.length > 0 && <PastElectionsList elections={elections} />}
         </RowGapBlock>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       </MainPanel>
@@ -65,6 +72,8 @@ export const PastElections = () => {
 
   return <PageLayout header={header} main={displayMain()} />
 }
+
+export const PastElectionsColLayout = '1fr 1fr 1fr 1fr 1fr'
 
 interface SortHeaderProps {
   sortKey: PastElectionsOrderKey
