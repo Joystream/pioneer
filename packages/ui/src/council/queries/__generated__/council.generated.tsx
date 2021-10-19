@@ -344,11 +344,11 @@ export type GetCandidateStatsQuery = {
   candidatesConnection: { __typename: 'CandidateConnection'; totalCount: number }
 }
 
-export type GetElectionVotesQueryVariables = Types.Exact<{
-  electionCycleId?: Types.Maybe<Types.Scalars['Int']>
+export type GetCouncilVotesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.CastVoteWhereInput>
 }>
 
-export type GetElectionVotesQuery = {
+export type GetCouncilVotesQuery = {
   __typename: 'Query'
   castVotes: Array<{
     __typename: 'CastVote'
@@ -683,9 +683,9 @@ export function useGetCandidateStatsLazyQuery(
 export type GetCandidateStatsQueryHookResult = ReturnType<typeof useGetCandidateStatsQuery>
 export type GetCandidateStatsLazyQueryHookResult = ReturnType<typeof useGetCandidateStatsLazyQuery>
 export type GetCandidateStatsQueryResult = Apollo.QueryResult<GetCandidateStatsQuery, GetCandidateStatsQueryVariables>
-export const GetElectionVotesDocument = gql`
-  query GetElectionVotes($electionCycleId: Int) {
-    castVotes(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
+export const GetCouncilVotesDocument = gql`
+  query GetCouncilVotes($where: CastVoteWhereInput) {
+    castVotes(where: $where) {
       ...CastVoteFields
     }
   }
@@ -693,33 +693,33 @@ export const GetElectionVotesDocument = gql`
 `
 
 /**
- * __useGetElectionVotesQuery__
+ * __useGetCouncilVotesQuery__
  *
- * To run a query within a React component, call `useGetElectionVotesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetElectionVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCouncilVotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetElectionVotesQuery({
+ * const { data, loading, error } = useGetCouncilVotesQuery({
  *   variables: {
  *      electionCycleId: // value for 'electionCycleId'
  *   },
  * });
  */
-export function useGetElectionVotesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetElectionVotesQuery, GetElectionVotesQueryVariables>
+export function useGetCouncilVotesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetElectionVotesQuery, GetElectionVotesQueryVariables>(GetElectionVotesDocument, options)
+  return Apollo.useQuery<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>(GetCouncilVotesDocument, options)
 }
-export function useGetElectionVotesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetElectionVotesQuery, GetElectionVotesQueryVariables>
+export function useGetCouncilVotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetElectionVotesQuery, GetElectionVotesQueryVariables>(GetElectionVotesDocument, options)
+  return Apollo.useLazyQuery<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>(GetCouncilVotesDocument, options)
 }
-export type GetElectionVotesQueryHookResult = ReturnType<typeof useGetElectionVotesQuery>
-export type GetElectionVotesLazyQueryHookResult = ReturnType<typeof useGetElectionVotesLazyQuery>
-export type GetElectionVotesQueryResult = Apollo.QueryResult<GetElectionVotesQuery, GetElectionVotesQueryVariables>
+export type GetCouncilVotesQueryHookResult = ReturnType<typeof useGetCouncilVotesQuery>
+export type GetCouncilVotesLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesLazyQuery>
+export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
