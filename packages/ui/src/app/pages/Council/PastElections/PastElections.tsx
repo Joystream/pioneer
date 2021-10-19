@@ -13,7 +13,7 @@ import { PastElectionsList } from '@/council/components/election/PastElectionsLi
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
 
-import { CouncilTabs } from './components/CouncilTabs'
+import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastElections = () => {
   useCandidatePreviewViaUrlParameter()

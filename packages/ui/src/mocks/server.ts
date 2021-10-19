@@ -102,6 +102,8 @@ export const makeServer = (environment = 'development') => {
               councilorRewardUpdatedEvents: getWhereResolver('CouncilorRewardUpdatedEvent'),
               electedCouncils: getWhereResolver('ElectedCouncil'),
               electionRounds: getWhereResolver('ElectionRound'),
+              electionRoundsConnection: getConnectionResolver('ElectionRoundConnection'),
+              electionRoundByUniqueInput: getUniqueResolver('ElectionRound'),
               forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
