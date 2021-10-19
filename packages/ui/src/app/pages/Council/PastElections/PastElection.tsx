@@ -3,22 +3,18 @@ import { useHistory, useParams } from 'react-router-dom'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
-import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
+import { NumericValueStat, StatisticBar, StatisticItem, Statistics, StatsBlock } from '@/common/components/statistics'
+import { TextHuge } from '@/common/components/typography'
+import { formatDateString } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { CouncilRoutes } from '@/council/constants'
 import { usePastElection } from '@/council/hooks/usePastElection'
-import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
-import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
-import { ForumRoutes } from '@/forum/constant'
-
-import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastElection = () => {
   const { id } = useParams<{ id: string }>()
@@ -68,7 +64,26 @@ export const PastElection = () => {
     return (
       <MainPanel>
         {isLoading && <Loading />}
-        {!isLoading && <>Something</>}
+        {!isLoading && election && (
+          <>
+            <Statistics>
+              <StatisticItem title="Ended at">{formatDateString(election.finishedAt)}</StatisticItem>
+              <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
+                <TextHuge bold>{election.cycleId} round</TextHuge>
+              </StatisticItem>
+              <NumericValueStat title="Total candidates" value={election.totalCandidates} />
+              <StatsBlock>
+                <StatisticBar
+                  title="Revealed votes"
+                  tooltipText="Lorem ipsum..."
+                  value={election.revealedVotes / election.totalVotes}
+                  numerator={election.revealedVotes}
+                  denominator={election.totalVotes + ' votes'}
+                />
+              </StatsBlock>
+            </Statistics>
+          </>
+        )}
       </MainPanel>
     )
   }
