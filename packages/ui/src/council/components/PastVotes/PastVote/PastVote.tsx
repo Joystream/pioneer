@@ -39,7 +39,7 @@ export const PastVote = ({ vote }: PastVoteProps) => {
       <MemberInfo member={vote.voteFor ?? unrevealed} skipModal={!vote.voteFor} />
       <TokenValue value={vote.stake} />
       <AccountInfo account={accountOrNamed(allAccounts, vote.castBy, 'Staking account')} />
-      <TextInlineMedium>{vote.stakeLocked ? 'Sealed' : 'Recovered'}</TextInlineMedium>
+      <TextInlineMedium>{!vote.voteFor ? 'Sealed' : 'Unsealed'}</TextInlineMedium>
       <ButtonPrimary size="medium" disabled={!vote.stakeLocked}>
         {vote.stakeLocked ? 'Recover stake' : 'Stake recovered'}
       </ButtonPrimary>
