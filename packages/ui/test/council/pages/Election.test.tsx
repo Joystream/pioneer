@@ -17,10 +17,23 @@ import {
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
+import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+
+const mockCandidateStats = {
+  isLoading: false,
+  total: 0,
+  withdrawn: 0,
+  successful: 0,
+  failed: 0,
+}
+
+jest.mock('../../../src/memberships/hooks/useMemberCandidacyStats', () => ({
+  useMemberCandidacyStats: () => mockCandidateStats,
+}))
 
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
@@ -134,6 +147,7 @@ describe('UI: Election page', () => {
             expect(queryAllByText(/newcomer/i).length).toBe(2)
           })
         })
+
         describe('My candidates', () => {
           it('No my candidates', async () => {
             TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
@@ -160,6 +174,7 @@ describe('UI: Election page', () => {
 
             expect(queryAllByText(/newcomer/i).length).toBe(1)
             expect(queryAllByText(/my stake/i).length).toBe(1)
+            expect(await getButton(/^Withdraw Candidacy/)).toBeDefined()
           })
         })
       })

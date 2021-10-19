@@ -7,6 +7,7 @@ import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -30,7 +31,7 @@ import { setupMockServer } from '../../_mocks/server'
 import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
-  stubDefaultBalances,
+  stubBalances,
   stubQuery,
   stubTransaction,
   stubTransactionFailure,
@@ -70,7 +71,6 @@ describe('UI: ApplyForRoleModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    jest.spyOn(console, 'log').mockImplementation()
 
     seedMembers(server.server)
     seedWorkingGroups(server.server)
@@ -85,11 +85,14 @@ describe('UI: ApplyForRoleModal', () => {
 
   beforeEach(async () => {
     const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
+    fields.stakeAmount = 2000
     const opening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubBalances(api, {
+      available: 2000,
+    })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
@@ -385,13 +388,15 @@ describe('UI: ApplyForRoleModal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <ApiContext.Provider value={api}>
-                    <ApplyForRoleModal />
-                  </ApiContext.Provider>
-                </MembershipContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <AccountsContext.Provider value={useAccounts}>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <BalancesContextProvider>
+                      <ApplyForRoleModal />
+                    </BalancesContextProvider>
+                  </MembershipContext.Provider>
+                </AccountsContext.Provider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

@@ -1,16 +1,16 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
 
-import { MyApplications } from '@/app/pages/WorkingGroups/MyApplications'
-import { MyRole } from '@/app/pages/WorkingGroups/MyRoles/MyRole'
-import { MyRoles } from '@/app/pages/WorkingGroups/MyRoles/MyRoles'
-import { UpcomingOpening } from '@/app/pages/WorkingGroups/UpcomingOpening'
-import { WorkingGroup } from '@/app/pages/WorkingGroups/WorkingGroup'
-import { WorkingGroups } from '@/app/pages/WorkingGroups/WorkingGroups'
-import { WorkingGroupOpening } from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
-import { WorkingGroupsOpenings } from '@/app/pages/WorkingGroups/WorkingGroupsOpenings'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
-import { WorkingGroupsRoutes } from './constants'
+import { MyApplications } from './MyApplications'
+import { MyRole } from './MyRoles/MyRole'
+import { MyRoles } from './MyRoles/MyRoles'
+import { UpcomingOpening } from './UpcomingOpening'
+import { WorkingGroup } from './WorkingGroup'
+import { WorkingGroups } from './WorkingGroups'
+import { WorkingGroupOpening } from './WorkingGroupsOpening'
+import { WorkingGroupsOpenings } from './WorkingGroupsOpenings'
 
 export const WorkingGroupsModule = () => (
   <Switch>

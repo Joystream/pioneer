@@ -1,8 +1,8 @@
-import React, { useRef } from 'react'
+import React from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
@@ -19,13 +19,12 @@ interface Props {
 export const AboutTab = ({ workingGroup }: Props) => {
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '', status: 'active' })
   const { statistics } = useGroupStatistics(workingGroup.id)
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
 
   return (
-    <ContentWithSidepanel>
-      <MainPanel ref={sideNeighborRef}>
+    <ContentWithSidePanel>
+      <MainPanel>
         <Statistics>
           {statistics.spending ? (
             <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
@@ -75,9 +74,9 @@ export const AboutTab = ({ workingGroup }: Props) => {
           )}
         </RowGapBlock>
       </MainPanel>
-      <SidePanel neighbor={sideNeighborRef}>
+      <SidePanel>
         <WorkersList lead={lead} workers={workers} />
       </SidePanel>
-    </ContentWithSidepanel>
+    </ContentWithSidePanel>
   )
 }

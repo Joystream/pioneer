@@ -14,8 +14,8 @@ export interface CouncilConstants {
 }
 
 export const asCouncilConstants = (
-  council: AugmentedConsts<any>['council'],
-  referendum: AugmentedConsts<any>['referendum']
+  council: AugmentedConsts<'rxjs'>['council'],
+  referendum: AugmentedConsts<'rxjs'>['referendum']
 ): CouncilConstants => ({
   size: council.councilSize.toNumber(),
   announcingPeriod: council.announcingPeriodDuration.toNumber(),

@@ -5,8 +5,8 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BN_ZERO } from '@/common/constants'
 
 import { useGetElectionVotesQuery } from '../queries'
-import { Election, ElectionCandidate } from '../types/Election'
-import { asVote } from '../types/Vote'
+import { asVote, ElectionCandidate } from '../types'
+import { Election } from '../types/Election'
 
 interface CandidateStats {
   candidate: ElectionCandidate

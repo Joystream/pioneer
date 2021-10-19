@@ -7,13 +7,13 @@ import { TokenValueStat } from '@/common/components/statistics'
 import { TextMedium } from '@/common/components/typography'
 import { BulletPoint, Colors, Overflow } from '@/common/constants'
 import { CandidateStatistics } from '@/council/components/candidate/CandidateStatistics'
-import { CandidateWithDetails } from '@/council/types'
+import { ElectionCandidateWithDetails } from '@/council/types'
 import { MemberInfo } from '@/memberships/components'
 
 import { VoteForCouncilFormModalProps } from '../VoteForCouncilFormModal'
 
 interface CandidacyReviewProps extends Omit<VoteForCouncilFormModalProps, 'send'> {
-  candidate: CandidateWithDetails | undefined
+  candidate?: ElectionCandidateWithDetails
 }
 
 export const CandidacyReview = memo(({ candidate, minStake }: CandidacyReviewProps) => {
@@ -30,7 +30,7 @@ export const CandidacyReview = memo(({ candidate, minStake }: CandidacyReviewPro
       <h6>Candidate</h6>
       <MemberInfo member={candidate.member} memberSize="l" size="l" skipModal />
 
-      <h4>{candidate.title}</h4>
+      <h4>{candidate.info.title}</h4>
 
       <CandidacyPointList>
         <CandidacyPoint>The More Important the Work, the More Important the Rest</CandidacyPoint>

@@ -33,6 +33,8 @@ import {
   stubDefaultBalances,
   stubQuery,
   stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
@@ -58,9 +60,10 @@ describe('UI: Announce Candidacy Modal', () => {
   }
 
   let useAccounts: UseAccounts
-  let announceCandidateTx: any
   let batchTx: any
+  let announceCandidacyTx: any
   let bindAccountTx: any
+  let candidacyNoteTx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -80,8 +83,11 @@ describe('UI: Announce Candidacy Modal', () => {
 
     stubDefaultBalances(api)
     stubCouncilConstants(api)
-    announceCandidateTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 25)
-    stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
+    stubTransaction(api, 'api.tx.members.confirmStakingAccount', 5)
+    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 10)
+    announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
+    candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
+    batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
@@ -91,8 +97,6 @@ describe('UI: Announce Candidacy Modal', () => {
       })
     )
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
-    batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
   })
 
   describe('Requirements', () => {
@@ -237,54 +241,235 @@ describe('UI: Announce Candidacy Modal', () => {
         expect(await getNextStepButton()).not.toBeDisabled()
       })
     })
+
+    describe('Summary and Banner', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+        await fillRewardAccountStep('alice', true)
+        await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+      })
+
+      it('Default', async () => {
+        expect(await getButton(/Preview thumbnail/i)).toBeDisabled()
+        expect(await getButton(/Preview profile/i)).toBeDisabled()
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+
+      it('Summary filled', async () => {
+        await fillSummary()
+
+        expect(await getNextStepButton()).not.toBeDisabled()
+        expect(await getButton(/Preview thumbnail/i)).not.toBeDisabled()
+        expect(await getButton(/Preview profile/i)).not.toBeDisabled()
+      })
+
+      it('Thumbnail preview', async () => {
+        await fillSummary()
+
+        const button = await getButton(/Preview thumbnail/i)
+        expect(button).not.toBeDisabled()
+
+        act(() => {
+          fireEvent.click(button as HTMLElement)
+        })
+
+        expect(screen.queryByText(/Candidacy Thumbnail Preview/i)).not.toBeNull()
+      })
+
+      it('Profile preview', async () => {
+        await fillSummary()
+
+        const button = await getButton(/Preview profile/i)
+        expect(button).not.toBeDisabled()
+
+        act(() => {
+          fireEvent.click(button as HTMLElement)
+        })
+
+        expect(screen.queryByText(/Candidacy Profile Preview/i)).not.toBeNull()
+      })
+    })
   })
 
-  describe('Summary and Banner', () => {
-    beforeEach(async () => {
-      renderModal()
-      await fillStakingStep('alice', 15, true)
-      await fillRewardAccountStep('alice', true)
-      await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
-    })
+  describe('Transaction', () => {
+    describe('Bind account step', () => {
+      describe('Staking account not bound nor staking candidate', () => {
+        beforeEach(async () => {
+          renderModal()
+          await fillStakingStep('alice', 15, true)
+          await fillRewardAccountStep('alice', true)
+          await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+          await fillSummary(true)
+        })
 
-    it('Default', async () => {
-      expect(await getButton(/Preview thumbnail/i)).toBeDisabled()
-      expect(await getButton(/Preview profile/i)).toBeDisabled()
-      expect(await getNextStepButton()).toBeDisabled()
-    })
+        it('Renders', async () => {
+          expect(screen.queryByText('You intend to bind account for staking')).not.toBeNull()
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('10')
+        })
 
-    it('Summary filled', async () => {
-      await fillSummary()
+        it('Success', async () => {
+          stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
 
-      expect(await getNextStepButton()).not.toBeDisabled()
-      expect(await getButton(/Preview thumbnail/i)).not.toBeDisabled()
-      expect(await getButton(/Preview profile/i)).not.toBeDisabled()
-    })
+          await act(async () => {
+            fireEvent.click(await getButton(/^Sign transaction/i))
+          })
 
-    it('Thumbnail preview', async () => {
-      await fillSummary()
+          expect(screen.queryByText(/You intend to announce candidacy/i)).not.toBeNull()
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        })
 
-      const button = await getButton(/Preview thumbnail/i)
-      expect(button).not.toBeDisabled()
+        it('Failure', async () => {
+          stubTransactionFailure(bindAccountTx)
 
-      act(() => {
-        fireEvent.click(button as HTMLElement)
+          await act(async () => {
+            fireEvent.click(await getButton(/^Sign transaction/i))
+          })
+
+          expect(screen.queryByText('Failure')).not.toBeNull()
+        })
       })
 
-      expect(screen.queryByText(/Candidacy Thumbnail Preview/i)).not.toBeNull()
-    })
+      it('Staking account is a candidate', async () => {
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', false),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
 
-    it('Profile preview', async () => {
-      await fillSummary()
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+        await fillRewardAccountStep('alice', true)
+        await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+        await fillSummary(true)
 
-      const button = await getButton(/Preview profile/i)
-      expect(button).not.toBeDisabled()
-
-      act(() => {
-        fireEvent.click(button as HTMLElement)
+        expect(screen.queryByText(/You intend to announce candidacy/i)).not.toBeNull()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
       })
 
-      expect(screen.queryByText(/Candidacy Profile Preview/i)).not.toBeNull()
+      it('Staking account is confirmed', async () => {
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', true),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+        await fillRewardAccountStep('alice', true)
+        await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+        await fillSummary(true)
+
+        expect(screen.queryByText(/You intend to announce candidacy/i)).not.toBeNull()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20')
+      })
+    })
+
+    describe('Announce candidacy step', () => {
+      async function beforeEach(confirmed: boolean) {
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', confirmed),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+        await fillRewardAccountStep('alice', true)
+        await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+        await fillSummary(true)
+      }
+
+      it('Success: Staking account confirmed', async () => {
+        await beforeEach(true)
+
+        stubTransactionSuccess(announceCandidacyTx, 'council', 'NewCandidate')
+
+        await act(async () => {
+          fireEvent.click(await getButton(/^Sign transaction/i))
+        })
+
+        expect(screen.queryByText(/You intend to set candidacy note/i)).not.toBeNull()
+      })
+
+      it('Success: Staking account not confirmed', async () => {
+        await beforeEach(false)
+        stubTransactionSuccess(batchTx, 'council', 'NewCandidate')
+
+        await act(async () => {
+          fireEvent.click(await getButton(/^Sign transaction/i))
+        })
+
+        expect(screen.queryByText(/You intend to set candidacy note/i)).not.toBeNull()
+      })
+
+      it('Failure', async () => {
+        await beforeEach(true)
+        stubTransactionFailure(announceCandidacyTx)
+
+        await act(async () => {
+          fireEvent.click(await getButton(/^Sign transaction/i))
+        })
+
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
+    })
+
+    describe('Candidacy note step', () => {
+      beforeEach(async () => {
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', false),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+
+        renderModal()
+        await fillStakingStep('alice', 15, true)
+        await fillRewardAccountStep('alice', true)
+        await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+        await fillSummary(true)
+
+        stubTransactionSuccess(batchTx, 'council', 'NewCandidate')
+        await act(async () => {
+          fireEvent.click(await getButton(/^Sign transaction/i))
+        })
+      })
+
+      it('Success', async () => {
+        stubTransactionSuccess(candidacyNoteTx, 'council', 'CandidacyNoteSet')
+
+        await act(async () => {
+          fireEvent.click(await getButton(/^Sign transaction/i))
+        })
+
+        expect(screen.queryByText(/^Success/i)).not.toBeNull()
+      })
+
+      it('Failure', async () => {
+        stubTransactionFailure(candidacyNoteTx)
+
+        await act(async () => {
+          fireEvent.click(await getButton(/^Sign transaction/i))
+        })
+
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
     })
   })
 

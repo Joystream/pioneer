@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -24,7 +24,6 @@ export const WorkingGroupsOpenings = () => {
   const { isLoading: currentLoading, openings } = useOpenings({ type: 'open' })
   const { activities } = useOpeningsActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const openingsTabs = [
     {
@@ -50,7 +49,7 @@ export const WorkingGroupsOpenings = () => {
         </PageHeaderWrapper>
       }
       main={
-        <MainPanel ref={sideNeighborRef}>
+        <MainPanel>
           <Statistics>
             <MyRolesStat />
             <MyStakeStat />
@@ -64,7 +63,7 @@ export const WorkingGroupsOpenings = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel neighbor={sideNeighborRef}>
+        <SidePanel>
           <ActivitiesBlock activities={activities} label="Working Groups Activities" />
         </SidePanel>
       }

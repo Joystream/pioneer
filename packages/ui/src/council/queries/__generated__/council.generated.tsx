@@ -86,6 +86,13 @@ export type ElectionCandidateFieldsFragment = {
       group: { __typename: 'WorkingGroup'; name: string }
     }>
   }
+  noteMetadata: {
+    __typename: 'CandidacyNoteMetadata'
+    header?: string | null | undefined
+    bulletPoints: Array<string>
+    bannerImageUri?: string | null | undefined
+    description?: string | null | undefined
+  }
 }
 
 export type ElectionRoundFieldsFragment = {
@@ -114,15 +121,23 @@ export type ElectionRoundFieldsFragment = {
         group: { __typename: 'WorkingGroup'; name: string }
       }>
     }
+    noteMetadata: {
+      __typename: 'CandidacyNoteMetadata'
+      header?: string | null | undefined
+      bulletPoints: Array<string>
+      bannerImageUri?: string | null | undefined
+      description?: string | null | undefined
+    }
   }>
 }
 
-export type CandidateDetailedFieldsFragment = {
+export type ElectionCandidateDetailedFieldsFragment = {
   __typename: 'Candidate'
-  id: string
   stakingAccountId: string
   rewardAccountId: string
+  id: string
   stake: any
+  electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
   member: {
     __typename: 'Membership'
     id: string
@@ -142,7 +157,6 @@ export type CandidateDetailedFieldsFragment = {
       group: { __typename: 'WorkingGroup'; name: string }
     }>
   }
-  electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
     header?: string | null | undefined
@@ -250,6 +264,13 @@ export type GetCurrentElectionQuery = {
           group: { __typename: 'WorkingGroup'; name: string }
         }>
       }
+      noteMetadata: {
+        __typename: 'CandidacyNoteMetadata'
+        header?: string | null | undefined
+        bulletPoints: Array<string>
+        bannerImageUri?: string | null | undefined
+        description?: string | null | undefined
+      }
     }>
   }>
 }
@@ -263,10 +284,11 @@ export type GetCandidateQuery = {
   candidateByUniqueInput?:
     | {
         __typename: 'Candidate'
-        id: string
         stakingAccountId: string
         rewardAccountId: string
+        id: string
         stake: any
+        electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
         member: {
           __typename: 'Membership'
           id: string
@@ -290,7 +312,6 @@ export type GetCandidateQuery = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }
-        electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
         noteMetadata: {
           __typename: 'CandidacyNoteMetadata'
           header?: string | null | undefined
@@ -394,6 +415,12 @@ export const ElectionCandidateFieldsFragmentDoc = gql`
       ...MemberFields
     }
     stake
+    noteMetadata {
+      header
+      bulletPoints
+      bannerImageUri
+      description
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -406,27 +433,17 @@ export const ElectionRoundFieldsFragmentDoc = gql`
   }
   ${ElectionCandidateFieldsFragmentDoc}
 `
-export const CandidateDetailedFieldsFragmentDoc = gql`
-  fragment CandidateDetailedFields on Candidate {
-    id
+export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
+  fragment ElectionCandidateDetailedFields on Candidate {
+    ...ElectionCandidateFields
     stakingAccountId
     rewardAccountId
-    stake
-    member {
-      ...MemberFields
-    }
     electionRound {
       cycleId
       isFinished
     }
-    noteMetadata {
-      header
-      bulletPoints
-      bannerImageUri
-      description
-    }
   }
-  ${MemberFieldsFragmentDoc}
+  ${ElectionCandidateFieldsFragmentDoc}
 `
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
@@ -533,10 +550,10 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
 export const GetCandidateDocument = gql`
   query GetCandidate($where: CandidateWhereUniqueInput!) {
     candidateByUniqueInput(where: $where) {
-      ...CandidateDetailedFields
+      ...ElectionCandidateDetailedFields
     }
   }
-  ${CandidateDetailedFieldsFragmentDoc}
+  ${ElectionCandidateDetailedFieldsFragmentDoc}
 `
 
 /**

@@ -24,21 +24,21 @@ yarn node-mocks --help
 ```
 ### Polkadot apps
 
-You can also connect to the node using [Polkadot apps wallet](README#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
+You can also connect to the node using [Polkadot apps wallet](README.md#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
 
 ### Query-node Mocks
 
 To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.
 
-All MirageJS & query-node mocks are stored inside the [`@/mocks`](packages/ui/src/mocks).
+All MirageJS & query-node mocks are stored inside the [`@/mocks`](/packages/ui/src/mocks).
 
 #### Adding a mocks for a GraphQL Entity
 
 In order to properly mock an `Entity` you should:
 
 1. Prepare mocked data
-* Write a generator that re-creates [seed raw data](packages/ui/src/mocks/data/raw) as JSON file.
-* See [generators](packages/ui/dev/query-node-mocks/generators) for examples.
+* Write a generator that re-creates [seed raw data](/packages/ui/src/mocks/data/raw) as JSON file.
+* See [generators](/packages/ui/dev/query-node-mocks/generators) for examples.
 2. Write a MirageJS seed function
 * A seed function will create proper MirageJS [database](https://miragejs.com/docs/main-concepts/database/) entries from raw data.
 * It should add only the data used by queries. Other information can be omitted.
@@ -60,7 +60,7 @@ In order to properly mock an `Entity` you should:
 
 * No data fetched from the query
 
-  See if proper query resolver is present in the [`@/mocks/server.ts`](packages/ui/src/mocks/server.ts) file.
+  See if proper query resolver is present in the [`@/mocks/server.ts`](/packages/ui/src/mocks/server.ts) file.
 
 * No associated data in the mocked response
 

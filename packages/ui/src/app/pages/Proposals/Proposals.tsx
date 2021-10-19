@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
+import React from 'react'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { MainPanel } from '@/common/components/page/PageContent'
@@ -18,7 +18,6 @@ import { ProposalsTabs } from './components/ProposalsTabs'
 export const Proposals = () => {
   const { proposals, isLoading } = useProposals({ status: 'active' })
   const { activities } = useProposalsActivities()
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <PageLayout
@@ -35,7 +34,7 @@ export const Proposals = () => {
       }
       main={
         proposals.length || isLoading ? (
-          <MainPanel ref={sideNeighborRef}>
+          <MainPanel>
             {isLoading ? (
               <SearchProcess
                 title="Searching"
@@ -53,7 +52,7 @@ export const Proposals = () => {
       }
       sidebar={
         (proposals.length || isLoading) && (
-          <SidePanel neighbor={sideNeighborRef}>
+          <SidePanel>
             <ActivitiesBlock activities={activities} label="Proposals Activities" />
           </SidePanel>
         )

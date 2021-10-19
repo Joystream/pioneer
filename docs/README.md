@@ -29,7 +29,7 @@ Libraries
 - [date-fns](https://date-fns.org/docs/Getting-Started) to interact with dates
 - React libraries for: routing, pagination, breadcrumbs, dropzone, etc (see package.json)
 
-**Note**: To read about the Pioneer 2 architecture & key concepts see [Pioneer 2 readme](packages/ui/README.md)
+**Note**: To read about the Pioneer 2 architecture & key concepts see [Pioneer 2 readme](/packages/ui/README.md)
 
 ### Dependencies
 
@@ -39,7 +39,7 @@ The package.json entries for `@polkadot/*` packages must be set to the exact ver
 
 The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc.).
 
-As the Storybook uses Babel a [shared webpack configuration](packages/ui/dev/webpack.shared.js) for both webpack and storybook was introduced.
+As the Storybook uses Babel a [shared webpack configuration](/packages/ui/dev/webpack.shared.js) for both webpack and storybook was introduced.
 
 To build the project in a development mode using webpack dev server:
 
@@ -80,7 +80,7 @@ Expected URIs:
 
 ### Local environment limitations
 
-Since the local query-node operates on [mocks](mocks#query-node-mocks) all of the query-node mocked entities are not present on-chain.
+Since the local query-node operates on [mocks](mocks.md#query-node-mocks) all of the query-node mocked entities are not present on-chain.
 
 Also, any The second limitation is that any on-chain action is not represented in the query-node mocks.
 
@@ -114,7 +114,7 @@ yarn run queries:generate
 ```
 
 The queries are organized as below:
-- The query-node schema is stored under [@/common/api/schema.graphql](packages/ui/src/common/api/schemas/schema.graphql)
+- The query-node schema is stored under [@/common/api/schema.graphql](/packages/ui/src/common/api/schemas/schema.graphql)
 - GraphQL's queries are stored per every module, inside `@/module/queries/` folder - you only need to modify those.
 - The `graphq-codegen` will generate React hooks for Apollo Client ([plugin `typescript-react-apollo`](https://www.graphql-code-generator.com/docs/plugins/typescript-react-apollo)) that will be exposed as `@/module/queries` import.
 
@@ -165,13 +165,13 @@ For the `olympia_dev` branch the `defs.json` use this [link](https://github.com/
 
 ## Using well-known accounts with Polkadot-js extension
 
-Substrate defines [well-known accounts](https://substrate.dev/docs/en/knowledgebase/integrate/subkey#well-known-keys) for `Alice`, `Alice_Stash`, `Bob`, `Bob_Stash`, `Charlie`, `Dave`, `Eve` and `Ferdie`.
+Substrate defines [well-known accounts](https://docs.substrate.io/v3/tools/subkey#well-known-keys) for `Alice`, `Alice_Stash`, `Bob`, `Bob_Stash`, `Charlie`, `Dave`, `Eve` and `Ferdie`.
 
 To add any of the above:
 
 1. Open extension and click plus sign
 2. Select "Import account from pre-existing seed"
-3. Copy the seed from [substrate help page](https://substrate.dev/docs/en/knowledgebase/integrate/subkey#well-known-keys) as "existing mnemonic seed"
+3. Copy the seed from [substrate help page](https://docs.substrate.io/v3/tools/subkey#well-known-keys) as "existing mnemonic seed"
 4. Open advanced and type the derivation path:
   * For `Alice`, `Bob`, `Charlie`, `Dave`, `Eve` & `Ferdie` use the name as path, e.g. `//Eve`
   * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`

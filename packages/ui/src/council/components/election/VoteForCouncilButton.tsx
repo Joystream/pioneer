@@ -12,7 +12,7 @@ export const VoteForCouncilButton = (data: VoteForCouncilModalCall['data']) => {
     [showModal]
   )
   return (
-    <ButtonPrimary size="small" onClick={vote}>
+    <ButtonPrimary size="medium" onClick={vote}>
       Vote
     </ButtonPrimary>
   )

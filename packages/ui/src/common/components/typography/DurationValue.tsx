@@ -5,7 +5,7 @@ import { Colors, Fonts } from '@/common/constants'
 import { intersperse } from '@/common/utils'
 
 interface DurationValueProps {
-  value: [number, string][]
+  value: [number | string, string][]
 }
 
 export const DurationValue = ({ value }: DurationValueProps) => (
@@ -23,7 +23,7 @@ export const DurationValue = ({ value }: DurationValueProps) => (
   </>
 )
 
-const Period = ({ amount, unit }: { amount: number; unit: string }) => (
+const Period = ({ amount, unit }: { amount: number | string; unit: string }) => (
   <Days unit={unit}>
     {amount} <Unit>{unit}</Unit>
   </Days>

@@ -10,7 +10,7 @@ import {
 } from '@/mocks/data/seedCouncils'
 
 import { saveFile } from '../../helpers/saveFile'
-import { randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
+import { memberAt, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
 const COUNCILS = 5
 
@@ -54,27 +54,32 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     isFinished ? randomFromRange(5, 8) : 0
   )
 
+  function createCandidate(candidateIndex: number, member: ReturnType<typeof randomMember>) {
+    return {
+      id: `${council.id}-${candidateIndex}`,
+      memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
+      electionRoundId: council.id,
+      stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
+      stakingAccountId: member.controllerAccount,
+      rewardAccountId: member.rootAccount,
+      note: faker.lorem.words(10),
+      noteMetadata: {
+        header: faker.lorem.words(4),
+        bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),
+        bannerImageUri: 'https://picsum.photos/500/300',
+        description: faker.lorem.words(10),
+      },
+    }
+  }
+
   const candidates: RawCouncilCandidateMock[] = repeat(
-    (candidateIndex) => {
-      const member = randomMember()
-      return {
-        id: `${council.id}-${candidateIndex}`,
-        memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
-        electionRoundId: council.id,
-        stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
-        stakingAccountId: member.controllerAccount,
-        rewardAccountId: member.rootAccount,
-        note: faker.lorem.words(10),
-        noteMetadata: {
-          header: faker.lorem.words(4),
-          bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),
-          bannerImageUri: 'https://picsum.photos/500/300',
-          description: faker.lorem.words(10),
-        },
-      }
-    },
+    (candidateIndex) => createCandidate(candidateIndex, randomMember()),
     isFinished ? councilors.length : randomFromRange(5, 8)
   )
+
+  if (!isFinished) {
+    candidates.push(createCandidate(candidates.length - 1, memberAt(0)))
+  }
 
   const electionRound: RawCouncilElectionMock = {
     id: council.id,

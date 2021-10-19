@@ -68,6 +68,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, 'build'),
       globalObject: 'this',
     },
+    stats: 'minimal',
     devServer: {
       historyApiFallback: true,
       host: '0.0.0.0',

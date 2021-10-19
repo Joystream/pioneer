@@ -34,18 +34,16 @@ Default.args = {
     inviteCount: 0,
     createdAt: '',
   },
-  image: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
+  info: {
+    title: 'A Presidency for All Americans',
+    bannerUri: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
+    bulletPoints: [
+      'Amet minim mollit non deserunt ullamco est sit liqua dolor',
+      'Amet minim mollit non deserunt ullamco est sit liqua dolor',
+      'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
+    ],
+  },
   voted: true,
   withdrawable: false,
-  title: 'A Presidency for All Americans',
-  infolist: [
-    'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-    'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-    'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
-    'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-    'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-  ],
   stake: (130000000 as unknown) as BN,
-  wons: undefined,
-  losts: undefined,
 }

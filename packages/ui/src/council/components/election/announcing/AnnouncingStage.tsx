@@ -4,7 +4,8 @@ import React, { useState } from 'react'
 import { Loading } from '@/common/components/Loading'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { AnnouncingStageTab, ElectionTabs } from '@/council/components/election/ElectionTabs'
-import { Election, ElectionCandidate } from '@/council/types/Election'
+import { ElectionCandidate } from '@/council/types'
+import { Election } from '@/council/types/Election'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
@@ -37,8 +38,9 @@ export const AnnouncingStage = ({ election }: AnnouncingStageProps) => {
         candidates={candidates.map((candidate) => ({
           id: candidate.id,
           member: candidate.member,
-          title: 'Some title',
+          info: candidate.info,
           ...(candidate.stake && isMyCandidate(myMembers, candidate) ? { stake: new BN(candidate.stake) } : {}),
+          withdrawable: !!isMyCandidate(myMembers, candidate),
         }))}
       />
     )

@@ -8,10 +8,9 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
-import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalContext } from '@/common/providers/modal/context'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
-import { MembershipContext } from '@/memberships/providers/membership/context'
-import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { Member } from '@/memberships/types'
 import { seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
@@ -37,13 +36,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 describe('UI: Withdraw Candidacy Modal', () => {
   const api = stubApi()
-  const useMyMemberships: MyMemberships = {
-    active: undefined,
-    members: [],
-    setActive: (member) => (useMyMemberships.active = member),
-    isLoading: false,
-    hasMembers: true,
-  }
 
   let useAccounts: UseAccounts
   let tx: any
@@ -61,22 +53,19 @@ describe('UI: Withdraw Candidacy Modal', () => {
   })
 
   beforeEach(async () => {
-    useMyMemberships.members = [getMember('alice'), getMember('bob')]
-    useMyMemberships.setActive(getMember('alice'))
-
     stubDefaultBalances(api)
     stubCouncilConstants(api)
     tx = stubTransaction(api, 'api.tx.council.withdrawCandidacy', 25)
   })
 
   it('Warning', async () => {
-    renderModal()
+    renderModal(getMember('alice'))
 
     expect(await screen.findByText(/^Please remember that this action is irreversible/i)).toBeDefined()
   })
 
   it('Transaction sign', async () => {
-    renderModal()
+    renderModal(getMember('alice'))
 
     fireEvent.click(await getButton('Withdraw Candidacy'))
 
@@ -87,7 +76,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, 'council', 'CandidacyWithdraw')
-    renderModal()
+    renderModal(getMember('alice'))
 
     fireEvent.click(await getButton('Withdraw Candidacy'))
     fireEvent.click(await getButton('Sign and send'))
@@ -97,7 +86,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
 
   it('Transaction error', async () => {
     stubTransactionFailure(tx)
-    renderModal()
+    renderModal(getMember('alice'))
 
     fireEvent.click(await getButton('Withdraw Candidacy'))
     fireEvent.click(await getButton('Sign and send'))
@@ -105,24 +94,29 @@ describe('UI: Withdraw Candidacy Modal', () => {
     expect(await screen.findByText(/^There was a problem with withdrawing your candidacy/i)).toBeDefined()
   })
 
-  function renderModal() {
+  function renderModal(member: Member) {
     return render(
       <MemoryRouter>
-        <ModalContextProvider>
+        <ModalContext.Provider
+          value={{
+            modal: 'WithdrawCandidacy',
+            modalData: { member },
+            hideModal: () => undefined,
+            showModal: () => undefined,
+          }}
+        >
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
                 <ApiContext.Provider value={api}>
                   <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <WithdrawCandidacyModal />
-                    </MembershipContext.Provider>
+                    <WithdrawCandidacyModal />
                   </BalancesContextProvider>
                 </ApiContext.Provider>
               </AccountsContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContextProvider>
+        </ModalContext.Provider>
       </MemoryRouter>
     )
   }
