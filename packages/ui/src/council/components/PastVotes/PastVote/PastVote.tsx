@@ -7,27 +7,13 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { ListItem } from '@/common/components/List'
-import { TextInlineMedium, TokenValue } from '@/common/components/typography'
+import { TextInlineBig, TextInlineMedium, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { Vote } from '@/council/types'
 import { MemberInfo } from '@/memberships/components'
-import { Member } from '@/memberships/types'
 
 export interface PastVoteProps {
   vote: Vote
-}
-
-const unrevealed: Member = {
-  id: '-1',
-  handle: 'Not revealed',
-  rootAccount: '',
-  controllerAccount: '',
-  roles: [],
-  inviteCount: 0,
-  isVerified: false,
-  isFoundingMember: false,
-  isCouncilMember: false,
-  createdAt: '',
 }
 
 export const PastVote = ({ vote }: PastVoteProps) => {
@@ -36,7 +22,7 @@ export const PastVote = ({ vote }: PastVoteProps) => {
     <PastVoteWrapper>
       <TextInlineMedium>#{vote.cycleId}</TextInlineMedium>
       <BlockTime block={{ number: -1, network: 'BABYLON', timestamp: '2000-01-01T00:00:00.893Z' }} />
-      <MemberInfo member={vote.voteFor ?? unrevealed} skipModal={!vote.voteFor} />
+      {vote.voteFor ? <MemberInfo member={vote.voteFor} /> : <TextInlineBig lighter>not revealed</TextInlineBig>}
       <TokenValue value={vote.stake} />
       <AccountInfo account={accountOrNamed(allAccounts, vote.castBy, 'Staking account')} />
       <TextInlineMedium>{!vote.voteFor ? 'Sealed' : 'Unsealed'}</TextInlineMedium>

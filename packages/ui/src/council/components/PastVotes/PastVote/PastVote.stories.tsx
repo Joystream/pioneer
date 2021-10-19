@@ -17,7 +17,7 @@ export default {
 const Template: Story<PastVoteProps> = (args) => <PastVote {...args} />
 
 export const Default = Template.bind({})
-const args: PastVoteProps = {
+const revealedArgs: PastVoteProps = {
   vote: {
     stake: new BN(10000000),
     stakeLocked: true,
@@ -26,4 +26,15 @@ const args: PastVoteProps = {
     cycleId: 6,
   },
 }
-Default.args = args
+Default.args = revealedArgs
+
+export const Unrevealed = Template.bind({})
+const unrevealedArgs: PastVoteProps = {
+  vote: {
+    stake: new BN(10000000),
+    stakeLocked: true,
+    castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    cycleId: 6,
+  },
+}
+Unrevealed.args = unrevealedArgs
