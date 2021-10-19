@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
 import { TotalValue } from '@/common/components/statistics'
-import { TextBig, TextInlineBig, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextBig, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
 import { PastElection } from '@/council/types/PastElection'
 

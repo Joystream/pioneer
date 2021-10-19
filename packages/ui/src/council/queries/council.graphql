@@ -45,6 +45,9 @@ fragment PastElectionRoundFields on ElectionRound {
   candidates {
     stake
   }
+  castVotes {
+    voteForId
+  }
 }
 
 fragment ElectionCandidateDetailedFields on Candidate {

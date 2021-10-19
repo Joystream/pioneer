@@ -16,6 +16,6 @@ export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastEle
   finishedAt: fields.updatedAt,
   totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
   totalCandidates: fields.candidates.length,
-  revealedVotes: 1,
-  totalVotes: 10,
+  revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
+  totalVotes: fields.castVotes.length,
 })

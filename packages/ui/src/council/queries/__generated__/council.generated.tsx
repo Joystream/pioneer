@@ -136,6 +136,7 @@ export type PastElectionRoundFieldsFragment = {
   cycleId: number
   updatedAt?: any | null | undefined
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -295,6 +296,7 @@ export type GetPastElectionsQuery = {
     cycleId: number
     updatedAt?: any | null | undefined
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
   }>
 }
 
@@ -469,6 +471,9 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
     updatedAt
     candidates {
       stake
+    }
+    castVotes {
+      voteForId
     }
   }
 `
