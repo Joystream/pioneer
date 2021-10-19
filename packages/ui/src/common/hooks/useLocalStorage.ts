@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 
-function getItem(key: string) {
+const getItem = (key?: string) => {
+  if (key === undefined) {
+    return
+  }
+
   const item = window.localStorage.getItem(key)
   let result
   if (item !== null) {
@@ -13,7 +17,11 @@ function getItem(key: string) {
   return result
 }
 
-function setItem(key: string, value: any) {
+const setItem = (key?: string, value?: any) => {
+  if (key === undefined) {
+    return
+  }
+
   if (value === undefined) {
     window.localStorage.removeItem(key)
   } else {
@@ -23,8 +31,10 @@ function setItem(key: string, value: any) {
   }
 }
 
-export const useLocalStorage = <T>(key: string) => {
-  const [value, setValue] = useState<T | undefined>(() => getItem(key))
+export const useLocalStorage = <T>(key?: string) => {
+  const [value, setValue] = useState<T | undefined>(() => {
+    return getItem(key)
+  })
 
   useEffect(() => {
     setValue(getItem(key))
@@ -32,7 +42,7 @@ export const useLocalStorage = <T>(key: string) => {
 
   useEffect(() => {
     setItem(key, value)
-  }, [value, key])
+  }, [value])
 
   return [value, setValue] as const
 }

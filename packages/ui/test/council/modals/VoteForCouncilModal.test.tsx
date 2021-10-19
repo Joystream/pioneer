@@ -13,7 +13,7 @@ import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { seedCouncilCandidates, seedCouncilElections, seedElectedCouncils, seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -68,6 +68,9 @@ describe('UI: Vote for Council Modal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
+    seedElectedCouncils(server.server, 1)
+    seedCouncilElections(server.server, 1)
+    seedCouncilCandidates(server.server, [{ memberId: '0' }])
 
     useAccounts = {
       hasAccounts: true,

@@ -57,15 +57,15 @@ export const seedCouncilMembers = (server: any) => {
 
 export const seedElectedCouncil = (data: RawCouncilMock, server: any) => server.schema.create('ElectedCouncil', data)
 
-export const seedElectedCouncils = (server: any) => {
-  rawCouncils.map((data) => seedElectedCouncil(data, server))
+export const seedElectedCouncils = (server: any, howMany?: number) => {
+  rawCouncils.slice(0, howMany).map((data) => seedElectedCouncil(data, server))
 }
 
 export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =>
   server.schema.create('ElectionRound', data)
 
-export const seedCouncilElections = (server: any) => {
-  rawElections.map((data) => seedCouncilElection(data, server))
+export const seedCouncilElections = (server: any, howMany?: number) => {
+  rawElections.slice(0, howMany).map((data) => seedCouncilElection(data, server))
 }
 
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
@@ -77,8 +77,12 @@ export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any)
   })
 }
 
-export const seedCouncilCandidates = (server: any) => {
-  rawCandidates.map((data) => seedCouncilCandidate(data, server))
+export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCouncilCandidateMock>[]) => {
+  const candidates =
+    overrides?.map<RawCouncilCandidateMock>((override, index) => ({ ...rawCandidates[index], ...override })) ??
+    rawCandidates
+
+  candidates.map((data) => seedCouncilCandidate(data, server))
 }
 
 export const seedCounncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)

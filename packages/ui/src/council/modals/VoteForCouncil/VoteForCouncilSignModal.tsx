@@ -1,5 +1,3 @@
-import crypto from 'crypto'
-
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef, State } from 'xstate'
@@ -16,6 +14,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'
+import { useCommitment } from '@/council/hooks/useCommitment'
 import { TransactionContext } from '@/proposals/modals/AddNewProposal/machine'
 
 import { StakeFormFields, VoteForCouncilModalCall } from './types'
@@ -29,9 +28,14 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
   const { api } = useApi()
   const { hideModal, modalData } = useModal<VoteForCouncilModalCall>()
 
-  const commitment = useMemo(() => crypto.createHash('sha256').update(modalData.id).digest(), [modalData.id])
+  const { commitment, isVoteStored } = useCommitment(stake.account.address, modalData.id)
 
-  const transaction = useMemo(() => api?.tx.referendum.vote(commitment, stake.amount), [commitment, stake.amount])
+  const transaction = useMemo(() => {
+    if (commitment) {
+      return api?.tx.referendum.vote(commitment, stake.amount)
+    }
+  }, [commitment, stake.amount])
+
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
     service,
     transaction,
@@ -63,7 +67,7 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
           />
         </TransactionInfoContainer>
 
-        <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
+        <ButtonPrimary size="medium" disabled={!isReady || !isVoteStored} onClick={sign}>
           Sign and send
           <Arrow direction="right" />
         </ButtonPrimary>
