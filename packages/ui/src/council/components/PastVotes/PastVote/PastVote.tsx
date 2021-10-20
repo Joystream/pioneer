@@ -33,9 +33,11 @@ export const PastVote = ({ vote }: PastVoteProps) => {
   )
 }
 
+export const PastVoteColumns = '48px 1fr 0.7fr 0.7fr 1fr 0.5fr 0.7fr'
+
 const PastVoteWrapper = styled(ListItem)`
   position: relative;
-  grid-template-columns: 48px 1fr 0.7fr 0.7fr 1fr 0.5fr 0.7fr;
+  grid-template-columns: ${PastVoteColumns};
   align-items: center;
   grid-column-gap: 8px;
   height: 116px;

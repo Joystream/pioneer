@@ -5,7 +5,9 @@ import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useMyPastVotes } from '@/council/hooks/useMyPastVotes'
 
-import { PastVote } from './PastVote/PastVote'
+import { PastVote, PastVoteColumns } from './PastVote/PastVote'
+import { List } from '@/common/components/List'
+import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 
 export const PastVotesList = () => {
   const { votes, isLoading } = useMyPastVotes()
@@ -19,9 +21,19 @@ export const PastVotesList = () => {
 
   return (
     <VotesList>
-      {votes.map((vote, index) => (
-        <PastVote vote={vote} key={index} />
-      ))}
+      <ListHeaders $colLayout={PastVoteColumns}>
+        <ListHeader>Round</ListHeader>
+        <ListHeader>Voted on</ListHeader>
+        <ListHeader>Candidate</ListHeader>
+        <ListHeader>Staked</ListHeader>
+        <ListHeader>Staking Account</ListHeader>
+        <ListHeader>Stage</ListHeader>
+      </ListHeaders>
+      <List as="div">
+        {votes.map((vote, index) => (
+          <PastVote vote={vote} key={index} />
+        ))}
+      </List>
     </VotesList>
   )
 }
