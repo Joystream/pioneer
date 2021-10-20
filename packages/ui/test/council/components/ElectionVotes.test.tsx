@@ -12,32 +12,10 @@ import {
   seedMembers,
 } from '@/mocks/data'
 
-import { alice, bob } from '../../_mocks/keyring/signers'
+import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
+import { bob } from '../../_mocks/keyring/signers'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-
-const VOTE_DATA = {
-  electionRoundId: '0',
-  stake: 1200,
-  stakeLocked: true,
-  castBy: alice.address,
-  voteForId: null,
-}
-
-const CANDIDATE_DATA = {
-  id: '0',
-  electionRoundId: '0',
-  memberId: '0',
-  stake: 1000,
-  stakingAccountId: '',
-  rewardAccountId: '',
-  noteMetadata: {
-    header: '',
-    bulletPoints: [],
-    bannerImageUri: '',
-    description: '',
-  },
-}
 
 const Results = () => {
   const { election } = useCurrentElection()

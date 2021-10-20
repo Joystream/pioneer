@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BN_ZERO } from '@/common/constants'
 
-import { useGetElectionVotesQuery } from '../queries'
+import { useGetCouncilVotesQuery } from '../queries'
 import { asVote, ElectionCandidate } from '../types'
 import { Election } from '../types/Election'
 
@@ -17,7 +17,9 @@ interface CandidateStats {
 
 export const useElectionVotes = (election: Election) => {
   const { allAccounts } = useMyAccounts()
-  const { data, loading } = useGetElectionVotesQuery({ variables: { electionCycleId: election.cycleId } })
+  const { data, loading } = useGetCouncilVotesQuery({
+    variables: { where: { electionRound: { cycleId_eq: election.cycleId } } },
+  })
 
   const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes.length])
 

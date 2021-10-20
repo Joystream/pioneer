@@ -3,6 +3,7 @@ import React from 'react'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { PastVotesList } from '@/council/components/PastVotes/PastVotesList'
 
 import { CouncilTabs } from './components/CouncilTabs'
 
@@ -16,7 +17,11 @@ export const PastVotes = () => {
     </PageHeaderWrapper>
   )
 
-  const main = <MainPanel></MainPanel>
+  const main = (
+    <MainPanel>
+      <PastVotesList />
+    </MainPanel>
+  )
 
   return <PageLayout header={header} main={main} />
 }

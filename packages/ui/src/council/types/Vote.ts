@@ -10,6 +10,7 @@ export interface Vote {
   stakeLocked: boolean
   castBy: Address
   voteFor?: Member
+  cycleId: number
 }
 
 export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
@@ -17,4 +18,5 @@ export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,
   voteFor: fields.voteFor ? asMember(fields.voteFor) : undefined,
+  cycleId: fields.electionRound.cycleId,
 })

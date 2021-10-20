@@ -67,6 +67,9 @@ fragment CastVoteFields on CastVote {
   voteFor {
     ...MemberFields
   }
+  electionRound {
+    cycleId
+  }
 }
 
 query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
@@ -117,8 +120,8 @@ query GetCandidateStats($memberId: ID) {
   }
 }
 
-query GetElectionVotes($electionCycleId: Int) {
-  castVotes(where: { electionRound: { cycleId_eq: $electionCycleId } }) {
+query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
+  castVotes(where: $where, orderBy: $orderBy) {
     ...CastVoteFields
   }
 }
