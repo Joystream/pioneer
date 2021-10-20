@@ -46,7 +46,7 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
 
           return {
             candidateId: votingResult.candidate.id,
-            revealed: false,
+            revealed: !!myVote,
             member: votingResult.candidate.member,
             sumOfAllStakes: votingResult.totalStake,
             ownStake: myVote ? myVote.stake : undefined,

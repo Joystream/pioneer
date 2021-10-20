@@ -133,10 +133,56 @@ export type ElectionRoundFieldsFragment = {
 
 export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
+  id: string
   cycleId: number
   updatedAt?: any | null | undefined
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
+}
+
+export type PastElectionRoundDetailedFieldsFragment = {
+  __typename: 'ElectionRound'
+  id: string
+  cycleId: number
+  updatedAt?: any | null | undefined
+  candidates: Array<{
+    __typename: 'Candidate'
+    stake: any
+    id: string
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    noteMetadata: {
+      __typename: 'CandidacyNoteMetadata'
+      header?: string | null | undefined
+      bulletPoints: Array<string>
+      bannerImageUri?: string | null | undefined
+      description?: string | null | undefined
+    }
+  }>
+  castVotes: Array<{
+    __typename: 'CastVote'
+    stake: any
+    stakeLocked: boolean
+    voteForId?: string | null | undefined
+    castBy: string
+  }>
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -294,6 +340,7 @@ export type GetPastElectionsQuery = {
   __typename: 'Query'
   electionRounds: Array<{
     __typename: 'ElectionRound'
+    id: string
     cycleId: number
     updatedAt?: any | null | undefined
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
@@ -306,6 +353,65 @@ export type GetPastElectionsCountQueryVariables = Types.Exact<{ [key: string]: n
 export type GetPastElectionsCountQuery = {
   __typename: 'Query'
   electionRoundsConnection: { __typename: 'ElectionRoundConnection'; totalCount: number }
+}
+
+export type GetPastElectionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetPastElectionQuery = {
+  __typename: 'Query'
+  electionRoundByUniqueInput?:
+    | {
+        __typename: 'ElectionRound'
+        id: string
+        cycleId: number
+        updatedAt?: any | null | undefined
+        candidates: Array<{
+          __typename: 'Candidate'
+          stake: any
+          id: string
+          member: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+          noteMetadata: {
+            __typename: 'CandidacyNoteMetadata'
+            header?: string | null | undefined
+            bulletPoints: Array<string>
+            bannerImageUri?: string | null | undefined
+            description?: string | null | undefined
+          }
+        }>
+        castVotes: Array<{
+          __typename: 'CastVote'
+          stake: any
+          stakeLocked: boolean
+          voteForId?: string | null | undefined
+          castBy: string
+        }>
+      }
+    | null
+    | undefined
 }
 
 export type GetCandidateQueryVariables = Types.Exact<{
@@ -470,6 +576,7 @@ export const ElectionRoundFieldsFragmentDoc = gql`
 `
 export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
+    id
     cycleId
     updatedAt
     candidates {
@@ -479,6 +586,22 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
       voteForId
     }
   }
+`
+export const PastElectionRoundDetailedFieldsFragmentDoc = gql`
+  fragment PastElectionRoundDetailedFields on ElectionRound {
+    ...PastElectionRoundFields
+    candidates {
+      ...ElectionCandidateFields
+    }
+    castVotes {
+      stake
+      stakeLocked
+      voteForId
+      castBy
+    }
+  }
+  ${PastElectionRoundFieldsFragmentDoc}
+  ${ElectionCandidateFieldsFragmentDoc}
 `
 export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
   fragment ElectionCandidateDetailedFields on Candidate {
@@ -686,6 +809,46 @@ export type GetPastElectionsCountQueryResult = Apollo.QueryResult<
   GetPastElectionsCountQuery,
   GetPastElectionsCountQueryVariables
 >
+export const GetPastElectionDocument = gql`
+  query GetPastElection($id: ID!) {
+    electionRoundByUniqueInput(where: { id: $id }) {
+      ...PastElectionRoundDetailedFields
+    }
+  }
+  ${PastElectionRoundDetailedFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastElectionQuery__
+ *
+ * To run a query within a React component, call `useGetPastElectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastElectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastElectionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPastElectionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastElectionQuery, GetPastElectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastElectionQuery, GetPastElectionQueryVariables>(GetPastElectionDocument, options)
+}
+export function useGetPastElectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastElectionQuery, GetPastElectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastElectionQuery, GetPastElectionQueryVariables>(GetPastElectionDocument, options)
+}
+export type GetPastElectionQueryHookResult = ReturnType<typeof useGetPastElectionQuery>
+export type GetPastElectionLazyQueryHookResult = ReturnType<typeof useGetPastElectionLazyQuery>
+export type GetPastElectionQueryResult = Apollo.QueryResult<GetPastElectionQuery, GetPastElectionQueryVariables>
 export const GetCandidateDocument = gql`
   query GetCandidate($where: CandidateWhereUniqueInput!) {
     candidateByUniqueInput(where: $where) {

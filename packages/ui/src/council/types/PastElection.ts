@@ -42,7 +42,14 @@ export const asPastElectionWithDetails = (
   totalStake: fields.castVotes.reduce((a, b) => a.addn(b.stake), BN_ZERO),
   votingResults: fields.candidates.map((candidate) => ({
     candidate: asElectionCandidate(candidate),
-    votes: fields.castVotes.filter((castVote) => castVote.voteForId === candidate.member.id).map(asVote),
+    votes: fields.castVotes
+      .filter((castVote) => castVote.voteForId === candidate.member.id)
+      .map((castVote) =>
+        asVote({
+          ...castVote,
+          electionRound: { __typename: 'ElectionRound', cycleId: fields.cycleId },
+        })
+      ),
     totalStake: fields.castVotes
       .filter((castVote) => castVote.voteForId === candidate.member.id)
       .reduce((a, b) => a.addn(b.stake), BN_ZERO),
