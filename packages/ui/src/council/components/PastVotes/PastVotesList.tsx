@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { List } from '@/common/components/List'
+import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useMyPastVotes } from '@/council/hooks/useMyPastVotes'
 
 import { PastVote, PastVoteColumns } from './PastVote/PastVote'
-import { List } from '@/common/components/List'
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 
 export const PastVotesList = () => {
   const { votes, isLoading } = useMyPastVotes()

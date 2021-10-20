@@ -1,4 +1,5 @@
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { CastVoteOrderByInput } from '@/common/api/queries'
 
 import { useGetCouncilVotesQuery } from '../queries'
 import { asVote } from '../types/Vote'
@@ -11,6 +12,7 @@ export const useMyPastVotes = () => {
         castBy_in: allAccounts.map((account) => account.address),
         electionRound: { isFinished_eq: true },
       },
+      orderBy: [CastVoteOrderByInput.CreatedAtDesc],
     },
   })
   return {
