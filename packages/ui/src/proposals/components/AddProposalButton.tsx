@@ -14,11 +14,9 @@ export const AddProposalButton = () => {
   }, [])
 
   return (
-    <>
-      <ButtonPrimary size="medium" onClick={addNewProposalModal}>
-        <PlusIcon />
-        Add new proposal
-      </ButtonPrimary>
-    </>
+    <ButtonPrimary size="medium" onClick={addNewProposalModal}>
+      <PlusIcon />
+      Add new proposal
+    </ButtonPrimary>
   )
 }
