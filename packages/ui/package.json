@@ -12,7 +12,7 @@
     "node-mocks": "ts-node dev/node-mocks/index.ts",
     "queries:generate": "graphql-codegen --config codegen.config.yml && yarn lint:fix",
     "query-node-mocks": "ts-node dev/query-node-mocks/generateMocks.ts",
-    "start": "NODE_OPTIONS=--max_old_space_size=8192 webpack serve --mode development --progress",
+    "start": "cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack serve --mode development --progress",
     "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
     "test": "jest"
   },
@@ -112,6 +112,7 @@
     "babel-plugin-styled-components": "^1.13.2",
     "chalk": "^4.1.2",
     "clean-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.3",
     "eslint-plugin-react-hooks": "^4.2.0",
     "faker": "^5.5.3",
     "html-webpack-plugin": "^5.3.2",
