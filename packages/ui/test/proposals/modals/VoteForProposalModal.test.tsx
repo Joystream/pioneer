@@ -1,4 +1,5 @@
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { configure, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -11,15 +12,15 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { seedMembers } from '@/mocks/data'
 import { VoteForProposalModal } from '@/proposals/modals/VoteForProposal'
 
+import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
-import { stubApi } from '../../_mocks/transactions'
-import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { seedMembers } from '@/mocks/data'
 import { alice, bob } from '../../_mocks/keyring'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubApi } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -60,6 +61,12 @@ describe('UI: Vote for Proposal Modal', () => {
   it('Renders a modal', async () => {
     renderModal()
     expect(await screen.findByText('Vote for proposal')).toBeDefined()
+  })
+
+  it('Empty form', async () => {
+    renderModal()
+
+    expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
   })
 
   function renderModal() {
