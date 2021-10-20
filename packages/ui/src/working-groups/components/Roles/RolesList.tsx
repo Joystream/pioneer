@@ -119,7 +119,6 @@ const RoleItemWrapper = styled(ToggleableItemWrap)`
   ${ContextMenuContainer} {
     z-index: 1;
   }
-
 `
 
 const RoleTitle = styled(ToggleableItemTitle)`

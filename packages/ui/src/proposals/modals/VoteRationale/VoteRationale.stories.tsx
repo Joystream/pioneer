@@ -15,7 +15,7 @@ export default {
 export const Default: Story = () => {
   return (
     <MemoryRouter>
-      <MockApolloProvider members proposals>
+      <MockApolloProvider members proposals workingGroups workers>
         <ModalContext.Provider
           value={{
             modalData: {
