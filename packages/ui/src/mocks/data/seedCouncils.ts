@@ -62,7 +62,7 @@ export const seedElectedCouncils = (server: any, howMany?: number) => {
 }
 
 export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =>
-  server.schema.create('ElectionRound', data)
+  server.schema.create('ElectionRound', { ...data, updatedAt: new Date().toISOString() })
 
 export const seedCouncilElections = (server: any, howMany?: number) => {
   rawElections.slice(0, howMany).map((data) => seedCouncilElection(data, server))

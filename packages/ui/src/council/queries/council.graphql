@@ -39,6 +39,17 @@ fragment ElectionRoundFields on ElectionRound {
   }
 }
 
+fragment PastElectionRoundFields on ElectionRound {
+  cycleId
+  updatedAt
+  candidates {
+    stake
+  }
+  castVotes {
+    voteForId
+  }
+}
+
 fragment ElectionCandidateDetailedFields on Candidate {
   ...ElectionCandidateFields
   stakingAccountId
@@ -67,6 +78,18 @@ query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
 query GetCurrentElection {
   electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields
+  }
+}
+
+query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
+  electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
+    ...PastElectionRoundFields
+  }
+}
+
+query GetPastElectionsCount {
+  electionRoundsConnection(where: { isFinished_eq: true }) {
+    totalCount
   }
 }
 

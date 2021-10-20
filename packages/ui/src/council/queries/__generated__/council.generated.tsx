@@ -131,6 +131,14 @@ export type ElectionRoundFieldsFragment = {
   }>
 }
 
+export type PastElectionRoundFieldsFragment = {
+  __typename: 'ElectionRound'
+  cycleId: number
+  updatedAt?: any | null | undefined
+  candidates: Array<{ __typename: 'Candidate'; stake: any }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
+}
+
 export type ElectionCandidateDetailedFieldsFragment = {
   __typename: 'Candidate'
   stakingAccountId: string
@@ -273,6 +281,30 @@ export type GetCurrentElectionQuery = {
       }
     }>
   }>
+}
+
+export type GetPastElectionsQueryVariables = Types.Exact<{
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
+}>
+
+export type GetPastElectionsQuery = {
+  __typename: 'Query'
+  electionRounds: Array<{
+    __typename: 'ElectionRound'
+    cycleId: number
+    updatedAt?: any | null | undefined
+    candidates: Array<{ __typename: 'Candidate'; stake: any }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
+  }>
+}
+
+export type GetPastElectionsCountQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetPastElectionsCountQuery = {
+  __typename: 'Query'
+  electionRoundsConnection: { __typename: 'ElectionRoundConnection'; totalCount: number }
 }
 
 export type GetCandidateQueryVariables = Types.Exact<{
@@ -433,6 +465,18 @@ export const ElectionRoundFieldsFragmentDoc = gql`
   }
   ${ElectionCandidateFieldsFragmentDoc}
 `
+export const PastElectionRoundFieldsFragmentDoc = gql`
+  fragment PastElectionRoundFields on ElectionRound {
+    cycleId
+    updatedAt
+    candidates {
+      stake
+    }
+    castVotes {
+      voteForId
+    }
+  }
+`
 export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
   fragment ElectionCandidateDetailedFields on Candidate {
     ...ElectionCandidateFields
@@ -546,6 +590,95 @@ export type GetCurrentElectionLazyQueryHookResult = ReturnType<typeof useGetCurr
 export type GetCurrentElectionQueryResult = Apollo.QueryResult<
   GetCurrentElectionQuery,
   GetCurrentElectionQueryVariables
+>
+export const GetPastElectionsDocument = gql`
+  query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
+    electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
+      ...PastElectionRoundFields
+    }
+  }
+  ${PastElectionRoundFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastElectionsQuery__
+ *
+ * To run a query within a React component, call `useGetPastElectionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastElectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastElectionsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetPastElectionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPastElectionsQuery, GetPastElectionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastElectionsQuery, GetPastElectionsQueryVariables>(GetPastElectionsDocument, options)
+}
+export function useGetPastElectionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastElectionsQuery, GetPastElectionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastElectionsQuery, GetPastElectionsQueryVariables>(GetPastElectionsDocument, options)
+}
+export type GetPastElectionsQueryHookResult = ReturnType<typeof useGetPastElectionsQuery>
+export type GetPastElectionsLazyQueryHookResult = ReturnType<typeof useGetPastElectionsLazyQuery>
+export type GetPastElectionsQueryResult = Apollo.QueryResult<GetPastElectionsQuery, GetPastElectionsQueryVariables>
+export const GetPastElectionsCountDocument = gql`
+  query GetPastElectionsCount {
+    electionRoundsConnection(where: { isFinished_eq: true }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetPastElectionsCountQuery__
+ *
+ * To run a query within a React component, call `useGetPastElectionsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastElectionsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastElectionsCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPastElectionsCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPastElectionsCountQuery, GetPastElectionsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastElectionsCountQuery, GetPastElectionsCountQueryVariables>(
+    GetPastElectionsCountDocument,
+    options
+  )
+}
+export function useGetPastElectionsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastElectionsCountQuery, GetPastElectionsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastElectionsCountQuery, GetPastElectionsCountQueryVariables>(
+    GetPastElectionsCountDocument,
+    options
+  )
+}
+export type GetPastElectionsCountQueryHookResult = ReturnType<typeof useGetPastElectionsCountQuery>
+export type GetPastElectionsCountLazyQueryHookResult = ReturnType<typeof useGetPastElectionsCountLazyQuery>
+export type GetPastElectionsCountQueryResult = Apollo.QueryResult<
+  GetPastElectionsCountQuery,
+  GetPastElectionsCountQueryVariables
 >
 export const GetCandidateDocument = gql`
   query GetCandidate($where: CandidateWhereUniqueInput!) {
