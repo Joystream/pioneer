@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
@@ -31,17 +30,33 @@ const isNextDisabled = (candidateIndex: number | undefined, candidates: string[]
 
 export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<CandidacyPreviewTabs>('CANDIDACY')
-  const { modalData } = useModal<CandidacyPreviewModalCall>()
+  const { modalData, hideModal } = useModal<CandidacyPreviewModalCall>()
   const [candidateId, setCandidateId] = useState(modalData.id)
   const { isLoading, candidate } = useCandidate(candidateId)
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
-  const history = useHistory()
+  const properUrl = getUrl({
+    route: candidate?.cycleFinished ? CouncilRoutes.pastElection : CouncilRoutes.currentElection,
+    params: { id: candidate?.cycleFinished && candidate?.cycleId ? candidate.cycleId : undefined },
+    query: { candidate: candidate?.id ?? '' },
+  })
+
+  const closeModal = useCallback(() => {
+    hideModal()
+    window.location.replace(
+      getUrl({
+        route: candidate?.cycleFinished ? CouncilRoutes.pastElection : CouncilRoutes.currentElection,
+        params: { id: candidate?.cycleFinished && candidate?.cycleId ? candidate.cycleId : undefined },
+      })
+    )
+  }, [hideModal])
+
   useEffect(() => {
-    if (candidate?.cycleFinished && history.location.pathname !== CouncilRoutes.pastElections) {
-      history.replace(`${CouncilRoutes.pastElections}?candidate=${candidate.id}`)
+    if (!isLoading && window.location.href !== properUrl) {
+      window.location.replace(properUrl)
     }
-  }, [candidate?.cycleFinished])
+  }, [isLoading, properUrl])
+
   const onClickLeft = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex - 1])
   const onClickRight = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex + 1])
 
@@ -74,15 +89,7 @@ export const CandidacyPreview = React.memo(() => {
           >
             <Arrow direction="right" />
           </ButtonGhost>
-          <CopyButtonTemplate
-            square
-            size="small"
-            textToCopy={getUrl({
-              route: candidate?.cycleFinished ? CouncilRoutes.pastElections : CouncilRoutes.currentElection,
-              query: { candidate: candidate?.id ?? '' },
-            })}
-            icon={<LinkIcon />}
-          />
+          <CopyButtonTemplate square size="small" textToCopy={properUrl} icon={<LinkIcon />} />
         </SidePaneTopButtonsGroup>
       }
       footer={
@@ -90,6 +97,7 @@ export const CandidacyPreview = React.memo(() => {
           <VoteForCouncilButton id={modalData.id} />
         </ButtonsGroup>
       }
+      closeModal={closeModal}
     >
       {!candidate ? (
         <Loading />

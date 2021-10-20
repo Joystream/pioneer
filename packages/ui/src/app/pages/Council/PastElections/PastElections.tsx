@@ -10,14 +10,11 @@ import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/Sorted
 import { TextBig } from '@/common/components/typography'
 import { TableOrder } from '@/common/types/TableOrder'
 import { PastElectionsList } from '@/council/components/election/pastElection/PastElectionsList/PastElectionsList'
-import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
 
 import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastElections = () => {
-  useCandidatePreviewViaUrlParameter()
-
   const [page, setPage] = useState(1)
   const [order, setOrder] = useState<TableOrder<PastElectionsOrderKey>>({ key: 'cycle', isDescending: true })
   const { isLoading, elections, pageCount } = usePastElections({
