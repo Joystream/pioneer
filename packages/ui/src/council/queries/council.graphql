@@ -51,6 +51,19 @@ fragment PastElectionRoundFields on ElectionRound {
   }
 }
 
+fragment PastElectionRoundDetailedFields on ElectionRound {
+  ...PastElectionRoundFields
+  candidates {
+    ...ElectionCandidateFields
+  }
+  castVotes {
+    stake
+    stakeLocked
+    voteForId
+    castBy
+  }
+}
+
 fragment ElectionCandidateDetailedFields on Candidate {
   ...ElectionCandidateFields
   stakingAccountId
@@ -99,7 +112,7 @@ query GetPastElectionsCount {
 
 query GetPastElection($id: ID!) {
   electionRoundByUniqueInput(where: { id: $id }) {
-    ...PastElectionRoundFields
+    ...PastElectionRoundDetailedFields
   }
 }
 

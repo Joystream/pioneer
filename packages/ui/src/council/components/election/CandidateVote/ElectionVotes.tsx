@@ -26,6 +26,7 @@ export const ElectionVotes = ({ election }: Props) => {
   return (
     <CandidateVoteList
       votes={votesPerCandidate.map((candidateStats, index) => ({
+        candidateId: candidateStats.candidate.id,
         revealed: true,
         index: index + 1,
         member: candidateStats.candidate.member,

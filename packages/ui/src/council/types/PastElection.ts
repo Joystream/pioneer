@@ -1,6 +1,15 @@
 import BN from 'bn.js'
 
-import { PastElectionRoundFieldsFragment } from '@/council/queries'
+import { BN_ZERO } from '@/common/constants'
+import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
+import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
+import { asVote, Vote } from '@/council/types/Vote'
+
+export interface ElectionVotingResult {
+  candidate: ElectionCandidate
+  totalStake: BN
+  votes: Vote[]
+}
 
 export interface PastElection {
   id: string
@@ -12,6 +21,10 @@ export interface PastElection {
   totalVotes: number
 }
 
+export interface PastElectionWithDetails extends PastElection {
+  votingResults: ElectionVotingResult[]
+}
+
 export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
   id: fields.id,
   cycleId: fields.cycleId,
@@ -20,4 +33,18 @@ export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastEle
   totalCandidates: fields.candidates.length,
   revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
   totalVotes: fields.castVotes.length,
+})
+
+export const asPastElectionWithDetails = (
+  fields: PastElectionRoundDetailedFieldsFragment
+): PastElectionWithDetails => ({
+  ...asPastElection(fields),
+  totalStake: fields.castVotes.reduce((a, b) => a.addn(b.stake), BN_ZERO),
+  votingResults: fields.candidates.map((candidate) => ({
+    candidate: asElectionCandidate(candidate),
+    votes: fields.castVotes.filter((castVote) => castVote.voteForId === candidate.member.id).map(asVote),
+    totalStake: fields.castVotes
+      .filter((castVote) => castVote.voteForId === candidate.member.id)
+      .reduce((a, b) => a.addn(b.stake), BN_ZERO),
+  })),
 })

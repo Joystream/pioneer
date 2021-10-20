@@ -9,7 +9,7 @@ import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
 import { TableOrder } from '@/common/types/TableOrder'
-import { PastElectionsList } from '@/council/components/election/PastElectionsList/PastElectionsList'
+import { PastElectionsList } from '@/council/components/election/pastElection/PastElectionsList/PastElectionsList'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
 

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -10,22 +10,26 @@ import { ProgressBar } from '@/common/components/Progress'
 import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
+import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 export interface CandidateVoteProps {
+  candidateId: string
   revealed: boolean
   member: Member
   sumOfAllStakes: BN
   totalStake: BN
-  ownStake: BN
+  ownStake?: BN
   votes: number
   index: number
 }
 
 export const CandidateVote = ({
+  candidateId,
   revealed,
   member,
   sumOfAllStakes,
@@ -34,26 +38,34 @@ export const CandidateVote = ({
   votes,
   index,
 }: CandidateVoteProps) => {
-  const roundedPercentage = totalStake.muln(100).divRound(sumOfAllStakes)
-  const userVoted = ownStake.gt(BN_ZERO)
+  const { showModal } = useModal()
+  const showCandidate = useCallback(() => {
+    showModal<CandidacyPreviewModalCall>({
+      modal: 'CandidacyPreview',
+      data: { id: candidateId },
+    })
+  }, [showModal])
+
+  const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
+  const userVoted = ownStake && ownStake.gt(BN_ZERO)
   return (
-    <CandidateVoteWrapper>
+    <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>
         {index}
       </VoteIndex>
       <MemberInfo onlyTop member={member} skipModal={!member} />
       <VoteIndicatorWrapper gap={16}>
         <StakeIndicator>
-          <ProgressBar start={0} end={roundedPercentage.toNumber() / 100} size="big" />
+          <ProgressBar start={0} end={roundedPercentage / 100} size="big" />
           <PercentageValue value bold>
-            {roundedPercentage.toString()}%
+            {roundedPercentage}%
           </PercentageValue>
         </StakeIndicator>
         <StakeAndVotesGroup>
           <StakeAndVotesRow>
             <Subscription>Total Stake</Subscription>
             <StatsValue>
-              <TokenValue value={totalStake} />
+              <TokenValue value={sumOfAllStakes} />
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
@@ -67,7 +79,7 @@ export const CandidateVote = ({
             )}
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            <Subscription>Total Revealed votes</Subscription>
+            <Subscription>Revealed votes</Subscription>
             <StatsValue>
               <TextInlineBig value>{votes}</TextInlineBig>
             </StatsValue>
