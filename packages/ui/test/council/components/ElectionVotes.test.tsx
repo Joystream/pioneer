@@ -8,7 +8,7 @@ import {
   RawCouncilElectionMock,
   seedCouncilCandidate,
   seedCouncilElection,
-  seedCounncilVote,
+  seedCouncilVote,
   seedMembers,
 } from '@/mocks/data'
 
@@ -44,7 +44,7 @@ describe('UI: ElectionVotes', () => {
   })
 
   it('No votes revealed', async () => {
-    seedCounncilVote(VOTE_DATA, server.server)
+    seedCouncilVote(VOTE_DATA, server.server)
 
     renderComponent()
 
@@ -54,7 +54,7 @@ describe('UI: ElectionVotes', () => {
   })
 
   it('Vote revealed', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
 
     renderComponent()
 
@@ -64,9 +64,9 @@ describe('UI: ElectionVotes', () => {
   })
 
   it('Multiple revealed votes', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
 
     renderComponent()
 
@@ -76,11 +76,11 @@ describe('UI: ElectionVotes', () => {
   })
 
   it('Multiple revealed votes, unrevealed votes', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, stake: 7000 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, stake: 3000 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, stake: 7000 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, stake: 3000 }, server.server)
 
     renderComponent()
 
@@ -91,9 +91,9 @@ describe('UI: ElectionVotes', () => {
 
   it('Multiple candidates, ordered by votes number', async () => {
     seedCouncilCandidate({ ...CANDIDATE_DATA, id: '1', memberId: '1' }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '1', stake: 2000 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '1', stake: 900 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '1', stake: 2000 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '1', stake: 900 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
 
     renderComponent()
 
@@ -108,8 +108,8 @@ describe('UI: ElectionVotes', () => {
   })
 
   it('Own stake', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1000 }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000, castBy: bob.address }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1000 }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000, castBy: bob.address }, server.server)
 
     renderComponent()
 

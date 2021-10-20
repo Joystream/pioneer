@@ -7,7 +7,7 @@ import {
   RawCouncilElectionMock,
   seedCouncilCandidate,
   seedCouncilElection,
-  seedCounncilVote,
+  seedCouncilVote,
   seedMembers,
 } from '@/mocks/data'
 
@@ -51,26 +51,26 @@ describe('UI: PastVotesList', () => {
   })
 
   it('One unrevealed vote', async () => {
-    seedCounncilVote(VOTE_DATA, server.server)
+    seedCouncilVote(VOTE_DATA, server.server)
     renderComponent()
     expect(await screen.findByText('not revealed')).toBeDefined()
   })
 
   it('One revealed vote', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0' }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0' }, server.server)
     renderComponent()
     expect(await screen.findByText('alice')).toBeDefined()
   })
 
   it('Only voted in present election', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0', electionRoundId: '1' }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', electionRoundId: '1' }, server.server)
     renderComponent()
     expect(await screen.findByText('You have no past votes.')).toBeDefined()
   })
 
   it('One past vote, one in current election', async () => {
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '0' }, server.server)
-    seedCounncilVote({ ...VOTE_DATA, voteForId: '1', electionRoundId: '1' }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '0' }, server.server)
+    seedCouncilVote({ ...VOTE_DATA, voteForId: '1', electionRoundId: '1' }, server.server)
     renderComponent()
     expect(await screen.findByText('alice')).toBeDefined()
     expect(screen.queryByText('bob')).toBeNull()
