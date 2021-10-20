@@ -50,7 +50,7 @@ describe('UI: ElectionVotes', () => {
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('0')
-    expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('0')
+    expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('0')
   })
 
   it('Vote revealed', async () => {
@@ -60,7 +60,7 @@ describe('UI: ElectionVotes', () => {
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('1,337')
-    expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('1')
+    expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('1')
   })
 
   it('Multiple revealed votes', async () => {
@@ -72,7 +72,7 @@ describe('UI: ElectionVotes', () => {
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
-    expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('3')
+    expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('3')
   })
 
   it('Multiple revealed votes, unrevealed votes', async () => {
@@ -86,7 +86,7 @@ describe('UI: ElectionVotes', () => {
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
-    expect((await screen.findByText(/total revealed votes/i)).nextSibling?.textContent).toEqual('3')
+    expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('3')
   })
 
   it('Multiple candidates, ordered by votes number', async () => {
@@ -102,7 +102,7 @@ describe('UI: ElectionVotes', () => {
     const stakes = await screen.findAllByText(/total stake/i)
     expect(stakes[0].nextSibling?.textContent).toEqual('2,900')
     expect(stakes[1].nextSibling?.textContent).toEqual('1,337')
-    const voteNumbers = await screen.findAllByText(/total revealed votes/i)
+    const voteNumbers = await screen.findAllByText(/revealed votes/i)
     expect(voteNumbers[0].nextSibling?.textContent).toEqual('2')
     expect(voteNumbers[1].nextSibling?.textContent).toEqual('1')
   })
