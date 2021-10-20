@@ -31,6 +31,7 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
             title: 'My Votes',
             active: tab === 'myVotes',
             onClick: () => setTab('myVotes'),
+            count: myVotes.length,
           },
         ]
       : []),
