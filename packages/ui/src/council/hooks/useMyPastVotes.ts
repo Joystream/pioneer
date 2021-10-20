@@ -10,7 +10,7 @@ import { useCurrentElection } from './useCurrentElection'
 
 export const useMyPastVotes = () => {
   const { allAccounts } = useMyAccounts()
-  const { election } = useCurrentElection()
+  const { isLoading: electionLoading, election } = useCurrentElection()
   const [fetch, { data, loading }] = useGetCouncilVotesLazyQuery()
   useEffect(() => {
     if (isDefined(election)) {
@@ -18,14 +18,14 @@ export const useMyPastVotes = () => {
         variables: {
           where: {
             castBy_in: allAccounts.map((account) => account.address),
-            electionRound: { cycleId_eq: election?.cycleId },
+            electionRound: { isFinished_eq: true },
           },
         },
       })
     }
-  }, [election])
+  }, [election?.cycleId])
   return {
     votes: data?.castVotes.map(asVote),
-    isLoading: loading,
+    isLoading: loading || electionLoading,
   }
 }

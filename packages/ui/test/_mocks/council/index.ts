@@ -4,6 +4,8 @@ import { MockMember } from '@/mocks/data'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { RawCouncilMock, RawCouncilorMock } from '@/mocks/data/seedCouncils'
 
+import { alice } from '../keyring/signers'
+
 const ALICE: MockMember = rawMembers[0]
 const getMember = (attrs: Partial<MockMember>): MockMember => ({ ...ALICE, ...attrs })
 
@@ -43,3 +45,26 @@ export const mockCouncilors: RawCouncilorMock[] = [
   getCouncilor({ electedInCouncilId: '2', memberId: '6' }),
   getCouncilor({ electedInCouncilId: '2', memberId: '0' }),
 ]
+
+export const VOTE_DATA = {
+  electionRoundId: '0',
+  stake: 1200,
+  stakeLocked: true,
+  castBy: alice.address,
+  voteForId: null,
+}
+
+export const CANDIDATE_DATA = {
+  id: '0',
+  electionRoundId: '0',
+  memberId: '0',
+  stake: 1000,
+  stakingAccountId: '',
+  rewardAccountId: '',
+  noteMetadata: {
+    header: '',
+    bulletPoints: [],
+    bannerImageUri: '',
+    description: '',
+  },
+}
