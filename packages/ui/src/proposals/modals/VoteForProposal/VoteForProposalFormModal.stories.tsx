@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
-import { VoteForProposalModalForm, VoteForProposalModalFormProps } from './VoteForProposalModalForm'
+import { VoteForProposalModalForm } from './VoteForProposalModalForm'
 
 export default {
   title: 'Proposals/VoteForProposal/VoteForProposalModalForm',
@@ -26,7 +26,7 @@ const Template: Story<Props> = ({ id, hideModal, showModal }) => {
   const modalData = { id }
   return (
     <MemoryRouter>
-      <MockApolloProvider members council>
+      <MockApolloProvider members council proposals workingGroups workers>
         <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
           <VoteForProposalModalForm />
         </ModalContext.Provider>
@@ -37,5 +37,5 @@ const Template: Story<Props> = ({ id, hideModal, showModal }) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  id: '0-0',
+  id: '0',
 }

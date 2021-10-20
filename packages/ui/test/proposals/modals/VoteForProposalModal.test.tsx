@@ -9,17 +9,18 @@ import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
-import { VoteForProposalModal } from '@/proposals/modals/VoteForProposal'
+import { seedMembers, seedProposal } from '@/mocks/data'
+import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 
 import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
@@ -30,11 +31,11 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 describe('UI: Vote for Proposal Modal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
+  const useModal: UseModal<ModalCallData<VoteForProposalModalCall>> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
     modal: null,
-    modalData: { id: '0-0' },
+    modalData: { id: '0' },
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -51,6 +52,7 @@ describe('UI: Vote for Proposal Modal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
+    seedProposal(PROPOSAL_DATA, server.server)
 
     useAccounts = {
       hasAccounts: true,
@@ -60,7 +62,9 @@ describe('UI: Vote for Proposal Modal', () => {
 
   it('Renders a modal', async () => {
     renderModal()
+
     expect(await screen.findByText('Vote for proposal')).toBeDefined()
+    expect(await screen.findByText(PROPOSAL_DATA.title)).toBeDefined()
   })
 
   it('Empty form', async () => {

@@ -1,5 +1,5 @@
-import { ModalCall } from '@/common/providers/modal/types'
+import { ModalWithDataCall } from '@/common/providers/modal/types'
 
-export type VoteForProposalModalCall = ModalCall<'VoteForProposalModal'>
+export type VoteForProposalModalCall = ModalWithDataCall<'VoteForProposalModal', { id: string }>
 
 export * from './VoteForProposalModal'
