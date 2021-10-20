@@ -1,11 +1,13 @@
 import React from 'react'
 
-export interface VoteForProposalModalFormProps {}
+export interface VoteForProposalModalFormProps {
+  foo?: number
+}
 
-export const VoteForProposalModalForm = ({}: VoteForProposalModalFormProps) => {
+export const VoteForProposalModalForm = ({ foo }: VoteForProposalModalFormProps) => {
   return (
     <div>
-      <p>VoteForProposalModalForm</p>
+      <p>Vote for proposal</p>
     </div>
   )
 }

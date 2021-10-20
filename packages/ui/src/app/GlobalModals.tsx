@@ -22,6 +22,7 @@ import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
+import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
@@ -53,6 +54,7 @@ export type ModalNames =
   | ModalName<CandidacyPreviewModalCall>
   | ModalName<VoteForCouncilModalCall>
   | ModalName<WithdrawCandidacyModalCall>
+  | ModalName<VoteForProposalModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -78,6 +80,7 @@ const modals: Record<ModalNames, ReactElement> = {
   CandidacyPreview: <CandidacyPreview />,
   VoteForCouncil: <VoteForCouncilModal />,
   WithdrawCandidacy: <WithdrawCandidacyModal />,
+  VoteForProposalModal: <VoteForProposalModal />,
 }
 
 export const GlobalModals = () => {

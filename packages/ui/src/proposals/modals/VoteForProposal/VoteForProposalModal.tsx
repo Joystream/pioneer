@@ -10,7 +10,8 @@ import { VoteForProposalMachine as machine } from './machine'
 export const VoteForProposalModal = () => {
   const { api } = useApi()
 
-  api?.tx.proposalsCodex
+  // api?.tx.proposalsEngine.vote()
+
   const [state] = useMachine(machine)
 
   if (state.matches('vote')) {

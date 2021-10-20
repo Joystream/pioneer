@@ -16,6 +16,10 @@ import { VoteForProposalModal } from '@/proposals/modals/VoteForProposal'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { seedMembers } from '@/mocks/data'
+import { alice, bob } from '../../_mocks/keyring'
+import { setupMockServer } from '../../_mocks/server'
 
 configure({ testIdAttribute: 'id' })
 
@@ -40,6 +44,18 @@ describe('UI: Vote for Proposal Modal', () => {
   }
 
   let useAccounts: UseAccounts
+
+  const server = setupMockServer({ noCleanupAfterEach: true })
+
+  beforeAll(async () => {
+    await cryptoWaitReady()
+    seedMembers(server.server, 2)
+
+    useAccounts = {
+      hasAccounts: true,
+      allAccounts: [alice, bob],
+    }
+  })
 
   it('Renders a modal', async () => {
     renderModal()
