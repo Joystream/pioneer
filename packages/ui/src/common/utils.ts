@@ -66,7 +66,7 @@ export const intersperse = <T extends any, S extends any>(
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item, index) => [toSeparator(index, list), item])]
 
 export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
-  Array.from<T>({ length: times }).map((_, i) => getItem(i))
+  Array.from({ length: times }, (_, i) => getItem(i))
 
 export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400) => {
   type Result = (ReturnType<T> extends Promise<infer U> ? U : ReturnType<T>) | undefined
@@ -91,6 +91,7 @@ export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400
 }
 
 export const last = <T extends any>(list: ArrayLike<T>): T => list[list.length - 1]
+export const flatten = <T extends any>(nested: T[][]) => ([] as T[]).concat(...nested)
 
 export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, index: number) => boolean): T[][] => {
   if (!list.length) return []
