@@ -27,7 +27,7 @@ export const VoteForCouncilModal = () => {
   const { active: activeMember } = useMyMemberships()
 
   const constants = useCouncilConstants()
-  const minStake = constants?.election.minStake
+  const minStake = constants?.election.minVoteStake
   const requiredStake = minStake?.toNumber() ?? 0
 
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(

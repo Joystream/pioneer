@@ -60,7 +60,7 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
           <Label>Min. Candidate Stake</Label>
           <TextMedium lighter>
             <TextInlineHuge dark value bold>
-              {formatTokenValue(constants?.election.minStake)}
+              {formatTokenValue(constants?.election.minCandidacyStake)}
             </TextInlineHuge>{' '}
             JOY
           </TextMedium>
