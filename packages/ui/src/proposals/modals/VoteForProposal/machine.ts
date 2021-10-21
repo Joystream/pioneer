@@ -12,7 +12,11 @@ interface FinalContext extends Required<VoteContext> {
   transactionEvents: EventRecord[]
 }
 
-type VoteForProposalState = { value: 'vote'; context: VoteContext } | { value: 'transaction'; context: FinalContext }
+type VoteForProposalState =
+  | { value: 'vote'; context: VoteContext }
+  | { value: 'transaction'; context: FinalContext }
+  | { value: 'success'; context: FinalContext }
+  | { value: 'error'; context: FinalContext }
 
 type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
@@ -38,7 +42,6 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
         },
       },
     },
-
     transaction: {
       invoke: {
         id: 'transaction',
@@ -57,9 +60,7 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
         ],
       },
     },
-
     success: { type: 'final' },
-
     error: { type: 'final' },
   },
 })

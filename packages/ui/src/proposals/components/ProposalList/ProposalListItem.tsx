@@ -10,7 +10,6 @@ import { TextSmall } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { MemberInfo } from '@/memberships/components'
-import { VoteForProposalButton } from '@/proposals/components/VoteForProposalButton'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { isProposalActive } from '@/proposals/model/proposalStatus'
@@ -51,8 +50,6 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
-      {/*//only for development*/}
-      <VoteForProposalButton id={'0'} />
     </ProposalItem>
   )
 }

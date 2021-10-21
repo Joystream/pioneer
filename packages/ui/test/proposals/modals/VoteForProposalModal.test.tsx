@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -13,15 +13,23 @@ import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers, seedProposal } from '@/mocks/data'
+import { getMember } from '@/mocks/helpers'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 
 import { getButton } from '../../_helpers/getButton'
+import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -38,8 +46,8 @@ describe('UI: Vote for Proposal Modal', () => {
     modalData: { id: '0' },
   }
   const useMyMemberships: MyMemberships = {
-    active: undefined,
-    members: [],
+    active: getMember('alice'),
+    members: [getMember('alice')],
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
@@ -63,49 +71,115 @@ describe('UI: Vote for Proposal Modal', () => {
   })
 
   beforeEach(() => {
-    tx = stubTransaction(api, 'api.tx.proposalEngine.vote')
+    tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 100)
+    stubDefaultBalances(api)
   })
 
   it('Renders a modal', async () => {
-    renderModal()
+    const { queryByText } = await renderModal()
 
-    expect(await screen.findByText('Vote for proposal')).toBeDefined()
-    expect(await screen.findByText(PROPOSAL_DATA.title)).toBeDefined()
+    expect(queryByText(/Vote for proposal/i)).not.toBeNull()
+    expect(queryByText(PROPOSAL_DATA.title)).not.toBeNull()
   })
 
-  it('Empty form', async () => {
-    renderModal()
+  describe('Form', () => {
+    it('Empty', async () => {
+      await renderModal()
 
-    expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
-    expect(await getButton(/^Reject/i))
-    expect(await getButton(/^Approve/i))
-    expect(await getButton(/^Abstain/i))
+      expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+      expect(await getButton(/^Reject/i)).toBeDefined()
+      expect(await getButton(/^Approve/i)).toBeDefined()
+      expect(await getButton(/^Abstain/i)).toBeDefined()
+    })
+
+    it('Filled', async () => {
+      await renderModal()
+
+      await act(async () => {
+        fireEvent.click(await getButton(/^Approve/i))
+      })
+      await fillRationale()
+
+      expect(await getButton(/^sign transaction and vote/i)).not.toBeDisabled()
+    })
+
+    it('Vote Status: Reject', async () => {
+      const { queryByText } = await renderModal()
+
+      await act(async () => {
+        fireEvent.click(await getButton(/^Reject/i))
+      })
+      expect(queryByText(/Slash proposal/i)).not.toBeNull()
+    })
   })
 
   describe('Transaction', () => {
-    beforeEach(async () => {
-      fireEvent.click(await getButton(/^Approve/i))
+    async function beforeEach(enoughFunds: boolean) {
+      if (!enoughFunds) {
+        tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 1500)
+      }
+
+      await renderModal()
+      await act(async () => {
+        fireEvent.click(await getButton(/^Approve/i))
+      })
+      await fillRationale()
+      await act(async () => {
+        fireEvent.click(await getButton(/^sign transaction and vote/i))
+      })
+    }
+
+    describe('Renders', () => {
+      it('Enough funds', async () => {
+        await beforeEach(true)
+
+        expect(await getButton(/^sign transaction and vote/i)).not.toBeDisabled()
+        expect(screen.queryByText(/^(.*?)You need at least \d+ JOY(.*)/i)).toBeNull()
+      })
+      it('Not enough funds', async () => {
+        await beforeEach(false)
+
+        expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+        expect(screen.queryByText(/^(.*?)You need at least 1500 JOY(.*)/i)).not.toBeNull()
+      })
     })
 
     it('Success', async () => {
+      await beforeEach(true)
       stubTransactionSuccess(tx, 'proposalsEngine', 'Voted')
 
-      fireEvent.click(await getButton(/^Sign/))
+      await act(async () => {
+        fireEvent.click(await getButton(/^sign transaction and vote/i))
+      })
 
-      expect(await screen.findByText('Success')).toBeDefined()
+      expect(screen.queryByText('Success')).not.toBeNull()
+      expect(await getButton(/See my proposal/i)).toBeDefined()
     })
 
     it('Error', async () => {
+      await beforeEach(true)
       stubTransactionFailure(tx)
 
-      fireEvent.click(await getButton(/^Sign/))
+      await act(async () => {
+        fireEvent.click(await getButton(/^sign transaction and vote/i))
+      })
 
-      expect(await screen.findByText('Oh no')).toBeDefined()
+      expect(screen.queryByText('Failure')).not.toBeNull()
+      expect(
+        includesTextWithMarkup(screen.getByText, `There was a problem while Approve proposal "${PROPOSAL_DATA.title}".`)
+      ).toBeInTheDocument()
     })
   })
 
-  function renderModal() {
-    return render(
+  const fillRationale = async () => {
+    const rationaleInput = await screen.findByLabelText(/Rationale/i)
+    act(() => {
+      fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
+    })
+  }
+
+  async function renderModal() {
+    const renderedModal = await render(
       <MemoryRouter>
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
@@ -124,5 +198,9 @@ describe('UI: Vote for Proposal Modal', () => {
         </ModalContext.Provider>
       </MemoryRouter>
     )
+
+    await waitFor(async () => expect(await screen.findByText('Vote for proposal')).toBeDefined())
+
+    return renderedModal
   }
 })
