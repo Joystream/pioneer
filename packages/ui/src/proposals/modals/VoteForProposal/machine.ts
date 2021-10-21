@@ -12,13 +12,17 @@ interface FinalContext extends Required<VoteContext> {
   transactionEvents: EventRecord[]
 }
 
-type VoteForProposalState = { value: 'vote'; context: VoteContext } | { value: 'transaction'; context: FinalContext }
+type VoteForProposalState =
+  | { value: 'vote'; context: VoteContext }
+  | { value: 'transaction'; context: FinalContext }
+  | { value: 'success'; context: FinalContext }
+  | { value: 'error'; context: FinalContext }
 
 type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type VoteForProposalEvent = FailEvent | PassEvent | SetRationaleEvent | SetVoteStatus
-type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
+export type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
 type SetVoteStatus = { type: 'SET_VOTE_STATUS'; status: VoteStatus }
 
 export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteForProposalEvent, VoteForProposalState>({
@@ -32,10 +36,12 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
         SET_RATIONALE: {
           actions: assign({ rationale: (_, event) => event.rationale }),
         },
-        PASS: 'transaction',
+        PASS: {
+          target: 'transaction',
+          cond: (context) => !!context.voteStatus && !!context.rationale,
+        },
       },
     },
-
     transaction: {
       invoke: {
         id: 'transaction',
@@ -54,9 +60,7 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
         ],
       },
     },
-
     success: { type: 'final' },
-
     error: { type: 'final' },
   },
 })
