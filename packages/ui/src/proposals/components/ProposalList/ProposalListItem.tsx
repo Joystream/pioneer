@@ -19,13 +19,15 @@ import {
   ToggleableItemInfoTop,
   ToggleableItemTitle,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
+import { VoteForProposalButton } from '../VoteForProposalButton'
 
-interface ProposalListItemProps {
+export interface ProposalListItemProps {
   proposal: Proposal
   isPast?: boolean
+  isCouncilMember?: boolean
 }
 
-export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) => {
+export const ProposalListItem = ({ proposal, isPast, isCouncilMember }: ProposalListItemProps) => {
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
     <ProposalItem
@@ -50,6 +52,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
+      {isCouncilMember && proposal.status === 'deciding' && <VoteForProposalButton id={proposal.id} />}
     </ProposalItem>
   )
 }

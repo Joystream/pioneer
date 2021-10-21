@@ -12,6 +12,7 @@ fragment ProposalFields on Proposal {
     ...MemberFields
   }
   createdAt
+  councilApprovals
 }
 
 fragment VoteFields on ProposalVotedEvent {
