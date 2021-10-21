@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react'
 import { Activity, ActivityCategory, BaseActivity } from '@/common/types/Activity'
 import { CategoryCreatedContent } from '@/forum/components/Activities/CategoryCreatedContent'
 import { PostAddedContent } from '@/forum/components/Activities/PostAddedContent'
+import { PostDeletedContent } from '@/forum/components/Activities/PostDeletedContent'
 import { PostEditedContent } from '@/forum/components/Activities/PostEditedContent'
 import { ThreadCreatedContent } from '@/forum/components/Activities/ThreadCreatedContent'
 import { ProposalCancelledContent } from '@/proposals/components/Activities/ProposalCancelledContent'
@@ -57,6 +58,7 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   WorkerRewardAmountUpdatedEvent: WorkerRewardAmountUpdatedContent,
   PostAddedEvent: PostAddedContent,
   PostTextUpdatedEvent: PostEditedContent,
+  PostDeletedEvent: PostDeletedContent,
   ThreadCreatedEvent: ThreadCreatedContent,
   CategoryCreatedEvent: CategoryCreatedContent,
   ProposalCreatedEvent: ProposalCreatedContent,

@@ -1,6 +1,11 @@
 import { BaseActivity, MemberDisplayFields } from '@/common/types'
 
-export type ForumActivity = PostAddedActivity | PostEditedActivity | ThreadCreatedActivity | CategoryCreatedActivity
+export type ForumActivity =
+  | PostAddedActivity
+  | PostEditedActivity
+  | PostDeletedActivity
+  | ThreadCreatedActivity
+  | CategoryCreatedActivity
 
 interface PostActivity extends BaseActivity {
   postId: string
@@ -14,6 +19,14 @@ export interface PostAddedActivity extends PostActivity {
 
 export interface PostEditedActivity extends PostActivity {
   eventType: 'PostTextUpdatedEvent'
+}
+
+export interface PostDeletedActivity extends BaseActivity {
+  eventType: 'PostDeletedEvent'
+  actor: MemberDisplayFields
+  threadId: string
+  threadTitle: string
+  numberOfPosts: number
 }
 
 export interface ThreadCreatedActivity extends BaseActivity {
