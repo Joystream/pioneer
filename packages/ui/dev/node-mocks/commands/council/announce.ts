@@ -40,7 +40,7 @@ const announceCandidacies = async () => {
           // Confirm staking account
           await signAndSend(api.tx.members.confirmStakingAccount(id, address), address)
         } else {
-          // release stakes
+          // Release stakes
           await signAndSend(api.tx.council.releaseCandidacyStake(id), address)
         }
 
@@ -53,6 +53,6 @@ const announceCandidacies = async () => {
 
 export const announceCandidaciesModule = {
   command: 'council:announce',
-  describe: 'Apply on opening',
+  describe: 'Announce council candidates',
   handler: announceCandidacies,
 }
