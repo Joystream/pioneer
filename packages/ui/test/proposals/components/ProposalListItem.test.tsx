@@ -1,13 +1,15 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { MembershipContext } from '@/memberships/providers/membership/context'
-import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { seedMembers, seedProposal } from '@/mocks/data'
 import { ProposalListItem, ProposalListItemProps } from '@/proposals/components/ProposalList/ProposalListItem'
 import { Proposal } from '@/proposals/types'
 
 import { getMember } from '../../_mocks/members'
+import { MockApolloProvider } from '../../_mocks/providers'
+import { setupMockServer } from '../../_mocks/server'
+import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 
 const proposalData: Proposal = {
   id: '0',
@@ -20,23 +22,7 @@ const proposalData: Proposal = {
 }
 
 describe('UI: ProposalListItem', () => {
-  const useMyMemberships: MyMemberships = {
-    active: undefined,
-    members: [],
-    setActive: (member) => (useMyMemberships.active = member),
-    isLoading: false,
-    hasMembers: true,
-  }
-
-  function renderComponent(props: ProposalListItemProps) {
-    render(
-      <MembershipContext.Provider value={useMyMemberships}>
-        <MemoryRouter>
-          <ProposalListItem {...props} />
-        </MemoryRouter>
-      </MembershipContext.Provider>
-    )
-  }
+  const server = setupMockServer()
 
   it('Proposal in voting stage', async () => {
     renderComponent({ proposal: proposalData, isCouncilMember: true })
@@ -52,4 +38,60 @@ describe('UI: ProposalListItem', () => {
     renderComponent({ proposal: proposalData, isCouncilMember: false })
     expect(screen.queryByText('Vote')).toBeNull()
   })
+
+  describe('Displays past votes', () => {
+    beforeEach(() => {
+      seedMembers(server.server, 2)
+    })
+
+    it('No previous votes', async () => {
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [],
+        },
+        server.server
+      )
+
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+
+      await waitForElementToBeRemoved(await screen.findByText(/loading/i))
+      expect(screen.queryByText('Approved')).toBeNull()
+    })
+
+    it('One previous vote', async () => {
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [
+            {
+              id: '0',
+              voteKind: 'APPROVE',
+              network: 'OLYMPIA',
+              createdAt: '2021-10-21T11:21:59.812Z',
+              inBlock: 100,
+              voterId: '0',
+              rationale: '',
+              votingRound: 1,
+            },
+          ],
+        },
+        server.server
+      )
+
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+
+      expect(await screen.findByText('Approved')).toBeDefined()
+    })
+  })
+
+  function renderComponent(props: ProposalListItemProps) {
+    render(
+      <MockApolloProvider>
+        <MemoryRouter>
+          <ProposalListItem {...props} />
+        </MemoryRouter>
+      </MockApolloProvider>
+    )
+  }
 })

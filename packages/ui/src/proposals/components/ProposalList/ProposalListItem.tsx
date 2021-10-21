@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { TableListItem } from '@/common/components/List'
+import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -12,6 +13,7 @@ import { camelCaseToText } from '@/common/helpers'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
 import { isProposalActive } from '@/proposals/model/proposalStatus'
 import { Proposal } from '@/proposals/types'
 import {
@@ -20,15 +22,18 @@ import {
   ToggleableItemTitle,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
 
+import { toCamelCase } from '../ProposalFilters/helpers'
 import { VoteForProposalButton } from '../VoteForProposalButton'
 
 export interface ProposalListItemProps {
   proposal: Proposal
   isPast?: boolean
+  memberId?: string
   isCouncilMember?: boolean
 }
 
-export const ProposalListItem = ({ proposal, isPast, isCouncilMember }: ProposalListItemProps) => {
+export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
+  const { votes, isLoading } = useProposalVotesByMember(proposal.id, memberId)
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
     <ProposalItem
@@ -54,6 +59,7 @@ export const ProposalListItem = ({ proposal, isPast, isCouncilMember }: Proposal
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
       {isCouncilMember && proposal.status === 'deciding' && <VoteForProposalButton id={proposal.id} />}
+      {isLoading ? <Loading /> : votes?.map((vote) => <span>Approved</span>)}
     </ProposalItem>
   )
 }

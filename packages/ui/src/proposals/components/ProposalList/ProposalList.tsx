@@ -32,7 +32,13 @@ export const ProposalList = ({ proposals, isPast }: ProposalListProps) => {
       </ProposalsListHeaders>
       <List as="div">
         {proposals.map((proposal) => (
-          <ProposalListItem key={proposal.id} proposal={proposal} isPast={isPast} isCouncilMember={isCouncilMember} />
+          <ProposalListItem
+            key={proposal.id}
+            proposal={proposal}
+            isPast={isPast}
+            memberId={active?.id}
+            isCouncilMember={isCouncilMember}
+          />
         ))}
       </List>
     </RowGapBlock>
