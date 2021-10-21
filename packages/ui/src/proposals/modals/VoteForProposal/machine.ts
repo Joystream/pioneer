@@ -18,7 +18,7 @@ type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type VoteForProposalEvent = FailEvent | PassEvent | SetRationaleEvent | SetVoteStatus
-type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
+export type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
 type SetVoteStatus = { type: 'SET_VOTE_STATUS'; status: VoteStatus }
 
 export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteForProposalEvent, VoteForProposalState>({

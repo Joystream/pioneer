@@ -71,6 +71,9 @@ describe('UI: Vote for Proposal Modal', () => {
     renderModal()
 
     expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+    expect(await getButton(/^Reject/i))
+    expect(await getButton(/^Approve/i))
+    expect(await getButton(/^Abstain/i))
   })
 
   function renderModal() {

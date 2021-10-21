@@ -1,16 +1,44 @@
 import React from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
-import { ButtonPrimary } from '@/common/components/buttons'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody } from '@/common/components/Modal'
+import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { CKEditor } from '@/common/components/CKEditor'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
+import { Arrow, CrossIcon, VerifiedMemberIcon } from '@/common/components/icons'
+import {
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  ScrollableModalColumn,
+  ScrolledModalBody,
+} from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
+import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
 import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview'
+import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
+
+interface FormFields {
+  voteStatus?: VoteStatus
+  rationale?: string
+}
+
+const FormSchema = Yup.object().shape({
+  voteStatus: Yup.string().required(),
+  rationale: Yup.string().required(),
+})
 
 export const VoteForProposalModalForm = () => {
   const { hideModal, modalData } = useModal<VoteForProposalModalCall>()
+  const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
+  const { isValid } = validation
+  const isRejected = fields.voteStatus === 'Reject' || fields.voteStatus === 'Slash'
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Vote for proposal" />
@@ -19,11 +47,63 @@ export const VoteForProposalModalForm = () => {
           <ProposalPreview proposalId={modalData.id} />
         </ProposalPreviewColumn>
         <ScrollableModalColumn>
-          <div>vote for proposal - right column</div>
+          <RowGapBlock gap={24}>
+            <Row>
+              <RowGapBlock gap={8}>
+                <h4>Your vote</h4>
+              </RowGapBlock>
+            </Row>
+            <Row>
+              <ButtonsGroup>
+                <ButtonPrimary
+                  size="medium"
+                  onClick={() => changeField('voteStatus', 'Approve')}
+                  outlined={fields.voteStatus !== 'Approve'}
+                >
+                  <VerifiedMemberIcon />
+                  Approve
+                </ButtonPrimary>
+                <ButtonPrimary size="medium" onClick={() => changeField('voteStatus', 'Reject')} outlined={!isRejected}>
+                  <CrossIcon />
+                  Reject
+                </ButtonPrimary>
+                <ButtonPrimary
+                  size="medium"
+                  onClick={() => changeField('voteStatus', 'Abstain')}
+                  outlined={fields.voteStatus !== 'Abstain'}
+                >
+                  <CrossIcon />
+                  Abstain
+                </ButtonPrimary>
+              </ButtonsGroup>
+            </Row>
+            {isRejected && (
+              <InlineToggleWrap>
+                <Label>Slash Proposal </Label>
+                <ToggleCheckbox
+                  falseLabel="No"
+                  trueLabel="Yes"
+                  checked={fields.voteStatus === 'Slash'}
+                  onChange={(isSet) => changeField('voteStatus', isSet ? 'Slash' : 'Reject')}
+                />
+                <Tooltip tooltipText="Lorem ipsum...">
+                  <TooltipDefault />
+                </Tooltip>
+              </InlineToggleWrap>
+            )}
+            <Row>
+              <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
+                <CKEditor
+                  id="field-rationale"
+                  onChange={(event, editor) => changeField('rationale', editor.getData())}
+                />
+              </InputComponent>
+            </Row>
+          </RowGapBlock>
         </ScrollableModalColumn>
       </VoteForProposalModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled onClick={() => undefined} size="medium">
+        <ButtonPrimary disabled={!isValid} onClick={() => undefined} size="medium">
           Sign transaction and Vote
           <Arrow direction="right" />
         </ButtonPrimary>

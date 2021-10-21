@@ -15,6 +15,7 @@ export interface ButtonProps extends ButtonSizingProps {
   borderless?: boolean
   onClick?: MouseEventHandler
   title?: string
+  outlined?: boolean
 }
 
 interface ButtonSizingProps {
@@ -42,9 +43,16 @@ const getPadding = (props: ButtonProps) => {
   return props.square ? '8px' : '8px 16px'
 }
 
-export function ButtonPrimary({ className, children, size, square, disabled, onClick }: ButtonProps) {
+export function ButtonPrimary({ className, children, size, square, disabled, onClick, outlined }: ButtonProps) {
   return (
-    <ButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
+    <ButtonPrimaryStyles
+      className={className}
+      size={size}
+      square={square}
+      disabled={disabled}
+      onClick={onClick}
+      outlined={outlined}
+    >
       <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonPrimaryStyles>
   )
@@ -72,6 +80,7 @@ export function ButtonGhost({ className, children, size, square, disabled, onCli
     </ButtonGhostStyles>
   )
 }
+
 export function ButtonBareGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
@@ -79,6 +88,7 @@ export function ButtonBareGhost({ className, children, size, square, disabled, o
     </ButtonBareGhostStyles>
   )
 }
+
 export function ButtonLink({ className, children, square, borderless, bold, inline, disabled, onClick }: ButtonProps) {
   return (
     <ButtonLinkStyles
@@ -105,6 +115,7 @@ export const ButtonInnerWrapper = styled.span<ButtonSizingProps>`
   width: fit-content;
   white-space: nowrap;
   transform: translateY(1px);
+
   & > svg {
     transform: translateY(-1px);
   }
@@ -142,6 +153,7 @@ export const BasicButtonStyles = css<ButtonProps>`
     z-index: 2;
     transition: ${Transitions.all};
   }
+
   & .blackPart,
   & .primaryPart {
     transition: ${Transitions.all};
@@ -168,12 +180,15 @@ export const BasicButtonStyles = css<ButtonProps>`
       transform: translate(-50%, -50%);
     }
   }
+
   &:active {
     transform: scale(0.96);
+
     &:after {
       transform: translate(-50%, -50%);
     }
   }
+
   &:disabled {
     cursor: not-allowed;
 
@@ -181,6 +196,7 @@ export const BasicButtonStyles = css<ButtonProps>`
     &:focus,
     &:active {
       transform: scale(1);
+
       &:after,
       &:before {
         transform: translate(-150%, -50%);
@@ -192,17 +208,18 @@ export const BasicButtonStyles = css<ButtonProps>`
 export const ButtonPrimaryStyles = styled.button<ButtonProps>`
   ${BasicButtonStyles};
 
-  color: ${Colors.White};
   border-color: ${Colors.Blue[500]};
-  background-color: ${Colors.Blue[500]};
+  background-color: ${({ outlined }) => (outlined ? Colors.White : Colors.Blue[500])};
+  color: ${({ outlined }) => (outlined ? Colors.Blue[500] : Colors.White)};
 
   ${ButtonInnerWrapper} > svg {
-    color: ${Colors.White};
+    color: ${({ outlined }) => (outlined ? Colors.Blue[500] : Colors.White)};
   }
 
   &:before {
     background-color: ${Colors.Blue[400]};
   }
+
   &:after {
     background-color: ${Colors.Blue[700]};
   }
@@ -235,6 +252,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   &:before {
     background-color: ${Colors.Black[50]};
   }
+
   &:after {
     background-color: ${Colors.Black[100]};
   }
@@ -247,6 +265,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Blue[500]};
@@ -262,11 +281,13 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Black[300]};
       fill: ${Colors.Black[300]};
     }
+
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[50]};
     background-color: ${Colors.Black[50]};
@@ -287,6 +308,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   &:before {
     background-color: ${Colors.Black[50]};
   }
+
   &:after {
     background-color: ${Colors.Blue[50]};
   }
@@ -295,9 +317,11 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   &:focus {
     border-color: ${Colors.Blue[100]};
     color: ${Colors.Blue[500]};
+
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Blue[500]};
@@ -313,11 +337,13 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Black[300]};
       fill: ${Colors.Black[300]};
     }
+
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[200]};
     background-color: ${Colors.White};
@@ -344,9 +370,11 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
   &:focus {
     border-color: transparent;
     color: ${Colors.Blue[500]};
+
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Blue[500]};
@@ -357,6 +385,7 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
   &:active {
     border-color: transparent;
     color: ${Colors.Blue[600]};
+
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[600]};
     }
@@ -366,11 +395,13 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Black[300]};
       fill: ${Colors.Black[300]};
     }
+
     color: ${Colors.Black[300]};
     border-color: transparent;
     background-color: ${Colors.White};
@@ -407,6 +438,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     width: 12px;
     height: 12px;
   }
+
   &:before {
     top: auto;
     bottom: 2px;
@@ -418,6 +450,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     transform: ${({ borderless }) => (borderless ? 'translateX(calc(-100% - 2px))' : 'translateX(0)')};
     background-color: ${Colors.Black[900]};
   }
+
   &:after {
     background-color: ${Colors.Blue[50]};
     border-radius: 0;
@@ -436,6 +469,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Blue[500]};
@@ -456,11 +490,13 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
+
     & .blackPart,
     & .primaryPart {
       color: ${Colors.Black[300]};
       fill: ${Colors.Black[300]};
     }
+
     color: ${Colors.Black[300]};
     border-color: transparent;
     background-color: transparent;
