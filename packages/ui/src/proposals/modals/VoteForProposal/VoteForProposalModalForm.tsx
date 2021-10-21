@@ -28,16 +28,30 @@ interface FormFields {
   rationale?: string
 }
 
+interface Props {
+  setStatus: (status: VoteStatus) => void
+  setRationale: (rationale: string) => void
+  onNext: () => void
+}
+
 const FormSchema = Yup.object().shape({
   voteStatus: Yup.string().required(),
   rationale: Yup.string().required(),
 })
 
-export const VoteForProposalModalForm = () => {
+export const VoteForProposalModalForm = ({ setStatus, setRationale, onNext }: Props) => {
   const { hideModal, modalData } = useModal<VoteForProposalModalCall>()
   const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
   const { isValid } = validation
   const isRejected = fields.voteStatus === 'Reject' || fields.voteStatus === 'Slash'
+  // useEffect(() => {
+  //   setStatus(fields.voteStatus)
+  // }, [fields.voteStatus])
+
+  const setVoteStatus = (status: VoteStatus) => {
+    changeField('voteStatus', status)
+    setStatus(status)
+  }
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -57,19 +71,19 @@ export const VoteForProposalModalForm = () => {
               <ButtonsGroup>
                 <ButtonPrimary
                   size="medium"
-                  onClick={() => changeField('voteStatus', 'Approve')}
+                  onClick={() => setVoteStatus('Approve')}
                   outlined={fields.voteStatus !== 'Approve'}
                 >
                   <VerifiedMemberIcon />
                   Approve
                 </ButtonPrimary>
-                <ButtonPrimary size="medium" onClick={() => changeField('voteStatus', 'Reject')} outlined={!isRejected}>
+                <ButtonPrimary size="medium" onClick={() => setVoteStatus('Reject')} outlined={!isRejected}>
                   <CrossIcon />
                   Reject
                 </ButtonPrimary>
                 <ButtonPrimary
                   size="medium"
-                  onClick={() => changeField('voteStatus', 'Abstain')}
+                  onClick={() => setVoteStatus('Abstain')}
                   outlined={fields.voteStatus !== 'Abstain'}
                 >
                   <CrossIcon />
@@ -84,7 +98,7 @@ export const VoteForProposalModalForm = () => {
                   falseLabel="No"
                   trueLabel="Yes"
                   checked={fields.voteStatus === 'Slash'}
-                  onChange={(isSet) => changeField('voteStatus', isSet ? 'Slash' : 'Reject')}
+                  onChange={(isSet) => setVoteStatus(isSet ? 'Slash' : 'Reject')}
                 />
                 <Tooltip tooltipText="Lorem ipsum...">
                   <TooltipDefault />
@@ -95,7 +109,10 @@ export const VoteForProposalModalForm = () => {
               <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
                 <CKEditor
                   id="field-rationale"
-                  onChange={(event, editor) => changeField('rationale', editor.getData())}
+                  onChange={(event, editor) => {
+                    changeField('rationale', editor.getData())
+                    setRationale(editor.getData())
+                  }}
                 />
               </InputComponent>
             </Row>
@@ -103,7 +120,7 @@ export const VoteForProposalModalForm = () => {
         </ScrollableModalColumn>
       </VoteForProposalModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={() => undefined} size="medium">
+        <ButtonPrimary disabled={!isValid} onClick={onNext} size="medium">
           Sign transaction and Vote
           <Arrow direction="right" />
         </ButtonPrimary>

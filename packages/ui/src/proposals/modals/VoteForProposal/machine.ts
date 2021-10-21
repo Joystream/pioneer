@@ -32,7 +32,10 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
         SET_RATIONALE: {
           actions: assign({ rationale: (_, event) => event.rationale }),
         },
-        PASS: 'transaction',
+        PASS: {
+          target: 'transaction',
+          cond: (context) => !!context.voteStatus && !!context.rationale,
+        },
       },
     },
 

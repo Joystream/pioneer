@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, render, screen } from '@testing-library/react'
+import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -21,7 +21,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
-import { stubApi } from '../../_mocks/transactions'
+import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -49,6 +49,8 @@ describe('UI: Vote for Proposal Modal', () => {
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
+  let tx: any
+
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
@@ -58,6 +60,10 @@ describe('UI: Vote for Proposal Modal', () => {
       hasAccounts: true,
       allAccounts: [alice, bob],
     }
+  })
+
+  beforeEach(() => {
+    tx = stubTransaction(api, 'api.tx.proposalEngine.vote')
   })
 
   it('Renders a modal', async () => {
@@ -74,6 +80,28 @@ describe('UI: Vote for Proposal Modal', () => {
     expect(await getButton(/^Reject/i))
     expect(await getButton(/^Approve/i))
     expect(await getButton(/^Abstain/i))
+  })
+
+  describe('Transaction', () => {
+    beforeEach(async () => {
+      fireEvent.click(await getButton(/^Approve/i))
+    })
+
+    it('Success', async () => {
+      stubTransactionSuccess(tx, 'proposalsEngine', 'Voted')
+
+      fireEvent.click(await getButton(/^Sign/))
+
+      expect(await screen.findByText('Success')).toBeDefined()
+    })
+
+    it('Error', async () => {
+      stubTransactionFailure(tx)
+
+      fireEvent.click(await getButton(/^Sign/))
+
+      expect(await screen.findByText('Oh no')).toBeDefined()
+    })
   })
 
   function renderModal() {
