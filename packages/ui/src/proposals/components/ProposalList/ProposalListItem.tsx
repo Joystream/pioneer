@@ -19,6 +19,7 @@ import {
   ToggleableItemInfoTop,
   ToggleableItemTitle,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
+
 import { VoteForProposalButton } from '../VoteForProposalButton'
 
 export interface ProposalListItemProps {
