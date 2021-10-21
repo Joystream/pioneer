@@ -81,7 +81,7 @@ export async function signAndSend(
 
         console.log(chalk.gray(` > Events:\n${eventsString}\n`))
 
-        console.log(`Transaction result: ${hasError(events) ? chalk.red('✕ Error') : chalk.green('✓ Success')}`)
+        console.log(`Transaction result: ${hasError(events) ? chalk.red('✕ Error') : chalk.green('✓ Success')}\n\n`)
 
         unsubCb()
         resolve(events)
