@@ -1,8 +1,10 @@
 import faker from 'faker'
 
+import { accountsMap } from '../../node-mocks/data/addresses'
+
 import { randomBlock, randomFromRange } from './utils'
 
-const MAX_MEMBERS = 45
+const MAX_MEMBERS = 42
 
 interface KnownMember {
   isVerified: boolean
@@ -15,17 +17,38 @@ interface KnownMember {
 export const KNOWN_MEMBERS: KnownMember[] = [
   {
     handle: 'alice',
-    rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    rootAccount: accountsMap.alice_stash,
+    controllerAccount: accountsMap.alice,
     isVerified: true,
     isCouncilMember: false,
   },
   {
     handle: 'bob',
-    rootAccount: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc',
-    controllerAccount: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
+    rootAccount: accountsMap.bob_stash,
+    controllerAccount: accountsMap.bob,
     isVerified: true,
     isCouncilMember: true,
+  },
+  {
+    handle: 'charlie',
+    rootAccount: accountsMap.charlie,
+    controllerAccount: accountsMap.charlie,
+    isVerified: true,
+    isCouncilMember: false,
+  },
+  {
+    handle: 'dave',
+    rootAccount: accountsMap.dave,
+    controllerAccount: accountsMap.dave,
+    isVerified: true,
+    isCouncilMember: false,
+  },
+  {
+    handle: 'eve',
+    rootAccount: accountsMap.eve,
+    controllerAccount: accountsMap.eve,
+    isVerified: true,
+    isCouncilMember: false,
   },
 ]
 
