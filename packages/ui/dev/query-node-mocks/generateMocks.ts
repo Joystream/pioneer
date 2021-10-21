@@ -48,7 +48,7 @@ const allModule = {
 }
 
 yargs(process.argv.slice(2))
-  .usage('yarn generate-mocks [<command>]')
+  .usage('yarn query-node-mocks [<command>]')
   .scriptName('')
   .command(allModule)
   .command(membersModule)

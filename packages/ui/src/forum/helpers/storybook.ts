@@ -27,6 +27,7 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
         text,
       },
       status: 'PostStatusActive',
+      deletedInEvent: null,
     }
 }
 
