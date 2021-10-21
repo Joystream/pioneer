@@ -7,7 +7,7 @@ export function calculateCommitment(accountId: string, optionId: string, salt: s
   // https://github.com/Joystream/joystream/blob/db3885858a7812377a19390968bdbf65221f0270/runtime-modules/referendum/src/lib.rs#L638
 
   const accountPayload = createType('AccountId', accountId).toU8a()
-  const optionPayload = createType('u64', Number.parseInt(optionId)).toU8a()
+  const optionPayload = createType('MemberId', Number.parseInt(optionId)).toU8a()
   const saltPayload = createType('Bytes', salt).toU8a()
   const cyclePayload = createType('u64', cycleId).toU8a()
 
