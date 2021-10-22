@@ -1,6 +1,8 @@
 import { useMachine } from '@xstate/react'
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TextInlineMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
@@ -19,13 +21,34 @@ export const VoteForProposalModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
   const { proposal, isLoading } = useProposal(modalData.id)
-
-  // api?.tx.proposalsEngine.vote()
+  const transactionFee = useMemo(
+    () => (active?.id ? api?.tx.proposalsEngine.vote(active?.id, modalData.id, 'Approve', '') : undefined),
+    [active?.id]
+  )
+  const feeInfo = useTransactionFee(active?.controllerAccount, transactionFee)
 
   const [state, send] = useMachine(machine)
 
-  if (isLoading || !proposal || !api || !active) {
+  useEffect((): any => {
+    if (state.matches('requirementsVerification')) {
+      if (feeInfo && feeInfo.canAfford) {
+        return send('PASS')
+      }
+
+      if (feeInfo && !feeInfo.canAfford) {
+        return send('FAIL')
+      }
+    }
+  }, [state, JSON.stringify(feeInfo)])
+
+  if (isLoading || !proposal || !api || !active || !feeInfo) {
     return null
+  }
+
+  if (state.matches('requirementsFailed')) {
+    return (
+      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+    )
   }
 
   if (state.matches('vote')) {
