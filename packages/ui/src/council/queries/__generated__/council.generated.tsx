@@ -73,7 +73,30 @@ export type PastCouncilDetailedFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
-  councilMembers: Array<{ __typename: 'CouncilMember'; memberId: string; accumulatedReward: any; unpaidReward: any }>
+  councilMembers: Array<{
+    __typename: 'CouncilMember'
+    accumulatedReward: any
+    unpaidReward: any
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  }>
 }
 
 export type ElectionCandidateFieldsFragment = {
@@ -331,9 +354,31 @@ export type GetPastCouncilQuery = {
         endedAtBlock?: number | null | undefined
         councilMembers: Array<{
           __typename: 'CouncilMember'
-          memberId: string
           accumulatedReward: any
           unpaidReward: any
+          member: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
         }>
       }
     | null
@@ -610,12 +655,15 @@ export const PastCouncilDetailedFieldsFragmentDoc = gql`
   fragment PastCouncilDetailedFields on ElectedCouncil {
     ...PastCouncilFields
     councilMembers {
-      memberId
+      member {
+        ...MemberFields
+      }
       accumulatedReward
       unpaidReward
     }
   }
   ${PastCouncilFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
 `
 export const ElectionCandidateFieldsFragmentDoc = gql`
   fragment ElectionCandidateFields on Candidate {

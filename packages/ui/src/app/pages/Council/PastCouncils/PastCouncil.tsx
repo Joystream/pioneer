@@ -1,3 +1,4 @@
+import { BN_ZERO } from '@polkadot/util'
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -11,6 +12,7 @@ import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { getUrl } from '@/common/utils/getUrl'
+import { PastCouncilStats } from '@/council/components/pastCouncil/PastCouncilStats'
 import { PastCouncilTabs } from '@/council/components/pastCouncil/PastCouncilTabs/PastCouncilTabs'
 import { CouncilRoutes } from '@/council/constants'
 import { usePastCouncil } from '@/council/hooks/usePastCouncil'
@@ -73,7 +75,17 @@ export const PastCouncil = () => {
     return (
       <MainPanel>
         {isLoading && <Loading />}
-        {!isLoading && council && <PastCouncilTabs council={council} />}
+        {!isLoading && council && (
+          <>
+            <PastCouncilStats
+              totalSpent={BN_ZERO}
+              totalDebt={council.totalDebt}
+              totalRewards={council.totalRewards}
+              totalSpentOnProposals={BN_ZERO}
+            />
+            <PastCouncilTabs council={council} />
+          </>
+        )}
       </MainPanel>
     )
   }
