@@ -49,6 +49,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
       electedInCouncilId: council.id,
       memberId: randomMember().id,
       unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
+      accumulatedReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
       stake: randomFromRange(10000, 1000000),
     }),
     isFinished ? randomFromRange(5, 8) : 0
