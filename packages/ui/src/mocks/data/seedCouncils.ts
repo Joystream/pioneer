@@ -87,8 +87,8 @@ export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCounci
   candidates.map((data) => seedCouncilCandidate(data, server))
 }
 
-export const seedCounncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)
+export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)
 
 export const seedCouncilVotes = (server: any) => {
-  rawVotes.map((data) => seedCounncilVote(data, server))
+  rawVotes.map((data) => seedCouncilVote(data, server))
 }

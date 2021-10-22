@@ -9,15 +9,12 @@ import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
 import { TableOrder } from '@/common/types/TableOrder'
-import { PastElectionsList } from '@/council/components/election/PastElectionsList/PastElectionsList'
-import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
+import { PastElectionsList } from '@/council/components/election/pastElection/PastElectionsList/PastElectionsList'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
 
-import { CouncilTabs } from './components/CouncilTabs'
+import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastElections = () => {
-  useCandidatePreviewViaUrlParameter()
-
   const [page, setPage] = useState(1)
   const [order, setOrder] = useState<TableOrder<PastElectionsOrderKey>>({ key: 'cycle', isDescending: true })
   const { isLoading, elections, pageCount } = usePastElections({
