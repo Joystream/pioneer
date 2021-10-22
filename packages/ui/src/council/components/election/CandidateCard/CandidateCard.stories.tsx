@@ -3,6 +3,8 @@ import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
 import { CandidateCard, CandidateCardProps } from './CandidateCard'
 
 export default {
@@ -15,7 +17,9 @@ export default {
 
 const Template: Story<CandidateCardProps> = (args) => (
   <MemoryRouter>
-    <CandidateCard {...args} />
+    <MockApolloProvider members council>
+      <CandidateCard {...args} />
+    </MockApolloProvider>
   </MemoryRouter>
 )
 
