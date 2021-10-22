@@ -4,8 +4,10 @@ import { TabProps, Tabs } from '@/common/components/Tabs'
 import { ElectionStage } from '@/council/types/Election'
 
 export type AnnouncingStageTab = 'candidates' | 'myCandidates'
-type VotingRevealingStageTab = 'candidates' | 'myVotes' | 'results'
-type ElectionTab = AnnouncingStageTab | VotingRevealingStageTab
+export type VotingStageTab = 'candidates' | 'myVotes'
+type RevealingStageTab = 'results' | 'myVotes'
+
+type ElectionTab = AnnouncingStageTab | VotingStageTab | RevealingStageTab
 
 interface ElectionTabsProps {
   stage: Exclude<ElectionStage, 'inactive'>

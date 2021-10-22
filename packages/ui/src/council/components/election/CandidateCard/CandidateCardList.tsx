@@ -9,9 +9,10 @@ import { NoCandidates } from './NoCandidates'
 interface CandidatesListProps extends Pick<CandidateCardProps, 'isVotingStage' | 'isPreview'> {
   candidates?: (CandidateCardProps['candidate'] & { isMyCandidate?: boolean })[]
   isLoading?: boolean
+  isVotingStage?: boolean
 }
 
-export const CandidateCardList = ({ candidates = [], isLoading }: CandidatesListProps) => {
+export const CandidateCardList = ({ candidates = [], isLoading, isVotingStage }: CandidatesListProps) => {
   if (isLoading) {
     return <Loading text="Loading candidates.." />
   }
@@ -23,7 +24,12 @@ export const CandidateCardList = ({ candidates = [], isLoading }: CandidatesList
   return (
     <CandidatesListStyles>
       {candidates.map(({ isMyCandidate, ...candidate }, index) => (
-        <CandidateCard key={index} candidate={candidate} withdrawable={isMyCandidate} />
+        <CandidateCard
+          key={index}
+          candidate={candidate}
+          withdrawable={isMyCandidate ?? false}
+          isVotingStage={isVotingStage}
+        />
       ))}
     </CandidatesListStyles>
   )
