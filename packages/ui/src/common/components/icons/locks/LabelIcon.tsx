@@ -5,7 +5,7 @@ import { Colors } from '@/common/constants'
 import { Icon } from '../Icon'
 
 interface LabelIconProps {
-  className?: any
+  className?: string
 }
 
 export const LabelIcon = React.memo(({ className }: LabelIconProps) => (

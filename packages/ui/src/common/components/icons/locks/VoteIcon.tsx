@@ -5,7 +5,7 @@ import { Colors } from '@/common/constants'
 import { Icon } from '../Icon'
 
 interface VoteIconProps {
-  className?: any
+  className?: string
 }
 
 export const VoteIcon = React.memo(({ className }: VoteIconProps) => (
