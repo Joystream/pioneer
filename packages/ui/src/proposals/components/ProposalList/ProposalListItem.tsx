@@ -37,9 +37,9 @@ export interface ProposalListItemProps {
 
 export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
   const { api } = useApi()
-  const voteStatus = useObservable(
+  const voteStatusSize = useObservable(
     memberId
-      ? api?.query.proposalsEngine.voteExistsByProposalByVoter(parseInt(proposal.id), parseInt(memberId))
+      ? api?.query.proposalsEngine.voteExistsByProposalByVoter.size(parseInt(proposal.id), parseInt(memberId))
       : undefined,
     [memberId]
   )
@@ -47,8 +47,8 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
   const constants = useProposalConstants(proposal.type)
   const constitutionality = constants?.constitutionality
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
-  const hasVoted = voteStatus?.isApprove || voteStatus?.isAbstain || voteStatus?.isReject || voteStatus?.isSlash
-  const canVote = isCouncilMember && proposal.status === 'deciding' && voteStatus && !hasVoted
+  const hasVoted = voteStatusSize?.gtn(0)
+  const canVote = isCouncilMember && proposal.status === 'deciding' && !hasVoted
   return (
     <ProposalItem
       as={GhostRouterLink}
@@ -85,8 +85,8 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
   )
 }
 
-const getVoteDisplay = (constitutionality?: number) => (vote: ProposalVote) => (
-  <span>
+const getVoteDisplay = (constitutionality?: number) => (vote: ProposalVote, index: number) => (
+  <span key={index}>
     {(constitutionality ?? 0) > 1 && `${vote.votingRound}/${constitutionality} `}
     {voteStatusMap[vote.voteKind]}
   </span>

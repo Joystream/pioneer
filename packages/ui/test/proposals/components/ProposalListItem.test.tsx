@@ -53,27 +53,20 @@ describe('UI: ProposalListItem', () => {
   stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', proposalParameters)
 
   describe('Proposal in deciding stage', () => {
-    const voteStatus = {
-      isApprove: false,
-      isReject: false,
-      isSlash: false,
-      isAbstain: false,
-    }
-
     it('Member has voted already', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', { ...voteStatus, isApprove: true })
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 16))
       renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
       expect(screen.queryByText('Vote')).toBeNull()
     })
 
     it('Member is not a council member', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
       renderComponent({ proposal: proposalData, isCouncilMember: false, memberId: '0' })
       expect(screen.queryByText('Vote')).toBeNull()
     })
 
     it('Member has not voted yet', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
       renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
       const button = await screen.findByText('Vote')
       expect(button).toBeDefined()
@@ -81,7 +74,7 @@ describe('UI: ProposalListItem', () => {
     })
 
     it('Voting in second round', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
       stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', {
         ...proposalParameters,
         constitutionality: createType('u32', 2),
