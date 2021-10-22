@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
+import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
@@ -10,6 +11,7 @@ import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { getUrl } from '@/common/utils/getUrl'
+import { PastCouncilTabs } from '@/council/components/pastCouncil/PastCouncilTabs/PastCouncilTabs'
 import { CouncilRoutes } from '@/council/constants'
 import { usePastCouncil } from '@/council/hooks/usePastCouncil'
 
@@ -19,11 +21,11 @@ export const PastCouncil = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, council } = usePastCouncil(id)
 
-  if (!isLoading && !council) {
-    history.replace('/404')
-
-    return null
-  }
+  useEffect(() => {
+    if (!isLoading && !council) {
+      history.replace('/404')
+    }
+  }, [isLoading, council])
 
   const displayHeader = () => {
     if (isLoading || !council) {
@@ -51,6 +53,16 @@ export const PastCouncil = () => {
             <BadgeStatus inverted size="l">
               Past Council
             </BadgeStatus>
+            <BlockTime
+              block={{
+                network: 'OLYMPIA',
+                timestamp: new Date().toString(),
+                number: council.endedAtBlock,
+              }}
+              lessInfo
+              dateLabel="Term ended at"
+              layout="row"
+            />
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>
@@ -61,7 +73,7 @@ export const PastCouncil = () => {
     return (
       <MainPanel>
         {isLoading && <Loading />}
-        {!isLoading && council && <>Council here</>}
+        {!isLoading && council && <PastCouncilTabs council={council} />}
       </MainPanel>
     )
   }

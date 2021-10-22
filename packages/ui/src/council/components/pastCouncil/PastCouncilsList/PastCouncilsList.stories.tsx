@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { PastCouncilsList } from '@/council/components/PastCouncilsList/PastCouncilsList'
+import { PastCouncilsList } from '@/council/components/pastCouncil/PastCouncilsList/PastCouncilsList'
 import { PastCouncil } from '@/council/types/PastCouncil'
 
 export default {
