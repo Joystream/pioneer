@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
@@ -17,7 +18,7 @@ import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
 import { isProposalActive } from '@/proposals/model/proposalStatus'
-import { Proposal } from '@/proposals/types'
+import { Proposal, ProposalVote } from '@/proposals/types'
 import {
   ToggleableItemInfo,
   ToggleableItemInfoTop,
@@ -31,6 +32,28 @@ export interface ProposalListItemProps {
   isPast?: boolean
   memberId?: string
   isCouncilMember?: boolean
+}
+
+const voteStatusMap: Record<ProposalVote['voteKind'], ReactNode> = {
+  ABSTAIN: <span>Abstained</span>,
+  APPROVE: (
+    <span>
+      <CheckboxIcon />
+      Approved
+    </span>
+  ),
+  REJECT: (
+    <span>
+      <CrossIcon />
+      Rejected
+    </span>
+  ),
+  SLASH: (
+    <span>
+      <CrossIcon />
+      Slashed
+    </span>
+  ),
 }
 
 export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
@@ -69,7 +92,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
       {canVote && <VoteForProposalButton id={proposal.id} />}
-      {isLoading ? <Loading /> : votes?.map((vote) => <span>Approved</span>)}
+      {isLoading ? <Loading /> : votes?.map((vote) => <span>{voteStatusMap[vote.voteKind]}</span>)}
     </ProposalItem>
   )
 }

@@ -60,6 +60,17 @@ describe('UI: ProposalListItem', () => {
   })
 
   describe('Displays past votes', () => {
+    const voteData = {
+      id: '0',
+      voteKind: 'APPROVE',
+      network: 'OLYMPIA',
+      createdAt: '2021-10-21T11:21:59.812Z',
+      inBlock: 100,
+      voterId: '0',
+      rationale: '',
+      votingRound: 1,
+    }
+
     beforeEach(() => {
       seedMembers(server.server, 2)
     })
@@ -79,22 +90,11 @@ describe('UI: ProposalListItem', () => {
       expect(screen.queryByText('Approved')).toBeNull()
     })
 
-    it('One previous vote', async () => {
+    it('One approval vote', async () => {
       seedProposal(
         {
           ...PROPOSAL_DATA,
-          votes: [
-            {
-              id: '0',
-              voteKind: 'APPROVE',
-              network: 'OLYMPIA',
-              createdAt: '2021-10-21T11:21:59.812Z',
-              inBlock: 100,
-              voterId: '0',
-              rationale: '',
-              votingRound: 1,
-            },
-          ],
+          votes: [voteData],
         },
         server.server
       )
@@ -102,6 +102,20 @@ describe('UI: ProposalListItem', () => {
       renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
 
       expect(await screen.findByText('Approved')).toBeDefined()
+    })
+
+    it('One reject vote', async () => {
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [{ ...voteData, voteKind: 'REJECT' }],
+        },
+        server.server
+      )
+
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+
+      expect(await screen.findByText('Rejected')).toBeDefined()
     })
   })
 
