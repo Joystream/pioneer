@@ -31,11 +31,20 @@ export const PastCouncilsList = ({ councils, isLoading }: Props) => {
   }
 
   return (
-    <>
-      {/* <List>
+    <RowGapBlock gap={4}>
+      <PastCouncilListHeaders $colLayout={PastCouncilColLayout}>
+        <ListHeader>Term</ListHeader>
+        <ListHeader>Term Ended</ListHeader>
+        <ListHeader>Total Spent</ListHeader>
+        <ListHeader>Spent on Proposals</ListHeader>
+        <ListHeader>Proposals approved</ListHeader>
+        <ListHeader>Proposals Rejected</ListHeader>
+      </PastCouncilListHeaders>
+      <List>
         {councils.map((council) => (
-          <TableListItem
-            $colLayout={'50px 1fr 1fr 1fr 1fr 1fr'}
+          <PastCouncilTableListItem
+            $colLayout={PastCouncilColLayout}
+            $isPast
             as={GhostRouterLink}
             to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
           >
@@ -46,50 +55,16 @@ export const PastCouncilsList = ({ councils, isLoading }: Props) => {
                 timestamp: new Date().toString(),
                 number: council.endedAtBlock,
               }}
+              layout="reverse-start"
               lessInfo
             />
             <TokenValue value={new BN(0)} />
             <TokenValue value={new BN(0)} />
             <CountInfo count={0} />
             <CountInfo count={0} />
-          </TableListItem>
+          </PastCouncilTableListItem>
         ))}
-      </List> */}
-      <RowGapBlock gap={4}>
-        <PastCouncilListHeaders $colLayout={PastCouncilColLayout}>
-          <ListHeader>Term</ListHeader>
-          <ListHeader>Term Ended</ListHeader>
-          <ListHeader>Total Spent</ListHeader>
-          <ListHeader>Spent on Proposals</ListHeader>
-          <ListHeader>Proposals approved</ListHeader>
-          <ListHeader>Proposals Rejected</ListHeader>
-        </PastCouncilListHeaders>
-        <List>
-          {councils.map((council) => (
-            <PastCouncilTableListItem
-              $colLayout={PastCouncilColLayout}
-              $isPast
-              as={GhostRouterLink}
-              to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
-            >
-              <Info>#{council.id}</Info>
-              <BlockTime
-                block={{
-                  network: 'OLYMPIA',
-                  timestamp: new Date().toString(),
-                  number: council.endedAtBlock,
-                }}
-                layout="reverse-start"
-                lessInfo
-              />
-              <TokenValue value={new BN(0)} />
-              <TokenValue value={new BN(0)} />
-              <CountInfo count={0} />
-              <CountInfo count={0} />
-            </PastCouncilTableListItem>
-          ))}
-        </List>
-      </RowGapBlock>
-    </>
+      </List>
+    </RowGapBlock>
   )
 }

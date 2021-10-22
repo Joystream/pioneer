@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { TableListItem } from '@/common/components/List'
+import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { ListHeaders } from '@/common/components/List/ListHeader'
 import { Colors } from '@/common/constants'
 
@@ -16,4 +16,6 @@ export const PastCouncilTableListItem = styled(TableListItem)`
   height: 80px;
   padding-right: 16px;
   background-color: ${({ $isPast }: { $isPast?: boolean }) => ($isPast ? Colors.Black[50] : Colors.White)};
+
+  ${TableListItemAsLinkHover};
 `
