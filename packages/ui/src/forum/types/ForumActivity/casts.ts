@@ -2,10 +2,12 @@ import { asBaseActivity, asMemberDisplayFields } from '@/common/types'
 import {
   CategoryCreatedEventFieldsFragment,
   PostAddedEventFieldsFragment,
+  PostDeletedEventFieldsFragment,
   PostTextUpdatedEventFieldsFragment,
   ThreadCreatedEventFieldsFragment,
 } from '@/forum/queries/__generated__/forumEvents.generated'
 
+import { PostDeletedActivity } from '.'
 import { CategoryCreatedActivity, PostAddedActivity, PostEditedActivity, ThreadCreatedActivity } from './types'
 
 export function asPostActivity(
@@ -29,6 +31,17 @@ export function asThreadCreatedActivity(fields: ThreadCreatedEventFieldsFragment
       title: fields.thread.title,
     },
     author: asMemberDisplayFields(fields.thread.author),
+  }
+}
+
+export function asPostDeletedActivity(fields: PostDeletedEventFieldsFragment): PostDeletedActivity {
+  return {
+    eventType: fields.__typename,
+    ...asBaseActivity(fields),
+    actor: fields.actor,
+    numberOfPosts: fields.posts.length,
+    threadId: fields.posts[0].thread.id,
+    threadTitle: fields.posts[0].thread.title,
   }
 }
 

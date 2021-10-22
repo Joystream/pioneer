@@ -116,6 +116,7 @@ export const makeServer = (environment = 'development') => {
               openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
+              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposals: getWhereResolver('Proposal'),

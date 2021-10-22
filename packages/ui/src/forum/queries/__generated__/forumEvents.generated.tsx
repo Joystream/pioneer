@@ -27,6 +27,18 @@ export type PostTextUpdatedEventFieldsFragment = {
   }
 }
 
+export type PostDeletedEventFieldsFragment = {
+  __typename: 'PostDeletedEvent'
+  id: string
+  createdAt: any
+  posts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    thread: { __typename: 'ForumThread'; id: string; title: string }
+  }>
+  actor: { __typename: 'Membership'; id: string; handle: string }
+}
+
 export type ThreadCreatedEventFieldsFragment = {
   __typename: 'ThreadCreatedEvent'
   id: string
@@ -76,6 +88,17 @@ export type GetForumEventsQuery = {
       thread: { __typename: 'ForumThread'; id: string }
       author: { __typename: 'Membership'; id: string; handle: string }
     }
+  }>
+  postDeletedEvents: Array<{
+    __typename: 'PostDeletedEvent'
+    id: string
+    createdAt: any
+    posts: Array<{
+      __typename: 'ForumPost'
+      id: string
+      thread: { __typename: 'ForumThread'; id: string; title: string }
+    }>
+    actor: { __typename: 'Membership'; id: string; handle: string }
   }>
   threadCreatedEvents: Array<{
     __typename: 'ThreadCreatedEvent'
@@ -133,6 +156,23 @@ export const PostTextUpdatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const PostDeletedEventFieldsFragmentDoc = gql`
+  fragment PostDeletedEventFields on PostDeletedEvent {
+    id
+    createdAt
+    posts {
+      id
+      thread {
+        id
+        title
+      }
+    }
+    actor {
+      id
+      handle
+    }
+  }
+`
 export const ThreadCreatedEventFieldsFragmentDoc = gql`
   fragment ThreadCreatedEventFields on ThreadCreatedEvent {
     id
@@ -169,6 +209,9 @@ export const GetForumEventsDocument = gql`
     postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostTextUpdatedEventFields
     }
+    postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
+      ...PostDeletedEventFields
+    }
     threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
       ...ThreadCreatedEventFields
     }
@@ -178,6 +221,7 @@ export const GetForumEventsDocument = gql`
   }
   ${PostAddedEventFieldsFragmentDoc}
   ${PostTextUpdatedEventFieldsFragmentDoc}
+  ${PostDeletedEventFieldsFragmentDoc}
   ${ThreadCreatedEventFieldsFragmentDoc}
   ${CategoryCreatedEventFieldsFragmentDoc}
 `
