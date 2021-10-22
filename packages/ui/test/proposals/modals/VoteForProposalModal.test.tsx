@@ -75,11 +75,19 @@ describe('UI: Vote for Proposal Modal', () => {
     stubDefaultBalances(api)
   })
 
-  it('Renders a modal', async () => {
-    const { queryByText } = await renderModal()
+  it('Requirements verification', async () => {
+    tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 10_000)
 
-    expect(queryByText(/Vote for proposal/i)).not.toBeNull()
-    expect(queryByText(PROPOSAL_DATA.title)).not.toBeNull()
+    await renderModal(true)
+
+    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+  })
+
+  it('Renders a modal', async () => {
+    await renderModal()
+
+    expect(screen.queryByText(/Vote for proposal/i)).not.toBeNull()
+    expect(screen.queryByText(PROPOSAL_DATA.title)).not.toBeNull()
   })
 
   describe('Form', () => {
@@ -104,12 +112,12 @@ describe('UI: Vote for Proposal Modal', () => {
     })
 
     it('Vote Status: Reject', async () => {
-      const { queryByText } = await renderModal()
+      await renderModal()
 
       await act(async () => {
         fireEvent.click(await getButton(/^Reject/i))
       })
-      expect(queryByText(/Slash proposal/i)).not.toBeNull()
+      expect(screen.queryByText(/Slash proposal/i)).not.toBeNull()
     })
   })
 
@@ -135,12 +143,6 @@ describe('UI: Vote for Proposal Modal', () => {
 
         expect(await getButton(/^sign transaction and vote/i)).not.toBeDisabled()
         expect(screen.queryByText(/^(.*?)You need at least \d+ JOY(.*)/i)).toBeNull()
-      })
-      it('Not enough funds', async () => {
-        await beforeEach(false)
-
-        expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
-        expect(screen.queryByText(/^(.*?)You need at least 1500 JOY(.*)/i)).not.toBeNull()
       })
     })
 
@@ -178,8 +180,8 @@ describe('UI: Vote for Proposal Modal', () => {
     })
   }
 
-  async function renderModal() {
-    const renderedModal = await render(
+  async function renderModal(skipWait?: boolean) {
+    await render(
       <MemoryRouter>
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
@@ -199,8 +201,8 @@ describe('UI: Vote for Proposal Modal', () => {
       </MemoryRouter>
     )
 
-    await waitFor(async () => expect(await screen.findByText('Vote for proposal')).toBeDefined())
-
-    return renderedModal
+    if (!skipWait) {
+      await waitFor(async () => expect(await screen.findByText('Vote for proposal')).toBeDefined())
+    }
   }
 })
