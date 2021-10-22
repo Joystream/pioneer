@@ -25,6 +25,17 @@ const proposalData: Proposal = {
   councilApprovals: 0,
 }
 
+const voteData = {
+  id: '0',
+  voteKind: 'APPROVE',
+  network: 'OLYMPIA',
+  createdAt: '2021-10-21T11:21:59.812Z',
+  inBlock: 100,
+  voterId: '0',
+  rationale: '',
+  votingRound: 1,
+}
+
 const proposalParameters = {
   votingPeriod: createType('u32', 10),
   gracePeriod: createType('u32', 10),
@@ -49,12 +60,6 @@ describe('UI: ProposalListItem', () => {
       isAbstain: false,
     }
 
-    it('Member has not voted yet', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
-      renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
-      expect(await screen.findByText('Vote')).toBeDefined()
-    })
-
     it('Member has voted already', async () => {
       stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', { ...voteStatus, isApprove: true })
       renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
@@ -66,6 +71,36 @@ describe('UI: ProposalListItem', () => {
       renderComponent({ proposal: proposalData, isCouncilMember: false, memberId: '0' })
       expect(screen.queryByText('Vote')).toBeNull()
     })
+
+    it('Member has not voted yet', async () => {
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
+      const button = await screen.findByText('Vote')
+      expect(button).toBeDefined()
+      expect(button.parentNode?.parentNode?.textContent).toEqual('Vote')
+    })
+
+    it('Voting in second round', async () => {
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', {
+        ...proposalParameters,
+        constitutionality: createType('u32', 2),
+      })
+      seedMembers(server.server, 2)
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [voteData],
+        },
+        server.server
+      )
+
+      renderComponent({ proposal: { ...proposalData, councilApprovals: 1 }, memberId: '0', isCouncilMember: true })
+
+      expect(await screen.findByText('Approved')).toBeDefined()
+      const button = await screen.findByText('Vote')
+      expect(button.parentNode?.parentNode?.textContent).toEqual('2/2 Vote')
+    })
   })
 
   it('Proposal not in voting stage', () => {
@@ -74,17 +109,6 @@ describe('UI: ProposalListItem', () => {
   })
 
   describe('Displays past votes', () => {
-    const voteData = {
-      id: '0',
-      voteKind: 'APPROVE',
-      network: 'OLYMPIA',
-      createdAt: '2021-10-21T11:21:59.812Z',
-      inBlock: 100,
-      voterId: '0',
-      rationale: '',
-      votingRound: 1,
-    }
-
     beforeEach(() => {
       seedMembers(server.server, 2)
     })

@@ -73,7 +73,12 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
       <StageField>
-        {canVote && <VoteForProposalButton id={proposal.id} />}
+        {canVote && (
+          <span>
+            {(constitutionality ?? 0) > 1 && `${proposal.councilApprovals + 1}/${constitutionality} `}
+            <VoteForProposalButton id={proposal.id} />
+          </span>
+        )}
         {isLoading ? <Loading /> : votes?.map(getVoteDisplay(constitutionality))}
       </StageField>
     </ProposalItem>
