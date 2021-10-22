@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -17,23 +16,16 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { WithdrawButton } from '@/council/components/election/WithdrawButton'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
+import { ElectionCandidate } from '@/council/types/Candidate'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
 import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyStats'
-import { Member } from '@/memberships/types'
 
 import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCardImage'
 
 export interface CandidateCardProps {
-  id: string
-  member: Member
+  candidate: Pick<ElectionCandidate, 'id' | 'member' | 'stake' | 'info'>
   voted?: boolean
   withdrawable?: boolean
-  info: {
-    title: string
-    bulletPoints: string[]
-    bannerUri?: string
-  }
-  stake?: BN
   wins?: number
   loses?: number
   isVotingStage?: boolean
@@ -41,12 +33,9 @@ export interface CandidateCardProps {
 }
 
 export const CandidateCard = ({
-  id,
-  member,
-  info,
+  candidate: { id, member, info, stake },
   voted,
   withdrawable,
-  stake,
   isVotingStage,
   isPreview,
 }: CandidateCardProps) => {

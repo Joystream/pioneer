@@ -26,11 +26,11 @@ export const Election = () => {
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
   useCandidatePreviewViaUrlParameter()
 
-  if (isLoadingElection || isLoadingElectionStage) {
+  if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
   }
 
-  if (!election || electionStage === 'inactive') {
+  if (electionStage === 'inactive') {
     return null
   }
 
@@ -61,10 +61,10 @@ export const Election = () => {
         </StatisticItem>
         <BlockDurationStatistics title="Period remaining length" tooltipText="Lorem ipsum..." value={remainingPeriod} />
         <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
-          <TextHuge bold>{election.cycleId} round</TextHuge>
+          <TextHuge bold>{election ? `${election.cycleId} round` : '-'}</TextHuge>
         </StatisticItem>
       </Statistics>
-      {electionStage === 'announcing' && <AnnouncingStage election={election} />}
+      {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
     </MainPanel>
   )
 

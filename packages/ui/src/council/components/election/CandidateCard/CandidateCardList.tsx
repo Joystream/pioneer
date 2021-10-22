@@ -1,17 +1,29 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { CandidateCardProps, CandidateCard } from './CandidateCard'
+import { Loading } from '@/common/components/Loading'
 
-interface CandidatesListProps {
-  candidates: CandidateCardProps[]
+import { CandidateCardProps, CandidateCard } from './CandidateCard'
+import { NoCandidates } from './NoCandidates'
+
+interface CandidatesListProps extends Pick<CandidateCardProps, 'isVotingStage' | 'isPreview'> {
+  candidates?: (CandidateCardProps['candidate'] & { isMyCandidate?: boolean })[]
+  isLoading?: boolean
 }
 
-export const CandidateCardList = ({ candidates }: CandidatesListProps) => {
+export const CandidateCardList = ({ candidates = [], isLoading }: CandidatesListProps) => {
+  if (isLoading) {
+    return <Loading text="Loading candidates.." />
+  }
+
+  if (!candidates.length) {
+    return <NoCandidates />
+  }
+
   return (
     <CandidatesListStyles>
-      {candidates.map((candidate, index) => (
-        <CandidateCard key={index} {...candidate} />
+      {candidates.map(({ isMyCandidate, ...candidate }, index) => (
+        <CandidateCard key={index} candidate={candidate} withdrawable={isMyCandidate} />
       ))}
     </CandidatesListStyles>
   )
