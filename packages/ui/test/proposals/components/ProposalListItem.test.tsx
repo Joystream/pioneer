@@ -1,5 +1,4 @@
 import { createType } from '@joystream/types'
-import { ProposalParameters } from '@joystream/types/proposals'
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
