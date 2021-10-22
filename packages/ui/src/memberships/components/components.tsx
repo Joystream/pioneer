@@ -97,7 +97,7 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
           grid-template-areas: 'memberphoto memberhead';
           grid-template-rows: unset !important;
         `
-      : !hideGroup
+      : hideGroup
       ? css`
           grid-template-areas: 'memberphoto memberhead';
           grid-template-rows: unset !important;
