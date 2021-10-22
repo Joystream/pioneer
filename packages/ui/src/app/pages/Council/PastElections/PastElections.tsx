@@ -29,7 +29,7 @@ export const PastElections = () => {
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>
-        <PageTitle>Past elections</PageTitle>
+        <PageTitle>Council</PageTitle>
       </PageHeaderRow>
       <CouncilTabs />
     </PageHeaderWrapper>

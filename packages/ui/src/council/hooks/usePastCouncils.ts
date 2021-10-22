@@ -1,11 +1,11 @@
 import { ElectedCouncilOrderByInput } from '@/common/api/queries'
-import { useGetElectedCouncilsQuery } from '@/council/queries'
-import { asCouncil } from '@/council/types'
+import { useGetPastCouncilsQuery } from '@/council/queries'
+import { asPastCouncil } from '@/council/types/PastCouncil'
 
 export const usePastCouncils = () => {
-  const { loading, data } = useGetElectedCouncilsQuery({
-    variables: { where: { isResigned_eq: true }, order: ElectedCouncilOrderByInput.CreatedAtDesc },
+  const { loading, data } = useGetPastCouncilsQuery({
+    variables: { orderBy: ElectedCouncilOrderByInput.CreatedAtDesc },
   })
 
-  return { isLoading: loading, councils: data?.electedCouncils.map(asCouncil) }
+  return { isLoading: loading, councils: data?.electedCouncils.map(asPastCouncil) }
 }

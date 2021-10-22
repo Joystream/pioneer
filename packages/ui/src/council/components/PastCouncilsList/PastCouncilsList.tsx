@@ -6,12 +6,12 @@ import { List, TableListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { TokenValue } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { Council } from '@/council/types'
+import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
 interface Props {
   isLoading: boolean
-  councils?: Council[]
+  councils?: PastCouncil[]
 }
 
 export const PastCouncilsList = ({ councils, isLoading }: Props) => {
@@ -32,7 +32,7 @@ export const PastCouncilsList = ({ councils, isLoading }: Props) => {
             block={{
               network: 'OLYMPIA',
               timestamp: new Date().toString(),
-              number: council.electedAtBlock,
+              number: council.endedAtBlock,
             }}
             lessInfo
           />

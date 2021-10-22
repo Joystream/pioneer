@@ -10,9 +10,21 @@ fragment CouncilMemberFields on CouncilMember {
   stake
 }
 
-fragment ElectedCouncilsFields on ElectedCouncil {
+fragment ElectedCouncilFields on ElectedCouncil {
   id
   electedAtBlock
+  councilMembers {
+    ...CouncilMemberFields
+  }
+}
+
+fragment PastCouncilFields on ElectedCouncil {
+  id
+  endedAtBlock
+}
+
+fragment PastCouncilDetailedFields on ElectedCouncil {
+  ...PastCouncilFields
   councilMembers {
     ...CouncilMemberFields
   }
@@ -86,9 +98,27 @@ fragment CastVoteFields on CastVote {
   }
 }
 
-query GetElectedCouncils($where: ElectedCouncilWhereInput!, $order: [ElectedCouncilOrderByInput!]) {
-  electedCouncils(where: $where, orderBy: $order) {
-    ...ElectedCouncilsFields
+query GetElectedCouncil {
+  electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
+    ...ElectedCouncilFields
+  }
+}
+
+query GetPastCouncils($offset: Int, $limit: Int, $orderBy: [ElectedCouncilOrderByInput!]) {
+  electedCouncils(where: { isResigned_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
+    ...PastCouncilFields
+  }
+}
+
+query GetPastCouncilsCount {
+  electedCouncilsConnection(where: { isResigned_eq: true }) {
+    totalCount
+  }
+}
+
+query GetPastCouncil($id: ID!) {
+  electedCouncilByUniqueInput(where: { id: $id }) {
+    ...PastCouncilDetailedFields
   }
 }
 

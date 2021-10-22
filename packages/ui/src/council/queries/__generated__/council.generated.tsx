@@ -31,10 +31,48 @@ export type CouncilMemberFieldsFragment = {
   }
 }
 
-export type ElectedCouncilsFieldsFragment = {
+export type ElectedCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   electedAtBlock: number
+  councilMembers: Array<{
+    __typename: 'CouncilMember'
+    id: string
+    unpaidReward: any
+    stake: any
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      councilMembers: Array<{ __typename: 'CouncilMember' }>
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  }>
+}
+
+export type PastCouncilFieldsFragment = {
+  __typename: 'ElectedCouncil'
+  id: string
+  endedAtBlock?: number | null | undefined
+}
+
+export type PastCouncilDetailedFieldsFragment = {
+  __typename: 'ElectedCouncil'
+  id: string
+  endedAtBlock?: number | null | undefined
   councilMembers: Array<{
     __typename: 'CouncilMember'
     id: string
@@ -250,12 +288,9 @@ export type CastVoteFieldsFragment = {
   electionRound: { __typename: 'ElectionRound'; cycleId: number }
 }
 
-export type GetElectedCouncilsQueryVariables = Types.Exact<{
-  where: Types.ElectedCouncilWhereInput
-  order?: Types.Maybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
-}>
+export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never }>
 
-export type GetElectedCouncilsQuery = {
+export type GetElectedCouncilQuery = {
   __typename: 'Query'
   electedCouncils: Array<{
     __typename: 'ElectedCouncil'
@@ -288,6 +323,70 @@ export type GetElectedCouncilsQuery = {
       }
     }>
   }>
+}
+
+export type GetPastCouncilsQueryVariables = Types.Exact<{
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
+}>
+
+export type GetPastCouncilsQuery = {
+  __typename: 'Query'
+  electedCouncils: Array<{ __typename: 'ElectedCouncil'; id: string; endedAtBlock?: number | null | undefined }>
+}
+
+export type GetPastCouncilsCountQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetPastCouncilsCountQuery = {
+  __typename: 'Query'
+  electedCouncilsConnection: { __typename: 'ElectedCouncilConnection'; totalCount: number }
+}
+
+export type GetPastCouncilQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetPastCouncilQuery = {
+  __typename: 'Query'
+  electedCouncilByUniqueInput?:
+    | {
+        __typename: 'ElectedCouncil'
+        id: string
+        endedAtBlock?: number | null | undefined
+        councilMembers: Array<{
+          __typename: 'CouncilMember'
+          id: string
+          unpaidReward: any
+          stake: any
+          member: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            councilMembers: Array<{ __typename: 'CouncilMember' }>
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+        }>
+      }
+    | null
+    | undefined
 }
 
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -540,14 +639,30 @@ export const CouncilMemberFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
-export const ElectedCouncilsFieldsFragmentDoc = gql`
-  fragment ElectedCouncilsFields on ElectedCouncil {
+export const ElectedCouncilFieldsFragmentDoc = gql`
+  fragment ElectedCouncilFields on ElectedCouncil {
     id
     electedAtBlock
     councilMembers {
       ...CouncilMemberFields
     }
   }
+  ${CouncilMemberFieldsFragmentDoc}
+`
+export const PastCouncilFieldsFragmentDoc = gql`
+  fragment PastCouncilFields on ElectedCouncil {
+    id
+    endedAtBlock
+  }
+`
+export const PastCouncilDetailedFieldsFragmentDoc = gql`
+  fragment PastCouncilDetailedFields on ElectedCouncil {
+    ...PastCouncilFields
+    councilMembers {
+      ...CouncilMemberFields
+    }
+  }
+  ${PastCouncilFieldsFragmentDoc}
   ${CouncilMemberFieldsFragmentDoc}
 `
 export const ElectionCandidateFieldsFragmentDoc = gql`
@@ -630,53 +745,177 @@ export const CastVoteFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
-export const GetElectedCouncilsDocument = gql`
-  query GetElectedCouncils($where: ElectedCouncilWhereInput!, $order: [ElectedCouncilOrderByInput!]) {
-    electedCouncils(where: $where, orderBy: $order) {
-      ...ElectedCouncilsFields
+export const GetElectedCouncilDocument = gql`
+  query GetElectedCouncil {
+    electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
+      ...ElectedCouncilFields
     }
   }
-  ${ElectedCouncilsFieldsFragmentDoc}
+  ${ElectedCouncilFieldsFragmentDoc}
 `
 
 /**
- * __useGetElectedCouncilsQuery__
+ * __useGetElectedCouncilQuery__
  *
- * To run a query within a React component, call `useGetElectedCouncilsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetElectedCouncilsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetElectedCouncilQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetElectedCouncilQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetElectedCouncilsQuery({
+ * const { data, loading, error } = useGetElectedCouncilQuery({
  *   variables: {
- *      where: // value for 'where'
- *      order: // value for 'order'
  *   },
  * });
  */
-export function useGetElectedCouncilsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetElectedCouncilsQuery, GetElectedCouncilsQueryVariables>
+export function useGetElectedCouncilQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetElectedCouncilsQuery, GetElectedCouncilsQueryVariables>(GetElectedCouncilsDocument, options)
+  return Apollo.useQuery<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>(GetElectedCouncilDocument, options)
 }
-export function useGetElectedCouncilsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetElectedCouncilsQuery, GetElectedCouncilsQueryVariables>
+export function useGetElectedCouncilLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetElectedCouncilsQuery, GetElectedCouncilsQueryVariables>(
-    GetElectedCouncilsDocument,
+  return Apollo.useLazyQuery<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>(
+    GetElectedCouncilDocument,
     options
   )
 }
-export type GetElectedCouncilsQueryHookResult = ReturnType<typeof useGetElectedCouncilsQuery>
-export type GetElectedCouncilsLazyQueryHookResult = ReturnType<typeof useGetElectedCouncilsLazyQuery>
-export type GetElectedCouncilsQueryResult = Apollo.QueryResult<
-  GetElectedCouncilsQuery,
-  GetElectedCouncilsQueryVariables
+export type GetElectedCouncilQueryHookResult = ReturnType<typeof useGetElectedCouncilQuery>
+export type GetElectedCouncilLazyQueryHookResult = ReturnType<typeof useGetElectedCouncilLazyQuery>
+export type GetElectedCouncilQueryResult = Apollo.QueryResult<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>
+export const GetPastCouncilsDocument = gql`
+  query GetPastCouncils($offset: Int, $limit: Int, $orderBy: [ElectedCouncilOrderByInput!]) {
+    electedCouncils(where: { isResigned_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
+      ...PastCouncilFields
+    }
+  }
+  ${PastCouncilFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastCouncilsQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetPastCouncilsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPastCouncilsQuery, GetPastCouncilsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilsQuery, GetPastCouncilsQueryVariables>(GetPastCouncilsDocument, options)
+}
+export function useGetPastCouncilsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilsQuery, GetPastCouncilsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilsQuery, GetPastCouncilsQueryVariables>(GetPastCouncilsDocument, options)
+}
+export type GetPastCouncilsQueryHookResult = ReturnType<typeof useGetPastCouncilsQuery>
+export type GetPastCouncilsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilsLazyQuery>
+export type GetPastCouncilsQueryResult = Apollo.QueryResult<GetPastCouncilsQuery, GetPastCouncilsQueryVariables>
+export const GetPastCouncilsCountDocument = gql`
+  query GetPastCouncilsCount {
+    electedCouncilsConnection(where: { isResigned_eq: true }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetPastCouncilsCountQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilsCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPastCouncilsCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPastCouncilsCountQuery, GetPastCouncilsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilsCountQuery, GetPastCouncilsCountQueryVariables>(
+    GetPastCouncilsCountDocument,
+    options
+  )
+}
+export function useGetPastCouncilsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilsCountQuery, GetPastCouncilsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilsCountQuery, GetPastCouncilsCountQueryVariables>(
+    GetPastCouncilsCountDocument,
+    options
+  )
+}
+export type GetPastCouncilsCountQueryHookResult = ReturnType<typeof useGetPastCouncilsCountQuery>
+export type GetPastCouncilsCountLazyQueryHookResult = ReturnType<typeof useGetPastCouncilsCountLazyQuery>
+export type GetPastCouncilsCountQueryResult = Apollo.QueryResult<
+  GetPastCouncilsCountQuery,
+  GetPastCouncilsCountQueryVariables
 >
+export const GetPastCouncilDocument = gql`
+  query GetPastCouncil($id: ID!) {
+    electedCouncilByUniqueInput(where: { id: $id }) {
+      ...PastCouncilDetailedFields
+    }
+  }
+  ${PastCouncilDetailedFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastCouncilQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPastCouncilQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilQuery, GetPastCouncilQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilQuery, GetPastCouncilQueryVariables>(GetPastCouncilDocument, options)
+}
+export function useGetPastCouncilLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilQuery, GetPastCouncilQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilQuery, GetPastCouncilQueryVariables>(GetPastCouncilDocument, options)
+}
+export type GetPastCouncilQueryHookResult = ReturnType<typeof useGetPastCouncilQuery>
+export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCouncilLazyQuery>
+export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
 export const GetCurrentElectionDocument = gql`
   query GetCurrentElection {
     electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
