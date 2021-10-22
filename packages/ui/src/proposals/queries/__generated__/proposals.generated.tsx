@@ -958,6 +958,7 @@ export type GetProposalPostParentQuery = {
 
 export type GetProposalVotesQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ProposalVotedEventWhereInput>
+  orderBy?: Types.Maybe<Array<Types.ProposalVotedEventOrderByInput> | Types.ProposalVotedEventOrderByInput>
 }>
 
 export type GetProposalVotesQuery = {
@@ -1382,8 +1383,8 @@ export type GetProposalPostParentQueryResult = Apollo.QueryResult<
   GetProposalPostParentQueryVariables
 >
 export const GetProposalVotesDocument = gql`
-  query GetProposalVotes($where: ProposalVotedEventWhereInput) {
-    proposalVotedEvents(where: $where) {
+  query GetProposalVotes($where: ProposalVotedEventWhereInput, $orderBy: [ProposalVotedEventOrderByInput!]) {
+    proposalVotedEvents(where: $where, orderBy: $orderBy) {
       ...VoteFields
     }
   }
@@ -1403,6 +1404,7 @@ export const GetProposalVotesDocument = gql`
  * const { data, loading, error } = useGetProposalVotesQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */

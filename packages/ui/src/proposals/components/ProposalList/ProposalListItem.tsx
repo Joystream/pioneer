@@ -16,6 +16,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
 import { isProposalActive } from '@/proposals/model/proposalStatus'
 import { Proposal, ProposalVote } from '@/proposals/types'
@@ -34,28 +35,6 @@ export interface ProposalListItemProps {
   isCouncilMember?: boolean
 }
 
-const voteStatusMap: Record<ProposalVote['voteKind'], ReactNode> = {
-  ABSTAIN: <span>Abstained</span>,
-  APPROVE: (
-    <span>
-      <CheckboxIcon />
-      Approved
-    </span>
-  ),
-  REJECT: (
-    <span>
-      <CrossIcon />
-      Rejected
-    </span>
-  ),
-  SLASH: (
-    <span>
-      <CrossIcon />
-      Slashed
-    </span>
-  ),
-}
-
 export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
   const { api } = useApi()
   const voteStatus = useObservable(
@@ -65,6 +44,8 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
     [memberId]
   )
   const { votes, isLoading } = useProposalVotesByMember(proposal.id, memberId)
+  const constants = useProposalConstants(proposal.type)
+  const constitutionality = constants?.constitutionality
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   const hasVoted = voteStatus?.isApprove || voteStatus?.isAbstain || voteStatus?.isReject || voteStatus?.isSlash
   const canVote = isCouncilMember && proposal.status === 'deciding' && voteStatus && !hasVoted
@@ -91,10 +72,41 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
-      {canVote && <VoteForProposalButton id={proposal.id} />}
-      {isLoading ? <Loading /> : votes?.map((vote) => <span>{voteStatusMap[vote.voteKind]}</span>)}
+      <StageField>
+        {canVote && <VoteForProposalButton id={proposal.id} />}
+        {isLoading ? <Loading /> : votes?.map(getVoteDisplay(constitutionality))}
+      </StageField>
     </ProposalItem>
   )
+}
+
+const getVoteDisplay = (constitutionality?: number) => (vote: ProposalVote) => (
+  <span>
+    {(constitutionality ?? 0) > 1 && `${vote.votingRound}/${constitutionality} `}
+    {voteStatusMap[vote.voteKind]}
+  </span>
+)
+
+const voteStatusMap: Record<ProposalVote['voteKind'], ReactNode> = {
+  ABSTAIN: <span>Abstained</span>,
+  APPROVE: (
+    <span>
+      <CheckboxIcon />
+      Approved
+    </span>
+  ),
+  REJECT: (
+    <span>
+      <CrossIcon />
+      Rejected
+    </span>
+  ),
+  SLASH: (
+    <span>
+      <CrossIcon />
+      Slashed
+    </span>
+  ),
 }
 
 const ProposalItem = styled(TableListItem)`

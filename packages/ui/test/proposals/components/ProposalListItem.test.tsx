@@ -1,3 +1,5 @@
+import { createType } from '@joystream/types'
+import { ProposalParameters } from '@joystream/types/proposals'
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -11,7 +13,7 @@ import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
-import { stubApi, stubQuery } from '../../_mocks/transactions'
+import { stubApi, stubConst, stubQuery } from '../../_mocks/transactions'
 
 const proposalData: Proposal = {
   id: '0',
@@ -23,9 +25,21 @@ const proposalData: Proposal = {
   councilApprovals: 0,
 }
 
+const proposalParameters = {
+  votingPeriod: createType('u32', 10),
+  gracePeriod: createType('u32', 10),
+  approvalQuorumPercentage: createType('u32', 10),
+  approvalThresholdPercentage: createType('u32', 10),
+  slashingQuorumPercentage: createType('u32', 10),
+  slashingThresholdPercentage: createType('u32', 10),
+  requiredStake: createType('Option<u128>', 1000),
+  constitutionality: createType('u32', 1),
+}
+
 describe('UI: ProposalListItem', () => {
   const server = setupMockServer()
   const api = stubApi()
+  stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', proposalParameters)
 
   describe('Proposal in deciding stage', () => {
     const voteStatus = {
@@ -91,6 +105,7 @@ describe('UI: ProposalListItem', () => {
     })
 
     it('One approval vote', async () => {
+      stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', proposalParameters)
       seedProposal(
         {
           ...PROPOSAL_DATA,
@@ -105,6 +120,7 @@ describe('UI: ProposalListItem', () => {
     })
 
     it('One reject vote', async () => {
+      stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', proposalParameters)
       seedProposal(
         {
           ...PROPOSAL_DATA,
@@ -115,7 +131,32 @@ describe('UI: ProposalListItem', () => {
 
       renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
 
-      expect(await screen.findByText('Rejected')).toBeDefined()
+      const vote = await screen.findByText('Rejected')
+      expect(vote).toBeDefined()
+      expect(vote.parentNode?.parentNode?.childNodes[0].textContent).toEqual('Rejected')
+    })
+
+    it('Two votes', async () => {
+      stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', {
+        ...proposalParameters,
+        constitutionality: createType('u32', 2),
+      })
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [
+            { ...voteData, voteKind: 'REJECT', votingRound: 2 },
+            { ...voteData, id: '1', votingRound: 1 },
+          ],
+        },
+        server.server
+      )
+
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+
+      const firstVote = await screen.findByText('Approved')
+      expect(firstVote.parentNode?.parentNode?.childNodes[0].textContent).toEqual('1/2 Approved')
+      expect(firstVote.parentNode?.parentNode?.childNodes[1].textContent).toEqual('2/2 Rejected')
     })
   })
 

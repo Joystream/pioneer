@@ -183,8 +183,8 @@ query GetProposalPostParent($where: ProposalDiscussionPostWhereUniqueInput!) {
   }
 }
 
-query GetProposalVotes($where: ProposalVotedEventWhereInput) {
-  proposalVotedEvents(where: $where) {
+query GetProposalVotes($where: ProposalVotedEventWhereInput, $orderBy: [ProposalVotedEventOrderByInput!]) {
+  proposalVotedEvents(where: $where, orderBy: $orderBy) {
     ...VoteFields
   }
 }
