@@ -1,6 +1,7 @@
 export const CouncilRoutes = {
   council: '/council',
   pastCouncils: '/council/past-councils',
+  pastCouncil: '/council/past-councils/:id',
   currentElection: '/council/election',
   myVotes: '/council/election/my-votes',
   pastElections: '/council/past-elections',
