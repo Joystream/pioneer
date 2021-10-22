@@ -10,6 +10,8 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { TextSmall } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
+import { useApi } from '@/common/hooks/useApi'
+import { useObservable } from '@/common/hooks/useObservable'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -22,7 +24,6 @@ import {
   ToggleableItemTitle,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
 
-import { toCamelCase } from '../ProposalFilters/helpers'
 import { VoteForProposalButton } from '../VoteForProposalButton'
 
 export interface ProposalListItemProps {
@@ -33,8 +34,17 @@ export interface ProposalListItemProps {
 }
 
 export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
+  const { api } = useApi()
+  const voteStatus = useObservable(
+    memberId
+      ? api?.query.proposalsEngine.voteExistsByProposalByVoter(parseInt(proposal.id), parseInt(memberId))
+      : undefined,
+    [memberId]
+  )
   const { votes, isLoading } = useProposalVotesByMember(proposal.id, memberId)
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
+  const hasVoted = voteStatus?.isApprove || voteStatus?.isAbstain || voteStatus?.isReject || voteStatus?.isSlash
+  const canVote = isCouncilMember && proposal.status === 'deciding' && voteStatus && !hasVoted
   return (
     <ProposalItem
       as={GhostRouterLink}
@@ -58,7 +68,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
-      {isCouncilMember && proposal.status === 'deciding' && <VoteForProposalButton id={proposal.id} />}
+      {canVote && <VoteForProposalButton id={proposal.id} />}
       {isLoading ? <Loading /> : votes?.map((vote) => <span>Approved</span>)}
     </ProposalItem>
   )

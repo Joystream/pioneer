@@ -2,6 +2,7 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { ApiContext } from '@/common/providers/api/context'
 import { seedMembers, seedProposal } from '@/mocks/data'
 import { ProposalListItem, ProposalListItemProps } from '@/proposals/components/ProposalList/ProposalListItem'
 import { Proposal } from '@/proposals/types'
@@ -10,6 +11,7 @@ import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
+import { stubApi, stubQuery } from '../../_mocks/transactions'
 
 const proposalData: Proposal = {
   id: '0',
@@ -23,19 +25,37 @@ const proposalData: Proposal = {
 
 describe('UI: ProposalListItem', () => {
   const server = setupMockServer()
+  const api = stubApi()
 
-  it('Proposal in voting stage', async () => {
-    renderComponent({ proposal: proposalData, isCouncilMember: true })
-    expect(await screen.findByText('Vote')).toBeDefined()
+  describe('Proposal in deciding stage', () => {
+    const voteStatus = {
+      isApprove: false,
+      isReject: false,
+      isSlash: false,
+      isAbstain: false,
+    }
+
+    it('Member has not voted yet', async () => {
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
+      expect(await screen.findByText('Vote')).toBeDefined()
+    })
+
+    it('Member has voted already', async () => {
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', { ...voteStatus, isApprove: true })
+      renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
+      expect(screen.queryByText('Vote')).toBeNull()
+    })
+
+    it('Member is not a council member', async () => {
+      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter', voteStatus)
+      renderComponent({ proposal: proposalData, isCouncilMember: false, memberId: '0' })
+      expect(screen.queryByText('Vote')).toBeNull()
+    })
   })
 
   it('Proposal not in voting stage', () => {
     renderComponent({ proposal: { ...proposalData, status: 'dormant' }, isCouncilMember: true })
-    expect(screen.queryByText('Vote')).toBeNull()
-  })
-
-  it('Proposal in voting stage, but member is not a council member', async () => {
-    renderComponent({ proposal: proposalData, isCouncilMember: false })
     expect(screen.queryByText('Vote')).toBeNull()
   })
 
@@ -87,11 +107,13 @@ describe('UI: ProposalListItem', () => {
 
   function renderComponent(props: ProposalListItemProps) {
     render(
-      <MockApolloProvider>
-        <MemoryRouter>
-          <ProposalListItem {...props} />
-        </MemoryRouter>
-      </MockApolloProvider>
+      <ApiContext.Provider value={api}>
+        <MockApolloProvider>
+          <MemoryRouter>
+            <ProposalListItem {...props} />
+          </MemoryRouter>
+        </MockApolloProvider>
+      </ApiContext.Provider>
     )
   }
 })
