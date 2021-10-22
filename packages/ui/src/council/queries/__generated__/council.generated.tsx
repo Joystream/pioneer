@@ -657,12 +657,12 @@ export const PastCouncilFieldsFragmentDoc = gql`
 `
 export const PastCouncilDetailedFieldsFragmentDoc = gql`
   fragment PastCouncilDetailedFields on ElectedCouncil {
-    id
-    endedAtBlock
+    ...PastCouncilFields
     councilMembers {
       ...CouncilMemberFields
     }
   }
+  ${PastCouncilFieldsFragmentDoc}
   ${CouncilMemberFieldsFragmentDoc}
 `
 export const ElectionCandidateFieldsFragmentDoc = gql`

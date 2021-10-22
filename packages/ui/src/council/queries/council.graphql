@@ -24,8 +24,7 @@ fragment PastCouncilFields on ElectedCouncil {
 }
 
 fragment PastCouncilDetailedFields on ElectedCouncil {
-  id
-  endedAtBlock
+  ...PastCouncilFields
   councilMembers {
     ...CouncilMemberFields
   }
