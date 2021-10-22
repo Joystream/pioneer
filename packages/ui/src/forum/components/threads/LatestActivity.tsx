@@ -18,7 +18,7 @@ export const LatestActivity = memo(({ threadId }: LatestActivitydProps) => {
 
   return (
     <LatestActivityRowGapBlock>
-      <MemberInfo member={post.author} size="s" memberSize="s" showGroup={false} />
+      <MemberInfo member={post.author} size="s" memberSize="s" hideGroup />
       <TextInlineExtraSmall lighter>{relativeTime(post.createdAt)}</TextInlineExtraSmall>
     </LatestActivityRowGapBlock>
   )

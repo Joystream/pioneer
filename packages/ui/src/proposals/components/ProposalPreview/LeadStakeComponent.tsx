@@ -26,7 +26,7 @@ export const LeadStakeComponent: ProposalPropertiesContent<
         </TextInlineBig>
       </StatisticItem>
       <StatisticItem title="Worker ID">
-        {member ? <MemberInfo member={member} showGroup /> : <TextBig>Unknown</TextBig>}
+        {member ? <MemberInfo member={member} /> : <TextBig>Unknown</TextBig>}
       </StatisticItem>
       <TokenValueStat title={amountText} value={details.amount} />
     </Statistics>

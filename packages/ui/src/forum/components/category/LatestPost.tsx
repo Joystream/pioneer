@@ -25,7 +25,7 @@ export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
       </LatestPostLink>
       <TextInlineExtraSmall as="div" lighter>
         <span>by</span>
-        <MemberInfo member={post.author} size="s" memberSize="s" showGroup={false} />
+        <MemberInfo member={post.author} size="s" memberSize="s" hideGroup />
       </TextInlineExtraSmall>
       <TextInlineExtraSmall lighter>{relativeTime(post.createdAt)}</TextInlineExtraSmall>
     </PostInfoStyles>

@@ -24,7 +24,7 @@ export const VoteForCouncilSuccessModal = () => {
           You have just successfully voted for the Candidate
         </TextMedium>
 
-        <SelectedMember size="l" member={candidate?.member} showGroup={false} />
+        <SelectedMember size="l" member={candidate?.member} hideGroup />
       </SuccessModalBody>
 
       <ModalFooter>
