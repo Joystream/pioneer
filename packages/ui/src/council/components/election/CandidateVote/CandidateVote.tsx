@@ -148,13 +148,14 @@ const CandidateVoteWrapper = styled(ListItem)`
   align-items: center;
   grid-column-gap: 8px;
   height: 116px;
-  padding: 24px 48px 24px 8px;
+  padding: 16px 48px 16px 8px;
   cursor: pointer;
 
   &:hover,
   &:focus,
   &:focus-within {
     border-color: ${Colors.Blue[100]};
+    z-index: 1;
 
     ${CandidateCardArrow} {
       color: ${Colors.Blue[500]};

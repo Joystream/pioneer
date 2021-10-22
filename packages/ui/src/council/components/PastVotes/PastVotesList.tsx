@@ -30,7 +30,7 @@ export const PastVotesList = () => {
         <ListHeader>Staking Account</ListHeader>
         <ListHeader>Stage</ListHeader>
       </ListHeaders>
-      <List as="div">
+      <List>
         {votes.map((vote, index) => (
           <PastVote vote={vote} key={index} $colLayout={PastVoteColumns} />
         ))}
