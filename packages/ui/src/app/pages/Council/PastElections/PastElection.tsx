@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -23,11 +23,11 @@ export const PastElection = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, election } = usePastElection(id)
 
-  if (!isLoading && !election) {
-    history.replace('/404')
-
-    return null
-  }
+  useEffect(() => {
+    if (!isLoading && !election) {
+      history.replace('/404')
+    }
+  }, [isLoading, election])
 
   const displayHeader = () => {
     if (isLoading || !election) {
