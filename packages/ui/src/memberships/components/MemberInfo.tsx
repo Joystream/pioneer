@@ -37,14 +37,14 @@ export interface MemberInfoContainerProps {
   skipModal?: boolean
 }
 
-export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps & { showGroup?: boolean }
+export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps & { hideGroup?: boolean }
 
 export const MemberInfo = React.memo(
   ({
     member,
     isOnDark,
     showIdOrText,
-    showGroup = true,
+    hideGroup,
     onlyTop,
     memberSize,
     size,
@@ -55,7 +55,7 @@ export const MemberInfo = React.memo(
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     const showMemberModal = useShowMemberModal(member.id)
-    const showRoles = !onlyTop && showGroup && !showIdOrText
+    const showRoles = !onlyTop && !hideGroup && !showIdOrText
     const showId = !onlyTop && !!showIdOrText
 
     return (
@@ -63,7 +63,7 @@ export const MemberInfo = React.memo(
         isOnDark={isOnDark}
         memberSize={memberSize}
         className={className}
-        showGroup={showGroup}
+        hideGroup={hideGroup}
         onClick={skipModal ? undefined : showMemberModal}
         skipModal={skipModal}
         onlyTop={onlyTop}

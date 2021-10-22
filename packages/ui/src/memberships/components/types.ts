@@ -4,7 +4,7 @@ export interface MemberInfoWrapProps {
   isOnDark?: boolean
   showIdOrText?: true | string
   memberSize?: MemberSize
-  showGroup?: boolean
+  hideGroup?: boolean
   skipModal?: boolean
   onlyTop?: boolean
 }

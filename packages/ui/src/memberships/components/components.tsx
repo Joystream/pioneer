@@ -91,13 +91,13 @@ export const MemberPhotoContainer = styled.div`
 
 export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   display: grid;
-  ${({ showGroup, onlyTop }) =>
+  ${({ hideGroup, onlyTop }) =>
     onlyTop
       ? css`
           grid-template-areas: 'memberphoto memberhead';
           grid-template-rows: unset !important;
         `
-      : showGroup === false
+      : !hideGroup
       ? css`
           grid-template-areas: 'memberphoto memberhead';
           grid-template-rows: unset !important;
@@ -314,5 +314,5 @@ const MemberSmallElements = css`
   grid-template-columns: 26px 1fr;
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
-  grid-row-gap: 0px;
+  grid-row-gap: 0;
 `

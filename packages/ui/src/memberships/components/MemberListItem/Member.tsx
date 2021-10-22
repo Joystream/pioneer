@@ -27,7 +27,7 @@ export const MemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberColumn>
-        <MemberInfo member={member} showGroup={false} />
+        <MemberInfo member={member} hideGroup />
       </MemberColumn>
 
       <MemberColumn>

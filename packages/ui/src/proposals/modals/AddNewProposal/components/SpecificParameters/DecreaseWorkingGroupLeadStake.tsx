@@ -10,7 +10,7 @@ import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
-import { SelectMember } from '@/memberships/components/SelectMember'
+import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
@@ -74,9 +74,7 @@ export const DecreaseWorkingGroupLeadStake = ({
               disableNoLead
             />
           </InputComponent>
-          <InputComponent label="Working Group Lead" inputSize="l" disabled>
-            <SelectMember onChange={() => true} disabled selected={lead} />
-          </InputComponent>
+          <SelectedMember label="Working Group Lead" member={lead} disabled />
           {group && (
             <Info>
               <TextMedium>
