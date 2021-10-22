@@ -21,11 +21,10 @@ import {
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
-import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+import { stubApi } from '../../_mocks/transactions'
 
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {

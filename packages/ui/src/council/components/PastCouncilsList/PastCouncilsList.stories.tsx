@@ -2,8 +2,8 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { PastCouncilsList } from '@/council/components/PastCouncilsList'
-import { Council } from '@/council/types'
+import { PastCouncilsList } from '@/council/components/PastCouncilsList/PastCouncilsList'
+import { PastCouncil } from '@/council/types/PastCouncil'
 
 export default {
   title: 'Council/PastCouncils',
@@ -12,7 +12,7 @@ export default {
 
 interface Props {
   count: number
-  councils: Council[]
+  councils: PastCouncil[]
   isLoading: boolean
 }
 
@@ -28,9 +28,9 @@ export const Default = Template.bind({})
 
 Default.args = {
   councils: [
-    { id: '0', electedAtBlock: 112145, councilors: [] },
-    { id: '1', electedAtBlock: 222346, councilors: [] },
-    { id: '1', electedAtBlock: 452335, councilors: [] },
+    { id: '0', endedAtBlock: 112145 },
+    { id: '1', endedAtBlock: 222346 },
+    { id: '1', endedAtBlock: 45233 },
   ],
   isLoading: false,
 }

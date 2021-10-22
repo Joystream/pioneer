@@ -2,7 +2,7 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { PastCouncils } from '@/app/pages/Council/PastCouncils'
+import { PastCouncils } from '@/app/pages/Council/PastCouncils/PastCouncils'
 import { seedElectedCouncil, seedMember } from '@/mocks/data'
 
 import { mockCouncils, mockMembers } from '../../_mocks/council'
