@@ -125,3 +125,9 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
     ...CastVoteFields
   }
 }
+
+query GetCouncilVotesCount($where: CastVoteWhereInput) {
+  castVotesConnection(where: $where) {
+    totalCount
+  }
+}

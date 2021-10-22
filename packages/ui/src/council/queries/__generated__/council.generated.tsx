@@ -419,6 +419,15 @@ export type GetCouncilVotesQuery = {
   }>
 }
 
+export type GetCouncilVotesCountQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.CastVoteWhereInput>
+}>
+
+export type GetCouncilVotesCountQuery = {
+  __typename: 'Query'
+  castVotesConnection: { __typename: 'CastVoteConnection'; totalCount: number }
+}
+
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -863,3 +872,51 @@ export function useGetCouncilVotesLazyQuery(
 export type GetCouncilVotesQueryHookResult = ReturnType<typeof useGetCouncilVotesQuery>
 export type GetCouncilVotesLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesLazyQuery>
 export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
+export const GetCouncilVotesCountDocument = gql`
+  query GetCouncilVotesCount($where: CastVoteWhereInput) {
+    castVotesConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetCouncilVotesCountQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilVotesCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilVotesCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilVotesCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetCouncilVotesCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>(
+    GetCouncilVotesCountDocument,
+    options
+  )
+}
+export function useGetCouncilVotesCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>(
+    GetCouncilVotesCountDocument,
+    options
+  )
+}
+export type GetCouncilVotesCountQueryHookResult = ReturnType<typeof useGetCouncilVotesCountQuery>
+export type GetCouncilVotesCountLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesCountLazyQuery>
+export type GetCouncilVotesCountQueryResult = Apollo.QueryResult<
+  GetCouncilVotesCountQuery,
+  GetCouncilVotesCountQueryVariables
+>
