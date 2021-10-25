@@ -10,11 +10,7 @@ import {
   PastCouncilTableListItem,
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
-import {
-  useGetCouncilBlockRangeQuery,
-  useGetCouncilExecutedProposalsCountQuery,
-  useGetCouncilRejectedProposalsCountQuery,
-} from '@/council/queries'
+import { useGetCouncilBlockRangeQuery, useGetCouncilProposalsStatsQuery } from '@/council/queries'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
@@ -33,14 +29,7 @@ const usePastCouncilProposals = (id: string) => {
 
   const council = rangeData?.electedCouncilByUniqueInput
 
-  const { loading: loadingData, data } = useGetCouncilExecutedProposalsCountQuery({
-    variables: {
-      startBlock: council?.electedAtBlock ?? 0,
-      endBlock: council?.endedAtBlock ?? 0,
-    },
-  })
-
-  const { loading: loadingBaz, data: rejectedData } = useGetCouncilRejectedProposalsCountQuery({
+  const { loading: loadingData, data } = useGetCouncilProposalsStatsQuery({
     variables: {
       startBlock: council?.electedAtBlock ?? 0,
       endBlock: council?.endedAtBlock ?? 0,
@@ -48,14 +37,15 @@ const usePastCouncilProposals = (id: string) => {
   })
 
   return {
-    isLoading: loadingRange || loadingData || loadingBaz,
-    approved: data?.proposalExecutedEventsConnection?.totalCount ?? 0,
-    rejected: (rejectedData?.rejected?.totalCount ?? 0) + (rejectedData?.slashed?.totalCount ?? 0),
+    isLoading: loadingRange || loadingData,
+    approved: data?.approved?.totalCount ?? 0,
+    rejected: data?.rejected?.totalCount ?? 0,
+    slashed: data?.slashed?.totalCount ?? 0,
   }
 }
 
 export const PastCouncilListItem = ({ council }: Props) => {
-  const { approved } = usePastCouncilProposals(council.id)
+  const { approved, rejected, slashed } = usePastCouncilProposals(council.id)
 
   return (
     <PastCouncilTableListItem
@@ -77,7 +67,7 @@ export const PastCouncilListItem = ({ council }: Props) => {
       <TokenValue value={new BN(0)} />
       <TokenValue value={new BN(0)} />
       <CountInfo count={approved} />
-      <CountInfo count={0} />
+      <CountInfo count={rejected + slashed} />
     </PastCouncilTableListItem>
   )
 }

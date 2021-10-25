@@ -184,13 +184,11 @@ query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
   }
 }
 
-query GetCouncilExecutedProposalsCount($startBlock: Int!, $endBlock: Int!) {
-  proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
+  approved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
     totalCount
   }
-}
-
-query GetCouncilRejectedProposalsCount($startBlock: Int!, $endBlock: Int!) {
+  ## Rejected + Slashed could be fetched using `isTypeOf_in: []` but it is not supported by Hydra now
   rejected: proposalDecisionMadeEventsConnection(
     where: {
       inBlock_gt: $startBlock
