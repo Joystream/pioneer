@@ -10,38 +10,12 @@ import {
   PastCouncilTableListItem,
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
-import { useGetCouncilBlockRangeQuery, useGetCouncilProposalsStatsQuery } from '@/council/queries'
+import { usePastCouncilProposals } from '@/council/hooks/usePastCouncilProposals'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
 interface Props {
   council: PastCouncil
-}
-
-const usePastCouncilProposals = (id: string) => {
-  const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
-    variables: {
-      where: {
-        id,
-      },
-    },
-  })
-
-  const council = rangeData?.electedCouncilByUniqueInput
-
-  const { loading: loadingData, data } = useGetCouncilProposalsStatsQuery({
-    variables: {
-      startBlock: council?.electedAtBlock ?? 0,
-      endBlock: council?.endedAtBlock ?? 0,
-    },
-  })
-
-  return {
-    isLoading: loadingRange || loadingData,
-    approved: data?.approved?.totalCount ?? 0,
-    rejected: data?.rejected?.totalCount ?? 0,
-    slashed: data?.slashed?.totalCount ?? 0,
-  }
 }
 
 export const PastCouncilListItem = ({ council }: Props) => {
