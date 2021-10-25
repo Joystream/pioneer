@@ -13,6 +13,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
+import { isDefined } from '@/common/utils'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { WithdrawButton } from '@/council/components/election/WithdrawButton'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
@@ -110,7 +111,7 @@ export const CandidateCard = ({
                 <WithdrawButton member={member} />
               </CandidateCardControls>
             )}
-            {isVotingStage && (
+            {isVotingStage && isDefined(voted) && (
               <CandidateCardControls>
                 {voted ? <ButtonPrimary size="medium">Vote again </ButtonPrimary> : <VoteForCouncilButton id={id} />}
               </CandidateCardControls>
