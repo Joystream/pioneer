@@ -4,3 +4,4 @@ coverage
 build-storybook
 .idea
 *.log
+.DS_Store
