@@ -43,6 +43,11 @@ export const generateForumPost = (threadId: string, threadStatus: string, author
       text: edits.length ? faker.lorem.words(randomFromRange(10, 100)) : postText,
     },
     status,
+    deletedInEvent: status === 'PostStatusRemoved' ? {
+      ...randomBlock(),
+      actorId: authorId,
+      rationale: '',
+    } : null,
   }
 }
 

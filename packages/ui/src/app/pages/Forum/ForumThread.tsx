@@ -57,11 +57,11 @@ export const ForumThread = () => {
     }
   }
 
-  if (!isLoading && !thread) {
-    history.replace('/404')
-
-    return null
-  }
+  useEffect(() => {
+    if (!isLoading && !thread) {
+      history.replace('/404')
+    }
+  }, [isLoading, thread])
 
   const displayHeader = () => {
     if (isLoading || !thread) {

@@ -9,7 +9,8 @@ export interface CouncilConstants {
   election: {
     votingPeriod: number
     revealingPeriod: number
-    minStake: BN
+    minVoteStake: BN
+    minCandidacyStake: BN
   }
 }
 
@@ -24,6 +25,7 @@ export const asCouncilConstants = (
   election: {
     votingPeriod: referendum.voteStageDuration.toNumber(),
     revealingPeriod: referendum.revealStageDuration.toNumber(),
-    minStake: referendum.minimumStake,
+    minVoteStake: referendum.minimumStake,
+    minCandidacyStake: council.minCandidateStake,
   },
 })

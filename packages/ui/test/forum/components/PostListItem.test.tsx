@@ -27,6 +27,7 @@ const post: RawForumPostMock = {
     text: 'text',
   },
   status: 'PostStatusActive',
+  deletedInEvent: null,
 }
 
 describe('UI: Post list item', () => {

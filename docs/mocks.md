@@ -11,6 +11,7 @@ To test most of the extrinsics requires existing on-chain data. To create some o
 
 Available commands:
 
+- `yarn node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
 - `yarn node-mocks members:create` – generate memberships using query-node mocks data
 - `yarn node-mocks set-budget` - Set membership Working Group budget
 - `yarn node-mocks opening:create` - Create an opening

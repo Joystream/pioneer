@@ -14,7 +14,7 @@ export const accountsMap = {
   charlie: CHARLIE,
   dave: DAVE,
   eve: EVE,
-}
+} as const
 
 export type KnownAccount = keyof typeof accountsMap
 

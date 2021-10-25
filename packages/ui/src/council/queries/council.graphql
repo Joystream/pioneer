@@ -10,11 +10,24 @@ fragment CouncilMemberFields on CouncilMember {
   stake
 }
 
-fragment ElectedCouncilsFields on ElectedCouncil {
+fragment ElectedCouncilFields on ElectedCouncil {
   id
   electedAtBlock
   councilMembers {
     ...CouncilMemberFields
+  }
+}
+
+fragment PastCouncilFields on ElectedCouncil {
+  id
+  endedAtBlock
+}
+
+fragment PastCouncilDetailedFields on ElectedCouncil {
+  ...PastCouncilFields
+  councilMembers {
+    accumulatedReward
+    unpaidReward
   }
 }
 
@@ -40,6 +53,7 @@ fragment ElectionRoundFields on ElectionRound {
 }
 
 fragment PastElectionRoundFields on ElectionRound {
+  id
   cycleId
   updatedAt
   candidates {
@@ -47,6 +61,19 @@ fragment PastElectionRoundFields on ElectionRound {
   }
   castVotes {
     voteForId
+  }
+}
+
+fragment PastElectionRoundDetailedFields on ElectionRound {
+  ...PastElectionRoundFields
+  candidates {
+    ...ElectionCandidateFields
+  }
+  castVotes {
+    stake
+    stakeLocked
+    voteForId
+    castBy
   }
 }
 
@@ -72,9 +99,27 @@ fragment CastVoteFields on CastVote {
   }
 }
 
-query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
-  electedCouncils(where: $where) {
-    ...ElectedCouncilsFields
+query GetElectedCouncil {
+  electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
+    ...ElectedCouncilFields
+  }
+}
+
+query GetPastCouncils($offset: Int, $limit: Int, $orderBy: [ElectedCouncilOrderByInput!]) {
+  electedCouncils(where: { isResigned_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
+    ...PastCouncilFields
+  }
+}
+
+query GetPastCouncilsCount {
+  electedCouncilsConnection(where: { isResigned_eq: true }) {
+    totalCount
+  }
+}
+
+query GetPastCouncil($id: ID!) {
+  electedCouncilByUniqueInput(where: { id: $id }) {
+    ...PastCouncilDetailedFields
   }
 }
 
@@ -93,6 +138,12 @@ query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderB
 query GetPastElectionsCount {
   electionRoundsConnection(where: { isFinished_eq: true }) {
     totalCount
+  }
+}
+
+query GetPastElection($id: ID!) {
+  electionRoundByUniqueInput(where: { id: $id }) {
+    ...PastElectionRoundDetailedFields
   }
 }
 

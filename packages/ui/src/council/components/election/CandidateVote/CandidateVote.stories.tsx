@@ -29,6 +29,7 @@ const args: CandidateVoteProps = {
     inviteCount: 0,
     createdAt: '',
   },
+  candidateId: '1',
   revealed: true,
   sumOfAllStakes: new BN(5000000),
   totalStake: new BN(500000),

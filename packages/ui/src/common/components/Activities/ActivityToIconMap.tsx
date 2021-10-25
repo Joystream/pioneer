@@ -42,6 +42,7 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   WorkerRewardAmountUpdatedEvent: [RewardIcon, 'joystream'],
   PostAddedEvent: [CreatedIcon, 'joystream'],
   PostTextUpdatedEvent: [UpcomingIcon, 'joystream'],
+  PostDeletedEvent: [TerminatedIcon, 'negative'],
   ThreadCreatedEvent: [CreatedIcon, 'joystream'],
   CategoryCreatedEvent: [CreatedIcon, 'joystream'],
   ProposalCreatedEvent: [CreatedIcon, 'joystream'],

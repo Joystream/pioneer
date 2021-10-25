@@ -40,7 +40,7 @@ interface InputProps<Element extends HTMLElement = HTMLInputElement> extends Rea
 
 export interface InputElementProps {
   disabled?: boolean
-  inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
+  inputSize?: 'xs' | 's' | 'm' | 'l' | 'xl' | 'auto' | undefined
   icon?: React.ReactElement
   iconRight?: boolean
   copy?: boolean
@@ -297,6 +297,8 @@ export const InputContainer = styled.div<InputElementProps>`
         return '48px'
       case 'l':
         return '80px'
+      case 'xl':
+        return '104px'
     }
   }};
   border: 1px solid

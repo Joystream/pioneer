@@ -69,7 +69,7 @@ export const AnnounceCandidacyModal = () => {
 
   const constants = useCouncilConstants()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    constants?.election.minStake.toNumber() || 0,
+    constants?.election.minCandidacyStake.toNumber() || 0,
     'Council Candidate'
   )
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
@@ -183,7 +183,7 @@ export const AnnounceCandidacyModal = () => {
       data: {
         accountsWithCompatibleLocks,
         accountsWithTransferableBalance,
-        requiredStake: (constants?.election.minStake as BN).toNumber(),
+        requiredStake: (constants?.election.minCandidacyStake as BN).toNumber(),
       },
     })
 
@@ -253,7 +253,7 @@ export const AnnounceCandidacyModal = () => {
             {state.matches('staking') && (
               <StakeStep
                 candidacyMember={activeMember}
-                minStake={constants?.election.minStake as BN}
+                minStake={constants?.election.minCandidacyStake as BN}
                 stake={state.context.stakingAmount}
                 setStake={(amount) => send('SET_AMOUNT', { amount })}
                 account={state.context.stakingAccount}

@@ -1,8 +1,9 @@
-import { useGetElectedCouncilsQuery } from '@/council/queries'
-import { asCouncil } from '@/council/types'
+import { useGetElectedCouncilQuery } from '@/council/queries'
+import { asElectedCouncil } from '@/council/types'
 
 export const useElectedCouncil = () => {
-  const { loading, data } = useGetElectedCouncilsQuery({ variables: { where: { endedAtBlock_eq: null } } })
+  const { loading, data } = useGetElectedCouncilQuery()
   const rawCouncil = data?.electedCouncils[0]
-  return { isLoading: loading, council: rawCouncil && asCouncil(rawCouncil) }
+
+  return { isLoading: loading, council: rawCouncil && asElectedCouncil(rawCouncil) }
 }

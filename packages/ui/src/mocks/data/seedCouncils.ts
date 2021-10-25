@@ -10,6 +10,7 @@ export interface RawCouncilorMock {
   memberId: string
   unpaidReward: number
   stake: number
+  accumulatedReward: number
 }
 
 export interface RawCouncilMock {
@@ -55,7 +56,9 @@ export const seedCouncilMembers = (server: any) => {
   rawCouncilors.map((data) => seedCouncilMember(data, server))
 }
 
-export const seedElectedCouncil = (data: RawCouncilMock, server: any) => server.schema.create('ElectedCouncil', data)
+export const seedElectedCouncil = (data: RawCouncilMock, server: any) => {
+  return server.schema.create('ElectedCouncil', { ...data, isResigned: !!data.endedAtBlock })
+}
 
 export const seedElectedCouncils = (server: any, howMany?: number) => {
   rawCouncils.slice(0, howMany).map((data) => seedElectedCouncil(data, server))
@@ -85,8 +88,8 @@ export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCounci
   candidates.map((data) => seedCouncilCandidate(data, server))
 }
 
-export const seedCounncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)
+export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)
 
 export const seedCouncilVotes = (server: any) => {
-  rawVotes.map((data) => seedCounncilVote(data, server))
+  rawVotes.map((data) => seedCouncilVote(data, server))
 }

@@ -161,6 +161,7 @@ export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number
     idlePeriodDuration: new BN(1),
     budgetRefillPeriod: new BN(1),
     announcingPeriodDuration: new BN(1),
+    minCandidateStake: new BN(constants?.minStake ?? 10),
   })
   set(api, 'api.consts.referendum', {
     voteStageDuration: new BN(1),

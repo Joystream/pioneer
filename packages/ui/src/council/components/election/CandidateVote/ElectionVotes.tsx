@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const ElectionVotes = ({ election }: Props) => {
-  const { votesPerCandidate, sumOfStakes, isLoading } = useElectionVotes(election)
+  const { votesPerCandidate, sumOfStakes: totalStake, isLoading } = useElectionVotes(election)
 
   if (isLoading) {
     return <Loading />
@@ -26,11 +26,12 @@ export const ElectionVotes = ({ election }: Props) => {
   return (
     <CandidateVoteList
       votes={votesPerCandidate.map((candidateStats, index) => ({
+        candidateId: candidateStats.candidate.id,
         revealed: true,
         index: index + 1,
         member: candidateStats.candidate.member,
-        sumOfAllStakes: sumOfStakes ?? BN_ZERO,
-        totalStake: candidateStats.totalStake,
+        sumOfAllStakes: candidateStats.totalStake,
+        totalStake: totalStake ?? BN_ZERO,
         votes: candidateStats.votesNumber,
         ownStake: candidateStats.ownStake,
       }))}

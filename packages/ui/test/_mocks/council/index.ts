@@ -14,6 +14,7 @@ const getCouncilor = (attrs: Partial<RawCouncilorMock>): RawCouncilorMock => ({
   electedInCouncilId: '0',
   memberId: '0',
   unpaidReward: 0,
+  accumulatedReward: 0,
   stake: 0,
   ...attrs,
 })

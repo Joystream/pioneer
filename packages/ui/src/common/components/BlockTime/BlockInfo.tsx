@@ -10,10 +10,11 @@ import { Block } from '@/common/types'
 export interface BlockInfoProp {
   block: Block
   lessInfo?: boolean
+  inline?: boolean
 }
 
-export const BlockInfo = ({ block, lessInfo }: BlockInfoProp) => (
-  <BlockInfoContainer lessInfo={lessInfo}>
+export const BlockInfo = ({ block, lessInfo, inline }: BlockInfoProp) => (
+  <BlockInfoContainer lessInfo={lessInfo} inline={inline}>
     <BlockIcon />
     <span>
       {formatTokenValue(block.number)} {lessInfo && 'block'}
@@ -22,8 +23,8 @@ export const BlockInfo = ({ block, lessInfo }: BlockInfoProp) => (
   </BlockInfoContainer>
 )
 
-export const BlockInfoContainer = styled.span<{ lessInfo?: boolean }>`
-  display: grid;
+export const BlockInfoContainer = styled.span<Omit<BlockInfoProp, 'block'>>`
+  display: ${({ inline }) => (inline ? 'inline-grid' : 'grid')};
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;

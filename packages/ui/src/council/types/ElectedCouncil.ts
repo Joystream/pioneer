@@ -1,14 +1,14 @@
-import { ElectedCouncilsFieldsFragment } from '@/council/queries'
+import { ElectedCouncilFieldsFragment } from '@/council/queries'
 
 import { asCouncilor, Councilor } from './Councilor'
 
-export interface Council {
+export interface ElectedCouncil {
   id: string
   electedAtBlock: number
   councilors: Councilor[]
 }
 
-export const asCouncil = (fields: ElectedCouncilsFieldsFragment): Council => ({
+export const asElectedCouncil = (fields: ElectedCouncilFieldsFragment): ElectedCouncil => ({
   id: fields.id,
   electedAtBlock: fields.electedAtBlock,
   councilors: fields.councilMembers.map(asCouncilor),

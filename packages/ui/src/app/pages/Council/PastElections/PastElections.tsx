@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from 'react'
+import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
@@ -9,15 +10,12 @@ import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
 import { TableOrder } from '@/common/types/TableOrder'
-import { PastElectionsList } from '@/council/components/election/PastElectionsList/PastElectionsList'
-import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
+import { PastElectionsList } from '@/council/components/election/pastElection/PastElectionsList/PastElectionsList'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
 
-import { CouncilTabs } from './components/CouncilTabs'
+import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastElections = () => {
-  useCandidatePreviewViaUrlParameter()
-
   const [page, setPage] = useState(1)
   const [order, setOrder] = useState<TableOrder<PastElectionsOrderKey>>({ key: 'cycle', isDescending: true })
   const { isLoading, elections, pageCount } = usePastElections({
@@ -32,7 +30,7 @@ export const PastElections = () => {
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>
-        <PageTitle>Past elections</PageTitle>
+        <PageTitle>Council</PageTitle>
       </PageHeaderRow>
       <CouncilTabs />
     </PageHeaderWrapper>
@@ -51,7 +49,7 @@ export const PastElections = () => {
       <MainPanel>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         <RowGapBlock gap={4}>
-          <ListHeaders $colLayout={PastElectionsColLayout}>
+          <PastElectionsListHeaders $colLayout={PastElectionsColLayout}>
             <SortHeader order={order} sort={sort} sortKey="cycle">
               Round
             </SortHeader>
@@ -61,7 +59,7 @@ export const PastElections = () => {
             <ListHeader>Total staked</ListHeader>
             <ListHeader>Revealed votes</ListHeader>
             <ListHeader>Total candidates</ListHeader>
-          </ListHeaders>
+          </PastElectionsListHeaders>
           {(!elections || !elections.length) && <TextBig>No elections found</TextBig>}
           {elections && elections.length > 0 && <PastElectionsList elections={elections} />}
         </RowGapBlock>
@@ -73,7 +71,7 @@ export const PastElections = () => {
   return <PageLayout header={header} main={displayMain()} />
 }
 
-export const PastElectionsColLayout = '1fr 1fr 1fr 1fr 1fr'
+export const PastElectionsColLayout = '48px 176px 156px 100px 100px'
 
 interface SortHeaderProps {
   sortKey: PastElectionsOrderKey
@@ -90,3 +88,7 @@ const SortHeader = ({ sortKey, order, children, sort }: SortHeaderProps) => (
     </HeaderText>
   </ListHeader>
 )
+
+const PastElectionsListHeaders = styled(ListHeaders)`
+  grid-column-gap: 24px;
+`

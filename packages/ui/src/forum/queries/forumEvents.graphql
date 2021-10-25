@@ -28,6 +28,22 @@ fragment PostTextUpdatedEventFields on PostTextUpdatedEvent {
   }
 }
 
+fragment PostDeletedEventFields on PostDeletedEvent {
+  id
+  createdAt
+  posts {
+    id
+    thread {
+      id
+      title
+    }
+  }
+  actor {
+    id
+    handle
+  }
+}
+
 fragment ThreadCreatedEventFields on ThreadCreatedEvent {
   id
   createdAt
@@ -60,6 +76,9 @@ query GetForumEvents {
   }
   postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostTextUpdatedEventFields
+  }
+  postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
+    ...PostDeletedEventFields
   }
   threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
     ...ThreadCreatedEventFields

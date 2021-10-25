@@ -1,55 +1,37 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { ListItem } from '@/common/components/List'
-import { TextInlineBig, TextInlineMedium, TokenValue } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { TextInlineMedium, TokenValue } from '@/common/components/typography'
 import { Vote } from '@/council/types'
 import { MemberInfo } from '@/memberships/components'
 
+import { PastVoteTableListItem, StakeRecoveringButton } from '../styles'
+
 export interface PastVoteProps {
   vote: Vote
+  $colLayout: string
 }
 
-export const PastVote = ({ vote }: PastVoteProps) => {
+export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
   const { allAccounts } = useMyAccounts()
   return (
-    <PastVoteWrapper>
+    <PastVoteTableListItem $isPast $colLayout={$colLayout}>
       <TextInlineMedium>#{vote.cycleId}</TextInlineMedium>
-      <BlockTime block={{ number: -1, network: 'BABYLON', timestamp: '2000-01-01T00:00:00.893Z' }} />
-      {vote.voteFor ? <MemberInfo member={vote.voteFor} /> : <TextInlineBig lighter>not revealed</TextInlineBig>}
+      <BlockTime
+        block={{ number: -1, network: 'BABYLON', timestamp: '2000-01-01T00:00:00.893Z' }}
+        lessInfo
+        layout="reverse-start"
+      />
+      {vote.voteFor ? <MemberInfo member={vote.voteFor} /> : <TextInlineMedium>not revealed</TextInlineMedium>}
       <TokenValue value={vote.stake} />
       <AccountInfo account={accountOrNamed(allAccounts, vote.castBy, 'Staking account')} />
       <TextInlineMedium>{!vote.voteFor ? 'Sealed' : 'Unsealed'}</TextInlineMedium>
-      <ButtonPrimary size="medium" disabled={!vote.stakeLocked}>
+      <StakeRecoveringButton size="small" disabled={!vote.stakeLocked}>
         {vote.stakeLocked ? 'Recover stake' : 'Stake recovered'}
-      </ButtonPrimary>
-    </PastVoteWrapper>
+      </StakeRecoveringButton>
+    </PastVoteTableListItem>
   )
 }
-
-export const PastVoteColumns = '48px 1fr 0.7fr 0.7fr 1fr 0.5fr 0.7fr'
-
-const PastVoteWrapper = styled(ListItem)`
-  position: relative;
-  grid-template-columns: ${PastVoteColumns};
-  align-items: center;
-  grid-column-gap: 8px;
-  height: 116px;
-  padding: 24px 48px 24px 8px;
-
-  &:hover,
-  &:focus,
-  &:focus-within {
-    border-color: ${Colors.Blue[100]};
-  }
-
-  ${ButtonsGroup} {
-    margin-left: auto;
-  }
-`

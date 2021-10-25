@@ -36,6 +36,11 @@ interface PostAddedEventMock extends BlockFieldsMock {
   text: string
 }
 
+interface PostDeletedEventMock extends BlockFieldsMock {
+  actorId: string
+  rationale: string
+}
+
 export interface RawForumPostMock {
   id: string
   threadId: string
@@ -45,6 +50,7 @@ export interface RawForumPostMock {
   edits: PostEdit[]
   postAddedEvent: PostAddedEventMock
   status: string
+  deletedInEvent: PostDeletedEventMock | null
 }
 
 const seedCategoryStatus = (status: RawForumCategoryMock['status'], server: any) => {
@@ -98,6 +104,7 @@ export function seedForumPost(data: RawForumPostMock, server: any) {
     updatedAt: sortedEdits.length ? sortedEdits[0].createdAt : null,
     status: server.schema.create(data.status),
     isVisible: ['PostStatusActive', 'PostStatusLocked'].includes(data.status),
+    deletedInEvent: data.deletedInEvent ? server.schema.create('PostDeletedEvent', data.deletedInEvent) : null,
   })
 }
 

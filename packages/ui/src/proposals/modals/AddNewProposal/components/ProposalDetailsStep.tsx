@@ -8,7 +8,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { SelectMember } from '@/memberships/components/SelectMember'
+import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
 
@@ -40,9 +40,7 @@ export const ProposalDetailsStep = ({
         </Row>
         <Row>
           <RowGapBlock gap={20}>
-            <InputComponent label="Proposer" inputSize="l" disabled>
-              <SelectMember onChange={() => true} disabled selected={proposer} />
-            </InputComponent>
+            <SelectedMember label="Proposer" member={proposer} disabled />
             <InputComponent label="Proposal title" required inputSize="m" id="field-title">
               <InputText id="field-title" value={title} onChange={(event) => setTitle(event.target.value)} />
             </InputComponent>

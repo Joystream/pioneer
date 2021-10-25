@@ -4,11 +4,11 @@ import { Colors } from '@/common/constants'
 
 import { Icon } from '../Icon'
 
-interface Props {
-  className?: any
+interface LockIconProps {
+  className?: string
 }
 
-export const LockIcon = React.memo(({ className }: Props) => (
+export const LockIcon = React.memo(({ className }: LockIconProps) => (
   <Icon
     size="16"
     viewBox="0 0 24 24"
