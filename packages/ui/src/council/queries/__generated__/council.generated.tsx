@@ -571,6 +571,16 @@ export type GetCouncilVotesQuery = {
   }>
 }
 
+export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.CastVoteWhereInput>
+  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+}>
+
+export type GetCouncilVotesCommitmentsQuery = {
+  __typename: 'Query'
+  castVotes: Array<{ __typename: 'CastVote'; commitment: string }>
+}
+
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -1213,3 +1223,52 @@ export function useGetCouncilVotesLazyQuery(
 export type GetCouncilVotesQueryHookResult = ReturnType<typeof useGetCouncilVotesQuery>
 export type GetCouncilVotesLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesLazyQuery>
 export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
+export const GetCouncilVotesCommitmentsDocument = gql`
+  query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
+    castVotes(where: $where, orderBy: $orderBy) {
+      commitment
+    }
+  }
+`
+
+/**
+ * __useGetCouncilVotesCommitmentsQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilVotesCommitmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilVotesCommitmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilVotesCommitmentsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetCouncilVotesCommitmentsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCouncilVotesCommitmentsQuery, GetCouncilVotesCommitmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilVotesCommitmentsQuery, GetCouncilVotesCommitmentsQueryVariables>(
+    GetCouncilVotesCommitmentsDocument,
+    options
+  )
+}
+export function useGetCouncilVotesCommitmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilVotesCommitmentsQuery, GetCouncilVotesCommitmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilVotesCommitmentsQuery, GetCouncilVotesCommitmentsQueryVariables>(
+    GetCouncilVotesCommitmentsDocument,
+    options
+  )
+}
+export type GetCouncilVotesCommitmentsQueryHookResult = ReturnType<typeof useGetCouncilVotesCommitmentsQuery>
+export type GetCouncilVotesCommitmentsLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesCommitmentsLazyQuery>
+export type GetCouncilVotesCommitmentsQueryResult = Apollo.QueryResult<
+  GetCouncilVotesCommitmentsQuery,
+  GetCouncilVotesCommitmentsQueryVariables
+>
