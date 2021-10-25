@@ -9,8 +9,8 @@ export interface PastCouncil {
 }
 
 export interface PastCouncilWithDetails extends PastCouncil {
-  totalDebt: BN
-  totalRewards: BN
+  totalMissedRewards: BN
+  totalPaidRewards: BN
 }
 
 export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil => ({
@@ -20,6 +20,6 @@ export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil =>
 
 export const asPastCouncilWithDetails = (fields: PastCouncilDetailedFieldsFragment): PastCouncilWithDetails => ({
   ...asPastCouncil(fields),
-  totalDebt: fields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
-  totalRewards: fields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
+  totalMissedRewards: fields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
+  totalPaidRewards: fields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
 })

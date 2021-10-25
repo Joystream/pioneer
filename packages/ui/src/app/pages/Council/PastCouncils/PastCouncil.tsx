@@ -79,8 +79,8 @@ export const PastCouncil = () => {
           <>
             <PastCouncilStats
               totalSpent={BN_ZERO}
-              totalDebt={council.totalDebt}
-              totalRewards={council.totalRewards}
+              totalMissedRewards={council.totalMissedRewards}
+              totalPaidRewards={council.totalPaidRewards}
               totalSpentOnProposals={BN_ZERO}
             />
             <PastCouncilTabs council={council} />

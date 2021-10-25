@@ -5,21 +5,21 @@ import { Statistics, TokenValueStat } from '@/common/components/statistics'
 
 interface PastCouncilStatsProps {
   totalSpent: BN
-  totalDebt: BN
-  totalRewards: BN
+  totalMissedRewards: BN
+  totalPaidRewards: BN
   totalSpentOnProposals: BN
 }
 
 export const PastCouncilStats = ({
   totalSpent,
-  totalDebt,
-  totalRewards,
+  totalMissedRewards,
+  totalPaidRewards,
   totalSpentOnProposals,
 }: PastCouncilStatsProps) => (
   <Statistics>
     <TokenValueStat title="Total spent" value={totalSpent} />
-    <TokenValueStat title="Total debt" value={totalDebt} />
-    <TokenValueStat title="Total rewards" value={totalRewards} />
+    <TokenValueStat title="Total missed rewards" value={totalMissedRewards} />
+    <TokenValueStat title="Total paid rewards" value={totalPaidRewards} />
     <TokenValueStat title="Total spent on proposals" value={totalSpentOnProposals} />
   </Statistics>
 )
