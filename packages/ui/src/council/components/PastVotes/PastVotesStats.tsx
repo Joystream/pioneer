@@ -1,16 +1,22 @@
 import React from 'react'
 
 import { StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextBig, TextMedium } from '@/common/components/typography'
+import { TextInlineBig, TextInlineMedium, TextSmall } from '@/common/components/typography'
 import { useMyPastVotesStats } from '@/council/hooks/useMyPastVotesStats'
 
 export const PastVotesStats = () => {
-  const { votesTotal } = useMyPastVotesStats()
+  const { votesTotal, votesForWinners } = useMyPastVotesStats()
+  const votesForWinnerPercent = votesForWinners && votesTotal && Math.round((votesForWinners / votesTotal) * 100)
   return (
     <Statistics>
       <StatisticItem title="Times Voted">
-        <TextBig>{votesTotal}</TextBig>
-        <TextMedium> votes</TextMedium>
+        <TextInlineBig>{votesTotal}</TextInlineBig>
+        <TextInlineMedium> votes</TextInlineMedium>
+      </StatisticItem>
+      <StatisticItem title="Times voted for winner">
+        <TextInlineBig>{votesForWinners}</TextInlineBig>
+        <TextInlineMedium> votes</TextInlineMedium>
+        <TextSmall lighter>{votesForWinnerPercent}% of all votes</TextSmall>
       </StatisticItem>
     </Statistics>
   )
