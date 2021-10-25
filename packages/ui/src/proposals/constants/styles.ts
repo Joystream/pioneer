@@ -15,3 +15,13 @@ export const ProposalListHeader = styled(ListHeader)`
     text-align: left;
   }
 `
+export const VoteDisplay = styled.span`
+display: flex;
+align-items: center;
+justify-content: space-between;
+`
+
+export const VoteStatus = styled.span`
+display: flex;
+align-items: center;
+`

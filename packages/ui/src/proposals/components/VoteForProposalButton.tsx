@@ -17,7 +17,7 @@ export const VoteForProposalButton = ({ id }: Props) => {
     })
   }, [])
   return (
-    <ButtonPrimary size="medium" onClick={voteForProposalModal}>
+    <ButtonPrimary size="small" onClick={voteForProposalModal}>
       Vote
     </ButtonPrimary>
   )

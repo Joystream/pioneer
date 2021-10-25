@@ -4,6 +4,7 @@ import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
+import { VoteDisplay, VoteStatus } from '@/proposals/constants'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
 import { Proposal, ProposalVote } from '@/proposals/types'
@@ -43,30 +44,30 @@ export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }:
 }
 
 const getVoteDisplay = (constitutionality?: number) => (vote: ProposalVote, index: number) => (
-  <span key={index}>
+  <VoteDisplay key={index}>
     {(constitutionality ?? 0) > 1 && `${vote.votingRound}/${constitutionality} `}
     {voteStatusMap[vote.voteKind]}
-  </span>
+  </VoteDisplay>
 )
 
 const voteStatusMap: Record<ProposalVote['voteKind'], ReactNode> = {
-  ABSTAIN: <span>Abstained</span>,
+  ABSTAIN: <VoteStatus>Abstained</VoteStatus>,
   APPROVE: (
-    <span>
+    <VoteStatus>
       <CheckboxIcon />
       Approved
-    </span>
+    </VoteStatus>
   ),
   REJECT: (
-    <span>
+    <VoteStatus>
       <CrossIcon />
       Rejected
-    </span>
+    </VoteStatus>
   ),
   SLASH: (
-    <span>
+    <VoteStatus>
       <CrossIcon />
       Slashed
-    </span>
+    </VoteStatus>
   ),
 }
