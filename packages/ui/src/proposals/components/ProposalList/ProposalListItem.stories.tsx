@@ -27,5 +27,6 @@ Default.args = {
     proposer: getMember('alice'),
     status: 'deciding',
     title: 'firewall Stand-alone set Checking',
+    councilApprovals: 0,
   },
 }

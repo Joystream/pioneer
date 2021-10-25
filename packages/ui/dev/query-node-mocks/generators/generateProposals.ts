@@ -106,6 +106,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
       discussionPosts,
       mode: `ProposalDiscussionThreadMode${arrayElement(['Open', 'Closed'])}`,
     },
+    councilApprovals: Math.round(Math.random())
   }
 }
 

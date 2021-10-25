@@ -53,6 +53,7 @@ export interface Proposal {
   proposer: Member
   createdAt: string
   endedAt?: string
+  councilApprovals: number
 }
 
 export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
@@ -63,6 +64,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     type: typenameToProposalDetails(fields.details.__typename),
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
+    councilApprovals: fields.councilApprovals,
   }
 
   if (!isProposalActive(proposal.status)) {

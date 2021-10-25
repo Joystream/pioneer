@@ -12,6 +12,7 @@ fragment ProposalFields on Proposal {
     ...MemberFields
   }
   createdAt
+  councilApprovals
 }
 
 fragment VoteFields on ProposalVotedEvent {
@@ -179,5 +180,11 @@ query GetRuntimeWasmBytecode($where: RuntimeWasmBytecodeWhereUniqueInput!) {
 query GetProposalPostParent($where: ProposalDiscussionPostWhereUniqueInput!) {
   proposalDiscussionPostByUniqueInput(where: $where) {
     ...ProposalPostParents
+  }
+}
+
+query GetProposalVotes($where: ProposalVotedEventWhereInput, $orderBy: [ProposalVotedEventOrderByInput!]) {
+  proposalVotedEvents(where: $where, orderBy: $orderBy) {
+    ...VoteFields
   }
 }
