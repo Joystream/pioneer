@@ -176,3 +176,28 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
     ...CastVoteFields
   }
 }
+
+query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
+  electedCouncilByUniqueInput(where: $where) {
+    electedAtBlock
+    endedAtBlock
+  }
+}
+
+query GetCouncilExecutedProposalsCount($startBlock: Int!, $endBlock: Int!) {
+  proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+    totalCount
+  }
+}
+
+query GetCouncilRejectedProposalsCount($startBlock: Int!, $endBlock: Int!) {
+  proposalDecisionMadeEventsConnection(
+    where: {
+      inBlock_gt: $startBlock
+      inBlock_lt: $endBlock
+      decisionStatus_json: { type_in: [ProposalStatusRejected, ProposalStatusSlashed] }
+    }
+  ) {
+    totalCount
+  }
+}

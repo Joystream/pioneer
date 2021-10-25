@@ -1,20 +1,14 @@
-import BN from 'bn.js'
 import React from 'react'
-import { generatePath } from 'react-router'
 
-import { BlockTime } from '@/common/components/BlockTime'
 import { List } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TokenValue } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { CouncilRoutes } from '@/council/constants'
+import { PastCouncilListItem } from '@/council/components/pastCouncil/PastCouncilsList/PastCouncilListItem'
 import { PastCouncil } from '@/council/types/PastCouncil'
-import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
-import { PastCouncilColLayout, PastCouncilListHeaders, PastCouncilTableListItem } from './styles'
+import { PastCouncilColLayout, PastCouncilListHeaders } from './styles'
 
 interface Props {
   isLoading: boolean
@@ -42,27 +36,7 @@ export const PastCouncilsList = ({ councils, isLoading }: Props) => {
       </PastCouncilListHeaders>
       <List>
         {councils.map((council) => (
-          <PastCouncilTableListItem
-            $colLayout={PastCouncilColLayout}
-            $isPast
-            as={GhostRouterLink}
-            to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
-          >
-            <Info>#{council.id}</Info>
-            <BlockTime
-              block={{
-                network: 'OLYMPIA',
-                timestamp: new Date().toString(),
-                number: council.endedAtBlock,
-              }}
-              layout="reverse-start"
-              lessInfo
-            />
-            <TokenValue value={new BN(0)} />
-            <TokenValue value={new BN(0)} />
-            <CountInfo count={0} />
-            <CountInfo count={0} />
-          </PastCouncilTableListItem>
+          <PastCouncilListItem key={council.id} council={council} />
         ))}
       </List>
     </RowGapBlock>

@@ -571,6 +571,38 @@ export type GetCouncilVotesQuery = {
   }>
 }
 
+export type GetCouncilBlockRangeQueryVariables = Types.Exact<{
+  where: Types.ElectedCouncilWhereUniqueInput
+}>
+
+export type GetCouncilBlockRangeQuery = {
+  __typename: 'Query'
+  electedCouncilByUniqueInput?:
+    | { __typename: 'ElectedCouncil'; electedAtBlock: number; endedAtBlock?: number | null | undefined }
+    | null
+    | undefined
+}
+
+export type GetCouncilExecutedProposalsCountQueryVariables = Types.Exact<{
+  startBlock: Types.Scalars['Int']
+  endBlock: Types.Scalars['Int']
+}>
+
+export type GetCouncilExecutedProposalsCountQuery = {
+  __typename: 'Query'
+  proposalExecutedEventsConnection: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
+}
+
+export type GetCouncilRejectedProposalsCountQueryVariables = Types.Exact<{
+  startBlock: Types.Scalars['Int']
+  endBlock: Types.Scalars['Int']
+}>
+
+export type GetCouncilRejectedProposalsCountQuery = {
+  __typename: 'Query'
+  proposalDecisionMadeEventsConnection: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+}
+
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -1213,3 +1245,176 @@ export function useGetCouncilVotesLazyQuery(
 export type GetCouncilVotesQueryHookResult = ReturnType<typeof useGetCouncilVotesQuery>
 export type GetCouncilVotesLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesLazyQuery>
 export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
+export const GetCouncilBlockRangeDocument = gql`
+  query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
+    electedCouncilByUniqueInput(where: $where) {
+      electedAtBlock
+      endedAtBlock
+    }
+  }
+`
+
+/**
+ * __useGetCouncilBlockRangeQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilBlockRangeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilBlockRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilBlockRangeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetCouncilBlockRangeQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
+    GetCouncilBlockRangeDocument,
+    options
+  )
+}
+export function useGetCouncilBlockRangeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
+    GetCouncilBlockRangeDocument,
+    options
+  )
+}
+export type GetCouncilBlockRangeQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeQuery>
+export type GetCouncilBlockRangeLazyQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeLazyQuery>
+export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
+  GetCouncilBlockRangeQuery,
+  GetCouncilBlockRangeQueryVariables
+>
+export const GetCouncilExecutedProposalsCountDocument = gql`
+  query GetCouncilExecutedProposalsCount($startBlock: Int!, $endBlock: Int!) {
+    proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetCouncilExecutedProposalsCountQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilExecutedProposalsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilExecutedProposalsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilExecutedProposalsCountQuery({
+ *   variables: {
+ *      startBlock: // value for 'startBlock'
+ *      endBlock: // value for 'endBlock'
+ *   },
+ * });
+ */
+export function useGetCouncilExecutedProposalsCountQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCouncilExecutedProposalsCountQuery,
+    GetCouncilExecutedProposalsCountQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilExecutedProposalsCountQuery, GetCouncilExecutedProposalsCountQueryVariables>(
+    GetCouncilExecutedProposalsCountDocument,
+    options
+  )
+}
+export function useGetCouncilExecutedProposalsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCouncilExecutedProposalsCountQuery,
+    GetCouncilExecutedProposalsCountQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilExecutedProposalsCountQuery, GetCouncilExecutedProposalsCountQueryVariables>(
+    GetCouncilExecutedProposalsCountDocument,
+    options
+  )
+}
+export type GetCouncilExecutedProposalsCountQueryHookResult = ReturnType<
+  typeof useGetCouncilExecutedProposalsCountQuery
+>
+export type GetCouncilExecutedProposalsCountLazyQueryHookResult = ReturnType<
+  typeof useGetCouncilExecutedProposalsCountLazyQuery
+>
+export type GetCouncilExecutedProposalsCountQueryResult = Apollo.QueryResult<
+  GetCouncilExecutedProposalsCountQuery,
+  GetCouncilExecutedProposalsCountQueryVariables
+>
+export const GetCouncilRejectedProposalsCountDocument = gql`
+  query GetCouncilRejectedProposalsCount($startBlock: Int!, $endBlock: Int!) {
+    proposalDecisionMadeEventsConnection(
+      where: {
+        inBlock_gt: $startBlock
+        inBlock_lt: $endBlock
+        decisionStatus_json: { type_in: [ProposalStatusRejected, ProposalStatusSlashed] }
+      }
+    ) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetCouncilRejectedProposalsCountQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilRejectedProposalsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilRejectedProposalsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilRejectedProposalsCountQuery({
+ *   variables: {
+ *      startBlock: // value for 'startBlock'
+ *      endBlock: // value for 'endBlock'
+ *   },
+ * });
+ */
+export function useGetCouncilRejectedProposalsCountQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCouncilRejectedProposalsCountQuery,
+    GetCouncilRejectedProposalsCountQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilRejectedProposalsCountQuery, GetCouncilRejectedProposalsCountQueryVariables>(
+    GetCouncilRejectedProposalsCountDocument,
+    options
+  )
+}
+export function useGetCouncilRejectedProposalsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCouncilRejectedProposalsCountQuery,
+    GetCouncilRejectedProposalsCountQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilRejectedProposalsCountQuery, GetCouncilRejectedProposalsCountQueryVariables>(
+    GetCouncilRejectedProposalsCountDocument,
+    options
+  )
+}
+export type GetCouncilRejectedProposalsCountQueryHookResult = ReturnType<
+  typeof useGetCouncilRejectedProposalsCountQuery
+>
+export type GetCouncilRejectedProposalsCountLazyQueryHookResult = ReturnType<
+  typeof useGetCouncilRejectedProposalsCountLazyQuery
+>
+export type GetCouncilRejectedProposalsCountQueryResult = Apollo.QueryResult<
+  GetCouncilRejectedProposalsCountQuery,
+  GetCouncilRejectedProposalsCountQueryVariables
+>
