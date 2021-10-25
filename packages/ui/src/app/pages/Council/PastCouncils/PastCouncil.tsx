@@ -77,13 +77,8 @@ export const PastCouncil = () => {
         {isLoading && <Loading />}
         {!isLoading && council && (
           <>
-            <PastCouncilStats
-              totalSpent={BN_ZERO}
-              totalMissedRewards={council.totalMissedRewards}
-              totalPaidRewards={council.totalPaidRewards}
-              totalSpentOnProposals={BN_ZERO}
-            />
-            <PastCouncilTabs council={council} />
+            <PastCouncilStats {...council} />
+            <PastCouncilTabs {...council} />
           </>
         )}
       </MainPanel>

@@ -1,420 +1,560 @@
 [
   {
     "electionRoundId": "0",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 3000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 1000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "44"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 6000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "46"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 8000,
+    "stake": 7000,
     "stakeLocked": true,
     "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "50"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "20"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
   },
   {
     "electionRoundId": "0",
     "stake": 7000,
     "stakeLocked": false,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 3000,
-    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "1"
+    "voteForId": "7"
   },
   {
     "electionRoundId": "0",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "44"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "1"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 6000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "47"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 8000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 10000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 8000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "1"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 1000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 3000,
-    "stakeLocked": false,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "14"
-  },
-  {
-    "electionRoundId": "1",
     "stake": 5000,
     "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": false,
     "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "37"
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 6000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "39"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 7000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "6"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "7"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "20"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "7"
   },
   {
     "electionRoundId": "1",
     "stake": 6000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 7000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "6"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 7000,
     "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "14"
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
   },
   {
     "electionRoundId": "1",
     "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "6"
   },
   {
     "electionRoundId": "1",
-    "stake": 4000,
-    "stakeLocked": false,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null
+    "stake": 3000,
+    "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "21"
   },
   {
     "electionRoundId": "1",
     "stake": 2000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "22"
+    "voteForId": "21"
   },
   {
     "electionRoundId": "1",
-    "stake": 7000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 10000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "22"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 7000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 5000,
+    "stake": 2000,
     "stakeLocked": false,
     "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "14"
+    "voteForId": "21"
   },
   {
     "electionRoundId": "1",
-    "stake": 6000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "42"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 8000,
-    "stakeLocked": false,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 10000,
+    "stake": 7000,
     "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 8000,
-    "stakeLocked": false,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "voteForId": "3"
   },
   {
-    "electionRoundId": "2",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "37"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 8000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "2",
+    "electionRoundId": "1",
     "stake": 9000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
   },
   {
-    "electionRoundId": "2",
+    "electionRoundId": "1",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "21"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "15"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 7000,
+    "stakeLocked": false,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": "39"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "21"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": "33"
+  },
+  {
+    "electionRoundId": "1",
     "stake": 5000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
   },
   {
-    "electionRoundId": "2",
-    "stake": 3000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "3"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 1000,
-    "stakeLocked": false,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "16"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "43"
-  },
-  {
-    "electionRoundId": "3",
+    "electionRoundId": "1",
     "stake": 8000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 4000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
+    "voteForId": "21"
   },
   {
-    "electionRoundId": "3",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "3",
+    "electionRoundId": "1",
     "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 3000,
-    "stakeLocked": true,
+    "stakeLocked": false,
     "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "voteForId": null
   },
   {
-    "electionRoundId": "3",
-    "stake": 6000,
+    "electionRoundId": "2",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "15"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 1000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "49"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 5000,
     "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 4000,
+    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
   },
   {
-    "electionRoundId": "3",
-    "stake": 3000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "23"
-  },
-  {
-    "electionRoundId": "3",
+    "electionRoundId": "2",
     "stake": 7000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
   },
   {
-    "electionRoundId": "3",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "43"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 8000,
-    "stakeLocked": true,
+    "electionRoundId": "2",
+    "stake": 6000,
+    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
+    "voteForId": "50"
   },
   {
-    "electionRoundId": "4",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 8000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "42"
-  },
-  {
-    "electionRoundId": "4",
+    "electionRoundId": "2",
     "stake": 6000,
     "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "15"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 3000,
+    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "17"
   },
   {
-    "electionRoundId": "4",
+    "electionRoundId": "2",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "2",
     "stake": 8000,
     "stakeLocked": true,
     "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "7"
+    "voteForId": null
   },
   {
-    "electionRoundId": "4",
+    "electionRoundId": "2",
+    "stake": 3000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "17"
+  },
+  {
+    "electionRoundId": "2",
     "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "50"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 9000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "7"
+    "voteForId": "13"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 6000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "3"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": "10"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "3"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "31"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 6000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "43"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "31"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "10"
   },
   {
     "electionRoundId": "4",
-    "stake": 1000,
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "8"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "24"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "16"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "0"
   },
   {
     "electionRoundId": "4",
-    "stake": 9000,
+    "stake": 5000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null
+    "voteForId": "30"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": "8"
   },
   {
     "electionRoundId": "4",
     "stake": 3000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "48"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
   },
   {
     "electionRoundId": "4",
-    "stake": 2000,
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "48"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "8"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 6000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null
@@ -423,14 +563,14 @@
     "electionRoundId": "4",
     "stake": 5000,
     "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "7"
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "48"
   },
   {
     "electionRoundId": "4",
-    "stake": 8000,
+    "stake": 2000,
     "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "40"
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "47"
   }
 ]

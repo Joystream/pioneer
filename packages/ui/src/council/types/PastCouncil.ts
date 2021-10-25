@@ -1,7 +1,11 @@
 import { BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 
-import { PastCouncilDetailedFieldsFragment, PastCouncilFieldsFragment } from '@/council/queries'
+import {
+  CouncilSpendingEventFieldsFragment,
+  PastCouncilDetailedFieldsFragment,
+  PastCouncilFieldsFragment,
+} from '@/council/queries'
 
 export interface PastCouncil {
   id: string
@@ -9,8 +13,10 @@ export interface PastCouncil {
 }
 
 export interface PastCouncilWithDetails extends PastCouncil {
+  totalSpent: BN
   totalMissedRewards: BN
   totalPaidRewards: BN
+  totalSpentOnProposals: BN
 }
 
 export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil => ({
@@ -18,8 +24,15 @@ export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil =>
   endedAtBlock: fields.endedAtBlock as number,
 })
 
-export const asPastCouncilWithDetails = (fields: PastCouncilDetailedFieldsFragment): PastCouncilWithDetails => ({
-  ...asPastCouncil(fields),
-  totalMissedRewards: fields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
-  totalPaidRewards: fields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
-})
+export const asPastCouncilWithDetails = (
+  councilFields: PastCouncilDetailedFieldsFragment,
+  spendingEvents: CouncilSpendingEventFieldsFragment[]
+): PastCouncilWithDetails => {
+  return {
+    ...asPastCouncil(councilFields),
+    totalSpent: spendingEvents.reduce((a, b) => a.addn(b.amount), BN_ZERO),
+    totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
+    totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
+    totalSpentOnProposals: BN_ZERO,
+  }
+}

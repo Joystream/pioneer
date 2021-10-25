@@ -99,6 +99,11 @@ fragment CastVoteFields on CastVote {
   }
 }
 
+fragment CouncilSpendingEventFields on BudgetSpendingEvent {
+  amount
+  type
+}
+
 query GetElectedCouncil {
   electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
     ...ElectedCouncilFields
@@ -117,9 +122,19 @@ query GetPastCouncilsCount {
   }
 }
 
-query GetPastCouncil($id: ID!) {
-  electedCouncilByUniqueInput(where: { id: $id }) {
+query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
+  council: electedCouncilByUniqueInput(where: { id: $id }) {
     ...PastCouncilDetailedFields
+  }
+  budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...CouncilSpendingEventFields
+  }
+}
+
+query GetCouncilBlockRange($id: ID!) {
+  council: electedCouncilByUniqueInput(where: { id: $id }) {
+    electedAtBlock
+    endedAtBlock
   }
 }
 
