@@ -600,7 +600,8 @@ export type GetCouncilRejectedProposalsCountQueryVariables = Types.Exact<{
 
 export type GetCouncilRejectedProposalsCountQuery = {
   __typename: 'Query'
-  proposalDecisionMadeEventsConnection: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  rejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  slashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
 }
 
 export const CouncilMemberFieldsFragmentDoc = gql`
@@ -1355,11 +1356,20 @@ export type GetCouncilExecutedProposalsCountQueryResult = Apollo.QueryResult<
 >
 export const GetCouncilRejectedProposalsCountDocument = gql`
   query GetCouncilRejectedProposalsCount($startBlock: Int!, $endBlock: Int!) {
-    proposalDecisionMadeEventsConnection(
+    rejected: proposalDecisionMadeEventsConnection(
       where: {
         inBlock_gt: $startBlock
         inBlock_lt: $endBlock
-        decisionStatus_json: { type_in: [ProposalStatusRejected, ProposalStatusSlashed] }
+        decisionStatus_json: { isTypeOf_eq: "ProposalStatusRejected" }
+      }
+    ) {
+      totalCount
+    }
+    slashed: proposalDecisionMadeEventsConnection(
+      where: {
+        inBlock_gt: $startBlock
+        inBlock_lt: $endBlock
+        decisionStatus_json: { isTypeOf_eq: "ProposalStatusSlashed" }
       }
     ) {
       totalCount

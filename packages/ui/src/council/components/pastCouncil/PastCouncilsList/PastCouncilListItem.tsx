@@ -10,7 +10,11 @@ import {
   PastCouncilTableListItem,
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
-import { useGetCouncilBlockRangeQuery, useGetCouncilExecutedProposalsCountQuery } from '@/council/queries'
+import {
+  useGetCouncilBlockRangeQuery,
+  useGetCouncilExecutedProposalsCountQuery,
+  useGetCouncilRejectedProposalsCountQuery,
+} from '@/council/queries'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
@@ -36,9 +40,17 @@ const usePastCouncilProposals = (id: string) => {
     },
   })
 
+  const { loading: loadingBaz, data: rejectedData } = useGetCouncilRejectedProposalsCountQuery({
+    variables: {
+      startBlock: council?.electedAtBlock ?? 0,
+      endBlock: council?.endedAtBlock ?? 0,
+    },
+  })
+
   return {
-    isLoading: loadingRange || loadingData,
-    approved: data?.proposalExecutedEventsConnection.totalCount ?? 0,
+    isLoading: loadingRange || loadingData || loadingBaz,
+    approved: data?.proposalExecutedEventsConnection?.totalCount ?? 0,
+    rejected: (rejectedData?.rejected?.totalCount ?? 0) + (rejectedData?.slashed?.totalCount ?? 0),
   }
 }
 
