@@ -2,6 +2,7 @@ import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { repeat } from '@/common/utils'
 import { useMyPastVotesStats } from '@/council/hooks/useMyPastVotesStats'
 import {
   RawCouncilElectionMock,
@@ -48,14 +49,14 @@ describe('useMyPastVotesStats', () => {
     })
 
     it('From single account', async () => {
-      ;[0, 0, 0].forEach(() => seedCounncilVote({ ...VOTE_DATA }, server.server))
+      repeat(() => seedCounncilVote({ ...VOTE_DATA }, server.server), 3)
 
       const result = await renderUseStats()
       expect(result.votesTotal).toEqual(3)
     })
 
     it('From multiple accounts', async () => {
-      ;[0, 0, 0].forEach(() => seedCounncilVote({ ...VOTE_DATA, castBy: alice.address }, server.server))
+      repeat(() => seedCounncilVote({ ...VOTE_DATA, castBy: alice.address }, server.server), 3)
       seedCounncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
 
       const result = await renderUseStats()
