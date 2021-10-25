@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { List, ListItem } from '@/common/components/List'
+import { List } from '@/common/components/List'
 import { PastElection } from '@/council/types/PastElection'
 
 import { PastElectionsListRow } from './PastElectionsListRow'
@@ -10,11 +10,9 @@ export interface PastWorkersListProps {
 }
 
 export const PastElectionsList = ({ elections }: PastWorkersListProps) => (
-  <List>
+  <List as="div">
     {elections.map((election, index) => (
-      <ListItem key={index}>
-        <PastElectionsListRow election={election} />
-      </ListItem>
+      <PastElectionsListRow election={election} key={index} />
     ))}
   </List>
 )

@@ -16,7 +16,7 @@ export interface BlockTimeProps extends BlockTimeLayoutProps {
 }
 
 interface BlockTimeLayoutProps {
-  layout?: 'row' | 'column' | 'reverse'
+  layout?: 'row' | 'column' | 'reverse' | 'reverse-start'
 }
 
 export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo }: BlockTimeProps) => (
@@ -75,11 +75,36 @@ export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
             color: ${Colors.Black[900]};
           }
         `
+      case 'reverse-start':
+        return css`
+          justify-content: start;
+          grid-row-gap: 8px;
+
+          ${AboutText} {
+            font-size: 12px;
+            line-height: 18px;
+            color: ${Colors.Black[500]};
+            order: 1;
+          }
+
+          ${BlockIconStyles} {
+            color: ${Colors.Black[900]};
+          }
+
+          ${BlockInfoContainer} {
+            color: ${Colors.Black[900]};
+            margin-left: 0;
+          }
+
+          ${BlockNetworkInfo} {
+            color: ${Colors.Black[900]};
+          }
+        `
       case 'reverse':
       default:
         return css`
-          justify-content: flex-end;
-          text-align: end;
+          justify-content: end;
+          text-align: right;
           grid-row-gap: 8px;
 
           ${AboutText} {

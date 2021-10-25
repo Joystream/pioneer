@@ -41,7 +41,7 @@ const FormSchema = Yup.object().shape({
 })
 
 export const VoteForProposalModalForm = ({ setStatus, setRationale, onNext, proposalTitle }: Props) => {
-  const { hideModal, modalData } = useModal<VoteForProposalModalCall>()
+  const { hideModal } = useModal<VoteForProposalModalCall>()
   const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
   const { isValid } = validation
   const isRejected = fields.voteStatus === 'Reject' || fields.voteStatus === 'Slash'

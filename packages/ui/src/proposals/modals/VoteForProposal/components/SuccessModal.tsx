@@ -5,7 +5,6 @@ import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { camelCaseToText } from '@/common/helpers'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
 
 interface SuccessModalProps {
