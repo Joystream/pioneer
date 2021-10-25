@@ -26,7 +26,8 @@ fragment PastCouncilFields on ElectedCouncil {
 fragment PastCouncilDetailedFields on ElectedCouncil {
   ...PastCouncilFields
   councilMembers {
-    ...CouncilMemberFields
+    accumulatedReward
+    unpaidReward
   }
 }
 

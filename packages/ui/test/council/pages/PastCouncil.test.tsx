@@ -30,21 +30,23 @@ describe('UI: Past Council page', () => {
     )
   })
 
-  it('Renders', async () => {
-    const { queryByText } = await renderComponent()
+  describe('Renders', () => {
+    it('Proper', async () => {
+      const { queryByText } = await renderComponent()
 
-    expect(queryByText(/Council #1/i)).not.toBeNull()
-    expect(queryByText(/^Past Council$/i)).not.toBeNull()
-    expect(queryByText(/Council members/i)).not.toBeNull()
-    expect(queryByText(/Proposals/i)).not.toBeNull()
-    expect(queryByText(/Working Groups/i)).not.toBeNull()
-  })
+      expect(queryByText(/Council #1/i)).not.toBeNull()
+      expect(queryByText(/^Past Council$/i)).not.toBeNull()
+      expect(queryByText(/Council members/i)).not.toBeNull()
+      expect(queryByText(/^Proposals$/i)).not.toBeNull()
+      expect(queryByText(/Working Groups/i)).not.toBeNull()
+    })
 
-  it('No such council', async () => {
-    pageCouncilId = 2
-    const { queryByText } = await renderComponent()
+    it('No such council', async () => {
+      pageCouncilId = 2
+      const { queryByText } = await renderComponent()
 
-    expect(queryByText(/not found/i)).not.toBeNull()
+      expect(queryByText(/not found/i)).not.toBeNull()
+    })
   })
 
   async function renderComponent() {

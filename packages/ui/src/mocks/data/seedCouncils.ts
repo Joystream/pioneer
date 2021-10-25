@@ -10,6 +10,7 @@ export interface RawCouncilorMock {
   memberId: string
   unpaidReward: number
   stake: number
+  accumulatedReward: number
 }
 
 export interface RawCouncilMock {
