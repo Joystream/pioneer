@@ -214,7 +214,10 @@ describe('UI: Election page', () => {
       </MemoryRouter>
     )
 
-    await waitForElementToBeRemoved(() => rendered.getByText('Loading...'))
+    const loader = rendered.queryByText('Loading candidates...')
+    if (loader) {
+      await waitForElementToBeRemoved(loader)
+    }
 
     return rendered
   }
