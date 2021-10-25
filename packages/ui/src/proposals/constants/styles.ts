@@ -16,12 +16,12 @@ export const ProposalListHeader = styled(ListHeader)`
   }
 `
 export const VoteDisplay = styled.span`
-display: flex;
-align-items: center;
-justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 
 export const VoteStatus = styled.span`
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
 `
