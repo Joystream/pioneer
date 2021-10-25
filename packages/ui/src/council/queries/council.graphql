@@ -131,3 +131,24 @@ query GetCouncilVotesCount($where: CastVoteWhereInput) {
     totalCount
   }
 }
+
+query GetPastVotesResults($myAccounts: [String!]) {
+  electionRounds(where: { isFinished_eq: true, castVotes_some: { castBy_in: $myAccounts } }) {
+    id
+    electedCouncil {
+      councilMembers {
+        member {
+          id
+        }
+      }
+    }
+  }
+  castVotes(where: { castBy_in: $myAccounts }) {
+    voteFor {
+      id
+    }
+    electionRound {
+      id
+    }
+  }
+}
