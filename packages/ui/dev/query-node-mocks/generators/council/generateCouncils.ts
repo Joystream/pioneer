@@ -39,8 +39,8 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
 
   const council = {
     id: String(councilIndex),
-    electedAtBlock: randomFromRange(10000, 1000000),
-    endedAtBlock: hasEnded ? randomFromRange(10000, 1000000) : null,
+    electedAtBlock: randomFromRange(0, 1000000),
+    endedAtBlock: hasEnded ? randomFromRange(0, 1000000) : null,
   }
 
   const councilors: RawCouncilorMock[] = repeat(
