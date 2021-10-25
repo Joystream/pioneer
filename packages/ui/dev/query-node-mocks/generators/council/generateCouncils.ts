@@ -14,6 +14,10 @@ import { memberAt, randomFromRange, randomFromWeightedSet, randomMember, repeat 
 
 const COUNCILS = 5
 
+// LocalStorage entry:
+// [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
+export const COMMITMENT = '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806'
+
 export const generateCouncils = () => {
   const data = Array.from({ length: COUNCILS }).reduce(generateCouncil, {
     councils: [],
@@ -102,6 +106,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
       stakeLocked: isFinished ? Math.random() > 0.5 : true,
       castBy: getCastBy(),
       voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
+      commitment: COMMITMENT,
     }),
     randomFromRange(10, 20)
   )

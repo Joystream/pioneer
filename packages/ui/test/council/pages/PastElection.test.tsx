@@ -21,6 +21,7 @@ import {
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
+import { COMMITMENT } from '../../../dev/query-node-mocks/generators/council/generateCouncils'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -72,6 +73,7 @@ const TEST_VOTES = [
     stakeLocked: false,
     castBy: getMember('bob').controllerAccount,
     voteForId: getMember('alice').id,
+    commitment: COMMITMENT,
   },
 ]
 
@@ -145,6 +147,7 @@ describe('UI: Past Election page', () => {
             stakeLocked: false,
             castBy: getMember('alice').controllerAccount,
             voteForId: getMember('bob').id,
+            commitment: COMMITMENT,
           },
           mockServer.server
         )

@@ -4,6 +4,7 @@ import { MockMember } from '@/mocks/data'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { RawCouncilMock, RawCouncilorMock } from '@/mocks/data/seedCouncils'
 
+import { COMMITMENT } from '../../../dev/query-node-mocks/generators/council/generateCouncils'
 import { alice } from '../keyring/signers'
 
 const ALICE: MockMember = rawMembers[0]
@@ -53,6 +54,7 @@ export const VOTE_DATA = {
   stakeLocked: true,
   castBy: alice.address,
   voteForId: null,
+  commitment: COMMITMENT,
 }
 
 export const CANDIDATE_DATA = {
