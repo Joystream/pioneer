@@ -2,217 +2,225 @@
   {
     "id": "0-0",
     "electedInCouncilId": "0",
-    "memberId": "3",
-    "unpaidReward": 67196,
-    "accumulatedReward": 7349,
-    "stake": 853501
+    "memberId": "14",
+    "unpaidReward": 49175,
+    "accumulatedReward": 8888,
+    "stake": 725559
   },
   {
     "id": "0-1",
     "electedInCouncilId": "0",
-    "memberId": "46",
-    "unpaidReward": 56067,
-    "accumulatedReward": 0,
-    "stake": 871981
+    "memberId": "33",
+    "unpaidReward": 0,
+    "accumulatedReward": 37132,
+    "stake": 570872
   },
   {
     "id": "0-2",
     "electedInCouncilId": "0",
-    "memberId": "31",
-    "unpaidReward": 9541,
-    "accumulatedReward": 90798,
-    "stake": 704740
+    "memberId": "47",
+    "unpaidReward": 95137,
+    "accumulatedReward": 0,
+    "stake": 469294
   },
   {
     "id": "0-3",
     "electedInCouncilId": "0",
-    "memberId": "44",
-    "unpaidReward": 48207,
-    "accumulatedReward": 94343,
-    "stake": 446651
+    "memberId": "30",
+    "unpaidReward": 98615,
+    "accumulatedReward": 0,
+    "stake": 551012
   },
   {
     "id": "0-4",
     "electedInCouncilId": "0",
-    "memberId": "1",
-    "unpaidReward": 71080,
+    "memberId": "33",
+    "unpaidReward": 81135,
     "accumulatedReward": 0,
-    "stake": 370138
+    "stake": 618584
   },
   {
     "id": "0-5",
     "electedInCouncilId": "0",
-    "memberId": "47",
-    "unpaidReward": 15198,
-    "accumulatedReward": 97799,
-    "stake": 683962
-  },
-  {
-    "id": "0-6",
-    "electedInCouncilId": "0",
-    "memberId": "5",
-    "unpaidReward": 0,
+    "memberId": "48",
+    "unpaidReward": 72116,
     "accumulatedReward": 0,
-    "stake": 587483
-  },
-  {
-    "id": "0-7",
-    "electedInCouncilId": "0",
-    "memberId": "11",
-    "unpaidReward": 85108,
-    "accumulatedReward": 95274,
-    "stake": 388070
+    "stake": 67736
   },
   {
     "id": "1-0",
     "electedInCouncilId": "1",
-    "memberId": "37",
-    "unpaidReward": 0,
-    "accumulatedReward": 18708,
-    "stake": 167268
+    "memberId": "16",
+    "unpaidReward": 32068,
+    "accumulatedReward": 31571,
+    "stake": 843851
   },
   {
     "id": "1-1",
     "electedInCouncilId": "1",
-    "memberId": "22",
-    "unpaidReward": 0,
-    "accumulatedReward": 0,
-    "stake": 883646
+    "memberId": "26",
+    "unpaidReward": 77719,
+    "accumulatedReward": 92336,
+    "stake": 895701
   },
   {
     "id": "1-2",
     "electedInCouncilId": "1",
-    "memberId": "38",
+    "memberId": "35",
     "unpaidReward": 0,
-    "accumulatedReward": 73891,
-    "stake": 174641
+    "accumulatedReward": 87385,
+    "stake": 227634
   },
   {
     "id": "1-3",
     "electedInCouncilId": "1",
-    "memberId": "36",
+    "memberId": "21",
     "unpaidReward": 0,
     "accumulatedReward": 0,
-    "stake": 571067
+    "stake": 849721
   },
   {
     "id": "1-4",
     "electedInCouncilId": "1",
     "memberId": "14",
-    "unpaidReward": 98715,
-    "accumulatedReward": 0,
-    "stake": 773653
+    "unpaidReward": 99899,
+    "accumulatedReward": 12664,
+    "stake": 848818
   },
   {
     "id": "1-5",
     "electedInCouncilId": "1",
-    "memberId": "42",
-    "unpaidReward": 46978,
+    "memberId": "9",
+    "unpaidReward": 68583,
     "accumulatedReward": 0,
-    "stake": 874291
+    "stake": 320398
+  },
+  {
+    "id": "1-6",
+    "electedInCouncilId": "1",
+    "memberId": "36",
+    "unpaidReward": 68005,
+    "accumulatedReward": 78616,
+    "stake": 711725
   },
   {
     "id": "2-0",
     "electedInCouncilId": "2",
-    "memberId": "37",
-    "unpaidReward": 52504,
-    "accumulatedReward": 0,
-    "stake": 375445
+    "memberId": "8",
+    "unpaidReward": 35511,
+    "accumulatedReward": 96363,
+    "stake": 994525
   },
   {
     "id": "2-1",
     "electedInCouncilId": "2",
-    "memberId": "49",
-    "unpaidReward": 19049,
-    "accumulatedReward": 86518,
-    "stake": 332760
+    "memberId": "45",
+    "unpaidReward": 0,
+    "accumulatedReward": 58126,
+    "stake": 630895
   },
   {
     "id": "2-2",
     "electedInCouncilId": "2",
-    "memberId": "27",
+    "memberId": "49",
     "unpaidReward": 0,
     "accumulatedReward": 0,
-    "stake": 330781
+    "stake": 368230
   },
   {
     "id": "2-3",
     "electedInCouncilId": "2",
-    "memberId": "24",
-    "unpaidReward": 7457,
-    "accumulatedReward": 55208,
-    "stake": 537294
+    "memberId": "16",
+    "unpaidReward": 98942,
+    "accumulatedReward": 0,
+    "stake": 576810
   },
   {
     "id": "2-4",
     "electedInCouncilId": "2",
-    "memberId": "0",
-    "unpaidReward": 8556,
-    "accumulatedReward": 0,
-    "stake": 220706
+    "memberId": "40",
+    "unpaidReward": 0,
+    "accumulatedReward": 25091,
+    "stake": 786123
   },
   {
     "id": "2-5",
     "electedInCouncilId": "2",
-    "memberId": "3",
+    "memberId": "24",
     "unpaidReward": 0,
-    "accumulatedReward": 34872,
-    "stake": 663797
+    "accumulatedReward": 95136,
+    "stake": 652021
   },
   {
     "id": "2-6",
     "electedInCouncilId": "2",
-    "memberId": "11",
-    "unpaidReward": 0,
-    "accumulatedReward": 0,
-    "stake": 352921
+    "memberId": "46",
+    "unpaidReward": 92466,
+    "accumulatedReward": 37272,
+    "stake": 409257
   },
   {
     "id": "3-0",
     "electedInCouncilId": "3",
-    "memberId": "9",
-    "unpaidReward": 0,
-    "accumulatedReward": 0,
-    "stake": 704287
+    "memberId": "23",
+    "unpaidReward": 98961,
+    "accumulatedReward": 94655,
+    "stake": 510159
   },
   {
     "id": "3-1",
     "electedInCouncilId": "3",
-    "memberId": "23",
-    "unpaidReward": 31008,
-    "accumulatedReward": 0,
-    "stake": 713015
+    "memberId": "1",
+    "unpaidReward": 0,
+    "accumulatedReward": 15576,
+    "stake": 119542
   },
   {
     "id": "3-2",
     "electedInCouncilId": "3",
-    "memberId": "16",
-    "unpaidReward": 18530,
-    "accumulatedReward": 0,
-    "stake": 263458
+    "memberId": "10",
+    "unpaidReward": 42466,
+    "accumulatedReward": 21565,
+    "stake": 457826
   },
   {
     "id": "3-3",
     "electedInCouncilId": "3",
-    "memberId": "43",
-    "unpaidReward": 70818,
-    "accumulatedReward": 86419,
-    "stake": 25583
+    "memberId": "48",
+    "unpaidReward": 0,
+    "accumulatedReward": 0,
+    "stake": 697870
   },
   {
     "id": "3-4",
     "electedInCouncilId": "3",
-    "memberId": "18",
-    "unpaidReward": 0,
-    "accumulatedReward": 53210,
-    "stake": 506875
+    "memberId": "20",
+    "unpaidReward": 25415,
+    "accumulatedReward": 0,
+    "stake": 186555
   },
   {
     "id": "3-5",
     "electedInCouncilId": "3",
-    "memberId": "10",
+    "memberId": "20",
     "unpaidReward": 0,
     "accumulatedReward": 0,
-    "stake": 851508
+    "stake": 423919
+  },
+  {
+    "id": "3-6",
+    "electedInCouncilId": "3",
+    "memberId": "14",
+    "unpaidReward": 0,
+    "accumulatedReward": 45268,
+    "stake": 702425
+  },
+  {
+    "id": "3-7",
+    "electedInCouncilId": "3",
+    "memberId": "37",
+    "unpaidReward": 86949,
+    "accumulatedReward": 0,
+    "stake": 232024
   }
 ]
