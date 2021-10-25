@@ -3,13 +3,17 @@ import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
 
-import { CandidateCardProps, CandidateCard } from './CandidateCard'
+import { CandidateCardProps, CandidateCard, CandidateCardCandidate } from './CandidateCard'
 import { NoCandidates } from './NoCandidates'
 
+interface CandidateCardListCandidate extends CandidateCardCandidate {
+  isMyCandidate?: boolean
+  voted?: boolean
+}
+
 interface CandidatesListProps extends Pick<CandidateCardProps, 'isVotingStage' | 'isPreview'> {
-  candidates?: (CandidateCardProps['candidate'] & { isMyCandidate?: boolean })[]
+  candidates?: CandidateCardListCandidate[]
   isLoading?: boolean
-  isVotingStage?: boolean
 }
 
 export const CandidateCardList = ({ candidates = [], isLoading, isVotingStage }: CandidatesListProps) => {
@@ -23,11 +27,12 @@ export const CandidateCardList = ({ candidates = [], isLoading, isVotingStage }:
 
   return (
     <CandidatesListStyles>
-      {candidates.map(({ isMyCandidate, ...candidate }, index) => (
+      {candidates.map(({ voted, isMyCandidate, ...candidate }, index) => (
         <CandidateCard
           key={index}
           candidate={candidate}
-          withdrawable={isMyCandidate ?? false}
+          voted={voted}
+          withdrawable={isMyCandidate}
           isVotingStage={isVotingStage}
         />
       ))}

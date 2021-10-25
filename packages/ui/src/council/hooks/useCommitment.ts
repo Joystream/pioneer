@@ -6,8 +6,9 @@ import { useCandidate } from '@/council/hooks/useCandidate'
 
 import { calculateCommitment } from '../model/calculateCommitment'
 
-interface VotingAttempt {
+export interface VotingAttempt {
   salt: string
+  accountId: string
   optionId: string
 }
 
@@ -24,8 +25,8 @@ export const useCommitment = (accountId: string, candidateId: string) => {
     const cycleId = candidate.cycleId
 
     return {
-      key: `vote:${cycleId}:${accountId}`,
-      value: { salt, optionId },
+      key: `votes:${cycleId}`,
+      value: { salt, accountId, optionId },
       commitment: calculateCommitment(accountId, optionId, salt, cycleId),
     }
   }, [accountId, candidate?.id])

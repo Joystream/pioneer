@@ -22,8 +22,10 @@ import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyS
 
 import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCardImage'
 
+export type CandidateCardCandidate = Pick<ElectionCandidate, 'id' | 'member' | 'stake' | 'info'>
+
 export interface CandidateCardProps {
-  candidate: Pick<ElectionCandidate, 'id' | 'member' | 'stake' | 'info'>
+  candidate: CandidateCardCandidate
   voted?: boolean
   withdrawable?: boolean
   wins?: number
