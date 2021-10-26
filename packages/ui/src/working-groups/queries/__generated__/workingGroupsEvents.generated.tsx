@@ -1,956 +1,354 @@
-import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
+import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated';
 
-import { gql } from '@apollo/client'
-import * as Apollo from '@apollo/client'
-const defaultOptions = {}
-export type AppliedOnOpeningEventFieldsFragment = {
-  __typename: 'AppliedOnOpeningEvent'
-  id: string
-  createdAt: any
-  application: {
-    __typename: 'WorkingGroupApplication'
-    applicant: { __typename: 'Membership'; id: string; handle: string }
-  }
-  opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-  group: { __typename: 'WorkingGroup'; name: string }
-}
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
+export type AppliedOnOpeningEventFieldsFragment = { __typename: 'AppliedOnOpeningEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', applicant: { __typename: 'Membership', id: string, handle: string } }, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string } };
 
-export type ApplicationWithdrawnEventFieldsFragment = {
-  __typename: 'ApplicationWithdrawnEvent'
-  id: string
-  createdAt: any
-  application: {
-    __typename: 'WorkingGroupApplication'
-    opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-    applicant: { __typename: 'Membership'; id: string; handle: string }
-  }
-  group: { __typename: 'WorkingGroup'; name: string }
-}
+export type ApplicationWithdrawnEventFieldsFragment = { __typename: 'ApplicationWithdrawnEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, applicant: { __typename: 'Membership', id: string, handle: string } }, group: { __typename: 'WorkingGroup', name: string } };
 
-export type BudgetSpendingActivityEventFieldsFragment = {
-  __typename: 'BudgetSpendingEvent'
-  id: string
-  createdAt: any
-  amount: any
-  group: { __typename: 'WorkingGroup'; name: string }
-}
+export type BudgetSpendingActivityEventFieldsFragment = { __typename: 'BudgetSpendingEvent', id: string, createdAt: any, amount: any, group: { __typename: 'WorkingGroup', name: string } };
 
-export type StakeDecreasedEventFieldsFragment = {
-  __typename: 'StakeDecreasedEvent'
-  id: string
-  createdAt: any
-  amount: any
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-}
+export type StakeDecreasedEventFieldsFragment = { __typename: 'StakeDecreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type StakeIncreasedEventFieldsFragment = {
-  __typename: 'StakeIncreasedEvent'
-  id: string
-  createdAt: any
-  amount: any
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-}
+export type StakeIncreasedEventFieldsFragment = { __typename: 'StakeIncreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type StakeSlashedEventFieldsFragment = {
-  __typename: 'StakeSlashedEvent'
-  id: string
-  createdAt: any
-  group: { __typename: 'WorkingGroup'; id: string; name: string }
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-}
+export type StakeSlashedEventFieldsFragment = { __typename: 'StakeSlashedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', id: string, name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type OpeningFilledEventFieldsFragment = {
-  __typename: 'OpeningFilledEvent'
-  id: string
-  createdAt: any
-  opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-  group: { __typename: 'WorkingGroup'; name: string }
-  workersHired: Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }>
-}
+export type OpeningFilledEventFieldsFragment = { __typename: 'OpeningFilledEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string }, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } }> };
 
-export type WorkerStartedLeavingEventFieldsFragment = {
-  __typename: 'WorkerStartedLeavingEvent'
-  id: string
-  createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string }
-  worker: {
-    __typename: 'Worker'
-    status:
-      | { __typename: 'WorkerStatusActive' }
-      | { __typename: 'WorkerStatusLeaving' }
-      | { __typename: 'WorkerStatusLeft' }
-      | { __typename: 'WorkerStatusTerminated' }
-    membership: { __typename: 'Membership'; id: string; handle: string }
-  }
-}
+export type WorkerStartedLeavingEventFieldsFragment = { __typename: 'WorkerStartedLeavingEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' }, membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type WorkerExitedEventFieldsFragment = {
-  __typename: 'WorkerExitedEvent'
-  id: string
-  createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string }
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-}
+export type WorkerExitedEventFieldsFragment = { __typename: 'WorkerExitedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type StatusTextChangedEventFieldsFragment = {
-  __typename: 'StatusTextChangedEvent'
-  id: string
-  createdAt: any
-  workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-  upcomingworkinggroupopeningcreatedInEvent?:
-    | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-    | null
-    | undefined
-  group: { __typename: 'WorkingGroup'; name: string }
-}
+export type StatusTextChangedEventFieldsFragment = { __typename: 'StatusTextChangedEvent', id: string, createdAt: any, workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata', id: string }> | null | undefined, upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening', id: string }> | null | undefined, group: { __typename: 'WorkingGroup', name: string } };
 
-export type OpeningAddedEventFieldsFragment = {
-  __typename: 'OpeningAddedEvent'
-  id: string
-  createdAt: any
-  opening: {
-    __typename: 'WorkingGroupOpening'
-    id: string
-    type: Types.WorkingGroupOpeningType
-    group: { __typename: 'WorkingGroup'; name: string }
-  }
-}
+export type OpeningAddedEventFieldsFragment = { __typename: 'OpeningAddedEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, group: { __typename: 'WorkingGroup', name: string } } };
 
-export type OpeningCanceledEventFieldsFragment = {
-  __typename: 'OpeningCanceledEvent'
-  id: string
-  createdAt: any
-  opening: {
-    __typename: 'WorkingGroupOpening'
-    id: string
-    type: Types.WorkingGroupOpeningType
-    group: { __typename: 'WorkingGroup'; name: string }
-  }
-}
+export type OpeningCanceledEventFieldsFragment = { __typename: 'OpeningCanceledEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, group: { __typename: 'WorkingGroup', name: string } } };
 
-export type BudgetSetEventFieldsFragment = {
-  __typename: 'BudgetSetEvent'
-  id: string
-  createdAt: any
-  newBudget: any
-  group: { __typename: 'WorkingGroup'; name: string }
-}
+export type BudgetSetEventFieldsFragment = { __typename: 'BudgetSetEvent', id: string, createdAt: any, newBudget: any, group: { __typename: 'WorkingGroup', name: string } };
 
-export type TerminatedWorkerEventFieldsFragment = {
-  __typename: 'TerminatedWorkerEvent'
-  id: string
-  createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string }
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-}
+export type TerminatedWorkerEventFieldsFragment = { __typename: 'TerminatedWorkerEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type TerminatedLeaderEventFieldsFragment = {
-  __typename: 'TerminatedLeaderEvent'
-  id: string
-  createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string }
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-}
+export type TerminatedLeaderEventFieldsFragment = { __typename: 'TerminatedLeaderEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } };
 
-export type WorkerRewardAmountUpdatedEventFragment = {
-  __typename: 'WorkerRewardAmountUpdatedEvent'
-  id: string
-  createdAt: any
-  newRewardPerBlock: any
-}
+export type WorkerRewardAmountUpdatedEventFragment = { __typename: 'WorkerRewardAmountUpdatedEvent', id: string, createdAt: any, newRewardPerBlock: any };
 
-export type WorkerRewardAccountUpdatedEventFragment = {
-  __typename: 'WorkerRewardAccountUpdatedEvent'
-  id: string
-  createdAt: any
-  newRewardAccount: string
-}
+export type WorkerRewardAccountUpdatedEventFragment = { __typename: 'WorkerRewardAccountUpdatedEvent', id: string, createdAt: any, newRewardAccount: string };
 
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
-  worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
-  application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
-}>
+  worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+}>;
 
-export type GetMemberRoleEventsQuery = {
-  __typename: 'Query'
-  appliedOnOpeningEvents: Array<{
-    __typename: 'AppliedOnOpeningEvent'
-    id: string
-    createdAt: any
-    application: {
-      __typename: 'WorkingGroupApplication'
-      applicant: { __typename: 'Membership'; id: string; handle: string }
-    }
-    opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  applicationWithdrawnEvents: Array<{
-    __typename: 'ApplicationWithdrawnEvent'
-    id: string
-    createdAt: any
-    application: {
-      __typename: 'WorkingGroupApplication'
-      opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-      applicant: { __typename: 'Membership'; id: string; handle: string }
-    }
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  stakeDecreasedEvents: Array<{
-    __typename: 'StakeDecreasedEvent'
-    id: string
-    createdAt: any
-    amount: any
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  stakeIncreasedEvents: Array<{
-    __typename: 'StakeIncreasedEvent'
-    id: string
-    createdAt: any
-    amount: any
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  stakeSlashedEvents: Array<{
-    __typename: 'StakeSlashedEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; id: string; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  workerStartedLeavingEvents: Array<{
-    __typename: 'WorkerStartedLeavingEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: {
-      __typename: 'Worker'
-      status:
-        | { __typename: 'WorkerStatusActive' }
-        | { __typename: 'WorkerStatusLeaving' }
-        | { __typename: 'WorkerStatusLeft' }
-        | { __typename: 'WorkerStatusTerminated' }
-      membership: { __typename: 'Membership'; id: string; handle: string }
-    }
-  }>
-  workerExitedEvents: Array<{
-    __typename: 'WorkerExitedEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  terminatedWorkerEvents: Array<{
-    __typename: 'TerminatedWorkerEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  terminatedLeaderEvents: Array<{
-    __typename: 'TerminatedLeaderEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  workerRewardAccountUpdatedEvents: Array<{
-    __typename: 'WorkerRewardAccountUpdatedEvent'
-    id: string
-    createdAt: any
-    newRewardAccount: string
-  }>
-  workerRewardAmountUpdatedEvents: Array<{
-    __typename: 'WorkerRewardAmountUpdatedEvent'
-    id: string
-    createdAt: any
-    newRewardPerBlock: any
-  }>
-}
+
+export type GetMemberRoleEventsQuery = { __typename: 'Query', appliedOnOpeningEvents: Array<{ __typename: 'AppliedOnOpeningEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', applicant: { __typename: 'Membership', id: string, handle: string } }, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string } }>, applicationWithdrawnEvents: Array<{ __typename: 'ApplicationWithdrawnEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, applicant: { __typename: 'Membership', id: string, handle: string } }, group: { __typename: 'WorkingGroup', name: string } }>, stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', id: string, name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, workerStartedLeavingEvents: Array<{ __typename: 'WorkerStartedLeavingEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' }, membership: { __typename: 'Membership', id: string, handle: string } } }>, workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, workerRewardAccountUpdatedEvents: Array<{ __typename: 'WorkerRewardAccountUpdatedEvent', id: string, createdAt: any, newRewardAccount: string }>, workerRewardAmountUpdatedEvents: Array<{ __typename: 'WorkerRewardAmountUpdatedEvent', id: string, createdAt: any, newRewardPerBlock: any }> };
 
 export type GetGroupEventsQueryVariables = Types.Exact<{
-  group_eq: Types.Scalars['ID']
-}>
+  group_eq: Types.Scalars['ID'];
+}>;
 
-export type GetGroupEventsQuery = {
-  __typename: 'Query'
-  appliedOnOpeningEvents: Array<{
-    __typename: 'AppliedOnOpeningEvent'
-    id: string
-    createdAt: any
-    application: {
-      __typename: 'WorkingGroupApplication'
-      applicant: { __typename: 'Membership'; id: string; handle: string }
-    }
-    opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  applicationWithdrawnEvents: Array<{
-    __typename: 'ApplicationWithdrawnEvent'
-    id: string
-    createdAt: any
-    application: {
-      __typename: 'WorkingGroupApplication'
-      opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-      applicant: { __typename: 'Membership'; id: string; handle: string }
-    }
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    id: string
-    createdAt: any
-    amount: any
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  stakeDecreasedEvents: Array<{
-    __typename: 'StakeDecreasedEvent'
-    id: string
-    createdAt: any
-    amount: any
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  stakeIncreasedEvents: Array<{
-    __typename: 'StakeIncreasedEvent'
-    id: string
-    createdAt: any
-    amount: any
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  openingAddedEvents: Array<{
-    __typename: 'OpeningAddedEvent'
-    id: string
-    createdAt: any
-    opening: {
-      __typename: 'WorkingGroupOpening'
-      id: string
-      type: Types.WorkingGroupOpeningType
-      group: { __typename: 'WorkingGroup'; name: string }
-    }
-  }>
-  openingCanceledEvents: Array<{
-    __typename: 'OpeningCanceledEvent'
-    id: string
-    createdAt: any
-    opening: {
-      __typename: 'WorkingGroupOpening'
-      id: string
-      type: Types.WorkingGroupOpeningType
-      group: { __typename: 'WorkingGroup'; name: string }
-    }
-  }>
-  openingFilledEvents: Array<{
-    __typename: 'OpeningFilledEvent'
-    id: string
-    createdAt: any
-    opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-    group: { __typename: 'WorkingGroup'; name: string }
-    workersHired: Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }>
-  }>
-  workerExitedEvents: Array<{
-    __typename: 'WorkerExitedEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  statusTextChangedEvents: Array<{
-    __typename: 'StatusTextChangedEvent'
-    id: string
-    createdAt: any
-    workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-    upcomingworkinggroupopeningcreatedInEvent?:
-      | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-      | null
-      | undefined
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  budgetSetEvents: Array<{
-    __typename: 'BudgetSetEvent'
-    id: string
-    createdAt: any
-    newBudget: any
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  stakeSlashedEvents: Array<{
-    __typename: 'StakeSlashedEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; id: string; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  terminatedWorkerEvents: Array<{
-    __typename: 'TerminatedWorkerEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  terminatedLeaderEvents: Array<{
-    __typename: 'TerminatedLeaderEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-}
+
+export type GetGroupEventsQuery = { __typename: 'Query', appliedOnOpeningEvents: Array<{ __typename: 'AppliedOnOpeningEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', applicant: { __typename: 'Membership', id: string, handle: string } }, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string } }>, applicationWithdrawnEvents: Array<{ __typename: 'ApplicationWithdrawnEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, applicant: { __typename: 'Membership', id: string, handle: string } }, group: { __typename: 'WorkingGroup', name: string } }>, budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent', id: string, createdAt: any, amount: any, group: { __typename: 'WorkingGroup', name: string } }>, stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, openingAddedEvents: Array<{ __typename: 'OpeningAddedEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, group: { __typename: 'WorkingGroup', name: string } } }>, openingCanceledEvents: Array<{ __typename: 'OpeningCanceledEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, group: { __typename: 'WorkingGroup', name: string } } }>, openingFilledEvents: Array<{ __typename: 'OpeningFilledEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string }, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } }> }>, workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, statusTextChangedEvents: Array<{ __typename: 'StatusTextChangedEvent', id: string, createdAt: any, workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata', id: string }> | null | undefined, upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening', id: string }> | null | undefined, group: { __typename: 'WorkingGroup', name: string } }>, budgetSetEvents: Array<{ __typename: 'BudgetSetEvent', id: string, createdAt: any, newBudget: any, group: { __typename: 'WorkingGroup', name: string } }>, stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', id: string, name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }> };
 
 export type GetWorkerEventsQueryVariables = Types.Exact<{
-  workerId?: Types.Maybe<Types.Scalars['ID']>
-  applicationId?: Types.Maybe<Types.Scalars['ID']>
-}>
+  workerId?: Types.Maybe<Types.Scalars['ID']>;
+  applicationId?: Types.Maybe<Types.Scalars['ID']>;
+}>;
 
-export type GetWorkerEventsQuery = {
-  __typename: 'Query'
-  appliedOnOpeningEvents: Array<{
-    __typename: 'AppliedOnOpeningEvent'
-    id: string
-    createdAt: any
-    application: {
-      __typename: 'WorkingGroupApplication'
-      applicant: { __typename: 'Membership'; id: string; handle: string }
-    }
-    opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  applicationWithdrawnEvents: Array<{
-    __typename: 'ApplicationWithdrawnEvent'
-    id: string
-    createdAt: any
-    application: {
-      __typename: 'WorkingGroupApplication'
-      opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-      applicant: { __typename: 'Membership'; id: string; handle: string }
-    }
-    group: { __typename: 'WorkingGroup'; name: string }
-  }>
-  stakeDecreasedEvents: Array<{
-    __typename: 'StakeDecreasedEvent'
-    id: string
-    createdAt: any
-    amount: any
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  stakeIncreasedEvents: Array<{
-    __typename: 'StakeIncreasedEvent'
-    id: string
-    createdAt: any
-    amount: any
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  stakeSlashedEvents: Array<{
-    __typename: 'StakeSlashedEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; id: string; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  workerStartedLeavingEvents: Array<{
-    __typename: 'WorkerStartedLeavingEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: {
-      __typename: 'Worker'
-      status:
-        | { __typename: 'WorkerStatusActive' }
-        | { __typename: 'WorkerStatusLeaving' }
-        | { __typename: 'WorkerStatusLeft' }
-        | { __typename: 'WorkerStatusTerminated' }
-      membership: { __typename: 'Membership'; id: string; handle: string }
-    }
-  }>
-  workerExitedEvents: Array<{
-    __typename: 'WorkerExitedEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  terminatedWorkerEvents: Array<{
-    __typename: 'TerminatedWorkerEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-  terminatedLeaderEvents: Array<{
-    __typename: 'TerminatedLeaderEvent'
-    id: string
-    createdAt: any
-    group: { __typename: 'WorkingGroup'; name: string }
-    worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-  }>
-}
 
-export type GetOpeningsEventsQueryVariables = Types.Exact<{ [key: string]: never }>
+export type GetWorkerEventsQuery = { __typename: 'Query', appliedOnOpeningEvents: Array<{ __typename: 'AppliedOnOpeningEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', applicant: { __typename: 'Membership', id: string, handle: string } }, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string } }>, applicationWithdrawnEvents: Array<{ __typename: 'ApplicationWithdrawnEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, applicant: { __typename: 'Membership', id: string, handle: string } }, group: { __typename: 'WorkingGroup', name: string } }>, stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', id: string, name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, workerStartedLeavingEvents: Array<{ __typename: 'WorkerStartedLeavingEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' }, membership: { __typename: 'Membership', id: string, handle: string } } }>, workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }>, terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } }> };
 
-export type GetOpeningsEventsQuery = {
-  __typename: 'Query'
-  events: Array<
-    | { __typename: 'AnnouncingPeriodStartedEvent' }
-    | {
-        __typename: 'ApplicationWithdrawnEvent'
-        id: string
-        createdAt: any
-        application: {
-          __typename: 'WorkingGroupApplication'
-          opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-          applicant: { __typename: 'Membership'; id: string; handle: string }
-        }
-        group: { __typename: 'WorkingGroup'; name: string }
-      }
-    | {
-        __typename: 'AppliedOnOpeningEvent'
-        id: string
-        createdAt: any
-        application: {
-          __typename: 'WorkingGroupApplication'
-          applicant: { __typename: 'Membership'; id: string; handle: string }
-        }
-        opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-        group: { __typename: 'WorkingGroup'; name: string }
-      }
-    | { __typename: 'BudgetBalanceSetEvent' }
-    | { __typename: 'BudgetIncrementUpdatedEvent' }
-    | { __typename: 'BudgetRefillEvent' }
-    | { __typename: 'BudgetRefillPlannedEvent' }
-    | {
-        __typename: 'BudgetSetEvent'
-        id: string
-        createdAt: any
-        newBudget: any
-        group: { __typename: 'WorkingGroup'; name: string }
-      }
-    | {
-        __typename: 'BudgetSpendingEvent'
-        id: string
-        createdAt: any
-        amount: any
-        group: { __typename: 'WorkingGroup'; name: string }
-      }
-    | { __typename: 'CandidacyNoteSetEvent' }
-    | { __typename: 'CandidacyStakeReleaseEvent' }
-    | { __typename: 'CandidacyWithdrawEvent' }
-    | { __typename: 'CouncilorRewardUpdatedEvent' }
-    | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
-    | { __typename: 'InitialInvitationCountUpdatedEvent' }
-    | { __typename: 'InvitesTransferredEvent' }
-    | { __typename: 'LeaderInvitationQuotaUpdatedEvent' }
-    | { __typename: 'LeaderSetEvent' }
-    | { __typename: 'LeaderUnsetEvent' }
-    | { __typename: 'MemberAccountsUpdatedEvent' }
-    | { __typename: 'MemberInvitedEvent' }
-    | { __typename: 'MemberProfileUpdatedEvent' }
-    | { __typename: 'MemberVerificationStatusUpdatedEvent' }
-    | { __typename: 'MembershipBoughtEvent' }
-    | { __typename: 'MembershipPriceUpdatedEvent' }
-    | { __typename: 'NewCandidateEvent' }
-    | { __typename: 'NewCouncilElectedEvent' }
-    | { __typename: 'NewCouncilNotElectedEvent' }
-    | { __typename: 'NewMissedRewardLevelReachedEvent' }
-    | { __typename: 'NotEnoughCandidatesEvent' }
-    | {
-        __typename: 'OpeningAddedEvent'
-        id: string
-        createdAt: any
-        opening: {
-          __typename: 'WorkingGroupOpening'
-          id: string
-          type: Types.WorkingGroupOpeningType
-          group: { __typename: 'WorkingGroup'; name: string }
-        }
-      }
-    | {
-        __typename: 'OpeningCanceledEvent'
-        id: string
-        createdAt: any
-        opening: {
-          __typename: 'WorkingGroupOpening'
-          id: string
-          type: Types.WorkingGroupOpeningType
-          group: { __typename: 'WorkingGroup'; name: string }
-        }
-      }
-    | {
-        __typename: 'OpeningFilledEvent'
-        id: string
-        createdAt: any
-        opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
-        group: { __typename: 'WorkingGroup'; name: string }
-        workersHired: Array<{
-          __typename: 'Worker'
-          membership: { __typename: 'Membership'; id: string; handle: string }
-        }>
-      }
-    | { __typename: 'ProposalCancelledEvent' }
-    | { __typename: 'ProposalCreatedEvent' }
-    | { __typename: 'ProposalDecisionMadeEvent' }
-    | { __typename: 'ProposalDiscussionPostCreatedEvent' }
-    | { __typename: 'ProposalDiscussionPostDeletedEvent' }
-    | { __typename: 'ProposalDiscussionPostUpdatedEvent' }
-    | { __typename: 'ProposalDiscussionThreadModeChangedEvent' }
-    | { __typename: 'ProposalExecutedEvent' }
-    | { __typename: 'ProposalStatusUpdatedEvent' }
-    | { __typename: 'ProposalVotedEvent' }
-    | { __typename: 'ReferendumFinishedEvent' }
-    | { __typename: 'ReferendumStartedEvent' }
-    | { __typename: 'ReferendumStartedForcefullyEvent' }
-    | { __typename: 'ReferralCutUpdatedEvent' }
-    | { __typename: 'RequestFundedEvent' }
-    | { __typename: 'RevealingStageStartedEvent' }
-    | { __typename: 'RewardPaidEvent' }
-    | { __typename: 'RewardPaymentEvent' }
-    | {
-        __typename: 'StakeDecreasedEvent'
-        id: string
-        createdAt: any
-        amount: any
-        worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-      }
-    | {
-        __typename: 'StakeIncreasedEvent'
-        id: string
-        createdAt: any
-        amount: any
-        worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-      }
-    | { __typename: 'StakeReleasedEvent' }
-    | {
-        __typename: 'StakeSlashedEvent'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; name: string }
-        worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-      }
-    | { __typename: 'StakingAccountAddedEvent' }
-    | { __typename: 'StakingAccountConfirmedEvent' }
-    | { __typename: 'StakingAccountRemovedEvent' }
-    | {
-        __typename: 'StatusTextChangedEvent'
-        id: string
-        createdAt: any
-        workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-        upcomingworkinggroupopeningcreatedInEvent?:
-          | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-          | null
-          | undefined
-        group: { __typename: 'WorkingGroup'; name: string }
-      }
-    | {
-        __typename: 'TerminatedLeaderEvent'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; name: string }
-        worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-      }
-    | {
-        __typename: 'TerminatedWorkerEvent'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; name: string }
-        worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-      }
-    | { __typename: 'VoteCastEvent' }
-    | { __typename: 'VoteRevealedEvent' }
-    | { __typename: 'VotingPeriodStartedEvent' }
-    | {
-        __typename: 'WorkerExitedEvent'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; name: string }
-        worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
-      }
-    | { __typename: 'WorkerRewardAccountUpdatedEvent' }
-    | { __typename: 'WorkerRewardAmountUpdatedEvent' }
-    | { __typename: 'WorkerRoleAccountUpdatedEvent' }
-    | { __typename: 'WorkerStartedLeavingEvent' }
-  >
-}
+export type GetOpeningsEventsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type GetOpeningsEventsQuery = { __typename: 'Query', events: Array<{ __typename: 'AnnouncingPeriodStartedEvent' } | { __typename: 'ApplicationWithdrawnEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, applicant: { __typename: 'Membership', id: string, handle: string } }, group: { __typename: 'WorkingGroup', name: string } } | { __typename: 'AppliedOnOpeningEvent', id: string, createdAt: any, application: { __typename: 'WorkingGroupApplication', applicant: { __typename: 'Membership', id: string, handle: string } }, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string } } | { __typename: 'BudgetBalanceSetEvent' } | { __typename: 'BudgetIncrementUpdatedEvent' } | { __typename: 'BudgetRefillEvent' } | { __typename: 'BudgetRefillPlannedEvent' } | { __typename: 'BudgetSetEvent', id: string, createdAt: any, newBudget: any, group: { __typename: 'WorkingGroup', name: string } } | { __typename: 'BudgetSpendingEvent', id: string, createdAt: any, amount: any, group: { __typename: 'WorkingGroup', name: string } } | { __typename: 'CandidacyNoteSetEvent' } | { __typename: 'CandidacyStakeReleaseEvent' } | { __typename: 'CandidacyWithdrawEvent' } | { __typename: 'CouncilorRewardUpdatedEvent' } | { __typename: 'InitialInvitationBalanceUpdatedEvent' } | { __typename: 'InitialInvitationCountUpdatedEvent' } | { __typename: 'InvitesTransferredEvent' } | { __typename: 'LeaderInvitationQuotaUpdatedEvent' } | { __typename: 'LeaderSetEvent' } | { __typename: 'LeaderUnsetEvent' } | { __typename: 'MemberAccountsUpdatedEvent' } | { __typename: 'MemberInvitedEvent' } | { __typename: 'MemberProfileUpdatedEvent' } | { __typename: 'MemberVerificationStatusUpdatedEvent' } | { __typename: 'MembershipBoughtEvent' } | { __typename: 'MembershipPriceUpdatedEvent' } | { __typename: 'NewCandidateEvent' } | { __typename: 'NewCouncilElectedEvent' } | { __typename: 'NewCouncilNotElectedEvent' } | { __typename: 'NewMissedRewardLevelReachedEvent' } | { __typename: 'NotEnoughCandidatesEvent' } | { __typename: 'OpeningAddedEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, group: { __typename: 'WorkingGroup', name: string } } } | { __typename: 'OpeningCanceledEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, group: { __typename: 'WorkingGroup', name: string } } } | { __typename: 'OpeningFilledEvent', id: string, createdAt: any, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType }, group: { __typename: 'WorkingGroup', name: string }, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } }> } | { __typename: 'ProposalCancelledEvent' } | { __typename: 'ProposalCreatedEvent' } | { __typename: 'ProposalDecisionMadeEvent' } | { __typename: 'ProposalDiscussionPostCreatedEvent' } | { __typename: 'ProposalDiscussionPostDeletedEvent' } | { __typename: 'ProposalDiscussionPostUpdatedEvent' } | { __typename: 'ProposalDiscussionThreadModeChangedEvent' } | { __typename: 'ProposalExecutedEvent' } | { __typename: 'ProposalStatusUpdatedEvent' } | { __typename: 'ProposalVotedEvent' } | { __typename: 'ReferendumFinishedEvent' } | { __typename: 'ReferendumStartedEvent' } | { __typename: 'ReferendumStartedForcefullyEvent' } | { __typename: 'ReferralCutUpdatedEvent' } | { __typename: 'RequestFundedEvent' } | { __typename: 'RevealingStageStartedEvent' } | { __typename: 'RewardPaidEvent' } | { __typename: 'RewardPaymentEvent' } | { __typename: 'StakeDecreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } } | { __typename: 'StakeIncreasedEvent', id: string, createdAt: any, amount: any, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } } | { __typename: 'StakeReleasedEvent' } | { __typename: 'StakeSlashedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', id: string, name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } } | { __typename: 'StakingAccountAddedEvent' } | { __typename: 'StakingAccountConfirmedEvent' } | { __typename: 'StakingAccountRemovedEvent' } | { __typename: 'StatusTextChangedEvent', id: string, createdAt: any, workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata', id: string }> | null | undefined, upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening', id: string }> | null | undefined, group: { __typename: 'WorkingGroup', name: string } } | { __typename: 'TerminatedLeaderEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } } | { __typename: 'TerminatedWorkerEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } } | { __typename: 'VoteCastEvent' } | { __typename: 'VoteRevealedEvent' } | { __typename: 'VotingPeriodStartedEvent' } | { __typename: 'WorkerExitedEvent', id: string, createdAt: any, group: { __typename: 'WorkingGroup', name: string }, worker: { __typename: 'Worker', membership: { __typename: 'Membership', id: string, handle: string } } } | { __typename: 'WorkerRewardAccountUpdatedEvent' } | { __typename: 'WorkerRewardAmountUpdatedEvent' } | { __typename: 'WorkerRoleAccountUpdatedEvent' } | { __typename: 'WorkerStartedLeavingEvent' }> };
 
 export const AppliedOnOpeningEventFieldsFragmentDoc = gql`
-  fragment AppliedOnOpeningEventFields on AppliedOnOpeningEvent {
-    id
-    createdAt
-    application {
-      applicant {
-        id
-        handle
-      }
-    }
-    opening {
+    fragment AppliedOnOpeningEventFields on AppliedOnOpeningEvent {
+  id
+  createdAt
+  application {
+    applicant {
       id
-      type
-    }
-    group {
-      name
+      handle
     }
   }
-`
+  opening {
+    id
+    type
+  }
+  group {
+    name
+  }
+}
+    `;
 export const ApplicationWithdrawnEventFieldsFragmentDoc = gql`
-  fragment ApplicationWithdrawnEventFields on ApplicationWithdrawnEvent {
-    id
-    createdAt
-    application {
-      opening {
-        id
-        type
-      }
-      applicant {
-        id
-        handle
-      }
+    fragment ApplicationWithdrawnEventFields on ApplicationWithdrawnEvent {
+  id
+  createdAt
+  application {
+    opening {
+      id
+      type
     }
-    group {
-      name
+    applicant {
+      id
+      handle
     }
   }
-`
+  group {
+    name
+  }
+}
+    `;
 export const BudgetSpendingActivityEventFieldsFragmentDoc = gql`
-  fragment BudgetSpendingActivityEventFields on BudgetSpendingEvent {
-    id
-    createdAt
-    amount
-    group {
-      name
-    }
+    fragment BudgetSpendingActivityEventFields on BudgetSpendingEvent {
+  id
+  createdAt
+  amount
+  group {
+    name
   }
-`
+}
+    `;
 export const StakeDecreasedEventFieldsFragmentDoc = gql`
-  fragment StakeDecreasedEventFields on StakeDecreasedEvent {
-    id
-    createdAt
-    worker {
-      membership {
-        id
-        handle
-      }
+    fragment StakeDecreasedEventFields on StakeDecreasedEvent {
+  id
+  createdAt
+  worker {
+    membership {
+      id
+      handle
     }
-    amount
   }
-`
+  amount
+}
+    `;
 export const StakeIncreasedEventFieldsFragmentDoc = gql`
-  fragment StakeIncreasedEventFields on StakeIncreasedEvent {
-    id
-    createdAt
-    worker {
-      membership {
-        id
-        handle
-      }
+    fragment StakeIncreasedEventFields on StakeIncreasedEvent {
+  id
+  createdAt
+  worker {
+    membership {
+      id
+      handle
     }
-    amount
   }
-`
+  amount
+}
+    `;
 export const StakeSlashedEventFieldsFragmentDoc = gql`
-  fragment StakeSlashedEventFields on StakeSlashedEvent {
+    fragment StakeSlashedEventFields on StakeSlashedEvent {
+  id
+  createdAt
+  group {
     id
-    createdAt
-    group {
+    name
+  }
+  worker {
+    membership {
       id
-      name
-    }
-    worker {
-      membership {
-        id
-        handle
-      }
+      handle
     }
   }
-`
+}
+    `;
 export const OpeningFilledEventFieldsFragmentDoc = gql`
-  fragment OpeningFilledEventFields on OpeningFilledEvent {
+    fragment OpeningFilledEventFields on OpeningFilledEvent {
+  id
+  createdAt
+  opening {
     id
-    createdAt
-    opening {
+    type
+  }
+  group {
+    name
+  }
+  workersHired {
+    membership {
       id
-      type
-    }
-    group {
-      name
-    }
-    workersHired {
-      membership {
-        id
-        handle
-      }
+      handle
     }
   }
-`
+}
+    `;
 export const WorkerStartedLeavingEventFieldsFragmentDoc = gql`
-  fragment WorkerStartedLeavingEventFields on WorkerStartedLeavingEvent {
-    id
-    createdAt
-    group {
-      name
+    fragment WorkerStartedLeavingEventFields on WorkerStartedLeavingEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    status {
+      __typename
     }
-    worker {
-      status {
-        __typename
-      }
-      membership {
-        id
-        handle
-      }
+    membership {
+      id
+      handle
     }
   }
-`
+}
+    `;
 export const WorkerExitedEventFieldsFragmentDoc = gql`
-  fragment WorkerExitedEventFields on WorkerExitedEvent {
-    id
-    createdAt
-    group {
-      name
-    }
-    worker {
-      membership {
-        id
-        handle
-      }
+    fragment WorkerExitedEventFields on WorkerExitedEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
     }
   }
-`
+}
+    `;
 export const StatusTextChangedEventFieldsFragmentDoc = gql`
-  fragment StatusTextChangedEventFields on StatusTextChangedEvent {
+    fragment StatusTextChangedEventFields on StatusTextChangedEvent {
+  id
+  createdAt
+  workinggroupmetadatasetInEvent {
     id
-    createdAt
-    workinggroupmetadatasetInEvent {
-      id
-    }
-    upcomingworkinggroupopeningcreatedInEvent {
-      id
-    }
-    group {
-      name
-    }
   }
-`
+  upcomingworkinggroupopeningcreatedInEvent {
+    id
+  }
+  group {
+    name
+  }
+}
+    `;
 export const OpeningAddedEventFieldsFragmentDoc = gql`
-  fragment OpeningAddedEventFields on OpeningAddedEvent {
+    fragment OpeningAddedEventFields on OpeningAddedEvent {
+  id
+  createdAt
+  opening {
     id
-    createdAt
-    opening {
-      id
-      type
-      group {
-        name
-      }
+    type
+    group {
+      name
     }
   }
-`
+}
+    `;
 export const OpeningCanceledEventFieldsFragmentDoc = gql`
-  fragment OpeningCanceledEventFields on OpeningCanceledEvent {
+    fragment OpeningCanceledEventFields on OpeningCanceledEvent {
+  id
+  createdAt
+  opening {
     id
-    createdAt
-    opening {
-      id
-      type
-      group {
-        name
-      }
+    type
+    group {
+      name
     }
   }
-`
+}
+    `;
 export const BudgetSetEventFieldsFragmentDoc = gql`
-  fragment BudgetSetEventFields on BudgetSetEvent {
-    id
-    createdAt
-    group {
-      name
-    }
-    newBudget
+    fragment BudgetSetEventFields on BudgetSetEvent {
+  id
+  createdAt
+  group {
+    name
   }
-`
+  newBudget
+}
+    `;
 export const TerminatedWorkerEventFieldsFragmentDoc = gql`
-  fragment TerminatedWorkerEventFields on TerminatedWorkerEvent {
-    id
-    createdAt
-    group {
-      name
-    }
-    worker {
-      membership {
-        id
-        handle
-      }
+    fragment TerminatedWorkerEventFields on TerminatedWorkerEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
     }
   }
-`
+}
+    `;
 export const TerminatedLeaderEventFieldsFragmentDoc = gql`
-  fragment TerminatedLeaderEventFields on TerminatedLeaderEvent {
-    id
-    createdAt
-    group {
-      name
-    }
-    worker {
-      membership {
-        id
-        handle
-      }
+    fragment TerminatedLeaderEventFields on TerminatedLeaderEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
     }
   }
-`
+}
+    `;
 export const WorkerRewardAmountUpdatedEventFragmentDoc = gql`
-  fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
-    id
-    createdAt
-    newRewardPerBlock
-  }
-`
+    fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
+  id
+  createdAt
+  newRewardPerBlock
+}
+    `;
 export const WorkerRewardAccountUpdatedEventFragmentDoc = gql`
-  fragment WorkerRewardAccountUpdatedEvent on WorkerRewardAccountUpdatedEvent {
-    id
-    createdAt
-    newRewardAccount
-  }
-`
+    fragment WorkerRewardAccountUpdatedEvent on WorkerRewardAccountUpdatedEvent {
+  id
+  createdAt
+  newRewardAccount
+}
+    `;
 export const GetMemberRoleEventsDocument = gql`
-  query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
-    appliedOnOpeningEvents(where: { application: { id_in: $application_in } }) {
-      ...AppliedOnOpeningEventFields
-    }
-    applicationWithdrawnEvents(where: { application: { id_in: $application_in } }) {
-      ...ApplicationWithdrawnEventFields
-    }
-    stakeDecreasedEvents(where: { worker: { id_in: $worker_in } }) {
-      ...StakeDecreasedEventFields
-    }
-    stakeIncreasedEvents(where: { worker: { id_in: $worker_in } }) {
-      ...StakeIncreasedEventFields
-    }
-    stakeSlashedEvents(where: { worker: { id_in: $worker_in } }) {
-      ...StakeSlashedEventFields
-    }
-    workerStartedLeavingEvents(where: { worker: { id_in: $worker_in } }) {
-      ...WorkerStartedLeavingEventFields
-    }
-    workerExitedEvents(where: { worker: { id_in: $worker_in } }) {
-      ...WorkerExitedEventFields
-    }
-    terminatedWorkerEvents(where: { worker: { id_in: $worker_in } }) {
-      ...TerminatedWorkerEventFields
-    }
-    terminatedLeaderEvents(where: { worker: { id_in: $worker_in } }) {
-      ...TerminatedLeaderEventFields
-    }
-    workerRewardAccountUpdatedEvents(where: { worker: { id_in: $worker_in } }) {
-      ...WorkerRewardAccountUpdatedEvent
-    }
-    workerRewardAmountUpdatedEvents(where: { worker: { id_in: $worker_in } }) {
-      ...WorkerRewardAmountUpdatedEvent
-    }
+    query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
+  appliedOnOpeningEvents(where: {application: {id_in: $application_in}}) {
+    ...AppliedOnOpeningEventFields
   }
-  ${AppliedOnOpeningEventFieldsFragmentDoc}
-  ${ApplicationWithdrawnEventFieldsFragmentDoc}
-  ${StakeDecreasedEventFieldsFragmentDoc}
-  ${StakeIncreasedEventFieldsFragmentDoc}
-  ${StakeSlashedEventFieldsFragmentDoc}
-  ${WorkerStartedLeavingEventFieldsFragmentDoc}
-  ${WorkerExitedEventFieldsFragmentDoc}
-  ${TerminatedWorkerEventFieldsFragmentDoc}
-  ${TerminatedLeaderEventFieldsFragmentDoc}
-  ${WorkerRewardAccountUpdatedEventFragmentDoc}
-  ${WorkerRewardAmountUpdatedEventFragmentDoc}
-`
+  applicationWithdrawnEvents(where: {application: {id_in: $application_in}}) {
+    ...ApplicationWithdrawnEventFields
+  }
+  stakeDecreasedEvents(where: {worker: {id_in: $worker_in}}) {
+    ...StakeDecreasedEventFields
+  }
+  stakeIncreasedEvents(where: {worker: {id_in: $worker_in}}) {
+    ...StakeIncreasedEventFields
+  }
+  stakeSlashedEvents(where: {worker: {id_in: $worker_in}}) {
+    ...StakeSlashedEventFields
+  }
+  workerStartedLeavingEvents(where: {worker: {id_in: $worker_in}}) {
+    ...WorkerStartedLeavingEventFields
+  }
+  workerExitedEvents(where: {worker: {id_in: $worker_in}}) {
+    ...WorkerExitedEventFields
+  }
+  terminatedWorkerEvents(where: {worker: {id_in: $worker_in}}) {
+    ...TerminatedWorkerEventFields
+  }
+  terminatedLeaderEvents(where: {worker: {id_in: $worker_in}}) {
+    ...TerminatedLeaderEventFields
+  }
+  workerRewardAccountUpdatedEvents(where: {worker: {id_in: $worker_in}}) {
+    ...WorkerRewardAccountUpdatedEvent
+  }
+  workerRewardAmountUpdatedEvents(where: {worker: {id_in: $worker_in}}) {
+    ...WorkerRewardAmountUpdatedEvent
+  }
+}
+    ${AppliedOnOpeningEventFieldsFragmentDoc}
+${ApplicationWithdrawnEventFieldsFragmentDoc}
+${StakeDecreasedEventFieldsFragmentDoc}
+${StakeIncreasedEventFieldsFragmentDoc}
+${StakeSlashedEventFieldsFragmentDoc}
+${WorkerStartedLeavingEventFieldsFragmentDoc}
+${WorkerExitedEventFieldsFragmentDoc}
+${TerminatedWorkerEventFieldsFragmentDoc}
+${TerminatedLeaderEventFieldsFragmentDoc}
+${WorkerRewardAccountUpdatedEventFragmentDoc}
+${WorkerRewardAmountUpdatedEventFragmentDoc}`;
 
 /**
  * __useGetMemberRoleEventsQuery__
@@ -969,90 +367,76 @@ export const GetMemberRoleEventsDocument = gql`
  *   },
  * });
  */
-export function useGetMemberRoleEventsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>(
-    GetMemberRoleEventsDocument,
-    options
-  )
-}
-export function useGetMemberRoleEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>(
-    GetMemberRoleEventsDocument,
-    options
-  )
-}
-export type GetMemberRoleEventsQueryHookResult = ReturnType<typeof useGetMemberRoleEventsQuery>
-export type GetMemberRoleEventsLazyQueryHookResult = ReturnType<typeof useGetMemberRoleEventsLazyQuery>
-export type GetMemberRoleEventsQueryResult = Apollo.QueryResult<
-  GetMemberRoleEventsQuery,
-  GetMemberRoleEventsQueryVariables
->
+export function useGetMemberRoleEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>(GetMemberRoleEventsDocument, options);
+      }
+export function useGetMemberRoleEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>(GetMemberRoleEventsDocument, options);
+        }
+export type GetMemberRoleEventsQueryHookResult = ReturnType<typeof useGetMemberRoleEventsQuery>;
+export type GetMemberRoleEventsLazyQueryHookResult = ReturnType<typeof useGetMemberRoleEventsLazyQuery>;
+export type GetMemberRoleEventsQueryResult = Apollo.QueryResult<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>;
 export const GetGroupEventsDocument = gql`
-  query GetGroupEvents($group_eq: ID!) {
-    appliedOnOpeningEvents(where: { group: { id_eq: $group_eq } }) {
-      ...AppliedOnOpeningEventFields
-    }
-    applicationWithdrawnEvents(where: { group: { id_eq: $group_eq } }) {
-      ...ApplicationWithdrawnEventFields
-    }
-    budgetSpendingEvents(where: { group: { id_eq: $group_eq } }) {
-      ...BudgetSpendingActivityEventFields
-    }
-    stakeDecreasedEvents(where: { group: { id_eq: $group_eq } }) {
-      ...StakeDecreasedEventFields
-    }
-    stakeIncreasedEvents(where: { group: { id_eq: $group_eq } }) {
-      ...StakeIncreasedEventFields
-    }
-    openingAddedEvents(where: { group: { id_eq: $group_eq } }) {
-      ...OpeningAddedEventFields
-    }
-    openingCanceledEvents(where: { group: { id_eq: $group_eq } }) {
-      ...OpeningCanceledEventFields
-    }
-    openingFilledEvents(where: { group: { id_eq: $group_eq } }) {
-      ...OpeningFilledEventFields
-    }
-    workerExitedEvents(where: { group: { id_eq: $group_eq } }) {
-      ...WorkerExitedEventFields
-    }
-    statusTextChangedEvents(where: { group: { id_eq: $group_eq } }) {
-      ...StatusTextChangedEventFields
-    }
-    budgetSetEvents(where: { group: { id_eq: $group_eq } }) {
-      ...BudgetSetEventFields
-    }
-    stakeSlashedEvents(where: { group: { id_eq: $group_eq } }) {
-      ...StakeSlashedEventFields
-    }
-    terminatedWorkerEvents(where: { group: { id_eq: $group_eq } }) {
-      ...TerminatedWorkerEventFields
-    }
-    terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
-      ...TerminatedLeaderEventFields
-    }
+    query GetGroupEvents($group_eq: ID!) {
+  appliedOnOpeningEvents(where: {group: {id_eq: $group_eq}}) {
+    ...AppliedOnOpeningEventFields
   }
-  ${AppliedOnOpeningEventFieldsFragmentDoc}
-  ${ApplicationWithdrawnEventFieldsFragmentDoc}
-  ${BudgetSpendingActivityEventFieldsFragmentDoc}
-  ${StakeDecreasedEventFieldsFragmentDoc}
-  ${StakeIncreasedEventFieldsFragmentDoc}
-  ${OpeningAddedEventFieldsFragmentDoc}
-  ${OpeningCanceledEventFieldsFragmentDoc}
-  ${OpeningFilledEventFieldsFragmentDoc}
-  ${WorkerExitedEventFieldsFragmentDoc}
-  ${StatusTextChangedEventFieldsFragmentDoc}
-  ${BudgetSetEventFieldsFragmentDoc}
-  ${StakeSlashedEventFieldsFragmentDoc}
-  ${TerminatedWorkerEventFieldsFragmentDoc}
-  ${TerminatedLeaderEventFieldsFragmentDoc}
-`
+  applicationWithdrawnEvents(where: {group: {id_eq: $group_eq}}) {
+    ...ApplicationWithdrawnEventFields
+  }
+  budgetSpendingEvents(where: {group: {id_eq: $group_eq}}) {
+    ...BudgetSpendingActivityEventFields
+  }
+  stakeDecreasedEvents(where: {group: {id_eq: $group_eq}}) {
+    ...StakeDecreasedEventFields
+  }
+  stakeIncreasedEvents(where: {group: {id_eq: $group_eq}}) {
+    ...StakeIncreasedEventFields
+  }
+  openingAddedEvents(where: {group: {id_eq: $group_eq}}) {
+    ...OpeningAddedEventFields
+  }
+  openingCanceledEvents(where: {group: {id_eq: $group_eq}}) {
+    ...OpeningCanceledEventFields
+  }
+  openingFilledEvents(where: {group: {id_eq: $group_eq}}) {
+    ...OpeningFilledEventFields
+  }
+  workerExitedEvents(where: {group: {id_eq: $group_eq}}) {
+    ...WorkerExitedEventFields
+  }
+  statusTextChangedEvents(where: {group: {id_eq: $group_eq}}) {
+    ...StatusTextChangedEventFields
+  }
+  budgetSetEvents(where: {group: {id_eq: $group_eq}}) {
+    ...BudgetSetEventFields
+  }
+  stakeSlashedEvents(where: {group: {id_eq: $group_eq}}) {
+    ...StakeSlashedEventFields
+  }
+  terminatedWorkerEvents(where: {group: {id_eq: $group_eq}}) {
+    ...TerminatedWorkerEventFields
+  }
+  terminatedLeaderEvents(where: {group: {id_eq: $group_eq}}) {
+    ...TerminatedLeaderEventFields
+  }
+}
+    ${AppliedOnOpeningEventFieldsFragmentDoc}
+${ApplicationWithdrawnEventFieldsFragmentDoc}
+${BudgetSpendingActivityEventFieldsFragmentDoc}
+${StakeDecreasedEventFieldsFragmentDoc}
+${StakeIncreasedEventFieldsFragmentDoc}
+${OpeningAddedEventFieldsFragmentDoc}
+${OpeningCanceledEventFieldsFragmentDoc}
+${OpeningFilledEventFieldsFragmentDoc}
+${WorkerExitedEventFieldsFragmentDoc}
+${StatusTextChangedEventFieldsFragmentDoc}
+${BudgetSetEventFieldsFragmentDoc}
+${StakeSlashedEventFieldsFragmentDoc}
+${TerminatedWorkerEventFieldsFragmentDoc}
+${TerminatedLeaderEventFieldsFragmentDoc}`;
 
 /**
  * __useGetGroupEventsQuery__
@@ -1070,61 +454,56 @@ export const GetGroupEventsDocument = gql`
  *   },
  * });
  */
-export function useGetGroupEventsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetGroupEventsQuery, GetGroupEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetGroupEventsQuery, GetGroupEventsQueryVariables>(GetGroupEventsDocument, options)
-}
-export function useGetGroupEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetGroupEventsQuery, GetGroupEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetGroupEventsQuery, GetGroupEventsQueryVariables>(GetGroupEventsDocument, options)
-}
-export type GetGroupEventsQueryHookResult = ReturnType<typeof useGetGroupEventsQuery>
-export type GetGroupEventsLazyQueryHookResult = ReturnType<typeof useGetGroupEventsLazyQuery>
-export type GetGroupEventsQueryResult = Apollo.QueryResult<GetGroupEventsQuery, GetGroupEventsQueryVariables>
+export function useGetGroupEventsQuery(baseOptions: Apollo.QueryHookOptions<GetGroupEventsQuery, GetGroupEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupEventsQuery, GetGroupEventsQueryVariables>(GetGroupEventsDocument, options);
+      }
+export function useGetGroupEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupEventsQuery, GetGroupEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupEventsQuery, GetGroupEventsQueryVariables>(GetGroupEventsDocument, options);
+        }
+export type GetGroupEventsQueryHookResult = ReturnType<typeof useGetGroupEventsQuery>;
+export type GetGroupEventsLazyQueryHookResult = ReturnType<typeof useGetGroupEventsLazyQuery>;
+export type GetGroupEventsQueryResult = Apollo.QueryResult<GetGroupEventsQuery, GetGroupEventsQueryVariables>;
 export const GetWorkerEventsDocument = gql`
-  query GetWorkerEvents($workerId: ID, $applicationId: ID) {
-    appliedOnOpeningEvents(where: { application: { id_eq: $applicationId } }) {
-      ...AppliedOnOpeningEventFields
-    }
-    applicationWithdrawnEvents(where: { application: { id_eq: $applicationId } }) {
-      ...ApplicationWithdrawnEventFields
-    }
-    stakeDecreasedEvents(where: { worker: { id_eq: $workerId } }) {
-      ...StakeDecreasedEventFields
-    }
-    stakeIncreasedEvents(where: { worker: { id_eq: $workerId } }) {
-      ...StakeIncreasedEventFields
-    }
-    stakeSlashedEvents(where: { worker: { id_eq: $workerId } }) {
-      ...StakeSlashedEventFields
-    }
-    workerStartedLeavingEvents(where: { worker: { id_eq: $workerId } }) {
-      ...WorkerStartedLeavingEventFields
-    }
-    workerExitedEvents(where: { worker: { id_eq: $workerId } }) {
-      ...WorkerExitedEventFields
-    }
-    terminatedWorkerEvents(where: { worker: { id_eq: $workerId } }) {
-      ...TerminatedWorkerEventFields
-    }
-    terminatedLeaderEvents(where: { worker: { id_eq: $workerId } }) {
-      ...TerminatedLeaderEventFields
-    }
+    query GetWorkerEvents($workerId: ID, $applicationId: ID) {
+  appliedOnOpeningEvents(where: {application: {id_eq: $applicationId}}) {
+    ...AppliedOnOpeningEventFields
   }
-  ${AppliedOnOpeningEventFieldsFragmentDoc}
-  ${ApplicationWithdrawnEventFieldsFragmentDoc}
-  ${StakeDecreasedEventFieldsFragmentDoc}
-  ${StakeIncreasedEventFieldsFragmentDoc}
-  ${StakeSlashedEventFieldsFragmentDoc}
-  ${WorkerStartedLeavingEventFieldsFragmentDoc}
-  ${WorkerExitedEventFieldsFragmentDoc}
-  ${TerminatedWorkerEventFieldsFragmentDoc}
-  ${TerminatedLeaderEventFieldsFragmentDoc}
-`
+  applicationWithdrawnEvents(where: {application: {id_eq: $applicationId}}) {
+    ...ApplicationWithdrawnEventFields
+  }
+  stakeDecreasedEvents(where: {worker: {id_eq: $workerId}}) {
+    ...StakeDecreasedEventFields
+  }
+  stakeIncreasedEvents(where: {worker: {id_eq: $workerId}}) {
+    ...StakeIncreasedEventFields
+  }
+  stakeSlashedEvents(where: {worker: {id_eq: $workerId}}) {
+    ...StakeSlashedEventFields
+  }
+  workerStartedLeavingEvents(where: {worker: {id_eq: $workerId}}) {
+    ...WorkerStartedLeavingEventFields
+  }
+  workerExitedEvents(where: {worker: {id_eq: $workerId}}) {
+    ...WorkerExitedEventFields
+  }
+  terminatedWorkerEvents(where: {worker: {id_eq: $workerId}}) {
+    ...TerminatedWorkerEventFields
+  }
+  terminatedLeaderEvents(where: {worker: {id_eq: $workerId}}) {
+    ...TerminatedLeaderEventFields
+  }
+}
+    ${AppliedOnOpeningEventFieldsFragmentDoc}
+${ApplicationWithdrawnEventFieldsFragmentDoc}
+${StakeDecreasedEventFieldsFragmentDoc}
+${StakeIncreasedEventFieldsFragmentDoc}
+${StakeSlashedEventFieldsFragmentDoc}
+${WorkerStartedLeavingEventFieldsFragmentDoc}
+${WorkerExitedEventFieldsFragmentDoc}
+${TerminatedWorkerEventFieldsFragmentDoc}
+${TerminatedLeaderEventFieldsFragmentDoc}`;
 
 /**
  * __useGetWorkerEventsQuery__
@@ -1143,104 +522,82 @@ export const GetWorkerEventsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkerEventsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>(GetWorkerEventsDocument, options)
-}
-export function useGetWorkerEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>(GetWorkerEventsDocument, options)
-}
-export type GetWorkerEventsQueryHookResult = ReturnType<typeof useGetWorkerEventsQuery>
-export type GetWorkerEventsLazyQueryHookResult = ReturnType<typeof useGetWorkerEventsLazyQuery>
-export type GetWorkerEventsQueryResult = Apollo.QueryResult<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
+export function useGetWorkerEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>(GetWorkerEventsDocument, options);
+      }
+export function useGetWorkerEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>(GetWorkerEventsDocument, options);
+        }
+export type GetWorkerEventsQueryHookResult = ReturnType<typeof useGetWorkerEventsQuery>;
+export type GetWorkerEventsLazyQueryHookResult = ReturnType<typeof useGetWorkerEventsLazyQuery>;
+export type GetWorkerEventsQueryResult = Apollo.QueryResult<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>;
 export const GetOpeningsEventsDocument = gql`
-  query GetOpeningsEvents {
-    events(
-      where: {
-        type_in: [
-          AppliedOnOpeningEvent
-          ApplicationWithdrawnEvent
-          BudgetSpendingEvent
-          StakeDecreasedEvent
-          StakeIncreasedEvent
-          OpeningAddedEvent
-          OpeningCanceledEvent
-          OpeningFilledEvent
-          WorkerExitedEvent
-          StatusTextChangedEvent
-          BudgetSetEvent
-          StakeSlashedEvent
-          TerminatedLeaderEvent
-          TerminatedWorkerEvent
-        ]
-      }
-      limit: 25
-      orderBy: [createdAt_DESC]
-    ) {
-      ... on AppliedOnOpeningEvent {
-        ...AppliedOnOpeningEventFields
-      }
-      ... on ApplicationWithdrawnEvent {
-        ...ApplicationWithdrawnEventFields
-      }
-      ... on BudgetSpendingEvent {
-        ...BudgetSpendingActivityEventFields
-      }
-      ... on StakeDecreasedEvent {
-        ...StakeDecreasedEventFields
-      }
-      ... on StakeIncreasedEvent {
-        ...StakeIncreasedEventFields
-      }
-      ... on OpeningAddedEvent {
-        ...OpeningAddedEventFields
-      }
-      ... on OpeningCanceledEvent {
-        ...OpeningCanceledEventFields
-      }
-      ... on OpeningFilledEvent {
-        ...OpeningFilledEventFields
-      }
-      ... on WorkerExitedEvent {
-        ...WorkerExitedEventFields
-      }
-      ... on StatusTextChangedEvent {
-        ...StatusTextChangedEventFields
-      }
-      ... on BudgetSetEvent {
-        ...BudgetSetEventFields
-      }
-      ... on StakeSlashedEvent {
-        ...StakeSlashedEventFields
-      }
-      ... on TerminatedWorkerEvent {
-        ...TerminatedWorkerEventFields
-      }
-      ... on TerminatedLeaderEvent {
-        ...TerminatedLeaderEventFields
-      }
+    query GetOpeningsEvents {
+  events(
+    where: {type_in: [AppliedOnOpeningEvent, ApplicationWithdrawnEvent, BudgetSpendingEvent, StakeDecreasedEvent, StakeIncreasedEvent, OpeningAddedEvent, OpeningCanceledEvent, OpeningFilledEvent, WorkerExitedEvent, StatusTextChangedEvent, BudgetSetEvent, StakeSlashedEvent, TerminatedLeaderEvent, TerminatedWorkerEvent]}
+    limit: 25
+    orderBy: [createdAt_DESC]
+  ) {
+    ... on AppliedOnOpeningEvent {
+      ...AppliedOnOpeningEventFields
+    }
+    ... on ApplicationWithdrawnEvent {
+      ...ApplicationWithdrawnEventFields
+    }
+    ... on BudgetSpendingEvent {
+      ...BudgetSpendingActivityEventFields
+    }
+    ... on StakeDecreasedEvent {
+      ...StakeDecreasedEventFields
+    }
+    ... on StakeIncreasedEvent {
+      ...StakeIncreasedEventFields
+    }
+    ... on OpeningAddedEvent {
+      ...OpeningAddedEventFields
+    }
+    ... on OpeningCanceledEvent {
+      ...OpeningCanceledEventFields
+    }
+    ... on OpeningFilledEvent {
+      ...OpeningFilledEventFields
+    }
+    ... on WorkerExitedEvent {
+      ...WorkerExitedEventFields
+    }
+    ... on StatusTextChangedEvent {
+      ...StatusTextChangedEventFields
+    }
+    ... on BudgetSetEvent {
+      ...BudgetSetEventFields
+    }
+    ... on StakeSlashedEvent {
+      ...StakeSlashedEventFields
+    }
+    ... on TerminatedWorkerEvent {
+      ...TerminatedWorkerEventFields
+    }
+    ... on TerminatedLeaderEvent {
+      ...TerminatedLeaderEventFields
     }
   }
-  ${AppliedOnOpeningEventFieldsFragmentDoc}
-  ${ApplicationWithdrawnEventFieldsFragmentDoc}
-  ${BudgetSpendingActivityEventFieldsFragmentDoc}
-  ${StakeDecreasedEventFieldsFragmentDoc}
-  ${StakeIncreasedEventFieldsFragmentDoc}
-  ${OpeningAddedEventFieldsFragmentDoc}
-  ${OpeningCanceledEventFieldsFragmentDoc}
-  ${OpeningFilledEventFieldsFragmentDoc}
-  ${WorkerExitedEventFieldsFragmentDoc}
-  ${StatusTextChangedEventFieldsFragmentDoc}
-  ${BudgetSetEventFieldsFragmentDoc}
-  ${StakeSlashedEventFieldsFragmentDoc}
-  ${TerminatedWorkerEventFieldsFragmentDoc}
-  ${TerminatedLeaderEventFieldsFragmentDoc}
-`
+}
+    ${AppliedOnOpeningEventFieldsFragmentDoc}
+${ApplicationWithdrawnEventFieldsFragmentDoc}
+${BudgetSpendingActivityEventFieldsFragmentDoc}
+${StakeDecreasedEventFieldsFragmentDoc}
+${StakeIncreasedEventFieldsFragmentDoc}
+${OpeningAddedEventFieldsFragmentDoc}
+${OpeningCanceledEventFieldsFragmentDoc}
+${OpeningFilledEventFieldsFragmentDoc}
+${WorkerExitedEventFieldsFragmentDoc}
+${StatusTextChangedEventFieldsFragmentDoc}
+${BudgetSetEventFieldsFragmentDoc}
+${StakeSlashedEventFieldsFragmentDoc}
+${TerminatedWorkerEventFieldsFragmentDoc}
+${TerminatedLeaderEventFieldsFragmentDoc}`;
 
 /**
  * __useGetOpeningsEventsQuery__
@@ -1257,21 +614,14 @@ export const GetOpeningsEventsDocument = gql`
  *   },
  * });
  */
-export function useGetOpeningsEventsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>(GetOpeningsEventsDocument, options)
-}
-export function useGetOpeningsEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>(
-    GetOpeningsEventsDocument,
-    options
-  )
-}
-export type GetOpeningsEventsQueryHookResult = ReturnType<typeof useGetOpeningsEventsQuery>
-export type GetOpeningsEventsLazyQueryHookResult = ReturnType<typeof useGetOpeningsEventsLazyQuery>
-export type GetOpeningsEventsQueryResult = Apollo.QueryResult<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>
+export function useGetOpeningsEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>(GetOpeningsEventsDocument, options);
+      }
+export function useGetOpeningsEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>(GetOpeningsEventsDocument, options);
+        }
+export type GetOpeningsEventsQueryHookResult = ReturnType<typeof useGetOpeningsEventsQuery>;
+export type GetOpeningsEventsLazyQueryHookResult = ReturnType<typeof useGetOpeningsEventsLazyQuery>;
+export type GetOpeningsEventsQueryResult = Apollo.QueryResult<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>;

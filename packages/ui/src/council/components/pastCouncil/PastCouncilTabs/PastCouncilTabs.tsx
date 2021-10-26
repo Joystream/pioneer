@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { TabProps, Tabs } from '@/common/components/Tabs'
+import { PastCouncilMembers } from '@/council/components/pastCouncil/PastCouncilTabs/PastCouncilMembers'
 import { PastCouncilWithDetails } from '@/council/types/PastCouncil'
 
 export const PastCouncilTabs = ({ id }: PastCouncilWithDetails) => {
@@ -27,6 +28,7 @@ export const PastCouncilTabs = ({ id }: PastCouncilWithDetails) => {
   return (
     <>
       <Tabs tabs={tabs} tabsSize="xs" />
+      {tab === 'councilMembers' && <PastCouncilMembers councilId={id} />}
     </>
   )
 }
