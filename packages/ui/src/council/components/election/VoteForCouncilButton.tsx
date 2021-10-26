@@ -4,13 +4,22 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { useModal } from '@/common/hooks/useModal'
 import { VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 
-export const VoteForCouncilButton = (data: VoteForCouncilModalCall['data']) => {
+interface VoteForCouncilButtonProps {
+  id: string
+  again?: boolean
+}
+
+export const VoteForCouncilButton = ({ id, again }: VoteForCouncilButtonProps) => {
   const { showModal } = useModal<VoteForCouncilModalCall>()
 
-  const vote = useCallback(() => showModal<VoteForCouncilModalCall>({ modal: 'VoteForCouncil', data }), [showModal])
+  const vote = useCallback(
+    () => showModal<VoteForCouncilModalCall>({ modal: 'VoteForCouncil', data: { id } }),
+    [showModal]
+  )
+
   return (
     <ButtonPrimary size="medium" onClick={vote}>
-      Vote
+      {again ? 'Vote again' : 'Vote'}
     </ButtonPrimary>
   )
 }

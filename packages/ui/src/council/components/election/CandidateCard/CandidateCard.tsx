@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
@@ -113,7 +112,7 @@ export const CandidateCard = ({
             )}
             {isVotingStage && isDefined(voted) && (
               <CandidateCardControls>
-                {voted ? <ButtonPrimary size="medium">Vote again </ButtonPrimary> : <VoteForCouncilButton id={id} />}
+                <VoteForCouncilButton id={id} again={voted} />
               </CandidateCardControls>
             )}
           </CandidateCardStakeAndControls>
