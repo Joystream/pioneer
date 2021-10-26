@@ -49,10 +49,7 @@ export const CKEditor = React.forwardRef(
     )
 
     useEffect(() => {
-      const createPromise: Promise<Editor> = (inline
-        ? MarkdownEditor.InlineMarkdownEditor
-        : MarkdownEditor.MarkdownEditor
-      )
+      const createPromise: Promise<Editor> = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
         .create(elementRef.current || '', {
           toolbar: {
             items: [

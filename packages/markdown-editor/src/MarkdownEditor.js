@@ -17,9 +17,6 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
 
-export const MarkdownEditor = ClassicEditor
-export const InlineMarkdownEditor = InlineEditor
-
 // Plugins to include in the build.
 const plugins = [
   Markdown,
@@ -59,6 +56,6 @@ function MentionToLink(editor) {
 }
 
 export default {
-  MarkdownEditor,
-  InlineMarkdownEditor,
+  ClassicEditor,
+  InlineEditor,
 }

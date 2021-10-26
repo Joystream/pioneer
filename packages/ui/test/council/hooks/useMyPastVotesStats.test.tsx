@@ -109,7 +109,6 @@ describe('useMyPastVotesStats', () => {
           electedInCouncilId: '0',
           memberId: '0',
           unpaidReward: 0,
-          accumulatedReward: 0,
           stake: 0,
         },
         server.server
@@ -174,7 +173,6 @@ describe('useMyPastVotesStats', () => {
           electedInCouncilId: '1',
           memberId: '1',
           unpaidReward: 0,
-          accumulatedReward: 0,
           stake: 0,
         },
         server.server
@@ -196,7 +194,6 @@ describe('useMyPastVotesStats', () => {
           electedInCouncilId: '0',
           memberId: '1',
           unpaidReward: 0,
-          accumulatedReward: 0,
           stake: 0,
         },
         server.server
@@ -217,7 +214,6 @@ describe('useMyPastVotesStats', () => {
           electedInCouncilId: '0',
           memberId: '1',
           unpaidReward: 0,
-          accumulatedReward: 0,
           stake: 0,
         },
         server.server

@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { Input } from '@/common/components/forms'
 
 import { Editor, EventInfo } from '../../../../markdown-editor'
-import { CKEditorProps } from '../imports/CKEditor'
 
 const CKEditor = ({ id, onChange }: CKEditorProps) => (
   <Input
