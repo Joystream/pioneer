@@ -4,7 +4,6 @@ import { MockMember } from '@/mocks/data'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { RawCouncilMock, RawCouncilorMock } from '@/mocks/data/seedCouncils'
 
-import { COMMITMENT } from '../../../dev/query-node-mocks/generators/council/generateCouncils'
 import { alice } from '../keyring/signers'
 
 const ALICE: MockMember = rawMembers[0]
@@ -54,7 +53,12 @@ export const VOTE_DATA = {
   stakeLocked: true,
   castBy: alice.address,
   voteForId: null,
-  commitment: COMMITMENT,
+  commitment: '0x3db26e2bd023ccf2d1167fd42d48cc76b1c1e5c1de9003f61e63ec6a337b91a2',
+  // For:
+  //  cycleId: 1,
+  //  salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a",
+  //  accountId:"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+  //  optionId:"0"
 }
 
 export const CANDIDATE_DATA = {

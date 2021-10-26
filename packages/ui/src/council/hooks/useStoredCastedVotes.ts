@@ -10,21 +10,21 @@ import { VotingAttempt } from './useCommitment'
 export const useStoredCastedVotes = (cycleId?: number) => {
   const [get, { data }] = useGetCouncilVotesCommitmentsLazyQuery()
 
-  const [votingAttempts] = useLocalStorage<VotingAttempt[]>(`votes:${cycleId}`)
+  const [votingAttempts = []] = useLocalStorage<VotingAttempt[]>(`votes:${cycleId}`)
   const { allAccounts } = useMyAccounts()
   const myAttempts = useMemo(() => {
     if (!cycleId || !allAccounts.length) return
 
     const addresses = allAccounts.map((account) => account.address)
     return votingAttempts
-      ?.filter(({ accountId }) => addresses.includes(accountId))
+      .filter(({ accountId }) => addresses.includes(accountId))
       .map(({ salt, accountId, optionId }) => ({
         salt,
         accountId,
         optionId,
         commitment: calculateCommitment(accountId, optionId, salt, cycleId),
       }))
-  }, [votingAttempts?.length, allAccounts.length])
+  }, [votingAttempts.length, allAccounts.length, cycleId])
 
   useEffect(() => {
     if (!myAttempts?.length) return
