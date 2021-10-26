@@ -9,7 +9,7 @@ import {
   seedCouncilCandidate,
   seedCouncilElection,
   seedCouncilMember,
-  seedCounncilVote,
+  seedCouncilVote,
   seedElectedCouncil,
   seedMembers,
 } from '@/mocks/data'
@@ -49,24 +49,24 @@ describe('useMyPastVotesStats', () => {
     })
 
     it('From single account', async () => {
-      repeat(() => seedCounncilVote({ ...VOTE_DATA }, server.server), 3)
+      repeat(() => seedCouncilVote({ ...VOTE_DATA }, server.server), 3)
 
       const result = await renderUseStats()
       expect(result.votesTotal).toEqual(3)
     })
 
     it('From multiple accounts', async () => {
-      repeat(() => seedCounncilVote({ ...VOTE_DATA, castBy: alice.address }, server.server), 3)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
+      repeat(() => seedCouncilVote({ ...VOTE_DATA, castBy: alice.address }, server.server), 3)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesTotal).toEqual(4)
     })
 
     it('Past elections only', async () => {
-      seedCounncilVote({ ...VOTE_DATA, castBy: alice.address }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, electionRoundId: '1' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: alice.address }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, electionRoundId: '1' }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesTotal).toEqual(2)
@@ -104,6 +104,7 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate(CANDIDATE_DATA, server.server)
       seedCouncilMember(
         {
+          accumulatedReward: 0,
           id: '0',
           electedInCouncilId: '0',
           memberId: '0',
@@ -115,23 +116,23 @@ describe('useMyPastVotesStats', () => {
     })
 
     it('One winner, one election', async () => {
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(1)
     })
 
     it('No votes for winners', async () => {
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(0)
     })
 
     it('One unrevealed vote, one for the winner', async () => {
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(1)
@@ -139,8 +140,8 @@ describe('useMyPastVotesStats', () => {
 
     it('Two revealed votes, only one for the winner', async () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(1)
@@ -167,6 +168,7 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1', electionRoundId: '2' }, server.server)
       seedCouncilMember(
         {
+          accumulatedReward: 0,
           id: '1',
           electedInCouncilId: '1',
           memberId: '1',
@@ -176,8 +178,8 @@ describe('useMyPastVotesStats', () => {
         server.server
       )
 
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, electionRoundId: '2', voteForId: '1' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, electionRoundId: '2', voteForId: '1' }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(2)
@@ -187,6 +189,7 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1' }, server.server)
       seedCouncilMember(
         {
+          accumulatedReward: 0,
           id: '1',
           electedInCouncilId: '0',
           memberId: '1',
@@ -195,8 +198,8 @@ describe('useMyPastVotesStats', () => {
         },
         server.server
       )
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(2)
@@ -206,6 +209,7 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1' }, server.server)
       seedCouncilMember(
         {
+          accumulatedReward: 0,
           id: '1',
           electedInCouncilId: '0',
           memberId: '1',
@@ -214,8 +218,8 @@ describe('useMyPastVotesStats', () => {
         },
         server.server
       )
-      seedCounncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
-      seedCounncilVote({ ...VOTE_DATA, castBy: alice.address, voteForId: '1' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+      seedCouncilVote({ ...VOTE_DATA, castBy: alice.address, voteForId: '1' }, server.server)
 
       const result = await renderUseStats()
       expect(result.votesForWinners).toEqual(2)
