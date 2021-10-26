@@ -19,7 +19,7 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
     <PastCouncilMemberWrapper onClick={() => setDropped(!isDropped)}>
       <PastCouncilMemberWrap>
         <MemberInfo member={councilMember.member} />
-        <CountInfo count={councilMember.acceptedProposals} />
+        <CountInfo count={councilMember.approvedProposals} />
         <CountInfo count={councilMember.rejectedProposals} />
         <CountInfo count={councilMember.slashedProposals} />
         <CountInfo count={councilMember.abstainedProposals} />

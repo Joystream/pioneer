@@ -1,7 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { PastElectionsColLayout } from '@/app/pages/Council/PastElections/PastElections'
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
@@ -24,7 +22,7 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
     <RowGapBlock gap={4}>
       <ListHeaders $colLayout="276px 128px 128px 128px 128px 104px">
         <ListHeader>Council member</ListHeader>
-        <ListHeader>Proposals accepted</ListHeader>
+        <ListHeader>Proposals approved</ListHeader>
         <ListHeader>Proposals rejected</ListHeader>
         <ListHeader>Proposals slashed</ListHeader>
         <ListHeader>Proposals abstained</ListHeader>
@@ -39,14 +37,3 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
     </RowGapBlock>
   )
 }
-
-const PastCouncilMembersWrap = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 16px auto;
-  grid-template-areas:
-    'accountstablenav'
-    'accountslist';
-  grid-row-gap: 4px;
-  width: 100%;
-`
