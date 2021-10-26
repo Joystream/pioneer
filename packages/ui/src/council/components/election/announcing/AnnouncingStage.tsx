@@ -1,59 +1,40 @@
-import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
-import { Loading } from '@/common/components/Loading'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { AnnouncingStageTab, ElectionTabs } from '@/council/components/election/ElectionTabs'
-import { ElectionCandidate } from '@/council/types'
 import { Election } from '@/council/types/Election'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { Member } from '@/memberships/types'
-
-import { NoCandidates } from './NoCandidates'
 
 interface AnnouncingStageProps {
-  election: Election
+  election: Election | undefined
+  isLoading?: boolean
 }
 
-const isMyCandidate = (members: Member[], candidate: ElectionCandidate) => {
-  return members.find((member) => member.id === candidate.member.id)
-}
-
-export const AnnouncingStage = ({ election }: AnnouncingStageProps) => {
-  const { isLoading, members: myMembers } = useMyMemberships()
+export const AnnouncingStage = ({ election, isLoading }: AnnouncingStageProps) => {
   const [tab, setTab] = useState<AnnouncingStageTab>('candidates')
-  const myCandidates = election.candidates.filter((candidate) => isMyCandidate(myMembers, candidate))
 
-  if (isLoading) {
-    return <Loading text="Loading candidates.." />
-  }
+  const { members: myMembers = [] } = useMyMemberships()
+  const myMemberIds = useMemo(() => myMembers.map(({ id }) => id), [myMembers.length])
 
-  const displayCandidates = (candidates: ElectionCandidate[]) => {
-    if (!candidates.length) {
-      return <NoCandidates />
-    }
+  const [allCandidates, myCandidates] = useMemo(() => {
+    const allCandidates = election?.candidates?.map((candidate) => ({
+      ...candidate,
+      isMyCandidate: myMemberIds.includes(candidate.member.id),
+    }))
+    const myCandidates = allCandidates?.filter(({ isMyCandidate }) => isMyCandidate)
 
-    return (
-      <CandidateCardList
-        candidates={candidates.map((candidate) => ({
-          id: candidate.id,
-          member: candidate.member,
-          info: candidate.info,
-          ...(candidate.stake && isMyCandidate(myMembers, candidate) ? { stake: new BN(candidate.stake) } : {}),
-          withdrawable: !!isMyCandidate(myMembers, candidate),
-        }))}
-      />
-    )
-  }
+    return [allCandidates, myCandidates]
+  }, [myMemberIds.length, election?.candidates.length])
+
   return (
     <>
       <ElectionTabs
         stage="announcing"
-        myCandidates={myCandidates.length}
+        myCandidates={myCandidates?.length}
         tab={tab}
         onSetTab={(tab) => setTab(tab as AnnouncingStageTab)}
       />
-      {displayCandidates(tab === 'candidates' ? election.candidates : myCandidates)}
+      <CandidateCardList candidates={tab === 'candidates' ? allCandidates : myCandidates} isLoading={isLoading} />
     </>
   )
 }

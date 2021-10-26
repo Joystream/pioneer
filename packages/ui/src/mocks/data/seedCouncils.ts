@@ -48,6 +48,7 @@ export interface RawCouncilVoteMock {
   stakeLocked: boolean
   voteForId: string | null
   castBy: string
+  commitment: string
 }
 
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)

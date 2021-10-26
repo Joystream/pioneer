@@ -10,13 +10,13 @@ export interface ElectionCandidate {
   stake: BN
   info: {
     title: string
-    summary: string
     bulletPoints: string[]
     bannerUri?: string
   }
 }
 
 export interface ElectionCandidateWithDetails extends ElectionCandidate {
+  info: ElectionCandidate['info'] & { summary: string }
   stakingAccount: string
   rewardAccount: string
   cycleId: number
@@ -29,7 +29,6 @@ export const asElectionCandidate = (fields: ElectionCandidateFieldsFragment): El
   stake: new BN(fields.stake),
   info: {
     title: fields.noteMetadata.header ?? 'Candidate',
-    summary: fields.noteMetadata.description ?? '',
     bulletPoints: fields.noteMetadata.bulletPoints,
     bannerUri: fields.noteMetadata.bannerImageUri ?? undefined,
   },
@@ -37,10 +36,14 @@ export const asElectionCandidate = (fields: ElectionCandidateFieldsFragment): El
 
 export const asElectionCandidateWithDetails = (
   fields: ElectionCandidateDetailedFieldsFragment
-): ElectionCandidateWithDetails => ({
-  ...asElectionCandidate(fields),
-  stakingAccount: fields.stakingAccountId,
-  rewardAccount: fields.rewardAccountId,
-  cycleId: fields.electionRound.cycleId,
-  cycleFinished: fields.electionRound.isFinished,
-})
+): ElectionCandidateWithDetails => {
+  const { info, ...candidateData } = asElectionCandidate(fields)
+  return {
+    ...candidateData,
+    info: { ...info, summary: fields.noteMetadata.description ?? '' },
+    stakingAccount: fields.stakingAccountId,
+    rewardAccount: fields.rewardAccountId,
+    cycleId: fields.electionRound.cycleId,
+    cycleFinished: fields.electionRound.isFinished,
+  }
+}

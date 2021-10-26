@@ -192,6 +192,12 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
   }
 }
 
+query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
+  castVotes(where: $where, orderBy: $orderBy) {
+    commitment
+  }
+}
+
 query GetCouncilVotesCount($where: CastVoteWhereInput) {
   castVotesConnection(where: $where) {
     totalCount

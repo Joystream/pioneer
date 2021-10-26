@@ -1,4 +1,4 @@
-import { act, fireEvent, render, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -12,12 +12,14 @@ import {
   RawCouncilCandidateMock,
   seedCouncilCandidate,
   seedCouncilElection,
+  seedCouncilVote,
   seedElectedCouncil,
   seedMembers,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
+import { VOTE_DATA } from '../../_mocks/council'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -159,10 +161,9 @@ describe('UI: Election page', () => {
           })
 
           it('Has my candidates', async () => {
-            const candidates = TEST_CANDIDATES
-            candidates[0].memberId = getMember('alice').id
-            candidates.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-            TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+            TEST_CANDIDATES.forEach((candidate, index) =>
+              seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
+            )
 
             const { queryAllByText, findByText } = await renderComponent()
 
@@ -180,12 +181,65 @@ describe('UI: Election page', () => {
       })
     })
 
-    it('Voting stage', async () => {
-      stubCouncilAndReferendum(api, 'Election', 'Voting')
+    describe('Voting stage', () => {
+      beforeEach(() => {
+        stubCouncilAndReferendum(api, 'Election', 'Voting')
+        window.localStorage.clear()
+      })
 
-      const { queryByText } = await renderComponent()
+      it('Displays stage', async () => {
+        const { queryByText } = await renderComponent()
 
-      expect(queryByText(/Voting period/i)).not.toBeNull()
+        expect(queryByText(/Voting period/i)).not.toBeNull()
+      })
+
+      it('No accounts', async () => {
+        TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+
+        await renderComponent({ hasAccounts: false, allAccounts: [] })
+
+        expect(screen.queryByText('Vote')).toBeNull()
+      })
+
+      it('No votes', async () => {
+        TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+
+        await renderComponent()
+
+        expect(await screen.findAllByText('Vote')).toHaveLength(2)
+      })
+
+      it('One vote matching query node', async () => {
+        TEST_CANDIDATES.forEach((candidate, index) =>
+          seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
+        )
+        seedCouncilVote({ ...VOTE_DATA, electionRoundId: '1' }, mockServer.server)
+
+        window.localStorage.setItem(
+          'votes:1',
+          '[{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]'
+        )
+        await renderComponent()
+
+        expect(await screen.findByText(/My Votes/i)).toBeDefined()
+        expect(screen.queryAllByText('Vote')).toHaveLength(1)
+        expect(await screen.findByText('Vote again')).toBeDefined()
+      })
+
+      it('One vote not matching query node', async () => {
+        TEST_CANDIDATES.forEach((candidate, index) =>
+          seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
+        )
+        seedCouncilVote({ ...VOTE_DATA, electionRoundId: '1' }, mockServer.server)
+
+        window.localStorage.setItem(
+          'votes:1',
+          '[{"salt":"0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]'
+        )
+        await renderComponent()
+
+        expect(await screen.queryByText(/My Votes/i)).toBeNull()
+      })
     })
 
     it('Revealing stage', async () => {
@@ -197,13 +251,13 @@ describe('UI: Election page', () => {
     })
   })
 
-  async function renderComponent() {
+  async function renderComponent(account = useAccounts) {
     const rendered = await render(
       <MemoryRouter>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
+              <AccountsContext.Provider value={account}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Election />
                 </MembershipContext.Provider>
@@ -214,7 +268,10 @@ describe('UI: Election page', () => {
       </MemoryRouter>
     )
 
-    await waitForElementToBeRemoved(() => rendered.getByText('Loading...'))
+    const loader = rendered.queryByText('Loading candidates...')
+    if (loader) {
+      await waitForElementToBeRemoved(loader)
+    }
 
     return rendered
   }
