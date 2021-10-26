@@ -263,6 +263,12 @@ export type CastVoteFieldsFragment = {
   electionRound: { __typename: 'ElectionRound'; cycleId: number }
 }
 
+export type CouncilSpendingEventFieldsFragment = {
+  __typename: 'BudgetSpendingEvent'
+  amount: any
+  type?: Types.EventTypeOptions | null | undefined
+}
+
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetElectedCouncilQuery = {
@@ -320,6 +326,8 @@ export type GetPastCouncilsCountQuery = {
 
 export type GetPastCouncilQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']
+  fromBlock: Types.Scalars['Int']
+  toBlock: Types.Scalars['Int']
 }>
 
 export type GetPastCouncilQuery = {
@@ -331,6 +339,23 @@ export type GetPastCouncilQuery = {
         endedAtBlock?: number | null | undefined
         councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
       }
+    | null
+    | undefined
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: any
+    type?: Types.EventTypeOptions | null | undefined
+  }>
+}
+
+export type GetCouncilBlockRangeQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetCouncilBlockRangeQuery = {
+  __typename: 'Query'
+  electedCouncilByUniqueInput?:
+    | { __typename: 'ElectedCouncil'; electedAtBlock: number; endedAtBlock?: number | null | undefined }
     | null
     | undefined
 }
@@ -721,6 +746,12 @@ export const CastVoteFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const CouncilSpendingEventFieldsFragmentDoc = gql`
+  fragment CouncilSpendingEventFields on BudgetSpendingEvent {
+    amount
+    type
+  }
+`
 export const GetElectedCouncilDocument = gql`
   query GetElectedCouncil {
     electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
@@ -853,12 +884,16 @@ export type GetPastCouncilsCountQueryResult = Apollo.QueryResult<
   GetPastCouncilsCountQueryVariables
 >
 export const GetPastCouncilDocument = gql`
-  query GetPastCouncil($id: ID!) {
+  query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
     electedCouncilByUniqueInput(where: { id: $id }) {
       ...PastCouncilDetailedFields
     }
+    budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+      ...CouncilSpendingEventFields
+    }
   }
   ${PastCouncilDetailedFieldsFragmentDoc}
+  ${CouncilSpendingEventFieldsFragmentDoc}
 `
 
 /**
@@ -874,6 +909,8 @@ export const GetPastCouncilDocument = gql`
  * const { data, loading, error } = useGetPastCouncilQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      fromBlock: // value for 'fromBlock'
+ *      toBlock: // value for 'toBlock'
  *   },
  * });
  */
@@ -892,6 +929,55 @@ export function useGetPastCouncilLazyQuery(
 export type GetPastCouncilQueryHookResult = ReturnType<typeof useGetPastCouncilQuery>
 export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCouncilLazyQuery>
 export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
+export const GetCouncilBlockRangeDocument = gql`
+  query GetCouncilBlockRange($id: ID!) {
+    electedCouncilByUniqueInput(where: { id: $id }) {
+      electedAtBlock
+      endedAtBlock
+    }
+  }
+`
+
+/**
+ * __useGetCouncilBlockRangeQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilBlockRangeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilBlockRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilBlockRangeQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCouncilBlockRangeQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
+    GetCouncilBlockRangeDocument,
+    options
+  )
+}
+export function useGetCouncilBlockRangeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
+    GetCouncilBlockRangeDocument,
+    options
+  )
+}
+export type GetCouncilBlockRangeQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeQuery>
+export type GetCouncilBlockRangeLazyQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeLazyQuery>
+export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
+  GetCouncilBlockRangeQuery,
+  GetCouncilBlockRangeQueryVariables
+>
 export const GetCurrentElectionDocument = gql`
   query GetCurrentElection {
     electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
