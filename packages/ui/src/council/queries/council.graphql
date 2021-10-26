@@ -123,7 +123,7 @@ query GetPastCouncilsCount {
 }
 
 query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
-  council: electedCouncilByUniqueInput(where: { id: $id }) {
+   electedCouncilByUniqueInput(where: { id: $id }) {
     ...PastCouncilDetailedFields
   }
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
@@ -132,7 +132,7 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
 }
 
 query GetCouncilBlockRange($id: ID!) {
-  council: electedCouncilByUniqueInput(where: { id: $id }) {
+  electedCouncilByUniqueInput(where: { id: $id }) {
     electedAtBlock
     endedAtBlock
   }

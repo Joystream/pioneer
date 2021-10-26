@@ -9,7 +9,7 @@ import { alice } from '../keyring/signers'
 const ALICE: MockMember = rawMembers[0]
 const getMember = (attrs: Partial<MockMember>): MockMember => ({ ...ALICE, ...attrs })
 
-const getCouncilor = (attrs: Partial<RawCouncilorMock>): RawCouncilorMock => ({
+export const getCouncilor = (attrs: Partial<RawCouncilorMock>): RawCouncilorMock => ({
   id: datatype.uuid(),
   electedInCouncilId: '0',
   memberId: '0',
