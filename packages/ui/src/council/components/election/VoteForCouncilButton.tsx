@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { MouseEventHandler, useCallback } from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { useModal } from '@/common/hooks/useModal'
@@ -12,8 +12,11 @@ interface VoteForCouncilButtonProps {
 export const VoteForCouncilButton = ({ id, again }: VoteForCouncilButtonProps) => {
   const { showModal } = useModal<VoteForCouncilModalCall>()
 
-  const vote = useCallback(
-    () => showModal<VoteForCouncilModalCall>({ modal: 'VoteForCouncil', data: { id } }),
+  const vote = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => {
+      event.stopPropagation()
+      showModal<VoteForCouncilModalCall>({ modal: 'VoteForCouncil', data: { id } })
+    },
     [showModal]
   )
 
