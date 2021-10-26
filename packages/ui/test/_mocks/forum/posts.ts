@@ -5,8 +5,7 @@ export const mockPosts: RawForumPostMock[] = [
     id: '0',
     threadId: '0',
     authorId: '0',
-    text:
-      'ducimus aspernatur veniam in sint sint voluptas aspernatur quia veniam cum et aut in voluptatibus sunt explicabo dolores aspernatur sit minima non blanditiis odio blanditiis quisquam ratione sed illo facere recusandae nulla vel voluptatem magni blanditiis sapiente excepturi tempora commodi ut perspiciatis quasi provident sint repellat rerum veritatis accusantium quia quisquam eaque sequi repellendus fugit ea cupiditate sapiente eaque aut quis excepturi inventore repudiandae eaque cum',
+    text: 'ducimus aspernatur veniam in sint sint voluptas aspernatur quia veniam cum et aut in voluptatibus sunt explicabo dolores aspernatur sit minima non blanditiis odio blanditiis quisquam ratione sed illo facere recusandae nulla vel voluptatem magni blanditiis sapiente excepturi tempora commodi ut perspiciatis quasi provident sint repellat rerum veritatis accusantium quia quisquam eaque sequi repellendus fugit ea cupiditate sapiente eaque aut quis excepturi inventore repudiandae eaque cum',
     edits: [
       {
         newText:
@@ -27,8 +26,7 @@ export const mockPosts: RawForumPostMock[] = [
       inBlock: 5465,
       createdAt: '2021-06-28T09:15:47.156Z',
       network: 'OLYMPIA',
-      text:
-        'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
+      text: 'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     },
     status: 'PostStatusActive',
     deletedInEvent: null,
@@ -37,15 +35,13 @@ export const mockPosts: RawForumPostMock[] = [
     id: '1',
     threadId: '0',
     authorId: '1',
-    text:
-      'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
+    text: 'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     edits: [],
     postAddedEvent: {
       inBlock: 885,
       createdAt: '2021-04-22T17:54:04.747Z',
       network: 'OLYMPIA',
-      text:
-        'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
+      text: 'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     },
     status: 'PostStatusActive',
     deletedInEvent: null,

@@ -1,0 +1,19 @@
+{
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "lib": ["DOM", "ES2020"],
+    "paths": {
+      "@/*": ["src/*"],
+    },
+    "baseUrl": "."
+  }
+}

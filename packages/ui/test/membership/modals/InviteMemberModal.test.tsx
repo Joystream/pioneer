@@ -32,7 +32,7 @@ const useMyAccounts: UseAccounts = {
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
+jest.mock('@/accounts/hooks/useMyAccounts', () => {
   return {
     useMyAccounts: () => useMyAccounts,
   }
@@ -60,6 +60,7 @@ describe('UI: InviteMemberModal', () => {
     stubQuery(api, 'members.membershipPrice', createBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
+    seedMembers(server.server)
   })
 
   it('Validate Working Group Budget', async () => {
@@ -77,8 +78,6 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Enables button', async () => {
-    seedMembers(server.server)
-
     renderModal()
 
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
@@ -125,11 +124,13 @@ describe('UI: InviteMemberModal', () => {
       fireEvent.change(getInput(/Root account/i), {
         target: { value: bobStash.address },
       })
-      fireEvent.change(getInput(/Controller account/i), {
+      await fireEvent.change(getInput(/Controller account/i), {
         target: { value: controllerAddress },
       })
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+      await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+
+      expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
       fireEvent.click(await getButton(/^Invite a member$/i))
     }
 

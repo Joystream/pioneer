@@ -41,10 +41,10 @@ export const usePastWorkersPagination = ({
   const { loading: loadingWorkers, data: workersData } = useGetPastWorkersQuery({ variables })
   const { loading: loadingCount, data: countData } = useGetWorkersCountQuery({ variables })
 
-  const workers = useMemo(() => workersData && workersData.workers && workersData.workers.map(asPastWorker), [
-    workersData,
-    loadingWorkers,
-  ])
+  const workers = useMemo(
+    () => workersData && workersData.workers && workersData.workers.map(asPastWorker),
+    [workersData, loadingWorkers]
+  )
   const totalCount = countData?.workersConnection.totalCount ?? 0
 
   return {

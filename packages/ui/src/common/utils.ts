@@ -54,8 +54,10 @@ export const equals = <T extends any>(
 
 export const merge = <A extends Obj, B extends Obj = Partial<A>>(a: A, b: B): A & B => ({ ...a, ...b })
 
-export const propsEquals = <T extends Obj>(...keys: (keyof T)[]) => (a: T, b: T) =>
-  keys.every((key) => a[key] === b[key])
+export const propsEquals =
+  <T extends Obj>(...keys: (keyof T)[]) =>
+  (a: T, b: T) =>
+    keys.every((key) => a[key] === b[key])
 
 // Lists:
 

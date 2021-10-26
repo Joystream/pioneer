@@ -7,10 +7,7 @@ import { VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 export const VoteForCouncilButton = (data: VoteForCouncilModalCall['data']) => {
   const { showModal } = useModal<VoteForCouncilModalCall>()
 
-  const vote = useCallback(
-    () => showModal<VoteForCouncilModalCall>({ modal: 'VoteForCouncil', data }),
-    [showModal]
-  )
+  const vote = useCallback(() => showModal<VoteForCouncilModalCall>({ modal: 'VoteForCouncil', data }), [showModal])
   return (
     <ButtonPrimary size="medium" onClick={vote}>
       Vote

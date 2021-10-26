@@ -8,10 +8,10 @@ export const useMyApplicationIds = () => {
   const { data, loading } = useGetWorkingGroupApplicationIdsQuery({
     variables: { where: { applicant: { id_eq: active?.id } } },
   })
-  const applicationIds = useMemo(() => data?.workingGroupApplications.map((application) => application.id) ?? [], [
-    data,
-    loading,
-  ])
+  const applicationIds = useMemo(
+    () => data?.workingGroupApplications.map((application) => application.id) ?? [],
+    [data, loading]
+  )
   return {
     applicationIds,
     isLoading: loading,

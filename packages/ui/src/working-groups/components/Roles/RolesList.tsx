@@ -17,13 +17,13 @@ import { Worker } from '@/working-groups/types'
 
 import { workerRoleTitle } from '../../helpers'
 import {
+  OpenItemSummaryColumn,
   ToggleableItemInfo,
   ToggleableItemInfoTop,
   ToggleableItemSummary,
   ToggleableItemTitle,
-  ToggleableSubscriptionWide,
   ToggleableItemWrap,
-  OpenItemSummaryColumn,
+  ToggleableSubscriptionWide,
 } from '../ToggleableItemStyledComponents'
 
 export interface RolesListProps {

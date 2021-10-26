@@ -1,12 +1,11 @@
 import { useApolloClient } from '@apollo/client'
+import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
 import React, { Ref, RefObject, useCallback, useEffect, useRef } from 'react'
 
 import { debounce } from '@/common/utils'
 import { SearchMembersDocument, SearchMembersQuery, SearchMembersQueryVariables } from '@/memberships/queries'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
-import { InlineMarkdownEditor, MarkdownEditor } from './MarkdownEditor.js'
-import { Editor, EventInfo } from './types'
 
 export interface CKEditorProps {
   id?: string
@@ -50,7 +49,7 @@ export const CKEditor = React.forwardRef(
     )
 
     useEffect(() => {
-      const createPromise: Promise<Editor> = (inline ? InlineMarkdownEditor : MarkdownEditor)
+      const createPromise: Promise<Editor> = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
         .create(elementRef.current || '', {
           toolbar: {
             items: [
@@ -81,7 +80,7 @@ export const CKEditor = React.forwardRef(
           // This value must be kept in sync with the language defined in webpack.config.js.
           language: 'en',
         })
-        .then((editor) => {
+        .then((editor: any) => {
           if (onReady) {
             onReady(editor)
           }

@@ -123,7 +123,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
+    api: {} as unknown as ApiRx,
     isConnected: true,
     connectionState: 'connected',
   }

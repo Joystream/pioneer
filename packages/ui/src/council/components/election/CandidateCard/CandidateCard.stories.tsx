@@ -49,6 +49,6 @@ Default.args = {
         'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
       ],
     },
-    stake: (130000000 as unknown) as BN,
+    stake: 130000000 as unknown as BN,
   },
 }
