@@ -91,9 +91,7 @@ const getFilter = (where: Record<string, any>) => {
           resultToBoolean(new Date(model[field]).getTime() - new Date(checkValue).getTime())
         )
       } else {
-        filters.push((model: Record<string, any>) =>
-          resultToBoolean(String(model[field]).localeCompare(String(checkValue)))
-        )
+        filters.push((model: Record<string, any>) => resultToBoolean(model[field] - checkValue))
       }
     }
 

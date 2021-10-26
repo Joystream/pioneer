@@ -10,6 +10,7 @@ export type ProposalFieldsFragment = {
   title: string
   statusSetAtTime: any
   createdAt: any
+  councilApprovals: number
   status:
     | { __typename: 'ProposalStatusCanceledByRuntime' }
     | { __typename: 'ProposalStatusCancelled' }
@@ -135,6 +136,7 @@ export type ProposalWithDetailsFieldsFragment = {
   title: string
   statusSetAtTime: any
   createdAt: any
+  councilApprovals: number
   votes: Array<{
     __typename: 'ProposalVotedEvent'
     id: string
@@ -523,6 +525,7 @@ export type GetProposalsQuery = {
     title: string
     statusSetAtTime: any
     createdAt: any
+    councilApprovals: number
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }
@@ -599,6 +602,7 @@ export type GetProposalQuery = {
         title: string
         statusSetAtTime: any
         createdAt: any
+        councilApprovals: number
         votes: Array<{
           __typename: 'ProposalVotedEvent'
           id: string
@@ -952,6 +956,40 @@ export type GetProposalPostParentQuery = {
     | undefined
 }
 
+export type GetProposalVotesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ProposalVotedEventWhereInput>
+  orderBy?: Types.Maybe<Array<Types.ProposalVotedEventOrderByInput> | Types.ProposalVotedEventOrderByInput>
+}>
+
+export type GetProposalVotesQuery = {
+  __typename: 'Query'
+  proposalVotedEvents: Array<{
+    __typename: 'ProposalVotedEvent'
+    id: string
+    voteKind: Types.ProposalVoteKind
+    votingRound: number
+    voter: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  }>
+}
+
 export const VoteFieldsFragmentDoc = gql`
   fragment VoteFields on ProposalVotedEvent {
     id
@@ -989,6 +1027,7 @@ export const ProposalFieldsFragmentDoc = gql`
       ...MemberFields
     }
     createdAt
+    councilApprovals
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -1343,3 +1382,44 @@ export type GetProposalPostParentQueryResult = Apollo.QueryResult<
   GetProposalPostParentQuery,
   GetProposalPostParentQueryVariables
 >
+export const GetProposalVotesDocument = gql`
+  query GetProposalVotes($where: ProposalVotedEventWhereInput, $orderBy: [ProposalVotedEventOrderByInput!]) {
+    proposalVotedEvents(where: $where, orderBy: $orderBy) {
+      ...VoteFields
+    }
+  }
+  ${VoteFieldsFragmentDoc}
+`
+
+/**
+ * __useGetProposalVotesQuery__
+ *
+ * To run a query within a React component, call `useGetProposalVotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalVotesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetProposalVotesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetProposalVotesQuery, GetProposalVotesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProposalVotesQuery, GetProposalVotesQueryVariables>(GetProposalVotesDocument, options)
+}
+export function useGetProposalVotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProposalVotesQuery, GetProposalVotesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProposalVotesQuery, GetProposalVotesQueryVariables>(GetProposalVotesDocument, options)
+}
+export type GetProposalVotesQueryHookResult = ReturnType<typeof useGetProposalVotesQuery>
+export type GetProposalVotesLazyQueryHookResult = ReturnType<typeof useGetProposalVotesLazyQuery>
+export type GetProposalVotesQueryResult = Apollo.QueryResult<GetProposalVotesQuery, GetProposalVotesQueryVariables>

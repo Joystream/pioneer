@@ -2,8 +2,7 @@ import React from 'react'
 
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography/TokenValue'
-import { useApi } from '@/common/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 import { MemberInfo } from '..'
@@ -13,10 +12,7 @@ import { MemberRoles } from '../MemberRoles'
 import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberModalTrigger, MemberRolesColumn } from './Fileds'
 
 export const MemberListItem = ({ member }: { member: Member }) => {
-  const { api, connectionState } = useApi()
-  const council = useObservable(api?.query.council.councilMembers(), [connectionState])
-  const councilMembersIds = council?.map(({ membership_id }) => membership_id.toNumber()) ?? []
-  const isCouncil = (id: number) => councilMembersIds.includes(id)
+  const isCouncilMember = useIsCouncilMember(member)
   const showMemberModal = useShowMemberModal(member.id)
 
   return (
@@ -31,7 +27,7 @@ export const MemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberColumn>
-        <Info>{isCouncil(parseInt(member.id)) ? <CheckboxIcon /> : <CrossIcon />}</Info>
+        <Info>{isCouncilMember ? <CheckboxIcon /> : <CrossIcon />}</Info>
       </MemberColumn>
 
       <MemberRolesColumn>

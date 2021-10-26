@@ -99,6 +99,11 @@ fragment CastVoteFields on CastVote {
   }
 }
 
+fragment CouncilSpendingEventFields on BudgetSpendingEvent {
+  amount
+  type
+}
+
 query GetElectedCouncil {
   electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
     ...ElectedCouncilFields
@@ -117,9 +122,19 @@ query GetPastCouncilsCount {
   }
 }
 
-query GetPastCouncil($id: ID!) {
+query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   electedCouncilByUniqueInput(where: { id: $id }) {
     ...PastCouncilDetailedFields
+  }
+  budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...CouncilSpendingEventFields
+  }
+}
+
+query GetCouncilBlockRange($id: ID!) {
+  electedCouncilByUniqueInput(where: { id: $id }) {
+    electedAtBlock
+    endedAtBlock
   }
 }
 
@@ -180,5 +195,32 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
 query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
   castVotes(where: $where, orderBy: $orderBy) {
     commitment
+  }
+}
+
+query GetCouncilVotesCount($where: CastVoteWhereInput) {
+  castVotesConnection(where: $where) {
+    totalCount
+  }
+}
+
+query GetPastVotesResults($myAccounts: [String!]) {
+  electionRounds(where: { isFinished_eq: true, castVotes_some: { castBy_in: $myAccounts } }) {
+    id
+    electedCouncil {
+      councilMembers {
+        member {
+          id
+        }
+      }
+    }
+  }
+  castVotes(where: { castBy_in: $myAccounts }) {
+    voteFor {
+      id
+    }
+    electionRound {
+      id
+    }
   }
 }
