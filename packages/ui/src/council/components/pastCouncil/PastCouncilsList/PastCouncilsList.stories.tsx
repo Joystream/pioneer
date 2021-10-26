@@ -16,10 +16,10 @@ interface Props {
   isLoading: boolean
 }
 
-const Template: Story<Props> = ({ councils, isLoading }) => {
+const Template: Story<Props> = () => {
   return (
     <MemoryRouter>
-      <PastCouncilsList isLoading={isLoading} councils={councils} />
+      <PastCouncilsList />
     </MemoryRouter>
   )
 }

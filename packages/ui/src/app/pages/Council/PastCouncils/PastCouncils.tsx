@@ -4,12 +4,10 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PastCouncilsList } from '@/council/components/pastCouncil/PastCouncilsList/PastCouncilsList'
-import { usePastCouncils } from '@/council/hooks/usePastCouncils'
 
 import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastCouncils = () => {
-  const { isLoading, councils } = usePastCouncils()
 
   const header = (
     <PageHeaderWrapper>
@@ -22,7 +20,7 @@ export const PastCouncils = () => {
 
   const main = (
     <MainPanel>
-      <PastCouncilsList isLoading={isLoading} councils={councils} />
+      <PastCouncilsList />
     </MainPanel>
   )
 
