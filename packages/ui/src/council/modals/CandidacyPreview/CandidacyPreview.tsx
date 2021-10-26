@@ -12,6 +12,8 @@ import { VoteForCouncilButton } from '@/council/components/election/VoteForCounc
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
+import { useElectionStage } from '@/council/hooks/useElectionStage'
+import { useStoredCastedVotes } from '@/council/hooks/useStoredCastedVotes'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
 import { MemberAccounts } from '@/memberships/components/MemberProfile/MemberAccounts'
 import { MemberModal } from '@/memberships/components/MemberProfile/MemberModal'
@@ -33,6 +35,11 @@ export const CandidacyPreview = React.memo(() => {
   const { modalData, hideModal } = useModal<CandidacyPreviewModalCall>()
   const [candidateId, setCandidateId] = useState(modalData.id)
   const { isLoading, candidate } = useCandidate(candidateId)
+
+  const { stage: electionStage } = useElectionStage()
+  const currentVotingCycleId = electionStage === 'voting' ? candidate?.cycleId : undefined
+  const myVotes = useStoredCastedVotes(currentVotingCycleId, candidate?.member.id)
+
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
   const properUrl = getUrl({
@@ -93,9 +100,11 @@ export const CandidacyPreview = React.memo(() => {
         </SidePaneTopButtonsGroup>
       }
       footer={
-        <ButtonsGroup>
-          <VoteForCouncilButton id={modalData.id} />
-        </ButtonsGroup>
+        isDefined(myVotes) ? (
+          <ButtonsGroup align="right">
+            <VoteForCouncilButton id={modalData.id} again={myVotes.length > 0} />
+          </ButtonsGroup>
+        ) : null
       }
       closeModal={closeModal}
     >
