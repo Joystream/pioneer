@@ -1,4 +1,3 @@
-import { BN_ZERO } from '@polkadot/util'
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
