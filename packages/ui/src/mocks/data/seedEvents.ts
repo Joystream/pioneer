@@ -10,6 +10,7 @@ import rawCandidacyWithdrawEvents from './raw/candidacyWithdrawEvents.json'
 import rawCouncilorRewardUpdatedEvents from './raw/councilorRewardUpdatedEvents.json'
 import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
 import rawOpeningFilledEvents from './raw/openingFilledEvents.json'
+import rawProposalVotedEvents from './raw/proposalVotedEvents.json'
 import rawRewardPaidEvents from './raw/rewardPaidEvents.json'
 import rawStakeDecreasedEvents from './raw/stakeDecreasedEvents.json'
 import rawStakeIncreasedEvents from './raw/stakeIncreasedEvents.json'
@@ -23,13 +24,16 @@ interface BaseEvent {
   network?: string
   createdAt: string
 }
+
 interface RawApplicationWithdrawnEvent extends BaseEvent {
   applicationId: string
 }
+
 interface RawAppliedOnOpeningEvent extends BaseEvent {
   applicationId: string
   openingId: string
 }
+
 interface RawBudgetSpendingEvent extends BaseEvent {
   groupId: string
   workerId: string
@@ -37,6 +41,7 @@ interface RawBudgetSpendingEvent extends BaseEvent {
   amount: number
   reciever: string
 }
+
 interface RawRewardPaidEvent extends BaseEvent {
   groupId: string
   workerId: string
@@ -44,16 +49,19 @@ interface RawRewardPaidEvent extends BaseEvent {
   amount: number
   type: string
 }
+
 interface RawStakeChangedEvent extends BaseEvent {
   workerId: string
   amount: number
 }
+
 interface RawStakeSlashedEvent extends BaseEvent {
   workerId: string
   requestedAmount: number
   slashedAmount: number
   rationale: string
 }
+
 interface RawOpeningFilledEvent extends BaseEvent {
   groupId: string
   openingId: string
@@ -101,6 +109,12 @@ interface RawCandidacyWithdrawEvent extends BaseEvent {
   memberId: string
 }
 
+export interface RawProposalVotedEventMock extends BaseEvent {
+  voterId: string
+  proposalId: string
+  voteKind: string
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -124,6 +138,7 @@ export const eventCategories = {
     ...rawEvent,
   })),
   CandidacyWithdrawEvent: rawCandidacyWithdrawEvents.map((rawEvent: RawCandidacyWithdrawEvent) => ({ ...rawEvent })),
+  ProposalVotedEvent: rawProposalVotedEvents.map((rawEvent: RawProposalVotedEventMock) => ({ ...rawEvent })),
 }
 
 type EventType = keyof typeof eventCategories
@@ -154,12 +169,6 @@ export function seedProposalsEvents(server: any) {
     createdAt: faker.date.recent(1),
     proposalId: '2',
     executionStatus: server.schema.create('ProposalStatusExecuted'),
-  })
-  server.schema.create('ProposalVotedEvent', {
-    ...randomRawBlock(),
-    createdAt: faker.date.recent(1),
-    proposalId: '3',
-    voterId: '3',
   })
   server.schema.create('ProposalDiscussionPostCreatedEvent', {
     ...randomRawBlock(),
