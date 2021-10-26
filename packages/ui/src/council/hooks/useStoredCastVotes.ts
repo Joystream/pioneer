@@ -2,12 +2,13 @@ import { useEffect, useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
+import { isDefined } from '@/common/utils'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
 import { useGetCouncilVotesCommitmentsLazyQuery } from '@/council/queries'
 
 import { VotingAttempt } from './useCommitment'
 
-export const useStoredCastedVotes = (cycleId?: number) => {
+export const useStoredCastVotes = (cycleId?: number) => {
   const [get, { data }] = useGetCouncilVotesCommitmentsLazyQuery()
 
   const [votingAttempts = []] = useLocalStorage<VotingAttempt[]>(`votes:${cycleId}`)
@@ -44,8 +45,11 @@ export const useStoredCastedVotes = (cycleId?: number) => {
     } else if (myAttempts.length === 0) {
       return []
     } else if (data) {
-      const castedCommitment = data.castVotes.map(({ commitment }) => commitment)
-      return myAttempts.filter(({ commitment }) => castedCommitment.includes(commitment))
+      const attemptsWithVoteIds = myAttempts.map((attempt) => ({
+        ...attempt,
+        voteId: data.castVotes.find((vote) => vote.commitment === attempt.commitment)?.id,
+      }))
+      return attemptsWithVoteIds.filter((attempt) => isDefined(attempt.voteId))
     }
   }, [myAttempts?.length, data?.castVotes.length])
 }

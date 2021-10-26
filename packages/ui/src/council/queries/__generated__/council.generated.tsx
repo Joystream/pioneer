@@ -603,7 +603,7 @@ export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
 
 export type GetCouncilVotesCommitmentsQuery = {
   __typename: 'Query'
-  castVotes: Array<{ __typename: 'CastVote'; commitment: string }>
+  castVotes: Array<{ __typename: 'CastVote'; id: string; commitment: string }>
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
@@ -1342,6 +1342,7 @@ export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery
 export const GetCouncilVotesCommitmentsDocument = gql`
   query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
     castVotes(where: $where, orderBy: $orderBy) {
+      id
       commitment
     }
   }
