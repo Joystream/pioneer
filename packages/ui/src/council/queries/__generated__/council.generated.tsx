@@ -571,6 +571,36 @@ export type GetCouncilVotesQuery = {
   }>
 }
 
+export type GetCouncilVotesCountQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.CastVoteWhereInput>
+}>
+
+export type GetCouncilVotesCountQuery = {
+  __typename: 'Query'
+  castVotesConnection: { __typename: 'CastVoteConnection'; totalCount: number }
+}
+
+export type GetPastVotesResultsQueryVariables = Types.Exact<{
+  myAccounts?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+}>
+
+export type GetPastVotesResultsQuery = {
+  __typename: 'Query'
+  electionRounds: Array<{
+    __typename: 'ElectionRound'
+    id: string
+    electedCouncil: {
+      __typename: 'ElectedCouncil'
+      councilMembers: Array<{ __typename: 'CouncilMember'; member: { __typename: 'Membership'; id: string } }>
+    }
+  }>
+  castVotes: Array<{
+    __typename: 'CastVote'
+    voteFor?: { __typename: 'Membership'; id: string } | null | undefined
+    electionRound: { __typename: 'ElectionRound'; id: string }
+  }>
+}
+
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -1213,3 +1243,114 @@ export function useGetCouncilVotesLazyQuery(
 export type GetCouncilVotesQueryHookResult = ReturnType<typeof useGetCouncilVotesQuery>
 export type GetCouncilVotesLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesLazyQuery>
 export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery, GetCouncilVotesQueryVariables>
+export const GetCouncilVotesCountDocument = gql`
+  query GetCouncilVotesCount($where: CastVoteWhereInput) {
+    castVotesConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetCouncilVotesCountQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilVotesCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilVotesCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilVotesCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetCouncilVotesCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>(
+    GetCouncilVotesCountDocument,
+    options
+  )
+}
+export function useGetCouncilVotesCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilVotesCountQuery, GetCouncilVotesCountQueryVariables>(
+    GetCouncilVotesCountDocument,
+    options
+  )
+}
+export type GetCouncilVotesCountQueryHookResult = ReturnType<typeof useGetCouncilVotesCountQuery>
+export type GetCouncilVotesCountLazyQueryHookResult = ReturnType<typeof useGetCouncilVotesCountLazyQuery>
+export type GetCouncilVotesCountQueryResult = Apollo.QueryResult<
+  GetCouncilVotesCountQuery,
+  GetCouncilVotesCountQueryVariables
+>
+export const GetPastVotesResultsDocument = gql`
+  query GetPastVotesResults($myAccounts: [String!]) {
+    electionRounds(where: { isFinished_eq: true, castVotes_some: { castBy_in: $myAccounts } }) {
+      id
+      electedCouncil {
+        councilMembers {
+          member {
+            id
+          }
+        }
+      }
+    }
+    castVotes(where: { castBy_in: $myAccounts }) {
+      voteFor {
+        id
+      }
+      electionRound {
+        id
+      }
+    }
+  }
+`
+
+/**
+ * __useGetPastVotesResultsQuery__
+ *
+ * To run a query within a React component, call `useGetPastVotesResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastVotesResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastVotesResultsQuery({
+ *   variables: {
+ *      myAccounts: // value for 'myAccounts'
+ *   },
+ * });
+ */
+export function useGetPastVotesResultsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPastVotesResultsQuery, GetPastVotesResultsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastVotesResultsQuery, GetPastVotesResultsQueryVariables>(
+    GetPastVotesResultsDocument,
+    options
+  )
+}
+export function useGetPastVotesResultsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastVotesResultsQuery, GetPastVotesResultsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastVotesResultsQuery, GetPastVotesResultsQueryVariables>(
+    GetPastVotesResultsDocument,
+    options
+  )
+}
+export type GetPastVotesResultsQueryHookResult = ReturnType<typeof useGetPastVotesResultsQuery>
+export type GetPastVotesResultsLazyQueryHookResult = ReturnType<typeof useGetPastVotesResultsLazyQuery>
+export type GetPastVotesResultsQueryResult = Apollo.QueryResult<
+  GetPastVotesResultsQuery,
+  GetPastVotesResultsQueryVariables
+>
