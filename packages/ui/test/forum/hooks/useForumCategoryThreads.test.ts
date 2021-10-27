@@ -3,6 +3,7 @@ import { endOfYesterday } from 'date-fns'
 import { act } from 'react-dom/test-utils'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
+import { SortOrder } from '@/common/hooks/useSort'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
 
@@ -23,6 +24,11 @@ const mockedQueryCountHook = useGetForumThreadsCountQuery as jest.Mock
 
 const { IsStickyDesc, UpdatedAtAsc, AuthorDesc } = ForumThreadOrderByInput
 
+const order: SortOrder<ForumThreadOrderByInput> = {
+  orderKey: 'updatedAt',
+  isDescending: true,
+}
+
 describe('useForumCategoryThreads', () => {
   afterEach(() => {
     mockedQueryHook.mockClear()
@@ -30,7 +36,7 @@ describe('useForumCategoryThreads', () => {
   })
 
   it('Default', () => {
-    renderUseForumCategoryThreads({})
+    renderUseForumCategoryThreads({ order })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -47,7 +53,7 @@ describe('useForumCategoryThreads', () => {
     const start = endOfYesterday()
     const end = new Date()
 
-    const { refresh } = renderUseForumCategoryThreads({ categoryId }).result.current
+    const { refresh } = renderUseForumCategoryThreads({ categoryId, order }).result.current
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -78,7 +84,7 @@ describe('useForumCategoryThreads', () => {
   })
 
   it('Order', () => {
-    renderUseForumCategoryThreads({ order: { key: 'Author', isDescending: true } })
+    renderUseForumCategoryThreads({ order: { orderKey: 'author', isDescending: true } })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -93,7 +99,7 @@ describe('useForumCategoryThreads', () => {
     const start = endOfYesterday()
     const end = new Date()
 
-    const { rerender } = renderUseForumCategoryThreads({ isArchive: true })
+    const { rerender } = renderUseForumCategoryThreads({ isArchive: true, order })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -105,7 +111,7 @@ describe('useForumCategoryThreads', () => {
       },
     })
 
-    act(() => rerender([{ isArchive: true, filters: { author: null, date: { start, end }, tag: null } }]))
+    act(() => rerender([{ isArchive: true, order, filters: { author: null, date: { start, end }, tag: null } }]))
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -122,7 +128,7 @@ describe('useForumCategoryThreads', () => {
   })
 
   it('Pagination', () => {
-    renderUseForumCategoryThreads({}, { perPage: 10, page: 1 })
+    renderUseForumCategoryThreads({ order }, { perPage: 10, page: 1 })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {

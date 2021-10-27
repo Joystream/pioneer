@@ -1,7 +1,5 @@
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { ThreadDefaultOrder } from '@/forum/components/threads/ThreadList'
-import { forumThreadOrderBy } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries/__generated__/forum.generated'
 import { asForumThread, ForumThread } from '@/forum/types'
 
@@ -26,7 +24,7 @@ export const useWatchlistedThreads = ({ page, threadsPerPage = 5 }: UseMyThreads
     where: { id_in: watchlist ?? [] },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
-    orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(ThreadDefaultOrder)],
+    orderBy: [ForumThreadOrderByInput.IsStickyDesc, ForumThreadOrderByInput.UpdatedAtDesc],
   }
   const { loading: loadingPosts, data: threadsData } = useGetForumThreadsQuery({ variables })
   const { loading: loadingCount, data: countData } = useGetForumThreadsCountQuery({
