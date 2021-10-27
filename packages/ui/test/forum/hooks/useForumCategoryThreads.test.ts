@@ -22,7 +22,7 @@ jest.mock('../../../src/forum/queries', () => ({
 const mockedQueryHook = useGetForumThreadsQuery as jest.Mock
 const mockedQueryCountHook = useGetForumThreadsCountQuery as jest.Mock
 
-const { IsStickyDesc, UpdatedAtAsc, AuthorDesc } = ForumThreadOrderByInput
+const { IsStickyDesc, UpdatedAtDesc, AuthorDesc } = ForumThreadOrderByInput
 
 const order: SortOrder<ForumThreadOrderByInput> = {
   orderKey: 'updatedAt',
@@ -41,7 +41,7 @@ describe('useForumCategoryThreads', () => {
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
-        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
     })
@@ -61,7 +61,7 @@ describe('useForumCategoryThreads', () => {
           category: { id_eq: categoryId },
           status_json: { isTypeOf_eq: 'ThreadStatusActive' },
         },
-        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
     })
@@ -77,7 +77,7 @@ describe('useForumCategoryThreads', () => {
           createdAt_gte: start,
           createdAt_lte: end,
         },
-        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
     })
@@ -106,7 +106,7 @@ describe('useForumCategoryThreads', () => {
         where: {
           status_json: { isTypeOf_eq: 'ThreadStatusLocked' },
         },
-        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
     })
@@ -121,7 +121,7 @@ describe('useForumCategoryThreads', () => {
             threadDeletedEvent: { createdAt_gte: start, createdAt_lte: end },
           },
         },
-        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
     })
@@ -133,7 +133,7 @@ describe('useForumCategoryThreads', () => {
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
-        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 10,
         offset: 0,
       },
