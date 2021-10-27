@@ -1,26 +1,18 @@
 import { ElectedCouncilOrderByInput } from '@/common/api/queries'
+import { getSortFromEnum, OrderKey, SortOrder } from '@/common/hooks/useSort'
 import { useGetPastCouncilsQuery } from '@/council/queries'
 import { asPastCouncil } from '@/council/types/PastCouncil'
 
-export type PastCouncilsOrderKey = 'cycle' | 'termEnded'
-
 interface UsePastCouncilsProps {
   page?: number
-  orderKey: PastCouncilsOrderKey
-  isDescending: boolean
+  order: SortOrder<OrderKey<ElectedCouncilOrderByInput>>
 }
 
-const getOrderBy = (key: PastCouncilsOrderKey, isDescending: boolean) => {
-  if (key === 'cycle') {
-    return isDescending ? ElectedCouncilOrderByInput.ElectedAtBlockDesc : ElectedCouncilOrderByInput.ElectedAtBlockAsc
-  }
+export const usePastCouncils = ({ order }: UsePastCouncilsProps) => {
+  const orderBy = getSortFromEnum(order, ElectedCouncilOrderByInput)
 
-  return isDescending ? ElectedCouncilOrderByInput.EndedAtBlockDesc : ElectedCouncilOrderByInput.EndedAtBlockAsc
-}
-
-export const usePastCouncils = ({ orderKey, isDescending }: UsePastCouncilsProps) => {
   const { loading, data } = useGetPastCouncilsQuery({
-    variables: { orderBy: [getOrderBy(orderKey, isDescending)] },
+    variables: { orderBy: orderBy ?? [] },
   })
 
   return { isLoading: loading, councils: data?.electedCouncils.map(asPastCouncil) }
