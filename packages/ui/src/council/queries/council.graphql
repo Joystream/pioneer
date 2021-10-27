@@ -70,6 +70,7 @@ fragment PastElectionRoundDetailedFields on ElectionRound {
     ...ElectionCandidateFields
   }
   castVotes {
+    id
     stake
     stakeLocked
     voteForId

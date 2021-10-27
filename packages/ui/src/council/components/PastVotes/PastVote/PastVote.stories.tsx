@@ -22,6 +22,7 @@ export const Default = Template.bind({})
 const revealedArgs: PastVoteProps = {
   $colLayout: PastVoteColumns,
   vote: {
+    id: '0',
     stake: new BN(10000000),
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
@@ -35,6 +36,7 @@ export const Unrevealed = Template.bind({})
 const unrevealedArgs: PastVoteProps = {
   $colLayout: PastVoteColumns,
   vote: {
+    id: '0',
     stake: new BN(10000000),
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',

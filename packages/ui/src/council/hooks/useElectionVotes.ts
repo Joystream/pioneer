@@ -40,7 +40,10 @@ export const useElectionVotes = (election: Election) => {
           myVotes:
             myCastVotes
               ?.filter((myVote) => myVote.optionId === candidate.member.id)
-              .map((myVote) => ({ ...myVote, isRevelaed: !!votes?.find((vote) => vote.id === myVote.voteId) })) ?? [],
+              .map((myVote) => ({
+                ...myVote,
+                isRevelaed: !!votes?.find((vote) => vote.id === myVote.voteId)?.voteFor,
+              })) ?? [],
         })
     )
     votes?.forEach((vote) => {
@@ -52,11 +55,6 @@ export const useElectionVotes = (election: Election) => {
           candidate.ownStake = candidate.ownStake.add(vote.stake)
         }
       }
-      // Object.entries(candidateStats).forEach(([,candidate]) => {
-      //   candidate.myVotes = myCastVotes
-      //     ?.filter(myVote => myVote.optionId === candidate.candidate.member.id)
-      //     .map(myVote => ({ ...myVote, isRevelaed: !!votes.find(vote => vote.id === myVote.voteId) })) ?? []
-      // })
     })
     return Object.values(candidateStats).sort((a, b) => b.totalStake.sub(a.totalStake).toNumber())
   }, [votes?.length, myCastVotes?.length])

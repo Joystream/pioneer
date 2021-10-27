@@ -191,6 +191,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
+    id: string
     stake: any
     stakeLocked: boolean
     voteForId?: string | null | undefined
@@ -476,6 +477,7 @@ export type GetPastElectionQuery = {
         }>
         castVotes: Array<{
           __typename: 'CastVote'
+          id: string
           stake: any
           stakeLocked: boolean
           voteForId?: string | null | undefined
@@ -723,6 +725,7 @@ export const PastElectionRoundDetailedFieldsFragmentDoc = gql`
       ...ElectionCandidateFields
     }
     castVotes {
+      id
       stake
       stakeLocked
       voteForId
