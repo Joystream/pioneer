@@ -5,7 +5,7 @@ import { ElectionStage } from '@/council/types/Election'
 
 export type AnnouncingStageTab = 'candidates' | 'myCandidates'
 export type VotingStageTab = 'candidates' | 'myVotes'
-type RevealingStageTab = 'results' | 'myVotes'
+export type RevealingStageTab = 'results' | 'myVotes'
 
 type ElectionTab = AnnouncingStageTab | VotingStageTab | RevealingStageTab
 

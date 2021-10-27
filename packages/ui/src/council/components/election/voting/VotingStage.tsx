@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { ElectionTabs, VotingStageTab } from '@/council/components/election/ElectionTabs'
-import { useStoredCastedVotes } from '@/council/hooks/useStoredCastedVotes'
+import { useStoredCastVotes } from '@/council/hooks/useStoredCastVotes'
 import { Election } from '@/council/types/Election'
 
 interface VotingStageProps {
@@ -13,7 +13,7 @@ interface VotingStageProps {
 export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   const [tab, setTab] = useState<VotingStageTab>('candidates')
 
-  const myVotes = useStoredCastedVotes(election?.cycleId)
+  const myVotes = useStoredCastVotes(election?.cycleId)
   const optionIds = useMemo(() => myVotes?.map(({ optionId }) => optionId), [myVotes?.length])
 
   const [allCandidates, votedForCandidates] = useMemo(() => {

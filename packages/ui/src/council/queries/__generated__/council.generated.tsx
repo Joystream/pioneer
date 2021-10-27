@@ -191,6 +191,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
+    id: string
     stake: any
     stakeLocked: boolean
     voteForId?: string | null | undefined
@@ -235,6 +236,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
 
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
+  id: string
   stake: any
   stakeLocked: boolean
   castBy: string
@@ -463,6 +465,7 @@ export type GetPastElectionQuery = {
         }>
         castVotes: Array<{
           __typename: 'CastVote'
+          id: string
           stake: any
           stakeLocked: boolean
           voteForId?: string | null | undefined
@@ -551,6 +554,7 @@ export type GetCouncilVotesQuery = {
   __typename: 'Query'
   castVotes: Array<{
     __typename: 'CastVote'
+    id: string
     stake: any
     stakeLocked: boolean
     castBy: string
@@ -591,7 +595,7 @@ export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
 
 export type GetCouncilVotesCommitmentsQuery = {
   __typename: 'Query'
-  castVotes: Array<{ __typename: 'CastVote'; commitment: string }>
+  castVotes: Array<{ __typename: 'CastVote'; id: string; commitment: string }>
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
@@ -733,6 +737,7 @@ export const PastElectionRoundDetailedFieldsFragmentDoc = gql`
       ...ElectionCandidateFields
     }
     castVotes {
+      id
       stake
       stakeLocked
       voteForId
@@ -756,6 +761,7 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 `
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
+    id
     stake
     stakeLocked
     castBy
@@ -1305,6 +1311,7 @@ export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery
 export const GetCouncilVotesCommitmentsDocument = gql`
   query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
     castVotes(where: $where, orderBy: $orderBy) {
+      id
       commitment
     }
   }

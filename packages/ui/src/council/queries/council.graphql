@@ -70,6 +70,7 @@ fragment PastElectionRoundDetailedFields on ElectionRound {
     ...ElectionCandidateFields
   }
   castVotes {
+    id
     stake
     stakeLocked
     voteForId
@@ -88,6 +89,7 @@ fragment ElectionCandidateDetailedFields on Candidate {
 }
 
 fragment CastVoteFields on CastVote {
+  id
   stake
   stakeLocked
   castBy
@@ -187,6 +189,7 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
 
 query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
   castVotes(where: $where, orderBy: $orderBy) {
+    id
     commitment
   }
 }

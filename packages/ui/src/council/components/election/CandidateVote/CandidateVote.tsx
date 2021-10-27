@@ -11,6 +11,7 @@ import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { MyCastVote } from '@/council/hooks/useCommitment'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
@@ -19,24 +20,24 @@ import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 export interface CandidateVoteProps {
   candidateId: string
-  revealed: boolean
   member: Member
   sumOfAllStakes: BN
   totalStake: BN
   ownStake?: BN
   votes: number
   index: number
+  myVotes: MyCastVote[]
 }
 
 export const CandidateVote = ({
   candidateId,
-  revealed,
   member,
   sumOfAllStakes,
   totalStake,
   ownStake,
   votes,
   index,
+  myVotes,
 }: CandidateVoteProps) => {
   const { showModal } = useModal()
   const showCandidate = useCallback(() => {
@@ -47,7 +48,9 @@ export const CandidateVote = ({
   }, [showModal])
 
   const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
-  const userVoted = ownStake && ownStake.gt(BN_ZERO)
+  const hasOwnStake = ownStake && ownStake.gt(BN_ZERO)
+  const hasMyVotes = myVotes.length > 0
+  const allVotesRevealed = !myVotes.find((vote) => vote.isRevelaed === false)
   return (
     <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>
@@ -69,7 +72,7 @@ export const CandidateVote = ({
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            {userVoted && (
+            {hasOwnStake && (
               <>
                 <Subscription>My Stake</Subscription>
                 <StatsValue>
@@ -87,8 +90,8 @@ export const CandidateVote = ({
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
       <ButtonsGroup>
-        {userVoted &&
-          (revealed ? (
+        {hasMyVotes &&
+          (allVotesRevealed ? (
             <ButtonPrimary size="medium" disabled>
               Revealed
             </ButtonPrimary>
