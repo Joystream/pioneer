@@ -1,4 +1,4 @@
-import { getSortFromEnum, OrderKey, SortOrder } from '@/common/hooks/useSort'
+import { getSortFromEnum, SortOrder } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
@@ -9,7 +9,7 @@ import { asMember, Member } from '../types'
 export const MEMBERS_PER_PAGE = 10
 
 interface UseMemberProps {
-  order: SortOrder<OrderKey<MembershipOrderByInput>>
+  order: SortOrder<MembershipOrderByInput>
   filter: MemberListFilter
   page?: number
 }

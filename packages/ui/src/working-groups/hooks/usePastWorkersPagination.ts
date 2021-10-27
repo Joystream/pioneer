@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { WorkerOrderByInput } from '@/common/api/queries'
-import { getSortFromEnum, OrderKey, SortOrder } from '@/common/hooks/useSort'
+import { getSortFromEnum, SortOrder } from '@/common/hooks/useSort'
 import { UseWorkersProps } from '@/working-groups/hooks/useWorkers'
 import { useGetPastWorkersQuery, useGetWorkersCountQuery } from '@/working-groups/queries'
 import { asPastWorker } from '@/working-groups/types'
@@ -10,7 +10,7 @@ export const WORKERS_PER_PAGE = 10
 
 interface UsePastWorkersPaginationProps extends UseWorkersProps {
   page?: number
-  order: SortOrder<OrderKey<WorkerOrderByInput>>
+  order: SortOrder<WorkerOrderByInput>
 }
 
 export const usePastWorkersPagination = ({ groupId: group_eq, page = 1, order }: UsePastWorkersPaginationProps) => {
