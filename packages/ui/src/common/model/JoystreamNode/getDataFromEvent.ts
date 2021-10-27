@@ -20,7 +20,7 @@ export const getDataFromEvent = <
     return
   }
 
-  const data = (eventRecord.event.data as unknown) as Tuple
+  const data = eventRecord.event.data as unknown as Tuple
 
   return data[index]
 }

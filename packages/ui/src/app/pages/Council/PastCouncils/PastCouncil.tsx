@@ -1,4 +1,3 @@
-import { BN_ZERO } from '@polkadot/util'
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -77,13 +76,8 @@ export const PastCouncil = () => {
         {isLoading && <Loading />}
         {!isLoading && council && (
           <>
-            <PastCouncilStats
-              totalSpent={BN_ZERO}
-              totalDebt={council.totalDebt}
-              totalRewards={council.totalRewards}
-              totalSpentOnProposals={BN_ZERO}
-            />
-            <PastCouncilTabs council={council} />
+            <PastCouncilStats {...council} />
+            <PastCouncilTabs {...council} />
           </>
         )}
       </MainPanel>

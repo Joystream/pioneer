@@ -46,10 +46,12 @@ const defaultDurationUnits: TimeUnit[] = [
   [AN_HOUR, 'hour'],
   [A_MINUTE, 'minute'],
 ]
-export const durationFormater = (units = defaultDurationUnits) => (duration: number | BN) =>
-  splitDuration(units)(Math.abs(isNumber(duration) ? duration : duration.toNumber()))
-    .flatMap(([duration, unit]) => (duration ? formatDurationUnit(duration, unit) : []))
-    .join(' ') || 'none'
+export const durationFormater =
+  (units = defaultDurationUnits) =>
+  (duration: number | BN) =>
+    splitDuration(units)(Math.abs(isNumber(duration) ? duration : duration.toNumber()))
+      .flatMap(([duration, unit]) => (duration ? formatDurationUnit(duration, unit) : []))
+      .join(' ') || 'none'
 
 const formatDurationUnit = (duration: number, unit: Intl.RelativeTimeFormatUnit) =>
   duration.toLocaleString('en', { style: 'unit', unit, unitDisplay: 'long' })
@@ -61,9 +63,11 @@ export const formatBlocksToDuration = durationFormater([
   [A_MINUTE / MILISECOND_PER_BLOCK, 'minute'],
 ])
 
-export const splitDuration = <T extends any>(units: [number, T][]) => (duration: number): [number, T][] => {
-  if (!units.length) return []
-  const [[unitValue, unitName], ...submultiples] = units
-  const amount = Math.floor(duration / unitValue)
-  return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
-}
+export const splitDuration =
+  <T extends any>(units: [number, T][]) =>
+  (duration: number): [number, T][] => {
+    if (!units.length) return []
+    const [[unitValue, unitName], ...submultiples] = units
+    const amount = Math.floor(duration / unitValue)
+    return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
+  }

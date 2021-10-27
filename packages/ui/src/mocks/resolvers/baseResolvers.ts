@@ -91,9 +91,7 @@ const getFilter = (where: Record<string, any>) => {
           resultToBoolean(new Date(model[field]).getTime() - new Date(checkValue).getTime())
         )
       } else {
-        filters.push((model: Record<string, any>) =>
-          resultToBoolean(String(model[field]).localeCompare(String(checkValue)))
-        )
+        filters.push((model: Record<string, any>) => resultToBoolean(model[field] - checkValue))
       }
     }
 
@@ -136,7 +134,7 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
     const end = parseInt(limit ?? 0) > 0 ? start + limit : undefined
     const pagedRecords = models.slice(start, end)
 
-    return (adaptRecords(pagedRecords) as unknown) as D
+    return adaptRecords(pagedRecords) as unknown as D
   }
 }
 
@@ -163,7 +161,7 @@ export const getInterfaceResolver = <T extends QueryArgs, D>(): WhereQueryResolv
     const end = parseInt(limit ?? 0) > 0 ? start + limit : undefined
     const pagedRecords = models?.slice(start, end)
 
-    return (adaptRecords(pagedRecords ?? []) as unknown) as D
+    return adaptRecords(pagedRecords ?? []) as unknown as D
   }
 }
 
@@ -199,7 +197,7 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
       records.sort(getSortBy(fields, nodeType))
     }
 
-    const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
+    const edges = getEdges(records, relayArgs, nodeType.name) as unknown as D[]
 
     return {
       edges,

@@ -20,12 +20,16 @@ import {
   ToggleableItemTitle,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
 
-interface ProposalListItemProps {
+import { ProposalItemVoteDetails } from './ProposalItemVoteDetails'
+
+export interface ProposalListItemProps {
   proposal: Proposal
   isPast?: boolean
+  memberId?: string
+  isCouncilMember?: boolean
 }
 
-export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) => {
+export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
     <ProposalItem
@@ -50,6 +54,9 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
+      <StageField>
+        <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
+      </StageField>
     </ProposalItem>
   )
 }

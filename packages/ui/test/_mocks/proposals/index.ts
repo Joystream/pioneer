@@ -13,6 +13,7 @@ const baseMock = {
     discussionPosts: [],
     mode: 'ProposalDiscussionThreadModeClosed',
   },
+  councilApprovals: 0,
 }
 
 export const testProposals: ProposalMock[] = [

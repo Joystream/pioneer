@@ -4,6 +4,7 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PastVotesList } from '@/council/components/PastVotes/PastVotesList'
+import { PastVotesStats } from '@/council/components/PastVotes/PastVotesStats'
 
 import { CouncilTabs } from './components/CouncilTabs'
 
@@ -19,6 +20,7 @@ export const PastVotes = () => {
 
   const main = (
     <MainPanel>
+      <PastVotesStats />
       <PastVotesList />
     </MainPanel>
   )

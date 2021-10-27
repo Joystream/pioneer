@@ -3,6 +3,8 @@ import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
 import { CandidateCard, CandidateCardProps } from './CandidateCard'
 
 export default {
@@ -15,35 +17,38 @@ export default {
 
 const Template: Story<CandidateCardProps> = (args) => (
   <MemoryRouter>
-    <CandidateCard {...args} />
+    <MockApolloProvider members council>
+      <CandidateCard {...args} />
+    </MockApolloProvider>
   </MemoryRouter>
 )
 
 export const Default = Template.bind({})
 Default.args = {
-  member: {
+  candidate: {
     id: '0',
-    name: 'Jennifer_123',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    handle: 'Jennifer_123',
-    isVerified: true,
-    isFoundingMember: true,
-    isCouncilMember: false,
-    roles: [],
-    inviteCount: 0,
-    createdAt: '',
+    member: {
+      id: '0',
+      name: 'Jennifer_123',
+      rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      handle: 'Jennifer_123',
+      isVerified: true,
+      isFoundingMember: true,
+      isCouncilMember: false,
+      roles: [],
+      inviteCount: 0,
+      createdAt: '',
+    },
+    info: {
+      title: 'A Presidency for All Americans',
+      bannerUri: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
+      bulletPoints: [
+        'Amet minim mollit non deserunt ullamco est sit liqua dolor',
+        'Amet minim mollit non deserunt ullamco est sit liqua dolor',
+        'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
+      ],
+    },
+    stake: 130000000 as unknown as BN,
   },
-  info: {
-    title: 'A Presidency for All Americans',
-    bannerUri: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
-    bulletPoints: [
-      'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-      'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-      'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
-    ],
-  },
-  voted: true,
-  withdrawable: false,
-  stake: (130000000 as unknown) as BN,
 }

@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -14,26 +13,22 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
+import { isDefined } from '@/common/utils'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { WithdrawButton } from '@/council/components/election/WithdrawButton'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
+import { ElectionCandidate } from '@/council/types/Candidate'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
 import { useMemberCandidacyStats } from '@/memberships/hooks/useMemberCandidacyStats'
-import { Member } from '@/memberships/types'
 
 import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCardImage'
 
+export type CandidateCardCandidate = Pick<ElectionCandidate, 'id' | 'member' | 'stake' | 'info'>
+
 export interface CandidateCardProps {
-  id: string
-  member: Member
+  candidate: CandidateCardCandidate
   voted?: boolean
   withdrawable?: boolean
-  info: {
-    title: string
-    bulletPoints: string[]
-    bannerUri?: string
-  }
-  stake?: BN
   wins?: number
   loses?: number
   isVotingStage?: boolean
@@ -41,12 +36,9 @@ export interface CandidateCardProps {
 }
 
 export const CandidateCard = ({
-  id,
-  member,
-  info,
+  candidate: { id, member, info, stake },
   voted,
   withdrawable,
-  stake,
   isVotingStage,
   isPreview,
 }: CandidateCardProps) => {
@@ -119,7 +111,7 @@ export const CandidateCard = ({
                 <WithdrawButton member={member} />
               </CandidateCardControls>
             )}
-            {isVotingStage && (
+            {isVotingStage && isDefined(voted) && (
               <CandidateCardControls>
                 {voted ? <ButtonPrimary size="medium">Vote again </ButtonPrimary> : <VoteForCouncilButton id={id} />}
               </CandidateCardControls>

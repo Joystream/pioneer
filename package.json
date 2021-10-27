@@ -12,9 +12,9 @@
   },
   "scripts": {
     "lint": "wsrun --package ui -c lint",
-    "build": "wsrun --fast-exit --stages -c build",
-    "build:storybook": "wsrun --fast-exit --stages -c --exlude ui build && wsrun --package ui -c build:storybook",
-    "storybook": "wsrun --package ui -c storybook",
+    "build": "wsrun --fast-exit --stages -c --exclude @joystream/markdown-editor build",
+    "build:storybook": "wsrun --fast-exit --stages -c --exclude ui --exclude-missing build && wsrun --package ui -c build:storybook",
+    "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --package ui -c test",
     "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit --package ui -c test",
     "start": "wsrun --package ui -c start"

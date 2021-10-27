@@ -16,4 +16,4 @@ type Props = Parameters<typeof MemberList>[0]
 const Template: Story<Props> = (args) => <MemberList {...args} />
 
 export const Members = Template.bind({})
-Members.args = { members: mockMembers.map((member) => asMember(({ ...member } as unknown) as any)) }
+Members.args = { members: mockMembers.map((member) => asMember({ ...member } as unknown as any)) }

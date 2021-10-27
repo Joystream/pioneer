@@ -76,23 +76,16 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
     }
   }, [])
 
-  const {
-    isDragActive,
-    isDragAccept,
-    isDragReject,
-    getRootProps,
-    getInputProps,
-    acceptedFiles,
-    fileRejections,
-  } = useDropzone({
-    onDrop,
-    accept: 'application/wasm',
-    maxFiles: 1,
-    maxSize: MAX_FILE_SIZE,
-    multiple: false,
-    getFilesFromEvent: getValidatedFiles,
-    validator,
-  })
+  const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
+    useDropzone({
+      onDrop,
+      accept: 'application/wasm',
+      maxFiles: 1,
+      maxSize: MAX_FILE_SIZE,
+      multiple: false,
+      getFilesFromEvent: getValidatedFiles,
+      validator,
+    })
 
   return (
     <RowGapBlock gap={24}>

@@ -15,10 +15,10 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 export const MyApplications = () => {
   const { applications, isLoading } = useMyApplications()
   const currentApplications = useMemo(() => applications?.filter(isPendingApplication), [applications, isLoading])
-  const pastApplications = useMemo(() => applications?.filter((a) => !isPendingApplication(a)), [
-    applications,
-    isLoading,
-  ])
+  const pastApplications = useMemo(
+    () => applications?.filter((a) => !isPendingApplication(a)),
+    [applications, isLoading]
+  )
 
   const displayLoadingOrEmptyState = () => {
     if (isLoading) {

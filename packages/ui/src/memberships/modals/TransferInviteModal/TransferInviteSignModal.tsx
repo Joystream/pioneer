@@ -28,12 +28,10 @@ interface Props {
 export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, amount, service }: Props) => {
   const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
-  const transaction = useMemo(() => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount), [
-    sourceMember.id,
-    targetMember.id,
-    amount,
-    connectionState,
-  ])
+  const transaction = useMemo(
+    () => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount),
+    [sourceMember.id, targetMember.id, amount, connectionState]
+  )
   const signerAddress = sourceMember.controllerAccount
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,

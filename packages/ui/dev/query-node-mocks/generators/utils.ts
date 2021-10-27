@@ -74,7 +74,7 @@ export const randomMember = () => members[randomFromRange(0, members.length - 1)
 export const memberAt = (index: number) => members[index]
 
 export const randomBlock = (date?: Date) => ({
-  inBlock: faker.datatype.number(10_000),
+  inBlock: faker.datatype.number(100000),
   createdAt: (date ?? faker.date.recent(180)).toJSON(),
   network: 'OLYMPIA',
 })

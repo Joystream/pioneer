@@ -18,10 +18,12 @@ import { ForumTabs } from './components/ForumTabs'
 export const ForumArchived = () => {
   const [page, setPage] = useState<number>(1)
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchive: true })
-  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads(
-    { isArchive: true },
-    { perPage: THREADS_PER_PAGE, page }
-  )
+  const {
+    isLoading: isLoadingThreads,
+    threads,
+    threadCount,
+    refresh,
+  } = useForumCategoryThreads({ isArchive: true }, { perPage: THREADS_PER_PAGE, page })
 
   return (
     <PageLayout

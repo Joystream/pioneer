@@ -84,7 +84,7 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
-    const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
+    const fields = server.server?.schema.first('WorkingGroupOpening') as unknown as WorkingGroupOpeningFieldsFragment
     fields.stakeAmount = 2000
     const opening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }

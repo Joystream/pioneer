@@ -12,6 +12,7 @@ import { camelCaseToText } from '@/common/helpers'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
+import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
@@ -26,11 +27,11 @@ export const Election = () => {
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
   useCandidatePreviewViaUrlParameter()
 
-  if (isLoadingElection || isLoadingElectionStage) {
+  if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
   }
 
-  if (!election || electionStage === 'inactive') {
+  if (electionStage === 'inactive') {
     return null
   }
 
@@ -61,10 +62,11 @@ export const Election = () => {
         </StatisticItem>
         <BlockDurationStatistics title="Period remaining length" tooltipText="Lorem ipsum..." value={remainingPeriod} />
         <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
-          <TextHuge bold>{election.cycleId} round</TextHuge>
+          <TextHuge bold>{election ? `${election.cycleId} round` : '-'}</TextHuge>
         </StatisticItem>
       </Statistics>
-      {electionStage === 'announcing' && <AnnouncingStage election={election} />}
+      {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
+      {electionStage === 'voting' && <VotingStage election={election} isLoading={isLoadingElection} />}
     </MainPanel>
   )
 

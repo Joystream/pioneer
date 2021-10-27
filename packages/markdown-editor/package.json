@@ -1,0 +1,48 @@
+{
+  "name": "@joystream/markdown-editor",
+  "version": "0.0.1",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "build:editor": "node --max_old_space_size=4096 ./node_modules/.bin/webpack --mode production --progress",
+    "lint": "yarn lint:prettier --check && yarn lint:eslint",
+    "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+    "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
+    "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'"
+  },
+  "main": "dist/ckeditor.js",
+  "types": "types/",
+  "dependencies": {
+    "@ckeditor/ckeditor5-autoformat": "^30.0.0",
+    "@ckeditor/ckeditor5-basic-styles": "^30.0.0",
+    "@ckeditor/ckeditor5-block-quote": "^30.0.0",
+    "@ckeditor/ckeditor5-editor-classic": "^30.0.0",
+    "@ckeditor/ckeditor5-editor-inline": "^30.0.0",
+    "@ckeditor/ckeditor5-essentials": "^30.0.0",
+    "@ckeditor/ckeditor5-heading": "^30.0.0",
+    "@ckeditor/ckeditor5-image": "^30.0.0",
+    "@ckeditor/ckeditor5-indent": "^30.0.0",
+    "@ckeditor/ckeditor5-link": "^30.0.0",
+    "@ckeditor/ckeditor5-list": "^30.0.0",
+    "@ckeditor/ckeditor5-markdown-gfm": "^30.0.0",
+    "@ckeditor/ckeditor5-mention": "^30.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^30.0.0",
+    "@ckeditor/ckeditor5-paste-from-office": "^30.0.0",
+    "@ckeditor/ckeditor5-theme-lark": "^30.0.0",
+    "@ckeditor/ckeditor5-typing": "^30.0.0",
+    "raw-loader": "^4.0.2"
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-dev-utils": "^25.4.5",
+    "@ckeditor/ckeditor5-dev-webpack-plugin": "^25.4.5",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "prettier": "^2.4.1",
+    "terser-webpack-plugin": "^5.1.3",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3",
+    "webpack": "^5.58.1",
+    "webpack-cli": "^4.9.0"
+  }
+}

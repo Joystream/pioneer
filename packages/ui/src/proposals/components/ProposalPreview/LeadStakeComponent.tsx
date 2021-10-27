@@ -12,23 +12,22 @@ import { ProposalPropertiesContent } from './ProposalDetails'
 interface Props {
   details: DecreaseLeadStakeDetails | SlashLeadDetails
 }
-export const LeadStakeComponent: ProposalPropertiesContent<
-  'decreaseWorkingGroupLeadStake' | 'slashWorkingGroupLead'
-> = ({ details }: Props) => {
-  const member = details.member
-  const amountText = details.type === 'decreaseWorkingGroupLeadStake' ? 'Decrease Stake Amount' : 'Slashing Amount'
+export const LeadStakeComponent: ProposalPropertiesContent<'decreaseWorkingGroupLeadStake' | 'slashWorkingGroupLead'> =
+  ({ details }: Props) => {
+    const member = details.member
+    const amountText = details.type === 'decreaseWorkingGroupLeadStake' ? 'Decrease Stake Amount' : 'Slashing Amount'
 
-  return (
-    <Statistics>
-      <StatisticItem title="Working Group">
-        <TextInlineBig bold value>
-          {capitalizeFirstLetter(details.groupName)}
-        </TextInlineBig>
-      </StatisticItem>
-      <StatisticItem title="Worker ID">
-        {member ? <MemberInfo member={member} /> : <TextBig>Unknown</TextBig>}
-      </StatisticItem>
-      <TokenValueStat title={amountText} value={details.amount} />
-    </Statistics>
-  )
-}
+    return (
+      <Statistics>
+        <StatisticItem title="Working Group">
+          <TextInlineBig bold value>
+            {capitalizeFirstLetter(details.groupName)}
+          </TextInlineBig>
+        </StatisticItem>
+        <StatisticItem title="Worker ID">
+          {member ? <MemberInfo member={member} /> : <TextBig>Unknown</TextBig>}
+        </StatisticItem>
+        <TokenValueStat title={amountText} value={details.amount} />
+      </Statistics>
+    )
+  }

@@ -70,8 +70,7 @@ const forum: {
       id: '0:0',
       threadId: '0',
       authorId: '0',
-      text:
-        'vero harum est eos officiis possimus maiores nam impedit cum et atque consequuntur ut soluta rem iste laboriosam dolorem perferendis aut est laudantium quas',
+      text: 'vero harum est eos officiis possimus maiores nam impedit cum et atque consequuntur ut soluta rem iste laboriosam dolorem perferendis aut est laudantium quas',
       edits: [
         {
           newText:
@@ -105,8 +104,7 @@ const forum: {
         inBlock: 4562,
         createdAt: '2021-05-27T22:46:06.046Z',
         network: 'OLYMPIA',
-        text:
-          'xime fuga dolores rerum pariatur nobis aut explicabo ut pariatur dolor voluptatem ut ullam eaque aut aut mollitia sed dolor non nesciunt',
+        text: 'xime fuga dolores rerum pariatur nobis aut explicabo ut pariatur dolor voluptatem ut ullam eaque aut aut mollitia sed dolor non nesciunt',
       },
       status: 'PostStatusActive',
       deletedInEvent: null,
