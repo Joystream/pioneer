@@ -8,7 +8,6 @@ import { PastCouncilsList } from '@/council/components/pastCouncil/PastCouncilsL
 import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastCouncils = () => {
-
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>

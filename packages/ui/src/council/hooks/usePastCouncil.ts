@@ -4,7 +4,11 @@ import { useGetCouncilBlockRangeQuery, useGetPastCouncilQuery } from '@/council/
 import { asPastCouncilWithDetails } from '@/council/types/PastCouncil'
 
 export const usePastCouncil = (id: string) => {
-  const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({ variables: { id } })
+  const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
+    variables: {
+      where: { id },
+    },
+  })
   const { fromBlock, toBlock } = useMemo(() => {
     return {
       fromBlock: rangeData?.electedCouncilByUniqueInput?.electedAtBlock ?? 0,

@@ -131,13 +131,6 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
 }
 
-query GetCouncilBlockRange($id: ID!) {
-  electedCouncilByUniqueInput(where: { id: $id }) {
-    electedAtBlock
-    endedAtBlock
-  }
-}
-
 query GetCurrentElection {
   electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields
