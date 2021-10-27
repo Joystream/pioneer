@@ -1,6 +1,14 @@
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { PastCouncilProposalsFieldsFragment } from '@/council/queries'
 import { MemberFieldsFragment } from '@/memberships/queries'
 import { asMember, Member } from '@/memberships/types'
+import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
+import { asProposal, Proposal } from '@/proposals/types'
+
+interface PastCouncilMemberProposalVote {
+  proposal: Proposal
+  voteStatus: VoteStatus
+}
 
 export interface PastCouncilMember {
   member: Member
@@ -8,6 +16,7 @@ export interface PastCouncilMember {
   rejectedProposals: number
   slashedProposals: number
   abstainedProposals: number
+  proposalVotes: PastCouncilMemberProposalVote[]
 }
 
 export const asPastCouncilMember = (proposalVotes: PastCouncilProposalsFieldsFragment[]) => (fields: {
@@ -26,4 +35,10 @@ export const asPastCouncilMember = (proposalVotes: PastCouncilProposalsFieldsFra
   abstainedProposals: proposalVotes.filter(
     (proposalVote) => proposalVote.voterId === fields.member.id && proposalVote.voteKind === 'ABSTAIN'
   ).length,
+  proposalVotes: proposalVotes
+    .filter((proposalVote) => proposalVote.voterId === fields.member.id)
+    .map((proposalVote) => ({
+      proposal: asProposal(proposalVote.proposal),
+      voteStatus: capitalizeFirstLetter(proposalVote.voteKind.toLowerCase()) as VoteStatus,
+    })),
 })

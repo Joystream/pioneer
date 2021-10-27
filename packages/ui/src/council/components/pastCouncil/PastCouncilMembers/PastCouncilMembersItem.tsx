@@ -28,7 +28,9 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
         </PastCouncilMemberControls>
       </PastCouncilMemberWrap>
       <StyledDropDown isDropped={isDropped}>
-        <>Proposals here</>
+        {councilMember.proposalVotes.map((proposalVote) => (
+          <>{JSON.stringify(proposalVote)}</>
+        ))}
       </StyledDropDown>
     </PastCouncilMemberWrapper>
   )

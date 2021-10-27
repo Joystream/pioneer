@@ -14,14 +14,7 @@ fragment PastCouncilProposalsFields on ProposalVotedEvent {
   voteKind
   voterId
   proposal {
-    id
-    title
-    status {
-      __typename
-    }
-    details {
-      __typename
-    }
+    ...ProposalFields
   }
 }
 
@@ -45,8 +38,6 @@ fragment PastCouncilDetailedFields on ElectedCouncil {
     unpaidReward
   }
 }
-
-
 
 fragment ElectionCandidateFields on Candidate {
   id
