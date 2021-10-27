@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
@@ -36,9 +37,11 @@ export const CandidacyPreview = React.memo(() => {
   const [candidateId, setCandidateId] = useState(modalData.id)
   const { isLoading, candidate } = useCandidate(candidateId)
 
+  const { allAccounts } = useMyAccounts()
   const { stage: electionStage } = useElectionStage()
   const currentVotingCycleId = electionStage === 'voting' ? candidate?.cycleId : undefined
   const myVotes = useStoredCastedVotes(currentVotingCycleId, candidate?.member.id)
+  const canVote = !!myVotes && allAccounts.length > myVotes.length
 
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
@@ -100,7 +103,7 @@ export const CandidacyPreview = React.memo(() => {
         </SidePaneTopButtonsGroup>
       }
       footer={
-        isDefined(myVotes) ? (
+        canVote ? (
           <ButtonsGroup align="right">
             <VoteForCouncilButton id={modalData.id} again={myVotes.length > 0} />
           </ButtonsGroup>

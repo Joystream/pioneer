@@ -30,7 +30,7 @@ export interface CandidateCardProps {
   withdrawable?: boolean
   wins?: number
   loses?: number
-  isVotingStage?: boolean
+  canVote?: boolean
   isPreview?: boolean
 }
 
@@ -38,7 +38,7 @@ export const CandidateCard = ({
   candidate: { id, member, info, stake },
   voted,
   withdrawable,
-  isVotingStage,
+  canVote,
   isPreview,
 }: CandidateCardProps) => {
   const { showModal } = useModal()
@@ -51,8 +51,6 @@ export const CandidateCard = ({
     }
   }, [showModal, isPreview])
   const { isLoading: loadingStats, successful, failed } = useMemberCandidacyStats(member.id)
-
-  const showWithdrawButton = !isVotingStage && withdrawable
 
   return (
     <CandidateCardWrapper onClick={showCandidate}>
@@ -105,12 +103,12 @@ export const CandidateCard = ({
                 <Subscription>My stake</Subscription>
               </CandidateCardStake>
             )}
-            {showWithdrawButton && (
+            {withdrawable && (
               <CandidateCardControls>
                 <WithdrawButton member={member} />
               </CandidateCardControls>
             )}
-            {isVotingStage && isDefined(voted) && (
+            {canVote && isDefined(voted) && (
               <CandidateCardControls>
                 <VoteForCouncilButton id={id} again={voted} />
               </CandidateCardControls>

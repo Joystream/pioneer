@@ -20,7 +20,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
 import { VOTE_DATA } from '../../_mocks/council'
-import { alice } from '../../_mocks/keyring'
+import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
@@ -182,6 +182,17 @@ describe('UI: Election page', () => {
     })
 
     describe('Voting stage', () => {
+      const prepareVoteWithSalt = (salt: string) => {
+        TEST_CANDIDATES.forEach((candidate, index) =>
+          seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
+        )
+        seedCouncilVote({ ...VOTE_DATA, electionRoundId: '1' }, mockServer.server)
+        window.localStorage.setItem(
+          'votes:1',
+          `[{"salt":"${salt}","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]`
+        )
+      }
+
       beforeEach(() => {
         stubCouncilAndReferendum(api, 'Election', 'Voting')
         window.localStorage.clear()
@@ -198,6 +209,7 @@ describe('UI: Election page', () => {
 
         await renderComponent({ hasAccounts: false, allAccounts: [] })
 
+        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote')).toBeNull()
       })
 
@@ -206,39 +218,38 @@ describe('UI: Election page', () => {
 
         await renderComponent()
 
+        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(await screen.findAllByText('Vote')).toHaveLength(2)
       })
 
-      it('One vote matching query node', async () => {
-        TEST_CANDIDATES.forEach((candidate, index) =>
-          seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
-        )
-        seedCouncilVote({ ...VOTE_DATA, electionRoundId: '1' }, mockServer.server)
+      it('One account and One valid vote', async () => {
+        prepareVoteWithSalt('0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a')
 
-        window.localStorage.setItem(
-          'votes:1',
-          '[{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]'
-        )
         await renderComponent()
 
         expect(await screen.findByText(/My Votes/i)).toBeDefined()
-        expect(screen.queryAllByText('Vote')).toHaveLength(1)
-        expect(await screen.findByText('Vote again')).toBeDefined()
+        expect(screen.queryByText('Vote')).toBeNull()
+        expect(screen.queryByText('Vote again')).toBeNull()
+      })
+
+      it('Multiple accounts and One valid vote', async () => {
+        prepareVoteWithSalt('0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a')
+
+        await renderComponent({ hasAccounts: true, allAccounts: [alice, bob] })
+
+        expect(await screen.findByText(/My Votes/i)).toBeDefined()
+        expect(await screen.findAllByText('Vote')).toHaveLength(1)
+        expect(await screen.findAllByText('Vote again')).toHaveLength(1)
       })
 
       it('One vote not matching query node', async () => {
-        TEST_CANDIDATES.forEach((candidate, index) =>
-          seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
-        )
-        seedCouncilVote({ ...VOTE_DATA, electionRoundId: '1' }, mockServer.server)
+        prepareVoteWithSalt('0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a')
 
-        window.localStorage.setItem(
-          'votes:1',
-          '[{"salt":"0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]'
-        )
         await renderComponent()
 
-        expect(await screen.queryByText(/My Votes/i)).toBeNull()
+        expect(screen.queryByText(/My Votes/i)).toBeNull()
+        expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText('Vote again')).toBeNull()
       })
     })
 
