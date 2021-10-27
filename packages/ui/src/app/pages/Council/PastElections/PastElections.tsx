@@ -9,7 +9,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
-import { TableOrder } from '@/common/types/TableOrder'
+import { SortOrder } from '@/common/hooks/useSort'
 import { PastElectionsList } from '@/council/components/election/pastElection/PastElectionsList/PastElectionsList'
 import { PastElectionsOrderKey, usePastElections } from '@/council/hooks/usePastElections'
 
@@ -17,14 +17,14 @@ import { CouncilTabs } from '../components/CouncilTabs'
 
 export const PastElections = () => {
   const [page, setPage] = useState(1)
-  const [order, setOrder] = useState<TableOrder<PastElectionsOrderKey>>({ key: 'cycle', isDescending: true })
+  const [order, setOrder] = useState<SortOrder<PastElectionsOrderKey>>({ orderKey: 'cycle', isDescending: true })
   const { isLoading, elections, pageCount } = usePastElections({
     page,
     isDescending: order.isDescending,
-    orderKey: order.key,
+    orderKey: order.orderKey,
   })
   const sort = (sortKey: PastElectionsOrderKey) => {
-    setOrder({ key: sortKey, isDescending: sortKey === order.key ? !order.isDescending : true })
+    setOrder({ orderKey: sortKey, isDescending: sortKey === order.orderKey ? !order.isDescending : true })
   }
 
   const header = (
@@ -75,7 +75,7 @@ export const PastElectionsColLayout = '48px 176px 156px 100px 100px'
 
 interface SortHeaderProps {
   sortKey: PastElectionsOrderKey
-  order: TableOrder<PastElectionsOrderKey>
+  order: SortOrder<PastElectionsOrderKey>
   children: ReactNode
   sort: (sortKey: PastElectionsOrderKey) => void
 }
@@ -84,7 +84,7 @@ const SortHeader = ({ sortKey, order, children, sort }: SortHeaderProps) => (
   <ListHeader onClick={() => sort(sortKey)}>
     <HeaderText>
       {children}
-      {order.key === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
+      {order.orderKey === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
     </HeaderText>
   </ListHeader>
 )

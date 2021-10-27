@@ -6,26 +6,26 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { TextBig } from '@/common/components/typography'
-import { TableOrder } from '@/common/types/TableOrder'
+import { SortOrder } from '@/common/hooks/useSort'
 import { PastWorkersList } from '@/working-groups/components/WorkersTableList/PastWorkersList'
 import { usePastWorkersPagination, WorkersOrderKey } from '@/working-groups/hooks/usePastWorkersPagination'
 
 export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
-  const [order, setOrder] = useState<TableOrder<WorkersOrderKey>>({ key: 'DateFinished', isDescending: true })
+  const [order, setOrder] = useState<SortOrder<WorkersOrderKey>>({ orderKey: 'DateFinished', isDescending: true })
 
   const { loadingWorkers, loadingCount, workers, pageCount } = usePastWorkersPagination({
     groupId,
     page,
     isDescending: order.isDescending,
-    orderKey: order.key,
+    orderKey: order.orderKey,
   })
 
   const sort = (sortKey: WorkersOrderKey) => {
-    if (sortKey === order.key) {
-      setOrder({ key: sortKey, isDescending: !order.isDescending })
+    if (sortKey === order.orderKey) {
+      setOrder({ orderKey: sortKey, isDescending: !order.isDescending })
     } else {
-      setOrder({ key: sortKey, isDescending: true })
+      setOrder({ orderKey: sortKey, isDescending: true })
     }
   }
 
@@ -59,7 +59,7 @@ const pastWorkersColLayout = '1fr 1fr 1fr'
 
 interface SortHeaderProps {
   sortKey: WorkersOrderKey
-  order: TableOrder<WorkersOrderKey>
+  order: SortOrder<WorkersOrderKey>
   children: ReactNode
   sort: (sortKey: WorkersOrderKey) => void
 }
@@ -68,7 +68,7 @@ const SortHeader = ({ sortKey, order, children, sort }: SortHeaderProps) => (
   <ListHeader onClick={() => sort(sortKey)}>
     <HeaderText>
       {children}
-      {order.key === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
+      {order.orderKey === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
     </HeaderText>
   </ListHeader>
 )
