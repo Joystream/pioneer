@@ -25,6 +25,7 @@ const StakeStepFormSchema = Yup.object().shape({
 export interface StakeStepProps {
   stakeLock: LockType
   minStake: BN
+  accountsFilter?: (option: Account) => boolean
   accountText?: ReactNode
   amountText?: ReactNode
   onChange: (isValid: boolean, fields: StakeStepFormFields) => void
@@ -33,6 +34,7 @@ export interface StakeStepProps {
 export const StakeStep = ({
   stakeLock,
   minStake,
+  accountsFilter,
   accountText = defaultAccountText,
   amountText = defaultAmountText(minStake),
   onChange,
@@ -55,9 +57,11 @@ export const StakeStep = ({
   }, [amount])
 
   const stake = new BN(fields.amount ?? minStake)
-  const accountsFilter = useCallback(
-    (account: Account) => filterByRequiredStake(stake, stakeLock, balances[account.address]),
-    [stake.toString(), JSON.stringify(balances)]
+  const selectAccountFilter = useCallback(
+    (account: Account) =>
+      (!accountsFilter || accountsFilter(account)) &&
+      filterByRequiredStake(stake, stakeLock, balances[account.address]),
+    [accountsFilter, stake.toString(), JSON.stringify(balances)]
   )
 
   useEffect(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
@@ -72,7 +76,7 @@ export const StakeStep = ({
               onChange={(account) => changeField('account', account)}
               selected={fields.account}
               minBalance={minStake}
-              filter={accountsFilter}
+              filter={selectAccountFilter}
             />
           </InputComponent>
         </RowGapBlock>
