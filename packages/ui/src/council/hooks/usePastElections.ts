@@ -1,31 +1,21 @@
 import { useMemo } from 'react'
 
 import { ElectionRoundOrderByInput } from '@/common/api/queries'
+import { getSortFromEnum, OrderKey, SortOrder } from '@/common/hooks/useSort'
 import { useGetPastElectionsCountQuery, useGetPastElectionsQuery } from '@/council/queries'
 
 import { asPastElection } from '../types/PastElection'
 
 export const ELECTION_PER_PAGE = 10
 
-export type PastElectionsOrderKey = 'cycle' | 'finishedAt'
-
 interface UsePastElectionsProps {
   page?: number
-  orderKey: PastElectionsOrderKey
-  isDescending: boolean
+  order: SortOrder<OrderKey<ElectionRoundOrderByInput>>
 }
 
-const getOrderBy = (key: PastElectionsOrderKey, isDescending: boolean) => {
-  if (key === 'cycle') {
-    return isDescending ? ElectionRoundOrderByInput.CycleIdDesc : ElectionRoundOrderByInput.CycleIdAsc
-  }
-
-  return isDescending ? ElectionRoundOrderByInput.UpdatedAtDesc : ElectionRoundOrderByInput.UpdatedAtAsc
-}
-
-export const usePastElections = ({ page = 1, orderKey, isDescending }: UsePastElectionsProps) => {
+export const usePastElections = ({ page = 1, order }: UsePastElectionsProps) => {
   const variables = {
-    orderBy: [getOrderBy(orderKey, isDescending)],
+    orderBy: [getSortFromEnum<ElectionRoundOrderByInput>(order)],
     limit: ELECTION_PER_PAGE,
     offset: (page - 1) * ELECTION_PER_PAGE,
   }
