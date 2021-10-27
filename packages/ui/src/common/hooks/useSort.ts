@@ -19,6 +19,12 @@ export function getSortFromEnum<T extends BaseSortKey>(order: SortOrder<OrderKey
   return value as T
 }
 
+export type GetSortProps<Order extends BaseSortKey> = (key: OrderKey<Order>) => {
+  onSort: () => void
+  isDescending: boolean
+  isActive: boolean
+}
+
 export const useSort = <Order extends BaseSortKey>(defaultKey: OrderKey<Order>) => {
   const [order, setOrder] = useState<SortOrder<OrderKey<Order>>>({ orderKey: defaultKey, isDescending: true })
   const sort = useCallback(
