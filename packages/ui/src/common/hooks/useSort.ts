@@ -1,7 +1,5 @@
 import { useCallback, useState } from 'react'
 
-type EnumTypeString<TEnum extends string> = { [key in string]: TEnum | string }
-
 export type BaseSortKey = `${string}_ASC` | `${string}_DESC`
 
 export type OrderKey<OrderBy extends BaseSortKey> = Extract<OrderBy, BaseSortKey> extends
@@ -15,8 +13,9 @@ export interface SortOrder<T> {
   isDescending: boolean
 }
 
-export function getSortFromEnum<T extends BaseSortKey>(order: SortOrder<OrderKey<T>>, orderByEnum: EnumTypeString<T>) {
+export function getSortFromEnum<T extends BaseSortKey>(order: SortOrder<OrderKey<T>>) {
   const value = order.isDescending ? `${order.orderKey}_DESC` : `${order.orderKey}_ASC`
+
   return value as T
 }
 

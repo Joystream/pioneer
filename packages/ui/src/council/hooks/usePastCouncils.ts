@@ -9,7 +9,7 @@ interface UsePastCouncilsProps {
 }
 
 export const usePastCouncils = ({ order }: UsePastCouncilsProps) => {
-  const orderBy = getSortFromEnum(order, ElectedCouncilOrderByInput)
+  const orderBy = getSortFromEnum<ElectedCouncilOrderByInput>(order)
 
   const { loading, data } = useGetPastCouncilsQuery({
     variables: { orderBy: orderBy ?? [] },

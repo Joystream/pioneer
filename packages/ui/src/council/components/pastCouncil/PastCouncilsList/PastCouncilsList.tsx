@@ -3,6 +3,7 @@ import React from 'react'
 import { ElectedCouncilOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
+import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
@@ -11,11 +12,10 @@ import { PastCouncilListItem } from '@/council/components/pastCouncil/PastCounci
 import { usePastCouncils } from '@/council/hooks/usePastCouncils'
 
 import { PastCouncilColLayout, PastCouncilListHeaders } from './styles'
-import { SortHeader } from '@/common/components/List/SortHeader'
 
 export const PastCouncilsList = () => {
   const { order, getSortProps } = useSort<ElectedCouncilOrderByInput>('electedAtBlock')
-  const { isLoading, councils } = usePastCouncils({order})
+  const { isLoading, councils } = usePastCouncils({ order })
 
   if (isLoading) {
     return <Loading />
