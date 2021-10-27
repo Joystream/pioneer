@@ -235,6 +235,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
 
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
+  id: string
   stake: any
   stakeLocked: boolean
   castBy: string
@@ -563,6 +564,7 @@ export type GetCouncilVotesQuery = {
   __typename: 'Query'
   castVotes: Array<{
     __typename: 'CastVote'
+    id: string
     stake: any
     stakeLocked: boolean
     castBy: string
@@ -744,6 +746,7 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 `
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
+    id
     stake
     stakeLocked
     castBy

@@ -4,6 +4,7 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ElectionVotes } from '@/council/components/election/CandidateVote/ElectionVotes'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
+import { calculateCommitment } from '@/council/model/calculateCommitment'
 import {
   RawCouncilElectionMock,
   seedCouncilCandidate,
@@ -115,6 +116,29 @@ describe('UI: ElectionVotes', () => {
 
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('3,000')
     expect((await screen.findByText(/my stake/i)).nextSibling?.textContent).toEqual('2,000')
+  })
+
+  describe('Votes that can be revealed', () => {
+    beforeEach(() => {
+      window.localStorage.clear()
+    })
+
+    it('No votes to reveal', () => {
+      renderComponent()
+
+      expect(screen.queryByText(/reveal/i)).toBeNull()
+    })
+
+    it('One vote can be revealed', async () => {
+      // commitment: '0x9585f8fffe80ce07d5afb79ed6952d894f142d8b8f71ef50db6bc45767773de1'
+      const salt = '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206'
+      const commitment = calculateCommitment(bob.address, '0', salt, 0)
+      seedCouncilVote({ ...VOTE_DATA, commitment, castBy: bob.address }, server.server)
+      window.localStorage.setItem('votes:0', JSON.stringify([{ salt, accountId: bob.address, optionId: '0' }]))
+      renderComponent()
+
+      expect(await screen.findByText('Reveal')).toBeDefined()
+    })
   })
 
   const renderComponent = () =>

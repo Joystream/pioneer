@@ -14,7 +14,7 @@ export const useStoredCastVotes = (cycleId?: number) => {
   const [votingAttempts = []] = useLocalStorage<VotingAttempt[]>(`votes:${cycleId}`)
   const { allAccounts } = useMyAccounts()
   const myAttempts = useMemo(() => {
-    if (!cycleId || !allAccounts.length) return
+    if (!isDefined(cycleId) || !allAccounts.length) return
 
     const addresses = allAccounts.map((account) => account.address)
     return votingAttempts
