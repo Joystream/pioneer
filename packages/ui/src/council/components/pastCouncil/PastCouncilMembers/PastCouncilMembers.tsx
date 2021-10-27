@@ -18,6 +18,7 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
     return <Loading />
   }
 
+  console.debug(councilMembers)
   return (
     <RowGapBlock gap={4}>
       <ListHeaders $colLayout="276px 128px 128px 128px 128px 104px">
