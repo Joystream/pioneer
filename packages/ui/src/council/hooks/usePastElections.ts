@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { ElectionRoundOrderByInput } from '@/common/api/queries'
-import { getSortFromEnum, SortOrder } from '@/common/hooks/useSort'
+import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { useGetPastElectionsCountQuery, useGetPastElectionsQuery } from '@/council/queries'
 
 import { asPastElection } from '../types/PastElection'
@@ -15,7 +15,7 @@ interface UsePastElectionsProps {
 
 export const usePastElections = ({ page = 1, order }: UsePastElectionsProps) => {
   const variables = {
-    orderBy: [getSortFromEnum<ElectionRoundOrderByInput>(order)],
+    orderBy: [toQueryOrderByInput<ElectionRoundOrderByInput>(order)],
     limit: ELECTION_PER_PAGE,
     offset: (page - 1) * ELECTION_PER_PAGE,
   }

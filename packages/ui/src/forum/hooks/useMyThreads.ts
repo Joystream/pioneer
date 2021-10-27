@@ -1,5 +1,5 @@
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { getSortFromEnum, SortOrder } from '@/common/hooks/useSort'
+import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries/__generated__/forum.generated'
 import { asForumThread, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -24,7 +24,7 @@ export const useMyThreads = ({ page, threadsPerPage = 5, order }: UseMyThreadsPr
     where: { author: { id_in: members.map((m) => m.id) } },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
-    orderBy: [ForumThreadOrderByInput.IsStickyDesc, getSortFromEnum<ForumThreadOrderByInput>(order)],
+    orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(order)],
   }
   const { loading: loadingPosts, data: threadsData } = useGetForumThreadsQuery({ variables })
   const { loading: loadingCount, data: countData } = useGetForumThreadsCountQuery({

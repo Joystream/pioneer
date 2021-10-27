@@ -1,4 +1,4 @@
-import { getSortFromEnum, SortOrder } from '@/common/hooks/useSort'
+import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
@@ -27,7 +27,7 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
     limit: MEMBERS_PER_PAGE,
     offset: (page - 1) * MEMBERS_PER_PAGE,
     where,
-    orderBy: getSortFromEnum<MembershipOrderByInput>(order),
+    orderBy: toQueryOrderByInput<MembershipOrderByInput>(order),
   }
   const { data, loading, error: err } = useGetMembersQuery({ variables })
   const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })

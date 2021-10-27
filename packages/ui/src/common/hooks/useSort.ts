@@ -13,7 +13,7 @@ export interface SortOrder<Order extends BaseSortKey> {
   isDescending: boolean
 }
 
-export function getSortFromEnum<Order extends BaseSortKey>(order: SortOrder<Order>) {
+export function toQueryOrderByInput<Order extends BaseSortKey>(order: SortOrder<Order>) {
   const value = order.isDescending ? `${order.orderKey}_DESC` : `${order.orderKey}_ASC`
 
   return value as Order

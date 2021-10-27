@@ -1,7 +1,7 @@
 import { Reducer, useEffect, useMemo, useReducer } from 'react'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { getSortFromEnum, SortOrder } from '@/common/hooks/useSort'
+import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
@@ -34,7 +34,7 @@ export const useForumCategoryThreads = (
   const { loading: loadingThreads, data: threadsData } = useGetForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
-      orderBy: [ForumThreadOrderByInput.IsStickyDesc, getSortFromEnum<ForumThreadOrderByInput>(options.order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(options.order)],
       ...(!pagination
         ? { limit: 30 }
         : {
