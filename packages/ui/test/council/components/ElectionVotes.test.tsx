@@ -18,9 +18,9 @@ import { alice, bob } from '../../_mocks/keyring/signers'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
-const Results = () => {
+const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
   const { election } = useCurrentElection()
-  return election ? <ElectionVotes election={election} /> : null
+  return election ? <ElectionVotes election={election} onlyMyVotes={onlyMyVotes} /> : null
 }
 
 describe('UI: ElectionVotes', () => {
@@ -226,11 +226,44 @@ describe('UI: ElectionVotes', () => {
     })
   })
 
-  const renderComponent = () =>
+  it('Set to display only my votes', async () => {
+    window.localStorage.clear()
+
+    seedCouncilCandidate({ ...CANDIDATE_DATA, id: '1', memberId: '1' }, server.server)
+    const salt = '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206'
+    seedCouncilVote(
+      {
+        ...VOTE_DATA,
+        commitment: calculateCommitment(bob.address, '0', salt, 0),
+        castBy: bob.address,
+        voteForId: '0',
+      },
+      server.server
+    )
+    seedCouncilVote(
+      {
+        ...VOTE_DATA,
+        commitment: calculateCommitment(alice.address, '1', salt, 0),
+        castBy: alice.address,
+        voteForId: '1',
+      },
+      server.server
+    )
+    window.localStorage.setItem('votes:0', JSON.stringify([{ salt, accountId: bob.address, optionId: '0' }]))
+
+    renderComponent(true)
+
+    const voteForAlice = await screen.findByText('alice')
+    const voteForBob = screen.queryByText('bob')
+    expect(voteForAlice).toBeDefined()
+    expect(voteForBob).toBeNull()
+  })
+
+  const renderComponent = (onlyMyVotes = false) =>
     render(
       <AccountsContext.Provider value={useAccounts}>
         <MockQueryNodeProviders>
-          <Results />
+          <Results onlyMyVotes={onlyMyVotes} />
         </MockQueryNodeProviders>
       </AccountsContext.Provider>
     )

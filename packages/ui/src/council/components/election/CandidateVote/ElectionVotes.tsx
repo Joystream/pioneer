@@ -10,22 +10,29 @@ import { CandidateVoteList } from './CandidateVoteList'
 
 interface Props {
   election: Election
+  onlyMyVotes?: boolean
 }
 
-export const ElectionVotes = ({ election }: Props) => {
+export const ElectionVotes = ({ election, onlyMyVotes }: Props) => {
   const { votesPerCandidate, sumOfStakes: totalStake, isLoading } = useElectionVotes(election)
+
+  const votesToDisplay = onlyMyVotes ? votesPerCandidate.filter((vote) => vote.myVotes.length) : votesPerCandidate
 
   if (isLoading) {
     return <Loading />
   }
 
-  if (!votesPerCandidate) {
+  if (!votesPerCandidate.length) {
     return <NoData>No votes have been cast yet.</NoData>
+  }
+
+  if (!votesToDisplay.length) {
+    return <NoData>No votes found.</NoData>
   }
 
   return (
     <CandidateVoteList
-      votes={votesPerCandidate.map((candidateStats, index) => ({
+      votes={votesToDisplay.map((candidateStats, index) => ({
         candidateId: candidateStats.candidate.id,
         index: index + 1,
         member: candidateStats.candidate.member,
