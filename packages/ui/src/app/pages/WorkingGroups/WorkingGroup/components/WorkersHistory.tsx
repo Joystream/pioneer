@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { WorkerOrderByInput } from '@/common/api/queries'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
@@ -12,12 +12,9 @@ import { PastWorkersList } from '@/working-groups/components/WorkersTableList/Pa
 import { usePastWorkersPagination } from '@/working-groups/hooks/usePastWorkersPagination'
 
 export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
-  const [page, setPage] = useState(1)
   const { order, getSortProps } = useSort<WorkerOrderByInput>('updatedAt')
-
-  const { loadingWorkers, loadingCount, workers, pageCount } = usePastWorkersPagination({
+  const { loadingWorkers, loadingCount, workers, pagination } = usePastWorkersPagination({
     groupId,
-    page,
     order,
   })
 
@@ -39,7 +36,7 @@ export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => 
         </ListHeaders>
         {loadingWorkers ? <Loading /> : <PastWorkersList workers={workers} />}
       </RowGapBlock>
-      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+      <Pagination {...pagination} />
     </>
   )
 }
