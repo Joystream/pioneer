@@ -1,4 +1,4 @@
-import { render, waitForElementToBeRemoved } from '@testing-library/react'
+import { configure, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
@@ -23,6 +23,8 @@ import { Members } from '../../_mocks/members'
 import { testProposals } from '../../_mocks/proposals'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+
+configure({ testIdAttribute: 'id' })
 
 describe('UI: Past Council page', () => {
   const mockServer = setupMockServer()
@@ -276,7 +278,7 @@ describe('UI: Past Council page', () => {
         })
 
         it('Renders table', async () => {
-          const { queryByText } = await renderAndOpenProposalsTab()
+          const { queryByText } = await renderAndOpenTab('Proposals')
 
           expect(queryByText(/^Proposal$/i)).not.toBeNull()
           expect(queryByText(/^Stage$/i)).not.toBeNull()
@@ -284,13 +286,13 @@ describe('UI: Past Council page', () => {
         })
 
         it('Proposals count', async () => {
-          const { queryAllByText } = await renderAndOpenProposalsTab()
+          const { queryAllByText } = await renderAndOpenTab('Proposals')
 
           expect(queryAllByText(/proposal details/i).length).toBe(2)
         })
 
         it('Proposal data', async () => {
-          const { getAllByText } = await renderAndOpenProposalsTab()
+          const { getAllByText } = await renderAndOpenTab('Proposals')
 
           const proposalRow = getAllByText(/^Proposal Details$/i)[0].parentElement?.parentElement
 
@@ -304,6 +306,18 @@ describe('UI: Past Council page', () => {
           expect(proposalStatus).toBe(camelCaseToText(testProposals[1].status))
         })
       })
+
+      describe('Working Groups', () => {
+        it('Renders table', async () => {
+          const { getByTestId } = await renderAndOpenTab('Working Groups')
+
+          const workingGroupsContainer = within(getByTestId('pastCouncil-workingGroups'))
+          expect(workingGroupsContainer.queryByText(/^Working group$/i)).not.toBeNull()
+          expect(workingGroupsContainer.queryByText(/^Total paid rewards$/i)).not.toBeNull()
+          expect(workingGroupsContainer.queryByText(/^Total missed rewards$/i)).not.toBeNull()
+          expect(workingGroupsContainer.queryByText(/^% of total budget$/i)).not.toBeNull()
+        })
+      })
     })
   })
 
@@ -314,10 +328,10 @@ describe('UI: Past Council page', () => {
     expect(queryByText(/not found/i)).not.toBeNull()
   })
 
-  const renderAndOpenProposalsTab = async () => {
+  const renderAndOpenTab = async (tabName: string) => {
     const component = await renderComponent()
 
-    component.getByText(/^Proposals$/i).click()
+    component.getByText(tabName).click()
 
     await waitForElementToBeRemoved(() => component.getByText('Loading...'))
 
