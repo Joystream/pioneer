@@ -1,4 +1,4 @@
-import { render, waitForElementToBeRemoved, screen } from '@testing-library/react'
+import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
@@ -17,6 +17,7 @@ import {
 import { getMember } from '@/mocks/helpers'
 
 import { getCouncilor } from '../../_mocks/council'
+import { Members } from '../../_mocks/members'
 import { testProposals } from '../../_mocks/proposals'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -219,6 +220,69 @@ describe('UI: Past Council page', () => {
           const abstainColumn = councilMemberRow?.children.item(4)?.textContent
           expect(abstainColumn).toBe('1')
         })
+        describe('Past council proposal vote table', () => {
+          beforeEach(() => {
+            seedEvent(
+              {
+                id: '0',
+                voterId: getMember('alice').id,
+                inBlock: 4,
+                createdAt: '2021-06-16T17:21:12.161Z',
+                network: 'OLYMPIA',
+                proposalId: '0',
+                voteKind: 'ABSTAIN',
+              },
+              'ProposalVotedEvent',
+              mockServer.server
+            )
+          })
+          it('Renders proposals headers', async () => {
+            const { queryByText } = await renderAndOpenPastCouncilProposals('alice')
+
+            expect(queryByText(/^Stage$/i)).not.toBeNull()
+            expect(queryByText(/^Council Member Vote$/i)).not.toBeNull()
+          })
+
+          it('Proposal title', async () => {
+            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
+            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+
+            const proposalTitle = pastCouncilProposalRow?.children?.item(0)?.children?.item(1)?.textContent
+            expect(proposalTitle).toBe('Canceled Proposal One')
+          })
+
+          it('Proposal Type', async () => {
+            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
+            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+
+            const proposalType = pastCouncilProposalRow?.children?.item(0)?.children?.item(0)?.textContent
+            expect(proposalType).toBe('fundingRequest')
+          })
+
+          it('Proposal status', async () => {
+            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
+            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+
+            const proposalStatus = pastCouncilProposalRow?.children?.item(1)?.textContent
+            expect(proposalStatus).toBe('CanceledByRuntime')
+          })
+
+          it('Proposal Vote Status', async () => {
+            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
+            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+
+            const proposalVoteStatus = pastCouncilProposalRow?.children?.item(2)?.textContent
+            expect(proposalVoteStatus).toBe('Abstain')
+          })
+
+          it('Proposal details button', async () => {
+            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
+
+            const proposalDetailsButton = getByText(/^Proposal Details$/i)?.parentElement
+
+            expect(proposalDetailsButton).not.toBeNull() //todo add test for button onClick
+          })
+        })
       })
     })
   })
@@ -229,6 +293,17 @@ describe('UI: Past Council page', () => {
 
     expect(queryByText(/not found/i)).not.toBeNull()
   })
+
+  const renderAndOpenPastCouncilProposals = async (memberName: Members) => {
+    const component = await renderComponent()
+
+    const councilMemberRow = component.getByText(getMember(memberName).handle).parentElement?.parentElement
+      ?.parentElement?.parentElement
+
+    councilMemberRow?.click()
+
+    return component
+  }
 
   async function renderComponent() {
     const rendered = await render(

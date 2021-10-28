@@ -44,11 +44,11 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
           </PastCouncilMemberHeaders>
           <List>
             {councilMember.proposalVotes.map((proposalVote) => (
-              <ListItem>
+              <ListItem key={proposalVote.proposal.id}>
                 <PastCouncilMemberWrapper>
                   <PastCouncilProposalWrap>
                     <div>
-                      <ProposalBadge>Funding request</ProposalBadge>
+                      <ProposalBadge>{proposalVote.proposal.type}</ProposalBadge>
                       <TextBig bold>{proposalVote.proposal.title}</TextBig>
                     </div>
                     <TextBig bold>{capitalizeFirstLetter(proposalVote.proposal.status)}</TextBig>
