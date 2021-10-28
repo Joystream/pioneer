@@ -1,18 +1,25 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { StatusBadge } from '@/app/pages/WorkingGroups/components/StatusBadges'
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextBig } from '@/common/components/typography'
+import { TextMedium } from '@/common/components/typography'
+import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
-import { capitalizeFirstLetter } from '@/common/helpers'
+import { camelCaseToText, capitalizeFirstLetter } from '@/common/helpers'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
 import { CountInfo } from '@/memberships/components/MemberListItem/Fileds'
+import { isProposalActive } from '@/proposals/model/proposalStatus'
+import {
+  ToggleableItemInfo,
+  ToggleableItemInfoTop,
+  ToggleableItemTitle,
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 
 interface Props {
   councilMember: PastCouncilMember
@@ -38,31 +45,42 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
       <StyledDropDown isDropped={isDropped}>
         <RowGapBlock gap={4}>
           <PastCouncilMemberHeaders $colLayout={CouncilMembersLayout}>
-            <PastCouncilListHeader>Proposals</PastCouncilListHeader>
+            <PastCouncilListHeader>Proposal</PastCouncilListHeader>
             <PastCouncilListHeader>Stage</PastCouncilListHeader>
-            <PastCouncilListHeader>Council Member Vote</PastCouncilListHeader>
+            <PastCouncilListHeader>Vote</PastCouncilListHeader>
           </PastCouncilMemberHeaders>
           <List>
-            {councilMember.proposalVotes.map((proposalVote) => (
-              <ListItem key={proposalVote.proposal.id}>
-                <PastCouncilMemberWrapper>
-                  <PastCouncilProposalWrap>
-                    <div>
-                      <ProposalBadge>{proposalVote.proposal.type}</ProposalBadge>
-                      <TextBig bold>{proposalVote.proposal.title}</TextBig>
-                    </div>
-                    <TextBig bold>{capitalizeFirstLetter(proposalVote.proposal.status)}</TextBig>
-                    <TextBig bold>{capitalizeFirstLetter(proposalVote.voteStatus)}</TextBig>
-                    <ButtonGhost size="medium">Proposal details</ButtonGhost>
-                  </PastCouncilProposalWrap>
-                </PastCouncilMemberWrapper>
-              </ListItem>
-            ))}
+            {councilMember.proposalVotes.map((proposalVote) => {
+              const date = new Date(
+                !isProposalActive(proposalVote.proposal.status)
+                  ? (proposalVote.proposal.endedAt as string)
+                  : proposalVote.proposal.createdAt
+              )
+
+              return (
+                <ListItem key={proposalVote.proposal.id}>
+                  <PastCouncilMemberWrapper>
+                    <PastCouncilProposalWrap>
+                      <ToggleableItemInfo>
+                        <ToggleableItemInfoTop>
+                          <Subscription>
+                            {!isProposalActive(proposalVote.proposal.status) ? 'Ended at:' : 'Created at:'}{' '}
+                            {date.toLocaleDateString('en-GB')}
+                          </Subscription>
+                          <BadgeStatus>{camelCaseToText(proposalVote.proposal.type)}</BadgeStatus>
+                        </ToggleableItemInfoTop>
+                        <ToggleableItemTitle>{proposalVote.proposal.title}</ToggleableItemTitle>
+                      </ToggleableItemInfo>
+                      <TextMedium bold>{camelCaseToText(proposalVote.proposal.status)}</TextMedium>
+                      <TextMedium bold>{capitalizeFirstLetter(proposalVote.voteStatus)}</TextMedium>
+                      <ButtonGhost size="medium">Proposal details</ButtonGhost>
+                    </PastCouncilProposalWrap>
+                  </PastCouncilMemberWrapper>
+                </ListItem>
+              )
+            })}
           </List>
         </RowGapBlock>
-        {/*{councilMember.proposalVotes.map((proposalVote) => (*/}
-        {/*  <>{JSON.stringify(proposalVote, undefined, 2)}</>*/}
-        {/*))}*/}
       </StyledDropDown>
     </PastCouncilMemberWrapper>
   )
@@ -107,6 +125,7 @@ export const PastCouncilMemberWrap = styled.div`
   height: ${Sizes.accountHeight};
   padding: 16px 8px 16px 16px;
   margin-left: -1px;
+
   > *:last-child {
     justify-self: end;
   }
@@ -131,8 +150,4 @@ const PastCouncilListHeader = styled(ListHeader)`
     justify-content: flex-start;
     text-align: left;
   }
-`
-
-const ProposalBadge = styled(StatusBadge)`
-  margin-bottom: 5px;
 `

@@ -4,7 +4,9 @@ import { useGetCouncilBlockRangeQuery, useGetPastCouncilMembersQuery } from '@/c
 import { asPastCouncilMember } from '@/council/types/PastCouncilMember'
 
 export const usePastCouncilMembers = (councilId: string) => {
-  const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({ variables: { id: councilId } })
+  const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
+    variables: { where: { id: councilId } },
+  })
   const { fromBlock, toBlock } = useMemo(() => {
     return {
       fromBlock: rangeData?.electedCouncilByUniqueInput?.electedAtBlock ?? 0,

@@ -5,6 +5,7 @@ import { generatePath, Route, Switch } from 'react-router-dom'
 
 import { PastCouncil } from '@/app/pages/Council/PastCouncils/PastCouncil'
 import { NotFound } from '@/app/pages/NotFound'
+import { camelCaseToText } from '@/common/helpers'
 import { CouncilRoutes } from '@/council/constants'
 import {
   seedCouncilMember,
@@ -16,6 +17,7 @@ import {
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
+import { getButton } from '../../_helpers/getButton'
 import { getCouncilor } from '../../_mocks/council'
 import { Members } from '../../_mocks/members'
 import { testProposals } from '../../_mocks/proposals'
@@ -220,7 +222,8 @@ describe('UI: Past Council page', () => {
           const abstainColumn = councilMemberRow?.children.item(4)?.textContent
           expect(abstainColumn).toBe('1')
         })
-        describe('Past council proposal vote table', () => {
+
+        describe('Proposal votes dropdown', () => {
           beforeEach(() => {
             seedEvent(
               {
@@ -236,51 +239,31 @@ describe('UI: Past Council page', () => {
               mockServer.server
             )
           })
-          it('Renders proposals headers', async () => {
-            const { queryByText } = await renderAndOpenPastCouncilProposals('alice')
+
+          it('Renders table headers', async () => {
+            const { queryByText } = await renderAndOpenProposalVotesDropdown('alice')
 
             expect(queryByText(/^Stage$/i)).not.toBeNull()
-            expect(queryByText(/^Council Member Vote$/i)).not.toBeNull()
+            expect(queryByText(/^Vote$/i)).not.toBeNull()
           })
 
-          it('Proposal title', async () => {
-            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
-            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+          it('Proposal data', async () => {
+            const { getByText } = await renderAndOpenProposalVotesDropdown('alice')
+            const proposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
 
-            const proposalTitle = pastCouncilProposalRow?.children?.item(0)?.children?.item(1)?.textContent
-            expect(proposalTitle).toBe('Canceled Proposal One')
-          })
+            const proposalTitle = proposalRow?.children?.item(0)?.children?.item(1)?.textContent
+            expect(proposalTitle).toBe(testProposals[0].title)
 
-          it('Proposal Type', async () => {
-            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
-            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+            const proposalType = proposalRow?.children?.item(0)?.children?.item(0)?.children?.item(1)?.textContent
+            expect(proposalType).toBe(camelCaseToText(testProposals[0].details.type))
 
-            const proposalType = pastCouncilProposalRow?.children?.item(0)?.children?.item(0)?.textContent
-            expect(proposalType).toBe('fundingRequest')
-          })
+            const proposalStatus = proposalRow?.children?.item(1)?.textContent
+            expect(proposalStatus).toBe(camelCaseToText(testProposals[0].status))
 
-          it('Proposal status', async () => {
-            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
-            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
-
-            const proposalStatus = pastCouncilProposalRow?.children?.item(1)?.textContent
-            expect(proposalStatus).toBe('CanceledByRuntime')
-          })
-
-          it('Proposal Vote Status', async () => {
-            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
-            const pastCouncilProposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
-
-            const proposalVoteStatus = pastCouncilProposalRow?.children?.item(2)?.textContent
+            const proposalVoteStatus = proposalRow?.children?.item(2)?.textContent
             expect(proposalVoteStatus).toBe('Abstain')
-          })
 
-          it('Proposal details button', async () => {
-            const { getByText } = await renderAndOpenPastCouncilProposals('alice')
-
-            const proposalDetailsButton = getByText(/^Proposal Details$/i)?.parentElement
-
-            expect(proposalDetailsButton).not.toBeNull() //todo add test for button onClick
+            expect(await getButton('Proposal details')).toBeDefined()
           })
         })
       })
@@ -294,7 +277,7 @@ describe('UI: Past Council page', () => {
     expect(queryByText(/not found/i)).not.toBeNull()
   })
 
-  const renderAndOpenPastCouncilProposals = async (memberName: Members) => {
+  const renderAndOpenProposalVotesDropdown = async (memberName: Members) => {
     const component = await renderComponent()
 
     const councilMemberRow = component.getByText(getMember(memberName).handle).parentElement?.parentElement
