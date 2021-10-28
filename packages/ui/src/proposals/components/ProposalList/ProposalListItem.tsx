@@ -9,6 +9,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { TextSmall } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
+import { toDDMMYY } from '@/common/utils/dates'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -30,7 +31,7 @@ export interface ProposalListItemProps {
 }
 
 export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
-  const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
+  const displayDate = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
     <ProposalItem
       as={GhostRouterLink}
@@ -41,7 +42,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <Subscription>
-            {isPast ? 'Ended:' : 'Created:'} {date.toLocaleDateString('en-GB')}
+            {isPast ? 'Ended at:' : 'Created at:'} {toDDMMYY(displayDate)}
           </Subscription>
           <BadgeStatus>{camelCaseToText(proposal.type)}</BadgeStatus>
         </ToggleableItemInfoTop>

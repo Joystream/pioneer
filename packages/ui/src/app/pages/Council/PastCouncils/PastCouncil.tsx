@@ -12,7 +12,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { getUrl } from '@/common/utils/getUrl'
 import { PastCouncilStats } from '@/council/components/pastCouncil/PastCouncilStats'
-import { PastCouncilTabs } from '@/council/components/pastCouncil/PastCouncilTabs/PastCouncilTabs'
+import { PastCouncilTabs } from '@/council/components/pastCouncil/PastCouncilTabs'
 import { CouncilRoutes } from '@/council/constants'
 import { usePastCouncil } from '@/council/hooks/usePastCouncil'
 

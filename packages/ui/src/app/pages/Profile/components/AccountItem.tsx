@@ -50,7 +50,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   const [isDropped, setDropped] = useState(false)
 
   return (
-    <AccounItemWrapper onClick={() => setDropped(!isDropped)}>
+    <AccountItemWrapper onClick={() => setDropped(!isDropped)}>
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
@@ -69,11 +69,11 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <StyledDropDown isDropped={isDropped}>
         <LocksDetails balance={balance} account={account} />
       </StyledDropDown>
-    </AccounItemWrapper>
+    </AccountItemWrapper>
   )
 }
 
-const AccounItemWrapper = styled.div`
+const AccountItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
