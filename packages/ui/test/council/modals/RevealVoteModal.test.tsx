@@ -24,7 +24,8 @@ describe('UI: RevealVoteModal', () => {
         salt: '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206',
         accountId: alice.address,
         optionId: '1',
-    }
+    },
+    voteForHandle: 'alice',
   }
 
   const useModal: UseModal<any> = {
@@ -38,11 +39,17 @@ describe('UI: RevealVoteModal', () => {
     await cryptoWaitReady()
   })
 
-  describe('Requirements failed', () => {
+  describe('Requirements check', () => {
     it('Cannot afford transaction fee', async () => {
         tx = stubTransaction(api, txPath, 10000)
         renderModal()
         expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    })
+
+    it('Requirements passed', async () => {
+      tx = stubTransaction(api, txPath, 10)
+      renderModal()
+      expect((await screen.findByText(/You intend to reveal your vote for/)).textContent).toEqual('You intend to reveal your vote for alice.')
     })
   })
 

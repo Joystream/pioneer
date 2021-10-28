@@ -9,6 +9,9 @@ import { useModal } from '@/common/hooks/useModal'
 
 import { RevealVoteModalCall } from '.'
 import { RevealVoteMachine } from './machine'
+import { createType } from '@joystream/types'
+import { RevealVoteSignModal } from './RevealVoteSignModal'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 
 export const RevealVoteModal = () => {
   const [state, send] = useMachine(RevealVoteMachine)
@@ -18,7 +21,7 @@ export const RevealVoteModal = () => {
 
   const { vote } = modalData
 
-  const transaction = useMemo(() => api?.tx.referendum.revealVote(vote.salt, vote.optionId ), [vote.salt, vote.optionId])
+  const transaction = useMemo(() => api?.tx.referendum.revealVote(vote.salt, createType('MemberId', parseInt(vote.optionId))), [vote.salt, vote.optionId])
   const feeInfo = useTransactionFee(vote.accountId, transaction)
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export const RevealVoteModal = () => {
     )
   }
 
-  if (!feeInfo) {
+  if (!feeInfo || !transaction) {
     return null
   }
 
@@ -51,7 +54,7 @@ export const RevealVoteModal = () => {
       />
     )
   } else if (state.matches('transaction')) {
-    // return <RevealVoteSignModal />
+    return <RevealVoteSignModal service={state.children.transaction} transaction={transaction} />
   }
 
   return null
