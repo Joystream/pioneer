@@ -4,8 +4,10 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { VotingAttempt } from '@/council/hooks/useCommitment'
 
@@ -21,37 +23,32 @@ export const PickVoteModal = ({ votes, send }: Props) => {
   const { allAccounts } = useMyAccounts()
   return (
     <Modal modalSize="xs" modalHeight="s" onClose={hideModal}>
-      <ModalHeader title="" onClick={hideModal} modalHeaderSize="s" />
+      <ModalHeader title="Pick vote" onClick={hideModal} />
       <ModalBody>
         <TextMedium light>Choose the vote you want to reveal.</TextMedium>
-        <AccountsList>
+        <List>
           {votes.map((vote) => (
-            <AccountOptionItem key={vote.accountId} onClick={() => send('PICKED', { vote })}>
-              <AccountInfo account={accountOrNamed(allAccounts, vote.accountId, 'Account')} />
-            </AccountOptionItem>
+            <ListItem key={vote.accountId} onClick={() => send('PICKED', { vote })} borderless>
+              <AccountItemWrapper>
+                <AccountInfo account={accountOrNamed(allAccounts, vote.accountId, 'Account')} />
+              </AccountItemWrapper>
+            </ListItem>
           ))}
-        </AccountsList>
+        </List>
       </ModalBody>
     </Modal>
   )
 }
 
-const AccountsList = styled.ul<{ memberIndicatorOffset?: string }>`
+const AccountItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  margin-left: -16px;
-  padding-left: 16px;
-  overflow: hidden;
-  overflow-y: scroll;
-`
-
-const AccountOptionItem = styled.li`
-  display: grid;
-  position: relative;
-  margin: 8px;
   width: 100%;
-  &:hover {
-    cursor: pointer;
-  }
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  cursor: pointer;
+  transition: ${Transitions.all};
+  padding: 16px 8px 16px 16px;
+
+  ${TableListItemAsLinkHover}
 `
