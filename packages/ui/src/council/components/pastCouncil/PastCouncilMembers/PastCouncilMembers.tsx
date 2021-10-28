@@ -27,7 +27,7 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
         <ListHeader>Proposals slashed</ListHeader>
         <ListHeader>Proposals abstained</ListHeader>
       </ListHeaders>
-      <List>
+      <List as="div">
         {councilMembers?.map((councilMember, index) => (
           <PastCouncilMembersItem councilMember={councilMember} key={index} />
         ))}
