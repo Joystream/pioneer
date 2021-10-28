@@ -42,7 +42,7 @@ export const useElectionVotes = (election: Election) => {
               ?.filter((myVote) => myVote.optionId === candidate.member.id)
               .map((myVote) => ({
                 ...myVote,
-                isRevelaed: !!votes?.find((vote) => vote.id === myVote.voteId)?.voteFor,
+                isRevealed: !!votes?.find((vote) => vote.id === myVote.voteId)?.voteFor,
               })) ?? [],
         })
     )

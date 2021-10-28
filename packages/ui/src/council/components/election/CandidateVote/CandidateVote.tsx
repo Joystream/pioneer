@@ -18,6 +18,8 @@ import { Member } from '@/memberships/types'
 
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
+import { RevealVoteButton } from './RevealVoteButton'
+
 export interface CandidateVoteProps {
   candidateId: string
   member: Member
@@ -50,7 +52,7 @@ export const CandidateVote = ({
   const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
   const hasOwnStake = ownStake && ownStake.gt(BN_ZERO)
   const hasMyVotes = myVotes.length > 0
-  const allVotesRevealed = !myVotes.find((vote) => vote.isRevelaed === false)
+  const allVotesRevealed = !myVotes.find((vote) => vote.isRevealed === false)
   return (
     <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>
@@ -96,7 +98,7 @@ export const CandidateVote = ({
               Revealed
             </ButtonPrimary>
           ) : (
-            <ButtonPrimary size="medium">Reveal</ButtonPrimary>
+            <RevealVoteButton myVotes={myVotes} voteForHandle={member.handle} />
           ))}
       </ButtonsGroup>
       <CandidateCardArrow>

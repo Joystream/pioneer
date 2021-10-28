@@ -14,7 +14,7 @@ export interface VotingAttempt {
 
 export interface MyCastVote extends VotingAttempt {
   voteId?: string
-  isRevelaed: boolean
+  isRevealed: boolean
 }
 
 export const useCommitment = (accountId: string, candidateId: string) => {
