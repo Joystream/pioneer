@@ -104,10 +104,10 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate(CANDIDATE_DATA, server.server)
       seedCouncilMember(
         {
-          accumulatedReward: 0,
           id: '0',
           electedInCouncilId: '0',
           memberId: '0',
+          accumulatedReward: 0,
           unpaidReward: 0,
           stake: 0,
         },
@@ -168,10 +168,10 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1', electionRoundId: '2' }, server.server)
       seedCouncilMember(
         {
-          accumulatedReward: 0,
           id: '1',
           electedInCouncilId: '1',
           memberId: '1',
+          accumulatedReward: 0,
           unpaidReward: 0,
           stake: 0,
         },
@@ -189,10 +189,10 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1' }, server.server)
       seedCouncilMember(
         {
-          accumulatedReward: 0,
           id: '1',
           electedInCouncilId: '0',
           memberId: '1',
+          accumulatedReward: 0,
           unpaidReward: 0,
           stake: 0,
         },
@@ -209,10 +209,10 @@ describe('useMyPastVotesStats', () => {
       seedCouncilCandidate({ ...CANDIDATE_DATA, memberId: '1', id: '1' }, server.server)
       seedCouncilMember(
         {
-          accumulatedReward: 0,
           id: '1',
           electedInCouncilId: '0',
           memberId: '1',
+          accumulatedReward: 0,
           unpaidReward: 0,
           stake: 0,
         },

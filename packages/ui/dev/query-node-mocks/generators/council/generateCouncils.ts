@@ -1,6 +1,7 @@
 import faker from 'faker'
 
 import { Reducer } from '@/common/types/helpers'
+import { RawProposalVotedEventMock } from '@/mocks/data'
 import {
   RawCouncilCandidateMock,
   RawCouncilElectionMock,
@@ -9,8 +10,9 @@ import {
   RawCouncilVoteMock,
 } from '@/mocks/data/seedCouncils'
 
+import rawProposals from '../../../../src/mocks/data/raw/proposals.json'
 import { saveFile } from '../../helpers/saveFile'
-import { memberAt, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
+import { memberAt, randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
 const COUNCILS = 5
 
@@ -26,6 +28,7 @@ export const generateCouncils = () => {
     electionRounds: [],
     candidates: [],
     votes: [],
+    proposalVotedEvents: [],
   })
   Object.entries(data).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
@@ -36,9 +39,11 @@ interface CouncilData {
   electionRounds: RawCouncilElectionMock[]
   candidates: RawCouncilCandidateMock[]
   votes: RawCouncilVoteMock[]
+  proposalVotedEvents: RawProposalVotedEventMock[]
 }
 
 const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
+  const proposalVotedEvents: RawProposalVotedEventMock[] = []
   const isFinished = councilIndex !== COUNCILS - 1
   const hasEnded = councilIndex < COUNCILS - 2
 
@@ -88,6 +93,19 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     candidates.push(createCandidate(candidates.length - 1, memberAt(0)))
   }
 
+  const voteKinds = ['APPROVE', 'REJECT', 'SLASH', 'ABSTAIN']
+  if (hasEnded) {
+    councilors.map((councilor) => {
+      proposalVotedEvents.push({
+        id: `${council.id}-${proposalVotedEvents.length}`,
+        voterId: councilor.memberId,
+        ...{ ...randomBlock(), inBlock: randomFromRange(council.electedAtBlock, council.endedAtBlock as number) },
+        proposalId: rawProposals[randomFromRange(0, rawProposals.length - 1)].id,
+        voteKind: voteKinds[randomFromRange(0, 3)],
+      })
+    })
+  }
+
   const electionRound: RawCouncilElectionMock = {
     id: council.id,
     cycleId: Number(council.id),
@@ -119,6 +137,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     electionRounds: [...data.electionRounds, electionRound],
     candidates: [...data.candidates, ...candidates],
     votes: [...data.votes, ...votes],
+    proposalVotedEvents: [...data.proposalVotedEvents, ...proposalVotedEvents],
   }
 }
 

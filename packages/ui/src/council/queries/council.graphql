@@ -10,6 +10,14 @@ fragment CouncilMemberFields on CouncilMember {
   stake
 }
 
+fragment PastCouncilProposalsFields on ProposalVotedEvent {
+  voteKind
+  voterId
+  proposal {
+    ...ProposalFields
+  }
+}
+
 fragment ElectedCouncilFields on ElectedCouncil {
   id
   electedAtBlock
@@ -130,6 +138,17 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
+  }
+}
+
+query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
+  councilMembers(where: { electedInCouncil_eq: $councilId }) {
+    member {
+      ...MemberFields
+    }
+  }
+  proposalVotedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }, orderBy: [createdAt_DESC]) {
+    ...PastCouncilProposalsFields
   }
 }
 

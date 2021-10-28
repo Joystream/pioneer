@@ -1,0 +1,173 @@
+[
+  {
+    "id": "0-0",
+    "voterId": "22",
+    "inBlock": 40456,
+    "createdAt": "2021-06-16T17:21:12.161Z",
+    "network": "OLYMPIA",
+    "proposalId": "7",
+    "voteKind": "REJECT"
+  },
+  {
+    "id": "0-1",
+    "voterId": "9",
+    "inBlock": 37286,
+    "createdAt": "2021-08-04T19:24:37.247Z",
+    "network": "OLYMPIA",
+    "proposalId": "20",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "0-2",
+    "voterId": "9",
+    "inBlock": 28930,
+    "createdAt": "2021-09-24T09:29:12.036Z",
+    "network": "OLYMPIA",
+    "proposalId": "4",
+    "voteKind": "REJECT"
+  },
+  {
+    "id": "0-3",
+    "voterId": "48",
+    "inBlock": 44905,
+    "createdAt": "2021-07-20T19:44:45.183Z",
+    "network": "OLYMPIA",
+    "proposalId": "5",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "0-4",
+    "voterId": "12",
+    "inBlock": 57092,
+    "createdAt": "2021-06-04T06:56:57.736Z",
+    "network": "OLYMPIA",
+    "proposalId": "7",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "0-5",
+    "voterId": "40",
+    "inBlock": 34677,
+    "createdAt": "2021-07-21T14:51:07.860Z",
+    "network": "OLYMPIA",
+    "proposalId": "5",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "0-6",
+    "voterId": "1",
+    "inBlock": 59530,
+    "createdAt": "2021-09-04T15:57:18.991Z",
+    "network": "OLYMPIA",
+    "proposalId": "2",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "1-0",
+    "voterId": "46",
+    "inBlock": 9289,
+    "createdAt": "2021-07-27T04:35:45.419Z",
+    "network": "OLYMPIA",
+    "proposalId": "18",
+    "voteKind": "REJECT"
+  },
+  {
+    "id": "1-1",
+    "voterId": "30",
+    "inBlock": 10126,
+    "createdAt": "2021-06-26T17:09:04.567Z",
+    "network": "OLYMPIA",
+    "proposalId": "5",
+    "voteKind": "REJECT"
+  },
+  {
+    "id": "1-2",
+    "voterId": "33",
+    "inBlock": 9512,
+    "createdAt": "2021-05-07T17:08:05.338Z",
+    "network": "OLYMPIA",
+    "proposalId": "20",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "1-3",
+    "voterId": "40",
+    "inBlock": 6643,
+    "createdAt": "2021-08-07T17:49:10.090Z",
+    "network": "OLYMPIA",
+    "proposalId": "21",
+    "voteKind": "REJECT"
+  },
+  {
+    "id": "1-4",
+    "voterId": "12",
+    "inBlock": 9171,
+    "createdAt": "2021-07-16T04:42:38.372Z",
+    "network": "OLYMPIA",
+    "proposalId": "13",
+    "voteKind": "REJECT"
+  },
+  {
+    "id": "1-5",
+    "voterId": "17",
+    "inBlock": 7581,
+    "createdAt": "2021-08-01T14:58:30.763Z",
+    "network": "OLYMPIA",
+    "proposalId": "8",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "2-0",
+    "voterId": "11",
+    "inBlock": 48688,
+    "createdAt": "2021-10-14T04:59:58.934Z",
+    "network": "OLYMPIA",
+    "proposalId": "18",
+    "voteKind": "APPROVE"
+  },
+  {
+    "id": "2-1",
+    "voterId": "1",
+    "inBlock": 86874,
+    "createdAt": "2021-06-14T10:24:37.863Z",
+    "network": "OLYMPIA",
+    "proposalId": "17",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "2-2",
+    "voterId": "42",
+    "inBlock": 25510,
+    "createdAt": "2021-09-26T11:36:00.719Z",
+    "network": "OLYMPIA",
+    "proposalId": "16",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "2-3",
+    "voterId": "44",
+    "inBlock": 87267,
+    "createdAt": "2021-10-04T22:02:19.347Z",
+    "network": "OLYMPIA",
+    "proposalId": "9",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "2-4",
+    "voterId": "23",
+    "inBlock": 90507,
+    "createdAt": "2021-05-19T18:32:36.963Z",
+    "network": "OLYMPIA",
+    "proposalId": "15",
+    "voteKind": "SLASH"
+  },
+  {
+    "id": "2-5",
+    "voterId": "3",
+    "inBlock": 39912,
+    "createdAt": "2021-10-03T03:36:46.575Z",
+    "network": "OLYMPIA",
+    "proposalId": "8",
+    "voteKind": "REJECT"
+  }
+]

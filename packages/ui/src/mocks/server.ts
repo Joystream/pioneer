@@ -99,6 +99,7 @@ export const makeServer = (environment = 'development') => {
               candidateByUniqueInput: getUniqueResolver('Candidate'),
               castVotes: getWhereResolver('CastVote'),
               castVotesConnection: getConnectionResolver('CastVoteConnection'),
+              councilMembers: getWhereResolver('CouncilMember'),
               councilMembersConnection: getConnectionResolver('CouncilMemberConnection'),
               councilorRewardUpdatedEvents: getWhereResolver('CouncilorRewardUpdatedEvent'),
               electedCouncils: getWhereResolver('ElectedCouncil'),
