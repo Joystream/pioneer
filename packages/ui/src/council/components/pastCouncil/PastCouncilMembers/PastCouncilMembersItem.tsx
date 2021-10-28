@@ -11,6 +11,7 @@ import { TextMedium } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { camelCaseToText, capitalizeFirstLetter } from '@/common/helpers'
+import { toDDMMYY } from '@/common/utils/dates'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
 import { CountInfo } from '@/memberships/components/MemberListItem/Fileds'
@@ -51,7 +52,7 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
           </PastCouncilMemberHeaders>
           <List>
             {councilMember.proposalVotes.map((proposalVote) => {
-              const date = new Date(
+              const displayDate = new Date(
                 !isProposalActive(proposalVote.proposal.status)
                   ? (proposalVote.proposal.endedAt as string)
                   : proposalVote.proposal.createdAt
@@ -65,7 +66,7 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
                         <ToggleableItemInfoTop>
                           <Subscription>
                             {!isProposalActive(proposalVote.proposal.status) ? 'Ended at:' : 'Created at:'}{' '}
-                            {date.toLocaleDateString('en-GB')}
+                            {toDDMMYY(displayDate)}
                           </Subscription>
                           <BadgeStatus>{camelCaseToText(proposalVote.proposal.type)}</BadgeStatus>
                         </ToggleableItemInfoTop>
