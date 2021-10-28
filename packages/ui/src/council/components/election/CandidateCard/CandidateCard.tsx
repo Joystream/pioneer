@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
@@ -31,7 +30,7 @@ export interface CandidateCardProps {
   withdrawable?: boolean
   wins?: number
   loses?: number
-  isVotingStage?: boolean
+  canVote?: boolean
   isPreview?: boolean
 }
 
@@ -39,7 +38,7 @@ export const CandidateCard = ({
   candidate: { id, member, info, stake },
   voted,
   withdrawable,
-  isVotingStage,
+  canVote,
   isPreview,
 }: CandidateCardProps) => {
   const { showModal } = useModal()
@@ -52,8 +51,6 @@ export const CandidateCard = ({
     }
   }, [showModal, isPreview])
   const { isLoading: loadingStats, successful, failed } = useMemberCandidacyStats(member.id)
-
-  const showWithdrawButton = !isVotingStage && withdrawable
 
   return (
     <CandidateCardWrapper onClick={showCandidate}>
@@ -106,14 +103,14 @@ export const CandidateCard = ({
                 <Subscription>My stake</Subscription>
               </CandidateCardStake>
             )}
-            {showWithdrawButton && (
+            {withdrawable && (
               <CandidateCardControls>
                 <WithdrawButton member={member} />
               </CandidateCardControls>
             )}
-            {isVotingStage && isDefined(voted) && (
+            {canVote && isDefined(voted) && (
               <CandidateCardControls>
-                {voted ? <ButtonPrimary size="medium">Vote again </ButtonPrimary> : <VoteForCouncilButton id={id} />}
+                <VoteForCouncilButton id={id} again={voted} />
               </CandidateCardControls>
             )}
           </CandidateCardStakeAndControls>

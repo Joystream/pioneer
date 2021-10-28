@@ -11,12 +11,12 @@ interface CandidateCardListCandidate extends CandidateCardCandidate {
   voted?: boolean
 }
 
-interface CandidatesListProps extends Pick<CandidateCardProps, 'isVotingStage' | 'isPreview'> {
+interface CandidatesListProps extends Pick<CandidateCardProps, 'canVote' | 'isPreview'> {
   candidates?: CandidateCardListCandidate[]
   isLoading?: boolean
 }
 
-export const CandidateCardList = ({ candidates = [], isLoading, isVotingStage }: CandidatesListProps) => {
+export const CandidateCardList = ({ candidates = [], isLoading, canVote }: CandidatesListProps) => {
   if (isLoading) {
     return <Loading text="Loading candidates..." />
   }
@@ -28,13 +28,7 @@ export const CandidateCardList = ({ candidates = [], isLoading, isVotingStage }:
   return (
     <CandidatesListStyles>
       {candidates.map(({ voted, isMyCandidate, ...candidate }, index) => (
-        <CandidateCard
-          key={index}
-          candidate={candidate}
-          voted={voted}
-          withdrawable={isMyCandidate}
-          isVotingStage={isVotingStage}
-        />
+        <CandidateCard key={index} candidate={candidate} voted={voted} withdrawable={isMyCandidate} canVote={canVote} />
       ))}
     </CandidatesListStyles>
   )
