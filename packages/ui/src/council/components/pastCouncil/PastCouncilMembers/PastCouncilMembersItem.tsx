@@ -1,29 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { List, ListItem, TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextMedium, TextSmall } from '@/common/components/typography'
-import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
-import { camelCaseToText, capitalizeFirstLetter } from '@/common/helpers'
-import { toDDMMYY } from '@/common/utils/dates'
 import { PastCouncilMembersLayout } from '@/council/components/pastCouncil/PastCouncilMembers/PastCouncilMembers'
+import { PastCouncilProposalsItem } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposalsItem'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
 import { CountInfo } from '@/memberships/components/MemberListItem/Fileds'
-import { StageField } from '@/proposals/components/ProposalList/ProposalListItem'
-import { isProposalActive } from '@/proposals/model/proposalStatus'
-import {
-  ToggleableItemInfo,
-  ToggleableItemInfoTop,
-  ToggleableItemTitle,
-} from '@/working-groups/components/ToggleableItemStyledComponents'
 
 interface Props {
   councilMember: PastCouncilMember
@@ -46,46 +33,18 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
       </PastCouncilMemberWrap>
       <StyledDropDown isDropped={isDropped}>
         <RowGapBlock gap={4}>
-          <PastCouncilMemberHeaders $colLayout={PastCouncilMemberProposalsLayout}>
-            <PastCouncilListHeader>Proposal</PastCouncilListHeader>
-            <PastCouncilListHeader>Stage</PastCouncilListHeader>
-            <PastCouncilListHeader>Proposer</PastCouncilListHeader>
-            <PastCouncilListHeader>Vote</PastCouncilListHeader>
-          </PastCouncilMemberHeaders>
+          <PastCouncilMemberProposalsHeaders $colLayout={PastCouncilMemberProposalsLayout}>
+            <PastCouncilMemberProposalsHeader>Proposal</PastCouncilMemberProposalsHeader>
+            <PastCouncilMemberProposalsHeader>Stage</PastCouncilMemberProposalsHeader>
+            <PastCouncilMemberProposalsHeader>Proposer</PastCouncilMemberProposalsHeader>
+            <PastCouncilMemberProposalsHeader>Vote</PastCouncilMemberProposalsHeader>
+          </PastCouncilMemberProposalsHeaders>
           <List>
-            {councilMember.proposalVotes.map((proposalVote) => {
-              const displayDate = new Date(
-                !isProposalActive(proposalVote.proposal.status)
-                  ? (proposalVote.proposal.endedAt as string)
-                  : proposalVote.proposal.createdAt
-              )
-
-              return (
-                <ListItem key={proposalVote.proposal.id}>
-                  <PastCouncilProposalWrap>
-                    <ToggleableItemInfo>
-                      <ToggleableItemInfoTop>
-                        <Subscription>
-                          {!isProposalActive(proposalVote.proposal.status) ? 'Ended at:' : 'Created at:'}{' '}
-                          {toDDMMYY(displayDate)}
-                        </Subscription>
-                        <BadgeStatus>{camelCaseToText(proposalVote.proposal.type)}</BadgeStatus>
-                      </ToggleableItemInfoTop>
-                      <ToggleableItemTitle>{proposalVote.proposal.title}</ToggleableItemTitle>
-                    </ToggleableItemInfo>
-                    <StageField>
-                      <TextSmall bold>{camelCaseToText(proposalVote.proposal.status)}</TextSmall>
-                      <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
-                        <TooltipDefault />
-                      </Tooltip>
-                    </StageField>
-                    <MemberInfo member={proposalVote.proposal.proposer} memberSize="s" />
-                    <TextMedium bold>{capitalizeFirstLetter(proposalVote.voteStatus)}</TextMedium>
-                    <ButtonGhost size="medium">Proposal details</ButtonGhost>
-                  </PastCouncilProposalWrap>
-                </ListItem>
-              )
-            })}
+            {councilMember.proposalVotes.map((proposalVote) => (
+              <ListItem key={proposalVote.proposal.id}>
+                <PastCouncilProposalsItem proposal={proposalVote.proposal} vote={proposalVote.voteStatus} />
+              </ListItem>
+            ))}
           </List>
         </RowGapBlock>
       </StyledDropDown>
@@ -124,29 +83,13 @@ const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.Black[50]};
 `
 
-const PastCouncilMemberHeaders = styled(ListHeaders)`
+const PastCouncilMemberProposalsHeaders = styled(ListHeaders)`
   padding-right: 16px;
 `
-const PastCouncilListHeader = styled(ListHeader)`
+const PastCouncilMemberProposalsHeader = styled(ListHeader)`
   &:last-child {
     position: static;
     justify-content: flex-start;
     text-align: left;
-  }
-`
-
-export const PastCouncilProposalWrap = styled.div`
-  display: grid;
-  grid-template-columns: ${PastCouncilMemberProposalsLayout};
-  grid-template-rows: 1fr;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: ${Sizes.accountHeight};
-  padding: 16px;
-  margin-left: -1px;
-
-  > *:last-child {
-    justify-self: end;
   }
 `

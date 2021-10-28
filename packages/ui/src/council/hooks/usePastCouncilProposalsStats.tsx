@@ -1,6 +1,6 @@
 import { useGetCouncilBlockRangeQuery, useGetCouncilProposalsStatsQuery } from '@/council/queries'
 
-export const usePastCouncilProposals = (id: string) => {
+export const usePastCouncilProposalsStats = (id: string) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
     variables: {
       where: {
