@@ -11,8 +11,8 @@ import {
   PastCouncilTableListItem,
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
-import { usePastCouncilProposalsStats } from '@/council/hooks/usePastCouncilProposalsStats'
 import { useCouncilTotalSpend } from '@/council/hooks/useCouncilTotalSpend'
+import { usePastCouncilProposalsStats } from '@/council/hooks/usePastCouncilProposalsStats'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
