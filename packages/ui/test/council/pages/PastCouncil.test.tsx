@@ -260,7 +260,7 @@ describe('UI: Past Council page', () => {
             const proposalStatus = proposalRow?.children?.item(1)?.textContent
             expect(proposalStatus).toBe(camelCaseToText(testProposals[0].status))
 
-            const proposalVoteStatus = proposalRow?.children?.item(2)?.textContent
+            const proposalVoteStatus = proposalRow?.children?.item(3)?.textContent
             expect(proposalVoteStatus).toBe('Abstain')
 
             expect(await getButton('Proposal details')).toBeDefined()
