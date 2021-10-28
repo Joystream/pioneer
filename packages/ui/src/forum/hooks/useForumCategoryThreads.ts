@@ -1,15 +1,15 @@
 import { Reducer, useEffect, useMemo, useReducer } from 'react'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
+import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
-import { ThreadDefaultOrder, ThreadOrder } from '@/forum/components/threads/ThreadList'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 
 export interface ThreadsOptions {
   filters: ThreadFiltersState
-  order: ThreadOrder
+  order?: SortOrder<ForumThreadOrderByInput>
   categoryId?: string
   isArchive?: boolean
 }
@@ -20,18 +20,21 @@ interface ThreadsNavigation {
 }
 
 const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
-const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
+const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters }
 
-export const useForumCategoryThreads = (options: Partial<ThreadsOptions>, pagination?: ThreadsNavigation) => {
+export const useForumCategoryThreads = (
+  options: Partial<ThreadsOptions> & { order: SortOrder<ForumThreadOrderByInput> },
+  pagination?: ThreadsNavigation
+) => {
   const initialOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])
   useEffect(() => refresh(initialOptions), [initialOptions])
 
-  const [{ order, filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initialOptions)
+  const [{ filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initialOptions)
 
   const { loading: loadingThreads, data: threadsData } = useGetForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
-      orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(options.order)],
       ...(!pagination
         ? { limit: 30 }
         : {
@@ -69,6 +72,3 @@ const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArch
     },
   }
 }
-
-export const forumThreadOrderBy = ({ key, isDescending }: ThreadOrder) =>
-  ForumThreadOrderByInput[`${key}${isDescending ? 'Desc' : 'Asc'}` as const]

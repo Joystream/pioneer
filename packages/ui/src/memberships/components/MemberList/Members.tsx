@@ -1,37 +1,24 @@
-import React, { Dispatch, ReactNode } from 'react'
+import React from 'react'
 
+import { MembershipOrderByInput } from '@/common/api/queries'
+import { List, ListItem } from '@/common/components/List'
+import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
+import { GetSortProps } from '@/common/hooks/useSort'
 
-import { List, ListItem } from '../../../common/components/List'
-import { ListHeader, ListHeaders } from '../../../common/components/List/ListHeader'
-import { HeaderText, SortIconDown, SortIconUp } from '../../../common/components/SortedListHeaders'
-import { MemberListOrder } from '../../hooks/useMembers'
 import { Member } from '../../types'
 import { MemberListItem } from '../MemberListItem'
 import { colLayoutByType } from '../MemberListItem/Fileds'
 
-type SortKey = MemberListOrder['sortBy']
 interface MemberListProps {
   members: Member[]
   isLoading?: boolean
-  order?: MemberListOrder
-  onSort?: Dispatch<SortKey>
+  getSortProps: GetSortProps<MembershipOrderByInput>
 }
 
-export const MemberList = ({ isLoading, members, order, onSort }: MemberListProps) => {
-  const SortHeader =
-    order && onSort && members.length > 1
-      ? ({ children, sortKey }: { children: ReactNode; sortKey: SortKey }) => (
-          <ListHeader onClick={() => onSort(sortKey)}>
-            <HeaderText>
-              {children}
-              {order.sortBy === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
-            </HeaderText>
-          </ListHeader>
-        )
-      : ListHeader
-
+export const MemberList = ({ isLoading, members, getSortProps }: MemberListProps) => {
   if (isLoading) {
     return <Loading />
   }
@@ -43,8 +30,8 @@ export const MemberList = ({ isLoading, members, order, onSort }: MemberListProp
   return (
     <div>
       <ListHeaders $colLayout={colLayoutByType('Member')}>
-        <SortHeader sortKey="id">ID</SortHeader>
-        <SortHeader sortKey="handle">Memeberships</SortHeader>
+        <SortHeader {...getSortProps('createdAt')}>ID</SortHeader>
+        <SortHeader {...getSortProps('handle')}>Memberships</SortHeader>
         <ListHeader>Council Member</ListHeader>
         <ListHeader>Roles</ListHeader>
         <ListHeader>Slashed</ListHeader>

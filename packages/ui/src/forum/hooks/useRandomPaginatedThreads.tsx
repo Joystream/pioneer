@@ -8,10 +8,6 @@ import {
 } from '@/forum/queries/__generated__/forum.generated'
 import { asForumThread } from '@/forum/types'
 
-import { ThreadDefaultOrder } from '../components/threads/ThreadList'
-
-import { forumThreadOrderBy } from './useForumCategoryThreads'
-
 interface Props {
   page: number
   threadsPerPage: number
@@ -32,7 +28,7 @@ export const useRandomPaginatedThreads = ({ page, threadsPerPage, maxThreads }: 
     where: { id_in: randomIDs },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
-    orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(ThreadDefaultOrder)],
+    orderBy: [ForumThreadOrderByInput.IsStickyDesc, ForumThreadOrderByInput.UpdatedAtDesc],
   }
 
   const { loading: loadingThreads, data: threadsData } = useGetForumThreadsQuery({ variables })
