@@ -260,11 +260,48 @@ describe('UI: Past Council page', () => {
             const proposalStatus = proposalRow?.children?.item(1)?.textContent
             expect(proposalStatus).toBe(camelCaseToText(testProposals[0].status))
 
-            const proposalVoteStatus = proposalRow?.children?.item(2)?.textContent
+            const proposalVoteStatus = proposalRow?.children?.item(3)?.textContent
             expect(proposalVoteStatus).toBe('Abstain')
 
             expect(await getButton('Proposal details')).toBeDefined()
           })
+        })
+      })
+
+      describe('Proposals', () => {
+        beforeEach(() => {
+          seedProposal({ ...testProposals[0] }, mockServer.server, 5)
+          seedProposal({ ...testProposals[1] }, mockServer.server, 6)
+          seedProposal({ ...testProposals[2] }, mockServer.server, 14)
+        })
+
+        it('Renders table', async () => {
+          const { queryByText } = await renderAndOpenProposalsTab()
+
+          expect(queryByText(/^Proposal$/i)).not.toBeNull()
+          expect(queryByText(/^Stage$/i)).not.toBeNull()
+          expect(queryByText(/^Proposer$/i)).not.toBeNull()
+        })
+
+        it('Proposals count', async () => {
+          const { queryAllByText } = await renderAndOpenProposalsTab()
+
+          expect(queryAllByText(/proposal details/i).length).toBe(2)
+        })
+
+        it('Proposal data', async () => {
+          const { getAllByText } = await renderAndOpenProposalsTab()
+
+          const proposalRow = getAllByText(/^Proposal Details$/i)[0].parentElement?.parentElement
+
+          const proposalTitle = proposalRow?.children?.item(0)?.children?.item(1)?.textContent
+          expect(proposalTitle).toBe(testProposals[1].title)
+
+          const proposalType = proposalRow?.children?.item(0)?.children?.item(0)?.children?.item(1)?.textContent
+          expect(proposalType).toBe(camelCaseToText(testProposals[1].details.type))
+
+          const proposalStatus = proposalRow?.children?.item(1)?.textContent
+          expect(proposalStatus).toBe(camelCaseToText(testProposals[1].status))
         })
       })
     })
@@ -276,6 +313,16 @@ describe('UI: Past Council page', () => {
 
     expect(queryByText(/not found/i)).not.toBeNull()
   })
+
+  const renderAndOpenProposalsTab = async () => {
+    const component = await renderComponent()
+
+    component.getByText(/^Proposals$/i).click()
+
+    await waitForElementToBeRemoved(() => component.getByText('Loading...'))
+
+    return component
+  }
 
   const renderAndOpenProposalVotesDropdown = async (memberName: Members) => {
     const component = await renderComponent()

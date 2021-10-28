@@ -158,6 +158,12 @@ query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
   }
 }
 
+query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
+  proposals(where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }, orderBy: [createdAt_DESC]) {
+    ...ProposalFields
+  }
+}
+
 query GetCurrentElection {
   electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields

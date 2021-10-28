@@ -43,7 +43,7 @@ export const VoteRationale = React.memo(() => {
 
   const getVoteLink = getUrl({
     route: ProposalsRoutes.preview,
-    params: { id: vote?.proposalId },
+    params: { id: vote?.proposalId ?? 0 },
     query: { showVote: voteId },
   })
 

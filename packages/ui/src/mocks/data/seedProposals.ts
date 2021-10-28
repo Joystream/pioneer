@@ -10,7 +10,7 @@ import { seedProposalDetails } from './seedProposalDetails'
 
 export const mockProposals: ProposalMock[] = rawProposals.map((rawProposal) => rawProposal)
 
-export const seedProposal = (proposal: ProposalMock, server: any) => {
+export const seedProposal = (proposal: ProposalMock, server: any, createdInBlock?: number) => {
   const member = server.schema.find('Membership', proposal.creatorId)
   return server.schema.create('Proposal', {
     ...proposal,
@@ -19,7 +19,7 @@ export const seedProposal = (proposal: ProposalMock, server: any) => {
     isFinalized: proposalPastStatuses.includes(proposal.status as ProposalStatus),
     details: seedProposalDetails(proposal.details, server),
     votes: seedVotes(proposal.votes, server),
-    createdInEvent: seedCreatedInEvent(server),
+    createdInEvent: seedCreatedInEvent(server, createdInBlock),
     proposalStatusUpdates: seedStatusUpdates(proposal.proposalStatusUpdates, server),
     discussionThread: seedDiscussionThread(proposal.discussionThread, server),
   })
@@ -35,7 +35,8 @@ const seedStatusUpdates = (updates: ProposalMock['proposalStatusUpdates'], serve
     return server.schema.create('ProposalStatusUpdatedEvent', { ...seedRandomBlockFields(), newStatus })
   })
 
-const seedCreatedInEvent = (server: any) => server.schema.create('ProposalCreatedEvent', seedRandomBlockFields())
+const seedCreatedInEvent = (server: any, inBlock?: number) =>
+  server.schema.create('ProposalCreatedEvent', seedRandomBlockFields(inBlock))
 
 const seedVotes = (votes: ProposalMock['votes'], server: any) =>
   votes.map((vote) => server.schema.create('ProposalVotedEvent', vote))

@@ -1,4 +1,5 @@
-import { useGetCouncilBlockRangeQuery, useGetCouncilProposalsStatsQuery } from '@/council/queries'
+import { useGetCouncilBlockRangeQuery, useGetPastCouncilProposalsQuery } from '@/council/queries'
+import { asProposal } from '@/proposals/types'
 
 export const usePastCouncilProposals = (id: string) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
@@ -11,17 +12,15 @@ export const usePastCouncilProposals = (id: string) => {
 
   const council = rangeData?.electedCouncilByUniqueInput
 
-  const { loading: loadingData, data } = useGetCouncilProposalsStatsQuery({
+  const { loading: loadingData, data } = useGetPastCouncilProposalsQuery({
     variables: {
-      startBlock: council?.electedAtBlock ?? 0,
-      endBlock: council?.endedAtBlock ?? 0,
+      fromBlock: council?.electedAtBlock ?? 0,
+      toBlock: council?.endedAtBlock ?? 0,
     },
   })
 
   return {
     isLoading: loadingRange || loadingData,
-    approved: data?.approved?.totalCount ?? 0,
-    rejected: data?.rejected?.totalCount ?? 0,
-    slashed: data?.slashed?.totalCount ?? 0,
+    proposals: data && data.proposals.map(asProposal),
   }
 }

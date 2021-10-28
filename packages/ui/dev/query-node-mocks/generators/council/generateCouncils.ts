@@ -102,6 +102,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
         ...{ ...randomBlock(), inBlock: randomFromRange(council.electedAtBlock, council.endedAtBlock as number) },
         proposalId: rawProposals[randomFromRange(0, rawProposals.length - 1)].id,
         voteKind: voteKinds[randomFromRange(0, 3)],
+        votingRound: 1,
       })
     })
   }

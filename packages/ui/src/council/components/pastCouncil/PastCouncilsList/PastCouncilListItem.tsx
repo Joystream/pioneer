@@ -12,7 +12,7 @@ import {
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
 import { useCouncilTotalSpend } from '@/council/hooks/useCouncilTotalSpend'
-import { usePastCouncilProposals } from '@/council/hooks/usePastCouncilProposals'
+import { usePastCouncilProposalsStats } from '@/council/hooks/usePastCouncilProposalsStats'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const PastCouncilListItem = ({ council }: Props) => {
-  const { approved, rejected, slashed } = usePastCouncilProposals(council.id)
+  const { approved, rejected, slashed } = usePastCouncilProposalsStats(council.id)
   const { isLoading: isLoadingTotal, totalSpent } = useCouncilTotalSpend(council.id)
 
   return (
