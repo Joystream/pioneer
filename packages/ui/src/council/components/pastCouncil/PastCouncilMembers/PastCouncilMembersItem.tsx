@@ -3,10 +3,11 @@ import styled from 'styled-components'
 
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { List, ListItem, TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { ListHeader } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { PastCouncilMembersLayout } from '@/council/components/pastCouncil/PastCouncilMembers/PastCouncilMembers'
+import { PastCouncilProposalsHeaders } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposals'
 import { PastCouncilProposalsItem } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposalsItem'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
@@ -33,12 +34,12 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
       </PastCouncilMemberWrap>
       <StyledDropDown isDropped={isDropped}>
         <RowGapBlock gap={4}>
-          <PastCouncilMemberProposalsHeaders $colLayout={PastCouncilMemberProposalsLayout}>
-            <PastCouncilMemberProposalsHeader>Proposal</PastCouncilMemberProposalsHeader>
-            <PastCouncilMemberProposalsHeader>Stage</PastCouncilMemberProposalsHeader>
-            <PastCouncilMemberProposalsHeader>Proposer</PastCouncilMemberProposalsHeader>
-            <PastCouncilMemberProposalsHeader>Vote</PastCouncilMemberProposalsHeader>
-          </PastCouncilMemberProposalsHeaders>
+          <PastCouncilProposalsHeaders $colLayout={PastCouncilMemberProposalsLayout}>
+            <ListHeader>Proposal</ListHeader>
+            <ListHeader>Stage</ListHeader>
+            <ListHeader>Proposer</ListHeader>
+            <ListHeader>Vote</ListHeader>
+          </PastCouncilProposalsHeaders>
           <List>
             {councilMember.proposalVotes.map((proposalVote) => (
               <ListItem key={proposalVote.proposal.id}>
@@ -52,7 +53,7 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
   )
 }
 
-const PastCouncilMemberProposalsLayout = '2fr repeat(4, 1fr)'
+export const PastCouncilMemberProposalsLayout = '2fr repeat(4, 1fr)'
 
 const PastCouncilMemberWrapper = styled.div<{ isDropped?: boolean }>`
   display: flex;
@@ -81,15 +82,4 @@ const StyledDropDown = styled(DropDownToggle)`
   row-gap: 16px;
   padding: 16px;
   background-color: ${Colors.Black[50]};
-`
-
-const PastCouncilMemberProposalsHeaders = styled(ListHeaders)`
-  padding-right: 16px;
-`
-const PastCouncilMemberProposalsHeader = styled(ListHeader)`
-  &:last-child {
-    position: static;
-    justify-content: flex-start;
-    text-align: left;
-  }
 `

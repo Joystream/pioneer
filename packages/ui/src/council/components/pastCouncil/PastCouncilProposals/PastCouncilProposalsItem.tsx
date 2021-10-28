@@ -11,6 +11,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { Sizes } from '@/common/constants'
 import { camelCaseToText, capitalizeFirstLetter } from '@/common/helpers'
 import { toDDMMYY } from '@/common/utils/dates'
+import { PastCouncilMemberProposalsLayout } from '@/council/components/pastCouncil/PastCouncilMembers/PastCouncilMembersItem'
 import { PastCouncilProposalsLayout } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposals'
 import { MemberInfo } from '@/memberships/components'
 import { StageField } from '@/proposals/components/ProposalList/ProposalListItem'
@@ -57,8 +58,6 @@ export const PastCouncilProposalsItem = ({ proposal, vote }: Props) => {
     </PastCouncilProposalWrap>
   )
 }
-
-const PastCouncilMemberProposalsLayout = '2fr repeat(4, 1fr)'
 
 export const PastCouncilMemberWrap = styled(TableListItem)`
   height: ${Sizes.accountHeight};
