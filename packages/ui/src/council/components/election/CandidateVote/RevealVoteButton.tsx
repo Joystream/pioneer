@@ -16,7 +16,7 @@ export const RevealVoteButton = ({ myVotes, voteForHandle }: Props) => {
   const onClick = useCallback(() => {
     showModal<RevealVoteModalCall>({
       modal: 'RevealVote',
-      data: { vote: unrevealedVotes[0], voteForHandle },
+      data: { votes: unrevealedVotes, voteForHandle },
     })
   }, [unrevealedVotes.length])
   return (

@@ -16,6 +16,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'
+import { VotingAttempt } from '@/council/hooks/useCommitment'
 import { TransactionContext } from '@/proposals/modals/AddNewProposal/machine'
 
 import { RevealVoteModalCall } from '.'
@@ -23,15 +24,14 @@ import { RevealVoteModalCall } from '.'
 interface Props {
   service: ActorRef<TransactionEvent, State<TransactionContext>>
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+  vote: VotingAttempt
 }
 
-export const RevealVoteSignModal = ({ service, transaction }: Props) => {
+export const RevealVoteSignModal = ({ service, transaction, vote }: Props) => {
   const { hideModal, modalData } = useModal<RevealVoteModalCall>()
   const { allAccounts } = useMyAccounts()
-  const {
-    vote: { accountId },
-    voteForHandle,
-  } = modalData
+  const { voteForHandle } = modalData
+  const { accountId } = vote
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
     service,
