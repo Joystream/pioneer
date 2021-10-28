@@ -524,6 +524,20 @@ export type GetPastCouncilMembersQuery = {
   }>
 }
 
+export type GetPastCouncilBudgetSpendingQueryVariables = Types.Exact<{
+  fromBlock: Types.Scalars['Int']
+  toBlock: Types.Scalars['Int']
+}>
+
+export type GetPastCouncilBudgetSpendingQuery = {
+  __typename: 'Query'
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: any
+    type?: Types.EventTypeOptions | null | undefined
+  }>
+}
+
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetCurrentElectionQuery = {
@@ -1197,6 +1211,61 @@ export type GetPastCouncilMembersLazyQueryHookResult = ReturnType<typeof useGetP
 export type GetPastCouncilMembersQueryResult = Apollo.QueryResult<
   GetPastCouncilMembersQuery,
   GetPastCouncilMembersQueryVariables
+>
+export const GetPastCouncilBudgetSpendingDocument = gql`
+  query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
+    budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+      ...CouncilSpendingEventFields
+    }
+  }
+  ${CouncilSpendingEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastCouncilBudgetSpendingQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilBudgetSpendingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilBudgetSpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilBudgetSpendingQuery({
+ *   variables: {
+ *      fromBlock: // value for 'fromBlock'
+ *      toBlock: // value for 'toBlock'
+ *   },
+ * });
+ */
+export function useGetPastCouncilBudgetSpendingQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
+    GetPastCouncilBudgetSpendingDocument,
+    options
+  )
+}
+export function useGetPastCouncilBudgetSpendingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPastCouncilBudgetSpendingQuery,
+    GetPastCouncilBudgetSpendingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
+    GetPastCouncilBudgetSpendingDocument,
+    options
+  )
+}
+export type GetPastCouncilBudgetSpendingQueryHookResult = ReturnType<typeof useGetPastCouncilBudgetSpendingQuery>
+export type GetPastCouncilBudgetSpendingLazyQueryHookResult = ReturnType<
+  typeof useGetPastCouncilBudgetSpendingLazyQuery
+>
+export type GetPastCouncilBudgetSpendingQueryResult = Apollo.QueryResult<
+  GetPastCouncilBudgetSpendingQuery,
+  GetPastCouncilBudgetSpendingQueryVariables
 >
 export const GetCurrentElectionDocument = gql`
   query GetCurrentElection {

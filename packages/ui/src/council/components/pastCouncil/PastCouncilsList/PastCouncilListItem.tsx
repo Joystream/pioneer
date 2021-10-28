@@ -3,6 +3,7 @@ import React from 'react'
 import { generatePath } from 'react-router'
 
 import { BlockTime } from '@/common/components/BlockTime'
+import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TokenValue } from '@/common/components/typography'
 import {
@@ -10,6 +11,7 @@ import {
   PastCouncilTableListItem,
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
+import { useCouncilTotalSpend } from '@/council/hooks/useCouncilTotalSpend'
 import { usePastCouncilProposals } from '@/council/hooks/usePastCouncilProposals'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
@@ -20,6 +22,7 @@ interface Props {
 
 export const PastCouncilListItem = ({ council }: Props) => {
   const { approved, rejected, slashed } = usePastCouncilProposals(council.id)
+  const { isLoading: isLoadingTotal, totalSpent } = useCouncilTotalSpend(council.id)
 
   return (
     <PastCouncilTableListItem
@@ -38,7 +41,7 @@ export const PastCouncilListItem = ({ council }: Props) => {
         layout="reverse-start"
         lessInfo
       />
-      <TokenValue value={new BN(0)} />
+      {isLoadingTotal ? <Loading /> : <TokenValue value={totalSpent} />}
       <TokenValue value={new BN(0)} />
       <CountInfo count={approved} />
       <CountInfo count={rejected + slashed} />
