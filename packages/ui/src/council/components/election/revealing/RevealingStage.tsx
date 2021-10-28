@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
-import { useStoredCastVotes } from '@/council/hooks/useStoredCastVotes'
 import { Election } from '@/council/types/Election'
 
 import { ElectionVotes } from '../CandidateVote/ElectionVotes'
@@ -14,8 +13,6 @@ interface Props {
 
 export const RevealingStage = ({ election, isLoading }: Props) => {
   const [tab, setTab] = useState<RevealingStageTab>('results')
-
-  const myVotes = useStoredCastVotes(election?.cycleId)
 
   if (isLoading) {
     return <Loading />

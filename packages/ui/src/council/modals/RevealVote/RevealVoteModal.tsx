@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 
@@ -9,9 +10,8 @@ import { useModal } from '@/common/hooks/useModal'
 
 import { RevealVoteModalCall } from '.'
 import { RevealVoteMachine } from './machine'
-import { createType } from '@joystream/types'
 import { RevealVoteSignModal } from './RevealVoteSignModal'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { RevealVoteSuccessModal } from './RevealVoteSuccessModal'
 
 export const RevealVoteModal = () => {
   const [state, send] = useMachine(RevealVoteMachine)
@@ -21,7 +21,10 @@ export const RevealVoteModal = () => {
 
   const { vote } = modalData
 
-  const transaction = useMemo(() => api?.tx.referendum.revealVote(vote.salt, createType('MemberId', parseInt(vote.optionId))), [vote.salt, vote.optionId])
+  const transaction = useMemo(
+    () => api?.tx.referendum.revealVote(vote.salt, createType('MemberId', parseInt(vote.optionId))),
+    [vote.salt, vote.optionId]
+  )
   const feeInfo = useTransactionFee(vote.accountId, transaction)
 
   useEffect(() => {
@@ -32,11 +35,11 @@ export const RevealVoteModal = () => {
   }, [state.value, feeInfo?.canAfford])
 
   if (state.matches('success')) {
-    // return <RevealVoteSuccessModal />
+    return <RevealVoteSuccessModal />
   } else if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem casting your vote.
+        There was a problem revealing your vote.
       </FailureModal>
     )
   }
@@ -46,13 +49,7 @@ export const RevealVoteModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={vote.accountId}
-        amount={feeInfo.transactionFee}
-      />
-    )
+    return <InsufficientFundsModal onClose={hideModal} address={vote.accountId} amount={feeInfo.transactionFee} />
   } else if (state.matches('transaction')) {
     return <RevealVoteSignModal service={state.children.transaction} transaction={transaction} />
   }

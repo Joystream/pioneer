@@ -1,4 +1,4 @@
-import { ModalWithDataCall } from '@/common/providers/modal/types';
-import { VotingAttempt } from '@/council/hooks/useCommitment';
+import { ModalWithDataCall } from '@/common/providers/modal/types'
+import { VotingAttempt } from '@/council/hooks/useCommitment'
 
-export type RevealVoteModalCall = ModalWithDataCall<'VoteForCouncil', { vote: VotingAttempt, voteForHandle: string }>
+export type RevealVoteModalCall = ModalWithDataCall<'VoteForCouncil', { vote: VotingAttempt; voteForHandle: string }>

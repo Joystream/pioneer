@@ -1,7 +1,11 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import React from 'react'
 import { ActorRef, State } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
@@ -13,22 +17,21 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'
 import { TransactionContext } from '@/proposals/modals/AddNewProposal/machine'
-import { RevealVoteModalCall } from '.'
-import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { ISubmittableResult } from '@polkadot/types/types'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 
+import { RevealVoteModalCall } from '.'
 
 interface Props {
   service: ActorRef<TransactionEvent, State<TransactionContext>>
-  transaction: SubmittableExtrinsic<"rxjs", ISubmittableResult>
+  transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
 export const RevealVoteSignModal = ({ service, transaction }: Props) => {
   const { hideModal, modalData } = useModal<RevealVoteModalCall>()
   const { allAccounts } = useMyAccounts()
-  const { vote: { accountId }, voteForHandle } = modalData
+  const {
+    vote: { accountId },
+    voteForHandle,
+  } = modalData
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
     service,
@@ -61,7 +64,7 @@ export const RevealVoteSignModal = ({ service, transaction }: Props) => {
         </TransactionInfoContainer>
 
         <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-          Sign and send
+          Sign and reveal
           <Arrow direction="right" />
         </ButtonPrimary>
       </ModalFooter>
