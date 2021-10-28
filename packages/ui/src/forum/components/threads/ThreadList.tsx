@@ -1,30 +1,23 @@
-import React, { FC, memo, useCallback, useMemo, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
+import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
-import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
+import { GetSortProps } from '@/common/hooks/useSort'
 import { ThreadsColLayout } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 
 import { ThreadListItem } from './ThreadListItem'
 
-type ThreadOrderKey = 'CreatedAt' | 'UpdatedAt' | 'Author' | 'Title'
-
-export interface ThreadOrder {
-  key: ThreadOrderKey
-  isDescending?: boolean
-}
-
-export const ThreadDefaultOrder: ThreadOrder = { key: 'UpdatedAt' }
-
 interface ThreadListProps {
   threads: ForumThread[]
-  onSort: (order: ThreadOrder) => void
+  getSortProps: GetSortProps<ForumThreadOrderByInput>
   page?: number
   pageCount?: number
   setPage?: (page: number) => void
@@ -32,31 +25,15 @@ interface ThreadListProps {
   isArchive?: boolean
 }
 
-export const ThreadList = ({ threads, onSort, isLoading, isArchive, page, pageCount, setPage }: ThreadListProps) => {
-  const [order, setOrder] = useState(ThreadDefaultOrder)
-
-  const sort = useCallback(
-    (key: ThreadOrderKey) => {
-      const next: ThreadOrder = { key, isDescending: order.key === key && !order.isDescending }
-      setOrder(next)
-      onSort?.(next)
-    },
-    [order, setOrder, onSort]
-  )
-
-  const SortHeader = useMemo<FC<{ value: ThreadOrderKey }>>(
-    () =>
-      memo(({ value, children }) => (
-        <ListHeader onClick={() => sort(value)}>
-          <HeaderText>
-            {children}
-            {order.key === value && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
-          </HeaderText>
-        </ListHeader>
-      )),
-    [order, sort]
-  )
-
+export const ThreadList = ({
+  threads,
+  getSortProps,
+  isLoading,
+  isArchive,
+  page,
+  pageCount,
+  setPage,
+}: ThreadListProps) => {
   if (threads.length <= 0 && !isLoading) {
     return <NotFoundText>No threads found</NotFoundText>
   }
@@ -64,11 +41,15 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive, page, pageCo
   return (
     <ThreadListStyles gap={4}>
       <ListHeaders $colLayout={ThreadsColLayout}>
-        <SortHeader value="Title">Threads</SortHeader>
+        <SortHeader {...getSortProps('title')}>Threads</SortHeader>
         <ListHeader>Replies</ListHeader>
-        <SortHeader value="UpdatedAt">Last Activity</SortHeader>
-        <SortHeader value="Author">Author</SortHeader>
-        {isArchive ? <ListHeader>Archived</ListHeader> : <SortHeader value="CreatedAt">Created</SortHeader>}
+        <SortHeader {...getSortProps('updatedAt')}>Last Activity</SortHeader>
+        <SortHeader {...getSortProps('author')}>Author</SortHeader>
+        {isArchive ? (
+          <ListHeader>Archived</ListHeader>
+        ) : (
+          <SortHeader {...getSortProps('createdAt')}>Created</SortHeader>
+        )}
       </ListHeaders>
 
       {isLoading ? (

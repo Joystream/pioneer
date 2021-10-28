@@ -6,6 +6,7 @@ import { asMember, Member } from '@/memberships/types'
 import { CastVoteFieldsFragment } from '../queries'
 
 export interface Vote {
+  id: string
   stake: BN
   stakeLocked: boolean
   castBy: Address
@@ -14,6 +15,7 @@ export interface Vote {
 }
 
 export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
+  id: fields.id,
   stake: new BN(fields.stake),
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,

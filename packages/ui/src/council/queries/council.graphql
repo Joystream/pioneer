@@ -70,6 +70,7 @@ fragment PastElectionRoundDetailedFields on ElectionRound {
     ...ElectionCandidateFields
   }
   castVotes {
+    id
     stake
     stakeLocked
     voteForId
@@ -88,6 +89,7 @@ fragment ElectionCandidateDetailedFields on Candidate {
 }
 
 fragment CastVoteFields on CastVote {
+  id
   stake
   stakeLocked
   castBy
@@ -128,13 +130,6 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
-  }
-}
-
-query GetCouncilBlockRange($id: ID!) {
-  electedCouncilByUniqueInput(where: { id: $id }) {
-    electedAtBlock
-    endedAtBlock
   }
 }
 
@@ -194,6 +189,7 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
 
 query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
   castVotes(where: $where, orderBy: $orderBy) {
+    id
     commitment
   }
 }
@@ -222,5 +218,37 @@ query GetPastVotesResults($myAccounts: [String!]) {
     electionRound {
       id
     }
+  }
+}
+
+query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
+  electedCouncilByUniqueInput(where: $where) {
+    electedAtBlock
+    endedAtBlock
+  }
+}
+
+query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
+  approved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+    totalCount
+  }
+  ## Rejected + Slashed could be fetched using `isTypeOf_in: []` but it is not supported by Hydra now
+  rejected: proposalDecisionMadeEventsConnection(
+    where: {
+      inBlock_gt: $startBlock
+      inBlock_lt: $endBlock
+      decisionStatus_json: { isTypeOf_eq: "ProposalStatusRejected" }
+    }
+  ) {
+    totalCount
+  }
+  slashed: proposalDecisionMadeEventsConnection(
+    where: {
+      inBlock_gt: $startBlock
+      inBlock_lt: $endBlock
+      decisionStatus_json: { isTypeOf_eq: "ProposalStatusSlashed" }
+    }
+  ) {
+    totalCount
   }
 }

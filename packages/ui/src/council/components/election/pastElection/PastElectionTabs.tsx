@@ -54,6 +54,7 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
             totalStake: election.totalStake,
             votes: votingResult.votes.length,
             index: index + 1,
+            myVotes: [],
           }
         })}
       />

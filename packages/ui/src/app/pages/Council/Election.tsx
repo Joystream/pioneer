@@ -12,6 +12,7 @@ import { camelCaseToText } from '@/common/helpers'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
+import { RevealingStage } from '@/council/components/election/revealing/RevealingStage'
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
@@ -67,6 +68,7 @@ export const Election = () => {
       </Statistics>
       {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
       {electionStage === 'voting' && <VotingStage election={election} isLoading={isLoadingElection} />}
+      {electionStage === 'revealing' && <RevealingStage election={election} isLoading={isLoadingElection} />}
     </MainPanel>
   )
 

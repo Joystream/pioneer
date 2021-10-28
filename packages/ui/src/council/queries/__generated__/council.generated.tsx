@@ -191,6 +191,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
+    id: string
     stake: any
     stakeLocked: boolean
     voteForId?: string | null | undefined
@@ -235,6 +236,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
 
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
+  id: string
   stake: any
   stakeLocked: boolean
   castBy: string
@@ -346,18 +348,6 @@ export type GetPastCouncilQuery = {
     amount: any
     type?: Types.EventTypeOptions | null | undefined
   }>
-}
-
-export type GetCouncilBlockRangeQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
-}>
-
-export type GetCouncilBlockRangeQuery = {
-  __typename: 'Query'
-  electedCouncilByUniqueInput?:
-    | { __typename: 'ElectedCouncil'; electedAtBlock: number; endedAtBlock?: number | null | undefined }
-    | null
-    | undefined
 }
 
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -475,6 +465,7 @@ export type GetPastElectionQuery = {
         }>
         castVotes: Array<{
           __typename: 'CastVote'
+          id: string
           stake: any
           stakeLocked: boolean
           voteForId?: string | null | undefined
@@ -563,6 +554,7 @@ export type GetCouncilVotesQuery = {
   __typename: 'Query'
   castVotes: Array<{
     __typename: 'CastVote'
+    id: string
     stake: any
     stakeLocked: boolean
     castBy: string
@@ -603,7 +595,7 @@ export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
 
 export type GetCouncilVotesCommitmentsQuery = {
   __typename: 'Query'
-  castVotes: Array<{ __typename: 'CastVote'; commitment: string }>
+  castVotes: Array<{ __typename: 'CastVote'; id: string; commitment: string }>
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
@@ -634,6 +626,30 @@ export type GetPastVotesResultsQuery = {
     voteFor?: { __typename: 'Membership'; id: string } | null | undefined
     electionRound: { __typename: 'ElectionRound'; id: string }
   }>
+}
+
+export type GetCouncilBlockRangeQueryVariables = Types.Exact<{
+  where: Types.ElectedCouncilWhereUniqueInput
+}>
+
+export type GetCouncilBlockRangeQuery = {
+  __typename: 'Query'
+  electedCouncilByUniqueInput?:
+    | { __typename: 'ElectedCouncil'; electedAtBlock: number; endedAtBlock?: number | null | undefined }
+    | null
+    | undefined
+}
+
+export type GetCouncilProposalsStatsQueryVariables = Types.Exact<{
+  startBlock: Types.Scalars['Int']
+  endBlock: Types.Scalars['Int']
+}>
+
+export type GetCouncilProposalsStatsQuery = {
+  __typename: 'Query'
+  approved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
+  rejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  slashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
 }
 
 export const CouncilMemberFieldsFragmentDoc = gql`
@@ -721,6 +737,7 @@ export const PastElectionRoundDetailedFieldsFragmentDoc = gql`
       ...ElectionCandidateFields
     }
     castVotes {
+      id
       stake
       stakeLocked
       voteForId
@@ -744,6 +761,7 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 `
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
+    id
     stake
     stakeLocked
     castBy
@@ -939,55 +957,6 @@ export function useGetPastCouncilLazyQuery(
 export type GetPastCouncilQueryHookResult = ReturnType<typeof useGetPastCouncilQuery>
 export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCouncilLazyQuery>
 export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
-export const GetCouncilBlockRangeDocument = gql`
-  query GetCouncilBlockRange($id: ID!) {
-    electedCouncilByUniqueInput(where: { id: $id }) {
-      electedAtBlock
-      endedAtBlock
-    }
-  }
-`
-
-/**
- * __useGetCouncilBlockRangeQuery__
- *
- * To run a query within a React component, call `useGetCouncilBlockRangeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCouncilBlockRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCouncilBlockRangeQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetCouncilBlockRangeQuery(
-  baseOptions: Apollo.QueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
-    GetCouncilBlockRangeDocument,
-    options
-  )
-}
-export function useGetCouncilBlockRangeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
-    GetCouncilBlockRangeDocument,
-    options
-  )
-}
-export type GetCouncilBlockRangeQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeQuery>
-export type GetCouncilBlockRangeLazyQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeLazyQuery>
-export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
-  GetCouncilBlockRangeQuery,
-  GetCouncilBlockRangeQueryVariables
->
 export const GetCurrentElectionDocument = gql`
   query GetCurrentElection {
     electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
@@ -1342,6 +1311,7 @@ export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery
 export const GetCouncilVotesCommitmentsDocument = gql`
   query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
     castVotes(where: $where, orderBy: $orderBy) {
+      id
       commitment
     }
   }
@@ -1498,4 +1468,120 @@ export type GetPastVotesResultsLazyQueryHookResult = ReturnType<typeof useGetPas
 export type GetPastVotesResultsQueryResult = Apollo.QueryResult<
   GetPastVotesResultsQuery,
   GetPastVotesResultsQueryVariables
+>
+export const GetCouncilBlockRangeDocument = gql`
+  query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
+    electedCouncilByUniqueInput(where: $where) {
+      electedAtBlock
+      endedAtBlock
+    }
+  }
+`
+
+/**
+ * __useGetCouncilBlockRangeQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilBlockRangeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilBlockRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilBlockRangeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetCouncilBlockRangeQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
+    GetCouncilBlockRangeDocument,
+    options
+  )
+}
+export function useGetCouncilBlockRangeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilBlockRangeQuery, GetCouncilBlockRangeQueryVariables>(
+    GetCouncilBlockRangeDocument,
+    options
+  )
+}
+export type GetCouncilBlockRangeQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeQuery>
+export type GetCouncilBlockRangeLazyQueryHookResult = ReturnType<typeof useGetCouncilBlockRangeLazyQuery>
+export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
+  GetCouncilBlockRangeQuery,
+  GetCouncilBlockRangeQueryVariables
+>
+export const GetCouncilProposalsStatsDocument = gql`
+  query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
+    approved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+      totalCount
+    }
+    rejected: proposalDecisionMadeEventsConnection(
+      where: {
+        inBlock_gt: $startBlock
+        inBlock_lt: $endBlock
+        decisionStatus_json: { isTypeOf_eq: "ProposalStatusRejected" }
+      }
+    ) {
+      totalCount
+    }
+    slashed: proposalDecisionMadeEventsConnection(
+      where: {
+        inBlock_gt: $startBlock
+        inBlock_lt: $endBlock
+        decisionStatus_json: { isTypeOf_eq: "ProposalStatusSlashed" }
+      }
+    ) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetCouncilProposalsStatsQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilProposalsStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilProposalsStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilProposalsStatsQuery({
+ *   variables: {
+ *      startBlock: // value for 'startBlock'
+ *      endBlock: // value for 'endBlock'
+ *   },
+ * });
+ */
+export function useGetCouncilProposalsStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>(
+    GetCouncilProposalsStatsDocument,
+    options
+  )
+}
+export function useGetCouncilProposalsStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>(
+    GetCouncilProposalsStatsDocument,
+    options
+  )
+}
+export type GetCouncilProposalsStatsQueryHookResult = ReturnType<typeof useGetCouncilProposalsStatsQuery>
+export type GetCouncilProposalsStatsLazyQueryHookResult = ReturnType<typeof useGetCouncilProposalsStatsLazyQuery>
+export type GetCouncilProposalsStatsQueryResult = Apollo.QueryResult<
+  GetCouncilProposalsStatsQuery,
+  GetCouncilProposalsStatsQueryVariables
 >

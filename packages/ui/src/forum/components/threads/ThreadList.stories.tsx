@@ -2,7 +2,9 @@ import { Meta, Story } from '@storybook/react'
 import React, { useMemo } from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { Loading } from '@/common/components/Loading'
+import { useSort } from '@/common/hooks/useSort'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
@@ -29,7 +31,7 @@ const forumThread: ForumThreadWithDetails = {
   status: { __typename: 'ThreadStatusActive' },
 }
 
-const Template: Story = ({ onSort, isArchive }) => {
+const Template: Story = ({ isArchive }) => {
   const threads = useMemo(
     () =>
       Array.from({ length: 5 }).map((_, index) => ({
@@ -41,10 +43,12 @@ const Template: Story = ({ onSort, isArchive }) => {
     []
   )
 
+  const { getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
+
   return (
     <MockApolloProvider members workers forum>
       <MemoryRouter>
-        {threads ? <ThreadList threads={threads} onSort={onSort} isArchive={isArchive} /> : <Loading />}
+        {threads ? <ThreadList threads={threads} getSortProps={getSortProps} isArchive={isArchive} /> : <Loading />}
       </MemoryRouter>
     </MockApolloProvider>
   )

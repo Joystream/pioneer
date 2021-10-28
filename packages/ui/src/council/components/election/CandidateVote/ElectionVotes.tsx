@@ -27,13 +27,13 @@ export const ElectionVotes = ({ election }: Props) => {
     <CandidateVoteList
       votes={votesPerCandidate.map((candidateStats, index) => ({
         candidateId: candidateStats.candidate.id,
-        revealed: true,
         index: index + 1,
         member: candidateStats.candidate.member,
         sumOfAllStakes: candidateStats.totalStake,
         totalStake: totalStake ?? BN_ZERO,
         votes: candidateStats.votesNumber,
         ownStake: candidateStats.ownStake,
+        myVotes: candidateStats.myVotes,
       }))}
     />
   )

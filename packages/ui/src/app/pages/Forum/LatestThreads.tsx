@@ -20,7 +20,16 @@ export const LatestThreads = () => {
           <ForumForumTabs />
         </ForumPageHeader>
       }
-      main={isLoading ? <Loading /> : <ThreadList threads={threads} onSort={() => null} />}
+      main={
+        isLoading ? (
+          <Loading />
+        ) : (
+          <ThreadList
+            threads={threads}
+            getSortProps={() => ({ isActive: false, onSort: () => undefined, isDescending: false })}
+          />
+        )
+      }
     />
   )
 }

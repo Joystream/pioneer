@@ -12,6 +12,11 @@ export interface VotingAttempt {
   optionId: string
 }
 
+export interface MyCastVote extends VotingAttempt {
+  voteId?: string
+  isRevelaed: boolean
+}
+
 export const useCommitment = (accountId: string, candidateId: string) => {
   const { candidate } = useCandidate(candidateId)
 

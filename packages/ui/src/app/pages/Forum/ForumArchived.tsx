@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { useSort } from '@/common/hooks/useSort'
 import { ForumCategoryList } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
@@ -17,13 +19,14 @@ import { ForumTabs } from './components/ForumTabs'
 
 export const ForumArchived = () => {
   const [page, setPage] = useState<number>(1)
+  const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchive: true })
   const {
     isLoading: isLoadingThreads,
     threads,
     threadCount,
     refresh,
-  } = useForumCategoryThreads({ isArchive: true }, { perPage: THREADS_PER_PAGE, page })
+  } = useForumCategoryThreads({ isArchive: true, order }, { perPage: THREADS_PER_PAGE, page })
 
   return (
     <PageLayout
@@ -53,7 +56,7 @@ export const ForumArchived = () => {
 
             <ThreadList
               threads={threads}
-              onSort={(order) => refresh({ order })}
+              getSortProps={getSortProps}
               isLoading={isLoadingThreads}
               isArchive
               page={page}

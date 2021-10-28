@@ -1,39 +1,25 @@
 import { useMemo } from 'react'
 
 import { WorkerOrderByInput } from '@/common/api/queries'
+import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { UseWorkersProps } from '@/working-groups/hooks/useWorkers'
 import { useGetPastWorkersQuery, useGetWorkersCountQuery } from '@/working-groups/queries'
 import { asPastWorker } from '@/working-groups/types'
 
 export const WORKERS_PER_PAGE = 10
 
-export type WorkersOrderKey = 'DateStarted' | 'DateFinished'
-
 interface UsePastWorkersPaginationProps extends UseWorkersProps {
   page?: number
-  orderKey: WorkersOrderKey
-  isDescending: boolean
+  order: SortOrder<WorkerOrderByInput>
 }
 
-const getOrderBy = (key: WorkersOrderKey, isDescending: boolean) => {
-  if (key === 'DateFinished') {
-    return isDescending ? WorkerOrderByInput.UpdatedAtDesc : WorkerOrderByInput.RuntimeIdAsc
-  }
-  return isDescending ? WorkerOrderByInput.CreatedAtDesc : WorkerOrderByInput.CreatedAtAsc
-}
-
-export const usePastWorkersPagination = ({
-  groupId: group_eq,
-  page = 1,
-  orderKey,
-  isDescending,
-}: UsePastWorkersPaginationProps) => {
+export const usePastWorkersPagination = ({ groupId: group_eq, page = 1, order }: UsePastWorkersPaginationProps) => {
   const variables = {
     where: {
       group: { id_eq: group_eq },
       status_json: { isTypeOf_not: 'WorkerStatusActive' },
     },
-    orderBy: [getOrderBy(orderKey, isDescending)],
+    orderBy: [toQueryOrderByInput<WorkerOrderByInput>(order)],
     limit: WORKERS_PER_PAGE,
     offset: (page - 1) * WORKERS_PER_PAGE,
   }
