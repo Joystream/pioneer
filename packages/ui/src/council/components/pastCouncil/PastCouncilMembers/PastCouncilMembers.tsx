@@ -20,7 +20,7 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
 
   return (
     <RowGapBlock gap={4}>
-      <ListHeaders $colLayout="276px 128px 128px 128px 128px 104px">
+      <ListHeaders $colLayout={PastCouncilMembersLayout}>
         <ListHeader>Council member</ListHeader>
         <ListHeader>Proposals approved</ListHeader>
         <ListHeader>Proposals rejected</ListHeader>
@@ -37,3 +37,5 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
     </RowGapBlock>
   )
 }
+
+export const PastCouncilMembersLayout = '276px repeat(4, 128px) 104px'
