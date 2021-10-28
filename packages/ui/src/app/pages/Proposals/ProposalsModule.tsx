@@ -13,9 +13,9 @@ export const ProposalsModule = () => {
       <Route exact path={ProposalsRoutes.current} component={Proposals} />
       <Route exact path={ProposalsRoutes.past} component={PastProposals} />
       <Route exact path={ProposalsRoutes.myproposals} />
-      <Route exact path={`${ProposalsRoutes.preview}/:id/vote/:voteId`} component={ProposalPreview} />
-      <Route exact path={`${ProposalsRoutes.preview}/:id/post/:postId`} component={ProposalPreview} />
-      <Route exact path={`${ProposalsRoutes.preview}/:id`} component={ProposalPreview} />
+      <Route exact path={`${ProposalsRoutes.preview}/vote/:voteId`} component={ProposalPreview} />
+      <Route exact path={`${ProposalsRoutes.preview}/post/:postId`} component={ProposalPreview} />
+      <Route exact path={`${ProposalsRoutes.preview}`} component={ProposalPreview} />
     </Switch>
   )
 }
