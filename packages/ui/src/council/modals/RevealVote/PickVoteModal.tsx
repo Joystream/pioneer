@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { AccountItem } from '@/app/pages/Profile/components/AccountItem'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -27,7 +27,7 @@ export const PickVoteModal = ({ votes, send }: Props) => {
         <AccountsList>
           {votes.map((vote) => (
             <AccountOptionItem key={vote.accountId} onClick={() => send('PICKED', { vote })}>
-              <AccountItem account={accountOrNamed(allAccounts, vote.accountId, 'Account')} />
+              <AccountInfo account={accountOrNamed(allAccounts, vote.accountId, 'Account')} />
             </AccountOptionItem>
           ))}
         </AccountsList>
@@ -49,4 +49,9 @@ const AccountsList = styled.ul<{ memberIndicatorOffset?: string }>`
 const AccountOptionItem = styled.li`
   display: grid;
   position: relative;
+  margin: 8px;
+  width: 100%;
+  &:hover {
+    cursor: pointer;
+  }
 `
