@@ -4,17 +4,20 @@ import styled from 'styled-components'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
-import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { List, ListItem, TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { camelCaseToText, capitalizeFirstLetter } from '@/common/helpers'
 import { toDDMMYY } from '@/common/utils/dates'
+import { PastCouncilMembersLayout } from '@/council/components/pastCouncil/PastCouncilMembers/PastCouncilMembers'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
 import { CountInfo } from '@/memberships/components/MemberListItem/Fileds'
+import { StageField } from '@/proposals/components/ProposalList/ProposalListItem'
 import { isProposalActive } from '@/proposals/model/proposalStatus'
 import {
   ToggleableItemInfo,
@@ -26,14 +29,12 @@ interface Props {
   councilMember: PastCouncilMember
 }
 
-const CouncilMembersLayout = '2fr 1fr 1fr 2fr'
-
 export const PastCouncilMembersItem = ({ councilMember }: Props) => {
   const [isDropped, setDropped] = useState(false)
 
   return (
     <PastCouncilMemberWrapper onClick={() => setDropped(!isDropped)} isDropped={isDropped}>
-      <PastCouncilMemberWrap>
+      <PastCouncilMemberWrap $colLayout={PastCouncilMembersLayout}>
         <MemberInfo member={councilMember.member} />
         <CountInfo count={councilMember.approvedProposals} />
         <CountInfo count={councilMember.rejectedProposals} />
@@ -45,9 +46,10 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
       </PastCouncilMemberWrap>
       <StyledDropDown isDropped={isDropped}>
         <RowGapBlock gap={4}>
-          <PastCouncilMemberHeaders $colLayout={CouncilMembersLayout}>
+          <PastCouncilMemberHeaders $colLayout={PastCouncilMemberProposalsLayout}>
             <PastCouncilListHeader>Proposal</PastCouncilListHeader>
             <PastCouncilListHeader>Stage</PastCouncilListHeader>
+            <PastCouncilListHeader>Proposer</PastCouncilListHeader>
             <PastCouncilListHeader>Vote</PastCouncilListHeader>
           </PastCouncilMemberHeaders>
           <List>
@@ -60,23 +62,27 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
 
               return (
                 <ListItem key={proposalVote.proposal.id}>
-                  <PastCouncilMemberWrapper>
-                    <PastCouncilProposalWrap>
-                      <ToggleableItemInfo>
-                        <ToggleableItemInfoTop>
-                          <Subscription>
-                            {!isProposalActive(proposalVote.proposal.status) ? 'Ended at:' : 'Created at:'}{' '}
-                            {toDDMMYY(displayDate)}
-                          </Subscription>
-                          <BadgeStatus>{camelCaseToText(proposalVote.proposal.type)}</BadgeStatus>
-                        </ToggleableItemInfoTop>
-                        <ToggleableItemTitle>{proposalVote.proposal.title}</ToggleableItemTitle>
-                      </ToggleableItemInfo>
-                      <TextMedium bold>{camelCaseToText(proposalVote.proposal.status)}</TextMedium>
-                      <TextMedium bold>{capitalizeFirstLetter(proposalVote.voteStatus)}</TextMedium>
-                      <ButtonGhost size="medium">Proposal details</ButtonGhost>
-                    </PastCouncilProposalWrap>
-                  </PastCouncilMemberWrapper>
+                  <PastCouncilProposalWrap>
+                    <ToggleableItemInfo>
+                      <ToggleableItemInfoTop>
+                        <Subscription>
+                          {!isProposalActive(proposalVote.proposal.status) ? 'Ended at:' : 'Created at:'}{' '}
+                          {toDDMMYY(displayDate)}
+                        </Subscription>
+                        <BadgeStatus>{camelCaseToText(proposalVote.proposal.type)}</BadgeStatus>
+                      </ToggleableItemInfoTop>
+                      <ToggleableItemTitle>{proposalVote.proposal.title}</ToggleableItemTitle>
+                    </ToggleableItemInfo>
+                    <StageField>
+                      <TextSmall bold>{camelCaseToText(proposalVote.proposal.status)}</TextSmall>
+                      <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
+                        <TooltipDefault />
+                      </Tooltip>
+                    </StageField>
+                    <MemberInfo member={proposalVote.proposal.proposer} memberSize="s" />
+                    <TextMedium bold>{capitalizeFirstLetter(proposalVote.voteStatus)}</TextMedium>
+                    <ButtonGhost size="medium">Proposal details</ButtonGhost>
+                  </PastCouncilProposalWrap>
                 </ListItem>
               )
             })}
@@ -86,6 +92,8 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
     </PastCouncilMemberWrapper>
   )
 }
+
+const PastCouncilMemberProposalsLayout = '2fr repeat(4, 1fr)'
 
 const PastCouncilMemberWrapper = styled.div<{ isDropped?: boolean }>`
   display: flex;
@@ -100,36 +108,10 @@ const PastCouncilMemberWrapper = styled.div<{ isDropped?: boolean }>`
   ${TableListItemAsLinkHover}
 `
 
-export const PastCouncilProposalWrap = styled.div`
-  display: grid;
-  grid-template-columns: ${CouncilMembersLayout};
-  grid-template-rows: 1fr;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+export const PastCouncilMemberWrap = styled(TableListItem)`
   height: ${Sizes.accountHeight};
-  padding: 16px;
-  margin-left: -1px;
-
-  > *:last-child {
-    justify-self: end;
-  }
-`
-
-export const PastCouncilMemberWrap = styled.div`
-  display: grid;
-  grid-template-columns: 276px repeat(4, 128px) 104px;
-  grid-template-rows: 1fr;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: ${Sizes.accountHeight};
-  padding: 16px 8px 16px 16px;
-  margin-left: -1px;
-
-  > *:last-child {
-    justify-self: end;
-  }
+  grid-column-gap: 24px;
+  margin-top: -1px;
 `
 
 const PastCouncilMemberControls = styled.div`
@@ -150,5 +132,21 @@ const PastCouncilListHeader = styled(ListHeader)`
     position: static;
     justify-content: flex-start;
     text-align: left;
+  }
+`
+
+export const PastCouncilProposalWrap = styled.div`
+  display: grid;
+  grid-template-columns: ${PastCouncilMemberProposalsLayout};
+  grid-template-rows: 1fr;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: ${Sizes.accountHeight};
+  padding: 16px;
+  margin-left: -1px;
+
+  > *:last-child {
+    justify-self: end;
   }
 `

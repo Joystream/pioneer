@@ -70,7 +70,7 @@ const ProposalItem = styled(TableListItem)`
   height: 86px;
 `
 
-const StageField = styled.div`
+export const StageField = styled.div`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
