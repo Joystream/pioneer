@@ -24,13 +24,16 @@ export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil =>
   endedAtBlock: fields.endedAtBlock as number,
 })
 
+export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment[]) =>
+  spendingEvents.reduce((a, b) => a.addn(b.amount), BN_ZERO)
+
 export const asPastCouncilWithDetails = (
   councilFields: PastCouncilDetailedFieldsFragment,
   spendingEvents: CouncilSpendingEventFieldsFragment[]
 ): PastCouncilWithDetails => {
   return {
     ...asPastCouncil(councilFields),
-    totalSpent: spendingEvents.reduce((a, b) => a.addn(b.amount), BN_ZERO),
+    totalSpent: getTotalSpent(spendingEvents),
     totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
     totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
     totalSpentOnProposals: BN_ZERO,
