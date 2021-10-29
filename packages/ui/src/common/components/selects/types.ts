@@ -2,7 +2,7 @@ import { KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react'
 
 import { ControlProps } from '../forms'
 
-export interface SelectProps<T, V> {
+export interface SelectProps<T, V = T> {
   id?: string
   disabled?: boolean
   placeholder: string

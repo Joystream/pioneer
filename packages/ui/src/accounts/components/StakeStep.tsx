@@ -73,6 +73,7 @@ export const StakeStep = ({
           {accountText}
           <InputComponent label="Select account for Staking" required inputSize="l">
             <SelectAccount
+              id="account-select"
               onChange={(account) => changeField('account', account)}
               selected={fields.account}
               minBalance={minStake}

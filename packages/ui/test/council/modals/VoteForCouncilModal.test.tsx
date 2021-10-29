@@ -1,6 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { configure, findByText, fireEvent, queryByText, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -13,10 +14,15 @@ import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedCouncilCandidates, seedCouncilElections, seedElectedCouncils, seedMembers } from '@/mocks/data'
+import {
+  seedCouncilCandidates,
+  seedCouncilElections,
+  seedCouncilVotes,
+  seedElectedCouncils,
+  seedMembers,
+} from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
-import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -58,19 +64,45 @@ describe('UI: Vote for Council Modal', () => {
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
-  const fillStakeStep = async (value: number) => {
-    await selectFromDropdown('Select account for Staking', 'alice')
-    const input = await screen.findByLabelText(/Select amount for staking/i)
-    fireEvent.change(input, { target: { value } })
+  const openAccountSelector = async () => {
+    const accountSelector = await screen.findByTestId('account-select')
+    act(() => {
+      fireEvent.click(accountSelector.children[0])
+    })
+    return accountSelector
   }
+
+  const selectAlice = async () => {
+    const accountSelector = await openAccountSelector()
+    const alice = await waitFor(() => findByText(accountSelector, 'alice'))
+    act(() => {
+      fireEvent.click(alice)
+    })
+  }
+  const fillStakeStep = async (value: number) => {
+    await selectAlice()
+    const input = await screen.findByLabelText(/Select amount for staking/i)
+    act(() => {
+      fireEvent.change(input, { target: { value } })
+    })
+  }
+
   const getNextStepButton = () => getButton(/Next step/i)
+
+  const resetVotes = (castBy = '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU') => {
+    seedCouncilVotes(server.server, [
+      { id: '0', electionRoundId: '0', voteForId: null, castBy },
+      { id: '1', electionRoundId: '1', voteForId: null, castBy: alice.address },
+    ])
+  }
 
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
-    seedElectedCouncils(server.server, 1)
-    seedCouncilElections(server.server, 1)
+    seedElectedCouncils(server.server, 2)
+    seedCouncilElections(server.server, 2)
     seedCouncilCandidates(server.server, [{ memberId: '0' }])
+    resetVotes()
 
     useAccounts = {
       hasAccounts: true,
@@ -122,9 +154,32 @@ describe('UI: Vote for Council Modal', () => {
     it('Too low stake', async () => {
       renderModal()
 
-      fillStakeStep(50)
+      await fillStakeStep(50)
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
+    })
+
+    describe('Staking Accounts Filter', () => {
+      afterAll(resetVotes)
+
+      it('My account have not voted this round', async () => {
+        renderModal()
+
+        const accountSelector = await openAccountSelector()
+        await waitFor(() => findByText(accountSelector, 'bob'))
+
+        expect(await findByText(accountSelector, 'alice')).not.toBeNull()
+      })
+
+      it('One of my account has voted', async () => {
+        resetVotes(alice.address) // Alice casts a vote here
+        renderModal()
+
+        const accountSelector = await openAccountSelector()
+        await waitFor(() => findByText(accountSelector, 'bob'))
+
+        expect(queryByText(accountSelector, 'alice')).toBeNull()
+      })
     })
 
     it('Valid fields', async () => {

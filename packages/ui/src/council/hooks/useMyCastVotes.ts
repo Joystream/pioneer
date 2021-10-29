@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { isDefined } from '@/common/utils'
 import { useGetCouncilVotesLazyQuery } from '@/council/queries'
 import { asVote } from '@/council/types'
 
@@ -9,7 +10,7 @@ export const useMyCastVotes = (cycleId?: number) => {
   const [getVotes, { data, loading }] = useGetCouncilVotesLazyQuery()
 
   useEffect(() => {
-    if (cycleId) {
+    if (isDefined(cycleId)) {
       getVotes({
         variables: {
           where: {
