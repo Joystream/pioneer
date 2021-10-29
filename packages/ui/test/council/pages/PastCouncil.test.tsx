@@ -1,4 +1,4 @@
-import { configure, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
+import { configure, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
@@ -316,6 +316,23 @@ describe('UI: Past Council page', () => {
           expect(workingGroupsContainer.queryByText(/^Total paid rewards$/i)).not.toBeNull()
           expect(workingGroupsContainer.queryByText(/^Total missed rewards$/i)).not.toBeNull()
           expect(workingGroupsContainer.queryByText(/^% of total budget$/i)).not.toBeNull()
+        })
+
+        it('Working group data', async () => {
+          // todo change expected values when seeded
+          const { getByTestId } = await renderAndOpenTab('Working Groups')
+
+          const workingGroupItem = getByTestId('pastCouncil-workingGroups-item')?.children.item(0)
+
+          const workingGroupName = workingGroupItem?.children.item(0)?.textContent
+          const workingGroupPaidRewards = workingGroupItem?.children.item(1)?.textContent
+          const workingGroupMissedRewards = workingGroupItem?.children.item(2)?.textContent
+          const workingGroupBudgetPercentage = workingGroupItem?.children.item(3)?.textContent
+
+          expect(workingGroupName).toBe('Storage')
+          expect(workingGroupPaidRewards).toBe('1,300,000')
+          expect(workingGroupMissedRewards).toBe('1,300,000')
+          expect(workingGroupBudgetPercentage).toBe('30%')
         })
       })
     })

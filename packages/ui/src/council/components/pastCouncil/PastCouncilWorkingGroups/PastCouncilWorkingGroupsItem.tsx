@@ -13,7 +13,7 @@ interface Props {
 
 export const PastCouncilWorkingGroupsItem = ({ workingGroup }: Props) => {
   return (
-    <PastCouncilWorkingGroupWrapper>
+    <PastCouncilWorkingGroupWrapper id="pastCouncil-workingGroups-item">
       <PastCouncilWorkingGroupWrap $colLayout={PastCouncilWorkingGroupsLayout}>
         <TextMedium bold>{workingGroup.name}</TextMedium>
         <TokenValue value={1300000} />
@@ -28,7 +28,7 @@ const PastCouncilWorkingGroupWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: 1px solid ${Colors.Black[100]};
+  // border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   cursor: pointer;
   transition: ${Transitions.all};
