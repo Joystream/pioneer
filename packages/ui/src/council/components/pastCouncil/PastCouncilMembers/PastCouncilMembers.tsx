@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { List, ListItem } from '@/common/components/List'
+import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -27,11 +27,9 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
         <ListHeader>Proposals slashed</ListHeader>
         <ListHeader>Proposals abstained</ListHeader>
       </ListHeaders>
-      <List as="div">
+      <List>
         {councilMembers?.map((councilMember, index) => (
-          <ListItem key={index} borderless>
-            <PastCouncilMembersItem councilMember={councilMember} />
-          </ListItem>
+          <PastCouncilMembersItem councilMember={councilMember} key={index} />
         ))}
       </List>
     </RowGapBlock>
