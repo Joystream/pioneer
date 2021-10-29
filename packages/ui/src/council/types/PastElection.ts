@@ -3,12 +3,12 @@ import BN from 'bn.js'
 import { BN_ZERO } from '@/common/constants'
 import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
-import { asVote, Vote } from '@/council/types/Vote'
+import { asPastElectionVote, asVote, PastElectionVote, Vote } from '@/council/types/Vote'
 
 export interface ElectionVotingResult {
   candidate: ElectionCandidate
   totalStake: BN
-  votes: Vote[]
+  votes: PastElectionVote[]
 }
 
 export interface PastElection {
@@ -45,9 +45,9 @@ export const asPastElectionWithDetails = (
     votes: fields.castVotes
       .filter((castVote) => castVote.voteForId === candidate.member.id)
       .map((castVote) =>
-        asVote({
+        asPastElectionVote({
           ...castVote,
-          electionRound: { __typename: 'ElectionRound', cycleId: fields.cycleId },
+          electionRound: fields.cycleId,
         })
       ),
     totalStake: fields.castVotes

@@ -263,7 +263,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    id: string
     stake: any
     stakeLocked: boolean
     voteForId?: string | null | undefined
@@ -309,6 +308,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
   id: string
+  createdAt: any
   stake: any
   stakeLocked: boolean
   castBy: string
@@ -727,7 +727,6 @@ export type GetPastElectionQuery = {
         }>
         castVotes: Array<{
           __typename: 'CastVote'
-          id: string
           stake: any
           stakeLocked: boolean
           voteForId?: string | null | undefined
@@ -817,6 +816,7 @@ export type GetCouncilVotesQuery = {
   castVotes: Array<{
     __typename: 'CastVote'
     id: string
+    createdAt: any
     stake: any
     stakeLocked: boolean
     castBy: string
@@ -1009,7 +1009,6 @@ export const PastElectionRoundDetailedFieldsFragmentDoc = gql`
       ...ElectionCandidateFields
     }
     castVotes {
-      id
       stake
       stakeLocked
       voteForId
@@ -1034,6 +1033,7 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
     id
+    createdAt
     stake
     stakeLocked
     castBy

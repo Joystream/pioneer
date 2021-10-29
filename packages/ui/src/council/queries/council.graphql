@@ -78,7 +78,6 @@ fragment PastElectionRoundDetailedFields on ElectionRound {
     ...ElectionCandidateFields
   }
   castVotes {
-    id
     stake
     stakeLocked
     voteForId
@@ -98,6 +97,7 @@ fragment ElectionCandidateDetailedFields on Candidate {
 
 fragment CastVoteFields on CastVote {
   id
+  createdAt
   stake
   stakeLocked
   castBy
