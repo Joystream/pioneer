@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -22,6 +23,7 @@ describe('UI: RecoverVoteStakeModal', () => {
 
   const modalData = {
     address: alice.address,
+    stake: new BN(200000),
   }
 
   const useModal: UseModal<any> = {
@@ -55,7 +57,11 @@ describe('UI: RecoverVoteStakeModal', () => {
 
   it('Display transaction step', async () => {
     renderModal()
-    expect(await screen.findByText('You intend to recover your stake.')).toBeDefined()
+    expect((await screen.findByText(/You intend to recover/)).textContent).toEqual(
+      'You intend to recover 200,000 stake locks from account.'
+    )
+    expect(await screen.findByText('Alice Account')).toBeDefined()
+    expect((await screen.findByText('Amount:')).nextSibling?.textContent).toEqual('200,000')
   })
 
   it('Transaction failure', async () => {

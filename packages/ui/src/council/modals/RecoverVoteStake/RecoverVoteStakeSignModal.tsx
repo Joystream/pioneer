@@ -28,7 +28,7 @@ interface Props {
 export const RecoverVoteStakeSignModal = ({ service, transaction }: Props) => {
   const {
     hideModal,
-    modalData: { address },
+    modalData: { address, stake },
   } = useModal<RecoverVoteStakeModalCall>()
   const { allAccounts } = useMyAccounts()
 
@@ -41,7 +41,9 @@ export const RecoverVoteStakeSignModal = ({ service, transaction }: Props) => {
   return (
     <TransactionModal onClose={hideModal} service={service}>
       <ModalBody>
-        <TextMedium light>You intend to recover your stake.</TextMedium>
+        <TextMedium light>
+          You intend to recover <TokenValue value={stake} /> stake locks from account.
+        </TextMedium>
         <TextMedium light>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
@@ -53,6 +55,11 @@ export const RecoverVoteStakeSignModal = ({ service, transaction }: Props) => {
 
       <ModalFooter>
         <TransactionInfoContainer>
+          <TransactionInfo
+            title="Amount:"
+            value={stake}
+            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+          />
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
