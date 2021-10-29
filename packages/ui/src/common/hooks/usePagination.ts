@@ -7,7 +7,7 @@ export const usePagination = (perPage: number, totalCountPerPage: number, deps: 
     setPage(1)
   }, deps)
 
-  const pageCount = totalCountPerPage ? totalCountPerPage / perPage : 0
+  const pageCount = totalCountPerPage ? Math.ceil(totalCountPerPage / perPage) : 0
   const pagination = {
     pageCount: pageCount,
     handlePageChange: setPage,

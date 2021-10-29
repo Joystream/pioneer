@@ -23,6 +23,7 @@ const revealedArgs: PastVoteProps = {
   $colLayout: PastVoteColumns,
   vote: {
     id: '0',
+    createdAt: '2021-10-29T10:48:33.179Z',
     stake: new BN(10000000),
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
@@ -37,6 +38,7 @@ const unrevealedArgs: PastVoteProps = {
   $colLayout: PastVoteColumns,
   vote: {
     id: '0',
+    createdAt: '2021-10-29T10:48:33.179Z',
     stake: new BN(10000000),
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',

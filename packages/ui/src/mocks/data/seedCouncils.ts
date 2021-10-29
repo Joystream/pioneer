@@ -1,3 +1,5 @@
+import faker from 'faker'
+
 import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
@@ -89,7 +91,13 @@ export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCounci
   candidates.map((data) => seedCouncilCandidate(data, server))
 }
 
-export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => server.schema.create('CastVote', data)
+export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
+  const roundNumber = parseInt(data.electionRoundId)
+  return server.schema.create('CastVote', {
+    ...data,
+    createdAt: faker.date.recent(10, roundNumber == 4 ? undefined : faker.date.past(4 - roundNumber)).toISOString(),
+  })
+}
 
 export const seedCouncilVotes = (server: any) => {
   rawVotes.map((data) => seedCouncilVote(data, server))
