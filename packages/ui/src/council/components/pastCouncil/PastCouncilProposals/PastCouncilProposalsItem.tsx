@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
-import { TableListItem } from '@/common/components/List'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
