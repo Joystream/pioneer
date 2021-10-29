@@ -59,11 +59,6 @@ export const PastCouncilProposalsItem = ({ proposal, vote }: Props) => {
   )
 }
 
-export const PastCouncilMemberWrap = styled(TableListItem)`
-  height: ${Sizes.accountHeight};
-  grid-column-gap: 24px;
-`
-
 export const PastCouncilProposalWrap = styled.div<{ vote?: VoteStatus }>`
   display: grid;
   grid-template-columns: ${({ vote }) => (vote ? PastCouncilMemberProposalsLayout : PastCouncilProposalsLayout)};

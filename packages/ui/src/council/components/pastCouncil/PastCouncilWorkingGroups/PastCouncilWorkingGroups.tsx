@@ -40,7 +40,7 @@ export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
       </PastCouncilTabsHeaders>
       <List>
         {workingGroups?.map((workingGroup) => (
-          <ListItem key={workingGroup.id}>
+          <ListItem key={workingGroup.id} borderless>
             <PastCouncilWorkingGroupsItem workingGroup={{ name: 'Storage' }} />
           </ListItem>
         ))}
