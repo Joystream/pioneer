@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -8,9 +8,10 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { RecoverVoteStakeModal } from '@/council/modals/RecoverVoteStake'
 
+import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring/signers'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction } from '../../_mocks/transactions'
+import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
 
 describe('UI: RecoverVoteStakeModal', () => {
   const api = stubApi()
@@ -55,6 +56,22 @@ describe('UI: RecoverVoteStakeModal', () => {
   it('Display transaction step', async () => {
     renderModal()
     expect(await screen.findByText('You intend to recover your stake.')).toBeDefined()
+  })
+
+  it('Transaction failure', async () => {
+    stubTransactionFailure(tx)
+    renderModal()
+
+    fireEvent.click(await getButton('Sign and recover stake'))
+    expect(await screen.findByText('There was a problem recovering the vote stake.'))
+  })
+
+  it('Transaction success', async () => {
+    stubTransactionSuccess(tx, 'referendum', 'StakeReleased')
+    renderModal()
+
+    fireEvent.click(await getButton('Sign and recover stake'))
+    expect(await screen.findByText('Your stake amount was recovered successfully.'))
   })
 
   const renderModal = () =>
