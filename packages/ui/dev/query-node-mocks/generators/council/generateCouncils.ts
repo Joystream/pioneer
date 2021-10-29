@@ -1,7 +1,6 @@
 import faker from 'faker'
 
 import { Reducer } from '@/common/types/helpers'
-import { RawProposalVotedEventMock } from '@/mocks/data'
 import {
   RawCouncilCandidateMock,
   RawCouncilElectionMock,
@@ -9,8 +8,10 @@ import {
   RawCouncilorMock,
   RawCouncilVoteMock,
 } from '@/mocks/data/seedCouncils'
+import { RawNewMissedRewardLevelReachedEvent, RawProposalVotedEvent } from '@/mocks/data/seedEvents'
 
 import rawProposals from '../../../../src/mocks/data/raw/proposals.json'
+import rawWorkers from '../../../../src/mocks/data/raw/workers.json'
 import { saveFile } from '../../helpers/saveFile'
 import { memberAt, randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
@@ -29,6 +30,7 @@ export const generateCouncils = () => {
     candidates: [],
     votes: [],
     proposalVotedEvents: [],
+    newMissedRewardLevelReachedEvents: [],
   })
   Object.entries(data).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
@@ -39,11 +41,13 @@ interface CouncilData {
   electionRounds: RawCouncilElectionMock[]
   candidates: RawCouncilCandidateMock[]
   votes: RawCouncilVoteMock[]
-  proposalVotedEvents: RawProposalVotedEventMock[]
+  proposalVotedEvents: RawProposalVotedEvent[]
+  newMissedRewardLevelReachedEvents: RawNewMissedRewardLevelReachedEvent[]
 }
 
 const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
-  const proposalVotedEvents: RawProposalVotedEventMock[] = []
+  const proposalVotedEvents: RawProposalVotedEvent[] = []
+  const newMissedRewardLevelReachedEvents: RawNewMissedRewardLevelReachedEvent[] = []
   const isFinished = councilIndex !== COUNCILS - 1
   const hasEnded = councilIndex < COUNCILS - 2
 
@@ -105,6 +109,20 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
         votingRound: 1,
       })
     })
+
+    newMissedRewardLevelReachedEvents.push(
+      ...repeat((eventIndex) => {
+        const randomWorker = rawWorkers[randomFromRange(0, rawWorkers.length - 1)]
+
+        return {
+          id: `${council.id}-${eventIndex}`,
+          groupId: randomWorker.groupId,
+          workerId: randomWorker.id,
+          newMissedRewardAmount: randomFromRange(0, 10000),
+          ...{ ...randomBlock(), inBlock: randomFromRange(council.electedAtBlock, council.endedAtBlock as number) },
+        }
+      }, randomFromRange(2, 6))
+    )
   }
 
   const electionRound: RawCouncilElectionMock = {
@@ -139,6 +157,10 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     candidates: [...data.candidates, ...candidates],
     votes: [...data.votes, ...votes],
     proposalVotedEvents: [...data.proposalVotedEvents, ...proposalVotedEvents],
+    newMissedRewardLevelReachedEvents: [
+      ...data.newMissedRewardLevelReachedEvents,
+      ...newMissedRewardLevelReachedEvents,
+    ],
   }
 }
 

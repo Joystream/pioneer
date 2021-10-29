@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -9,16 +10,20 @@ import { PastCouncilWorkingGroup } from '@/council/types/PastCouncilWorkingGroup
 
 interface Props {
   workingGroup: PastCouncilWorkingGroup
+  totalBudget: BN
 }
 
-export const PastCouncilWorkingGroupsItem = ({ workingGroup }: Props) => {
+export const PastCouncilWorkingGroupsItem = ({ workingGroup, totalBudget }: Props) => {
   return (
     <PastCouncilWorkingGroupWrapper id="pastCouncil-workingGroups-item">
       <PastCouncilWorkingGroupWrap $colLayout={PastCouncilWorkingGroupsLayout} as="div">
         <TextMedium bold>{workingGroup.name}</TextMedium>
         <TokenValue value={workingGroup.totalPaidReward} />
         <TokenValue value={workingGroup.totalMissedReward} />
-        <TextMedium bold>30%</TextMedium>
+        <TokenValue value={workingGroup.budget} />
+        <TextMedium bold>
+          {!totalBudget.eqn(0) ? workingGroup.budget.muln(100).div(totalBudget).toNumber() : 0}%
+        </TextMedium>
       </PastCouncilWorkingGroupWrap>
     </PastCouncilWorkingGroupWrapper>
   )

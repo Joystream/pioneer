@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { useToggle } from '@/common/hooks/useToggle'
+import { BN_ZERO } from '@/common/constants'
 import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
 import { PastCouncilWorkingGroupsItem } from '@/council/components/pastCouncil/PastCouncilWorkingGroups/PastCouncilWorkingGroupsItem'
 import { usePastCouncilWorkingGroups } from '@/council/hooks/usePastCouncilWorkingGroups'
@@ -16,6 +16,8 @@ interface Props {
 export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
   const { isLoading, workingGroups } = usePastCouncilWorkingGroups(councilId)
 
+  const totalBudget = workingGroups?.reduce((a, b) => a.add(b.budget), BN_ZERO) ?? BN_ZERO
+
   if (isLoading) {
     return <Loading />
   }
@@ -26,12 +28,13 @@ export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
         <ListHeader>Working Group</ListHeader>
         <ListHeader>Total paid rewards</ListHeader>
         <ListHeader>Total missed rewards</ListHeader>
+        <ListHeader>Budget</ListHeader>
         <ListHeader>% of total budget</ListHeader>
       </PastCouncilTabsHeaders>
       <List>
         {workingGroups?.map((workingGroup) => (
           <ListItem key={workingGroup.id} borderless>
-            <PastCouncilWorkingGroupsItem workingGroup={workingGroup} />
+            <PastCouncilWorkingGroupsItem workingGroup={workingGroup} totalBudget={totalBudget} />
           </ListItem>
         ))}
       </List>
@@ -39,4 +42,4 @@ export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
   )
 }
 
-export const PastCouncilWorkingGroupsLayout = 'repeat(3,1fr) 140px'
+export const PastCouncilWorkingGroupsLayout = 'repeat(4,1fr) 140px'

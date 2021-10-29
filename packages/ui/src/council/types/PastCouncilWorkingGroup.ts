@@ -32,9 +32,12 @@ const getTotalMissedReward = (
 ): BN => {
   events = events.filter((event) => event.groupId === groupId)
 
-  const groupedEvents = groupBy(events, 'workerId')
-  console.log(groupedEvents)
-  return BN_ZERO
+  const groupedEvents: { [key: string]: PastCouncilNewMissedRewardLevelReachedEventFieldsFragment[] } = groupBy(
+    events,
+    'workerId'
+  )
+
+  return Object.values(groupedEvents).reduce((a, b) => a.addn(b[0].newMissedRewardAmount ?? 0), BN_ZERO)
 }
 
 export const asPastCouncilWorkingGroup = (
