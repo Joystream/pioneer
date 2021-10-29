@@ -22,7 +22,7 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
 
   return (
     <PastCouncilMemberWrapper onClick={() => setDropped(!isDropped)} isDropped={isDropped}>
-      <PastCouncilMemberWrap $colLayout={PastCouncilMembersLayout}>
+      <PastCouncilMemberWrap $colLayout={PastCouncilMembersLayout} borderless as="div">
         <MemberInfo member={councilMember.member} />
         <CountInfo count={councilMember.approvedProposals} />
         <CountInfo count={councilMember.rejectedProposals} />
@@ -55,14 +55,15 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
 
 export const PastCouncilMemberProposalsLayout = '2fr repeat(4, 1fr)'
 
-const PastCouncilMemberWrapper = styled.div<{ isDropped?: boolean }>`
+const PastCouncilMemberWrapper = styled(ListItem)<{ isDropped?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   border: 1px solid ${Colors.Black[100]};
-  background-color: ${({ isDropped }) => (isDropped ? Colors.Black[50] : Colors.White)}
+  background-color: ${({ isDropped }) => (isDropped ? Colors.Black[50] : Colors.White)};
   border-radius: ${BorderRad.s};
   cursor: pointer;
+  overflow: hidden;
   transition: ${Transitions.all};
 
   ${TableListItemAsLinkHover}
@@ -71,7 +72,6 @@ const PastCouncilMemberWrapper = styled.div<{ isDropped?: boolean }>`
 export const PastCouncilMemberWrap = styled(TableListItem)`
   height: ${Sizes.accountHeight};
   grid-column-gap: 24px;
-  margin-top: -1px;
 `
 
 const PastCouncilMemberControls = styled.div`
