@@ -32,8 +32,8 @@ export interface TabsProps {
 
 export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
   <TabsContainer className={className} tabsSize={tabsSize}>
-    {tabs.map(({ active, onClick, title, count }) => (
-      <Tab key={title} active={active} onClick={onClick} title={title} count={count} />
+    {tabs.map(({ active, onClick, title, count, changes }) => (
+      <Tab key={title} active={active} onClick={onClick} title={title} count={count} changes={changes} />
     ))}
   </TabsContainer>
 )
@@ -46,7 +46,7 @@ export const TabsContainer: FC<Omit<TabsProps, 'tabs'>> = ({ className, tabsSize
 
 const Tab = ({ active, onClick, title, count, changes }: TabProps) => (
   <TabContainer active={active} onClick={onClick}>
-    {title} {count !== undefined && <CountBadge count={count} />} {changes && <ChangesIndocator />}
+    {title} {count !== undefined && <CountBadge count={count} />} {changes && <ChangesIndicator />}
   </TabContainer>
 )
 
@@ -75,7 +75,7 @@ const TabsStyles = styled.div<TabsSize>`
   }}
 `
 
-const ChangesIndocator = styled.div`
+const ChangesIndicator = styled.div`
   width: 6px;
   height: 6px;
   border-radius: ${BorderRad.round};
