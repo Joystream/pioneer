@@ -37,4 +37,5 @@ const WorkerWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 32px;
   grid-column-gap: 8px;
+  align-items: center;
 `

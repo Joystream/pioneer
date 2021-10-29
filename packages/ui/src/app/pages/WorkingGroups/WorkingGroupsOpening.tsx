@@ -153,7 +153,7 @@ export const WorkingGroupOpening = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel>
+        <SidePanel scrollable>
           <ApplicantsList
             allApplicants={opening.applications}
             myApplication={myApplication}

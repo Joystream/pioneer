@@ -11,9 +11,9 @@ import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupNam
 
 import { StatusBadge, StatusGroup } from '../components/StatusBadges'
 
-import { AboutTab } from './AboutTab'
-import { HistoryTab } from './HistoryTab'
-import { OpeningsTab } from './OpeningsTab'
+import { AboutTab, AboutTabSidebar } from './AboutTab'
+import { HistoryTab, HistoryTabSidebar } from './HistoryTab'
+import { OpeningsTab, OpeningsTabSidebar } from './OpeningsTab'
 
 type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 
@@ -28,7 +28,7 @@ export function WorkingGroup() {
     { title: 'History', active: currentTab === 'HISTORY', onClick: () => setCurrentTab('HISTORY') },
   ]
 
-  const displayTabs = () => {
+  const displayTabsContent = () => {
     if (isLoading || !group) {
       return <Loading />
     }
@@ -40,6 +40,18 @@ export function WorkingGroup() {
         {currentTab === 'HISTORY' && <HistoryTab workingGroup={group} />}
       </>
     )
+  }
+
+  const displayTabsSidebar = () => {
+    if (!isLoading && group) {
+      return (
+        <>
+          {currentTab === 'OPENINGS' && <OpeningsTabSidebar workingGroup={group} />}
+          {currentTab === 'ABOUT' && <AboutTabSidebar workingGroup={group} />}
+          {currentTab === 'HISTORY' && <HistoryTabSidebar workingGroup={group} />}
+        </>
+      )
+    }
   }
 
   return (
@@ -57,7 +69,9 @@ export function WorkingGroup() {
           <Tabs tabs={tabs} />
         </PageHeaderWrapper>
       }
-      main={displayTabs()}
+      main={displayTabsContent()}
+      sidebar={displayTabsSidebar()}
+      sidebarScrollable
     />
   )
 }

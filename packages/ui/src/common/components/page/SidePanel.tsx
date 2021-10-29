@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BorderRad, RemoveScrollbar } from '@/common/constants'
 
@@ -7,15 +7,18 @@ import { ActivitiesList } from '../Activities'
 import { ActivityItem } from '../Activities/ActivityComponent'
 
 interface SidePanelProps {
+  scrollable?: boolean
   className?: string
   children?: React.ReactNode
 }
 
-export const SidePanel = ({ className, children }: SidePanelProps) => (
-  <SidePanelStyles className={className}>{children}</SidePanelStyles>
+export const SidePanel = ({ scrollable, className, children }: SidePanelProps) => (
+  <SidePanelStyles scrollable={scrollable} className={className}>
+    {children}
+  </SidePanelStyles>
 )
 
-export const SidePanelStyles = styled.div<{ neighborHeight?: number }>`
+export const SidePanelStyles = styled.div<Pick<SidePanelProps, 'scrollable'>>`
   display: flex;
   position: absolute;
   top: 0;
@@ -23,10 +26,18 @@ export const SidePanelStyles = styled.div<{ neighborHeight?: number }>`
   bottom: 0;
   width: 100%;
   max-width: 280px;
+  min-height: 184px;
+  height: 100%;
   padding-left: 24px;
   overflow: hidden;
-  overflow-y: scroll;
-  ${RemoveScrollbar};
+
+  ${({ scrollable }) =>
+    scrollable &&
+    css`
+      max-height: 100%;
+      overflow-y: scroll;
+      ${RemoveScrollbar};
+    `}
 
   &:after {
     content: '';

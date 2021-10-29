@@ -9,7 +9,7 @@ import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithSidePanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -75,6 +75,7 @@ export const ProposalPreview = () => {
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}
+      sidebarScrollable
       header={
         <PageHeaderWrapper>
           <PageHeaderRow>
@@ -140,16 +141,16 @@ export const ProposalPreview = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel>
+        <SidePanel scrollable>
           <RowGapBlock gap={36}>
             <VotesPreview votes={votes} />
 
             <ProposalHistory proposal={proposal} />
 
-            <ContentWithTabs>
+            <RowGapBlock gap={16}>
               <Label>Proposer</Label>
               <MemberInfo member={proposal.proposer} />
-            </ContentWithTabs>
+            </RowGapBlock>
           </RowGapBlock>
         </SidePanel>
       }

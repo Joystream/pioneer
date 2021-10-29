@@ -29,5 +29,6 @@ const ActivitiesContent = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 40px 0 8px;
+  max-height: 100%;
+  padding: 0 0 8px;
 `

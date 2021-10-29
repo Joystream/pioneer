@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Tabs } from '@/common/components/Tabs'
 import { useGroupActivities } from '@/working-groups/hooks/useGroupActivities'
@@ -22,20 +22,24 @@ export function HistoryTab({ workingGroup }: Props) {
     { title: 'Past openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },
     { title: 'Past workers', active: currentTab === 'WORKERS', onClick: () => setCurrentTab('WORKERS') },
   ]
+
+  return (
+    <MainPanel>
+      <RowGapBlock gap={32}>
+        <Tabs tabsSize="xs" tabs={tabs} />
+        {currentTab === 'OPENINGS' && <OpeningsHistory groupId={workingGroup?.id} />}
+        {currentTab === 'WORKERS' && <WorkersHistory groupId={workingGroup?.id} />}
+      </RowGapBlock>
+    </MainPanel>
+  )
+}
+
+export function HistoryTabSidebar({ workingGroup }: Props) {
   const { activities } = useGroupActivities(workingGroup.id)
 
   return (
-    <ContentWithSidePanel>
-      <MainPanel>
-        <RowGapBlock gap={32}>
-          <Tabs tabsSize="xs" tabs={tabs} />
-          {currentTab === 'OPENINGS' && <OpeningsHistory groupId={workingGroup?.id} />}
-          {currentTab === 'WORKERS' && <WorkersHistory groupId={workingGroup?.id} />}
-        </RowGapBlock>
-      </MainPanel>
-      <SidePanel>
-        <ActivitiesBlock activities={activities} label="Working Groups Activities" />
-      </SidePanel>
-    </ContentWithSidePanel>
+    <SidePanel scrollable>
+      <ActivitiesBlock activities={activities} label="Working Groups Activities" />
+    </SidePanel>
   )
 }
