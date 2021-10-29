@@ -1,10 +1,5 @@
-import {
-  useGetCouncilBlockRangeQuery,
-  useGetPastCouncilProposalsQuery,
-  useGetPastCouncilWorkingGroupsQuery,
-} from '@/council/queries'
+import { useGetCouncilBlockRangeQuery, useGetPastCouncilWorkingGroupsQuery } from '@/council/queries'
 import { asPastCouncilWorkingGroup } from '@/council/types/PastCouncilWorkingGroup'
-import { asProposal } from '@/proposals/types'
 
 export const usePastCouncilWorkingGroups = (id: string) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({

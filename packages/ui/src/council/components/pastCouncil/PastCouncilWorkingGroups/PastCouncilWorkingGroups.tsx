@@ -42,4 +42,4 @@ export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
   )
 }
 
-export const PastCouncilWorkingGroupsLayout = 'repeat(4,1fr) 140px'
+export const PastCouncilWorkingGroupsLayout = 'repeat(6,1fr)'

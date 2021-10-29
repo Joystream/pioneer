@@ -8,11 +8,14 @@ import { NotFound } from '@/app/pages/NotFound'
 import { camelCaseToText } from '@/common/helpers'
 import { CouncilRoutes } from '@/council/constants'
 import {
+  seedApplication,
   seedCouncilMember,
   seedElectedCouncil,
   seedEvent,
   seedMembers,
+  seedOpening,
   seedProposal,
+  seedWorker,
   seedWorkingGroups,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
@@ -23,6 +26,7 @@ import { Members } from '../../_mocks/members'
 import { testProposals } from '../../_mocks/proposals'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 
 configure({ testIdAttribute: 'id' })
 
@@ -33,6 +37,7 @@ describe('UI: Past Council page', () => {
   beforeEach(() => {
     pageCouncilId = 1
     seedMembers(mockServer.server, 2)
+    seedWorkingGroups(mockServer.server)
     seedElectedCouncil(
       {
         id: '1',
@@ -124,7 +129,6 @@ describe('UI: Past Council page', () => {
     describe('Tabs', () => {
       describe('Council members', () => {
         beforeEach(() => {
-          seedWorkingGroups(mockServer.server)
           seedProposal({ ...testProposals[0] }, mockServer.server)
         })
 
@@ -251,7 +255,7 @@ describe('UI: Past Council page', () => {
 
           it('Proposal data', async () => {
             const { getByText } = await renderAndOpenProposalVotesDropdown('alice')
-            const proposalRow = getByText(/^Proposal Details$/i)?.parentElement?.parentElement
+            const proposalRow = getByText(/^Go to proposal$/i)?.parentElement?.parentElement
 
             const proposalTitle = proposalRow?.children?.item(0)?.children?.item(1)?.textContent
             expect(proposalTitle).toBe(testProposals[0].title)
@@ -265,7 +269,7 @@ describe('UI: Past Council page', () => {
             const proposalVoteStatus = proposalRow?.children?.item(3)?.textContent
             expect(proposalVoteStatus).toBe('Abstain')
 
-            expect(await getButton('Proposal details')).toBeDefined()
+            expect(await getButton('Go to proposal')).toBeDefined()
           })
         })
       })
@@ -288,13 +292,13 @@ describe('UI: Past Council page', () => {
         it('Proposals count', async () => {
           const { queryAllByText } = await renderAndOpenTab('Proposals')
 
-          expect(queryAllByText(/proposal details/i).length).toBe(2)
+          expect(queryAllByText(/Go to proposal/i).length).toBe(2)
         })
 
         it('Proposal data', async () => {
           const { getAllByText } = await renderAndOpenTab('Proposals')
 
-          const proposalRow = getAllByText(/^Proposal Details$/i)[0].parentElement?.parentElement
+          const proposalRow = getAllByText(/^Go to proposal$/i)[0].parentElement?.parentElement
 
           const proposalTitle = proposalRow?.children?.item(0)?.children?.item(1)?.textContent
           expect(proposalTitle).toBe(testProposals[1].title)
@@ -308,6 +312,51 @@ describe('UI: Past Council page', () => {
       })
 
       describe('Working Groups', () => {
+        beforeEach(() => {
+          seedOpening(OPENING_DATA, mockServer.server)
+          seedApplication({ ...APPLICATION_DATA, applicantId: getMember('alice').id }, mockServer.server)
+          seedWorker(WORKER_DATA, mockServer.server)
+          seedEvent(
+            {
+              groupId: WORKER_DATA.groupId,
+              workerId: WORKER_DATA.id,
+              id: '0-0',
+              newMissedRewardAmount: 3145,
+              inBlock: 1,
+              createdAt: '2021-08-02T17:43:53.321Z',
+              network: 'OLYMPIA',
+            },
+            'NewMissedRewardLevelReachedEvent',
+            mockServer.server
+          )
+          seedEvent(
+            {
+              inBlock: 1,
+              createdAt: '2021-09-14T11:54:56.127Z',
+              network: 'OLYMPIA',
+              groupId: WORKER_DATA.groupId,
+              newBudget: 80000,
+            },
+            'BudgetSetEvent',
+            mockServer.server
+          )
+          seedEvent(
+            {
+              id: '0',
+              inBlock: 1,
+              createdAt: '2021-06-21T21:26:48.549Z',
+              network: 'OLYMPIA',
+              groupId: WORKER_DATA.groupId,
+              workerId: WORKER_DATA.id,
+              rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+              amount: 6050,
+              type: 'REGULAR',
+            },
+            'RewardPaidEvent',
+            mockServer.server
+          )
+        })
+
         it('Renders table', async () => {
           const { getByTestId } = await renderAndOpenTab('Working Groups')
 
@@ -319,20 +368,21 @@ describe('UI: Past Council page', () => {
         })
 
         it('Working group data', async () => {
-          // todo change expected values when seeded
-          const { getByTestId } = await renderAndOpenTab('Working Groups')
+          const { getAllByTestId } = await renderAndOpenTab('Working Groups')
 
-          const workingGroupItem = getByTestId('pastCouncil-workingGroups-item')?.children.item(0)
+          const workingGroupItem = getAllByTestId('workingGroups-item')[0]?.children.item(0)
 
           const workingGroupName = workingGroupItem?.children.item(0)?.textContent
           const workingGroupPaidRewards = workingGroupItem?.children.item(1)?.textContent
           const workingGroupMissedRewards = workingGroupItem?.children.item(2)?.textContent
-          const workingGroupBudgetPercentage = workingGroupItem?.children.item(3)?.textContent
+          const workingGroupTotalBudget = workingGroupItem?.children.item(3)?.textContent
+          const workingGroupBudgetPercentage = workingGroupItem?.children.item(4)?.textContent
 
-          expect(workingGroupName).toBe('Storage')
-          expect(workingGroupPaidRewards).toBe('1,300,000')
-          expect(workingGroupMissedRewards).toBe('1,300,000')
-          expect(workingGroupBudgetPercentage).toBe('30%')
+          expect(workingGroupName).toBe('forum')
+          expect(workingGroupPaidRewards).toBe('6,050')
+          expect(workingGroupMissedRewards).toBe('3,145')
+          expect(workingGroupTotalBudget).toBe('80,000')
+          expect(workingGroupBudgetPercentage).toBe('100%')
         })
       })
     })

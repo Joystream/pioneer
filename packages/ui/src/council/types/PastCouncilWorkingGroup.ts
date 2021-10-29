@@ -40,16 +40,18 @@ const getTotalMissedReward = (
   return Object.values(groupedEvents).reduce((a, b) => a.addn(b[0].newMissedRewardAmount ?? 0), BN_ZERO)
 }
 
-export const asPastCouncilWorkingGroup = (
-  budgetSetEvents: PastCouncilBudgetSetEventFieldsFragment[],
-  rewardPaidEvents: PastCouncilRewardPaidEventFieldsFragment[],
-  newMissedRewardLevelReachedEvents: PastCouncilNewMissedRewardLevelReachedEventFieldsFragment[]
-) => (fields: PastCouncilWorkingGroupFieldsFragment): PastCouncilWorkingGroup => ({
-  id: fields.id,
-  name: asWorkingGroupName(fields.name),
-  totalPaidReward: rewardPaidEvents
-    .filter((rewardEvent) => rewardEvent.groupId === fields.id)
-    .reduce((a, b) => a.addn(b.amount), BN_ZERO),
-  totalMissedReward: getTotalMissedReward(newMissedRewardLevelReachedEvents, fields.id),
-  budget: new BN(budgetSetEvents.find((budgetEvent) => budgetEvent.groupId === fields.id)?.newBudget ?? 0),
-})
+export const asPastCouncilWorkingGroup =
+  (
+    budgetSetEvents: PastCouncilBudgetSetEventFieldsFragment[],
+    rewardPaidEvents: PastCouncilRewardPaidEventFieldsFragment[],
+    newMissedRewardLevelReachedEvents: PastCouncilNewMissedRewardLevelReachedEventFieldsFragment[]
+  ) =>
+  (fields: PastCouncilWorkingGroupFieldsFragment): PastCouncilWorkingGroup => ({
+    id: fields.id,
+    name: asWorkingGroupName(fields.name),
+    totalPaidReward: rewardPaidEvents
+      .filter((rewardEvent) => rewardEvent.groupId === fields.id)
+      .reduce((a, b) => a.addn(b.amount), BN_ZERO),
+    totalMissedReward: getTotalMissedReward(newMissedRewardLevelReachedEvents, fields.id),
+    budget: new BN(budgetSetEvents.find((budgetEvent) => budgetEvent.groupId === fields.id)?.newBudget ?? 0),
+  })
