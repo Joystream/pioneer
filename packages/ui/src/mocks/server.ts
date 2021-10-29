@@ -119,6 +119,7 @@ export const makeServer = (environment = 'development') => {
               membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
               membershipsConnection: getConnectionResolver('MembershipConnection'),
+              newMissedRewardLevelReachedEvents: getWhereResolver('NewMissedRewardLevelReachedEvent'),
               openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),

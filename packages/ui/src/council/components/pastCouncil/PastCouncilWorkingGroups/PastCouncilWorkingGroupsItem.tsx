@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { Colors, Sizes, Transitions } from '@/common/constants'
+import { Sizes, Transitions } from '@/common/constants'
 import { PastCouncilWorkingGroupsLayout } from '@/council/components/pastCouncil/PastCouncilWorkingGroups/PastCouncilWorkingGroups'
-import { WorkingGroup } from '@/working-groups/types'
+import { PastCouncilWorkingGroup } from '@/council/types/PastCouncilWorkingGroup'
 
 interface Props {
-  workingGroup: Partial<WorkingGroup>
+  workingGroup: PastCouncilWorkingGroup
 }
 
 export const PastCouncilWorkingGroupsItem = ({ workingGroup }: Props) => {
@@ -16,8 +16,8 @@ export const PastCouncilWorkingGroupsItem = ({ workingGroup }: Props) => {
     <PastCouncilWorkingGroupWrapper id="pastCouncil-workingGroups-item">
       <PastCouncilWorkingGroupWrap $colLayout={PastCouncilWorkingGroupsLayout} as="div">
         <TextMedium bold>{workingGroup.name}</TextMedium>
-        <TokenValue value={1300000} />
-        <TokenValue value={1300000} />
+        <TokenValue value={workingGroup.totalPaidReward} />
+        <TokenValue value={workingGroup.totalMissedReward} />
         <TextMedium bold>30%</TextMedium>
       </PastCouncilWorkingGroupWrap>
     </PastCouncilWorkingGroupWrapper>
