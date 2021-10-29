@@ -5,14 +5,17 @@ import { asMember, Member } from '@/memberships/types'
 
 import { CastVoteFieldsFragment, PastElectionRoundDetailedFieldsFragment } from '../queries'
 
-export interface Vote {
-  id: string
-  createdAt: string
+interface BaseVote {
   stake: BN
   stakeLocked: boolean
   castBy: Address
-  voteFor?: Member
   cycleId: number
+}
+
+export interface Vote extends BaseVote {
+  id: string
+  createdAt: string
+  voteFor?: Member
 }
 
 export const asPastElectionVote = (
@@ -24,7 +27,7 @@ export const asPastElectionVote = (
   cycleId: fields.electionRound,
 })
 
-export type PastElectionVote = ReturnType<typeof asPastElectionVote>
+export type PastElectionVote = BaseVote
 
 export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   id: fields.id,

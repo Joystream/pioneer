@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import { BN_ZERO } from '@/common/constants'
 import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
-import { asPastElectionVote, asVote, PastElectionVote, Vote } from '@/council/types/Vote'
+import { asPastElectionVote, PastElectionVote } from '@/council/types/Vote'
 
 export interface ElectionVotingResult {
   candidate: ElectionCandidate
