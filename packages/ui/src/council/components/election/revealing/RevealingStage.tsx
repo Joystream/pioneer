@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
+import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { Election } from '@/council/types/Election'
 
 import { CandidateCardList } from '../CandidateCard/CandidateCardList'
@@ -14,14 +15,20 @@ interface Props {
 
 export const RevealingStage = ({ election, isLoading }: Props) => {
   const [tab, setTab] = useState<RevealingStageTab>('results')
+  const { votesTotal, isLoading: votesTotalLoading } = useMyCurrentVotesCount(election?.cycleId)
 
-  if (isLoading) {
+  if (isLoading || votesTotalLoading) {
     return <Loading />
   }
 
   return (
     <>
-      <ElectionTabs stage="revealing" tab={tab} onSetTab={(tab) => setTab(tab as RevealingStageTab)} />
+      <ElectionTabs
+        stage="revealing"
+        myVotes={votesTotal}
+        tab={tab}
+        onSetTab={(tab) => setTab(tab as RevealingStageTab)}
+      />
       {election && ['results', 'myVotes'].includes(tab) && (
         <ElectionVotes election={election} onlyMyVotes={tab === 'myVotes'} />
       )}

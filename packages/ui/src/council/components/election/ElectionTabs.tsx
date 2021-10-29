@@ -41,11 +41,6 @@ export const ElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTab }: El
       active: tab === 'results',
       onClick: () => onSetTab('results'),
     })
-    tabs.push({
-      title: 'My votes',
-      active: tab === 'myVotes',
-      onClick: () => onSetTab('myVotes'),
-    })
   }
 
   if ((stage === 'voting' || stage === 'revealing') && myVotes) {
