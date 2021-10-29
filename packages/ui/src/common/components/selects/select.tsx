@@ -85,6 +85,7 @@ export const Select = <T extends any, V extends any = T>({
 
         {onSearch && (isOpen || !isDefined(selected)) ? (
           <EmptyOption
+            id={`${id}-input`}
             ref={textInput}
             type="text"
             placeholder={placeholder}
