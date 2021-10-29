@@ -117,7 +117,7 @@ export const ApplyForRoleModal = () => {
   }
 
   if (state.matches('stake')) {
-    return <ApplyForRoleStakeStep opening={opening} steps={getSteps(service)} send={send} />
+    return <ApplyForRoleStakeStep opening={opening} steps={getSteps(service)} send={send} member={activeMember} />
   }
 
   if (state.matches('form')) {

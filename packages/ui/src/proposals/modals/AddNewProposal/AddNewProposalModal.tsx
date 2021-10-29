@@ -283,6 +283,7 @@ export const AddNewProposalModal = () => {
             )}
             {state.matches('generalParameters.stakingAccount') && (
               <StakingAccountStep
+                member={activeMember}
                 requiredStake={constants?.requiredStake as BN}
                 account={state.context.stakingAccount}
                 setAccount={(account) => send('SET_ACCOUNT', { account })}

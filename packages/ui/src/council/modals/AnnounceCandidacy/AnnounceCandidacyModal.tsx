@@ -126,7 +126,13 @@ export const AnnounceCandidacyModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
 
   const isValidNext = useMemo(() => {
-    if (state.matches('staking') && !!state.context.stakingAccount && state.context.stakingAmount) {
+    if (
+      state.matches('staking') &&
+      !!state.context.stakingAccount &&
+      state.context.stakingAmount &&
+      stakingStatus !== 'unknown' &&
+      stakingStatus !== 'other'
+    ) {
       return true
     } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
       return true
@@ -159,6 +165,24 @@ export const AnnounceCandidacyModal = () => {
     }
 
     if (state.matches('beforeTransaction')) {
+      // stakingStatus === "unknown"
+      // wrong account
+      //
+      // stakingStatus === "free" -> OK
+      // 1. add Staking Account  | BOB
+      // 2a. confirm staking     | ALICE
+      // 2b. announce candidacy  | ALICE
+      //
+      // stakingStatus === "candidate"
+      // 2a. confirm staking
+      // 2b. announce candacy
+      //
+      // stakingStatus === "confirmed"
+      // 2b. announce candacy
+      //
+      // stakingStatus === "other"
+      // wrong account
+
       return send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])

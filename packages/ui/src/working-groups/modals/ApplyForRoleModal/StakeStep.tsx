@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
@@ -15,12 +16,14 @@ import { useForm } from '@/common/hooks/useForm'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { AccountSchema } from '@/memberships/model/validation'
+import { Member } from '@/memberships/types'
 
 import { groupToLockId, WorkingGroupOpening } from '../../types'
 
 interface StakeStepProps {
   opening: WorkingGroupOpening
   onChange: (isValid: boolean, fields: StakeStepFormFields) => void
+  member: Member
 }
 
 export interface StakeStepFormFields {
@@ -33,7 +36,7 @@ const StakeStepFormSchema = Yup.object().shape({
   amount: Yup.number().required(),
 })
 
-export function StakeStep({ onChange, opening }: StakeStepProps) {
+export function StakeStep({ onChange, opening, member }: StakeStepProps) {
   const minStake = opening.stake
   const balances = useMyBalances()
   const schema = useMemo(() => {
@@ -51,12 +54,13 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
   }
   const { changeField, validation, fields } = useForm<StakeStepFormFields>(formInitializer, schema)
   const { isValid, errors } = validation
+  const status = useStakingAccountStatus(fields.account?.address, member.id)
 
   useEffect(() => {
     changeField('amount', amount)
   }, [amount])
 
-  useEffect(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
+  useEffect(() => onChange(isValid && status !== 'other', fields), [isValid, status, JSON.stringify(fields)])
 
   const accountsFilter = useCallback(
     (account: Account) => filterByRequiredStake(minStake, groupToLockId(opening.groupName), balances[account.address]),
@@ -71,7 +75,13 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
             <h4>1. Select an Account</h4>
             <TextMedium>First please select an account for staking.</TextMedium>
           </RowGapBlock>
-          <InputComponent label="Select account for Staking" required inputSize="l">
+          <InputComponent
+            label="Select account for Staking"
+            required
+            inputSize="l"
+            validation={status === 'other' ? 'invalid' : undefined}
+            message={status === 'other' ? 'This account is bound to the another member' : undefined}
+          >
             <SelectAccount
               onChange={(account) => changeField('account', account)}
               selected={fields.account}
