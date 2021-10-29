@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { RemoveScrollbar } from '@/common/constants'
+
 import { Activity } from '../../types'
 
 import { ActivityComponent } from './ActivityComponent'
@@ -27,4 +29,8 @@ export const ActivitiesList = styled.ul`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+  ${RemoveScrollbar};
 `

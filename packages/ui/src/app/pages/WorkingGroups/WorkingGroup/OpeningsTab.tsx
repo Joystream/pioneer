@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { ContentWithSidePanel, MainPanel } from '@/common/components/page/PageContent'
+import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
@@ -21,40 +21,43 @@ interface Props {
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { isLoading: isLoadingCurrent, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
-  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', status: 'active' })
   const { debt } = useGroupDebt(workingGroup.id)
 
+  return (
+    <MainPanel>
+      <Statistics>
+        <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
+        <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={debt} />
+        <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={workingGroup.averageStake} />
+      </Statistics>
+
+      <OpeningsCategories>
+        <OpeningsCategory>
+          <Label>
+            Upcoming Openings <CountBadge count={upcomingOpenings.length} />
+          </Label>
+          <LoadingOpenings isLoading={isLoadingUpcoming} openings={upcomingOpenings} />
+        </OpeningsCategory>
+      </OpeningsCategories>
+
+      <OpeningsCategories>
+        <OpeningsCategory>
+          <Label>Openings</Label>
+          <LoadingOpenings isLoading={isLoadingCurrent} openings={openings} />
+        </OpeningsCategory>
+      </OpeningsCategories>
+    </MainPanel>
+  )
+}
+
+export const OpeningsTabSidebar = ({ workingGroup }: Props) => {
+  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', status: 'active' })
   const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
 
   return (
-    <ContentWithSidePanel>
-      <MainPanel>
-        <Statistics>
-          <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
-          <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={debt} />
-          <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={workingGroup.averageStake} />
-        </Statistics>
-
-        <OpeningsCategories>
-          <OpeningsCategory>
-            <Label>
-              Upcoming Openings <CountBadge count={upcomingOpenings.length} />
-            </Label>
-            <LoadingOpenings isLoading={isLoadingUpcoming} openings={upcomingOpenings} />
-          </OpeningsCategory>
-        </OpeningsCategories>
-
-        <OpeningsCategories>
-          <OpeningsCategory>
-            <Label>Openings</Label>
-            <LoadingOpenings isLoading={isLoadingCurrent} openings={openings} />
-          </OpeningsCategory>
-        </OpeningsCategories>
-      </MainPanel>
-      <SidePanel>
-        <WorkersList lead={lead} workers={workers} />
-      </SidePanel>
-    </ContentWithSidePanel>
+    <SidePanel scrollable>
+      <WorkersList lead={lead} workers={workers} />
+    </SidePanel>
   )
 }
 
