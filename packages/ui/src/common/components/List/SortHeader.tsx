@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import styled from 'styled-components'
 
 import { HeaderText, SortIconDown, SortIconUp } from '../SortedListHeaders'
 
@@ -12,10 +13,14 @@ interface SortHeaderProps {
 }
 
 export const SortHeader = ({ onSort, isActive, isDescending, children }: SortHeaderProps) => (
-  <ListHeader onClick={onSort}>
+  <ClickableListHeader onClick={onSort}>
     <HeaderText>
       {children}
       {isActive && (isDescending ? <SortIconDown /> : <SortIconUp />)}
     </HeaderText>
-  </ListHeader>
+  </ClickableListHeader>
 )
+
+const ClickableListHeader = styled(ListHeader)`
+  cursor: pointer;
+`
