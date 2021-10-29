@@ -212,8 +212,8 @@ query GetCandidateStats($memberId: ID) {
   }
 }
 
-query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
-  castVotes(where: $where, orderBy: $orderBy) {
+query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!], $limit: Int, $offset: Int) {
+  castVotes(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
     ...CastVoteFields
   }
 }

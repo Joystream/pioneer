@@ -809,6 +809,8 @@ export type GetCandidateStatsQuery = {
 export type GetCouncilVotesQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.CastVoteWhereInput>
   orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetCouncilVotesQuery = {
@@ -1705,8 +1707,8 @@ export type GetCandidateStatsQueryHookResult = ReturnType<typeof useGetCandidate
 export type GetCandidateStatsLazyQueryHookResult = ReturnType<typeof useGetCandidateStatsLazyQuery>
 export type GetCandidateStatsQueryResult = Apollo.QueryResult<GetCandidateStatsQuery, GetCandidateStatsQueryVariables>
 export const GetCouncilVotesDocument = gql`
-  query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
-    castVotes(where: $where, orderBy: $orderBy) {
+  query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!], $limit: Int, $offset: Int) {
+    castVotes(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
       ...CastVoteFields
     }
   }
@@ -1727,6 +1729,8 @@ export const GetCouncilVotesDocument = gql`
  *   variables: {
  *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
