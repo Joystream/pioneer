@@ -6,6 +6,7 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useToggle } from '@/common/hooks/useToggle'
 import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
+import { PastCouncilWorkingGroupsItem } from '@/council/components/pastCouncil/PastCouncilWorkingGroups/PastCouncilWorkingGroupsItem'
 
 interface Props {
   councilId: string
@@ -13,7 +14,11 @@ interface Props {
 
 export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
   const [isLoading, toggleIsLoading] = useToggle(true)
-  const workingGroups: any[] = []
+  const workingGroups: any[] = [
+    {
+      id: 1,
+    },
+  ]
 
   useEffect(() => {
     setTimeout(() => {
@@ -35,11 +40,13 @@ export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
       </PastCouncilTabsHeaders>
       <List>
         {workingGroups?.map((workingGroup) => (
-          <ListItem key={workingGroup.id}>{/*<PastCouncilProposalsItem proposal={proposal} />*/}</ListItem>
+          <ListItem key={workingGroup.id}>
+            <PastCouncilWorkingGroupsItem workingGroup={{ name: 'Storage' }} />
+          </ListItem>
         ))}
       </List>
     </RowGapBlock>
   )
 }
 
-export const PastCouncilWorkingGroupsLayout = 'repeat(4, 1fr)'
+export const PastCouncilWorkingGroupsLayout = 'repeat(3,1fr) 140px'
