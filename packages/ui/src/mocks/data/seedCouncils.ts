@@ -45,6 +45,7 @@ export interface RawCouncilElectionMock {
 }
 
 export interface RawCouncilVoteMock {
+  id?: string
   electionRoundId: string
   stake: number
   stakeLocked: boolean
@@ -83,13 +84,8 @@ export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any)
   })
 }
 
-export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCouncilCandidateMock>[]) => {
-  const candidates =
-    overrides?.map<RawCouncilCandidateMock>((override, index) => ({ ...rawCandidates[index], ...override })) ??
-    rawCandidates
-
-  candidates.map((data) => seedCouncilCandidate(data, server))
-}
+export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCouncilCandidateMock>[]) =>
+  optionalOverride(rawCandidates, overrides).map((data) => seedCouncilCandidate(data, server))
 
 export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
   const roundNumber = parseInt(data.electionRoundId)
@@ -99,6 +95,8 @@ export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
   })
 }
 
-export const seedCouncilVotes = (server: any) => {
-  rawVotes.map((data) => seedCouncilVote(data, server))
-}
+export const seedCouncilVotes = (server: any, overrides?: Partial<RawCouncilVoteMock>[]) =>
+  optionalOverride(rawVotes, overrides).map((data) => seedCouncilVote(data, server))
+
+const optionalOverride = <T>(data: T[], overrides?: Partial<T>[]): T[] =>
+  overrides?.map<T>((override, index) => ({ ...data[index], ...override })) ?? data

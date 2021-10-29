@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import { Event, EventData } from 'xstate/lib/types'
 
 import { StakeStep } from '@/accounts/components/StakeStep'
+import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody } from '@/common/components/Modal'
 import { useModal } from '@/common/hooks/useModal'
 import { useCandidate } from '@/council/hooks/useCandidate'
+import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 
 import { CandidacyReview } from './components/CandidacyReview'
@@ -22,6 +24,14 @@ export interface VoteForCouncilFormModalProps {
 export const VoteForCouncilFormModal = ({ minStake, send }: VoteForCouncilFormModalProps) => {
   const { hideModal, modalData } = useModal<VoteForCouncilModalCall>()
   const { candidate } = useCandidate(modalData.id)
+
+  const { votes } = useMyCastVotes(candidate?.cycleId)
+  const alreadyVotedAccounts = votes?.map(({ castBy }) => castBy)
+  const accountsFilter = useCallback(
+    ({ address }: Account) => !!alreadyVotedAccounts && !alreadyVotedAccounts.includes(address),
+    [alreadyVotedAccounts?.length]
+  )
+
   const [isValid, setValid] = useState(false)
   const [stake, setStake] = useState<StakeStepFormFields | null>(null)
 
@@ -39,7 +49,12 @@ export const VoteForCouncilFormModal = ({ minStake, send }: VoteForCouncilFormMo
       <VoteForCouncilModalBody>
         <CandidacyReview candidate={candidate} minStake={minStake} />
         <ScrollableModalColumn>
-          <StakeStep stakeLock="Voting" minStake={minStake} onChange={onStakeStepChange} />
+          <StakeStep
+            stakeLock="Voting"
+            minStake={minStake}
+            accountsFilter={accountsFilter}
+            onChange={onStakeStepChange}
+          />
         </ScrollableModalColumn>
       </VoteForCouncilModalBody>
       <ModalFooter>

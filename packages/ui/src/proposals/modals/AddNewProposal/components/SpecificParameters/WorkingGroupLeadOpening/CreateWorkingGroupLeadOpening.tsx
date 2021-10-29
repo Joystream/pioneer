@@ -33,7 +33,7 @@ export const CreateWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            id="working-group-select"
+            id="working-group-select-input"
             label="Working Group"
             required
             inputSize="l"
