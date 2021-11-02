@@ -2,7 +2,7 @@ import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, Router } from 'react-router'
 import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -17,7 +17,7 @@ import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { RawCouncilElectionMock, seedCouncilCandidate, seedCouncilElection, seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
@@ -36,6 +36,9 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { createMemoryHistory, MemoryHistory } from 'history'
+import { CANDIDATE_DATA } from '../../_mocks/council'
+import { CouncilRoutes } from '@/council/constants'
 
 configure({ testIdAttribute: 'id' })
 
@@ -470,7 +473,58 @@ describe('UI: Announce Candidacy Modal', () => {
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })
+
     })
+  })
+
+  it('See my Announcement button', async () => {
+    stubTransactionSuccess(candidacyNoteTx, 'council', 'CandidacyNoteSet')
+    seedCouncilElection(
+      {
+        id: '0',
+        isFinished: false,
+        cycleId: 0,
+      } as RawCouncilElectionMock,
+      server.server
+    )
+
+    const history = createMemoryHistory()
+
+    stubQuery(
+      api,
+      'members.stakingAccountIdMemberStatus',
+      createType('StakingAccountMemberBinding', {
+        member_id: createType('MemberId', 0),
+        confirmed: createType('bool', false),
+      })
+    )
+    stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+
+    renderModal(history)
+    await fillStakingStep('alice', 15, true)
+    await fillRewardAccountStep('alice', true)
+    await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+    await fillSummary(true)
+
+    stubTransactionSuccess(batchTx, 'council', 'NewCandidate')
+    await act(async () => {
+      fireEvent.click(await getButton(/^Sign transaction/i))
+    })
+
+    stubTransactionSuccess(candidacyNoteTx, 'council', 'CandidacyNoteSet')
+    await act(async () => {
+      fireEvent.click(await getButton(/^Sign transaction/i))
+    })
+    seedCouncilCandidate(CANDIDATE_DATA, server.server)
+
+    expect(screen.queryByText(/^Success/i)).not.toBeNull()
+    await act(async () => {
+      fireEvent.click(await getButton(/^See my announcement/i))
+    })
+
+    const lastPage = history.entries.pop()
+    expect(lastPage?.pathname).toEqual(CouncilRoutes.currentElection)
+    expect(lastPage?.search).toEqual('candidate=0')
   })
 
   async function fillStakingAmount(value: number) {
@@ -550,9 +604,10 @@ describe('UI: Announce Candidacy Modal', () => {
     })
   }
 
-  function renderModal() {
+  function renderModal(initialHistory?: MemoryHistory) {
+    const history = initialHistory ?? createMemoryHistory()
     return render(
-      <MemoryRouter>
+      <Router history={history}>
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
@@ -568,7 +623,7 @@ describe('UI: Announce Candidacy Modal', () => {
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>
-      </MemoryRouter>
+      </Router>
     )
   }
 })
