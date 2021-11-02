@@ -3,38 +3,49 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { AccountRow } from '@/common/components/Modal'
+import { TableListItem } from '@/common/components/List'
 import { TokenValue } from '@/common/components/typography'
 import { Colors, Sizes } from '@/common/constants'
 
-import { Account } from '../types'
+import { Account, LockType } from '../types'
 
 import { AccountInfo } from './AccountInfo'
 
 interface SelectedAccountProps {
   account: Account
-  stake: BN
+  amount: BN
+  lockType: LockType
 }
 
-export const AccountLockInfo = ({ account, stake }: SelectedAccountProps) => {
+export const AccountLockInfo = ({ account, amount, lockType }: SelectedAccountProps) => {
   return (
-    <LockInfoContainer>
+    <LockInfoContainer $colLayout={lockInfoLayout}>
       <AccountInfo account={account} />
       <div>
-        {lockIcon('Voting')}
-        Stake from council
+        {lockIcon(lockType)}
+        {lockType} stake
       </div>
-      <TokenValue value={stake} />
+      <TokenValueWrapper>
+        <TokenValue value={amount} />
+      </TokenValueWrapper>
     </LockInfoContainer>
   )
 }
 
-export const LockInfoContainer = styled(AccountRow)`
+export const lockInfoLayout = '3fr 2fr 2fr'
+
+export const LockInfoContainer = styled(TableListItem)`
   padding: 8px 0 8px 16px;
-  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
   height: ${Sizes.selectHeight};
   min-height: ${Sizes.selectHeight};
   max-height: ${Sizes.selectHeight};
   background-color: ${Colors.Black[75]};
   border: 1px solid ${Colors.Black[200]};
+`
+
+export const TokenValueWrapper = styled.div`
+  display: flex;
+  justify-content: right;
+  padding-right: 44px;
 `

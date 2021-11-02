@@ -3,13 +3,15 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import React from 'react'
 import { ActorRef, State } from 'xstate'
 
-import { AccountLockInfo } from '@/accounts/components/AccountLockInfo'
+import { AccountLockInfo, lockInfoLayout } from '@/accounts/components/AccountLockInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
+import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -44,13 +46,21 @@ export const RecoverVoteStakeSignModal = ({ service, transaction }: Props) => {
         <TextMedium light>
           You intend to recover <TokenValue value={stake} /> stake locks from account.
         </TextMedium>
-        <TextMedium light>
-          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
-        </TextMedium>
 
-        <InputComponent label="Fee sending from account" inputSize="l" disabled>
-          <AccountLockInfo account={accountOrNamed(allAccounts, address, 'Account')} stake={stake} />
-        </InputComponent>
+        <RowGapBlock gap={8}>
+          <ListHeaders $colLayout={lockInfoLayout}>
+            <div />
+            <ListHeader>Unlocking</ListHeader>
+            <ListHeader>Recoverable stake</ListHeader>
+          </ListHeaders>
+          <InputComponent inputSize="l" disabled>
+            <AccountLockInfo
+              account={accountOrNamed(allAccounts, address, 'Account')}
+              amount={stake}
+              lockType={'Voting'}
+            />
+          </InputComponent>
+        </RowGapBlock>
       </ModalBody>
 
       <ModalFooter>
