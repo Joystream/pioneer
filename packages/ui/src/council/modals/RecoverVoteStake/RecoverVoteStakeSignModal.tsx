@@ -3,7 +3,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import React from 'react'
 import { ActorRef, State } from 'xstate'
 
-import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { AccountLockInfo } from '@/accounts/components/AccountLockInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -48,8 +48,8 @@ export const RecoverVoteStakeSignModal = ({ service, transaction }: Props) => {
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
 
-        <InputComponent label="Fee sending from account" inputSize="l">
-          <SelectedAccount account={accountOrNamed(allAccounts, address, 'Account')} />
+        <InputComponent label="Fee sending from account" inputSize="l" disabled>
+          <AccountLockInfo account={accountOrNamed(allAccounts, address, 'Account')} stake={stake} />
         </InputComponent>
       </ModalBody>
 
