@@ -1,0 +1,34 @@
+version: '3.4'
+
+x-joystream-node: &default
+  image: joystream/node:${RUNTIME}
+  volumes: [./data:/data]
+
+services:
+  node:
+    <<: *default
+    command: |
+      --tmp --alice --validator
+      --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all
+      --chain /data/chain-spec.json --log runtime
+    ports:
+      - '127.0.0.1:9944:9944'
+      - '127.0.0.1:9933:9933'
+
+  # Rebuild a chain spec from the current runtime
+  build:
+    <<: *default
+    entrypoint: ''
+    command: bash -c './node build-spec --dev > /data/chain-spec.json'
+
+  validate:
+    <<: *default
+    entrypoint: ''
+    command: |
+      bash -c
+      './node build-spec --raw --chain /data/chain-spec.json > /dev/null'
+
+  bash:
+    <<: *default
+    entrypoint: ''
+    command: /bin/bash
