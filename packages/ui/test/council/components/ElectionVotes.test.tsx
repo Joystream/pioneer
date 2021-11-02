@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { ElectionVotes } from '@/council/components/election/CandidateVote/ElectionVotes'
+import { RevealingStageVotes } from '@/council/components/election/CandidateVote/RevealingStageVotes'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
+import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
 import {
   RawCouncilElectionMock,
@@ -20,10 +21,18 @@ import { setupMockServer } from '../../_mocks/server'
 
 const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
   const { election } = useCurrentElection()
-  return election ? <ElectionVotes election={election} onlyMyVotes={onlyMyVotes} /> : null
+  const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
+  return election ? (
+    <RevealingStageVotes
+      isLoading={votesLoading}
+      totalStake={totalStake}
+      votesPerCandidate={votesPerCandidate}
+      onlyMyVotes={onlyMyVotes}
+    />
+  ) : null
 }
 
-describe('UI: ElectionVotes', () => {
+describe('UI: RevealingStageVotes', () => {
   const server = setupMockServer()
 
   const useAccounts = {

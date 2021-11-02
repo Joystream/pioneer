@@ -1,21 +1,21 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { NoData } from '@/common/components/NoData'
 import { BN_ZERO } from '@/common/constants'
-import { useElectionVotes } from '@/council/hooks/useElectionVotes'
-import { Election } from '@/council/types/Election'
+import { CandidateStats } from '@/council/hooks/useElectionVotes'
 
 import { CandidateVoteList } from './CandidateVoteList'
 
 interface Props {
-  election: Election
   onlyMyVotes?: boolean
+  votesPerCandidate: CandidateStats[]
+  totalStake?: BN
+  isLoading: boolean
 }
 
-export const ElectionVotes = ({ election, onlyMyVotes }: Props) => {
-  const { votesPerCandidate, sumOfStakes: totalStake, isLoading } = useElectionVotes(election)
-
+export const RevealingStageVotes = ({ votesPerCandidate, totalStake, onlyMyVotes, isLoading }: Props) => {
   const votesToDisplay = onlyMyVotes ? votesPerCandidate.filter((vote) => vote.myVotes.length) : votesPerCandidate
 
   if (isLoading) {

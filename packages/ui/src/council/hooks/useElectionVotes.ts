@@ -11,7 +11,7 @@ import { Election } from '../types/Election'
 import { MyCastVote } from './useCommitment'
 import { useStoredCastVotes } from './useStoredCastVotes'
 
-interface CandidateStats {
+export interface CandidateStats {
   candidate: ElectionCandidate
   votesNumber: number
   totalStake: BN
@@ -19,18 +19,18 @@ interface CandidateStats {
   myVotes: MyCastVote[]
 }
 
-export const useElectionVotes = (election: Election) => {
+export const useElectionVotes = (election?: Election) => {
   const { allAccounts } = useMyAccounts()
   const { data, loading } = useGetCouncilVotesQuery({
-    variables: { where: { electionRound: { cycleId_eq: election.cycleId } } },
+    variables: { where: { electionRound: { cycleId_eq: election?.cycleId } } },
   })
-  const myCastVotes = useStoredCastVotes(election.cycleId)
+  const myCastVotes = useStoredCastVotes(election?.cycleId)
 
   const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes.length])
 
   const votesPerCandidate = useMemo(() => {
     const candidateStats: Record<string, CandidateStats> = {}
-    election.candidates.forEach(
+    election?.candidates.forEach(
       (candidate) =>
         (candidateStats[candidate.member.id] = {
           candidate,
