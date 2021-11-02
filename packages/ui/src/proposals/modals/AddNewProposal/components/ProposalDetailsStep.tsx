@@ -47,6 +47,7 @@ export const ProposalDetailsStep = ({
             <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
               <CKEditor
                 id="field-rationale"
+                minRows={5}
                 onChange={(event, editor) => setRationale(editor.getData())}
                 onReady={(editor) => editor.setData(rationale)}
               />
