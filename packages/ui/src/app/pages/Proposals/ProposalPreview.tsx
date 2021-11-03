@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
-import { ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -19,15 +19,19 @@ import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
+import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { ProposalDetailsComponent } from '@/proposals/components/ProposalPreview/ProposalDetails'
 import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
+import { VoteForProposalButton } from '@/proposals/components/VoteForProposalButton'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
+import { useHasMemberVotedOnProposal } from '@/proposals/hooks/useHasMemberVotedOnProposal'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
@@ -56,6 +60,10 @@ export const ProposalPreview = () => {
       showModal<VoteRationaleModalCall>({ modal: 'VoteRationaleModal', data: { id: voteId } })
     }
   }, [voteId])
+
+  const { active } = useMyMemberships()
+  const isCouncilMember = useIsCouncilMember(active)
+  const hasVoted = useHasMemberVotedOnProposal(id, active?.id)
 
   if (isLoading || !proposal || !votes) {
     return (
@@ -121,6 +129,15 @@ export const ProposalPreview = () => {
               value={currentVotingRound}
               onChange={setVotingRound}
             />
+          )}
+
+          {isCouncilMember && proposal.status === 'deciding' && !hasVoted && (
+            <VoteForProposalButton id={id}>Vote on Proposal</VoteForProposalButton>
+          )}
+          {hasVoted && (
+            <ButtonPrimary size="medium" disabled>
+              Already voted
+            </ButtonPrimary>
           )}
         </PageHeaderWrapper>
       }
