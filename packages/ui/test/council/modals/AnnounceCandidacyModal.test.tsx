@@ -1,6 +1,7 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, configure, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { createMemoryHistory, MemoryHistory } from 'history'
 import React from 'react'
 import { MemoryRouter, Router } from 'react-router'
 import { interpret } from 'xstate'
@@ -13,6 +14,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { CouncilRoutes } from '@/council/constants'
 import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -23,6 +25,7 @@ import { getButton } from '../../_helpers/getButton'
 import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
+import { CANDIDATE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -36,9 +39,6 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { createMemoryHistory, MemoryHistory } from 'history'
-import { CANDIDATE_DATA } from '../../_mocks/council'
-import { CouncilRoutes } from '@/council/constants'
 
 configure({ testIdAttribute: 'id' })
 
@@ -473,7 +473,6 @@ describe('UI: Announce Candidacy Modal', () => {
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })
-
     })
   })
 
@@ -487,6 +486,7 @@ describe('UI: Announce Candidacy Modal', () => {
       } as RawCouncilElectionMock,
       server.server
     )
+    seedCouncilCandidate(CANDIDATE_DATA, server.server)
 
     const history = createMemoryHistory()
 
@@ -515,9 +515,9 @@ describe('UI: Announce Candidacy Modal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/^Sign transaction/i))
     })
-    seedCouncilCandidate(CANDIDATE_DATA, server.server)
 
     expect(screen.queryByText(/^Success/i)).not.toBeNull()
+    await waitFor(async () => expect(await getButton(/^See my announcement/i)).not.toBeDisabled())
     await act(async () => {
       fireEvent.click(await getButton(/^See my announcement/i))
     })

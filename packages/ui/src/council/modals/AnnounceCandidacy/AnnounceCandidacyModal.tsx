@@ -229,7 +229,7 @@ export const AnnounceCandidacyModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} />
+    return <SuccessModal onClose={hideModal} memberId={activeMember.id} />
   }
 
   if (state.matches('error')) {
