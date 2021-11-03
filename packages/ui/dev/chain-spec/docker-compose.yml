@@ -28,7 +28,7 @@ services:
       bash -c
       './node build-spec --raw --chain /data/chain-spec.json > /dev/null'
 
-  bash:
+  shell:
     <<: *default
     entrypoint: ''
     command: /bin/bash
