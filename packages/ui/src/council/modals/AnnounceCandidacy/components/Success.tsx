@@ -1,8 +1,7 @@
 import React from 'react'
-import { generatePath } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import { ButtonGhost } from '@/common/components/buttons'
-import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -17,6 +16,12 @@ interface SuccessModalProps {
 
 export const SuccessModal = ({ onClose, memberId }: SuccessModalProps) => {
   const { isLoading, candidateId } = useCandidateIdByMember(memberId)
+  const history = useHistory()
+
+  const redirect = () => {
+    onClose()
+    history.push(`${CouncilRoutes.currentElection}?candidate=${candidateId}`)
+  }
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -27,13 +32,9 @@ export const SuccessModal = ({ onClose, memberId }: SuccessModalProps) => {
         </Info>
       </ModalBody>
       <ModalFooter>
-        <LinkButtonGhost
-          size="medium"
-          disabled={isLoading}
-          to={`${CouncilRoutes.currentElection}?candidate=${candidateId}`}
-        >
+        <ButtonGhost onClick={redirect} size="medium" disabled={isLoading || !candidateId}>
           See my Announcement
-        </LinkButtonGhost>
+        </ButtonGhost>
       </ModalFooter>
     </Modal>
   )
