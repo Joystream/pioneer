@@ -54,10 +54,8 @@ export const equals = <T extends any>(
 
 export const merge = <A extends Obj, B extends Obj = Partial<A>>(a: A, b: B): A & B => ({ ...a, ...b })
 
-export const propsEquals =
-  <T extends Obj>(...keys: (keyof T)[]) =>
-  (a: T, b: T) =>
-    keys.every((key) => a[key] === b[key])
+export const propsEquals = <T extends Obj>(...keys: (keyof T)[]) => (a: T, b: T) =>
+  keys.every((key) => a[key] === b[key])
 
 // Lists:
 
@@ -106,3 +104,14 @@ export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, 
 }
 
 export const asArray = <T extends any>(item: undefined | T): T[] => (isDefined(item) ? [item] : [])
+
+type Item = Record<string, any>
+
+export const arrayGroupBy = (items: Item[], key: keyof Item) =>
+  items.reduce(
+    (result, item) => ({
+      ...result,
+      [item[key]]: [...(result[item[key]] || []), item],
+    }),
+    {}
+  )
