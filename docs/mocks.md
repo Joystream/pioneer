@@ -23,6 +23,26 @@ To show help:
 ```shell
 yarn node-mocks --help
 ```
+
+#### Chain spec
+
+Another way to influence the on-chain state for testing purpose, is to provide a customize `chain-spec.json` file when running a Joystream node:
+
+1. Create `packages/ui/dev/chain-spec/data/chain-spec.json` if it does not exist:
+   - Run `docker-compose run --rm build`
+   - The first time the `chain-spec.json` file is generated this way, the file ownership might have to be fixed.
+
+2. _(optional)_ Change the starting Council/Referendum stage (the default is `Announcing`):
+   - Run `yarn workspace ui run set-chain-spec <stage>` (the stages are lowercase)
+   - Note that the voting and revealing periods are also extended thanks to `referendumInstance1.stage.{STAGE}.started` being set to a future block.
+
+3. Start the node:
+   - Either with docker compose: `docker-compose up node`
+   - Or directly with the runtime binary:
+      ```shell
+      <path to the runtime> --tmp --alice --validator --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --chain packages/ui/dev/chain-spec/data/chain-spec.json --log runtime
+      ```
+
 ### Polkadot apps
 
 You can also connect to the node using [Polkadot apps wallet](README.md#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
@@ -110,6 +130,6 @@ Here only the first two members from the mocked [@/mocks/data/raw/members.json](
 
 Finally in order to both reuse and customize mocked data. Some _plural_ `seedEntities()` can be implemented as follow:
 ```ts
-seedCouncilCandidates(server.server, [{ memberId: '0' }, { memberId: '1' }])
+seedCouncilCandidates(server, [{ memberId: '0' }, { memberId: '1' }])
 ```
 Here the first two candidates from [`@/mocks/data/raw/candidates.json`](/packages/ui/src/mocks/data/raw/candidates.json) were added to the MirageJS database, but their `memberId`s where changed to match the two members previously seeded.
