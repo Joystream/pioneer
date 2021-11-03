@@ -1,18 +1,18 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { useMyAccounts } from '../../../../accounts/hooks/useMyAccounts'
-import { useMyBalances } from '../../../../accounts/hooks/useMyBalances'
-import { filterAccounts } from '../../../../accounts/model/filterAccounts'
-import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
-import { List, ListItem } from '../../../../common/components/List'
-import { Loading } from '../../../../common/components/Loading'
-import { ContentWithTabs } from '../../../../common/components/page/PageContent'
-import { HeaderText, SortIconDown, SortIconUp } from '../../../../common/components/SortedListHeaders'
-import { Tabs } from '../../../../common/components/Tabs'
-import { Colors } from '../../../../common/constants'
+import { List, ListItem } from '../../common/components/List'
+import { Loading } from '../../common/components/Loading'
+import { ContentWithTabs } from '../../common/components/page/PageContent'
+import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
+import { Tabs } from '../../common/components/Tabs'
+import { Colors } from '../../common/constants'
+import { useMyAccounts } from '../hooks/useMyAccounts'
+import { useMyBalances } from '../hooks/useMyBalances'
+import { filterAccounts } from '../model/filterAccounts'
+import { setOrder, sortAccounts, SortKey } from '../model/sortAccounts'
 
-import { AccountItem } from './AccountItem'
+import { AccountItem } from './AccountItem/AccountItem'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useMyAccounts()

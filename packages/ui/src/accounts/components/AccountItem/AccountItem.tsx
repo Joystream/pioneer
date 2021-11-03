@@ -6,41 +6,18 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { Account, Balances } from '@/accounts/types'
-import { LockItem } from '@/app/pages/Profile/components/LockItem'
+import { Account } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, TokenValue } from '@/common/components/typography'
-import { Label } from '@/common/components/typography/Label'
-import { Colors, Sizes, Transitions, BorderRad } from '@/common/constants'
+import { TokenValue } from '@/common/components/typography'
+import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
+
+import { LocksDetails } from './components/LocksDetails'
 
 interface AccountItemDataProps {
   account: Account
 }
-
-const DisplayLocks = ({ balance }: { balance: Balances | null }) => {
-  if (!balance || !balance.locks.length) {
-    return <TextMedium light>No locks found.</TextMedium>
-  }
-
-  return (
-    <>
-      {balance.locks.map((lock, index) => (
-        <LockItem key={index} lock={lock} />
-      ))}
-    </>
-  )
-}
-
-const LocksDetails = (props: { balance: Balances | null; account: Account }) => (
-  <>
-    <RowGapBlock gap={8}>
-      <Label>Account Locks:</Label>
-      <DisplayLocks balance={props.balance} />
-    </RowGapBlock>
-  </>
-)
 
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
@@ -67,7 +44,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
-        <LocksDetails balance={balance} account={account} />
+        <LocksDetails balance={balance} />
       </StyledDropDown>
     </AccountItemWrapper>
   )

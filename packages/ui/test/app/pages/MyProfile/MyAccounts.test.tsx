@@ -87,13 +87,11 @@ describe('Page: MyAccounts', () => {
     renderPage()
 
     const header: HTMLElement = screen.getByRole('banner')
+
     testStatisticItem(header, /total balance/i, /20,500/i)
     testStatisticItem(header, /total transferable balance/i, /20,000/i)
     testStatisticItem(header, /total locked balance/i, /500/i)
     testStatisticItem(header, /total recoverable/i, /500/i)
-
-    const recoverAll = within(header).getByRole('button', { name: /recover all/i })
-    expect(recoverAll).toBeDefined()
   })
 
   function renderPage(path = '/profile') {
