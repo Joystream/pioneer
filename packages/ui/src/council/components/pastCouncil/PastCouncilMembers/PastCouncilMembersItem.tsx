@@ -7,8 +7,8 @@ import { ListHeader } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { PastCouncilMembersLayout } from '@/council/components/pastCouncil/PastCouncilMembers/PastCouncilMembers'
-import { PastCouncilProposalsHeaders } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposals'
 import { PastCouncilProposalsItem } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposalsItem'
+import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
 import { CountInfo } from '@/memberships/components/MemberListItem/Fileds'
@@ -34,12 +34,12 @@ export const PastCouncilMembersItem = ({ councilMember }: Props) => {
       </PastCouncilMemberWrap>
       <StyledDropDown isDropped={isDropped}>
         <RowGapBlock gap={4}>
-          <PastCouncilProposalsHeaders $colLayout={PastCouncilMemberProposalsLayout}>
+          <PastCouncilTabsHeaders $colLayout={PastCouncilMemberProposalsLayout}>
             <ListHeader>Proposal</ListHeader>
             <ListHeader>Stage</ListHeader>
             <ListHeader>Proposer</ListHeader>
             <ListHeader>Vote</ListHeader>
-          </PastCouncilProposalsHeaders>
+          </PastCouncilTabsHeaders>
           <List>
             {councilMember.proposalVotes.map((proposalVote) => (
               <ListItem key={proposalVote.proposal.id}>

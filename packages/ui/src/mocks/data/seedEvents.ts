@@ -8,6 +8,7 @@ import rawBudgetSetEvents from './raw/budgetSetEvents.json'
 import rawBudgetSpendingEvents from './raw/budgetSpendingEvents.json'
 import rawCandidacyWithdrawEvents from './raw/candidacyWithdrawEvents.json'
 import rawCouncilorRewardUpdatedEvents from './raw/councilorRewardUpdatedEvents.json'
+import rawNewMissedRewardLevelReachedEvents from './raw/newMissedRewardLevelReachedEvents.json'
 import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
 import rawOpeningFilledEvents from './raw/openingFilledEvents.json'
 import rawProposalVotedEvents from './raw/proposalVotedEvents.json'
@@ -109,11 +110,17 @@ interface RawCandidacyWithdrawEvent extends BaseEvent {
   memberId: string
 }
 
-export interface RawProposalVotedEventMock extends BaseEvent {
+export interface RawProposalVotedEvent extends BaseEvent {
   voterId: string
   proposalId: string
   voteKind: string
   votingRound: number
+}
+
+export interface RawNewMissedRewardLevelReachedEvent extends BaseEvent {
+  groupId: string
+  workerId: string
+  newMissedRewardAmount: number
 }
 
 export const eventCategories = {
@@ -139,7 +146,10 @@ export const eventCategories = {
     ...rawEvent,
   })),
   CandidacyWithdrawEvent: rawCandidacyWithdrawEvents.map((rawEvent: RawCandidacyWithdrawEvent) => ({ ...rawEvent })),
-  ProposalVotedEvent: rawProposalVotedEvents.map((rawEvent: RawProposalVotedEventMock) => ({ ...rawEvent })),
+  ProposalVotedEvent: rawProposalVotedEvents.map((rawEvent: RawProposalVotedEvent) => ({ ...rawEvent })),
+  NewMissedRewardLevelReachedEvent: rawNewMissedRewardLevelReachedEvents.map(
+    (rawEvent: RawNewMissedRewardLevelReachedEvent) => ({ ...rawEvent })
+  ),
 }
 
 type EventType = keyof typeof eventCategories

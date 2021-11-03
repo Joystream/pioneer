@@ -62,6 +62,7 @@ export function LinkButtonGhost({ className, children, size, square, disabled, t
     </LinkButtonGhostStyles>
   )
 }
+
 export function LinkButtonBareGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
     <LinkButtonBareGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
@@ -69,6 +70,7 @@ export function LinkButtonBareGhost({ className, children, size, square, disable
     </LinkButtonBareGhostStyles>
   )
 }
+
 export function LinkButtonLink({ className, children, square, disabled, to }: LinkButtonProps) {
   return (
     <LinkButtonLinkStyles className={className} $square={square} disabled={disabled} to={to} size="small">
@@ -85,6 +87,7 @@ export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   align-items: center;
   width: fit-content;
   transform: translateY(1px);
+
   & > svg {
     transform: translateY(-1px);
   }
@@ -129,6 +132,7 @@ export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
       z-index: 2;
       transition: ${Transitions.all};
     }
+
     & .blackPart,
     & .primaryPart {
       transition: ${Transitions.all};
@@ -155,8 +159,10 @@ export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
         transform: translate(-50%, -50%);
       }
     }
+
     &:active {
       transform: scale(0.96);
+
       &:after {
         transform: translate(-50%, -50%);
       }
@@ -166,6 +172,7 @@ export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
 
 export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
+
   &,
   &:visited {
     color: ${Colors.White};
@@ -179,6 +186,7 @@ export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
     &:before {
       background-color: ${Colors.Blue[400]};
     }
+
     &:after {
       background-color: ${Colors.Blue[700]};
     }
@@ -196,6 +204,7 @@ export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
 
 export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
+
   &,
   &:visited {
     border-color: ${Colors.Black[75]};
@@ -208,6 +217,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
     &:before {
       background-color: ${Colors.Black[50]};
     }
+
     &:after {
       background-color: ${Colors.Black[100]};
     }
@@ -220,6 +230,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
       ${LinkButtonInnerWrapper} > svg {
         color: ${Colors.Blue[500]};
       }
+
       & .blackPart,
       & .primaryPart {
         color: ${Colors.Blue[500]};
@@ -235,6 +246,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
 
 export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
+
   &,
   &:visited {
     color: ${Colors.Black[900]};
@@ -248,6 +260,7 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
     &:before {
       background-color: ${Colors.Black[50]};
     }
+
     &:after {
       background-color: ${Colors.Blue[50]};
     }
@@ -256,9 +269,11 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
     &:focus {
       border-color: ${Colors.Blue[100]};
       color: ${Colors.Blue[500]};
+
       ${LinkButtonInnerWrapper} > svg {
         color: ${Colors.Blue[500]};
       }
+
       & .blackPart,
       & .primaryPart {
         color: ${Colors.Blue[500]};
@@ -274,6 +289,7 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
 
 export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
+
   &,
   &:visited {
     color: ${Colors.Black[900]};
@@ -293,9 +309,11 @@ export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonStyleProps>`
     &:focus {
       border-color: transparent;
       color: ${Colors.Blue[500]};
+
       ${LinkButtonInnerWrapper} > svg {
         color: ${Colors.Blue[500]};
       }
+
       & .blackPart,
       & .primaryPart {
         color: ${Colors.Blue[500]};
@@ -343,6 +361,7 @@ export const LinkButtonLinkStyles = styled(Link)<LinkButtonStyleProps>`
       transform: translateX(0%);
       background-color: ${Colors.Black[900]};
     }
+
     &:after {
       background-color: ${Colors.Blue[50]};
       border-radius: 0;
@@ -361,6 +380,7 @@ export const LinkButtonLinkStyles = styled(Link)<LinkButtonStyleProps>`
       ${LinkButtonInnerWrapper} > svg {
         color: ${Colors.Blue[500]};
       }
+
       & .blackPart,
       & .primaryPart {
         color: ${Colors.Blue[500]};

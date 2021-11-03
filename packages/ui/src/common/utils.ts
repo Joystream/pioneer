@@ -106,3 +106,14 @@ export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, 
 }
 
 export const asArray = <T extends any>(item: undefined | T): T[] => (isDefined(item) ? [item] : [])
+
+type Item = Record<string, any>
+
+export const arrayGroupBy = (items: Item[], key: keyof Item) =>
+  items.reduce(
+    (result, item) => ({
+      ...result,
+      [item[key]]: [...(result[item[key]] || []), item],
+    }),
+    {}
+  )

@@ -103,6 +103,19 @@ export type PastCouncilProposalsFieldsFragment = {
   }
 }
 
+export type PastCouncilWorkingGroupFieldsFragment = { __typename: 'WorkingGroup'; id: string; name: string }
+
+export type PastCouncilBudgetSetEventFieldsFragment = { __typename: 'BudgetSetEvent'; newBudget: any; groupId: string }
+
+export type PastCouncilRewardPaidEventFieldsFragment = { __typename: 'RewardPaidEvent'; groupId: string; amount: any }
+
+export type PastCouncilNewMissedRewardLevelReachedEventFieldsFragment = {
+  __typename: 'NewMissedRewardLevelReachedEvent'
+  groupId: string
+  workerId: string
+  newMissedRewardAmount: any
+}
+
 export type ElectedCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
@@ -612,6 +625,24 @@ export type GetPastCouncilProposalsQuery = {
   }>
 }
 
+export type GetPastCouncilWorkingGroupsQueryVariables = Types.Exact<{
+  fromBlock: Types.Scalars['Int']
+  toBlock: Types.Scalars['Int']
+}>
+
+export type GetPastCouncilWorkingGroupsQuery = {
+  __typename: 'Query'
+  workingGroups: Array<{ __typename: 'WorkingGroup'; id: string; name: string }>
+  budgetSetEvents: Array<{ __typename: 'BudgetSetEvent'; newBudget: any; groupId: string }>
+  rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent'; groupId: string; amount: any }>
+  newMissedRewardLevelReachedEvents: Array<{
+    __typename: 'NewMissedRewardLevelReachedEvent'
+    groupId: string
+    workerId: string
+    newMissedRewardAmount: any
+  }>
+}
+
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetCurrentElectionQuery = {
@@ -925,6 +956,31 @@ export const PastCouncilProposalsFieldsFragmentDoc = gql`
     }
   }
   ${ProposalFieldsFragmentDoc}
+`
+export const PastCouncilWorkingGroupFieldsFragmentDoc = gql`
+  fragment PastCouncilWorkingGroupFields on WorkingGroup {
+    id
+    name
+  }
+`
+export const PastCouncilBudgetSetEventFieldsFragmentDoc = gql`
+  fragment PastCouncilBudgetSetEventFields on BudgetSetEvent {
+    newBudget
+    groupId
+  }
+`
+export const PastCouncilRewardPaidEventFieldsFragmentDoc = gql`
+  fragment PastCouncilRewardPaidEventFields on RewardPaidEvent {
+    groupId
+    amount
+  }
+`
+export const PastCouncilNewMissedRewardLevelReachedEventFieldsFragmentDoc = gql`
+  fragment PastCouncilNewMissedRewardLevelReachedEventFields on NewMissedRewardLevelReachedEvent {
+    groupId
+    workerId
+    newMissedRewardAmount
+  }
 `
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
@@ -1395,6 +1451,68 @@ export type GetPastCouncilProposalsLazyQueryHookResult = ReturnType<typeof useGe
 export type GetPastCouncilProposalsQueryResult = Apollo.QueryResult<
   GetPastCouncilProposalsQuery,
   GetPastCouncilProposalsQueryVariables
+>
+export const GetPastCouncilWorkingGroupsDocument = gql`
+  query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
+    workingGroups {
+      ...PastCouncilWorkingGroupFields
+    }
+    budgetSetEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+      ...PastCouncilBudgetSetEventFields
+    }
+    rewardPaidEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+      ...PastCouncilRewardPaidEventFields
+    }
+    newMissedRewardLevelReachedEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+      ...PastCouncilNewMissedRewardLevelReachedEventFields
+    }
+  }
+  ${PastCouncilWorkingGroupFieldsFragmentDoc}
+  ${PastCouncilBudgetSetEventFieldsFragmentDoc}
+  ${PastCouncilRewardPaidEventFieldsFragmentDoc}
+  ${PastCouncilNewMissedRewardLevelReachedEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastCouncilWorkingGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilWorkingGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilWorkingGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilWorkingGroupsQuery({
+ *   variables: {
+ *      fromBlock: // value for 'fromBlock'
+ *      toBlock: // value for 'toBlock'
+ *   },
+ * });
+ */
+export function useGetPastCouncilWorkingGroupsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilWorkingGroupsQuery, GetPastCouncilWorkingGroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilWorkingGroupsQuery, GetPastCouncilWorkingGroupsQueryVariables>(
+    GetPastCouncilWorkingGroupsDocument,
+    options
+  )
+}
+export function useGetPastCouncilWorkingGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilWorkingGroupsQuery, GetPastCouncilWorkingGroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilWorkingGroupsQuery, GetPastCouncilWorkingGroupsQueryVariables>(
+    GetPastCouncilWorkingGroupsDocument,
+    options
+  )
+}
+export type GetPastCouncilWorkingGroupsQueryHookResult = ReturnType<typeof useGetPastCouncilWorkingGroupsQuery>
+export type GetPastCouncilWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilWorkingGroupsLazyQuery>
+export type GetPastCouncilWorkingGroupsQueryResult = Apollo.QueryResult<
+  GetPastCouncilWorkingGroupsQuery,
+  GetPastCouncilWorkingGroupsQueryVariables
 >
 export const GetCurrentElectionDocument = gql`
   query GetCurrentElection {

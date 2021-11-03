@@ -18,6 +18,27 @@ fragment PastCouncilProposalsFields on ProposalVotedEvent {
   }
 }
 
+fragment PastCouncilWorkingGroupFields on WorkingGroup {
+  id
+  name
+}
+
+fragment PastCouncilBudgetSetEventFields on BudgetSetEvent {
+  newBudget
+  groupId
+}
+
+fragment PastCouncilRewardPaidEventFields on RewardPaidEvent {
+  groupId
+  amount
+}
+
+fragment PastCouncilNewMissedRewardLevelReachedEventFields on NewMissedRewardLevelReachedEvent {
+  groupId
+  workerId
+  newMissedRewardAmount
+}
+
 fragment ElectedCouncilFields on ElectedCouncil {
   id
   electedAtBlock
@@ -161,6 +182,27 @@ query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
 query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
   proposals(where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }, orderBy: [createdAt_DESC]) {
     ...ProposalFields
+  }
+}
+
+query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
+  proposals(where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }, orderBy: [createdAt_DESC]) {
+    ...ProposalFields
+  }
+}
+
+query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
+  workingGroups {
+    ...PastCouncilWorkingGroupFields
+  }
+  budgetSetEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+    ...PastCouncilBudgetSetEventFields
+  }
+  rewardPaidEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...PastCouncilRewardPaidEventFields
+  }
+  newMissedRewardLevelReachedEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+    ...PastCouncilNewMissedRewardLevelReachedEventFields
   }
 }
 

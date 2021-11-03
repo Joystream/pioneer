@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
-import { TableListItem } from '@/common/components/List'
+import { ArrowRightIcon } from '@/common/components/icons'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -53,16 +53,11 @@ export const PastCouncilProposalsItem = ({ proposal, vote }: Props) => {
       <MemberInfo member={proposal.proposer} memberSize="s" />
       {vote && <TextMedium bold>{capitalizeFirstLetter(vote)}</TextMedium>}
       <LinkButtonGhost to={generatePath(ProposalsRoutes.preview, { id: proposal.id })} size="medium">
-        Proposal details
+        Go to proposal <ArrowRightIcon />
       </LinkButtonGhost>
     </PastCouncilProposalWrap>
   )
 }
-
-export const PastCouncilMemberWrap = styled(TableListItem)`
-  height: ${Sizes.accountHeight};
-  grid-column-gap: 24px;
-`
 
 export const PastCouncilProposalWrap = styled.div<{ vote?: VoteStatus }>`
   display: grid;
