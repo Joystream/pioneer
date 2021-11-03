@@ -40,7 +40,10 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
   }
 }
 
-type FilterGqlInput = Pick<MembershipWhereInput, 'id_eq' | 'isVerified_eq' | 'isFoundingMember_eq' | 'handle_contains' | 'isCouncilMember_eq'>
+type FilterGqlInput = Pick<
+  MembershipWhereInput,
+  'id_eq' | 'isVerified_eq' | 'isFoundingMember_eq' | 'handle_contains' | 'isCouncilMember_eq'
+>
 
 const filterToGqlInput = ({ search, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
   ...(search ? { handle_contains: search } : {}),
