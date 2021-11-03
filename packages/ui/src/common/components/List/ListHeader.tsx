@@ -35,3 +35,5 @@ export const ListHeader = styled.span`
     position: relative;
   }
 `
+
+export const EmptyListHeader = ListHeader
