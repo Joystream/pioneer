@@ -20,7 +20,7 @@ export const RecoverVoteStakeModal = () => {
     hideModal,
     modalData: { address },
   } = useModal<RecoverVoteStakeModalCall>()
-  const transaction = useMemo(() => api?.tx.referendum.releaseVoteStake(), [])
+  const transaction = useMemo(() => api?.tx.referendum.releaseVoteStake(), [api])
   const feeInfo = useTransactionFee(address, transaction)
   useEffect(() => {
     if (state.matches('requirementsVerification') && isDefined(feeInfo?.canAfford)) {
@@ -31,6 +31,7 @@ export const RecoverVoteStakeModal = () => {
   if (state.matches('success')) {
     return <RecoverVoteStakeSuccessModal />
   }
+
   if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
@@ -45,7 +46,7 @@ export const RecoverVoteStakeModal = () => {
     return <InsufficientFundsModal onClose={hideModal} address={address} amount={feeInfo.transactionFee} />
   }
 
-  if (transaction && state.matches('transaction')) {
+  if (state.matches('transaction')) {
     return <RecoverVoteStakeSignModal transaction={transaction} service={state.children.transaction} />
   }
 

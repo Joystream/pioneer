@@ -11,13 +11,13 @@ import { Account, LockType } from '../types'
 
 import { AccountInfo } from './AccountInfo'
 
-interface SelectedAccountProps {
+export interface AccountLockInfoProps {
   account: Account
   amount: BN
   lockType: LockType
 }
 
-export const AccountLockInfo = ({ account, amount, lockType }: SelectedAccountProps) => {
+export const AccountLockInfo = ({ account, amount, lockType }: AccountLockInfoProps) => {
   return (
     <LockInfoContainer $colLayout={lockInfoLayout}>
       <AccountInfo account={account} />

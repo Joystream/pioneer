@@ -25,7 +25,6 @@ export const RecoverVoteStakeSuccessModal = () => {
           Your account
         </ButtonGhost>
       </ModalFooter>
-      p
     </Modal>
   )
 }
