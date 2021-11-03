@@ -113,6 +113,7 @@ export interface RawProposalVotedEventMock extends BaseEvent {
   voterId: string
   proposalId: string
   voteKind: string
+  votingRound: number
 }
 
 export const eventCategories = {

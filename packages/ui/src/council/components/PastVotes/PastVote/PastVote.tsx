@@ -21,7 +21,7 @@ export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
     <PastVoteTableListItem $isPast $colLayout={$colLayout}>
       <TextInlineMedium>#{vote.cycleId}</TextInlineMedium>
       <BlockTime
-        block={{ number: -1, network: 'BABYLON', timestamp: '2000-01-01T00:00:00.893Z' }}
+        block={{ number: -1, network: 'BABYLON', timestamp: vote.createdAt }}
         lessInfo
         layout="reverse-start"
       />

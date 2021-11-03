@@ -6,6 +6,7 @@ import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Pagination } from '@/common/components/Pagination'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useSort } from '@/common/hooks/useSort'
 import { PastCouncilListItem } from '@/council/components/pastCouncil/PastCouncilsList/PastCouncilListItem'
@@ -15,7 +16,7 @@ import { PastCouncilColLayout, PastCouncilListHeaders } from './styles'
 
 export const PastCouncilsList = () => {
   const { order, getSortProps } = useSort<ElectedCouncilOrderByInput>('electedAtBlock')
-  const { isLoading, councils } = usePastCouncils({ order })
+  const { isLoading, councils, pagination } = usePastCouncils({ order })
 
   if (isLoading) {
     return <Loading />
@@ -40,6 +41,7 @@ export const PastCouncilsList = () => {
           <PastCouncilListItem key={council.id} council={council} />
         ))}
       </List>
+      <Pagination {...pagination} />
     </RowGapBlock>
   )
 }

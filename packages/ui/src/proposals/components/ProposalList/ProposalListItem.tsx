@@ -1,4 +1,5 @@
 import React from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -35,7 +36,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
   return (
     <ProposalItem
       as={GhostRouterLink}
-      to={`${ProposalsRoutes.preview}/${proposal.id}`}
+      to={generatePath(ProposalsRoutes.preview, { id: proposal.id })}
       $colLayout={ProposalColLayout}
       $isPast={!isProposalActive(proposal.status)}
     >
@@ -70,7 +71,7 @@ const ProposalItem = styled(TableListItem)`
   height: 86px;
 `
 
-const StageField = styled.div`
+export const StageField = styled.div`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;

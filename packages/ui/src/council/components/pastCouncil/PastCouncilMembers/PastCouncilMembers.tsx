@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { List, ListItem } from '@/common/components/List'
+import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -20,7 +20,7 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
 
   return (
     <RowGapBlock gap={4}>
-      <ListHeaders $colLayout="276px 128px 128px 128px 128px 104px">
+      <ListHeaders $colLayout={PastCouncilMembersLayout}>
         <ListHeader>Council member</ListHeader>
         <ListHeader>Proposals approved</ListHeader>
         <ListHeader>Proposals rejected</ListHeader>
@@ -29,11 +29,11 @@ export const PastCouncilMembers = ({ councilId }: Props) => {
       </ListHeaders>
       <List>
         {councilMembers?.map((councilMember, index) => (
-          <ListItem key={index} borderless>
-            <PastCouncilMembersItem councilMember={councilMember} />
-          </ListItem>
+          <PastCouncilMembersItem councilMember={councilMember} key={index} />
         ))}
       </List>
     </RowGapBlock>
   )
 }
+
+export const PastCouncilMembersLayout = '276px repeat(4, 128px) 104px'

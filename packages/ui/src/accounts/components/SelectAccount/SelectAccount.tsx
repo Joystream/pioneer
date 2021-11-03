@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { Address } from '@/common/types'
 
-import { Select, SelectedOption } from '../../../common/components/selects'
+import { Select, SelectedOption, SelectProps } from '../../../common/components/selects'
 import { useMyAccounts } from '../../hooks/useMyAccounts'
 import { accountOrNamed } from '../../model/accountOrNamed'
 import { isValidAddress } from '../../model/isValidAddress'
@@ -19,15 +19,13 @@ export const filterAccount = (filterOut: Account | Address | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOutAddress : () => true
 }
 
-interface Props {
+interface Props extends Pick<SelectProps<Account>, 'id' | 'selected' | 'disabled'> {
   onChange: (selected: Account) => void
   filter?: (option: Account) => boolean
-  selected?: Account
-  disabled?: boolean
   minBalance?: BN
 }
 
-export const SelectAccount = React.memo(({ onChange, filter, selected, disabled }: Props) => {
+export const SelectAccount = React.memo(({ id, onChange, filter, selected, disabled }: Props) => {
   const { allAccounts } = useMyAccounts()
   const options = allAccounts.filter(filter || (() => true))
 
@@ -50,6 +48,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected, disabled 
 
   return (
     <Select
+      id={id}
       selected={selected}
       onChange={change}
       disabled={disabled}

@@ -23,13 +23,8 @@ export const Members = () => {
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const { order, getSortProps } = useSort<MembershipOrderByInput>('createdAt')
   const searchSlot = useRef<HTMLDivElement>(null)
-  const [page, setPage] = useState(1)
 
-  useEffect(() => {
-    setPage(1)
-  }, [filter, order])
-
-  const { members, isLoading, totalCount, pageCount } = useMembers({ order, filter, page })
+  const { members, isLoading, totalCount, pagination } = useMembers({ order, filter })
 
   return (
     <PageLayout
@@ -38,7 +33,7 @@ export const Members = () => {
         <MainPanel>
           <MemberListFilters searchSlot={searchSlot} memberCount={totalCount} onApply={setFilter} />
           <MemberList isLoading={isLoading} members={members} getSortProps={getSortProps} />
-          <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+          <Pagination {...pagination} />
         </MainPanel>
       }
     />

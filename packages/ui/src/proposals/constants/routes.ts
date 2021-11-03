@@ -2,7 +2,7 @@ export const ProposalsRoutes = {
   current: '/proposals/current',
   past: '/proposals/past',
   myproposals: '/proposals/my-proposals',
-  preview: '/proposals/preview',
+  preview: '/proposals/preview/:id',
   home: '/proposals',
 } as const
 

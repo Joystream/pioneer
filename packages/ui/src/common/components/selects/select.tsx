@@ -79,13 +79,13 @@ export const Select = <T extends any, V extends any = T>({
   }
 
   return (
-    <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown} className={className}>
+    <SelectComponent ref={selectNode} id={id} tabIndex={-1} onKeyDown={onKeyDown} className={className}>
       <Toggle onClick={isOpen ? undefined : onToggleClick} isOpen={isOpen} disabled={disabled}>
         <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
 
         {onSearch && (isOpen || !isDefined(selected)) ? (
           <EmptyOption
-            id={id}
+            id={`${id}-input`}
             ref={textInput}
             type="text"
             placeholder={placeholder}

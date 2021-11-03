@@ -4,8 +4,21 @@ import { MemoryRouter } from 'react-router'
 
 import { CouncilTabs } from '@/app/pages/Council/components/CouncilTabs'
 import { ApiContext } from '@/common/providers/api/context'
+import { LocalStorageKey } from '@/council/hooks/useElectionStatusChanged'
 
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+
+const CHILD_NODES_WITH_INDICATOR = 4
+
+const expectHasChanges = async () => {
+  const electionTab = await screen.findByText(/^Election/i)
+  expect(electionTab.childNodes.length === CHILD_NODES_WITH_INDICATOR).toBeTruthy()
+}
+
+const expectHasNoChanges = async () => {
+  const electionTab = await screen.findByText(/^Election/i)
+  expect(electionTab.childNodes.length < CHILD_NODES_WITH_INDICATOR).toBeTruthy()
+}
 
 describe('CouncilTabs', () => {
   const api = stubApi()
@@ -40,6 +53,39 @@ describe('CouncilTabs', () => {
     renderComponent()
 
     expect(screen.queryByText(/^Election$/i)).not.toBeNull()
+  })
+
+  describe('Election indicator', () => {
+    beforeEach(() => {
+      window.localStorage.clear()
+    })
+
+    it('New voting period', async () => {
+      window.localStorage.setItem(LocalStorageKey, JSON.stringify('inactive'))
+      stubCouncilAndReferendum(api, 'Election', 'Inactive')
+
+      renderComponent()
+
+      await expectHasChanges()
+    })
+
+    it('Same voting period (Announcing)', async () => {
+      window.localStorage.setItem(LocalStorageKey, JSON.stringify('announcing'))
+      stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
+
+      renderComponent()
+
+      await expectHasNoChanges()
+    })
+
+    it('Same voting period (Revealing)', async () => {
+      window.localStorage.setItem(LocalStorageKey, JSON.stringify('revealing'))
+      stubCouncilAndReferendum(api, 'Election', 'Revealing')
+
+      renderComponent()
+
+      await expectHasNoChanges()
+    })
   })
 
   function renderComponent() {

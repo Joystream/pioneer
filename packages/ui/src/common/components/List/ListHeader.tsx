@@ -22,7 +22,6 @@ export const ListHeader = styled.span`
   text-transform: uppercase;
   text-align: left;
   user-select: none;
-  cursor: pointer;
 
   &:first-child {
     justify-content: flex-start;

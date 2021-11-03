@@ -8,6 +8,7 @@ import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
+import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVote'
 import { VoteForCouncilModal, VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
@@ -55,6 +56,7 @@ export type ModalNames =
   | ModalName<VoteForCouncilModalCall>
   | ModalName<WithdrawCandidacyModalCall>
   | ModalName<VoteForProposalModalCall>
+  | ModalName<RevealVoteModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -81,6 +83,7 @@ const modals: Record<ModalNames, ReactElement> = {
   VoteForCouncil: <VoteForCouncilModal />,
   WithdrawCandidacy: <WithdrawCandidacyModal />,
   VoteForProposalModal: <VoteForProposalModal />,
+  RevealVote: <RevealVoteModal />,
 }
 
 export const GlobalModals = () => {

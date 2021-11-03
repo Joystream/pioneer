@@ -10,21 +10,28 @@ export interface PageLayoutProps {
   header?: ReactNode
   main?: ReactNode
   sidebar?: ReactNode
+  sidebarScrollable?: boolean
   footer?: ReactNode
 }
 
-export const PageLayout = ({ header, main, sidebar, footer, lastBreadcrumb }: PageLayoutProps) => (
+export const PageLayout = ({ header, main, sidebar, sidebarScrollable, footer, lastBreadcrumb }: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-    <PageLayoutContent header={header} main={main} sidebar={sidebar} footer={footer} />
+    <PageLayoutContent
+      header={header}
+      main={main}
+      sidebar={sidebar}
+      sidebarScrollable={sidebarScrollable}
+      footer={footer}
+    />
   </PageContent>
 )
 
-export const PageLayoutContent = ({ header, main, sidebar, footer }: PageLayoutProps) => (
+export const PageLayoutContent = ({ header, main, sidebar, sidebarScrollable, footer }: PageLayoutProps) => (
   <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer}>
     {header && <PageHeader>{header}</PageHeader>}
     {main && <PageMain>{main}</PageMain>}
-    {sidebar && <PageSidebar>{sidebar}</PageSidebar>}
+    {sidebar && <PageSidebar sidebarScrollable={sidebarScrollable}>{sidebar}</PageSidebar>}
     {footer && <PageFooter>{footer}</PageFooter>}
   </PageLayoutComponent>
 )
@@ -57,12 +64,19 @@ const PageMain = styled.main`
   grid-area: main;
 `
 
-const PageSidebar = styled.aside`
+const PageSidebar = styled.aside<Pick<PageLayoutProps, 'sidebarScrollable'>>`
   position: absolute;
   top: 0;
   bottom: 0;
   width: 100%;
   grid-area: sidebar;
+
+  ${({ sidebarScrollable }) =>
+    sidebarScrollable &&
+    css`
+      max-height: 100%;
+      overflow: hidden;
+    `}
 `
 
 const PageFooter = styled.footer`

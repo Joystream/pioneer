@@ -78,7 +78,6 @@ fragment PastElectionRoundDetailedFields on ElectionRound {
     ...ElectionCandidateFields
   }
   castVotes {
-    id
     stake
     stakeLocked
     voteForId
@@ -98,6 +97,7 @@ fragment ElectionCandidateDetailedFields on Candidate {
 
 fragment CastVoteFields on CastVote {
   id
+  createdAt
   stake
   stakeLocked
   castBy
@@ -152,6 +152,18 @@ query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
 }
 
+query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
+  budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...CouncilSpendingEventFields
+  }
+}
+
+query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
+  proposals(where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }, orderBy: [createdAt_DESC]) {
+    ...ProposalFields
+  }
+}
+
 query GetCurrentElection {
   electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields
@@ -200,8 +212,8 @@ query GetCandidateStats($memberId: ID) {
   }
 }
 
-query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
-  castVotes(where: $where, orderBy: $orderBy) {
+query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!], $limit: Int, $offset: Int) {
+  castVotes(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
     ...CastVoteFields
   }
 }

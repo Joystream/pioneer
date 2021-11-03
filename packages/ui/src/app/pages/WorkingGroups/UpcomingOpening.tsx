@@ -96,7 +96,7 @@ export const UpcomingOpening = () => {
         </MainPanel>
       }
       sidebar={
-        <SidePanel>
+        <SidePanel scrollable>
           <ApplicationStatus />
         </SidePanel>
       }

@@ -21,7 +21,7 @@ export interface CKEditorProps {
 
 export const CKEditor = React.forwardRef(
   (
-    { maxRows = 20, minRows = 8, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
+    { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
     ref?: Ref<HTMLDivElement>
   ) => {
     const localRef = useRef<HTMLDivElement>(null)

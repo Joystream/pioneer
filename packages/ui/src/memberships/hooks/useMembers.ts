@@ -1,48 +1,42 @@
+import { usePagination } from '@/common/hooks/usePagination'
 import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
 
 import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
-import { asMember, Member } from '../types'
+import { asMember } from '../types'
 
 export const MEMBERS_PER_PAGE = 10
 
 interface UseMemberProps {
   order: SortOrder<MembershipOrderByInput>
   filter: MemberListFilter
-  page?: number
+  perPage?: number
 }
 
-interface UseMembers {
-  isLoading: boolean
-  members: Member[]
-  totalCount?: number
-  pageCount?: number
-}
-
-export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMembers => {
+export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
   const where = filterToGqlInput(filter)
+  const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })
+  const totalCount = connectionData?.membershipsConnection.totalCount
+  const { offset, pagination } = usePagination(MEMBERS_PER_PAGE, totalCount ?? 0, [order, filter])
   const variables = {
-    limit: MEMBERS_PER_PAGE,
-    offset: (page - 1) * MEMBERS_PER_PAGE,
+    limit: perPage,
+    offset,
     where,
     orderBy: toQueryOrderByInput<MembershipOrderByInput>(order),
   }
   const { data, loading, error: err } = useGetMembersQuery({ variables })
-  const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })
 
   if (err) {
     error(err)
   }
 
-  const totalCount = connectionData?.membershipsConnection.totalCount
-
   return {
     isLoading: loading,
     members: data?.memberships.map(asMember) ?? [],
     totalCount,
-    pageCount: totalCount && Math.ceil(totalCount / MEMBERS_PER_PAGE),
+    pagination,
   }
 }
 

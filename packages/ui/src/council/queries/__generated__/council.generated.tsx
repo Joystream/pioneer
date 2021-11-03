@@ -263,7 +263,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    id: string
     stake: any
     stakeLocked: boolean
     voteForId?: string | null | undefined
@@ -309,6 +308,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
   id: string
+  createdAt: any
   stake: any
   stakeLocked: boolean
   castBy: string
@@ -524,6 +524,94 @@ export type GetPastCouncilMembersQuery = {
   }>
 }
 
+export type GetPastCouncilBudgetSpendingQueryVariables = Types.Exact<{
+  fromBlock: Types.Scalars['Int']
+  toBlock: Types.Scalars['Int']
+}>
+
+export type GetPastCouncilBudgetSpendingQuery = {
+  __typename: 'Query'
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: any
+    type?: Types.EventTypeOptions | null | undefined
+  }>
+}
+
+export type GetPastCouncilProposalsQueryVariables = Types.Exact<{
+  fromBlock: Types.Scalars['Int']
+  toBlock: Types.Scalars['Int']
+}>
+
+export type GetPastCouncilProposalsQuery = {
+  __typename: 'Query'
+  proposals: Array<{
+    __typename: 'Proposal'
+    id: string
+    title: string
+    statusSetAtTime: any
+    createdAt: any
+    councilApprovals: number
+    status:
+      | { __typename: 'ProposalStatusCanceledByRuntime' }
+      | { __typename: 'ProposalStatusCancelled' }
+      | { __typename: 'ProposalStatusDeciding' }
+      | { __typename: 'ProposalStatusDormant' }
+      | { __typename: 'ProposalStatusExecuted' }
+      | { __typename: 'ProposalStatusExecutionFailed' }
+      | { __typename: 'ProposalStatusExpired' }
+      | { __typename: 'ProposalStatusGracing' }
+      | { __typename: 'ProposalStatusRejected' }
+      | { __typename: 'ProposalStatusSlashed' }
+      | { __typename: 'ProposalStatusVetoed' }
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateBlogPostProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'EditBlogPostProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'FundingRequestProposalDetails' }
+      | { __typename: 'LockBlogPostProposalDetails' }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UnlockBlogPostProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
+    creator: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  }>
+}
+
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetCurrentElectionQuery = {
@@ -639,7 +727,6 @@ export type GetPastElectionQuery = {
         }>
         castVotes: Array<{
           __typename: 'CastVote'
-          id: string
           stake: any
           stakeLocked: boolean
           voteForId?: string | null | undefined
@@ -722,6 +809,8 @@ export type GetCandidateStatsQuery = {
 export type GetCouncilVotesQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.CastVoteWhereInput>
   orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetCouncilVotesQuery = {
@@ -729,6 +818,7 @@ export type GetCouncilVotesQuery = {
   castVotes: Array<{
     __typename: 'CastVote'
     id: string
+    createdAt: any
     stake: any
     stakeLocked: boolean
     castBy: string
@@ -921,7 +1011,6 @@ export const PastElectionRoundDetailedFieldsFragmentDoc = gql`
       ...ElectionCandidateFields
     }
     castVotes {
-      id
       stake
       stakeLocked
       voteForId
@@ -946,6 +1035,7 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
     id
+    createdAt
     stake
     stakeLocked
     castBy
@@ -1197,6 +1287,114 @@ export type GetPastCouncilMembersLazyQueryHookResult = ReturnType<typeof useGetP
 export type GetPastCouncilMembersQueryResult = Apollo.QueryResult<
   GetPastCouncilMembersQuery,
   GetPastCouncilMembersQueryVariables
+>
+export const GetPastCouncilBudgetSpendingDocument = gql`
+  query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
+    budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+      ...CouncilSpendingEventFields
+    }
+  }
+  ${CouncilSpendingEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastCouncilBudgetSpendingQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilBudgetSpendingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilBudgetSpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilBudgetSpendingQuery({
+ *   variables: {
+ *      fromBlock: // value for 'fromBlock'
+ *      toBlock: // value for 'toBlock'
+ *   },
+ * });
+ */
+export function useGetPastCouncilBudgetSpendingQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
+    GetPastCouncilBudgetSpendingDocument,
+    options
+  )
+}
+export function useGetPastCouncilBudgetSpendingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPastCouncilBudgetSpendingQuery,
+    GetPastCouncilBudgetSpendingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
+    GetPastCouncilBudgetSpendingDocument,
+    options
+  )
+}
+export type GetPastCouncilBudgetSpendingQueryHookResult = ReturnType<typeof useGetPastCouncilBudgetSpendingQuery>
+export type GetPastCouncilBudgetSpendingLazyQueryHookResult = ReturnType<
+  typeof useGetPastCouncilBudgetSpendingLazyQuery
+>
+export type GetPastCouncilBudgetSpendingQueryResult = Apollo.QueryResult<
+  GetPastCouncilBudgetSpendingQuery,
+  GetPastCouncilBudgetSpendingQueryVariables
+>
+export const GetPastCouncilProposalsDocument = gql`
+  query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
+    proposals(
+      where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }
+      orderBy: [createdAt_DESC]
+    ) {
+      ...ProposalFields
+    }
+  }
+  ${ProposalFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastCouncilProposalsQuery__
+ *
+ * To run a query within a React component, call `useGetPastCouncilProposalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilProposalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastCouncilProposalsQuery({
+ *   variables: {
+ *      fromBlock: // value for 'fromBlock'
+ *      toBlock: // value for 'toBlock'
+ *   },
+ * });
+ */
+export function useGetPastCouncilProposalsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilProposalsQuery, GetPastCouncilProposalsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastCouncilProposalsQuery, GetPastCouncilProposalsQueryVariables>(
+    GetPastCouncilProposalsDocument,
+    options
+  )
+}
+export function useGetPastCouncilProposalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilProposalsQuery, GetPastCouncilProposalsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastCouncilProposalsQuery, GetPastCouncilProposalsQueryVariables>(
+    GetPastCouncilProposalsDocument,
+    options
+  )
+}
+export type GetPastCouncilProposalsQueryHookResult = ReturnType<typeof useGetPastCouncilProposalsQuery>
+export type GetPastCouncilProposalsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilProposalsLazyQuery>
+export type GetPastCouncilProposalsQueryResult = Apollo.QueryResult<
+  GetPastCouncilProposalsQuery,
+  GetPastCouncilProposalsQueryVariables
 >
 export const GetCurrentElectionDocument = gql`
   query GetCurrentElection {
@@ -1509,8 +1707,8 @@ export type GetCandidateStatsQueryHookResult = ReturnType<typeof useGetCandidate
 export type GetCandidateStatsLazyQueryHookResult = ReturnType<typeof useGetCandidateStatsLazyQuery>
 export type GetCandidateStatsQueryResult = Apollo.QueryResult<GetCandidateStatsQuery, GetCandidateStatsQueryVariables>
 export const GetCouncilVotesDocument = gql`
-  query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
-    castVotes(where: $where, orderBy: $orderBy) {
+  query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!], $limit: Int, $offset: Int) {
+    castVotes(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
       ...CastVoteFields
     }
   }
@@ -1531,6 +1729,8 @@ export const GetCouncilVotesDocument = gql`
  *   variables: {
  *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
