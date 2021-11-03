@@ -52,10 +52,10 @@ describe('toBalances', () => {
         locks: [
           {
             amount: createBalance(200).toBn(),
-            type: 'Forum Worker',
+            type: 'Staking Candidate',
           },
         ],
-        recoverable: new BN(0),
+        recoverable: new BN(200),
         total: new BN(387),
         transferable: createBalance(187).toBn(),
       }
@@ -70,7 +70,7 @@ describe('toBalances', () => {
         frozenFee: createBalance(200),
         frozenMisc: createBalance(200),
         lockedBalance: createBalance(200),
-        lockedBreakdown: [createBalanceLock(200)],
+        lockedBreakdown: [createBalanceLock(200, 'Forum Worker')],
         votingBalance: createBalance(200),
       },
       {
