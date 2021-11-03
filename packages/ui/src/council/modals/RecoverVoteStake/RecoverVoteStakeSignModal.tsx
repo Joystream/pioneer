@@ -9,7 +9,7 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { EmptyListHeader, ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
@@ -49,7 +49,7 @@ export const RecoverVoteStakeSignModal = ({ service, transaction }: Props) => {
 
         <RowGapBlock gap={8}>
           <ListHeaders $colLayout={lockInfoLayout}>
-            <div />
+            <EmptyListHeader />
             <ListHeader>Unlocking</ListHeader>
             <ListHeader>Recoverable stake</ListHeader>
           </ListHeaders>
