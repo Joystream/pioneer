@@ -1,6 +1,9 @@
+import { LockIdentifier } from '@polkadot/types/interfaces'
+
 import { BalanceLock, LockType } from '@/accounts/types'
 
 export const lockTypes: { [key: string]: LockType } = {
+  '0x7374616b696e6720': 'Staking',
   '0x0000000000000000': 'Voting',
   '0x0101010101010101': 'Council Candidate',
   '0x0202020202020202': 'Councilor',
@@ -29,6 +32,7 @@ const ANY_WORKER: LockType[] = [
 
 const STAKING_INVITATION_VOTING: LockType[] = ['Staking Candidate', 'Invitation', 'Voting']
 const COMPATIBLE_LOCKS: Record<LockType, Set<LockType>> = {
+  Staking: new Set<LockType>(),
   'Staking Candidate': new Set<LockType>([
     'Invitation',
     'Voting',
@@ -76,7 +80,7 @@ const COMPATIBLE_LOCKS: Record<LockType, Set<LockType>> = {
   'Storage Worker': new Set(STAKING_INVITATION_VOTING),
 }
 
-export const isRecoverable = (type: LockType): boolean => type === 'Council Candidate'
+export const isRecoverable = (type: LockType): boolean => STAKING_INVITATION_VOTING.includes(type)
 
 export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => {
   if (existingLocks.length < 1) {
@@ -84,4 +88,8 @@ export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]
   }
 
   return existingLocks.some(({ type }) => !COMPATIBLE_LOCKS[lock].has(type))
+}
+
+export const lockLookup = (id: LockIdentifier): LockType => {
+  return lockTypes[id.toHex()]
 }

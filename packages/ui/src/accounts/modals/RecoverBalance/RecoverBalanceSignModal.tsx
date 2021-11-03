@@ -27,7 +27,12 @@ export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
       return
     }
 
-    return api.tx.council.releaseCandidacyStake(active.id)
+    // TODO: Those are transaction that needs to be handled:
+    // api.tx.members.removeStakingAccount(memberId)
+    // api.tx.referendum.releaseVoteStake()
+    // api.tx.council.releaseCandidacyStake()
+
+    return api.tx.utility.batch([])
   }, [connectionState, active?.id, JSON.stringify(balances)])
 
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
@@ -49,7 +54,7 @@ export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee?.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>

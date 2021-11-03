@@ -6,6 +6,7 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
 
+import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
 import { UseApi } from '@/common/providers/api/provider'
@@ -200,7 +201,7 @@ export const stubCouncilAndReferendum = (
   )
 }
 
-type Balances = { available?: number; locked?: number; lockId?: number }
+type Balances = { available?: number; locked?: number; lockId?: LockType }
 
 export const stubBalances = (api: UseApi, { available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
@@ -217,7 +218,7 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
         frozenFee: new BN(0),
         frozenMisc: new BN(0),
         isVesting: false,
-        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 11)],
+        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Staking Candidate')],
         reservedBalance: new BN(0),
         vestedBalance: new BN(0),
         vestedClaimable: new BN(0),

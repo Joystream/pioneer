@@ -3,10 +3,9 @@ import React from 'react'
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
+import { PageTitle } from '@/common/components/page/PageTitle'
 import { AddMembershipButton } from '@/memberships/components/AddMembershipButton'
 import { InviteMemberButton } from '@/memberships/components/InviteMemberButton'
-
-import { PageTitle } from '../../../common/components/page/PageTitle'
 
 import { Memberships } from './components/Memberships'
 import { MyProfileTabs } from './components/MyProfileTabs'
