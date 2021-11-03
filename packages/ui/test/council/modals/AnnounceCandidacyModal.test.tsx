@@ -524,7 +524,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
     const lastPage = history.entries.pop()
     expect(lastPage?.pathname).toEqual(CouncilRoutes.currentElection)
-    expect(lastPage?.search).toEqual('candidate=0')
+    expect(lastPage?.search).toEqual('?candidate=0')
   })
 
   async function fillStakingAmount(value: number) {
