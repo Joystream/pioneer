@@ -28,7 +28,7 @@ import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VoteForProposalButton } from '@/proposals/components/VoteForProposalButton'
-import { VotesPreview } from '@/proposals/components/VotesPreview'
+import { VotesContainer, VotesPreview } from '@/proposals/components/VotesPreview'
 import { getVoteStatusComponent } from '@/proposals/components/VoteStatusComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
@@ -164,7 +164,7 @@ export const ProposalPreview = () => {
       sidebar={
         <SidePanel scrollable>
           <RowGapBlock gap={36}>
-            {myVoteStatus && <span>You voted for: {getVoteStatusComponent(myVoteStatus)}</span>}
+            {myVoteStatus && <VotesContainer>You voted for: {getVoteStatusComponent(myVoteStatus)}</VotesContainer>}
             <VotesPreview votes={votes} />
 
             <ProposalHistory proposal={proposal} />

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 
+import { ProposalVoteKind } from '@/common/api/queries'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { VoteStatus } from '@/proposals/constants'
 
@@ -27,4 +28,8 @@ const voteStatusMap: Record<ProposalVote['voteKind'], ReactNode> = {
   ),
 }
 
-export const getVoteStatusComponent = (voteKind: ProposalVote['voteKind']) => voteStatusMap[voteKind]
+interface Props {
+  voteKind: ProposalVoteKind
+}
+export const VoteStatusComponent = ({ voteKind }: Props) => <>{voteStatusMap[voteKind]}</>
+export const getVoteStatusComponent = (voteKind: ProposalVoteKind) => voteStatusMap[voteKind]
