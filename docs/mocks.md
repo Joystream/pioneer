@@ -88,3 +88,28 @@ In order to properly mock an `Entity` you should:
     childId: '7'
   })
   ```
+
+#### Speeding up MirageJS seeding
+
+Seeding MirageJS can be slow, so when writing tests or stories, it's important to only add the truly essential data to MirageJS. For instance seeding all mocked members data with ~~`seedMembers(server)`~~ in a test suit or a story should be avoided.
+
+One way to seed fewer data is to manually pass them to the _singular_ `seedEntity()` functions. For example with `ElectedCouncil`:
+
+```ts
+seedElectedCouncil({ id: '0', electedAtBlock: 1, endedAtBlock: 2 }, server)
+seedElectedCouncil({ id: '1', electedAtBlock: 3, endedAtBlock: 4 }, server)
+```
+
+A drawback of this method is that: the code needs to be updated whenever the entity fields change. Like if `electedAtBlock` is rename to `electedAt`, or if a new field is added to `ElectedCouncil`. So it's important to keep most of this data in one place, like in [packages/ui/test/_mocks/server/seeds/index.ts](/packages/ui/test/_mocks/server/seeds/index.ts).
+
+To avoid this issue, some _plural_ `seedEntities()` truncate the [raw data](/packages/ui/src/mocks/data/raw). For example:
+```ts
+seedMembers(server, 2)
+```
+Here only the first two members from the mocked [@/mocks/data/raw/members.json](/packages/ui/src/mocks/data/raw/members.json) file were added to the MirageJS database.
+
+Finally in order to both reuse and customize mocked data. Some _plural_ `seedEntities()` can be implemented as follow:
+```ts
+seedCouncilCandidates(server.server, [{ memberId: '0' }, { memberId: '1' }])
+```
+Here the first two candidates from [`@/mocks/data/raw/candidates.json`](/packages/ui/src/mocks/data/raw/candidates.json) were added to the MirageJS database, but their `memberId`s where changed to match the two members previously seeded.

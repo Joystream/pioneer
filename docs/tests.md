@@ -104,7 +104,7 @@ Additionally, the below node modules are always mocked (see `packages/ui/tests/_
 
 If you experience a slow test:
 
-- Reduce number of mocked data. The default `seedEntity()` methods loads all the date (with related tables) while most of the tests needs only one or two entities.
+- Reduce number of mocked data. The default `seedEntities()` methods loads all the date (with related tables) while most of the tests needs only one or two entities (see [Speeding up MirageJS seeding](mocks.md#speeding-up-miragejs-seeding)).
 - Look out for `*ByRole()` queries as they are way slower than `*ByText()` or `*ByTestId()` (we use `id` as test-id attribute).
 
 ## CI & integration
