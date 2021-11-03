@@ -44,7 +44,7 @@ type FilterGqlInput = Pick<MembershipWhereInput, 'id_eq' | 'isVerified_eq' | 'is
 
 const filterToGqlInput = ({ search, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
   ...(search ? { handle_contains: search } : {}),
-  ...(council ? { isCouncilMember_eq: true } : {}),
+  ...(council === null ? {} : { isCouncilMember_eq: council }),
   ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
 })
