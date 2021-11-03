@@ -13,6 +13,7 @@ import {
 } from '@/common/components/StepperModal'
 import { useModal } from '@/common/hooks/useModal'
 import { Step } from '@/common/model/machines/getSteps'
+import { Member } from '@/memberships/types'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
@@ -24,9 +25,10 @@ interface Props {
   opening: WorkingGroupOpening
   send: (event: Event<ApplyForRoleEvent>, payload?: EventData | undefined) => void
   steps: Step[]
+  member: Member
 }
 
-export const ApplyForRoleStakeStep = ({ opening, send, steps }: Props) => {
+export const ApplyForRoleStakeStep = ({ opening, send, steps, member }: Props) => {
   const { hideModal } = useModal()
   const [isValid, setValid] = useState(false)
   const [stake, setStake] = useState<StakeStepFormFields | null>(null)
@@ -46,7 +48,7 @@ export const ApplyForRoleStakeStep = ({ opening, send, steps }: Props) => {
             <OpeningFormPreview opening={opening} />
           </StepDescriptionColumn>
           <StepperBody>
-            <StakeStep opening={opening} onChange={onStakeStepChange} />
+            <StakeStep opening={opening} onChange={onStakeStepChange} member={member} />
           </StepperBody>
         </StepperModalWrapper>
       </StepperModalBody>

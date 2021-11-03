@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -35,6 +36,7 @@ const StakeStepFormSchema = Yup.object().shape({
 
 export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account, setAccount }: StakingStepProps) => {
   const balances = useMyBalances()
+  const status = useStakingAccountStatus(account?.address, candidacyMember.id)
   const schema = useMemo(() => {
     StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
       minStake.toNumber(),
@@ -103,7 +105,14 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
             <h4>1. Select an Account</h4>
             <TextMedium>First please select an account for staking.</TextMedium>
           </RowGapBlock>
-          <InputComponent label="Select account for Staking" required inputSize="l" disabled={!isSomeBalanceGteStake}>
+          <InputComponent
+            label="Select account for Staking"
+            required
+            inputSize="l"
+            disabled={!isSomeBalanceGteStake}
+            validation={status === 'other' ? 'invalid' : undefined}
+            message={status === 'other' ? 'This account is bound to the another member' : undefined}
+          >
             <SelectAccount
               onChange={(account) => setAccount(account)}
               selected={account}
