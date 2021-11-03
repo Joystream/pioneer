@@ -10,7 +10,7 @@ import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMember, seedProposal } from '@/mocks/data'
+import { seedMembers, seedProposal } from '@/mocks/data'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
@@ -30,7 +30,9 @@ describe('ProposalPreview', () => {
   const useMyMemberships: MyMemberships = {
     active: getMember('alice'),
     members: [getMember('alice')],
-    setActive: (member) => (useMyMemberships.active = member),
+    setActive: (member) => {
+      useMyMemberships.active = member
+    },
     isLoading: false,
     hasMembers: true,
   }
@@ -38,7 +40,7 @@ describe('ProposalPreview', () => {
   beforeAll(cryptoWaitReady)
 
   beforeEach(() => {
-    seedMember(MEMBER_ALICE_DATA, mockServer.server)
+    seedMembers(mockServer.server, 2)
     seedProposal(PROPOSAL_DATA, mockServer.server)
     stubQuery(api, 'council.councilMembers', [])
     stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
@@ -91,6 +93,7 @@ describe('ProposalPreview', () => {
     it('Member is not a council member', () => {
       renderPage()
       expect(screen.queryByText(/Vote on Proposal/i)).toBeNull()
+      expect(screen.queryByText(/Already voted/i)).toBeNull()
     })
 
     describe('Member is a council member', () => {
@@ -108,6 +111,42 @@ describe('ProposalPreview', () => {
         renderPage()
         expect(await screen.findByText(/Already voted/i)).toBeDefined()
       })
+    })
+  })
+
+  describe('"You voted for" section', () => {
+    beforeEach(() => {
+      stubQuery(api, 'council.councilMembers', [{ membership_id: createType('MemberId', 0) }])
+    })
+
+    it('No vote cast', () => {
+      renderPage()
+      expect(screen.queryByText(/You voted for:/i)).toBeNull()
+    })
+
+    it('Voted for rejecting', async () => {
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [
+            {
+              id: '0',
+              voteKind: 'REJECT',
+              network: 'OLYMPIA',
+              createdAt: '2021-10-21T11:21:59.812Z',
+              inBlock: 100,
+              voterId: '0',
+              rationale: '',
+              votingRound: 0,
+            },
+          ],
+        },
+        mockServer.server
+      )
+
+      renderPage()
+
+      expect((await screen.findByText(/You voted for:/i)).textContent).toEqual('You voted for: Rejected')
     })
   })
 

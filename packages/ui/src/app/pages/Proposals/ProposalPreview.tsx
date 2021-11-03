@@ -29,6 +29,7 @@ import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VoteForProposalButton } from '@/proposals/components/VoteForProposalButton'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
+import { getVoteStatusComponent } from '@/proposals/components/VoteStatusComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useHasMemberVotedOnProposal } from '@/proposals/hooks/useHasMemberVotedOnProposal'
@@ -65,6 +66,9 @@ export const ProposalPreview = () => {
   const isCouncilMember = useIsCouncilMember(active)
   const hasVoted = useHasMemberVotedOnProposal(id, active?.id)
 
+  const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
+  const myVoteStatus = myVote?.voteKind
+
   if (isLoading || !proposal || !votes) {
     return (
       <PageLayout
@@ -91,6 +95,15 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
+              {isCouncilMember &&
+                proposal.status === 'deciding' &&
+                (!hasVoted ? (
+                  <VoteForProposalButton id={id}>Vote on Proposal</VoteForProposalButton>
+                ) : (
+                  <ButtonPrimary size="medium" disabled>
+                    Already voted
+                  </ButtonPrimary>
+                ))}
               <CopyButtonTemplate
                 size="medium"
                 textToCopy={getUrl({ route: ProposalsRoutes.preview, params: { id: proposal.id } })}
@@ -130,15 +143,6 @@ export const ProposalPreview = () => {
               onChange={setVotingRound}
             />
           )}
-
-          {isCouncilMember && proposal.status === 'deciding' && !hasVoted && (
-            <VoteForProposalButton id={id}>Vote on Proposal</VoteForProposalButton>
-          )}
-          {hasVoted && (
-            <ButtonPrimary size="medium" disabled>
-              Already voted
-            </ButtonPrimary>
-          )}
         </PageHeaderWrapper>
       }
       main={
@@ -160,6 +164,7 @@ export const ProposalPreview = () => {
       sidebar={
         <SidePanel scrollable>
           <RowGapBlock gap={36}>
+            {myVoteStatus && <span>You voted for: {getVoteStatusComponent(myVoteStatus)}</span>}
             <VotesPreview votes={votes} />
 
             <ProposalHistory proposal={proposal} />
