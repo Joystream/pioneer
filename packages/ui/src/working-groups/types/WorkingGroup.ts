@@ -5,6 +5,10 @@ import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
 import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
+export type GroupIdName = Extract<
+  keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
+  `${string}WorkingGroup`
+>
 export interface WorkingGroup {
   id: GroupIdName
   name: string
@@ -59,19 +63,4 @@ export const asWorkingGroupName = (name: string) => {
     .replace('WorkingGroup', '')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .toLowerCase()
-}
-
-type WorkingGroupApiCategory = `${string}WorkingGroup`
-export type GroupIdName = Extract<
-  keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
-  WorkingGroupApiCategory
->
-
-export const GroupRewardPeriods: Record<GroupIdName, BN> = {
-  forumWorkingGroup: new BN(14400 + 10),
-  storageWorkingGroup: new BN(14400 + 20),
-  contentDirectoryWorkingGroup: new BN(14400 + 30),
-  membershipWorkingGroup: new BN(14400 + 40),
-  gatewayWorkingGroup: new BN(14400 + 50),
-  operationsWorkingGroup: new BN(14400 + 60),
 }
