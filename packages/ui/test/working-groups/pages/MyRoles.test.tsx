@@ -28,6 +28,7 @@ describe('UI: My Role Page', () => {
   const mockServer = setupMockServer()
 
   const useAccounts: UseAccounts = {
+    isLoading: false,
     hasAccounts: true,
     allAccounts: [alice, bob],
   }

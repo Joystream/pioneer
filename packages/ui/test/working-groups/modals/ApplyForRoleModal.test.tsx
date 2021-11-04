@@ -80,6 +80,7 @@ describe('UI: ApplyForRoleModal', () => {
     seedOpening(OPENING_DATA, server.server)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

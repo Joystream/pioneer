@@ -25,6 +25,7 @@ interface Props {
 }
 
 const useAccounts = {
+  isLoading: false,
   allAccounts: [
     { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
     { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
