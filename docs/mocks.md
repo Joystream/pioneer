@@ -29,8 +29,11 @@ yarn node-mocks --help
 Another way to influence the on-chain state for testing purpose, is to provide a customize `chain-spec.json` file when running a Joystream node:
 
 1. Create `packages/ui/dev/chain-spec/data/chain-spec.json` if it does not exist:
-   - Run `docker-compose run --rm build`
-   - The first time the `chain-spec.json` file is generated this way, the file ownership might have to be fixed.
+   - Either with docker compose: `docker-compose run --rm build` (the first time the `chain-spec.json` file is generated this way, the file ownership might have to be fixed).
+   - Or directly with the runtime binary:
+      ```shell
+      <path to the runtime> build-spec --dev > packages/ui/dev/chain-spec/data/chain-spec.json
+      ```
 
 2. _(optional)_ Change the starting Council/Referendum stage (the default is `Announcing`):
    - Run `yarn workspace ui run set-chain-spec <stage>` (the stages are lowercase)
