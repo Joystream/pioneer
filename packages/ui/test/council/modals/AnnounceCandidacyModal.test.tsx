@@ -1,8 +1,9 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, configure, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { createMemoryHistory, MemoryHistory } from 'history'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, Router } from 'react-router'
 import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -13,16 +14,18 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { CouncilRoutes } from '@/council/constants'
 import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { RawCouncilElectionMock, seedCouncilCandidate, seedCouncilElection, seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
+import { CANDIDATE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -473,6 +476,57 @@ describe('UI: Announce Candidacy Modal', () => {
     })
   })
 
+  it('See my Announcement button', async () => {
+    stubTransactionSuccess(candidacyNoteTx, 'council', 'CandidacyNoteSet')
+    seedCouncilElection(
+      {
+        id: '0',
+        isFinished: false,
+        cycleId: 0,
+      } as RawCouncilElectionMock,
+      server.server
+    )
+    seedCouncilCandidate(CANDIDATE_DATA, server.server)
+
+    const history = createMemoryHistory()
+
+    stubQuery(
+      api,
+      'members.stakingAccountIdMemberStatus',
+      createType('StakingAccountMemberBinding', {
+        member_id: createType('MemberId', 0),
+        confirmed: createType('bool', false),
+      })
+    )
+    stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+
+    renderModal(history)
+    await fillStakingStep('alice', 15, true)
+    await fillRewardAccountStep('alice', true)
+    await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
+    await fillSummary(true)
+
+    stubTransactionSuccess(batchTx, 'council', 'NewCandidate')
+    await act(async () => {
+      fireEvent.click(await getButton(/^Sign transaction/i))
+    })
+
+    stubTransactionSuccess(candidacyNoteTx, 'council', 'CandidacyNoteSet')
+    await act(async () => {
+      fireEvent.click(await getButton(/^Sign transaction/i))
+    })
+
+    expect(screen.queryByText(/^Success/i)).not.toBeNull()
+    await waitFor(async () => expect(await getButton(/^See my announcement/i)).not.toBeDisabled())
+    await act(async () => {
+      fireEvent.click(await getButton(/^See my announcement/i))
+    })
+
+    const lastPage = history.entries.pop()
+    expect(lastPage?.pathname).toEqual(CouncilRoutes.currentElection)
+    expect(lastPage?.search).toEqual('?candidate=0')
+  })
+
   async function fillStakingAmount(value: number) {
     const amountInput = await screen.getByTestId('amount-input')
 
@@ -550,9 +604,10 @@ describe('UI: Announce Candidacy Modal', () => {
     })
   }
 
-  function renderModal() {
+  function renderModal(initialHistory?: MemoryHistory) {
+    const history = initialHistory ?? createMemoryHistory()
     return render(
-      <MemoryRouter>
+      <Router history={history}>
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
@@ -568,7 +623,7 @@ describe('UI: Announce Candidacy Modal', () => {
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>
-      </MemoryRouter>
+      </Router>
     )
   }
 })

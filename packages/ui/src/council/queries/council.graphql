@@ -242,6 +242,12 @@ query GetElectionCandidatesIds($electionCycleId: Int!) {
   }
 }
 
+query GetCurrentCandidateIdByMember($memberId: ID!) {
+  candidates(where: { member: { id_eq: $memberId } }, orderBy: [electionRound_DESC], limit: 1) {
+    id
+  }
+}
+
 query GetCandidateStats($memberId: ID) {
   candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
     totalCount

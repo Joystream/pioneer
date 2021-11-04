@@ -826,6 +826,15 @@ export type GetElectionCandidatesIdsQuery = {
   candidates: Array<{ __typename: 'Candidate'; id: string }>
 }
 
+export type GetCurrentCandidateIdByMemberQueryVariables = Types.Exact<{
+  memberId: Types.Scalars['ID']
+}>
+
+export type GetCurrentCandidateIdByMemberQuery = {
+  __typename: 'Query'
+  candidates: Array<{ __typename: 'Candidate'; id: string }>
+}
+
 export type GetCandidateStatsQueryVariables = Types.Exact<{
   memberId?: Types.Maybe<Types.Scalars['ID']>
 }>
@@ -1775,6 +1784,59 @@ export type GetElectionCandidatesIdsLazyQueryHookResult = ReturnType<typeof useG
 export type GetElectionCandidatesIdsQueryResult = Apollo.QueryResult<
   GetElectionCandidatesIdsQuery,
   GetElectionCandidatesIdsQueryVariables
+>
+export const GetCurrentCandidateIdByMemberDocument = gql`
+  query GetCurrentCandidateIdByMember($memberId: ID!) {
+    candidates(where: { member: { id_eq: $memberId } }, orderBy: [electionRound_DESC], limit: 1) {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetCurrentCandidateIdByMemberQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentCandidateIdByMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentCandidateIdByMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentCandidateIdByMemberQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetCurrentCandidateIdByMemberQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCurrentCandidateIdByMemberQuery, GetCurrentCandidateIdByMemberQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCurrentCandidateIdByMemberQuery, GetCurrentCandidateIdByMemberQueryVariables>(
+    GetCurrentCandidateIdByMemberDocument,
+    options
+  )
+}
+export function useGetCurrentCandidateIdByMemberLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCurrentCandidateIdByMemberQuery,
+    GetCurrentCandidateIdByMemberQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCurrentCandidateIdByMemberQuery, GetCurrentCandidateIdByMemberQueryVariables>(
+    GetCurrentCandidateIdByMemberDocument,
+    options
+  )
+}
+export type GetCurrentCandidateIdByMemberQueryHookResult = ReturnType<typeof useGetCurrentCandidateIdByMemberQuery>
+export type GetCurrentCandidateIdByMemberLazyQueryHookResult = ReturnType<
+  typeof useGetCurrentCandidateIdByMemberLazyQuery
+>
+export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
+  GetCurrentCandidateIdByMemberQuery,
+  GetCurrentCandidateIdByMemberQueryVariables
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
