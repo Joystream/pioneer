@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
@@ -15,6 +15,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
+import { getButton, queryButton } from '../../../_helpers/getButton'
 import { alice, bob } from '../../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
@@ -93,6 +94,28 @@ describe('Page: MyAccounts', () => {
     testStatisticItem(header, /total transferable balance/i, /20,000/i)
     testStatisticItem(header, /total locked balance/i, /500/i)
     testStatisticItem(header, /total recoverable/i, /500/i)
+  })
+
+  it('Recover balance button (recoverable)', async () => {
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
+
+    renderPage()
+
+    fireEvent.click(await screen.findByText(/alice/i))
+    await screen.findByText(/Staking Candidate/i)
+
+    expect(await getButton(/^recover$/i)).toBeDefined()
+  })
+
+  it('Recover balance button (nonrecoverable)', async () => {
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Storage Worker' })
+
+    renderPage()
+
+    fireEvent.click(await screen.findByText(/alice/i))
+    await screen.findByText(/Storage Worker/i)
+
+    expect(await queryButton(/^recover$/i)).not.toBeDefined()
   })
 
   function renderPage(path = '/profile') {

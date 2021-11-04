@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { BalanceLock } from '@/accounts/types'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 
@@ -21,8 +22,12 @@ export const LockItem = ({ lock, isRecoverable }: DetailsItemDataProps) => (
       <div />
       {isRecoverable ? <div /> : null}
       <TokenValue value={lock.amount} />
-      {isRecoverable ? null : <div />}
-      <div />
+      {isRecoverable && (
+        <>
+          <div />
+          <ButtonPrimary size="small">Recover</ButtonPrimary>
+        </>
+      )}
     </AccountDetailsWrap>
   </DetailsItemVoteWrapper>
 )
