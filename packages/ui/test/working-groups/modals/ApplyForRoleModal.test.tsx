@@ -32,6 +32,7 @@ import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubBalances,
+  stubConst,
   stubQuery,
   stubTransaction,
   stubTransactionFailure,
@@ -48,6 +49,7 @@ jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
 
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
+
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
@@ -90,6 +92,7 @@ describe('UI: ApplyForRoleModal', () => {
     useModal.modalData = { opening }
     useMyMemberships.setActive(getMember('alice'))
 
+    stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
     stubBalances(api, {
       available: 2000,
     })

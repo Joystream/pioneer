@@ -763,7 +763,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     id: string
     type: Types.WorkingGroupOpeningType
     rewardPerBlock: any
-    group: { __typename: 'WorkingGroup'; name: string }
+    group: { __typename: 'WorkingGroup'; id: string; name: string }
   }
   applicant: {
     __typename: 'Membership'
@@ -809,7 +809,7 @@ export type GetWorkingGroupApplicationsQuery = {
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
-      group: { __typename: 'WorkingGroup'; name: string }
+      group: { __typename: 'WorkingGroup'; id: string; name: string }
     }
     applicant: {
       __typename: 'Membership'
@@ -866,7 +866,7 @@ export type GetWorkingGroupApplicationQuery = {
           id: string
           type: Types.WorkingGroupOpeningType
           rewardPerBlock: any
-          group: { __typename: 'WorkingGroup'; name: string }
+          group: { __typename: 'WorkingGroup'; id: string; name: string }
         }
         applicant: {
           __typename: 'Membership'
@@ -1241,6 +1241,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
     opening {
       id
       group {
+        id
         name
       }
       type

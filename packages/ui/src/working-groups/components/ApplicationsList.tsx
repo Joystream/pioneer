@@ -10,6 +10,7 @@ import { TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { useModal } from '../../common/hooks/useModal'
 import { openingTitle } from '../helpers'
+import { useRewardPeriod } from '../hooks/useRewardPeriod'
 import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
@@ -42,6 +43,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { applicationId: application.id } })
   }, [application.id])
+  const rewardPeriod = useRewardPeriod(application.opening.groupId)
 
   return (
     <ApplicationItemWrap past={past}>
@@ -56,11 +58,9 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={application.opening.reward.payout} />
+            <TokenValue value={rewardPeriod?.mul(application.opening.rewardPerBlock)} />
           </TextInlineBig>
-          <ToggleableSubscriptionWide>
-            Reward per {application.opening.reward.blockInterval} blocks.
-          </ToggleableSubscriptionWide>
+          <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>

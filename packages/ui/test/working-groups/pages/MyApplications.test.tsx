@@ -1,8 +1,7 @@
+import { BN_TEN } from '@polkadot/util'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
-
-import { getReward } from '@/working-groups/model/getReward'
 
 import { MyApplications } from '../../../src/app/pages/WorkingGroups/MyApplications'
 import { Block } from '../../../src/common/types'
@@ -27,7 +26,8 @@ const currentApplication: WorkingGroupApplication = {
     id: '2',
     type: 'LEAD',
     groupName: 'Storage',
-    reward: getReward(1, 'storage'),
+    groupId: 'storageWorkingGroup',
+    rewardPerBlock: BN_TEN,
   },
   createdAtBlock: block,
   status: 'ApplicationStatusPending',
@@ -41,7 +41,8 @@ const pastApplication: WorkingGroupApplication = {
     id: '2',
     type: 'REGULAR',
     groupName: 'Forum',
-    reward: getReward(1, 'forum'),
+    groupId: 'forumWorkingGroup',
+    rewardPerBlock: BN_TEN,
   },
   createdAtBlock: block,
   status: 'ApplicationStatusRejected',
