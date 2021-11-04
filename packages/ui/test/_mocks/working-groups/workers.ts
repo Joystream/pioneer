@@ -1,4 +1,5 @@
-import { getReward } from '@/working-groups/model/getReward'
+import { BN_TWO } from '@polkadot/util'
+
 import { WorkerWithDetails } from '@/working-groups/types'
 
 import { alice } from '../keyring'
@@ -13,7 +14,7 @@ export const WORKER: WorkerWithDetails = {
     id: 'forumWorkingGroup',
   },
   isLead: false,
-  reward: getReward(2, 'forumWorkingGroup'),
+  rewardPerBlock: BN_TWO,
   stake: 2000,
   minStake: 2000,
   owedReward: 1000,

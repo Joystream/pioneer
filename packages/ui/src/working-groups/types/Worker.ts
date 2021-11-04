@@ -1,11 +1,9 @@
+import BN from 'bn.js'
+
 import { Address, asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { PastWorkerFieldsFragment, WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupName, GroupIdName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
-
-import { getReward } from '../model/getReward'
-
-import { Reward } from './Reward'
 
 export interface WorkerBaseInfo {
   member: Member
@@ -19,7 +17,7 @@ export interface Worker {
   group: Pick<WorkingGroup, 'id' | 'name'>
   status: WorkerStatusTypename
   isLead: boolean
-  reward: Reward
+  rewardPerBlock: BN
   owedReward: number
   stake: number
 }
@@ -68,7 +66,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   },
   status: fields.status.__typename,
   isLead: fields.isLead,
-  reward: getReward(fields.rewardPerBlock, fields.group.id as GroupIdName),
+  rewardPerBlock: new BN(fields.rewardPerBlock),
   stake: fields.stake,
   owedReward: fields.missingRewardAmount,
 })

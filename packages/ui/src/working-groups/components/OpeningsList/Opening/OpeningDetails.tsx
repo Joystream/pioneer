@@ -14,11 +14,13 @@ import {
   OpenedTop,
   OpenedWrapper,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 
 export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
   const { showModal } = useModal()
+  const rewardPeriod = useRewardPeriod(opening.groupId)
 
   return (
     <OpenedContainer onClick={onClick}>
@@ -31,9 +33,9 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
         <Statistics withMargin gapSize="s">
           <StatsBlock size="m" centered>
             <TextBig>
-              <TokenValue value={opening.reward.payout} />
+              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
             </TextBig>
-            <Subscription>Reward per {opening.reward.blockInterval} blocks</Subscription>
+            <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TwoColumnsStatistic>

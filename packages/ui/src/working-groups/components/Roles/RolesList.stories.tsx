@@ -1,10 +1,10 @@
+import { BN_TEN } from '@polkadot/util'
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { RolesList, RolesListProps } from '@/working-groups/components/Roles/RolesList'
-import { getReward } from '@/working-groups/model/getReward'
 
 export default {
   title: 'WorkingGroup/RolesList',
@@ -28,7 +28,7 @@ Default.args = {
       group: { id: 'forumWorkingGroup', name: 'forum' },
       membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
       status: 'WorkerStatusActive',
-      reward: getReward(1, 'forumWorkingGroup'),
+      rewardPerBlock: BN_TEN,
       stake: 1000,
       isLead: false,
       owedReward: 1000,

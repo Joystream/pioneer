@@ -9,6 +9,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
@@ -55,6 +56,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
     })
   }, [])
   const { earnings } = useWorkerEarnings(worker.id)
+  const rewardPeriod = useRewardPeriod(worker.group.id)
 
   const roleRoute = `/working-groups/my-roles/${worker.id}`
 
@@ -72,9 +74,9 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(worker.reward.payout)} />
+            <TokenValue value={rewardPeriod?.mul(worker.rewardPerBlock)} />
           </TextInlineBig>
-          <ToggleableSubscriptionWide>Reward per {worker.reward.blockInterval} blocks</ToggleableSubscriptionWide>
+          <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>

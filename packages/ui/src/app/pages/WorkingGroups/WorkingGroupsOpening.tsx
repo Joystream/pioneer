@@ -33,6 +33,7 @@ import { ApplicationStatusWrapper } from '@/working-groups/components/Applicatio
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-groups/constants'
 import { useOpening } from '@/working-groups/hooks/useOpening'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
 
@@ -51,6 +52,7 @@ export const WorkingGroupOpening = () => {
       return opening.applications.find(({ id }) => id === activeMembership?.id)
     }
   }, [opening?.id, activeMembership?.id])
+  const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   if (isLoading || !opening) {
     return (
@@ -138,8 +140,8 @@ export const WorkingGroupOpening = () => {
             <Statistics>
               <DurationStatistics title="Time Left" value={opening.expectedEnding} />
               <TokenValueStat
-                title={`Reward per ${opening.reward.blockInterval} blocks`}
-                value={opening.reward.payout}
+                title={`Reward per ${rewardPeriod?.toString()} blocks`}
+                value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
               <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} />

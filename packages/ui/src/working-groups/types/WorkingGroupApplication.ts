@@ -1,11 +1,11 @@
+import BN from 'bn.js'
+
 import { asBlock, Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 
-import { getReward } from '../model/getReward'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
 import { GroupIdName } from '.'
-import { Reward } from './Reward'
 import { asWorkingGroupName } from './WorkingGroup'
 
 export interface WorkingGroupApplication {
@@ -15,7 +15,8 @@ export interface WorkingGroupApplication {
     id: string
     type: string
     groupName: string
-    reward: Reward
+    groupId: GroupIdName
+    rewardPerBlock: BN
   }
   applicant?: Member
   roleAccount?: string
@@ -33,7 +34,8 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
     id: fields.opening.id,
     type: fields.opening.type,
     groupName: asWorkingGroupName(fields.opening.group.name),
-    reward: getReward(fields.opening.rewardPerBlock, fields.opening.group.name as GroupIdName),
+    groupId: fields.opening.group.id as GroupIdName,
+    rewardPerBlock: new BN(fields.opening.rewardPerBlock),
   },
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,
