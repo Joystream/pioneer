@@ -284,12 +284,41 @@ describe('UI: Election page', () => {
       })
     })
 
-    it('Revealing stage', async () => {
-      stubCouncilAndReferendum(api, 'Election', 'Revealing')
+    describe('Revealing stage', () => {
+      beforeEach(() => {
+        stubCouncilAndReferendum(api, 'Election', 'Revealing')
+        window.localStorage.clear()
+      })
 
-      const { queryByText } = await renderComponent()
+      it('Displays stage', async () => {
+        const { queryByText } = await renderComponent()
 
-      expect(queryByText(/Revealing period/i)).not.toBeNull()
+        expect(queryByText(/Revealing period/i)).not.toBeNull()
+      })
+
+      describe('Votes count', () => {
+        it('Two votes for different candidates', async () => {
+          TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+          castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, bobMemberId, TEST_SALT)
+
+          await renderComponent([alice, bob])
+
+          const myVotesTab = await screen.findByText(/My Votes/i)
+          expect(myVotesTab.firstElementChild).toHaveTextContent('2')
+        })
+
+        it('Two votes for the same candidate', async () => {
+          TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+          castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, aliceMemberId, TEST_SALT)
+
+          await renderComponent([alice, bob])
+
+          const myVotesTab = await screen.findByText(/My Votes/i)
+          expect(myVotesTab.firstElementChild).toHaveTextContent('2')
+        })
+      })
     })
   })
 
