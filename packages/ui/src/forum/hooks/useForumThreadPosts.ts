@@ -43,7 +43,9 @@ export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNav
     }
   }, [where, offset])
 
-  const { loading: loadingCount, data: countData } = useGetForumPostsCountQuery({ variables: { where } })
+  const { loading: loadingCount, data: countData } = useGetForumPostsCountQuery({
+    variables: { where },
+  })
   const totalCount = countData?.forumPostsConnection.totalCount
 
   return {
