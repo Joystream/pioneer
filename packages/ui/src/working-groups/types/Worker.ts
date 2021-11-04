@@ -1,7 +1,7 @@
 import { Address, asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { PastWorkerFieldsFragment, WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
-import { asWorkingGroupName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
+import { asWorkingGroupName, GroupIdName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 import { getReward } from '../model/getReward'
 
@@ -59,7 +59,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   id: fields.id,
   runtimeId: fields.runtimeId,
   group: {
-    id: fields.group.id,
+    id: fields.group.id as GroupIdName,
     name: asWorkingGroupName(fields.group.name),
   },
   membership: {
@@ -68,7 +68,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   },
   status: fields.status.__typename,
   isLead: fields.isLead,
-  reward: getReward(fields.rewardPerBlock, fields.group.name),
+  reward: getReward(fields.rewardPerBlock, fields.group.id as GroupIdName),
   stake: fields.stake,
   owedReward: fields.missingRewardAmount,
 })

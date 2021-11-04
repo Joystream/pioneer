@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Colors, Transitions } from '../../common/constants'
-import { GroupName } from '../types'
+import { GroupIdName } from '../types'
 
 export interface WorkingGroupImageProps {
   className?: string
-  groupName?: GroupName | string
+  groupName?: GroupIdName | string
 }
 
 export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImageProps) => {

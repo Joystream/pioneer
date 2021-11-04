@@ -4,6 +4,7 @@ import { Member } from '@/memberships/types'
 import { getReward } from '../model/getReward'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
+import { GroupIdName } from '.'
 import { Reward } from './Reward'
 import { asWorkingGroupName } from './WorkingGroup'
 
@@ -32,7 +33,7 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
     id: fields.opening.id,
     type: fields.opening.type,
     groupName: asWorkingGroupName(fields.opening.group.name),
-    reward: getReward(fields.opening.rewardPerBlock, fields.opening.group.name),
+    reward: getReward(fields.opening.rewardPerBlock, fields.opening.group.name as GroupIdName),
   },
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,

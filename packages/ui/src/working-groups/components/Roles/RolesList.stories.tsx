@@ -25,10 +25,10 @@ Default.args = {
     {
       id: '0',
       runtimeId: 1,
-      group: { id: '0', name: 'forum' },
+      group: { id: 'forumWorkingGroup', name: 'forum' },
       membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
       status: 'WorkerStatusActive',
-      reward: getReward(1, 'forum'),
+      reward: getReward(1, 'forumWorkingGroup'),
       stake: 1000,
       isLead: false,
       owedReward: 1000,

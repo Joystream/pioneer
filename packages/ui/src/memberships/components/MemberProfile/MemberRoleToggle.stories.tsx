@@ -31,10 +31,10 @@ Default.args = {
   role: {
     id: '123',
     runtimeId: 12,
-    group: { id: '3', name: 'membership' },
+    group: { id: 'membershipWorkingGroup', name: 'membership' },
     isLead: false,
     membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
-    reward: getReward(2, 'membership'),
+    reward: getReward(2, 'membershipWorkingGroup'),
     stake: 192837021,
     owedReward: 1000,
     minStake: 400,

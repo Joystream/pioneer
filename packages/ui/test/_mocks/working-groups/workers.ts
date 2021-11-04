@@ -10,10 +10,10 @@ export const WORKER: WorkerWithDetails = {
   },
   group: {
     name: 'forum',
-    id: '1',
+    id: 'forumWorkingGroup',
   },
   isLead: false,
-  reward: getReward(2, 'forum'),
+  reward: getReward(2, 'forumWorkingGroup'),
   stake: 2000,
   minStake: 2000,
   owedReward: 1000,

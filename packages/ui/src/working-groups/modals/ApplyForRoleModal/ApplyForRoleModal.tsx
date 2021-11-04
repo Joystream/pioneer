@@ -19,9 +19,8 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
-import { getGroup } from '@/working-groups/model/getGroup'
 
-import { GroupName, groupToLockId } from '../../types'
+import { groupToLockId } from '../../types'
 
 import { ApplyForRoleApplicationStep } from './ApplyForRoleApplicationStep'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
@@ -45,11 +44,11 @@ export const ApplyForRoleModal = () => {
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
     requiredStake,
-    groupToLockId(opening.groupName)
+    groupToLockId(opening.groupId)
   )
   const transaction = useMemo(() => {
     if (activeMember && api) {
-      return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
+      return api.tx[opening.groupId].applyOnOpening({
         member_id: activeMember?.id,
         opening_id: opening.runtimeId,
         role_account_id: activeMember?.controllerAccount,
@@ -148,7 +147,7 @@ export const ApplyForRoleModal = () => {
   if (state.matches('transaction') && signer && api && transactionService) {
     const { stake, answers } = state.context
 
-    const applyOnOpeningTransaction = getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
+    const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
       opening_id: opening.runtimeId,
       member_id: activeMember?.id,
       role_account_id: activeMember?.controllerAccount,

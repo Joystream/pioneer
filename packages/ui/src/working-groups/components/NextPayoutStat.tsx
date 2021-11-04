@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
 
+import { useApi } from '@/common/hooks/useApi'
+
 import { StatisticItem } from '../../common/components/statistics'
 import { NumericValue } from '../../common/components/statistics/NumericValueStat'
 import { TextMedium } from '../../common/components/typography'
@@ -15,8 +17,9 @@ interface Props {
 
 export const NextPayoutStat = ({ workers }: Props) => {
   const blockNumber = useCurrentBlockNumber()
+  const { api } = useApi()
   const nextPayout = useMemo(
-    () => blockNumber && getNextPayout(workers, blockNumber),
+    () => blockNumber && getNextPayout(workers, blockNumber, api),
     [workers.length, blockNumber?.toNumber()]
   )
 
