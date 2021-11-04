@@ -1,7 +1,7 @@
 import { LazyQueryResult } from '@apollo/client'
 import { useEffect, useMemo } from 'react'
 
-import { ForumPostWhereInput } from '@/common/api/queries'
+import { ForumPostOrderByInput, ForumPostWhereInput } from '@/common/api/queries'
 import { Defined } from '@/common/types/helpers'
 import { isDefined } from '@/common/utils'
 import { useGetForumPostsCountQuery, useGetForumPostsIdsLazyQuery, useGetForumPostsLazyQuery } from '@/forum/queries'
@@ -37,9 +37,9 @@ export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNav
 
   useEffect(() => {
     if (isDefined(offset)) {
-      getPosts({ variables: { where, offset, limit: POSTS_PER_PAGE } })
+      getPosts({ variables: { where, offset, limit: POSTS_PER_PAGE, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
     } else {
-      getPostIds({ variables: { where, limit: 100000 } })
+      getPostIds({ variables: { where, limit: 100000, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
     }
   }, [where, offset])
 
