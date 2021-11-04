@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -8,6 +8,7 @@ import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
 import { seedMember, seedMembers } from '@/mocks/data'
 
+import { getButton } from '../../_helpers/getButton'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -21,10 +22,10 @@ describe('UI: CurrentMember component', () => {
   })
 
   describe('with no memberships', () => {
-    it('Displays create button', () => {
-      const { getByRole } = renderComponent()
+    it('Displays create button', async () => {
+      renderComponent()
 
-      expect(getByRole('button', { name: /create membership/i })).toBeDefined()
+      expect(await getButton(/create membership/i)).toBeDefined()
     })
   })
 
@@ -34,25 +35,26 @@ describe('UI: CurrentMember component', () => {
     })
 
     it('Displays memberships count', async () => {
-      const { getAllByText } = await renderAndWait()
+      await renderAndWait()
 
-      expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 2/i)
+      expect(screen.getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 2/i)
     })
 
     it('Renders select member button', async () => {
-      const { getByText } = await renderAndWait()
+      await renderAndWait()
 
-      expect(getByText(/select membership/i)).toBeDefined()
+      expect(screen.getByText(/select membership/i)).toBeDefined()
     })
 
     it('Sets active member', async () => {
-      const { getByText, getByRole } = await renderAndWait()
+      await renderAndWait()
 
-      fireEvent.click(getByText(/select membership/i))
+      await act(async () => {
+        fireEvent.click(screen.getByText(/select membership/i))
+        fireEvent.click(within(await screen.findByRole('modal')).getByText(/alice/i))
+      })
 
-      fireEvent.click(within(getByRole('modal')).getByText(/alice/i))
-
-      expect(getByText(/alice/i)).toBeDefined()
+      expect(screen.getByText(/alice/i)).toBeDefined()
     })
   })
 
@@ -62,9 +64,9 @@ describe('UI: CurrentMember component', () => {
     })
 
     it('Renders select member button', async () => {
-      const { getByText } = await renderAndWait()
+      await renderAndWait()
 
-      expect(getByText(/select membership/i)).toBeDefined()
+      expect(screen.getByText(/select membership/i)).toBeDefined()
     })
   })
 
@@ -106,11 +108,8 @@ describe('UI: CurrentMember component', () => {
   }
 
   async function renderAndWait() {
-    const renderResult = renderComponent()
-    const { getByRole } = renderResult
+    renderComponent()
 
-    await waitForElementToBeRemoved(() => getByRole('button', { name: /create membership/i }))
-
-    return renderResult
+    await waitForElementToBeRemoved(() => screen.getByText(/create membership/i))
   }
 })
