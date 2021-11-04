@@ -4,18 +4,21 @@ import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 
+import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
 import { ApiContext } from '@/common/providers/api/context'
-import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalContext } from '@/common/providers/modal/context'
+import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
 import { getButton, queryButton } from '../../../_helpers/getButton'
+import { createBalance } from '../../../_mocks/chainTypes'
 import { alice, bob } from '../../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
@@ -39,6 +42,8 @@ describe('Page: MyAccounts', () => {
     hasMembers: true,
   }
 
+  let useModal: UseModal<any>
+
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
@@ -49,6 +54,12 @@ describe('Page: MyAccounts', () => {
       isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
+    }
+    useModal = {
+      hideModal: jest.fn(),
+      modal: null,
+      modalData: undefined,
+      showModal: jest.fn(),
     }
 
     stubDefaultBalances(api)
@@ -96,26 +107,49 @@ describe('Page: MyAccounts', () => {
     testStatisticItem(header, /total recoverable/i, /500/i)
   })
 
-  it('Recover balance button (recoverable)', async () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
+  describe('Recover balance button', () => {
+    it('Recoverable', async () => {
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
 
-    renderPage()
+      renderPage()
 
-    fireEvent.click(await screen.findByText(/alice/i))
-    await screen.findByText(/Staking Candidate/i)
+      fireEvent.click(await screen.findByText(/alice/i))
+      await screen.findByText(/Staking Candidate/i)
 
-    expect(await getButton(/^recover$/i)).toBeDefined()
-  })
+      expect(await getButton(/^recover$/i)).toBeDefined()
+    })
 
-  it('Recover balance button (nonrecoverable)', async () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Storage Worker' })
+    it.only('Opens modal', async () => {
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
 
-    renderPage()
+      renderPage()
 
-    fireEvent.click(await screen.findByText(/alice/i))
-    await screen.findByText(/Storage Worker/i)
+      fireEvent.click(await screen.findByText(/alice/i))
+      fireEvent.click(await getButton(/^recover$/i))
 
-    expect(await queryButton(/^recover$/i)).not.toBeDefined()
+      const expected: RecoverBalanceModalCall = {
+        modal: 'RecoverBalance',
+        data: {
+          address: alice.address,
+          lock: {
+            amount: createBalance(250).toBn(),
+            type: 'Staking Candidate',
+          },
+        },
+      }
+      expect(useModal.showModal).toBeCalledWith(expected)
+    })
+
+    it('Nonrecoverable', async () => {
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Storage Worker' })
+
+      renderPage()
+
+      fireEvent.click(await screen.findByText(/alice/i))
+      await screen.findByText(/Storage Worker/i)
+
+      expect(await queryButton(/^recover$/i)).not.toBeDefined()
+    })
   })
 
   function renderPage(path = '/profile') {
@@ -127,7 +161,7 @@ describe('Page: MyAccounts', () => {
         <AccountsContext.Provider value={useAccounts}>
           <ApiContext.Provider value={api}>
             <BalancesContextProvider>
-              <ModalContextProvider>
+              <ModalContext.Provider value={useModal}>
                 <MockQueryNodeProviders>
                   <MembershipContext.Provider value={useMyMemberships}>
                     <Switch>
@@ -136,7 +170,7 @@ describe('Page: MyAccounts', () => {
                     <GlobalModals />
                   </MembershipContext.Provider>
                 </MockQueryNodeProviders>
-              </ModalContextProvider>
+              </ModalContext.Provider>
             </BalancesContextProvider>
           </ApiContext.Provider>
         </AccountsContext.Provider>

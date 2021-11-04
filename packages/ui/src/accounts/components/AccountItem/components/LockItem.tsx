@@ -2,35 +2,56 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
+import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { BalanceLock } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
+import { Address } from '@/common/types'
 
-interface DetailsItemDataProps {
+type DetailsItemDataProps = {
   lock: BalanceLock
   isRecoverable?: boolean
+  address?: Address
 }
 
-export const LockItem = ({ lock, isRecoverable }: DetailsItemDataProps) => (
-  <DetailsItemVoteWrapper>
-    <AccountDetailsWrap>
-      <DetailsInfo>
-        {lockIcon(lock.type)}
-        <DetailsName>{lock.type}</DetailsName>
-      </DetailsInfo>
-      <div />
-      {isRecoverable ? <div /> : null}
-      <TokenValue value={lock.amount} />
-      {isRecoverable && (
-        <>
-          <div />
-          <ButtonPrimary size="small">Recover</ButtonPrimary>
-        </>
-      )}
-    </AccountDetailsWrap>
-  </DetailsItemVoteWrapper>
-)
+export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps) => {
+  const { showModal } = useModal()
+
+  return (
+    <DetailsItemVoteWrapper>
+      <AccountDetailsWrap>
+        <DetailsInfo>
+          {lockIcon(lock.type)}
+          <DetailsName>{lock.type}</DetailsName>
+        </DetailsInfo>
+        <div />
+        {isRecoverable ? <div /> : null}
+        <TokenValue value={lock.amount} />
+        {isRecoverable && (
+          <>
+            <div />
+            <ButtonPrimary
+              size="small"
+              onClick={() =>
+                showModal<RecoverBalanceModalCall>({
+                  modal: 'RecoverBalance',
+                  data: {
+                    address: address ?? '',
+                    lock,
+                  },
+                })
+              }
+            >
+              Recover
+            </ButtonPrimary>
+          </>
+        )}
+      </AccountDetailsWrap>
+    </DetailsItemVoteWrapper>
+  )
+}
 
 const DetailsItemVoteWrapper = styled.div`
   display: flex;

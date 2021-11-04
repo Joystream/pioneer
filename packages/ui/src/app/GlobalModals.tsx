@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react'
 
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
@@ -59,6 +60,7 @@ export type ModalNames =
   | ModalName<VoteForProposalModalCall>
   | ModalName<RevealVoteModalCall>
   | ModalName<RecoverVoteStakeModalCall>
+  | ModalName<RecoverBalanceModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -87,6 +89,7 @@ const modals: Record<ModalNames, ReactElement> = {
   VoteForProposalModal: <VoteForProposalModal />,
   RevealVote: <RevealVoteModal />,
   RecoverVoteStake: <RecoverVoteStakeModal />,
+  RecoverBalance: <RecoverBalanceModal />,
 }
 
 export const GlobalModals = () => {

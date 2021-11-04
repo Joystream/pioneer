@@ -44,7 +44,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
-        <LocksDetails balance={balance} />
+        <LocksDetails balance={balance} address={address} />
       </StyledDropDown>
     </AccountItemWrapper>
   )

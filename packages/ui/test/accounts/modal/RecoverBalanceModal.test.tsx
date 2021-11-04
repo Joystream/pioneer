@@ -103,7 +103,7 @@ describe('UI: RecoverBalanceModal', () => {
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
               <ModalContext.Provider value={useModal}>
-                <RecoverBalanceModal onClose={() => undefined} />
+                <RecoverBalanceModal />
               </ModalContext.Provider>
             </ApiContext.Provider>
           </MembershipContext.Provider>
