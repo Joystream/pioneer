@@ -65,6 +65,7 @@ describe('UI: Vote for Proposal Modal', () => {
     seedProposal(PROPOSAL_DATA, server.server)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

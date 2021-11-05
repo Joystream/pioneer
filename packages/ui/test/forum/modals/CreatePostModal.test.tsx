@@ -68,6 +68,7 @@ describe('UI: CreatePostModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

@@ -45,6 +45,7 @@ describe('Page: MyAccounts', () => {
 
   beforeEach(() => {
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

@@ -83,6 +83,7 @@ describe('UI: Past Election page', () => {
   let pageElectionId = 1
 
   const useAccounts: UseAccounts = {
+    isLoading: false,
     hasAccounts: true,
     allAccounts: [alice],
   }
