@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion'
 import React from 'react'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -7,7 +8,6 @@ import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { VideoHint } from '@/common/components/VideoHint'
 import { useToggle } from '@/common/hooks/useToggle'
-import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { WorkingGroupsList } from '@/working-groups/components/WorkingGroupsList'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
 
@@ -32,7 +32,7 @@ export const WorkingGroups = () => {
             </ButtonsGroup>
           </PageHeaderRow>
           <WorkingGroupsTabs />
-          {isHintVisible && <VideoHint onClose={toggleHint} />}
+          <AnimatePresence>{isHintVisible && <VideoHint onClose={toggleHint} />}</AnimatePresence>
         </PageHeaderWrapper>
       }
       main={<WorkingGroupsList groups={groups} />}
