@@ -54,7 +54,7 @@ export const PostHistoryModal = React.memo(() => {
       return 'active'
     }
 
-    return 'next'
+    return 'hideNumber'
   }
 
   const displayEdits = () => (
