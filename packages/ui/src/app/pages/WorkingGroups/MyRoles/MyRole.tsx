@@ -18,7 +18,6 @@ import { Statistics, TokenValueStat, StakeStat } from '@/common/components/stati
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { NextPayoutStat } from '@/working-groups/components/NextPayoutStat'

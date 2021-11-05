@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react'
+import { ReactElement } from 'react-markdown/lib/react-markdown'
 
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 
 import { Tooltip } from '../Tooltip'
 
-import { ButtonGhost, ButtonPrimary, ButtonProps } from '.'
+import { ButtonGhost, ButtonPrimary, ButtonProps, ButtonSecondary } from '.'
 
 interface WrapperProps {
   children: ReactNode
@@ -20,17 +21,26 @@ export const TransactionButtonWrapper = ({ children }: WrapperProps) => {
   return <>{children}</>
 }
 
+type StyleOption = 'primary' | 'ghost' | 'secondary'
+
 interface TransactionButtonProps extends ButtonProps {
-  style: 'primary' | 'ghost'
+  style: StyleOption
 }
 
 export const TransactionButton = (props: TransactionButtonProps) => {
   const { isTransactionPending } = useTransactionStatus()
-  const Button = props.style === 'ghost' ? ButtonGhost : ButtonPrimary
+
+  const Button = buttonTypes[props.style]
 
   return (
     <TransactionButtonWrapper>
       <Button {...props} disabled={isTransactionPending || props.disabled} />
     </TransactionButtonWrapper>
   )
+}
+
+const buttonTypes: Record<StyleOption, (props: ButtonProps) => ReactElement> = {
+  primary: ButtonPrimary,
+  secondary: ButtonSecondary,
+  ghost: ButtonGhost,
 }
