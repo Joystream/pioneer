@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 
 import { ButtonGhost, ButtonPrimary } from '../../common/components/buttons'
@@ -25,17 +26,19 @@ export function TransferButton({ from, to, disabled }: Props) {
   const isDisabled = !!disabled || isTransactionPending
 
   return (
-    <ButtonForTransfer
-      size="small"
-      square
-      onClick={(event) => {
-        event.stopPropagation()
-        showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })
-      }}
-      disabled={isDisabled}
-    >
-      <PickedTransferIcon type={iconType} />
-    </ButtonForTransfer>
+    <TransactionButtonWrapper>
+      <ButtonForTransfer
+        size="small"
+        square
+        onClick={(event) => {
+          event.stopPropagation()
+          showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })
+        }}
+        disabled={isDisabled}
+      >
+        <PickedTransferIcon type={iconType} />
+      </ButtonForTransfer>
+    </TransactionButtonWrapper>
   )
 }
 

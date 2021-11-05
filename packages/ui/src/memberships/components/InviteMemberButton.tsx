@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react'
 
-import { ButtonGhost, ButtonSize } from '../../common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+
+import { ButtonSize } from '../../common/components/buttons'
 import { useToggle } from '../../common/hooks/useToggle'
 import { InviteMemberModal } from '../modals/InviteMemberModal'
 
@@ -12,12 +15,19 @@ interface InviteMemberButtonProps {
 
 export const InviteMemberButton = ({ className, children, size }: InviteMemberButtonProps) => {
   const [isOpen, toggleIsOpen] = useToggle()
+  const { isTransactionPending } = useTransactionStatus()
 
   return (
     <>
-      <ButtonGhost size={size} onClick={toggleIsOpen} className={className}>
+      <TransactionButton
+        style="ghost"
+        size={size}
+        onClick={toggleIsOpen}
+        className={className}
+        disabled={isTransactionPending}
+      >
         {children}
-      </ButtonGhost>
+      </TransactionButton>
       {isOpen && <InviteMemberModal onClose={toggleIsOpen} />}
     </>
   )
