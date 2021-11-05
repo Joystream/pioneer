@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
+import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon } from '@/common/components/icons'
 import { StepperStep } from '@/common/components/Stepper'
@@ -35,7 +37,7 @@ export const OnboardingOverlay = () => {
       <TextContainer>
         <TextHuge bold>Become a member</TextHuge>
         <TextSmall onClick={() => setState((prev) => !prev)}>
-          Show how <ArrowDownExpandedIcon />
+          Show how <ArrowDownExpandedIcon /> {/*todo add icons and make them rotate on open*/}
         </TextSmall>
       </TextContainer>
       <StepperContainer>
@@ -44,19 +46,33 @@ export const OnboardingOverlay = () => {
       <ButtonContainer>
         <ButtonPrimary size="large">Join now</ButtonPrimary>
       </ButtonContainer>
-      <Dropdown isOpen={state}>keafhds</Dropdown>
+      <Dropdown isOpen={state}>
+        <DropdownContent>
+          <DrawerContainer title="What are the benefits?">
+            <BenefitsTable />
+          </DrawerContainer>
+          <DrawerContainer title="How to become a member?">asd</DrawerContainer>
+        </DropdownContent>
+      </Dropdown>
     </Wrapper>
   )
 }
 
 const Dropdown = styled.div<{ isOpen: boolean }>`
   width: 100%;
-  height: ${({ isOpen }) => (isOpen ? '100%' : '0px')};
-  background-color: red;
+  height: ${({ isOpen }) => (isOpen ? '500%' : '0px')};
+  background-color: ${Colors.Black[700]};
   position: absolute;
   transition: ${Transitions.all};
   inset: 0;
   top: 85px;
+  overflow: hidden;
+`
+
+const DropdownContent = styled.div`
+  display: flex;
+  padding: 40px;
+  justify-content: space-between;
 `
 
 const Wrapper = styled.div`
@@ -85,6 +101,7 @@ const TextContainer = styled.div`
 
   > *:last-child {
     color: ${Colors.Black[400]};
+    cursor: pointer;
   }
 
   svg {
