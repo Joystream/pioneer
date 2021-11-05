@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 
@@ -17,8 +17,8 @@ export const VoteForProposalButton = ({ id }: Props) => {
     })
   }, [])
   return (
-    <ButtonPrimary size="small" onClick={voteForProposalModal}>
+    <TransactionButton style="primary" size="small" onClick={voteForProposalModal}>
       Vote
-    </ButtonPrimary>
+    </TransactionButton>
   )
 }

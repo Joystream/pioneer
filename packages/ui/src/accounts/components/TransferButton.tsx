@@ -44,19 +44,23 @@ export function TransferButton({ from, to, disabled }: Props) {
 
 export function TransferButtonStyled() {
   const { showModal } = useModal()
+  const { isTransactionPending } = useTransactionStatus()
   const iconType = 'transfer'
 
   return (
-    <ButtonForTransferStyled
-      size="small"
-      square
-      onClick={(event) => {
-        event.stopPropagation()
-        showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })
-      }}
-    >
-      <PickedTransferIcon type={iconType} />
-    </ButtonForTransferStyled>
+    <TransactionButtonWrapper>
+      <ButtonForTransferStyled
+        size="small"
+        square
+        onClick={(event) => {
+          event.stopPropagation()
+          showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })
+        }}
+        disabled={isTransactionPending}
+      >
+        <PickedTransferIcon type={iconType} />
+      </ButtonForTransferStyled>
+    </TransactionButtonWrapper>
   )
 }
 

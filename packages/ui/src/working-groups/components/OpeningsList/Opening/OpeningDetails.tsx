@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -63,12 +64,13 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
             Learn more
           </LinkButtonGhost>
           {isOpeningOpen(opening) && (
-            <ButtonPrimary
+            <TransactionButton
+              style="primary"
               onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
               size="medium"
             >
               Apply now
-            </ButtonPrimary>
+            </TransactionButton>
           )}
         </ButtonsGroup>
       </OpenedWrapper>

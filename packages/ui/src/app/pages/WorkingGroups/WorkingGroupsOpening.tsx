@@ -6,7 +6,8 @@ import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/P
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -82,12 +83,13 @@ export const WorkingGroupOpening = () => {
   })
 
   const ApplyButton = memo(() => (
-    <ButtonPrimary
+    <TransactionButton
+      style="primary"
       size="medium"
       onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
     >
       Apply now!
-    </ButtonPrimary>
+    </TransactionButton>
   ))
 
   const ApplicationStatus = memo(() => (
