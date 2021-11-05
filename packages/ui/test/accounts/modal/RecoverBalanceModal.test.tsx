@@ -1,10 +1,12 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { RecoverBalanceModal } from '@/accounts/modals/RecoverBalance'
-import { Account } from '@/accounts/types'
+import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -24,18 +26,8 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
 describe('UI: RecoverBalanceModal', () => {
+  let useAccounts: UseAccounts
   const api = stubApi()
   const server = setupMockServer({ noCleanupAfterEach: true })
   let tx: any
@@ -43,19 +35,24 @@ describe('UI: RecoverBalanceModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, bob)
     seedMembers(server.server, 2)
   })
 
-  afterAll(() => {
-    jest.restoreAllMocks()
-  })
-
-  const useModal: UseModal<any> = {
+  const useModal: UseModal<RecoverBalanceModalCall> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
     modal: null,
-    modalData: undefined,
+    modalData: {
+      modal: 'RecoverBalance',
+      data: {
+        lock: {
+          amount: new BN(300),
+          type: 'Staking Candidate',
+        },
+        address: alice.address,
+        memberId: '0',
+      },
+    },
   }
 
   const useMyMemberships: MyMemberships = {
@@ -69,7 +66,11 @@ describe('UI: RecoverBalanceModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     useMyMemberships.setActive(getMember('alice'))
-    tx = stubTransaction(api, 'api.tx.utility.batch')
+    tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
+    useAccounts = {
+      hasAccounts: true,
+      allAccounts: [alice, bob],
+    }
   })
 
   it('Transaction summary', async () => {
@@ -78,20 +79,20 @@ describe('UI: RecoverBalanceModal', () => {
     expect(await screen.findByRole('heading', { name: 'Recover balances' })).toBeDefined()
   })
 
-  it.skip('Success', async () => {
+  it('Success', async () => {
     stubTransactionSuccess(tx, 'council', 'CandidacyStakeRelease', [createType('MemberId', 0)])
 
     renderModal()
-    await fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
+    fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
 
     expect(await screen.findByText('Success')).toBeDefined()
   })
 
-  it.skip('Failure', async () => {
+  it('Failure', async () => {
     stubTransactionFailure(tx)
 
     renderModal()
-    await fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
+    fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
 
     expect(await screen.findByText('Failure')).toBeDefined()
   })
@@ -102,9 +103,11 @@ describe('UI: RecoverBalanceModal', () => {
         <MockQueryNodeProviders>
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
-              <ModalContext.Provider value={useModal}>
-                <RecoverBalanceModal />
-              </ModalContext.Provider>
+              <AccountsContext.Provider value={useAccounts}>
+                <ModalContext.Provider value={useModal}>
+                  <RecoverBalanceModal />
+                </ModalContext.Provider>
+              </AccountsContext.Provider>
             </ApiContext.Provider>
           </MembershipContext.Provider>
         </MockQueryNodeProviders>

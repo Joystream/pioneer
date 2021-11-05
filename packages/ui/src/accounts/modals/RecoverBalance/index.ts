@@ -8,5 +8,6 @@ export type RecoverBalanceModalCall = ModalWithDataCall<
   {
     address: Address
     lock: BalanceLock
+    memberId: string
   }
 >

@@ -1,23 +1,23 @@
 import { useMachine } from '@xstate/react'
 import React from 'react'
 
+import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { recoverBalanceMachine } from '@/accounts/modals/RecoverBalance/machine'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TextMedium } from '@/common/components/typography'
-import {useModal} from '@/common/hooks/useModal';
+import { useModal } from '@/common/hooks/useModal'
 
 import { RecoverBalanceSignModal } from './RecoverBalanceSignModal'
 import { RecoverBalanceSuccessModal } from './RecoverBalanceSuccessModal'
 
-
 export const RecoverBalanceModal = () => {
   const [state] = useMachine(recoverBalanceMachine)
-  const { hideModal } = useModal()
+  const { hideModal, modalData } = useModal<RecoverBalanceModalCall>()
 
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
-    return <RecoverBalanceSignModal onClose={hideModal} service={transactionService} />
+    return <RecoverBalanceSignModal onClose={hideModal} service={transactionService} memberId={modalData.memberId} />
   }
 
   if (state.matches('success')) {

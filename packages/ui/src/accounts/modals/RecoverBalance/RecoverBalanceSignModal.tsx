@@ -14,9 +14,10 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 interface Props {
   onClose: () => void
   service: ActorRef<any>
+  memberId: string
 }
 
-export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
+export const RecoverBalanceSignModal = ({ onClose, service, memberId }: Props) => {
   const balances = useMyTotalBalances()
   const { api, connectionState } = useApi()
   const amount = balances.recoverable
@@ -26,13 +27,9 @@ export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
     if (!amount || !api || !active) {
       return
     }
-
-    // TODO: Those are transaction that needs to be handled:
-    // api.tx.members.removeStakingAccount(memberId)
     // api.tx.referendum.releaseVoteStake()
-    // api.tx.council.releaseCandidacyStake()
-
-    return api.tx.utility.batch([])
+    // api.tx.council.releaseCandidacyStake(membershipId)
+    return api.tx.council.releaseCandidacyStake(memberId)
   }, [connectionState, active?.id, JSON.stringify(balances)])
 
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
