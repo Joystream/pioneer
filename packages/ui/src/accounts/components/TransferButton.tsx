@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+
 import { ButtonGhost, ButtonPrimary } from '../../common/components/buttons'
 import { TransferType, PickedTransferIcon } from '../../common/components/icons/TransferIcons'
 import { Colors } from '../../common/constants'
@@ -16,10 +18,11 @@ interface Props {
 
 export function TransferButton({ from, to, disabled }: Props) {
   const { showModal } = useModal()
+  const { isTransactionPending } = useTransactionStatus()
   const isTransfer = !from && !to
   const isSend = !!from && !isTransfer
   const iconType: TransferType = isTransfer ? 'transfer' : isSend ? 'send' : 'receive'
-  const isDisabled = !!disabled
+  const isDisabled = !!disabled || isTransactionPending
 
   return (
     <ButtonForTransfer

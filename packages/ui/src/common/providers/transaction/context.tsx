@@ -1,11 +1,11 @@
 import { createContext } from 'react'
 
 export interface UseTransaction {
-  transactionPending: boolean
+  isTransactionPending: boolean
   setPending: (state: boolean) => void
 }
 
 export const TransactionContext = createContext<UseTransaction>({
-  transactionPending: false,
+  isTransactionPending: false,
   setPending: () => undefined,
 })

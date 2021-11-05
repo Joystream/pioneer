@@ -7,12 +7,12 @@ interface Props {
 }
 
 export const TransactionContextProvider = ({ children }: Props) => {
-  const [transactionPending, setPending] = useState(false)
+  const [isTransactionPending, setPending] = useState(false)
 
   return (
     <TransactionContext.Provider
       value={{
-        transactionPending,
+        isTransactionPending,
         setPending,
       }}
     >

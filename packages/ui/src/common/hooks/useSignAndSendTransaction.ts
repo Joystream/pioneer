@@ -12,7 +12,7 @@ import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
 import { useObservable } from './useObservable'
-import { useTransaction } from './useTransaction'
+import { useTransactionStatus } from './useTransactionStatus'
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
@@ -60,7 +60,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const sign = useCallback(() => send('SIGN'), [service])
-  const { setPending } = useTransaction()
+  const { setPending } = useTransactionStatus()
 
   useEffect(() => {
     if (!state.matches('signing') || !transaction || !paymentInfo) {
