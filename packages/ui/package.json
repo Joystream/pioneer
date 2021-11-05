@@ -98,6 +98,7 @@
     "cross-env": "^7.0.3",
     "eslint-plugin-react-hooks": "^4.2.0",
     "faker": "^5.5.3",
+    "fork-ts-checker-webpack-plugin": "^6.4.0",
     "html-webpack-plugin": "^5.3.2",
     "jest": "^27.2.5",
     "jsdom": "^18.0.0",
