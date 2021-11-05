@@ -2,7 +2,7 @@ import { Interpreter, State, StateMachine, StateNode } from 'xstate'
 
 export interface Step {
   title: string
-  type: 'past' | 'active' | 'next'
+  type: 'past' | 'active' | 'next' | 'hideNumber'
   isBaby?: boolean
   onClick?: () => void
 }
