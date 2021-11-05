@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
+import { ForumPostOrderByInput } from '@/common/api/queries'
 import { repeat } from '@/common/utils'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 import { useGetForumPostsCountQuery, useGetForumPostsIdsLazyQuery, useGetForumPostsLazyQuery } from '@/forum/queries'
@@ -21,7 +22,7 @@ jest.mock('../../../src/forum/queries', () => ({
 const mockedPostsLazyQuery = useGetForumPostsLazyQuery as jest.Mock
 const mockedPostsIdsLazyQuery = useGetForumPostsIdsLazyQuery as jest.Mock
 const mockedPostsCountQuery = useGetForumPostsCountQuery as jest.Mock
-
+const orderFieldAndDirection = ForumPostOrderByInput.CreatedAtAsc
 // NOTE the tests assume `POSTS_PER_PAGE` to be 10
 describe('useForumThreadPosts', () => {
   beforeEach(() => {
@@ -49,13 +50,13 @@ describe('useForumThreadPosts', () => {
 
     expect(mockedPostsCountQuery).toBeCalledWith({ variables: { where } })
     expect(getPostIds).not.toHaveBeenCalled()
-    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10 } })
+    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10, orderBy: orderFieldAndDirection } })
     expect(result.current).toMatchObject({ page: 1, pageCount: 5, posts: [] })
 
     rerender(['0', { post: null, page: '3' }])
 
     expect(getPostIds).not.toHaveBeenCalled()
-    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10 } })
+    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10, orderBy: orderFieldAndDirection } })
     expect(result.current).toMatchObject({ page: 3, pageCount: 5, posts: [] })
   })
 
@@ -66,8 +67,8 @@ describe('useForumThreadPosts', () => {
     rerender()
 
     expect(mockedPostsCountQuery).toBeCalledWith({ variables: { where } })
-    expect(getPostIds).toBeCalledWith({ variables: { where, limit: 100000 } })
-    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10 } })
+    expect(getPostIds).toBeCalledWith({ variables: { where, limit: 100000, orderBy: orderFieldAndDirection } })
+    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10, orderBy: orderFieldAndDirection } })
     expect(result.current).toMatchObject({ page: 1, pageCount: 5, posts: [] })
   })
 })

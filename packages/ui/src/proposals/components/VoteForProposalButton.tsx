@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { ReactNode, useCallback } from 'react'
 
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
@@ -6,9 +6,10 @@ import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 
 interface Props {
   id: string
+  children: ReactNode
 }
 
-export const VoteForProposalButton = ({ id }: Props) => {
+export const VoteForProposalButton = ({ id, children }: Props) => {
   const { showModal } = useModal()
   const voteForProposalModal = useCallback(() => {
     showModal<VoteForProposalModalCall>({
@@ -18,7 +19,7 @@ export const VoteForProposalButton = ({ id }: Props) => {
   }, [])
   return (
     <TransactionButton style="primary" size="small" onClick={voteForProposalModal}>
-      Vote
+      {children}
     </TransactionButton>
   )
 }

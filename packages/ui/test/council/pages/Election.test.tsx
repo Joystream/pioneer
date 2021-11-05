@@ -81,6 +81,7 @@ describe('UI: Election page', () => {
   const api = stubApi()
 
   const useAccounts: UseAccounts = {
+    isLoading: false,
     hasAccounts: true,
     allAccounts: [alice],
   }
@@ -207,7 +208,7 @@ describe('UI: Election page', () => {
       it('No accounts', async () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-        await renderComponent({ hasAccounts: false, allAccounts: [] })
+        await renderComponent({ isLoading: false, hasAccounts: false, allAccounts: [] })
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote')).toBeNull()
@@ -235,7 +236,7 @@ describe('UI: Election page', () => {
       it('Multiple accounts and One valid vote', async () => {
         prepareVoteWithSalt('0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a')
 
-        await renderComponent({ hasAccounts: true, allAccounts: [alice, bob] })
+        await renderComponent({ isLoading: false, hasAccounts: true, allAccounts: [alice, bob] })
 
         expect(await screen.findByText(/My Votes/i)).toBeDefined()
         expect(await screen.findAllByText('Vote')).toHaveLength(1)

@@ -17,11 +17,13 @@ import { NumericValueStat } from '@/common/components/statistics/NumericValueSta
 import { TextSmall } from '@/common/components/typography'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
 
 export const UpcomingOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, opening } = useUpcomingOpening(id)
+  const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   if (isLoading || !opening) {
     return (
@@ -80,7 +82,10 @@ export const UpcomingOpening = () => {
                 value={opening.expectedEnding}
                 from={opening.expectedStart}
               />
-              <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
+              <TokenValueStat
+                title={`Reward per ${rewardPeriod?.toString()} blocks`}
+                value={rewardPeriod?.mul(opening.rewardPerBlock)}
+              />
               {opening.hiringLimit ? (
                 <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
               ) : (

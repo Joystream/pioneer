@@ -13,6 +13,7 @@ import { BorderRad, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { Member } from '@/memberships/types'
 import { workerRoleTitle } from '@/working-groups/helpers'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { WorkerWithDetails } from '@/working-groups/types'
@@ -31,6 +32,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
     })
   }, [role])
   const { earnings } = useWorkerEarnings(role.id)
+  const rewardPeriod = useRewardPeriod(role.group.id)
 
   return (
     <RoleToggle absoluteToggle>
@@ -53,7 +55,8 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                     <SidePaneLabel text="Reward" />
                     <SidePaneColumn>
                       <SidePaneText>
-                        <TokenValue value={role.reward.payout} /> / {role.reward.blockInterval} blocks
+                        <TokenValue value={rewardPeriod?.mul(role.rewardPerBlock)} /> / {rewardPeriod?.toString()}{' '}
+                        blocks
                       </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>

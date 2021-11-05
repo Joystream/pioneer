@@ -75,6 +75,7 @@ describe('UI: Announce Candidacy Modal', () => {
     seedMembers(server.server)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

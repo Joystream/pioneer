@@ -22,6 +22,7 @@ import { setupMockServer } from '../../_mocks/server'
 describe('useMyPastVotesStats', () => {
   const server = setupMockServer()
   const useAccounts = {
+    isLoading: false,
     hasAccounts: false,
     allAccounts: [alice, bob],
   }

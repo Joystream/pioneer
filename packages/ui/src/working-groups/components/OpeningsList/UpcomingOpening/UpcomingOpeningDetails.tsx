@@ -16,8 +16,10 @@ import {
   OpenedWrapper,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 
 export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
+  const rewardPeriod = useRewardPeriod(opening.groupId)
   return (
     <OpenedContainer onClick={onClick}>
       <OpenedWrapper>
@@ -29,9 +31,9 @@ export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
         <Statistics withMargin gapSize="s">
           <StatsBlock size="m" centered>
             <TextBig>
-              <TokenValue value={opening.reward.payout} />
+              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
             </TextBig>
-            <Subscription>Reward per {opening.reward.blockInterval} blocks</Subscription>
+            <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TwoColumnsStatistic>
@@ -45,7 +47,7 @@ export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TextBig>
-              <TokenValue value={opening.reward.payout} />
+              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
             </TextBig>
             <Subscription>Minimum Stake Required</Subscription>
           </StatsBlock>

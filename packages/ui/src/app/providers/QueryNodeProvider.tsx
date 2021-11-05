@@ -49,5 +49,18 @@ const getApolloClient = (network: 'local' | 'olympia-testnet') => {
     link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),
     connectToDevTools: true,
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+        errorPolicy: 'all',
+      },
+      query: {
+        fetchPolicy: 'standby',
+        errorPolicy: 'all',
+      },
+      mutate: {
+        errorPolicy: 'all',
+      },
+    },
   })
 }

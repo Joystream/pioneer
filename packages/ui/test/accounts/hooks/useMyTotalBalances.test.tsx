@@ -71,6 +71,7 @@ describe('useMyTotalBalances', () => {
       <MockKeyringProvider>
         <AccountsContext.Provider
           value={{
+            isLoading: false,
             allAccounts: [
               {
                 address: alice.address,

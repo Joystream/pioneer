@@ -60,6 +60,7 @@ describe('UI: LeaveRoleModal', () => {
     seedWorker(WORKER_DATA, server.server)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice],
     }

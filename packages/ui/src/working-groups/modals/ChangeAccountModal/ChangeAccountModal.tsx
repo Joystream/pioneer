@@ -11,7 +11,7 @@ import { Address } from '@/common/types'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { getGroup } from '@/working-groups/model/getGroup'
 
-import { GroupName, WorkerWithDetails } from '../../types'
+import { WorkerWithDetails } from '../../types'
 
 import { ChangeAccountModalCall } from '.'
 import { ChangeAccountSelectModal } from './ChangeAccountSelectModal'
@@ -27,7 +27,7 @@ const getTransaction = (
   selectedAddress: Address
 ): SubmittableExtrinsic<'rxjs'> => {
   const runtimeId = worker.runtimeId
-  const group = getGroup(api, worker.group.name as GroupName)
+  const group = getGroup(api, worker.group.id)
 
   if (modalType === ModalTypes.CHANGE_ROLE_ACCOUNT) {
     return group.updateRoleAccount(runtimeId, selectedAddress)

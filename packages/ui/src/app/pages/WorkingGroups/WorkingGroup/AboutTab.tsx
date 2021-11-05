@@ -6,6 +6,7 @@ import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { isDefined } from '@/common/utils'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
@@ -30,14 +31,14 @@ export const AboutTab = ({ workingGroup }: Props) => {
             <Loading />
           </StatisticItem>
         )}
-        {statistics.totalHired ? (
+        {isDefined(statistics.totalHired) ? (
           <NumericValueStat title="Total hired" value={statistics.totalHired} />
         ) : (
           <StatisticItem centered>
             <Loading />
           </StatisticItem>
         )}
-        {statistics.totalFired ? (
+        {isDefined(statistics.totalFired) ? (
           <NumericValueStat title="Total fired" value={statistics.totalFired} />
         ) : (
           <StatisticItem centered>

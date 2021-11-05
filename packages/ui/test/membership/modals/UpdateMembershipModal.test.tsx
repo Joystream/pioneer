@@ -25,6 +25,7 @@ import {
 } from '../../_mocks/transactions'
 
 const useMyAccounts: UseAccounts = {
+  isLoading: false,
   hasAccounts: true,
   allAccounts: [],
 }
