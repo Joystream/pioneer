@@ -6,10 +6,13 @@ import { Close, CloseButton } from '@/common/components/buttons'
 import { Colors, RemoveScrollbar } from '@/common/constants'
 
 interface VideoHintProps {
+  videoURI: string
   onClose: () => void
+  showCloseTooltip: boolean
+  onCloseTooltip: () => void
 }
 
-export const VideoHint = ({ onClose }: VideoHintProps) => {
+export const VideoHint = ({ videoURI, onClose }: VideoHintProps) => {
   return (
     <VideoHintContainer
       initial={{ minHeight: '0px' }}
@@ -21,7 +24,7 @@ export const VideoHint = ({ onClose }: VideoHintProps) => {
         <VideoHintInnerWrapper>
           <CloseButton onClick={onClose} />
           <iframe
-            src="https://www.youtube.com/embed/cC-tTakpJEs"
+            src={videoURI}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
