@@ -14,12 +14,14 @@ import { formatDateString } from '@/common/model/formatters'
 import { percentTimeLeft } from '@/common/model/percentTimeLeft'
 import { relativeTime } from '@/common/model/relativeTime'
 
+import { useRewardPeriod } from '../hooks/useRewardPeriod'
 import { WorkingGroupOpening } from '../types'
 
 export type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
 
 export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewProps) => {
   const [isMarkdownCollapsed, setMarkdownCollapsed] = useState(true)
+  const rewardPeriod = useRewardPeriod(opening.groupId)
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -63,9 +65,9 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
           <Label>Reward</Label>
           <TextMedium lighter>
             <TextInlineHuge>
-              <TokenValue value={opening.reward.payout} />
+              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
             </TextInlineHuge>{' '}
-            per {opening.reward.blockInterval} blocks
+            per {rewardPeriod?.toString()} blocks
           </TextMedium>
         </RowGapBlock>
       </Row>

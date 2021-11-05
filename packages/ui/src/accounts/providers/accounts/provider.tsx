@@ -16,6 +16,7 @@ type Error = 'EXTENSION'
 export interface UseAccounts {
   allAccounts: Account[]
   hasAccounts: boolean
+  isLoading: boolean
   error?: Error
 }
 
@@ -112,7 +113,7 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value: UseAccounts = { allAccounts, hasAccounts }
+  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isLoaded }
 
   if (extensionUnavailable) {
     value.error = 'EXTENSION'

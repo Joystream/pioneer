@@ -34,6 +34,7 @@ describe('UI: RecoverVoteStakeModal', () => {
   }
 
   const useAccounts = {
+    isLoading: false,
     allAccounts: [
       { ...alice, name: 'Alice Account' },
       { ...bob, name: 'Bob Account' },

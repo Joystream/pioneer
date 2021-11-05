@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { asWorkingGroupName } from '@/working-groups/types'
+import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 
 import { asMember, Member } from '../../memberships/types'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
@@ -23,7 +23,7 @@ export interface FundingRequestDetails {
 export interface CreateLeadOpeningDetails {
   type: 'createWorkingGroupLeadOpening'
   group?: {
-    id: string
+    id: GroupIdName
     name: string
   }
   stakeAmount: BN
@@ -71,7 +71,7 @@ const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDet
 ): CreateLeadOpeningDetails => {
   const group = fragment.group
     ? {
-        id: fragment.group.id,
+        id: fragment.group.id as GroupIdName,
         name: asWorkingGroupName(fragment.group.name),
       }
     : undefined

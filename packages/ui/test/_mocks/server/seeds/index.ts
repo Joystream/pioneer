@@ -123,7 +123,7 @@ export const PROPOSAL_DATA: ProposalMock = {
     voteKind,
     network: 'OLYMPIA',
     createdAt: '2021-07-20T15:15:00.910Z',
-    voterId: '0',
+    voterId: '1',
     inBlock: 0,
     rationale: '',
     votingRound: 0,

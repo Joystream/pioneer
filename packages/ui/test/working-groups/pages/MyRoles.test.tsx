@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, waitForElementToBeRemoved, screen } from '@testing-library/react'
 import React from 'react'
@@ -7,6 +8,7 @@ import { Route } from 'react-router-dom'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { MyRole } from '@/app/pages/WorkingGroups/MyRoles/MyRole'
+import { ApiContext } from '@/common/providers/api/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -17,14 +19,16 @@ import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
-import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
+import { stubApi, stubConst } from '../../_mocks/transactions'
 
 describe('UI: My Role Page', () => {
   const mockServer = setupMockServer()
 
   const useAccounts: UseAccounts = {
+    isLoading: false,
     hasAccounts: true,
     allAccounts: [alice, bob],
   }
@@ -35,6 +39,8 @@ describe('UI: My Role Page', () => {
     isLoading: false,
     hasMembers: true,
   }
+  const api = stubApi()
+  stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
 
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -99,7 +105,7 @@ describe('UI: My Role Page', () => {
 
   function renderPage() {
     return render(
-      <MockApiProvider>
+      <ApiContext.Provider value={api}>
         <MemoryRouter initialEntries={[`working-groups/my-roles/${WORKER_DATA.id}`]}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
@@ -113,7 +119,7 @@ describe('UI: My Role Page', () => {
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </MemoryRouter>
-      </MockApiProvider>
+      </ApiContext.Provider>
     )
   }
 })

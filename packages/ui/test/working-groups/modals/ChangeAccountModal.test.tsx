@@ -61,6 +61,7 @@ describe('UI: ChangeRoleModal', () => {
     await cryptoWaitReady()
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

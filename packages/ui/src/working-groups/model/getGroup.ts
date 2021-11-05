@@ -1,7 +1,7 @@
 import { ApiRx } from '@polkadot/api'
 
-import { groupExtrinsics, GroupName } from '../types'
+import { GroupIdName } from '../types'
 
-export function getGroup(api: ApiRx, groupName: GroupName) {
-  return api.tx[groupExtrinsics[groupName]]
+export function getGroup(api: ApiRx, groupName: GroupIdName) {
+  return api.tx[groupName]
 }

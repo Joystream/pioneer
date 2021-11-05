@@ -75,6 +75,7 @@ describe('UI: CurrentMember component', () => {
       <MockKeyringProvider>
         <AccountsContext.Provider
           value={{
+            isLoading: false,
             hasAccounts: true,
             allAccounts: [
               {

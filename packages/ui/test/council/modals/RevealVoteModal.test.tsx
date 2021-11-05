@@ -39,6 +39,7 @@ describe('UI: RevealVoteModal', () => {
   }
 
   const useAccounts = {
+    isLoading: false,
     allAccounts: [
       { ...alice, name: 'Alice Account' },
       { ...bob, name: 'Bob Account' },

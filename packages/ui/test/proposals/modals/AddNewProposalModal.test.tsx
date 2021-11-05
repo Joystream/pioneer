@@ -87,6 +87,7 @@ describe('UI: AddNewProposalModal', () => {
     seedMembers(server.server)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

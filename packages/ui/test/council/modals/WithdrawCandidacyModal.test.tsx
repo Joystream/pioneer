@@ -47,6 +47,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     seedMembers(server.server, 2)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

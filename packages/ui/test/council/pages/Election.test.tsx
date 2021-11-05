@@ -328,7 +328,9 @@ describe('UI: Election page', () => {
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={{ hasAccounts: accounts.length > 0, allAccounts: accounts }}>
+              <AccountsContext.Provider
+                value={{ isLoading: false, hasAccounts: accounts.length > 0, allAccounts: accounts }}
+              >
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Election />
                 </MembershipContext.Provider>

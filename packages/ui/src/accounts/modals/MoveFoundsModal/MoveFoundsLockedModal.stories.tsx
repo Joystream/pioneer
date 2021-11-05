@@ -29,6 +29,7 @@ const Template: Story<MoveFoundsLockedModalProps> = (args) => {
       <HashRouter>
         <AccountsContext.Provider
           value={{
+            isLoading: false,
             hasAccounts: true,
             allAccounts: [alice, aliceStash, bob, bobStash],
           }}

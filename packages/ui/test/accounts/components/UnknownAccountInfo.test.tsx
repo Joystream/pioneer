@@ -10,6 +10,7 @@ import { setupMockServer } from '../../_mocks/server'
 
 describe('UI: UnknownAccountInfo component', () => {
   const useAccounts = {
+    isLoading: false,
     hasAccounts: false,
     allAccounts: [alice, bob],
   }

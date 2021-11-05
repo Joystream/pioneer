@@ -36,6 +36,7 @@ describe('UI: RevealingStageVotes', () => {
   const server = setupMockServer()
 
   const useAccounts = {
+    isLoading: false,
     hasAccounts: true,
     allAccounts: [{ name: 'account', address: bob.address }],
   }
