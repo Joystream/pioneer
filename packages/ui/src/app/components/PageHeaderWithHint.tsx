@@ -52,14 +52,7 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
       </PageHeaderRow>
       {tabs}
       <AnimatePresence>
-        {isHintVisible && (
-          <VideoHint
-            videoURI={hintVideoURI[hintType]}
-            onClose={closeHint}
-            showCloseTooltip={showCloseTooltip}
-            onCloseTooltip={toggleCloseTooltip}
-          />
-        )}
+        {isHintVisible && <VideoHint videoURI={hintVideoURI[hintType]} onClose={closeHint} />}
       </AnimatePresence>
     </PageHeaderWrapper>
   )
