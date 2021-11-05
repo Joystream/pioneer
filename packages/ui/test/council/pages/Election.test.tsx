@@ -208,7 +208,8 @@ describe('UI: Election page', () => {
       it('No accounts', async () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-        await renderComponent({ isLoading: false, hasAccounts: false, allAccounts: [] })
+        await renderComponent([])
+        await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote')).toBeNull()
@@ -219,8 +220,9 @@ describe('UI: Election page', () => {
 
         await renderComponent()
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText(/My Votes/i)).toBeNull()
+        expect(screen.queryByText('Vote again')).toBeNull()
       })
 
       it('One account and One valid vote', async () => {
@@ -247,9 +249,10 @@ describe('UI: Election page', () => {
         prepareVoteWithSalt('0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a')
 
         await renderComponent()
+        await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
-        expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText('Vote')).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
       })
     })
