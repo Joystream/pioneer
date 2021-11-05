@@ -76,6 +76,7 @@ module.exports = (env, argv) => {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'build'),
       globalObject: 'this',
+      pathinfo: false,
     },
     stats: 'minimal',
     devServer: {
