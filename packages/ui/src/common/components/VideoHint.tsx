@@ -8,8 +8,6 @@ import { Colors, RemoveScrollbar } from '@/common/constants'
 interface VideoHintProps {
   videoURI: string
   onClose: () => void
-  showCloseTooltip: boolean
-  onCloseTooltip: () => void
 }
 
 export const VideoHint = ({ videoURI, onClose }: VideoHintProps) => {

@@ -11,13 +11,15 @@ import { useToggle } from '@/common/hooks/useToggle'
 
 interface PageHeaderWithHintProps {
   title: string
-  hintType: 'workingGroups'
+  hintType: 'workingGroups' | 'proposals' | 'council'
   buttons?: ReactNode
   tabs?: ReactNode
 }
 
 const hintVideoURI: { [key in PageHeaderWithHintProps['hintType']]: string } = {
   workingGroups: 'https://www.youtube.com/embed/cC-tTakpJEs',
+  proposals: 'https://www.youtube.com/embed/cC-tTakpJEs',
+  council: 'https://www.youtube.com/embed/cC-tTakpJEs',
 }
 
 export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeaderWithHintProps) => {
