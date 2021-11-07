@@ -3,7 +3,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 import React from 'react'
-import { MemoryRouter, Router } from 'react-router'
+import { Router } from 'react-router'
 import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -75,6 +75,7 @@ describe('UI: Announce Candidacy Modal', () => {
     seedMembers(server.server)
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

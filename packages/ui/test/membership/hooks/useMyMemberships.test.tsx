@@ -17,6 +17,7 @@ const renderUseMembership = () => {
 }
 
 const useMyAccounts: UseAccounts = {
+  isLoading: false,
   hasAccounts: false,
   allAccounts: [],
 }

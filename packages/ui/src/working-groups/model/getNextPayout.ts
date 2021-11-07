@@ -1,18 +1,17 @@
+import { ApiRx } from '@polkadot/api'
+import { BN_MILLION, BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 
-import { GroupRewardPeriods, isKnownGroupName, Worker } from '../types'
+import { Worker } from '../types'
 
-export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN) {
-  const blocksUntilNext = (interval: BN) => interval.sub(blockNumber.mod(interval))
+export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN, api?: ApiRx) {
+  const blocksUntilNext = (interval?: BN) => interval?.sub(blockNumber.mod(interval))
 
-  const userGroups = [...new Set(workers.map((worker) => worker.group.name))]
-  const nextPayoutPerGroup = userGroups
-    .filter(isKnownGroupName)
-    .map((name) => GroupRewardPeriods[name])
-    .map(blocksUntilNext)
+  const userGroups = [...new Set(workers.map((worker) => worker.group.id))]
+  const nextPayoutPerGroup = userGroups.map((name) => api?.consts[name].rewardPeriod.toBn()).map(blocksUntilNext)
 
   if (nextPayoutPerGroup.length) {
-    return nextPayoutPerGroup.reduce((closest, time) => (closest = BN.min(closest, time)))
+    return nextPayoutPerGroup.reduce((closest, time) => (closest = BN.min(closest ?? BN_ZERO, time ?? BN_MILLION)))
   }
   return new BN(-1)
 }

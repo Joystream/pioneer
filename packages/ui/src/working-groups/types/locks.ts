@@ -1,15 +1,15 @@
 import { LockType } from '@/accounts/types'
-import { GroupName } from '@/working-groups/types/WorkingGroup'
+import { GroupIdName } from '@/working-groups/types/WorkingGroup'
 
-const GROUP_TO_LOCK_ID: Record<GroupName, LockType> = {
-  forum: 'Forum Worker',
-  'content directory': 'Content Directory Worker',
-  membership: 'Membership Worker',
-  storage: 'Storage Worker',
-  gateway: 'Gateway Worker',
-  operations: 'Operations Worker',
+const GROUP_TO_LOCK_ID: Record<GroupIdName, LockType> = {
+  forumWorkingGroup: 'Forum Worker',
+  contentDirectoryWorkingGroup: 'Content Directory Worker',
+  membershipWorkingGroup: 'Membership Worker',
+  storageWorkingGroup: 'Storage Worker',
+  gatewayWorkingGroup: 'Gateway Worker',
+  operationsWorkingGroup: 'Operations Worker',
 }
 
-export const groupToLockId = (groupName: GroupName): LockType => {
+export const groupToLockId = (groupName: GroupIdName): LockType => {
   return GROUP_TO_LOCK_ID[groupName]
 }

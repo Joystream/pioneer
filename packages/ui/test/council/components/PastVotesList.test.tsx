@@ -20,6 +20,7 @@ describe('UI: PastVotesList', () => {
   const server = setupMockServer()
 
   const useAccounts = {
+    isLoading: false,
     hasAccounts: true,
     allAccounts: [{ name: 'account', address: alice.address }],
   }

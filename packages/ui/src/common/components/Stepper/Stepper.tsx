@@ -18,7 +18,7 @@ const getStepFace = (step: StepToRender) => {
     return null
   }
 
-  if (step.isActive) {
+  if (step.isActive || step.hideNumber) {
     return <Arrow direction="right" />
   }
 

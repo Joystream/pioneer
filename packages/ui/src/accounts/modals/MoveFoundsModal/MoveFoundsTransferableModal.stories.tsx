@@ -26,6 +26,7 @@ const Template: Story<MoveFoundsTransferableModalProps> = (args) => {
   return (
     <AccountsContext.Provider
       value={{
+        isLoading: false,
         hasAccounts: true,
         allAccounts: args.accounts?.map((address) => ({ address, name: 'Test' })) ?? [],
       }}

@@ -63,7 +63,7 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
   useEffect(() => onChange(isValid && status !== 'other', fields), [isValid, status, JSON.stringify(fields)])
 
   const accountsFilter = useCallback(
-    (account: Account) => filterByRequiredStake(minStake, groupToLockId(opening.groupName), balances[account.address]),
+    (account: Account) => filterByRequiredStake(minStake, groupToLockId(opening.groupId), balances[account.address]),
     [minStake.toString(), JSON.stringify(balances)]
   )
 

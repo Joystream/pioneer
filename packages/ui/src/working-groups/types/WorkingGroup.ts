@@ -1,11 +1,16 @@
+import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
 import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
+export type GroupIdName = Extract<
+  keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
+  `${string}WorkingGroup`
+>
 export interface WorkingGroup {
-  id: string
+  id: GroupIdName
   name: string
   image?: string
   about?: string
@@ -27,7 +32,7 @@ export interface DetailedWorkingGroup extends WorkingGroup {
 
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
   return {
-    id: group.id,
+    id: group.id as GroupIdName,
     image: undefined,
     name: asWorkingGroupName(group.name),
     about: group.metadata?.about ?? '',
@@ -53,26 +58,9 @@ export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment
     : {}),
 })
 
-const KnownWorkingGroups = ['forum', 'storage', 'content directory', 'membership', 'gateway', 'operations'] as const
-
 export const asWorkingGroupName = (name: string) => {
   return name
     .replace('WorkingGroup', '')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .toLowerCase()
-}
-
-export type GroupName = typeof KnownWorkingGroups[number]
-
-export const isKnownGroupName = (name: string): name is GroupName => {
-  return KnownWorkingGroups.includes(name as GroupName)
-}
-
-export const GroupRewardPeriods: Record<GroupName, BN> = {
-  forum: new BN(14400 + 10),
-  storage: new BN(14400 + 20),
-  'content directory': new BN(14400 + 30),
-  membership: new BN(14400 + 40),
-  gateway: new BN(14400 + 50),
-  operations: new BN(14400 + 60),
 }

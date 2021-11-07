@@ -105,6 +105,7 @@ describe('UI: Vote for Council Modal', () => {
     resetVotes()
 
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
     }

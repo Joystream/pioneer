@@ -8,6 +8,7 @@ export interface StepperStep extends Step {
 
 export interface StepToRender extends StepperStep {
   number: null | number
+  hideNumber?: boolean
   isPast: boolean
   isActive: boolean
 }
@@ -18,6 +19,7 @@ export const asStepsToRender = (steps: StepperStep[]): StepToRender[] => {
   return steps.map((step) => ({
     ...step,
     number: step.isBaby ? null : stepCounter++,
+    hideNumber: step.type === 'hideNumber',
     isActive: step.type === 'active',
     isPast: step.type === 'past',
   }))

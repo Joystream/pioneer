@@ -1,5 +1,4 @@
 import { styled } from '@storybook/theming'
-import BN from 'bn.js'
 import React, { useState } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
@@ -19,7 +18,8 @@ import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { useEscape } from '@/common/hooks/useEscape'
 import { CreateLeadOpeningDetails } from '@/proposals/types/ProposalDetails'
-import { GroupRewardPeriods, isKnownGroupName } from '@/working-groups/types'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
+import { GroupIdName } from '@/working-groups/types'
 
 import { ProposalPropertiesContent } from './ProposalDetails'
 
@@ -31,8 +31,8 @@ export const CreateLeadOpeningDetailsComponent: ProposalPropertiesContent<'creat
   details,
 }: DetailsComponentProps) => {
   const name = details.group?.name ?? ''
-  const rewardPeriod = isKnownGroupName(name) ? GroupRewardPeriods[name] : new BN(1)
-  const payoutAmount = rewardPeriod.mul(details.rewardPerBlock)
+  const rewardPeriod = useRewardPeriod(details.group?.id as GroupIdName)
+  const payoutAmount = rewardPeriod?.mul(details.rewardPerBlock)
   const [isDescriptionVisible, setDescriptionVisible] = useState(false)
   const description = details.openingDescription ?? ''
   return (
@@ -51,7 +51,7 @@ export const CreateLeadOpeningDetailsComponent: ProposalPropertiesContent<'creat
             {details.unstakingPeriod.toString()} blocks
           </TextInlineBig>
         </StatisticItem>
-        <StatisticItem title={`Reward per ${rewardPeriod.toString()} blocks`}>
+        <StatisticItem title={`Reward per ${rewardPeriod?.toString()} blocks`}>
           <TextInlineBig bold value>
             <TokenValue value={payoutAmount} />
           </TextInlineBig>

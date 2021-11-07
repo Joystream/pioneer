@@ -274,6 +274,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   opening {
     id
     group {
+      id
       name
     }
     type
