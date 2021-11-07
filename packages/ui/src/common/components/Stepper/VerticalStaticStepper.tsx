@@ -5,10 +5,8 @@ import { TextHuge, TextInlineBig } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 
 interface VerticalStaticStepperData {
-  stepState: {
-    title: string
-    subtitle?: string[]
-  }
+  title: string
+  subtitle?: string[]
 }
 export interface VerticalStaticStepperProps {
   steps: Array<VerticalStaticStepperData>
@@ -23,9 +21,9 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
             <StepNumberText value>{index + 1}</StepNumberText>
           </StepNumber>
           <StepBody>
-            <StepTitle>{item.stepState.title}</StepTitle>
+            <StepTitle>{item.title}</StepTitle>
             <StepSubtitleList>
-              {item.stepState.subtitle?.map((subtitle) => (
+              {item.subtitle?.map((subtitle) => (
                 <StepSubtitle>{subtitle}</StepSubtitle>
               ))}
             </StepSubtitleList>

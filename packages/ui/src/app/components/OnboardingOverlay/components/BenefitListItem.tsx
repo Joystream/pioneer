@@ -53,4 +53,8 @@ const Circle = styled.span<{ color: string }>`
   height: 28px;
   width: 28px;
   background-color: ${({ color }) => color};
+
+  svg {
+    color: ${Colors.White};
+  }
 `

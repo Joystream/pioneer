@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { ArrowDownExpandedIcon } from '@/common/components/icons'
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
+import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
-import { Colors, Transitions } from '@/common/constants'
+import { Colors } from '@/common/constants'
 
 const steps: StepperStep[] = [
   {
@@ -29,50 +31,78 @@ const steps: StepperStep[] = [
   },
 ]
 
+const innerStaticStepperSteps = [
+  {
+    title: 'Install Polkadot extension',
+    subtitle: ['and create account', 'then connect it to your joystream membership'],
+  },
+  {
+    title: 'Create or select a Polkadot account',
+  },
+  {
+    title: 'Get FREE tokens',
+  },
+  {
+    title: 'Create membership',
+  },
+]
+
 export const OnboardingOverlay = () => {
-  const [state, setState] = useState(false)
+  const [state, setState] = useState(true)
 
   return (
-    <Wrapper>
-      <TextContainer>
-        <TextHuge bold>Become a member</TextHuge>
-        <TextSmall onClick={() => setState((prev) => !prev)}>
-          Show how <ArrowDownExpandedIcon /> {/*todo add icons and make them rotate on open*/}
-        </TextSmall>
-      </TextContainer>
-      <StepperContainer>
-        <HorizontalStepper steps={steps} />
-      </StepperContainer>
-      <ButtonContainer>
-        <ButtonPrimary size="large">Join now</ButtonPrimary>
-      </ButtonContainer>
-      <Dropdown isOpen={state}>
+    <div>
+      <Wrapper>
+        <TextContainer>
+          <TextHuge bold>Become a member</TextHuge>
+          <TextSmall onClick={() => setState((prev) => !prev)}>
+            Show how <ArrowDownExpandedIcon /> {/*todo add icons and make them rotate on open*/}
+          </TextSmall>
+        </TextContainer>
+        <StepperContainer>
+          <HorizontalStepper steps={steps} />
+        </StepperContainer>
+        <ButtonContainer>
+          <ButtonPrimary size="large">Join now</ButtonPrimary>
+        </ButtonContainer>
+      </Wrapper>
+      <StyledDropDown isDropped={state}>
         <DropdownContent>
           <DrawerContainer title="What are the benefits?">
             <BenefitsTable />
           </DrawerContainer>
-          <DrawerContainer title="How to become a member?">asd</DrawerContainer>
+          <DrawerContainer title="How to become a member?">
+            <VerticalStaticStepper steps={innerStaticStepperSteps} />
+          </DrawerContainer>
+          <div />
+          <ButtonPrimary size="large">Continue</ButtonPrimary>
         </DropdownContent>
-      </Dropdown>
-    </Wrapper>
+      </StyledDropDown>
+    </div>
   )
 }
 
-const Dropdown = styled.div<{ isOpen: boolean }>`
-  width: 100%;
-  height: ${({ isOpen }) => (isOpen ? '500%' : '0px')};
+const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.Black[700]};
-  position: absolute;
-  transition: ${Transitions.all};
-  inset: 0;
-  top: 85px;
-  overflow: hidden;
 `
 
 const DropdownContent = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 30px;
   padding: 40px;
-  justify-content: space-between;
+
+  > *:first-child {
+    padding-right: 10%;
+  }
+
+  > *:nth-child(2) {
+    justify-self: center;
+  }
+
+  button {
+    margin-left: 30%;
+  }
 `
 
 const Wrapper = styled.div`
@@ -114,7 +144,7 @@ const TextContainer = styled.div`
 
 const StepperContainer = styled.div`
   display: flex;
-  flex: 3;
+  flex: 1;
   align-items: center;
   padding: 10px;
 `

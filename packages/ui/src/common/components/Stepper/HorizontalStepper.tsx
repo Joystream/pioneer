@@ -44,6 +44,8 @@ const activeStepCss = css`
 const StepTitle = styled.h6`
   align-self: center;
   text-transform: capitalize;
+  width: max-content;
+  max-width: 100%;
   transition: ${Transitions.all};
   font-weight: 400;
   padding-left: 8px;
@@ -83,8 +85,8 @@ export const Step = styled.div<{ step: StepToRender; theme: typeof HorizontalSte
     width: 100%;
 
     &:after {
+      margin-left: 12px;
       content: '';
-      width: max-content;
       min-width: 20px;
       height: 1px;
       background-color: ${Colors.Black[500]};
@@ -116,4 +118,5 @@ const HorizontalStepperWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: fit-content;
 `
