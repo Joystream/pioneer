@@ -1,17 +1,17 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { OnboardingOverlay } from '@/app/components/OnboardingOverlay/OnboardingOverlay'
+import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 
 export default {
   title: 'App/OnboardingOverlay',
-  component: OnboardingOverlay,
+  component: OnBoardingOverlay,
 } as Meta
 
 const Template: Story = (args) => (
   <TemplateBlock>
-    <OnboardingOverlay {...args} />
+    <OnBoardingOverlay {...args} />
   </TemplateBlock>
 )
 

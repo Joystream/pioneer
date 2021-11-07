@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import { OnboardingOverlay } from '@/app/components/OnboardingOverlay/OnboardingOverlay'
+import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
@@ -30,7 +30,7 @@ export const App = () => (
     <Page>
       <SideBar />
       <Screen>
-        <OnboardingOverlay />
+        <OnBoardingOverlay />
         <Switch>
           <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
           <Route path={ProposalsRoutes.home} component={ProposalsModule} />

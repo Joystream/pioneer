@@ -11,23 +11,28 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
 
 const steps: StepperStep[] = [
   {
     title: 'Add Polkadot plugin',
     type: 'next',
+    id: 'installPlugin',
   },
   {
     title: 'Create or select a Polkadot account',
     type: 'next',
+    id: 'addAccount',
   },
   {
     title: 'Get FREE tokens',
     type: 'next',
+    id: '',
   },
   {
     title: 'Create membership',
     type: 'next',
+    id: 'createMembership',
   },
 ]
 
@@ -47,8 +52,30 @@ const innerStaticStepperSteps = [
   },
 ]
 
-export const OnboardingOverlay = () => {
+const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
+  const activeIndex = steps.findIndex((step) => step?.id === status)
+  if (!activeIndex) return steps.map((step) => ({ ...step, type: 'next' }))
+
+  return steps.map((step, index) => {
+    if (index < activeIndex) {
+      return { ...step, type: 'past' }
+    }
+    if (index === activeIndex) {
+      return { ...step, type: 'active' }
+    }
+    return { ...step, type: 'next' }
+  })
+}
+
+export const OnBoardingOverlay = () => {
+  const { isLoading, status } = useOnBoardingStatus()
   const [isOpen, setIsOpen] = useState(false)
+
+  if (isLoading || !status || status === 'finished') {
+    return null
+  }
+
+  const onBoardingSteps = asOnBoardingSteps(steps, status)
 
   return (
     <MainWrapper>
@@ -60,7 +87,7 @@ export const OnboardingOverlay = () => {
           </TextSmall>
         </TextContainer>
         <StepperContainer>
-          <HorizontalStepper steps={steps} />
+          <HorizontalStepper steps={onBoardingSteps} />
         </StepperContainer>
         <ButtonContainer>
           <ButtonPrimary size="large">Join now</ButtonPrimary>
