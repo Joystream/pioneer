@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextInlineBig, TextInlineSmall } from '@/common/components/typography'
+import { TextHuge, TextInlineBig } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 
 interface VerticalStaticStepperData {
   stepState: {
     title: string
-    subtitle?: string | undefined
+    subtitle?: string[]
   }
 }
 export interface VerticalStaticStepperProps {
@@ -24,7 +24,11 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
           </StepNumber>
           <StepBody>
             <StepTitle>{item.stepState.title}</StepTitle>
-            <StepSubtitle>{item.stepState.subtitle}</StepSubtitle>
+            <StepSubtitleList>
+              {item.stepState.subtitle?.map((subtitle) => (
+                <StepSubtitle>{subtitle}</StepSubtitle>
+              ))}
+            </StepSubtitleList>
           </StepBody>
         </StepWrap>
       ))}
@@ -49,11 +53,18 @@ const StepNumber = styled.div`
   font-weight: 700;
 `
 
-const StepTitle = styled.h6`
+const StepTitle = styled(TextHuge)`
   align-self: center;
+  font-weight: 700;
   text-transform: capitalize;
 `
-const StepSubtitle = styled(TextInlineSmall)`
+
+const StepSubtitleList = styled.ul`
+  list-style: disc;
+  margin-left: 15px;
+`
+
+const StepSubtitle = styled.li`
   color: ${Colors.White};
 `
 const StepBody = styled.div`
@@ -61,6 +72,7 @@ const StepBody = styled.div`
   align-items: center;
   row-gap: 8px;
   padding-left: 16px;
+  margin-top: 12px;
 `
 
 const StepWrap = styled.div`
