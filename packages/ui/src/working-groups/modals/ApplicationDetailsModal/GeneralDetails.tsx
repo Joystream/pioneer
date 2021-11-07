@@ -8,6 +8,7 @@ import { TokenValue } from '@/common/components/typography'
 
 import { openingTitle } from '../../helpers'
 import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
+import { LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 
 interface Props {
   application: WorkingGroupApplication
@@ -17,7 +18,9 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
   <SidePaneTable>
     <SidePaneRow>
       <SidePaneLabel text="Opening" />
-      <SidePaneText>{openingTitle(application)}</SidePaneText>
+      <LinkButtonLink size="small" to={`/working-groups/openings/${application?.opening?.id}`}>
+        {openingTitle(application)}
+      </LinkButtonLink>
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Status" />

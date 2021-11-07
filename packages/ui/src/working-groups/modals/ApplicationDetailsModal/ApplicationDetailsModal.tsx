@@ -15,6 +15,7 @@ import { Tabs } from '@/common/components/Tabs'
 import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
 import { useApplication } from '@/working-groups/hooks/useApplication'
+import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
 
 import { FormDetails } from './FormDetails'
 import { GeneralDetails } from './GeneralDetails'
@@ -28,6 +29,7 @@ export const ApplicationDetailsModal = React.memo(() => {
     modalData: { applicationId },
   } = useModal<ApplicationDetailsModalCall>()
   const { isLoading, application } = useApplication(applicationId)
+  const isMyMembership = useIsMyMembership(application?.applicant?.id || '')
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -44,7 +46,7 @@ export const ApplicationDetailsModal = React.memo(() => {
       <SidePane topSize="s">
         <SidePaneHeader>
           <SidePanelTop>
-            <SidePaneTitle>My Application</SidePaneTitle>
+            <SidePaneTitle>{isMyMembership ? 'My Application' : 'Application'}</SidePaneTitle>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
           <Tabs
