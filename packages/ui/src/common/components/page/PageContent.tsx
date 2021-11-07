@@ -2,10 +2,8 @@ import styled from 'styled-components'
 
 export const PageContent = styled.div`
   position: relative;
-  width: 100%;
-  height: 100%;
-  grid-area: page;
-  padding: 40px 0 8px;
+  padding: 40px 24px 8px 0;
+  margin-left: 24px;
 `
 
 export const ContentWithSidePanel = styled.div`

@@ -48,14 +48,14 @@ const innerStaticStepperSteps = [
 ]
 
 export const OnboardingOverlay = () => {
-  const [state, setState] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div>
+    <MainWrapper>
       <Wrapper>
         <TextContainer>
           <TextHuge bold>Become a member</TextHuge>
-          <TextSmall onClick={() => setState((prev) => !prev)}>
+          <TextSmall onClick={() => setIsOpen((prev) => !prev)}>
             Show how <ArrowDownExpandedIcon /> {/*todo add icons and make them rotate on open*/}
           </TextSmall>
         </TextContainer>
@@ -66,7 +66,7 @@ export const OnboardingOverlay = () => {
           <ButtonPrimary size="large">Join now</ButtonPrimary>
         </ButtonContainer>
       </Wrapper>
-      <StyledDropDown isDropped={state}>
+      <StyledDropDown isDropped={isOpen}>
         <DropdownContent>
           <DrawerContainer title="What are the benefits?">
             <BenefitsTable />
@@ -78,12 +78,18 @@ export const OnboardingOverlay = () => {
           <ButtonPrimary size="large">Continue</ButtonPrimary>
         </DropdownContent>
       </StyledDropDown>
-    </div>
+    </MainWrapper>
   )
 }
 
+const MainWrapper = styled.div`
+  position: relative;
+`
+
 const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.Black[700]};
+  position: absolute;
+  z-index: 100000;
 `
 
 const DropdownContent = styled.div`
