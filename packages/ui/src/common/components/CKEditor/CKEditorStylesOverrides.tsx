@@ -18,6 +18,7 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
   .ck.ck-editor__main > .ck.ck-content {
     max-height: ${({ maxRows }) => maxRows * (EDITOR_LINE_HEIGHT + EDITOR_LINE_SPACING) + EDITOR_LINE_SPACING}em;
     min-height: ${({ minRows }) => minRows * (EDITOR_LINE_HEIGHT + EDITOR_LINE_SPACING) + EDITOR_LINE_SPACING}em;
+    resize: vertical;
   }
 
   .ck.ck-content p,
