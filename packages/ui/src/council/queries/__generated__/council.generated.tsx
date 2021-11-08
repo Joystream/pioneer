@@ -325,6 +325,7 @@ export type CastVoteFieldsFragment = {
   stake: any
   stakeLocked: boolean
   castBy: string
+  commitment: string
   voteFor?:
     | {
         __typename: 'Membership'
@@ -862,6 +863,7 @@ export type GetCouncilVotesQuery = {
     stake: any
     stakeLocked: boolean
     castBy: string
+    commitment: string
     voteFor?:
       | {
           __typename: 'Membership'
@@ -1104,6 +1106,7 @@ export const CastVoteFieldsFragmentDoc = gql`
     stake
     stakeLocked
     castBy
+    commitment
     voteFor {
       ...MemberFields
     }
