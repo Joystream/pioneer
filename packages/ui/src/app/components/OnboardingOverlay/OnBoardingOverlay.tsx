@@ -84,9 +84,7 @@ export const OnBoardingOverlay = () => {
       <Wrapper>
         <TextContainer>
           <TextHuge bold>Become a member</TextHuge>
-          <TextSmall onClick={toggle}>
-            Show how  {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}
-          </TextSmall>
+          <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
         </TextContainer>
         <StepperContainer>
           <HorizontalStepper steps={onBoardingSteps} />
