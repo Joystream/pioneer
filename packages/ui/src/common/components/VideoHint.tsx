@@ -21,13 +21,7 @@ export const VideoHint = ({ videoURI, onClose }: VideoHintProps) => {
       <VideoHintWrapper>
         <VideoHintInnerWrapper>
           <CloseButton onClick={onClose} />
-          <iframe
-            src={videoURI}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+          <iframe src={videoURI} title="Video preview" frameBorder="0" allowFullScreen />
         </VideoHintInnerWrapper>
       </VideoHintWrapper>
     </VideoHintContainer>
