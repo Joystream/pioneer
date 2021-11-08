@@ -20,6 +20,7 @@ export interface VoteCount {
 export interface VotingRound {
   map: VoteMap
   count: VoteCount
+  roundNumber: number
 }
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
@@ -29,11 +30,12 @@ export const useVotingRounds = (votes: ProposalVote[] = [], updates: ProposalSta
 
   const voteRounds: (Omit<VotingRound, 'count'> & { total?: number })[] = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length || 1
-    const votesByRound = groupBy(votes, propsEquals('votingRound'))
+    const votesByRound = groupBy(votes, propsEquals('votingRound')).sort((a, b) => a[0].votingRound - b[0].votingRound)
 
     const voteRound = (round: number) => ({
       map: (votesByRound[round] || []).reduce(mapVotes, new Map()),
       total: votesByRound[round]?.length,
+      roundNumber: votesByRound[round]?.[0]?.votingRound ?? decidingCount,
     })
 
     return repeat(voteRound, decidingCount)

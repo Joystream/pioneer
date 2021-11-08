@@ -39,11 +39,11 @@ describe('useVotingRounds', () => {
   it('Default', () => {
     const { result, rerender } = renderUseProposalVotes(
       [
-        [Approve, 0],
-        [Reject, 0],
-        [Approve, 0],
-        [Slash, 1],
-        [Abstain, 1],
+        [Approve, 1],
+        [Reject, 1],
+        [Approve, 1],
+        [Slash, 2],
+        [Abstain, 2],
       ],
       ['deciding', 'dormant', 'deciding']
     )
@@ -51,8 +51,8 @@ describe('useVotingRounds', () => {
     expect(result.current).toEqual([
       {
         map: new Map([
-          [Approve, [asVote([Approve, 0]), asVote([Approve, 0])]],
-          [Reject, [asVote([Reject, 0])]],
+          [Approve, [asVote([Approve, 1]), asVote([Approve, 1])]],
+          [Reject, [asVote([Reject, 1])]],
         ]),
         count: {
           total: 3,
@@ -62,11 +62,12 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: councilSize - 3,
         },
+        roundNumber: 1,
       },
       {
         map: new Map([
-          [Abstain, [asVote([Abstain, 1])]],
-          [Slash, [asVote([Slash, 1])]],
+          [Abstain, [asVote([Abstain, 2])]],
+          [Slash, [asVote([Slash, 2])]],
         ]),
         count: {
           total: 2,
@@ -76,6 +77,7 @@ describe('useVotingRounds', () => {
           abstain: 1,
           remain: councilSize - 2,
         },
+        roundNumber: 2,
       },
     ])
 
@@ -92,6 +94,91 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: councilSize,
         },
+        roundNumber: 1,
+      },
+    ])
+  })
+
+  it('No votes in newest round', () => {
+    const { result } = renderUseProposalVotes(
+      [
+        [Approve, 1],
+        [Approve, 1],
+        [Approve, 1],
+      ],
+      ['deciding', 'dormant', 'deciding']
+    )
+
+    expect(result.current).toEqual([
+      {
+        map: new Map([[Approve, [asVote([Approve, 1]), asVote([Approve, 1]), asVote([Approve, 1])]]]),
+        count: {
+          total: 3,
+          approve: 3,
+          reject: 0,
+          slash: 0,
+          abstain: 0,
+          remain: 0,
+        },
+        roundNumber: 1,
+      },
+      {
+        map: new Map([]),
+        count: {
+          total: 0,
+          approve: 0,
+          reject: 0,
+          slash: 0,
+          abstain: 0,
+          remain: councilSize,
+        },
+        roundNumber: 2,
+      },
+    ])
+  })
+
+  it('Votes seeded in reversed order', () => {
+    const { result } = renderUseProposalVotes(
+      [
+        [Approve, 2],
+        [Reject, 2],
+        [Approve, 2],
+        [Slash, 1],
+        [Abstain, 1],
+      ],
+      ['deciding', 'dormant', 'deciding']
+    )
+
+    expect(result.current).toEqual([
+      {
+        map: new Map([
+          [Abstain, [asVote([Abstain, 1])]],
+          [Slash, [asVote([Slash, 1])]],
+        ]),
+        count: {
+          total: 2,
+          approve: 0,
+          reject: 0,
+          slash: 1,
+          abstain: 1,
+          remain: councilSize - 2,
+        },
+        roundNumber: 1,
+      },
+      {
+        map: new Map([
+          [Approve, [asVote([Approve, 2]), asVote([Approve, 2])]],
+          [Reject, [asVote([Reject, 2])]],
+        ]),
+        count: {
+          total: 3,
+          approve: 2,
+          reject: 1,
+          slash: 0,
+          abstain: 0,
+          remain: councilSize - 3,
+        },
+        roundNumber: 2,
       },
     ])
   })
@@ -126,6 +213,7 @@ describe('useVotingRounds', () => {
           abstain: 1,
           remain: undefined,
         },
+        roundNumber: 0,
       },
     ])
   })
