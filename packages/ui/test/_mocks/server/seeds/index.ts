@@ -1,6 +1,7 @@
 import { MockMember, RawOpeningMock, RawWorker, seedRandomBlockFields } from '@/mocks/data'
 import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
 
+import {accountsMap} from '../../../../dev/node-mocks/data/addresses';
 import { ProposalMock } from '../../../../dev/query-node-mocks/generators/generateProposals'
 import { RawApplication } from '../../../../src/mocks/data/seedApplications'
 
@@ -16,6 +17,7 @@ export const MEMBER_ALICE_DATA: MockMember = {
   isVerified: true,
   isFoundingMember: true,
   inviteCount: 5,
+  boundAccounts: [accountsMap.alice, accountsMap.alice_stash],
   entry: {
     __typename: '',
     membershipBoughtEvent: seedRandomBlockFields(),

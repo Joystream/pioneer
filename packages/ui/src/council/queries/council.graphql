@@ -185,12 +185,6 @@ query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
   }
 }
 
-query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
-  proposals(where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }, orderBy: [createdAt_DESC]) {
-    ...ProposalFields
-  }
-}
-
 query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
   workingGroups {
     ...PastCouncilWorkingGroupFields

@@ -50,6 +50,9 @@ describe('UI: Forum Thread Page', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined
+    }
   }
 
   const forumThread: ForumThreadWithDetails = {

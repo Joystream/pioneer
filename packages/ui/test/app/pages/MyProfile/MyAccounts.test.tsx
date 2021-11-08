@@ -40,6 +40,9 @@ describe('Page: MyAccounts', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined
+    }
   }
 
   let useModal: UseModal<any>
@@ -135,6 +138,7 @@ describe('Page: MyAccounts', () => {
             amount: createBalance(250).toBn(),
             type: 'Staking Candidate',
           },
+          memberId: '0',
         },
       }
       expect(useModal.showModal).toBeCalledWith(expected)

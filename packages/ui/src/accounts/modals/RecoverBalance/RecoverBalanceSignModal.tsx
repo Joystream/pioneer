@@ -9,32 +9,33 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { Address } from '@/common/types'
+import { Member } from '@/memberships/types'
 
 interface Props {
   onClose: () => void
   service: ActorRef<any>
-  memberId: string
+  memberId: Member['id']
+  address: Address
 }
 
-export const RecoverBalanceSignModal = ({ onClose, service, memberId }: Props) => {
+export const RecoverBalanceSignModal = ({ onClose, service, memberId, address }: Props) => {
   const balances = useMyTotalBalances()
   const { api, connectionState } = useApi()
   const amount = balances.recoverable
-  const { active } = useMyMemberships()
 
   const transaction = useMemo(() => {
-    if (!amount || !api || !active) {
+    if (!amount || !api) {
       return
     }
     // api.tx.referendum.releaseVoteStake()
     // api.tx.council.releaseCandidacyStake(membershipId)
     return api.tx.council.releaseCandidacyStake(memberId)
-  }, [connectionState, active?.id, JSON.stringify(balances)])
+  }, [connectionState, memberId, JSON.stringify(balances)])
 
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
-    signer: active?.controllerAccount || '',
+    signer: address || '',
     service,
   })
 

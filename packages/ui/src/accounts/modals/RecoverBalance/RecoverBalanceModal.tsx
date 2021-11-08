@@ -17,7 +17,14 @@ export const RecoverBalanceModal = () => {
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
-    return <RecoverBalanceSignModal onClose={hideModal} service={transactionService} memberId={modalData.memberId} />
+    return (
+      <RecoverBalanceSignModal
+        onClose={hideModal}
+        service={transactionService}
+        memberId={modalData.memberId}
+        address={modalData.address}
+      />
+    )
   }
 
   if (state.matches('success')) {

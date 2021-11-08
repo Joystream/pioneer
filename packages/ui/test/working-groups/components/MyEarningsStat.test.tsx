@@ -32,6 +32,9 @@ describe('MyEarningsStat', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined
+    }
   }
 
   beforeAll(async () => {

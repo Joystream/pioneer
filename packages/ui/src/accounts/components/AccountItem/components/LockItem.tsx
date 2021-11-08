@@ -9,6 +9,7 @@ import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { Address } from '@/common/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 type DetailsItemDataProps = {
   lock: BalanceLock
@@ -18,6 +19,20 @@ type DetailsItemDataProps = {
 
 export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps) => {
   const { showModal } = useModal()
+  const {
+    helpers: { getMemberIdByBoundAccountAddress },
+  } = useMyMemberships()
+
+  const onClick = () => {
+    if (!address) return
+    const memberId = getMemberIdByBoundAccountAddress(address)
+    if (!memberId) return
+
+    showModal<RecoverBalanceModalCall>({
+      modal: 'RecoverBalance',
+      data: { address, lock, memberId },
+    })
+  }
 
   return (
     <DetailsItemVoteWrapper>
@@ -32,18 +47,7 @@ export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps)
         {isRecoverable && (
           <>
             <div />
-            <ButtonPrimary
-              size="small"
-              onClick={() =>
-                showModal<RecoverBalanceModalCall>({
-                  modal: 'RecoverBalance',
-                  data: {
-                    address: address ?? '',
-                    lock,
-                  },
-                })
-              }
-            >
+            <ButtonPrimary size="small" onClick={onClick}>
               Recover
             </ButtonPrimary>
           </>
