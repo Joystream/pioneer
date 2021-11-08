@@ -20,7 +20,6 @@ export interface VoteCount {
 export interface VotingRound {
   map: VoteMap
   count: VoteCount
-  roundNumber: number
 }
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
@@ -35,7 +34,6 @@ export const useVotingRounds = (votes: ProposalVote[] = [], updates: ProposalSta
     const voteRound = (round: number) => ({
       map: (votesByRound[round] || []).reduce(mapVotes, new Map()),
       total: votesByRound[round]?.length,
-      roundNumber: votesByRound[round]?.[0]?.votingRound ?? decidingCount,
     })
 
     return repeat(voteRound, decidingCount)

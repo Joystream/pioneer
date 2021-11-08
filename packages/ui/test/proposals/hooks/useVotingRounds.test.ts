@@ -62,7 +62,6 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: councilSize - 3,
         },
-        roundNumber: 1,
       },
       {
         map: new Map([
@@ -77,7 +76,6 @@ describe('useVotingRounds', () => {
           abstain: 1,
           remain: councilSize - 2,
         },
-        roundNumber: 2,
       },
     ])
 
@@ -94,7 +92,6 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: councilSize,
         },
-        roundNumber: 1,
       },
     ])
   })
@@ -120,7 +117,6 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: 0,
         },
-        roundNumber: 1,
       },
       {
         map: new Map([]),
@@ -132,7 +128,6 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: councilSize,
         },
-        roundNumber: 2,
       },
     ])
   })
@@ -163,7 +158,6 @@ describe('useVotingRounds', () => {
           abstain: 1,
           remain: councilSize - 2,
         },
-        roundNumber: 1,
       },
       {
         map: new Map([
@@ -178,7 +172,6 @@ describe('useVotingRounds', () => {
           abstain: 0,
           remain: councilSize - 3,
         },
-        roundNumber: 2,
       },
     ])
   })
@@ -213,7 +206,6 @@ describe('useVotingRounds', () => {
           abstain: 1,
           remain: undefined,
         },
-        roundNumber: 0,
       },
     ])
   })
