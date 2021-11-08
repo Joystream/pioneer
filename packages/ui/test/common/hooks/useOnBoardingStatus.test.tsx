@@ -5,6 +5,8 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { ApiContext } from '@/common/providers/api/context'
+import { UseApi } from '@/common/providers/api/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -28,6 +30,12 @@ describe('useOnBoardingStatus', () => {
     hasMembers: false,
   }
 
+  const useApi = {
+    isConnected: false,
+    api: undefined,
+    connectionState: 'connecting',
+  } as UseApi
+
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server)
@@ -43,6 +51,7 @@ describe('useOnBoardingStatus', () => {
       useMyAccounts.isLoading = false
       useMyMemberships.isLoading = false
       useMyAccounts.error = undefined
+      useApi.isConnected = true
     })
 
     it('Install plugin', async () => {
@@ -83,9 +92,11 @@ describe('useOnBoardingStatus', () => {
     const { result } = renderHook(() => useOnBoardingStatus(), {
       wrapper: ({ children }) => (
         <MockApolloProvider>
-          <AccountsContext.Provider value={useMyAccounts}>
-            <MembershipContext.Provider value={useMyMemberships}>{children}</MembershipContext.Provider>
-          </AccountsContext.Provider>
+          <ApiContext.Provider value={useApi}>
+            <AccountsContext.Provider value={useMyAccounts}>
+              <MembershipContext.Provider value={useMyMemberships}>{children}</MembershipContext.Provider>
+            </AccountsContext.Provider>
+          </ApiContext.Provider>
         </MockApolloProvider>
       ),
     })

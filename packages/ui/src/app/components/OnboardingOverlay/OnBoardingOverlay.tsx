@@ -54,7 +54,7 @@ const innerStaticStepperSteps = [
 
 const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
   const activeIndex = steps.findIndex((step) => step?.id === status)
-  if (!activeIndex) return steps.map((step) => ({ ...step, type: 'next' }))
+  if (activeIndex === -1) return steps.map((step) => ({ ...step, type: 'next' }))
 
   return steps.map((step, index) => {
     if (index < activeIndex) {
@@ -74,7 +74,7 @@ export const OnBoardingOverlay = () => {
   if (isLoading || !status || status === 'finished') {
     return null
   }
-  console.log(isLoading, status, ' test')
+
   const onBoardingSteps = asOnBoardingSteps(steps, status)
 
   return (

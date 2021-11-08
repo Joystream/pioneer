@@ -10,6 +10,7 @@ interface UseOnBoardingStatus {
 }
 
 export const useOnBoardingStatus = (): UseOnBoardingStatus => {
+  const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
 

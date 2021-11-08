@@ -32,7 +32,7 @@ function isKeyringLoaded(keyring: Keyring) {
   }
 }
 
-const loadKeysFromExtension = async (keyring: Keyring, onLoadingDone: () => void) => {
+const loadKeysFromExtension = async (keyring: Keyring) => {
   await web3Enable('Pioneer')
   const injectedAccounts = await web3Accounts()
 
@@ -53,8 +53,6 @@ const loadKeysFromExtension = async (keyring: Keyring, onLoadingDone: () => void
 
     accounts.forEach((injected) => keyring.addExternal(injected.address, injected.meta))
   })
-
-  onLoadingDone()
 }
 
 // Extensions is not always ready on application load, hence the check
@@ -82,7 +80,6 @@ const onExtensionLoaded = (onSuccess: () => void, onFail: () => void) => () => {
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
   const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
-  const [isAccountsLoaded, setIsAccountsLoaded] = useState(false)
   const [extensionUnavailable, setExtensionUnavailable] = useState(false)
 
   useEffect(
@@ -98,9 +95,7 @@ export const AccountsContextProvider = (props: Props) => {
       return
     }
 
-    loadKeysFromExtension(keyring, () => {
-      /**/
-    }).catch(error)
+    loadKeysFromExtension(keyring).catch(error)
   }, [isExtensionLoaded])
 
   const accounts = useObservable(keyring.accounts.subject.asObservable().pipe(debounceTime(20)), [keyring])
@@ -114,16 +109,15 @@ export const AccountsContextProvider = (props: Props) => {
         name: account.json.meta.name,
       }))
     )
-    // setIsAccountsLoaded(true)
   }
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded || !isAccountsLoaded }
+  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded }
 
   if (extensionUnavailable) {
     value.error = 'EXTENSION'
   }
-  console.log(accounts, JSON.stringify(value), 'useMyAcc hoo')
+
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>
 }

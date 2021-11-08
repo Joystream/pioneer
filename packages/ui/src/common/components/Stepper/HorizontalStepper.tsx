@@ -18,7 +18,7 @@ export const HorizontalStepper = ({ steps, theme = 'light' }: HorizontalStepperP
   return (
     <HorizontalStepperWrapper>
       {stepsToRender.map((step, index) => (
-        <Step theme={HorizontalStepperTheme[theme]} step={step}>
+        <Step theme={HorizontalStepperTheme[theme]} step={step} key={`horizontal-stepper-${index}`}>
           <StepCircle>{step.isPast ? <CheckboxIcon /> : index + 1}</StepCircle>
           <StepBody>
             <StepTitle>{step.title}</StepTitle>
@@ -92,6 +92,7 @@ export const Step = styled.div<{ step: StepToRender; theme: typeof HorizontalSte
       background-color: ${Colors.Black[500]};
     }
   }
+
   ${StepCircle} {
     ${({ step: { isPast, isActive } }) => {
       if (isPast) {
