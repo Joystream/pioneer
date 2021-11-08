@@ -37,8 +37,8 @@ export const PastVotesList = () => {
         <SortHeader {...getSortProps('stakeLocked')}>Stake recovered</SortHeader>
       </ListHeaders>
       <List>
-        {votes.map((vote, index) => (
-          <PastVote vote={vote} key={index} $colLayout={PastVoteColumns} />
+        {votes.map((vote) => (
+          <PastVote vote={vote} key={vote.id} $colLayout={PastVoteColumns} />
         ))}
       </List>
       <Pagination {...pagination} />

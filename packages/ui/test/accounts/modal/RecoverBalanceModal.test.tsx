@@ -75,6 +75,14 @@ describe('UI: RecoverBalanceModal', () => {
     }
   })
 
+  it('Insufficient funds', async () => {
+    tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake', 10_000)
+
+    renderModal()
+
+    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+  })
+
   it('Transaction summary', async () => {
     renderModal()
 

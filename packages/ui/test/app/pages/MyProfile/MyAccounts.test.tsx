@@ -41,8 +41,8 @@ describe('Page: MyAccounts', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   let useModal: UseModal<any>
@@ -122,7 +122,7 @@ describe('Page: MyAccounts', () => {
       expect(await getButton(/^recover$/i)).toBeDefined()
     })
 
-    it.only('Opens modal', async () => {
+    it('Opens modal', async () => {
       stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
 
       renderPage()
@@ -136,7 +136,7 @@ describe('Page: MyAccounts', () => {
           address: alice.address,
           lock: {
             amount: createBalance(250).toBn(),
-            type: 'Staking Candidate',
+            type: 'Council Candidate',
           },
           memberId: '0',
         },

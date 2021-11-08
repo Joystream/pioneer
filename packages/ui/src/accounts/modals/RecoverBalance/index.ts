@@ -7,29 +7,40 @@ import { Member } from '@/memberships/types'
 
 export * from './RecoverBalanceModal'
 
-export type RecoverableLock =
-  | {
-      amount: BN
-      type: 'Voting'
-    }
-  | {
-      amount: BN
-      type: 'Council Candidate'
-    }
+type VotingLock = {
+  amount: BN
+  type: 'Voting'
+}
+type CouncilLock = {
+  amount: BN
+  type: 'Council Candidate'
+}
+export type RecoverableLock = VotingLock | CouncilLock
 
 export const isRecoverableLock = (lock: BalanceLock): lock is RecoverableLock => {
-  if (lock.type === 'Voting' || lock.type === 'Council Candidate') {
-    return true
-  }
-
-  return false
+  return lock.type === 'Voting' || lock.type === 'Council Candidate'
 }
 
-export type RecoverBalanceModalCall = ModalWithDataCall<
-  'RecoverBalance',
-  {
-    address: Address
-    lock: RecoverableLock
-    memberId: Member['id']
-  }
->
+interface RecoverableModalData {
+  address: Address
+  lock: RecoverableLock
+  memberId?: Member['id']
+}
+
+export interface VotingData extends RecoverableModalData {
+  address: Address
+  lock: VotingLock
+  memberId: undefined
+}
+
+interface CouncilCandidateData extends RecoverableModalData {
+  address: Address
+  lock: CouncilLock
+  memberId: Member['id']
+}
+
+export const isCouncilCandidateData = (data: RecoverableModalData): data is CouncilCandidateData => {
+  return data.lock.type === 'Council Candidate'
+}
+
+export type RecoverBalanceModalCall = ModalWithDataCall<'RecoverBalance', RecoverableModalData>

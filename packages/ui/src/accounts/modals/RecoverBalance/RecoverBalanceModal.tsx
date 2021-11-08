@@ -1,18 +1,47 @@
 import { useMachine } from '@xstate/react'
-import React from 'react'
+import React, { useLayoutEffect, useMemo } from 'react'
 
-import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
+import { isCouncilCandidateData, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { recoverBalanceMachine } from '@/accounts/modals/RecoverBalance/machine'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { isDefined } from '@/common/utils'
 
 import { RecoverBalanceSignModal } from './RecoverBalanceSignModal'
 import { RecoverBalanceSuccessModal } from './RecoverBalanceSuccessModal'
 
 export const RecoverBalanceModal = () => {
-  const [state] = useMachine(recoverBalanceMachine)
+  const [state, send] = useMachine(recoverBalanceMachine)
+  const { api, connectionState } = useApi()
   const { hideModal, modalData } = useModal<RecoverBalanceModalCall>()
+  const transaction = useMemo(() => {
+    if (!api) {
+      return
+    }
+    return isCouncilCandidateData(modalData)
+      ? api.tx.council.releaseCandidacyStake(modalData.memberId)
+      : api.tx.referendum.releaseVoteStake()
+  }, [connectionState, modalData?.memberId, modalData.lock.type])
+  const feeInfo = useTransactionFee(modalData.address, transaction)
+
+  useLayoutEffect(() => {
+    if (state.matches('requirementsVerification') && isDefined(feeInfo?.canAfford)) {
+      send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
+    }
+  }, [feeInfo, state.value])
+
+  if (!transaction || !feeInfo) {
+    return null
+  }
+
+  if (state.matches('requirementsFailed')) {
+    return <InsufficientFundsModal onClose={hideModal} address={modalData.address} amount={feeInfo.transactionFee} />
+  }
+
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
@@ -20,8 +49,8 @@ export const RecoverBalanceModal = () => {
       <RecoverBalanceSignModal
         onClose={hideModal}
         service={transactionService}
-        memberId={modalData.memberId}
         address={modalData.address}
+        transaction={transaction}
         lock={modalData.lock}
       />
     )
@@ -34,7 +63,7 @@ export const RecoverBalanceModal = () => {
   if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        <TextMedium>There was a problem with recovering balances.</TextMedium>
+        <TextMedium>There was a problem with recovering balance.</TextMedium>
       </FailureModal>
     )
   }
