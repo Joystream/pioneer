@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { ElectionTabs, VotingStageTab } from '@/council/components/election/ElectionTabs'
+import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { Election } from '@/council/types/Election'
 
@@ -13,27 +14,28 @@ interface VotingStageProps {
 
 export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   const [tab, setTab] = useState<VotingStageTab>('candidates')
+  const { votesTotal } = useMyCurrentVotesCount()
 
   const { allAccounts } = useMyAccounts()
   const myVotes = useVerifiedVotingAttempts(election?.cycleId)
-  const optionIds = useMemo(() => myVotes?.map(({ optionId }) => optionId), [myVotes?.length])
+  const optionIds = useMemo(() => new Set(myVotes?.map(({ optionId }) => optionId)), [myVotes?.length])
   const canVote = !!myVotes && allAccounts.length > myVotes.length
 
   const [allCandidates, votedForCandidates] = useMemo(() => {
     const allCandidates = election?.candidates?.map((candidate) => ({
       ...candidate,
-      voted: optionIds?.includes(candidate.member.id),
+      voted: optionIds?.has(candidate.member.id),
     }))
     const votedForCandidates = allCandidates?.filter(({ voted }) => voted)
 
     return [allCandidates, votedForCandidates]
-  }, [optionIds?.length, election?.candidates.length])
+  }, [optionIds?.size, election?.candidates.length])
 
   return (
     <>
       <ElectionTabs
         stage="voting"
-        myVotes={votedForCandidates?.length}
+        myVotes={myVotes?.length && votesTotal}
         tab={tab}
         onSetTab={(tab) => setTab(tab as VotingStageTab)}
       />
