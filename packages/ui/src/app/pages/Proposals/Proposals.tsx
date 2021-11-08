@@ -1,10 +1,9 @@
 import React from 'react'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
+import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { ButtonsGroup } from '@/common/components/buttons'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageTitle } from '@/common/components/page/PageTitle'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
@@ -22,15 +21,12 @@ export const Proposals = () => {
   return (
     <PageLayout
       header={
-        <PageHeaderWrapper>
-          <PageHeaderRow>
-            <PageTitle>Proposals</PageTitle>
-            <ButtonsGroup>
-              <AddProposalButton />
-            </ButtonsGroup>
-          </PageHeaderRow>
-          <ProposalsTabs />
-        </PageHeaderWrapper>
+        <PageHeaderWithHint
+          title="Proposals"
+          hintType="proposals"
+          tabs={<ProposalsTabs />}
+          buttons={<AddProposalButton />}
+        />
       }
       main={
         proposals.length || isLoading ? (
