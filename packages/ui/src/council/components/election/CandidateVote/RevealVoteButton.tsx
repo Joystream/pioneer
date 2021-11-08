@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { useModal } from '@/common/hooks/useModal'
-import { MyCastVote } from '@/council/hooks/useCommitment'
+import { MyCastVote } from '@/council/hooks/useElectionVotes'
 import { RevealVoteModalCall } from '@/council/modals/RevealVote'
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 export const RevealVoteButton = ({ myVotes, voteForHandle }: Props) => {
   const { showModal } = useModal()
-  const unrevealedVotes = myVotes.filter((vote) => vote.isRevealed)
+  const unrevealedVotes = myVotes.flatMap((vote) => vote.attempt ?? [])
   const onClick = useCallback(() => {
     showModal<RevealVoteModalCall>({
       modal: 'RevealVote',
