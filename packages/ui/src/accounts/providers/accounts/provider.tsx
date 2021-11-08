@@ -117,6 +117,7 @@ export const AccountsContextProvider = (props: Props) => {
 
   if (extensionUnavailable) {
     value.error = 'EXTENSION'
+    value.isLoading = false
   }
 
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>
