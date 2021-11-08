@@ -33,8 +33,8 @@ describe('MyEarningsStat', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeAll(async () => {

@@ -92,8 +92,8 @@ describe('UI: Election page', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeEach(() => {

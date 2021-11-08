@@ -42,8 +42,8 @@ describe('UI: LeaveRoleModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   let useAccounts: UseAccounts

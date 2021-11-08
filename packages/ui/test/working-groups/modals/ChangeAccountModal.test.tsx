@@ -50,8 +50,8 @@ describe('UI: ChangeRoleModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   let useAccounts: UseAccounts

@@ -31,8 +31,8 @@ describe('UI: Proposal discussion', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   const baseThread: ProposalDiscussionThread = {

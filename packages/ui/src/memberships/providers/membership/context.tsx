@@ -9,6 +9,6 @@ export const MembershipContext = createContext<MyMemberships>({
   hasMembers: false,
   isLoading: true,
   helpers: {
-    getMemberIdByBoundAccountAddress: () => undefined
-  }
+    getMemberIdByBoundAccountAddress: () => undefined,
+  },
 })

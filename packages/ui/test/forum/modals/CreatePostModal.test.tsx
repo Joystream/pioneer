@@ -55,8 +55,8 @@ describe('UI: CreatePostModal', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
   let useAccounts: UseAccounts
 

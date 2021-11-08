@@ -48,8 +48,8 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
     hasMembers: false,
     isLoading: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   return (
