@@ -14,8 +14,8 @@ import {
 import { Tabs } from '@/common/components/Tabs'
 import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
-import { useApplication } from '@/working-groups/hooks/useApplication'
 import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
+import { useApplication } from '@/working-groups/hooks/useApplication'
 
 import { FormDetails } from './FormDetails'
 import { GeneralDetails } from './GeneralDetails'

@@ -3,12 +3,12 @@ import React from 'react'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
 import { BlockTime } from '@/common/components/BlockTime'
+import { LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 import { SidePaneTable, SidePaneText, SidePaneRow, SidePaneLabel } from '@/common/components/SidePane'
 import { TokenValue } from '@/common/components/typography'
 
 import { openingTitle } from '../../helpers'
 import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
-import { LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 
 interface Props {
   application: WorkingGroupApplication
