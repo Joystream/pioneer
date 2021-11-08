@@ -5,6 +5,7 @@ const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const webpack = require('webpack')
 
 const shared = require('./dev/webpack.shared')
@@ -31,6 +32,7 @@ module.exports = (env, argv) => {
         },
       ],
     }),
+    new ForkTsCheckerWebpackPlugin(),
   ]
 
   return {
@@ -47,8 +49,15 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+              },
+            },
+          ],
+          exclude: [/node_modules/],
         },
         {
           test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf|svg)$/,
@@ -67,6 +76,31 @@ module.exports = (env, argv) => {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'build'),
       globalObject: 'this',
+      pathinfo: false,
+    },
+    optimization: {
+      runtimeChunk: true,
+      splitChunks: {
+        chunks: 'async',
+        minSize: 20000,
+        minRemainingSize: 0,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        enforceSizeThreshold: 50000,
+        cacheGroups: {
+          defaultVendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            reuseExistingChunk: true,
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+        },
+      },
     },
     stats: 'minimal',
     devServer: {
