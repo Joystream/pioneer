@@ -14,7 +14,7 @@ import { CouncilRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
-import { useStoredCastVotes } from '@/council/hooks/useStoredCastVotes'
+import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
 import { MemberAccounts } from '@/memberships/components/MemberProfile/MemberAccounts'
 import { MemberModal } from '@/memberships/components/MemberProfile/MemberModal'
@@ -40,7 +40,7 @@ export const CandidacyPreview = React.memo(() => {
   const { allAccounts } = useMyAccounts()
   const { stage: electionStage } = useElectionStage()
   const currentVotingCycleId = electionStage === 'voting' ? candidate?.cycleId : undefined
-  const myVotes = useStoredCastVotes(currentVotingCycleId, candidate?.member.id)
+  const myVotes = useVerifiedVotingAttempts(currentVotingCycleId, candidate?.member.id)
   const canVote = !!myVotes && allAccounts.length > myVotes.length
 
   const candidates = useElectionCandidatesIds(candidate?.cycleId)

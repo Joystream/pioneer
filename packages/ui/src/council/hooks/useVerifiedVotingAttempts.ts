@@ -1,11 +1,10 @@
 import { useEffect, useMemo } from 'react'
 
-import { isDefined } from '@/common/utils'
 import { useGetCouncilVotesCommitmentsLazyQuery } from '@/council/queries'
 
 import { useMyVotingAttempts } from './useMyVotingAttempts'
 
-export const useStoredCastVotes = (cycleId?: number, optionId?: string) => {
+export const useVerifiedVotingAttempts = (cycleId?: number, optionId?: string) => {
   const [get, { data }] = useGetCouncilVotesCommitmentsLazyQuery()
   const myAttempts = useMyVotingAttempts(cycleId, optionId)
 
@@ -27,11 +26,8 @@ export const useStoredCastVotes = (cycleId?: number, optionId?: string) => {
     } else if (myAttempts.length === 0) {
       return []
     } else if (data) {
-      const attemptsWithVoteIds = myAttempts.map((attempt) => ({
-        ...attempt,
-        voteId: data.castVotes.find((vote) => vote.commitment === attempt.commitment)?.id,
-      }))
-      return attemptsWithVoteIds.filter((attempt) => isDefined(attempt.voteId))
+      const castedCommitment = data.castVotes.map(({ commitment }) => commitment)
+      return myAttempts.filter(({ commitment }) => castedCommitment.includes(commitment))
     }
   }, [myAttempts?.length, data?.castVotes.length])
 }

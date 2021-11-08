@@ -263,7 +263,6 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
 
 query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
   castVotes(where: $where, orderBy: $orderBy) {
-    id
     commitment
   }
 }
