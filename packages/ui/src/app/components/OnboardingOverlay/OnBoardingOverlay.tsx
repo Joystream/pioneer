@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
@@ -13,6 +13,7 @@ import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStati
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { useToggle } from '@/common/hooks/useToggle'
 
 const steps: StepperStep[] = [
   {
@@ -70,7 +71,7 @@ const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): Step
 
 export const OnBoardingOverlay = () => {
   const { isLoading, status } = useOnBoardingStatus()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggle] = useToggle()
 
   if (isLoading || !status || status === 'finished') {
     return null
@@ -83,9 +84,8 @@ export const OnBoardingOverlay = () => {
       <Wrapper>
         <TextContainer>
           <TextHuge bold>Become a member</TextHuge>
-          <TextSmall onClick={() => setIsOpen((prev) => !prev)}>
-            Show how
-            {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}
+          <TextSmall onClick={toggle}>
+            Show how  {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}
           </TextSmall>
         </TextContainer>
         <StepperContainer>
@@ -147,6 +147,10 @@ const Wrapper = styled.div`
   height: 85px;
   display: flex;
   position: relative;
+
+  > * {
+    overflow: hidden;
+  }
 `
 
 const ButtonContainer = styled.div`
@@ -178,7 +182,8 @@ const TextContainer = styled.div`
 
 const StepperContainer = styled.div`
   display: flex;
-  flex: 1;
+  flex: 3;
   align-items: center;
   padding: 10px;
+  justify-content: center;
 `
