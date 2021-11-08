@@ -1,5 +1,6 @@
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useApi } from '@/common/hooks/useApi'
 
 export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'getFreeTokens' | 'createMembership' | 'finished'
 
@@ -12,7 +13,9 @@ export const useOnBoardingStatus = (): UseOnBoardingStatus => {
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
 
-  if (isLoadingAccounts || isLoadingMembers) {
+  console.log(isLoadingAccounts, isConnected, hasAccounts, ' test 1')
+
+  if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
   }
 

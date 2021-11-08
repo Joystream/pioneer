@@ -74,7 +74,7 @@ export const OnBoardingOverlay = () => {
   if (isLoading || !status || status === 'finished') {
     return null
   }
-
+  console.log(isLoading, status, ' test')
   const onBoardingSteps = asOnBoardingSteps(steps, status)
 
   return (
