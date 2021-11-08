@@ -99,6 +99,10 @@ export const stubTransactionSuccess = <
   )
 }
 
+export const stubTransactionPending = (transaction: any) => {
+  set(transaction, 'signAndSend', () => from([{ status: { isReady: true, type: 'Ready' } }]))
+}
+
 export const stubBatchTransactionFailure = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(createBatchErrorEvents()))
 }
