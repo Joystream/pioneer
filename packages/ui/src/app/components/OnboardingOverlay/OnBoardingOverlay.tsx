@@ -145,6 +145,10 @@ const Wrapper = styled.div`
   height: 85px;
   display: flex;
   position: relative;
+
+  > * {
+    overflow: hidden;
+  }
 `
 
 const ButtonContainer = styled.div`
@@ -177,7 +181,8 @@ const TextContainer = styled.div`
 
 const StepperContainer = styled.div`
   display: flex;
-  flex: 1;
+  flex: 3;
   align-items: center;
   padding: 10px;
+  justify-content: center;
 `
