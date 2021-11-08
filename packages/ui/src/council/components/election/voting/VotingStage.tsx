@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { isDefined } from '@/common/utils'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { ElectionTabs, VotingStageTab } from '@/council/components/election/ElectionTabs'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
@@ -19,7 +20,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   const { allAccounts } = useMyAccounts()
   const myVotes = useVerifiedVotingAttempts(election?.cycleId)
   const optionIds = useMemo(() => new Set(myVotes?.map(({ optionId }) => optionId)), [myVotes?.length])
-  const canVote = !!myVotes && allAccounts.length > myVotes.length
+  const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
 
   const [allCandidates, votedForCandidates] = useMemo(() => {
     const allCandidates = election?.candidates?.map((candidate) => ({

@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
-
-import { Loading } from '../../../common/components/Loading'
-import { PageTitle } from '../../../common/components/page/PageTitle'
-import { WorkingGroupsList } from '../../../working-groups/components/WorkingGroupsList'
-import { useWorkingGroups } from '../../../working-groups/hooks/useWorkingGroups'
+import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
+import { PageLayout } from '@/app/components/PageLayout'
+import { Loading } from '@/common/components/Loading'
+import { WorkingGroupsList } from '@/working-groups/components/WorkingGroupsList'
+import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
@@ -18,12 +17,7 @@ export const WorkingGroups = () => {
 
   return (
     <PageLayout
-      header={
-        <PageHeaderWrapper>
-          <PageTitle>Working Groups</PageTitle>
-          <WorkingGroupsTabs />
-        </PageHeaderWrapper>
-      }
+      header={<PageHeaderWithHint title="Working Groups" hintType="workingGroups" tabs={<WorkingGroupsTabs />} />}
       main={<WorkingGroupsList groups={groups} />}
     />
   )

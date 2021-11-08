@@ -211,6 +211,7 @@ describe('UI: Election page', () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
         await renderComponent([])
+        await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote')).toBeNull()
@@ -221,8 +222,9 @@ describe('UI: Election page', () => {
 
         await renderComponent()
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText(/My Votes/i)).toBeNull()
+        expect(screen.queryByText('Vote again')).toBeNull()
       })
 
       it('One account and One valid vote', async () => {
@@ -253,9 +255,10 @@ describe('UI: Election page', () => {
         castVote(alice.address, aliceMemberId, salt, TEST_COMMITMENT)
 
         await renderComponent()
+        await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
-        expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText('Vote')).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
       })
 
