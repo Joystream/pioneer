@@ -5,7 +5,8 @@ import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/Ben
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
-import { ArrowDownExpandedIcon } from '@/common/components/icons'
+import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
+import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIcon'
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
@@ -83,7 +84,8 @@ export const OnBoardingOverlay = () => {
         <TextContainer>
           <TextHuge bold>Become a member</TextHuge>
           <TextSmall onClick={() => setIsOpen((prev) => !prev)}>
-            Show how <ArrowDownExpandedIcon /> {/*todo add icons and make them rotate on open*/}
+            Show how
+            {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}
           </TextSmall>
         </TextContainer>
         <StepperContainer>
@@ -171,7 +173,6 @@ const TextContainer = styled.div`
     height: 16px;
     width: 16px;
     margin-left: 5px;
-    margin-bottom: -4px;
   }
 `
 
