@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
+import { isRecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { BalanceLock } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TokenValue } from '@/common/components/typography'
@@ -28,10 +28,12 @@ export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps)
     const memberId = getMemberIdByBoundAccountAddress(address)
     if (!memberId) return
 
-    showModal<RecoverBalanceModalCall>({
-      modal: 'RecoverBalance',
-      data: { address, lock, memberId },
-    })
+    if (isRecoverableLock(lock)) {
+      showModal<RecoverBalanceModalCall>({
+        modal: 'RecoverBalance',
+        data: { address, lock, memberId },
+      })
+    }
   }
 
   return (

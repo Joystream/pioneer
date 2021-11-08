@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
-import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
+import { RecoverableLock } from '@/accounts/modals/RecoverBalance/index'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
@@ -17,21 +17,21 @@ interface Props {
   service: ActorRef<any>
   memberId: Member['id']
   address: Address
+  lock: RecoverableLock
 }
 
-export const RecoverBalanceSignModal = ({ onClose, service, memberId, address }: Props) => {
-  const balances = useMyTotalBalances()
+export const RecoverBalanceSignModal = ({ onClose, service, memberId, address, lock }: Props) => {
   const { api, connectionState } = useApi()
-  const amount = balances.recoverable
 
   const transaction = useMemo(() => {
-    if (!amount || !api) {
+    if (!api) {
       return
     }
-    // api.tx.referendum.releaseVoteStake()
-    // api.tx.council.releaseCandidacyStake(membershipId)
-    return api.tx.council.releaseCandidacyStake(memberId)
-  }, [connectionState, memberId, JSON.stringify(balances)])
+
+    return lock.type === 'Council Candidate'
+      ? api.tx.council.releaseCandidacyStake(memberId)
+      : api.tx.referendum.releaseVoteStake()
+  }, [connectionState, memberId, lock.type])
 
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
@@ -43,12 +43,12 @@ export const RecoverBalanceSignModal = ({ onClose, service, memberId, address }:
     <TransactionModal service={service} onClose={onClose} title="Recover balances">
       <ModalBody>
         <TextMedium>
-          You intend to recover <TokenValue value={amount} /> stake locks from accounts.
+          You intend to recover <TokenValue value={lock.amount} /> stake locks from accounts.
         </TextMedium>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title="Amount:" value={amount} />
+          <TransactionInfo title="Amount:" value={lock.amount} />
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee?.toBn()}

@@ -2,6 +2,7 @@ import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
+import { set } from 'lodash'
 import React from 'react'
 
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
@@ -9,7 +10,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -34,26 +35,10 @@ describe('UI: RecoverBalanceModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    jest.spyOn(console, 'log').mockImplementation()
     seedMembers(server.server, 2)
   })
 
-  const useModal: UseModal<RecoverBalanceModalCall> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: {
-      modal: 'RecoverBalance',
-      data: {
-        lock: {
-          amount: new BN(300),
-          type: 'Staking Candidate',
-        },
-        address: alice.address,
-        memberId: '0',
-      },
-    },
-  }
+  let useModal: UseModal<ModalCallData<RecoverBalanceModalCall>>
 
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -62,8 +47,8 @@ describe('UI: RecoverBalanceModal', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined
-    }
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeEach(async () => {
@@ -71,8 +56,22 @@ describe('UI: RecoverBalanceModal', () => {
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
     useAccounts = {
+      isLoading: false,
       hasAccounts: true,
       allAccounts: [alice, bob],
+    }
+    useModal = {
+      hideModal: jest.fn(),
+      showModal: jest.fn(),
+      modal: 'RecoverBalance',
+      modalData: {
+        lock: {
+          amount: new BN(300),
+          type: 'Council Candidate',
+        },
+        address: alice.address,
+        memberId: '0',
+      },
     }
   })
 
@@ -80,6 +79,38 @@ describe('UI: RecoverBalanceModal', () => {
     renderModal()
 
     expect(await screen.findByRole('heading', { name: 'Recover balances' })).toBeDefined()
+  })
+
+  describe('Transaction for lockType', () => {
+    let releaseCandidacyStakeMock: any
+    let releaseVoteStake: any
+
+    beforeEach(() => {
+      releaseCandidacyStakeMock = jest.fn()
+      releaseVoteStake = jest.fn()
+
+      set(api, 'api.tx.council.releaseCandidacyStake', releaseCandidacyStakeMock)
+      set(api, 'api.tx.referendum.releaseVoteStake', releaseVoteStake)
+    })
+
+    it('Council Candidate', async () => {
+      renderModal()
+
+      expect(releaseCandidacyStakeMock).toBeCalled()
+      expect(releaseVoteStake).not.toBeCalled()
+    })
+
+    it('Voting', async () => {
+      useModal.modalData.lock = {
+        amount: new BN(300),
+        type: 'Voting',
+      }
+
+      renderModal()
+
+      expect(releaseCandidacyStakeMock).not.toBeCalled()
+      expect(releaseVoteStake).toBeCalled()
+    })
   })
 
   it('Success', async () => {

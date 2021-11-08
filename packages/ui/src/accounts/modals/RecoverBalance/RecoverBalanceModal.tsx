@@ -13,7 +13,6 @@ import { RecoverBalanceSuccessModal } from './RecoverBalanceSuccessModal'
 export const RecoverBalanceModal = () => {
   const [state] = useMachine(recoverBalanceMachine)
   const { hideModal, modalData } = useModal<RecoverBalanceModalCall>()
-
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
@@ -23,6 +22,7 @@ export const RecoverBalanceModal = () => {
         service={transactionService}
         memberId={modalData.memberId}
         address={modalData.address}
+        lock={modalData.lock}
       />
     )
   }

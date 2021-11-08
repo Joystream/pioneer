@@ -26,6 +26,9 @@ describe('useOnBoardingStatus', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: true,
     hasMembers: false,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeAll(async () => {
