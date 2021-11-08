@@ -6,20 +6,15 @@ import { ButtonsGroup } from '@/common/components/buttons'
 import { HintButton } from '@/common/components/buttons/HintButton'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { VideoHint } from '@/common/components/VideoHint'
+import { videoHints, VideoHintType } from '@/common/constants/videoHints'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useToggle } from '@/common/hooks/useToggle'
 
 interface PageHeaderWithHintProps {
   title: string
-  hintType: 'workingGroups' | 'proposals' | 'council'
+  hintType: VideoHintType
   buttons?: ReactNode
   tabs?: ReactNode
-}
-
-const hintVideoURI: { [key in PageHeaderWithHintProps['hintType']]: string } = {
-  workingGroups: 'https://www.youtube.com/embed/cC-tTakpJEs',
-  proposals: 'https://www.youtube.com/embed/cC-tTakpJEs',
-  council: 'https://www.youtube.com/embed/cC-tTakpJEs',
 }
 
 export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeaderWithHintProps) => {
@@ -41,7 +36,7 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
       toggleCloseTooltip()
       setExperiencedCloseTooltip(true)
     }
-  }, [])
+  }, [experiencedCloseTooltip])
 
   return (
     <PageHeaderWrapper>
@@ -54,7 +49,7 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
       </PageHeaderRow>
       {tabs}
       <AnimatePresence>
-        {isHintVisible && <VideoHint videoURI={hintVideoURI[hintType]} onClose={closeHint} />}
+        {isHintVisible && <VideoHint videoURI={videoHints[hintType]} onClose={closeHint} />}
       </AnimatePresence>
     </PageHeaderWrapper>
   )
