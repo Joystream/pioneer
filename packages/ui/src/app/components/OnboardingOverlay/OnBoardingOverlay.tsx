@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
@@ -12,6 +12,7 @@ import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStati
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { useToggle } from '@/common/hooks/useToggle'
 
 const steps: StepperStep[] = [
   {
@@ -69,7 +70,7 @@ const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): Step
 
 export const OnBoardingOverlay = () => {
   const { isLoading, status } = useOnBoardingStatus()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggle] = useToggle()
 
   if (isLoading || !status || status === 'finished') {
     return null
@@ -82,7 +83,7 @@ export const OnBoardingOverlay = () => {
       <Wrapper>
         <TextContainer>
           <TextHuge bold>Become a member</TextHuge>
-          <TextSmall onClick={() => setIsOpen((prev) => !prev)}>
+          <TextSmall onClick={toggle}>
             Show how <ArrowDownExpandedIcon /> {/*todo add icons and make them rotate on open*/}
           </TextSmall>
         </TextContainer>
