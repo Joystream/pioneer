@@ -19,7 +19,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
   const { votesTotal } = useMyCurrentVotesCount()
 
   const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
-  const myVotesTotal = votesPerCandidate.filter((vote) => vote.myVotes.length).length
+  const asDisplayableVotes = votesPerCandidate.some((vote) => vote.myVotes.length)
 
   if (isLoading) {
     return <Loading />
@@ -29,7 +29,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
     <>
       <ElectionTabs
         stage="revealing"
-        myVotes={myVotesTotal && votesTotal}
+        myVotes={asDisplayableVotes && votesTotal}
         tab={tab}
         onSetTab={(tab) => setTab(tab as RevealingStageTab)}
       />
