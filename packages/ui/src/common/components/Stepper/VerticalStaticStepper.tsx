@@ -16,15 +16,15 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
   return (
     <StepperWrap>
       {steps.map((item, index) => (
-        <StepWrap>
+        <StepWrap key={`vertical-stepper-${index}`}>
           <StepNumber>
             <StepNumberText value>{index + 1}</StepNumberText>
           </StepNumber>
           <StepBody>
             <StepTitle>{item.title}</StepTitle>
             <StepSubtitleList>
-              {item.subtitle?.map((subtitle) => (
-                <StepSubtitle>{subtitle}</StepSubtitle>
+              {item.subtitle?.map((subtitle, indexSubtitle) => (
+                <StepSubtitle key={`vertical-stepper-subtitle-${indexSubtitle}`}>{subtitle}</StepSubtitle>
               ))}
             </StepSubtitleList>
           </StepBody>
