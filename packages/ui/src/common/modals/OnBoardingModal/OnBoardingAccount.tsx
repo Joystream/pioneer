@@ -9,7 +9,7 @@ export const OnBoardingAccount = () => {
   const { hasAccounts, isLoading } = useMyAccounts()
 
   const step = useMemo(() => {
-    if (hasAccounts) {
+    if (!hasAccounts) {
       return <NoAccountStep />
     }
 
