@@ -77,7 +77,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     voterId: member.id,
     inBlock: randomFromRange(1000, 2000),
     rationale: randomMarkdown(),
-    votingRound: Math.floor(index / COUNCIL_SIZE),
+    votingRound: Math.floor(index / COUNCIL_SIZE) + 1,
   }))
 
   const messageCount = randomFromWeightedSet([1, 0], [2, 1], [4, 2], [1, randomFromRange(3, MAX_MESSAGES)])()
