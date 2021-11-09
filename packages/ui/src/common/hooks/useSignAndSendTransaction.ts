@@ -12,6 +12,7 @@ import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
 import { useObservable } from './useObservable'
+import { useTransactionStatus } from './useTransactionStatus'
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
@@ -19,7 +20,12 @@ interface UseSignAndSendTransactionParams {
   service: ActorRef<any>
 }
 
-const observeTransaction = (transaction: Observable<ISubmittableResult>, send: Sender<any>, fee: BN) => {
+const observeTransaction = (
+  transaction: Observable<ISubmittableResult>,
+  send: Sender<any>,
+  fee: BN,
+  setPending: (b: boolean) => void
+) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
 
@@ -27,6 +33,7 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
 
     if (status.isReady) {
       send('PENDING')
+      setPending(true)
     }
 
     if (status.isInBlock) {
@@ -39,6 +46,8 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
         events,
         fee,
       })
+
+      setPending(false)
     }
   }
 
@@ -51,6 +60,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const sign = useCallback(() => send('SIGN'), [service])
+  const { setPending } = useTransactionStatus()
 
   useEffect(() => {
     if (!state.matches('signing') || !transaction || !paymentInfo) {
@@ -60,7 +70,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
     const fee = paymentInfo.partialFee.toBn()
 
     web3FromAddress(signer).then((extension) => {
-      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee)
+      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee, setPending)
     })
     send('SIGN_EXTERNAL')
   }, [state.value.toString(), paymentInfo])

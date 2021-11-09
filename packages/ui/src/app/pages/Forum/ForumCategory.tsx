@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
@@ -63,12 +63,13 @@ export const ForumCategory = () => {
             </PreviousPage>
           }
           buttons={
-            <ButtonPrimary
+            <TransactionButton
+              style="primary"
               size="medium"
               onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
             >
               <PlusIcon /> Add New Thread
-            </ButtonPrimary>
+            </TransactionButton>
           }
         >
           <ModeratorsContainer>

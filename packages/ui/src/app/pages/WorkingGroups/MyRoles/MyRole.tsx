@@ -6,8 +6,9 @@ import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/P
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -57,6 +58,7 @@ export const MyRole = () => {
       data: { applicationId: worker.applicationId },
     })
   }, [worker?.applicationId])
+
   const showLeaveRoleModal = useCallback(() => {
     worker &&
       showModal<LeaveRoleModalCall>({
@@ -94,12 +96,12 @@ export const MyRole = () => {
                 Opening
               </LinkButtonGhost>
               {isActive && isOwn && (
-                <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
+                <TransactionButton style="ghost" size="medium" onClick={showLeaveRoleModal}>
                   Leave this position
                   <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
                     <TooltipDefault />
                   </Tooltip>
-                </ButtonGhost>
+                </TransactionButton>
               )}
             </ButtonsGroup>
           </PageHeaderRow>
@@ -136,9 +138,9 @@ export const MyRole = () => {
               <Label>Role Account</Label>
               <ButtonsGroup>
                 {isActive && isOwn && (
-                  <ButtonGhost size="small" onClick={onChangeRoleClick}>
+                  <TransactionButton style="ghost" size="small" onClick={onChangeRoleClick}>
                     Change Role Account
-                  </ButtonGhost>
+                  </TransactionButton>
                 )}
               </ButtonsGroup>
             </RoleAccountHeader>
@@ -148,7 +150,12 @@ export const MyRole = () => {
             <RoleAccountHeader>
               <Label>Stake Account</Label>
               <ButtonsGroup>
-                {isActive || (isLeaving && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>)}
+                {isActive ||
+                  (isLeaving && (
+                    <TransactionButton style="primary" size="small">
+                      Move Excess Tokens
+                    </TransactionButton>
+                  ))}
               </ButtonsGroup>
             </RoleAccountHeader>
             <MyRoleAccount
@@ -161,9 +168,9 @@ export const MyRole = () => {
               <Label>Reward Account</Label>
               <ButtonsGroup>
                 {isActive && isOwn && (
-                  <ButtonGhost size="small" onClick={onChangeRewardClick}>
+                  <TransactionButton style="ghost" size="small" onClick={onChangeRewardClick}>
                     Change Reward Account
-                  </ButtonGhost>
+                  </TransactionButton>
                 )}
               </ButtonsGroup>
             </RoleAccountHeader>
