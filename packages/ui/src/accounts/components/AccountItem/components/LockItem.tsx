@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { isRecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { BalanceLock } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
@@ -49,9 +49,9 @@ export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps)
         {isRecoverable && (
           <>
             <div />
-            <ButtonPrimary size="small" onClick={onClick}>
+            <TransactionButton style="primary" size="small" onClick={onClick}>
               Recover
-            </ButtonPrimary>
+            </TransactionButton>
           </>
         )}
       </AccountDetailsWrap>
