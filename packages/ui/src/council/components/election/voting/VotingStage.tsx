@@ -5,7 +5,7 @@ import { isDefined } from '@/common/utils'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { ElectionTabs, VotingStageTab } from '@/council/components/election/ElectionTabs'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
-import { useStoredCastVotes } from '@/council/hooks/useStoredCastVotes'
+import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { Election } from '@/council/types/Election'
 
 interface VotingStageProps {
@@ -18,8 +18,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   const { votesTotal } = useMyCurrentVotesCount()
 
   const { allAccounts } = useMyAccounts()
-  const myVotes = useStoredCastVotes(election?.cycleId)
-
+  const myVotes = useVerifiedVotingAttempts(election?.cycleId)
   const optionIds = useMemo(() => new Set(myVotes?.map(({ optionId }) => optionId)), [myVotes?.length])
   const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
 

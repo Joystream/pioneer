@@ -79,24 +79,24 @@ const onExtensionLoaded = (onSuccess: () => void, onFail: () => void) => () => {
 
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
   const [extensionUnavailable, setExtensionUnavailable] = useState(false)
 
   useEffect(
     onExtensionLoaded(
-      () => setIsLoaded(true),
+      () => setIsExtensionLoaded(true),
       () => setExtensionUnavailable(true)
     ),
     []
   )
 
   useEffect(() => {
-    if (!isLoaded) {
+    if (!isExtensionLoaded) {
       return
     }
 
     loadKeysFromExtension(keyring).catch(error)
-  }, [isLoaded])
+  }, [isExtensionLoaded])
 
   const accounts = useObservable(keyring.accounts.subject.asObservable().pipe(debounceTime(20)), [keyring])
 
@@ -113,10 +113,11 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isLoaded }
+  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded }
 
   if (extensionUnavailable) {
     value.error = 'EXTENSION'
+    value.isLoading = false
   }
 
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>

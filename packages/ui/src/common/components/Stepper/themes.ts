@@ -20,3 +20,12 @@ export const StepperTheme = {
     stepperActiveTitleTextStroke: Colors.White,
   },
 }
+
+export const HorizontalStepperTheme = {
+  dark: {
+    stepperText: Colors.White,
+  },
+  light: {
+    stepperText: Colors.Black,
+  },
+}

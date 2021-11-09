@@ -11,7 +11,7 @@ import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { MyCastVote } from '@/council/hooks/useCommitment'
+import { MyCastVote } from '@/council/hooks/useElectionVotes'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
@@ -52,7 +52,7 @@ export const CandidateVote = ({
   const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
   const hasOwnStake = ownStake && ownStake.gt(BN_ZERO)
   const hasMyVotes = myVotes.length > 0
-  const allVotesRevealed = !myVotes.find((vote) => vote.isRevealed === false)
+  const allVotesRevealed = myVotes.every((vote) => vote.voteFor)
   return (
     <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>

@@ -122,6 +122,7 @@ fragment CastVoteFields on CastVote {
   stake
   stakeLocked
   castBy
+  commitment
   voteFor {
     ...MemberFields
   }
@@ -262,7 +263,6 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
 
 query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
   castVotes(where: $where, orderBy: $orderBy) {
-    id
     commitment
   }
 }

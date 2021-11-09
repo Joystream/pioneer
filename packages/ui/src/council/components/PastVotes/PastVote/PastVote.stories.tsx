@@ -29,6 +29,7 @@ const revealedArgs: PastVoteProps = {
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     voteFor: getMember('alice'),
     cycleId: 6,
+    commitment: 'foo',
   },
 }
 Default.args = revealedArgs
@@ -43,6 +44,7 @@ const unrevealedArgs: PastVoteProps = {
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     cycleId: 6,
+    commitment: 'foo',
   },
 }
 Unrevealed.args = unrevealedArgs

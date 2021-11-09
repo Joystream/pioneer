@@ -42,7 +42,7 @@ export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, absta
   const map: VoteMap = new Map(
     lengths.map(([voteKind, length]) => [
       voteKind,
-      repeat(() => ({ voteKind, id: '1', votingRound: 0, voter: getMember('alice') }), length),
+      repeat(() => ({ voteKind, id: '1', votingRound: 1, voter: getMember('alice') }), length),
     ])
   )
 
