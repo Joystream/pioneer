@@ -6,6 +6,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { VoteForProposalModalForm } from './VoteForProposalModalForm'
+import {useProposal} from "@/proposals/hooks/useProposal";
 
 export default {
   title: 'Proposals/VoteForProposal/VoteForProposalModalForm',
@@ -22,21 +23,29 @@ interface Props {
   showModal: () => void
 }
 
+const ConnectedVoteForProposalModalForm = ({id}: {id: string }) => {
+  const { proposal, isLoading } = useProposal(id)
+  console.log({ proposal, isLoading })
+  return (
+    <VoteForProposalModalForm
+      onNext={() => true}
+      setRationale={() => true}
+      setStatus={() => true}
+      proposalTitle={proposal?.title || ''}
+      proposalType={proposal?.type || ''}
+      proposalRationale={proposal?.rationale || ''}
+      proposalDetails={proposal?.details}
+    />
+  )
+}
+
 const Template: Story<Props> = ({ id, hideModal, showModal }) => {
   const modalData = { id }
   return (
     <MemoryRouter>
       <MockApolloProvider members council proposals workingGroups workers>
         <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <VoteForProposalModalForm
-            onNext={() => true}
-            setRationale={() => true}
-            setStatus={() => true}
-            proposalTitle={'Title'}
-            rationale={'Rationale'}
-            recipient={'Recipient'}
-            proposalType={'Funding Request'}
-          />
+          <ConnectedVoteForProposalModalForm id={id} />
         </ModalContext.Provider>
       </MockApolloProvider>
     </MemoryRouter>

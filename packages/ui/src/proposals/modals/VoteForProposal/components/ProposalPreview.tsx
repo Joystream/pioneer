@@ -1,41 +1,31 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { TextInlineMedium, TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
-import { camelCaseToText } from '@/common/helpers'
-import { shortenAddress } from '@/common/model/formatters'
+import {camelCaseToText} from '@/common/helpers'
+import getDetailsRenderStructure from '@/proposals/helpers/getDetailsRenderStructure'
+import {Proposal} from '@/proposals/types'
+
+import {NormalTextDetails} from './detailsRenderers'
 
 interface Props {
   proposalTitle: string
-  rationale: string
-  recipient: string
   proposalType: string
+  proposalRationale: string
+  proposalDetails?: Proposal['details']
 }
 
-export const ProposalPreview = ({ proposalTitle, rationale, recipient, proposalType }: Props) => {
+export const ProposalPreview = ({
+  proposalTitle,
+  proposalType,
+  proposalRationale,
+  proposalDetails,
+}: Props) => {
+  const detailsRenderStructure = getDetailsRenderStructure(proposalDetails)
+  console.log({ detailsRenderStructure })
   return (
     <>
-      <h4>{proposalTitle}</h4>
-      <h5>{camelCaseToText(proposalType)}</h5>
-      <ProposalDetailsTitle>Recipent of funds</ProposalDetailsTitle>
-      <RecipientAccount>{shortenAddress(recipient)}</RecipientAccount>
-      <ProposalDetailsTitle>Rationale</ProposalDetailsTitle>
-      <ProposalDetailsInfo>{rationale}</ProposalDetailsInfo>
+      <h5>{proposalTitle}</h5>
+      <h6>{proposalType && `${camelCaseToText(proposalType)}:`}</h6>
+      {proposalRationale && <NormalTextDetails label="rationale" value={proposalRationale} />}
     </>
   )
 }
-
-const ProposalDetailsTitle = styled(TextSmall)`
-  text-transform: uppercase;
-  color: ${Colors.Gray[700]};
-`
-
-const ProposalDetailsInfo = styled(TextInlineMedium)`
-  color: ${Colors.Gray[700]};
-`
-
-const RecipientAccount = styled(TextInlineMedium)`
-  color: ${Colors.Gray[900]};
-  font-weight: 600;
-`

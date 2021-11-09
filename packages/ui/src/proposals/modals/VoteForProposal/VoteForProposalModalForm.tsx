@@ -22,6 +22,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
+import {Proposal} from '@/proposals/types'
 
 interface FormFields {
   voteStatus?: VoteStatus
@@ -33,9 +34,9 @@ interface Props {
   setRationale: (rationale: string) => void
   onNext: () => void
   proposalTitle: string
-  rationale: string
-  recipient: string
   proposalType: string
+  proposalRationale: string
+  proposalDetails?: Proposal['details']
 }
 
 const FormSchema = Yup.object().shape({
@@ -48,9 +49,9 @@ export const VoteForProposalModalForm = ({
   setRationale,
   onNext,
   proposalTitle,
-  rationale,
-  recipient,
   proposalType,
+  proposalRationale,
+  proposalDetails,
 }: Props) => {
   const { hideModal } = useModal<VoteForProposalModalCall>()
   const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
@@ -69,9 +70,9 @@ export const VoteForProposalModalForm = ({
         <ProposalPreviewColumn>
           <ProposalPreview
             proposalTitle={proposalTitle}
-            rationale={rationale}
-            recipient={recipient}
             proposalType={proposalType}
+            proposalRationale={proposalRationale}
+            proposalDetails={proposalDetails}
           />
         </ProposalPreviewColumn>
         <ScrollableModalColumn>
