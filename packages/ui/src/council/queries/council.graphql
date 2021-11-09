@@ -122,6 +122,7 @@ fragment CastVoteFields on CastVote {
   stake
   stakeLocked
   castBy
+  commitment
   voteFor {
     ...MemberFields
   }
@@ -176,12 +177,6 @@ query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
 query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
-  }
-}
-
-query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
-  proposals(where: { createdInEvent: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock } }, orderBy: [createdAt_DESC]) {
-    ...ProposalFields
   }
 }
 
@@ -268,7 +263,6 @@ query GetCouncilVotes($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInpu
 
 query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
   castVotes(where: $where, orderBy: $orderBy) {
-    id
     commitment
   }
 }

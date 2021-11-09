@@ -5,11 +5,16 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BN_ZERO } from '@/common/constants'
 
 import { useGetCouncilVotesQuery } from '../queries'
-import { asVote, ElectionCandidate } from '../types'
+import { asVote, ElectionCandidate, Vote } from '../types'
 import { Election } from '../types/Election'
 
-import { MyCastVote } from './useCommitment'
-import { useStoredCastVotes } from './useStoredCastVotes'
+import { VotingAttempt } from './useCommitment'
+import { useMyVotingAttempts } from './useMyVotingAttempts'
+
+export interface MyCastVote extends Vote {
+  optionId: string
+  attempt?: VotingAttempt
+}
 
 export interface CandidateStats {
   candidate: ElectionCandidate
@@ -24,9 +29,24 @@ export const useElectionVotes = (election?: Election) => {
   const { data, loading } = useGetCouncilVotesQuery({
     variables: { where: { electionRound: { cycleId_eq: election?.cycleId } } },
   })
-  const myCastVotes = useStoredCastVotes(election?.cycleId)
-
   const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes.length])
+
+  const myVotingAttempts = useMyVotingAttempts(election?.cycleId)
+  const myCastVotes = useMemo(() => {
+    if (!votes || !myVotingAttempts) return
+    if (!allAccounts.length) return []
+
+    const addresses = allAccounts.map((account) => account.address)
+    return votes
+      .filter(({ castBy }) => addresses.includes(castBy))
+      .flatMap<MyCastVote>((vote) => {
+        if (vote.voteFor) return { ...vote, optionId: vote.voteFor.id }
+
+        const attempt = myVotingAttempts.find(({ commitment }) => commitment === vote.commitment)
+
+        return attempt ? { ...vote, optionId: attempt.optionId, attempt } : []
+      })
+  }, [allAccounts?.length, votes?.length, myVotingAttempts?.length])
 
   const votesPerCandidate = useMemo(() => {
     const candidateStats: Record<string, CandidateStats> = {}
@@ -37,13 +57,7 @@ export const useElectionVotes = (election?: Election) => {
           votesNumber: 0,
           totalStake: BN_ZERO,
           ownStake: BN_ZERO,
-          myVotes:
-            myCastVotes
-              ?.filter((myVote) => myVote.optionId === candidate.member.id)
-              .map((myVote) => ({
-                ...myVote,
-                isRevealed: !!votes?.find((vote) => vote.id === myVote.voteId)?.voteFor,
-              })) ?? [],
+          myVotes: myCastVotes?.filter(({ optionId }) => optionId === candidate.member.id) ?? [],
         })
     )
     votes?.forEach((vote) => {

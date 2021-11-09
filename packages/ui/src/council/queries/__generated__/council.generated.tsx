@@ -325,6 +325,7 @@ export type CastVoteFieldsFragment = {
   stake: any
   stakeLocked: boolean
   castBy: string
+  commitment: string
   voteFor?:
     | {
         __typename: 'Membership'
@@ -862,6 +863,7 @@ export type GetCouncilVotesQuery = {
     stake: any
     stakeLocked: boolean
     castBy: string
+    commitment: string
     voteFor?:
       | {
           __typename: 'Membership'
@@ -899,7 +901,7 @@ export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
 
 export type GetCouncilVotesCommitmentsQuery = {
   __typename: 'Query'
-  castVotes: Array<{ __typename: 'CastVote'; id: string; commitment: string }>
+  castVotes: Array<{ __typename: 'CastVote'; commitment: string }>
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
@@ -1104,6 +1106,7 @@ export const CastVoteFieldsFragmentDoc = gql`
     stake
     stakeLocked
     castBy
+    commitment
     voteFor {
       ...MemberFields
     }
@@ -1932,7 +1935,6 @@ export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery
 export const GetCouncilVotesCommitmentsDocument = gql`
   query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
     castVotes(where: $where, orderBy: $orderBy) {
-      id
       commitment
     }
   }

@@ -246,7 +246,6 @@ describe('UI: RevealingStageVotes', () => {
         ...VOTE_DATA,
         commitment: calculateCommitment(bob.address, '0', salt, 0),
         castBy: bob.address,
-        voteForId: '0',
       },
       server.server
     )
@@ -255,7 +254,6 @@ describe('UI: RevealingStageVotes', () => {
         ...VOTE_DATA,
         commitment: calculateCommitment(alice.address, '1', salt, 0),
         castBy: alice.address,
-        voteForId: '1',
       },
       server.server
     )
@@ -267,6 +265,15 @@ describe('UI: RevealingStageVotes', () => {
     const voteForBob = screen.queryByText('bob')
     expect(voteForAlice).toBeDefined()
     expect(voteForBob).toBeNull()
+  })
+
+  it('Display all my revealed votes', async () => {
+    window.localStorage.clear()
+    seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '0' }, server.server)
+
+    renderComponent(true)
+
+    expect(await screen.findByText('alice')).toBeDefined()
   })
 
   const renderComponent = (onlyMyVotes = false) =>
