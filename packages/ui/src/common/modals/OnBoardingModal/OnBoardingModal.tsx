@@ -8,6 +8,7 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 
 export const OnBoardingModal = () => {
@@ -18,6 +19,8 @@ export const OnBoardingModal = () => {
     switch (status) {
       case 'installPlugin':
         return <OnBoardingPlugin />
+      case 'addAccount':
+        return <OnBoardingAccount />
       default:
         return null
     }

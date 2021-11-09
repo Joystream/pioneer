@@ -96,7 +96,7 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  extension: true,
-  account: false,
+  extension: false,
+  account: true,
   membership: false,
 }
