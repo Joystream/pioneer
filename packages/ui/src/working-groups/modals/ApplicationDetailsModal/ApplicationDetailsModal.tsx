@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
@@ -14,6 +15,7 @@ import {
 import { Tabs } from '@/common/components/Tabs'
 import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
+import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
 import { useApplication } from '@/working-groups/hooks/useApplication'
 
 import { FormDetails } from './FormDetails'
@@ -28,6 +30,8 @@ export const ApplicationDetailsModal = React.memo(() => {
     modalData: { applicationId },
   } = useModal<ApplicationDetailsModalCall>()
   const { isLoading, application } = useApplication(applicationId)
+  const history = useHistory()
+  const isMyMembership = useIsMyMembership(application?.applicant?.id || '')
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -39,12 +43,22 @@ export const ApplicationDetailsModal = React.memo(() => {
 
   const [currentTab, setCurrentTab] = useState<Tab>('GENERAL')
 
+  useEffect(
+    () =>
+      history.listen((location) => {
+        if (currentTab === 'GENERAL' && location.pathname.startsWith('/working-groups')) {
+          hideModal()
+        }
+      }),
+    [currentTab]
+  )
+
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane topSize="s">
         <SidePaneHeader>
           <SidePanelTop>
-            <SidePaneTitle>My Application</SidePaneTitle>
+            <SidePaneTitle>{isMyMembership ? 'My Application' : 'Application'}</SidePaneTitle>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
           <Tabs

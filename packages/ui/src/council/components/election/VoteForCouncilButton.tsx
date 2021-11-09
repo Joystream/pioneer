@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useCallback } from 'react'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
 import { VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 
@@ -21,8 +21,8 @@ export const VoteForCouncilButton = ({ id, again }: VoteForCouncilButtonProps) =
   )
 
   return (
-    <ButtonPrimary size="medium" onClick={vote}>
+    <TransactionButton style="primary" size="medium" onClick={vote}>
       {again ? 'Vote again' : 'Vote'}
-    </ButtonPrimary>
+    </TransactionButton>
   )
 }

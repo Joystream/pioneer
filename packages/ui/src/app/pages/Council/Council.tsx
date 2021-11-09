@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
+import { PageLayout } from '@/app/components/PageLayout'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
@@ -20,14 +20,7 @@ export const Council = () => {
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
 
-  const header = (
-    <PageHeaderWrapper>
-      <PageHeaderRow>
-        <PageTitle>Council</PageTitle>
-      </PageHeaderRow>
-      <CouncilTabs />
-    </PageHeaderWrapper>
-  )
+  const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
   const main = (
     <MainPanel>

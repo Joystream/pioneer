@@ -12,7 +12,7 @@ type ElectionTab = AnnouncingStageTab | VotingStageTab | RevealingStageTab
 interface ElectionTabsProps {
   stage: Exclude<ElectionStage, 'inactive'>
   myCandidates?: number
-  myVotes?: number
+  myVotes?: number | false
   tab: ElectionTab
   onSetTab: (tab: ElectionTab) => void
 }

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { useModal } from '@/common/hooks/useModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
@@ -14,9 +14,9 @@ export const AddProposalButton = () => {
   }, [])
 
   return (
-    <ButtonPrimary size="medium" onClick={addNewProposalModal}>
+    <TransactionButton style="primary" size="medium" onClick={addNewProposalModal}>
       <PlusIcon />
       Add new proposal
-    </ButtonPrimary>
+    </TransactionButton>
   )
 }

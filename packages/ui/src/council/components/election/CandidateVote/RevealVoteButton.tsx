@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
 import { MyCastVote } from '@/council/hooks/useCommitment'
 import { RevealVoteModalCall } from '@/council/modals/RevealVote'
@@ -20,8 +20,8 @@ export const RevealVoteButton = ({ myVotes, voteForHandle }: Props) => {
     })
   }, [unrevealedVotes.length])
   return (
-    <ButtonPrimary size="medium" onClick={onClick}>
+    <TransactionButton style="primary" size="medium" onClick={onClick}>
       Reveal
-    </ButtonPrimary>
+    </TransactionButton>
   )
 }

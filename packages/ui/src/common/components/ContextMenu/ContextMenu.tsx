@@ -6,7 +6,8 @@ import styled from 'styled-components'
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 
 import { Animations, BorderRad, Colors, Shadows, ZIndex } from '../../constants'
-import { ButtonGhost, ButtonLink, ButtonSize } from '../buttons'
+import { ButtonLink, ButtonSize } from '../buttons'
+import { TransactionButton } from '../buttons/TransactionButton'
 import { KebabMenuIcon } from '../icons'
 
 export interface ContextMenuItem {
@@ -49,9 +50,15 @@ export const ContextMenu = ({ items, size, title }: ContextMenuProps) => {
 
   return (
     <ContextMenuContainer ref={setReferenceElementRef}>
-      <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers} title={title ?? 'Context menu'}>
+      <TransactionButton
+        style="ghost"
+        square
+        size={size ?? 'medium'}
+        {...contextMenuHandlers}
+        title={title ?? 'Context menu'}
+      >
         <KebabMenuIcon />
-      </ButtonGhost>
+      </TransactionButton>
       {isMenuVisible &&
         ReactDOM.createPortal(
           <ContextMenuWrapper

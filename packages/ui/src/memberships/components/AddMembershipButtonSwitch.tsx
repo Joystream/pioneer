@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+
 import { MyProfileIcon } from '../../common/components/page/Sidebar/LinksIcons/MyProfileIcon'
 import { TextSmall } from '../../common/components/typography'
 import { BorderRad, Colors, Transitions } from '../../common/constants'
@@ -10,16 +13,17 @@ interface Props {
 }
 
 export const AddMembershipButtonSwitch = ({ onClick }: Props) => {
+  const { isTransactionPending } = useTransactionStatus()
   return (
-    <>
-      <AddMemberships onClick={onClick}>
+    <TransactionButtonWrapper>
+      <AddMemberships onClick={onClick} disabled={isTransactionPending}>
         <AddMembershipImage>
           <MyProfileIcon />
         </AddMembershipImage>
         <AddMembershipTitle>New Member</AddMembershipTitle>
         <AddMembershipText>Create a New Membership</AddMembershipText>
       </AddMemberships>
-    </>
+    </TransactionButtonWrapper>
   )
 }
 

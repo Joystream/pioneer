@@ -7,6 +7,7 @@ import { QueryNodeProvider } from '@/app/providers/QueryNodeProvider'
 import { ApiContextProvider } from '@/common/providers/api/provider'
 import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { TransactionContextProvider } from '@/common/providers/transaction/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
 import { GlobalStyle } from './providers/GlobalStyle'
@@ -19,18 +20,20 @@ export const Providers = ({ children }: Props) => (
   <KeyringContextProvider>
     <ApiContextProvider>
       <AccountsContextProvider>
-        <BalancesContextProvider>
-          <QueryNodeProvider>
-            <MembershipContextProvider>
-              <HashRouter>
-                <ModalContextProvider>
-                  <GlobalStyle />
-                  {children}
-                </ModalContextProvider>
-              </HashRouter>
-            </MembershipContextProvider>
-          </QueryNodeProvider>
-        </BalancesContextProvider>
+        <TransactionContextProvider>
+          <BalancesContextProvider>
+            <QueryNodeProvider>
+              <MembershipContextProvider>
+                <HashRouter>
+                  <ModalContextProvider>
+                    <GlobalStyle />
+                    {children}
+                  </ModalContextProvider>
+                </HashRouter>
+              </MembershipContextProvider>
+            </QueryNodeProvider>
+          </BalancesContextProvider>
+        </TransactionContextProvider>
       </AccountsContextProvider>
     </ApiContextProvider>
   </KeyringContextProvider>

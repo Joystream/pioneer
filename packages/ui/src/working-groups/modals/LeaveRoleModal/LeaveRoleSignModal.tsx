@@ -38,7 +38,7 @@ export const LeaveRoleSignModal = ({ onClose, transaction, worker, service }: Pr
         <Row>
           <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
         </Row>
-        <InputComponent label="From" inputSize="l" disabled={true}>
+        <InputComponent label="From" inputSize="l" disabled>
           <SelectedAccount account={signer} />
         </InputComponent>
       </ModalBody>

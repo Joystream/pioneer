@@ -1,5 +1,8 @@
 import React, { ReactNode } from 'react'
 
+import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+
 import { ButtonSize } from '../../common/components/buttons'
 import { useModal } from '../../common/hooks/useModal'
 import { BuyMembershipModalCall } from '../modals/BuyMembershipModal'
@@ -14,14 +17,18 @@ interface AddMembershipButtonProps {
 
 export const AddMembershipButton = ({ className, children, size }: AddMembershipButtonProps) => {
   const { showModal } = useModal()
+  const { isTransactionPending } = useTransactionStatus()
 
   return (
-    <MembershipActionButton
-      onClick={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
-      className={className}
-      size={size}
-    >
-      {children}
-    </MembershipActionButton>
+    <TransactionButtonWrapper>
+      <MembershipActionButton
+        onClick={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
+        className={className}
+        size={size}
+        disabled={isTransactionPending}
+      >
+        {children}
+      </MembershipActionButton>
+    </TransactionButtonWrapper>
   )
 }

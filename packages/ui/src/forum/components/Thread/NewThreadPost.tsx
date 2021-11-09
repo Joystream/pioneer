@@ -4,6 +4,7 @@ import React, { Ref, RefObject, useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { ArrowReplyIcon, CrossIcon } from '@/common/components/icons'
@@ -71,7 +72,8 @@ export const NewThreadPost = React.forwardRef(
           <EditorMemo setNewText={setText} editorRef={editorRef} />
         </InputComponent>
         <ButtonsGroup>
-          <ButtonPrimary
+          <TransactionButton
+            style="primary"
             size="medium"
             onClick={() => {
               const transaction = getTransaction(postText, isEditable)
@@ -84,7 +86,7 @@ export const NewThreadPost = React.forwardRef(
             disabled={postText === ''}
           >
             {replyTo ? 'Post a reply' : 'Create post'}
-          </ButtonPrimary>
+          </TransactionButton>
           <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
             Keep editable
           </Checkbox>
