@@ -5,10 +5,10 @@ import { useModal } from '@/common/hooks/useModal'
 import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 
 interface Props {
-  text: string
+  children: string
 }
 
-export const OnBoardingButton = ({ text }: Props) => {
+export const OnBoardingButton = ({ children }: Props) => {
   const { showModal } = useModal()
 
   const showOnBoardingModal = useCallback(() => {
@@ -19,7 +19,7 @@ export const OnBoardingButton = ({ text }: Props) => {
 
   return (
     <ButtonPrimary size="large" onClick={showOnBoardingModal}>
-      {text}
+      {children}
     </ButtonPrimary>
   )
 }

@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Loading } from '@/common/components/Loading'
+import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
+import { CloseButton } from '@/common/components/buttons'
 import { Modal } from '@/common/components/Modal'
+import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
@@ -21,17 +23,39 @@ export const OnBoardingModal = () => {
     }
   }, [status])
 
-  if (isLoading) {
-    return <Loading />
+  if (isLoading || !status) {
+    return null
   }
 
   return (
     <StyledModal onClose={hideModal} modalSize="m">
-      <StepperPlaceholder />
+      <StepperWrapper>
+        <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
+        <StyledCloseButton onClick={hideModal} />
+      </StepperWrapper>
       {step}
     </StyledModal>
   )
 }
+
+const StyledCloseButton = styled(CloseButton)`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+`
+
+const StepperWrapper = styled.div`
+  width: 100%;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background-color: ${Colors.Black[700]};
+
+  > *:first-child {
+    width: 80%;
+  }
+`
 
 const StyledModal = styled(Modal)`
   > *:last-child {
@@ -39,10 +63,4 @@ const StyledModal = styled(Modal)`
     display: flex;
     justify-content: center;
   }
-`
-
-const StepperPlaceholder = styled.div`
-  width: 100%;
-  height: 80px;
-  background-color: ${Colors.Black[700]};
 `

@@ -91,8 +91,8 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
   )
 }
 
-export const Horizontal = Template.bind({})
-Horizontal.args = {
+export const Default = Template.bind({})
+Default.args = {
   extension: true,
   account: false,
   membership: false,

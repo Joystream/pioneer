@@ -9,15 +9,14 @@ export default {
   component: HorizontalStepper,
 } as Meta
 
-const Template: Story<HorizontalStepperProps> = ({ steps, theme }) => (
+const Template: Story<HorizontalStepperProps> = ({ steps }) => (
   <TemplateBlock>
-    <HorizontalStepper steps={steps} theme={theme} />
+    <HorizontalStepper steps={steps} />
   </TemplateBlock>
 )
 
 export const Horizontal = Template.bind({})
 Horizontal.args = {
-  theme: 'dark',
   steps: [
     { title: 'Add Polkadot plugin', type: 'past' },
     { title: 'Create or select a Polkadot account', type: 'active' },
