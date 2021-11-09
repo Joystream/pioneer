@@ -9,7 +9,6 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { TransactionContextProvider } from '@/common/providers/transaction/provider'
-import { RecoverVoteStakeModal } from '@/council/modals/RecoverVoteStake'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
@@ -87,7 +86,6 @@ describe('UI: TransactionButton', () => {
           <AccountsContext.Provider value={useAccounts}>
             <ApiContext.Provider value={api}>
               <TransactionContextProvider>
-                <RecoverVoteStakeModal />
                 <TransactionButton style="primary" size="large">
                   Start new transaction
                 </TransactionButton>

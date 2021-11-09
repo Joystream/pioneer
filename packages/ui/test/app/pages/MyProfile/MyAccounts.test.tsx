@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
@@ -22,6 +22,7 @@ import { createBalance } from '../../../_mocks/chainTypes'
 import { alice, bob } from '../../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
+import { MEMBER_ALICE_DATA } from '../../../_mocks/server/seeds'
 import { stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
 
 const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: RegExp) => {
@@ -41,7 +42,7 @@ describe('Page: MyAccounts', () => {
     isLoading: false,
     hasMembers: true,
     helpers: {
-      getMemberIdByBoundAccountAddress: () => undefined,
+      getMemberIdByBoundAccountAddress: () => MEMBER_ALICE_DATA.id,
     },
   }
 
@@ -64,6 +65,7 @@ describe('Page: MyAccounts', () => {
       modalData: undefined,
       showModal: jest.fn(),
     }
+    useMyMemberships.members = []
 
     stubDefaultBalances(api)
   })
@@ -98,7 +100,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Recoverable locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
     renderPage()
 
@@ -112,23 +114,25 @@ describe('Page: MyAccounts', () => {
 
   describe('Recover balance button', () => {
     it('Recoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
       renderPage()
 
       fireEvent.click(await screen.findByText(/alice/i))
-      await screen.findByText(/Staking Candidate/i)
+      await screen.findByText(/Council Candidate/i)
 
       expect(await getButton(/^recover$/i)).toBeDefined()
     })
 
     it('Opens modal', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Staking Candidate' })
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
       renderPage()
 
-      fireEvent.click(await screen.findByText(/alice/i))
-      fireEvent.click(await getButton(/^recover$/i))
+      await act(async () => {
+        fireEvent.click(await screen.findByText(/alice/i))
+        fireEvent.click(await getButton(/^recover$/i))
+      })
 
       const expected: RecoverBalanceModalCall = {
         modal: 'RecoverBalance',
@@ -138,7 +142,7 @@ describe('Page: MyAccounts', () => {
             amount: createBalance(250).toBn(),
             type: 'Council Candidate',
           },
-          memberId: '0',
+          memberId: MEMBER_ALICE_DATA.id,
         },
       }
       expect(useModal.showModal).toBeCalledWith(expected)
