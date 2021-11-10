@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
 import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIcon'

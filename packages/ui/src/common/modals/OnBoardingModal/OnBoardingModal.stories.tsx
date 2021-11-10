@@ -1,9 +1,12 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { BalancesContext } from '@/accounts/providers/balances/context'
+import { AddressToBalanceMap } from '@/accounts/types'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal/OnBoardingModal'
 import { ApiContext } from '@/common/providers/api/context'
@@ -25,9 +28,23 @@ const useApi = {
 const useMyAccounts: UseAccounts = {
   isLoading: false,
   hasAccounts: false,
-  allAccounts: [],
+  allAccounts: [
+    { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
+    { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
+  ],
   error: undefined,
 }
+
+const useMyBalances: AddressToBalanceMap = {
+  [useMyAccounts.allAccounts[0].address]: {
+    total: new BN(10000),
+    locked: new BN(0),
+    recoverable: new BN(0),
+    transferable: new BN(0),
+    locks: [],
+  },
+}
+
 const useMyMemberships: MyMemberships = {
   active: undefined,
   members: [],
@@ -79,13 +96,15 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
 
   return (
     <MemoryRouter>
-      <MockApolloProvider>
+      <MockApolloProvider members>
         <ApiContext.Provider value={state.useApi}>
           <AccountsContext.Provider value={state.useMyAccounts}>
             <MembershipContext.Provider value={state.useMyMemberships}>
-              <TemplateBlock>
-                <OnBoardingModal />
-              </TemplateBlock>
+              <BalancesContext.Provider value={useMyBalances}>
+                <TemplateBlock>
+                  <OnBoardingModal />
+                </TemplateBlock>
+              </BalancesContext.Provider>
             </MembershipContext.Provider>
           </AccountsContext.Provider>
         </ApiContext.Provider>
