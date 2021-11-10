@@ -4,6 +4,7 @@ import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 
 import { asMember, Member } from '../../memberships/types'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
+import {KeysOfUnion} from '@/common/types/helpers'
 
 type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
@@ -58,6 +59,8 @@ export type ProposalDetails =
   | DecreaseLeadStakeDetails
   | SlashLeadDetails
   | RuntimeUpgrade
+
+export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {

@@ -45,10 +45,6 @@ export type ProposalType =
   | 'unlockBlogPost'
   | 'veto'
 
-export interface ProposalDetails {
-  groupName?: string
-}
-
 export interface Proposal {
   id: string
   title: string
@@ -58,7 +54,6 @@ export interface Proposal {
   createdAt: string
   endedAt?: string
   councilApprovals: number
-  details?: ProposalDetails
 }
 
 export const asProposal = (fields: ProposalFieldsFragment): Proposal => {

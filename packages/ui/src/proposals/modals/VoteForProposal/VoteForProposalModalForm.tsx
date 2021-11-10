@@ -22,7 +22,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
-import {Proposal} from '@/proposals/types'
+import {ProposalWithDetails} from '@/proposals/types'
 
 interface FormFields {
   voteStatus?: VoteStatus
@@ -36,7 +36,7 @@ interface Props {
   proposalTitle: string
   proposalType: string
   proposalRationale: string
-  proposalDetails?: Proposal['details']
+  proposalDetails?: ProposalWithDetails['details']
 }
 
 const FormSchema = Yup.object().shape({

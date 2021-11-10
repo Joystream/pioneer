@@ -4,9 +4,9 @@ import { MemoryRouter } from 'react-router'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import {useProposal} from '@/proposals/hooks/useProposal';
 
 import { VoteForProposalModalForm } from './VoteForProposalModalForm'
-import {useProposal} from "@/proposals/hooks/useProposal";
 
 export default {
   title: 'Proposals/VoteForProposal/VoteForProposalModalForm',
