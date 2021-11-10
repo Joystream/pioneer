@@ -1,21 +1,34 @@
+import { useMachine } from '@xstate/react'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CloseButton } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
-import { Modal, ModalFooter } from '@/common/components/Modal'
+import { ModalFooter, ScrolledModal } from '@/common/components/Modal'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useObservable } from '@/common/hooks/useObservable'
 import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
 import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
+import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingTokens } from '@/common/modals/OnBoardingModal/OnBoardingTokens'
+import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
+import { BuyMembershipSignModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSignModal'
+import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
+import { buyMembershipMachine } from '@/memberships/modals/BuyMembershipModal/machine'
+import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
-  const { isLoading, status, setFreeTokensAccount } = useOnBoardingStatus()
+  const { isLoading, status, setFreeTokens } = useOnBoardingStatus()
+  const { api, connectionState } = useApi()
+  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const [state, send] = useMachine(buyMembershipMachine)
   const { hideModal } = useModal()
 
   const step = useMemo(() => {
@@ -23,18 +36,53 @@ export const OnBoardingModal = () => {
       case 'installPlugin':
         return <OnBoardingPlugin />
       case 'addAccount':
-        return <OnBoardingAccount onAccountSelect={setFreeTokensAccount} />
+        return <OnBoardingAccount onAccountSelect={setFreeTokens} />
       case 'getFreeTokens':
-        return <OnBoardingTokens onRedemption={() => setFreeTokensAccount('retrieved')} />
+        return <OnBoardingTokens onRedemption={() => setFreeTokens('redeemed')} />
       case 'createMembership':
-        return <div>membership</div>
+        return (
+          <OnBoardingMembership
+            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+            membershipPrice={membershipPrice}
+          />
+        )
       default:
         return null
     }
-  }, [status])
+  }, [status, membershipPrice])
 
   if (isLoading || !status) {
     return null
+  }
+
+  if (state.matches('transaction') && api) {
+    const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
+    const { form } = state.context
+    const service = state.children.transaction
+
+    return (
+      <BuyMembershipSignModal
+        onClose={hideModal}
+        membershipPrice={membershipPrice}
+        formData={form}
+        transaction={transaction}
+        initialSigner={form.controllerAccount}
+        service={service}
+      />
+    )
+  }
+
+  if (state.matches('success')) {
+    const { form, memberId } = state.context
+    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
+  }
+
+  if (state.matches('error')) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem with creating a membership for {state.context.form.name}.
+      </FailureModal>
+    )
   }
 
   return (
@@ -74,7 +122,7 @@ const StepperWrapper = styled.div`
   }
 `
 
-const StyledModal = styled(Modal)`
+const StyledModal = styled(ScrolledModal)`
   > *:last-child {
     background-color: ${Colors.Black[100]};
   }

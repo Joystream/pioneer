@@ -12,7 +12,7 @@ import { ModalFooter } from '@/common/components/Modal'
 import { TextExtraHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
-import { AccountsListItem } from './AccountsList/AccountsListItem'
+import { ConnectAccountItem } from './ConnectAccountItem'
 
 interface Props {
   onAccountSelect: (account: string) => void
@@ -44,7 +44,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
         <StyledList>
           {allAccounts.map((account) => (
             <ListItem onClick={() => setSelectedAccountAddress(account.address)} key={account.address} borderless>
-              <AccountsListItem
+              <ConnectAccountItem
                 account={account}
                 totalBalance={balances[account.address]?.total}
                 selected={account.address === selectedAccountAddress}

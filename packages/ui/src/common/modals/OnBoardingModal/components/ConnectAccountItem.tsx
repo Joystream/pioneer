@@ -4,22 +4,23 @@ import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { Account } from '@/accounts/types'
-import { TableListItemAsLinkHover } from '@/common/components/List'
+import { CheckboxIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 
-interface AccountList {
+interface ConnectAccountItemProps {
   account: Account
   totalBalance: BN
   selected?: boolean
 }
 
-export const AccountsListItem = ({ account, totalBalance, selected }: AccountList) => {
+export const ConnectAccountItem = ({ account, totalBalance, selected }: ConnectAccountItemProps) => {
   return (
     <AccountListWrapper selected={selected}>
       <AccountItemWrap>
         <AccountInfo account={account} />
         <TokenValue value={totalBalance} />
+        {selected && <CheckboxIcon />}
       </AccountItemWrap>
     </AccountListWrapper>
   )

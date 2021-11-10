@@ -2,8 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import polkadotAccount from '@/app/assets/images/OnBoarding/PolkadotAddAccount.png'
-import { WarningIcon } from '@/common/components/icons/WarningIcon'
-import { ModalFooter } from '@/common/components/Modal'
 import { HorizontalStaticStepper } from '@/common/components/Stepper/HorizontalStaticStepper'
 import { TextExtraHuge, TextMedium } from '@/common/components/typography'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal'
@@ -54,8 +52,4 @@ const Wrapper = styled.div`
     height: 100px;
     margin: 20px 0;
   }
-`
-
-const StyledModalFooter = styled(ModalFooter)`
-  grid-column-gap: 5px;
 `
