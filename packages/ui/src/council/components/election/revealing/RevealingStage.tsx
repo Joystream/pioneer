@@ -16,7 +16,7 @@ interface Props {
 
 export const RevealingStage = ({ election, isLoading }: Props) => {
   const [tab, setTab] = useState<RevealingStageTab>('results')
-  const { votesTotal } = useMyCurrentVotesCount()
+  const { votesTotal } = useMyCurrentVotesCount(election?.cycleId)
 
   const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
   const asDisplayableVotes = votesPerCandidate.some((vote) => vote.myVotes.length)
