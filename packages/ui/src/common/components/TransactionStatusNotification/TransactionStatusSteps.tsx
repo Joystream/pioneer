@@ -5,20 +5,14 @@ import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
 
 import { CheckboxIcon } from '../icons'
 
-interface TransactionStatusStepProps {
-  stepState: 'past' | 'active' | undefined
-}
+import { TransactionStatusSteperProps, TransactionStatusStepProps } from './types'
 
-export interface TransactionStatusSteperProps {
-  steps: Array<TransactionStatusStepProps>
-  state: 'loading' | 'pending' | 'successful' | 'failure'
-}
 
 export const TransactionStatusStepper = ({ steps, state }: TransactionStatusSteperProps) => {
   return (
     <StepsWrapper state={state}>
       {steps.map(({ stepState }, index) => (
-        <Step>
+        <Step key={index}>
           <StepCircle stepState={stepState}>{stepState === 'past' ? <CheckboxIcon /> : index + 1}</StepCircle>
         </Step>
       ))}

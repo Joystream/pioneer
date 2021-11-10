@@ -3,21 +3,16 @@ import React from 'react'
 
 import {
   TransactionStatusProps,
-  TransactionStatusStateProps,
   TransactionStatus,
-  TransactionStatusHolder,
 } from './TransactionStatusNotification'
-import { TransactionStatusSteperProps } from './TransactionStatusSteps'
 
 export default {
   title: 'Common/TransactionStatusNotification',
   component: TransactionStatus,
 } as Meta
 
-const Template: Story<TransactionStatusProps & TransactionStatusStateProps & TransactionStatusSteperProps> = (args) => (
-  <TransactionStatusHolder>
+const Template: Story<TransactionStatusProps> = (args) => (
     <TransactionStatus {...args} />
-  </TransactionStatusHolder>
 )
 
 export const NotificationComponent = Template.bind({})
