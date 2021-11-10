@@ -107,7 +107,7 @@ describe('UI: Election page', () => {
   }
 
   beforeEach(() => {
-    seedMembers(mockServer.server)
+    seedMembers(mockServer.server, 2)
     seedElectedCouncil(
       {
         id: '1',
