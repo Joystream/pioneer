@@ -22,7 +22,7 @@ export const onBoardingSteps: StepperStep[] = [
     id: 'installPlugin',
   },
   {
-    title: 'Create or select a Polkadot account',
+    title: 'Connect a Polkadot account',
     type: 'next',
     id: 'addAccount',
   },
