@@ -8,6 +8,7 @@ import { WarningIcon } from '@/common/components/icons/WarningIcon'
 import { ModalFooter } from '@/common/components/Modal'
 import { TextExtraHuge, TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoardingModal'
 
 export const OnBoardingPlugin = () => {
   const openLink = useCallback(() => {
@@ -29,17 +30,10 @@ export const OnBoardingPlugin = () => {
           Install extension
         </ButtonPrimary>
       </Wrapper>
-      <StyledModalFooter>
-        <WarningIcon />
-        <TextMedium>Please reload the page after installing the plugin</TextMedium>
-      </StyledModalFooter>
+      <OnBoardingTextFooter text="Please reload the page after installing the plugin!" />
     </>
   )
 }
-
-const StyledModalFooter = styled(ModalFooter)`
-  grid-column-gap: 5px;
-`
 
 const Wrapper = styled.div`
   width: 75%;

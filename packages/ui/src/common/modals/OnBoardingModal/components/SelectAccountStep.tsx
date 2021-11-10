@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -15,6 +15,7 @@ import { Colors } from '@/common/constants'
 import { AccountsListItem } from './AccountsList/AccountsListItem'
 
 export const SelectAccountStep = () => {
+  const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>()
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
 
@@ -27,34 +28,39 @@ export const SelectAccountStep = () => {
           <JoystreamLogo />
         </IconsWrapper>
         <TextWrapper>
-          <TextExtraHuge bold>Connect accounts</TextExtraHuge>
+          <TextExtraHuge bold>Connect account</TextExtraHuge>
           <StyledSubtitle>
-            Select polkadot account which you want to connect to your new joystream membership.
+            Select Polkadot account which you want to connect to your new joystream membership.
           </StyledSubtitle>
         </TextWrapper>
-        <List>
+        <StyledList>
           {allAccounts.map((account) => (
-            <ListItem key={account.address} borderless>
-              <AccountsListItem account={account} totalBalance={balances[account.address]?.total} />
+            <ListItem onClick={() => setSelectedAccountAddress(account.address)} key={account.address} borderless>
+              <AccountsListItem
+                account={account}
+                totalBalance={balances[account.address]?.total}
+                selected={account.address === selectedAccountAddress}
+              />
             </ListItem>
           ))}
-        </List>
+        </StyledList>
       </ContentWrapper>
-      <StyledModalFooter>
-        <StyledButton size="large">Connect Account</StyledButton>
-      </StyledModalFooter>
+      <ModalFooter>
+        <ButtonPrimary size="medium">Connect Account</ButtonPrimary>
+      </ModalFooter>
     </>
   )
 }
-
-const StyledModalFooter = styled(ModalFooter)`
-  grid-column-gap: 5px;
-  justify-items: end;
+const StyledList = styled(List)`
+  width: 90%;
+  margin: 20px auto 80px auto;
 `
+
 const IconsWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   & > svg {
     margin: 0 10px 0 10px;
   }
@@ -73,11 +79,6 @@ const TextWrapper = styled.div`
 const StyledSubtitle = styled(TextMedium)`
   color: ${Colors.Black[500]};
   display: flex;
-  margin: 0 auto;
+  margin: 8px auto 0 auto;
   width: 50%;
-  margin-top: 8px;
-`
-
-const StyledButton = styled(ButtonPrimary)`
-  justify-content: flex-end;
 `

@@ -6,6 +6,7 @@ import { WarningIcon } from '@/common/components/icons/WarningIcon'
 import { ModalFooter } from '@/common/components/Modal'
 import { HorizontalStaticStepper } from '@/common/components/Stepper/HorizontalStaticStepper'
 import { TextExtraHuge, TextMedium } from '@/common/components/typography'
+import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal'
 
 const steps = [
   'Open the extension with the icon in your browser bar.',
@@ -22,10 +23,7 @@ export const NoAccountStep = () => {
         <TextMedium>Follow instructions to create an account</TextMedium>
         <HorizontalStaticStepper steps={steps} />
       </Wrapper>
-      <StyledModalFooter>
-        <WarningIcon />
-        <TextMedium>Make sure to safely save your seed phrase!</TextMedium>
-      </StyledModalFooter>
+      <OnBoardingTextFooter text="Make sure to safely save your seed phrase!" />
     </>
   )
 }

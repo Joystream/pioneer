@@ -11,14 +11,13 @@ import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 interface AccountList {
   account: Account
   totalBalance: BN
+  selected?: boolean
 }
 
-export const AccountsListItem = ({ account, totalBalance }: AccountList) => {
-  const address = account.address
-
+export const AccountsListItem = ({ account, totalBalance, selected }: AccountList) => {
   return (
-    <AccountListWrapper>
-      <AccountItemWrap key={address}>
+    <AccountListWrapper selected={selected}>
+      <AccountItemWrap>
         <AccountInfo account={account} />
         <TokenValue value={totalBalance} />
       </AccountItemWrap>
@@ -26,7 +25,7 @@ export const AccountsListItem = ({ account, totalBalance }: AccountList) => {
   )
 }
 
-const AccountListWrapper = styled.div`
+const AccountListWrapper = styled.div<{ selected?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -35,12 +34,18 @@ const AccountListWrapper = styled.div`
   cursor: pointer;
   transition: ${Transitions.all};
 
-  ${TableListItemAsLinkHover}
+  background-color: ${({ selected }) => (selected ? Colors.Blue[50] : 'transparent')};
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: ${Colors.Blue[500]};
+  }
 `
 
 export const AccountItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 276px repeat(4, 128px) 104px;
+  grid-template-columns: 1fr 1fr 40px;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: end;

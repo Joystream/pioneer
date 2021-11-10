@@ -3,8 +3,10 @@ import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CloseButton } from '@/common/components/buttons'
-import { Modal } from '@/common/components/Modal'
+import { WarningIcon } from '@/common/components/icons/WarningIcon'
+import { Modal, ModalFooter } from '@/common/components/Modal'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
+import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
@@ -41,6 +43,13 @@ export const OnBoardingModal = () => {
   )
 }
 
+export const OnBoardingTextFooter = ({ text }: { text: string }) => (
+  <OnBoardingTextFooterWrapper>
+    <WarningIcon />
+    <TextMedium>{text}</TextMedium>
+  </OnBoardingTextFooterWrapper>
+)
+
 const StyledCloseButton = styled(CloseButton)`
   position: absolute;
   right: 10px;
@@ -63,7 +72,12 @@ const StepperWrapper = styled.div`
 const StyledModal = styled(Modal)`
   > *:last-child {
     background-color: ${Colors.Black[100]};
-    display: flex;
-    justify-content: center;
   }
+`
+
+const OnBoardingTextFooterWrapper = styled(ModalFooter)`
+  display: flex;
+  grid-column-gap: 5px;
+  justify-items: center;
+  justify-content: center;
 `
