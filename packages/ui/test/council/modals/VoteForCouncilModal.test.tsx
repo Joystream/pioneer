@@ -99,8 +99,8 @@ describe('UI: Vote for Council Modal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
-    seedElectedCouncils(server.server, 2)
-    seedCouncilElections(server.server, 2)
+    seedElectedCouncils(server.server, [{}, {}])
+    seedCouncilElections(server.server, [{}, {}])
     seedCouncilCandidates(server.server, [{ memberId: '0' }])
     resetVotes()
 

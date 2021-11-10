@@ -11,9 +11,9 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
   RawCouncilCandidateMock,
   seedCouncilCandidate,
-  seedCouncilElection,
+  seedCouncilElections,
   seedCouncilVote,
-  seedElectedCouncil,
+  seedElectedCouncils,
   seedMembers,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
@@ -108,15 +108,11 @@ describe('UI: Election page', () => {
 
   beforeEach(() => {
     seedMembers(mockServer.server, 2)
-    seedElectedCouncil(
-      {
-        id: '1',
-        electedAtBlock: 0,
-        endedAtBlock: null,
-      },
-      mockServer.server
-    )
-    seedCouncilElection({ id: '1', cycleId: 1, isFinished: false, electedCouncilId: '1' }, mockServer.server)
+    seedElectedCouncils(mockServer.server, [{}, { endedAtBlock: null }])
+    seedCouncilElections(mockServer.server, [{}, { isFinished: false }])
+
+    const commitment = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    seedCouncilVote({ ...VOTE_DATA, castBy: alice.address, commitment, electionRoundId: '0' }, mockServer.server)
   })
 
   it('Inactive', async () => {
