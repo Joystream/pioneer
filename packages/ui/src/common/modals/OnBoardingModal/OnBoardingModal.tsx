@@ -12,9 +12,10 @@ import { useModal } from '@/common/hooks/useModal'
 import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
 import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
+import { OnBoardingTokens } from '@/common/modals/OnBoardingModal/OnBoardingTokens'
 
 export const OnBoardingModal = () => {
-  const { isLoading, status } = useOnBoardingStatus()
+  const { isLoading, status, setFreeTokensAccount } = useOnBoardingStatus()
   const { hideModal } = useModal()
 
   const step = useMemo(() => {
@@ -22,7 +23,11 @@ export const OnBoardingModal = () => {
       case 'installPlugin':
         return <OnBoardingPlugin />
       case 'addAccount':
-        return <OnBoardingAccount />
+        return <OnBoardingAccount onAccountSelect={setFreeTokensAccount} />
+      case 'getFreeTokens':
+        return <OnBoardingTokens onRedemption={() => setFreeTokensAccount('retrieved')} />
+      case 'createMembership':
+        return <div>membership</div>
       default:
         return null
     }

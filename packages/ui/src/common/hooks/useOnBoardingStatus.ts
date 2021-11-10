@@ -1,7 +1,6 @@
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/common/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { useObservable } from '@/common/hooks/useObservable'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'getFreeTokens' | 'createMembership' | 'finished'
@@ -16,7 +15,7 @@ export const useOnBoardingStatus = (): UseOnBoardingStatus => {
   const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
-  const [freeTokensAccount, setFreeTokensAccount] = useLocalStorage<string>('free-tokens-account')
+  const [freeTokens, setFreeTokensAccount] = useLocalStorage<string>('free-tokens-account')
 
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
@@ -26,7 +25,11 @@ export const useOnBoardingStatus = (): UseOnBoardingStatus => {
     return { isLoading: false, status: 'installPlugin' }
   }
 
-  if (!hasAccounts || (!freeTokensAccount && !hasMembers)) {
+  if (!hasAccounts || freeTokens !== 'retrieved') {
+    return { isLoading: false, status: 'getFreeTokens', setFreeTokensAccount }
+  }
+
+  if (!hasAccounts || (!freeTokens && !hasMembers)) {
     return { isLoading: false, status: 'addAccount', setFreeTokensAccount }
   }
 

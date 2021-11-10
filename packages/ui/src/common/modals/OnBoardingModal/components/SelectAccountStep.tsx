@@ -14,10 +14,18 @@ import { Colors } from '@/common/constants'
 
 import { AccountsListItem } from './AccountsList/AccountsListItem'
 
-export const SelectAccountStep = () => {
+interface Props {
+  onAccountSelect: (account: string) => void
+}
+
+export const SelectAccountStep = ({ onAccountSelect }: Props) => {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>()
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
+
+  const onConfirm = () => {
+    if (selectedAccountAddress) onAccountSelect(selectedAccountAddress)
+  }
 
   return (
     <>
@@ -46,7 +54,9 @@ export const SelectAccountStep = () => {
         </StyledList>
       </ContentWrapper>
       <ModalFooter>
-        <ButtonPrimary size="medium">Connect Account</ButtonPrimary>
+        <ButtonPrimary onClick={onConfirm} disabled={!selectedAccountAddress} size="medium">
+          Connect Account
+        </ButtonPrimary>
       </ModalFooter>
     </>
   )

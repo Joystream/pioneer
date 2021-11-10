@@ -29,7 +29,7 @@ export const onBoardingSteps: StepperStep[] = [
   {
     title: 'Get FREE tokens',
     type: 'next',
-    id: '',
+    id: 'getFreeTokens',
   },
   {
     title: 'Create membership',

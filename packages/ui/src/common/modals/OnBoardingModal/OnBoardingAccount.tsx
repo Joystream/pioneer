@@ -5,7 +5,11 @@ import { Loading } from '@/common/components/Loading'
 import { NoAccountStep } from '@/common/modals/OnBoardingModal/components/NoAccountStep'
 import { SelectAccountStep } from '@/common/modals/OnBoardingModal/components/SelectAccountStep'
 
-export const OnBoardingAccount = () => {
+interface Props {
+  onAccountSelect: (address: string) => void
+}
+
+export const OnBoardingAccount = ({ onAccountSelect }: Props) => {
   const { hasAccounts, isLoading } = useMyAccounts()
 
   const step = useMemo(() => {
@@ -13,7 +17,7 @@ export const OnBoardingAccount = () => {
       return <NoAccountStep />
     }
 
-    return <SelectAccountStep />
+    return <SelectAccountStep onAccountSelect={onAccountSelect} />
   }, [])
 
   if (isLoading) {
