@@ -51,7 +51,7 @@ export const OnBoardingModal = () => {
     }
   }, [status, membershipPrice])
 
-  if (isLoading || !status) {
+  if (isLoading || !status || status === 'finished') {
     return null
   }
 

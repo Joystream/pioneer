@@ -5,11 +5,10 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'getFreeTokens' | 'createMembership' | 'finished'
 
-interface UseOnBoardingStatus {
+export interface UseOnBoardingStatus {
   isLoading: boolean
   status?: OnBoardingStatus
   setFreeTokens?: any
-  setRedeemedTokens?: any
 }
 
 export const useOnBoardingStatus = (): UseOnBoardingStatus => {
