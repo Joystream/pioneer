@@ -2,12 +2,15 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React from 'react'
 import { ActorRef } from 'xstate'
 
-import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { AccountLockInfo, lockInfoLayout } from '@/accounts/components/AccountLockInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { RecoverableLock } from '@/accounts/modals/RecoverBalance/index'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { InputComponent } from '@/common/components/forms'
+import { EmptyListHeader, ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -37,11 +40,19 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
         <TextMedium>
           You intend to recover <TokenValue value={lock.amount} /> stake lock from account.
         </TextMedium>
-        <SelectedAccount account={recoverAccount} />
+        <RowGapBlock gap={8}>
+          <ListHeaders $colLayout={lockInfoLayout}>
+            <EmptyListHeader />
+            <ListHeader>Unlocking</ListHeader>
+            <ListHeader>Recoverable stake</ListHeader>
+          </ListHeaders>
+          <InputComponent inputSize="l" disabled>
+            <AccountLockInfo account={recoverAccount} amount={lock.amount} lockType={'Voting'} />
+          </InputComponent>
+        </RowGapBlock>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title="Amount:" value={lock.amount} />
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee?.toBn()}
