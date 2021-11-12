@@ -1,5 +1,3 @@
-import { UseMembershipOnBoarding } from '@/common/hooks/useMembershipOnBoarding'
-
 interface MembershipOnBoarding extends UseMembershipOnBoarding {
   setFreeTokens?: (value: string) => void
   isModalOpen: boolean
@@ -8,4 +6,11 @@ interface MembershipOnBoarding extends UseMembershipOnBoarding {
 
 export interface UseOnBoarding {
   membership: MembershipOnBoarding
+}
+
+export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'getFreeTokens' | 'createMembership' | 'finished'
+
+export interface UseMembershipOnBoarding {
+  isLoading: boolean
+  status?: OnBoardingStatus
 }
