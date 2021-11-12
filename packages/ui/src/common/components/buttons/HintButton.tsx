@@ -2,20 +2,49 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { HintIcon } from '@/common/components/icons/HintIcon'
-import { BorderRad, Colors } from '@/common/constants'
+import { BorderRad, Colors, ZIndex } from '@/common/constants'
 
+import { Tooltip } from '../Tooltip'
+import { TextMedium } from '../typography'
+
+import { CloseButton } from '.'
 import { ButtonGhostStyles, ButtonPrimary, ButtonInnerWrapper, ButtonPrimaryStyles } from './Buttons'
 
 export interface HintIconProps {
   isActive?: boolean
+  tooltip?: string
+  onTooltipClose?: () => void
   onClick?: () => void
 }
 
-export function HintButton({ isActive, onClick }: HintIconProps) {
+export function HintButton({ isActive, tooltip, onTooltipClose, onClick }: HintIconProps) {
   return (
-    <HintButtonElement size="small" isActive={isActive} onClick={onClick}>
-      <HintIcon />
-    </HintButtonElement>
+    <>
+      {tooltip ? (
+        <>
+          <HintBackgroud />
+          <HintTooltip
+            tooltipOpen
+            popupContent={
+              <>
+                <TextMedium bold black>
+                  {tooltip}
+                </TextMedium>
+                <CloseButton onClick={onTooltipClose} />
+              </>
+            }
+          >
+            <HintButtonElement size="small" isActive={isActive} onClick={onClick}>
+              <HintIcon />
+            </HintButtonElement>
+          </HintTooltip>
+        </>
+      ) : (
+        <HintButtonElement size="small" isActive={isActive} onClick={onClick}>
+          <HintIcon />
+        </HintButtonElement>
+      )}
+    </>
   )
 }
 
@@ -31,6 +60,7 @@ const HintButtonElement = styled(ButtonPrimary)<{ isActive?: boolean }>`
   height: 32px;
   padding: 0;
   border-radius: ${BorderRad.full};
+  z-index: ${ZIndex.tooltip};
 
   ${({ isActive }) =>
     isActive
@@ -97,4 +127,27 @@ const HintButtonElement = styled(ButtonPrimary)<{ isActive?: boolean }>`
             border-color: ${Colors.Blue[100]};
           }
         `};
+`
+
+const HintTooltip = styled(Tooltip)`
+  flex-direction: row;
+  color: ${Colors.Black[900]};
+  column-gap: 12px;
+  background-color: ${Colors.Black[75]};
+  border-color: ${Colors.Black[200]};
+
+  &:after {
+    display: none;
+  }
+`
+
+const HintBackgroud = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${Colors.Black[700]};
+  opacity: 0.85;
+  z-index: ${ZIndex.modal};
 `

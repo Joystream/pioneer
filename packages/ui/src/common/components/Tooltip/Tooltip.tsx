@@ -16,6 +16,7 @@ export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 
 
 export interface TooltipPopupProps {
   className?: string
+  tooltipOpen?: boolean
   tooltipText?: string
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
@@ -36,6 +37,7 @@ export const Tooltip = ({
   absolute,
   children,
   tooltipText,
+  tooltipOpen = false,
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
@@ -43,7 +45,7 @@ export const Tooltip = ({
   className,
   forBig,
 }: TooltipProps) => {
-  const [isTooltipActive, setTooltipActive] = useState(false)
+  const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLButtonElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
@@ -59,16 +61,22 @@ export const Tooltip = ({
   })
 
   const mouseIsOver = () => {
-    setTooltipActive(true)
+    if (tooltipOpen === undefined) {
+      setTooltipActive(true)
+    }
   }
   const mouseLeft = () => {
-    setTooltipActive(false)
+    if (tooltipOpen === undefined) {
+      setTooltipActive(false)
+    }
   }
 
   const tooltipHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
-      event.stopPropagation()
-      setTooltipActive(false)
+      if (tooltipOpen === undefined) {
+        event.stopPropagation()
+        setTooltipActive(false)
+      }
     },
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
