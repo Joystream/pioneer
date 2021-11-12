@@ -4,9 +4,10 @@ import { DeepMerger } from '@apollo/client/utilities'
 import yargs from 'yargs'
 
 import { capitalizeFirstLetter } from '../../src/common/helpers'
-import { isDefined } from '../../src/common/utils'
+import { isDefined, objectEquals } from '../../src/common/utils'
 import rawCandidates from '../../src/mocks/data/raw/candidates.json'
 import rawMembers from '../../src/mocks/data/raw/members.json'
+import rawVotes from '../../src/mocks/data/raw/votes.json'
 
 import configs from './configs'
 
@@ -21,20 +22,29 @@ const members = rawMembers.map((member) => ({
 }))
 
 const CYCLE_ID = 4
-const ELECTION_ROUND_ID = String(CYCLE_ID)
-const candidates = rawCandidates
-  .filter((candidate) => candidate.electionRoundId === ELECTION_ROUND_ID)
-  .map((candidate) => [
-    Number(candidate.memberId),
-    {
-      staking_account_id: candidate.stakingAccountId,
-      reward_account_id: candidate.rewardAccountId,
-      cycle_id: CYCLE_ID,
-      stake: candidate.stake,
-      vote_power: 0,
-      note_hash: null,
-    },
-  ])
+const fromLastElection = objectEquals({ electionRoundId: String(CYCLE_ID) })
+
+const candidates = rawCandidates.filter(fromLastElection).map((candidate) => [
+  Number(candidate.memberId),
+  {
+    staking_account_id: candidate.stakingAccountId,
+    reward_account_id: candidate.rewardAccountId,
+    cycle_id: CYCLE_ID,
+    stake: candidate.stake,
+    vote_power: 0,
+    note_hash: null,
+  },
+])
+
+const votes = rawVotes.filter(fromLastElection).map((vote) => [
+  vote.castBy,
+  {
+    commitment: vote.commitment,
+    cycle_id: CYCLE_ID,
+    stake: vote.stake,
+    vote_for: Number(vote.voteForId),
+  },
+])
 
 const DefaultDurations = { voting: 5, revealing: 7 }
 
@@ -58,6 +68,9 @@ const handlerFor = (stage: 'announcing' | 'voting' | 'revealing') => (args: any)
 
   // Set members
   oldSpec.genesis.runtime.membership.members = members
+
+  // Set votes
+  oldSpec.genesis.runtime.referendumInstance1.votes = votes
 
   if (stage === 'voting' || stage === 'revealing') {
     // Set candidates (on Voting and Revealing stage)
