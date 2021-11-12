@@ -92,6 +92,9 @@ describe('UI: Election page', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   const castVote = (

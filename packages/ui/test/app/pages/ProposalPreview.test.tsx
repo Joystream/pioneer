@@ -35,6 +35,9 @@ describe('ProposalPreview', () => {
     },
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeAll(cryptoWaitReady)

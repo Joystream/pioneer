@@ -43,12 +43,13 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
 
   const membershipContext = {
     active: getMember('alice'),
-    setActive: () => {
-      /**/
-    },
+    setActive: () => undefined,
     members: [getMember('alice')],
     hasMembers: false,
     isLoading: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   return (
@@ -99,6 +100,7 @@ Exercitation veniam consequat sunt nostrud amet.`,
       isFoundingMember: false,
       isCouncilMember: false,
       roles: [],
+      boundAccounts: [],
       inviteCount: 0,
       createdAt: '',
     },

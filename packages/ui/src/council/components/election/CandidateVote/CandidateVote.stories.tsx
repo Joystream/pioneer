@@ -26,6 +26,7 @@ const args: CandidateVoteProps = {
     isFoundingMember: true,
     isCouncilMember: false,
     roles: [],
+    boundAccounts: [],
     inviteCount: 0,
     createdAt: '',
   },
