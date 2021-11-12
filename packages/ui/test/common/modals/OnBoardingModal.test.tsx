@@ -5,10 +5,10 @@ import React from 'react'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap } from '@/accounts/types'
 import { Colors } from '@/common/constants'
-import { UseOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
 import { stubApi } from '../../_mocks/transactions'
 
@@ -19,10 +19,14 @@ const mockUseMyAccounts: UseAccounts = {
   error: undefined,
 }
 
-const mockOnBoardingStatus: UseOnBoardingStatus = {
-  status: 'installPlugin',
-  isLoading: false,
-  setFreeTokens: jest.fn(),
+const mockOnBoarding: UseOnBoarding = {
+  membership: {
+    status: 'installPlugin',
+    isLoading: false,
+    setFreeTokens: jest.fn(),
+    isModalOpen: true,
+    toggleModal: jest.fn(),
+  },
 }
 
 let mockMyBalances: AddressToBalanceMap = {}
@@ -35,8 +39,8 @@ jest.mock('@/accounts/hooks/useMyBalances', () => ({
   useMyBalances: () => mockMyBalances,
 }))
 
-jest.mock('@/common/hooks/useOnBoardingStatus', () => ({
-  useOnBoardingStatus: () => mockOnBoardingStatus,
+jest.mock('@/common/hooks/useOnBoarding', () => ({
+  useOnBoarding: () => mockOnBoarding,
 }))
 
 describe('UI: OnBoardingModal', () => {
@@ -52,7 +56,7 @@ describe('UI: OnBoardingModal', () => {
   afterEach(cleanup)
 
   it('Do not render', () => {
-    mockOnBoardingStatus.isLoading = true
+    mockOnBoarding.membership.isLoading = true
 
     const { queryByText } = renderModal()
 
@@ -61,7 +65,7 @@ describe('UI: OnBoardingModal', () => {
 
   describe('Status: Install plugin', () => {
     beforeAll(() => {
-      mockOnBoardingStatus.isLoading = false
+      mockOnBoarding.membership.isLoading = false
     })
 
     it('Stepper matches', () => {
@@ -87,7 +91,7 @@ describe('UI: OnBoardingModal', () => {
 
   describe('Status: addAccount', () => {
     beforeAll(() => {
-      mockOnBoardingStatus.status = 'addAccount'
+      mockOnBoarding.membership.status = 'addAccount'
     })
 
     it('Stepper matches', () => {
@@ -165,14 +169,14 @@ describe('UI: OnBoardingModal', () => {
         getByText('Alice').click()
         getByText('Connect Account').click()
 
-        expect(mockOnBoardingStatus.setFreeTokens).toBeCalledWith('123')
+        expect(mockOnBoarding.membership.setFreeTokens).toBeCalledWith('123')
       })
     })
   })
 
   describe('Status: getFreeTokens', () => {
     beforeAll(() => {
-      mockOnBoardingStatus.status = 'getFreeTokens'
+      mockOnBoarding.membership.status = 'getFreeTokens'
     })
 
     it('Step matches', () => {
@@ -195,13 +199,13 @@ describe('UI: OnBoardingModal', () => {
 
       getByText(/Continue And Get Tokens/i)?.click()
 
-      expect(mockOnBoardingStatus.setFreeTokens).toBeCalledWith('redeemed')
+      expect(mockOnBoarding.membership.setFreeTokens).toBeCalledWith('redeemed')
     })
   })
 
   describe('Status: createMembership', () => {
     beforeAll(() => {
-      mockOnBoardingStatus.status = 'createMembership'
+      mockOnBoarding.membership.status = 'createMembership'
     })
 
     it('Step matches', () => {
