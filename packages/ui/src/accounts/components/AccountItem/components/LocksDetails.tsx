@@ -5,12 +5,14 @@ import { isRecoverable } from '@/accounts/model/lockTypes'
 import { Balances } from '@/accounts/types'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextMedium } from '@/common/components/typography'
+import { Address } from '@/common/types'
 
 interface LocksDetailsProps {
   balance: Balances | null
+  address: Address
 }
 
-export const LocksDetails = ({ balance }: LocksDetailsProps) => {
+export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
   if (!balance || !balance.locks.length) {
     return <TextMedium light>No locks found.</TextMedium>
   }
@@ -29,7 +31,7 @@ export const LocksDetails = ({ balance }: LocksDetailsProps) => {
 
         {recoverable.length > 0 && <Label>Recoverable Locks:</Label>}
         {recoverable.map((lock, index) => (
-          <LockItem key={index} lock={lock} isRecoverable />
+          <LockItem key={index} lock={lock} isRecoverable address={address} />
         ))}
       </RowGapBlock>
     </>

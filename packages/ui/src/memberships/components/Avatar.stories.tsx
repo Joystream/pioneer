@@ -22,6 +22,7 @@ Default.args = {
     isFoundingMember: false,
     isCouncilMember: false,
     roles: [],
+    boundAccounts: [],
     inviteCount: 0,
     createdAt: '',
   },

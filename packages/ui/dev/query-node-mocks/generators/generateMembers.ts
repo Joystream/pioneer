@@ -12,6 +12,7 @@ interface KnownMember {
   rootAccount: string
   controllerAccount: string
   isCouncilMember: boolean
+  boundAccounts?: string[]
 }
 
 export const KNOWN_MEMBERS: KnownMember[] = [
@@ -21,11 +22,13 @@ export const KNOWN_MEMBERS: KnownMember[] = [
     controllerAccount: accountsMap.alice,
     isVerified: true,
     isCouncilMember: false,
+    boundAccounts: [accountsMap.alice, accountsMap.alice_stash],
   },
   {
     handle: 'bob',
     rootAccount: accountsMap.bob_stash,
     controllerAccount: accountsMap.bob,
+    boundAccounts: [accountsMap.bob],
     isVerified: true,
     isCouncilMember: true,
   },
@@ -58,6 +61,7 @@ const generateBaseMember = () => ({
   id: String(nextId++),
   rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+  boundAccounts: [],
   handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,
   metadata: {
     name: faker.lorem.words(2),

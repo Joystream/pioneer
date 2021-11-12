@@ -54,6 +54,7 @@ export type ProposalFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -80,6 +81,7 @@ export type VoteFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -111,6 +113,7 @@ export type VoteWithDetailsFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -147,6 +150,7 @@ export type ProposalWithDetailsFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -201,6 +205,7 @@ export type ProposalWithDetailsFieldsFragment = {
                 id: string
                 rootAccount: string
                 controllerAccount: string
+                boundAccounts: Array<string>
                 handle: string
                 isVerified: boolean
                 isFoundingMember: boolean
@@ -263,6 +268,7 @@ export type ProposalWithDetailsFieldsFragment = {
                 id: string
                 rootAccount: string
                 controllerAccount: string
+                boundAccounts: Array<string>
                 handle: string
                 isVerified: boolean
                 isFoundingMember: boolean
@@ -316,6 +322,7 @@ export type ProposalWithDetailsFieldsFragment = {
               id: string
               rootAccount: string
               controllerAccount: string
+              boundAccounts: Array<string>
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
@@ -348,6 +355,7 @@ export type ProposalWithDetailsFieldsFragment = {
         id: string
         rootAccount: string
         controllerAccount: string
+        boundAccounts: Array<string>
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
@@ -390,6 +398,7 @@ export type ProposalWithDetailsFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -430,6 +439,7 @@ export type DiscussionPostFieldsFragment = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -462,6 +472,7 @@ export type DiscussionPostFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -495,6 +506,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -569,6 +581,7 @@ export type GetProposalsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -613,6 +626,7 @@ export type GetProposalQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -671,6 +685,7 @@ export type GetProposalQuery = {
                       id: string
                       rootAccount: string
                       controllerAccount: string
+                      boundAccounts: Array<string>
                       handle: string
                       isVerified: boolean
                       isFoundingMember: boolean
@@ -733,6 +748,7 @@ export type GetProposalQuery = {
                       id: string
                       rootAccount: string
                       controllerAccount: string
+                      boundAccounts: Array<string>
                       handle: string
                       isVerified: boolean
                       isFoundingMember: boolean
@@ -786,6 +802,7 @@ export type GetProposalQuery = {
                     id: string
                     rootAccount: string
                     controllerAccount: string
+                    boundAccounts: Array<string>
                     handle: string
                     isVerified: boolean
                     isFoundingMember: boolean
@@ -818,6 +835,7 @@ export type GetProposalQuery = {
               id: string
               rootAccount: string
               controllerAccount: string
+              boundAccounts: Array<string>
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
@@ -867,6 +885,7 @@ export type GetProposalQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -912,6 +931,7 @@ export type GetVoteWithDetailsQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -973,6 +993,7 @@ export type GetProposalVotesQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean

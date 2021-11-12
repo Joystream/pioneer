@@ -4,10 +4,11 @@ import { MyMemberships } from './provider'
 
 export const MembershipContext = createContext<MyMemberships>({
   active: undefined,
-  setActive: () => {
-    /**/
-  },
+  setActive: () => undefined,
   members: [],
   hasMembers: false,
   isLoading: true,
+  helpers: {
+    getMemberIdByBoundAccountAddress: () => undefined,
+  },
 })
