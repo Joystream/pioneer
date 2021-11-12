@@ -13,8 +13,8 @@ export const HorizontalStaticStepper = ({ steps }: Props) => {
     <Wrapper>
       {steps.map((text, index) => (
         <>
-          {!!index && <Dash />}
-          <Step>
+          {!!index && <Dash key={`horizontalStepper-1-${index}`} />}
+          <Step key={`horizontalStepper-2-${index}`}>
             <StepCircle>{index + 1}</StepCircle>
             <TextMedium>{text}</TextMedium>
           </Step>
