@@ -18,11 +18,6 @@ import { memberAt, randomBlock, randomFromRange, randomMember, repeat } from '..
 
 const COUNCILS = 5
 
-// LocalStorage entry:
-// key: votes:4
-// value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
-export const COMMITMENT = '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806'
-
 export const generateCouncils = () => {
   const data = Array.from({ length: COUNCILS }).reduce(generateCouncil, {
     councils: [],
@@ -138,7 +133,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     stakeLocked: isFinished ? Math.random() > 0.5 : true,
     castBy: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
     voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
-    commitment: COMMITMENT,
+    commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
     ...override,
   })
 
@@ -146,10 +141,18 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     ...repeat(createVote, randomFromRange(10, 20)),
     createVote(21, { castBy: ALICE_STASH }),
 
-    // Add a revealable vote (with the above local storage entry) on the on going election
     ...(isFinished
       ? [createVote(22, { castBy: ALICE }), createVote(23, { castBy: BOB_STASH })]
-      : [createVote(22, { castBy: ALICE, voteForId: null })]),
+      : [
+          // Add a revealable vote (matching the local storage entry below) on the on going election
+          // key: votes:4
+          // value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
+          createVote(22, {
+            castBy: ALICE,
+            commitment: '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806',
+            voteForId: null,
+          }),
+        ]),
   ]
 
   return {
