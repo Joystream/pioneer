@@ -14,7 +14,7 @@ import { TransactionState, TransactionStatusStateProps, TransactionStatusStepPro
 export interface TransactionStatusProps {
   title: string
   message: string | React.ReactElement | React.ReactNode
-  showClose?: boolean
+  onClose?: () => void
   state: TransactionState
   steps?: TransactionStatusStepProps[]
 }
@@ -30,17 +30,17 @@ const TransactionStatusHolder = ({ children }: TransactionStatusNotificationsHol
   )
 }
 
-export const TransactionStatus = ({
+export const TransactionStatusNotification = ({
   title,
   message,
   state,
-  showClose,
+  onClose,
   steps,
 }: TransactionStatusProps) => {
   return (
     <TransactionStatusHolder>
       <StatusComponent state={state}>
-        {showClose && <StatusCloseButton onClick={() => undefined} />}
+        {onClose && <StatusCloseButton onClick={onClose} />}
         {steps && <TransactionStatusStepper steps={steps} state={state} />}
         <StatusHeader>
           <TransactionStatusIcon state={state} />

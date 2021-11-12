@@ -1,13 +1,13 @@
 import { useActor } from '@xstate/react'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { ActorRef } from 'xstate'
 
 import { MultiTransactionModalHeader } from '@/common/modals/TransactionModal/MultiTransactionModalHeader'
 
 import { Modal, ModalHeader } from '../../components/Modal'
-import { WaitModal } from '../../components/WaitModal'
 
 import { MultiTransactionConfig } from './types'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 
 export interface TransactionModalProps {
   children: ReactNode
@@ -19,6 +19,12 @@ export interface TransactionModalProps {
 
 export const TransactionModal = ({ onClose, children, service, title, useMultiTransaction }: TransactionModalProps) => {
   const [state] = useActor(service)
+  const { showStatus } = useTransactionStatus()
+  useEffect(() => {
+    if (state.matches('signWithExtension')) {
+      showStatus(service)
+    }
+  }, [state.value])
 
   if (state.matches('prepare')) {
     return (
@@ -34,26 +40,6 @@ export const TransactionModal = ({ onClose, children, service, title, useMultiTr
         )}
         {children}
       </Modal>
-    )
-  }
-
-  if (state.matches('signWithExtension')) {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Waiting for the extension"
-        description="Please, sign the transaction using external signer app."
-      />
-    )
-  }
-
-  if (state.matches('pending')) {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Pending transaction"
-        description="We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim."
-      />
     )
   }
 

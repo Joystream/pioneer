@@ -3,16 +3,16 @@ import React from 'react'
 
 import {
   TransactionStatusProps,
-  TransactionStatus,
+  TransactionStatusNotification,
 } from './TransactionStatusNotification'
 
 export default {
   title: 'Common/TransactionStatusNotification',
-  component: TransactionStatus,
+  component: TransactionStatusNotification,
 } as Meta
 
 const Template: Story<TransactionStatusProps> = (args) => (
-    <TransactionStatus {...args} />
+    <TransactionStatusNotification {...args} />
 )
 
 export const NotificationComponent = Template.bind({})
@@ -20,7 +20,7 @@ export const NotificationComponent = Template.bind({})
 NotificationComponent.args = {
   title: 'Finazlizing Transaction',
   message: 'The transaction has been included in a block.',
-  showClose: true,
+  onClose: () => undefined,
   state: 'pending',
   steps: [{ stepState: 'past' }, { stepState: 'active' }, { stepState: undefined }, { stepState: undefined }],
 }

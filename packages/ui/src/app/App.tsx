@@ -24,6 +24,7 @@ import { ProposalsModule } from './pages/Proposals/ProposalsModule'
 import { Settings } from './pages/Settings/Settings'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
+import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 
 export const App = () => (
   <Providers>
@@ -49,6 +50,7 @@ export const App = () => (
     </Page>
     <GlobalModals />
     <NotificationsHolder>
+      <TransactionStatus />
       <ConnectionStatus />
       <ExtensionWarning />
     </NotificationsHolder>
