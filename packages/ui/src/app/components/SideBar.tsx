@@ -1,26 +1,34 @@
-import { AnimateSharedLayout } from 'framer-motion'
+import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
 import React, { useState } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
+import { Arrow } from '@/common/components/icons'
 import { Notifications, NotificationsButton } from '@/common/components/Notifications'
+import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
+import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
+import { ContentIcon } from '@/common/components/page/Sidebar/LinksIcons/ContentIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
 import { FinancialsIcon } from '@/common/components/page/Sidebar/LinksIcons/FinancialsIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
+import { GatewaysIcon } from '@/common/components/page/Sidebar/LinksIcons/GatewaysIcon'
 import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
 import { OverviewIcon } from '@/common/components/page/Sidebar/LinksIcons/OverviewIcon'
 import { ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons/ProposalsIcon'
 import { SettingsIcon } from '@/common/components/page/Sidebar/LinksIcons/SettingsIcon'
+import { StorageIcon } from '@/common/components/page/Sidebar/LinksIcons/StorageIcon'
 import { ValidatorsIcon } from '@/common/components/page/Sidebar/LinksIcons/ValidatorsIcon'
 import { WorkingGroupsIcon } from '@/common/components/page/Sidebar/LinksIcons/WorkingGroupsIcon'
 import { LogoLink } from '@/common/components/page/Sidebar/LogoLink'
 import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sidebar/Navigation'
+import { NavigationExpandButton } from '@/common/components/page/Sidebar/NavigationExpandButton'
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { RemoveScrollbar } from '@/common/constants'
+import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
@@ -29,6 +37,7 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 export const SideBar = () => {
   const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
+  const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const onClose = () => setNotificationsPanelOpen(false)
 
   return (
@@ -43,12 +52,6 @@ export const SideBar = () => {
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
-            <NavigationLinksItem>
-              <NavigationLink to="/inexisting" disabled>
-                <OverviewIcon />
-                Overview
-              </NavigationLink>
-            </NavigationLinksItem>
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile}>
                 <MyProfileIcon />
@@ -74,15 +77,9 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/inexisting" disabled>
-                <ConstitutionIcon />
-                Constitution
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to="/inexisting" disabled>
-                <ValidatorsIcon />
-                Validators
+              <NavigationLink to={CouncilRoutes.currentElection}>
+                <CouncilIcon />
+                Election
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
@@ -98,17 +95,82 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/inexisting" disabled>
-                <FinancialsIcon />
-                Financials
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
               <NavigationLink to={SettingsRoutes.settings}>
                 <SettingsIcon />
                 Settings
               </NavigationLink>
             </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationExpandButton active={comingSoonListActive} onClick={toggleComingSoonListActive}>
+                <Arrow direction="down" size="20" className="nav-icon" />
+                COMING SOON
+              </NavigationExpandButton>
+            </NavigationLinksItem>
+            <AnimatePresence>
+              {comingSoonListActive && (
+                <motion.div
+                  initial={{ height: 0 }}
+                  animate={{ height: 'auto' }}
+                  exit={{ minHeight: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <ConstitutionIcon />
+                      Constitution
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <BountyIcon />
+                      Bounty
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <OverviewIcon />
+                      Overview
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <FinancialsIcon />
+                      Financials
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <ValidatorsIcon />
+                      Validators
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <GatewaysIcon />
+                      Gateways
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <StorageIcon />
+                      Storage
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <BandwidthIcon />
+                      Bandwidth
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
+                    <NavigationLink to="/inexisting" disabled>
+                      <ContentIcon />
+                      Content
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </NavigationLinks>
         </AnimateSharedLayout>
         <ProfileComponent />

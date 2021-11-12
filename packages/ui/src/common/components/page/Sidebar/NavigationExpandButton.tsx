@@ -1,51 +1,35 @@
-import { motion } from 'framer-motion'
 import React from 'react'
-import { NavLink, useRouteMatch } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions, Overflow } from '../../../constants'
 
-interface NavigationLinkProps extends DisabledNavigationLinkProps {
+interface NavigationExpandButtonProps extends DisabledNavigationLinkProps {
   children: React.ReactNode
-  exact?: boolean
   className?: string
-  to: string
+  active?: boolean
+  onClick?: () => void
 }
 
 interface DisabledNavigationLinkProps {
   disabled?: boolean
 }
 
-export const NavigationLink = ({ children, exact, className, to, disabled }: NavigationLinkProps) => {
-  const match = useRouteMatch(to)
-
+export const NavigationExpandButton = ({
+  children,
+  className,
+  active,
+  disabled,
+  onClick,
+}: NavigationExpandButtonProps) => {
   return (
-    <NavigationItemLink
-      exact={exact}
-      to={to}
-      className={className}
-      disabled={disabled}
-      activeClassName="active-page"
-      onClick={(event) => {
-        if (disabled) {
-          event.preventDefault()
-        }
-      }}
-    >
-      {match && (
-        <ActivePageIndicator
-          layoutId="activeLink"
-          className="activeLink"
-          initial={false}
-          transition={{ default: { duration: 0.25 } }}
-        />
-      )}
+    <NavigationItemButton className={className} disabled={disabled} onClick={onClick} active={active}>
+      <ActivePageIndicator active={active} />
       <NavigationItemLinkChildren>{children}</NavigationItemLinkChildren>
-    </NavigationItemLink>
+    </NavigationItemButton>
   )
 }
 
-const ActivePageIndicator = styled(motion.div)`
+const ActivePageIndicator = styled.div<Pick<NavigationExpandButtonProps, 'active'>>`
   position: absolute;
   top: 0;
   left: 0;
@@ -60,7 +44,7 @@ const ActivePageIndicator = styled(motion.div)`
     top: 0;
     width: 4px;
     height: 100%;
-    background-color: ${Colors.Blue[500]};
+    background-color: ${({ active }) => (active ? Colors.Blue[500] : 'transparent')};
     transition: ${Transitions.all};
   }
   &:after {
@@ -70,7 +54,7 @@ const ActivePageIndicator = styled(motion.div)`
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: ${Colors.Black[700]};
+    background-color: ${({ active }) => (active ? Colors.Black[700] : 'transparent')};
     transition: ${Transitions.all};
     z-index: -1;
   }
@@ -94,7 +78,7 @@ const NavigationItemLinkChildren = styled.div`
   ${Overflow.FullDots};
 `
 
-const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
+const NavigationItemButton = styled.button<DisabledNavigationLinkProps & Pick<NavigationExpandButtonProps, 'active'>>`
   display: flex;
   position: relative;
   justify-content: start;
@@ -107,11 +91,12 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
   font-weight: 400;
   line-height: 24px;
   -webkit-text-stroke-width: 0.05em;
-  -webkit-text-stroke-color: transparent;
-  color: ${({ disabled }) => (disabled ? Colors.Black[600] : Colors.Black[200])};
+  -webkit-text-stroke-color: ${({ active }) => (active ? Colors.White : 'transparent')};
+  color: ${({ disabled, active }) => (disabled ? Colors.Black[600] : active ? Colors.White : Colors.Black[200])};
   text-transform: capitalize;
   text-decoration: none;
   transition: ${Transitions.all};
+  cursor: pointer;
 
   &:after {
     content: '';
@@ -127,12 +112,13 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
   }
 
   .nav-icon {
-    color: ${({ disabled }) => (disabled ? Colors.Black[600] : Colors.Black[400])};
+    color: ${({ disabled, active }) => (disabled ? Colors.Black[600] : active ? Colors.White : Colors.Black[400])};
     transition: ${Transitions.all};
+    transform: scaleY(${({ active }) => (active ? '-1' : '1')});
   }
 
   &:hover {
-    ${({ disabled }) =>
+    ${({ disabled, active }) =>
       disabled
         ? css`
             color: ${Colors.Black[600]};
@@ -144,6 +130,16 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
             }
             cursor: not-allowed;
           `
+        : active
+        ? css`
+            color: ${Colors.White};
+            &:after {
+              background-color: 'transparent';
+            }
+            .nav-icon {
+              color: ${Colors.White};
+            }
+          `
         : css`
             color: ${Colors.White};
             &:after {
@@ -154,19 +150,8 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
             }
           `};
   }
-
-  &.active-page {
-    color: ${Colors.White};
-    -webkit-text-stroke-color: ${Colors.White};
-
-    &:hover {
-      &:after {
-        background-color: transparent;
-      }
-    }
-  }
-  &.active-page .nav-icon {
-    color: ${Colors.White};
+  &:disabled {
+    cursor: not-allowed;
   }
 
   @media (max-height: 768px) {
