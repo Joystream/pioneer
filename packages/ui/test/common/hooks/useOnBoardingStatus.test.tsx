@@ -14,6 +14,12 @@ import { seedMembers } from '@/mocks/data'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
+let mockUseLocalStorage: [string | undefined, any] = [undefined, jest.fn()]
+
+jest.mock('@/common/hooks/useLocalStorage', () => ({
+  useLocalStorage: () => mockUseLocalStorage,
+}))
+
 describe('useOnBoardingStatus', () => {
   const server = setupMockServer()
 
@@ -70,8 +76,18 @@ describe('useOnBoardingStatus', () => {
       expect(result.status).toEqual('addAccount')
     })
 
+    it('Get tokens', async () => {
+      useMyAccounts.hasAccounts = true
+      mockUseLocalStorage = ['address', jest.fn()]
+      const result = await renderUseOnBoardingStatus()
+
+      expect(result.isLoading).toEqual(false)
+      expect(result.status).toEqual('getFreeTokens')
+    })
+
     it('Create membership', async () => {
       useMyAccounts.hasAccounts = true
+      mockUseLocalStorage = ['redeemed', jest.fn()]
       const result = await renderUseOnBoardingStatus()
 
       expect(result.isLoading).toEqual(false)
