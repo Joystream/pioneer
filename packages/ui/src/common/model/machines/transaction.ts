@@ -12,7 +12,6 @@ export type TransactionEvent =
   | { type: 'SIGN' }
   | { type: 'SIGN_EXTERNAL' }
   | { type: 'PENDING' }
-  | { type: 'CANCELED'}
   | TransactionFinalizingEvent
   | TransactionSuccessEvent
   | TransactionErrorEvent
