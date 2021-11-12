@@ -43,6 +43,13 @@ const useMyBalances: AddressToBalanceMap = {
     transferable: new BN(0),
     locks: [],
   },
+  [useMyAccounts.allAccounts[1].address]: {
+    total: new BN(10000),
+    locked: new BN(0),
+    recoverable: new BN(0),
+    transferable: new BN(0),
+    locks: [],
+  },
 }
 
 const useMyMemberships: MyMemberships = {
@@ -54,12 +61,12 @@ const useMyMemberships: MyMemberships = {
 }
 
 interface Props {
-  extension: boolean
-  account: boolean
-  membership: boolean
+  extension?: boolean
+  account?: boolean
+  accountPick?: boolean
 }
 
-const Template: Story<Props> = ({ extension, membership, account }: Props) => {
+const Template: Story<Props> = ({ extension = false, account = false, accountPick = false }: Props) => {
   const [state, setState] = useState<any>({
     useApi,
     useMyMemberships,
@@ -67,13 +74,14 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
   })
 
   useEffect(() => {
+    window.localStorage.removeItem('free-tokens')
+
     if (extension) {
       setState({
         useApi,
         useMyMemberships,
         useMyAccounts: { ...useMyAccounts, error: 'EXTENSION' },
       })
-      return
     }
 
     if (account) {
@@ -82,17 +90,16 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
         useMyMemberships,
         useMyAccounts: { ...useMyAccounts },
       })
-      return
     }
 
-    if (membership) {
+    if (accountPick) {
       setState({
         useApi,
         useMyMemberships,
         useMyAccounts: { ...useMyAccounts, hasAccounts: true },
       })
     }
-  }, [membership, account, extension])
+  }, [account, extension, accountPick])
 
   return (
     <MemoryRouter>
@@ -113,9 +120,17 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
   )
 }
 
-export const Default = Template.bind({})
-Default.args = {
-  extension: false,
+export const Plugin = Template.bind({})
+Plugin.args = {
+  extension: true,
+}
+
+export const Account_1 = Template.bind({})
+Account_1.args = {
   account: true,
-  membership: false,
+}
+
+export const Account_2 = Template.bind({})
+Account_2.args = {
+  accountPick: true,
 }
