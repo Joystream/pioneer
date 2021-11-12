@@ -1,24 +1,19 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
-import { useModal } from '@/common/hooks/useModal'
-import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 
 interface Props {
   children: string
 }
 
 export const OnBoardingButton = ({ children }: Props) => {
-  const { showModal } = useModal()
-
-  const showOnBoardingModal = useCallback(() => {
-    showModal<OnBoardingModalCall>({
-      modal: 'OnBoardingModal',
-    })
-  }, [])
+  const {
+    membership: { toggleModal },
+  } = useOnBoarding()
 
   return (
-    <ButtonPrimary size="large" onClick={showOnBoardingModal}>
+    <ButtonPrimary size="large" onClick={toggleModal}>
       {children}
     </ButtonPrimary>
   )

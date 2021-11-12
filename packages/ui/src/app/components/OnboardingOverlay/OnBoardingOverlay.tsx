@@ -12,8 +12,9 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
+import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
   {
@@ -70,7 +71,9 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 }
 
 export const OnBoardingOverlay = () => {
-  const { isLoading, status } = useOnBoardingStatus()
+  const {
+    membership: { isLoading, status },
+  } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
 
   if (isLoading || !status || status === 'finished') {

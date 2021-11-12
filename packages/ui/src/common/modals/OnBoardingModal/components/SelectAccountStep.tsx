@@ -15,7 +15,7 @@ import { Colors } from '@/common/constants'
 import { ConnectAccountItem } from './ConnectAccountItem'
 
 interface Props {
-  onAccountSelect: (account: string) => void
+  onAccountSelect?: (account: string) => void
 }
 
 export const SelectAccountStep = ({ onAccountSelect }: Props) => {
@@ -24,7 +24,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
   const balances = useMyBalances()
 
   const onConfirm = () => {
-    if (selectedAccountAddress) onAccountSelect(selectedAccountAddress)
+    if (selectedAccountAddress && onAccountSelect) onAccountSelect(selectedAccountAddress)
   }
 
   return (
