@@ -2,12 +2,12 @@ import { useActor } from '@xstate/react'
 import React, { ReactNode, useEffect } from 'react'
 import { ActorRef } from 'xstate'
 
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { MultiTransactionModalHeader } from '@/common/modals/TransactionModal/MultiTransactionModalHeader'
 
 import { Modal, ModalHeader } from '../../components/Modal'
 
 import { MultiTransactionConfig } from './types'
-import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 
 export interface TransactionModalProps {
   children: ReactNode

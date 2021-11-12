@@ -4,7 +4,7 @@ import { ActorRef } from 'xstate'
 export interface UseTransaction {
   isTransactionPending: boolean
   setPending: (state: boolean) => void
-  transactionService?: ActorRef<any>,
+  transactionService?: ActorRef<any>
   showStatus: (service: ActorRef<any>) => void
   hideStatus: () => void
   statusShown: boolean

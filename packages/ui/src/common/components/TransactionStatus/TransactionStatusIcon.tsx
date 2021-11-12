@@ -8,31 +8,31 @@ import { LoadingAnimation } from '../LoadingAnimation'
 import { TransactionState } from './types'
 
 export interface TransactionStatusStateProps {
-	state: TransactionState
+  state: TransactionState
 }
 
 export const TransactionStatusIcon = ({ state }: TransactionStatusStateProps) => {
-	switch (state) {
-		case 'loading':
-			return <LoadingAnimation />
-		case 'pending':
-			return <PendingAnimation />
-		case 'successful':
-			return <StatusSuccessSymbol />
-		case 'failure':
-			return <StatusFailureSymbol />
-		default:
-			return null
-	}
+  switch (state) {
+    case 'loading':
+      return <LoadingAnimation />
+    case 'pending':
+      return <PendingAnimation />
+    case 'successful':
+      return <StatusSuccessSymbol />
+    case 'failure':
+      return <StatusFailureSymbol />
+    default:
+      return null
+  }
 }
 
 const PendingAnimation = styled(LoadingAnimation)`
-	.loading-stroke-1 {
-			stroke: ${Colors.Orange[300]};
-	}
-	.loading-stroke-2 {
-			stroke: ${Colors.Orange[500]};
-	}
+  .loading-stroke-1 {
+    stroke: ${Colors.Orange[300]};
+  }
+  .loading-stroke-2 {
+    stroke: ${Colors.Orange[500]};
+  }
 `
 const StatusSuccessSymbol = styled(SuccessSymbol)`
   width: 24px;

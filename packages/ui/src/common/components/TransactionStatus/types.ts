@@ -1,13 +1,14 @@
 export type TransactionState = 'loading' | 'pending' | 'successful' | 'failure'
 export type StepState = 'past' | 'active' | undefined
+export type StepNumber = 1 | 2 | 3 | 4
 
 export interface TransactionStatusStepProps {
-	stepState: StepState
+  stepState: StepState
 }
 
 export interface TransactionStatusSteperProps {
-	steps: TransactionStatusStepProps[]
-	state: TransactionState
+  stepNumber: StepNumber
+  state: TransactionState
 }
 
 export interface TransactionStatusStateProps {

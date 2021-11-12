@@ -7,6 +7,7 @@ import { NotFound } from '@/app/pages/NotFound'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
+import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { CouncilRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -24,7 +25,6 @@ import { ProposalsModule } from './pages/Proposals/ProposalsModule'
 import { Settings } from './pages/Settings/Settings'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
-import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 
 export const App = () => (
   <Providers>

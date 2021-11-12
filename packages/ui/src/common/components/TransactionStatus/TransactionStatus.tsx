@@ -1,19 +1,23 @@
-import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { useActor } from '@xstate/react'
 import React from 'react'
 import { ActorRef } from 'xstate'
+
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
 export const TransactionStatus = () => {
   const { transactionService, statusShown } = useTransactionStatus()
 
   if (statusShown && transactionService) {
-      return <TransactionStatusContent service={transactionService} />
+    return <TransactionStatusContent service={transactionService} />
   }
   return null
 }
 
-interface Props { service: ActorRef<any> }
+interface Props {
+  service: ActorRef<any>
+}
 
 const TransactionStatusContent = ({ service }: Props) => {
   const [state] = useActor(service)
@@ -46,7 +50,7 @@ const TransactionStatusContent = ({ service }: Props) => {
         title="Pending transaction"
         message="We are waiting for your trasaction to be mined. Please wait."
         state="pending"
-        steps={[{stepState: 'active'}, {stepState: undefined} ,{stepState: undefined}, {stepState: undefined}]}
+        stepNumber={1}
       />
     )
   }
@@ -57,7 +61,7 @@ const TransactionStatusContent = ({ service }: Props) => {
         title="Finalizing transaction"
         message="The transaction has been included in a block."
         state="pending"
-        steps={[{stepState: undefined}, {stepState: 'active'} ,{stepState: undefined}, {stepState: undefined}]}
+        stepNumber={2}
       />
     )
   }
@@ -68,7 +72,7 @@ const TransactionStatusContent = ({ service }: Props) => {
         title="Transaction succeeded"
         message="The entire process was a success."
         state="successful"
-        steps={[{stepState: 'past'}, {stepState: 'past'} ,{stepState: 'past'}, {stepState: 'active'}]}
+        stepNumber={4}
         onClose={hideStatus}
       />
     )

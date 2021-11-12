@@ -8,15 +8,14 @@ import { TextHuge } from '../typography'
 
 import { TransactionStatusIcon } from './TransactionStatusIcon'
 import { TransactionStatusStepper } from './TransactionStatusSteps'
-import { TransactionState, TransactionStatusStateProps, TransactionStatusStepProps } from './types'
-
+import { StepNumber, TransactionState, TransactionStatusStateProps, TransactionStatusStepProps } from './types'
 
 export interface TransactionStatusProps {
   title: string
   message: string | React.ReactElement | React.ReactNode
   onClose?: () => void
   state: TransactionState
-  steps?: TransactionStatusStepProps[]
+  stepNumber?: StepNumber
 }
 
 interface TransactionStatusNotificationsHolderProps {
@@ -35,13 +34,13 @@ export const TransactionStatusNotification = ({
   message,
   state,
   onClose,
-  steps,
+  stepNumber,
 }: TransactionStatusProps) => {
   return (
     <TransactionStatusHolder>
       <StatusComponent state={state}>
         {onClose && <StatusCloseButton onClick={onClose} />}
-        {steps && <TransactionStatusStepper steps={steps} state={state} />}
+        {stepNumber && <TransactionStatusStepper stepNumber={stepNumber} state={state} />}
         <StatusHeader>
           <TransactionStatusIcon state={state} />
           <StatusTitle>{title}</StatusTitle>
