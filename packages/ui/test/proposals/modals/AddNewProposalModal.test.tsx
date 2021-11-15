@@ -40,6 +40,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   stubApi,
+  stubConst,
   stubDefaultBalances,
   stubProposalConstants,
   stubQuery,
@@ -113,6 +114,8 @@ describe('UI: AddNewProposalModal', () => {
       })
     )
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
+    stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 1000))
+    stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 1000))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
     changeModeTx = stubTransaction(api, 'api.tx.proposalsDiscussion.changeThreadMode', 10)
@@ -250,6 +253,30 @@ describe('UI: AddNewProposalModal', () => {
 
           const button = await getNextStepButton()
           expect(button).not.toBeDisabled()
+        })
+      })
+
+      describe('Proposal details validation', () => {
+        it('Title too long', async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          await finishStakingAccount()
+
+          await fillProposalDetails()
+
+          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Description too long', async () => {
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishStakingAccount()
+
+          await fillProposalDetails()
+
+          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
         })
       })
 
