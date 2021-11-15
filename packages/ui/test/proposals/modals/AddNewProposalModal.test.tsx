@@ -278,6 +278,19 @@ describe('UI: AddNewProposalModal', () => {
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
+
+        it('Both fields too long', async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishStakingAccount()
+
+          await fillProposalDetails()
+
+          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
       })
 
       describe('Trigger & Discussion', () => {
