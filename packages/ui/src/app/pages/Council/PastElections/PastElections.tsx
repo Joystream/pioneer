@@ -43,15 +43,19 @@ export const PastElections = () => {
       <MainPanel>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         <RowGapBlock gap={4}>
-          <PastElectionsListHeaders $colLayout={PastElectionsColLayout}>
-            <SortHeader {...getSortProps('cycleId')}>Round</SortHeader>
-            <SortHeader {...getSortProps('updatedAt')}>Election ended at</SortHeader>
-            <ListHeader>Total staked</ListHeader>
-            <ListHeader>Revealed votes</ListHeader>
-            <ListHeader>Total candidates</ListHeader>
-          </PastElectionsListHeaders>
           {(!elections || !elections.length) && <TextBig>No elections found</TextBig>}
-          {elections && elections.length > 0 && <PastElectionsList elections={elections} />}
+          {elections && elections.length > 0 && (
+            <>
+              <PastElectionsListHeaders $colLayout={PastElectionsColLayout}>
+                <SortHeader {...getSortProps('cycleId')}>Round</SortHeader>
+                <SortHeader {...getSortProps('updatedAt')}>Election ended at</SortHeader>
+                <ListHeader>Total staked</ListHeader>
+                <ListHeader>Revealed votes</ListHeader>
+                <ListHeader>Total candidates</ListHeader>
+              </PastElectionsListHeaders>
+              <PastElectionsList elections={elections} />
+            </>
+          )}
         </RowGapBlock>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       </MainPanel>
