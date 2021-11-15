@@ -58,6 +58,7 @@
     "react-transition-group": "^4.4.2",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.1",
+    "subscriptions-transport-ws": "^0.11.0",
     "use-react-router-breadcrumbs": "^2.0.2",
     "xstate": "^4.22.0",
     "yup": "^0.32.9"
