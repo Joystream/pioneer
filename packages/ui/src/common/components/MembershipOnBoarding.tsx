@@ -1,18 +1,16 @@
 import React from 'react'
 
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
-import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal'
 
 export const MembershipOnBoarding = () => {
-  const {
-    membership: { isModalOpen },
-  } = useOnBoarding()
+  const [membershipModal, toggleMembershipModal] = useToggle()
 
   return (
     <>
-      <OnBoardingOverlay />
-      {isModalOpen && <OnBoardingModal />}
+      <OnBoardingOverlay toggleModal={toggleMembershipModal} />
+      {membershipModal && <OnBoardingModal toggleModal={toggleMembershipModal} />}
     </>
   )
 }

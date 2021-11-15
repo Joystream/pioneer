@@ -3,7 +3,6 @@ import React from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/common/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingContext } from '@/common/providers/onboarding/context'
 import { UseMembershipOnBoarding } from '@/common/providers/onboarding/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -13,17 +12,12 @@ interface Props {
 }
 
 export const OnBoardingProvider = (props: Props) => {
-  const [membershipModal, toggleMembershipModal] = useToggle()
   const [membershipOnBoardingValue, setMembershipOnBoardingValue] = useLocalStorage<string>('onboarding-intro')
   const membership = useMembershipOnBoarding(membershipOnBoardingValue)
 
   const value = {
-    membership: {
-      ...membership,
-      setFreeTokens: setMembershipOnBoardingValue,
-      isModalOpen: membershipModal,
-      toggleModal: toggleMembershipModal,
-    },
+    ...membership,
+    setFreeTokens: setMembershipOnBoardingValue,
   }
 
   return <OnBoardingContext.Provider value={{ ...value }}>{props.children}</OnBoardingContext.Provider>

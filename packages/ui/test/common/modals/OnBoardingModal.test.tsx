@@ -20,13 +20,9 @@ const mockUseMyAccounts: UseAccounts = {
 }
 
 const mockOnBoarding: UseOnBoarding = {
-  membership: {
-    status: 'installPlugin',
-    isLoading: false,
-    setFreeTokens: jest.fn(),
-    isModalOpen: true,
-    toggleModal: jest.fn(),
-  },
+  status: 'installPlugin',
+  isLoading: false,
+  setFreeTokens: jest.fn(),
 }
 
 let mockMyBalances: AddressToBalanceMap = {}
@@ -56,7 +52,7 @@ describe('UI: OnBoardingModal', () => {
   afterEach(cleanup)
 
   it('Do not render', () => {
-    mockOnBoarding.membership.isLoading = true
+    mockOnBoarding.isLoading = true
 
     const { queryByText } = renderModal()
 
@@ -65,7 +61,7 @@ describe('UI: OnBoardingModal', () => {
 
   describe('Status: Install plugin', () => {
     beforeAll(() => {
-      mockOnBoarding.membership.isLoading = false
+      mockOnBoarding.isLoading = false
     })
 
     it('Stepper matches', () => {
@@ -91,7 +87,7 @@ describe('UI: OnBoardingModal', () => {
 
   describe('Status: addAccount', () => {
     beforeAll(() => {
-      mockOnBoarding.membership.status = 'addAccount'
+      mockOnBoarding.status = 'addAccount'
     })
 
     it('Stepper matches', () => {
@@ -169,14 +165,14 @@ describe('UI: OnBoardingModal', () => {
         getByText('Alice').click()
         getByText('Connect Account').click()
 
-        expect(mockOnBoarding.membership.setFreeTokens).toBeCalledWith('123')
+        expect(mockOnBoarding.setFreeTokens).toBeCalledWith('123')
       })
     })
   })
 
   describe('Status: getFreeTokens', () => {
     beforeAll(() => {
-      mockOnBoarding.membership.status = 'getFreeTokens'
+      mockOnBoarding.status = 'getFreeTokens'
     })
 
     it('Step matches', () => {
@@ -199,13 +195,13 @@ describe('UI: OnBoardingModal', () => {
 
       getByText(/Continue And Get Tokens/i)?.click()
 
-      expect(mockOnBoarding.membership.setFreeTokens).toBeCalledWith('redeemed')
+      expect(mockOnBoarding.setFreeTokens).toBeCalledWith('redeemed')
     })
   })
 
   describe('Status: createMembership', () => {
     beforeAll(() => {
-      mockOnBoarding.membership.status = 'createMembership'
+      mockOnBoarding.status = 'createMembership'
     })
 
     it('Step matches', () => {
@@ -229,7 +225,7 @@ describe('UI: OnBoardingModal', () => {
   const renderModal = () =>
     render(
       <ModalContext.Provider value={useModal}>
-        <OnBoardingModal />
+        <OnBoardingModal toggleModal={() => undefined} />
       </ModalContext.Provider>
     )
 })

@@ -50,8 +50,8 @@ describe('useOnBoarding', () => {
 
   describe('Membership', () => {
     it('Loading', async () => {
-      const { membership } = await renderUseOnBoarding()
-      expect(membership.isLoading).toEqual(true)
+      const { isLoading } = await renderUseOnBoarding()
+      expect(isLoading).toEqual(true)
     })
 
     describe('Loaded', () => {
@@ -65,45 +65,45 @@ describe('useOnBoarding', () => {
       it('Install plugin', async () => {
         useMyAccounts.error = 'EXTENSION'
 
-        const { membership } = await renderUseOnBoarding()
+        const { isLoading, status } = await renderUseOnBoarding()
 
-        expect(membership.isLoading).toEqual(false)
-        expect(membership.status).toEqual('installPlugin')
+        expect(isLoading).toEqual(false)
+        expect(status).toEqual('installPlugin')
       })
 
       it('Add account', async () => {
-        const { membership } = await renderUseOnBoarding()
+        const { isLoading, status } = await renderUseOnBoarding()
 
-        expect(membership.isLoading).toEqual(false)
-        expect(membership.status).toEqual('addAccount')
+        expect(isLoading).toEqual(false)
+        expect(status).toEqual('addAccount')
       })
 
       it('Get tokens', async () => {
         useMyAccounts.hasAccounts = true
         mockUseLocalStorage = ['address', jest.fn()]
-        const { membership } = await renderUseOnBoarding()
+        const { isLoading, status } = await renderUseOnBoarding()
 
-        expect(membership.isLoading).toEqual(false)
-        expect(membership.status).toEqual('getFreeTokens')
+        expect(isLoading).toEqual(false)
+        expect(status).toEqual('getFreeTokens')
       })
 
       it('Create membership', async () => {
         useMyAccounts.hasAccounts = true
         mockUseLocalStorage = ['redeemed', jest.fn()]
-        const { membership } = await renderUseOnBoarding()
+        const { isLoading, status } = await renderUseOnBoarding()
 
-        expect(membership.isLoading).toEqual(false)
-        expect(membership.status).toEqual('createMembership')
+        expect(isLoading).toEqual(false)
+        expect(status).toEqual('createMembership')
       })
 
       it('Finished', async () => {
         useMyAccounts.hasAccounts = true
         useMyMemberships.hasMembers = true
         mockUseLocalStorage = ['redeemed', jest.fn()]
-        const { membership } = await renderUseOnBoarding()
+        const { isLoading, status } = await renderUseOnBoarding()
 
-        expect(membership.isLoading).toEqual(false)
-        expect(membership.status).toEqual('finished')
+        expect(isLoading).toEqual(false)
+        expect(status).toEqual('finished')
       })
     })
   })

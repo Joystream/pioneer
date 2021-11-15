@@ -23,10 +23,12 @@ import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipMod
 import { buyMembershipMachine } from '@/memberships/modals/BuyMembershipModal/machine'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
-export const OnBoardingModal = () => {
-  const {
-    membership: { isLoading, status, setFreeTokens, toggleModal },
-  } = useOnBoarding()
+interface Props {
+  toggleModal: () => void
+}
+
+export const OnBoardingModal = ({ toggleModal }: Props) => {
+  const { isLoading, status, setFreeTokens } = useOnBoarding()
   const { api, connectionState } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(buyMembershipMachine)
