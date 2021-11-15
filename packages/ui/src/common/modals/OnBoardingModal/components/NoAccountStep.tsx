@@ -33,8 +33,10 @@ const AccountImage = styled.img`
 
 const Wrapper = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
   > *:nth-child(1) {
@@ -50,6 +52,6 @@ const Wrapper = styled.div`
   > *:nth-child(4) {
     width: 90%;
     height: 100px;
-    margin: 20px 0;
+    margin-top: 20px;
   }
 `

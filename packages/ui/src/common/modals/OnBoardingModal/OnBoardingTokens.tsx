@@ -35,9 +35,12 @@ const ReCAPTCHA = styled.img`
 
 const Wrapper = styled.div`
   display: flex;
+  width: 100%;
+
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  margin: 80px 0 150px 0;
+  justify-content: center;
 
   > *:nth-child(2) {
     margin: 8px 0 64px 0;

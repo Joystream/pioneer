@@ -34,17 +34,18 @@ export const OnBoardingPlugin = () => {
 }
 
 const Wrapper = styled.div`
-  width: 75%;
+  width: 100%;
   height: 100%;
-  margin: 30px auto 100px auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   text-align: center;
 
   > *:first-child {
     color: ${Colors.Black[500]};
-    margin-bottom: 50px;
+    margin: 30px 0 50px 0;
+    width: 70%;
   }
 
   > *:nth-child(2) {

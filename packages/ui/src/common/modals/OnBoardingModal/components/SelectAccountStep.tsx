@@ -63,7 +63,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
 }
 const StyledList = styled(List)`
   width: 90%;
-  margin: 20px auto 80px auto;
+  margin: 20px auto 0 auto;
 `
 
 const IconsWrapper = styled.div`
@@ -77,7 +77,7 @@ const IconsWrapper = styled.div`
 `
 const ContentWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
   margin-top: 66px;
 `

@@ -86,7 +86,7 @@ export const OnBoardingModal = () => {
   }
 
   return (
-    <StyledModal onClose={hideModal} modalSize="m">
+    <StyledModal onClose={hideModal} modalSize="m" modalHeight="m">
       <StepperWrapper>
         <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
         <StyledCloseButton onClick={hideModal} />
@@ -123,6 +123,7 @@ const StepperWrapper = styled.div`
 `
 
 const StyledModal = styled(ScrolledModal)`
+  height: 100%;
   > *:last-child {
     background-color: ${Colors.Black[100]};
   }

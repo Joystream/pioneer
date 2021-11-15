@@ -29,6 +29,7 @@ const Dash = styled.div`
   width: 40px;
   background-color: ${Colors.Black[200]};
   margin-top: 12px;
+  flex: 1;
 `
 
 const StepCircle = styled.div`
@@ -49,7 +50,7 @@ const Step = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-
+  flex: 2;
   > *:last-child {
     margin-top: 8px;
     color: ${Colors.Black[400]};
@@ -62,8 +63,4 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-
-  > * {
-    flex: 1;
-  }
 `
