@@ -1,6 +1,6 @@
 {
   "ts-node": {
-    "files": true
+    "files": false
   },
   "compilerOptions": {
     "target": "es2020",
@@ -9,8 +9,10 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "jsx": "react",
     "lib": ["DOM", "ES2020"],
+    "types": ["jest"],
     "paths": {
       "@/*": ["src/*"],
       "@polkadot/api/augment": ["../types/augment/augment-api.ts"],

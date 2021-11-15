@@ -33,6 +33,9 @@ const useMyMemberships: MyMemberships = {
   setActive: (member) => (useMyMemberships.active = member),
   isLoading: false,
   hasMembers: false,
+  helpers: {
+    getMemberIdByBoundAccountAddress: () => undefined,
+  },
 }
 
 interface Props {

@@ -44,7 +44,12 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
         <PageTitle>{title}</PageTitle>
         <ButtonsGroup>
           {buttons}
-          <HintButton isActive={isHintVisible} onClick={toggleHint} />
+          <HintButton
+            isActive={isHintVisible}
+            onClick={toggleHint}
+            tooltip={showCloseTooltip ? 'Click here to see video again' : undefined}
+            onTooltipClose={() => toggleCloseTooltip()}
+          />
         </ButtonsGroup>
       </PageHeaderRow>
       {tabs}

@@ -12,11 +12,11 @@ const max = (max: BN, { amount }: BalanceLock) => {
 export const toBalances = (balances: DeriveBalancesAll): Balances => {
   const { lockedBalance, availableBalance, lockedBreakdown, freeBalance, reservedBalance } = balances
 
-  const locks = lockedBreakdown.map((lock) => {
+  const locks: BalanceLock[] = lockedBreakdown.map((lock) => {
     const lockType = lockLookup(lock.id)
 
     return {
-      amount: lock.amount,
+      amount: lock.amount.toBn(),
       type: lockType,
     }
   })

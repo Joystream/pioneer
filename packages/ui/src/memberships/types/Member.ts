@@ -14,6 +14,7 @@ export interface Member {
   handle: string
   rootAccount: Address
   controllerAccount: Address
+  boundAccounts: Address[]
   name?: string
   avatar?: string
   inviteCount: number

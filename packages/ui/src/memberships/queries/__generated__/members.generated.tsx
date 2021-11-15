@@ -8,6 +8,7 @@ export type MemberFieldsFragment = {
   id: string
   rootAccount: string
   controllerAccount: string
+  boundAccounts: Array<string>
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
@@ -28,6 +29,7 @@ export type MemberWithDetailsFieldsFragment = {
   id: string
   rootAccount: string
   controllerAccount: string
+  boundAccounts: Array<string>
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
@@ -54,6 +56,7 @@ export type MemberWithDetailsFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -92,6 +95,7 @@ export type GetMembersQuery = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -129,6 +133,7 @@ export type GetMemberQuery = {
         id: string
         rootAccount: string
         controllerAccount: string
+        boundAccounts: Array<string>
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
@@ -155,6 +160,7 @@ export type GetMemberQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -198,6 +204,7 @@ export type SearchMembersQuery = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -235,6 +242,7 @@ export const MemberFieldsFragmentDoc = gql`
     id
     rootAccount
     controllerAccount
+    boundAccounts
     handle
     metadata {
       name
