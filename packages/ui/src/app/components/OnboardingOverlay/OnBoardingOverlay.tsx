@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
 import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIcon'
+import { OnBoardingButton } from '@/common/components/OnBoardingButton'
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
@@ -15,21 +15,21 @@ import { Colors } from '@/common/constants'
 import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
 import { useToggle } from '@/common/hooks/useToggle'
 
-const steps: StepperStep[] = [
+export const onBoardingSteps: StepperStep[] = [
   {
     title: 'Add Polkadot plugin',
     type: 'next',
     id: 'installPlugin',
   },
   {
-    title: 'Create or select a Polkadot account',
+    title: 'Connect a Polkadot account',
     type: 'next',
     id: 'addAccount',
   },
   {
     title: 'Get FREE tokens',
     type: 'next',
-    id: '',
+    id: 'getFreeTokens',
   },
   {
     title: 'Create membership',
@@ -54,7 +54,7 @@ const innerStaticStepperSteps = [
   },
 ]
 
-const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
+export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
   const activeIndex = steps.findIndex((step) => step?.id === status)
   if (activeIndex === -1) return steps.map((step) => ({ ...step, type: 'next' }))
 
@@ -77,7 +77,7 @@ export const OnBoardingOverlay = () => {
     return null
   }
 
-  const onBoardingSteps = asOnBoardingSteps(steps, status)
+  const steps = asOnBoardingSteps(onBoardingSteps, status)
 
   return (
     <MainWrapper>
@@ -87,10 +87,10 @@ export const OnBoardingOverlay = () => {
           <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
         </TextContainer>
         <StepperContainer>
-          <HorizontalStepper steps={onBoardingSteps} />
+          <HorizontalStepper steps={steps} />
         </StepperContainer>
         <ButtonContainer>
-          <ButtonPrimary size="large">Join now</ButtonPrimary>
+          <OnBoardingButton>Join now</OnBoardingButton>
         </ButtonContainer>
       </Wrapper>
       <StyledDropDown isDropped={isOpen}>
@@ -102,7 +102,7 @@ export const OnBoardingOverlay = () => {
             <VerticalStaticStepper steps={innerStaticStepperSteps} />
           </DrawerContainer>
           <div />
-          <ButtonPrimary size="large">Continue</ButtonPrimary>
+          <OnBoardingButton>Continue</OnBoardingButton>
         </DropdownContent>
       </StyledDropDown>
     </MainWrapper>
@@ -116,7 +116,7 @@ const MainWrapper = styled.div`
 const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.Black[700]};
   position: absolute;
-  z-index: 100000;
+  z-index: 84;
 `
 
 const DropdownContent = styled.div`

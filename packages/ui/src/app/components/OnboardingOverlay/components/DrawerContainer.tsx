@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextGiant } from '@/common/components/typography'
+import { TextExtraHuge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 export interface Props {
@@ -12,7 +12,7 @@ export interface Props {
 
 export const DrawerContainer = ({ title, children, className }: Props) => (
   <Wrapper className={className}>
-    <TextGiant bold>{title}</TextGiant>
+    <TextExtraHuge bold>{title}</TextExtraHuge>
     {children}
   </Wrapper>
 )
