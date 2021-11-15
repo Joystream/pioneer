@@ -1,355 +1,307 @@
 [
   {
     "electionRoundId": "0",
-    "stake": 4000,
+    "stake": 3000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "44",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "0",
-    "stake": 4000,
+    "stake": 6000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "25",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": "12",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "0",
-    "stake": 7000,
+    "stake": 8000,
     "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "30",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "0",
     "stake": 9000,
     "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "47",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "12",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "47",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "47",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 3000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "0",
     "stake": 7000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "38",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 6000,
     "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "13",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 9000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "9",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "0",
+    "stake": 4000,
+    "stakeLocked": true,
     "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "44",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "0",
     "stake": 4000,
     "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "castBy": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 4000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "0",
     "stake": 1000,
     "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "16",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 3000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "3",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 3000,
-    "stakeLocked": true,
     "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "electionRoundId": "0",
+    "electionRoundId": "1",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 2000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "22",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
     "stake": 10000,
-    "stakeLocked": false,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "44",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 2000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 6000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "3",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "0",
-    "stake": 8000,
-    "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "18",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "35",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 1000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "37",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": "7",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "1",
     "stake": 3000,
-    "stakeLocked": false,
+    "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 6000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "37",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "1",
     "stake": 7000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": "22",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "1",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "37",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 2000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 4000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "4",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "1",
-    "stake": 8000,
-    "stakeLocked": false,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 3000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 2000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "25",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 2000,
-    "stakeLocked": false,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
     "stake": 9000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "electionRoundId": "2",
+    "electionRoundId": "1",
+    "stake": 7000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "22",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
     "stake": 5000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "17",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "electionRoundId": "2",
+    "electionRoundId": "1",
+    "stake": 5000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "9",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
     "stake": 9000,
-    "stakeLocked": false,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 4000,
     "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "17",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "23",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 1000,
-    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "21",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "electionRoundId": "2",
-    "stake": 3000,
-    "stakeLocked": false,
+    "electionRoundId": "1",
+    "stake": 5000,
+    "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "17",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": "21",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "electionRoundId": "2",
-    "stake": 7000,
-    "stakeLocked": false,
+    "electionRoundId": "1",
+    "stake": 10000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "7",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "43",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 1000,
+    "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "39",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "voteForId": "7",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "1",
+    "stake": 2000,
+    "stakeLocked": false,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": "47",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "2",
     "stake": 7000,
-    "stakeLocked": false,
+    "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "23",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": "43",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "2",
@@ -357,231 +309,303 @@
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 3000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "43",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "28",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 8000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "28",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 10000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 7000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "19",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "2",
     "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "28",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "43",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 3000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "43",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 9000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 5000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "2",
+    "stake": 5000,
+    "stakeLocked": false,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 7000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "14",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "31",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 4000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "14",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 2000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "31",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 5000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "31",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 5000,
+    "stakeLocked": false,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "34",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 6000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "22",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 1000,
+    "stakeLocked": true,
+    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "voteForId": "14",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 7000,
+    "stakeLocked": true,
+    "castBy": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "voteForId": "36",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "3",
+    "stake": 1000,
+    "stakeLocked": false,
+    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "voteForId": "22",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 4000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "45",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "electionRoundId": "2",
-    "stake": 2000,
-    "stakeLocked": false,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": "10",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "2",
-    "stake": 4000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 4000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "24",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 8000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 9000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "31",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 2000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 3000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "43",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "2",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
+    "electionRoundId": "4",
     "stake": 6000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 5000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 4000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "3",
-    "stake": 2000,
-    "stakeLocked": false,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 2000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "voteForId": "46",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "4",
-    "stake": 8000,
+    "stake": 2000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "24",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "4",
     "stake": 10000,
     "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "4",
     "stake": 6000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "24",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "47",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 2000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 3000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 9000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
-  },
-  {
-    "electionRoundId": "4",
-    "stake": 5000,
-    "stakeLocked": true,
-    "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "0",
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "4",
@@ -589,14 +613,118 @@
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
-    "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
     "electionRoundId": "4",
-    "stake": 2000,
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 9000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "24",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 10000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 1000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "46",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "24",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "46",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 3000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "29",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 5000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "35",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 8000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": "35",
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 7000,
+    "stakeLocked": true,
+    "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 6000,
     "stakeLocked": true,
     "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "voteForId": "43",
+    "voteForId": null,
+    "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "electionRoundId": "4",
+    "stake": 3000,
+    "stakeLocked": true,
+    "castBy": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "voteForId": null,
     "commitment": "0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806"
   }
 ]
