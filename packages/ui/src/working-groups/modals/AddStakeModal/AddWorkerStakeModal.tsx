@@ -1,34 +1,45 @@
+import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { useApi } from '@/common/hooks/useApi'
 import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
+import { AddWorkerStakeSignModal } from '@/working-groups/modals/AddStakeModal/AddWorkerStakeSignModal'
+import { addStakeMachine } from '@/working-groups/modals/AddStakeModal/machine'
+import { SuccessModal } from '@/working-groups/modals/AddStakeModal/SuccessModal'
 import { AddWorkerStakeModalCall } from '@/working-groups/modals/AddStakeModal/types'
-import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
+
+export interface IncreaseStakeFormFields {
+  amount?: string
+}
 
 const StakeFormSchema = Yup.object().shape({
   amount: Yup.number().required(),
 })
 
 export const AddWorkerStakeModal = () => {
-  // todo: add mahcine to handle sign/pending/success/error on transaction
+  const { api } = useApi()
   const { hideModal, modalData } = useModal<AddWorkerStakeModalCall>()
-  const minStake = modalData.worker?.minStake - modalData?.worker.stake
-  const [amount, setAmount] = useNumberInput(0, minStake)
+  const [state, send] = useMachine(addStakeMachine)
+  const { minStake, stake, group, runtimeId } = modalData.worker
+  const minAddStake = minStake - stake
+  const [amount, setAmount] = useNumberInput(0, minAddStake)
 
   const schema = useMemo(() => {
-    StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.min(minStake, 'You need at least ${min} stake')
+    StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.min(minAddStake, 'You need at least ${min} stake')
     return StakeFormSchema
-  }, [minStake.toString()])
+  }, [minAddStake.toString()])
 
-  const { changeField, validation, fields } = useForm<StakeStepFormFields>({ amount: undefined }, schema)
+  const { changeField, validation, fields } = useForm<IncreaseStakeFormFields>({ amount: undefined }, schema)
   const { isValid, errors } = validation
 
   useEffect(() => {
@@ -36,7 +47,32 @@ export const AddWorkerStakeModal = () => {
   }, [amount])
 
   const onSubmit = () => {
-    console.log(fields, ' fields')
+    send({ type: 'DONE', form: fields })
+  }
+
+  if (state.matches('transaction')) {
+    const transaction = api?.tx[group.id].increaseStake(runtimeId, new BN(state.context.form.amount || 0))
+    return (
+      <AddWorkerStakeSignModal
+        onClose={hideModal}
+        service={state.children.transaction}
+        amount={new BN(state.context.form.amount || 0)}
+        transaction={transaction}
+        worker={modalData.worker}
+      />
+    )
+  }
+
+  if (state.matches('success')) {
+    return <SuccessModal onClose={hideModal} amount={state.context.form.amount || '0'} />
+  }
+
+  if (state.matches('error')) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was an problem with increasing the stake
+      </FailureModal>
+    )
   }
 
   return (
