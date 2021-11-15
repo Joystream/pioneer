@@ -58,6 +58,8 @@ export const VoteForProposalModal = () => {
         setStatus={(status: VoteStatus) => send('SET_VOTE_STATUS', { status })}
         setRationale={(rationale: string) => send('SET_RATIONALE', { rationale })}
         onNext={() => send('PASS')}
+        rationale={proposal.rationale}
+        recipient={proposal.proposer.rootAccount}
       />
     )
   }
