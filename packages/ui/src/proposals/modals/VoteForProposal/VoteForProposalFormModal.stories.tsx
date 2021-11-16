@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import {useProposal} from '@/proposals/hooks/useProposal';
+import { useProposal } from '@/proposals/hooks/useProposal'
 
 import { VoteForProposalModalForm } from './VoteForProposalModalForm'
 
@@ -23,9 +23,8 @@ interface Props {
   showModal: () => void
 }
 
-const ConnectedVoteForProposalModalForm = ({id}: {id: string }) => {
-  const { proposal, isLoading } = useProposal(id)
-  console.log({ proposal, isLoading })
+const ConnectedVoteForProposalModalForm = ({ id }: { id: string }) => {
+  const { proposal } = useProposal(id)
   return (
     <VoteForProposalModalForm
       onNext={() => true}

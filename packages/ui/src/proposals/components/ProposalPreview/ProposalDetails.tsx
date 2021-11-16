@@ -26,7 +26,6 @@ interface Props {
 
 export const ProposalDetailsComponent = ({ details }: Props) => {
   const Content = details.type && proposalDetails[details.type]
-  console.log({ details });
   if (Content) {
     return <Content details={details} />
   }

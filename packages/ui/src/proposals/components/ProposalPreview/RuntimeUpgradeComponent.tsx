@@ -5,13 +5,12 @@ import { Statistics } from '@/common/components/statistics'
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
 import { TextInlineBig } from '@/common/components/typography'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
-
-import { RuntimeUpgrade } from '../../types/ProposalDetails'
+import { RuntimeUpgradeDetails } from '@/proposals/types'
 
 import { ProposalPropertiesContent } from './ProposalDetails'
 
 interface RuntimeUpgradeProps {
-  details: RuntimeUpgrade
+  details: RuntimeUpgradeDetails
 }
 
 export const RuntimeUpgradeComponent: ProposalPropertiesContent<'runtimeUpgrade'> = ({

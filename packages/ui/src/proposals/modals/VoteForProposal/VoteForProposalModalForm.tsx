@@ -19,10 +19,10 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
-import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview'
+import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview/ProposalPreview'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
-import {ProposalWithDetails} from '@/proposals/types'
+import { ProposalWithDetails } from '@/proposals/types'
 
 interface FormFields {
   voteStatus?: VoteStatus
