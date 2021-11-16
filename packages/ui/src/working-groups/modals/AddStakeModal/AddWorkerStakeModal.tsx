@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -30,14 +31,21 @@ export const AddWorkerStakeModal = () => {
   const { api } = useApi()
   const { hideModal, modalData } = useModal<AddWorkerStakeModalCall>()
   const [state, send] = useMachine(addStakeMachine)
-  const { minStake, stake, group, runtimeId } = modalData.worker
+  const { minStake, stake, group, runtimeId, roleAccount } = modalData.worker
   const minAddStake = minStake - stake
   const [amount, setAmount] = useNumberInput(0, minAddStake)
+  const balance = useBalance(roleAccount)
 
   const schema = useMemo(() => {
     StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.min(minAddStake, 'You need at least ${min} stake')
+    if (balance?.transferable) {
+      StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.max(
+        balance?.transferable.toNumber(),
+        'Given amount exceed your transferable balance of ${max} JOY'
+      )
+    }
     return StakeFormSchema
-  }, [minAddStake.toString()])
+  }, [minAddStake.toString(), balance?.transferable.toString()])
 
   const { changeField, validation, fields } = useForm<IncreaseStakeFormFields>({ amount: undefined }, schema)
   const { isValid, errors } = validation
@@ -59,6 +67,7 @@ export const AddWorkerStakeModal = () => {
         amount={new BN(state.context.form.amount || 0)}
         transaction={transaction}
         worker={modalData.worker}
+        workerBalance={balance?.transferable}
       />
     )
   }

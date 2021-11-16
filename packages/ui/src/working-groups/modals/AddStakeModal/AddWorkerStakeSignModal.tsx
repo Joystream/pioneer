@@ -4,7 +4,6 @@ import BN from 'bn.js'
 import React from 'react'
 import { ActorRef } from 'xstate'
 
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
@@ -19,18 +18,18 @@ interface Props {
   amount: BN
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   worker: WorkerWithDetails
+  workerBalance?: BN
 }
 
-export const AddWorkerStakeSignModal = ({ onClose, service, amount, transaction, worker }: Props) => {
+export const AddWorkerStakeSignModal = ({ onClose, service, amount, transaction, worker, workerBalance }: Props) => {
   const { roleAccount, id } = worker
   const { paymentInfo: { partialFee } = {}, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: roleAccount,
     service,
   })
-  const balance = useBalance(roleAccount)
 
-  const signDisabled = !isReady || (partialFee && !balance?.transferable.gte(partialFee))
+  const signDisabled = !isReady || (partialFee && !workerBalance?.gte(partialFee.iadd(amount)))
 
   return (
     <TransactionModal onClose={onClose} service={service}>
