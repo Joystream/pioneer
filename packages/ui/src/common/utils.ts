@@ -54,10 +54,8 @@ export const equals = <T extends any>(
 
 export const merge = <A extends Obj, B extends Obj = Partial<A>>(a: A, b: B): A & B => ({ ...a, ...b })
 
-export const propsEquals =
-  <T extends Obj>(...keys: (keyof T)[]) =>
-  (a: T, b: T) =>
-    keys.every((key) => a[key] === b[key])
+export const propsEquals = <T extends Obj>(...keys: (keyof T)[]) => (a: T, b: T) =>
+  keys.every((key) => a[key] === b[key])
 
 // Lists:
 
@@ -66,6 +64,13 @@ export const intersperse = <T extends any, S extends any>(
   toSeparator: (index: number, list: T[]) => S
 ): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item, index) => [toSeparator(index, list), item])]
+
+export const partition = <T extends any>(list: T[], predicate: (x: T) => boolean): [T[], T[]] =>
+  list.reduce(
+    ([pass, fail]: [T[], T[]], item): [T[], T[]] =>
+      predicate(item) ? [[...pass, item], fail] : [pass, [...fail, item]],
+    [[], []]
+  )
 
 export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
   Array.from({ length: times }, (_, i) => getItem(i))

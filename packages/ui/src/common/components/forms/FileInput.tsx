@@ -12,6 +12,7 @@ import { BasicLinkButtonPrimaryStyles } from '@/common/components/buttons/LinkBu
 import { FileIcon } from '@/common/components/icons'
 import { TextInlineSmall } from '@/common/components/typography'
 import { Colors, Fonts } from '@/common/constants'
+import { partition } from '@/common/utils'
 
 export interface FileInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
   title?: string
@@ -20,7 +21,8 @@ export interface FileInputProps extends Omit<InputHTMLAttributes<HTMLInputElemen
 
 export const FileInput = ({ title = 'Drag and drop files here', onChange, ...inputProps }: FileInputProps) => {
   const [files, addFiles] = useReducer(
-    (files: File[], newFiles: File[]): File[] => (inputProps.multiple ? [...files, ...(newFiles ?? [])] : newFiles),
+    (files: File[], newFiles: File[]): File[] =>
+      inputProps.multiple ? [...files, ...(newFiles ?? [])] : [newFiles[0]],
     []
   )
   useEffect(() => onChange(files), [files])
@@ -36,11 +38,23 @@ export const FileInput = ({ title = 'Drag and drop files here', onChange, ...inp
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
-      const newFiles = Array.from(event.dataTransfer.items)
-        .slice(0, inputProps.multiple ? undefined : 1)
-        .flatMap((dropped) => (dropped?.kind === 'file' && dropped.getAsFile()) || [])
+      const newFiles = Array.from(event.dataTransfer.items).flatMap(
+        (dropped) => (dropped?.kind === 'file' && dropped.getAsFile()) || []
+      )
+      if (!newFiles.length) return
 
-      if (newFiles.length) addFiles(newFiles)
+      const accept = inputProps.accept?.split(',').filter((type) => type)
+      if (!accept?.length) return addFiles(newFiles)
+
+      const [acceptExtensions, acceptMimeTypes] = partition(accept, (type) => type.startsWith('.'))
+      const validFiles = newFiles.filter(({ type, name }) => {
+        if (acceptMimeTypes.includes(type)) return true
+        else {
+          const fileExtension = name.replace(/[^.]/, '').toLowerCase()
+          return fileExtension.length && acceptExtensions.some((extension) => fileExtension.endsWith(extension))
+        }
+      })
+      if (validFiles?.length) return addFiles(validFiles)
     },
     [files, inputProps.multiple]
   )

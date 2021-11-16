@@ -15,6 +15,7 @@ const Template: Story<FileInputProps> = (args) => <FileInput {...args} />
 
 export const Defaults = Template.bind({})
 Defaults.args = {
-  title: 'You can drag and drop files here !',
+  title: 'You can drag and drop json files here !',
+  accept: 'application/json',
   multiple: false,
 }
