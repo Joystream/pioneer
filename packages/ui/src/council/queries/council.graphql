@@ -177,6 +177,15 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
   }
+  fundingRequestsApproved: proposalExecutedEvents(
+    where: {
+      inBlock_gt: $fromBlock
+      inBlock_lt: $toBlock
+      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+    }
+  ) {
+    ...FundingRequestApproved
+  }
 }
 
 query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {

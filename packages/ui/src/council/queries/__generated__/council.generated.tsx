@@ -485,6 +485,47 @@ export type GetPastCouncilQuery = {
     amount: any
     type?: Types.EventTypeOptions | null | undefined
   }>
+  fundingRequestsApproved: Array<{
+    __typename: 'ProposalExecutedEvent'
+    proposal: {
+      __typename: 'Proposal'
+      details:
+        | { __typename: 'AmendConstitutionProposalDetails' }
+        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'CreateBlogPostProposalDetails' }
+        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+        | { __typename: 'EditBlogPostProposalDetails' }
+        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+        | {
+            __typename: 'FundingRequestProposalDetails'
+            destinationsList?:
+              | {
+                  __typename: 'FundingRequestDestinationsList'
+                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+                }
+              | null
+              | undefined
+          }
+        | { __typename: 'LockBlogPostProposalDetails' }
+        | { __typename: 'RuntimeUpgradeProposalDetails' }
+        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+        | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+        | { __typename: 'SetInitialInvitationCountProposalDetails' }
+        | { __typename: 'SetMaxValidatorCountProposalDetails' }
+        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+        | { __typename: 'SetMembershipPriceProposalDetails' }
+        | { __typename: 'SetReferralCutProposalDetails' }
+        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+        | { __typename: 'SignalProposalDetails' }
+        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UnlockBlogPostProposalDetails' }
+        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+        | { __typename: 'VetoProposalDetails' }
+    }
+  }>
 }
 
 export type GetPastCouncilMembersQueryVariables = Types.Exact<{
@@ -1368,9 +1409,19 @@ export const GetPastCouncilDocument = gql`
     budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...CouncilSpendingEventFields
     }
+    fundingRequestsApproved: proposalExecutedEvents(
+      where: {
+        inBlock_gt: $fromBlock
+        inBlock_lt: $toBlock
+        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      }
+    ) {
+      ...FundingRequestApproved
+    }
   }
   ${PastCouncilDetailedFieldsFragmentDoc}
   ${CouncilSpendingEventFieldsFragmentDoc}
+  ${FundingRequestApprovedFragmentDoc}
 `
 
 /**

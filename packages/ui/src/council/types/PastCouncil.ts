@@ -5,7 +5,7 @@ import {
   CouncilSpendingEventFieldsFragment,
   FundingRequestApprovedFragment,
   PastCouncilDetailedFieldsFragment,
-  PastCouncilFieldsFragment,
+  PastCouncilFieldsFragment
 } from '@/council/queries'
 import { asProposalDetails, DetailsFragment, FundingRequestDetails } from '@/proposals/types'
 
@@ -23,7 +23,7 @@ export interface PastCouncilWithDetails extends PastCouncil {
 
 export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil => ({
   id: fields.id,
-  endedAtBlock: fields.endedAtBlock as number,
+  endedAtBlock: fields.endedAtBlock as number
 })
 
 export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment[]) =>
@@ -40,13 +40,14 @@ export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragm
 
 export const asPastCouncilWithDetails = (
   councilFields: PastCouncilDetailedFieldsFragment,
-  spendingEvents: CouncilSpendingEventFieldsFragment[]
+  spendingEvents: CouncilSpendingEventFieldsFragment[],
+  fundingRequestsApproved: FundingRequestApprovedFragment[]
 ): PastCouncilWithDetails => {
   return {
     ...asPastCouncil(councilFields),
     totalSpent: getTotalSpent(spendingEvents),
     totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
     totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
-    totalSpentOnProposals: BN_ZERO,
+    totalSpentOnProposals: getSpentOnProposals(fundingRequestsApproved)
   }
 }
