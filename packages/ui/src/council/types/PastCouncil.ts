@@ -3,9 +3,11 @@ import BN from 'bn.js'
 
 import {
   CouncilSpendingEventFieldsFragment,
+  FundingRequestApprovedFragment,
   PastCouncilDetailedFieldsFragment,
   PastCouncilFieldsFragment,
 } from '@/council/queries'
+import { asProposalDetails, DetailsFragment, FundingRequestDetails } from '@/proposals/types'
 
 export interface PastCouncil {
   id: string
@@ -26,6 +28,15 @@ export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil =>
 
 export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment[]) =>
   spendingEvents.reduce((a, b) => a.addn(b.amount), BN_ZERO)
+
+export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragment[]) => {
+  return fundingRequests.reduce((sum, fundingRequest) => {
+    const details = asProposalDetails(fundingRequest.proposal.details as DetailsFragment) as FundingRequestDetails
+    const amount = details.destinations?.reduce((a, b) => a.addn(b.amount), BN_ZERO) || BN_ZERO
+
+    return sum.add(amount)
+  }, BN_ZERO)
+}
 
 export const asPastCouncilWithDetails = (
   councilFields: PastCouncilDetailedFieldsFragment,
