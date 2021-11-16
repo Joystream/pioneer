@@ -19,7 +19,7 @@ import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 
-export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
+export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
   const rewardPeriod = useRewardPeriod(opening.groupId)
 
@@ -40,11 +40,19 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TwoColumnsStatistic>
+              {past && (
+                <StatiscticContentColumn>
+                  <TextBig value bold>
+                    {opening.hiring.current}
+                  </TextBig>
+                  <Subscription>Hired</Subscription>
+                </StatiscticContentColumn>
+              )}
               <StatiscticContentColumn>
                 <TextBig value bold>
-                  {opening.hiring.total}
+                  {opening.hiring.limit}
                 </TextBig>
-                <Subscription>Target no of Hires</Subscription>
+                <Subscription>Target no. of Hires</Subscription>
               </StatiscticContentColumn>
             </TwoColumnsStatistic>
           </StatsBlock>

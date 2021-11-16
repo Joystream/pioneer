@@ -44,13 +44,20 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
           <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextBig bold>{opening.applicants}</TextBig>
+          <TextBig>{opening.applicants}</TextBig>
           <Subscription>Applications</Subscription>
         </OpenItemSummaryColumn>
-        <OpenItemSummaryColumn>
-          <Fraction numerator={opening.hiring.current} denominator={opening.hiring.total} sameSize />
-          <Subscription>Hiring</Subscription>
-        </OpenItemSummaryColumn>
+        {past ? (
+          <OpenItemSummaryColumn>
+            <Fraction numerator={opening.hiring.current} denominator={opening.hiring.limit} />
+            <Subscription>Hired</Subscription>
+          </OpenItemSummaryColumn>
+        ) : (
+          <OpenItemSummaryColumn>
+            <TextBig bold>{opening.hiring.limit}</TextBig>
+            <Subscription>Hiring</Subscription>
+          </OpenItemSummaryColumn>
+        )}
       </ToggleableItemSummary>
     </ToggleableItemWrap>
   )

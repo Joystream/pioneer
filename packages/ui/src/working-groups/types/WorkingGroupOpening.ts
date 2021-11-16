@@ -50,7 +50,7 @@ export interface WorkingGroupOpening extends BaseOpening {
   applicants: number
   hiring: {
     current: number
-    total: number
+    limit: number
   }
   unstakingPeriod: number
 }
@@ -112,7 +112,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     applicants: fields.applications?.length || 0,
     hiring: {
       current: fields.openingfilledeventopening?.reduce((total, event) => total + event.workersHired.length, 0) ?? 0,
-      total: fields.metadata?.hiringLimit ?? 0,
+      limit: fields.metadata?.hiringLimit ?? 0,
     },
     unstakingPeriod: fields.unstakingPeriod,
   }
