@@ -30,6 +30,9 @@ describe('useOnBoarding', () => {
     allAccounts: [],
   }
   const useMyMemberships: MyMemberships = {
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
     active: undefined,
     members: [],
     setActive: (member) => (useMyMemberships.active = member),
