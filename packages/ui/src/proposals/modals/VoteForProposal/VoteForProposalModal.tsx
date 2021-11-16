@@ -60,6 +60,7 @@ export const VoteForProposalModal = () => {
         onNext={() => send('PASS')}
         rationale={proposal.rationale}
         recipient={proposal.proposer.rootAccount}
+        proposalType={proposal.type}
       />
     )
   }

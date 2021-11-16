@@ -3,19 +3,21 @@ import styled from 'styled-components'
 
 import { TextInlineMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { camelCaseToText } from '@/common/helpers'
 import { shortenAddress } from '@/common/model/formatters'
 
 interface Props {
   proposalTitle: string
   rationale: string
   recipient: string
+  proposalType: string
 }
 
-export const ProposalPreview = ({ proposalTitle, rationale, recipient }: Props) => {
+export const ProposalPreview = ({ proposalTitle, rationale, recipient, proposalType }: Props) => {
   return (
     <>
       <h4>{proposalTitle}</h4>
-      <h5>Funding Request</h5>
+      <h5>{camelCaseToText(proposalType)}</h5>
       <ProposalDetailsTitle>Recipent of funds</ProposalDetailsTitle>
       <RecipientAccount>{shortenAddress(recipient)}</RecipientAccount>
       <ProposalDetailsTitle>Rationale</ProposalDetailsTitle>

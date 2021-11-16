@@ -35,6 +35,7 @@ interface Props {
   proposalTitle: string
   rationale: string
   recipient: string
+  proposalType: string
 }
 
 const FormSchema = Yup.object().shape({
@@ -49,6 +50,7 @@ export const VoteForProposalModalForm = ({
   proposalTitle,
   rationale,
   recipient,
+  proposalType,
 }: Props) => {
   const { hideModal } = useModal<VoteForProposalModalCall>()
   const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
@@ -65,7 +67,12 @@ export const VoteForProposalModalForm = ({
       <ModalHeader onClick={hideModal} title="Vote for proposal" />
       <VoteForProposalModalBody>
         <ProposalPreviewColumn>
-          <ProposalPreview proposalTitle={proposalTitle} rationale={rationale} recipient={recipient} />
+          <ProposalPreview
+            proposalTitle={proposalTitle}
+            rationale={rationale}
+            recipient={recipient}
+            proposalType={proposalType}
+          />
         </ProposalPreviewColumn>
         <ScrollableModalColumn>
           <RowGapBlock gap={24}>

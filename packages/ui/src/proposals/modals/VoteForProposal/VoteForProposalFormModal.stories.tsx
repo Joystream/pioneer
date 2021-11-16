@@ -35,6 +35,7 @@ const Template: Story<Props> = ({ id, hideModal, showModal }) => {
             proposalTitle={'Title'}
             rationale={'Rationale'}
             recipient={'Recipient'}
+            proposalType={'Funding Request'}
           />
         </ModalContext.Provider>
       </MockApolloProvider>
