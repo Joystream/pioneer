@@ -42,12 +42,6 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
             <TwoColumnsStatistic>
               <StatiscticContentColumn>
                 <TextBig value bold>
-                  {opening.applicants.total}
-                </TextBig>
-                <Subscription>Applicant limit</Subscription>
-              </StatiscticContentColumn>
-              <StatiscticContentColumn>
-                <TextBig value bold>
                   {opening.hiring.total}
                 </TextBig>
                 <Subscription>Target no of Hires</Subscription>

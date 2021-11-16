@@ -47,10 +47,7 @@ export interface WorkingGroupOpening extends BaseOpening {
   budget: number
   type: WorkingGroupOpeningType
   status: Status
-  applicants: {
-    current: number
-    total: number
-  }
+  applicants: number
   hiring: {
     current: number
     total: number
@@ -112,12 +109,9 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     type: fields.type as WorkingGroupOpeningType,
     status: fields.status.__typename,
     leadId: fields.group.leaderId,
-    applicants: {
-      current: 0,
-      total: fields.applications?.length || 0,
-    },
+    applicants: fields.applications?.length || 0,
     hiring: {
-      current: 0,
+      current: fields.openingfilledeventopening?.reduce((total, event) => total + event.workersHired.length, 0) ?? 0,
       total: fields.metadata?.hiringLimit ?? 0,
     },
     unstakingPeriod: fields.unstakingPeriod,

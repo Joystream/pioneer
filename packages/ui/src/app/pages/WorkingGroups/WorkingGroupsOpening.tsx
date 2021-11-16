@@ -18,6 +18,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import {
   DurationStatistics,
   FractionValue,
+  NumericValue,
   StatiscticContentColumn,
   StatisticHeader,
   Statistics,
@@ -182,7 +183,7 @@ const ApplicationStats = ({ applicants, hiring }: Pick<WorkingGroupOpeningType, 
     <TwoColumnsStatistic>
       <StatiscticContentColumn>
         <StatisticHeader title="Applicants" />
-        <FractionValue numerator={applicants.current} denominator={applicants.total} />
+        <NumericValue>{applicants}</NumericValue>
       </StatiscticContentColumn>
       <StatiscticContentColumn>
         <StatisticHeader title="Hiring" />
