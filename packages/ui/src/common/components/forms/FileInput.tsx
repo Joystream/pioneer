@@ -1,12 +1,6 @@
-import React, {
-  ChangeEventHandler,
-  DragEventHandler,
-  InputHTMLAttributes,
-  useCallback,
-  useEffect,
-  useReducer,
-} from 'react'
+import React, { ChangeEventHandler, DragEventHandler, InputHTMLAttributes, useCallback } from 'react'
 import styled from 'styled-components'
+import { ValidationError } from 'yup'
 
 import { BasicLinkButtonPrimaryStyles } from '@/common/components/buttons/LinkButtons'
 import { FileIcon } from '@/common/components/icons'
@@ -14,30 +8,32 @@ import { TextInlineSmall } from '@/common/components/typography'
 import { Colors, Fonts } from '@/common/constants'
 import { partition } from '@/common/utils'
 
-export interface FileInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
-  title?: string
-  onChange: (files: File[]) => void
+import { ControlProps, InputArea, InputComponent, InputContainer } from '.'
+
+export interface FileEntry {
+  file: File
+  errors?: ValidationError[]
 }
 
-export const FileInput = ({ title = 'Drag and drop files here', onChange, ...inputProps }: FileInputProps) => {
-  const [files, addFiles] = useReducer(
-    (files: File[], newFiles: File[]): File[] =>
-      inputProps.multiple ? [...files, ...(newFiles ?? [])] : [newFiles[0]],
-    []
-  )
-  useEffect(() => onChange(files), [files])
+type NativeFileInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'>
+export interface FileInputProps extends ControlProps<FileEntry[], File[]>, NativeFileInputProps {
+  title?: string
+}
 
+export const FileInput = ({ title = 'Drag and drop files here', value, onChange, ...inputProps }: FileInputProps) => {
   const onUpload: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
       event.preventDefault()
-      addFiles(Array.from(event.target.files ?? []))
+      onChange(Array.from(event.target.files ?? []))
     },
-    [files]
+    [onChange]
   )
 
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
+
+      const addFiles = (files: File[]) => onChange(files.slice(0, inputProps.multiple ? undefined : 1))
       const newFiles = Array.from(event.dataTransfer.items).flatMap(
         (dropped) => (dropped?.kind === 'file' && dropped.getAsFile()) || []
       )
@@ -56,7 +52,7 @@ export const FileInput = ({ title = 'Drag and drop files here', onChange, ...inp
       })
       if (validFiles?.length) return addFiles(validFiles)
     },
-    [files, inputProps.multiple]
+    [onChange, inputProps.accept, inputProps.multiple]
   )
 
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
@@ -78,10 +74,14 @@ export const FileInput = ({ title = 'Drag and drop files here', onChange, ...inp
         </p>
       </FileInputContainer>
 
-      {files?.map((file, index) => (
-        <FileEntry key={index}>
+      {value?.map(({ file, errors }, index) => (
+        <FilePreview
+          key={index}
+          validation={errors && (errors.length ? 'invalid' : 'valid')}
+          message={errors?.[0]?.message}
+        >
           <LighterText>{file.name}</LighterText>
-        </FileEntry>
+        </FilePreview>
       ))}
     </>
   )
@@ -110,14 +110,16 @@ const FileInputContainer = styled.div`
   }
 `
 
-const FileEntry = styled.div`
-  align-items: center;
-  background: ${Colors.Black[25]};
-  display: flex;
+const FilePreview = styled(InputComponent)`
   margin-top: 16px;
-  height: 56px;
 
-  &::before {
+  ${InputContainer} {
+    background: ${Colors.Black[25]};
+    border: none;
+    height: 56px;
+  }
+
+  ${InputArea}::before {
     background-color: ${Colors.Blue[200]};
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
