@@ -5,7 +5,7 @@ import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 import { asMember, Member } from '../../memberships/types'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
 
-type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
+export type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
 
 interface BaseProposalDetails {
