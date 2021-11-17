@@ -11,9 +11,8 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
-import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
-import { useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
@@ -24,12 +23,15 @@ import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipMod
 import { buyMembershipMachine } from '@/memberships/modals/BuyMembershipModal/machine'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
-export const OnBoardingModal = () => {
-  const { isLoading, status, setFreeTokens } = useOnBoardingStatus()
+interface Props {
+  toggleModal: () => void
+}
+
+export const OnBoardingModal = ({ toggleModal }: Props) => {
+  const { isLoading, status, setFreeTokens } = useOnBoarding()
   const { api, connectionState } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(buyMembershipMachine)
-  const { hideModal } = useModal()
 
   const step = useMemo(() => {
     switch (status) {
@@ -38,7 +40,7 @@ export const OnBoardingModal = () => {
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setFreeTokens} />
       case 'getFreeTokens':
-        return <OnBoardingTokens onRedemption={() => setFreeTokens('redeemed')} />
+        return <OnBoardingTokens onRedemption={() => setFreeTokens && setFreeTokens('redeemed')} />
       case 'createMembership':
         return (
           <OnBoardingMembership
@@ -62,7 +64,7 @@ export const OnBoardingModal = () => {
 
     return (
       <BuyMembershipSignModal
-        onClose={hideModal}
+        onClose={toggleModal}
         membershipPrice={membershipPrice}
         formData={form}
         transaction={transaction}
@@ -74,22 +76,22 @@ export const OnBoardingModal = () => {
 
   if (state.matches('success')) {
     const { form, memberId } = state.context
-    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
+    return <BuyMembershipSuccessModal onClose={toggleModal} member={form} memberId={memberId?.toString()} />
   }
 
   if (state.matches('error')) {
     return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+      <FailureModal onClose={toggleModal} events={state.context.transactionEvents}>
         There was a problem with creating a membership for {state.context.form.name}.
       </FailureModal>
     )
   }
 
   return (
-    <StyledModal onClose={hideModal} modalSize="m" modalHeight="m">
+    <StyledModal onClose={toggleModal} modalSize="m" modalHeight="m">
       <StepperWrapper>
         <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
-        <StyledCloseButton onClick={hideModal} />
+        <StyledCloseButton onClick={toggleModal} />
       </StepperWrapper>
       {step}
     </StyledModal>

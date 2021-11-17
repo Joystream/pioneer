@@ -6,7 +6,7 @@ import { NoAccountStep } from '@/common/modals/OnBoardingModal/components/NoAcco
 import { SelectAccountStep } from '@/common/modals/OnBoardingModal/components/SelectAccountStep'
 
 interface Props {
-  onAccountSelect: (address: string) => void
+  onAccountSelect?: (address: string) => void
 }
 
 export const OnBoardingAccount = ({ onAccountSelect }: Props) => {

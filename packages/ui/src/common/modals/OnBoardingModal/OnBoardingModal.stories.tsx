@@ -10,6 +10,7 @@ import { AddressToBalanceMap } from '@/accounts/types'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal/OnBoardingModal'
 import { ApiContext } from '@/common/providers/api/context'
+import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -111,9 +112,11 @@ const Template: Story<Props> = ({ extension = false, account = false, accountPic
           <AccountsContext.Provider value={state.useMyAccounts}>
             <MembershipContext.Provider value={state.useMyMemberships}>
               <BalancesContext.Provider value={useMyBalances}>
-                <TemplateBlock>
-                  <OnBoardingModal />
-                </TemplateBlock>
+                <OnBoardingProvider>
+                  <TemplateBlock>
+                    <OnBoardingModal toggleModal={() => undefined} />
+                  </TemplateBlock>
+                </OnBoardingProvider>
               </BalancesContext.Provider>
             </MembershipContext.Provider>
           </AccountsContext.Provider>

@@ -3,23 +3,23 @@ import React from 'react'
 
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { Colors } from '@/common/constants'
-import { UseOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
-const mockOnBoardingStatus: UseOnBoardingStatus = {
+const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
   setFreeTokens: jest.fn(),
 }
 
-jest.mock('@/common/hooks/useOnBoardingStatus', () => ({
-  useOnBoardingStatus: () => mockOnBoardingStatus,
+jest.mock('@/common/hooks/useOnBoarding', () => ({
+  useOnBoarding: () => mockOnBoarding,
 }))
 
 describe('OnBoardingOverlay', () => {
   afterEach(cleanup)
 
   it('Loading', () => {
-    mockOnBoardingStatus.isLoading = true
+    mockOnBoarding.isLoading = true
 
     const { queryByText } = renderComponent()
 
@@ -28,7 +28,7 @@ describe('OnBoardingOverlay', () => {
 
   describe('Loaded', () => {
     beforeAll(() => {
-      mockOnBoardingStatus.isLoading = false
+      mockOnBoarding.isLoading = false
     })
 
     it('Expands', () => {
@@ -48,7 +48,7 @@ describe('OnBoardingOverlay', () => {
     })
 
     it('Add account', () => {
-      mockOnBoardingStatus.status = 'addAccount'
+      mockOnBoarding.status = 'addAccount'
       const { getByText } = renderComponent()
 
       const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
@@ -59,7 +59,7 @@ describe('OnBoardingOverlay', () => {
     })
 
     it('Get FREE Tokens', () => {
-      mockOnBoardingStatus.status = 'getFreeTokens'
+      mockOnBoarding.status = 'getFreeTokens'
       const { getByText } = renderComponent()
 
       const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
@@ -70,7 +70,7 @@ describe('OnBoardingOverlay', () => {
     })
 
     it('Create membership', () => {
-      mockOnBoardingStatus.status = 'createMembership'
+      mockOnBoarding.status = 'createMembership'
       const { getByText } = renderComponent()
 
       const tokensCircle = getStepCircle('Get FREE tokens', getByText)
@@ -81,7 +81,7 @@ describe('OnBoardingOverlay', () => {
     })
 
     it('Finished', () => {
-      mockOnBoardingStatus.status = 'finished'
+      mockOnBoarding.status = 'finished'
       const { queryByText } = renderComponent()
 
       expect(queryByText('Join now')).toBeNull()
@@ -90,5 +90,5 @@ describe('OnBoardingOverlay', () => {
 
   const getStepCircle = (text: string, getByText: any) => getByText(text)?.parentElement?.previousElementSibling
 
-  const renderComponent = () => render(<OnBoardingOverlay />)
+  const renderComponent = () => render(<OnBoardingOverlay toggleModal={() => undefined} />)
 })

@@ -3,17 +3,18 @@ import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
 import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIcon'
-import { OnBoardingButton } from '@/common/components/OnBoardingButton'
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
+import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
   {
@@ -69,8 +70,12 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
   })
 }
 
-export const OnBoardingOverlay = () => {
-  const { isLoading, status } = useOnBoardingStatus()
+interface Props {
+  toggleModal: () => void
+}
+
+export const OnBoardingOverlay = ({ toggleModal }: Props) => {
+  const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
 
   if (isLoading || !status || status === 'finished') {
@@ -90,7 +95,9 @@ export const OnBoardingOverlay = () => {
           <HorizontalStepper steps={steps} />
         </StepperContainer>
         <ButtonContainer>
-          <OnBoardingButton>Join now</OnBoardingButton>
+          <ButtonPrimary size="large" onClick={toggleModal}>
+            Join now
+          </ButtonPrimary>
         </ButtonContainer>
       </Wrapper>
       <StyledDropDown isDropped={isOpen}>
@@ -102,7 +109,9 @@ export const OnBoardingOverlay = () => {
             <VerticalStaticStepper steps={innerStaticStepperSteps} />
           </DrawerContainer>
           <div />
-          <OnBoardingButton>Continue</OnBoardingButton>
+          <ButtonPrimary onClick={toggleModal} size="large">
+            Continue
+          </ButtonPrimary>
         </DropdownContent>
       </StyledDropDown>
     </MainWrapper>
