@@ -33,6 +33,9 @@ interface Props {
   setRationale: (rationale: string) => void
   onNext: () => void
   proposalTitle: string
+  rationale: string
+  recipient: string
+  proposalType: string
 }
 
 const FormSchema = Yup.object().shape({
@@ -40,7 +43,15 @@ const FormSchema = Yup.object().shape({
   rationale: Yup.string().required(),
 })
 
-export const VoteForProposalModalForm = ({ setStatus, setRationale, onNext, proposalTitle }: Props) => {
+export const VoteForProposalModalForm = ({
+  setStatus,
+  setRationale,
+  onNext,
+  proposalTitle,
+  rationale,
+  recipient,
+  proposalType,
+}: Props) => {
   const { hideModal } = useModal<VoteForProposalModalCall>()
   const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
   const { isValid } = validation
@@ -56,7 +67,12 @@ export const VoteForProposalModalForm = ({ setStatus, setRationale, onNext, prop
       <ModalHeader onClick={hideModal} title="Vote for proposal" />
       <VoteForProposalModalBody>
         <ProposalPreviewColumn>
-          <ProposalPreview proposalTitle={proposalTitle} />
+          <ProposalPreview
+            proposalTitle={proposalTitle}
+            rationale={rationale}
+            recipient={recipient}
+            proposalType={proposalType}
+          />
         </ProposalPreviewColumn>
         <ScrollableModalColumn>
           <RowGapBlock gap={24}>
