@@ -11,13 +11,11 @@ interface Props {
   value: string
 }
 
-export const Address = ({ label, value }: Props) => {
-  return (
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>{label}</Label>
-        <CopyComponent altText={shortenAddress(value)} copyText={value} />
-      </RowGapBlock>
-    </Row>
-  )
-}
+export const Address = ({ label, value }: Props) => (
+  <Row>
+    <RowGapBlock gap={4}>
+      <Label>{label}</Label>
+      <CopyComponent altText={shortenAddress(value)} copyText={value} />
+    </RowGapBlock>
+  </Row>
+)

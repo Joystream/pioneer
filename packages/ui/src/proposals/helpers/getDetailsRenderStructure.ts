@@ -173,7 +173,7 @@ const getDetailsOrder = (proposalDetails: ProposalDetails): ProposalDetailsKeys[
   return Object.keys(omit(proposalDetails, 'type')) as ProposalDetailsKeys[]
 }
 
-const getDetailsRenderStructure = (proposalDetails: ProposalWithDetails['details']) => {
+const getDetailsRenderStructure = (proposalDetails?: ProposalWithDetails['details']) => {
   if (!proposalDetails) return {}
 
   const structure = getDetailsOrder(proposalDetails).map((key: ProposalDetailsKeys) =>

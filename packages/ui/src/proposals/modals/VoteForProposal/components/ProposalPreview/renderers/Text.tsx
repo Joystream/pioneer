@@ -9,15 +9,13 @@ interface Props {
   value: string
 }
 
-export const Text = ({ label, value }: Props) => {
-  return (
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>{label}</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{value}</TextInlineMedium>
-        </TextMedium>
-      </RowGapBlock>
-    </Row>
-  )
-}
+export const Text = ({ label, value }: Props) => (
+  <Row>
+    <RowGapBlock gap={4}>
+      <Label>{label}</Label>
+      <TextMedium lighter>
+        <TextInlineMedium dark>{value}</TextInlineMedium>
+      </TextMedium>
+    </RowGapBlock>
+  </Row>
+)

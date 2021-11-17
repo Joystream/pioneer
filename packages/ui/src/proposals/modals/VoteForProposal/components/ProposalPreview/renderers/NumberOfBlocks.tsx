@@ -11,15 +11,13 @@ interface Props {
   value: BN
 }
 
-export const NumberOfBlocks = ({ label, value }: Props) => {
-  return (
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>{label}</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(value)}</TextInlineMedium> blocks
-        </TextMedium>
-      </RowGapBlock>
-    </Row>
-  )
-}
+export const NumberOfBlocks = ({ label, value }: Props) => (
+  <Row>
+    <RowGapBlock gap={4}>
+      <Label>{label}</Label>
+      <TextMedium lighter>
+        <TextInlineMedium dark>{formatTokenValue(value)}</TextInlineMedium> blocks
+      </TextMedium>
+    </RowGapBlock>
+  </Row>
+)

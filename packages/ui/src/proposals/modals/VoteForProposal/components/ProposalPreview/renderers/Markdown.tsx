@@ -10,13 +10,11 @@ interface Props {
   value: string
 }
 
-export const Markdown = ({ label, value }: Props) => {
-  return (
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>{label}</Label>
-        <MarkdownPreview markdown={value} size="xs" />
-      </RowGapBlock>
-    </Row>
-  )
-}
+export const Markdown = ({ label, value }: Props) => (
+  <Row>
+    <RowGapBlock gap={4}>
+      <Label>{label}</Label>
+      <MarkdownPreview markdown={value} size="xs" />
+    </RowGapBlock>
+  </Row>
+)

@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback } from 'react'
+import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -19,8 +19,7 @@ export interface ProposalDetailContent {
   (props: { label: string; value: any }): ReactElement
 }
 
-const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
-  //@todo remove partial
+const renderTypeMapper: Record<RenderType, ProposalDetailContent> = {
   Text: Text,
   Amount: Amount,
   NumberOfBlocks: NumberOfBlocks,
@@ -39,12 +38,11 @@ export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale
 
     return null
   }, [])
+  const detailsRenderStructure = useMemo(() => getDetailsRenderStructure(proposalDetails), [proposalDetails])
 
   if (!proposalDetails) {
     return null
   }
-
-  const detailsRenderStructure = getDetailsRenderStructure(proposalDetails)
 
   return (
     <RowGapBlock gap={24}>
