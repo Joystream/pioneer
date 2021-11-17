@@ -75,6 +75,10 @@ export const MyRole = () => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
+  const onMoveExcessClick = () => {
+    showModal({ modal: 'MoveExcessTokensModal', data: { worker } })
+  }
+
   if (isLoading || !worker) {
     return <Loading />
   }
@@ -152,7 +156,7 @@ export const MyRole = () => {
               <ButtonsGroup>
                 {isActive ||
                   (isLeaving && (
-                    <TransactionButton style="primary" size="small">
+                    <TransactionButton style="primary" size="small" onClick={onMoveExcessClick}>
                       Move Excess Tokens
                     </TransactionButton>
                   ))}
