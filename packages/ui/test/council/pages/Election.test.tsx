@@ -97,6 +97,9 @@ describe('UI: Election page', () => {
     },
   }
 
+  URL.createObjectURL = jest.fn()
+  URL.revokeObjectURL = jest.fn()
+
   const castVote = (
     castBy: string,
     optionId: string,

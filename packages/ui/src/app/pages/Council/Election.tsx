@@ -12,6 +12,7 @@ import { camelCaseToText } from '@/common/helpers'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
+import { BackupVotesButton } from '@/council/components/election/BackupVotesButton'
 import { RevealingStage } from '@/council/components/election/revealing/RevealingStage'
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { CouncilRoutes } from '@/council/constants'
@@ -49,6 +50,11 @@ export const Election = () => {
             Copy link
           </CopyButtonTemplate>
           {electionStage === 'announcing' && <AnnounceCandidacyButton />}
+          {(electionStage === 'voting' || electionStage === 'revealing') && (
+            <>
+              <BackupVotesButton cycleId={election?.cycleId} />
+            </>
+          )}
         </ButtonsGroup>
       </PageHeaderRow>
       <CouncilTabs />
