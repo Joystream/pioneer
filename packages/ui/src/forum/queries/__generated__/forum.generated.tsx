@@ -70,6 +70,62 @@ export type ForumCategoryFieldsFragment = {
   }>
 }
 
+export type ArchivedForumCategoryFieldsFragment = {
+  __typename: 'ForumCategory'
+  id: string
+  title: string
+  description: string
+  forumcategoryparent?:
+    | Array<{
+        __typename: 'ForumCategory'
+        id: string
+        title: string
+        status:
+          | { __typename: 'CategoryStatusActive' }
+          | { __typename: 'CategoryStatusArchived' }
+          | { __typename: 'CategoryStatusRemoved' }
+      }>
+    | null
+    | undefined
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?:
+          | {
+              __typename: 'CategoryArchivalStatusUpdatedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            }
+          | null
+          | undefined
+      }
+    | { __typename: 'CategoryStatusRemoved' }
+}
+
+export type ArchivedForumBaseCategoryFieldsFragment = {
+  __typename: 'ForumCategory'
+  id: string
+  title: string
+  description: string
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?:
+          | {
+              __typename: 'CategoryArchivalStatusUpdatedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            }
+          | null
+          | undefined
+      }
+    | { __typename: 'CategoryStatusRemoved' }
+}
+
 export type ForumCategoryWithDetailsFieldsFragment = {
   __typename: 'ForumCategory'
   id: string
@@ -460,6 +516,47 @@ export type GetForumCategoriesQuery = {
       id: string
       membership: { __typename: 'Membership'; id: string; handle: string }
     }>
+  }>
+}
+
+export type GetArchivedForumCategoriesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ForumCategoryWhereInput>
+}>
+
+export type GetArchivedForumCategoriesQuery = {
+  __typename: 'Query'
+  forumCategories: Array<{
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    description: string
+    forumcategoryparent?:
+      | Array<{
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          status:
+            | { __typename: 'CategoryStatusActive' }
+            | { __typename: 'CategoryStatusArchived' }
+            | { __typename: 'CategoryStatusRemoved' }
+        }>
+      | null
+      | undefined
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | {
+          __typename: 'CategoryStatusArchived'
+          categoryArchivalStatusUpdatedEvent?:
+            | {
+                __typename: 'CategoryArchivalStatusUpdatedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              }
+            | null
+            | undefined
+        }
+      | { __typename: 'CategoryStatusRemoved' }
   }>
 }
 
@@ -923,6 +1020,42 @@ export type SearchForumPostQuery = {
   }>
 }
 
+export const ArchivedForumBaseCategoryFieldsFragmentDoc = gql`
+  fragment ArchivedForumBaseCategoryFields on ForumCategory {
+    id
+    title
+    description
+    status {
+      __typename
+      ... on CategoryStatusArchived {
+        categoryArchivalStatusUpdatedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+    }
+  }
+`
+export const ForumSubCategoryFieldsFragmentDoc = gql`
+  fragment ForumSubCategoryFields on ForumCategory {
+    id
+    title
+  }
+`
+export const ArchivedForumCategoryFieldsFragmentDoc = gql`
+  fragment ArchivedForumCategoryFields on ForumCategory {
+    ...ArchivedForumBaseCategoryFields
+    forumcategoryparent {
+      ...ForumSubCategoryFields
+      status {
+        __typename
+      }
+    }
+  }
+  ${ArchivedForumBaseCategoryFieldsFragmentDoc}
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
 export const ForumModeratorFieldsFragmentDoc = gql`
   fragment ForumModeratorFields on Worker {
     id
@@ -952,12 +1085,6 @@ export const ForumBaseCategoryFieldsFragmentDoc = gql`
     }
   }
   ${ForumModeratorFieldsFragmentDoc}
-`
-export const ForumSubCategoryFieldsFragmentDoc = gql`
-  fragment ForumSubCategoryFields on ForumCategory {
-    id
-    title
-  }
 `
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
@@ -1135,6 +1262,55 @@ export type GetForumCategoriesLazyQueryHookResult = ReturnType<typeof useGetForu
 export type GetForumCategoriesQueryResult = Apollo.QueryResult<
   GetForumCategoriesQuery,
   GetForumCategoriesQueryVariables
+>
+export const GetArchivedForumCategoriesDocument = gql`
+  query GetArchivedForumCategories($where: ForumCategoryWhereInput) {
+    forumCategories(where: $where) {
+      ...ArchivedForumCategoryFields
+    }
+  }
+  ${ArchivedForumCategoryFieldsFragmentDoc}
+`
+
+/**
+ * __useGetArchivedForumCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetArchivedForumCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetArchivedForumCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArchivedForumCategoriesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetArchivedForumCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>(
+    GetArchivedForumCategoriesDocument,
+    options
+  )
+}
+export function useGetArchivedForumCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>(
+    GetArchivedForumCategoriesDocument,
+    options
+  )
+}
+export type GetArchivedForumCategoriesQueryHookResult = ReturnType<typeof useGetArchivedForumCategoriesQuery>
+export type GetArchivedForumCategoriesLazyQueryHookResult = ReturnType<typeof useGetArchivedForumCategoriesLazyQuery>
+export type GetArchivedForumCategoriesQueryResult = Apollo.QueryResult<
+  GetArchivedForumCategoriesQuery,
+  GetArchivedForumCategoriesQueryVariables
 >
 export const GetForumCategoryDocument = gql`
   query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {

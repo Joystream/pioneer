@@ -34,16 +34,5 @@ describe('useForumCategories', () => {
         where: { parent: { id_eq: null }, status_json: { isTypeOf_eq: ActiveStatus } },
       },
     })
-
-    rerender([{ isArchive: true }])
-
-    expect(mockedQueryHook).toBeCalledWith({
-      variables: {
-        where: {
-          status_json: { isTypeOf_eq: ArchivedStatus },
-          OR: [{ parent: { id_eq: null } }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }],
-        },
-      },
-    })
   })
 })

@@ -27,6 +27,32 @@ fragment ForumCategoryFields on ForumCategory {
   }
 }
 
+fragment ArchivedForumCategoryFields on ForumCategory {
+  ...ArchivedForumBaseCategoryFields
+  forumcategoryparent {
+    ...ForumSubCategoryFields
+    status {
+      __typename
+    }
+  }
+}
+
+fragment ArchivedForumBaseCategoryFields on ForumCategory {
+  id
+  title
+  description
+  status {
+    __typename
+    ... on CategoryStatusArchived {
+      categoryArchivalStatusUpdatedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+}
+
 fragment ForumCategoryWithDetailsFields on ForumCategory {
   ...ForumBaseCategoryFields
   forumcategoryparent {
@@ -148,6 +174,12 @@ fragment ForumPostParents on ForumPost {
 query GetForumCategories($where: ForumCategoryWhereInput) {
   forumCategories(where: $where) {
     ...ForumCategoryFields
+  }
+}
+
+query GetArchivedForumCategories($where: ForumCategoryWhereInput) {
+  forumCategories(where: $where) {
+    ...ArchivedForumCategoryFields
   }
 }
 
