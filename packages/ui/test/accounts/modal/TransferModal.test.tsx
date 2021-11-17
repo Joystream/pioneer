@@ -115,14 +115,6 @@ describe('UI: TransferModal', () => {
       })
     }
 
-    it('Renders wait for transaction step', async () => {
-      set(transfer, 'signAndSend', () => of(set({}, 'status.isReady', true)))
-
-      await renderAndSign()
-
-      expect(await screen.findByText('Pending transaction')).toBeDefined()
-    })
-
     describe('Success', () => {
       beforeEach(() => {
         stubTransactionSuccess(transfer, 'balances', 'Transfer', [

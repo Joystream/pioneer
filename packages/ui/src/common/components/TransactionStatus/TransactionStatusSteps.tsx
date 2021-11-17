@@ -5,20 +5,21 @@ import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
 
 import { CheckboxIcon } from '../icons'
 
-interface TransactionStatusStepProps {
-  stepState: 'past' | 'active' | undefined
-}
+import { StepState, TransactionStatusSteperProps, TransactionStatusStepProps } from './types'
 
-export interface TransactionStatusSteperProps {
-  steps: Array<TransactionStatusStepProps>
-  state: 'loading' | 'pending' | 'successful' | 'failure'
-}
+const STEPS_NUMBER = 4
 
-export const TransactionStatusStepper = ({ steps, state }: TransactionStatusSteperProps) => {
+export const TransactionStatusStepper = ({ stepNumber, state }: TransactionStatusSteperProps) => {
+  const steps: { stepState: StepState }[] = Array.from({ length: STEPS_NUMBER }).map((_, index) => {
+    if (index + 1 === stepNumber) {
+      return { stepState: 'active' }
+    }
+    return index + 1 < stepNumber ? { stepState: 'past' } : { stepState: undefined }
+  })
   return (
     <StepsWrapper state={state}>
       {steps.map(({ stepState }, index) => (
-        <Step>
+        <Step key={index}>
           <StepCircle stepState={stepState}>{stepState === 'past' ? <CheckboxIcon /> : index + 1}</StepCircle>
         </Step>
       ))}

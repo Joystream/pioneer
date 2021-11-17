@@ -7,6 +7,7 @@ import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { MembershipOnBoarding } from '@/common/components/MembershipOnBoarding'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
+import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { CouncilRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
@@ -52,6 +53,7 @@ export const App = () => (
     </Page>
     <GlobalModals />
     <NotificationsHolder>
+      <TransactionStatus />
       <ConnectionStatus />
       <ExtensionWarning />
     </NotificationsHolder>
