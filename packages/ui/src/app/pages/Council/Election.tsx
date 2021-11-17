@@ -13,6 +13,7 @@ import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
 import { BackupVotesButton } from '@/council/components/election/BackupVotesButton'
+import { RestoreVotesButton } from '@/council/components/election/RestoreVotesButton'
 import { RevealingStage } from '@/council/components/election/revealing/RevealingStage'
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { CouncilRoutes } from '@/council/constants'
@@ -53,6 +54,7 @@ export const Election = () => {
           {(electionStage === 'voting' || electionStage === 'revealing') && (
             <>
               <BackupVotesButton cycleId={election?.cycleId} />
+              <RestoreVotesButton cycleId={election?.cycleId} />
             </>
           )}
         </ButtonsGroup>
