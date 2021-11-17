@@ -31,6 +31,7 @@ import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
+import { MoveExcessTokensModal, MoveExcessTokensModalCall } from '@/working-groups/modals/MoveExcessTokensModal'
 
 export type ModalNames =
   | ModalName<TransferInvitesModalCall>
@@ -59,6 +60,7 @@ export type ModalNames =
   | ModalName<VoteForProposalModalCall>
   | ModalName<RevealVoteModalCall>
   | ModalName<RecoverBalanceModalCall>
+  | ModalName<MoveExcessTokensModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -87,6 +89,7 @@ const modals: Record<ModalNames, ReactElement> = {
   VoteForProposalModal: <VoteForProposalModal />,
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
+  MoveExcessTokensModal: <MoveExcessTokensModal />,
 }
 
 export const GlobalModals = () => {
