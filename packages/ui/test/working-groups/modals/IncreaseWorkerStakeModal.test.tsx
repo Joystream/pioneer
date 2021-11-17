@@ -74,7 +74,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       renderModal()
 
       const input = await getStakeInput()
-      const submitButton = await getButton('Add Stake')
+      const submitButton = await getButton('Increase Stake')
 
       expect(input?.value).toBe('200')
       expect(submitButton).not.toBeDisabled()
@@ -84,7 +84,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       renderModal()
 
       const input = await getStakeInput()
-      const submitButton = await getButton('Add Stake')
+      const submitButton = await getButton('Increase Stake')
 
       fireEvent.change(input, { target: { value: '100' } })
 
@@ -95,7 +95,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       renderModal()
 
       const input = await getStakeInput()
-      const submitButton = await getButton('Add Stake')
+      const submitButton = await getButton('Increase Stake')
 
       fireEvent.change(input, { target: { value: '10000' } })
 
@@ -114,7 +114,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       renderModal()
 
       const input = await getStakeInput()
-      const submitButton = await getButton('Add Stake')
+      const submitButton = await getButton('Increase Stake')
 
       fireEvent.change(input, { target: { value: '1000' } })
       fireEvent.click(submitButton)
@@ -151,7 +151,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
   const renderModalAndProceedToSign = async () => {
     renderModal()
 
-    const submitButton = await getButton('Add Stake')
+    const submitButton = await getButton('Increase Stake')
     fireEvent.click(submitButton)
   }
 
