@@ -23,7 +23,11 @@ interface Props {
 
 export const AddWorkerStakeSignModal = ({ onClose, service, amount, transaction, worker, workerBalance }: Props) => {
   const { roleAccount, id } = worker
-  const { paymentInfo: { partialFee } = {}, sign, isReady } = useSignAndSendTransaction({
+  const {
+    paymentInfo: { partialFee } = {},
+    sign,
+    isReady,
+  } = useSignAndSendTransaction({
     transaction,
     signer: roleAccount,
     service,
