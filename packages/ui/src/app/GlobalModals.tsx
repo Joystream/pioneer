@@ -27,10 +27,13 @@ import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
-import { AddWorkerStakeModal, AddWorkerStakeModalCall } from '@/working-groups/modals/AddStakeModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
+import {
+  IncreaseWorkerStakeModal,
+  IncreaseWorkerStakeModalCall,
+} from '@/working-groups/modals/IncreaseWorkerStakeModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
 export type ModalNames =
@@ -60,7 +63,7 @@ export type ModalNames =
   | ModalName<VoteForProposalModalCall>
   | ModalName<RevealVoteModalCall>
   | ModalName<RecoverBalanceModalCall>
-  | ModalName<AddWorkerStakeModalCall>
+  | ModalName<IncreaseWorkerStakeModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -89,7 +92,7 @@ const modals: Record<ModalNames, ReactElement> = {
   VoteForProposalModal: <VoteForProposalModal />,
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
-  AddWorkerStake: <AddWorkerStakeModal />,
+  IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
 }
 
 export const GlobalModals = () => {

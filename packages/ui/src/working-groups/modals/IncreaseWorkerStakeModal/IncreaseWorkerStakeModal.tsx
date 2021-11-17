@@ -14,10 +14,10 @@ import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
-import { AddWorkerStakeSignModal } from '@/working-groups/modals/AddStakeModal/AddWorkerStakeSignModal'
-import { addStakeMachine } from '@/working-groups/modals/AddStakeModal/machine'
-import { SuccessModal } from '@/working-groups/modals/AddStakeModal/SuccessModal'
-import { AddWorkerStakeModalCall } from '@/working-groups/modals/AddStakeModal/types'
+import { IncreaseWorkerStakeSignModal } from '@/working-groups/modals/IncreaseWorkerStakeModal/IncreaseWorkerStakeSignModal'
+import { increaseStakeMachine } from '@/working-groups/modals/IncreaseWorkerStakeModal/machine'
+import { SuccessModal } from '@/working-groups/modals/IncreaseWorkerStakeModal/SuccessModal'
+import { IncreaseWorkerStakeModalCall } from '@/working-groups/modals/IncreaseWorkerStakeModal/types'
 import { getGroup } from '@/working-groups/model/getGroup'
 
 export interface IncreaseStakeFormFields {
@@ -28,10 +28,10 @@ const StakeFormSchema = Yup.object().shape({
   amount: Yup.number().required(),
 })
 
-export const AddWorkerStakeModal = () => {
+export const IncreaseWorkerStakeModal = () => {
   const { api } = useApi()
-  const { hideModal, modalData } = useModal<AddWorkerStakeModalCall>()
-  const [state, send] = useMachine(addStakeMachine)
+  const { hideModal, modalData } = useModal<IncreaseWorkerStakeModalCall>()
+  const [state, send] = useMachine(increaseStakeMachine)
   const { minStake, stake, group, runtimeId, roleAccount } = modalData.worker
   const minAddStake = minStake - stake
   const [amount, setAmount] = useNumberInput(0, minAddStake)
@@ -63,7 +63,7 @@ export const AddWorkerStakeModal = () => {
     const workerGroup = api && getGroup(api, group.id)
     const transaction = workerGroup?.increaseStake(runtimeId, new BN(state.context.form.amount || 0))
     return (
-      <AddWorkerStakeSignModal
+      <IncreaseWorkerStakeSignModal
         onClose={hideModal}
         service={state.children.transaction}
         amount={new BN(state.context.form.amount || 0)}
@@ -88,7 +88,7 @@ export const AddWorkerStakeModal = () => {
 
   return (
     <Modal onClose={hideModal} modalSize="m" modalHeight="s">
-      <ModalHeader title="Add stake" onClick={hideModal} />
+      <ModalHeader title="Increase stake" onClick={hideModal} />
       <ModalBody>
         <InputComponent
           id="amount-input"
@@ -109,7 +109,7 @@ export const AddWorkerStakeModal = () => {
       <ModalFooter>
         <ButtonsGroup align="right">
           <ButtonPrimary disabled={!isValid} size="medium" onClick={onSubmit}>
-            Add Stake
+            Increase Stake
           </ButtonPrimary>
         </ButtonsGroup>
       </ModalFooter>

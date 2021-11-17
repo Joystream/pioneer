@@ -77,8 +77,8 @@ export const MyRole = () => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
-  const onAddStakeClick = (): void => {
-    showModal({ modal: 'AddWorkerStake', data: { worker } })
+  const onIncreaseStakeClick = (): void => {
+    showModal({ modal: 'IncreaseWorkerStake', data: { worker } })
   }
 
   if (isLoading || !worker) {
@@ -163,8 +163,8 @@ export const MyRole = () => {
                     </TransactionButton>
                   ))}
                 {isActive && shouldIncreaseStake && (
-                  <TransactionButton style="primary" size="small" onClick={onAddStakeClick}>
-                    Add Stake
+                  <TransactionButton style="primary" size="small" onClick={onIncreaseStakeClick}>
+                    Increase Stake
                   </TransactionButton>
                 )}
               </ButtonsGroup>

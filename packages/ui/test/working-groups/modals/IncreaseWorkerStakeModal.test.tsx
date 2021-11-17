@@ -5,7 +5,7 @@ import React from 'react'
 import { Account } from '@/accounts/types'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
-import { AddWorkerStakeModal } from '@/working-groups/modals/AddStakeModal'
+import { IncreaseWorkerStakeModal } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
@@ -31,7 +31,7 @@ jest.mock('@/accounts/hooks/useMyAccounts', () => {
   }
 })
 
-describe('UI: AddStakeModal', () => {
+describe('UI: IncreaseWorkerStakeModal', () => {
   const api = stubApi()
   let transfer: any
 
@@ -169,7 +169,7 @@ describe('UI: AddStakeModal', () => {
       <MockKeyringProvider>
         <ApiContext.Provider value={api}>
           <ModalContext.Provider value={mockModalContext}>
-            <AddWorkerStakeModal />
+            <IncreaseWorkerStakeModal />
           </ModalContext.Provider>
         </ApiContext.Provider>
       </MockKeyringProvider>

@@ -21,7 +21,7 @@ interface Props {
   workerBalance?: BN
 }
 
-export const AddWorkerStakeSignModal = ({ onClose, service, amount, transaction, worker, workerBalance }: Props) => {
+export const IncreaseWorkerStakeSignModal = ({ onClose, service, amount, transaction, worker, workerBalance }: Props) => {
   const { roleAccount, id } = worker
   const {
     paymentInfo: { partialFee } = {},

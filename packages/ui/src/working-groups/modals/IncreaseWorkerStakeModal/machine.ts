@@ -3,27 +3,27 @@ import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-import { IncreaseStakeFormFields } from '@/working-groups/modals/AddStakeModal/AddWorkerStakeModal'
+import { IncreaseStakeFormFields } from '@/working-groups/modals/IncreaseWorkerStakeModal/IncreaseWorkerStakeModal'
 
-interface AddStakeContext {
+interface IncreaseStakeContext {
   form?: IncreaseStakeFormFields
   transactionEvents?: EventRecord[]
 }
 
-type AddStakeState =
+type IncreaseStakeState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: { form: IncreaseStakeFormFields } }
-  | { value: 'success'; context: Required<AddStakeContext> }
+  | { value: 'success'; context: Required<IncreaseStakeContext> }
   | { value: 'error'; context: { form: IncreaseStakeFormFields; transactionEvents: EventRecord[] } }
 
-export type AddStakeEvent =
+export type IncreaseStakeEvent =
   | { type: 'PASS' }
   | { type: 'FAIL' }
   | { type: 'DONE'; form: IncreaseStakeFormFields }
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
 
-export const addStakeMachine = createMachine<AddStakeContext, AddStakeEvent, AddStakeState>({
+export const increaseStakeMachine = createMachine<IncreaseStakeContext, IncreaseStakeEvent, IncreaseStakeState>({
   initial: 'prepare',
   states: {
     prepare: {
