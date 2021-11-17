@@ -9,14 +9,12 @@ import { AddWorkerStakeModal } from '@/working-groups/modals/AddStakeModal'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
-import { setupMockServer } from '../../_mocks/server'
+import { MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
-  stubTransactionPending,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
@@ -34,7 +32,6 @@ jest.mock('@/accounts/hooks/useMyAccounts', () => {
 })
 
 describe('UI: AddStakeModal', () => {
-  setupMockServer()
   const api = stubApi()
   let transfer: any
 
@@ -67,10 +64,10 @@ describe('UI: AddStakeModal', () => {
   })
 
   describe('Form step', () => {
-    it('Renders modal', () => {
-      const { queryByText } = renderModal()
+    it('Renders modal', async () => {
+      renderModal()
 
-      expect(queryByText('Add stake')).toBeDefined()
+      expect(screen.queryByText('Add stake')).toBeDefined()
     })
 
     it('Setup minimal stake', async () => {
@@ -78,8 +75,7 @@ describe('UI: AddStakeModal', () => {
 
       const input = await getStakeInput()
       const submitButton = await getButton('Add Stake')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+
       expect(input?.value).toBe('200')
       expect(submitButton).not.toBeDisabled()
     })
@@ -109,9 +105,9 @@ describe('UI: AddStakeModal', () => {
 
   describe('Sign step', () => {
     it('Goes to sign modal', async () => {
-      const { queryByText } = await renderModalAndProceedToSign()
+      await renderModalAndProceedToSign()
 
-      expect(queryByText('Authorize transaction')).toBeDefined()
+      expect(screen.queryByText('Authorize transaction')).toBeDefined()
     })
 
     it('Transaction exceed balance', async () => {
@@ -121,21 +117,11 @@ describe('UI: AddStakeModal', () => {
       const submitButton = await getButton('Add Stake')
 
       fireEvent.change(input, { target: { value: '1000' } })
-      submitButton.click()
+      fireEvent.click(submitButton)
 
       const signButton = await getButton('Sign transaction and Stake')
 
       expect(signButton).toBeDisabled()
-    })
-
-    describe('Pending', () => {
-      it('Renders wait for transaction', async () => {
-        stubTransactionPending(transfer)
-
-        await renderModalAndProceedToSign(true)
-
-        expect(screen.queryByText('Pending transaction')).toBeDefined()
-      })
     })
 
     describe('Success', () => {
@@ -144,7 +130,8 @@ describe('UI: AddStakeModal', () => {
       })
 
       it('Renders transaction success', async () => {
-        await renderModalAndProceedToSign(true)
+        await renderModalAndProceedToSign()
+        await signTransaction()
 
         expect(await screen.findByText('Success')).toBeDefined()
       })
@@ -153,40 +140,37 @@ describe('UI: AddStakeModal', () => {
     describe('Failure', () => {
       it('Renders transaction failure', async () => {
         stubTransactionFailure(transfer)
-        await renderModalAndProceedToSign(true)
+        await renderModalAndProceedToSign()
+        await signTransaction()
 
         expect(await screen.queryByText('Failure')).toBeDefined()
       })
     })
   })
 
-  const renderModalAndProceedToSign = async (shouldSign = false) => {
-    const modal = renderModal()
+  const renderModalAndProceedToSign = async () => {
+    renderModal()
 
     const submitButton = await getButton('Add Stake')
-    submitButton.click()
-
-    if (shouldSign) {
-      const signButton = await getButton('Sign transaction and Stake')
-      signButton.click()
-    }
-
-    return modal
+    fireEvent.click(submitButton)
   }
 
   const getStakeInput = () => {
-    return screen.getByTestId('amount-input')
+    return screen.getByTestId<HTMLInputElement>('amount-input')
   }
 
-  function renderModal() {
-    return render(
+  const signTransaction = async () => {
+    const signButton = await getButton('Sign transaction and Stake')
+    fireEvent.click(signButton)
+  }
+
+  const renderModal = () => {
+    render(
       <MockKeyringProvider>
         <ApiContext.Provider value={api}>
-          <MockQueryNodeProviders>
-            <ModalContext.Provider value={mockModalContext}>
-              <AddWorkerStakeModal />
-            </ModalContext.Provider>
-          </MockQueryNodeProviders>
+          <ModalContext.Provider value={mockModalContext}>
+            <AddWorkerStakeModal />
+          </ModalContext.Provider>
         </ApiContext.Provider>
       </MockKeyringProvider>
     )

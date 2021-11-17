@@ -1,4 +1,3 @@
-// import { DecoratedEvents } from '@joystream/types/augment/augment-api-events'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 

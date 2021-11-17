@@ -18,6 +18,7 @@ import { AddWorkerStakeSignModal } from '@/working-groups/modals/AddStakeModal/A
 import { addStakeMachine } from '@/working-groups/modals/AddStakeModal/machine'
 import { SuccessModal } from '@/working-groups/modals/AddStakeModal/SuccessModal'
 import { AddWorkerStakeModalCall } from '@/working-groups/modals/AddStakeModal/types'
+import { getGroup } from '@/working-groups/model/getGroup'
 
 export interface IncreaseStakeFormFields {
   amount?: string
@@ -59,7 +60,8 @@ export const AddWorkerStakeModal = () => {
   }
 
   if (state.matches('transaction')) {
-    const transaction = api?.tx[group.id].increaseStake(runtimeId, new BN(state.context.form.amount || 0))
+    const workerGroup = api && getGroup(api, group.id)
+    const transaction = workerGroup?.increaseStake(runtimeId, new BN(state.context.form.amount || 0))
     return (
       <AddWorkerStakeSignModal
         onClose={hideModal}
