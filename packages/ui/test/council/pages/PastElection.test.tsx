@@ -21,7 +21,6 @@ import {
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
-import { COMMITMENT } from '../../../dev/query-node-mocks/generators/council/generateCouncils'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -66,16 +65,14 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   },
 ]
 
-const TEST_VOTES = [
-  {
-    electionRoundId: '1',
-    stake: 1000,
-    stakeLocked: false,
-    castBy: getMember('bob').controllerAccount,
-    voteForId: getMember('alice').id,
-    commitment: COMMITMENT,
-  },
-]
+const TEST_VOTE = {
+  electionRoundId: '1',
+  stake: 1000,
+  stakeLocked: false,
+  castBy: getMember('bob').controllerAccount,
+  voteForId: getMember('alice').id,
+  commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
+}
 
 describe('UI: Past Election page', () => {
   const mockServer = setupMockServer()
@@ -93,6 +90,9 @@ describe('UI: Past Election page', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeEach(() => {
@@ -108,7 +108,7 @@ describe('UI: Past Election page', () => {
     )
     seedCouncilElection({ id: '1', cycleId: 1, isFinished: true, electedCouncilId: '1' }, mockServer.server)
     TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-    TEST_VOTES.map((vote) => seedCouncilVote(vote, mockServer.server))
+    seedCouncilVote(TEST_VOTE, mockServer.server)
   })
 
   it('Renders', async () => {
@@ -143,12 +143,10 @@ describe('UI: Past Election page', () => {
       it('Has', async () => {
         seedCouncilVote(
           {
-            electionRoundId: '1',
+            ...TEST_VOTE,
             stake: 2000,
-            stakeLocked: false,
             castBy: getMember('alice').controllerAccount,
             voteForId: getMember('bob').id,
-            commitment: COMMITMENT,
           },
           mockServer.server
         )

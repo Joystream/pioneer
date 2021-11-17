@@ -26,6 +26,7 @@ export type WorkerFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -59,6 +60,7 @@ export type PastWorkerFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -117,6 +119,7 @@ export type WorkerDetailedFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -256,6 +259,7 @@ export type GetWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -299,6 +303,7 @@ export type GetPastWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -373,6 +378,7 @@ export type GetDetailedWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -427,6 +433,7 @@ export type GetWorkerQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -538,6 +545,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -653,6 +661,7 @@ export type GetWorkingGroupOpeningQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -770,6 +779,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -816,6 +826,7 @@ export type GetWorkingGroupApplicationsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -873,6 +884,7 @@ export type GetWorkingGroupApplicationQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean

@@ -138,8 +138,8 @@ export const AddNewProposalModal = () => {
       return setValidNext(true)
     }
 
-    if (state.matches('generalParameters.proposalDetails') && state.context.title && state.context.rationale) {
-      return setValidNext(true)
+    if (state.matches('generalParameters.proposalDetails')) {
+      return
     }
 
     if (
@@ -296,6 +296,7 @@ export const AddNewProposalModal = () => {
                 rationale={state.context.rationale}
                 setTitle={(title) => send('SET_TITLE', { title })}
                 setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
+                setValidNext={setValidNext}
               />
             )}
             {state.matches('generalParameters.triggerAndDiscussion') && (

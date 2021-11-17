@@ -1,82 +1,82 @@
 [
   {
-    "inBlock": 80605,
-    "createdAt": "2021-09-20T00:34:55.093Z",
-    "network": "OLYMPIA",
-    "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-30",
-    "newRewardPerBlock": 16
-  },
-  {
-    "inBlock": 23980,
-    "createdAt": "2021-07-09T07:10:26.772Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-43",
-    "newRewardPerBlock": 33
-  },
-  {
-    "inBlock": 58638,
-    "createdAt": "2021-09-28T13:19:59.535Z",
-    "network": "OLYMPIA",
-    "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-19",
-    "newRewardPerBlock": 4
-  },
-  {
-    "inBlock": 15172,
-    "createdAt": "2021-08-17T19:29:04.922Z",
-    "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-60",
-    "newRewardPerBlock": 46
-  },
-  {
-    "inBlock": 61650,
-    "createdAt": "2021-07-03T15:58:41.976Z",
+    "inBlock": 86581,
+    "createdAt": "2021-10-28T02:59:04.452Z",
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-7",
+    "workerId": "forumWorkingGroup-9",
+    "newRewardPerBlock": 2
+  },
+  {
+    "inBlock": 73905,
+    "createdAt": "2021-11-06T16:05:52.191Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-56",
     "newRewardPerBlock": 31
   },
   {
-    "inBlock": 68911,
-    "createdAt": "2021-08-07T08:18:00.531Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-53",
-    "newRewardPerBlock": 46
-  },
-  {
-    "inBlock": 19626,
-    "createdAt": "2021-10-29T06:00:03.397Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-38",
-    "newRewardPerBlock": 36
-  },
-  {
-    "inBlock": 85176,
-    "createdAt": "2021-05-11T06:36:20.042Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-35",
-    "newRewardPerBlock": 40
-  },
-  {
-    "inBlock": 79304,
-    "createdAt": "2021-09-26T04:01:27.945Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-36",
-    "newRewardPerBlock": 10
-  },
-  {
-    "inBlock": 56308,
-    "createdAt": "2021-10-11T05:56:03.471Z",
+    "inBlock": 72880,
+    "createdAt": "2021-08-22T08:54:48.127Z",
     "network": "OLYMPIA",
     "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-73",
-    "newRewardPerBlock": 47
+    "workerId": "membershipWorkingGroup-77",
+    "newRewardPerBlock": 28
+  },
+  {
+    "inBlock": 59913,
+    "createdAt": "2021-07-25T23:14:10.583Z",
+    "network": "OLYMPIA",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-36",
+    "newRewardPerBlock": 48
+  },
+  {
+    "inBlock": 45985,
+    "createdAt": "2021-06-13T12:55:53.844Z",
+    "network": "OLYMPIA",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-35",
+    "newRewardPerBlock": 11
+  },
+  {
+    "inBlock": 48441,
+    "createdAt": "2021-05-26T06:19:46.741Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-43",
+    "newRewardPerBlock": 34
+  },
+  {
+    "inBlock": 52566,
+    "createdAt": "2021-08-22T12:32:20.159Z",
+    "network": "OLYMPIA",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-11",
+    "newRewardPerBlock": 15
+  },
+  {
+    "inBlock": 11741,
+    "createdAt": "2021-06-27T13:54:02.210Z",
+    "network": "OLYMPIA",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-40",
+    "newRewardPerBlock": 17
+  },
+  {
+    "inBlock": 2565,
+    "createdAt": "2021-05-29T02:47:50.229Z",
+    "network": "OLYMPIA",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-77",
+    "newRewardPerBlock": 37
+  },
+  {
+    "inBlock": 4379,
+    "createdAt": "2021-06-15T06:27:43.207Z",
+    "network": "OLYMPIA",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-35",
+    "newRewardPerBlock": 10
   }
 ]

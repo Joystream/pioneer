@@ -66,7 +66,7 @@ export interface MemberFormFields {
   invitor?: Member
 }
 
-export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
+export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProps, 'onClose'>) => {
   const { api, connectionState } = useApi()
 
   const initializer = {
@@ -106,8 +106,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   }
 
   return (
-    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Add membership" />
+    <>
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <Row>
@@ -245,6 +244,15 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
           </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>
+    </>
+  )
+}
+
+export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
+  return (
+    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
+      <ModalHeader onClick={onClose} title="Add membership" />
+      <BuyMembershipForm membershipPrice={membershipPrice} onSubmit={onSubmit} />
     </ScrolledModal>
   )
 }

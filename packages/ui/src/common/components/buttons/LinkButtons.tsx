@@ -24,19 +24,19 @@ const height: { [key in LinkButtonSize]: string } = {
   small: '32px',
 }
 
-const getHeight = (props: LinkButtonProps) => height[props.size || 'large']
-const getFontSize = (props: LinkButtonProps) => (props.size === 'small' ? '14px' : '16px')
-const getLineHeight = (props: LinkButtonProps) => (props.size === 'small' ? '20px' : '24px')
-const getPadding = (props: LinkButtonProps) => {
+const getHeight = (props: BasicLinkButtonStylesProps) => height[props.size || 'large']
+const getFontSize = (props: BasicLinkButtonStylesProps) => (props.size === 'small' ? '14px' : '16px')
+const getLineHeight = (props: BasicLinkButtonStylesProps) => (props.size === 'small' ? '20px' : '24px')
+const getPadding = (props: BasicLinkButtonStylesProps) => {
   if (props.size == 'small') {
-    return props.square ? '6px' : '4px 8px'
+    return props.$square ? '6px' : '4px 8px'
   }
 
   if (props.size == 'medium') {
-    return props.square ? '8px' : '4px 16px'
+    return props.$square ? '8px' : '4px 16px'
   }
 
-  return props.square ? '8px' : '8px 16px'
+  return props.$square ? '8px' : '8px 16px'
 }
 
 export function LinkButtonPrimary({ className, children, size, square, disabled, to }: LinkButtonProps) {
@@ -94,10 +94,12 @@ export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
 `
 
 interface LinkButtonStyleProps extends Omit<LinkButtonProps, 'square'> {
-  $square: LinkButtonProps['square']
+  $square?: LinkButtonProps['square']
 }
 
-export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
+export type BasicLinkButtonStylesProps = Pick<LinkButtonStyleProps, '$square' | 'size'>
+
+export const BasicLinkButtonStyles = css<BasicLinkButtonStylesProps>`
   &,
   &:visited {
     display: flex;
@@ -244,7 +246,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
   }
 `
 
-export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
+export const BasicLinkButtonGhostStyles = css<BasicLinkButtonStylesProps>`
   ${BasicLinkButtonStyles};
 
   &,
@@ -285,6 +287,10 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
       border-color: ${Colors.Blue[100]};
     }
   }
+`
+
+export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
+  ${BasicLinkButtonGhostStyles};
 `
 
 export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonStyleProps>`

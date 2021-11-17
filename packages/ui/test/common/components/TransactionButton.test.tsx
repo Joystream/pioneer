@@ -1,15 +1,15 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render } from '@testing-library/react'
-import BN from 'bn.js'
+import { useMachine } from '@xstate/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { transactionMachine } from '@/common/model/machines'
 import { ApiContext } from '@/common/providers/api/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
 import { TransactionContextProvider } from '@/common/providers/transaction/provider'
-import { RecoverVoteStakeModal } from '@/council/modals/RecoverVoteStake'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
@@ -22,18 +22,6 @@ describe('UI: TransactionButton', () => {
   let tx: any
 
   stubTransaction(api, txPath)
-
-  const modalData = {
-    address: alice.address,
-    stake: new BN(200000),
-  }
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
 
   const useAccounts = {
     isLoading: false,
@@ -57,10 +45,10 @@ describe('UI: TransactionButton', () => {
   it('Button is disabled when there is a pending transaction', async () => {
     stubTransactionPending(tx)
     renderComponents()
+
     expect(await getButton('Start new transaction')).not.toBeDisabled()
 
     await act(async () => {
-      // use a real transaction modal to begin a transaction
       fireEvent.click(await getButton('Sign and recover stake'))
     })
 
@@ -80,21 +68,34 @@ describe('UI: TransactionButton', () => {
     expect(await getButton('Start new transaction')).not.toBeDisabled()
   })
 
+  const TestButton = () => {
+    const [, , service] = useMachine(transactionMachine)
+    const { sign } = useSignAndSendTransaction({
+      transaction: tx,
+      signer: alice.address,
+      service,
+    })
+
+    return (
+      <ButtonPrimary size="large" onClick={sign}>
+        Sign and recover stake
+      </ButtonPrimary>
+    )
+  }
+
   const renderComponents = () =>
     render(
-      <ModalContext.Provider value={useModal}>
-        <MockKeyringProvider>
-          <AccountsContext.Provider value={useAccounts}>
-            <ApiContext.Provider value={api}>
-              <TransactionContextProvider>
-                <RecoverVoteStakeModal />
-                <TransactionButton style="primary" size="large">
-                  Start new transaction
-                </TransactionButton>
-              </TransactionContextProvider>
-            </ApiContext.Provider>
-          </AccountsContext.Provider>
-        </MockKeyringProvider>
-      </ModalContext.Provider>
+      <MockKeyringProvider>
+        <AccountsContext.Provider value={useAccounts}>
+          <ApiContext.Provider value={api}>
+            <TransactionContextProvider>
+              <TestButton />
+              <TransactionButton style="primary" size="large">
+                Start new transaction
+              </TransactionButton>
+            </TransactionContextProvider>
+          </ApiContext.Provider>
+        </AccountsContext.Provider>
+      </MockKeyringProvider>
     )
 })

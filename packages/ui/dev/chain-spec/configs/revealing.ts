@@ -4,7 +4,6 @@ export default {
       council: {
         stage: {
           stage: {
-            Announcing: undefined,
             Election: {
               candidates_count: 0,
             },
@@ -14,7 +13,7 @@ export default {
       referendumInstance1: {
         stage: {
           Revealing: {
-            started: 10000,
+            started: 0,
             winning_target_count: 3,
             current_cycle_id: 4,
             intermediate_winners: [],

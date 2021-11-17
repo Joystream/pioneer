@@ -11,6 +11,7 @@ describe('sortMemberships', () => {
     isFoundingMember: false,
     isCouncilMember: false,
     roles: [],
+    boundAccounts: [],
     isVerified: true,
     inviteCount: 0,
     createdAt: '',

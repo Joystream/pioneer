@@ -19,9 +19,10 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
-import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview'
+import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview/ProposalPreview'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
+import { ProposalWithDetails } from '@/proposals/types'
 
 interface FormFields {
   voteStatus?: VoteStatus
@@ -33,6 +34,9 @@ interface Props {
   setRationale: (rationale: string) => void
   onNext: () => void
   proposalTitle: string
+  proposalType: string
+  proposalRationale: string
+  proposalDetails?: ProposalWithDetails['details']
 }
 
 const FormSchema = Yup.object().shape({
@@ -40,7 +44,15 @@ const FormSchema = Yup.object().shape({
   rationale: Yup.string().required(),
 })
 
-export const VoteForProposalModalForm = ({ setStatus, setRationale, onNext, proposalTitle }: Props) => {
+export const VoteForProposalModalForm = ({
+  setStatus,
+  setRationale,
+  onNext,
+  proposalTitle,
+  proposalType,
+  proposalRationale,
+  proposalDetails,
+}: Props) => {
   const { hideModal } = useModal<VoteForProposalModalCall>()
   const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
   const { isValid } = validation
@@ -56,7 +68,12 @@ export const VoteForProposalModalForm = ({ setStatus, setRationale, onNext, prop
       <ModalHeader onClick={hideModal} title="Vote for proposal" />
       <VoteForProposalModalBody>
         <ProposalPreviewColumn>
-          <ProposalPreview proposalTitle={proposalTitle} />
+          <ProposalPreview
+            proposalTitle={proposalTitle}
+            proposalType={proposalType}
+            proposalRationale={proposalRationale}
+            proposalDetails={proposalDetails}
+          />
         </ProposalPreviewColumn>
         <ScrollableModalColumn>
           <RowGapBlock gap={24}>

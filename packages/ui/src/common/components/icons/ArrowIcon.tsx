@@ -6,11 +6,12 @@ import { Icon } from './Icon'
 interface ArrowProps {
   direction?: 'down' | 'left' | 'up' | 'right'
   className?: string
+  size?: string
 }
 
-export function Arrow({ className, direction }: ArrowProps) {
+export function Arrow({ className, direction, size = '16' }: ArrowProps) {
   return (
-    <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Icon size={size} viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <ArrowIconPath
         fillRule="evenodd"
         clipRule="evenodd"
