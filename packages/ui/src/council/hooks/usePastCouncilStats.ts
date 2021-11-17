@@ -1,7 +1,7 @@
-import { useGetCouncilBlockRangeQuery, useGetPastCouncilListStatsQuery } from '@/council/queries'
+import { useGetCouncilBlockRangeQuery, useGetPastCouncilStatsQuery } from '@/council/queries'
 import { getSpentOnProposals, getTotalSpent } from '@/council/types/PastCouncil'
 
-export const usePastCouncilListStats = (id: string) => {
+export const usePastCouncilStats = (id: string) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
     variables: {
       where: {
@@ -12,7 +12,7 @@ export const usePastCouncilListStats = (id: string) => {
 
   const council = rangeData?.electedCouncilByUniqueInput
 
-  const { loading: loadingData, data } = useGetPastCouncilListStatsQuery({
+  const { loading: loadingData, data } = useGetPastCouncilStatsQuery({
     variables: {
       startBlock: council?.electedAtBlock ?? 0,
       endBlock: council?.endedAtBlock ?? 0,

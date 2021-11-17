@@ -320,7 +320,7 @@ query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
   }
 }
 
-query GetPastCouncilListStats($startBlock: Int!, $endBlock: Int!) {
+query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
   proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
     totalCount
   }

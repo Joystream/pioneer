@@ -1031,12 +1031,12 @@ export type GetCouncilBlockRangeQuery = {
     | undefined
 }
 
-export type GetPastCouncilListStatsQueryVariables = Types.Exact<{
+export type GetPastCouncilStatsQueryVariables = Types.Exact<{
   startBlock: Types.Scalars['Int']
   endBlock: Types.Scalars['Int']
 }>
 
-export type GetPastCouncilListStatsQuery = {
+export type GetPastCouncilStatsQuery = {
   __typename: 'Query'
   proposalsApproved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
   fundingRequestsApproved: Array<{
@@ -2244,8 +2244,8 @@ export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
   GetCouncilBlockRangeQuery,
   GetCouncilBlockRangeQueryVariables
 >
-export const GetPastCouncilListStatsDocument = gql`
-  query GetPastCouncilListStats($startBlock: Int!, $endBlock: Int!) {
+export const GetPastCouncilStatsDocument = gql`
+  query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
     proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
       totalCount
     }
@@ -2285,43 +2285,43 @@ export const GetPastCouncilListStatsDocument = gql`
 `
 
 /**
- * __useGetPastCouncilListStatsQuery__
+ * __useGetPastCouncilStatsQuery__
  *
- * To run a query within a React component, call `useGetPastCouncilListStatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPastCouncilListStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPastCouncilStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetPastCouncilListStatsQuery({
+ * const { data, loading, error } = useGetPastCouncilStatsQuery({
  *   variables: {
  *      startBlock: // value for 'startBlock'
  *      endBlock: // value for 'endBlock'
  *   },
  * });
  */
-export function useGetPastCouncilListStatsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetPastCouncilListStatsQuery, GetPastCouncilListStatsQueryVariables>
+export function useGetPastCouncilStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPastCouncilListStatsQuery, GetPastCouncilListStatsQueryVariables>(
-    GetPastCouncilListStatsDocument,
+  return Apollo.useQuery<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>(
+    GetPastCouncilStatsDocument,
     options
   )
 }
-export function useGetPastCouncilListStatsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilListStatsQuery, GetPastCouncilListStatsQueryVariables>
+export function useGetPastCouncilStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPastCouncilListStatsQuery, GetPastCouncilListStatsQueryVariables>(
-    GetPastCouncilListStatsDocument,
+  return Apollo.useLazyQuery<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>(
+    GetPastCouncilStatsDocument,
     options
   )
 }
-export type GetPastCouncilListStatsQueryHookResult = ReturnType<typeof useGetPastCouncilListStatsQuery>
-export type GetPastCouncilListStatsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilListStatsLazyQuery>
-export type GetPastCouncilListStatsQueryResult = Apollo.QueryResult<
-  GetPastCouncilListStatsQuery,
-  GetPastCouncilListStatsQueryVariables
+export type GetPastCouncilStatsQueryHookResult = ReturnType<typeof useGetPastCouncilStatsQuery>
+export type GetPastCouncilStatsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilStatsLazyQuery>
+export type GetPastCouncilStatsQueryResult = Apollo.QueryResult<
+  GetPastCouncilStatsQuery,
+  GetPastCouncilStatsQueryVariables
 >

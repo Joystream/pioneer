@@ -16,7 +16,7 @@ import {
   seedOpening,
   seedProposal,
   seedWorker,
-  seedWorkingGroups
+  seedWorkingGroups,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
@@ -42,7 +42,7 @@ describe('UI: Past Council page', () => {
       {
         id: '1',
         electedAtBlock: 0,
-        endedAtBlock: 10
+        endedAtBlock: 10,
       },
       mockServer.server
     )
@@ -50,7 +50,7 @@ describe('UI: Past Council page', () => {
       {
         ...getCouncilor({ electedInCouncilId: '1', memberId: getMember('alice').id }),
         unpaidReward: 10,
-        accumulatedReward: 15
+        accumulatedReward: 15,
       },
       mockServer.server
     )
@@ -58,7 +58,7 @@ describe('UI: Past Council page', () => {
       {
         ...getCouncilor({ electedInCouncilId: '1', memberId: getMember('bob').id }),
         unpaidReward: 20,
-        accumulatedReward: 40
+        accumulatedReward: 40,
       },
       mockServer.server
     )
@@ -78,20 +78,24 @@ describe('UI: Past Council page', () => {
     describe('Stats', () => {
       beforeEach(async () => {
         seedProposal(testProposals[0], mockServer.server)
-        seedEvent({
-          id: '0',
-          inBlock: 5,
-          createdAt: '2021-10-07T11:47:39.042Z',
-          network: 'OLYMPIA',
-          proposalId: testProposals[0].id
-        }, 'ProposalExecutedEvent', mockServer.server)
         seedEvent(
           {
             id: '0',
             inBlock: 5,
             createdAt: '2021-10-07T11:47:39.042Z',
             network: 'OLYMPIA',
-            amount: 100
+            proposalId: testProposals[0].id,
+          },
+          'ProposalExecutedEvent',
+          mockServer.server
+        )
+        seedEvent(
+          {
+            id: '0',
+            inBlock: 5,
+            createdAt: '2021-10-07T11:47:39.042Z',
+            network: 'OLYMPIA',
+            amount: 100,
           },
           'BudgetSpendingEvent',
           mockServer.server
@@ -102,7 +106,7 @@ describe('UI: Past Council page', () => {
             inBlock: 6,
             createdAt: '2021-10-07T11:47:39.042Z',
             network: 'OLYMPIA',
-            amount: 200
+            amount: 200,
           },
           'BudgetSpendingEvent',
           mockServer.server
@@ -159,7 +163,7 @@ describe('UI: Past Council page', () => {
               createdAt: '2021-06-16T17:21:12.161Z',
               network: 'OLYMPIA',
               proposalId: '0',
-              voteKind: 'APPROVE'
+              voteKind: 'APPROVE',
             },
             'ProposalVotedEvent',
             mockServer.server
@@ -182,7 +186,7 @@ describe('UI: Past Council page', () => {
               createdAt: '2021-06-16T17:21:12.161Z',
               network: 'OLYMPIA',
               proposalId: '0',
-              voteKind: 'REJECT'
+              voteKind: 'REJECT',
             },
             'ProposalVotedEvent',
             mockServer.server
@@ -204,7 +208,7 @@ describe('UI: Past Council page', () => {
               createdAt: '2021-06-16T17:21:12.161Z',
               network: 'OLYMPIA',
               proposalId: '0',
-              voteKind: 'SLASH'
+              voteKind: 'SLASH',
             },
             'ProposalVotedEvent',
             mockServer.server
@@ -225,7 +229,7 @@ describe('UI: Past Council page', () => {
               createdAt: '2021-06-16T17:21:12.161Z',
               network: 'OLYMPIA',
               proposalId: '0',
-              voteKind: 'ABSTAIN'
+              voteKind: 'ABSTAIN',
             },
             'ProposalVotedEvent',
             mockServer.server
@@ -247,7 +251,7 @@ describe('UI: Past Council page', () => {
                 createdAt: '2021-06-16T17:21:12.161Z',
                 network: 'OLYMPIA',
                 proposalId: '0',
-                voteKind: 'ABSTAIN'
+                voteKind: 'ABSTAIN',
               },
               'ProposalVotedEvent',
               mockServer.server
@@ -332,7 +336,7 @@ describe('UI: Past Council page', () => {
               newMissedRewardAmount: 3145,
               inBlock: 1,
               createdAt: '2021-08-02T17:43:53.321Z',
-              network: 'OLYMPIA'
+              network: 'OLYMPIA',
             },
             'NewMissedRewardLevelReachedEvent',
             mockServer.server
@@ -343,7 +347,7 @@ describe('UI: Past Council page', () => {
               createdAt: '2021-09-14T11:54:56.127Z',
               network: 'OLYMPIA',
               groupId: WORKER_DATA.groupId,
-              newBudget: 80000
+              newBudget: 80000,
             },
             'BudgetSetEvent',
             mockServer.server
@@ -358,7 +362,7 @@ describe('UI: Past Council page', () => {
               workerId: WORKER_DATA.id,
               rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
               amount: 6050,
-              type: 'REGULAR'
+              type: 'REGULAR',
             },
             'RewardPaidEvent',
             mockServer.server
@@ -431,7 +435,7 @@ describe('UI: Past Council page', () => {
           <MockKeyringProvider>
             <Switch>
               <Route path={CouncilRoutes.pastCouncil} component={PastCouncil} />
-              <Route path='/404' component={NotFound} />
+              <Route path="/404" component={NotFound} />
             </Switch>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
