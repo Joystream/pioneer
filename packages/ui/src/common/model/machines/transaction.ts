@@ -4,15 +4,17 @@ import { ActionTypes, assign, createMachine, DoneInvokeEvent, send } from 'xstat
 
 import { EmptyObject } from '@/common/types'
 
-export type TransactionFinalizingEvent = { type: 'FINALIZING'; events: EventRecord[]; fee: BN }
+export type TransactionProcessingEvent = { type: 'PROCESSING'; events: EventRecord[]; fee: BN }
 export type TransactionSuccessEvent = { type: 'SUCCESS'; events: EventRecord[]; fee: BN }
 export type TransactionErrorEvent = { type: 'ERROR'; events: EventRecord[]; fee: BN }
 export type TransactionEvent =
   | { type: 'SIGNED' }
   | { type: 'SIGN' }
   | { type: 'SIGN_EXTERNAL' }
+  | { type: 'CANCELED' }
   | { type: 'PENDING' }
-  | TransactionFinalizingEvent
+  | { type: 'FINALIZING' }
+  | TransactionProcessingEvent
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
@@ -26,6 +28,8 @@ type TransactionState =
   | { value: 'signing'; context: EmptyObject }
   | { value: 'signWithExtension'; context: EmptyObject }
   | { value: 'canceled'; context: EmptyObject }
+  | { value: 'finalizing'; context: EmptyObject }
+  | { value: 'processing'; context: Required<TransactionContext> }
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: Required<TransactionContext> }
 
@@ -49,16 +53,7 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     signWithExtension: {
       on: {
         PENDING: 'pending',
-        ERROR: {
-          target: 'canceled',
-          actions: [
-            assign({
-              events: (_, event) => event.events,
-              fee: (_, event) => event.fee,
-            }),
-            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
-          ],
-        },
+        CANCELED: 'canceled',
       },
     },
     canceled: {
@@ -66,26 +61,17 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     },
     pending: {
       on: {
-        FINALIZING: {
-          target: 'finalizing',
-          actions: assign({
-            events: (_, event) => event.events,
-            fee: (_, event) => event.fee,
-          }),
-        },
-        ERROR: {
-          target: 'error',
-          actions: [
-            assign({
-              events: (_, event) => event.events,
-              fee: (_, event) => event.fee,
-            }),
-            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
-          ],
-        },
+        FINALIZING: 'finalizing',
+        ERROR: 'error',
       },
     },
     finalizing: {
+      on: {
+        PROCESSING: 'processing',
+        ERROR: 'error',
+      },
+    },
+    processing: {
       on: {
         SUCCESS: {
           target: 'success',
