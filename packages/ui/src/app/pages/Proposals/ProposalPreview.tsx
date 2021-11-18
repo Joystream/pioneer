@@ -21,6 +21,7 @@ import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
 import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { ProposalDetailsComponent } from '@/proposals/components/ProposalPreview/ProposalDetails'
@@ -154,6 +155,7 @@ export const ProposalPreview = () => {
             <h3>{camelCaseToText(proposal.type)}</h3>
 
             <ProposalDetailsComponent details={proposal.details} />
+            <ProposalDetails proposalDetails={proposal.details} />
 
             <RationalePreview rationale={proposal.rationale} />
 
