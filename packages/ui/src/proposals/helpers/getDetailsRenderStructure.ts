@@ -16,11 +16,19 @@ import {
   DestinationsDetail,
 } from '@/proposals/types'
 
-export type RenderType = 'Text' | 'Amount' | 'Markdown' | 'RuntimeBlob' | 'NumberOfBlocks' | 'Member' | 'Address'
+export type RenderType =
+  | 'Text'
+  | 'Amount'
+  | 'Markdown'
+  | 'RuntimeBlob'
+  | 'NumberOfBlocks'
+  | 'Member'
+  | 'Address'
+  | 'Divider'
 
 export interface RenderNode {
-  label: string
-  value: any
+  label?: string
+  value?: any
   renderType: RenderType
 }
 
@@ -42,6 +50,9 @@ const destinationsMapper: Mapper<DestinationsDetail, 'destinations'> = (value): 
       label: 'destination',
       value: destination.account,
       renderType: 'Address',
+    })
+    result.push({
+      renderType: 'Divider',
     })
   })
 

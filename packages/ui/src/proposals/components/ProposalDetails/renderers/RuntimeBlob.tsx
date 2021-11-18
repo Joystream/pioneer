@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
-import styled from 'styled-components'
 
-import { FileIcon } from '@/common/components/icons'
-import { Link } from '@/common/components/Link'
-import { Row } from '@/common/components/Modal'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Label, TextInlineMedium } from '@/common/components/typography'
+import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
+import { StatisticButton } from '@/common/components/statistics/StatisticButton'
+import { TextInlineBig } from '@/common/components/typography'
+import { downloadFile } from '@/common/utils/downloadFile'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
 
 interface Props {
@@ -16,9 +14,12 @@ interface Props {
 export const RuntimeBlob = ({ label, value: newBytecodeId }: Props) => {
   const { state, runtimeBase64string, fetch } = useRuntimeBytecode(newBytecodeId)
 
+  const download = () =>
+    downloadFile(`bytecode_${newBytecodeId}.wasm`, `data:application/octet-stream;base64,${runtimeBase64string}`)
+
   useEffect(() => {
-    if (state === 'loaded' && runtimeBase64string) {
-      downloadFile(newBytecodeId, getDownloadHref(runtimeBase64string))
+    if (state === 'loaded') {
+      download()
     }
   }, [state])
 
@@ -26,40 +27,16 @@ export const RuntimeBlob = ({ label, value: newBytecodeId }: Props) => {
     if (state !== 'loaded') {
       fetch()
     } else {
-      runtimeBase64string && downloadFile(newBytecodeId, getDownloadHref(runtimeBase64string))
+      download()
     }
   }
 
   return (
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>{label}</Label>
-        <FileLink onClick={onClick} dark>
-          <FileIcon />
-          <TextInlineMedium bold value>
-            {state === 'loading' ? 'Downloading file...' : 'File Preview'}
-          </TextInlineMedium>
-        </FileLink>
-      </RowGapBlock>
-    </Row>
+    <StatisticButton title={label} onClick={onClick} disabled={state === 'loading'} icon={<ArrowRightIcon />}>
+      <FileIcon />
+      <TextInlineBig bold value>
+        {state === 'loading' ? 'Downloading file...' : 'File Preview'}
+      </TextInlineBig>
+    </StatisticButton>
   )
 }
-
-function downloadFile(id: string | undefined, downloadHref: string) {
-  const a = document.createElement('a')
-  a.download = `bytecode_${id}.wasm`
-  a.href = downloadHref
-  a.click()
-}
-
-function getDownloadHref(base64string: string) {
-  return `data:application/octet-stream;base64,${base64string}`
-}
-
-export const FileLink = styled(Link)`
-  display: flex;
-  text-decoration: none;
-  & svg {
-    margin-right: 4px;
-  }
-`

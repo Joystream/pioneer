@@ -1,9 +1,7 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { set } from 'lodash'
 import React from 'react'
-import { of } from 'rxjs'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account } from '@/accounts/types'

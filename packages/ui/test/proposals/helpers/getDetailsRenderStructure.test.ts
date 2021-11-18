@@ -28,6 +28,9 @@ describe('getDetailsRenderStructure()', () => {
           value: alice.address,
           renderType: 'Address',
         },
+        {
+          renderType: 'Divider',
+        },
       ],
     })
   })
@@ -44,6 +47,7 @@ describe('getDetailsRenderStructure()', () => {
           account: bob.address,
           amount: 30,
         },
+
         {
           account: aliceStash.address,
           amount: 10,
@@ -64,6 +68,9 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Address',
         },
         {
+          renderType: 'Divider',
+        },
+        {
           label: 'amount',
           value: 30,
           renderType: 'Amount',
@@ -74,6 +81,9 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Address',
         },
         {
+          renderType: 'Divider',
+        },
+        {
           label: 'amount',
           value: 10,
           renderType: 'Amount',
@@ -82,6 +92,9 @@ describe('getDetailsRenderStructure()', () => {
           label: 'destination',
           value: aliceStash.address,
           renderType: 'Address',
+        },
+        {
+          renderType: 'Divider',
         },
       ],
     })

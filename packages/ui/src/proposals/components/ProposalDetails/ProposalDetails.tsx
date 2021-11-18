@@ -1,10 +1,10 @@
 import React, { ReactElement, useCallback, useMemo } from 'react'
 
-import { Statistics } from '@/common/components/statistics'
+import { StatisticsThreeColumns } from '@/common/components/statistics'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
 
-import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text } from './renderers'
+import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text, Divider } from './renderers'
 
 interface Props {
   proposalDetails?: ProposalWithDetails['details']
@@ -14,7 +14,7 @@ export interface ProposalDetailContent {
   (props: { label: string; value: any }): ReactElement
 }
 
-const renderTypeMapper: Record<RenderType, ProposalDetailContent> = {
+const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Text: Text,
   Amount: Amount,
   NumberOfBlocks: NumberOfBlocks,
@@ -22,13 +22,14 @@ const renderTypeMapper: Record<RenderType, ProposalDetailContent> = {
   Member: Member,
   Address: Address,
   RuntimeBlob: RuntimeBlob,
+  Divider: Divider,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {
-      return <Component label={detail.label} value={detail.value} key={index} />
+      return <Component label={detail.label || ''} value={detail.value} key={index} />
     }
 
     return null
@@ -39,5 +40,5 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
     return null
   }
 
-  return <Statistics>{detailsRenderStructure?.structure?.map(renderProposalDetail)}</Statistics>
+  return <StatisticsThreeColumns>{detailsRenderStructure?.structure?.map(renderProposalDetail)}</StatisticsThreeColumns>
 }

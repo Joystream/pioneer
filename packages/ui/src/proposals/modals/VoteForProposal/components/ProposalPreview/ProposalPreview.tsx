@@ -19,7 +19,7 @@ export interface ProposalDetailContent {
   (props: { label: string; value: any }): ReactElement
 }
 
-const renderTypeMapper: Record<RenderType, ProposalDetailContent> = {
+const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Text: Text,
   Amount: Amount,
   NumberOfBlocks: NumberOfBlocks,
@@ -33,7 +33,7 @@ export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {
-      return <Component label={detail.label} value={detail.value} key={index} />
+      return <Component label={detail.label || ''} value={detail.value} key={index} />
     }
 
     return null

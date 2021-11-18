@@ -24,7 +24,6 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
-import { ProposalDetailsComponent } from '@/proposals/components/ProposalPreview/ProposalDetails'
 import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
@@ -154,7 +153,6 @@ export const ProposalPreview = () => {
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.type)}</h3>
 
-            <ProposalDetailsComponent details={proposal.details} />
             <ProposalDetails proposalDetails={proposal.details} />
 
             <RationalePreview rationale={proposal.rationale} />
