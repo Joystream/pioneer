@@ -39,6 +39,7 @@ const StepperWrap = styled.div`
   position: relative;
   grid-row-gap: 20px;
   align-content: start;
+  margin-bottom: 15px;
 `
 
 const StepNumber = styled.div`

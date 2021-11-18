@@ -12,18 +12,12 @@ interface Props {
 }
 
 export const OnBoardingProvider = (props: Props) => {
-  const [membershipOnBoardingValue, setMembershipOnBoardingValue] = useLocalStorage<string>('onboarding-intro')
-  const membership = useMembershipOnBoarding(membershipOnBoardingValue)
+  const membershipOnBoarding = useMembershipOnBoarding()
 
-  const value = {
-    ...membership,
-    setFreeTokens: setMembershipOnBoardingValue,
-  }
-
-  return <OnBoardingContext.Provider value={{ ...value }}>{props.children}</OnBoardingContext.Provider>
+  return <OnBoardingContext.Provider value={{ ...membershipOnBoarding }}>{props.children}</OnBoardingContext.Provider>
 }
 
-const useMembershipOnBoarding = (localStorageValue: string | undefined): UseMembershipOnBoarding => {
+const useMembershipOnBoarding = (): UseMembershipOnBoarding => {
   const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
@@ -36,15 +30,11 @@ const useMembershipOnBoarding = (localStorageValue: string | undefined): UseMemb
     return { isLoading: false, status: 'installPlugin' }
   }
 
-  if (!hasAccounts || (!localStorageValue && !hasMembers)) {
+  if (!hasAccounts) {
     return { isLoading: false, status: 'addAccount' }
   }
 
-  if (!hasMembers && localStorageValue !== 'redeemed') {
-    return { isLoading: false, status: 'getFreeTokens' }
-  }
-
-  if (!hasMembers && localStorageValue === 'redeemed') {
+  if (!hasMembers) {
     return { isLoading: false, status: 'createMembership' }
   }
 

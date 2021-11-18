@@ -28,12 +28,7 @@ export const onBoardingSteps: StepperStep[] = [
     id: 'addAccount',
   },
   {
-    title: 'Get FREE tokens',
-    type: 'next',
-    id: 'getFreeTokens',
-  },
-  {
-    title: 'Create membership',
+    title: 'Create membership for FREE',
     type: 'next',
     id: 'createMembership',
   },
@@ -48,10 +43,7 @@ const innerStaticStepperSteps = [
     title: 'Create or select a Polkadot account',
   },
   {
-    title: 'Get FREE tokens',
-  },
-  {
-    title: 'Create membership',
+    title: 'Create membership for FREE',
   },
 ]
 
@@ -107,11 +99,10 @@ export const OnBoardingOverlay = ({ toggleModal }: Props) => {
           </DrawerContainer>
           <DrawerContainer title="How to become a member?">
             <VerticalStaticStepper steps={innerStaticStepperSteps} />
+            <ButtonPrimary onClick={toggleModal} size="large">
+              Continue
+            </ButtonPrimary>
           </DrawerContainer>
-          <div />
-          <ButtonPrimary onClick={toggleModal} size="large">
-            Continue
-          </ButtonPrimary>
         </DropdownContent>
       </StyledDropDown>
     </MainWrapper>
@@ -131,7 +122,6 @@ const StyledDropDown = styled(DropDownToggle)`
 const DropdownContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-row-gap: 30px;
   padding: 40px;
 
   > *:first-child {
