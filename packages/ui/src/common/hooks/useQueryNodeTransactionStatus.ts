@@ -25,6 +25,6 @@ export function useQueryNodeTransactionStatus(blockHash?: Hash | string) {
       setStatus(blockHash === queryNodeBlockHash ? 'confirmed' : 'rejected')
     }
   }, [queryNodeState, queryNodeBlockHash])
-  
+
   return status
 }

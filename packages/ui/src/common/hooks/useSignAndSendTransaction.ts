@@ -1,9 +1,10 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
+import { Hash } from '@polkadot/types/interfaces/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
@@ -12,6 +13,7 @@ import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
 import { useObservable } from './useObservable'
+import { useQueryNodeTransactionStatus } from './useQueryNodeTransactionStatus'
 import { useTransactionStatus } from './useTransactionStatus'
 
 interface UseSignAndSendTransactionParams {
@@ -24,7 +26,8 @@ const observeTransaction = (
   transaction: Observable<ISubmittableResult>,
   send: Sender<any>,
   fee: BN,
-  setPending: (b: boolean) => void
+  setPending: (b: boolean) => void,
+  setBlockHash: (h: string | Hash) => void
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
@@ -37,31 +40,32 @@ const observeTransaction = (
     }
 
     if (status.isInBlock) {
-      info('Included at block hash', JSON.stringify(status.asInBlock))
+      const hash = status.asInBlock
+      info('Included at block hash', JSON.stringify(hash))
       info('Events:')
       info(JSON.stringify(events))
+      setBlockHash(hash.toString())
 
-      send({
-        type: hasErrorEvent(events) ? 'ERROR' : 'FINALIZING',
-        events,
-        fee,
-      })
+      send(hasErrorEvent(events) ? 'ERROR' : 'FINALIZING')
 
       setPending(false)
     }
 
     if (status.isFinalized) {
       send({
-        type: hasErrorEvent(events) ? 'ERROR' : 'SUCCESS',
+        type: hasErrorEvent(events) ? 'ERROR' : 'PROCESSING',
         events,
         fee,
       })
     }
   }
 
-  const errorHandler = () => send({ type: 'ERROR', events: [] })
+  const errorHandler = () => send({ type: 'CANCELED', events: [] })
 
-  transaction.subscribe(statusCallback, errorHandler)
+  transaction.subscribe({
+    next: statusCallback,
+    error: errorHandler,
+  })
 }
 
 export const useSignAndSendTransaction = ({ transaction, signer, service }: UseSignAndSendTransactionParams) => {
@@ -69,6 +73,10 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const sign = useCallback(() => send('SIGN'), [service])
   const { setPending } = useTransactionStatus()
+
+  const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
+
+  const queryNodeStatus = useQueryNodeTransactionStatus(blockHash)
 
   useEffect(() => {
     if (!state.matches('signing') || !transaction || !paymentInfo) {
@@ -78,10 +86,23 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
     const fee = paymentInfo.partialFee.toBn()
 
     web3FromAddress(signer).then((extension) => {
-      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee, setPending)
+      observeTransaction(
+        transaction.signAndSend(signer, { signer: extension.signer }),
+        send,
+        fee,
+        setPending,
+        setBlockHash
+      )
     })
     send('SIGN_EXTERNAL')
   }, [state.value.toString(), paymentInfo])
+
+  useEffect(() => {
+    if (!state.matches('processing')) {
+      return
+    }
+    queryNodeStatus === 'confirmed' && send('SUCCESS')
+  }, [state.value.toString(), queryNodeStatus])
 
   return {
     paymentInfo,
