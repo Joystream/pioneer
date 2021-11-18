@@ -4,7 +4,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/common/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { OnBoardingContext } from '@/common/providers/onboarding/context'
-import { UseMembershipOnBoarding } from '@/common/providers/onboarding/types'
+import { UseOnBoarding } from '@/common/providers/onboarding/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface Props {
@@ -12,15 +12,14 @@ interface Props {
 }
 
 export const OnBoardingProvider = (props: Props) => {
-  const membershipOnBoarding = useMembershipOnBoarding()
-
-  return <OnBoardingContext.Provider value={{ ...membershipOnBoarding }}>{props.children}</OnBoardingContext.Provider>
+  return <OnBoardingContext.Provider value={{ ...useOnBoarding() }}>{props.children}</OnBoardingContext.Provider>
 }
 
-const useMembershipOnBoarding = (): UseMembershipOnBoarding => {
+const useOnBoarding = (): UseOnBoarding => {
   const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
+  const [membershipAccount, setMembershipAccount] = useLocalStorage('onboarding-membership-account')
 
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
@@ -30,11 +29,11 @@ const useMembershipOnBoarding = (): UseMembershipOnBoarding => {
     return { isLoading: false, status: 'installPlugin' }
   }
 
-  if (!hasAccounts) {
-    return { isLoading: false, status: 'addAccount' }
+  if (!hasAccounts || !membershipAccount) {
+    return { isLoading: false, status: 'addAccount', setMembershipAccount }
   }
 
-  if (!hasMembers) {
+  if (!hasMembers && membershipAccount) {
     return { isLoading: false, status: 'createMembership' }
   }
 

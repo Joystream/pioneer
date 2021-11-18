@@ -22,7 +22,7 @@ const mockUseMyAccounts: UseAccounts = {
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setFreeTokens: jest.fn(),
+  setMembershipAccount: jest.fn(),
 }
 
 let mockMyBalances: AddressToBalanceMap = {}
@@ -165,7 +165,7 @@ describe('UI: OnBoardingModal', () => {
         getByText('Alice').click()
         getByText('Connect Account').click()
 
-        expect(mockOnBoarding.setFreeTokens).toBeCalledWith('123')
+        expect(mockOnBoarding.setMembershipAccount).toBeCalledWith('123')
       })
     })
   })
@@ -195,7 +195,7 @@ describe('UI: OnBoardingModal', () => {
 
       getByText(/Continue And Get Tokens/i)?.click()
 
-      expect(mockOnBoarding.setFreeTokens).toBeCalledWith('redeemed')
+      expect(mockOnBoarding.setMembershipAccount).toBeCalledWith('redeemed')
     })
   })
 

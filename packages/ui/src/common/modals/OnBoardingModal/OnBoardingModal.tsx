@@ -17,7 +17,6 @@ import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
-import { OnBoardingTokens } from '@/common/modals/OnBoardingModal/OnBoardingTokens'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSignModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
@@ -26,7 +25,7 @@ import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
-  const { isLoading, status, setFreeTokens } = useOnBoarding()
+  const { isLoading, status, setMembershipAccount } = useOnBoarding()
   const { api, connectionState } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(buyMembershipMachine)
@@ -36,9 +35,7 @@ export const OnBoardingModal = () => {
       case 'installPlugin':
         return <OnBoardingPlugin />
       case 'addAccount':
-        return <OnBoardingAccount onAccountSelect={setFreeTokens} />
-      case 'getFreeTokens':
-        return <OnBoardingTokens onRedemption={() => setFreeTokens && setFreeTokens('redeemed')} />
+        return <OnBoardingAccount onAccountSelect={setMembershipAccount} />
       case 'createMembership':
         return (
           <OnBoardingMembership

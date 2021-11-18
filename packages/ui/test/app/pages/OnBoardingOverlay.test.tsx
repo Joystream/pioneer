@@ -8,7 +8,7 @@ import { UseOnBoarding } from '@/common/providers/onboarding/types'
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setFreeTokens: jest.fn()
+  setMembershipAccount: jest.fn()
 }
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
