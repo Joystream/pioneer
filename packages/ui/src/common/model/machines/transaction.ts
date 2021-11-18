@@ -58,6 +58,9 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     },
     canceled: {
       type: 'final',
+      data: {
+        finalStatus: 'canceled',
+      },
     },
     pending: {
       on: {
@@ -97,7 +100,7 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
       data: {
         events: (_: TransactionContext, event: TransactionSuccessEvent) => event.events,
         fee: (_: TransactionContext, event: TransactionSuccessEvent) => event.fee,
-        isError: false,
+        finalStatus: 'success',
       },
     },
     error: {
@@ -105,12 +108,17 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
       data: {
         events: (_: TransactionContext, event: TransactionErrorEvent) => event.events,
         fee: (_: TransactionContext, event: TransactionErrorEvent) => event.fee,
-        isError: true,
+        finalStatus: 'error',
       },
     },
   },
 })
 
-export const isTransactionSuccess = (context: unknown, event: DoneInvokeEvent<{ isError: boolean }>) =>
-  !event.data.isError
-export const isTransactionError = (context: unknown, event: DoneInvokeEvent<{ isError: boolean }>) => event.data.isError
+type FinalStatus = 'success' | 'error' | 'canceled'
+
+export const isTransactionSuccess = (context: unknown, event: DoneInvokeEvent<{ finalStatus: FinalStatus }>) =>
+  event.data.finalStatus === 'success'
+export const isTransactionError = (context: unknown, event: DoneInvokeEvent<{ finalStatus: FinalStatus }>) =>
+  event.data.finalStatus === 'error'
+export const isTransactionCanceled = (context: unknown, event: DoneInvokeEvent<{ finalStatus: FinalStatus }>) =>
+  event.data.finalStatus === 'canceled'

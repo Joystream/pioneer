@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 interface StakingContext {
@@ -206,6 +206,10 @@ export const announceCandidacyMachine = createMachine<
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
@@ -223,6 +227,10 @@ export const announceCandidacyMachine = createMachine<
             target: 'error',
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
           },
         ],
       },
@@ -242,10 +250,15 @@ export const announceCandidacyMachine = createMachine<
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

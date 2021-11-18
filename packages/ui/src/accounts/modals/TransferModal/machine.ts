@@ -2,7 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 import { Account } from '../../types'
@@ -78,10 +78,15 @@ export const transferMachine = createMachine<TransferContext, TransferEvent, Tra
             cond: isTransactionError,
             actions: assign({ transactionEvents: (_, event) => event.data.events, fee: (_, event) => event.data.fee }),
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

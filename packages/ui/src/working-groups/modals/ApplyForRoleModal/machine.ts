@@ -1,7 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 import { StakeStepFormFields } from './StakeStep'
@@ -97,6 +97,10 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
@@ -116,10 +120,15 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

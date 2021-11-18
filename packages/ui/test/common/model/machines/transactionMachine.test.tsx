@@ -1,6 +1,6 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, TransactionEvent, transactionMachine } from '@/common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, TransactionEvent, transactionMachine } from '@/common/model/machines'
 
 describe('Machine: Transaction machine', () => {
   let service: Interpreter<any, any, TransactionEvent, any>
@@ -103,11 +103,16 @@ describe('Machine: Transaction machine', () => {
                 }),
                 cond: isTransactionError,
               },
+              {
+                target: 'canceled',
+                cond: isTransactionCanceled,
+              },
             ],
           },
         },
         success: { type: 'final' },
         error: { type: 'final' },
+        canceled: { type: 'final' },
       },
     })
     let service: Interpreter<any>

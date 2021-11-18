@@ -62,12 +62,12 @@ export const RevealVoteMachine = createMachine<Partial<RevealVoteContext>, Revea
             actions: assign({ transactionEvents: (_, event) => event.data.events }),
             cond: isTransactionError,
           },
+          
         ],
       },
     },
-
     success: { type: 'final' },
-
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

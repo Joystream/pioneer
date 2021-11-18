@@ -1,7 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
@@ -63,10 +63,15 @@ export const inviteMemberMachine = createMachine<Context, InviteMemberEvent, Inv
             cond: isTransactionError,
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

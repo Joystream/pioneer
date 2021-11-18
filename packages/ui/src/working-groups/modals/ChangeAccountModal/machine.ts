@@ -1,7 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
 import { Address, EmptyObject } from '../../../common/types'
 
 interface ChangeAccountContext {
@@ -51,6 +51,10 @@ export const changeAccountMachine = createMachine<Context, ChangeAccountEvent, C
             target: 'error',
             cond: isTransactionError,
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
           },
         ],
       },

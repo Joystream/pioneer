@@ -3,7 +3,7 @@ import { assign, createMachine } from 'xstate'
 
 import { EmptyObject } from '@/common/types'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
 
 interface LeaveRoleContext {
   rationale?: string
@@ -52,10 +52,15 @@ export const leaveRoleMachine = createMachine<Context, LeaveRoleEvent, LeaveRole
             target: 'error',
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })
