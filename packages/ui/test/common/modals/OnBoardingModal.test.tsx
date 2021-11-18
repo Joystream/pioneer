@@ -225,7 +225,7 @@ describe('UI: OnBoardingModal', () => {
   const renderModal = () =>
     render(
       <ModalContext.Provider value={useModal}>
-        <OnBoardingModal toggleModal={() => undefined} />
+        <OnBoardingModal />
       </ModalContext.Provider>
     )
 })

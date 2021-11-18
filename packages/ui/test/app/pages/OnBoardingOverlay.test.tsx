@@ -8,11 +8,11 @@ import { UseOnBoarding } from '@/common/providers/onboarding/types'
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setFreeTokens: jest.fn(),
+  setFreeTokens: jest.fn()
 }
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
-  useOnBoarding: () => mockOnBoarding,
+  useOnBoarding: () => mockOnBoarding
 }))
 
 describe('OnBoardingOverlay', () => {
@@ -90,5 +90,5 @@ describe('OnBoardingOverlay', () => {
 
   const getStepCircle = (text: string, getByText: any) => getByText(text)?.parentElement?.previousElementSibling
 
-  const renderComponent = () => render(<OnBoardingOverlay toggleModal={() => undefined} />)
+  const renderComponent = () => render(<OnBoardingOverlay />)
 })

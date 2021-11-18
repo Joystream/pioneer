@@ -87,7 +87,7 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
           <MembershipContext.Provider value={state.useMyMemberships}>
             <OnBoardingProvider>
               <TemplateBlock>
-                <OnBoardingOverlay toggleModal={() => undefined} />
+                <OnBoardingOverlay />
               </TemplateBlock>
             </OnBoardingProvider>
           </MembershipContext.Provider>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
@@ -17,7 +17,7 @@ export const CurrentMember = () => {
   if (!hasMembers) {
     return (
       <MembershipButtonsWrapper>
-        <AddMembershipButton size="large">Create membership</AddMembershipButton>
+        <AddMembershipButton size='large'>Join Now</AddMembershipButton>
       </MembershipButtonsWrapper>
     )
   }
@@ -37,7 +37,7 @@ export const CurrentMember = () => {
         <MembershipButtonsWrapper>
           <MembershipActionButton
             onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}
-            size="large"
+            size='large'
           >
             Select membership
           </MembershipActionButton>

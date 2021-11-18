@@ -1,14 +1,13 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
-import { MembershipOnBoarding } from '@/common/components/MembershipOnBoarding'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
-import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -33,9 +32,7 @@ export const App = () => (
     <Page>
       <SideBar />
       <Screen>
-        <OnBoardingProvider>
-          <MembershipOnBoarding />
-        </OnBoardingProvider>
+        <OnBoardingOverlay />
         <Switch>
           <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
           <Route path={ProposalsRoutes.home} component={ProposalsModule} />

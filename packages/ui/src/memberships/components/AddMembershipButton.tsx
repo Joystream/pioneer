@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useCallback } from 'react'
 
 import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
@@ -18,11 +18,14 @@ interface AddMembershipButtonProps {
 export const AddMembershipButton = ({ className, children, size }: AddMembershipButtonProps) => {
   const { showModal } = useModal()
   const { isTransactionPending } = useTransactionStatus()
+  const openOnBoardingModal = useCallback(() => {
+    showModal({ modal: 'OnBoardingModal' })
+  }, [])
 
   return (
     <TransactionButtonWrapper>
       <MembershipActionButton
-        onClick={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
+        onClick={openOnBoardingModal}
         className={className}
         size={size}
         disabled={isTransactionPending}

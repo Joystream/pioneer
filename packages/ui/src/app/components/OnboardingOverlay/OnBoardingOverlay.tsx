@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
@@ -15,36 +15,39 @@ import { Colors } from '@/common/constants'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
+import { useModal } from '@/common/hooks/useModal'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 
 export const onBoardingSteps: StepperStep[] = [
   {
     title: 'Add Polkadot plugin',
     type: 'next',
-    id: 'installPlugin',
+    id: 'installPlugin'
   },
   {
     title: 'Connect a Polkadot account',
     type: 'next',
-    id: 'addAccount',
+    id: 'addAccount'
   },
   {
     title: 'Create membership for FREE',
     type: 'next',
-    id: 'createMembership',
-  },
+    id: 'createMembership'
+  }
 ]
 
 const innerStaticStepperSteps = [
   {
     title: 'Install Polkadot extension',
-    subtitle: ['and create account', 'then connect it to your joystream membership'],
+    subtitle: ['and create account', 'then connect it to your joystream membership']
   },
   {
-    title: 'Create or select a Polkadot account',
+    title: 'Create or select a Polkadot account'
   },
   {
-    title: 'Create membership for FREE',
-  },
+    title: 'Create membership for FREE'
+  }
 ]
 
 export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
@@ -62,13 +65,13 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
   })
 }
 
-interface Props {
-  toggleModal: () => void
-}
-
-export const OnBoardingOverlay = ({ toggleModal }: Props) => {
+export const OnBoardingOverlay = () => {
+  const { showModal } = useModal<OnBoardingModalCall>()
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
+  const openOnBoardingModal = useCallback(() => {
+    showModal({ modal: 'OnBoardingModal' })
+  }, [])
 
   if (isLoading || !status || status === 'finished') {
     return null
@@ -87,19 +90,19 @@ export const OnBoardingOverlay = ({ toggleModal }: Props) => {
           <HorizontalStepper steps={steps} />
         </StepperContainer>
         <ButtonContainer>
-          <ButtonPrimary size="large" onClick={toggleModal}>
+          <ButtonPrimary size='large' onClick={openOnBoardingModal}>
             Join now
           </ButtonPrimary>
         </ButtonContainer>
       </Wrapper>
       <StyledDropDown isDropped={isOpen}>
         <DropdownContent>
-          <DrawerContainer title="What are the benefits?">
+          <DrawerContainer title='What are the benefits?'>
             <BenefitsTable />
           </DrawerContainer>
-          <DrawerContainer title="How to become a member?">
+          <DrawerContainer title='How to become a member?'>
             <VerticalStaticStepper steps={innerStaticStepperSteps} />
-            <ButtonPrimary onClick={toggleModal} size="large">
+            <ButtonPrimary onClick={openOnBoardingModal} size='large'>
               Continue
             </ButtonPrimary>
           </DrawerContainer>
