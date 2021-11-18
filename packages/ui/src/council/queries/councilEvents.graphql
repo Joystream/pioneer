@@ -33,6 +33,7 @@ fragment CouncilorRewardUpdatedEventFields on CouncilorRewardUpdatedEvent {
 fragment NewCandidateEventFields on NewCandidateEvent {
   id
   createdAt
+  memberId
   member {
     handle
   }

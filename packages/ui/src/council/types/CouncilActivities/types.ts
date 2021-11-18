@@ -12,7 +12,7 @@ import {
 
 export type CouncilActivity =
   | NewCouncilElectedActivity
-  | CouncilWithdrawActivity
+  | CandidacyWithdrawActivity
   | AnnouncingPeriodStartedActivity
   | VotingPeriodStartedActivity
   | CouncilorRewardUpdatedActivity
@@ -35,7 +35,7 @@ export interface NewCouncilElectedActivity extends BaseActivity {
   electedMembersNumber: number
 }
 
-export interface CouncilWithdrawActivity extends BaseActivity {
+export interface CandidacyWithdrawActivity extends BaseActivity {
   eventType: 'CandidacyWithdrawEvent'
   candidateHandle: string
 }
@@ -60,6 +60,7 @@ export interface NotEnoughCandidatesActivity extends BaseActivity {
 export interface NewCandidateActivity extends BaseActivity {
   eventType: 'NewCandidateEvent'
   candidateHandle: string
+  memberId: string
 }
 
 export interface RevealingStageStartedActivity extends BaseActivity {

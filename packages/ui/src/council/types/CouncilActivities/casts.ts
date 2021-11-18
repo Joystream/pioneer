@@ -18,7 +18,7 @@ import {
   VotingPeriodStartedActivity,
   RevealingStageStartedActivity,
   NewCandidateActivity,
-  CouncilWithdrawActivity,
+  CandidacyWithdrawActivity,
   CouncilorRewardUpdatedActivity,
   NotEnoughCandidatesActivity,
 } from '@/council/types/CouncilActivities/types'
@@ -66,11 +66,12 @@ const asNewCandidateActivity: CouncilActivityCast<NewCandidateEventFieldsFragmen
   eventType: fields.__typename,
   ...asBaseActivity(fields),
   candidateHandle: fields.member.handle,
+  memberId: fields.memberId,
 })
 
 const asCandidacyWithdrawActivity: CouncilActivityCast<
   CandidacyWithdrawEventFieldsFragment,
-  CouncilWithdrawActivity
+  CandidacyWithdrawActivity
 > = (fields) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),

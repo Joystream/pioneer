@@ -40,6 +40,7 @@ export type NewCandidateEventFieldsFragment = {
   __typename: 'NewCandidateEvent'
   id: string
   createdAt: any
+  memberId: string
   member: { __typename: 'Membership'; handle: string }
 }
 
@@ -94,6 +95,7 @@ export type GetCouncilEventsQuery = {
         __typename: 'NewCandidateEvent'
         id: string
         createdAt: any
+        memberId: string
         member: { __typename: 'Membership'; handle: string }
       }
     | {
@@ -188,6 +190,7 @@ export const NewCandidateEventFieldsFragmentDoc = gql`
   fragment NewCandidateEventFields on NewCandidateEvent {
     id
     createdAt
+    memberId
     member {
       handle
     }
