@@ -24,11 +24,6 @@ export type ForumBaseCategoryFieldsFragment = {
           | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
-  moderators: Array<{
-    __typename: 'Worker'
-    id: string
-    membership: { __typename: 'Membership'; id: string; handle: string }
-  }>
 }
 
 export type ForumCategoryFieldsFragment = {
@@ -36,6 +31,11 @@ export type ForumCategoryFieldsFragment = {
   id: string
   title: string
   description: string
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
   forumcategoryparent?:
     | Array<{
         __typename: 'ForumCategory'
@@ -63,11 +63,6 @@ export type ForumCategoryFieldsFragment = {
           | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
-  moderators: Array<{
-    __typename: 'Worker'
-    id: string
-    membership: { __typename: 'Membership'; id: string; handle: string }
-  }>
 }
 
 export type ArchivedForumCategoryFieldsFragment = {
@@ -104,28 +99,6 @@ export type ArchivedForumCategoryFieldsFragment = {
     | { __typename: 'CategoryStatusRemoved' }
 }
 
-export type ArchivedForumBaseCategoryFieldsFragment = {
-  __typename: 'ForumCategory'
-  id: string
-  title: string
-  description: string
-  status:
-    | { __typename: 'CategoryStatusActive' }
-    | {
-        __typename: 'CategoryStatusArchived'
-        categoryArchivalStatusUpdatedEvent?:
-          | {
-              __typename: 'CategoryArchivalStatusUpdatedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            }
-          | null
-          | undefined
-      }
-    | { __typename: 'CategoryStatusRemoved' }
-}
-
 export type ForumCategoryWithDetailsFieldsFragment = {
   __typename: 'ForumCategory'
   id: string
@@ -137,6 +110,11 @@ export type ForumCategoryWithDetailsFieldsFragment = {
         id: string
         title: string
         description: string
+        moderators: Array<{
+          __typename: 'Worker'
+          id: string
+          membership: { __typename: 'Membership'; id: string; handle: string }
+        }>
         forumcategoryparent?:
           | Array<{
               __typename: 'ForumCategory'
@@ -164,11 +142,6 @@ export type ForumCategoryWithDetailsFieldsFragment = {
                 | undefined
             }
           | { __typename: 'CategoryStatusRemoved' }
-        moderators: Array<{
-          __typename: 'Worker'
-          id: string
-          membership: { __typename: 'Membership'; id: string; handle: string }
-        }>
       }>
     | null
     | undefined
@@ -187,11 +160,6 @@ export type ForumCategoryWithDetailsFieldsFragment = {
           | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
-  moderators: Array<{
-    __typename: 'Worker'
-    id: string
-    membership: { __typename: 'Membership'; id: string; handle: string }
-  }>
 }
 
 export type ForumModeratorFieldsFragment = {
@@ -484,6 +452,11 @@ export type GetForumCategoriesQuery = {
     id: string
     title: string
     description: string
+    moderators: Array<{
+      __typename: 'Worker'
+      id: string
+      membership: { __typename: 'Membership'; id: string; handle: string }
+    }>
     forumcategoryparent?:
       | Array<{
           __typename: 'ForumCategory'
@@ -511,11 +484,6 @@ export type GetForumCategoriesQuery = {
             | undefined
         }
       | { __typename: 'CategoryStatusRemoved' }
-    moderators: Array<{
-      __typename: 'Worker'
-      id: string
-      membership: { __typename: 'Membership'; id: string; handle: string }
-    }>
   }>
 }
 
@@ -578,6 +546,11 @@ export type GetForumCategoryQuery = {
               id: string
               title: string
               description: string
+              moderators: Array<{
+                __typename: 'Worker'
+                id: string
+                membership: { __typename: 'Membership'; id: string; handle: string }
+              }>
               forumcategoryparent?:
                 | Array<{
                     __typename: 'ForumCategory'
@@ -605,11 +578,6 @@ export type GetForumCategoryQuery = {
                       | undefined
                   }
                 | { __typename: 'CategoryStatusRemoved' }
-              moderators: Array<{
-                __typename: 'Worker'
-                id: string
-                membership: { __typename: 'Membership'; id: string; handle: string }
-              }>
             }>
           | null
           | undefined
@@ -628,11 +596,6 @@ export type GetForumCategoryQuery = {
                 | undefined
             }
           | { __typename: 'CategoryStatusRemoved' }
-        moderators: Array<{
-          __typename: 'Worker'
-          id: string
-          membership: { __typename: 'Membership'; id: string; handle: string }
-        }>
       }
     | null
     | undefined
@@ -1020,8 +983,8 @@ export type SearchForumPostQuery = {
   }>
 }
 
-export const ArchivedForumBaseCategoryFieldsFragmentDoc = gql`
-  fragment ArchivedForumBaseCategoryFields on ForumCategory {
+export const ForumBaseCategoryFieldsFragmentDoc = gql`
+  fragment ForumBaseCategoryFields on ForumCategory {
     id
     title
     description
@@ -1045,7 +1008,7 @@ export const ForumSubCategoryFieldsFragmentDoc = gql`
 `
 export const ArchivedForumCategoryFieldsFragmentDoc = gql`
   fragment ArchivedForumCategoryFields on ForumCategory {
-    ...ArchivedForumBaseCategoryFields
+    ...ForumBaseCategoryFields
     forumcategoryparent {
       ...ForumSubCategoryFields
       status {
@@ -1053,7 +1016,7 @@ export const ArchivedForumCategoryFieldsFragmentDoc = gql`
       }
     }
   }
-  ${ArchivedForumBaseCategoryFieldsFragmentDoc}
+  ${ForumBaseCategoryFieldsFragmentDoc}
   ${ForumSubCategoryFieldsFragmentDoc}
 `
 export const ForumModeratorFieldsFragmentDoc = gql`
@@ -1065,30 +1028,12 @@ export const ForumModeratorFieldsFragmentDoc = gql`
     }
   }
 `
-export const ForumBaseCategoryFieldsFragmentDoc = gql`
-  fragment ForumBaseCategoryFields on ForumCategory {
-    id
-    title
-    description
-    status {
-      __typename
-      ... on CategoryStatusArchived {
-        categoryArchivalStatusUpdatedEvent {
-          createdAt
-          inBlock
-          network
-        }
-      }
-    }
-    moderators {
-      ...ForumModeratorFields
-    }
-  }
-  ${ForumModeratorFieldsFragmentDoc}
-`
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
     ...ForumBaseCategoryFields
+    moderators {
+      ...ForumModeratorFields
+    }
     forumcategoryparent {
       ...ForumSubCategoryFields
       status {
@@ -1097,6 +1042,7 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     }
   }
   ${ForumBaseCategoryFieldsFragmentDoc}
+  ${ForumModeratorFieldsFragmentDoc}
   ${ForumSubCategoryFieldsFragmentDoc}
 `
 export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`

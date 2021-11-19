@@ -5,6 +5,7 @@ import {
   ForumCategoryFieldsFragment,
   ArchivedForumCategoryFieldsFragment,
   ForumSubCategoryFieldsFragment,
+  ForumBaseCategoryFieldsFragment,
 } from '@/forum/queries'
 
 export interface ForumCategory {
@@ -35,8 +36,9 @@ export interface ForumSubCategory {
 export type CategoryBreadcrumb = ForumSubCategory
 
 type ForumCategoryFields = Omit<ForumCategoryFieldsFragment, '__typename'>
+type ForumBaseCategoryFields = Omit<ForumBaseCategoryFieldsFragment, '__typename'>
 type ArchivedForumCategoryFields = Omit<ArchivedForumCategoryFieldsFragment, '__typename'>
-export const asBaseForumCategory = (fields: ForumCategoryFields): Omit<ForumCategory, 'subcategories'> => ({
+export const asBaseForumCategory = (fields: ForumBaseCategoryFields): Omit<ForumCategory, 'subcategories'> => ({
   id: fields.id,
   title: fields.title,
   description: fields.description,
@@ -46,7 +48,7 @@ export const asBaseForumCategory = (fields: ForumCategoryFields): Omit<ForumCate
       ? { categoryArchivalStatusUpdatedEvent: asBlock(fields.status.categoryArchivalStatusUpdatedEvent) }
       : {}),
   },
-  moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
+  moderators: [],
 })
 
 export const asBaseArchivedForumCategory = (
@@ -66,6 +68,7 @@ export const asBaseArchivedForumCategory = (
 
 export const asForumCategory = (fields: ForumCategoryFields): ForumCategory => ({
   ...asBaseForumCategory(fields),
+  moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
   subcategories:
     fields.forumcategoryparent?.map((fields) => ({ ...asSubCategory(fields), status: fields.status.__typename })) ?? [],
 })

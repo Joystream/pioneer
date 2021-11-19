@@ -12,7 +12,7 @@ import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { THREADS_PER_PAGE } from '@/forum/constant'
-import { useArchivedForumCategories } from '@/forum/hooks/useForumCategories'
+import { useArchivedForumCategories } from '@/forum/hooks/useArchivedForumCategories'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
 import { ForumTabs } from './components/ForumTabs'

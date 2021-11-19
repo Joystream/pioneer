@@ -12,13 +12,13 @@ fragment ForumBaseCategoryFields on ForumCategory {
       }
     }
   }
-  moderators {
-    ...ForumModeratorFields
-  }
 }
 
 fragment ForumCategoryFields on ForumCategory {
   ...ForumBaseCategoryFields
+  moderators {
+    ...ForumModeratorFields
+  }
   forumcategoryparent {
     ...ForumSubCategoryFields
     status {
@@ -28,27 +28,11 @@ fragment ForumCategoryFields on ForumCategory {
 }
 
 fragment ArchivedForumCategoryFields on ForumCategory {
-  ...ArchivedForumBaseCategoryFields
+  ...ForumBaseCategoryFields
   forumcategoryparent {
     ...ForumSubCategoryFields
     status {
       __typename
-    }
-  }
-}
-
-fragment ArchivedForumBaseCategoryFields on ForumCategory {
-  id
-  title
-  description
-  status {
-    __typename
-    ... on CategoryStatusArchived {
-      categoryArchivalStatusUpdatedEvent {
-        createdAt
-        inBlock
-        network
-      }
     }
   }
 }

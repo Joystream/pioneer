@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import { ActiveStatus, ArchivedStatus, useArchivedForumCategories } from '@/forum/hooks/useForumCategories'
+import { ArchivedStatus, useArchivedForumCategories } from '@/forum/hooks/useArchivedForumCategories'
 import { useGetArchivedForumCategoriesQuery } from '@/forum/queries'
 
 type Props = Parameters<typeof useArchivedForumCategories>
