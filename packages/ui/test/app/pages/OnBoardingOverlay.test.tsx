@@ -58,17 +58,6 @@ describe('OnBoardingOverlay', () => {
       expect(accountCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
 
-    it('Get FREE Tokens', () => {
-      mockOnBoarding.status = 'getFreeTokens'
-      const { getByText } = renderComponent()
-
-      const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
-      const tokensCircle = getStepCircle('Get FREE tokens', getByText)
-
-      expect(accountCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
-      expect(tokensCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
-    })
-
     it('Create membership', () => {
       mockOnBoarding.status = 'createMembership'
       const { getByText } = renderComponent()

@@ -22,12 +22,11 @@ import { BuyMembershipSignModal } from '@/memberships/modals/BuyMembershipModal/
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 import { buyMembershipMachine } from '@/memberships/modals/BuyMembershipModal/machine'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
+import { SetMembershipAccount } from '@/common/providers/onboarding/types'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
-  const { isLoading, status, setMembershipAccount } = useOnBoarding()
-  const { api, connectionState } = useApi()
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const { isLoading, status, membershipAccount, setMembershipAccount } = useOnBoarding()
   const [state, send] = useMachine(buyMembershipMachine)
 
   const step = useMemo(() => {
@@ -39,35 +38,36 @@ export const OnBoardingModal = () => {
       case 'createMembership':
         return (
           <OnBoardingMembership
+            setMembershipAccount={setMembershipAccount as SetMembershipAccount}
             onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
-            membershipPrice={membershipPrice}
+            membershipAccount={membershipAccount as string}
           />
         )
       default:
         return null
     }
-  }, [status, membershipPrice])
+  }, [status, membershipAccount])
 
   if (isLoading || !status || status === 'finished') {
     return null
   }
 
-  if (state.matches('transaction') && api) {
-    const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
-    const { form } = state.context
-    const service = state.children.transaction
-
-    return (
-      <BuyMembershipSignModal
-        onClose={hideModal}
-        membershipPrice={membershipPrice}
-        formData={form}
-        transaction={transaction}
-        initialSigner={form.controllerAccount}
-        service={service}
-      />
-    )
-  }
+  // if (state.matches('transaction') && api) {
+  //   const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
+  //   const { form } = state.context
+  //   const service = state.children.transaction
+  //
+  //   return (
+  //     <BuyMembershipSignModal
+  //       onClose={hideModal}
+  //       membershipPrice={membershipPrice}
+  //       formData={form}
+  //       transaction={transaction}
+  //       initialSigner={form.controllerAccount}
+  //       service={service}
+  //     />
+  //   )
+  // }
 
   if (state.matches('success')) {
     const { form, memberId } = state.context

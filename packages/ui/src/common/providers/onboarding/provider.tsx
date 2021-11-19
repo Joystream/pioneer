@@ -6,6 +6,7 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { OnBoardingContext } from '@/common/providers/onboarding/context'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { Account } from '@/accounts/types'
 
 interface Props {
   children: React.ReactNode
@@ -15,11 +16,15 @@ export const OnBoardingProvider = (props: Props) => {
   return <OnBoardingContext.Provider value={{ ...useOnBoarding() }}>{props.children}</OnBoardingContext.Provider>
 }
 
+const hasAccount = (allAccounts: Account[], address: string) => {
+  return !!allAccounts.find(account => account.address === address)
+}
+
 const useOnBoarding = (): UseOnBoarding => {
   const { isConnected } = useApi()
-  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts } = useMyAccounts()
+  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
-  const [membershipAccount, setMembershipAccount] = useLocalStorage('onboarding-membership-account')
+  const [membershipAccount, setMembershipAccount] = useLocalStorage<string>('onboarding-membership-account')
 
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
@@ -29,12 +34,12 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: false, status: 'installPlugin' }
   }
 
-  if (!hasAccounts || !membershipAccount) {
+  if (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount)) {
     return { isLoading: false, status: 'addAccount', setMembershipAccount }
   }
 
-  if (!hasMembers && membershipAccount) {
-    return { isLoading: false, status: 'createMembership' }
+  if (!hasMembers && membershipAccount && hasAccount(allAccounts, membershipAccount)) {
+    return { isLoading: false, status: 'createMembership', membershipAccount, setMembershipAccount }
   }
 
   return { isLoading: false, status: 'finished' }

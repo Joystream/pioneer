@@ -3,9 +3,18 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { Account } from '@/accounts/types'
+import { Arrow } from '@/common/components/icons'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { useForm } from '@/common/hooks/useForm'
+import { useObservable } from '@/common/hooks/useObservable'
+
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
-import { Account } from '../../../accounts/types'
-import { ButtonPrimary } from '../../../common/components/buttons'
+import { ButtonGhost, ButtonPrimary } from '../../../common/components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -14,7 +23,7 @@ import {
   InputTextarea,
   Label,
   LabelLink,
-  ToggleCheckbox,
+  ToggleCheckbox
 } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import {
@@ -25,21 +34,23 @@ import {
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-  TransactionInfoContainer,
+  TransactionInfoContainer
 } from '../../../common/components/Modal'
-import { TransactionInfo } from '../../../common/components/TransactionInfo'
-import { TextMedium } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useForm } from '../../../common/hooks/useForm'
-import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
-interface CreateProps {
+
+interface BuyMembershipFormModalProps {
   onClose: () => void
   onSubmit: (params: MemberFormFields) => void
   membershipPrice?: BalanceOf
+}
+
+interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
+  type: 'onBoarding' | 'general'
+  membershipAccount?: string
+  changeMembershipAccount?: () => void
 }
 
 const CreateMemberSchema = Yup.object().shape({
@@ -50,7 +61,7 @@ const CreateMemberSchema = Yup.object().shape({
   handle: HandleSchema.required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
-  referrer: ReferrerSchema,
+  referrer: ReferrerSchema
 })
 
 export interface MemberFormFields {
@@ -66,19 +77,26 @@ export interface MemberFormFields {
   invitor?: Member
 }
 
-export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProps, 'onClose'>) => {
+export const BuyMembershipForm = ({
+                                    onSubmit,
+                                    membershipPrice,
+                                    membershipAccount,
+                                    changeMembershipAccount,
+                                    type
+                                  }: BuyMembershipFormProps) => {
   const { api, connectionState } = useApi()
+  const { allAccounts } = useMyAccounts()
 
   const initializer = {
     name: '',
-    rootAccount: undefined,
-    controllerAccount: undefined,
+    rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
+    controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
     handle: '',
     about: '',
     avatarUri: '',
     isReferred: false,
     referrer: undefined,
-    hasTerms: false,
+    hasTerms: false
   }
   const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
   const { isValid, errors, setContext } = validation
@@ -90,7 +108,7 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
     handle,
-    connectionState,
+    connectionState
   ])
 
   useEffect(() => {
@@ -113,14 +131,14 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
             <InlineToggleWrap>
               <Label>I was referred by a member: </Label>
               <ToggleCheckbox
-                trueLabel="Yes"
-                falseLabel="No"
+                trueLabel='Yes'
+                falseLabel='No'
                 onChange={(isSet) => changeField('isReferred', isSet)}
                 checked={isReferred ?? false}
               />
             </InlineToggleWrap>
             {isReferred && (
-              <InputComponent required inputSize="l">
+              <InputComponent required inputSize='l'>
                 <SelectMember
                   onChange={(member) => changeField('referrer', member)}
                   disabled={!isReferred}
@@ -135,35 +153,37 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
           </Row>
 
           <Row>
-            <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
+            <InputComponent label='Root account' required inputSize='l' tooltipText='Something about root accounts'>
               <SelectAccount
                 filter={filterRoot}
                 onChange={(account) => changeField('rootAccount', account)}
                 selected={rootAccount}
+                disabled={type === 'onBoarding'}
               />
             </InputComponent>
           </Row>
 
           <Row>
             <InputComponent
-              label="Controller account"
+              label='Controller account'
               required
-              inputSize="l"
-              tooltipText="Something about controller account"
+              inputSize='l'
+              tooltipText='Something about controller account'
             >
               <SelectAccount
                 filter={filterController}
                 onChange={(account) => changeField('controllerAccount', account)}
                 selected={controllerAccount}
+                disabled={type === 'onBoarding'}
               />
             </InputComponent>
           </Row>
 
           <Row>
-            <InputComponent id="member-name" label="Member Name" required>
+            <InputComponent id='member-name' label='Member Name' required>
               <InputText
-                id="member-name"
-                placeholder="Type"
+                id='member-name'
+                placeholder='Type'
                 value={name}
                 onChange={(event) => changeField('name', event.target.value)}
               />
@@ -171,10 +191,10 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
           </Row>
 
           <Row>
-            <InputComponent id="membership-handle" label="Membership handle" required>
+            <InputComponent id='membership-handle' label='Membership handle' required>
               <InputText
-                id="membership-handle"
-                placeholder="Type"
+                id='membership-handle'
+                placeholder='Type'
                 value={handle}
                 onChange={(event) => changeField('handle', event.target.value)}
               />
@@ -182,11 +202,11 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
           </Row>
 
           <Row>
-            <InputComponent id="member-about" label="About member" inputSize="l">
+            <InputComponent id='member-about' label='About member' inputSize='l'>
               <InputTextarea
-                id="member-about"
+                id='member-about'
                 value={about}
-                placeholder="Type"
+                placeholder='Type'
                 onChange={(event) => changeField('about', event.target.value)}
               />
             </InputComponent>
@@ -194,8 +214,8 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
 
           <Row>
             <InputComponent
-              id="member-avatar"
-              label="Member Avatar"
+              id='member-avatar'
+              label='Member Avatar'
               required
               value={avatarUri}
               validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
@@ -204,10 +224,10 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
                   ? getErrorMessage('avatarUri', errors)
                   : 'Paste an URL of your avatar image. Text lorem ipsum.'
               }
-              placeholder="Image URL"
+              placeholder='Image URL'
             >
               <InputText
-                id="member-avatar"
+                id='member-avatar'
                 value={avatarUri}
                 onChange={(event) => changeField('avatarUri', event.target.value)}
               />
@@ -217,14 +237,20 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
       </ScrolledModalBody>
       <ModalFooter twoColumns>
         <ModalFooterGroup left>
+          {type === 'onBoarding' && (
+            <ButtonGhost onClick={changeMembershipAccount} size='medium'>
+              <Arrow direction='left' />
+              Select other account
+            </ButtonGhost>
+          )}
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <TextMedium colorInherit>
               I agree to the{' '}
-              <LabelLink href="http://example.com/" target="_blank">
+              <LabelLink href='http://example.com/' target='_blank'>
                 Terms of Service
               </LabelLink>{' '}
               and{' '}
-              <LabelLink href="http://example.com/" target="_blank">
+              <LabelLink href='http://example.com/' target='_blank'>
                 Privacy Policy
               </LabelLink>
               .
@@ -232,14 +258,16 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
           </Checkbox>
         </ModalFooterGroup>
         <ModalFooterGroup>
-          <TransactionInfoContainer>
-            <TransactionInfo
-              title="Creation fee:"
-              value={membershipPrice?.toBn()}
-              tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-            />
-          </TransactionInfoContainer>
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
+          {type === 'general' && (
+            <TransactionInfoContainer>
+              <TransactionInfo
+                title='Creation fee:'
+                value={membershipPrice?.toBn()}
+                tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+              />
+            </TransactionInfoContainer>
+          )}
+          <ButtonPrimary size='medium' onClick={onCreate} disabled={!isValid}>
             Create a Membership
           </ButtonPrimary>
         </ModalFooterGroup>
@@ -248,11 +276,11 @@ export const BuyMembershipForm = ({ onSubmit, membershipPrice }: Omit<CreateProp
   )
 }
 
-export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
+export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: BuyMembershipFormModalProps) => {
   return (
-    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Add membership" />
-      <BuyMembershipForm membershipPrice={membershipPrice} onSubmit={onSubmit} />
+    <ScrolledModal modalSize='m' modalHeight='m' onClose={onClose}>
+      <ModalHeader onClick={onClose} title='Add membership' />
+      <BuyMembershipForm type='general' membershipPrice={membershipPrice} onSubmit={onSubmit} />
     </ScrolledModal>
   )
 }

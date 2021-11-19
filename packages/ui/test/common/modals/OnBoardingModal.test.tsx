@@ -170,35 +170,6 @@ describe('UI: OnBoardingModal', () => {
     })
   })
 
-  describe('Status: getFreeTokens', () => {
-    beforeAll(() => {
-      mockOnBoarding.status = 'getFreeTokens'
-    })
-
-    it('Step matches', () => {
-      const { getByText } = renderModal()
-
-      const tokenCircle = getStepperStepCircle('Get FREE tokens', getByText)
-
-      expect(tokenCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
-    })
-
-    it('Shows correct screen', () => {
-      const { queryByText } = renderModal()
-
-      expect(queryByText('One Last Thing')).toBeDefined()
-      expect(queryByText('Continue And Get Free Tokens')).toBeDefined()
-    })
-
-    it('Proceed to next step', () => {
-      const { getByText } = renderModal()
-
-      getByText(/Continue And Get Tokens/i)?.click()
-
-      expect(mockOnBoarding.setMembershipAccount).toBeCalledWith('redeemed')
-    })
-  })
-
   describe('Status: createMembership', () => {
     beforeAll(() => {
       mockOnBoarding.status = 'createMembership'
