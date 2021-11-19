@@ -4,6 +4,7 @@ import { ActionTypes, assign, createMachine, DoneInvokeEvent, send } from 'xstat
 
 import { EmptyObject } from '@/common/types'
 
+export type TransactionFinalizingEvent = { type: 'FINALIZING'; events: EventRecord[]; fee: BN }
 export type TransactionSuccessEvent = { type: 'SUCCESS'; events: EventRecord[]; fee: BN }
 export type TransactionErrorEvent = { type: 'ERROR'; events: EventRecord[]; fee: BN }
 export type TransactionEvent =
@@ -11,6 +12,7 @@ export type TransactionEvent =
   | { type: 'SIGN' }
   | { type: 'SIGN_EXTERNAL' }
   | { type: 'PENDING' }
+  | TransactionFinalizingEvent
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
@@ -23,6 +25,7 @@ type TransactionState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'signing'; context: EmptyObject }
   | { value: 'signWithExtension'; context: EmptyObject }
+  | { value: 'canceled'; context: EmptyObject }
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: Required<TransactionContext> }
 
@@ -47,6 +50,30 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
       on: {
         PENDING: 'pending',
         ERROR: {
+          target: 'canceled',
+          actions: [
+            assign({
+              events: (_, event) => event.events,
+              fee: (_, event) => event.fee,
+            }),
+            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
+          ],
+        },
+      },
+    },
+    canceled: {
+      type: 'final',
+    },
+    pending: {
+      on: {
+        FINALIZING: {
+          target: 'finalizing',
+          actions: assign({
+            events: (_, event) => event.events,
+            fee: (_, event) => event.fee,
+          }),
+        },
+        ERROR: {
           target: 'error',
           actions: [
             assign({
@@ -58,7 +85,7 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
         },
       },
     },
-    pending: {
+    finalizing: {
       on: {
         SUCCESS: {
           target: 'success',

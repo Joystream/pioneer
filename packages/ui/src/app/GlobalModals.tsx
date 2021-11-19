@@ -30,6 +30,10 @@ import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
+import {
+  IncreaseWorkerStakeModal,
+  IncreaseWorkerStakeModalCall,
+} from '@/working-groups/modals/IncreaseWorkerStakeModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { MoveExcessTokensModal, MoveExcessTokensModalCall } from '@/working-groups/modals/MoveExcessTokensModal'
 
@@ -61,6 +65,7 @@ export type ModalNames =
   | ModalName<RevealVoteModalCall>
   | ModalName<RecoverBalanceModalCall>
   | ModalName<MoveExcessTokensModalCall>
+  | ModalName<IncreaseWorkerStakeModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -89,6 +94,7 @@ const modals: Record<ModalNames, ReactElement> = {
   VoteForProposalModal: <VoteForProposalModal />,
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
+  IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   MoveExcessTokensModal: <MoveExcessTokensModal />,
 }
 

@@ -36,12 +36,6 @@ const AccountListWrapper = styled.div<{ selected?: boolean }>`
   transition: ${Transitions.all};
 
   background-color: ${({ selected }) => (selected ? Colors.Blue[50] : 'transparent')};
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: ${Colors.Blue[500]};
-  }
 `
 
 export const AccountItemWrap = styled.div`

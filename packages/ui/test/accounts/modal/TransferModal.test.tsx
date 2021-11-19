@@ -1,9 +1,7 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { set } from 'lodash'
 import React from 'react'
-import { of } from 'rxjs'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account } from '@/accounts/types'
@@ -114,14 +112,6 @@ describe('UI: TransferModal', () => {
         fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
       })
     }
-
-    it('Renders wait for transaction step', async () => {
-      set(transfer, 'signAndSend', () => of(set({}, 'status.isReady', true)))
-
-      await renderAndSign()
-
-      expect(await screen.findByText('Pending transaction')).toBeDefined()
-    })
 
     describe('Success', () => {
       beforeEach(() => {

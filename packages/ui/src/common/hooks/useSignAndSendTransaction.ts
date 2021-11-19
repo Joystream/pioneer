@@ -42,12 +42,20 @@ const observeTransaction = (
       info(JSON.stringify(events))
 
       send({
-        type: hasErrorEvent(events) ? 'ERROR' : 'SUCCESS',
+        type: hasErrorEvent(events) ? 'ERROR' : 'FINALIZING',
         events,
         fee,
       })
 
       setPending(false)
+    }
+
+    if (status.isFinalized) {
+      send({
+        type: hasErrorEvent(events) ? 'ERROR' : 'SUCCESS',
+        events,
+        fee,
+      })
     }
   }
 

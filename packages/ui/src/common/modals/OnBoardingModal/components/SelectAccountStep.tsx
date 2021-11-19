@@ -8,7 +8,7 @@ import { ConnectIcon } from '@/common/components/icons/ConnectIcon'
 import { JoystreamLogo } from '@/common/components/icons/JoystreamLogo'
 import { PolkadotIcon } from '@/common/components/icons/PolkadotIcon'
 import { List, ListItem } from '@/common/components/List'
-import { ModalFooter } from '@/common/components/Modal'
+import { ModalFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { TextExtraHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -29,30 +29,32 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
 
   return (
     <>
-      <ContentWrapper>
-        <IconsWrapper>
-          <PolkadotIcon />
-          <ConnectIcon />
-          <JoystreamLogo />
-        </IconsWrapper>
-        <TextWrapper>
-          <TextExtraHuge bold>Connect account</TextExtraHuge>
-          <StyledSubtitle>
-            Select Polkadot account which you want to connect to your new joystream membership.
-          </StyledSubtitle>
-        </TextWrapper>
-        <StyledList>
-          {allAccounts.map((account) => (
-            <ListItem onClick={() => setSelectedAccountAddress(account.address)} key={account.address} borderless>
-              <ConnectAccountItem
-                account={account}
-                totalBalance={balances[account.address]?.total}
-                selected={account.address === selectedAccountAddress}
-              />
-            </ListItem>
-          ))}
-        </StyledList>
-      </ContentWrapper>
+      <ScrolledModalBody>
+        <ContentWrapper>
+          <IconsWrapper>
+            <PolkadotIcon />
+            <ConnectIcon />
+            <JoystreamLogo />
+          </IconsWrapper>
+          <TextWrapper>
+            <TextExtraHuge bold>Connect account</TextExtraHuge>
+            <StyledSubtitle>
+              Select Polkadot account which you want to connect to your new joystream membership.
+            </StyledSubtitle>
+          </TextWrapper>
+          <StyledList>
+            {allAccounts.map((account) => (
+              <ListItem onClick={() => setSelectedAccountAddress(account.address)} key={account.address} borderless>
+                <ConnectAccountItem
+                  account={account}
+                  totalBalance={balances[account.address]?.total}
+                  selected={account.address === selectedAccountAddress}
+                />
+              </ListItem>
+            ))}
+          </StyledList>
+        </ContentWrapper>
+      </ScrolledModalBody>
       <ModalFooter>
         <ButtonPrimary onClick={onConfirm} disabled={!selectedAccountAddress} size="medium">
           Connect Account
@@ -77,9 +79,14 @@ const IconsWrapper = styled.div`
 `
 const ContentWrapper = styled.div`
   display: flex;
-  align-items: center;
   flex-direction: column;
-  margin-top: 66px;
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+  height: 100%;
+  margin: 64px auto 40px;
+  padding: 0 0 24px;
+  text-align: center;
 `
 
 const TextWrapper = styled.div`

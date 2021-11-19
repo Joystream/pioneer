@@ -204,6 +204,11 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   applications {
     id
   }
+  openingfilledeventopening {
+    workersHired {
+      id
+    }
+  }
 }
 
 fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {

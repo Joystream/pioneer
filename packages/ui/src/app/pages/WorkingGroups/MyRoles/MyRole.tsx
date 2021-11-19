@@ -46,6 +46,8 @@ export const MyRole = () => {
 
   const isActive = worker && worker.status === 'WorkerStatusActive'
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
+  const isBelowMinStake = worker && worker.stake < worker.minStake
+  const shouldIncreaseStake = worker?.stakeAccount && isBelowMinStake && isOwn
   const canMoveExcessTokens = worker && balance?.transferable && worker.stake > worker.minStake
 
   const workerExcessValue = useMemo(() => {
@@ -85,6 +87,10 @@ export const MyRole = () => {
 
   const onChangeRewardClick = (): void => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
+  }
+
+  const onIncreaseStakeClick = (): void => {
+    showModal({ modal: 'IncreaseWorkerStake', data: { worker } })
   }
 
   const onMoveExcessClick = () => {
@@ -175,6 +181,11 @@ export const MyRole = () => {
                       Move Excess Tokens
                     </TransactionButton>
                   ))}
+                {isActive && shouldIncreaseStake && (
+                  <TransactionButton style="primary" size="small" onClick={onIncreaseStakeClick}>
+                    Increase Stake
+                  </TransactionButton>
+                )}
               </ButtonsGroup>
             </RoleAccountHeader>
             <MyRoleAccount

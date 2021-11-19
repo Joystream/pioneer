@@ -520,6 +520,10 @@ export type WorkingGroupOpeningFieldsFragment = {
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
   applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+  openingfilledeventopening?:
+    | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+    | null
+    | undefined
 }
 
 export type WorkingGroupOpeningDetailedFieldsFragment = {
@@ -575,6 +579,10 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
     | { __typename: 'OpeningStatusCancelled' }
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
+  openingfilledeventopening?:
+    | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+    | null
+    | undefined
 }
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
@@ -628,6 +636,10 @@ export type GetWorkingGroupOpeningsQuery = {
       | { __typename: 'OpeningStatusFilled' }
       | { __typename: 'OpeningStatusOpen' }
     applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+    openingfilledeventopening?:
+      | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+      | null
+      | undefined
   }>
 }
 
@@ -695,6 +707,10 @@ export type GetWorkingGroupOpeningQuery = {
           | { __typename: 'OpeningStatusCancelled' }
           | { __typename: 'OpeningStatusFilled' }
           | { __typename: 'OpeningStatusOpen' }
+        openingfilledeventopening?:
+          | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -1223,6 +1239,11 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     unstakingPeriod
     applications {
       id
+    }
+    openingfilledeventopening {
+      workersHired {
+        id
+      }
     }
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}

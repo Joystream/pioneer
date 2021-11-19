@@ -12,6 +12,11 @@ export const usePastCouncil = (id: string) => {
     council:
       councilData?.electedCouncilByUniqueInput &&
       councilData?.budgetSpendingEvents &&
-      asPastCouncilWithDetails(councilData.electedCouncilByUniqueInput, councilData.budgetSpendingEvents),
+      councilData?.fundingRequestsApproved &&
+      asPastCouncilWithDetails(
+        councilData.electedCouncilByUniqueInput,
+        councilData.budgetSpendingEvents,
+        councilData.fundingRequestsApproved
+      ),
   }
 }
