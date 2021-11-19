@@ -43,7 +43,11 @@ export const BuyMembershipSignModal = ({
     initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')
   )
   const fromAddress = from.address
-  const { isReady, paymentInfo, sign } = useSignAndSendQueryNodeTransaction({ transaction, signer: fromAddress, service })
+  const { isReady, paymentInfo, sign } = useSignAndSendQueryNodeTransaction({
+    transaction,
+    signer: fromAddress,
+    service,
+  })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(fromAddress)
 

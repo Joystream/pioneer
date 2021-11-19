@@ -22,8 +22,13 @@ interface Params {
 export const useSignAndSendQueryNodeTransaction = ({ transaction, signer, service }: Params) => {
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
   const queryNodeStatus = useQueryNodeTransactionStatus(blockHash)
-  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({transaction, signer, service, setBlockHash})
-  
+  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
+    transaction,
+    signer,
+    service,
+    setBlockHash,
+  })
+
   const sign = useCallback(() => send('SIGN'), [service])
 
   useEffect(() => {
@@ -41,8 +46,8 @@ export const useSignAndSendQueryNodeTransaction = ({ transaction, signer, servic
 }
 
 export const useSignAndSendTransaction = ({ transaction, signer, service }: Params) => {
-  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({transaction, signer, service})
-  
+  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({ transaction, signer, service })
+
   const sign = useCallback(() => send('SIGN'), [service])
 
   useEffect(() => {

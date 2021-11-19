@@ -4,7 +4,12 @@ import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
-import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 interface DetailsContext {

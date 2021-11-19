@@ -73,7 +73,11 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
   const transaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
   const signer = accountOrNamed(allAccounts, member.controllerAccount, 'Controller account')
 
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({ transaction, signer: signer.address, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
+    transaction,
+    signer: signer.address,
+    service,
+  })
 
   return (
     <TransactionModal onClose={onClose} service={service}>

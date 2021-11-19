@@ -3,7 +3,12 @@ import { assign, createMachine } from 'xstate'
 
 import { EmptyObject } from '@/common/types'
 
-import { isTransactionCanceled, isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '../../../common/model/machines'
 
 interface LeaveRoleContext {
   rationale?: string

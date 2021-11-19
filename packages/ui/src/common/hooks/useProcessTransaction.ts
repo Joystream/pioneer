@@ -70,7 +70,12 @@ const observeTransaction = (
   })
 }
 
-export const useProcessTransaction = ({ transaction, signer, service, setBlockHash }: UseSignAndSendTransactionParams) => {
+export const useProcessTransaction = ({
+  transaction,
+  signer,
+  service,
+  setBlockHash,
+}: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const { setPending } = useTransactionStatus()
