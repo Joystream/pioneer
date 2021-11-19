@@ -46,7 +46,7 @@ export const Tooltip = ({
   forBig,
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
-  const [referenceElementRef, setReferenceElementRef] = useState<HTMLButtonElement | null>(null)
+  const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
     placement: 'bottom-start',
@@ -61,19 +61,19 @@ export const Tooltip = ({
   })
 
   const mouseIsOver = () => {
-    if (tooltipOpen === undefined) {
+    if (!tooltipOpen) {
       setTooltipActive(true)
     }
   }
   const mouseLeft = () => {
-    if (tooltipOpen === undefined) {
+    if (!tooltipOpen) {
       setTooltipActive(false)
     }
   }
 
   const tooltipHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
-      if (tooltipOpen === undefined) {
+      if (!tooltipOpen) {
         event.stopPropagation()
         setTooltipActive(false)
       }
@@ -90,7 +90,7 @@ export const Tooltip = ({
 
   return (
     <TooltipContainer absolute={absolute}>
-      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0}>
+      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0}>
         {children}
       </TooltipComponent>
       {isTooltipActive &&
@@ -256,11 +256,16 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   }
 `
 
-export const TooltipComponent = styled.button`
+export const TooltipComponent = styled.i`
   display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
+  border: none;
+  outline: none;
+  font-style: normal;
+  background-color: transparent;
+  padding: 0;
 
   &:hover,
   &:focus {
