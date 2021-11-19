@@ -8,7 +8,7 @@ import { TextHuge } from '../typography'
 
 import { TransactionStatusIcon } from './TransactionStatusIcon'
 import { TransactionStatusStepper } from './TransactionStatusSteps'
-import { StepNumber, TransactionState, TransactionStatusStateProps, TransactionStatusStepProps } from './types'
+import { StepNumber, TransactionState, TransactionStatusStateProps } from './types'
 
 export interface TransactionStatusProps {
   title: string
