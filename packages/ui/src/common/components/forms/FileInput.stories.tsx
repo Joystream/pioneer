@@ -21,7 +21,7 @@ const Template: Story<FileInputProps & { filesAreValid: boolean }> = ({ filesAre
 
 export const Defaults = Template.bind({})
 Defaults.args = {
-  title: 'You can drag and drop json files here !',
+  title: 'Drag and drop file here to upload',
   accept: 'application/json',
   multiple: false,
   filesAreValid: false,

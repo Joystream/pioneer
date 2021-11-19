@@ -1,12 +1,13 @@
-import React, { ChangeEventHandler, DragEventHandler, InputHTMLAttributes, useCallback } from 'react'
+import React, { useState, ChangeEventHandler, DragEventHandler, InputHTMLAttributes, useCallback } from 'react'
 import styled from 'styled-components'
 import { ValidationError } from 'yup'
 
 import { BasicLinkButtonPrimaryStyles } from '@/common/components/buttons/LinkButtons'
-import { FileIcon } from '@/common/components/icons'
 import { TextInlineSmall } from '@/common/components/typography'
-import { Colors, Fonts } from '@/common/constants'
+import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
 import { partition } from '@/common/utils'
+
+import { DropFileIcon } from '../icons/DropFileIcon'
 
 import { ControlProps, InputArea, InputComponent, InputContainer } from '.'
 
@@ -21,6 +22,7 @@ export interface FileInputProps extends ControlProps<FileEntry[], File[]>, Nativ
 }
 
 export const FileInput = ({ title = 'Drag and drop files here', value, onChange, ...inputProps }: FileInputProps) => {
+  const [fileInZone, setFileInZone] = useState(false)
   const onUpload: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
       event.preventDefault()
@@ -57,14 +59,20 @@ export const FileInput = ({ title = 'Drag and drop files here', value, onChange,
 
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
     event.preventDefault()
+    setFileInZone(true)
+  }, [])
+
+  const onDragLeave: DragEventHandler<HTMLDivElement> = useCallback((event) => {
+    event.preventDefault()
+    setFileInZone(false)
   }, [])
 
   return (
     <>
-      <FileInputContainer onDrop={onDrop} onDragOver={onDragOver}>
-        <FileIcon />
+      <FileInputContainer onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave} fileInZone={fileInZone}>
+        <FileInputIcon />
 
-        <h5>{title}</h5>
+        <FileInputTitle>{title}</FileInputTitle>
 
         <p>
           <LighterText>or</LighterText>{' '}
@@ -89,15 +97,23 @@ export const FileInput = ({ title = 'Drag and drop files here', value, onChange,
 
 const BrowseButton = styled.label`
   ${BasicLinkButtonPrimaryStyles};
+
+  margin-left: 10px;
+  text-transform: none;
 `
-const FileInputContainer = styled.div`
-  background: ${Colors.Black[25]};
-  border: 2px dotted ${Colors.Black[300]};
-  display: grid;
-  gap: 10px;
-  height: 204px;
-  place-content: center;
-  place-items: center;
+
+const FileInputContainer = styled.div<{ fileInZone?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 204px;
+  border: 2px dashed ${({ fileInZone }) => (fileInZone ? Colors.Blue[500] : Colors.Black[300])};
+  border-radius: ${BorderRad.m};
+  background-color: ${Colors.Black[25]};
+  box-shadow: ${({ fileInZone }) =>
+    fileInZone ? `inset 0px 0px 104px ${Colors.Blue[500] + '29'}` : 'inset 0px 0px 0px transparent'};
+  transition: ${Transitions.all};
 
   ${BrowseButton} {
     display: inline-flex;
@@ -108,6 +124,26 @@ const FileInputContainer = styled.div`
     position: absolute;
     pointer-events: none;
   }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: ${Colors.Blue[500]};
+    ${BrowseButton} {
+      &:before {
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+`
+
+const FileInputIcon = styled(DropFileIcon)`
+  margin: 8px 0;
+  color: ${Colors.Black[400]};
+`
+
+const FileInputTitle = styled.h5`
+  margin: 10px auto;
 `
 
 const FilePreview = styled(InputComponent)`
