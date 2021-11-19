@@ -17,7 +17,7 @@ interface Params {
 // Transactions which emit events handled by QueryNode use useSignAndSendQueryNodeTransaction hook
 // that waits for QueryNode confirmation on PROCESSING stage.
 // Other transactions use simplified hook useSignAndSendTransaction which automatically switch
-// from state FINALIZING to PROCESSING.
+// from PROCESSING state to SUCCESS/ERROR.
 
 export const useSignAndSendQueryNodeTransaction = ({ transaction, signer, service }: Params) => {
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
