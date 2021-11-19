@@ -67,6 +67,13 @@ export const intersperse = <T extends any, S extends any>(
 ): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item, index) => [toSeparator(index, list), item])]
 
+export const partition = <T extends any>(list: T[], predicate: (x: T) => boolean): [T[], T[]] =>
+  list.reduce(
+    ([pass, fail]: [T[], T[]], item): [T[], T[]] =>
+      predicate(item) ? [[...pass, item], fail] : [pass, [...fail, item]],
+    [[], []]
+  )
+
 export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
   Array.from({ length: times }, (_, i) => getItem(i))
 

@@ -172,7 +172,7 @@ export const BasicLinkButtonStyles = css<BasicLinkButtonStylesProps>`
   }
 `
 
-export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
+export const BasicLinkButtonPrimaryStyles = css<BasicLinkButtonStylesProps>`
   ${BasicLinkButtonStyles};
 
   &,
@@ -202,6 +202,10 @@ export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
       border-color: ${Colors.Blue[700]};
     }
   }
+`
+
+export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
+  ${BasicLinkButtonPrimaryStyles};
 `
 
 export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
