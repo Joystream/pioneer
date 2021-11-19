@@ -16,7 +16,7 @@ import { TransferModalCall } from './types'
 
 export const TransferModal = () => {
   const { hideModal, modalData } = useModal<TransferModalCall>()
-  const { from: transferFrom, to: transferTo } = modalData
+  const { from: transferFrom, to: transferTo, maxValue, transaction, minValue } = modalData
   const [state, send] = useMachine(transferMachine)
 
   const isTransfer = !transferFrom && !transferTo
@@ -29,14 +29,32 @@ export const TransferModal = () => {
 
   if (state.matches('prepare')) {
     return (
-      <TransferFormModal onClose={hideModal} from={transferFrom} to={transferTo} onAccept={onAccept} title={title} />
+      <TransferFormModal
+        onClose={hideModal}
+        from={transferFrom}
+        to={transferTo}
+        onAccept={onAccept}
+        title={title}
+        maxValue={maxValue}
+        minValue={minValue}
+        defaultTransaction={transaction}
+      />
     )
   }
 
   if (state.matches('transaction')) {
     const { amount, to, from } = state.context
     const service = state.children.transaction
-    return <TransferSignModal onClose={hideModal} from={from} to={to} amount={amount} service={service} />
+    return (
+      <TransferSignModal
+        onClose={hideModal}
+        from={from}
+        to={to}
+        amount={amount}
+        service={service}
+        defaultTransaction={transaction}
+      />
+    )
   }
 
   if (state.matches('success')) {

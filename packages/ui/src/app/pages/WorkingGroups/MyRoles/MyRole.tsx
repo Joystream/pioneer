@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -47,6 +48,14 @@ export const MyRole = () => {
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
   const canMoveExcessTokens = worker && balance?.transferable && worker.stake > worker.minStake
 
+  const workerExcessValue = useMemo(() => {
+    if (canMoveExcessTokens) {
+      const excessValue = worker.stake - worker.minStake
+
+      return balance.transferable.gtn(excessValue) ? new BN(excessValue) : balance.transferable
+    }
+  }, [worker, balance])
+
   const { activities } = useRoleActivities(worker)
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
   const warning = worker ? getRoleWarning(worker.status, unstakingPeriodEnd) : undefined
@@ -79,7 +88,10 @@ export const MyRole = () => {
   }
 
   const onMoveExcessClick = () => {
-    showModal({ modal: 'MoveExcessTokensModal', data: { worker } })
+    showModal({
+      modal: 'TransferTokens',
+      data: { from: worker?.stakeAccount, to: worker?.roleAccount, maxValue: workerExcessValue },
+    })
   }
 
   if (isLoading || !worker) {

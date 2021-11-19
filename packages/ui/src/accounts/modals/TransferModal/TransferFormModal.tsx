@@ -1,13 +1,17 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { PickedTransferIcon } from '@/common/components/icons/TransferIcons'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
+import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { formatTokenValue } from '@/common/model/formatters'
 
-import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
-import { PickedTransferIcon } from '../../../common/components/icons/TransferIcons'
 import {
   AmountButton,
   AmountButtons,
@@ -18,8 +22,6 @@ import {
   Row,
   TransactionAmount,
 } from '../../../common/components/Modal'
-import { useNumberInput } from '../../../common/hooks/useNumberInput'
-import { formatTokenValue } from '../../../common/model/formatters'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
 import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../types'
@@ -30,9 +32,21 @@ interface Props {
   onClose: () => void
   onAccept: (amount: BN, from: Account, to: Account) => void
   title: string
+  maxValue?: BN
+  minValue?: BN
+  defaultTransaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
-export function TransferFormModal({ from, to, onClose, onAccept, title }: Props) {
+export function TransferFormModal({
+  from,
+  to,
+  onClose,
+  onAccept,
+  title,
+  maxValue,
+  minValue,
+  defaultTransaction,
+}: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)
@@ -43,13 +57,17 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
   const isZero = new BN(amount).lte(BN_ZERO)
-  const isOverBalance = new BN(amount).gt(transferableBalance || 0)
-  const isTransferDisabled = isZero || isOverBalance || !recipient
+  const isOverBalance = new BN(amount).gt(maxValue || transferableBalance || 0)
+  const isUnderMinimumValue = new BN(amount).lt(minValue || BN_ZERO)
+  const isTransferDisabled = isZero || isOverBalance || !recipient || isUnderMinimumValue
   const isValueDisabled = !sender
 
   const { api } = useApi()
-  const [maxAmount, setMaxAmount] = useState(transferableBalance)
-  const maxFee = useTransactionFee(sender?.address, api?.tx.balances.transfer(recipient?.address || '', maxAmount))
+  const [maxAmount, setMaxAmount] = useState(maxValue || transferableBalance)
+  const maxFee = useTransactionFee(
+    sender?.address,
+    defaultTransaction || api?.tx.balances.transfer(recipient?.address || '', maxAmount)
+  )
   useEffect(() => {
     setMaxAmount(transferableBalance.sub(maxFee?.transactionFee ?? BN_ZERO))
   }, [maxFee?.transactionFee.toString()])

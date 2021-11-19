@@ -1,3 +1,5 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
@@ -33,18 +35,21 @@ interface Props {
   amount: BN
   to: Account
   service: ActorRef<any>
+  defaultTransaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
-export function TransferSignModal({ onClose, from, amount, to, service }: Props) {
+export function TransferSignModal({ onClose, from, amount, to, service, defaultTransaction }: Props) {
   const toAddress = to.address
   const fromAddress = from.address
   const balanceFrom = useBalance(fromAddress)
   const balanceTo = useBalance(toAddress)
   const { api, connectionState } = useApi()
-  const transaction = useMemo(
-    () => api?.tx?.balances?.transfer(toAddress, amount),
-    [toAddress, amount, connectionState]
-  )
+  const transaction = useMemo(() => defaultTransaction || api?.tx?.balances?.transfer(toAddress, amount), [
+    toAddress,
+    amount,
+    connectionState,
+    defaultTransaction,
+  ])
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
 
   return (
