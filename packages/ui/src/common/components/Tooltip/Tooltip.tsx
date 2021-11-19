@@ -88,7 +88,8 @@ export const Tooltip = ({
     onMouseLeave: mouseLeft,
   }
 
-  const isExternalLink = () => tooltipLinkURL && (tooltipLinkURL.startsWith('#') || tooltipLinkURL.startsWith('/'))
+  const isExternalLink = () =>
+    tooltipLinkURL && (tooltipLinkURL.startsWith('http://') || tooltipLinkURL.startsWith('https://'))
 
   return (
     <TooltipContainer absolute={absolute}>
@@ -125,15 +126,15 @@ export const Tooltip = ({
                 <TooltipText>{tooltipText}</TooltipText>
                 {tooltipLinkURL &&
                   (isExternalLink() ? (
-                    <TooltipLink to={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipLink>
-                  ) : (
                     <TooltipExternalLink href={tooltipLinkURL} target="_blank">
                       {tooltipLinkText ?? 'Link'}
                       <LinkSymbol />
                     </TooltipExternalLink>
+                  ) : (
+                    <TooltipLink to={tooltipLinkURL} target="_blank">
+                      {tooltipLinkText ?? 'Link'}
+                      <LinkSymbol />
+                    </TooltipLink>
                   ))}
               </TooltipPopupContainer>,
               document.body
