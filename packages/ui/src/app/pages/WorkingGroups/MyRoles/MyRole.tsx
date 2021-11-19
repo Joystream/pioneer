@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -36,6 +37,7 @@ export const MyRole = () => {
 
   const { worker, isLoading } = useWorker(id)
   const { members } = useMyMemberships()
+  const balance = useBalance(worker?.stakeAccount)
 
   const isOwn = useMemo(() => {
     return !!members.find((member) => member.id === worker?.membership.id)
@@ -43,6 +45,7 @@ export const MyRole = () => {
 
   const isActive = worker && worker.status === 'WorkerStatusActive'
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
+  const canMoveExcessTokens = worker && balance?.transferable && worker.stake > worker.minStake
 
   const { activities } = useRoleActivities(worker)
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
@@ -155,7 +158,7 @@ export const MyRole = () => {
               <Label>Stake Account</Label>
               <ButtonsGroup>
                 {isActive ||
-                  (isLeaving && (
+                  (canMoveExcessTokens && (
                     <TransactionButton style="primary" size="small" onClick={onMoveExcessClick}>
                       Move Excess Tokens
                     </TransactionButton>
