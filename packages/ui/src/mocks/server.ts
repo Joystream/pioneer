@@ -22,14 +22,14 @@ import {
   seedCouncilCandidates,
   seedCouncilElections,
   seedProposalsEvents,
-  seedCouncilVotes,
+  seedCouncilVotes
 } from './data'
 import {
   getConnectionResolver,
   getInterfaceResolver,
   getUniqueResolver,
   getWhereResolver,
-  searchMembersResolver,
+  searchMembersResolver
 } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -164,39 +164,40 @@ export const makeServer = (environment = 'development') => {
               workingGroups: getWhereResolver('WorkingGroup'),
               postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
               postAddedEvents: getWhereResolver('PostAddedEvent'),
-              events: getInterfaceResolver(),
-            },
-          },
+              events: getInterfaceResolver()
+            }
+          }
         })
       )
+      this.passthrough('http://localhost:4000/register')
     },
 
     ...(environment !== 'development'
       ? {}
       : {
-          seeds(server: Server<AnyRegistry>) {
-            fixAssociations(server)
+        seeds(server: Server<AnyRegistry>) {
+          fixAssociations(server)
 
-            seedMembers(server)
-            seedWorkingGroups(server)
-            seedOpeningStatuses(server)
-            seedOpenings(server)
-            seedUpcomingOpenings(server)
-            seedApplications(server)
-            seedWorkers(server)
-            updateWorkingGroups(server)
-            seedProposals(server)
-            seedEvents(server)
-            seedForumCategories(server)
-            seedForumThreads(server)
-            seedForumPosts(server)
-            seedProposalsEvents(server)
-            seedElectedCouncils(server)
-            seedCouncilMembers(server)
-            seedCouncilElections(server)
-            seedCouncilCandidates(server)
-            seedCouncilVotes(server)
-          },
-        }),
+          seedMembers(server)
+          seedWorkingGroups(server)
+          seedOpeningStatuses(server)
+          seedOpenings(server)
+          seedUpcomingOpenings(server)
+          seedApplications(server)
+          seedWorkers(server)
+          updateWorkingGroups(server)
+          seedProposals(server)
+          seedEvents(server)
+          seedForumCategories(server)
+          seedForumThreads(server)
+          seedForumPosts(server)
+          seedProposalsEvents(server)
+          seedElectedCouncils(server)
+          seedCouncilMembers(server)
+          seedCouncilElections(server)
+          seedCouncilCandidates(server)
+          seedCouncilVotes(server)
+        }
+      })
   })
 }
