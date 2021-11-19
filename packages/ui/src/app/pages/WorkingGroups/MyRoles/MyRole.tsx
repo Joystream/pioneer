@@ -20,6 +20,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat, StakeStat } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
@@ -32,9 +33,8 @@ import { useRoleActivities } from '@/working-groups/hooks/utils/useRoleActivitie
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
-import { getRoleWarning } from '@/working-groups/model/getRoleWarning'
-import { useApi } from '@/common/hooks/useApi'
 import { getGroup } from '@/working-groups/model/getGroup'
+import { getRoleWarning } from '@/working-groups/model/getRoleWarning'
 
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
@@ -125,6 +125,7 @@ export const MyRole = () => {
         from: roleAccount,
         to: stakeAccount,
         minValue: workerIncreaseValue,
+        initialValue: workerIncreaseValue,
         transactionMaker: increaseTransactionMaker,
       },
     })

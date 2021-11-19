@@ -21,6 +21,7 @@ import {
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
@@ -50,6 +51,8 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
     [toAddress, amount, connectionState, transactionMaker]
   )
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
+
+  const isDisabled = !isReady || balanceFrom?.transferable.lt(amount.add(paymentInfo?.partialFee || BN_ZERO))
 
   return (
     <TransactionModal service={service} onClose={onClose}>
@@ -100,7 +103,7 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
             }
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={isDisabled}>
           Sign transaction and Transfer
         </ButtonPrimary>
       </ModalFooter>

@@ -38,7 +38,6 @@ export const TransferModal = () => {
         maxValue={maxValue}
         minValue={minValue}
         initialValue={initialValue}
-        transactionMaker={transactionMaker}
       />
     )
   }
