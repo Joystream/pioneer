@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import reCAPTCHA from '@/app/assets/images/OnBoarding/reCAPTCHA.png'
 import { ButtonPrimary } from '@/common/components/buttons'
-import { ModalFooter } from '@/common/components/Modal'
+import { ModalFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { TextExtraHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -14,13 +14,15 @@ interface Props {
 export const OnBoardingTokens = ({ onRedemption }: Props) => {
   return (
     <>
-      <Wrapper>
-        <TextExtraHuge bold>One Last Thing</TextExtraHuge>
-        <TextMedium>To receive free tokens. Please confirm that you are not a robot.</TextMedium>
-        <ReCAPTCHA src={reCAPTCHA} />
-      </Wrapper>
+      <ScrolledModalBody>
+        <Wrapper>
+          <TextExtraHuge bold>One Last Thing</TextExtraHuge>
+          <TextMedium>To receive free tokens. Please confirm that you are not a robot.</TextMedium>
+          <ReCAPTCHA src={reCAPTCHA} />
+        </Wrapper>
+      </ScrolledModalBody>
       <ModalFooter>
-        <ButtonPrimary onClick={onRedemption} size="large">
+        <ButtonPrimary onClick={onRedemption} size="medium">
           Continue and Get Tokens
         </ButtonPrimary>
       </ModalFooter>
@@ -35,12 +37,15 @@ const ReCAPTCHA = styled.img`
 
 const Wrapper = styled.div`
   display: flex;
-  width: 100%;
-
-  height: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  width: 100%;
+  max-width: 640px;
+  height: 100%;
+  margin: 0 auto;
+  margin: 64px auto 24px;
+  padding: 0 24px;
+  text-align: center;
 
   > *:nth-child(2) {
     margin: 8px 0 64px 0;

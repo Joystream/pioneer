@@ -6,7 +6,7 @@ import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingO
 import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
-import { ModalFooter, ScrolledModal } from '@/common/components/Modal'
+import { Modal, ModalFooter } from '@/common/components/Modal'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -88,7 +88,7 @@ export const OnBoardingModal = ({ toggleModal }: Props) => {
   }
 
   return (
-    <StyledModal onClose={toggleModal} modalSize="m" modalHeight="m">
+    <StyledModal onClose={toggleModal} modalSize="l" modalHeight="m">
       <StepperWrapper>
         <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
         <StyledCloseButton onClick={toggleModal} />
@@ -112,23 +112,19 @@ const StyledCloseButton = styled(CloseButton)`
 `
 
 const StepperWrapper = styled.div`
-  width: 100%;
-  height: 80px;
   display: grid;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 52px;
+  height: 80px;
   position: relative;
   background-color: ${Colors.Black[700]};
-
-  > *:first-child {
-    width: 80%;
-  }
 `
 
-const StyledModal = styled(ScrolledModal)`
-  height: 100%;
-  > *:last-child {
-    background-color: ${Colors.Black[100]};
-  }
+const StyledModal = styled(Modal)`
+  grid-template-rows: 80px 1fr 64px;
+  max-width: 780px;
 `
 
 const OnBoardingTextFooterWrapper = styled(ModalFooter)`
@@ -136,4 +132,5 @@ const OnBoardingTextFooterWrapper = styled(ModalFooter)`
   grid-column-gap: 5px;
   justify-items: center;
   justify-content: center;
+  background-color: ${Colors.Black[100]};
 `
