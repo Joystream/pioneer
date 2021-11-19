@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { TextBig, TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
@@ -44,13 +44,20 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
           <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <Fraction numerator={opening.applicants.current} denominator={opening.applicants.total} sameSize />
+          <TextBig>{opening.applicants}</TextBig>
           <Subscription>Applications</Subscription>
         </OpenItemSummaryColumn>
-        <OpenItemSummaryColumn>
-          <Fraction numerator={opening.hiring.current} denominator={opening.hiring.total} sameSize />
-          <Subscription>Hiring</Subscription>
-        </OpenItemSummaryColumn>
+        {past ? (
+          <OpenItemSummaryColumn>
+            <Fraction numerator={opening.hiring.current} denominator={opening.hiring.limit} />
+            <Subscription>Hired</Subscription>
+          </OpenItemSummaryColumn>
+        ) : (
+          <OpenItemSummaryColumn>
+            <TextBig bold>{opening.hiring.limit}</TextBig>
+            <Subscription>Hiring</Subscription>
+          </OpenItemSummaryColumn>
+        )}
       </ToggleableItemSummary>
     </ToggleableItemWrap>
   )

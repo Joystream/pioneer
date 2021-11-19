@@ -2,6 +2,7 @@ fragment MemberFields on Membership {
   id
   rootAccount
   controllerAccount
+  boundAccounts
   handle
   metadata {
     name

@@ -2,30 +2,62 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
+import { isRecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { BalanceLock } from '@/accounts/types'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
+import { Address } from '@/common/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface DetailsItemDataProps {
+type DetailsItemDataProps = {
   lock: BalanceLock
   isRecoverable?: boolean
+  address?: Address
 }
 
-export const LockItem = ({ lock, isRecoverable }: DetailsItemDataProps) => (
-  <DetailsItemVoteWrapper>
-    <AccountDetailsWrap>
-      <DetailsInfo>
-        {lockIcon(lock.type)}
-        <DetailsName>{lock.type}</DetailsName>
-      </DetailsInfo>
-      <div />
-      {isRecoverable ? <div /> : null}
-      <TokenValue value={lock.amount} />
-      {isRecoverable ? null : <div />}
-      <div />
-    </AccountDetailsWrap>
-  </DetailsItemVoteWrapper>
-)
+export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps) => {
+  const { showModal } = useModal()
+  const {
+    helpers: { getMemberIdByBoundAccountAddress },
+  } = useMyMemberships()
+
+  const onClick = () => {
+    if (!address) return
+    const memberId = getMemberIdByBoundAccountAddress(address)
+    if (!memberId) return
+
+    if (isRecoverableLock(lock)) {
+      showModal<RecoverBalanceModalCall>({
+        modal: 'RecoverBalance',
+        data: { address, lock, memberId },
+      })
+    }
+  }
+
+  return (
+    <DetailsItemVoteWrapper>
+      <AccountDetailsWrap>
+        <DetailsInfo>
+          {lockIcon(lock.type)}
+          <DetailsName>{lock.type}</DetailsName>
+        </DetailsInfo>
+        <div />
+        {isRecoverable ? <div /> : null}
+        <TokenValue value={lock.amount} />
+        {isRecoverable && (
+          <>
+            <div />
+            <TransactionButton style="primary" size="small" onClick={onClick}>
+              Recover
+            </TransactionButton>
+          </>
+        )}
+      </AccountDetailsWrap>
+    </DetailsItemVoteWrapper>
+  )
+}
 
 const DetailsItemVoteWrapper = styled.div`
   display: flex;

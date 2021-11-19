@@ -56,12 +56,6 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
         CANCELED: 'canceled',
       },
     },
-    canceled: {
-      type: 'final',
-      data: {
-        finalStatus: 'canceled',
-      },
-    },
     pending: {
       on: {
         FINALIZING: 'finalizing',
@@ -109,6 +103,12 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
         events: (_: TransactionContext, event: TransactionErrorEvent) => event.events,
         fee: (_: TransactionContext, event: TransactionErrorEvent) => event.fee,
         finalStatus: 'error',
+      },
+    },
+    canceled: {
+      type: 'final',
+      data: {
+        finalStatus: 'canceled',
       },
     },
   },

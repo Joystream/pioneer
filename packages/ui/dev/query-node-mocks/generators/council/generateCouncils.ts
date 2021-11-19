@@ -12,15 +12,11 @@ import { RawNewMissedRewardLevelReachedEvent, RawProposalVotedEvent } from '@/mo
 
 import rawProposals from '../../../../src/mocks/data/raw/proposals.json'
 import rawWorkers from '../../../../src/mocks/data/raw/workers.json'
+import { ALICE, ALICE_STASH, BOB_STASH } from '../../../node-mocks/data/addresses'
 import { saveFile } from '../../helpers/saveFile'
-import { memberAt, randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
+import { memberAt, randomBlock, randomFromRange, randomMember, repeat } from '../utils'
 
 const COUNCILS = 5
-
-// LocalStorage entry:
-// key: votes:4
-// value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
-export const COMMITMENT = '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806'
 
 export const generateCouncils = () => {
   const data = Array.from({ length: COUNCILS }).reduce(generateCouncil, {
@@ -70,31 +66,30 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     isFinished ? randomFromRange(5, 8) : 0
   )
 
-  function createCandidate(candidateIndex: number, member: ReturnType<typeof randomMember>) {
-    return {
-      id: `${council.id}-${candidateIndex}`,
-      memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
-      electionRoundId: council.id,
-      stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
-      stakingAccountId: member.controllerAccount,
-      rewardAccountId: member.rootAccount,
-      note: faker.lorem.words(10),
-      noteMetadata: {
-        header: faker.lorem.words(4),
-        bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),
-        bannerImageUri: 'https://picsum.photos/500/300',
-        description: faker.lorem.words(10),
-      },
-    }
-  }
+  const createCandidate = (candidateIndex: number, member = randomMember()) => ({
+    id: `${council.id}-${candidateIndex}`,
+    memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
+    electionRoundId: council.id,
+    stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
+    stakingAccountId: member.controllerAccount,
+    rewardAccountId: member.rootAccount,
+    note: faker.lorem.words(10),
+    noteMetadata: {
+      header: faker.lorem.words(4),
+      bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),
+      bannerImageUri: 'https://picsum.photos/500/300',
+      description: faker.lorem.words(10),
+    },
+  })
 
   const candidates: RawCouncilCandidateMock[] = repeat(
-    (candidateIndex) => createCandidate(candidateIndex, randomMember()),
+    createCandidate,
     isFinished ? councilors.length : randomFromRange(5, 8)
   )
 
+  // Add Alice as the last candidate of the on going election
   if (!isFinished) {
-    candidates.push(createCandidate(candidates.length - 1, memberAt(0)))
+    candidates.push(createCandidate(candidates.length, memberAt(0)))
   }
 
   const voteKinds = ['APPROVE', 'REJECT', 'SLASH', 'ABSTAIN']
@@ -132,23 +127,33 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     electedCouncilId: council.id,
   }
 
-  const getCastBy = randomFromWeightedSet(
-    [1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'],
-    [1, '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'],
-    [5, '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU']
-  )
+  const createVote = (voteIndex: number, override: Partial<RawCouncilVoteMock> = {}): RawCouncilVoteMock => ({
+    electionRoundId: council.id,
+    stake: randomFromRange(1, 10) * 1000,
+    stakeLocked: isFinished ? Math.random() > 0.5 : true,
+    castBy: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
+    commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    ...override,
+  })
 
-  const votes: RawCouncilVoteMock[] = repeat(
-    () => ({
-      electionRoundId: council.id,
-      stake: randomFromRange(1, 10) * 1000,
-      stakeLocked: isFinished ? Math.random() > 0.5 : true,
-      castBy: getCastBy(),
-      voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
-      commitment: COMMITMENT,
-    }),
-    randomFromRange(10, 20)
-  )
+  const votes: RawCouncilVoteMock[] = [
+    ...repeat(createVote, randomFromRange(10, 20)),
+    createVote(21, { castBy: ALICE_STASH }),
+
+    ...(isFinished
+      ? [createVote(22, { castBy: ALICE }), createVote(23, { castBy: BOB_STASH })]
+      : [
+          // Add a revealable vote (matching the local storage entry below) on the on going election
+          // key: votes:4
+          // value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
+          createVote(22, {
+            castBy: ALICE,
+            commitment: '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806',
+            voteForId: null,
+          }),
+        ]),
+  ]
 
   return {
     councils: [...data.councils, council],

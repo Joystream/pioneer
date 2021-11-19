@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { TextInlineBig, TextMedium, TokenValue } from '@/common/components/typography'
+import { TextBig, TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
 import {
@@ -44,7 +44,7 @@ export const UpcomingOpeningListItem = ({ opening, onClick }: UpcomingProps) => 
           <ToggleableSubscriptionWide>Minimum stake required</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextMedium>{opening.hiringLimit}</TextMedium>
+          <TextBig bold>{opening.hiringLimit}</TextBig>
           <Subscription>Hiring</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>

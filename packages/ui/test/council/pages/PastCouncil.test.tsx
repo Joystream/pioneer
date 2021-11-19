@@ -77,6 +77,18 @@ describe('UI: Past Council page', () => {
 
     describe('Stats', () => {
       beforeEach(async () => {
+        seedProposal(testProposals[0], mockServer.server)
+        seedEvent(
+          {
+            id: '0',
+            inBlock: 5,
+            createdAt: '2021-10-07T11:47:39.042Z',
+            network: 'OLYMPIA',
+            proposalId: testProposals[0].id,
+          },
+          'ProposalExecutedEvent',
+          mockServer.server
+        )
         seedEvent(
           {
             id: '0',
@@ -122,7 +134,7 @@ describe('UI: Past Council page', () => {
       it('Total spent on proposals', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent on proposals$/i).parentElement?.nextSibling?.textContent).toBe('0')
+        expect(getByText(/^Total spent on proposals$/i).parentElement?.nextSibling?.textContent).toBe('5,000')
       })
     })
 

@@ -3,7 +3,7 @@ import React from 'react'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../../../constants'
+import { BorderRad, Colors, Transitions, Overflow } from '../../../constants'
 
 interface NavigationLinkProps extends DisabledNavigationLinkProps {
   children: React.ReactNode
@@ -91,6 +91,7 @@ const NavigationItemLinkChildren = styled.div`
   -webkit-text-stroke-color: inherit;
   color: inherit;
   z-index: 20;
+  ${Overflow.FullDots};
 `
 
 const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`

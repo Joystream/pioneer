@@ -14,6 +14,7 @@ import { CouncilRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
+import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { MemberDetails } from '@/memberships/components/MemberProfile'
 import { MemberAccounts } from '@/memberships/components/MemberProfile/MemberAccounts'
@@ -41,7 +42,8 @@ export const CandidacyPreview = React.memo(() => {
   const { stage: electionStage } = useElectionStage()
   const currentVotingCycleId = electionStage === 'voting' ? candidate?.cycleId : undefined
   const myVotes = useVerifiedVotingAttempts(currentVotingCycleId, candidate?.member.id)
-  const canVote = !!myVotes && allAccounts.length > myVotes.length
+  const { votesTotal } = useMyCurrentVotesCount(currentVotingCycleId)
+  const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
 
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
@@ -105,7 +107,7 @@ export const CandidacyPreview = React.memo(() => {
       footer={
         canVote ? (
           <ButtonsGroup align="right">
-            <VoteForCouncilButton id={modalData.id} again={myVotes.length > 0} />
+            <VoteForCouncilButton id={modalData.id} again={!!myVotes && myVotes.length > 0} />
           </ButtonsGroup>
         ) : null
       }

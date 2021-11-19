@@ -9,6 +9,8 @@ interface Context {
 }
 
 type State =
+  | { value: 'requirementsVerification'; context: EmptyObject }
+  | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'transaction'; context: EmptyObject }
   | { value: 'success'; context: EmptyObject }
   | { value: 'error'; context: Required<Context> }
@@ -16,8 +18,14 @@ type State =
 export type RecoverBalanceEvent = { type: 'FAIL' } | { type: 'PASS' }
 
 export const recoverBalanceMachine = createMachine<Context, RecoverBalanceEvent, State>({
-  initial: 'transaction',
+  initial: 'requirementsVerification',
   states: {
+    requirementsVerification: {
+      on: {
+        PASS: 'transaction',
+        FAIL: 'requirementsFailed',
+      },
+    },
     transaction: {
       invoke: {
         id: 'transaction',
@@ -39,6 +47,7 @@ export const recoverBalanceMachine = createMachine<Context, RecoverBalanceEvent,
         ],
       },
     },
+    requirementsFailed: { type: 'final' },
     success: { type: 'final' },
     error: { type: 'final' },
     canceled: { type: 'final' },

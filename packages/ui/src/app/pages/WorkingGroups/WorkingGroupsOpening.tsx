@@ -18,6 +18,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import {
   DurationStatistics,
   FractionValue,
+  NumericValue,
   StatiscticContentColumn,
   StatisticHeader,
   Statistics,
@@ -146,7 +147,7 @@ export const WorkingGroupOpening = () => {
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
               <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
-              <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} />
+              <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>
         </PageHeaderWrapper>
@@ -177,17 +178,28 @@ export const WorkingGroupOpening = () => {
   )
 }
 
-const ApplicationStats = ({ applicants, hiring }: Pick<WorkingGroupOpeningType, 'applicants' | 'hiring'>) => (
+const ApplicationStats = ({
+  applicants,
+  hiring,
+  status,
+}: Pick<WorkingGroupOpeningType, 'applicants' | 'hiring' | 'status'>) => (
   <ApplicationStatsStyles>
     <TwoColumnsStatistic>
       <StatiscticContentColumn>
         <StatisticHeader title="Applicants" />
-        <FractionValue numerator={applicants.current} denominator={applicants.total} />
+        <NumericValue>{applicants}</NumericValue>
       </StatiscticContentColumn>
-      <StatiscticContentColumn>
-        <StatisticHeader title="Hiring" />
-        <FractionValue numerator={hiring.current} denominator={hiring.total} />
-      </StatiscticContentColumn>
+      {status === OpeningStatuses.FILLED || status === OpeningStatuses.CANCELLED ? (
+        <StatiscticContentColumn>
+          <StatisticHeader title="Hired" />
+          <FractionValue numerator={hiring.current} denominator={hiring.limit} />
+        </StatiscticContentColumn>
+      ) : (
+        <StatiscticContentColumn>
+          <StatisticHeader title="Hiring limit" />
+          <NumericValue>{hiring.limit}</NumericValue>
+        </StatiscticContentColumn>
+      )}
     </TwoColumnsStatistic>
   </ApplicationStatsStyles>
 )

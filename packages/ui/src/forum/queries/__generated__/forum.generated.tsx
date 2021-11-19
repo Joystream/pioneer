@@ -287,6 +287,7 @@ export type ForumPostFieldsFragment = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -323,6 +324,7 @@ export type ForumPostFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -361,6 +363,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -784,6 +787,7 @@ export type GetForumPostsQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -820,6 +824,7 @@ export type GetForumPostsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean

@@ -53,6 +53,9 @@ describe('CreateThreadModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeEach(async () => {

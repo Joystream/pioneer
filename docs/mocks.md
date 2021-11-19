@@ -36,8 +36,8 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       ```
 
 2. _(optional)_ Change the starting Council/Referendum stage (the default is `Announcing`):
-   - Run `yarn workspace ui run set-chain-spec <stage>` (the stages are lowercase)
-   - Note that the voting and revealing periods are also extended thanks to `referendumInstance1.stage.{STAGE}.started` being set to a future block.
+   - Run `yarn workspace ui run set-chain-spec <stage> [-d <duration>]` (the stages are lowercase)
+   - For the `Voting` and `Revealing` stages the `duration` option set the number of blocks this stage will last.
 
 3. Start the node:
    - Either with docker compose: `docker-compose up node`

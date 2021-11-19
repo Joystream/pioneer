@@ -57,7 +57,7 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
       <Row>
         <RowGapBlock gap={4}>
           <Label>Applicants</Label>
-          <Fraction numerator={opening.hiring.total} denominator={opening.hiring.current} />
+          <Fraction numerator={opening.hiring.limit} denominator={opening.hiring.current} />
         </RowGapBlock>
       </Row>
       <Row>

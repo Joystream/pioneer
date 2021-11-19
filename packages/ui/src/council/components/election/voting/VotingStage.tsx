@@ -15,7 +15,7 @@ interface VotingStageProps {
 
 export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   const [tab, setTab] = useState<VotingStageTab>('candidates')
-  const { votesTotal } = useMyCurrentVotesCount()
+  const { votesTotal } = useMyCurrentVotesCount(election?.cycleId)
 
   const { allAccounts } = useMyAccounts()
   const myVotes = useVerifiedVotingAttempts(election?.cycleId)

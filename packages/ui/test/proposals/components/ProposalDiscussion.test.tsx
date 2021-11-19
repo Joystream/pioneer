@@ -30,6 +30,9 @@ describe('UI: Proposal discussion', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   const baseThread: ProposalDiscussionThread = {

@@ -26,6 +26,7 @@ export type WorkerFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -59,6 +60,7 @@ export type PastWorkerFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -117,6 +119,7 @@ export type WorkerDetailedFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -256,6 +259,7 @@ export type GetWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -299,6 +303,7 @@ export type GetPastWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -373,6 +378,7 @@ export type GetDetailedWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -427,6 +433,7 @@ export type GetWorkerQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -513,6 +520,10 @@ export type WorkingGroupOpeningFieldsFragment = {
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
   applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+  openingfilledeventopening?:
+    | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+    | null
+    | undefined
 }
 
 export type WorkingGroupOpeningDetailedFieldsFragment = {
@@ -538,6 +549,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -567,6 +579,10 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
     | { __typename: 'OpeningStatusCancelled' }
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
+  openingfilledeventopening?:
+    | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+    | null
+    | undefined
 }
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
@@ -620,6 +636,10 @@ export type GetWorkingGroupOpeningsQuery = {
       | { __typename: 'OpeningStatusFilled' }
       | { __typename: 'OpeningStatusOpen' }
     applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+    openingfilledeventopening?:
+      | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+      | null
+      | undefined
   }>
 }
 
@@ -653,6 +673,7 @@ export type GetWorkingGroupOpeningQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -686,6 +707,10 @@ export type GetWorkingGroupOpeningQuery = {
           | { __typename: 'OpeningStatusCancelled' }
           | { __typename: 'OpeningStatusFilled' }
           | { __typename: 'OpeningStatusOpen' }
+        openingfilledeventopening?:
+          | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -770,6 +795,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
@@ -816,6 +842,7 @@ export type GetWorkingGroupApplicationsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
@@ -873,6 +900,7 @@ export type GetWorkingGroupApplicationQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -1211,6 +1239,11 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     unstakingPeriod
     applications {
       id
+    }
+    openingfilledeventopening {
+      workersHired {
+        id
+      }
     }
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
