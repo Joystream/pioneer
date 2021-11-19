@@ -16,7 +16,7 @@ import { TransferModalCall } from './types'
 
 export const TransferModal = () => {
   const { hideModal, modalData } = useModal<TransferModalCall>()
-  const { from: transferFrom, to: transferTo, maxValue, transaction, minValue } = modalData
+  const { from: transferFrom, to: transferTo, maxValue, transactionMaker, minValue, initialValue } = modalData
   const [state, send] = useMachine(transferMachine)
 
   const isTransfer = !transferFrom && !transferTo
@@ -37,7 +37,8 @@ export const TransferModal = () => {
         title={title}
         maxValue={maxValue}
         minValue={minValue}
-        defaultTransaction={transaction}
+        initialValue={initialValue}
+        transactionMaker={transactionMaker}
       />
     )
   }
@@ -52,7 +53,7 @@ export const TransferModal = () => {
         to={to}
         amount={amount}
         service={service}
-        defaultTransaction={transaction}
+        transactionMaker={transactionMaker}
       />
     )
   }

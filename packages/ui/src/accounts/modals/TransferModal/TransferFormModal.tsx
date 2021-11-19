@@ -34,7 +34,8 @@ interface Props {
   title: string
   maxValue?: BN
   minValue?: BN
-  defaultTransaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+  initialValue?: BN
+  transactionMaker?: (amount: BN) => SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
 export function TransferFormModal({
@@ -45,14 +46,17 @@ export function TransferFormModal({
   title,
   maxValue,
   minValue,
-  defaultTransaction,
+  transactionMaker,
+  initialValue,
 }: Props) {
+  const { api } = useApi()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
-  const [amount, setAmount] = useNumberInput(0)
+  const [amount, setAmount] = useNumberInput(0, initialValue)
   const senderBalance = useBalance(sender?.address)
   const filterSender = useCallback(filterAccount(recipient), [recipient])
   const transferableBalance = senderBalance?.transferable ?? BN_ZERO
+  const [maxAmount, setMaxAmount] = useState(maxValue || transferableBalance)
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
@@ -62,15 +66,10 @@ export function TransferFormModal({
   const isTransferDisabled = isZero || isOverBalance || !recipient || isUnderMinimumValue
   const isValueDisabled = !sender
 
-  const { api } = useApi()
-  const [maxAmount, setMaxAmount] = useState(maxValue || transferableBalance)
-  const maxFee = useTransactionFee(
-    sender?.address,
-    defaultTransaction || api?.tx.balances.transfer(recipient?.address || '', maxAmount)
-  )
-  useEffect(() => {
-    setMaxAmount(transferableBalance.sub(maxFee?.transactionFee ?? BN_ZERO))
-  }, [maxFee?.transactionFee.toString()])
+  const maxFee = useTransactionFee(sender?.address, api?.tx.balances.transfer(recipient?.address || '', maxAmount))
+  // useEffect(() => {
+  //   setMaxAmount(transferableBalance.sub(maxFee?.transactionFee ?? BN_ZERO))
+  // }, [maxFee?.transactionFee.toString()])
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(maxAmount.toString())
@@ -79,6 +78,8 @@ export function TransferFormModal({
       onAccept(new BN(amount), sender, recipient)
     }
   }
+
+  console.log('loop form')
   return (
     <Modal modalSize={'m'} onClose={onClose}>
       <ModalHeader onClick={onClose} title={title} icon={<PickedTransferIcon type={getIconType()} />} />

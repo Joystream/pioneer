@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -32,13 +33,26 @@ import { ApplicationDetailsModalCall } from '@/working-groups/modals/Application
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { getRoleWarning } from '@/working-groups/model/getRoleWarning'
+import { useApi } from '@/common/hooks/useApi'
+import { getGroup } from '@/working-groups/model/getGroup'
 
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
+  const { api } = useApi()
+  const { allAccounts } = useMyAccounts()
 
   const { worker, isLoading } = useWorker(id)
   const { members } = useMyMemberships()
-  const balance = useBalance(worker?.stakeAccount)
+  const stakeBalance = useBalance(worker?.stakeAccount)
+  const roleBalance = useBalance(worker?.roleAccount)
+  const roleAccount = useMemo(() => allAccounts.find((account) => account.address === worker?.roleAccount), [
+    worker,
+    allAccounts,
+  ])
+  const stakeAccount = useMemo(() => allAccounts.find((account) => account.address === worker?.stakeAccount), [
+    worker,
+    allAccounts,
+  ])
 
   const isOwn = useMemo(() => {
     return !!members.find((member) => member.id === worker?.membership.id)
@@ -48,15 +62,22 @@ export const MyRole = () => {
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
   const isBelowMinStake = worker && worker.stake < worker.minStake
   const shouldIncreaseStake = worker?.stakeAccount && isBelowMinStake && isOwn
-  const canMoveExcessTokens = worker && balance?.transferable && worker.stake > worker.minStake
+  const canMoveExcessTokens = worker && stakeBalance?.transferable && worker.stake > worker.minStake
 
   const workerExcessValue = useMemo(() => {
     if (canMoveExcessTokens) {
       const excessValue = worker.stake - worker.minStake
 
-      return balance.transferable.gtn(excessValue) ? new BN(excessValue) : balance.transferable
+      return stakeBalance.transferable.gtn(excessValue) ? new BN(excessValue) : stakeBalance.transferable
     }
-  }, [worker, balance])
+  }, [worker, stakeBalance])
+
+  const workerIncreaseValue = useMemo(() => {
+    if (shouldIncreaseStake) {
+      const shortage = worker.minStake - worker.stake
+      return roleBalance?.transferable.gtn(shortage) ? new BN(shortage) : roleBalance?.transferable
+    }
+  }, [worker, roleBalance])
 
   const { activities } = useRoleActivities(worker)
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
@@ -89,8 +110,24 @@ export const MyRole = () => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
+  const increaseTransactionMaker = useMemo(() => {
+    if (worker && api) {
+      const group = getGroup(api, worker.group.id)
+
+      return (amount: BN) => group.increaseStake(worker.runtimeId, amount)
+    }
+  }, [worker, api])
+
   const onIncreaseStakeClick = (): void => {
-    showModal({ modal: 'IncreaseWorkerStake', data: { worker } })
+    showModal({
+      modal: 'TransferTokens',
+      data: {
+        from: roleAccount,
+        to: stakeAccount,
+        minValue: workerIncreaseValue,
+        transactionMaker: increaseTransactionMaker,
+      },
+    })
   }
 
   const onMoveExcessClick = () => {

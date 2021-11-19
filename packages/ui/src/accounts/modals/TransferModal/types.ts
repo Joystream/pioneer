@@ -13,6 +13,7 @@ export type TransferModalCall = ModalWithDataCall<
     to?: Account
     maxValue?: BN
     minValue?: BN
-    transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+    initialValue?: BN
+    transactionMaker?: (amount: BN) => SubmittableExtrinsic<'rxjs', ISubmittableResult>
   }
 >

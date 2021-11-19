@@ -35,21 +35,20 @@ interface Props {
   amount: BN
   to: Account
   service: ActorRef<any>
-  defaultTransaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+  transactionMaker?: (amount: BN) => SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
-export function TransferSignModal({ onClose, from, amount, to, service, defaultTransaction }: Props) {
+export function TransferSignModal({ onClose, from, amount, to, service, transactionMaker }: Props) {
   const toAddress = to.address
   const fromAddress = from.address
   const balanceFrom = useBalance(fromAddress)
   const balanceTo = useBalance(toAddress)
   const { api, connectionState } = useApi()
-  const transaction = useMemo(() => defaultTransaction || api?.tx?.balances?.transfer(toAddress, amount), [
-    toAddress,
-    amount,
-    connectionState,
-    defaultTransaction,
-  ])
+
+  const transaction = useMemo(
+    () => (transactionMaker ? transactionMaker(amount) : api?.tx?.balances?.transfer(toAddress, amount)),
+    [toAddress, amount, connectionState, transactionMaker]
+  )
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
 
   return (
