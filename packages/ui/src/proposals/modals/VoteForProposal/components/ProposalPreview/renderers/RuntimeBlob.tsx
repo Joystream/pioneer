@@ -8,6 +8,8 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineMedium } from '@/common/components/typography'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
 
+import { downloadFile } from '../../../../../../common/utils/downloadFile'
+
 interface Props {
   label: string
   value: string
@@ -16,9 +18,12 @@ interface Props {
 export const RuntimeBlob = ({ label, value: newBytecodeId }: Props) => {
   const { state, runtimeBase64string, fetch } = useRuntimeBytecode(newBytecodeId)
 
+  const download = () =>
+    downloadFile(`bytecode_${newBytecodeId}.wasm`, `data:application/octet-stream;base64,${runtimeBase64string}`)
+
   useEffect(() => {
-    if (state === 'loaded' && runtimeBase64string) {
-      downloadFile(newBytecodeId, getDownloadHref(runtimeBase64string))
+    if (state === 'loaded') {
+      download()
     }
   }, [state])
 
@@ -26,7 +31,7 @@ export const RuntimeBlob = ({ label, value: newBytecodeId }: Props) => {
     if (state !== 'loaded') {
       fetch()
     } else {
-      runtimeBase64string && downloadFile(newBytecodeId, getDownloadHref(runtimeBase64string))
+      download()
     }
   }
 
@@ -43,17 +48,6 @@ export const RuntimeBlob = ({ label, value: newBytecodeId }: Props) => {
       </RowGapBlock>
     </Row>
   )
-}
-
-function downloadFile(id: string | undefined, downloadHref: string) {
-  const a = document.createElement('a')
-  a.download = `bytecode_${id}.wasm`
-  a.href = downloadHref
-  a.click()
-}
-
-function getDownloadHref(base64string: string) {
-  return `data:application/octet-stream;base64,${base64string}`
 }
 
 export const FileLink = styled(Link)`

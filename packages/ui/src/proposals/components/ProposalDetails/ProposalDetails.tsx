@@ -1,17 +1,12 @@
 import React, { ReactElement, useCallback, useMemo } from 'react'
 
-import { Row } from '@/common/components/Modal'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { camelCaseToText } from '@/common/helpers'
+import { StatisticsThreeColumns } from '@/common/components/statistics'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
 
-import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text } from './renderers'
+import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text, Divider } from './renderers'
 
 interface Props {
-  proposalTitle: string
-  proposalType: string
-  proposalRationale: string
   proposalDetails?: ProposalWithDetails['details']
 }
 
@@ -27,9 +22,10 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Member: Member,
   Address: Address,
   RuntimeBlob: RuntimeBlob,
+  Divider: Divider,
 }
 
-export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale, proposalDetails }: Props) => {
+export const ProposalDetails = ({ proposalDetails }: Props) => {
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {
@@ -44,20 +40,5 @@ export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale
     return null
   }
 
-  return (
-    <RowGapBlock gap={24}>
-      <Row>
-        <RowGapBlock gap={8}>
-          <h5>{proposalTitle}</h5>
-        </RowGapBlock>
-      </Row>
-      <Row>
-        <RowGapBlock gap={8}>
-          <h6>{proposalType && `${camelCaseToText(proposalType)}`}</h6>
-        </RowGapBlock>
-      </Row>
-      {detailsRenderStructure?.structure?.map(renderProposalDetail)}
-      {proposalRationale && <Markdown label="rationale" value={proposalRationale} />}
-    </RowGapBlock>
-  )
+  return <StatisticsThreeColumns>{detailsRenderStructure?.structure?.map(renderProposalDetail)}</StatisticsThreeColumns>
 }
