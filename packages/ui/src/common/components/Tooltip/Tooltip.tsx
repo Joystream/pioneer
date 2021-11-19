@@ -263,6 +263,7 @@ export const TooltipComponent = styled.i`
   align-items: center;
   border: none;
   outline: none;
+  font-style: normal;
   background-color: transparent;
   padding: 0;
 
