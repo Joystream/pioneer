@@ -7,7 +7,7 @@ import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingO
 import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
-import { ModalFooter, ScrolledModal } from '@/common/components/Modal'
+import { Modal, ModalFooter, ScrolledModal } from '@/common/components/Modal'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -91,7 +91,7 @@ export const OnBoardingModal = () => {
   }
 
   return (
-    <StyledModal onClose={hideModal} modalSize='m' modalHeight='m'>
+    <StyledModal onClose={hideModal} modalSize='l' modalHeight='m'>
       <StepperWrapper>
         <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
         <StyledCloseButton onClick={hideModal} />

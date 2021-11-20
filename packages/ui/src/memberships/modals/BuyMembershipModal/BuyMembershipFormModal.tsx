@@ -127,58 +127,58 @@ export const BuyMembershipForm = ({
     <>
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <Row>
-            <InlineToggleWrap>
-              <Label>I was referred by a member: </Label>
-              <ToggleCheckbox
-                trueLabel='Yes'
-                falseLabel='No'
-                onChange={(isSet) => changeField('isReferred', isSet)}
-                checked={isReferred ?? false}
-              />
-            </InlineToggleWrap>
-            {isReferred && (
-              <InputComponent required inputSize='l'>
-                <SelectMember
-                  onChange={(member) => changeField('referrer', member)}
-                  disabled={!isReferred}
-                  selected={referrer}
+          {type === 'general' && (
+            <Row>
+              <InlineToggleWrap>
+                <Label>I was referred by a member: </Label>
+                <ToggleCheckbox
+                  trueLabel='Yes'
+                  falseLabel='No'
+                  onChange={(isSet) => changeField('isReferred', isSet)}
+                  checked={isReferred ?? false}
                 />
-              </InputComponent>
-            )}
-          </Row>
-
+              </InlineToggleWrap>
+              {isReferred && (
+                <InputComponent required inputSize='l'>
+                  <SelectMember
+                    onChange={(member) => changeField('referrer', member)}
+                    disabled={!isReferred}
+                    selected={referrer}
+                  />
+                </InputComponent>
+              )}
+            </Row>
+          )}
           <Row>
             <TextMedium dark>Please fill in all the details below.</TextMedium>
           </Row>
-
-          <Row>
-            <InputComponent label='Root account' required inputSize='l' tooltipText='Something about root accounts'>
-              <SelectAccount
-                filter={filterRoot}
-                onChange={(account) => changeField('rootAccount', account)}
-                selected={rootAccount}
-                disabled={type === 'onBoarding'}
-              />
-            </InputComponent>
-          </Row>
-
-          <Row>
-            <InputComponent
-              label='Controller account'
-              required
-              inputSize='l'
-              tooltipText='Something about controller account'
-            >
-              <SelectAccount
-                filter={filterController}
-                onChange={(account) => changeField('controllerAccount', account)}
-                selected={controllerAccount}
-                disabled={type === 'onBoarding'}
-              />
-            </InputComponent>
-          </Row>
-
+          {type === 'general' && (
+            <>
+              <Row>
+                <InputComponent label='Root account' required inputSize='l' tooltipText='Something about root accounts'>
+                  <SelectAccount
+                    filter={filterRoot}
+                    onChange={(account) => changeField('rootAccount', account)}
+                    selected={rootAccount}
+                  />
+                </InputComponent>
+              </Row>
+              <Row>
+                <InputComponent
+                  label='Controller account'
+                  required
+                  inputSize='l'
+                  tooltipText='Something about controller account'
+                >
+                  <SelectAccount
+                    filter={filterController}
+                    onChange={(account) => changeField('controllerAccount', account)}
+                    selected={controllerAccount}
+                  />
+                </InputComponent>
+              </Row>
+            </>
+          )}
           <Row>
             <InputComponent id='member-name' label='Member Name' required>
               <InputText
@@ -189,7 +189,6 @@ export const BuyMembershipForm = ({
               />
             </InputComponent>
           </Row>
-
           <Row>
             <InputComponent id='membership-handle' label='Membership handle' required>
               <InputText
@@ -200,7 +199,6 @@ export const BuyMembershipForm = ({
               />
             </InputComponent>
           </Row>
-
           <Row>
             <InputComponent id='member-about' label='About member' inputSize='l'>
               <InputTextarea
@@ -211,7 +209,6 @@ export const BuyMembershipForm = ({
               />
             </InputComponent>
           </Row>
-
           <Row>
             <InputComponent
               id='member-avatar'
@@ -240,7 +237,7 @@ export const BuyMembershipForm = ({
           {type === 'onBoarding' && (
             <ButtonGhost onClick={changeMembershipAccount} size='medium'>
               <Arrow direction='left' />
-              Select other account
+              Change account
             </ButtonGhost>
           )}
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
