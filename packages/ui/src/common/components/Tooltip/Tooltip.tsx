@@ -88,6 +88,9 @@ export const Tooltip = ({
     onMouseLeave: mouseLeft,
   }
 
+  const isExternalLink = () =>
+    tooltipLinkURL && (tooltipLinkURL.startsWith('http://') || tooltipLinkURL.startsWith('https://'))
+
   return (
     <TooltipContainer absolute={absolute}>
       <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0}>
@@ -121,12 +124,18 @@ export const Tooltip = ({
               >
                 {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
                 <TooltipText>{tooltipText}</TooltipText>
-                {tooltipLinkURL && (
-                  <TooltipLink to={tooltipLinkURL} target="_blank">
-                    {tooltipLinkText ?? 'Link'}
-                    <LinkSymbol />
-                  </TooltipLink>
-                )}
+                {tooltipLinkURL &&
+                  (isExternalLink() ? (
+                    <TooltipExternalLink href={tooltipLinkURL} target="_blank">
+                      {tooltipLinkText ?? 'Link'}
+                      <LinkSymbol />
+                    </TooltipExternalLink>
+                  ) : (
+                    <TooltipLink to={tooltipLinkURL} target="_blank">
+                      {tooltipLinkText ?? 'Link'}
+                      <LinkSymbol />
+                    </TooltipLink>
+                  ))}
               </TooltipPopupContainer>,
               document.body
             ))}
@@ -221,6 +230,42 @@ export const TooltipText = styled.p`
 `
 
 export const TooltipLink = styled(Link)<{ to: string; target: string }>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  align-items: center;
+  width: fit-content;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  color: ${Colors.Black[400]};
+  transition: ${Transitions.all};
+  text-transform: capitalize;
+
+  ${LinkSymbolStyle} {
+    width: 12px;
+    height: 12px;
+
+    .blackPart,
+    .primaryPart {
+      fill: ${Colors.Black[300]};
+    }
+  }
+
+  &:hover {
+    color: ${Colors.Blue[500]};
+
+    ${LinkSymbolStyle} {
+      .blackPart,
+      .primaryPart {
+        fill: ${Colors.Blue[500]};
+      }
+    }
+  }
+`
+
+export const TooltipExternalLink = styled.a<{ href: string | undefined; target: string }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
