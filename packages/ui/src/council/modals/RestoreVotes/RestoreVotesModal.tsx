@@ -46,17 +46,19 @@ const parseContent = (contentJson: string, cycleId: number): Pick<Value, 'errors
 type Value = FileEntry & { content?: VotesBackup }
 type Action = { type: 'set-file'; value: File } | { type: 'set-content'; value: string }
 
-const valueReducer = (cycleId: number) => (value: undefined | Value, action: Action): undefined | Value => {
-  switch (action.type) {
-    case 'set-file':
-      return { file: action.value }
+const valueReducer =
+  (cycleId: number) =>
+  (value: undefined | Value, action: Action): undefined | Value => {
+    switch (action.type) {
+      case 'set-file':
+        return { file: action.value }
 
-    case 'set-content':
-      if (value) {
-        return { file: value.file, ...parseContent(action.value, cycleId) }
-      }
+      case 'set-content':
+        if (value) {
+          return { file: value.file, ...parseContent(action.value, cycleId) }
+        }
+    }
   }
-}
 
 export const RestoreVotesModal = () => {
   const {
