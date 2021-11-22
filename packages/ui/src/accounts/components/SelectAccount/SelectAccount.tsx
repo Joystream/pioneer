@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { filterAccounts } from '@/accounts/model/filterAccounts'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { Address } from '@/common/types'
 
@@ -27,7 +29,12 @@ interface Props extends Pick<SelectProps<Account>, 'id' | 'selected' | 'disabled
 
 export const SelectAccount = React.memo(({ id, onChange, filter, selected, disabled }: Props) => {
   const { allAccounts } = useMyAccounts()
-  const options = allAccounts.filter(filter || (() => true))
+  const balances = useMyBalances()
+  const options = useMemo(() => filterAccounts(allAccounts, false, balances).filter(filter || (() => true)), [
+    balances,
+    allAccounts,
+    filter,
+  ])
 
   const [search, setSearch] = useState('')
 

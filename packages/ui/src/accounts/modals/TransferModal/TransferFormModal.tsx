@@ -50,7 +50,6 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   const isValueDisabled = !sender
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
-  const setMax = () => setAmount(maxValue?.toString() || transferableBalance.toString())
   const onClick = () => {
     if (amount && recipient && sender) {
       onAccept(new BN(amount), sender, recipient)
@@ -96,9 +95,6 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
           <AmountButtons>
             <AmountButton size="small" onClick={setHalf} disabled={isValueDisabled}>
               Use half
-            </AmountButton>
-            <AmountButton size="small" onClick={setMax} disabled={isValueDisabled}>
-              Use max
             </AmountButton>
           </AmountButtons>
         </TransactionAmount>
