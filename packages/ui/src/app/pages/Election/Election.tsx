@@ -40,7 +40,7 @@ export const Election = () => {
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>
-        <PageTitle>Council</PageTitle>
+        <PageTitle>Elections</PageTitle>
         <ButtonsGroup>
           <CopyButtonTemplate
             size="medium"

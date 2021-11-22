@@ -24,7 +24,7 @@ export const PastElections = () => {
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>
-        <PageTitle>Council</PageTitle>
+        <PageTitle>Elections</PageTitle>
       </PageHeaderRow>
       <ElectionTabs />
     </PageHeaderWrapper>
