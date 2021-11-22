@@ -24,6 +24,7 @@ type ChangeAccountState =
   | { value: 'transaction'; context: Required<ChangeAccountContext> }
   | { value: 'success'; context: Required<ChangeAccountContext> }
   | { value: 'error'; context: Required<Context> }
+  | { value: 'cancelled'; context: Required<Context> }
 
 export type ChangeAccountEvent =
   | { type: 'PASS' }
@@ -65,6 +66,7 @@ export const changeAccountMachine = createMachine<Context, ChangeAccountEvent, C
       },
     },
     success: { type: 'final' },
+    canceled: { type: 'final' },
     error: { type: 'final' },
   },
 })

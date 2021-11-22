@@ -1,5 +1,6 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
+import {BN_ZERO} from '@/common/constants'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -71,12 +72,13 @@ describe('Machine: Transaction machine', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
     service.send('PENDING')
-    service.send('FINALIZING')
-    service.send('PROCESSING')
-    service.send('SUCCESS', { events: ['foo', 'bar'] })
+    service.send('FINALIZING', { fee: BN_ZERO })
+    service.send('PROCESSING', { events: ['foo', 'bar'] })
+    service.send('SUCCESS')
 
     expect(service.state.context).toEqual({
       events: ['foo', 'bar'],
+      fee: BN_ZERO,
     })
   })
 
@@ -133,12 +135,12 @@ describe('Machine: Transaction machine', () => {
       child.send('SIGN')
       child.send('SIGN_EXTERNAL')
       child.send('PENDING')
-      child.send('FINALIZING')
-      child.send('PROCESSING')
-      child.send({ type: 'SUCCESS', events: ['foo', 'bar'] })
+      child.send({type: 'FINALIZING', fee: BN_ZERO})
+      child.send({ type: 'PROCESSING', events: ['foo', 'bar'] })
+      child.send('SUCCESS')
 
       expect(service.state.matches('success')).toBeTruthy()
-      expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'] })
+      expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'], fee: BN_ZERO })
     })
 
     it('error', () => {

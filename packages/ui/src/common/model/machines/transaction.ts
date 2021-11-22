@@ -4,16 +4,16 @@ import { ActionTypes, assign, createMachine, DoneInvokeEvent, send } from 'xstat
 
 import { EmptyObject } from '@/common/types'
 
-export type TransactionProcessingEvent = { type: 'PROCESSING'; events: EventRecord[]; fee: BN }
-export type TransactionSuccessEvent = { type: 'SUCCESS'; events: EventRecord[]; fee: BN }
-export type TransactionErrorEvent = { type: 'ERROR'; events: EventRecord[]; fee: BN }
+export type TransactionProcessingEvent = { type: 'PROCESSING'; events: EventRecord[] }
+export type TransactionSuccessEvent = { type: 'SUCCESS' }
+export type TransactionErrorEvent = { type: 'ERROR'; events: EventRecord[] }
 export type TransactionEvent =
   | { type: 'SIGNED' }
   | { type: 'SIGN' }
   | { type: 'SIGN_EXTERNAL' }
   | { type: 'CANCELED' }
   | { type: 'PENDING' }
-  | { type: 'FINALIZING' }
+  | { type: 'FINALIZING', fee: BN }
   | TransactionProcessingEvent
   | TransactionSuccessEvent
   | TransactionErrorEvent
@@ -58,31 +58,36 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     },
     pending: {
       on: {
-        FINALIZING: 'finalizing',
+        FINALIZING: {
+          target: 'finalizing',
+          actions: assign({
+            fee: (_, event) => event.fee
+          })
+        },
         ERROR: 'error',
       },
     },
     finalizing: {
       on: {
-        PROCESSING: 'processing',
+        PROCESSING: {
+          target: 'processing',
+          actions: assign({
+            events: (_, event) => event.events,
+          }),
+        },
         ERROR: 'error',
-      },
+      }
     },
     processing: {
       on: {
         SUCCESS: {
-          target: 'success',
-          actions: assign({
-            events: (_, event) => event.events,
-            fee: (_, event) => event.fee,
-          }),
+          target: 'success'
         },
         ERROR: {
           target: 'error',
           actions: [
             assign({
               events: (_, event) => event.events,
-              fee: (_, event) => event.fee,
             }),
             send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
           ],
@@ -92,16 +97,16 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     success: {
       type: 'final',
       data: {
-        events: (_: TransactionContext, event: TransactionSuccessEvent) => event.events,
-        fee: (_: TransactionContext, event: TransactionSuccessEvent) => event.fee,
+        events: (context: TransactionContext) => context.events,
+        fee: (context: TransactionContext) => context.fee,
         finalStatus: 'success',
       },
     },
     error: {
       type: 'final',
       data: {
-        events: (_: TransactionContext, event: TransactionErrorEvent) => event.events,
-        fee: (_: TransactionContext, event: TransactionErrorEvent) => event.fee,
+        events: (context: TransactionContext) => context.events,
+        fee: (context: TransactionContext) => context.fee,
         finalStatus: 'error',
       },
     },
