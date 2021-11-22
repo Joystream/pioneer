@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import React, { useCallback, useState } from 'react'
 
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { PickedTransferIcon } from '@/common/components/icons/TransferIcons'
 import { BN_ZERO } from '@/common/constants'
@@ -19,7 +20,6 @@ import {
   TransactionAmount,
 } from '../../../common/components/Modal'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
-import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../types'
 
 interface Props {
@@ -37,9 +37,12 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0, initialValue)
-  const senderBalance = useBalance(sender?.address)
-  const filterSender = useCallback(filterAccount(recipient), [recipient])
-  const transferableBalance = senderBalance?.transferable ?? BN_ZERO
+  const balances = useMyBalances()
+  const filterSender = useCallback(
+    (account: Account) => account.address !== recipient?.address && balances[account.address]?.transferable.gt(BN_ZERO),
+    [recipient, balances]
+  )
+  const transferableBalance = balances[sender?.address as string]?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
