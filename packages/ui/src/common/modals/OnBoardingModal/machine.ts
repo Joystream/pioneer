@@ -1,5 +1,3 @@
-import { EventRecord } from '@polkadot/types/interfaces/system'
-import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { EmptyObject } from '@/common/types'
@@ -8,22 +6,21 @@ import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMem
 
 interface OnBoardingModalContext {
   form?: MemberFormFields
-  memberId?: BN
-  transactionEvents?: EventRecord[]
+  errorMessage?: string
 }
 
 type OnBoardingModalState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: { form: MemberFormFields } }
-  | { value: 'success'; context: Required<OnBoardingModalContext> }
-  | { value: 'error'; context: { form: MemberFormFields; transactionEvents: EventRecord[] } }
+  | { value: 'success'; context: { form: MemberFormFields } }
+  | { value: 'error'; context: Required<OnBoardingModalContext> }
 
 export type OnBoardingModalEvent =
   | { type: 'DONE'; form: MemberFormFields }
-  | { type: 'SUCCESS'; memberId: BN }
-  | { type: 'ERROR' }
+  | { type: 'SUCCESS' }
+  | { type: 'ERROR'; errorMessage: string }
 
-export const buyMembershipMachine = createMachine<OnBoardingModalContext, OnBoardingModalEvent, OnBoardingModalState>({
+export const onBoardingMachine = createMachine<OnBoardingModalContext, OnBoardingModalEvent, OnBoardingModalState>({
   initial: 'prepare',
   states: {
     prepare: {
@@ -40,7 +37,8 @@ export const buyMembershipMachine = createMachine<OnBoardingModalContext, OnBoar
           target: 'success'
         },
         ERROR: {
-          target: 'error'
+          target: 'error',
+          actions: assign({ errorMessage: (_, event) => event.errorMessage })
         }
       }
     },
