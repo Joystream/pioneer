@@ -1,10 +1,12 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
-import { Account } from '@/accounts/types'
+import { Account, Balances } from '@/accounts/types'
+import { BN_ZERO } from '@/common/constants'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
@@ -26,17 +28,39 @@ const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
+const useMyBalances: { [k: string]: Balances } = {}
+
 jest.mock('@/accounts/hooks/useMyAccounts', () => {
   return {
     useMyAccounts: () => useMyAccounts,
   }
 })
 
+jest.mock('@/accounts/hooks/useMyBalances', () => ({
+  useMyBalances: () => useMyBalances,
+}))
+
+const BN_BALANCE = new BN(1000)
+
 describe('UI: TransferModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
     useMyAccounts.allAccounts.push(alice, bob)
+    useMyBalances[alice.address] = {
+      total: BN_BALANCE,
+      locked: BN_ZERO,
+      recoverable: BN_BALANCE,
+      transferable: BN_BALANCE,
+      locks: [],
+    }
+    useMyBalances[bob.address] = {
+      total: BN_BALANCE,
+      locked: BN_ZERO,
+      recoverable: BN_BALANCE,
+      transferable: BN_BALANCE,
+      locks: [],
+    }
   })
 
   afterAll(() => {
@@ -71,17 +95,14 @@ describe('UI: TransferModal', () => {
 
     const input = await screen.findByLabelText(/number of tokens/i)
     const useHalfButton = await getButton(/use half/i)
-    const useMaxButton = await getButton(/use max/i)
 
     expect(input).toBeDisabled()
     expect(useHalfButton).toBeDisabled()
-    expect(useMaxButton).toBeDisabled()
 
     await selectFromDropdown('From', 'alice')
 
     expect(input).not.toBeDisabled()
     expect(useHalfButton).not.toBeDisabled()
-    expect(useMaxButton).not.toBeDisabled()
   })
 
   it('Renders an Authorize transaction step', async () => {
@@ -90,7 +111,7 @@ describe('UI: TransferModal', () => {
     const input = await screen.findByLabelText('Number of tokens')
     expect(await getButton('Transfer tokens')).toBeDisabled()
 
-    fireEvent.change(input, { target: { value: '50' } })
+    fireEvent.change(input, { target: { value: '1' } })
 
     const button = await getButton(/transfer tokens/i)
     expect(button).not.toBeDisabled()

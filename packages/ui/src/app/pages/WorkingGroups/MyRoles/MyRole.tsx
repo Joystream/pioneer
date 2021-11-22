@@ -83,7 +83,7 @@ export const MyRole = () => {
     if (worker && api) {
       const group = getGroup(api, worker.group.id)
 
-      return (amount: BN) => group.increaseStake(worker.runtimeId, amount)
+      return (amount: BN) => group?.increaseStake(worker.runtimeId, amount)
     }
   }, [worker, api])
 
