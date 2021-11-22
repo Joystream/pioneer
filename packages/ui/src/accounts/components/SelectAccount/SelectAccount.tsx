@@ -30,11 +30,10 @@ interface Props extends Pick<SelectProps<Account>, 'id' | 'selected' | 'disabled
 export const SelectAccount = React.memo(({ id, onChange, filter, selected, disabled }: Props) => {
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
-  const options = useMemo(() => filterAccounts(allAccounts, false, balances).filter(filter || (() => true)), [
-    balances,
-    allAccounts,
-    filter,
-  ])
+  const options = useMemo(
+    () => filterAccounts(allAccounts, false, balances).filter(filter || (() => true)),
+    [balances, allAccounts, filter]
+  )
 
   const [search, setSearch] = useState('')
 

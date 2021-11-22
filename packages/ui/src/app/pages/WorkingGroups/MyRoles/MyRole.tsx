@@ -45,14 +45,14 @@ export const MyRole = () => {
   const { members } = useMyMemberships()
   const stakeBalance = useBalance(worker?.stakeAccount)
   const roleBalance = useBalance(worker?.roleAccount)
-  const roleAccount = useMemo(() => allAccounts.find((account) => account.address === worker?.roleAccount), [
-    worker,
-    allAccounts,
-  ])
-  const stakeAccount = useMemo(() => allAccounts.find((account) => account.address === worker?.stakeAccount), [
-    worker,
-    allAccounts,
-  ])
+  const roleAccount = useMemo(
+    () => allAccounts.find((account) => account.address === worker?.roleAccount),
+    [worker, allAccounts]
+  )
+  const stakeAccount = useMemo(
+    () => allAccounts.find((account) => account.address === worker?.stakeAccount),
+    [worker, allAccounts]
+  )
 
   const isOwn = useMemo(() => {
     return !!members.find((member) => member.id === worker?.membership.id)
