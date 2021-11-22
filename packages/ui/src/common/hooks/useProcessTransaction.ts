@@ -48,12 +48,11 @@ const observeTransaction = (
       info(JSON.stringify(events))
       setBlockHash && setBlockHash(hash.toString())
 
-      if(hasErrorEvent(events)) {
+      if (hasErrorEvent(events)) {
         send('ERROR')
       } else {
-        send(  { type: 'FINALIZING',  fee })
+        send({ type: 'FINALIZING', fee })
       }
-
 
       setPending(false)
     }

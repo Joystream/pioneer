@@ -150,9 +150,7 @@ export const stubApi = () => {
   )
   stubDefaultBalances(api)
   set(api, 'api.rpc.chain.getBlockHash', () => {
-    from([
-      createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')
-    ])
+    from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
   })
 
   return api

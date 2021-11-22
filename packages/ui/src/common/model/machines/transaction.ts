@@ -13,7 +13,7 @@ export type TransactionEvent =
   | { type: 'SIGN_EXTERNAL' }
   | { type: 'CANCELED' }
   | { type: 'PENDING' }
-  | { type: 'FINALIZING', fee: BN }
+  | { type: 'FINALIZING'; fee: BN }
   | TransactionProcessingEvent
   | TransactionSuccessEvent
   | TransactionErrorEvent
@@ -61,8 +61,8 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
         FINALIZING: {
           target: 'finalizing',
           actions: assign({
-            fee: (_, event) => event.fee
-          })
+            fee: (_, event) => event.fee,
+          }),
         },
         ERROR: 'error',
       },
@@ -76,12 +76,12 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
           }),
         },
         ERROR: 'error',
-      }
+      },
     },
     processing: {
       on: {
         SUCCESS: {
-          target: 'success'
+          target: 'success',
         },
         ERROR: {
           target: 'error',

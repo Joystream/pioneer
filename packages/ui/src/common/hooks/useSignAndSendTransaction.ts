@@ -1,12 +1,12 @@
-import {SubmittableExtrinsic} from '@polkadot/api/types'
-import {Hash} from '@polkadot/types/interfaces/types'
-import {useCallback, useEffect, useState} from 'react'
-import {ActorRef} from 'xstate'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { Hash } from '@polkadot/types/interfaces/types'
+import { useCallback, useEffect, useState } from 'react'
+import { ActorRef } from 'xstate'
 
-import {Address} from '../types'
+import { Address } from '../types'
 
-import {useProcessTransaction} from './useProcessTransaction'
-import {useQueryNodeTransactionStatus} from './useQueryNodeTransactionStatus'
+import { useProcessTransaction } from './useProcessTransaction'
+import { useQueryNodeTransactionStatus } from './useQueryNodeTransactionStatus'
 
 interface Params {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
@@ -19,10 +19,10 @@ interface Params {
 // Other transactions use simplified hook useSignAndSendTransaction which automatically switch
 // from PROCESSING state to SUCCESS/ERROR.
 
-export const useSignAndSendQueryNodeTransaction = ({transaction, signer, service}: Params) => {
+export const useSignAndSendQueryNodeTransaction = ({ transaction, signer, service }: Params) => {
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
   const queryNodeStatus = useQueryNodeTransactionStatus(blockHash)
-  const {send, paymentInfo, isReady, isProcessing} = useProcessTransaction({
+  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
     transaction,
     signer,
     service,
@@ -48,8 +48,8 @@ export const useSignAndSendQueryNodeTransaction = ({transaction, signer, service
   }
 }
 
-export const useSignAndSendTransaction = ({transaction, signer, service}: Params) => {
-  const {send, paymentInfo, isReady, isProcessing} = useProcessTransaction({transaction, signer, service})
+export const useSignAndSendTransaction = ({ transaction, signer, service }: Params) => {
+  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({ transaction, signer, service })
 
   const sign = useCallback(() => send('SIGN'), [service])
 

@@ -744,9 +744,9 @@ describe('UI: AddNewProposalModal', () => {
       it('Success', async () => {
         stubTransactionSuccess(changeModeTx, 'proposalsDiscussion', 'ThreadModeChanged')
         const button = await getButton(/sign transaction and change mode/i)
-        await act(async() => {
+        await act(async () => {
           fireEvent.click(button)
-        } )
+        })
         expect(screen.queryByText('See my Proposal')).not.toBeNull()
       })
 

@@ -1,6 +1,6 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import {BN_ZERO} from '@/common/constants'
+import { BN_ZERO } from '@/common/constants'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -135,7 +135,7 @@ describe('Machine: Transaction machine', () => {
       child.send('SIGN')
       child.send('SIGN_EXTERNAL')
       child.send('PENDING')
-      child.send({type: 'FINALIZING', fee: BN_ZERO})
+      child.send({ type: 'FINALIZING', fee: BN_ZERO })
       child.send({ type: 'PROCESSING', events: ['foo', 'bar'] })
       child.send('SUCCESS')
 
