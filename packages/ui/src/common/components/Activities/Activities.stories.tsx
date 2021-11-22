@@ -231,6 +231,44 @@ const activities: Activity[] = [
       },
     ],
   },
+  {
+    id: '16',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'NewCouncilElectedEvent',
+    electedMembersNumber: 11,
+  },
+  {
+    id: '17',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'CandidacyWithdrawEvent',
+    candidateHandle: '12',
+  },
+  {
+    id: '18',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'AnnouncingPeriodStartedEvent',
+  },
+  {
+    id: '19',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'VotingPeriodStartedEvent',
+  },
+  {
+    id: '20',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'CouncilorRewardUpdatedEvent',
+    newReward: '1000',
+  },
+  {
+    id: '21',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'NotEnoughCandidatesEvent',
+  },
+  {
+    id: '23',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'RevealingStageStartedEvent',
+  },
 ]
 
 export const Default = Template.bind({})

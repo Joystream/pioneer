@@ -1,3 +1,4 @@
+import { CouncilActivity } from '@/council/types/CouncilActivities'
 import { ForumActivity } from '@/forum/types/ForumActivity'
 import { Member } from '@/memberships/types'
 import { ProposalActivity } from '@/proposals/types/ProposalsActivities'
@@ -5,7 +6,7 @@ import { WorkingGroupActivity } from '@/working-groups/types'
 
 export type ActivityCategory = Activity['eventType']
 
-export type Activity = WorkingGroupActivity | ForumActivity | ProposalActivity
+export type Activity = WorkingGroupActivity | ForumActivity | ProposalActivity | CouncilActivity
 
 export interface BaseActivity {
   id: string

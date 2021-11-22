@@ -1,0 +1,93 @@
+fragment NewCouncilElectedEventFields on NewCouncilElectedEvent {
+  id
+  createdAt
+  electedMembers {
+    id
+  }
+}
+
+fragment CandidacyWithdrawEventFields on CandidacyWithdrawEvent {
+  id
+  createdAt
+  member {
+    handle
+  }
+}
+
+fragment AnnouncingPeriodStartedEventFields on AnnouncingPeriodStartedEvent {
+  id
+  createdAt
+}
+
+fragment VotingPeriodStartedEventFields on VotingPeriodStartedEvent {
+  id
+  createdAt
+}
+
+fragment CouncilorRewardUpdatedEventFields on CouncilorRewardUpdatedEvent {
+  id
+  createdAt
+  rewardAmount
+}
+
+fragment NewCandidateEventFields on NewCandidateEvent {
+  id
+  createdAt
+  memberId
+  member {
+    handle
+  }
+}
+
+fragment NotEnoughCandidatesEventFields on NotEnoughCandidatesEvent {
+  id
+  createdAt
+}
+
+fragment RevealingStageStartedEventFields on RevealingStageStartedEvent {
+  id
+  createdAt
+}
+
+query GetCouncilEvents {
+  events(
+    where: {
+      type_in: [
+        NewCouncilElectedEvent
+        CandidacyWithdrawEvent
+        AnnouncingPeriodStartedEvent
+        VotingPeriodStartedEvent
+        CouncilorRewardUpdatedEvent
+        NewCandidateEvent
+        NotEnoughCandidatesEvent
+        RevealingStageStartedEvent
+      ]
+    }
+    orderBy: [createdAt_DESC]
+  ) {
+    ... on NewCouncilElectedEvent {
+      ...NewCouncilElectedEventFields
+    }
+    ... on CandidacyWithdrawEvent {
+      ...CandidacyWithdrawEventFields
+    }
+    ... on AnnouncingPeriodStartedEvent {
+      ...AnnouncingPeriodStartedEventFields
+    }
+    ... on VotingPeriodStartedEvent {
+      ...VotingPeriodStartedEventFields
+    }
+    ... on CouncilorRewardUpdatedEvent {
+      ...CouncilorRewardUpdatedEventFields
+    }
+    ... on NewCandidateEvent {
+      ...NewCandidateEventFields
+    }
+    ... on NotEnoughCandidatesEvent {
+      ...NotEnoughCandidatesEventFields
+    }
+    ... on RevealingStageStartedEvent {
+      ...RevealingStageStartedEventFields
+    }
+  }
+}

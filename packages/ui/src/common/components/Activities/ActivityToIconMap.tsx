@@ -55,4 +55,12 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   ProposalDiscussionPostCreatedEvent: [CreatedIcon, 'joystream'],
   ProposalDiscussionPostUpdatedEvent: [StatusUpdatedIcon, 'joystream'],
   ProposalDiscussionPostDeletedEvent: [ClosedIcon, 'negative'],
+  RevealingStageStartedEvent: [StatusUpdatedIcon, 'positive'],
+  CouncilorRewardUpdatedEvent: [StatusUpdatedIcon, 'joystream'],
+  AnnouncingPeriodStartedEvent: [StatusUpdatedIcon, 'joystream'],
+  VotingPeriodStartedEvent: [StatusUpdatedIcon, 'joystream'],
+  NewCouncilElectedEvent: [HiredIcon, 'positive'],
+  NewCandidateEvent: [CreatedIcon, 'joystream'],
+  CandidacyWithdrawEvent: [ExiteRoleIcon, 'negative'],
+  NotEnoughCandidatesEvent: [ClosedIcon, 'negative'],
 }
