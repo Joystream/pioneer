@@ -6,7 +6,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PastVotesList } from '@/council/components/PastVotes/PastVotesList'
 import { PastVotesStats } from '@/council/components/PastVotes/PastVotesStats'
 
-import { CouncilTabs } from './components/CouncilTabs'
+import { ElectionTabs } from './components/ElectionTabs'
 
 export const PastVotes = () => {
   const header = (
@@ -14,7 +14,7 @@ export const PastVotes = () => {
       <PageHeaderRow>
         <PageTitle>Council</PageTitle>
       </PageHeaderRow>
-      <CouncilTabs />
+      <ElectionTabs />
     </PageHeaderWrapper>
   )
 

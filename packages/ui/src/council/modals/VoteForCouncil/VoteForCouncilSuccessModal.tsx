@@ -5,7 +5,7 @@ import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, SuccessModalBody } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 
@@ -28,7 +28,7 @@ export const VoteForCouncilSuccessModal = () => {
       </SuccessModalBody>
 
       <ModalFooter>
-        <LinkButtonGhost to={CouncilRoutes.currentElection} size="medium">
+        <LinkButtonGhost to={ElectionRoutes.currentElection} size="medium">
           See my Vote
         </LinkButtonGhost>
       </ModalFooter>

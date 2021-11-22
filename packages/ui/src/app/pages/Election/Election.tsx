@@ -15,13 +15,13 @@ import { AnnouncingStage } from '@/council/components/election/announcing/Announ
 import { BackupVotesButton } from '@/council/components/election/BackupVotesButton'
 import { RevealingStage } from '@/council/components/election/revealing/RevealingStage'
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
-import { CouncilTabs } from './components/CouncilTabs'
+import { ElectionTabs } from './components/ElectionTabs'
 
 export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
@@ -44,7 +44,7 @@ export const Election = () => {
         <ButtonsGroup>
           <CopyButtonTemplate
             size="medium"
-            textToCopy={getUrl({ route: CouncilRoutes.currentElection })}
+            textToCopy={getUrl({ route: ElectionRoutes.currentElection })}
             icon={<LinkIcon />}
           >
             Copy link
@@ -57,7 +57,7 @@ export const Election = () => {
           )}
         </ButtonsGroup>
       </PageHeaderRow>
-      <CouncilTabs />
+      <ElectionTabs />
     </PageHeaderWrapper>
   )
 

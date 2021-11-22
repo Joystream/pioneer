@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { isDefined } from '@/common/utils'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
-import { ElectionTabs, VotingStageTab } from '@/council/components/election/ElectionTabs'
+import { CurrentElectionTabs, VotingStageTab } from '@/council/components/election/CurrentElectionTabs'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { Election } from '@/council/types/Election'
@@ -34,7 +34,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
 
   return (
     <>
-      <ElectionTabs
+      <CurrentElectionTabs
         stage="voting"
         myVotes={myVotes?.length && votesTotal}
         tab={tab}

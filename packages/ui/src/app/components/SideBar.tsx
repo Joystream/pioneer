@@ -29,7 +29,7 @@ import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHea
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { RemoveScrollbar } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
-import { CouncilRoutes } from '@/council/constants'
+import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -77,7 +77,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={CouncilRoutes.currentElection}>
+              <NavigationLink to={ElectionRoutes.currentElection}>
                 <CouncilIcon />
                 Election
               </NavigationLink>

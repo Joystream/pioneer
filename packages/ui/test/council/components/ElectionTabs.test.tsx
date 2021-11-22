@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { CouncilTabs } from '@/app/pages/Council/components/CouncilTabs'
+import { ElectionTabs } from '@/app/pages/Election/components/ElectionTabs'
 import { ApiContext } from '@/common/providers/api/context'
 import { LocalStorageKey } from '@/council/hooks/useElectionStatusChanged'
 
@@ -92,7 +92,7 @@ describe('CouncilTabs', () => {
     return render(
       <ApiContext.Provider value={api}>
         <MemoryRouter>
-          <CouncilTabs />
+          <ElectionTabs />
         </MemoryRouter>
       </ApiContext.Provider>
     )
