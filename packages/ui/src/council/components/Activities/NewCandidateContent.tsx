@@ -9,7 +9,7 @@ import { NewCandidateActivity } from '@/council/types/CouncilActivities'
 export const NewCandidateContent: ActivityContentComponent<NewCandidateActivity> = ({ activity }) => {
   const { candidateId } = useCandidateIdByMember(activity.memberId)
   return (
-    <ActivityRouterLink to={`${CouncilRoutes.council}/${candidateId}`}>
+    <ActivityRouterLink to={`${CouncilRoutes.currentElection}?candidate=${candidateId}`}>
       {activity.candidateHandle} has applied to council election.
     </ActivityRouterLink>
   )
