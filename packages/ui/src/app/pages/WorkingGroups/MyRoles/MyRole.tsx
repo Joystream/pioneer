@@ -79,6 +79,14 @@ export const MyRole = () => {
     }
   }, [worker, roleBalance])
 
+  const increaseTransactionFactory = useMemo(() => {
+    if (worker && api) {
+      const group = getGroup(api, worker.group.id)
+
+      return (amount: BN) => group.increaseStake(worker.runtimeId, amount)
+    }
+  }, [worker, api])
+
   const { activities } = useRoleActivities(worker)
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
   const warning = worker ? getRoleWarning(worker.status, unstakingPeriodEnd) : undefined
@@ -110,14 +118,6 @@ export const MyRole = () => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
-  const increaseTransactionMaker = useMemo(() => {
-    if (worker && api) {
-      const group = getGroup(api, worker.group.id)
-
-      return (amount: BN) => group.increaseStake(worker.runtimeId, amount)
-    }
-  }, [worker, api])
-
   const onIncreaseStakeClick = (): void => {
     showModal({
       modal: 'TransferTokens',
@@ -126,7 +126,7 @@ export const MyRole = () => {
         to: stakeAccount,
         minValue: workerIncreaseValue,
         initialValue: workerIncreaseValue,
-        transactionMaker: increaseTransactionMaker,
+        transactionFactory: increaseTransactionFactory,
       },
     })
   }
