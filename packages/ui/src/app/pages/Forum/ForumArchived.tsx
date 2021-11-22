@@ -12,7 +12,7 @@ import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { THREADS_PER_PAGE } from '@/forum/constant'
-import { useForumCategories } from '@/forum/hooks/useForumCategories'
+import { useArchivedForumCategories } from '@/forum/hooks/useArchivedForumCategories'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
 import { ForumTabs } from './components/ForumTabs'
@@ -20,7 +20,7 @@ import { ForumTabs } from './components/ForumTabs'
 export const ForumArchived = () => {
   const [page, setPage] = useState<number>(1)
   const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
-  const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchive: true })
+  const { isLoading: isLoadingCategories, forumCategories } = useArchivedForumCategories()
   const {
     isLoading: isLoadingThreads,
     threads,
