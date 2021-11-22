@@ -66,6 +66,17 @@ const TransactionStatusContent = ({ service }: Props) => {
     )
   }
 
+  if (state.matches('processing')) {
+    return (
+      <TransactionStatusNotification
+        title="Processing transaction"
+        message="Waiting for the query node to process the block."
+        state="pending"
+        stepNumber={3}
+      />
+    )
+  }
+
   if (state.matches('success')) {
     return (
       <TransactionStatusNotification

@@ -5,10 +5,11 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { UpdateMembershipModal } from '../../../src/memberships/modals/UpdateMembershipModal'
-import { Member } from '../../../src/memberships/types'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { ApiContext } from '@/common/providers/api/context'
+import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
+import { Member } from '@/memberships/types'
+
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { createBalanceOf } from '../../_mocks/chainTypes'
@@ -35,6 +36,10 @@ jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
     useMyAccounts: () => useMyAccounts,
   }
 })
+
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
 
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {

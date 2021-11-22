@@ -11,7 +11,7 @@ import { ModalBody, ModalFooter, SignTransferContainer, TransactionInfoContainer
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
-import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
 
@@ -33,7 +33,7 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
     [sourceMember.id, targetMember.id, amount, connectionState]
   )
   const signerAddress = sourceMember.controllerAccount
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
     transaction,
     signer: signerAddress,
     service,

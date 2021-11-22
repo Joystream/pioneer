@@ -1,7 +1,12 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '../../../common/model/machines'
 import { Address, EmptyObject } from '../../../common/types'
 
 interface ChangeAccountContext {
@@ -19,6 +24,7 @@ type ChangeAccountState =
   | { value: 'transaction'; context: Required<ChangeAccountContext> }
   | { value: 'success'; context: Required<ChangeAccountContext> }
   | { value: 'error'; context: Required<Context> }
+  | { value: 'cancelled'; context: Required<Context> }
 
 export type ChangeAccountEvent =
   | { type: 'PASS' }
@@ -52,10 +58,15 @@ export const changeAccountMachine = createMachine<Context, ChangeAccountEvent, C
             cond: isTransactionError,
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
+    canceled: { type: 'final' },
     error: { type: 'final' },
   },
 })

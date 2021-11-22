@@ -1,5 +1,7 @@
-import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 import React, { ReactNode } from 'react'
 
 import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
@@ -10,6 +12,8 @@ import { makeServer } from '@/mocks/server'
 interface Props {
   children: ReactNode
 }
+
+const QUERY_NODE_GRAPHQL_SUBSCRIPTION_URL = 'wss://olympia-dev.joystream.app/query/server/graphql'
 
 const ENDPOINTS: Record<NetworkType, string> = {
   local: 'http://localhost:8081/graphql',
@@ -45,8 +49,26 @@ const getApolloClient = (network: 'local' | 'olympia-testnet') => {
     }
   })
 
+  const queryLink = from([errorLink, httpLink])
+  const subscriptionLink = new WebSocketLink({
+    uri: QUERY_NODE_GRAPHQL_SUBSCRIPTION_URL,
+    options: {
+      reconnect: true,
+      reconnectionAttempts: 5,
+    },
+  })
+
+  const splitLink = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+    },
+    subscriptionLink,
+    queryLink
+  )
+
   return new ApolloClient({
-    link: from([errorLink, httpLink]),
+    link: splitLink,
     cache: new InMemoryCache(),
     connectToDevTools: true,
     defaultOptions: {

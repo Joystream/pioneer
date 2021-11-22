@@ -34,6 +34,10 @@ import {
 } from '../../_mocks/transactions'
 import { WORKER as worker } from '../../_mocks/working-groups'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: ChangeRoleModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {

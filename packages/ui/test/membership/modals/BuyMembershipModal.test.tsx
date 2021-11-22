@@ -47,6 +47,10 @@ jest.mock('@/common/hooks/useModal', () => {
   }
 })
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: BuyMembershipModal', () => {
   const api = stubApi()
   let transaction: any

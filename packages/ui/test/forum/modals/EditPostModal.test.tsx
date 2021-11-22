@@ -28,6 +28,10 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: EditPostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.editPostText'
