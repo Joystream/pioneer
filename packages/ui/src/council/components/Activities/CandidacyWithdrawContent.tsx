@@ -7,7 +7,10 @@ import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 export const CandidacyWithdrawContent: ActivityContentComponent<CandidacyWithdrawActivity> = ({ activity }) => (
   <>
     Council candidate
-    <MemberModalLink call={{ modal: 'Member', data: { id: activity.id } }}> {activity.candidateHandle}</MemberModalLink>{' '}
+    <MemberModalLink call={{ modal: 'Member', data: { id: activity.id } }}>
+      {' '}
+      {activity.candidateHandle}
+    </MemberModalLink>{' '}
     has resigned.
   </>
 )
