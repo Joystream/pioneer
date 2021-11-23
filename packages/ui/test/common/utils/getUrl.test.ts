@@ -1,6 +1,6 @@
 import { MembersRoutes, ProfileRoutes } from '@/app/constants/routes'
 import { getUrl } from '@/common/utils/getUrl'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 
 let windowSpy: jest.SpyInstance
 const mockLocation = new URL('https://pioneer.com/#/domain/1?query=12')
@@ -26,18 +26,16 @@ describe('getUrl', () => {
   })
 
   it('Link to a module with query parameters', () => {
-    expect(getUrl({ route: CouncilRoutes.currentElection, query: { candidate: '12' } })).toEqual(
-      'https://pioneer.com/#/council/election?candidate=12'
+    expect(getUrl({ route: ElectionRoutes.currentElection, query: { candidate: '12' } })).toEqual(
+      'https://pioneer.com/#/election?candidate=12'
     )
-    expect(getUrl({ route: CouncilRoutes.currentElection, query: { candidate: '12', otherParam: '13' } })).toEqual(
-      'https://pioneer.com/#/council/election?candidate=12&otherParam=13'
+    expect(getUrl({ route: ElectionRoutes.currentElection, query: { candidate: '12', otherParam: '13' } })).toEqual(
+      'https://pioneer.com/#/election?candidate=12&otherParam=13'
     )
   })
 
   it('Empty query parameters', () => {
-    expect(getUrl({ route: CouncilRoutes.currentElection, query: {} })).toEqual(
-      'https://pioneer.com/#/council/election'
-    )
+    expect(getUrl({ route: ElectionRoutes.currentElection, query: {} })).toEqual('https://pioneer.com/#/election')
   })
 
   it('Link with every kind of parameters', () => {

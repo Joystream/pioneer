@@ -12,7 +12,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { getUrl } from '@/common/utils/getUrl'
 import { PastElectionStats } from '@/council/components/election/pastElection/PastElectionStats'
 import { PastElectionTabs } from '@/council/components/election/pastElection/PastElectionTabs'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { usePastElection } from '@/council/hooks/usePastElection'
 
@@ -43,7 +43,7 @@ export const PastElection = () => {
           <ButtonsGroup>
             <CopyButtonTemplate
               size="medium"
-              textToCopy={getUrl({ route: CouncilRoutes.pastElection, params: { id: election.id } })}
+              textToCopy={getUrl({ route: ElectionRoutes.pastElection, params: { id: election.id } })}
               icon={<LinkIcon />}
             >
               Copy link

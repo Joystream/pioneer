@@ -12,12 +12,22 @@ fragment ForumBaseCategoryFields on ForumCategory {
       }
     }
   }
-  moderators {
-    ...ForumModeratorFields
-  }
 }
 
 fragment ForumCategoryFields on ForumCategory {
+  ...ForumBaseCategoryFields
+  moderators {
+    ...ForumModeratorFields
+  }
+  forumcategoryparent {
+    ...ForumSubCategoryFields
+    status {
+      __typename
+    }
+  }
+}
+
+fragment ArchivedForumCategoryFields on ForumCategory {
   ...ForumBaseCategoryFields
   forumcategoryparent {
     ...ForumSubCategoryFields
@@ -148,6 +158,12 @@ fragment ForumPostParents on ForumPost {
 query GetForumCategories($where: ForumCategoryWhereInput) {
   forumCategories(where: $where) {
     ...ForumCategoryFields
+  }
+}
+
+query GetArchivedForumCategories($where: ForumCategoryWhereInput) {
+  forumCategories(where: $where) {
+    ...ArchivedForumCategoryFields
   }
 }
 

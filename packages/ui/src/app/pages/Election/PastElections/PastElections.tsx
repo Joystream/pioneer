@@ -14,7 +14,7 @@ import { useSort } from '@/common/hooks/useSort'
 import { PastElectionsList } from '@/council/components/election/pastElection/PastElectionsList/PastElectionsList'
 import { usePastElections } from '@/council/hooks/usePastElections'
 
-import { CouncilTabs } from '../components/CouncilTabs'
+import { ElectionTabs } from '../components/ElectionTabs'
 
 export const PastElections = () => {
   const [page, setPage] = useState(1)
@@ -24,9 +24,9 @@ export const PastElections = () => {
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>
-        <PageTitle>Council</PageTitle>
+        <PageTitle>Elections</PageTitle>
       </PageHeaderRow>
-      <CouncilTabs />
+      <ElectionTabs />
     </PageHeaderWrapper>
   )
 

@@ -1,7 +1,12 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '@/common/model/machines'
 
 interface VoteContext {
   voteStatus?: VoteStatus
@@ -65,11 +70,16 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
             actions: assign({ transactionEvents: (_, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     requirementsFailed: { type: 'final' },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

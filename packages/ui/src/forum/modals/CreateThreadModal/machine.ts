@@ -4,7 +4,12 @@ import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 interface DetailsContext {
@@ -90,10 +95,15 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
             cond: isTransactionError,
             actions: assign({ transactionEvents: (_, event) => event.data.events }),
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

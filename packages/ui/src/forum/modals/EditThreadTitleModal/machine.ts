@@ -3,7 +3,12 @@ import { assign, createMachine } from 'xstate'
 
 import { EmptyObject } from '@/common/types'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '../../../common/model/machines'
 
 interface Context {
   transactionEvents?: EventRecord[]
@@ -34,10 +39,15 @@ export const editThreadTitleMachine = createMachine<Context, EditThreadTitleEven
             cond: isTransactionError,
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })
