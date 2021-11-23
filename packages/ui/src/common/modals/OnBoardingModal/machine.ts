@@ -6,7 +6,6 @@ import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMem
 
 interface OnBoardingModalContext {
   form?: MemberFormFields
-  errorMessage?: string
 }
 
 type OnBoardingModalState =
@@ -18,7 +17,7 @@ type OnBoardingModalState =
 export type OnBoardingModalEvent =
   | { type: 'DONE'; form: MemberFormFields }
   | { type: 'SUCCESS' }
-  | { type: 'ERROR'; errorMessage: string }
+  | { type: 'ERROR' }
 
 export const onBoardingMachine = createMachine<OnBoardingModalContext, OnBoardingModalEvent, OnBoardingModalState>({
   initial: 'prepare',
@@ -37,8 +36,7 @@ export const onBoardingMachine = createMachine<OnBoardingModalContext, OnBoardin
           target: 'success'
         },
         ERROR: {
-          target: 'error',
-          actions: assign({ errorMessage: (_, event) => event.errorMessage })
+          target: 'error'
         }
       }
     },

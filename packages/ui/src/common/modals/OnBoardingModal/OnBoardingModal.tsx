@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import Axios, { AxiosError } from 'axios'
+import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -22,7 +22,6 @@ import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlug
 import { SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
-import { camelCaseToText } from '@/common/helpers'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
@@ -59,13 +58,24 @@ export const OnBoardingModal = () => {
           avatar: form.avatarUri,
           about: form.about
         }
-        const { data, status } = await Axios.post('http://localhost:4000/register', membershipData)
-        setMembershipData({ id: data.memberId, blockHash: data.blockHash })
-        console.log('here', status)
-      } catch (err: any) {
-        const errorMessage = (err.isAxiosError && camelCaseToText((err as AxiosError).response?.data.error)) || 'Unknown error'
-        console.log(errorMessage)
-        send({ type: 'ERROR', errorMessage })
+
+        const response = await fetch('http://localhost:4000/register', {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(membershipData)
+        })
+
+        const { error, memberId, blockHash } = await response.json()
+        if (error) {
+          send({ type: 'ERROR' })
+        } else {
+          setMembershipData({ id: new BN(memberId).toString(), blockHash: blockHash })
+        }
+      } catch (err) {
+        send({ type: 'ERROR'})
       }
     }
 
@@ -75,7 +85,8 @@ export const OnBoardingModal = () => {
   }, [JSON.stringify(state)])
 
   useEffect(() => {
-    if (membershipData?.blockHash && transactionStatus === 'confirmed') {
+    // if (membershipData?.blockHash && transactionStatus === 'confirmed') {
+    if (membershipData?.blockHash) {
       send('SUCCESS')
     }
   }, [JSON.stringify(membershipData), transactionStatus])
@@ -103,7 +114,7 @@ export const OnBoardingModal = () => {
     return (
       <FailureModal onClose={hideModal}>
         There was a problem with creating a membership for {state.context.form.name}.
-        <ResultText>{state.context.errorMessage}</ResultText>
+        <ResultText>We could not create your membership at the moment! Please, try again later!</ResultText>
       </FailureModal>
     )
   }
