@@ -31,8 +31,7 @@ export const SelectWorkingGroupOpeningBase = ({
   className,
   groupId,
 }: Props) => {
-  const { isLoading, openings } = useOpenings({ type: 'open', groupId })
-  console.log(openings, openings)
+  const { openings } = useOpenings({ type: 'open', groupId })
   const selectedOpening = useMemo(() => openings.find((opening) => opening.id === selectedOpeningId), [
     selectedOpeningId,
     openings.length,
@@ -50,9 +49,10 @@ export const SelectWorkingGroupOpeningBase = ({
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
-      placeholder="Select Working Group or type group name"
+      placeholder="Select Opening to cancel"
       renderList={(onOptionClick) => <OptionsListWorkingGroupOpening allOpenings={openings} onChange={onOptionClick} />}
       className={className}
+      onSearch={() => undefined}
     />
   )
 }

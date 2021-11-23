@@ -35,6 +35,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
       return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
     }
+    case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
+      return !!(specifics?.groupId && specifics?.openingId)
+    }
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
       return !!(
         specifics?.stakingAmount &&

@@ -4,11 +4,8 @@ import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { SelectedMember } from '@/memberships/components/SelectMember'
-import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
-import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export interface DecreaseWorkingGroupLeadStakeParameters {
   groupId?: string
@@ -26,11 +23,6 @@ export const CancelWorkingGroupLeadOpening = ({
   setGroupId,
   setOpeningId,
 }: DecreaseWorkingGroupLeadStakeProps) => {
-  const { group } = useWorkingGroup({ name: groupId })
-  const { member: lead } = useMember(group?.leadId)
-
-  const isDisabled = !group || (group && !group.leadId)
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -53,7 +45,6 @@ export const CancelWorkingGroupLeadOpening = ({
               disableNoLead
             />
           </InputComponent>
-          {/*<SelectedMember label="Working Group Opening" member={lead} disabled />*/}
         </RowGapBlock>
       </Row>
       <Row>
@@ -62,14 +53,18 @@ export const CancelWorkingGroupLeadOpening = ({
             label="Opening"
             required
             inputSize="l"
-            tooltipText="Please select an opening ID for Working Group"
+            tooltipText={
+              groupId ? 'Please select an opening ID for Working Group' : 'Please first select Working Group'
+            }
+            disabled={!groupId}
           >
             <SelectWorkingGroupOpening
               onChange={(selected) => setOpeningId(selected.id)}
               selectedOpeningId={openingId}
+              disabled={!groupId}
+              groupId={groupId}
             />
           </InputComponent>
-          {/*<SelectedMember label="Working Group Opening" member={lead} disabled />*/}
         </RowGapBlock>
       </Row>
     </RowGapBlock>

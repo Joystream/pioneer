@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextMedium } from '@/common/components/typography'
-import { Overflow, Transitions } from '@/common/constants'
+import { TextSmall } from '@/common/components/typography'
+import { Colors, Transitions } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
@@ -12,6 +12,7 @@ interface Props {
 
 export const OptionWorkingGroupOpening = ({ opening }: Props) => (
   <OptionWorkingGroupWrapper>
+    <TextSmall>ID: {opening.id}</TextSmall>
     <OptionWorkingGroupTitle>{camelCaseToText(opening.title)}</OptionWorkingGroupTitle>
   </OptionWorkingGroupWrapper>
 )
@@ -24,9 +25,10 @@ const OptionWorkingGroupWrapper = styled.div`
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
+  justify-content: center;
 
-  ${TextMedium} {
-    ${Overflow.DotsTwoLine};
+  ${TextSmall} {
+    color: ${Colors.Black[500]};
   }
 `
 

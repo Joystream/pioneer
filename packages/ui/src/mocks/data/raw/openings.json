@@ -36,7 +36,7 @@
     "stakeAmount": 6000,
     "rewardPerBlock": 400,
     "version": 1,
-    "type": "LEAD",
+    "type": "LEADER",
     "status": "open",
     "unstakingPeriod": 29209,
     "metadata": {
@@ -66,7 +66,7 @@
     "stakeAmount": 2000,
     "rewardPerBlock": 100,
     "version": 1,
-    "type": "LEAD",
+    "type": "LEADER",
     "status": "filled",
     "unstakingPeriod": 28536,
     "metadata": {
@@ -426,7 +426,7 @@
     "stakeAmount": 5000,
     "rewardPerBlock": 100,
     "version": 1,
-    "type": "LEAD",
+    "type": "LEADER",
     "status": "filled",
     "unstakingPeriod": 18035,
     "metadata": {
@@ -846,7 +846,7 @@
     "stakeAmount": 10000,
     "rewardPerBlock": 400,
     "version": 1,
-    "type": "LEAD",
+    "type": "LEADER",
     "status": "open",
     "unstakingPeriod": 31836,
     "metadata": {
@@ -906,7 +906,7 @@
     "stakeAmount": 7000,
     "rewardPerBlock": 400,
     "version": 1,
-    "type": "LEAD",
+    "type": "LEADER",
     "status": "filled",
     "unstakingPeriod": 23719,
     "metadata": {

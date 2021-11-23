@@ -27,7 +27,6 @@ export const useOpenings = ({ groupId: group_eq, type }: UseOpeningsParams) => {
     group: { id_eq: group_eq },
     ...getOpeningsWhere(type),
   }
-  console.log(getOpeningsWhere(type), ' type')
 
   const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables: { where } })
   err && error(err)
