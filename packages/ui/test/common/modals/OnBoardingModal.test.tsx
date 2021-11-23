@@ -1,6 +1,7 @@
 import { cleanup, render } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap } from '@/accounts/types'
@@ -10,6 +11,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
+import { MockApolloProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
 
 const mockUseMyAccounts: UseAccounts = {
@@ -79,7 +81,7 @@ describe('UI: OnBoardingModal', () => {
       const pluginButton = getByText('Install extension')
       expect(pluginButton).toBeDefined()
 
-      pluginButton.click()
+      act(() => pluginButton.click())
 
       expect(windowSpy).toBeCalledWith('https://polkadot.js.org/extension/', '_blank')
     })
@@ -162,8 +164,8 @@ describe('UI: OnBoardingModal', () => {
       it('Proceed to next step', () => {
         const { getByText } = renderModal()
 
-        getByText('Alice').click()
-        getByText('Connect Account').click()
+        act(() => getByText('Alice').click())
+        act(() => getByText('Connect Account').click())
 
         expect(mockOnBoarding.setMembershipAccount).toBeCalledWith('123')
       })
@@ -178,7 +180,7 @@ describe('UI: OnBoardingModal', () => {
     it('Step matches', () => {
       const { getByText } = renderModal()
 
-      const membershipCircle = getStepperStepCircle('Create membership', getByText)
+      const membershipCircle = getStepperStepCircle('Create membership for FREE', getByText)
 
       expect(membershipCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
@@ -195,8 +197,10 @@ describe('UI: OnBoardingModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
-        <OnBoardingModal />
-      </ModalContext.Provider>
+      <MockApolloProvider>
+        <ModalContext.Provider value={useModal}>
+          <OnBoardingModal />
+        </ModalContext.Provider>
+      </MockApolloProvider>
     )
 })

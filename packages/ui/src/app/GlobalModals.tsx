@@ -33,7 +33,7 @@ import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modal
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import {
   IncreaseWorkerStakeModal,
-  IncreaseWorkerStakeModalCall
+  IncreaseWorkerStakeModalCall,
 } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
@@ -95,7 +95,7 @@ const modals: Record<ModalNames, ReactElement> = {
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
-  OnBoardingModal: <OnBoardingModal />
+  OnBoardingModal: <OnBoardingModal />,
 }
 
 export const GlobalModals = () => {

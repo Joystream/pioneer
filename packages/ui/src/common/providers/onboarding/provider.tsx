@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { Account } from '@/accounts/types'
 import { useApi } from '@/common/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { OnBoardingContext } from '@/common/providers/onboarding/context'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { Account } from '@/accounts/types'
 
 interface Props {
   children: React.ReactNode
@@ -17,7 +17,7 @@ export const OnBoardingProvider = (props: Props) => {
 }
 
 const hasAccount = (allAccounts: Account[], address: string) => {
-  return !!allAccounts.find(account => account.address === address)
+  return !!allAccounts.find((account) => account.address === address)
 }
 
 const useOnBoarding = (): UseOnBoarding => {
@@ -34,7 +34,7 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: false, status: 'installPlugin' }
   }
 
-  if (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount)) {
+  if (!hasMembers && (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount))) {
     return { isLoading: false, status: 'addAccount', setMembershipAccount }
   }
 

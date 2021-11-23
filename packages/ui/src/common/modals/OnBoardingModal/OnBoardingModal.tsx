@@ -56,16 +56,16 @@ export const OnBoardingModal = () => {
           account: membershipAccount,
           handle: form.handle,
           avatar: form.avatarUri,
-          about: form.about
+          about: form.about,
         }
 
         const response = await fetch('http://localhost:4000/register', {
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
           method: 'POST',
-          body: JSON.stringify(membershipData)
+          body: JSON.stringify(membershipData),
         })
 
         const { error, memberId, blockHash } = await response.json()
@@ -75,7 +75,7 @@ export const OnBoardingModal = () => {
           setMembershipData({ id: new BN(memberId).toString(), blockHash: blockHash })
         }
       } catch (err) {
-        send({ type: 'ERROR'})
+        send({ type: 'ERROR' })
       }
     }
 
@@ -99,7 +99,7 @@ export const OnBoardingModal = () => {
     return (
       <WaitModal
         onClose={hideModal}
-        title='Pending transaction'
+        title="Pending transaction"
         description="Please wait while your membership is being created. Our faucet server will create it for you so you don't need to worry about any fees. This should take about 15 seconds."
       />
     )
@@ -120,7 +120,7 @@ export const OnBoardingModal = () => {
   }
 
   return (
-    <StyledModal onClose={hideModal} modalSize='l' modalHeight='m'>
+    <StyledModal onClose={hideModal} modalSize="l" modalHeight="m">
       <StepperWrapper>
         <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
         <StyledCloseButton onClick={hideModal} />

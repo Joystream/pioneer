@@ -8,11 +8,11 @@ import { UseOnBoarding } from '@/common/providers/onboarding/types'
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setMembershipAccount: jest.fn()
+  setMembershipAccount: jest.fn(),
 }
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
-  useOnBoarding: () => mockOnBoarding
+  useOnBoarding: () => mockOnBoarding,
 }))
 
 describe('OnBoardingOverlay', () => {
@@ -62,10 +62,12 @@ describe('OnBoardingOverlay', () => {
       mockOnBoarding.status = 'createMembership'
       const { getByText } = renderComponent()
 
-      const tokensCircle = getStepCircle('Get FREE tokens', getByText)
-      const membershipCircle = getStepCircle('Create membership', getByText)
+      const pluginCircle = getStepCircle('Add Polkadot plugin', getByText)
+      const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
+      const membershipCircle = getStepCircle('Create membership for FREE', getByText)
 
-      expect(tokensCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
+      expect(pluginCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
+      expect(accountCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
       expect(membershipCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
 

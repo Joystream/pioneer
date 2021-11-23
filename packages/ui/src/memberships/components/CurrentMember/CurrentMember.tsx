@@ -1,11 +1,12 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
+import { ButtonPrimary } from '@/common/components/buttons'
+import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
+
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { ArrowDownExpandedIcon, Icon } from '../../../common/components/icons'
-import { BorderRad, Colors, Transitions } from '../../../common/constants'
-import { useModal } from '../../../common/hooks/useModal'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
@@ -17,7 +18,7 @@ export const CurrentMember = () => {
   if (!hasMembers) {
     return (
       <MembershipButtonsWrapper>
-        <AddMembershipButton size='large'>Join Now</AddMembershipButton>
+        <AddMembershipButton size="large">Join Now</AddMembershipButton>
       </MembershipButtonsWrapper>
     )
   }
@@ -37,7 +38,7 @@ export const CurrentMember = () => {
         <MembershipButtonsWrapper>
           <MembershipActionButton
             onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}
-            size='large'
+            size="large"
           >
             Select membership
           </MembershipActionButton>

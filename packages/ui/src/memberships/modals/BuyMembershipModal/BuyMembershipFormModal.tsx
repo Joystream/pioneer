@@ -23,7 +23,7 @@ import {
   InputTextarea,
   Label,
   LabelLink,
-  ToggleCheckbox
+  ToggleCheckbox,
 } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import {
@@ -34,12 +34,11 @@ import {
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-  TransactionInfoContainer
+  TransactionInfoContainer,
 } from '../../../common/components/Modal'
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
-
 
 interface BuyMembershipFormModalProps {
   onClose: () => void
@@ -61,7 +60,7 @@ const CreateMemberSchema = Yup.object().shape({
   handle: HandleSchema.required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
-  referrer: ReferrerSchema
+  referrer: ReferrerSchema,
 })
 
 export interface MemberFormFields {
@@ -78,12 +77,12 @@ export interface MemberFormFields {
 }
 
 export const BuyMembershipForm = ({
-                                    onSubmit,
-                                    membershipPrice,
-                                    membershipAccount,
-                                    changeMembershipAccount,
-                                    type
-                                  }: BuyMembershipFormProps) => {
+  onSubmit,
+  membershipPrice,
+  membershipAccount,
+  changeMembershipAccount,
+  type,
+}: BuyMembershipFormProps) => {
   const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
 
@@ -96,7 +95,7 @@ export const BuyMembershipForm = ({
     avatarUri: '',
     isReferred: false,
     referrer: undefined,
-    hasTerms: false
+    hasTerms: false,
   }
   const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
   const { isValid, errors, setContext } = validation
@@ -108,7 +107,7 @@ export const BuyMembershipForm = ({
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
     handle,
-    connectionState
+    connectionState,
   ])
 
   useEffect(() => {
@@ -132,14 +131,14 @@ export const BuyMembershipForm = ({
               <InlineToggleWrap>
                 <Label>I was referred by a member: </Label>
                 <ToggleCheckbox
-                  trueLabel='Yes'
-                  falseLabel='No'
+                  trueLabel="Yes"
+                  falseLabel="No"
                   onChange={(isSet) => changeField('isReferred', isSet)}
                   checked={isReferred ?? false}
                 />
               </InlineToggleWrap>
               {isReferred && (
-                <InputComponent required inputSize='l'>
+                <InputComponent required inputSize="l">
                   <SelectMember
                     onChange={(member) => changeField('referrer', member)}
                     disabled={!isReferred}
@@ -155,7 +154,7 @@ export const BuyMembershipForm = ({
           {type === 'general' && (
             <>
               <Row>
-                <InputComponent label='Root account' required inputSize='l' tooltipText='Something about root accounts'>
+                <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
                   <SelectAccount
                     filter={filterRoot}
                     onChange={(account) => changeField('rootAccount', account)}
@@ -165,10 +164,10 @@ export const BuyMembershipForm = ({
               </Row>
               <Row>
                 <InputComponent
-                  label='Controller account'
+                  label="Controller account"
                   required
-                  inputSize='l'
-                  tooltipText='Something about controller account'
+                  inputSize="l"
+                  tooltipText="Something about controller account"
                 >
                   <SelectAccount
                     filter={filterController}
@@ -180,39 +179,39 @@ export const BuyMembershipForm = ({
             </>
           )}
           <Row>
-            <InputComponent id='member-name' label='Member Name' required>
+            <InputComponent id="member-name" label="Member Name" required>
               <InputText
-                id='member-name'
-                placeholder='Type'
+                id="member-name"
+                placeholder="Type"
                 value={name}
                 onChange={(event) => changeField('name', event.target.value)}
               />
             </InputComponent>
           </Row>
           <Row>
-            <InputComponent id='membership-handle' label='Membership handle' required>
+            <InputComponent id="membership-handle" label="Membership handle" required>
               <InputText
-                id='membership-handle'
-                placeholder='Type'
+                id="membership-handle"
+                placeholder="Type"
                 value={handle}
                 onChange={(event) => changeField('handle', event.target.value)}
               />
             </InputComponent>
           </Row>
           <Row>
-            <InputComponent id='member-about' label='About member' inputSize='l'>
+            <InputComponent id="member-about" label="About member" inputSize="l">
               <InputTextarea
-                id='member-about'
+                id="member-about"
                 value={about}
-                placeholder='Type'
+                placeholder="Type"
                 onChange={(event) => changeField('about', event.target.value)}
               />
             </InputComponent>
           </Row>
           <Row>
             <InputComponent
-              id='member-avatar'
-              label='Member Avatar'
+              id="member-avatar"
+              label="Member Avatar"
               required
               value={avatarUri}
               validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
@@ -221,10 +220,10 @@ export const BuyMembershipForm = ({
                   ? getErrorMessage('avatarUri', errors)
                   : 'Paste an URL of your avatar image. Text lorem ipsum.'
               }
-              placeholder='Image URL'
+              placeholder="Image URL"
             >
               <InputText
-                id='member-avatar'
+                id="member-avatar"
                 value={avatarUri}
                 onChange={(event) => changeField('avatarUri', event.target.value)}
               />
@@ -235,19 +234,19 @@ export const BuyMembershipForm = ({
       <ModalFooter twoColumns>
         <ModalFooterGroup left>
           {type === 'onBoarding' && (
-            <ButtonGhost onClick={changeMembershipAccount} size='medium'>
-              <Arrow direction='left' />
+            <ButtonGhost onClick={changeMembershipAccount} size="medium">
+              <Arrow direction="left" />
               Change account
             </ButtonGhost>
           )}
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <TextMedium colorInherit>
               I agree to the{' '}
-              <LabelLink href='http://example.com/' target='_blank'>
+              <LabelLink href="http://example.com/" target="_blank">
                 Terms of Service
               </LabelLink>{' '}
               and{' '}
-              <LabelLink href='http://example.com/' target='_blank'>
+              <LabelLink href="http://example.com/" target="_blank">
                 Privacy Policy
               </LabelLink>
               .
@@ -258,13 +257,13 @@ export const BuyMembershipForm = ({
           {type === 'general' && (
             <TransactionInfoContainer>
               <TransactionInfo
-                title='Creation fee:'
+                title="Creation fee:"
                 value={membershipPrice?.toBn()}
                 tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size='medium' onClick={onCreate} disabled={!isValid}>
+          <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
             Create a Membership
           </ButtonPrimary>
         </ModalFooterGroup>
@@ -275,9 +274,9 @@ export const BuyMembershipForm = ({
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: BuyMembershipFormModalProps) => {
   return (
-    <ScrolledModal modalSize='m' modalHeight='m' onClose={onClose}>
-      <ModalHeader onClick={onClose} title='Add membership' />
-      <BuyMembershipForm type='general' membershipPrice={membershipPrice} onSubmit={onSubmit} />
+    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
+      <ModalHeader onClick={onClose} title="Add membership" />
+      <BuyMembershipForm type="general" membershipPrice={membershipPrice} onSubmit={onSubmit} />
     </ScrolledModal>
   )
 }

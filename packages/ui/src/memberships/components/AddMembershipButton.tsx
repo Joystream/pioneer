@@ -1,11 +1,9 @@
 import React, { ReactNode, useCallback } from 'react'
 
+import { ButtonSize } from '@/common/components/buttons'
 import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
+import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
-
-import { ButtonSize } from '../../common/components/buttons'
-import { useModal } from '../../common/hooks/useModal'
-import { BuyMembershipModalCall } from '../modals/BuyMembershipModal'
 
 import { MembershipActionButton } from './CurrentMember'
 

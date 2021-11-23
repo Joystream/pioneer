@@ -10,10 +10,16 @@ interface OnBoardingMembershipProps {
 }
 
 export const OnBoardingMembership = ({
-                                       membershipAccount,
-                                       setMembershipAccount,
-                                       onSubmit
-                                     }: OnBoardingMembershipProps) => {
-  return <BuyMembershipForm type='onBoarding' membershipAccount={membershipAccount}
-                            changeMembershipAccount={() => setMembershipAccount(undefined)} onSubmit={onSubmit} />
+  membershipAccount,
+  setMembershipAccount,
+  onSubmit,
+}: OnBoardingMembershipProps) => {
+  return (
+    <BuyMembershipForm
+      type="onBoarding"
+      membershipAccount={membershipAccount}
+      changeMembershipAccount={() => setMembershipAccount(undefined)}
+      onSubmit={onSubmit}
+    />
+  )
 }

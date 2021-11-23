@@ -3,7 +3,6 @@ import { assign, createMachine } from 'xstate'
 import { EmptyObject } from '@/common/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
-
 interface OnBoardingModalContext {
   form?: MemberFormFields
 }
@@ -14,10 +13,7 @@ type OnBoardingModalState =
   | { value: 'success'; context: { form: MemberFormFields } }
   | { value: 'error'; context: Required<OnBoardingModalContext> }
 
-export type OnBoardingModalEvent =
-  | { type: 'DONE'; form: MemberFormFields }
-  | { type: 'SUCCESS' }
-  | { type: 'ERROR' }
+export type OnBoardingModalEvent = { type: 'DONE'; form: MemberFormFields } | { type: 'SUCCESS' } | { type: 'ERROR' }
 
 export const onBoardingMachine = createMachine<OnBoardingModalContext, OnBoardingModalEvent, OnBoardingModalState>({
   initial: 'prepare',
@@ -26,21 +22,21 @@ export const onBoardingMachine = createMachine<OnBoardingModalContext, OnBoardin
       on: {
         DONE: {
           target: 'transaction',
-          actions: assign({ form: (_, event) => event.form })
-        }
-      }
+          actions: assign({ form: (_, event) => event.form }),
+        },
+      },
     },
     transaction: {
       on: {
         SUCCESS: {
-          target: 'success'
+          target: 'success',
         },
         ERROR: {
-          target: 'error'
-        }
-      }
+          target: 'error',
+        },
+      },
     },
     success: { type: 'final' },
-    error: { type: 'final' }
-  }
+    error: { type: 'final' },
+  },
 })
