@@ -124,7 +124,7 @@ fragment CastVoteFields on CastVote {
   castBy
   commitment
   voteFor {
-    ...MemberFields
+    ...ElectionCandidateFields
   }
   electionRound {
     cycleId
@@ -263,7 +263,7 @@ query GetCurrentCandidateIdByMember($memberId: ID!) {
 }
 
 query GetCandidateStats($memberId: ID) {
-  candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+  candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
     totalCount
   }
   councilMembersConnection(where: { member: { id_eq: $memberId } }) {

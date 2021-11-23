@@ -1,16 +1,20 @@
 fragment NewCouncilElectedEventFields on NewCouncilElectedEvent {
   id
   createdAt
-  electedMembers {
-    id
+  electedCouncil {
+    councilMembers {
+      id
+    }
   }
 }
 
 fragment CandidacyWithdrawEventFields on CandidacyWithdrawEvent {
   id
   createdAt
-  member {
-    handle
+  candidate {
+    member {
+      handle
+    }
   }
 }
 
@@ -33,9 +37,11 @@ fragment CouncilorRewardUpdatedEventFields on CouncilorRewardUpdatedEvent {
 fragment NewCandidateEventFields on NewCandidateEvent {
   id
   createdAt
-  memberId
-  member {
-    handle
+  candidate {
+    member {
+      id
+      handle
+    }
   }
 }
 
