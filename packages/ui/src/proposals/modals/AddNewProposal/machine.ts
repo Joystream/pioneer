@@ -160,6 +160,7 @@ type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: string }
+type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: string }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
@@ -183,6 +184,7 @@ export type AddNewProposalEvent =
   | SetDiscussionWhitelistEvent
   | SetDescriptionEvent
   | SetWorkingGroupEvent
+  | SetOpeningIdEvent
   | SetWorkerEvent
   | SetShortDescriptionEvent
   | SetStakingAmount
@@ -498,14 +500,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
         cancelWorkingGroupLeadOpening: {
           on: {
-            SET_STAKING_AMOUNT: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  stakingAmount: event.stakingAmount,
-                }),
-              }),
-            },
             SET_WORKING_GROUP: {
               actions: assign({
                 specifics: (context, event) => ({
@@ -514,11 +508,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 }),
               }),
             },
-            SET_WORKER: {
+            SET_OPENING_ID: {
               actions: assign({
                 specifics: (context, event) => ({
                   ...context.specifics,
-                  workerId: event.workerId,
+                  openingId: event.openingId,
                 }),
               }),
             },

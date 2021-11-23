@@ -7,16 +7,17 @@ import { TextMedium } from '@/common/components/typography'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
+import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export interface DecreaseWorkingGroupLeadStakeParameters {
   groupId?: string
-  openingId?: number
+  openingId?: string
 }
 
 interface DecreaseWorkingGroupLeadStakeProps extends DecreaseWorkingGroupLeadStakeParameters {
   setGroupId(groupId: string): void
-  setOpeningId(openingId?: number): void
+  setOpeningId(openingId?: string): void
 }
 
 export const CancelWorkingGroupLeadOpening = ({
@@ -52,20 +53,23 @@ export const CancelWorkingGroupLeadOpening = ({
               disableNoLead
             />
           </InputComponent>
-          <SelectedMember label="Working Group Opening" member={lead} disabled />
+          {/*<SelectedMember label="Working Group Opening" member={lead} disabled />*/}
         </RowGapBlock>
       </Row>
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            label="Opening ID"
+            label="Opening"
             required
             inputSize="l"
             tooltipText="Please select an opening ID for Working Group"
           >
-            {/*<SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => set(selected.id)} disableNoLead />*/}
+            <SelectWorkingGroupOpening
+              onChange={(selected) => setOpeningId(selected.id)}
+              selectedOpeningId={openingId}
+            />
           </InputComponent>
-          <SelectedMember label="Working Group Opening" member={lead} disabled />
+          {/*<SelectedMember label="Working Group Opening" member={lead} disabled />*/}
         </RowGapBlock>
       </Row>
     </RowGapBlock>

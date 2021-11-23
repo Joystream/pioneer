@@ -1,57 +1,44 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { OptionComponent, Select, SelectedOption } from '@/common/components/selects'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import {
-  OptionWorkingGroup,
-  OptionWorkingGroupTitle,
-} from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
-import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
-import { WorkingGroup } from '@/working-groups/types'
-
-import { OptionsListWorkingGroup } from './OptionsListWorkingGroup'
+import { OptionWorkingGroupTitle } from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
+import { OptionsListWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/OptionsListWorkingGroupOpening'
+import { OptionWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/OptionWorkingGroupOpening'
+import { useOpenings } from '@/working-groups/hooks/useOpenings'
+import { WorkingGroup, WorkingGroupOpening } from '@/working-groups/types'
 
 export const filterWorkingGroup = (filterOut: WorkingGroup | undefined) => {
   return filterOut ? (workingGroup: WorkingGroup) => workingGroup.name !== filterOut.name : () => true
 }
 
-const filterByText = (options: WorkingGroup[], text: string) => {
-  if (!text.length) {
-    return options
-  }
-
-  const searchBy = text.toLocaleLowerCase()
-  return options.filter(({ name }) => name?.toLocaleLowerCase().includes(searchBy))
-}
-
 interface Props {
-  onChange: (selected: WorkingGroup) => void
-  selectedGroupId?: string
+  onChange: (selected: WorkingGroupOpening) => void
+  selectedOpeningId?: string
+  groupId?: string
   disabled?: boolean
   className?: string
-  disableNoLead?: boolean
   id?: string
 }
 
-export const SelectWorkingGroupOpening = ({
+export const SelectWorkingGroupOpeningBase = ({
   id,
   onChange,
-  selectedGroupId,
+  selectedOpeningId,
   disabled,
   className,
-  disableNoLead,
+  groupId,
 }: Props) => {
-  const [search, setSearch] = useState('')
-  const { isLoading, groups } = useWorkingGroups()
-  const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
-    selectedGroupId,
-    groups.length,
+  const { isLoading, openings } = useOpenings({ type: 'open', groupId })
+  console.log(openings, openings)
+  const selectedOpening = useMemo(() => openings.find((opening) => opening.id === selectedOpeningId), [
+    selectedOpeningId,
+    openings.length,
   ])
-  const filteredFoundWorkingGroups = useMemo(() => filterByText(groups, search), [search, groups.length, isLoading])
 
-  const change = (selected: WorkingGroup, close: () => void) => {
+  const change = (selected: WorkingGroupOpening, close: () => void) => {
     onChange(selected)
     close()
   }
@@ -59,31 +46,24 @@ export const SelectWorkingGroupOpening = ({
   return (
     <Select
       id={id}
-      selected={selectedGroup}
+      selected={selectedOpening}
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
       placeholder="Select Working Group or type group name"
-      renderList={(onOptionClick) => (
-        <OptionsListWorkingGroup
-          allWorkingGroups={filteredFoundWorkingGroups}
-          disableNoLead={disableNoLead}
-          onChange={onOptionClick}
-        />
-      )}
-      onSearch={(search) => setSearch(search)}
+      renderList={(onOptionClick) => <OptionsListWorkingGroupOpening allOpenings={openings} onChange={onOptionClick} />}
       className={className}
     />
   )
 }
 
-const renderSelected = (group: WorkingGroup) => (
+const renderSelected = (opening: WorkingGroupOpening) => (
   <SelectedOption>
-    <OptionWorkingGroup group={group} />
+    <OptionWorkingGroupOpening opening={opening} />
   </SelectedOption>
 )
 
-export const SelectWorkingGroup = styled(SelectWorkingGroupOpening)`
+export const SelectWorkingGroupOpening = styled(SelectWorkingGroupOpeningBase)`
   ${SelectedOption} {
     grid-template-columns: 1fr;
   }

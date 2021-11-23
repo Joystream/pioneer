@@ -89,9 +89,9 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
       return (
         <CancelWorkingGroupLeadOpening
           groupId={state.context.specifics?.groupId}
-          // openingId={state.context.specifics?.openingId}
+          openingId={state.context.specifics?.openingId}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-          // setWorkerId={(openingId) => send('SET_WORKER', { openingId })}
+          setOpeningId={(openingId) => send('SET_OPENING_ID', { openingId })}
         />
       )
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
