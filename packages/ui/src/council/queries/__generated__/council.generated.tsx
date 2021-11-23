@@ -335,24 +335,40 @@ export type CastVoteFieldsFragment = {
   commitment: string
   voteFor?:
     | {
-        __typename: 'Membership'
+        __typename: 'Candidate'
         id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
-        roles: Array<{
-          __typename: 'Worker'
+        stake: any
+        member: {
+          __typename: 'Membership'
           id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
           createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        noteMetadata: {
+          __typename: 'CandidacyNoteMetadata'
+          header?: string | null | undefined
+          bulletPoints: Array<string>
+          bannerImageUri?: string | null | undefined
+          description?: string | null | undefined
+        }
       }
     | null
     | undefined
@@ -950,28 +966,40 @@ export type GetCouncilVotesQuery = {
     commitment: string
     voteFor?:
       | {
-          __typename: 'Membership'
+          __typename: 'Candidate'
           id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
+          stake: any
+          member: {
+            __typename: 'Membership'
             id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
             createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+          noteMetadata: {
+            __typename: 'CandidacyNoteMetadata'
+            header?: string | null | undefined
+            bulletPoints: Array<string>
+            bannerImageUri?: string | null | undefined
+            description?: string | null | undefined
+          }
         }
       | null
       | undefined
@@ -1014,7 +1042,7 @@ export type GetPastVotesResultsQuery = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    voteFor?: { __typename: 'Membership'; id: string } | null | undefined
+    voteFor?: { __typename: 'Candidate'; id: string } | null | undefined
     electionRound: { __typename: 'ElectionRound'; id: string }
   }>
 }
@@ -1239,13 +1267,13 @@ export const CastVoteFieldsFragmentDoc = gql`
     castBy
     commitment
     voteFor {
-      ...MemberFields
+      ...ElectionCandidateFields
     }
     electionRound {
       cycleId
     }
   }
-  ${MemberFieldsFragmentDoc}
+  ${ElectionCandidateFieldsFragmentDoc}
 `
 export const CouncilSpendingEventFieldsFragmentDoc = gql`
   fragment CouncilSpendingEventFields on BudgetSpendingEvent {
@@ -1946,7 +1974,7 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+    candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
       totalCount
     }
     councilMembersConnection(where: { member: { id_eq: $memberId } }) {

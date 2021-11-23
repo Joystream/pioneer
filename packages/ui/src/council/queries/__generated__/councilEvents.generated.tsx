@@ -7,14 +7,14 @@ export type NewCouncilElectedEventFieldsFragment = {
   __typename: 'NewCouncilElectedEvent'
   id: string
   createdAt: any
-  electedMembers: Array<{ __typename: 'Membership'; id: string }>
+  electedCouncil: { __typename: 'ElectedCouncil'; councilMembers: Array<{ __typename: 'CouncilMember'; id: string }> }
 }
 
 export type CandidacyWithdrawEventFieldsFragment = {
   __typename: 'CandidacyWithdrawEvent'
   id: string
   createdAt: any
-  member: { __typename: 'Membership'; handle: string }
+  candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; handle: string } }
 }
 
 export type AnnouncingPeriodStartedEventFieldsFragment = {
@@ -40,8 +40,7 @@ export type NewCandidateEventFieldsFragment = {
   __typename: 'NewCandidateEvent'
   id: string
   createdAt: any
-  memberId: string
-  member: { __typename: 'Membership'; handle: string }
+  candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
 }
 
 export type NotEnoughCandidatesEventFieldsFragment = {
@@ -76,7 +75,7 @@ export type GetCouncilEventsQuery = {
         __typename: 'CandidacyWithdrawEvent'
         id: string
         createdAt: any
-        member: { __typename: 'Membership'; handle: string }
+        candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; handle: string } }
       }
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: any }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
@@ -95,14 +94,16 @@ export type GetCouncilEventsQuery = {
         __typename: 'NewCandidateEvent'
         id: string
         createdAt: any
-        memberId: string
-        member: { __typename: 'Membership'; handle: string }
+        candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
       }
     | {
         __typename: 'NewCouncilElectedEvent'
         id: string
         createdAt: any
-        electedMembers: Array<{ __typename: 'Membership'; id: string }>
+        electedCouncil: {
+          __typename: 'ElectedCouncil'
+          councilMembers: Array<{ __typename: 'CouncilMember'; id: string }>
+        }
       }
     | { __typename: 'NewCouncilNotElectedEvent' }
     | { __typename: 'NewMissedRewardLevelReachedEvent' }
@@ -153,8 +154,10 @@ export const NewCouncilElectedEventFieldsFragmentDoc = gql`
   fragment NewCouncilElectedEventFields on NewCouncilElectedEvent {
     id
     createdAt
-    electedMembers {
-      id
+    electedCouncil {
+      councilMembers {
+        id
+      }
     }
   }
 `
@@ -162,8 +165,10 @@ export const CandidacyWithdrawEventFieldsFragmentDoc = gql`
   fragment CandidacyWithdrawEventFields on CandidacyWithdrawEvent {
     id
     createdAt
-    member {
-      handle
+    candidate {
+      member {
+        handle
+      }
     }
   }
 `
@@ -190,9 +195,11 @@ export const NewCandidateEventFieldsFragmentDoc = gql`
   fragment NewCandidateEventFields on NewCandidateEvent {
     id
     createdAt
-    memberId
-    member {
-      handle
+    candidate {
+      member {
+        id
+        handle
+      }
     }
   }
 `

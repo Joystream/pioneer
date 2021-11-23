@@ -57,7 +57,7 @@ const asNewCouncilElectedActivity: CouncilActivityCast<
 > = (fields) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),
-  electedMembersNumber: fields.electedMembers.length,
+  electedMembersCount: fields.electedCouncil.councilMembers.length,
 })
 
 const asNewCandidateActivity: CouncilActivityCast<NewCandidateEventFieldsFragment, NewCandidateActivity> = (
@@ -65,8 +65,8 @@ const asNewCandidateActivity: CouncilActivityCast<NewCandidateEventFieldsFragmen
 ) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),
-  candidateHandle: fields.member.handle,
-  memberId: fields.memberId,
+  candidateHandle: fields.candidate.member.handle,
+  memberId: fields.candidate.member.handle,
 })
 
 const asCandidacyWithdrawActivity: CouncilActivityCast<
@@ -75,7 +75,7 @@ const asCandidacyWithdrawActivity: CouncilActivityCast<
 > = (fields) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),
-  candidateHandle: fields.member.handle,
+  candidateHandle: fields.candidate.member.handle,
 })
 
 const asCouncilorRewardUpdatedActivity: CouncilActivityCast<

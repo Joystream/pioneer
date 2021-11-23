@@ -32,7 +32,7 @@ export type CouncilEventFieldsFragment =
 
 export interface NewCouncilElectedActivity extends BaseActivity {
   eventType: 'NewCouncilElectedEvent'
-  electedMembersNumber: number
+  electedMembersCount: number
 }
 
 export interface CandidacyWithdrawActivity extends BaseActivity {
