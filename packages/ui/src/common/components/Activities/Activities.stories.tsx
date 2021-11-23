@@ -235,7 +235,7 @@ const activities: Activity[] = [
     id: '16',
     createdAt: '2021-05-25T10:28:04.155Z',
     eventType: 'NewCouncilElectedEvent',
-    electedMembersNumber: 11,
+    electedMembersCount: 11,
   },
   {
     id: '17',
