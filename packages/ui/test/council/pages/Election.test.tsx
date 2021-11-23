@@ -40,7 +40,7 @@ jest.mock('../../../src/memberships/hooks/useMemberCandidacyStats', () => ({
 const aliceMemberId = getMember('alice').id
 const bobMemberId = getMember('bob').id
 
-// Easier to test if both ID are the equal
+// NOTE in these tests, ids of candidates and members/options are used interchangeably for simplicity
 const aliceCandidateId = aliceMemberId
 const bobCandidateId = bobMemberId
 
