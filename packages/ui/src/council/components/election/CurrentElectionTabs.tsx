@@ -17,7 +17,7 @@ interface ElectionTabsProps {
   onSetTab: (tab: ElectionTab) => void
 }
 
-export const ElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTab }: ElectionTabsProps) => {
+export const CurrentElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTab }: ElectionTabsProps) => {
   const tabs: TabProps[] = [
     {
       title: 'Candidates',

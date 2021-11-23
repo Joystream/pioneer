@@ -10,7 +10,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
 import { getUrl } from '@/common/utils/getUrl'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useElectionCandidatesIds } from '@/council/hooks/useElectionCandidatesIds'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -48,7 +48,7 @@ export const CandidacyPreview = React.memo(() => {
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
   const properUrl = getUrl({
-    route: candidate?.cycleFinished ? CouncilRoutes.pastElection : CouncilRoutes.currentElection,
+    route: candidate?.cycleFinished ? ElectionRoutes.pastElection : ElectionRoutes.currentElection,
     params: { id: candidate?.cycleFinished && candidate?.cycleId ? candidate.cycleId : undefined },
     query: { candidate: candidate?.id ?? '' },
   })
@@ -57,7 +57,7 @@ export const CandidacyPreview = React.memo(() => {
     hideModal()
     window.location.replace(
       getUrl({
-        route: candidate?.cycleFinished ? CouncilRoutes.pastElection : CouncilRoutes.currentElection,
+        route: candidate?.cycleFinished ? ElectionRoutes.pastElection : ElectionRoutes.currentElection,
         params: { id: candidate?.cycleFinished && candidate?.cycleId ? candidate.cycleId : undefined },
       })
     )

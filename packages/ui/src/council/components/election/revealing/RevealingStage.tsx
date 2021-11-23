@@ -7,7 +7,7 @@ import { Election } from '@/council/types/Election'
 
 import { CandidateCardList } from '../CandidateCard/CandidateCardList'
 import { RevealingStageVotes } from '../CandidateVote/RevealingStageVotes'
-import { ElectionTabs, RevealingStageTab } from '../ElectionTabs'
+import { CurrentElectionTabs, RevealingStageTab } from '../CurrentElectionTabs'
 
 interface Props {
   election: Election | undefined
@@ -27,7 +27,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
 
   return (
     <>
-      <ElectionTabs
+      <CurrentElectionTabs
         stage="revealing"
         myVotes={asDisplayableVotes && votesTotal}
         tab={tab}

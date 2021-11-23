@@ -3,7 +3,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { Election } from '@/app/pages/Council/Election'
+import { Election } from '@/app/pages/Election/Election'
 import { ApiContext } from '@/common/providers/api/context'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
 import { MembershipContext } from '@/memberships/providers/membership/context'
