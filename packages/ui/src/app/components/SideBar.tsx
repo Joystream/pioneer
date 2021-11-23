@@ -30,6 +30,7 @@ import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { RemoveScrollbar } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
+import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -39,6 +40,8 @@ export const SideBar = () => {
   const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const onClose = () => setNotificationsPanelOpen(false)
+  const { stage: electionStage } = useElectionStage()
+  const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElection : ElectionRoutes.currentElection
 
   return (
     <Navigation>
@@ -77,7 +80,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={ElectionRoutes.currentElection}>
+              <NavigationLink to={electionLink}>
                 <CouncilIcon />
                 Election
               </NavigationLink>
