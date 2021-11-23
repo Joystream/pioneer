@@ -70,7 +70,7 @@ const TEST_VOTE = {
   stake: 1000,
   stakeLocked: false,
   castBy: getMember('bob').controllerAccount,
-  voteForId: getMember('alice').id,
+  voteForId: '1',
   commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
 }
 

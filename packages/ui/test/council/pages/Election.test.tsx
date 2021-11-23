@@ -40,9 +40,13 @@ jest.mock('../../../src/memberships/hooks/useMemberCandidacyStats', () => ({
 const aliceMemberId = getMember('alice').id
 const bobMemberId = getMember('bob').id
 
+// Easier to test if both ID are the equal
+const aliceCandidateId = aliceMemberId
+const bobCandidateId = bobMemberId
+
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
-    id: '1',
+    id: aliceCandidateId,
     electionRoundId: '1',
     memberId: aliceMemberId,
     stake: 1000,
@@ -60,7 +64,7 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
     },
   },
   {
-    id: '2',
+    id: bobCandidateId,
     electionRoundId: '1',
     memberId: bobMemberId,
     stake: 1000,
@@ -231,7 +235,7 @@ describe('UI: Election page', () => {
 
       it('One account and One valid vote', async () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-        castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
+        castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
 
         await renderComponent()
 
@@ -242,7 +246,7 @@ describe('UI: Election page', () => {
 
       it('Multiple accounts and One valid vote', async () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-        castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
+        castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
 
         await renderComponent([alice, bob])
 
@@ -254,7 +258,7 @@ describe('UI: Election page', () => {
       it('One vote not matching query node', async () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
         const salt = '0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a'
-        castVote(alice.address, aliceMemberId, salt, TEST_COMMITMENT)
+        castVote(alice.address, aliceCandidateId, salt, TEST_COMMITMENT)
 
         await renderComponent()
         await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
@@ -267,8 +271,8 @@ describe('UI: Election page', () => {
       describe('Votes count', () => {
         it('Two votes for different candidates', async () => {
           TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-          castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
-          castVote(bob.address, bobMemberId, TEST_SALT)
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, bobCandidateId, TEST_SALT)
 
           await renderComponent([alice, bob])
 
@@ -278,8 +282,8 @@ describe('UI: Election page', () => {
 
         it('Two votes for the same candidate', async () => {
           TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-          castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
-          castVote(bob.address, aliceMemberId, TEST_SALT)
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, aliceCandidateId, TEST_SALT)
 
           await renderComponent([alice, bob])
 
@@ -304,8 +308,8 @@ describe('UI: Election page', () => {
       describe('Votes count', () => {
         it('Two votes for different candidates', async () => {
           TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-          castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
-          castVote(bob.address, bobMemberId, TEST_SALT)
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, bobCandidateId, TEST_SALT)
 
           await renderComponent([alice, bob])
 
@@ -315,8 +319,8 @@ describe('UI: Election page', () => {
 
         it('Two votes for the same candidate', async () => {
           TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-          castVote(alice.address, aliceMemberId, TEST_SALT, TEST_COMMITMENT)
-          castVote(bob.address, aliceMemberId, TEST_SALT)
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, aliceCandidateId, TEST_SALT)
 
           await renderComponent([alice, bob])
 

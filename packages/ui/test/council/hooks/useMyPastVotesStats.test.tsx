@@ -102,7 +102,7 @@ describe('useMyPastVotesStats', () => {
         } as RawCouncilElectionMock,
         server.server
       )
-      seedCouncilCandidate(CANDIDATE_DATA, server.server)
+      seedCouncilCandidate({ ...CANDIDATE_DATA }, server.server)
       seedCouncilMember(
         {
           id: '0',
@@ -124,6 +124,7 @@ describe('useMyPastVotesStats', () => {
     })
 
     it('No votes for winners', async () => {
+      seedCouncilCandidate({ ...CANDIDATE_DATA, id: '1', memberId: '1' }, server.server)
       seedCouncilVote({ ...VOTE_DATA, castBy: bob.address, voteForId: '1' }, server.server)
       seedCouncilVote({ ...VOTE_DATA, castBy: bob.address }, server.server)
 
