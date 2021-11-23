@@ -59,6 +59,10 @@ jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -740,7 +744,9 @@ describe('UI: AddNewProposalModal', () => {
       it('Success', async () => {
         stubTransactionSuccess(changeModeTx, 'proposalsDiscussion', 'ThreadModeChanged')
         const button = await getButton(/sign transaction and change mode/i)
-        await fireEvent.click(button as HTMLElement)
+        await act(async () => {
+          fireEvent.click(button)
+        })
         expect(screen.queryByText('See my Proposal')).not.toBeNull()
       })
 

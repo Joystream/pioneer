@@ -30,6 +30,10 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deletePosts'

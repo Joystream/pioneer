@@ -3,7 +3,12 @@ import { assign, createMachine } from 'xstate'
 
 import { EmptyObject } from '@/common/types'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '../../../common/model/machines'
 
 import { UpdateMemberForm } from './types'
 
@@ -54,10 +59,15 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
             target: 'error',
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })

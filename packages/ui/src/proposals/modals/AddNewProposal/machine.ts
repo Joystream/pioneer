@@ -5,7 +5,12 @@ import { StateSchema } from 'xstate/lib/types'
 
 import { Account } from '@/accounts/types'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -503,6 +508,10 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
@@ -530,6 +539,10 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
@@ -548,10 +561,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
         ],
       },
     },
     success: { type: 'final' },
     error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })
