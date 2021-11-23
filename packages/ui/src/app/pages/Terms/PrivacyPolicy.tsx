@@ -1,10 +1,20 @@
 import React from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
+import { PageTitle } from '@/common/components/page/PageTitle'
 
 import Privacy from './md/Privacy.md'
 
 export const PrivacyPolicy = () => {
-  return <PageLayout main={<MarkdownPreview markdown={Privacy} />} />
+  return (
+    <PageLayout
+      header={
+        <PageHeaderWrapper>
+          <PageTitle>Privacy Policy</PageTitle>
+        </PageHeaderWrapper>
+      }
+      main={<MarkdownPreview markdown={Privacy} />}
+    />
+  )
 }
