@@ -85,8 +85,7 @@ export const OnBoardingModal = () => {
   }, [JSON.stringify(state)])
 
   useEffect(() => {
-    // if (membershipData?.blockHash && transactionStatus === 'confirmed') {
-    if (membershipData?.blockHash) {
+    if (membershipData?.blockHash && transactionStatus === 'confirmed') {
       send('SUCCESS')
     }
   }, [JSON.stringify(membershipData), transactionStatus])

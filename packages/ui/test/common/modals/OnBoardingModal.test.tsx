@@ -19,27 +19,27 @@ const mockUseMyAccounts: UseAccounts = {
   isLoading: false,
   hasAccounts: false,
   allAccounts: [],
-  error: undefined
+  error: undefined,
 }
 
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setMembershipAccount: jest.fn()
+  setMembershipAccount: jest.fn(),
 }
 
 let mockMyBalances: AddressToBalanceMap = {}
 
 jest.mock('@/accounts/hooks/useMyAccounts', () => ({
-  useMyAccounts: () => mockUseMyAccounts
+  useMyAccounts: () => mockUseMyAccounts,
 }))
 
 jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () => mockMyBalances
+  useMyBalances: () => mockMyBalances,
 }))
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
-  useOnBoarding: () => mockOnBoarding
+  useOnBoarding: () => mockOnBoarding,
 }))
 
 describe('UI: OnBoardingModal', () => {
@@ -49,7 +49,7 @@ describe('UI: OnBoardingModal', () => {
     hideModal: jest.fn(),
     showModal: jest.fn(),
     modal: null,
-    modalData: undefined
+    modalData: undefined,
   }
 
   afterEach(cleanup)
@@ -115,12 +115,12 @@ describe('UI: OnBoardingModal', () => {
         mockUseMyAccounts.allAccounts = [
           {
             address: '123',
-            name: 'Alice'
+            name: 'Alice',
           },
           {
             address: '321',
-            name: 'Bob'
-          }
+            name: 'Bob',
+          },
         ]
         mockMyBalances = {
           '123': {
@@ -128,15 +128,15 @@ describe('UI: OnBoardingModal', () => {
             locked: new BN(0),
             recoverable: new BN(0),
             transferable: new BN(0),
-            locks: []
+            locks: [],
           },
           '321': {
             total: new BN(0),
             locked: new BN(0),
             recoverable: new BN(0),
             transferable: new BN(0),
-            locks: []
-          }
+            locks: [],
+          },
         }
       })
 
