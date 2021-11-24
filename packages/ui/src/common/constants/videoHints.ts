@@ -1,7 +1,7 @@
 export type VideoHintType = 'workingGroups' | 'proposals' | 'council'
 
 export const videoHints: { [key in VideoHintType]: string } = {
-  workingGroups: 'https://www.youtube.com/embed/cC-tTakpJEs',
-  proposals: 'https://www.youtube.com/embed/cC-tTakpJEs',
-  council: 'https://www.youtube.com/embed/cC-tTakpJEs',
+  workingGroups: 'https://deploy-preview-1606--atlas-dev.netlify.app/embedded/video/1',
+  proposals: 'https://deploy-preview-1606--atlas-dev.netlify.app/embedded/video/1',
+  council: 'https://deploy-preview-1606--atlas-dev.netlify.app/embedded/video/1',
 }
