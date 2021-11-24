@@ -132,7 +132,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
     stake: randomFromRange(1, 10) * 1000,
     stakeLocked: isFinished ? Math.random() > 0.5 : true,
     castBy: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].memberId : null,
+    voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].id : null,
     commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
     ...override,
   })

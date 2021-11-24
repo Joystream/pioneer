@@ -1,2008 +1,3 @@
-type Query {
-  announcingPeriodStartedEvents(
-    offset: Int
-    limit: Int = 50
-    where: AnnouncingPeriodStartedEventWhereInput
-    orderBy: [AnnouncingPeriodStartedEventOrderByInput!]
-  ): [AnnouncingPeriodStartedEvent!]!
-  announcingPeriodStartedEventByUniqueInput(
-    where: AnnouncingPeriodStartedEventWhereUniqueInput!
-  ): AnnouncingPeriodStartedEvent
-  announcingPeriodStartedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: AnnouncingPeriodStartedEventWhereInput
-    orderBy: [AnnouncingPeriodStartedEventOrderByInput!]
-  ): AnnouncingPeriodStartedEventConnection!
-  applicationFormQuestionAnswers(
-    offset: Int
-    limit: Int = 50
-    where: ApplicationFormQuestionAnswerWhereInput
-    orderBy: [ApplicationFormQuestionAnswerOrderByInput!]
-  ): [ApplicationFormQuestionAnswer!]!
-  applicationFormQuestionAnswerByUniqueInput(
-    where: ApplicationFormQuestionAnswerWhereUniqueInput!
-  ): ApplicationFormQuestionAnswer
-  applicationFormQuestionAnswersConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ApplicationFormQuestionAnswerWhereInput
-    orderBy: [ApplicationFormQuestionAnswerOrderByInput!]
-  ): ApplicationFormQuestionAnswerConnection!
-  applicationFormQuestions(
-    offset: Int
-    limit: Int = 50
-    where: ApplicationFormQuestionWhereInput
-    orderBy: [ApplicationFormQuestionOrderByInput!]
-  ): [ApplicationFormQuestion!]!
-  applicationFormQuestionByUniqueInput(where: ApplicationFormQuestionWhereUniqueInput!): ApplicationFormQuestion
-  applicationFormQuestionsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ApplicationFormQuestionWhereInput
-    orderBy: [ApplicationFormQuestionOrderByInput!]
-  ): ApplicationFormQuestionConnection!
-  applicationWithdrawnEvents(
-    offset: Int
-    limit: Int = 50
-    where: ApplicationWithdrawnEventWhereInput
-    orderBy: [ApplicationWithdrawnEventOrderByInput!]
-  ): [ApplicationWithdrawnEvent!]!
-  applicationWithdrawnEventByUniqueInput(where: ApplicationWithdrawnEventWhereUniqueInput!): ApplicationWithdrawnEvent
-  applicationWithdrawnEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ApplicationWithdrawnEventWhereInput
-    orderBy: [ApplicationWithdrawnEventOrderByInput!]
-  ): ApplicationWithdrawnEventConnection!
-  appliedOnOpeningEvents(
-    offset: Int
-    limit: Int = 50
-    where: AppliedOnOpeningEventWhereInput
-    orderBy: [AppliedOnOpeningEventOrderByInput!]
-  ): [AppliedOnOpeningEvent!]!
-  appliedOnOpeningEventByUniqueInput(where: AppliedOnOpeningEventWhereUniqueInput!): AppliedOnOpeningEvent
-  appliedOnOpeningEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: AppliedOnOpeningEventWhereInput
-    orderBy: [AppliedOnOpeningEventOrderByInput!]
-  ): AppliedOnOpeningEventConnection!
-  budgetBalanceSetEvents(
-    offset: Int
-    limit: Int = 50
-    where: BudgetBalanceSetEventWhereInput
-    orderBy: [BudgetBalanceSetEventOrderByInput!]
-  ): [BudgetBalanceSetEvent!]!
-  budgetBalanceSetEventByUniqueInput(where: BudgetBalanceSetEventWhereUniqueInput!): BudgetBalanceSetEvent
-  budgetBalanceSetEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BudgetBalanceSetEventWhereInput
-    orderBy: [BudgetBalanceSetEventOrderByInput!]
-  ): BudgetBalanceSetEventConnection!
-  budgetIncrementUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: BudgetIncrementUpdatedEventWhereInput
-    orderBy: [BudgetIncrementUpdatedEventOrderByInput!]
-  ): [BudgetIncrementUpdatedEvent!]!
-  budgetIncrementUpdatedEventByUniqueInput(
-    where: BudgetIncrementUpdatedEventWhereUniqueInput!
-  ): BudgetIncrementUpdatedEvent
-  budgetIncrementUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BudgetIncrementUpdatedEventWhereInput
-    orderBy: [BudgetIncrementUpdatedEventOrderByInput!]
-  ): BudgetIncrementUpdatedEventConnection!
-  budgetRefillEvents(
-    offset: Int
-    limit: Int = 50
-    where: BudgetRefillEventWhereInput
-    orderBy: [BudgetRefillEventOrderByInput!]
-  ): [BudgetRefillEvent!]!
-  budgetRefillEventByUniqueInput(where: BudgetRefillEventWhereUniqueInput!): BudgetRefillEvent
-  budgetRefillEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BudgetRefillEventWhereInput
-    orderBy: [BudgetRefillEventOrderByInput!]
-  ): BudgetRefillEventConnection!
-  budgetRefillPlannedEvents(
-    offset: Int
-    limit: Int = 50
-    where: BudgetRefillPlannedEventWhereInput
-    orderBy: [BudgetRefillPlannedEventOrderByInput!]
-  ): [BudgetRefillPlannedEvent!]!
-  budgetRefillPlannedEventByUniqueInput(where: BudgetRefillPlannedEventWhereUniqueInput!): BudgetRefillPlannedEvent
-  budgetRefillPlannedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BudgetRefillPlannedEventWhereInput
-    orderBy: [BudgetRefillPlannedEventOrderByInput!]
-  ): BudgetRefillPlannedEventConnection!
-  budgetSetEvents(
-    offset: Int
-    limit: Int = 50
-    where: BudgetSetEventWhereInput
-    orderBy: [BudgetSetEventOrderByInput!]
-  ): [BudgetSetEvent!]!
-  budgetSetEventByUniqueInput(where: BudgetSetEventWhereUniqueInput!): BudgetSetEvent
-  budgetSetEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BudgetSetEventWhereInput
-    orderBy: [BudgetSetEventOrderByInput!]
-  ): BudgetSetEventConnection!
-  budgetSpendingEvents(
-    offset: Int
-    limit: Int = 50
-    where: BudgetSpendingEventWhereInput
-    orderBy: [BudgetSpendingEventOrderByInput!]
-  ): [BudgetSpendingEvent!]!
-  budgetSpendingEventByUniqueInput(where: BudgetSpendingEventWhereUniqueInput!): BudgetSpendingEvent
-  budgetSpendingEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BudgetSpendingEventWhereInput
-    orderBy: [BudgetSpendingEventOrderByInput!]
-  ): BudgetSpendingEventConnection!
-  candidacyNoteMetadata(
-    offset: Int
-    limit: Int = 50
-    where: CandidacyNoteMetadataWhereInput
-    orderBy: [CandidacyNoteMetadataOrderByInput!]
-  ): [CandidacyNoteMetadata!]!
-  candidacyNoteMetadataByUniqueInput(where: CandidacyNoteMetadataWhereUniqueInput!): CandidacyNoteMetadata
-  candidacyNoteMetadataConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CandidacyNoteMetadataWhereInput
-    orderBy: [CandidacyNoteMetadataOrderByInput!]
-  ): CandidacyNoteMetadataConnection!
-  candidacyNoteSetEvents(
-    offset: Int
-    limit: Int = 50
-    where: CandidacyNoteSetEventWhereInput
-    orderBy: [CandidacyNoteSetEventOrderByInput!]
-  ): [CandidacyNoteSetEvent!]!
-  candidacyNoteSetEventByUniqueInput(where: CandidacyNoteSetEventWhereUniqueInput!): CandidacyNoteSetEvent
-  candidacyNoteSetEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CandidacyNoteSetEventWhereInput
-    orderBy: [CandidacyNoteSetEventOrderByInput!]
-  ): CandidacyNoteSetEventConnection!
-  candidacyStakeReleaseEvents(
-    offset: Int
-    limit: Int = 50
-    where: CandidacyStakeReleaseEventWhereInput
-    orderBy: [CandidacyStakeReleaseEventOrderByInput!]
-  ): [CandidacyStakeReleaseEvent!]!
-  candidacyStakeReleaseEventByUniqueInput(
-    where: CandidacyStakeReleaseEventWhereUniqueInput!
-  ): CandidacyStakeReleaseEvent
-  candidacyStakeReleaseEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CandidacyStakeReleaseEventWhereInput
-    orderBy: [CandidacyStakeReleaseEventOrderByInput!]
-  ): CandidacyStakeReleaseEventConnection!
-  candidacyWithdrawEvents(
-    offset: Int
-    limit: Int = 50
-    where: CandidacyWithdrawEventWhereInput
-    orderBy: [CandidacyWithdrawEventOrderByInput!]
-  ): [CandidacyWithdrawEvent!]!
-  candidacyWithdrawEventByUniqueInput(where: CandidacyWithdrawEventWhereUniqueInput!): CandidacyWithdrawEvent
-  candidacyWithdrawEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CandidacyWithdrawEventWhereInput
-    orderBy: [CandidacyWithdrawEventOrderByInput!]
-  ): CandidacyWithdrawEventConnection!
-  candidates(offset: Int, limit: Int = 50, where: CandidateWhereInput, orderBy: [CandidateOrderByInput!]): [Candidate!]!
-  candidateByUniqueInput(where: CandidateWhereUniqueInput!): Candidate
-  candidatesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CandidateWhereInput
-    orderBy: [CandidateOrderByInput!]
-  ): CandidateConnection!
-  castVotes(offset: Int, limit: Int = 50, where: CastVoteWhereInput, orderBy: [CastVoteOrderByInput!]): [CastVote!]!
-  castVoteByUniqueInput(where: CastVoteWhereUniqueInput!): CastVote
-  castVotesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CastVoteWhereInput
-    orderBy: [CastVoteOrderByInput!]
-  ): CastVoteConnection!
-  categoryArchivalStatusUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: CategoryArchivalStatusUpdatedEventWhereInput
-    orderBy: [CategoryArchivalStatusUpdatedEventOrderByInput!]
-  ): [CategoryArchivalStatusUpdatedEvent!]!
-  categoryArchivalStatusUpdatedEventByUniqueInput(
-    where: CategoryArchivalStatusUpdatedEventWhereUniqueInput!
-  ): CategoryArchivalStatusUpdatedEvent
-  categoryArchivalStatusUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CategoryArchivalStatusUpdatedEventWhereInput
-    orderBy: [CategoryArchivalStatusUpdatedEventOrderByInput!]
-  ): CategoryArchivalStatusUpdatedEventConnection!
-  categoryCreatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: CategoryCreatedEventWhereInput
-    orderBy: [CategoryCreatedEventOrderByInput!]
-  ): [CategoryCreatedEvent!]!
-  categoryCreatedEventByUniqueInput(where: CategoryCreatedEventWhereUniqueInput!): CategoryCreatedEvent
-  categoryCreatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CategoryCreatedEventWhereInput
-    orderBy: [CategoryCreatedEventOrderByInput!]
-  ): CategoryCreatedEventConnection!
-  categoryDeletedEvents(
-    offset: Int
-    limit: Int = 50
-    where: CategoryDeletedEventWhereInput
-    orderBy: [CategoryDeletedEventOrderByInput!]
-  ): [CategoryDeletedEvent!]!
-  categoryDeletedEventByUniqueInput(where: CategoryDeletedEventWhereUniqueInput!): CategoryDeletedEvent
-  categoryDeletedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CategoryDeletedEventWhereInput
-    orderBy: [CategoryDeletedEventOrderByInput!]
-  ): CategoryDeletedEventConnection!
-  categoryMembershipOfModeratorUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: CategoryMembershipOfModeratorUpdatedEventWhereInput
-    orderBy: [CategoryMembershipOfModeratorUpdatedEventOrderByInput!]
-  ): [CategoryMembershipOfModeratorUpdatedEvent!]!
-  categoryMembershipOfModeratorUpdatedEventByUniqueInput(
-    where: CategoryMembershipOfModeratorUpdatedEventWhereUniqueInput!
-  ): CategoryMembershipOfModeratorUpdatedEvent
-  categoryMembershipOfModeratorUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CategoryMembershipOfModeratorUpdatedEventWhereInput
-    orderBy: [CategoryMembershipOfModeratorUpdatedEventOrderByInput!]
-  ): CategoryMembershipOfModeratorUpdatedEventConnection!
-  categoryStickyThreadUpdateEvents(
-    offset: Int
-    limit: Int = 50
-    where: CategoryStickyThreadUpdateEventWhereInput
-    orderBy: [CategoryStickyThreadUpdateEventOrderByInput!]
-  ): [CategoryStickyThreadUpdateEvent!]!
-  categoryStickyThreadUpdateEventByUniqueInput(
-    where: CategoryStickyThreadUpdateEventWhereUniqueInput!
-  ): CategoryStickyThreadUpdateEvent
-  categoryStickyThreadUpdateEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CategoryStickyThreadUpdateEventWhereInput
-    orderBy: [CategoryStickyThreadUpdateEventOrderByInput!]
-  ): CategoryStickyThreadUpdateEventConnection!
-  channelCategories(
-    offset: Int
-    limit: Int = 50
-    where: ChannelCategoryWhereInput
-    orderBy: [ChannelCategoryOrderByInput!]
-  ): [ChannelCategory!]!
-  channelCategoryByUniqueInput(where: ChannelCategoryWhereUniqueInput!): ChannelCategory
-  channelCategoriesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ChannelCategoryWhereInput
-    orderBy: [ChannelCategoryOrderByInput!]
-  ): ChannelCategoryConnection!
-  channels(offset: Int, limit: Int = 50, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): [Channel!]!
-  channelByUniqueInput(where: ChannelWhereUniqueInput!): Channel
-  channelsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ChannelWhereInput
-    orderBy: [ChannelOrderByInput!]
-  ): ChannelConnection!
-  councilMembers(
-    offset: Int
-    limit: Int = 50
-    where: CouncilMemberWhereInput
-    orderBy: [CouncilMemberOrderByInput!]
-  ): [CouncilMember!]!
-  councilMemberByUniqueInput(where: CouncilMemberWhereUniqueInput!): CouncilMember
-  councilMembersConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CouncilMemberWhereInput
-    orderBy: [CouncilMemberOrderByInput!]
-  ): CouncilMemberConnection!
-  councilStageUpdates(
-    offset: Int
-    limit: Int = 50
-    where: CouncilStageUpdateWhereInput
-    orderBy: [CouncilStageUpdateOrderByInput!]
-  ): [CouncilStageUpdate!]!
-  councilStageUpdateByUniqueInput(where: CouncilStageUpdateWhereUniqueInput!): CouncilStageUpdate
-  councilStageUpdatesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CouncilStageUpdateWhereInput
-    orderBy: [CouncilStageUpdateOrderByInput!]
-  ): CouncilStageUpdateConnection!
-  councilorRewardUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: CouncilorRewardUpdatedEventWhereInput
-    orderBy: [CouncilorRewardUpdatedEventOrderByInput!]
-  ): [CouncilorRewardUpdatedEvent!]!
-  councilorRewardUpdatedEventByUniqueInput(
-    where: CouncilorRewardUpdatedEventWhereUniqueInput!
-  ): CouncilorRewardUpdatedEvent
-  councilorRewardUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CouncilorRewardUpdatedEventWhereInput
-    orderBy: [CouncilorRewardUpdatedEventOrderByInput!]
-  ): CouncilorRewardUpdatedEventConnection!
-  curatorGroups(
-    offset: Int
-    limit: Int = 50
-    where: CuratorGroupWhereInput
-    orderBy: [CuratorGroupOrderByInput!]
-  ): [CuratorGroup!]!
-  curatorGroupByUniqueInput(where: CuratorGroupWhereUniqueInput!): CuratorGroup
-  curatorGroupsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: CuratorGroupWhereInput
-    orderBy: [CuratorGroupOrderByInput!]
-  ): CuratorGroupConnection!
-  dataObjects(
-    offset: Int
-    limit: Int = 50
-    where: DataObjectWhereInput
-    orderBy: [DataObjectOrderByInput!]
-  ): [DataObject!]!
-  dataObjectByUniqueInput(where: DataObjectWhereUniqueInput!): DataObject
-  dataObjectsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: DataObjectWhereInput
-    orderBy: [DataObjectOrderByInput!]
-  ): DataObjectConnection!
-  electedCouncils(
-    offset: Int
-    limit: Int = 50
-    where: ElectedCouncilWhereInput
-    orderBy: [ElectedCouncilOrderByInput!]
-  ): [ElectedCouncil!]!
-  electedCouncilByUniqueInput(where: ElectedCouncilWhereUniqueInput!): ElectedCouncil
-  electedCouncilsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ElectedCouncilWhereInput
-    orderBy: [ElectedCouncilOrderByInput!]
-  ): ElectedCouncilConnection!
-  electionRounds(
-    offset: Int
-    limit: Int = 50
-    where: ElectionRoundWhereInput
-    orderBy: [ElectionRoundOrderByInput!]
-  ): [ElectionRound!]!
-  electionRoundByUniqueInput(where: ElectionRoundWhereUniqueInput!): ElectionRound
-  electionRoundsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ElectionRoundWhereInput
-    orderBy: [ElectionRoundOrderByInput!]
-  ): ElectionRoundConnection!
-  events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: [EventOrderByInput!]): [Event!]!
-  forumCategories(
-    offset: Int
-    limit: Int = 50
-    where: ForumCategoryWhereInput
-    orderBy: [ForumCategoryOrderByInput!]
-  ): [ForumCategory!]!
-  forumCategoryByUniqueInput(where: ForumCategoryWhereUniqueInput!): ForumCategory
-  forumCategoriesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumCategoryWhereInput
-    orderBy: [ForumCategoryOrderByInput!]
-  ): ForumCategoryConnection!
-  forumPollAlternatives(
-    offset: Int
-    limit: Int = 50
-    where: ForumPollAlternativeWhereInput
-    orderBy: [ForumPollAlternativeOrderByInput!]
-  ): [ForumPollAlternative!]!
-  forumPollAlternativeByUniqueInput(where: ForumPollAlternativeWhereUniqueInput!): ForumPollAlternative
-  forumPollAlternativesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumPollAlternativeWhereInput
-    orderBy: [ForumPollAlternativeOrderByInput!]
-  ): ForumPollAlternativeConnection!
-  forumPolls(offset: Int, limit: Int = 50, where: ForumPollWhereInput, orderBy: [ForumPollOrderByInput!]): [ForumPoll!]!
-  forumPollByUniqueInput(where: ForumPollWhereUniqueInput!): ForumPoll
-  forumPollsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumPollWhereInput
-    orderBy: [ForumPollOrderByInput!]
-  ): ForumPollConnection!
-  forumPostReactions(
-    offset: Int
-    limit: Int = 50
-    where: ForumPostReactionWhereInput
-    orderBy: [ForumPostReactionOrderByInput!]
-  ): [ForumPostReaction!]!
-  forumPostReactionByUniqueInput(where: ForumPostReactionWhereUniqueInput!): ForumPostReaction
-  forumPostReactionsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumPostReactionWhereInput
-    orderBy: [ForumPostReactionOrderByInput!]
-  ): ForumPostReactionConnection!
-  forumPosts(offset: Int, limit: Int = 50, where: ForumPostWhereInput, orderBy: [ForumPostOrderByInput!]): [ForumPost!]!
-  forumPostByUniqueInput(where: ForumPostWhereUniqueInput!): ForumPost
-  forumPostsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumPostWhereInput
-    orderBy: [ForumPostOrderByInput!]
-  ): ForumPostConnection!
-  forumThreadTags(
-    offset: Int
-    limit: Int = 50
-    where: ForumThreadTagWhereInput
-    orderBy: [ForumThreadTagOrderByInput!]
-  ): [ForumThreadTag!]!
-  forumThreadTagByUniqueInput(where: ForumThreadTagWhereUniqueInput!): ForumThreadTag
-  forumThreadTagsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumThreadTagWhereInput
-    orderBy: [ForumThreadTagOrderByInput!]
-  ): ForumThreadTagConnection!
-  forumThreads(
-    offset: Int
-    limit: Int = 50
-    where: ForumThreadWhereInput
-    orderBy: [ForumThreadOrderByInput!]
-  ): [ForumThread!]!
-  forumThreadByUniqueInput(where: ForumThreadWhereUniqueInput!): ForumThread
-  forumThreadsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ForumThreadWhereInput
-    orderBy: [ForumThreadOrderByInput!]
-  ): ForumThreadConnection!
-  fundingRequestDestinations(
-    offset: Int
-    limit: Int = 50
-    where: FundingRequestDestinationWhereInput
-    orderBy: [FundingRequestDestinationOrderByInput!]
-  ): [FundingRequestDestination!]!
-  fundingRequestDestinationByUniqueInput(where: FundingRequestDestinationWhereUniqueInput!): FundingRequestDestination
-  fundingRequestDestinationsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: FundingRequestDestinationWhereInput
-    orderBy: [FundingRequestDestinationOrderByInput!]
-  ): FundingRequestDestinationConnection!
-  fundingRequestDestinationsLists(
-    offset: Int
-    limit: Int = 50
-    where: FundingRequestDestinationsListWhereInput
-    orderBy: [FundingRequestDestinationsListOrderByInput!]
-  ): [FundingRequestDestinationsList!]!
-  fundingRequestDestinationsListByUniqueInput(
-    where: FundingRequestDestinationsListWhereUniqueInput!
-  ): FundingRequestDestinationsList
-  fundingRequestDestinationsListsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: FundingRequestDestinationsListWhereInput
-    orderBy: [FundingRequestDestinationsListOrderByInput!]
-  ): FundingRequestDestinationsListConnection!
-  initialInvitationBalanceUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: InitialInvitationBalanceUpdatedEventWhereInput
-    orderBy: [InitialInvitationBalanceUpdatedEventOrderByInput!]
-  ): [InitialInvitationBalanceUpdatedEvent!]!
-  initialInvitationBalanceUpdatedEventByUniqueInput(
-    where: InitialInvitationBalanceUpdatedEventWhereUniqueInput!
-  ): InitialInvitationBalanceUpdatedEvent
-  initialInvitationBalanceUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: InitialInvitationBalanceUpdatedEventWhereInput
-    orderBy: [InitialInvitationBalanceUpdatedEventOrderByInput!]
-  ): InitialInvitationBalanceUpdatedEventConnection!
-  initialInvitationCountUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: InitialInvitationCountUpdatedEventWhereInput
-    orderBy: [InitialInvitationCountUpdatedEventOrderByInput!]
-  ): [InitialInvitationCountUpdatedEvent!]!
-  initialInvitationCountUpdatedEventByUniqueInput(
-    where: InitialInvitationCountUpdatedEventWhereUniqueInput!
-  ): InitialInvitationCountUpdatedEvent
-  initialInvitationCountUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: InitialInvitationCountUpdatedEventWhereInput
-    orderBy: [InitialInvitationCountUpdatedEventOrderByInput!]
-  ): InitialInvitationCountUpdatedEventConnection!
-  invitesTransferredEvents(
-    offset: Int
-    limit: Int = 50
-    where: InvitesTransferredEventWhereInput
-    orderBy: [InvitesTransferredEventOrderByInput!]
-  ): [InvitesTransferredEvent!]!
-  invitesTransferredEventByUniqueInput(where: InvitesTransferredEventWhereUniqueInput!): InvitesTransferredEvent
-  invitesTransferredEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: InvitesTransferredEventWhereInput
-    orderBy: [InvitesTransferredEventOrderByInput!]
-  ): InvitesTransferredEventConnection!
-  languages(offset: Int, limit: Int = 50, where: LanguageWhereInput, orderBy: [LanguageOrderByInput!]): [Language!]!
-  languageByUniqueInput(where: LanguageWhereUniqueInput!): Language
-  languagesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: LanguageWhereInput
-    orderBy: [LanguageOrderByInput!]
-  ): LanguageConnection!
-  leaderInvitationQuotaUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: LeaderInvitationQuotaUpdatedEventWhereInput
-    orderBy: [LeaderInvitationQuotaUpdatedEventOrderByInput!]
-  ): [LeaderInvitationQuotaUpdatedEvent!]!
-  leaderInvitationQuotaUpdatedEventByUniqueInput(
-    where: LeaderInvitationQuotaUpdatedEventWhereUniqueInput!
-  ): LeaderInvitationQuotaUpdatedEvent
-  leaderInvitationQuotaUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: LeaderInvitationQuotaUpdatedEventWhereInput
-    orderBy: [LeaderInvitationQuotaUpdatedEventOrderByInput!]
-  ): LeaderInvitationQuotaUpdatedEventConnection!
-  leaderSetEvents(
-    offset: Int
-    limit: Int = 50
-    where: LeaderSetEventWhereInput
-    orderBy: [LeaderSetEventOrderByInput!]
-  ): [LeaderSetEvent!]!
-  leaderSetEventByUniqueInput(where: LeaderSetEventWhereUniqueInput!): LeaderSetEvent
-  leaderSetEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: LeaderSetEventWhereInput
-    orderBy: [LeaderSetEventOrderByInput!]
-  ): LeaderSetEventConnection!
-  leaderUnsetEvents(
-    offset: Int
-    limit: Int = 50
-    where: LeaderUnsetEventWhereInput
-    orderBy: [LeaderUnsetEventOrderByInput!]
-  ): [LeaderUnsetEvent!]!
-  leaderUnsetEventByUniqueInput(where: LeaderUnsetEventWhereUniqueInput!): LeaderUnsetEvent
-  leaderUnsetEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: LeaderUnsetEventWhereInput
-    orderBy: [LeaderUnsetEventOrderByInput!]
-  ): LeaderUnsetEventConnection!
-  licenses(offset: Int, limit: Int = 50, where: LicenseWhereInput, orderBy: [LicenseOrderByInput!]): [License!]!
-  licenseByUniqueInput(where: LicenseWhereUniqueInput!): License
-  licensesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: LicenseWhereInput
-    orderBy: [LicenseOrderByInput!]
-  ): LicenseConnection!
-  memberAccountsUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: MemberAccountsUpdatedEventWhereInput
-    orderBy: [MemberAccountsUpdatedEventOrderByInput!]
-  ): [MemberAccountsUpdatedEvent!]!
-  memberAccountsUpdatedEventByUniqueInput(
-    where: MemberAccountsUpdatedEventWhereUniqueInput!
-  ): MemberAccountsUpdatedEvent
-  memberAccountsUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MemberAccountsUpdatedEventWhereInput
-    orderBy: [MemberAccountsUpdatedEventOrderByInput!]
-  ): MemberAccountsUpdatedEventConnection!
-  memberInvitedEvents(
-    offset: Int
-    limit: Int = 50
-    where: MemberInvitedEventWhereInput
-    orderBy: [MemberInvitedEventOrderByInput!]
-  ): [MemberInvitedEvent!]!
-  memberInvitedEventByUniqueInput(where: MemberInvitedEventWhereUniqueInput!): MemberInvitedEvent
-  memberInvitedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MemberInvitedEventWhereInput
-    orderBy: [MemberInvitedEventOrderByInput!]
-  ): MemberInvitedEventConnection!
-  memberMetadata(
-    offset: Int
-    limit: Int = 50
-    where: MemberMetadataWhereInput
-    orderBy: [MemberMetadataOrderByInput!]
-  ): [MemberMetadata!]!
-  memberMetadataByUniqueInput(where: MemberMetadataWhereUniqueInput!): MemberMetadata
-  memberMetadataConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MemberMetadataWhereInput
-    orderBy: [MemberMetadataOrderByInput!]
-  ): MemberMetadataConnection!
-  memberProfileUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: MemberProfileUpdatedEventWhereInput
-    orderBy: [MemberProfileUpdatedEventOrderByInput!]
-  ): [MemberProfileUpdatedEvent!]!
-  memberProfileUpdatedEventByUniqueInput(where: MemberProfileUpdatedEventWhereUniqueInput!): MemberProfileUpdatedEvent
-  memberProfileUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MemberProfileUpdatedEventWhereInput
-    orderBy: [MemberProfileUpdatedEventOrderByInput!]
-  ): MemberProfileUpdatedEventConnection!
-  memberVerificationStatusUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: MemberVerificationStatusUpdatedEventWhereInput
-    orderBy: [MemberVerificationStatusUpdatedEventOrderByInput!]
-  ): [MemberVerificationStatusUpdatedEvent!]!
-  memberVerificationStatusUpdatedEventByUniqueInput(
-    where: MemberVerificationStatusUpdatedEventWhereUniqueInput!
-  ): MemberVerificationStatusUpdatedEvent
-  memberVerificationStatusUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MemberVerificationStatusUpdatedEventWhereInput
-    orderBy: [MemberVerificationStatusUpdatedEventOrderByInput!]
-  ): MemberVerificationStatusUpdatedEventConnection!
-  membershipBoughtEvents(
-    offset: Int
-    limit: Int = 50
-    where: MembershipBoughtEventWhereInput
-    orderBy: [MembershipBoughtEventOrderByInput!]
-  ): [MembershipBoughtEvent!]!
-  membershipBoughtEventByUniqueInput(where: MembershipBoughtEventWhereUniqueInput!): MembershipBoughtEvent
-  membershipBoughtEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MembershipBoughtEventWhereInput
-    orderBy: [MembershipBoughtEventOrderByInput!]
-  ): MembershipBoughtEventConnection!
-  membershipPriceUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: MembershipPriceUpdatedEventWhereInput
-    orderBy: [MembershipPriceUpdatedEventOrderByInput!]
-  ): [MembershipPriceUpdatedEvent!]!
-  membershipPriceUpdatedEventByUniqueInput(
-    where: MembershipPriceUpdatedEventWhereUniqueInput!
-  ): MembershipPriceUpdatedEvent
-  membershipPriceUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MembershipPriceUpdatedEventWhereInput
-    orderBy: [MembershipPriceUpdatedEventOrderByInput!]
-  ): MembershipPriceUpdatedEventConnection!
-  membershipSystemSnapshots(
-    offset: Int
-    limit: Int = 50
-    where: MembershipSystemSnapshotWhereInput
-    orderBy: [MembershipSystemSnapshotOrderByInput!]
-  ): [MembershipSystemSnapshot!]!
-  membershipSystemSnapshotByUniqueInput(where: MembershipSystemSnapshotWhereUniqueInput!): MembershipSystemSnapshot
-  membershipSystemSnapshotsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MembershipSystemSnapshotWhereInput
-    orderBy: [MembershipSystemSnapshotOrderByInput!]
-  ): MembershipSystemSnapshotConnection!
-  memberships(
-    offset: Int
-    limit: Int = 50
-    where: MembershipWhereInput
-    orderBy: [MembershipOrderByInput!]
-  ): [Membership!]!
-  membershipByUniqueInput(where: MembershipWhereUniqueInput!): Membership
-  membershipsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: MembershipWhereInput
-    orderBy: [MembershipOrderByInput!]
-  ): MembershipConnection!
-  newCandidateEvents(
-    offset: Int
-    limit: Int = 50
-    where: NewCandidateEventWhereInput
-    orderBy: [NewCandidateEventOrderByInput!]
-  ): [NewCandidateEvent!]!
-  newCandidateEventByUniqueInput(where: NewCandidateEventWhereUniqueInput!): NewCandidateEvent
-  newCandidateEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: NewCandidateEventWhereInput
-    orderBy: [NewCandidateEventOrderByInput!]
-  ): NewCandidateEventConnection!
-  newCouncilElectedEvents(
-    offset: Int
-    limit: Int = 50
-    where: NewCouncilElectedEventWhereInput
-    orderBy: [NewCouncilElectedEventOrderByInput!]
-  ): [NewCouncilElectedEvent!]!
-  newCouncilElectedEventByUniqueInput(where: NewCouncilElectedEventWhereUniqueInput!): NewCouncilElectedEvent
-  newCouncilElectedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: NewCouncilElectedEventWhereInput
-    orderBy: [NewCouncilElectedEventOrderByInput!]
-  ): NewCouncilElectedEventConnection!
-  newCouncilNotElectedEvents(
-    offset: Int
-    limit: Int = 50
-    where: NewCouncilNotElectedEventWhereInput
-    orderBy: [NewCouncilNotElectedEventOrderByInput!]
-  ): [NewCouncilNotElectedEvent!]!
-  newCouncilNotElectedEventByUniqueInput(where: NewCouncilNotElectedEventWhereUniqueInput!): NewCouncilNotElectedEvent
-  newCouncilNotElectedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: NewCouncilNotElectedEventWhereInput
-    orderBy: [NewCouncilNotElectedEventOrderByInput!]
-  ): NewCouncilNotElectedEventConnection!
-  newMissedRewardLevelReachedEvents(
-    offset: Int
-    limit: Int = 50
-    where: NewMissedRewardLevelReachedEventWhereInput
-    orderBy: [NewMissedRewardLevelReachedEventOrderByInput!]
-  ): [NewMissedRewardLevelReachedEvent!]!
-  newMissedRewardLevelReachedEventByUniqueInput(
-    where: NewMissedRewardLevelReachedEventWhereUniqueInput!
-  ): NewMissedRewardLevelReachedEvent
-  newMissedRewardLevelReachedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: NewMissedRewardLevelReachedEventWhereInput
-    orderBy: [NewMissedRewardLevelReachedEventOrderByInput!]
-  ): NewMissedRewardLevelReachedEventConnection!
-  notEnoughCandidatesEvents(
-    offset: Int
-    limit: Int = 50
-    where: NotEnoughCandidatesEventWhereInput
-    orderBy: [NotEnoughCandidatesEventOrderByInput!]
-  ): [NotEnoughCandidatesEvent!]!
-  notEnoughCandidatesEventByUniqueInput(where: NotEnoughCandidatesEventWhereUniqueInput!): NotEnoughCandidatesEvent
-  notEnoughCandidatesEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: NotEnoughCandidatesEventWhereInput
-    orderBy: [NotEnoughCandidatesEventOrderByInput!]
-  ): NotEnoughCandidatesEventConnection!
-  openingAddedEvents(
-    offset: Int
-    limit: Int = 50
-    where: OpeningAddedEventWhereInput
-    orderBy: [OpeningAddedEventOrderByInput!]
-  ): [OpeningAddedEvent!]!
-  openingAddedEventByUniqueInput(where: OpeningAddedEventWhereUniqueInput!): OpeningAddedEvent
-  openingAddedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: OpeningAddedEventWhereInput
-    orderBy: [OpeningAddedEventOrderByInput!]
-  ): OpeningAddedEventConnection!
-  openingCanceledEvents(
-    offset: Int
-    limit: Int = 50
-    where: OpeningCanceledEventWhereInput
-    orderBy: [OpeningCanceledEventOrderByInput!]
-  ): [OpeningCanceledEvent!]!
-  openingCanceledEventByUniqueInput(where: OpeningCanceledEventWhereUniqueInput!): OpeningCanceledEvent
-  openingCanceledEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: OpeningCanceledEventWhereInput
-    orderBy: [OpeningCanceledEventOrderByInput!]
-  ): OpeningCanceledEventConnection!
-  openingFilledEvents(
-    offset: Int
-    limit: Int = 50
-    where: OpeningFilledEventWhereInput
-    orderBy: [OpeningFilledEventOrderByInput!]
-  ): [OpeningFilledEvent!]!
-  openingFilledEventByUniqueInput(where: OpeningFilledEventWhereUniqueInput!): OpeningFilledEvent
-  openingFilledEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: OpeningFilledEventWhereInput
-    orderBy: [OpeningFilledEventOrderByInput!]
-  ): OpeningFilledEventConnection!
-  postAddedEvents(
-    offset: Int
-    limit: Int = 50
-    where: PostAddedEventWhereInput
-    orderBy: [PostAddedEventOrderByInput!]
-  ): [PostAddedEvent!]!
-  postAddedEventByUniqueInput(where: PostAddedEventWhereUniqueInput!): PostAddedEvent
-  postAddedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: PostAddedEventWhereInput
-    orderBy: [PostAddedEventOrderByInput!]
-  ): PostAddedEventConnection!
-  postDeletedEvents(
-    offset: Int
-    limit: Int = 50
-    where: PostDeletedEventWhereInput
-    orderBy: [PostDeletedEventOrderByInput!]
-  ): [PostDeletedEvent!]!
-  postDeletedEventByUniqueInput(where: PostDeletedEventWhereUniqueInput!): PostDeletedEvent
-  postDeletedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: PostDeletedEventWhereInput
-    orderBy: [PostDeletedEventOrderByInput!]
-  ): PostDeletedEventConnection!
-  postModeratedEvents(
-    offset: Int
-    limit: Int = 50
-    where: PostModeratedEventWhereInput
-    orderBy: [PostModeratedEventOrderByInput!]
-  ): [PostModeratedEvent!]!
-  postModeratedEventByUniqueInput(where: PostModeratedEventWhereUniqueInput!): PostModeratedEvent
-  postModeratedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: PostModeratedEventWhereInput
-    orderBy: [PostModeratedEventOrderByInput!]
-  ): PostModeratedEventConnection!
-  postReactedEvents(
-    offset: Int
-    limit: Int = 50
-    where: PostReactedEventWhereInput
-    orderBy: [PostReactedEventOrderByInput!]
-  ): [PostReactedEvent!]!
-  postReactedEventByUniqueInput(where: PostReactedEventWhereUniqueInput!): PostReactedEvent
-  postReactedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: PostReactedEventWhereInput
-    orderBy: [PostReactedEventOrderByInput!]
-  ): PostReactedEventConnection!
-  postTextUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: PostTextUpdatedEventWhereInput
-    orderBy: [PostTextUpdatedEventOrderByInput!]
-  ): [PostTextUpdatedEvent!]!
-  postTextUpdatedEventByUniqueInput(where: PostTextUpdatedEventWhereUniqueInput!): PostTextUpdatedEvent
-  postTextUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: PostTextUpdatedEventWhereInput
-    orderBy: [PostTextUpdatedEventOrderByInput!]
-  ): PostTextUpdatedEventConnection!
-  proposalCancelledEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalCancelledEventWhereInput
-    orderBy: [ProposalCancelledEventOrderByInput!]
-  ): [ProposalCancelledEvent!]!
-  proposalCancelledEventByUniqueInput(where: ProposalCancelledEventWhereUniqueInput!): ProposalCancelledEvent
-  proposalCancelledEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalCancelledEventWhereInput
-    orderBy: [ProposalCancelledEventOrderByInput!]
-  ): ProposalCancelledEventConnection!
-  proposalCreatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalCreatedEventWhereInput
-    orderBy: [ProposalCreatedEventOrderByInput!]
-  ): [ProposalCreatedEvent!]!
-  proposalCreatedEventByUniqueInput(where: ProposalCreatedEventWhereUniqueInput!): ProposalCreatedEvent
-  proposalCreatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalCreatedEventWhereInput
-    orderBy: [ProposalCreatedEventOrderByInput!]
-  ): ProposalCreatedEventConnection!
-  proposalDecisionMadeEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDecisionMadeEventWhereInput
-    orderBy: [ProposalDecisionMadeEventOrderByInput!]
-  ): [ProposalDecisionMadeEvent!]!
-  proposalDecisionMadeEventByUniqueInput(where: ProposalDecisionMadeEventWhereUniqueInput!): ProposalDecisionMadeEvent
-  proposalDecisionMadeEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDecisionMadeEventWhereInput
-    orderBy: [ProposalDecisionMadeEventOrderByInput!]
-  ): ProposalDecisionMadeEventConnection!
-  proposalDiscussionPostCreatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionPostCreatedEventWhereInput
-    orderBy: [ProposalDiscussionPostCreatedEventOrderByInput!]
-  ): [ProposalDiscussionPostCreatedEvent!]!
-  proposalDiscussionPostCreatedEventByUniqueInput(
-    where: ProposalDiscussionPostCreatedEventWhereUniqueInput!
-  ): ProposalDiscussionPostCreatedEvent
-
-  proposalDiscussionPostCreatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionPostCreatedEventWhereInput
-    orderBy: [ProposalDiscussionPostCreatedEventOrderByInput!]
-  ): ProposalDiscussionPostCreatedEventConnection!
-  proposalDiscussionPostDeletedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionPostDeletedEventWhereInput
-    orderBy: [ProposalDiscussionPostDeletedEventOrderByInput!]
-  ): [ProposalDiscussionPostDeletedEvent!]!
-  proposalDiscussionPostDeletedEventByUniqueInput(
-    where: ProposalDiscussionPostDeletedEventWhereUniqueInput!
-  ): ProposalDiscussionPostDeletedEvent
-  proposalDiscussionPostDeletedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionPostDeletedEventWhereInput
-    orderBy: [ProposalDiscussionPostDeletedEventOrderByInput!]
-  ): ProposalDiscussionPostDeletedEventConnection!
-  proposalDiscussionPostUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionPostUpdatedEventWhereInput
-    orderBy: [ProposalDiscussionPostUpdatedEventOrderByInput!]
-  ): [ProposalDiscussionPostUpdatedEvent!]!
-  proposalDiscussionPostUpdatedEventByUniqueInput(
-    where: ProposalDiscussionPostUpdatedEventWhereUniqueInput!
-  ): ProposalDiscussionPostUpdatedEvent
-  proposalDiscussionPostUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionPostUpdatedEventWhereInput
-    orderBy: [ProposalDiscussionPostUpdatedEventOrderByInput!]
-  ): ProposalDiscussionPostUpdatedEventConnection!
-  proposalDiscussionPosts(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionPostWhereInput
-    orderBy: [ProposalDiscussionPostOrderByInput!]
-  ): [ProposalDiscussionPost!]!
-  proposalDiscussionPostByUniqueInput(where: ProposalDiscussionPostWhereUniqueInput!): ProposalDiscussionPost
-  proposalDiscussionPostsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionPostWhereInput
-    orderBy: [ProposalDiscussionPostOrderByInput!]
-  ): ProposalDiscussionPostConnection!
-  proposalDiscussionThreadModeChangedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionThreadModeChangedEventWhereInput
-    orderBy: [ProposalDiscussionThreadModeChangedEventOrderByInput!]
-  ): [ProposalDiscussionThreadModeChangedEvent!]!
-  proposalDiscussionThreadModeChangedEventByUniqueInput(
-    where: ProposalDiscussionThreadModeChangedEventWhereUniqueInput!
-  ): ProposalDiscussionThreadModeChangedEvent
-  proposalDiscussionThreadModeChangedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionThreadModeChangedEventWhereInput
-    orderBy: [ProposalDiscussionThreadModeChangedEventOrderByInput!]
-  ): ProposalDiscussionThreadModeChangedEventConnection!
-  proposalDiscussionThreads(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionThreadWhereInput
-    orderBy: [ProposalDiscussionThreadOrderByInput!]
-  ): [ProposalDiscussionThread!]!
-  proposalDiscussionThreadByUniqueInput(where: ProposalDiscussionThreadWhereUniqueInput!): ProposalDiscussionThread
-  proposalDiscussionThreadsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionThreadWhereInput
-    orderBy: [ProposalDiscussionThreadOrderByInput!]
-  ): ProposalDiscussionThreadConnection!
-  proposalDiscussionWhitelists(
-    offset: Int
-    limit: Int = 50
-    where: ProposalDiscussionWhitelistWhereInput
-    orderBy: [ProposalDiscussionWhitelistOrderByInput!]
-  ): [ProposalDiscussionWhitelist!]!
-  proposalDiscussionWhitelistByUniqueInput(
-    where: ProposalDiscussionWhitelistWhereUniqueInput!
-  ): ProposalDiscussionWhitelist
-  proposalDiscussionWhitelistsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalDiscussionWhitelistWhereInput
-    orderBy: [ProposalDiscussionWhitelistOrderByInput!]
-  ): ProposalDiscussionWhitelistConnection!
-  proposalExecutedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalExecutedEventWhereInput
-    orderBy: [ProposalExecutedEventOrderByInput!]
-  ): [ProposalExecutedEvent!]!
-  proposalExecutedEventByUniqueInput(where: ProposalExecutedEventWhereUniqueInput!): ProposalExecutedEvent
-  proposalExecutedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalExecutedEventWhereInput
-    orderBy: [ProposalExecutedEventOrderByInput!]
-  ): ProposalExecutedEventConnection!
-  proposalStatusUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalStatusUpdatedEventWhereInput
-    orderBy: [ProposalStatusUpdatedEventOrderByInput!]
-  ): [ProposalStatusUpdatedEvent!]!
-  proposalStatusUpdatedEventByUniqueInput(
-    where: ProposalStatusUpdatedEventWhereUniqueInput!
-  ): ProposalStatusUpdatedEvent
-  proposalStatusUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalStatusUpdatedEventWhereInput
-    orderBy: [ProposalStatusUpdatedEventOrderByInput!]
-  ): ProposalStatusUpdatedEventConnection!
-  proposalVotedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ProposalVotedEventWhereInput
-    orderBy: [ProposalVotedEventOrderByInput!]
-  ): [ProposalVotedEvent!]!
-  proposalVotedEventByUniqueInput(where: ProposalVotedEventWhereUniqueInput!): ProposalVotedEvent
-  proposalVotedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalVotedEventWhereInput
-    orderBy: [ProposalVotedEventOrderByInput!]
-  ): ProposalVotedEventConnection!
-  proposals(offset: Int, limit: Int = 50, where: ProposalWhereInput, orderBy: [ProposalOrderByInput!]): [Proposal!]!
-  proposalByUniqueInput(where: ProposalWhereUniqueInput!): Proposal
-  proposalsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ProposalWhereInput
-    orderBy: [ProposalOrderByInput!]
-  ): ProposalConnection!
-  channelCategoriesByName(
-    whereChannelCategory: ChannelCategoryWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [ChannelCategoriesByNameFTSOutput!]!
-  membersByHandle(
-    whereMembership: MembershipWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [MembersByHandleFTSOutput!]!
-  postsByText(
-    whereForumPost: ForumPostWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [PostsByTextFTSOutput!]!
-  proposalsByDescription(
-    whereProposal: ProposalWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [ProposalsByDescriptionFTSOutput!]!
-  proposalsByTitle(
-    whereProposal: ProposalWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [ProposalsByTitleFTSOutput!]!
-  search(
-    whereVideo: VideoWhereInput
-    whereChannel: ChannelWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [SearchFTSOutput!]!
-  threadsByTitle(
-    whereForumThread: ForumThreadWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [ThreadsByTitleFTSOutput!]!
-  videoCategoriesByName(
-    whereVideoCategory: VideoCategoryWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [VideoCategoriesByNameFTSOutput!]!
-  referendumFinishedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ReferendumFinishedEventWhereInput
-    orderBy: [ReferendumFinishedEventOrderByInput!]
-  ): [ReferendumFinishedEvent!]!
-  referendumFinishedEventByUniqueInput(where: ReferendumFinishedEventWhereUniqueInput!): ReferendumFinishedEvent
-  referendumFinishedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ReferendumFinishedEventWhereInput
-    orderBy: [ReferendumFinishedEventOrderByInput!]
-  ): ReferendumFinishedEventConnection!
-  referendumStageRevealingOptionResults(
-    offset: Int
-    limit: Int = 50
-    where: ReferendumStageRevealingOptionResultWhereInput
-    orderBy: [ReferendumStageRevealingOptionResultOrderByInput!]
-  ): [ReferendumStageRevealingOptionResult!]!
-  referendumStageRevealingOptionResultByUniqueInput(
-    where: ReferendumStageRevealingOptionResultWhereUniqueInput!
-  ): ReferendumStageRevealingOptionResult
-  referendumStageRevealingOptionResultsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ReferendumStageRevealingOptionResultWhereInput
-    orderBy: [ReferendumStageRevealingOptionResultOrderByInput!]
-  ): ReferendumStageRevealingOptionResultConnection!
-  referendumStartedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ReferendumStartedEventWhereInput
-    orderBy: [ReferendumStartedEventOrderByInput!]
-  ): [ReferendumStartedEvent!]!
-  referendumStartedEventByUniqueInput(where: ReferendumStartedEventWhereUniqueInput!): ReferendumStartedEvent
-  referendumStartedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ReferendumStartedEventWhereInput
-    orderBy: [ReferendumStartedEventOrderByInput!]
-  ): ReferendumStartedEventConnection!
-  referendumStartedForcefullyEvents(
-    offset: Int
-    limit: Int = 50
-    where: ReferendumStartedForcefullyEventWhereInput
-    orderBy: [ReferendumStartedForcefullyEventOrderByInput!]
-  ): [ReferendumStartedForcefullyEvent!]!
-  referendumStartedForcefullyEventByUniqueInput(
-    where: ReferendumStartedForcefullyEventWhereUniqueInput!
-  ): ReferendumStartedForcefullyEvent
-  referendumStartedForcefullyEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ReferendumStartedForcefullyEventWhereInput
-    orderBy: [ReferendumStartedForcefullyEventOrderByInput!]
-  ): ReferendumStartedForcefullyEventConnection!
-  referralCutUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ReferralCutUpdatedEventWhereInput
-    orderBy: [ReferralCutUpdatedEventOrderByInput!]
-  ): [ReferralCutUpdatedEvent!]!
-  referralCutUpdatedEventByUniqueInput(where: ReferralCutUpdatedEventWhereUniqueInput!): ReferralCutUpdatedEvent
-  referralCutUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ReferralCutUpdatedEventWhereInput
-    orderBy: [ReferralCutUpdatedEventOrderByInput!]
-  ): ReferralCutUpdatedEventConnection!
-  requestFundedEvents(
-    offset: Int
-    limit: Int = 50
-    where: RequestFundedEventWhereInput
-    orderBy: [RequestFundedEventOrderByInput!]
-  ): [RequestFundedEvent!]!
-  requestFundedEventByUniqueInput(where: RequestFundedEventWhereUniqueInput!): RequestFundedEvent
-  requestFundedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: RequestFundedEventWhereInput
-    orderBy: [RequestFundedEventOrderByInput!]
-  ): RequestFundedEventConnection!
-  revealingStageStartedEvents(
-    offset: Int
-    limit: Int = 50
-    where: RevealingStageStartedEventWhereInput
-    orderBy: [RevealingStageStartedEventOrderByInput!]
-  ): [RevealingStageStartedEvent!]!
-  revealingStageStartedEventByUniqueInput(
-    where: RevealingStageStartedEventWhereUniqueInput!
-  ): RevealingStageStartedEvent
-  revealingStageStartedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: RevealingStageStartedEventWhereInput
-    orderBy: [RevealingStageStartedEventOrderByInput!]
-  ): RevealingStageStartedEventConnection!
-  rewardPaidEvents(
-    offset: Int
-    limit: Int = 50
-    where: RewardPaidEventWhereInput
-    orderBy: [RewardPaidEventOrderByInput!]
-  ): [RewardPaidEvent!]!
-  rewardPaidEventByUniqueInput(where: RewardPaidEventWhereUniqueInput!): RewardPaidEvent
-  rewardPaidEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: RewardPaidEventWhereInput
-    orderBy: [RewardPaidEventOrderByInput!]
-  ): RewardPaidEventConnection!
-  rewardPaymentEvents(
-    offset: Int
-    limit: Int = 50
-    where: RewardPaymentEventWhereInput
-    orderBy: [RewardPaymentEventOrderByInput!]
-  ): [RewardPaymentEvent!]!
-  rewardPaymentEventByUniqueInput(where: RewardPaymentEventWhereUniqueInput!): RewardPaymentEvent
-  rewardPaymentEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: RewardPaymentEventWhereInput
-    orderBy: [RewardPaymentEventOrderByInput!]
-  ): RewardPaymentEventConnection!
-  runtimeWasmBytecodes(
-    offset: Int
-    limit: Int = 50
-    where: RuntimeWasmBytecodeWhereInput
-    orderBy: [RuntimeWasmBytecodeOrderByInput!]
-  ): [RuntimeWasmBytecode!]!
-  runtimeWasmBytecodeByUniqueInput(where: RuntimeWasmBytecodeWhereUniqueInput!): RuntimeWasmBytecode
-  runtimeWasmBytecodesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: RuntimeWasmBytecodeWhereInput
-    orderBy: [RuntimeWasmBytecodeOrderByInput!]
-  ): RuntimeWasmBytecodeConnection!
-  stakeDecreasedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakeDecreasedEventWhereInput
-    orderBy: [StakeDecreasedEventOrderByInput!]
-  ): [StakeDecreasedEvent!]!
-  stakeDecreasedEventByUniqueInput(where: StakeDecreasedEventWhereUniqueInput!): StakeDecreasedEvent
-  stakeDecreasedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakeDecreasedEventWhereInput
-    orderBy: [StakeDecreasedEventOrderByInput!]
-  ): StakeDecreasedEventConnection!
-  stakeIncreasedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakeIncreasedEventWhereInput
-    orderBy: [StakeIncreasedEventOrderByInput!]
-  ): [StakeIncreasedEvent!]!
-  stakeIncreasedEventByUniqueInput(where: StakeIncreasedEventWhereUniqueInput!): StakeIncreasedEvent
-  stakeIncreasedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakeIncreasedEventWhereInput
-    orderBy: [StakeIncreasedEventOrderByInput!]
-  ): StakeIncreasedEventConnection!
-  stakeReleasedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakeReleasedEventWhereInput
-    orderBy: [StakeReleasedEventOrderByInput!]
-  ): [StakeReleasedEvent!]!
-  stakeReleasedEventByUniqueInput(where: StakeReleasedEventWhereUniqueInput!): StakeReleasedEvent
-  stakeReleasedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakeReleasedEventWhereInput
-    orderBy: [StakeReleasedEventOrderByInput!]
-  ): StakeReleasedEventConnection!
-  stakeSlashedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakeSlashedEventWhereInput
-    orderBy: [StakeSlashedEventOrderByInput!]
-  ): [StakeSlashedEvent!]!
-  stakeSlashedEventByUniqueInput(where: StakeSlashedEventWhereUniqueInput!): StakeSlashedEvent
-  stakeSlashedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakeSlashedEventWhereInput
-    orderBy: [StakeSlashedEventOrderByInput!]
-  ): StakeSlashedEventConnection!
-  stakingAccountAddedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakingAccountAddedEventWhereInput
-    orderBy: [StakingAccountAddedEventOrderByInput!]
-  ): [StakingAccountAddedEvent!]!
-  stakingAccountAddedEventByUniqueInput(where: StakingAccountAddedEventWhereUniqueInput!): StakingAccountAddedEvent
-  stakingAccountAddedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakingAccountAddedEventWhereInput
-    orderBy: [StakingAccountAddedEventOrderByInput!]
-  ): StakingAccountAddedEventConnection!
-  stakingAccountConfirmedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakingAccountConfirmedEventWhereInput
-    orderBy: [StakingAccountConfirmedEventOrderByInput!]
-  ): [StakingAccountConfirmedEvent!]!
-  stakingAccountConfirmedEventByUniqueInput(
-    where: StakingAccountConfirmedEventWhereUniqueInput!
-  ): StakingAccountConfirmedEvent
-  stakingAccountConfirmedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakingAccountConfirmedEventWhereInput
-    orderBy: [StakingAccountConfirmedEventOrderByInput!]
-  ): StakingAccountConfirmedEventConnection!
-  stakingAccountRemovedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StakingAccountRemovedEventWhereInput
-    orderBy: [StakingAccountRemovedEventOrderByInput!]
-  ): [StakingAccountRemovedEvent!]!
-  stakingAccountRemovedEventByUniqueInput(
-    where: StakingAccountRemovedEventWhereUniqueInput!
-  ): StakingAccountRemovedEvent
-  stakingAccountRemovedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StakingAccountRemovedEventWhereInput
-    orderBy: [StakingAccountRemovedEventOrderByInput!]
-  ): StakingAccountRemovedEventConnection!
-  statusTextChangedEvents(
-    offset: Int
-    limit: Int = 50
-    where: StatusTextChangedEventWhereInput
-    orderBy: [StatusTextChangedEventOrderByInput!]
-  ): [StatusTextChangedEvent!]!
-  statusTextChangedEventByUniqueInput(where: StatusTextChangedEventWhereUniqueInput!): StatusTextChangedEvent
-  statusTextChangedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: StatusTextChangedEventWhereInput
-    orderBy: [StatusTextChangedEventOrderByInput!]
-  ): StatusTextChangedEventConnection!
-  terminatedLeaderEvents(
-    offset: Int
-    limit: Int = 50
-    where: TerminatedLeaderEventWhereInput
-    orderBy: [TerminatedLeaderEventOrderByInput!]
-  ): [TerminatedLeaderEvent!]!
-  terminatedLeaderEventByUniqueInput(where: TerminatedLeaderEventWhereUniqueInput!): TerminatedLeaderEvent
-  terminatedLeaderEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: TerminatedLeaderEventWhereInput
-    orderBy: [TerminatedLeaderEventOrderByInput!]
-  ): TerminatedLeaderEventConnection!
-  terminatedWorkerEvents(
-    offset: Int
-    limit: Int = 50
-    where: TerminatedWorkerEventWhereInput
-    orderBy: [TerminatedWorkerEventOrderByInput!]
-  ): [TerminatedWorkerEvent!]!
-  terminatedWorkerEventByUniqueInput(where: TerminatedWorkerEventWhereUniqueInput!): TerminatedWorkerEvent
-  terminatedWorkerEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: TerminatedWorkerEventWhereInput
-    orderBy: [TerminatedWorkerEventOrderByInput!]
-  ): TerminatedWorkerEventConnection!
-  threadCreatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ThreadCreatedEventWhereInput
-    orderBy: [ThreadCreatedEventOrderByInput!]
-  ): [ThreadCreatedEvent!]!
-  threadCreatedEventByUniqueInput(where: ThreadCreatedEventWhereUniqueInput!): ThreadCreatedEvent
-  threadCreatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ThreadCreatedEventWhereInput
-    orderBy: [ThreadCreatedEventOrderByInput!]
-  ): ThreadCreatedEventConnection!
-  threadDeletedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ThreadDeletedEventWhereInput
-    orderBy: [ThreadDeletedEventOrderByInput!]
-  ): [ThreadDeletedEvent!]!
-  threadDeletedEventByUniqueInput(where: ThreadDeletedEventWhereUniqueInput!): ThreadDeletedEvent
-  threadDeletedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ThreadDeletedEventWhereInput
-    orderBy: [ThreadDeletedEventOrderByInput!]
-  ): ThreadDeletedEventConnection!
-  threadMetadataUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ThreadMetadataUpdatedEventWhereInput
-    orderBy: [ThreadMetadataUpdatedEventOrderByInput!]
-  ): [ThreadMetadataUpdatedEvent!]!
-  threadMetadataUpdatedEventByUniqueInput(
-    where: ThreadMetadataUpdatedEventWhereUniqueInput!
-  ): ThreadMetadataUpdatedEvent
-  threadMetadataUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ThreadMetadataUpdatedEventWhereInput
-    orderBy: [ThreadMetadataUpdatedEventOrderByInput!]
-  ): ThreadMetadataUpdatedEventConnection!
-  threadModeratedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ThreadModeratedEventWhereInput
-    orderBy: [ThreadModeratedEventOrderByInput!]
-  ): [ThreadModeratedEvent!]!
-  threadModeratedEventByUniqueInput(where: ThreadModeratedEventWhereUniqueInput!): ThreadModeratedEvent
-  threadModeratedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ThreadModeratedEventWhereInput
-    orderBy: [ThreadModeratedEventOrderByInput!]
-  ): ThreadModeratedEventConnection!
-  threadMovedEvents(
-    offset: Int
-    limit: Int = 50
-    where: ThreadMovedEventWhereInput
-    orderBy: [ThreadMovedEventOrderByInput!]
-  ): [ThreadMovedEvent!]!
-  threadMovedEventByUniqueInput(where: ThreadMovedEventWhereUniqueInput!): ThreadMovedEvent
-  threadMovedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: ThreadMovedEventWhereInput
-    orderBy: [ThreadMovedEventOrderByInput!]
-  ): ThreadMovedEventConnection!
-  upcomingWorkingGroupOpenings(
-    offset: Int
-    limit: Int = 50
-    where: UpcomingWorkingGroupOpeningWhereInput
-    orderBy: [UpcomingWorkingGroupOpeningOrderByInput!]
-  ): [UpcomingWorkingGroupOpening!]!
-  upcomingWorkingGroupOpeningByUniqueInput(
-    where: UpcomingWorkingGroupOpeningWhereUniqueInput!
-  ): UpcomingWorkingGroupOpening
-  upcomingWorkingGroupOpeningsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: UpcomingWorkingGroupOpeningWhereInput
-    orderBy: [UpcomingWorkingGroupOpeningOrderByInput!]
-  ): UpcomingWorkingGroupOpeningConnection!
-  videoCategories(
-    offset: Int
-    limit: Int = 50
-    where: VideoCategoryWhereInput
-    orderBy: [VideoCategoryOrderByInput!]
-  ): [VideoCategory!]!
-  videoCategoryByUniqueInput(where: VideoCategoryWhereUniqueInput!): VideoCategory
-  videoCategoriesConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VideoCategoryWhereInput
-    orderBy: [VideoCategoryOrderByInput!]
-  ): VideoCategoryConnection!
-  videoMediaEncodings(
-    offset: Int
-    limit: Int = 50
-    where: VideoMediaEncodingWhereInput
-    orderBy: [VideoMediaEncodingOrderByInput!]
-  ): [VideoMediaEncoding!]!
-  videoMediaEncodingByUniqueInput(where: VideoMediaEncodingWhereUniqueInput!): VideoMediaEncoding
-  videoMediaEncodingsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VideoMediaEncodingWhereInput
-    orderBy: [VideoMediaEncodingOrderByInput!]
-  ): VideoMediaEncodingConnection!
-  videoMediaMetadata(
-    offset: Int
-    limit: Int = 50
-    where: VideoMediaMetadataWhereInput
-    orderBy: [VideoMediaMetadataOrderByInput!]
-  ): [VideoMediaMetadata!]!
-  videoMediaMetadataByUniqueInput(where: VideoMediaMetadataWhereUniqueInput!): VideoMediaMetadata
-  videoMediaMetadataConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VideoMediaMetadataWhereInput
-    orderBy: [VideoMediaMetadataOrderByInput!]
-  ): VideoMediaMetadataConnection!
-  videos(offset: Int, limit: Int = 50, where: VideoWhereInput, orderBy: [VideoOrderByInput!]): [Video!]!
-  videoByUniqueInput(where: VideoWhereUniqueInput!): Video
-  videosConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VideoWhereInput
-    orderBy: [VideoOrderByInput!]
-  ): VideoConnection!
-  voteCastEvents(
-    offset: Int
-    limit: Int = 50
-    where: VoteCastEventWhereInput
-    orderBy: [VoteCastEventOrderByInput!]
-  ): [VoteCastEvent!]!
-  voteCastEventByUniqueInput(where: VoteCastEventWhereUniqueInput!): VoteCastEvent
-  voteCastEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VoteCastEventWhereInput
-    orderBy: [VoteCastEventOrderByInput!]
-  ): VoteCastEventConnection!
-  voteOnPollEvents(
-    offset: Int
-    limit: Int = 50
-    where: VoteOnPollEventWhereInput
-    orderBy: [VoteOnPollEventOrderByInput!]
-  ): [VoteOnPollEvent!]!
-  voteOnPollEventByUniqueInput(where: VoteOnPollEventWhereUniqueInput!): VoteOnPollEvent
-  voteOnPollEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VoteOnPollEventWhereInput
-    orderBy: [VoteOnPollEventOrderByInput!]
-  ): VoteOnPollEventConnection!
-  voteRevealedEvents(
-    offset: Int
-    limit: Int = 50
-    where: VoteRevealedEventWhereInput
-    orderBy: [VoteRevealedEventOrderByInput!]
-  ): [VoteRevealedEvent!]!
-  voteRevealedEventByUniqueInput(where: VoteRevealedEventWhereUniqueInput!): VoteRevealedEvent
-  voteRevealedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VoteRevealedEventWhereInput
-    orderBy: [VoteRevealedEventOrderByInput!]
-  ): VoteRevealedEventConnection!
-  votingPeriodStartedEvents(
-    offset: Int
-    limit: Int = 50
-    where: VotingPeriodStartedEventWhereInput
-    orderBy: [VotingPeriodStartedEventOrderByInput!]
-  ): [VotingPeriodStartedEvent!]!
-  votingPeriodStartedEventByUniqueInput(where: VotingPeriodStartedEventWhereUniqueInput!): VotingPeriodStartedEvent
-  votingPeriodStartedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: VotingPeriodStartedEventWhereInput
-    orderBy: [VotingPeriodStartedEventOrderByInput!]
-  ): VotingPeriodStartedEventConnection!
-  workerExitedEvents(
-    offset: Int
-    limit: Int = 50
-    where: WorkerExitedEventWhereInput
-    orderBy: [WorkerExitedEventOrderByInput!]
-  ): [WorkerExitedEvent!]!
-  workerExitedEventByUniqueInput(where: WorkerExitedEventWhereUniqueInput!): WorkerExitedEvent
-  workerExitedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkerExitedEventWhereInput
-    orderBy: [WorkerExitedEventOrderByInput!]
-  ): WorkerExitedEventConnection!
-  workerRewardAccountUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: WorkerRewardAccountUpdatedEventWhereInput
-    orderBy: [WorkerRewardAccountUpdatedEventOrderByInput!]
-  ): [WorkerRewardAccountUpdatedEvent!]!
-  workerRewardAccountUpdatedEventByUniqueInput(
-    where: WorkerRewardAccountUpdatedEventWhereUniqueInput!
-  ): WorkerRewardAccountUpdatedEvent
-  workerRewardAccountUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkerRewardAccountUpdatedEventWhereInput
-    orderBy: [WorkerRewardAccountUpdatedEventOrderByInput!]
-  ): WorkerRewardAccountUpdatedEventConnection!
-  workerRewardAmountUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: WorkerRewardAmountUpdatedEventWhereInput
-    orderBy: [WorkerRewardAmountUpdatedEventOrderByInput!]
-  ): [WorkerRewardAmountUpdatedEvent!]!
-  workerRewardAmountUpdatedEventByUniqueInput(
-    where: WorkerRewardAmountUpdatedEventWhereUniqueInput!
-  ): WorkerRewardAmountUpdatedEvent
-  workerRewardAmountUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkerRewardAmountUpdatedEventWhereInput
-    orderBy: [WorkerRewardAmountUpdatedEventOrderByInput!]
-  ): WorkerRewardAmountUpdatedEventConnection!
-  workerRoleAccountUpdatedEvents(
-    offset: Int
-    limit: Int = 50
-    where: WorkerRoleAccountUpdatedEventWhereInput
-    orderBy: [WorkerRoleAccountUpdatedEventOrderByInput!]
-  ): [WorkerRoleAccountUpdatedEvent!]!
-  workerRoleAccountUpdatedEventByUniqueInput(
-    where: WorkerRoleAccountUpdatedEventWhereUniqueInput!
-  ): WorkerRoleAccountUpdatedEvent
-  workerRoleAccountUpdatedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkerRoleAccountUpdatedEventWhereInput
-    orderBy: [WorkerRoleAccountUpdatedEventOrderByInput!]
-  ): WorkerRoleAccountUpdatedEventConnection!
-  workerStartedLeavingEvents(
-    offset: Int
-    limit: Int = 50
-    where: WorkerStartedLeavingEventWhereInput
-    orderBy: [WorkerStartedLeavingEventOrderByInput!]
-  ): [WorkerStartedLeavingEvent!]!
-  workerStartedLeavingEventByUniqueInput(where: WorkerStartedLeavingEventWhereUniqueInput!): WorkerStartedLeavingEvent
-  workerStartedLeavingEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkerStartedLeavingEventWhereInput
-    orderBy: [WorkerStartedLeavingEventOrderByInput!]
-  ): WorkerStartedLeavingEventConnection!
-  workers(offset: Int, limit: Int = 50, where: WorkerWhereInput, orderBy: [WorkerOrderByInput!]): [Worker!]!
-  workerByUniqueInput(where: WorkerWhereUniqueInput!): Worker
-  workersConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkerWhereInput
-    orderBy: [WorkerOrderByInput!]
-  ): WorkerConnection!
-  workingGroupApplications(
-    offset: Int
-    limit: Int = 50
-    where: WorkingGroupApplicationWhereInput
-    orderBy: [WorkingGroupApplicationOrderByInput!]
-  ): [WorkingGroupApplication!]!
-  workingGroupApplicationByUniqueInput(where: WorkingGroupApplicationWhereUniqueInput!): WorkingGroupApplication
-  workingGroupApplicationsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkingGroupApplicationWhereInput
-    orderBy: [WorkingGroupApplicationOrderByInput!]
-  ): WorkingGroupApplicationConnection!
-  workingGroupMetadata(
-    offset: Int
-    limit: Int = 50
-    where: WorkingGroupMetadataWhereInput
-    orderBy: [WorkingGroupMetadataOrderByInput!]
-  ): [WorkingGroupMetadata!]!
-  workingGroupMetadataByUniqueInput(where: WorkingGroupMetadataWhereUniqueInput!): WorkingGroupMetadata
-  workingGroupMetadataConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkingGroupMetadataWhereInput
-    orderBy: [WorkingGroupMetadataOrderByInput!]
-  ): WorkingGroupMetadataConnection!
-  workingGroupOpeningMetadata(
-    offset: Int
-    limit: Int = 50
-    where: WorkingGroupOpeningMetadataWhereInput
-    orderBy: [WorkingGroupOpeningMetadataOrderByInput!]
-  ): [WorkingGroupOpeningMetadata!]!
-  workingGroupOpeningMetadataByUniqueInput(
-    where: WorkingGroupOpeningMetadataWhereUniqueInput!
-  ): WorkingGroupOpeningMetadata
-  workingGroupOpeningMetadataConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkingGroupOpeningMetadataWhereInput
-    orderBy: [WorkingGroupOpeningMetadataOrderByInput!]
-  ): WorkingGroupOpeningMetadataConnection!
-  workingGroupOpenings(
-    offset: Int
-    limit: Int = 50
-    where: WorkingGroupOpeningWhereInput
-    orderBy: [WorkingGroupOpeningOrderByInput!]
-  ): [WorkingGroupOpening!]!
-  workingGroupOpeningByUniqueInput(where: WorkingGroupOpeningWhereUniqueInput!): WorkingGroupOpening
-  workingGroupOpeningsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkingGroupOpeningWhereInput
-    orderBy: [WorkingGroupOpeningOrderByInput!]
-  ): WorkingGroupOpeningConnection!
-  workingGroups(
-    offset: Int
-    limit: Int = 50
-    where: WorkingGroupWhereInput
-    orderBy: [WorkingGroupOrderByInput!]
-  ): [WorkingGroup!]!
-  workingGroupByUniqueInput(where: WorkingGroupWhereUniqueInput!): WorkingGroup
-  workingGroupsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: WorkingGroupWhereInput
-    orderBy: [WorkingGroupOrderByInput!]
-  ): WorkingGroupConnection!
-}
-
 type AmendConstitutionProposalDetails {
   """
   New (proposed) constitution text (md-formatted)
@@ -3437,6 +1432,7 @@ type BudgetRefillPlannedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
+  nextRefillInBlock: Int!
 }
 
 type BudgetRefillPlannedEventConnection {
@@ -3450,6 +1446,7 @@ input BudgetRefillPlannedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
+  nextRefillInBlock: Float!
 }
 
 type BudgetRefillPlannedEventEdge {
@@ -3472,6 +1469,8 @@ enum BudgetRefillPlannedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
+  nextRefillInBlock_ASC
+  nextRefillInBlock_DESC
 }
 
 input BudgetRefillPlannedEventUpdateInput {
@@ -3479,6 +1478,7 @@ input BudgetRefillPlannedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
+  nextRefillInBlock: Float
 }
 
 input BudgetRefillPlannedEventWhereInput {
@@ -3525,6 +1525,12 @@ input BudgetRefillPlannedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
+  nextRefillInBlock_eq: Int
+  nextRefillInBlock_gt: Int
+  nextRefillInBlock_gte: Int
+  nextRefillInBlock_lt: Int
+  nextRefillInBlock_lte: Int
+  nextRefillInBlock_in: [Int!]
   AND: [BudgetRefillPlannedEventWhereInput!]
   OR: [BudgetRefillPlannedEventWhereInput!]
 }
@@ -4039,13 +2045,8 @@ type CandidacyNoteSetEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  member: Membership!
-  memberId: String!
-
-  """
-  The note that has been set.
-  """
-  note: String!
+  candidate: Candidate!
+  candidateId: String!
   noteMetadata: CandidacyNoteMetadata!
   noteMetadataId: String!
 }
@@ -4061,8 +2062,7 @@ input CandidacyNoteSetEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  member: ID!
-  note: String!
+  candidate: ID!
   noteMetadata: ID!
 }
 
@@ -4086,10 +2086,8 @@ enum CandidacyNoteSetEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  member_ASC
-  member_DESC
-  note_ASC
-  note_DESC
+  candidate_ASC
+  candidate_DESC
   noteMetadata_ASC
   noteMetadata_DESC
 }
@@ -4099,8 +2097,7 @@ input CandidacyNoteSetEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  member: ID
-  note: String
+  candidate: ID
   noteMetadata: ID
 }
 
@@ -4148,16 +2145,11 @@ input CandidacyNoteSetEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
-  note_eq: String
-  note_contains: String
-  note_startsWith: String
-  note_endsWith: String
-  note_in: [String!]
+  candidate_eq: ID
+  candidate_in: [ID!]
   noteMetadata_eq: ID
   noteMetadata_in: [ID!]
-  member: MembershipWhereInput
+  candidate: CandidateWhereInput
   noteMetadata: CandidacyNoteMetadataWhereInput
   AND: [CandidacyNoteSetEventWhereInput!]
   OR: [CandidacyNoteSetEventWhereInput!]
@@ -4200,8 +2192,8 @@ type CandidacyStakeReleaseEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  member: Membership!
-  memberId: String!
+  candidate: Candidate!
+  candidateId: String!
 }
 
 type CandidacyStakeReleaseEventConnection {
@@ -4215,7 +2207,7 @@ input CandidacyStakeReleaseEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  member: ID!
+  candidate: ID!
 }
 
 type CandidacyStakeReleaseEventEdge {
@@ -4238,8 +2230,8 @@ enum CandidacyStakeReleaseEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  member_ASC
-  member_DESC
+  candidate_ASC
+  candidate_DESC
 }
 
 input CandidacyStakeReleaseEventUpdateInput {
@@ -4247,7 +2239,7 @@ input CandidacyStakeReleaseEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  member: ID
+  candidate: ID
 }
 
 input CandidacyStakeReleaseEventWhereInput {
@@ -4294,9 +2286,9 @@ input CandidacyStakeReleaseEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
-  member: MembershipWhereInput
+  candidate_eq: ID
+  candidate_in: [ID!]
+  candidate: CandidateWhereInput
   AND: [CandidacyStakeReleaseEventWhereInput!]
   OR: [CandidacyStakeReleaseEventWhereInput!]
 }
@@ -4338,8 +2330,8 @@ type CandidacyWithdrawEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  member: Membership!
-  memberId: String!
+  candidate: Candidate!
+  candidateId: String!
 }
 
 type CandidacyWithdrawEventConnection {
@@ -4353,7 +2345,7 @@ input CandidacyWithdrawEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  member: ID!
+  candidate: ID!
 }
 
 type CandidacyWithdrawEventEdge {
@@ -4376,8 +2368,8 @@ enum CandidacyWithdrawEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  member_ASC
-  member_DESC
+  candidate_ASC
+  candidate_DESC
 }
 
 input CandidacyWithdrawEventUpdateInput {
@@ -4385,7 +2377,7 @@ input CandidacyWithdrawEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  member: ID
+  candidate: ID
 }
 
 input CandidacyWithdrawEventWhereInput {
@@ -4432,9 +2424,9 @@ input CandidacyWithdrawEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
-  member: MembershipWhereInput
+  candidate_eq: ID
+  candidate_in: [ID!]
+  candidate: CandidateWhereInput
   AND: [CandidacyWithdrawEventWhereInput!]
   OR: [CandidacyWithdrawEventWhereInput!]
 }
@@ -4486,13 +2478,13 @@ type Candidate implements BaseGraphQLObject {
   Sum of power of all votes received.
   """
   votePower: BigInt!
-
-  """
-  Candidacy note.
-  """
-  note: String!
   noteMetadata: CandidacyNoteMetadata!
   noteMetadataId: String!
+  votesRecieved: [CastVote!]!
+  candidacynoteseteventcandidate: [CandidacyNoteSetEvent!]
+  candidacystakereleaseeventcandidate: [CandidacyStakeReleaseEvent!]
+  candidacywithdraweventcandidate: [CandidacyWithdrawEvent!]
+  newcandidateeventcandidate: [NewCandidateEvent!]
 }
 
 type CandidateConnection {
@@ -4510,7 +2502,6 @@ input CandidateCreateInput {
   stakeLocked: Boolean!
   candidacyWithdrawn: Boolean!
   votePower: BigInt!
-  note: String!
   noteMetadata: ID!
 }
 
@@ -4542,8 +2533,6 @@ enum CandidateOrderByInput {
   candidacyWithdrawn_DESC
   votePower_ASC
   votePower_DESC
-  note_ASC
-  note_DESC
   noteMetadata_ASC
   noteMetadata_DESC
 }
@@ -4557,7 +2546,6 @@ input CandidateUpdateInput {
   stakeLocked: Boolean
   candidacyWithdrawn: Boolean
   votePower: BigInt
-  note: String
   noteMetadata: ID
 }
 
@@ -4616,16 +2604,26 @@ input CandidateWhereInput {
   votePower_lt: BigInt
   votePower_lte: BigInt
   votePower_in: [BigInt!]
-  note_eq: String
-  note_contains: String
-  note_startsWith: String
-  note_endsWith: String
-  note_in: [String!]
   noteMetadata_eq: ID
   noteMetadata_in: [ID!]
   member: MembershipWhereInput
   electionRound: ElectionRoundWhereInput
   noteMetadata: CandidacyNoteMetadataWhereInput
+  votesRecieved_none: CastVoteWhereInput
+  votesRecieved_some: CastVoteWhereInput
+  votesRecieved_every: CastVoteWhereInput
+  candidacynoteseteventcandidate_none: CandidacyNoteSetEventWhereInput
+  candidacynoteseteventcandidate_some: CandidacyNoteSetEventWhereInput
+  candidacynoteseteventcandidate_every: CandidacyNoteSetEventWhereInput
+  candidacystakereleaseeventcandidate_none: CandidacyStakeReleaseEventWhereInput
+  candidacystakereleaseeventcandidate_some: CandidacyStakeReleaseEventWhereInput
+  candidacystakereleaseeventcandidate_every: CandidacyStakeReleaseEventWhereInput
+  candidacywithdraweventcandidate_none: CandidacyWithdrawEventWhereInput
+  candidacywithdraweventcandidate_some: CandidacyWithdrawEventWhereInput
+  candidacywithdraweventcandidate_every: CandidacyWithdrawEventWhereInput
+  newcandidateeventcandidate_none: NewCandidateEventWhereInput
+  newcandidateeventcandidate_some: NewCandidateEventWhereInput
+  newcandidateeventcandidate_every: NewCandidateEventWhereInput
   AND: [CandidateWhereInput!]
   OR: [CandidateWhereInput!]
 }
@@ -4645,7 +2643,7 @@ type CastVote implements BaseGraphQLObject {
   version: Int!
 
   """
-  Hashed vote that was casted before being revealed.
+  Hashed vote that was casted before being revealed. Hex format.
   """
   commitment: String!
   electionRound: ElectionRound!
@@ -4665,13 +2663,15 @@ type CastVote implements BaseGraphQLObject {
   Account that cast the vote.
   """
   castBy: String!
-  voteFor: Membership
+  voteFor: Candidate
   voteForId: String
 
   """
   Vote's power.
   """
   votePower: BigInt!
+  votecasteventcastVote: [VoteCastEvent!]
+  voterevealedeventcastVote: [VoteRevealedEvent!]
 }
 
 type CastVoteConnection {
@@ -4782,7 +2782,13 @@ input CastVoteWhereInput {
   votePower_lte: BigInt
   votePower_in: [BigInt!]
   electionRound: ElectionRoundWhereInput
-  voteFor: MembershipWhereInput
+  voteFor: CandidateWhereInput
+  votecasteventcastVote_none: VoteCastEventWhereInput
+  votecasteventcastVote_some: VoteCastEventWhereInput
+  votecasteventcastVote_every: VoteCastEventWhereInput
+  voterevealedeventcastVote_none: VoteRevealedEventWhereInput
+  voterevealedeventcastVote_some: VoteRevealedEventWhereInput
+  voterevealedeventcastVote_every: VoteRevealedEventWhereInput
   AND: [CastVoteWhereInput!]
   OR: [CastVoteWhereInput!]
 }
@@ -5945,6 +3951,7 @@ type CouncilMember implements BaseGraphQLObject {
   accumulatedReward: BigInt!
   electedInCouncil: ElectedCouncil!
   electedInCouncilId: String!
+  rewardpaymenteventcouncilMember: [RewardPaymentEvent!]
 }
 
 type CouncilMemberConnection {
@@ -6070,6 +4077,9 @@ input CouncilMemberWhereInput {
   electedInCouncil_in: [ID!]
   member: MembershipWhereInput
   electedInCouncil: ElectedCouncilWhereInput
+  rewardpaymenteventcouncilMember_none: RewardPaymentEventWhereInput
+  rewardpaymenteventcouncilMember_some: RewardPaymentEventWhereInput
+  rewardpaymenteventcouncilMember_every: RewardPaymentEventWhereInput
   AND: [CouncilMemberWhereInput!]
   OR: [CouncilMemberWhereInput!]
 }
@@ -6421,7 +4431,7 @@ input CouncilStageUpdateCreateInput {
   stage: JSONObject!
   changedAt: BigInt!
   electedCouncil: ID
-  electionProblem: JSONObject!
+  electionProblem: ElectionProblem
 }
 
 type CouncilStageUpdateEdge {
@@ -6440,13 +4450,15 @@ enum CouncilStageUpdateOrderByInput {
   changedAt_DESC
   electedCouncil_ASC
   electedCouncil_DESC
+  electionProblem_ASC
+  electionProblem_DESC
 }
 
 input CouncilStageUpdateUpdateInput {
   stage: JSONObject
   changedAt: BigInt
   electedCouncil: ID
-  electionProblem: JSONObject
+  electionProblem: ElectionProblem
 }
 
 input CouncilStageUpdateWhereInput {
@@ -6483,7 +4495,8 @@ input CouncilStageUpdateWhereInput {
   changedAt_in: [BigInt!]
   electedCouncil_eq: ID
   electedCouncil_in: [ID!]
-  electionProblem_json: JSONObject
+  electionProblem_eq: ElectionProblem
+  electionProblem_in: [ElectionProblem!]
   electedCouncil: ElectedCouncilWhereInput
   AND: [CouncilStageUpdateWhereInput!]
   OR: [CouncilStageUpdateWhereInput!]
@@ -7331,6 +5344,7 @@ type ElectedCouncil implements BaseGraphQLObject {
   Sign if council is already resigned.
   """
   isResigned: Boolean!
+  newcouncilelectedeventelectedCouncil: [NewCouncilElectedEvent!]
 }
 
 type ElectedCouncilConnection {
@@ -7422,6 +5436,9 @@ input ElectedCouncilWhereInput {
   nextCouncilElections_none: ElectionRoundWhereInput
   nextCouncilElections_some: ElectionRoundWhereInput
   nextCouncilElections_every: ElectionRoundWhereInput
+  newcouncilelectedeventelectedCouncil_none: NewCouncilElectedEventWhereInput
+  newcouncilelectedeventelectedCouncil_some: NewCouncilElectedEventWhereInput
+  newcouncilelectedeventelectedCouncil_every: NewCouncilElectedEventWhereInput
   AND: [ElectedCouncilWhereInput!]
   OR: [ElectedCouncilWhereInput!]
 }
@@ -7430,108 +5447,9 @@ input ElectedCouncilWhereUniqueInput {
   id: ID!
 }
 
-union ElectionProblem = ElectionProblemNotEnoughCandidates | ElectionProblemNewCouncilNotElected | VariantNone
-
-type ElectionProblemNewCouncilNotElected {
-  dummy: Int
-}
-
-input ElectionProblemNewCouncilNotElectedCreateInput {
-  dummy: Float
-}
-
-input ElectionProblemNewCouncilNotElectedUpdateInput {
-  dummy: Float
-}
-
-input ElectionProblemNewCouncilNotElectedWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [ElectionProblemNewCouncilNotElectedWhereInput!]
-  OR: [ElectionProblemNewCouncilNotElectedWhereInput!]
-}
-
-input ElectionProblemNewCouncilNotElectedWhereUniqueInput {
-  id: ID!
-}
-
-type ElectionProblemNotEnoughCandidates {
-  dummy: Int
-}
-
-input ElectionProblemNotEnoughCandidatesCreateInput {
-  dummy: Float
-}
-
-input ElectionProblemNotEnoughCandidatesUpdateInput {
-  dummy: Float
-}
-
-input ElectionProblemNotEnoughCandidatesWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [ElectionProblemNotEnoughCandidatesWhereInput!]
-  OR: [ElectionProblemNotEnoughCandidatesWhereInput!]
-}
-
-input ElectionProblemNotEnoughCandidatesWhereUniqueInput {
-  id: ID!
+enum ElectionProblem {
+  NOT_ENOUGH_CANDIDATES
+  NEW_COUNCIL_NOT_ELECTED
 }
 
 type ElectionRound implements BaseGraphQLObject {
@@ -10938,11 +8856,6 @@ type Membership implements BaseGraphQLObject {
   channels: [Channel!]!
   councilMembers: [CouncilMember!]!
   referendumStageRevealingOptionResults: [ReferendumStageRevealingOptionResult!]!
-  votesRecieved: [CastVote!]!
-  electedCouncilEvents: [NewCouncilElectedEvent!]!
-  candidacynoteseteventmember: [CandidacyNoteSetEvent!]
-  candidacystakereleaseeventmember: [CandidacyStakeReleaseEvent!]
-  candidacywithdraweventmember: [CandidacyWithdrawEvent!]
   candidatemember: [Candidate!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
@@ -10956,7 +8869,6 @@ type Membership implements BaseGraphQLObject {
   memberverificationstatusupdatedeventmember: [MemberVerificationStatusUpdatedEvent!]
   membershipboughteventnewMember: [MembershipBoughtEvent!]
   membershipboughteventreferrer: [MembershipBoughtEvent!]
-  newcandidateeventmember: [NewCandidateEvent!]
   postdeletedeventactor: [PostDeletedEvent!]
   postreactedeventreactingMember: [PostReactedEvent!]
   proposalcreator: [Proposal!]
@@ -10964,12 +8876,10 @@ type Membership implements BaseGraphQLObject {
   proposaldiscussionpostdeletedeventactor: [ProposalDiscussionPostDeletedEvent!]
   proposaldiscussionthreadmodechangedeventactor: [ProposalDiscussionThreadModeChangedEvent!]
   proposalvotedeventvoter: [ProposalVotedEvent!]
-  rewardpaymenteventmember: [RewardPaymentEvent!]
   stakingaccountaddedeventmember: [StakingAccountAddedEvent!]
   stakingaccountconfirmedeventmember: [StakingAccountConfirmedEvent!]
   stakingaccountremovedeventmember: [StakingAccountRemovedEvent!]
   voteonpolleventvotingMember: [VoteOnPollEvent!]
-  voterevealedeventmember: [VoteRevealedEvent!]
   workinggroupapplicationapplicant: [WorkingGroupApplication!]
 }
 
@@ -11680,21 +9590,6 @@ input MembershipWhereInput {
   referendumStageRevealingOptionResults_none: ReferendumStageRevealingOptionResultWhereInput
   referendumStageRevealingOptionResults_some: ReferendumStageRevealingOptionResultWhereInput
   referendumStageRevealingOptionResults_every: ReferendumStageRevealingOptionResultWhereInput
-  votesRecieved_none: CastVoteWhereInput
-  votesRecieved_some: CastVoteWhereInput
-  votesRecieved_every: CastVoteWhereInput
-  electedCouncilEvents_none: NewCouncilElectedEventWhereInput
-  electedCouncilEvents_some: NewCouncilElectedEventWhereInput
-  electedCouncilEvents_every: NewCouncilElectedEventWhereInput
-  candidacynoteseteventmember_none: CandidacyNoteSetEventWhereInput
-  candidacynoteseteventmember_some: CandidacyNoteSetEventWhereInput
-  candidacynoteseteventmember_every: CandidacyNoteSetEventWhereInput
-  candidacystakereleaseeventmember_none: CandidacyStakeReleaseEventWhereInput
-  candidacystakereleaseeventmember_some: CandidacyStakeReleaseEventWhereInput
-  candidacystakereleaseeventmember_every: CandidacyStakeReleaseEventWhereInput
-  candidacywithdraweventmember_none: CandidacyWithdrawEventWhereInput
-  candidacywithdraweventmember_some: CandidacyWithdrawEventWhereInput
-  candidacywithdraweventmember_every: CandidacyWithdrawEventWhereInput
   candidatemember_none: CandidateWhereInput
   candidatemember_some: CandidateWhereInput
   candidatemember_every: CandidateWhereInput
@@ -11734,9 +9629,6 @@ input MembershipWhereInput {
   membershipboughteventreferrer_none: MembershipBoughtEventWhereInput
   membershipboughteventreferrer_some: MembershipBoughtEventWhereInput
   membershipboughteventreferrer_every: MembershipBoughtEventWhereInput
-  newcandidateeventmember_none: NewCandidateEventWhereInput
-  newcandidateeventmember_some: NewCandidateEventWhereInput
-  newcandidateeventmember_every: NewCandidateEventWhereInput
   postdeletedeventactor_none: PostDeletedEventWhereInput
   postdeletedeventactor_some: PostDeletedEventWhereInput
   postdeletedeventactor_every: PostDeletedEventWhereInput
@@ -11758,9 +9650,6 @@ input MembershipWhereInput {
   proposalvotedeventvoter_none: ProposalVotedEventWhereInput
   proposalvotedeventvoter_some: ProposalVotedEventWhereInput
   proposalvotedeventvoter_every: ProposalVotedEventWhereInput
-  rewardpaymenteventmember_none: RewardPaymentEventWhereInput
-  rewardpaymenteventmember_some: RewardPaymentEventWhereInput
-  rewardpaymenteventmember_every: RewardPaymentEventWhereInput
   stakingaccountaddedeventmember_none: StakingAccountAddedEventWhereInput
   stakingaccountaddedeventmember_some: StakingAccountAddedEventWhereInput
   stakingaccountaddedeventmember_every: StakingAccountAddedEventWhereInput
@@ -11773,9 +9662,6 @@ input MembershipWhereInput {
   voteonpolleventvotingMember_none: VoteOnPollEventWhereInput
   voteonpolleventvotingMember_some: VoteOnPollEventWhereInput
   voteonpolleventvotingMember_every: VoteOnPollEventWhereInput
-  voterevealedeventmember_none: VoteRevealedEventWhereInput
-  voterevealedeventmember_some: VoteRevealedEventWhereInput
-  voterevealedeventmember_every: VoteRevealedEventWhereInput
   workinggroupapplicationapplicant_none: WorkingGroupApplicationWhereInput
   workinggroupapplicationapplicant_some: WorkingGroupApplicationWhereInput
   workinggroupapplicationapplicant_every: WorkingGroupApplicationWhereInput
@@ -11986,8 +9872,8 @@ type NewCandidateEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  member: Membership!
-  memberId: String!
+  candidate: Candidate!
+  candidateId: String!
 
   """
   Candidate's account used to stake currency.
@@ -12016,7 +9902,7 @@ input NewCandidateEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  member: ID!
+  candidate: ID!
   stakingAccount: String!
   rewardAccount: String!
   balance: BigInt!
@@ -12042,8 +9928,8 @@ enum NewCandidateEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  member_ASC
-  member_DESC
+  candidate_ASC
+  candidate_DESC
   stakingAccount_ASC
   stakingAccount_DESC
   rewardAccount_ASC
@@ -12057,7 +9943,7 @@ input NewCandidateEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  member: ID
+  candidate: ID
   stakingAccount: String
   rewardAccount: String
   balance: BigInt
@@ -12107,8 +9993,8 @@ input NewCandidateEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
+  candidate_eq: ID
+  candidate_in: [ID!]
   stakingAccount_eq: String
   stakingAccount_contains: String
   stakingAccount_startsWith: String
@@ -12125,7 +10011,7 @@ input NewCandidateEventWhereInput {
   balance_lt: BigInt
   balance_lte: BigInt
   balance_in: [BigInt!]
-  member: MembershipWhereInput
+  candidate: CandidateWhereInput
   AND: [NewCandidateEventWhereInput!]
   OR: [NewCandidateEventWhereInput!]
 }
@@ -12167,7 +10053,8 @@ type NewCouncilElectedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  electedMembers: [Membership!]!
+  electedCouncil: ElectedCouncil!
+  electedCouncilId: String!
 }
 
 type NewCouncilElectedEventConnection {
@@ -12181,6 +10068,7 @@ input NewCouncilElectedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
+  electedCouncil: ID!
 }
 
 type NewCouncilElectedEventEdge {
@@ -12203,6 +10091,8 @@ enum NewCouncilElectedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
+  electedCouncil_ASC
+  electedCouncil_DESC
 }
 
 input NewCouncilElectedEventUpdateInput {
@@ -12210,6 +10100,7 @@ input NewCouncilElectedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
+  electedCouncil: ID
 }
 
 input NewCouncilElectedEventWhereInput {
@@ -12256,9 +10147,9 @@ input NewCouncilElectedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  electedMembers_none: MembershipWhereInput
-  electedMembers_some: MembershipWhereInput
-  electedMembers_every: MembershipWhereInput
+  electedCouncil_eq: ID
+  electedCouncil_in: [ID!]
+  electedCouncil: ElectedCouncilWhereInput
   AND: [NewCouncilElectedEventWhereInput!]
   OR: [NewCouncilElectedEventWhereInput!]
 }
@@ -16643,6 +14534,2010 @@ input ProposalWhereUniqueInput {
   id: ID!
 }
 
+type Query {
+  announcingPeriodStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: AnnouncingPeriodStartedEventWhereInput
+    orderBy: [AnnouncingPeriodStartedEventOrderByInput!]
+  ): [AnnouncingPeriodStartedEvent!]!
+  announcingPeriodStartedEventByUniqueInput(
+    where: AnnouncingPeriodStartedEventWhereUniqueInput!
+  ): AnnouncingPeriodStartedEvent
+  announcingPeriodStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AnnouncingPeriodStartedEventWhereInput
+    orderBy: [AnnouncingPeriodStartedEventOrderByInput!]
+  ): AnnouncingPeriodStartedEventConnection!
+  applicationFormQuestionAnswers(
+    offset: Int
+    limit: Int = 50
+    where: ApplicationFormQuestionAnswerWhereInput
+    orderBy: [ApplicationFormQuestionAnswerOrderByInput!]
+  ): [ApplicationFormQuestionAnswer!]!
+  applicationFormQuestionAnswerByUniqueInput(
+    where: ApplicationFormQuestionAnswerWhereUniqueInput!
+  ): ApplicationFormQuestionAnswer
+  applicationFormQuestionAnswersConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ApplicationFormQuestionAnswerWhereInput
+    orderBy: [ApplicationFormQuestionAnswerOrderByInput!]
+  ): ApplicationFormQuestionAnswerConnection!
+  applicationFormQuestions(
+    offset: Int
+    limit: Int = 50
+    where: ApplicationFormQuestionWhereInput
+    orderBy: [ApplicationFormQuestionOrderByInput!]
+  ): [ApplicationFormQuestion!]!
+  applicationFormQuestionByUniqueInput(where: ApplicationFormQuestionWhereUniqueInput!): ApplicationFormQuestion
+  applicationFormQuestionsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ApplicationFormQuestionWhereInput
+    orderBy: [ApplicationFormQuestionOrderByInput!]
+  ): ApplicationFormQuestionConnection!
+  applicationWithdrawnEvents(
+    offset: Int
+    limit: Int = 50
+    where: ApplicationWithdrawnEventWhereInput
+    orderBy: [ApplicationWithdrawnEventOrderByInput!]
+  ): [ApplicationWithdrawnEvent!]!
+  applicationWithdrawnEventByUniqueInput(where: ApplicationWithdrawnEventWhereUniqueInput!): ApplicationWithdrawnEvent
+  applicationWithdrawnEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ApplicationWithdrawnEventWhereInput
+    orderBy: [ApplicationWithdrawnEventOrderByInput!]
+  ): ApplicationWithdrawnEventConnection!
+  appliedOnOpeningEvents(
+    offset: Int
+    limit: Int = 50
+    where: AppliedOnOpeningEventWhereInput
+    orderBy: [AppliedOnOpeningEventOrderByInput!]
+  ): [AppliedOnOpeningEvent!]!
+  appliedOnOpeningEventByUniqueInput(where: AppliedOnOpeningEventWhereUniqueInput!): AppliedOnOpeningEvent
+  appliedOnOpeningEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AppliedOnOpeningEventWhereInput
+    orderBy: [AppliedOnOpeningEventOrderByInput!]
+  ): AppliedOnOpeningEventConnection!
+  budgetBalanceSetEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetBalanceSetEventWhereInput
+    orderBy: [BudgetBalanceSetEventOrderByInput!]
+  ): [BudgetBalanceSetEvent!]!
+  budgetBalanceSetEventByUniqueInput(where: BudgetBalanceSetEventWhereUniqueInput!): BudgetBalanceSetEvent
+  budgetBalanceSetEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetBalanceSetEventWhereInput
+    orderBy: [BudgetBalanceSetEventOrderByInput!]
+  ): BudgetBalanceSetEventConnection!
+  budgetIncrementUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetIncrementUpdatedEventWhereInput
+    orderBy: [BudgetIncrementUpdatedEventOrderByInput!]
+  ): [BudgetIncrementUpdatedEvent!]!
+  budgetIncrementUpdatedEventByUniqueInput(
+    where: BudgetIncrementUpdatedEventWhereUniqueInput!
+  ): BudgetIncrementUpdatedEvent
+  budgetIncrementUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetIncrementUpdatedEventWhereInput
+    orderBy: [BudgetIncrementUpdatedEventOrderByInput!]
+  ): BudgetIncrementUpdatedEventConnection!
+  budgetRefillEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetRefillEventWhereInput
+    orderBy: [BudgetRefillEventOrderByInput!]
+  ): [BudgetRefillEvent!]!
+  budgetRefillEventByUniqueInput(where: BudgetRefillEventWhereUniqueInput!): BudgetRefillEvent
+  budgetRefillEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetRefillEventWhereInput
+    orderBy: [BudgetRefillEventOrderByInput!]
+  ): BudgetRefillEventConnection!
+  budgetRefillPlannedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetRefillPlannedEventWhereInput
+    orderBy: [BudgetRefillPlannedEventOrderByInput!]
+  ): [BudgetRefillPlannedEvent!]!
+  budgetRefillPlannedEventByUniqueInput(where: BudgetRefillPlannedEventWhereUniqueInput!): BudgetRefillPlannedEvent
+  budgetRefillPlannedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetRefillPlannedEventWhereInput
+    orderBy: [BudgetRefillPlannedEventOrderByInput!]
+  ): BudgetRefillPlannedEventConnection!
+  budgetSetEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetSetEventWhereInput
+    orderBy: [BudgetSetEventOrderByInput!]
+  ): [BudgetSetEvent!]!
+  budgetSetEventByUniqueInput(where: BudgetSetEventWhereUniqueInput!): BudgetSetEvent
+  budgetSetEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetSetEventWhereInput
+    orderBy: [BudgetSetEventOrderByInput!]
+  ): BudgetSetEventConnection!
+  budgetSpendingEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetSpendingEventWhereInput
+    orderBy: [BudgetSpendingEventOrderByInput!]
+  ): [BudgetSpendingEvent!]!
+  budgetSpendingEventByUniqueInput(where: BudgetSpendingEventWhereUniqueInput!): BudgetSpendingEvent
+  budgetSpendingEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetSpendingEventWhereInput
+    orderBy: [BudgetSpendingEventOrderByInput!]
+  ): BudgetSpendingEventConnection!
+  candidacyNoteMetadata(
+    offset: Int
+    limit: Int = 50
+    where: CandidacyNoteMetadataWhereInput
+    orderBy: [CandidacyNoteMetadataOrderByInput!]
+  ): [CandidacyNoteMetadata!]!
+  candidacyNoteMetadataByUniqueInput(where: CandidacyNoteMetadataWhereUniqueInput!): CandidacyNoteMetadata
+  candidacyNoteMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CandidacyNoteMetadataWhereInput
+    orderBy: [CandidacyNoteMetadataOrderByInput!]
+  ): CandidacyNoteMetadataConnection!
+  candidacyNoteSetEvents(
+    offset: Int
+    limit: Int = 50
+    where: CandidacyNoteSetEventWhereInput
+    orderBy: [CandidacyNoteSetEventOrderByInput!]
+  ): [CandidacyNoteSetEvent!]!
+  candidacyNoteSetEventByUniqueInput(where: CandidacyNoteSetEventWhereUniqueInput!): CandidacyNoteSetEvent
+  candidacyNoteSetEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CandidacyNoteSetEventWhereInput
+    orderBy: [CandidacyNoteSetEventOrderByInput!]
+  ): CandidacyNoteSetEventConnection!
+  candidacyStakeReleaseEvents(
+    offset: Int
+    limit: Int = 50
+    where: CandidacyStakeReleaseEventWhereInput
+    orderBy: [CandidacyStakeReleaseEventOrderByInput!]
+  ): [CandidacyStakeReleaseEvent!]!
+  candidacyStakeReleaseEventByUniqueInput(
+    where: CandidacyStakeReleaseEventWhereUniqueInput!
+  ): CandidacyStakeReleaseEvent
+  candidacyStakeReleaseEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CandidacyStakeReleaseEventWhereInput
+    orderBy: [CandidacyStakeReleaseEventOrderByInput!]
+  ): CandidacyStakeReleaseEventConnection!
+  candidacyWithdrawEvents(
+    offset: Int
+    limit: Int = 50
+    where: CandidacyWithdrawEventWhereInput
+    orderBy: [CandidacyWithdrawEventOrderByInput!]
+  ): [CandidacyWithdrawEvent!]!
+  candidacyWithdrawEventByUniqueInput(where: CandidacyWithdrawEventWhereUniqueInput!): CandidacyWithdrawEvent
+  candidacyWithdrawEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CandidacyWithdrawEventWhereInput
+    orderBy: [CandidacyWithdrawEventOrderByInput!]
+  ): CandidacyWithdrawEventConnection!
+  candidates(offset: Int, limit: Int = 50, where: CandidateWhereInput, orderBy: [CandidateOrderByInput!]): [Candidate!]!
+  candidateByUniqueInput(where: CandidateWhereUniqueInput!): Candidate
+  candidatesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CandidateWhereInput
+    orderBy: [CandidateOrderByInput!]
+  ): CandidateConnection!
+  castVotes(offset: Int, limit: Int = 50, where: CastVoteWhereInput, orderBy: [CastVoteOrderByInput!]): [CastVote!]!
+  castVoteByUniqueInput(where: CastVoteWhereUniqueInput!): CastVote
+  castVotesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CastVoteWhereInput
+    orderBy: [CastVoteOrderByInput!]
+  ): CastVoteConnection!
+  categoryArchivalStatusUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: CategoryArchivalStatusUpdatedEventWhereInput
+    orderBy: [CategoryArchivalStatusUpdatedEventOrderByInput!]
+  ): [CategoryArchivalStatusUpdatedEvent!]!
+  categoryArchivalStatusUpdatedEventByUniqueInput(
+    where: CategoryArchivalStatusUpdatedEventWhereUniqueInput!
+  ): CategoryArchivalStatusUpdatedEvent
+  categoryArchivalStatusUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CategoryArchivalStatusUpdatedEventWhereInput
+    orderBy: [CategoryArchivalStatusUpdatedEventOrderByInput!]
+  ): CategoryArchivalStatusUpdatedEventConnection!
+  categoryCreatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: CategoryCreatedEventWhereInput
+    orderBy: [CategoryCreatedEventOrderByInput!]
+  ): [CategoryCreatedEvent!]!
+  categoryCreatedEventByUniqueInput(where: CategoryCreatedEventWhereUniqueInput!): CategoryCreatedEvent
+  categoryCreatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CategoryCreatedEventWhereInput
+    orderBy: [CategoryCreatedEventOrderByInput!]
+  ): CategoryCreatedEventConnection!
+  categoryDeletedEvents(
+    offset: Int
+    limit: Int = 50
+    where: CategoryDeletedEventWhereInput
+    orderBy: [CategoryDeletedEventOrderByInput!]
+  ): [CategoryDeletedEvent!]!
+  categoryDeletedEventByUniqueInput(where: CategoryDeletedEventWhereUniqueInput!): CategoryDeletedEvent
+  categoryDeletedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CategoryDeletedEventWhereInput
+    orderBy: [CategoryDeletedEventOrderByInput!]
+  ): CategoryDeletedEventConnection!
+  categoryMembershipOfModeratorUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: CategoryMembershipOfModeratorUpdatedEventWhereInput
+    orderBy: [CategoryMembershipOfModeratorUpdatedEventOrderByInput!]
+  ): [CategoryMembershipOfModeratorUpdatedEvent!]!
+  categoryMembershipOfModeratorUpdatedEventByUniqueInput(
+    where: CategoryMembershipOfModeratorUpdatedEventWhereUniqueInput!
+  ): CategoryMembershipOfModeratorUpdatedEvent
+  categoryMembershipOfModeratorUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CategoryMembershipOfModeratorUpdatedEventWhereInput
+    orderBy: [CategoryMembershipOfModeratorUpdatedEventOrderByInput!]
+  ): CategoryMembershipOfModeratorUpdatedEventConnection!
+  categoryStickyThreadUpdateEvents(
+    offset: Int
+    limit: Int = 50
+    where: CategoryStickyThreadUpdateEventWhereInput
+    orderBy: [CategoryStickyThreadUpdateEventOrderByInput!]
+  ): [CategoryStickyThreadUpdateEvent!]!
+  categoryStickyThreadUpdateEventByUniqueInput(
+    where: CategoryStickyThreadUpdateEventWhereUniqueInput!
+  ): CategoryStickyThreadUpdateEvent
+  categoryStickyThreadUpdateEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CategoryStickyThreadUpdateEventWhereInput
+    orderBy: [CategoryStickyThreadUpdateEventOrderByInput!]
+  ): CategoryStickyThreadUpdateEventConnection!
+  channelCategories(
+    offset: Int
+    limit: Int = 50
+    where: ChannelCategoryWhereInput
+    orderBy: [ChannelCategoryOrderByInput!]
+  ): [ChannelCategory!]!
+  channelCategoryByUniqueInput(where: ChannelCategoryWhereUniqueInput!): ChannelCategory
+  channelCategoriesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ChannelCategoryWhereInput
+    orderBy: [ChannelCategoryOrderByInput!]
+  ): ChannelCategoryConnection!
+  channels(offset: Int, limit: Int = 50, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): [Channel!]!
+  channelByUniqueInput(where: ChannelWhereUniqueInput!): Channel
+  channelsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ChannelWhereInput
+    orderBy: [ChannelOrderByInput!]
+  ): ChannelConnection!
+  councilMembers(
+    offset: Int
+    limit: Int = 50
+    where: CouncilMemberWhereInput
+    orderBy: [CouncilMemberOrderByInput!]
+  ): [CouncilMember!]!
+  councilMemberByUniqueInput(where: CouncilMemberWhereUniqueInput!): CouncilMember
+  councilMembersConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CouncilMemberWhereInput
+    orderBy: [CouncilMemberOrderByInput!]
+  ): CouncilMemberConnection!
+  councilStageUpdates(
+    offset: Int
+    limit: Int = 50
+    where: CouncilStageUpdateWhereInput
+    orderBy: [CouncilStageUpdateOrderByInput!]
+  ): [CouncilStageUpdate!]!
+  councilStageUpdateByUniqueInput(where: CouncilStageUpdateWhereUniqueInput!): CouncilStageUpdate
+  councilStageUpdatesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CouncilStageUpdateWhereInput
+    orderBy: [CouncilStageUpdateOrderByInput!]
+  ): CouncilStageUpdateConnection!
+  councilorRewardUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: CouncilorRewardUpdatedEventWhereInput
+    orderBy: [CouncilorRewardUpdatedEventOrderByInput!]
+  ): [CouncilorRewardUpdatedEvent!]!
+  councilorRewardUpdatedEventByUniqueInput(
+    where: CouncilorRewardUpdatedEventWhereUniqueInput!
+  ): CouncilorRewardUpdatedEvent
+  councilorRewardUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CouncilorRewardUpdatedEventWhereInput
+    orderBy: [CouncilorRewardUpdatedEventOrderByInput!]
+  ): CouncilorRewardUpdatedEventConnection!
+  curatorGroups(
+    offset: Int
+    limit: Int = 50
+    where: CuratorGroupWhereInput
+    orderBy: [CuratorGroupOrderByInput!]
+  ): [CuratorGroup!]!
+  curatorGroupByUniqueInput(where: CuratorGroupWhereUniqueInput!): CuratorGroup
+  curatorGroupsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: CuratorGroupWhereInput
+    orderBy: [CuratorGroupOrderByInput!]
+  ): CuratorGroupConnection!
+  dataObjects(
+    offset: Int
+    limit: Int = 50
+    where: DataObjectWhereInput
+    orderBy: [DataObjectOrderByInput!]
+  ): [DataObject!]!
+  dataObjectByUniqueInput(where: DataObjectWhereUniqueInput!): DataObject
+  dataObjectsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DataObjectWhereInput
+    orderBy: [DataObjectOrderByInput!]
+  ): DataObjectConnection!
+  electedCouncils(
+    offset: Int
+    limit: Int = 50
+    where: ElectedCouncilWhereInput
+    orderBy: [ElectedCouncilOrderByInput!]
+  ): [ElectedCouncil!]!
+  electedCouncilByUniqueInput(where: ElectedCouncilWhereUniqueInput!): ElectedCouncil
+  electedCouncilsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ElectedCouncilWhereInput
+    orderBy: [ElectedCouncilOrderByInput!]
+  ): ElectedCouncilConnection!
+  electionRounds(
+    offset: Int
+    limit: Int = 50
+    where: ElectionRoundWhereInput
+    orderBy: [ElectionRoundOrderByInput!]
+  ): [ElectionRound!]!
+  electionRoundByUniqueInput(where: ElectionRoundWhereUniqueInput!): ElectionRound
+  electionRoundsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ElectionRoundWhereInput
+    orderBy: [ElectionRoundOrderByInput!]
+  ): ElectionRoundConnection!
+  events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: [EventOrderByInput!]): [Event!]!
+  forumCategories(
+    offset: Int
+    limit: Int = 50
+    where: ForumCategoryWhereInput
+    orderBy: [ForumCategoryOrderByInput!]
+  ): [ForumCategory!]!
+  forumCategoryByUniqueInput(where: ForumCategoryWhereUniqueInput!): ForumCategory
+  forumCategoriesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumCategoryWhereInput
+    orderBy: [ForumCategoryOrderByInput!]
+  ): ForumCategoryConnection!
+  forumPollAlternatives(
+    offset: Int
+    limit: Int = 50
+    where: ForumPollAlternativeWhereInput
+    orderBy: [ForumPollAlternativeOrderByInput!]
+  ): [ForumPollAlternative!]!
+  forumPollAlternativeByUniqueInput(where: ForumPollAlternativeWhereUniqueInput!): ForumPollAlternative
+  forumPollAlternativesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumPollAlternativeWhereInput
+    orderBy: [ForumPollAlternativeOrderByInput!]
+  ): ForumPollAlternativeConnection!
+  forumPolls(offset: Int, limit: Int = 50, where: ForumPollWhereInput, orderBy: [ForumPollOrderByInput!]): [ForumPoll!]!
+  forumPollByUniqueInput(where: ForumPollWhereUniqueInput!): ForumPoll
+  forumPollsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumPollWhereInput
+    orderBy: [ForumPollOrderByInput!]
+  ): ForumPollConnection!
+  forumPostReactions(
+    offset: Int
+    limit: Int = 50
+    where: ForumPostReactionWhereInput
+    orderBy: [ForumPostReactionOrderByInput!]
+  ): [ForumPostReaction!]!
+  forumPostReactionByUniqueInput(where: ForumPostReactionWhereUniqueInput!): ForumPostReaction
+  forumPostReactionsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumPostReactionWhereInput
+    orderBy: [ForumPostReactionOrderByInput!]
+  ): ForumPostReactionConnection!
+  forumPosts(offset: Int, limit: Int = 50, where: ForumPostWhereInput, orderBy: [ForumPostOrderByInput!]): [ForumPost!]!
+  forumPostByUniqueInput(where: ForumPostWhereUniqueInput!): ForumPost
+  forumPostsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumPostWhereInput
+    orderBy: [ForumPostOrderByInput!]
+  ): ForumPostConnection!
+  forumThreadTags(
+    offset: Int
+    limit: Int = 50
+    where: ForumThreadTagWhereInput
+    orderBy: [ForumThreadTagOrderByInput!]
+  ): [ForumThreadTag!]!
+  forumThreadTagByUniqueInput(where: ForumThreadTagWhereUniqueInput!): ForumThreadTag
+  forumThreadTagsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumThreadTagWhereInput
+    orderBy: [ForumThreadTagOrderByInput!]
+  ): ForumThreadTagConnection!
+  forumThreads(
+    offset: Int
+    limit: Int = 50
+    where: ForumThreadWhereInput
+    orderBy: [ForumThreadOrderByInput!]
+  ): [ForumThread!]!
+  forumThreadByUniqueInput(where: ForumThreadWhereUniqueInput!): ForumThread
+  forumThreadsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ForumThreadWhereInput
+    orderBy: [ForumThreadOrderByInput!]
+  ): ForumThreadConnection!
+  fundingRequestDestinations(
+    offset: Int
+    limit: Int = 50
+    where: FundingRequestDestinationWhereInput
+    orderBy: [FundingRequestDestinationOrderByInput!]
+  ): [FundingRequestDestination!]!
+  fundingRequestDestinationByUniqueInput(where: FundingRequestDestinationWhereUniqueInput!): FundingRequestDestination
+  fundingRequestDestinationsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: FundingRequestDestinationWhereInput
+    orderBy: [FundingRequestDestinationOrderByInput!]
+  ): FundingRequestDestinationConnection!
+  fundingRequestDestinationsLists(
+    offset: Int
+    limit: Int = 50
+    where: FundingRequestDestinationsListWhereInput
+    orderBy: [FundingRequestDestinationsListOrderByInput!]
+  ): [FundingRequestDestinationsList!]!
+  fundingRequestDestinationsListByUniqueInput(
+    where: FundingRequestDestinationsListWhereUniqueInput!
+  ): FundingRequestDestinationsList
+  fundingRequestDestinationsListsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: FundingRequestDestinationsListWhereInput
+    orderBy: [FundingRequestDestinationsListOrderByInput!]
+  ): FundingRequestDestinationsListConnection!
+  initialInvitationBalanceUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: InitialInvitationBalanceUpdatedEventWhereInput
+    orderBy: [InitialInvitationBalanceUpdatedEventOrderByInput!]
+  ): [InitialInvitationBalanceUpdatedEvent!]!
+  initialInvitationBalanceUpdatedEventByUniqueInput(
+    where: InitialInvitationBalanceUpdatedEventWhereUniqueInput!
+  ): InitialInvitationBalanceUpdatedEvent
+  initialInvitationBalanceUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: InitialInvitationBalanceUpdatedEventWhereInput
+    orderBy: [InitialInvitationBalanceUpdatedEventOrderByInput!]
+  ): InitialInvitationBalanceUpdatedEventConnection!
+  initialInvitationCountUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: InitialInvitationCountUpdatedEventWhereInput
+    orderBy: [InitialInvitationCountUpdatedEventOrderByInput!]
+  ): [InitialInvitationCountUpdatedEvent!]!
+  initialInvitationCountUpdatedEventByUniqueInput(
+    where: InitialInvitationCountUpdatedEventWhereUniqueInput!
+  ): InitialInvitationCountUpdatedEvent
+  initialInvitationCountUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: InitialInvitationCountUpdatedEventWhereInput
+    orderBy: [InitialInvitationCountUpdatedEventOrderByInput!]
+  ): InitialInvitationCountUpdatedEventConnection!
+  invitesTransferredEvents(
+    offset: Int
+    limit: Int = 50
+    where: InvitesTransferredEventWhereInput
+    orderBy: [InvitesTransferredEventOrderByInput!]
+  ): [InvitesTransferredEvent!]!
+  invitesTransferredEventByUniqueInput(where: InvitesTransferredEventWhereUniqueInput!): InvitesTransferredEvent
+  invitesTransferredEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: InvitesTransferredEventWhereInput
+    orderBy: [InvitesTransferredEventOrderByInput!]
+  ): InvitesTransferredEventConnection!
+  languages(offset: Int, limit: Int = 50, where: LanguageWhereInput, orderBy: [LanguageOrderByInput!]): [Language!]!
+  languageByUniqueInput(where: LanguageWhereUniqueInput!): Language
+  languagesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: LanguageWhereInput
+    orderBy: [LanguageOrderByInput!]
+  ): LanguageConnection!
+  leaderInvitationQuotaUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: LeaderInvitationQuotaUpdatedEventWhereInput
+    orderBy: [LeaderInvitationQuotaUpdatedEventOrderByInput!]
+  ): [LeaderInvitationQuotaUpdatedEvent!]!
+  leaderInvitationQuotaUpdatedEventByUniqueInput(
+    where: LeaderInvitationQuotaUpdatedEventWhereUniqueInput!
+  ): LeaderInvitationQuotaUpdatedEvent
+  leaderInvitationQuotaUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: LeaderInvitationQuotaUpdatedEventWhereInput
+    orderBy: [LeaderInvitationQuotaUpdatedEventOrderByInput!]
+  ): LeaderInvitationQuotaUpdatedEventConnection!
+  leaderSetEvents(
+    offset: Int
+    limit: Int = 50
+    where: LeaderSetEventWhereInput
+    orderBy: [LeaderSetEventOrderByInput!]
+  ): [LeaderSetEvent!]!
+  leaderSetEventByUniqueInput(where: LeaderSetEventWhereUniqueInput!): LeaderSetEvent
+  leaderSetEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: LeaderSetEventWhereInput
+    orderBy: [LeaderSetEventOrderByInput!]
+  ): LeaderSetEventConnection!
+  leaderUnsetEvents(
+    offset: Int
+    limit: Int = 50
+    where: LeaderUnsetEventWhereInput
+    orderBy: [LeaderUnsetEventOrderByInput!]
+  ): [LeaderUnsetEvent!]!
+  leaderUnsetEventByUniqueInput(where: LeaderUnsetEventWhereUniqueInput!): LeaderUnsetEvent
+  leaderUnsetEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: LeaderUnsetEventWhereInput
+    orderBy: [LeaderUnsetEventOrderByInput!]
+  ): LeaderUnsetEventConnection!
+  licenses(offset: Int, limit: Int = 50, where: LicenseWhereInput, orderBy: [LicenseOrderByInput!]): [License!]!
+  licenseByUniqueInput(where: LicenseWhereUniqueInput!): License
+  licensesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: LicenseWhereInput
+    orderBy: [LicenseOrderByInput!]
+  ): LicenseConnection!
+  memberAccountsUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: MemberAccountsUpdatedEventWhereInput
+    orderBy: [MemberAccountsUpdatedEventOrderByInput!]
+  ): [MemberAccountsUpdatedEvent!]!
+  memberAccountsUpdatedEventByUniqueInput(
+    where: MemberAccountsUpdatedEventWhereUniqueInput!
+  ): MemberAccountsUpdatedEvent
+  memberAccountsUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MemberAccountsUpdatedEventWhereInput
+    orderBy: [MemberAccountsUpdatedEventOrderByInput!]
+  ): MemberAccountsUpdatedEventConnection!
+  memberInvitedEvents(
+    offset: Int
+    limit: Int = 50
+    where: MemberInvitedEventWhereInput
+    orderBy: [MemberInvitedEventOrderByInput!]
+  ): [MemberInvitedEvent!]!
+  memberInvitedEventByUniqueInput(where: MemberInvitedEventWhereUniqueInput!): MemberInvitedEvent
+  memberInvitedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MemberInvitedEventWhereInput
+    orderBy: [MemberInvitedEventOrderByInput!]
+  ): MemberInvitedEventConnection!
+  memberMetadata(
+    offset: Int
+    limit: Int = 50
+    where: MemberMetadataWhereInput
+    orderBy: [MemberMetadataOrderByInput!]
+  ): [MemberMetadata!]!
+  memberMetadataByUniqueInput(where: MemberMetadataWhereUniqueInput!): MemberMetadata
+  memberMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MemberMetadataWhereInput
+    orderBy: [MemberMetadataOrderByInput!]
+  ): MemberMetadataConnection!
+  memberProfileUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: MemberProfileUpdatedEventWhereInput
+    orderBy: [MemberProfileUpdatedEventOrderByInput!]
+  ): [MemberProfileUpdatedEvent!]!
+  memberProfileUpdatedEventByUniqueInput(where: MemberProfileUpdatedEventWhereUniqueInput!): MemberProfileUpdatedEvent
+  memberProfileUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MemberProfileUpdatedEventWhereInput
+    orderBy: [MemberProfileUpdatedEventOrderByInput!]
+  ): MemberProfileUpdatedEventConnection!
+  memberVerificationStatusUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: MemberVerificationStatusUpdatedEventWhereInput
+    orderBy: [MemberVerificationStatusUpdatedEventOrderByInput!]
+  ): [MemberVerificationStatusUpdatedEvent!]!
+  memberVerificationStatusUpdatedEventByUniqueInput(
+    where: MemberVerificationStatusUpdatedEventWhereUniqueInput!
+  ): MemberVerificationStatusUpdatedEvent
+  memberVerificationStatusUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MemberVerificationStatusUpdatedEventWhereInput
+    orderBy: [MemberVerificationStatusUpdatedEventOrderByInput!]
+  ): MemberVerificationStatusUpdatedEventConnection!
+  membershipBoughtEvents(
+    offset: Int
+    limit: Int = 50
+    where: MembershipBoughtEventWhereInput
+    orderBy: [MembershipBoughtEventOrderByInput!]
+  ): [MembershipBoughtEvent!]!
+  membershipBoughtEventByUniqueInput(where: MembershipBoughtEventWhereUniqueInput!): MembershipBoughtEvent
+  membershipBoughtEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MembershipBoughtEventWhereInput
+    orderBy: [MembershipBoughtEventOrderByInput!]
+  ): MembershipBoughtEventConnection!
+  membershipPriceUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: MembershipPriceUpdatedEventWhereInput
+    orderBy: [MembershipPriceUpdatedEventOrderByInput!]
+  ): [MembershipPriceUpdatedEvent!]!
+  membershipPriceUpdatedEventByUniqueInput(
+    where: MembershipPriceUpdatedEventWhereUniqueInput!
+  ): MembershipPriceUpdatedEvent
+  membershipPriceUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MembershipPriceUpdatedEventWhereInput
+    orderBy: [MembershipPriceUpdatedEventOrderByInput!]
+  ): MembershipPriceUpdatedEventConnection!
+  membershipSystemSnapshots(
+    offset: Int
+    limit: Int = 50
+    where: MembershipSystemSnapshotWhereInput
+    orderBy: [MembershipSystemSnapshotOrderByInput!]
+  ): [MembershipSystemSnapshot!]!
+  membershipSystemSnapshotByUniqueInput(where: MembershipSystemSnapshotWhereUniqueInput!): MembershipSystemSnapshot
+  membershipSystemSnapshotsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MembershipSystemSnapshotWhereInput
+    orderBy: [MembershipSystemSnapshotOrderByInput!]
+  ): MembershipSystemSnapshotConnection!
+  memberships(
+    offset: Int
+    limit: Int = 50
+    where: MembershipWhereInput
+    orderBy: [MembershipOrderByInput!]
+  ): [Membership!]!
+  membershipByUniqueInput(where: MembershipWhereUniqueInput!): Membership
+  membershipsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MembershipWhereInput
+    orderBy: [MembershipOrderByInput!]
+  ): MembershipConnection!
+  newCandidateEvents(
+    offset: Int
+    limit: Int = 50
+    where: NewCandidateEventWhereInput
+    orderBy: [NewCandidateEventOrderByInput!]
+  ): [NewCandidateEvent!]!
+  newCandidateEventByUniqueInput(where: NewCandidateEventWhereUniqueInput!): NewCandidateEvent
+  newCandidateEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NewCandidateEventWhereInput
+    orderBy: [NewCandidateEventOrderByInput!]
+  ): NewCandidateEventConnection!
+  newCouncilElectedEvents(
+    offset: Int
+    limit: Int = 50
+    where: NewCouncilElectedEventWhereInput
+    orderBy: [NewCouncilElectedEventOrderByInput!]
+  ): [NewCouncilElectedEvent!]!
+  newCouncilElectedEventByUniqueInput(where: NewCouncilElectedEventWhereUniqueInput!): NewCouncilElectedEvent
+  newCouncilElectedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NewCouncilElectedEventWhereInput
+    orderBy: [NewCouncilElectedEventOrderByInput!]
+  ): NewCouncilElectedEventConnection!
+  newCouncilNotElectedEvents(
+    offset: Int
+    limit: Int = 50
+    where: NewCouncilNotElectedEventWhereInput
+    orderBy: [NewCouncilNotElectedEventOrderByInput!]
+  ): [NewCouncilNotElectedEvent!]!
+  newCouncilNotElectedEventByUniqueInput(where: NewCouncilNotElectedEventWhereUniqueInput!): NewCouncilNotElectedEvent
+  newCouncilNotElectedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NewCouncilNotElectedEventWhereInput
+    orderBy: [NewCouncilNotElectedEventOrderByInput!]
+  ): NewCouncilNotElectedEventConnection!
+  newMissedRewardLevelReachedEvents(
+    offset: Int
+    limit: Int = 50
+    where: NewMissedRewardLevelReachedEventWhereInput
+    orderBy: [NewMissedRewardLevelReachedEventOrderByInput!]
+  ): [NewMissedRewardLevelReachedEvent!]!
+  newMissedRewardLevelReachedEventByUniqueInput(
+    where: NewMissedRewardLevelReachedEventWhereUniqueInput!
+  ): NewMissedRewardLevelReachedEvent
+  newMissedRewardLevelReachedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NewMissedRewardLevelReachedEventWhereInput
+    orderBy: [NewMissedRewardLevelReachedEventOrderByInput!]
+  ): NewMissedRewardLevelReachedEventConnection!
+  notEnoughCandidatesEvents(
+    offset: Int
+    limit: Int = 50
+    where: NotEnoughCandidatesEventWhereInput
+    orderBy: [NotEnoughCandidatesEventOrderByInput!]
+  ): [NotEnoughCandidatesEvent!]!
+  notEnoughCandidatesEventByUniqueInput(where: NotEnoughCandidatesEventWhereUniqueInput!): NotEnoughCandidatesEvent
+  notEnoughCandidatesEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NotEnoughCandidatesEventWhereInput
+    orderBy: [NotEnoughCandidatesEventOrderByInput!]
+  ): NotEnoughCandidatesEventConnection!
+  openingAddedEvents(
+    offset: Int
+    limit: Int = 50
+    where: OpeningAddedEventWhereInput
+    orderBy: [OpeningAddedEventOrderByInput!]
+  ): [OpeningAddedEvent!]!
+  openingAddedEventByUniqueInput(where: OpeningAddedEventWhereUniqueInput!): OpeningAddedEvent
+  openingAddedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OpeningAddedEventWhereInput
+    orderBy: [OpeningAddedEventOrderByInput!]
+  ): OpeningAddedEventConnection!
+  openingCanceledEvents(
+    offset: Int
+    limit: Int = 50
+    where: OpeningCanceledEventWhereInput
+    orderBy: [OpeningCanceledEventOrderByInput!]
+  ): [OpeningCanceledEvent!]!
+  openingCanceledEventByUniqueInput(where: OpeningCanceledEventWhereUniqueInput!): OpeningCanceledEvent
+  openingCanceledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OpeningCanceledEventWhereInput
+    orderBy: [OpeningCanceledEventOrderByInput!]
+  ): OpeningCanceledEventConnection!
+  openingFilledEvents(
+    offset: Int
+    limit: Int = 50
+    where: OpeningFilledEventWhereInput
+    orderBy: [OpeningFilledEventOrderByInput!]
+  ): [OpeningFilledEvent!]!
+  openingFilledEventByUniqueInput(where: OpeningFilledEventWhereUniqueInput!): OpeningFilledEvent
+  openingFilledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OpeningFilledEventWhereInput
+    orderBy: [OpeningFilledEventOrderByInput!]
+  ): OpeningFilledEventConnection!
+  postAddedEvents(
+    offset: Int
+    limit: Int = 50
+    where: PostAddedEventWhereInput
+    orderBy: [PostAddedEventOrderByInput!]
+  ): [PostAddedEvent!]!
+  postAddedEventByUniqueInput(where: PostAddedEventWhereUniqueInput!): PostAddedEvent
+  postAddedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: PostAddedEventWhereInput
+    orderBy: [PostAddedEventOrderByInput!]
+  ): PostAddedEventConnection!
+  postDeletedEvents(
+    offset: Int
+    limit: Int = 50
+    where: PostDeletedEventWhereInput
+    orderBy: [PostDeletedEventOrderByInput!]
+  ): [PostDeletedEvent!]!
+  postDeletedEventByUniqueInput(where: PostDeletedEventWhereUniqueInput!): PostDeletedEvent
+  postDeletedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: PostDeletedEventWhereInput
+    orderBy: [PostDeletedEventOrderByInput!]
+  ): PostDeletedEventConnection!
+  postModeratedEvents(
+    offset: Int
+    limit: Int = 50
+    where: PostModeratedEventWhereInput
+    orderBy: [PostModeratedEventOrderByInput!]
+  ): [PostModeratedEvent!]!
+  postModeratedEventByUniqueInput(where: PostModeratedEventWhereUniqueInput!): PostModeratedEvent
+  postModeratedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: PostModeratedEventWhereInput
+    orderBy: [PostModeratedEventOrderByInput!]
+  ): PostModeratedEventConnection!
+  postReactedEvents(
+    offset: Int
+    limit: Int = 50
+    where: PostReactedEventWhereInput
+    orderBy: [PostReactedEventOrderByInput!]
+  ): [PostReactedEvent!]!
+  postReactedEventByUniqueInput(where: PostReactedEventWhereUniqueInput!): PostReactedEvent
+  postReactedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: PostReactedEventWhereInput
+    orderBy: [PostReactedEventOrderByInput!]
+  ): PostReactedEventConnection!
+  postTextUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: PostTextUpdatedEventWhereInput
+    orderBy: [PostTextUpdatedEventOrderByInput!]
+  ): [PostTextUpdatedEvent!]!
+  postTextUpdatedEventByUniqueInput(where: PostTextUpdatedEventWhereUniqueInput!): PostTextUpdatedEvent
+  postTextUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: PostTextUpdatedEventWhereInput
+    orderBy: [PostTextUpdatedEventOrderByInput!]
+  ): PostTextUpdatedEventConnection!
+  proposalCancelledEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalCancelledEventWhereInput
+    orderBy: [ProposalCancelledEventOrderByInput!]
+  ): [ProposalCancelledEvent!]!
+  proposalCancelledEventByUniqueInput(where: ProposalCancelledEventWhereUniqueInput!): ProposalCancelledEvent
+  proposalCancelledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalCancelledEventWhereInput
+    orderBy: [ProposalCancelledEventOrderByInput!]
+  ): ProposalCancelledEventConnection!
+  proposalCreatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalCreatedEventWhereInput
+    orderBy: [ProposalCreatedEventOrderByInput!]
+  ): [ProposalCreatedEvent!]!
+  proposalCreatedEventByUniqueInput(where: ProposalCreatedEventWhereUniqueInput!): ProposalCreatedEvent
+  proposalCreatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalCreatedEventWhereInput
+    orderBy: [ProposalCreatedEventOrderByInput!]
+  ): ProposalCreatedEventConnection!
+  proposalDecisionMadeEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDecisionMadeEventWhereInput
+    orderBy: [ProposalDecisionMadeEventOrderByInput!]
+  ): [ProposalDecisionMadeEvent!]!
+  proposalDecisionMadeEventByUniqueInput(where: ProposalDecisionMadeEventWhereUniqueInput!): ProposalDecisionMadeEvent
+  proposalDecisionMadeEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDecisionMadeEventWhereInput
+    orderBy: [ProposalDecisionMadeEventOrderByInput!]
+  ): ProposalDecisionMadeEventConnection!
+  proposalDiscussionPostCreatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionPostCreatedEventWhereInput
+    orderBy: [ProposalDiscussionPostCreatedEventOrderByInput!]
+  ): [ProposalDiscussionPostCreatedEvent!]!
+  proposalDiscussionPostCreatedEventByUniqueInput(
+    where: ProposalDiscussionPostCreatedEventWhereUniqueInput!
+  ): ProposalDiscussionPostCreatedEvent
+  proposalDiscussionPostCreatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionPostCreatedEventWhereInput
+    orderBy: [ProposalDiscussionPostCreatedEventOrderByInput!]
+  ): ProposalDiscussionPostCreatedEventConnection!
+  proposalDiscussionPostDeletedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionPostDeletedEventWhereInput
+    orderBy: [ProposalDiscussionPostDeletedEventOrderByInput!]
+  ): [ProposalDiscussionPostDeletedEvent!]!
+  proposalDiscussionPostDeletedEventByUniqueInput(
+    where: ProposalDiscussionPostDeletedEventWhereUniqueInput!
+  ): ProposalDiscussionPostDeletedEvent
+  proposalDiscussionPostDeletedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionPostDeletedEventWhereInput
+    orderBy: [ProposalDiscussionPostDeletedEventOrderByInput!]
+  ): ProposalDiscussionPostDeletedEventConnection!
+  proposalDiscussionPostUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionPostUpdatedEventWhereInput
+    orderBy: [ProposalDiscussionPostUpdatedEventOrderByInput!]
+  ): [ProposalDiscussionPostUpdatedEvent!]!
+  proposalDiscussionPostUpdatedEventByUniqueInput(
+    where: ProposalDiscussionPostUpdatedEventWhereUniqueInput!
+  ): ProposalDiscussionPostUpdatedEvent
+  proposalDiscussionPostUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionPostUpdatedEventWhereInput
+    orderBy: [ProposalDiscussionPostUpdatedEventOrderByInput!]
+  ): ProposalDiscussionPostUpdatedEventConnection!
+  proposalDiscussionPosts(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionPostWhereInput
+    orderBy: [ProposalDiscussionPostOrderByInput!]
+  ): [ProposalDiscussionPost!]!
+  proposalDiscussionPostByUniqueInput(where: ProposalDiscussionPostWhereUniqueInput!): ProposalDiscussionPost
+  proposalDiscussionPostsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionPostWhereInput
+    orderBy: [ProposalDiscussionPostOrderByInput!]
+  ): ProposalDiscussionPostConnection!
+  proposalDiscussionThreadModeChangedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionThreadModeChangedEventWhereInput
+    orderBy: [ProposalDiscussionThreadModeChangedEventOrderByInput!]
+  ): [ProposalDiscussionThreadModeChangedEvent!]!
+  proposalDiscussionThreadModeChangedEventByUniqueInput(
+    where: ProposalDiscussionThreadModeChangedEventWhereUniqueInput!
+  ): ProposalDiscussionThreadModeChangedEvent
+  proposalDiscussionThreadModeChangedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionThreadModeChangedEventWhereInput
+    orderBy: [ProposalDiscussionThreadModeChangedEventOrderByInput!]
+  ): ProposalDiscussionThreadModeChangedEventConnection!
+  proposalDiscussionThreads(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionThreadWhereInput
+    orderBy: [ProposalDiscussionThreadOrderByInput!]
+  ): [ProposalDiscussionThread!]!
+  proposalDiscussionThreadByUniqueInput(where: ProposalDiscussionThreadWhereUniqueInput!): ProposalDiscussionThread
+  proposalDiscussionThreadsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionThreadWhereInput
+    orderBy: [ProposalDiscussionThreadOrderByInput!]
+  ): ProposalDiscussionThreadConnection!
+  proposalDiscussionWhitelists(
+    offset: Int
+    limit: Int = 50
+    where: ProposalDiscussionWhitelistWhereInput
+    orderBy: [ProposalDiscussionWhitelistOrderByInput!]
+  ): [ProposalDiscussionWhitelist!]!
+  proposalDiscussionWhitelistByUniqueInput(
+    where: ProposalDiscussionWhitelistWhereUniqueInput!
+  ): ProposalDiscussionWhitelist
+  proposalDiscussionWhitelistsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalDiscussionWhitelistWhereInput
+    orderBy: [ProposalDiscussionWhitelistOrderByInput!]
+  ): ProposalDiscussionWhitelistConnection!
+  proposalExecutedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalExecutedEventWhereInput
+    orderBy: [ProposalExecutedEventOrderByInput!]
+  ): [ProposalExecutedEvent!]!
+  proposalExecutedEventByUniqueInput(where: ProposalExecutedEventWhereUniqueInput!): ProposalExecutedEvent
+  proposalExecutedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalExecutedEventWhereInput
+    orderBy: [ProposalExecutedEventOrderByInput!]
+  ): ProposalExecutedEventConnection!
+  proposalStatusUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalStatusUpdatedEventWhereInput
+    orderBy: [ProposalStatusUpdatedEventOrderByInput!]
+  ): [ProposalStatusUpdatedEvent!]!
+  proposalStatusUpdatedEventByUniqueInput(
+    where: ProposalStatusUpdatedEventWhereUniqueInput!
+  ): ProposalStatusUpdatedEvent
+  proposalStatusUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalStatusUpdatedEventWhereInput
+    orderBy: [ProposalStatusUpdatedEventOrderByInput!]
+  ): ProposalStatusUpdatedEventConnection!
+  proposalVotedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ProposalVotedEventWhereInput
+    orderBy: [ProposalVotedEventOrderByInput!]
+  ): [ProposalVotedEvent!]!
+  proposalVotedEventByUniqueInput(where: ProposalVotedEventWhereUniqueInput!): ProposalVotedEvent
+  proposalVotedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalVotedEventWhereInput
+    orderBy: [ProposalVotedEventOrderByInput!]
+  ): ProposalVotedEventConnection!
+  proposals(offset: Int, limit: Int = 50, where: ProposalWhereInput, orderBy: [ProposalOrderByInput!]): [Proposal!]!
+  proposalByUniqueInput(where: ProposalWhereUniqueInput!): Proposal
+  proposalsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ProposalWhereInput
+    orderBy: [ProposalOrderByInput!]
+  ): ProposalConnection!
+  channelCategoriesByName(
+    whereChannelCategory: ChannelCategoryWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [ChannelCategoriesByNameFTSOutput!]!
+  membersByHandle(
+    whereMembership: MembershipWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [MembersByHandleFTSOutput!]!
+  postsByText(
+    whereForumPost: ForumPostWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [PostsByTextFTSOutput!]!
+  proposalsByDescription(
+    whereProposal: ProposalWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [ProposalsByDescriptionFTSOutput!]!
+  proposalsByTitle(
+    whereProposal: ProposalWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [ProposalsByTitleFTSOutput!]!
+  search(
+    whereVideo: VideoWhereInput
+    whereChannel: ChannelWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [SearchFTSOutput!]!
+  threadsByTitle(
+    whereForumThread: ForumThreadWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [ThreadsByTitleFTSOutput!]!
+  videoCategoriesByName(
+    whereVideoCategory: VideoCategoryWhereInput
+    skip: Int = 0
+    limit: Int = 5
+    text: String!
+  ): [VideoCategoriesByNameFTSOutput!]!
+  referendumFinishedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ReferendumFinishedEventWhereInput
+    orderBy: [ReferendumFinishedEventOrderByInput!]
+  ): [ReferendumFinishedEvent!]!
+  referendumFinishedEventByUniqueInput(where: ReferendumFinishedEventWhereUniqueInput!): ReferendumFinishedEvent
+  referendumFinishedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ReferendumFinishedEventWhereInput
+    orderBy: [ReferendumFinishedEventOrderByInput!]
+  ): ReferendumFinishedEventConnection!
+  referendumStageRevealingOptionResults(
+    offset: Int
+    limit: Int = 50
+    where: ReferendumStageRevealingOptionResultWhereInput
+    orderBy: [ReferendumStageRevealingOptionResultOrderByInput!]
+  ): [ReferendumStageRevealingOptionResult!]!
+  referendumStageRevealingOptionResultByUniqueInput(
+    where: ReferendumStageRevealingOptionResultWhereUniqueInput!
+  ): ReferendumStageRevealingOptionResult
+  referendumStageRevealingOptionResultsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ReferendumStageRevealingOptionResultWhereInput
+    orderBy: [ReferendumStageRevealingOptionResultOrderByInput!]
+  ): ReferendumStageRevealingOptionResultConnection!
+  referendumStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ReferendumStartedEventWhereInput
+    orderBy: [ReferendumStartedEventOrderByInput!]
+  ): [ReferendumStartedEvent!]!
+  referendumStartedEventByUniqueInput(where: ReferendumStartedEventWhereUniqueInput!): ReferendumStartedEvent
+  referendumStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ReferendumStartedEventWhereInput
+    orderBy: [ReferendumStartedEventOrderByInput!]
+  ): ReferendumStartedEventConnection!
+  referendumStartedForcefullyEvents(
+    offset: Int
+    limit: Int = 50
+    where: ReferendumStartedForcefullyEventWhereInput
+    orderBy: [ReferendumStartedForcefullyEventOrderByInput!]
+  ): [ReferendumStartedForcefullyEvent!]!
+  referendumStartedForcefullyEventByUniqueInput(
+    where: ReferendumStartedForcefullyEventWhereUniqueInput!
+  ): ReferendumStartedForcefullyEvent
+  referendumStartedForcefullyEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ReferendumStartedForcefullyEventWhereInput
+    orderBy: [ReferendumStartedForcefullyEventOrderByInput!]
+  ): ReferendumStartedForcefullyEventConnection!
+  referralCutUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ReferralCutUpdatedEventWhereInput
+    orderBy: [ReferralCutUpdatedEventOrderByInput!]
+  ): [ReferralCutUpdatedEvent!]!
+  referralCutUpdatedEventByUniqueInput(where: ReferralCutUpdatedEventWhereUniqueInput!): ReferralCutUpdatedEvent
+  referralCutUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ReferralCutUpdatedEventWhereInput
+    orderBy: [ReferralCutUpdatedEventOrderByInput!]
+  ): ReferralCutUpdatedEventConnection!
+  requestFundedEvents(
+    offset: Int
+    limit: Int = 50
+    where: RequestFundedEventWhereInput
+    orderBy: [RequestFundedEventOrderByInput!]
+  ): [RequestFundedEvent!]!
+  requestFundedEventByUniqueInput(where: RequestFundedEventWhereUniqueInput!): RequestFundedEvent
+  requestFundedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: RequestFundedEventWhereInput
+    orderBy: [RequestFundedEventOrderByInput!]
+  ): RequestFundedEventConnection!
+  revealingStageStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: RevealingStageStartedEventWhereInput
+    orderBy: [RevealingStageStartedEventOrderByInput!]
+  ): [RevealingStageStartedEvent!]!
+  revealingStageStartedEventByUniqueInput(
+    where: RevealingStageStartedEventWhereUniqueInput!
+  ): RevealingStageStartedEvent
+  revealingStageStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: RevealingStageStartedEventWhereInput
+    orderBy: [RevealingStageStartedEventOrderByInput!]
+  ): RevealingStageStartedEventConnection!
+  rewardPaidEvents(
+    offset: Int
+    limit: Int = 50
+    where: RewardPaidEventWhereInput
+    orderBy: [RewardPaidEventOrderByInput!]
+  ): [RewardPaidEvent!]!
+  rewardPaidEventByUniqueInput(where: RewardPaidEventWhereUniqueInput!): RewardPaidEvent
+  rewardPaidEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: RewardPaidEventWhereInput
+    orderBy: [RewardPaidEventOrderByInput!]
+  ): RewardPaidEventConnection!
+  rewardPaymentEvents(
+    offset: Int
+    limit: Int = 50
+    where: RewardPaymentEventWhereInput
+    orderBy: [RewardPaymentEventOrderByInput!]
+  ): [RewardPaymentEvent!]!
+  rewardPaymentEventByUniqueInput(where: RewardPaymentEventWhereUniqueInput!): RewardPaymentEvent
+  rewardPaymentEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: RewardPaymentEventWhereInput
+    orderBy: [RewardPaymentEventOrderByInput!]
+  ): RewardPaymentEventConnection!
+  runtimeWasmBytecodes(
+    offset: Int
+    limit: Int = 50
+    where: RuntimeWasmBytecodeWhereInput
+    orderBy: [RuntimeWasmBytecodeOrderByInput!]
+  ): [RuntimeWasmBytecode!]!
+  runtimeWasmBytecodeByUniqueInput(where: RuntimeWasmBytecodeWhereUniqueInput!): RuntimeWasmBytecode
+  runtimeWasmBytecodesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: RuntimeWasmBytecodeWhereInput
+    orderBy: [RuntimeWasmBytecodeOrderByInput!]
+  ): RuntimeWasmBytecodeConnection!
+  stakeDecreasedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakeDecreasedEventWhereInput
+    orderBy: [StakeDecreasedEventOrderByInput!]
+  ): [StakeDecreasedEvent!]!
+  stakeDecreasedEventByUniqueInput(where: StakeDecreasedEventWhereUniqueInput!): StakeDecreasedEvent
+  stakeDecreasedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakeDecreasedEventWhereInput
+    orderBy: [StakeDecreasedEventOrderByInput!]
+  ): StakeDecreasedEventConnection!
+  stakeIncreasedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakeIncreasedEventWhereInput
+    orderBy: [StakeIncreasedEventOrderByInput!]
+  ): [StakeIncreasedEvent!]!
+  stakeIncreasedEventByUniqueInput(where: StakeIncreasedEventWhereUniqueInput!): StakeIncreasedEvent
+  stakeIncreasedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakeIncreasedEventWhereInput
+    orderBy: [StakeIncreasedEventOrderByInput!]
+  ): StakeIncreasedEventConnection!
+  stakeReleasedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakeReleasedEventWhereInput
+    orderBy: [StakeReleasedEventOrderByInput!]
+  ): [StakeReleasedEvent!]!
+  stakeReleasedEventByUniqueInput(where: StakeReleasedEventWhereUniqueInput!): StakeReleasedEvent
+  stakeReleasedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakeReleasedEventWhereInput
+    orderBy: [StakeReleasedEventOrderByInput!]
+  ): StakeReleasedEventConnection!
+  stakeSlashedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakeSlashedEventWhereInput
+    orderBy: [StakeSlashedEventOrderByInput!]
+  ): [StakeSlashedEvent!]!
+  stakeSlashedEventByUniqueInput(where: StakeSlashedEventWhereUniqueInput!): StakeSlashedEvent
+  stakeSlashedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakeSlashedEventWhereInput
+    orderBy: [StakeSlashedEventOrderByInput!]
+  ): StakeSlashedEventConnection!
+  stakingAccountAddedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakingAccountAddedEventWhereInput
+    orderBy: [StakingAccountAddedEventOrderByInput!]
+  ): [StakingAccountAddedEvent!]!
+  stakingAccountAddedEventByUniqueInput(where: StakingAccountAddedEventWhereUniqueInput!): StakingAccountAddedEvent
+  stakingAccountAddedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakingAccountAddedEventWhereInput
+    orderBy: [StakingAccountAddedEventOrderByInput!]
+  ): StakingAccountAddedEventConnection!
+  stakingAccountConfirmedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakingAccountConfirmedEventWhereInput
+    orderBy: [StakingAccountConfirmedEventOrderByInput!]
+  ): [StakingAccountConfirmedEvent!]!
+  stakingAccountConfirmedEventByUniqueInput(
+    where: StakingAccountConfirmedEventWhereUniqueInput!
+  ): StakingAccountConfirmedEvent
+  stakingAccountConfirmedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakingAccountConfirmedEventWhereInput
+    orderBy: [StakingAccountConfirmedEventOrderByInput!]
+  ): StakingAccountConfirmedEventConnection!
+  stakingAccountRemovedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StakingAccountRemovedEventWhereInput
+    orderBy: [StakingAccountRemovedEventOrderByInput!]
+  ): [StakingAccountRemovedEvent!]!
+  stakingAccountRemovedEventByUniqueInput(
+    where: StakingAccountRemovedEventWhereUniqueInput!
+  ): StakingAccountRemovedEvent
+  stakingAccountRemovedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StakingAccountRemovedEventWhereInput
+    orderBy: [StakingAccountRemovedEventOrderByInput!]
+  ): StakingAccountRemovedEventConnection!
+  statusTextChangedEvents(
+    offset: Int
+    limit: Int = 50
+    where: StatusTextChangedEventWhereInput
+    orderBy: [StatusTextChangedEventOrderByInput!]
+  ): [StatusTextChangedEvent!]!
+  statusTextChangedEventByUniqueInput(where: StatusTextChangedEventWhereUniqueInput!): StatusTextChangedEvent
+  statusTextChangedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StatusTextChangedEventWhereInput
+    orderBy: [StatusTextChangedEventOrderByInput!]
+  ): StatusTextChangedEventConnection!
+  terminatedLeaderEvents(
+    offset: Int
+    limit: Int = 50
+    where: TerminatedLeaderEventWhereInput
+    orderBy: [TerminatedLeaderEventOrderByInput!]
+  ): [TerminatedLeaderEvent!]!
+  terminatedLeaderEventByUniqueInput(where: TerminatedLeaderEventWhereUniqueInput!): TerminatedLeaderEvent
+  terminatedLeaderEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: TerminatedLeaderEventWhereInput
+    orderBy: [TerminatedLeaderEventOrderByInput!]
+  ): TerminatedLeaderEventConnection!
+  terminatedWorkerEvents(
+    offset: Int
+    limit: Int = 50
+    where: TerminatedWorkerEventWhereInput
+    orderBy: [TerminatedWorkerEventOrderByInput!]
+  ): [TerminatedWorkerEvent!]!
+  terminatedWorkerEventByUniqueInput(where: TerminatedWorkerEventWhereUniqueInput!): TerminatedWorkerEvent
+  terminatedWorkerEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: TerminatedWorkerEventWhereInput
+    orderBy: [TerminatedWorkerEventOrderByInput!]
+  ): TerminatedWorkerEventConnection!
+  threadCreatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ThreadCreatedEventWhereInput
+    orderBy: [ThreadCreatedEventOrderByInput!]
+  ): [ThreadCreatedEvent!]!
+  threadCreatedEventByUniqueInput(where: ThreadCreatedEventWhereUniqueInput!): ThreadCreatedEvent
+  threadCreatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ThreadCreatedEventWhereInput
+    orderBy: [ThreadCreatedEventOrderByInput!]
+  ): ThreadCreatedEventConnection!
+  threadDeletedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ThreadDeletedEventWhereInput
+    orderBy: [ThreadDeletedEventOrderByInput!]
+  ): [ThreadDeletedEvent!]!
+  threadDeletedEventByUniqueInput(where: ThreadDeletedEventWhereUniqueInput!): ThreadDeletedEvent
+  threadDeletedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ThreadDeletedEventWhereInput
+    orderBy: [ThreadDeletedEventOrderByInput!]
+  ): ThreadDeletedEventConnection!
+  threadMetadataUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ThreadMetadataUpdatedEventWhereInput
+    orderBy: [ThreadMetadataUpdatedEventOrderByInput!]
+  ): [ThreadMetadataUpdatedEvent!]!
+  threadMetadataUpdatedEventByUniqueInput(
+    where: ThreadMetadataUpdatedEventWhereUniqueInput!
+  ): ThreadMetadataUpdatedEvent
+  threadMetadataUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ThreadMetadataUpdatedEventWhereInput
+    orderBy: [ThreadMetadataUpdatedEventOrderByInput!]
+  ): ThreadMetadataUpdatedEventConnection!
+  threadModeratedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ThreadModeratedEventWhereInput
+    orderBy: [ThreadModeratedEventOrderByInput!]
+  ): [ThreadModeratedEvent!]!
+  threadModeratedEventByUniqueInput(where: ThreadModeratedEventWhereUniqueInput!): ThreadModeratedEvent
+  threadModeratedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ThreadModeratedEventWhereInput
+    orderBy: [ThreadModeratedEventOrderByInput!]
+  ): ThreadModeratedEventConnection!
+  threadMovedEvents(
+    offset: Int
+    limit: Int = 50
+    where: ThreadMovedEventWhereInput
+    orderBy: [ThreadMovedEventOrderByInput!]
+  ): [ThreadMovedEvent!]!
+  threadMovedEventByUniqueInput(where: ThreadMovedEventWhereUniqueInput!): ThreadMovedEvent
+  threadMovedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ThreadMovedEventWhereInput
+    orderBy: [ThreadMovedEventOrderByInput!]
+  ): ThreadMovedEventConnection!
+  upcomingWorkingGroupOpenings(
+    offset: Int
+    limit: Int = 50
+    where: UpcomingWorkingGroupOpeningWhereInput
+    orderBy: [UpcomingWorkingGroupOpeningOrderByInput!]
+  ): [UpcomingWorkingGroupOpening!]!
+  upcomingWorkingGroupOpeningByUniqueInput(
+    where: UpcomingWorkingGroupOpeningWhereUniqueInput!
+  ): UpcomingWorkingGroupOpening
+  upcomingWorkingGroupOpeningsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: UpcomingWorkingGroupOpeningWhereInput
+    orderBy: [UpcomingWorkingGroupOpeningOrderByInput!]
+  ): UpcomingWorkingGroupOpeningConnection!
+  videoCategories(
+    offset: Int
+    limit: Int = 50
+    where: VideoCategoryWhereInput
+    orderBy: [VideoCategoryOrderByInput!]
+  ): [VideoCategory!]!
+  videoCategoryByUniqueInput(where: VideoCategoryWhereUniqueInput!): VideoCategory
+  videoCategoriesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VideoCategoryWhereInput
+    orderBy: [VideoCategoryOrderByInput!]
+  ): VideoCategoryConnection!
+  videoMediaEncodings(
+    offset: Int
+    limit: Int = 50
+    where: VideoMediaEncodingWhereInput
+    orderBy: [VideoMediaEncodingOrderByInput!]
+  ): [VideoMediaEncoding!]!
+  videoMediaEncodingByUniqueInput(where: VideoMediaEncodingWhereUniqueInput!): VideoMediaEncoding
+  videoMediaEncodingsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VideoMediaEncodingWhereInput
+    orderBy: [VideoMediaEncodingOrderByInput!]
+  ): VideoMediaEncodingConnection!
+  videoMediaMetadata(
+    offset: Int
+    limit: Int = 50
+    where: VideoMediaMetadataWhereInput
+    orderBy: [VideoMediaMetadataOrderByInput!]
+  ): [VideoMediaMetadata!]!
+  videoMediaMetadataByUniqueInput(where: VideoMediaMetadataWhereUniqueInput!): VideoMediaMetadata
+  videoMediaMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VideoMediaMetadataWhereInput
+    orderBy: [VideoMediaMetadataOrderByInput!]
+  ): VideoMediaMetadataConnection!
+  videos(offset: Int, limit: Int = 50, where: VideoWhereInput, orderBy: [VideoOrderByInput!]): [Video!]!
+  videoByUniqueInput(where: VideoWhereUniqueInput!): Video
+  videosConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VideoWhereInput
+    orderBy: [VideoOrderByInput!]
+  ): VideoConnection!
+  voteCastEvents(
+    offset: Int
+    limit: Int = 50
+    where: VoteCastEventWhereInput
+    orderBy: [VoteCastEventOrderByInput!]
+  ): [VoteCastEvent!]!
+  voteCastEventByUniqueInput(where: VoteCastEventWhereUniqueInput!): VoteCastEvent
+  voteCastEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VoteCastEventWhereInput
+    orderBy: [VoteCastEventOrderByInput!]
+  ): VoteCastEventConnection!
+  voteOnPollEvents(
+    offset: Int
+    limit: Int = 50
+    where: VoteOnPollEventWhereInput
+    orderBy: [VoteOnPollEventOrderByInput!]
+  ): [VoteOnPollEvent!]!
+  voteOnPollEventByUniqueInput(where: VoteOnPollEventWhereUniqueInput!): VoteOnPollEvent
+  voteOnPollEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VoteOnPollEventWhereInput
+    orderBy: [VoteOnPollEventOrderByInput!]
+  ): VoteOnPollEventConnection!
+  voteRevealedEvents(
+    offset: Int
+    limit: Int = 50
+    where: VoteRevealedEventWhereInput
+    orderBy: [VoteRevealedEventOrderByInput!]
+  ): [VoteRevealedEvent!]!
+  voteRevealedEventByUniqueInput(where: VoteRevealedEventWhereUniqueInput!): VoteRevealedEvent
+  voteRevealedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VoteRevealedEventWhereInput
+    orderBy: [VoteRevealedEventOrderByInput!]
+  ): VoteRevealedEventConnection!
+  votingPeriodStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: VotingPeriodStartedEventWhereInput
+    orderBy: [VotingPeriodStartedEventOrderByInput!]
+  ): [VotingPeriodStartedEvent!]!
+  votingPeriodStartedEventByUniqueInput(where: VotingPeriodStartedEventWhereUniqueInput!): VotingPeriodStartedEvent
+  votingPeriodStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VotingPeriodStartedEventWhereInput
+    orderBy: [VotingPeriodStartedEventOrderByInput!]
+  ): VotingPeriodStartedEventConnection!
+  workerExitedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkerExitedEventWhereInput
+    orderBy: [WorkerExitedEventOrderByInput!]
+  ): [WorkerExitedEvent!]!
+  workerExitedEventByUniqueInput(where: WorkerExitedEventWhereUniqueInput!): WorkerExitedEvent
+  workerExitedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkerExitedEventWhereInput
+    orderBy: [WorkerExitedEventOrderByInput!]
+  ): WorkerExitedEventConnection!
+  workerRewardAccountUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkerRewardAccountUpdatedEventWhereInput
+    orderBy: [WorkerRewardAccountUpdatedEventOrderByInput!]
+  ): [WorkerRewardAccountUpdatedEvent!]!
+  workerRewardAccountUpdatedEventByUniqueInput(
+    where: WorkerRewardAccountUpdatedEventWhereUniqueInput!
+  ): WorkerRewardAccountUpdatedEvent
+  workerRewardAccountUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkerRewardAccountUpdatedEventWhereInput
+    orderBy: [WorkerRewardAccountUpdatedEventOrderByInput!]
+  ): WorkerRewardAccountUpdatedEventConnection!
+  workerRewardAmountUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkerRewardAmountUpdatedEventWhereInput
+    orderBy: [WorkerRewardAmountUpdatedEventOrderByInput!]
+  ): [WorkerRewardAmountUpdatedEvent!]!
+  workerRewardAmountUpdatedEventByUniqueInput(
+    where: WorkerRewardAmountUpdatedEventWhereUniqueInput!
+  ): WorkerRewardAmountUpdatedEvent
+  workerRewardAmountUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkerRewardAmountUpdatedEventWhereInput
+    orderBy: [WorkerRewardAmountUpdatedEventOrderByInput!]
+  ): WorkerRewardAmountUpdatedEventConnection!
+  workerRoleAccountUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkerRoleAccountUpdatedEventWhereInput
+    orderBy: [WorkerRoleAccountUpdatedEventOrderByInput!]
+  ): [WorkerRoleAccountUpdatedEvent!]!
+  workerRoleAccountUpdatedEventByUniqueInput(
+    where: WorkerRoleAccountUpdatedEventWhereUniqueInput!
+  ): WorkerRoleAccountUpdatedEvent
+  workerRoleAccountUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkerRoleAccountUpdatedEventWhereInput
+    orderBy: [WorkerRoleAccountUpdatedEventOrderByInput!]
+  ): WorkerRoleAccountUpdatedEventConnection!
+  workerStartedLeavingEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkerStartedLeavingEventWhereInput
+    orderBy: [WorkerStartedLeavingEventOrderByInput!]
+  ): [WorkerStartedLeavingEvent!]!
+  workerStartedLeavingEventByUniqueInput(where: WorkerStartedLeavingEventWhereUniqueInput!): WorkerStartedLeavingEvent
+  workerStartedLeavingEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkerStartedLeavingEventWhereInput
+    orderBy: [WorkerStartedLeavingEventOrderByInput!]
+  ): WorkerStartedLeavingEventConnection!
+  workers(offset: Int, limit: Int = 50, where: WorkerWhereInput, orderBy: [WorkerOrderByInput!]): [Worker!]!
+  workerByUniqueInput(where: WorkerWhereUniqueInput!): Worker
+  workersConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkerWhereInput
+    orderBy: [WorkerOrderByInput!]
+  ): WorkerConnection!
+  workingGroupApplications(
+    offset: Int
+    limit: Int = 50
+    where: WorkingGroupApplicationWhereInput
+    orderBy: [WorkingGroupApplicationOrderByInput!]
+  ): [WorkingGroupApplication!]!
+  workingGroupApplicationByUniqueInput(where: WorkingGroupApplicationWhereUniqueInput!): WorkingGroupApplication
+  workingGroupApplicationsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkingGroupApplicationWhereInput
+    orderBy: [WorkingGroupApplicationOrderByInput!]
+  ): WorkingGroupApplicationConnection!
+  workingGroupMetadata(
+    offset: Int
+    limit: Int = 50
+    where: WorkingGroupMetadataWhereInput
+    orderBy: [WorkingGroupMetadataOrderByInput!]
+  ): [WorkingGroupMetadata!]!
+  workingGroupMetadataByUniqueInput(where: WorkingGroupMetadataWhereUniqueInput!): WorkingGroupMetadata
+  workingGroupMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkingGroupMetadataWhereInput
+    orderBy: [WorkingGroupMetadataOrderByInput!]
+  ): WorkingGroupMetadataConnection!
+  workingGroupOpeningMetadata(
+    offset: Int
+    limit: Int = 50
+    where: WorkingGroupOpeningMetadataWhereInput
+    orderBy: [WorkingGroupOpeningMetadataOrderByInput!]
+  ): [WorkingGroupOpeningMetadata!]!
+  workingGroupOpeningMetadataByUniqueInput(
+    where: WorkingGroupOpeningMetadataWhereUniqueInput!
+  ): WorkingGroupOpeningMetadata
+  workingGroupOpeningMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkingGroupOpeningMetadataWhereInput
+    orderBy: [WorkingGroupOpeningMetadataOrderByInput!]
+  ): WorkingGroupOpeningMetadataConnection!
+  workingGroupOpenings(
+    offset: Int
+    limit: Int = 50
+    where: WorkingGroupOpeningWhereInput
+    orderBy: [WorkingGroupOpeningOrderByInput!]
+  ): [WorkingGroupOpening!]!
+  workingGroupOpeningByUniqueInput(where: WorkingGroupOpeningWhereUniqueInput!): WorkingGroupOpening
+  workingGroupOpeningsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkingGroupOpeningWhereInput
+    orderBy: [WorkingGroupOpeningOrderByInput!]
+  ): WorkingGroupOpeningConnection!
+  workingGroups(
+    offset: Int
+    limit: Int = 50
+    where: WorkingGroupWhereInput
+    orderBy: [WorkingGroupOrderByInput!]
+  ): [WorkingGroup!]!
+  workingGroupByUniqueInput(where: WorkingGroupWhereUniqueInput!): WorkingGroup
+  workingGroupsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkingGroupWhereInput
+    orderBy: [WorkingGroupOrderByInput!]
+  ): WorkingGroupConnection!
+}
+
 type ReferendumFinishedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -16776,84 +16671,6 @@ input ReferendumFinishedEventWhereUniqueInput {
   id: ID!
 }
 
-type ReferendumStageInactive {
-  dummy: Int
-}
-
-input ReferendumStageInactiveCreateInput {
-  dummy: Float
-}
-
-input ReferendumStageInactiveUpdateInput {
-  dummy: Float
-}
-
-input ReferendumStageInactiveWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [ReferendumStageInactiveWhereInput!]
-  OR: [ReferendumStageInactiveWhereInput!]
-}
-
-input ReferendumStageInactiveWhereUniqueInput {
-  id: ID!
-}
-
-type ReferendumStageRevealing {
-  """
-  Block in which referendum started
-  """
-  started: BigInt!
-
-  """
-  Target number of winners
-  """
-  winningTargetCount: BigInt!
-
-  """
-  Intermediate winning options
-  """
-  intermediateWinners: [ReferendumStageRevealingOptionResult!]
-
-  """
-  Index of current election
-  """
-  electionRound: ElectionRound
-}
-
-input ReferendumStageRevealingCreateInput {
-  started: BigInt!
-  winningTargetCount: BigInt!
-}
-
 type ReferendumStageRevealingOptionResult implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -16863,8 +16680,8 @@ type ReferendumStageRevealingOptionResult implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  optionId: Membership!
-  optionIdId: String!
+  option: Membership!
+  optionId: String!
 
   """
   Sum of votes' power received.
@@ -16883,7 +16700,7 @@ type ReferendumStageRevealingOptionResultConnection {
 }
 
 input ReferendumStageRevealingOptionResultCreateInput {
-  optionId: ID!
+  option: ID!
   votePower: BigInt!
   electionRound: ID!
   referendumFinishedEvent: ID!
@@ -16901,8 +16718,8 @@ enum ReferendumStageRevealingOptionResultOrderByInput {
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
-  optionId_ASC
-  optionId_DESC
+  option_ASC
+  option_DESC
   votePower_ASC
   votePower_DESC
   electionRound_ASC
@@ -16912,7 +16729,7 @@ enum ReferendumStageRevealingOptionResultOrderByInput {
 }
 
 input ReferendumStageRevealingOptionResultUpdateInput {
-  optionId: ID
+  option: ID
   votePower: BigInt
   electionRound: ID
   referendumFinishedEvent: ID
@@ -16943,8 +16760,8 @@ input ReferendumStageRevealingOptionResultWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  optionId_eq: ID
-  optionId_in: [ID!]
+  option_eq: ID
+  option_in: [ID!]
   votePower_eq: BigInt
   votePower_gt: BigInt
   votePower_gte: BigInt
@@ -16955,7 +16772,7 @@ input ReferendumStageRevealingOptionResultWhereInput {
   electionRound_in: [ID!]
   referendumFinishedEvent_eq: ID
   referendumFinishedEvent_in: [ID!]
-  optionId: MembershipWhereInput
+  option: MembershipWhereInput
   electionRound: ElectionRoundWhereInput
   referendumFinishedEvent: ReferendumFinishedEventWhereInput
   AND: [ReferendumStageRevealingOptionResultWhereInput!]
@@ -16963,128 +16780,6 @@ input ReferendumStageRevealingOptionResultWhereInput {
 }
 
 input ReferendumStageRevealingOptionResultWhereUniqueInput {
-  id: ID!
-}
-
-input ReferendumStageRevealingUpdateInput {
-  started: BigInt
-  winningTargetCount: BigInt
-}
-
-input ReferendumStageRevealingWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  started_eq: BigInt
-  started_gt: BigInt
-  started_gte: BigInt
-  started_lt: BigInt
-  started_lte: BigInt
-  started_in: [BigInt!]
-  winningTargetCount_eq: BigInt
-  winningTargetCount_gt: BigInt
-  winningTargetCount_gte: BigInt
-  winningTargetCount_lt: BigInt
-  winningTargetCount_lte: BigInt
-  winningTargetCount_in: [BigInt!]
-  AND: [ReferendumStageRevealingWhereInput!]
-  OR: [ReferendumStageRevealingWhereInput!]
-}
-
-input ReferendumStageRevealingWhereUniqueInput {
-  id: ID!
-}
-
-type ReferendumStageVoting {
-  """
-  Block in which referendum started.
-  """
-  started: BigInt!
-
-  """
-  Target number of winners.
-  """
-  winningTargetCount: BigInt!
-
-  """
-  Index of current election
-  """
-  electionRound: ElectionRound
-}
-
-input ReferendumStageVotingCreateInput {
-  started: BigInt!
-  winningTargetCount: BigInt!
-}
-
-input ReferendumStageVotingUpdateInput {
-  started: BigInt
-  winningTargetCount: BigInt
-}
-
-input ReferendumStageVotingWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  started_eq: BigInt
-  started_gt: BigInt
-  started_gte: BigInt
-  started_lt: BigInt
-  started_lte: BigInt
-  started_in: [BigInt!]
-  winningTargetCount_eq: BigInt
-  winningTargetCount_gt: BigInt
-  winningTargetCount_gte: BigInt
-  winningTargetCount_lt: BigInt
-  winningTargetCount_lte: BigInt
-  winningTargetCount_in: [BigInt!]
-  AND: [ReferendumStageVotingWhereInput!]
-  OR: [ReferendumStageVotingWhereInput!]
-}
-
-input ReferendumStageVotingWhereUniqueInput {
   id: ID!
 }
 
@@ -17555,7 +17250,7 @@ type RequestFundedEvent implements Event & BaseGraphQLObject {
   version: Int!
 
   """
-  Funding account.
+  Target account.
   """
   account: String!
 
@@ -18027,8 +17722,8 @@ type RewardPaymentEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  member: Membership!
-  memberId: String!
+  councilMember: CouncilMember!
+  councilMemberId: String!
 
   """
   Candidate's account that will be recieving rewards if candidate's elected.
@@ -18057,7 +17752,7 @@ input RewardPaymentEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  member: ID!
+  councilMember: ID!
   rewardAccount: String!
   paidBalance: BigInt!
   missingBalance: BigInt!
@@ -18083,8 +17778,8 @@ enum RewardPaymentEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  member_ASC
-  member_DESC
+  councilMember_ASC
+  councilMember_DESC
   rewardAccount_ASC
   rewardAccount_DESC
   paidBalance_ASC
@@ -18098,7 +17793,7 @@ input RewardPaymentEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  member: ID
+  councilMember: ID
   rewardAccount: String
   paidBalance: BigInt
   missingBalance: BigInt
@@ -18148,8 +17843,8 @@ input RewardPaymentEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
+  councilMember_eq: ID
+  councilMember_in: [ID!]
   rewardAccount_eq: String
   rewardAccount_contains: String
   rewardAccount_startsWith: String
@@ -18167,7 +17862,7 @@ input RewardPaymentEventWhereInput {
   missingBalance_lt: BigInt
   missingBalance_lte: BigInt
   missingBalance_in: [BigInt!]
-  member: MembershipWhereInput
+  councilMember: CouncilMemberWhereInput
   AND: [RewardPaymentEventWhereInput!]
   OR: [RewardPaymentEventWhereInput!]
 }
@@ -22486,21 +22181,8 @@ type VoteCastEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-
-  """
-  Account that cast the vote.
-  """
-  account: String!
-
-  """
-  Hash of sealed vote.
-  """
-  hash: String!
-
-  """
-  Vote power decided by amount staked.
-  """
-  votePower: BigInt!
+  castVote: CastVote!
+  castVoteId: String!
 }
 
 type VoteCastEventConnection {
@@ -22514,9 +22196,7 @@ input VoteCastEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  account: String!
-  hash: String!
-  votePower: BigInt!
+  castVote: ID!
 }
 
 type VoteCastEventEdge {
@@ -22539,12 +22219,8 @@ enum VoteCastEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  account_ASC
-  account_DESC
-  hash_ASC
-  hash_DESC
-  votePower_ASC
-  votePower_DESC
+  castVote_ASC
+  castVote_DESC
 }
 
 input VoteCastEventUpdateInput {
@@ -22552,9 +22228,7 @@ input VoteCastEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  account: String
-  hash: String
-  votePower: BigInt
+  castVote: ID
 }
 
 input VoteCastEventWhereInput {
@@ -22601,22 +22275,9 @@ input VoteCastEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  account_eq: String
-  account_contains: String
-  account_startsWith: String
-  account_endsWith: String
-  account_in: [String!]
-  hash_eq: String
-  hash_contains: String
-  hash_startsWith: String
-  hash_endsWith: String
-  hash_in: [String!]
-  votePower_eq: BigInt
-  votePower_gt: BigInt
-  votePower_gte: BigInt
-  votePower_lt: BigInt
-  votePower_lte: BigInt
-  votePower_in: [BigInt!]
+  castVote_eq: ID
+  castVote_in: [ID!]
+  castVote: CastVoteWhereInput
   AND: [VoteCastEventWhereInput!]
   OR: [VoteCastEventWhereInput!]
 }
@@ -22801,18 +22462,8 @@ type VoteRevealedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-
-  """
-  Account that cast a vote.
-  """
-  account: String!
-  member: Membership!
-  memberId: String!
-
-  """
-  Salt that has been used for the vote's hash creation.
-  """
-  salt: String!
+  castVote: CastVote!
+  castVoteId: String!
 }
 
 type VoteRevealedEventConnection {
@@ -22826,9 +22477,7 @@ input VoteRevealedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  account: String!
-  member: ID!
-  salt: String!
+  castVote: ID!
 }
 
 type VoteRevealedEventEdge {
@@ -22851,12 +22500,8 @@ enum VoteRevealedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
-  account_ASC
-  account_DESC
-  member_ASC
-  member_DESC
-  salt_ASC
-  salt_DESC
+  castVote_ASC
+  castVote_DESC
 }
 
 input VoteRevealedEventUpdateInput {
@@ -22864,9 +22509,7 @@ input VoteRevealedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  account: String
-  member: ID
-  salt: String
+  castVote: ID
 }
 
 input VoteRevealedEventWhereInput {
@@ -22913,19 +22556,9 @@ input VoteRevealedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  account_eq: String
-  account_contains: String
-  account_startsWith: String
-  account_endsWith: String
-  account_in: [String!]
-  member_eq: ID
-  member_in: [ID!]
-  salt_eq: String
-  salt_contains: String
-  salt_startsWith: String
-  salt_endsWith: String
-  salt_in: [String!]
-  member: MembershipWhereInput
+  castVote_eq: ID
+  castVote_in: [ID!]
+  castVote: CastVoteWhereInput
   AND: [VoteRevealedEventWhereInput!]
   OR: [VoteRevealedEventWhereInput!]
 }

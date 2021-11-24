@@ -10,6 +10,7 @@ import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
+import { RestoreVotesModal, RestoreVotesModalCall } from '@/council/modals/RestoreVotes'
 import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVote'
 import { VoteForCouncilModal, VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
@@ -66,6 +67,7 @@ export type ModalNames =
   | ModalName<RecoverBalanceModalCall>
   | ModalName<IncreaseWorkerStakeModalCall>
   | ModalName<OnBoardingModalCall>
+  | ModalName<RestoreVotesModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -96,6 +98,7 @@ const modals: Record<ModalNames, ReactElement> = {
   RecoverBalance: <RecoverBalanceModal />,
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   OnBoardingModal: <OnBoardingModal />,
+  RestoreVotes: <RestoreVotesModal />,
 }
 
 export const GlobalModals = () => {
