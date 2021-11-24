@@ -34,12 +34,14 @@ export const CancelWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="working-group-select-input"
             label="Working Group"
             required
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
             <SelectWorkingGroup
+              id="working-group-select"
               selectedGroupId={groupId}
               onChange={(selected) => setGroupId(selected.id)}
               disableNoLead
@@ -50,6 +52,7 @@ export const CancelWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="opening-input"
             label="Opening"
             required
             inputSize="l"
@@ -59,6 +62,7 @@ export const CancelWorkingGroupLeadOpening = ({
             disabled={!groupId}
           >
             <SelectWorkingGroupOpening
+              id="opening"
               onChange={(selected) => setOpeningId(selected.id)}
               selectedOpeningId={openingId}
               disabled={!groupId}

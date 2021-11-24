@@ -481,7 +481,6 @@ describe('UI: AddNewProposalModal', () => {
           await finishTriggerAndDiscussion()
 
           expect(screen.getByText(/^Create Working Group Lead Opening$/i)).toBeDefined()
-          expect(screen.getByText(/^Create Working Group Lead Opening$/i)).toBeDefined()
         })
 
         it('Step 1: Valid', async () => {
@@ -546,17 +545,15 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(
-            screen.queryByLabelText<HTMLInputElement>(/^working group/i, { selector: 'input' })
-          ).toHaveValue('')
-          expect(screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
-          expect(await getNextStepButton()).toBeDisabled()
+          expect(await screen.queryByLabelText(/^working group/i, { selector: 'input' })).toHaveValue('')
+          expect(await screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid form', async () => {
           await SpecificParameters.CancelWorkingGroupLeadOpening.selectGroup('Forum')
           await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-0')
-          expect(await getNextStepButton()).toBeEnabled()
+          expect(await getCreateButton()).toBeEnabled()
         })
       })
     })
