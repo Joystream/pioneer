@@ -61,6 +61,9 @@ export const propsEquals =
 
 // Lists:
 
+export const dedupeObjects = <T>(list: T[], options?: EqualsOption): T[] =>
+  list.reduce((remain: T[], item) => [...remain, ...(remain.some(objectEquals(item, options)) ? [] : [item])], [])
+
 export const intersperse = <T extends any, S extends any>(
   list: T[],
   toSeparator: (index: number, list: T[]) => S

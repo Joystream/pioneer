@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const getItem = (key?: string) => {
   if (key === undefined) {
@@ -40,9 +40,13 @@ export const useLocalStorage = <T>(key?: string) => {
     setValue(getItem(key))
   }, [key])
 
-  useEffect(() => {
-    setItem(key, value)
-  }, [value])
+  const set = useCallback(
+    (value: T) => {
+      setValue(value)
+      setItem(key, value)
+    },
+    [key]
+  )
 
-  return [value, setValue] as const
+  return [value, set] as const
 }

@@ -5,6 +5,11 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { isDefined } from '@/common/utils'
 import { VotingAttempt } from '@/council/hooks/useCommitment'
 
+export interface VotesBackup {
+  cycleId: number
+  votingAttempts: VotingAttempt[]
+}
+
 interface Props {
   cycleId?: number
 }
@@ -14,9 +19,10 @@ export const BackupVotesButton = ({ cycleId }: Props) => {
 
   if (!votingAttempts?.length || !isDefined(cycleId)) return null
 
-  const votesJSON = JSON.stringify({ cycleId, votingAttempts })
+  const backup: VotesBackup = { cycleId, votingAttempts }
+  const backupJSON = JSON.stringify(backup)
   return (
-    <DownloadButtonGhost size="medium" name={`Votes-${cycleId}.json`} parts={[votesJSON]}>
+    <DownloadButtonGhost size="medium" name={`Votes-${cycleId}.json`} parts={[backupJSON]}>
       Backup Votes
     </DownloadButtonGhost>
   )
