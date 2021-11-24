@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 import { of } from 'rxjs'
 
 import { Account } from '@/accounts/types'
@@ -184,13 +185,15 @@ describe('UI: BuyMembershipModal', () => {
 
   function renderModal() {
     render(
-      <MockQueryNodeProviders>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <BuyMembershipModal />
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </MockQueryNodeProviders>
+      <MemoryRouter>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <BuyMembershipModal />
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
+      </MemoryRouter>
     )
   }
 })

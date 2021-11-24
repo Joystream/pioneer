@@ -3,6 +3,7 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
+import { TermsRoutes } from '@/app/constants/routes'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
@@ -242,11 +243,11 @@ export const BuyMembershipForm = ({
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <TextMedium colorInherit>
               I agree to the{' '}
-              <LabelLink href="http://example.com/" target="_blank">
+              <LabelLink to={TermsRoutes.termsOfService} target="_blank">
                 Terms of Service
               </LabelLink>{' '}
               and{' '}
-              <LabelLink href="http://example.com/" target="_blank">
+              <LabelLink to={TermsRoutes.privacyPolicy} target="_blank">
                 Privacy Policy
               </LabelLink>
               .
