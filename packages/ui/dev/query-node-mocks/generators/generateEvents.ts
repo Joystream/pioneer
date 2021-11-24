@@ -19,7 +19,7 @@ const generateRewardPaidEvent = (mocks: Mocks) => {
       workerId: worker?.id.toString(),
       rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
       amount: randomFromRange(100, 1000) * 10,
-      type: 'REGULAR',
+      type: 'REGULAR'
     }
   }
 }
@@ -34,7 +34,7 @@ const generateBudgetSpending = (mocks: Mocks) => () => {
     workerId: worker?.id.toString(),
     rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     amount: randomFromRange(0, 10000),
-    reciever: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    reciever: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'
   }
 }
 
@@ -47,7 +47,7 @@ const generateAppliedOnOpeningEvent = (mocks: Mocks) => () => {
     createdAt: faker.date.recent(30),
     applicationId: application.id,
     openingId: application.openingId,
-    groupId: opening?.groupId,
+    groupId: opening?.groupId
   }
 }
 
@@ -60,7 +60,7 @@ const generateApplicationWithdrawnEvent = (mocks: Mocks) => () => {
     id: (nextApplicationWithdrawnEventId++).toString(),
     createdAt: faker.date.recent(20),
     applicationId: application.id,
-    groupId: opening?.groupId,
+    groupId: opening?.groupId
   }
 }
 
@@ -70,7 +70,7 @@ const generateStakeChanged = (mocks: Mocks) => () => {
     createdAt: faker.date.recent(7),
     groupId: worker?.groupId,
     workerId: worker?.id,
-    amount: randomFromRange(100, 10000),
+    amount: randomFromRange(100, 10000)
   }
 }
 
@@ -82,7 +82,7 @@ const generateStakeSlashedEvent = (mocks: Mocks) => () => {
     workerId: worker?.id,
     requestedAmount: 1000,
     slashedAmount: 1000,
-    rationale: 'rationale',
+    rationale: 'rationale'
   }
 }
 
@@ -96,7 +96,7 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
     ...randomBlock(),
     workersHiredIds: Array.from({ length: opening.metadata.hiringLimit }).map(
       () => workers[randomFromRange(0, workers.length - 1)]?.id
-    ),
+    )
   }
 }
 
@@ -107,7 +107,7 @@ const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
   return {
     ...randomBlock(),
     groupId: group?.id,
-    openingId: opening.id,
+    openingId: opening.id
   }
 }
 
@@ -116,13 +116,13 @@ const generateBudgetSetEvent = (mocks: Mocks) => () => {
   return {
     ...randomBlock(),
     groupId: group.id,
-    newBudget: 10000 * randomFromRange(1, 10),
+    newBudget: 10000 * randomFromRange(1, 10)
   }
 }
 
 const generateCouncilorRewardUpdatedEvent = () => ({
   ...randomBlock(),
-  rewardAmount: 5000 * randomFromRange(1, 10),
+  rewardAmount: 5000 * randomFromRange(1, 10)
 })
 
 const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
@@ -133,7 +133,7 @@ const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
     ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id,
-    newRewardAccount: member?.rootAccount,
+    newRewardAccount: member?.rootAccount
   }
 }
 
@@ -143,15 +143,15 @@ const generateWorkerRewardAmountUpdatedEvent = (mocks: Mocks) => () => {
     ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id,
-    newRewardPerBlock: randomFromRange(1, 50),
+    newRewardPerBlock: randomFromRange(1, 50)
   }
 }
 
-const generateCandidacyWithdrawEvent = (mocks:Mocks) => () => {
+const generateCandidacyWithdrawEvent = (mocks: Mocks) => () => {
   const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
   return {
     ...randomBlock(),
-    memberId: member.id,
+    memberId: member.id
   }
 }
 
@@ -191,7 +191,7 @@ export const generateWorkerLeavingEvent = (workerId: string, groupId: string) =>
   return {
     ...randomBlock(),
     groupId,
-    workerId,
+    workerId
   }
 }
 
@@ -200,6 +200,6 @@ export const generateTerminatedEvent = (workerId: string, groupId: string) => {
     ...randomBlock(),
     groupId,
     workerId,
-    penalty: 0,
+    penalty: 0
   }
 }
