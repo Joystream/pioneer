@@ -382,6 +382,29 @@ describe('UI: AddNewProposalModal', () => {
         await finishWarning()
       })
 
+      describe('Type - Signal', () => {
+        beforeEach(async () => {
+          await finishProposalType('signal')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Invalid - signal field not filled ', async () => {
+          expect(screen.queryByLabelText(/^signal/i)).toHaveValue('')
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - signal field filled', async () => {
+          await SpecificParameters.Signal.fillSignal('Foo')
+
+          const button = await getCreateButton()
+          expect(button).toBeEnabled()
+        })
+      })
+
       describe('Type - Funding Request', () => {
         beforeEach(async () => {
           await finishProposalType('fundingRequest')
@@ -853,6 +876,9 @@ describe('UI: AddNewProposalModal', () => {
 
   const SpecificParameters = {
     fillAmount: async (value: number) => await fillField('amount-input', value),
+    Signal: {
+      fillSignal: async (value: string) => await fillField('signal', value),
+    },
     FundingRequest: {
       selectRecipient: async (name: string) => {
         await selectFromDropdown('Recipient account', name)

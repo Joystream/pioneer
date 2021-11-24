@@ -26,9 +26,9 @@ export const Signal = ({ signal, setSignal }: SignalProps) => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Signal" required inputSize="auto" id="field-description">
+          <InputComponent label="Signal" required inputSize="auto" id="signal">
             <CKEditor
-              id="field-description"
+              id="signal"
               onReady={(editor) => editor.setData(signal || '')}
               onChange={(event, editor) => setSignal(editor.getData())}
             />
