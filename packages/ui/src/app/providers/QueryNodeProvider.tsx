@@ -17,24 +17,25 @@ const QUERY_NODE_GRAPHQL_SUBSCRIPTION_URL = 'wss://olympia-dev.joystream.app/que
 
 const ENDPOINTS: Record<NetworkType, string> = {
   local: 'http://localhost:8081/graphql',
+  'local-mocks': 'http://localhost:8081/graphql',
   'olympia-testnet': 'https://olympia-dev.joystream.app/query/server/graphql',
 }
 
 export const QueryNodeProvider = ({ children }: Props) => {
   const [network] = useNetwork()
 
-  if (network === 'olympia-testnet') {
-    return <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
+  if (network === 'local-mocks') {
+    return (
+      <ServerContextProvider value={makeServer()}>
+        <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
+      </ServerContextProvider>
+    )
   }
 
-  return (
-    <ServerContextProvider value={makeServer()}>
-      <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
-    </ServerContextProvider>
-  )
+  return <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
 }
 
-const getApolloClient = (network: 'local' | 'olympia-testnet') => {
+const getApolloClient = (network: NetworkType) => {
   const httpLink = new HttpLink({
     uri: ENDPOINTS[network],
   })
