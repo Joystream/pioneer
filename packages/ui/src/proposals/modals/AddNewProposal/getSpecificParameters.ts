@@ -12,9 +12,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
 
   const specifics = state.context.specifics
 
-  switch (
-    state.context.type // todo add cancelWorkingGroupOpening transaction
-  ) {
+  switch (state.context.type) {
     case 'fundingRequest': {
       return {
         FundingRequest: [{ amount: specifics?.amount, account: specifics?.account?.address }],
