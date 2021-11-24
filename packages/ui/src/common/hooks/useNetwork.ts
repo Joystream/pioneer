@@ -1,6 +1,6 @@
 import { useLocalStorage } from './useLocalStorage'
 
-export type NetworkType = 'local' | 'olympia-testnet'
+export type NetworkType = 'local' | 'local-mocks' | 'olympia-testnet'
 
 export const useNetwork = () => {
   const [network, setNetwork] = useLocalStorage<NetworkType>('network')
