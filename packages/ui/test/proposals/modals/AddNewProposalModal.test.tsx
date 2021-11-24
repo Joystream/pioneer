@@ -481,6 +481,7 @@ describe('UI: AddNewProposalModal', () => {
           await finishTriggerAndDiscussion()
 
           expect(screen.getByText(/^Create Working Group Lead Opening$/i)).toBeDefined()
+          expect(screen.getByText(/^Create Working Group Lead Opening$/i)).toBeDefined()
         })
 
         it('Step 1: Valid', async () => {
@@ -527,6 +528,31 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(100)
           expect(await getCreateButton()).toBeEnabled()
         })
+      })
+    })
+
+    describe('Type - Cancel Working Group Lead Opening', () => {
+      beforeAll(() => {
+        seedWorkingGroups(server.server)
+        seedOpenings(server.server)
+      })
+      beforeEach(async () => {
+        await finishProposalType('cancelWorkingGroupLeadOpening')
+        await finishStakingAccount()
+        await finishProposalDetails()
+        await finishTriggerAndDiscussion()
+
+        expect(screen.getByText(/^Cancel Working Group Lead Opening$/i)).toBeDefined()
+      })
+      it('Invalid form', async () => {
+        expect(screen.queryByLabelText(/^working group/i, { selector: 'input' })).toHaveValue('')
+        expect(screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
+        expect(await getNextStepButton()).toBeDisabled()
+      })
+      it('Valid form', async () => {
+        await SpecificParameters.CancelWorkingGroupLeadOpening.selectGroup('Forum')
+        await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-0')
+        expect(await getNextStepButton()).toBeEnabled()
       })
     })
 
@@ -846,6 +872,10 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Working Group$', name)
   }
 
+  const selectedOpening = async (name: string) => {
+    await selectFromDropdown('^Opening$', name)
+  }
+
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     await fireEvent.change(amountInput, { target: { value } })
@@ -874,6 +904,10 @@ describe('UI: AddNewProposalModal', () => {
       fillDescription: async (value: string) => await fillField('field-description', value),
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
+    },
+    CancelWorkingGroupLeadOpening: {
+      selectGroup,
+      selectedOpening,
     },
   }
 
