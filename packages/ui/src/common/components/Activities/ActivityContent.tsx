@@ -1,6 +1,16 @@
 import React, { ReactElement } from 'react'
 
 import { Activity, ActivityCategory, BaseActivity } from '@/common/types/Activity'
+import {
+  AnnouncingPeriodStartedContent,
+  CandidacyWithdrawContent,
+  CouncilorRewardUpdatedContent,
+  NotEnoughCandidatesContent,
+  NewCouncilElectedContent,
+  VotingPeriodStartedContent,
+  RevealingStageStartedContent,
+  NewCandidateContent,
+} from '@/council/components/Activities'
 import { CategoryCreatedContent } from '@/forum/components/Activities/CategoryCreatedContent'
 import { PostAddedContent } from '@/forum/components/Activities/PostAddedContent'
 import { PostDeletedContent } from '@/forum/components/Activities/PostDeletedContent'
@@ -71,6 +81,14 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   ProposalDiscussionPostCreatedEvent: ProposalDiscussionPostCreatedContent,
   ProposalDiscussionPostUpdatedEvent: ProposalDiscussionPostEditedContent,
   ProposalDiscussionPostDeletedEvent: ProposalDiscussionPostDeletedContent,
+  NotEnoughCandidatesEvent: NotEnoughCandidatesContent,
+  CandidacyWithdrawEvent: CandidacyWithdrawContent,
+  NewCandidateEvent: NewCandidateContent,
+  NewCouncilElectedEvent: NewCouncilElectedContent,
+  VotingPeriodStartedEvent: VotingPeriodStartedContent,
+  AnnouncingPeriodStartedEvent: AnnouncingPeriodStartedContent,
+  CouncilorRewardUpdatedEvent: CouncilorRewardUpdatedContent,
+  RevealingStageStartedEvent: RevealingStageStartedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {

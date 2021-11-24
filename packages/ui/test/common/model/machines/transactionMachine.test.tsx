@@ -1,6 +1,13 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, TransactionEvent, transactionMachine } from '@/common/model/machines'
+import { BN_ZERO } from '@/common/constants'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  TransactionEvent,
+  transactionMachine,
+} from '@/common/model/machines'
 
 describe('Machine: Transaction machine', () => {
   let service: Interpreter<any, any, TransactionEvent, any>
@@ -36,6 +43,7 @@ describe('Machine: Transaction machine', () => {
     service.send('SIGN_EXTERNAL')
     service.send('PENDING')
     service.send('FINALIZING')
+    service.send('PROCESSING')
     service.send('SUCCESS')
 
     expect(service.state.matches('success')).toBeTruthy()
@@ -46,6 +54,7 @@ describe('Machine: Transaction machine', () => {
     service.send('SIGN_EXTERNAL')
     service.send('PENDING')
     service.send('FINALIZING')
+    service.send('PROCESSING')
     service.send('ERROR')
 
     expect(service.state.matches('error')).toBeTruthy()
@@ -54,7 +63,7 @@ describe('Machine: Transaction machine', () => {
   it('Close extension while signing', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
-    service.send('ERROR')
+    service.send('CANCELED')
 
     expect(service.state.matches('canceled')).toBeTruthy()
   })
@@ -63,11 +72,13 @@ describe('Machine: Transaction machine', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
     service.send('PENDING')
-    service.send('FINALIZING')
-    service.send('SUCCESS', { events: ['foo', 'bar'] })
+    service.send('FINALIZING', { fee: BN_ZERO })
+    service.send('PROCESSING', { events: ['foo', 'bar'] })
+    service.send('SUCCESS')
 
     expect(service.state.context).toEqual({
       events: ['foo', 'bar'],
+      fee: BN_ZERO,
     })
   })
 
@@ -100,11 +111,16 @@ describe('Machine: Transaction machine', () => {
                 }),
                 cond: isTransactionError,
               },
+              {
+                target: 'canceled',
+                cond: isTransactionCanceled,
+              },
             ],
           },
         },
         success: { type: 'final' },
         error: { type: 'final' },
+        canceled: { type: 'final' },
       },
     })
     let service: Interpreter<any>
@@ -119,11 +135,12 @@ describe('Machine: Transaction machine', () => {
       child.send('SIGN')
       child.send('SIGN_EXTERNAL')
       child.send('PENDING')
-      child.send('FINALIZING')
-      child.send({ type: 'SUCCESS', events: ['foo', 'bar'] })
+      child.send({ type: 'FINALIZING', fee: BN_ZERO })
+      child.send({ type: 'PROCESSING', events: ['foo', 'bar'] })
+      child.send('SUCCESS')
 
       expect(service.state.matches('success')).toBeTruthy()
-      expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'] })
+      expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'], fee: BN_ZERO })
     })
 
     it('error', () => {
@@ -132,6 +149,7 @@ describe('Machine: Transaction machine', () => {
       child.send('SIGN_EXTERNAL')
       child.send('PENDING')
       child.send('FINALIZING')
+      child.send('PROCESSING')
       child.send({ type: 'ERROR', events: ['foo', 'bar'] })
 
       expect(service.state.matches('error')).toBeTruthy()

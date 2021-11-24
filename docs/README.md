@@ -35,6 +35,8 @@ Libraries
 
 The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
 
+The CKEditor 5 build is available in `packages/markdown-editor` packages. [More on editor development](/packages/markdown-editor/README.md).
+
 ### Build tools
 
 The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc.).

@@ -19,10 +19,7 @@ export interface WorkingGroupApplication {
     rewardPerBlock: BN
   }
   applicant?: Member
-  roleAccount?: string
-  rewardAccount?: string
   stakingAccount: string
-  answers?: [any]
   status?: string
   createdAtBlock: Block
 }

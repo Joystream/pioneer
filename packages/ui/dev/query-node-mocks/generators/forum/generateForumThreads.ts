@@ -6,6 +6,7 @@ import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mo
 import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
 import { ArchiveStatus as CategoryArchiveStatus } from './generateCategories'
+import { MocksForForum } from './generateForumMocks'
 
 let nextThreadId = 0
 let nextPostId = 0
@@ -13,7 +14,7 @@ let nextPostId = 0
 const randomPostStatus = randomFromWeightedSet<PostStatusTypename>(
   [10, 'PostStatusActive'],
   [1, 'PostStatusModerated'],
-  [1, 'PostStatusRemoved'],
+  [1, 'PostStatusRemoved']
 )
 
 export const generateForumPost = (threadId: string, threadStatus: string, authorId: string, repliesToId?: string): RawForumPostMock => {
@@ -24,7 +25,7 @@ export const generateForumPost = (threadId: string, threadStatus: string, author
     lastEditDate = faker.date.between(lastEditDate ?? createdAt, new Date())
     return {
       newText: faker.lorem.words(randomFromRange(10, 100)),
-      ...randomBlock(lastEditDate),
+      ...randomBlock(lastEditDate)
     }
   })
   const status: PostStatusTypename = threadStatus == 'ThreadStatusLocked'
@@ -40,14 +41,14 @@ export const generateForumPost = (threadId: string, threadStatus: string, author
     repliesToId,
     postAddedEvent: {
       ...randomBlock(createdAt),
-      text: edits.length ? faker.lorem.words(randomFromRange(10, 100)) : postText,
+      text: edits.length ? faker.lorem.words(randomFromRange(10, 100)) : postText
     },
     status,
     deletedInEvent: status === 'PostStatusRemoved' ? {
       ...randomBlock(),
       actorId: authorId,
-      rationale: '',
-    } : null,
+      rationale: ''
+    } : null
   }
 }
 
@@ -56,7 +57,7 @@ const Locked: ThreadStatusType = 'ThreadStatusLocked'
 const Moderated: ThreadStatusType = 'ThreadStatusModerated'
 const Removed: ThreadStatusType = 'ThreadStatusRemoved'
 
-export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => {
+export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => (mocks: MocksForForum) => {
   const forumThreads: RawForumThreadMock[] = forumCategories.flatMap((category) =>
     repeat(() => {
       const isArchived = category.status.__typename === CategoryArchiveStatus || Math.random() < 0.2
@@ -69,10 +70,10 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
         categoryId: category.id,
         isSticky: !(nextThreadId % 5),
         title: faker.lorem.words(randomFromRange(4, 8)),
-        authorId: randomMember().id,
+        authorId: randomMember(mocks.members).id,
         status,
         visiblePostsCount: randomFromRange(3, 8),
-        createdInEvent,
+        createdInEvent
       }
     }, randomFromRange(3, 10))
   )
@@ -83,11 +84,11 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
 
     posts.push(generateForumPost(id, status.__typename, authorId))
 
-    for (let visibleIndex = 1; visibleIndex < visiblePostsCount - 1; ) {
+    for (let visibleIndex = 1; visibleIndex < visiblePostsCount - 1;) {
       const repliesToId =
         posts.length > 1 && Math.random() > 0.5 ? posts[randomFromRange(1, posts.length - 1)].id : undefined
 
-      const post = generateForumPost(id, status.__typename, randomMember().id, repliesToId)
+      const post = generateForumPost(id, status.__typename, randomMember(mocks.members).id, repliesToId)
       posts.push(post)
 
       if (isArchivedThread ? post.status === 'PostStatusLocked' : post.status === 'PostStatusActive') {

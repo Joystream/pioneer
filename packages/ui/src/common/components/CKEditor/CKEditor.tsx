@@ -65,7 +65,6 @@ export const CKEditor = React.forwardRef(
               'outdent',
               'indent',
               '|',
-              'uploadImage',
               'blockQuote',
               'undo',
               'redo',

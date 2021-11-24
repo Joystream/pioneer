@@ -2,14 +2,14 @@ import React from 'react'
 import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
-import { PastElectionsColLayout } from '@/app/pages/Council/PastElections/PastElections'
+import { PastElectionsColLayout } from '@/app/pages/Election/PastElections/PastElections'
 import { BlockTime } from '@/common/components/BlockTime'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { formatDateString } from '@/common/model/formatters'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { PastElection } from '@/council/types/PastElection'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
@@ -22,7 +22,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
     <PastElectionsListRowItem
       $colLayout={PastElectionsColLayout}
       as={GhostRouterLink}
-      to={generatePath(CouncilRoutes.pastElection, { id: election.id })}
+      to={generatePath(ElectionRoutes.pastElection, { id: election.id })}
     >
       <Info>#{election.id}</Info>
       <BlockTime

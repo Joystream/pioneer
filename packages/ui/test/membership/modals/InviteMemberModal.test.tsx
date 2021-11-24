@@ -39,6 +39,10 @@ jest.mock('@/accounts/hooks/useMyAccounts', () => {
   }
 })
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -84,14 +88,14 @@ describe('UI: InviteMemberModal', () => {
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
 
     await selectFromDropdown('Inviting member', 'alice')
-    await fireEvent.change(getInput(/Root account/i), {
+    fireEvent.change(getInput(/Root account/i), {
       target: { value: bobStash.address },
     })
-    await fireEvent.change(getInput(/Controller account/i), {
+    fireEvent.change(getInput(/Controller account/i), {
       target: { value: controllerAddress },
     })
-    await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
     expect(await getButton(/^Invite a member$/i)).toBeEnabled()
   })
@@ -104,14 +108,14 @@ describe('UI: InviteMemberModal', () => {
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
 
     await selectFromDropdown('Inviting member', 'alice')
-    await fireEvent.change(getInput(/Root account/i), {
+    fireEvent.change(getInput(/Root account/i), {
       target: { value: bobStash.address },
     })
-    await fireEvent.change(getInput(/Controller account/i), {
+    fireEvent.change(getInput(/Controller account/i), {
       target: { value: 'AAa' },
     })
-    await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
   })
@@ -125,11 +129,11 @@ describe('UI: InviteMemberModal', () => {
       fireEvent.change(getInput(/Root account/i), {
         target: { value: bobStash.address },
       })
-      await fireEvent.change(getInput(/Controller account/i), {
+      fireEvent.change(getInput(/Controller account/i), {
         target: { value: controllerAddress },
       })
-      await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
       expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
       fireEvent.click(await getButton(/^Invite a member$/i))

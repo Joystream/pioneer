@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
-import { AnnouncingStageTab, ElectionTabs } from '@/council/components/election/ElectionTabs'
+import { AnnouncingStageTab, CurrentElectionTabs } from '@/council/components/election/CurrentElectionTabs'
 import { Election } from '@/council/types/Election'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -28,7 +28,7 @@ export const AnnouncingStage = ({ election, isLoading }: AnnouncingStageProps) =
 
   return (
     <>
-      <ElectionTabs
+      <CurrentElectionTabs
         stage="announcing"
         myCandidates={myCandidates?.length}
         tab={tab}
