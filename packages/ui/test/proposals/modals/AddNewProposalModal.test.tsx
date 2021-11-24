@@ -529,30 +529,35 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
-    })
 
-    describe('Type - Cancel Working Group Lead Opening', () => {
-      beforeAll(() => {
-        seedWorkingGroups(server.server)
-        seedOpenings(server.server)
-      })
-      beforeEach(async () => {
-        await finishProposalType('cancelWorkingGroupLeadOpening')
-        await finishStakingAccount()
-        await finishProposalDetails()
-        await finishTriggerAndDiscussion()
+      describe('Type - Cancel Working Group Lead Opening', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpenings(server.server)
+        })
 
-        expect(screen.getByText(/^Cancel Working Group Lead Opening$/i)).toBeDefined()
-      })
-      it('Invalid form', async () => {
-        expect(screen.queryByLabelText(/^working group/i, { selector: 'input' })).toHaveValue('')
-        expect(screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
-        expect(await getNextStepButton()).toBeDisabled()
-      })
-      it('Valid form', async () => {
-        await SpecificParameters.CancelWorkingGroupLeadOpening.selectGroup('Forum')
-        await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-0')
-        expect(await getNextStepButton()).toBeEnabled()
+        beforeEach(async () => {
+          await finishProposalType('cancelWorkingGroupLeadOpening')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Cancel Working Group Lead Opening$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(
+            screen.queryByLabelText<HTMLInputElement>(/^working group/i, { selector: 'input' })
+          ).toHaveValue('')
+          expect(screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
+          expect(await getNextStepButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectGroup('Forum')
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-0')
+          expect(await getNextStepButton()).toBeEnabled()
+        })
       })
     })
 
