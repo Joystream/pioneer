@@ -1,6 +1,7 @@
 import { cleanup, render } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap } from '@/accounts/types'
@@ -224,8 +225,10 @@ describe('UI: OnBoardingModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
-        <OnBoardingModal toggleModal={() => undefined} />
-      </ModalContext.Provider>
+      <MemoryRouter>
+        <ModalContext.Provider value={useModal}>
+          <OnBoardingModal toggleModal={() => undefined} />
+        </ModalContext.Provider>
+      </MemoryRouter>
     )
 })
