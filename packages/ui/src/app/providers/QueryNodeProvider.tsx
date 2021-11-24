@@ -13,7 +13,11 @@ interface Props {
   children: ReactNode
 }
 
-const QUERY_NODE_GRAPHQL_SUBSCRIPTION_URL = 'wss://olympia-dev.joystream.app/query/server/graphql'
+const SUBSCRIPTION_ENDPOINTS: Record<NetworkType, string> = {
+  local: 'ws://localhost:8081/graphql',
+  'local-mocks': 'ws://localhost:8081/graphql',
+  'olympia-testnet': 'wss://olympia-dev.joystream.app/query/server/graphql',
+}
 
 const ENDPOINTS: Record<NetworkType, string> = {
   local: 'http://localhost:8081/graphql',
@@ -52,7 +56,7 @@ const getApolloClient = (network: NetworkType) => {
 
   const queryLink = from([errorLink, httpLink])
   const subscriptionLink = new WebSocketLink({
-    uri: QUERY_NODE_GRAPHQL_SUBSCRIPTION_URL,
+    uri: SUBSCRIPTION_ENDPOINTS[network],
     options: {
       reconnect: true,
       reconnectionAttempts: 5,
