@@ -24,7 +24,7 @@ const useOnBoarding = (): UseOnBoarding => {
   const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts } = useMyAccounts()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
-  const [membershipAccount, setMembershipAccount] = useLocalStorage<string>('onboarding-membership-account')
+  const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
 
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
