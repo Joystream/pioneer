@@ -14,18 +14,17 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
+import { GroupIdName } from '@/working-groups/types'
 
 export interface DecreaseWorkingGroupLeadStakeParameters {
   stakingAmount?: BN
-  groupId?: string
+  groupId?: GroupIdName
   workerId?: number
 }
 
 interface DecreaseWorkingGroupLeadStakeProps extends DecreaseWorkingGroupLeadStakeParameters {
   setStakingAmount: (amount: BN) => void
-
-  setGroupId(groupId: string): void
-
+  setGroupId(groupId: GroupIdName): void
   setWorkerId(workerId?: number): void
 }
 

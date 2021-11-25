@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
+import { GroupIdName } from '@/working-groups/types'
 
 export default {
   title: 'Proposals/AddNewProposalModal/CreateWorkingGroupLeadOpening',
@@ -14,7 +15,7 @@ export default {
 const OpeningTemplate: Story = () => {
   const [shortDescription, setShortDescription] = useState('')
   const [description, setDescription] = useState('')
-  const [groupId, setGroupId] = useState('')
+  const [groupId, setGroupId] = useState<GroupIdName>()
 
   return (
     <MockApolloProvider members workingGroups>
