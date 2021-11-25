@@ -67,6 +67,8 @@ export type SlashLeadDetails = ProposalDetailsNew<
 >
 export type RuntimeUpgradeDetails = ProposalDetailsNew<'runtimeUpgrade', NewByteCodeIdDetail>
 
+export type UpdateGroupBudgetDetails = ProposalDetailsNew<'updateWorkingGroupBudget', GroupDetail & AmountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -74,6 +76,7 @@ export type ProposalDetails =
   | DecreaseLeadStakeDetails
   | SlashLeadDetails
   | RuntimeUpgradeDetails
+  | UpdateGroupBudgetDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -136,6 +139,15 @@ const asRuntimeUpgrade: DetailsCast<'RuntimeUpgradeProposalDetails'> = (fragment
   newBytecodeId: fragment.newRuntimeBytecode?.id,
 })
 
+const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalDetails'> = (fragment): UpdateGroupBudgetDetails => ({
+  type: 'updateWorkingGroupBudget',
+  amount: new BN(fragment.amount),
+  group: {
+    id: fragment.group?.id as GroupIdName,
+    name: asWorkingGroupName(fragment.group?.name ?? 'Unknown')
+  }
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -146,6 +158,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   DecreaseWorkingGroupLeadStakeProposalDetails: asDecreaseLeadStake,
   SlashWorkingGroupLeadProposalDetails: asSlashLead,
   RuntimeUpgradeProposalDetails: asRuntimeUpgrade,
+  UpdateWorkingGroupBudgetProposalDetails: asUpdateWorkingGroupBudget,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

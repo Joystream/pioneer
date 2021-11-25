@@ -107,6 +107,13 @@ fragment ProposalWithDetailsFields on Proposal {
         id
       }
     }
+    ... on UpdateWorkingGroupBudgetProposalDetails {
+      group {
+        id
+        name
+      }
+      amount
+    }
   }
   discussionThread {
     id

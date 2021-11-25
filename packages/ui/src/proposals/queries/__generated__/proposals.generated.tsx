@@ -293,7 +293,11 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
     | { __typename: 'UnlockBlogPostProposalDetails' }
-    | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+    | {
+        __typename: 'UpdateWorkingGroupBudgetProposalDetails'
+        amount: any
+        group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
+      }
     | { __typename: 'VetoProposalDetails' }
   discussionThread: {
     __typename: 'ProposalDiscussionThread'
@@ -773,7 +777,11 @@ export type GetProposalQuery = {
             }
           | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
           | { __typename: 'UnlockBlogPostProposalDetails' }
-          | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+          | {
+              __typename: 'UpdateWorkingGroupBudgetProposalDetails'
+              amount: any
+              group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
+            }
           | { __typename: 'VetoProposalDetails' }
         discussionThread: {
           __typename: 'ProposalDiscussionThread'
@@ -1152,6 +1160,13 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         newRuntimeBytecode {
           id
         }
+      }
+      ... on UpdateWorkingGroupBudgetProposalDetails {
+        group {
+          id
+          name
+        }
+        amount
       }
     }
     discussionThread {
