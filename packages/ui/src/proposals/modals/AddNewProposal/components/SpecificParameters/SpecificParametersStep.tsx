@@ -2,6 +2,7 @@ import React from 'react'
 import { State, Typestate } from 'xstate'
 
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
+import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FillWorkingGroupLeadOpening'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
@@ -60,6 +61,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
 }
 
 export const SpecificParametersStep = ({ send, state }: SpecificParametersStepProps) => {
+  const {
+    context: { specifics },
+  } = state
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
@@ -79,6 +83,18 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
         />
       )
+    case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
+      return (
+        <FillWorkingGroupLeadOpening
+          groupId={specifics?.groupId}
+          applicationId={specifics?.applicationId}
+          openingId={specifics?.openingId}
+          setGroupId={(groupId: string) => send('SET_WORKING_GROUP', { groupId })}
+          setApplicationId={(applicationId: string) => send('SET_APPLICATION_ID', { applicationId })}
+          setOpenedId={(openingId: string) => send('SET_APPLICATION_ID', { openingId })}
+        />
+      )
+    }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'):
       return (
         <CreateWorkingGroupLeadOpening

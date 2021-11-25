@@ -1,4 +1,5 @@
-import { lowerFirstLetter } from '../../common/helpers'
+import { lowerFirstLetter } from '@/common/helpers'
+
 import { ProposalType } from '../types'
 
 export const proposalDetails: ProposalType[] = [
@@ -36,6 +37,7 @@ export const enabledProposals: ProposalType[] = [
   'decreaseWorkingGroupLeadStake',
   'slashWorkingGroupLead',
   'signal',
+  'fillWorkingGroupLeadOpening',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {

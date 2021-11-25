@@ -51,6 +51,15 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         SlashWorkingGroupLead: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
       }
     }
+    case 'fillWorkingGroupLeadOpening': {
+      return {
+        FillWorkingGroupLeadOpening: {
+          opening_id: specifics?.openingId,
+          successful_application_id: specifics?.applicationId,
+          workingGroup: WorkingGroupDef.Forum,
+        },
+      }
+    }
     default:
       return { Signal: '' }
   }
