@@ -9,7 +9,7 @@ import {
   OptionWorkingGroupTitle,
 } from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
-import { WorkingGroup } from '@/working-groups/types'
+import { GroupIdName, WorkingGroup } from '@/working-groups/types'
 
 import { OptionsListWorkingGroup } from './OptionsListWorkingGroup'
 
@@ -28,7 +28,7 @@ const filterByText = (options: WorkingGroup[], text: string) => {
 
 interface Props {
   onChange: (selected: WorkingGroup) => void
-  selectedGroupId?: string
+  selectedGroupId?: GroupIdName
   disabled?: boolean
   className?: string
   disableNoLead?: boolean
@@ -45,10 +45,10 @@ export const SelectWorkingGroupBase = ({
 }: Props) => {
   const [search, setSearch] = useState('')
   const { isLoading, groups } = useWorkingGroups()
-  const selectedGroup = useMemo(
-    () => groups.find((group) => group.id === selectedGroupId),
-    [selectedGroupId, groups.length]
-  )
+  const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
+    selectedGroupId,
+    groups.length,
+  ])
   const filteredFoundWorkingGroups = useMemo(() => filterByText(groups, search), [search, groups.length, isLoading])
 
   const change = (selected: WorkingGroup, close: () => void) => {
