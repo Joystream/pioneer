@@ -229,7 +229,20 @@ export type ProposalWithDetailsFieldsFragment = {
           | undefined
       }
     | { __typename: 'EditBlogPostProposalDetails' }
-    | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
+        opening?:
+          | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+          | null
+          | undefined
+        application?:
+          | {
+              __typename: 'WorkingGroupApplication'
+              applicant: { __typename: 'Membership'; id: string; handle: string }
+            }
+          | null
+          | undefined
+      }
     | {
         __typename: 'FundingRequestProposalDetails'
         destinationsList?:
@@ -245,15 +258,26 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'RuntimeUpgradeProposalDetails'
         newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
       }
-    | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
     | { __typename: 'SetInitialInvitationCountProposalDetails' }
-    | { __typename: 'SetMaxValidatorCountProposalDetails' }
+    | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-    | { __typename: 'SetMembershipPriceProposalDetails' }
+    | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
     | { __typename: 'SetReferralCutProposalDetails' }
-    | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+    | {
+        __typename: 'SetWorkingGroupLeadRewardProposalDetails'
+        newRewardPerBlock: any
+        lead?:
+          | {
+              __typename: 'Worker'
+              membership: { __typename: 'Membership'; id: string; handle: string }
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+            }
+          | null
+          | undefined
+      }
     | { __typename: 'SignalProposalDetails' }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
@@ -291,7 +315,18 @@ export type ProposalWithDetailsFieldsFragment = {
           | null
           | undefined
       }
-    | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | {
+        __typename: 'TerminateWorkingGroupLeadProposalDetails'
+        slashingAmount?: any | null | undefined
+        lead?:
+          | {
+              __typename: 'Worker'
+              membership: { __typename: 'Membership'; id: string; handle: string }
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+            }
+          | null
+          | undefined
+      }
     | { __typename: 'UnlockBlogPostProposalDetails' }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
@@ -713,7 +748,20 @@ export type GetProposalQuery = {
                 | undefined
             }
           | { __typename: 'EditBlogPostProposalDetails' }
-          | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+          | {
+              __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
+              opening?:
+                | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+                | null
+                | undefined
+              application?:
+                | {
+                    __typename: 'WorkingGroupApplication'
+                    applicant: { __typename: 'Membership'; id: string; handle: string }
+                  }
+                | null
+                | undefined
+            }
           | {
               __typename: 'FundingRequestProposalDetails'
               destinationsList?:
@@ -729,15 +777,26 @@ export type GetProposalQuery = {
               __typename: 'RuntimeUpgradeProposalDetails'
               newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
             }
-          | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+          | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
           | { __typename: 'SetCouncilorRewardProposalDetails' }
           | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
           | { __typename: 'SetInitialInvitationCountProposalDetails' }
-          | { __typename: 'SetMaxValidatorCountProposalDetails' }
+          | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
           | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-          | { __typename: 'SetMembershipPriceProposalDetails' }
+          | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
           | { __typename: 'SetReferralCutProposalDetails' }
-          | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+          | {
+              __typename: 'SetWorkingGroupLeadRewardProposalDetails'
+              newRewardPerBlock: any
+              lead?:
+                | {
+                    __typename: 'Worker'
+                    membership: { __typename: 'Membership'; id: string; handle: string }
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                  }
+                | null
+                | undefined
+            }
           | { __typename: 'SignalProposalDetails' }
           | {
               __typename: 'SlashWorkingGroupLeadProposalDetails'
@@ -775,7 +834,18 @@ export type GetProposalQuery = {
                 | null
                 | undefined
             }
-          | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+          | {
+              __typename: 'TerminateWorkingGroupLeadProposalDetails'
+              slashingAmount?: any | null | undefined
+              lead?:
+                | {
+                    __typename: 'Worker'
+                    membership: { __typename: 'Membership'; id: string; handle: string }
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                  }
+                | null
+                | undefined
+            }
           | { __typename: 'UnlockBlogPostProposalDetails' }
           | {
               __typename: 'UpdateWorkingGroupBudgetProposalDetails'
@@ -1167,6 +1237,55 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
           name
         }
         amount
+      }
+      ... on SetMaxValidatorCountProposalDetails {
+        newMaxValidatorCount
+      }
+      ... on FillWorkingGroupLeadOpeningProposalDetails {
+        opening {
+          group {
+            id
+            name
+          }
+        }
+        application {
+          applicant {
+            id
+            handle
+          }
+        }
+      }
+      ... on SetWorkingGroupLeadRewardProposalDetails {
+        lead {
+          membership {
+            id
+            handle
+          }
+          group {
+            id
+            name
+          }
+        }
+        newRewardPerBlock
+      }
+      ... on TerminateWorkingGroupLeadProposalDetails {
+        lead {
+          membership {
+            id
+            handle
+          }
+          group {
+            id
+            name
+          }
+        }
+        slashingAmount
+      }
+      ... on SetMembershipPriceProposalDetails {
+        newPrice
+      }
+      ... on SetCouncilBudgetIncrementProposalDetails {
+        newAmount
       }
     }
     discussionThread {

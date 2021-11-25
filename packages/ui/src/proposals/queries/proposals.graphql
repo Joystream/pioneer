@@ -114,6 +114,55 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       amount
     }
+    ... on SetMaxValidatorCountProposalDetails {
+      newMaxValidatorCount
+    }
+    ... on FillWorkingGroupLeadOpeningProposalDetails {
+      opening {
+        group {
+          id
+          name
+        }
+      }
+      application {
+        applicant {
+          id
+          handle
+        }
+      }
+    }
+    ... on SetWorkingGroupLeadRewardProposalDetails {
+      lead {
+        membership {
+          id
+          handle
+        }
+        group {
+          id
+          name
+        }
+      }
+      newRewardPerBlock
+    }
+    ... on TerminateWorkingGroupLeadProposalDetails {
+      lead {
+        membership {
+          id
+          handle
+        }
+        group {
+          id
+          name
+        }
+      }
+      slashingAmount
+    }
+    ... on SetMembershipPriceProposalDetails {
+      newPrice
+    }
+    ... on SetCouncilBudgetIncrementProposalDetails {
+      newAmount
+    }
   }
   discussionThread {
     id
