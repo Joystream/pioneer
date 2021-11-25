@@ -545,14 +545,12 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByLabelText(/^working group/i, { selector: 'input' })).toHaveValue('')
           expect(await screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.CancelWorkingGroupLeadOpening.selectGroup('Forum')
-          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-0')
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -908,7 +906,6 @@ describe('UI: AddNewProposalModal', () => {
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
     },
     CancelWorkingGroupLeadOpening: {
-      selectGroup,
       selectedOpening,
     },
   }

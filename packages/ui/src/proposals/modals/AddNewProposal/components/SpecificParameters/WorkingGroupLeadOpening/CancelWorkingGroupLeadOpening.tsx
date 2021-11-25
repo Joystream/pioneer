@@ -4,25 +4,23 @@ import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 
-export interface DecreaseWorkingGroupLeadStakeParameters {
+export interface CancelWorkingGroupLeadStakeParameters {
   groupId?: string
-  openingId?: string
+  openingId?: number
 }
 
-interface DecreaseWorkingGroupLeadStakeProps extends DecreaseWorkingGroupLeadStakeParameters {
+interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadStakeParameters {
   setGroupId(groupId: string): void
-  setOpeningId(openingId?: string): void
+  setOpeningId(openingId?: number): void
 }
 
 export const CancelWorkingGroupLeadOpening = ({
   openingId,
   groupId,
-  setGroupId,
   setOpeningId,
-}: DecreaseWorkingGroupLeadStakeProps) => {
+}: CancelWorkingGroupLeadStakeProps) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -34,24 +32,6 @@ export const CancelWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            id="working-group-select-input"
-            label="Working Group"
-            required
-            inputSize="l"
-            tooltipText="Please select an identifier for Working Group"
-          >
-            <SelectWorkingGroup
-              id="working-group-select"
-              selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
-              disableNoLead
-            />
-          </InputComponent>
-        </RowGapBlock>
-      </Row>
-      <Row>
-        <RowGapBlock gap={20}>
-          <InputComponent
             id="opening-input"
             label="Opening"
             required
@@ -59,14 +39,12 @@ export const CancelWorkingGroupLeadOpening = ({
             tooltipText={
               groupId ? 'Please select an opening ID for Working Group' : 'Please first select Working Group'
             }
-            disabled={!groupId}
           >
             <SelectWorkingGroupOpening
               id="opening"
-              onChange={(selected) => setOpeningId(selected.id)}
+              openingsPositionType="LEADER"
+              onChange={(selected) => setOpeningId(selected.runtimeId)}
               selectedOpeningId={openingId}
-              disabled={!groupId}
-              groupId={groupId}
             />
           </InputComponent>
         </RowGapBlock>

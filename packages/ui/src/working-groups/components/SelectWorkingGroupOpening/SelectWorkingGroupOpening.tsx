@@ -8,6 +8,7 @@ import { OptionWorkingGroupTitle } from '@/working-groups/components/SelectWorki
 import { OptionsListWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/OptionsListWorkingGroupOpening'
 import { OptionWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/OptionWorkingGroupOpening'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
+import { OpeningPositionType } from '@/working-groups/hooks/utils/queries'
 import { WorkingGroup, WorkingGroupOpening } from '@/working-groups/types'
 
 export const filterWorkingGroup = (filterOut: WorkingGroup | undefined) => {
@@ -16,11 +17,12 @@ export const filterWorkingGroup = (filterOut: WorkingGroup | undefined) => {
 
 interface Props {
   onChange: (selected: WorkingGroupOpening) => void
-  selectedOpeningId?: string
+  selectedOpeningId?: number
   groupId?: string
   disabled?: boolean
   className?: string
   id?: string
+  openingsPositionType?: OpeningPositionType
 }
 
 export const SelectWorkingGroupOpeningBase = ({
@@ -30,9 +32,10 @@ export const SelectWorkingGroupOpeningBase = ({
   disabled,
   className,
   groupId,
+  openingsPositionType,
 }: Props) => {
-  const { openings } = useOpenings({ type: 'open', groupId })
-  const selectedOpening = useMemo(() => openings.find((opening) => opening.id === selectedOpeningId), [
+  const { openings } = useOpenings({ type: 'open', groupId, openingsPositionType })
+  const selectedOpening = useMemo(() => openings.find((opening) => opening.runtimeId === selectedOpeningId), [
     selectedOpeningId,
     openings.length,
   ])
