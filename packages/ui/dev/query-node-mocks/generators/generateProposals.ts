@@ -4,6 +4,7 @@ import { ProposalVoteKind } from '../../../src/common/api/queries'
 import { proposalDetails } from '../../../src/proposals/model/proposalDetails'
 import { proposalActiveStatuses } from '../../../src/proposals/model/proposalStatus'
 import { ProposalStatus, ProposalType } from '../../../src/proposals/types/proposals'
+import { saveFile } from '../helpers/saveFile'
 
 import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 import { Mocks } from './types'
@@ -51,7 +52,7 @@ const MAX_MESSAGES = 8
 let nextId = 0
 let nextVoteId = 0
 
-const generateProposal = (type: ProposalType, mocks: Mocks) => {
+const generateProposal = (type: ProposalType, mocks: MocksForProposals) => {
   const proposalId = String(nextId++)
   const statusHistory = [DECIDING, ...randomVoteRoundStatuses(), ...randomLastStatuses()]
 
@@ -109,19 +110,28 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     councilApprovals: Math.round(Math.random())
   }
 }
+type MocksForProposals = Pick<Mocks, 'members' | 'workers' | 'workingGroups'>
 
 export type ProposalMock = ReturnType<typeof generateProposal>
 
-export const generateProposals = (mocks: Mocks): ProposalMock[] => {
-  return proposalTypes.map((type) => generateProposal(type, mocks))
+export const generateProposals = (mocks?: MocksForProposals): ProposalMock[] => {
+  if (!mocks) {
+    mocks = {
+      members: require('../../../src/mocks/data/raw/members.json'),
+      workingGroups: require('../../../src/mocks/data/raw/workingGroups.json'),
+      workers: require('../../../src/mocks/data/raw/workers.json')
+    }
+  }
+
+  return proposalTypes.map((type) => generateProposal(type, mocks!))
 }
 
-const generateProposalDetails = (type: ProposalType, mocks: Mocks) => {
+const generateProposalDetails = (type: ProposalType, mocks: MocksForProposals) => {
   const details = ProposalDetailsGenerator[type]?.(mocks)
   return details ?? { type }
 }
 
-const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => any>> = {
+const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForProposals) => any>> = {
   fundingRequest: () => ({
     type: 'fundingRequest',
     data: {
@@ -158,10 +168,21 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
     data: {
       bytecode: '0x0061736d'
     }
+  }),
+  updateWorkingGroupBudget: (mocks) => ({
+    type: 'updateWorkingGroupBudget',
+    groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
+    amount: randomFromRange(5, 20) * 1000,
   })
 }
 
-const getLeadStakeData = (mocks: Mocks) => ({
+const getLeadStakeData = (mocks: MocksForProposals) => ({
   leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
   amount: randomFromRange(1, 10) * 1000
 })
+
+export const proposalsModule = {
+  command: 'proposals',
+  describe: 'Generate proposals from other mocks',
+  handler: () => saveFile('proposals', generateProposals())
+}
