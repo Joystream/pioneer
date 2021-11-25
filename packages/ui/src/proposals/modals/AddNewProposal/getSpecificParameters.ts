@@ -1,9 +1,26 @@
 import { createType } from '@joystream/types'
 import { WorkingGroupDef } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
+import { Null } from '@polkadot/types'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
+import { GroupIdName } from '@/working-groups/types'
+
+const GroupIdToGroupParam: Record<GroupIdName, typeof Null> = {
+  contentDirectoryWorkingGroup: WorkingGroupDef.Content,
+  gatewayWorkingGroup: WorkingGroupDef.Gateway,
+  membershipWorkingGroup: WorkingGroupDef.Membership,
+  operationsWorkingGroup: WorkingGroupDef.Operations,
+  storageWorkingGroup: WorkingGroupDef.Storage,
+  forumWorkingGroup: WorkingGroupDef.Forum,
+}
+
+const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
+  if (!groupId) return null
+
+  return GroupIdToGroupParam[groupId]
+}
 
 export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): any => {
   if (!isValidSpecificParameters(state)) {
@@ -38,12 +55,20 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'decreaseWorkingGroupLeadStake': {
       return {
-        DecreaseWorkingGroupLeadStake: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
+        DecreaseWorkingGroupLeadStake: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
       }
     }
     case 'slashWorkingGroupLead': {
       return {
-        SlashWorkingGroupLead: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
+        SlashWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
       }
     }
     default:
