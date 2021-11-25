@@ -196,7 +196,7 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
   setWorkingGroupLeadReward: (mocks) => ({
     type: 'setWorkingGroupLeadReward',
     data: {
-      lead: mocks.workers[randomFromRange(0, mocks.workers.length)],
+      leadId: mocks.workers[randomFromRange(0, mocks.workers.length)]?.id,
       newRewardPerBlock: randomFromRange(100, 1000),
     }
   }),
