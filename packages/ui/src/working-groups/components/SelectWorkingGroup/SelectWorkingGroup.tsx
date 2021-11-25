@@ -45,10 +45,10 @@ export const SelectWorkingGroupBase = ({
 }: Props) => {
   const [search, setSearch] = useState('')
   const { isLoading, groups } = useWorkingGroups()
-  const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
-    selectedGroupId,
-    groups.length,
-  ])
+  const selectedGroup = useMemo(
+    () => groups.find((group) => group.id === selectedGroupId),
+    [selectedGroupId, groups.length]
+  )
   const filteredFoundWorkingGroups = useMemo(() => filterByText(groups, search), [search, groups.length, isLoading])
 
   const change = (selected: WorkingGroup, close: () => void) => {

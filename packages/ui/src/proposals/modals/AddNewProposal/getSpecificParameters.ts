@@ -1,19 +1,18 @@
 import { createType } from '@joystream/types'
-import { WorkingGroupDef } from '@joystream/types/common'
+import { WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
-import { Null } from '@polkadot/types'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
 
-const GroupIdToGroupParam: Record<GroupIdName, typeof Null> = {
-  contentDirectoryWorkingGroup: WorkingGroupDef.Content,
-  gatewayWorkingGroup: WorkingGroupDef.Gateway,
-  membershipWorkingGroup: WorkingGroupDef.Membership,
-  operationsWorkingGroup: WorkingGroupDef.Operations,
-  storageWorkingGroup: WorkingGroupDef.Storage,
-  forumWorkingGroup: WorkingGroupDef.Forum,
+const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
+  contentDirectoryWorkingGroup: 'Content',
+  forumWorkingGroup: 'Forum',
+  gatewayWorkingGroup: 'Gateway',
+  membershipWorkingGroup: 'Membership',
+  operationsWorkingGroup: 'Operations',
+  storageWorkingGroup: 'Storage',
 }
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
@@ -49,7 +48,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
             leaving_unstaking_period: specifics?.leavingUnstakingPeriod,
           },
           reward_per_block: specifics?.rewardPerBlock,
-          workingGroup: WorkingGroupDef.Membership,
+          working_group: getWorkingGroupParam(specifics?.groupId),
         },
       }
     }
