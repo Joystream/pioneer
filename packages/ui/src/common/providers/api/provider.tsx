@@ -43,6 +43,7 @@ export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 const endpoints: Record<NetworkType, string> = {
   local: 'ws://127.0.0.1:9944',
+  'local-mocks': 'ws://127.0.0.1:9944',
   'olympia-testnet': 'wss://olympia-dev.joystream.app/rpc',
 }
 

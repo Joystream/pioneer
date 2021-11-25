@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -29,6 +29,10 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
 
 describe('UI: CreatePostModal', () => {
   const api = stubApi()
@@ -104,14 +108,22 @@ describe('UI: CreatePostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and post/i))
+
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and post/i))
+    })
+
     expect(await screen.getByText('There was a problem posting your message.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, 'forum', 'PostTextUpdated')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and post/i))
+
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and post/i))
+    })
+
     expect(await screen.getByText('Your post has been submitted.')).toBeDefined()
   })
 

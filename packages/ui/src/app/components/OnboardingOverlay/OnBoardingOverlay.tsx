@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
@@ -12,27 +12,25 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { OnBoardingStatus, useOnBoardingStatus } from '@/common/hooks/useOnBoardingStatus'
+import { useModal } from '@/common/hooks/useModal'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
+import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
+import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
-const steps: StepperStep[] = [
+export const onBoardingSteps: StepperStep[] = [
   {
     title: 'Add Polkadot plugin',
     type: 'next',
     id: 'installPlugin',
   },
   {
-    title: 'Create or select a Polkadot account',
+    title: 'Connect a Polkadot account',
     type: 'next',
     id: 'addAccount',
   },
   {
-    title: 'Get FREE tokens',
-    type: 'next',
-    id: '',
-  },
-  {
-    title: 'Create membership',
+    title: 'Create membership for FREE',
     type: 'next',
     id: 'createMembership',
   },
@@ -47,14 +45,11 @@ const innerStaticStepperSteps = [
     title: 'Create or select a Polkadot account',
   },
   {
-    title: 'Get FREE tokens',
-  },
-  {
-    title: 'Create membership',
+    title: 'Create membership for FREE',
   },
 ]
 
-const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
+export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
   const activeIndex = steps.findIndex((step) => step?.id === status)
   if (activeIndex === -1) return steps.map((step) => ({ ...step, type: 'next' }))
 
@@ -70,14 +65,18 @@ const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): Step
 }
 
 export const OnBoardingOverlay = () => {
-  const { isLoading, status } = useOnBoardingStatus()
+  const { showModal } = useModal<OnBoardingModalCall>()
+  const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
+  const openOnBoardingModal = useCallback(() => {
+    showModal({ modal: 'OnBoardingModal' })
+  }, [])
 
   if (isLoading || !status || status === 'finished') {
     return null
   }
 
-  const onBoardingSteps = asOnBoardingSteps(steps, status)
+  const steps = asOnBoardingSteps(onBoardingSteps, status)
 
   return (
     <MainWrapper>
@@ -87,10 +86,12 @@ export const OnBoardingOverlay = () => {
           <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
         </TextContainer>
         <StepperContainer>
-          <HorizontalStepper steps={onBoardingSteps} />
+          <HorizontalStepper steps={steps} />
         </StepperContainer>
         <ButtonContainer>
-          <ButtonPrimary size="large">Join now</ButtonPrimary>
+          <ButtonPrimary size="large" onClick={openOnBoardingModal}>
+            Join now
+          </ButtonPrimary>
         </ButtonContainer>
       </Wrapper>
       <StyledDropDown isDropped={isOpen}>
@@ -100,9 +101,10 @@ export const OnBoardingOverlay = () => {
           </DrawerContainer>
           <DrawerContainer title="How to become a member?">
             <VerticalStaticStepper steps={innerStaticStepperSteps} />
+            <ButtonPrimary onClick={openOnBoardingModal} size="large">
+              Continue
+            </ButtonPrimary>
           </DrawerContainer>
-          <div />
-          <ButtonPrimary size="large">Continue</ButtonPrimary>
         </DropdownContent>
       </StyledDropDown>
     </MainWrapper>
@@ -116,13 +118,12 @@ const MainWrapper = styled.div`
 const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.Black[700]};
   position: absolute;
-  z-index: 100000;
+  z-index: 84;
 `
 
 const DropdownContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-row-gap: 30px;
   padding: 40px;
 
   > *:first-child {

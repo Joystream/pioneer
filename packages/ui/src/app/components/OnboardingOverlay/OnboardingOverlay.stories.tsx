@@ -6,6 +6,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { ApiContext } from '@/common/providers/api/context'
+import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -84,9 +85,11 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
       <ApiContext.Provider value={state.useApi}>
         <AccountsContext.Provider value={state.useMyAccounts}>
           <MembershipContext.Provider value={state.useMyMemberships}>
-            <TemplateBlock>
-              <OnBoardingOverlay />
-            </TemplateBlock>
+            <OnBoardingProvider>
+              <TemplateBlock>
+                <OnBoardingOverlay />
+              </TemplateBlock>
+            </OnBoardingProvider>
           </MembershipContext.Provider>
         </AccountsContext.Provider>
       </ApiContext.Provider>
@@ -94,8 +97,8 @@ const Template: Story<Props> = ({ extension, membership, account }: Props) => {
   )
 }
 
-export const Horizontal = Template.bind({})
-Horizontal.args = {
+export const Default = Template.bind({})
+Default.args = {
   extension: true,
   account: false,
   membership: false,

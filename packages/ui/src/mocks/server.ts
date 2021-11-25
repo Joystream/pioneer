@@ -128,6 +128,7 @@ export const makeServer = (environment = 'development') => {
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposalVotedEvents: getWhereResolver('ProposalVotedEvent'),
               proposals: getWhereResolver('Proposal'),
+              proposalExecutedEvents: getWhereResolver('ProposalExecutedEvent'),
               proposalExecutedEventsConnection: getConnectionResolver('ProposalExecutedEventConnection'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
               runtimeWasmBytecodeByUniqueInput: getUniqueResolver('RuntimeWasmBytecode'),
@@ -168,6 +169,7 @@ export const makeServer = (environment = 'development') => {
           },
         })
       )
+      this.passthrough('http://localhost:4000/register')
     },
 
     ...(environment !== 'development'

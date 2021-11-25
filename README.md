@@ -50,6 +50,7 @@ The project's monorepo contains packages:
 - [packages/ui](packages/ui) – The main Pioneer 2.0 package
 - [packages/types](packages/types) – A copy of [@joystream/types](https://github.com/Joystream/joystream/tree/olympia/types) checked out from an Olympia dev branch.
 - [packages/metadata-protobuf](packages/metadata-protobuf) – A copy [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/olympia/metadata-protobuf) checked out from an Olympia dev branch.
+- [packages/markdown-editor](packages/markdown-editor) – A CKEditor 5 build used as Markdown editor.
 
 ## Contributing
 

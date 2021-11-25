@@ -124,7 +124,7 @@ fragment CastVoteFields on CastVote {
   castBy
   commitment
   voteFor {
-    ...MemberFields
+    ...ElectionCandidateFields
   }
   electionRound {
     cycleId
@@ -134,6 +134,22 @@ fragment CastVoteFields on CastVote {
 fragment CouncilSpendingEventFields on BudgetSpendingEvent {
   amount
   type
+}
+
+fragment FundingRequestApproved on ProposalExecutedEvent {
+  proposal {
+    details {
+      __typename
+      ... on FundingRequestProposalDetails {
+        destinationsList {
+          destinations {
+            amount
+            account
+          }
+        }
+      }
+    }
+  }
 }
 
 query GetElectedCouncil {
@@ -161,6 +177,15 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
   }
+  fundingRequestsApproved: proposalExecutedEvents(
+    where: {
+      inBlock_gt: $fromBlock
+      inBlock_lt: $toBlock
+      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+    }
+  ) {
+    ...FundingRequestApproved
+  }
 }
 
 query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
@@ -171,12 +196,6 @@ query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
   proposalVotedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }, orderBy: [createdAt_DESC]) {
     ...PastCouncilProposalsFields
-  }
-}
-
-query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
-  budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
-    ...CouncilSpendingEventFields
   }
 }
 
@@ -244,7 +263,7 @@ query GetCurrentCandidateIdByMember($memberId: ID!) {
 }
 
 query GetCandidateStats($memberId: ID) {
-  candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+  candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
     totalCount
   }
   councilMembersConnection(where: { member: { id_eq: $memberId } }) {
@@ -301,12 +320,21 @@ query GetCouncilBlockRange($where: ElectedCouncilWhereUniqueInput!) {
   }
 }
 
-query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
-  approved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
+  proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
     totalCount
   }
+  fundingRequestsApproved: proposalExecutedEvents(
+    where: {
+      inBlock_gt: $startBlock
+      inBlock_lt: $endBlock
+      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+    }
+  ) {
+    ...FundingRequestApproved
+  }
   ## Rejected + Slashed could be fetched using `isTypeOf_in: []` but it is not supported by Hydra now
-  rejected: proposalDecisionMadeEventsConnection(
+  proposalsRejected: proposalDecisionMadeEventsConnection(
     where: {
       inBlock_gt: $startBlock
       inBlock_lt: $endBlock
@@ -315,7 +343,7 @@ query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
   ) {
     totalCount
   }
-  slashed: proposalDecisionMadeEventsConnection(
+  proposalsSlashed: proposalDecisionMadeEventsConnection(
     where: {
       inBlock_gt: $startBlock
       inBlock_lt: $endBlock
@@ -323,5 +351,8 @@ query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
     }
   ) {
     totalCount
+  }
+  budgetSpendingEvents(where: { inBlock_gte: $startBlock, inBlock_lte: $endBlock }) {
+    ...CouncilSpendingEventFields
   }
 }

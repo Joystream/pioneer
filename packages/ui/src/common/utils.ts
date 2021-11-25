@@ -61,11 +61,21 @@ export const propsEquals =
 
 // Lists:
 
+export const dedupeObjects = <T>(list: T[], options?: EqualsOption): T[] =>
+  list.reduce((remain: T[], item) => [...remain, ...(remain.some(objectEquals(item, options)) ? [] : [item])], [])
+
 export const intersperse = <T extends any, S extends any>(
   list: T[],
   toSeparator: (index: number, list: T[]) => S
 ): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item, index) => [toSeparator(index, list), item])]
+
+export const partition = <T extends any>(list: T[], predicate: (x: T) => boolean): [T[], T[]] =>
+  list.reduce(
+    ([pass, fail]: [T[], T[]], item): [T[], T[]] =>
+      predicate(item) ? [[...pass, item], fail] : [pass, [...fail, item]],
+    [[], []]
+  )
 
 export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
   Array.from({ length: times }, (_, i) => getItem(i))

@@ -3,9 +3,19 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { Account } from '@/accounts/types'
+import { TermsRoutes } from '@/app/constants/routes'
+import { Arrow } from '@/common/components/icons'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { useForm } from '@/common/hooks/useForm'
+import { useObservable } from '@/common/hooks/useObservable'
+
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
-import { Account } from '../../../accounts/types'
-import { ButtonPrimary } from '../../../common/components/buttons'
+import { ButtonGhost, ButtonPrimary } from '../../../common/components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -27,19 +37,20 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '../../../common/components/Modal'
-import { TransactionInfo } from '../../../common/components/TransactionInfo'
-import { TextMedium } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useForm } from '../../../common/hooks/useForm'
-import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
-interface CreateProps {
+interface BuyMembershipFormModalProps {
   onClose: () => void
   onSubmit: (params: MemberFormFields) => void
   membershipPrice?: BalanceOf
+}
+
+interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
+  type: 'onBoarding' | 'general'
+  membershipAccount?: string
+  changeMembershipAccount?: () => void
 }
 
 const CreateMemberSchema = Yup.object().shape({
@@ -66,13 +77,20 @@ export interface MemberFormFields {
   invitor?: Member
 }
 
-export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
+export const BuyMembershipForm = ({
+  onSubmit,
+  membershipPrice,
+  membershipAccount,
+  changeMembershipAccount,
+  type,
+}: BuyMembershipFormProps) => {
   const { api, connectionState } = useApi()
+  const { allAccounts } = useMyAccounts()
 
   const initializer = {
     name: '',
-    rootAccount: undefined,
-    controllerAccount: undefined,
+    rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
+    controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
     handle: '',
     about: '',
     avatarUri: '',
@@ -106,60 +124,61 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   }
 
   return (
-    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Add membership" />
+    <>
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <Row>
-            <InlineToggleWrap>
-              <Label>I was referred by a member: </Label>
-              <ToggleCheckbox
-                trueLabel="Yes"
-                falseLabel="No"
-                onChange={(isSet) => changeField('isReferred', isSet)}
-                checked={isReferred ?? false}
-              />
-            </InlineToggleWrap>
-            {isReferred && (
-              <InputComponent required inputSize="l">
-                <SelectMember
-                  onChange={(member) => changeField('referrer', member)}
-                  disabled={!isReferred}
-                  selected={referrer}
+          {type === 'general' && (
+            <Row>
+              <InlineToggleWrap>
+                <Label>I was referred by a member: </Label>
+                <ToggleCheckbox
+                  trueLabel="Yes"
+                  falseLabel="No"
+                  onChange={(isSet) => changeField('isReferred', isSet)}
+                  checked={isReferred ?? false}
                 />
-              </InputComponent>
-            )}
-          </Row>
-
+              </InlineToggleWrap>
+              {isReferred && (
+                <InputComponent required inputSize="l">
+                  <SelectMember
+                    onChange={(member) => changeField('referrer', member)}
+                    disabled={!isReferred}
+                    selected={referrer}
+                  />
+                </InputComponent>
+              )}
+            </Row>
+          )}
           <Row>
             <TextMedium dark>Please fill in all the details below.</TextMedium>
           </Row>
-
-          <Row>
-            <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
-              <SelectAccount
-                filter={filterRoot}
-                onChange={(account) => changeField('rootAccount', account)}
-                selected={rootAccount}
-              />
-            </InputComponent>
-          </Row>
-
-          <Row>
-            <InputComponent
-              label="Controller account"
-              required
-              inputSize="l"
-              tooltipText="Something about controller account"
-            >
-              <SelectAccount
-                filter={filterController}
-                onChange={(account) => changeField('controllerAccount', account)}
-                selected={controllerAccount}
-              />
-            </InputComponent>
-          </Row>
-
+          {type === 'general' && (
+            <>
+              <Row>
+                <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
+                  <SelectAccount
+                    filter={filterRoot}
+                    onChange={(account) => changeField('rootAccount', account)}
+                    selected={rootAccount}
+                  />
+                </InputComponent>
+              </Row>
+              <Row>
+                <InputComponent
+                  label="Controller account"
+                  required
+                  inputSize="l"
+                  tooltipText="Something about controller account"
+                >
+                  <SelectAccount
+                    filter={filterController}
+                    onChange={(account) => changeField('controllerAccount', account)}
+                    selected={controllerAccount}
+                  />
+                </InputComponent>
+              </Row>
+            </>
+          )}
           <Row>
             <InputComponent id="member-name" label="Member Name" required>
               <InputText
@@ -170,7 +189,6 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
               />
             </InputComponent>
           </Row>
-
           <Row>
             <InputComponent id="membership-handle" label="Membership handle" required>
               <InputText
@@ -181,7 +199,6 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
               />
             </InputComponent>
           </Row>
-
           <Row>
             <InputComponent id="member-about" label="About member" inputSize="l">
               <InputTextarea
@@ -192,7 +209,6 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
               />
             </InputComponent>
           </Row>
-
           <Row>
             <InputComponent
               id="member-avatar"
@@ -218,14 +234,20 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
       </ScrolledModalBody>
       <ModalFooter twoColumns>
         <ModalFooterGroup left>
+          {type === 'onBoarding' && (
+            <ButtonGhost onClick={changeMembershipAccount} size="medium">
+              <Arrow direction="left" />
+              Change account
+            </ButtonGhost>
+          )}
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <TextMedium colorInherit>
               I agree to the{' '}
-              <LabelLink href="http://example.com/" target="_blank">
+              <LabelLink to={TermsRoutes.termsOfService} target="_blank">
                 Terms of Service
               </LabelLink>{' '}
               and{' '}
-              <LabelLink href="http://example.com/" target="_blank">
+              <LabelLink to={TermsRoutes.privacyPolicy} target="_blank">
                 Privacy Policy
               </LabelLink>
               .
@@ -233,18 +255,29 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
           </Checkbox>
         </ModalFooterGroup>
         <ModalFooterGroup>
-          <TransactionInfoContainer>
-            <TransactionInfo
-              title="Creation fee:"
-              value={membershipPrice?.toBn()}
-              tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-            />
-          </TransactionInfoContainer>
+          {type === 'general' && (
+            <TransactionInfoContainer>
+              <TransactionInfo
+                title="Creation fee:"
+                value={membershipPrice?.toBn()}
+                tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+              />
+            </TransactionInfoContainer>
+          )}
           <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
             Create a Membership
           </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>
+    </>
+  )
+}
+
+export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: BuyMembershipFormModalProps) => {
+  return (
+    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
+      <ModalHeader onClick={onClose} title="Add membership" />
+      <BuyMembershipForm type="general" membershipPrice={membershipPrice} onSubmit={onSubmit} />
     </ScrolledModal>
   )
 }

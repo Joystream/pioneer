@@ -13,6 +13,11 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
   const specifics = state.context.specifics
 
   switch (state.context.type) {
+    case 'signal': {
+      return {
+        Signal: [specifics?.signal],
+      }
+    }
     case 'fundingRequest': {
       return {
         FundingRequest: [{ amount: specifics?.amount, account: specifics?.account?.address }],

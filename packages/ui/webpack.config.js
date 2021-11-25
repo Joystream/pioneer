@@ -69,6 +69,10 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           loader: 'graphql-tag/loader',
         },
+        {
+          test: /\.md$/,
+          use: 'raw-loader',
+        },
       ],
     },
     resolve: shared.resolve,

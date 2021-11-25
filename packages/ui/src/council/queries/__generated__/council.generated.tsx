@@ -335,24 +335,40 @@ export type CastVoteFieldsFragment = {
   commitment: string
   voteFor?:
     | {
-        __typename: 'Membership'
+        __typename: 'Candidate'
         id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
-        roles: Array<{
-          __typename: 'Worker'
+        stake: any
+        member: {
+          __typename: 'Membership'
           id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
           createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        noteMetadata: {
+          __typename: 'CandidacyNoteMetadata'
+          header?: string | null | undefined
+          bulletPoints: Array<string>
+          bannerImageUri?: string | null | undefined
+          description?: string | null | undefined
+        }
       }
     | null
     | undefined
@@ -363,6 +379,48 @@ export type CouncilSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
   amount: any
   type?: Types.EventTypeOptions | null | undefined
+}
+
+export type FundingRequestApprovedFragment = {
+  __typename: 'ProposalExecutedEvent'
+  proposal: {
+    __typename: 'Proposal'
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateBlogPostProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'EditBlogPostProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | {
+          __typename: 'FundingRequestProposalDetails'
+          destinationsList?:
+            | {
+                __typename: 'FundingRequestDestinationsList'
+                destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+              }
+            | null
+            | undefined
+        }
+      | { __typename: 'LockBlogPostProposalDetails' }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UnlockBlogPostProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
+  }
 }
 
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -442,6 +500,47 @@ export type GetPastCouncilQuery = {
     __typename: 'BudgetSpendingEvent'
     amount: any
     type?: Types.EventTypeOptions | null | undefined
+  }>
+  fundingRequestsApproved: Array<{
+    __typename: 'ProposalExecutedEvent'
+    proposal: {
+      __typename: 'Proposal'
+      details:
+        | { __typename: 'AmendConstitutionProposalDetails' }
+        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'CreateBlogPostProposalDetails' }
+        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+        | { __typename: 'EditBlogPostProposalDetails' }
+        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+        | {
+            __typename: 'FundingRequestProposalDetails'
+            destinationsList?:
+              | {
+                  __typename: 'FundingRequestDestinationsList'
+                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+                }
+              | null
+              | undefined
+          }
+        | { __typename: 'LockBlogPostProposalDetails' }
+        | { __typename: 'RuntimeUpgradeProposalDetails' }
+        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+        | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+        | { __typename: 'SetInitialInvitationCountProposalDetails' }
+        | { __typename: 'SetMaxValidatorCountProposalDetails' }
+        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+        | { __typename: 'SetMembershipPriceProposalDetails' }
+        | { __typename: 'SetReferralCutProposalDetails' }
+        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+        | { __typename: 'SignalProposalDetails' }
+        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UnlockBlogPostProposalDetails' }
+        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+        | { __typename: 'VetoProposalDetails' }
+    }
   }>
 }
 
@@ -546,20 +645,6 @@ export type GetPastCouncilMembersQuery = {
         }>
       }
     }
-  }>
-}
-
-export type GetPastCouncilBudgetSpendingQueryVariables = Types.Exact<{
-  fromBlock: Types.Scalars['Int']
-  toBlock: Types.Scalars['Int']
-}>
-
-export type GetPastCouncilBudgetSpendingQuery = {
-  __typename: 'Query'
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    amount: any
-    type?: Types.EventTypeOptions | null | undefined
   }>
 }
 
@@ -881,28 +966,40 @@ export type GetCouncilVotesQuery = {
     commitment: string
     voteFor?:
       | {
-          __typename: 'Membership'
+          __typename: 'Candidate'
           id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
+          stake: any
+          member: {
+            __typename: 'Membership'
             id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
             createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+          noteMetadata: {
+            __typename: 'CandidacyNoteMetadata'
+            header?: string | null | undefined
+            bulletPoints: Array<string>
+            bannerImageUri?: string | null | undefined
+            description?: string | null | undefined
+          }
         }
       | null
       | undefined
@@ -945,7 +1042,7 @@ export type GetPastVotesResultsQuery = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    voteFor?: { __typename: 'Membership'; id: string } | null | undefined
+    voteFor?: { __typename: 'Candidate'; id: string } | null | undefined
     electionRound: { __typename: 'ElectionRound'; id: string }
   }>
 }
@@ -962,16 +1059,62 @@ export type GetCouncilBlockRangeQuery = {
     | undefined
 }
 
-export type GetCouncilProposalsStatsQueryVariables = Types.Exact<{
+export type GetPastCouncilStatsQueryVariables = Types.Exact<{
   startBlock: Types.Scalars['Int']
   endBlock: Types.Scalars['Int']
 }>
 
-export type GetCouncilProposalsStatsQuery = {
+export type GetPastCouncilStatsQuery = {
   __typename: 'Query'
-  approved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
-  rejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
-  slashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  proposalsApproved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
+  fundingRequestsApproved: Array<{
+    __typename: 'ProposalExecutedEvent'
+    proposal: {
+      __typename: 'Proposal'
+      details:
+        | { __typename: 'AmendConstitutionProposalDetails' }
+        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'CreateBlogPostProposalDetails' }
+        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+        | { __typename: 'EditBlogPostProposalDetails' }
+        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+        | {
+            __typename: 'FundingRequestProposalDetails'
+            destinationsList?:
+              | {
+                  __typename: 'FundingRequestDestinationsList'
+                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+                }
+              | null
+              | undefined
+          }
+        | { __typename: 'LockBlogPostProposalDetails' }
+        | { __typename: 'RuntimeUpgradeProposalDetails' }
+        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+        | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+        | { __typename: 'SetInitialInvitationCountProposalDetails' }
+        | { __typename: 'SetMaxValidatorCountProposalDetails' }
+        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+        | { __typename: 'SetMembershipPriceProposalDetails' }
+        | { __typename: 'SetReferralCutProposalDetails' }
+        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+        | { __typename: 'SignalProposalDetails' }
+        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UnlockBlogPostProposalDetails' }
+        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+        | { __typename: 'VetoProposalDetails' }
+    }
+  }>
+  proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: any
+    type?: Types.EventTypeOptions | null | undefined
+  }>
 }
 
 export const PastCouncilProposalsFieldsFragmentDoc = gql`
@@ -1124,18 +1267,35 @@ export const CastVoteFieldsFragmentDoc = gql`
     castBy
     commitment
     voteFor {
-      ...MemberFields
+      ...ElectionCandidateFields
     }
     electionRound {
       cycleId
     }
   }
-  ${MemberFieldsFragmentDoc}
+  ${ElectionCandidateFieldsFragmentDoc}
 `
 export const CouncilSpendingEventFieldsFragmentDoc = gql`
   fragment CouncilSpendingEventFields on BudgetSpendingEvent {
     amount
     type
+  }
+`
+export const FundingRequestApprovedFragmentDoc = gql`
+  fragment FundingRequestApproved on ProposalExecutedEvent {
+    proposal {
+      details {
+        __typename
+        ... on FundingRequestProposalDetails {
+          destinationsList {
+            destinations {
+              amount
+              account
+            }
+          }
+        }
+      }
+    }
   }
 `
 export const GetElectedCouncilDocument = gql`
@@ -1277,9 +1437,19 @@ export const GetPastCouncilDocument = gql`
     budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...CouncilSpendingEventFields
     }
+    fundingRequestsApproved: proposalExecutedEvents(
+      where: {
+        inBlock_gt: $fromBlock
+        inBlock_lt: $toBlock
+        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      }
+    ) {
+      ...FundingRequestApproved
+    }
   }
   ${PastCouncilDetailedFieldsFragmentDoc}
   ${CouncilSpendingEventFieldsFragmentDoc}
+  ${FundingRequestApprovedFragmentDoc}
 `
 
 /**
@@ -1371,61 +1541,6 @@ export type GetPastCouncilMembersLazyQueryHookResult = ReturnType<typeof useGetP
 export type GetPastCouncilMembersQueryResult = Apollo.QueryResult<
   GetPastCouncilMembersQuery,
   GetPastCouncilMembersQueryVariables
->
-export const GetPastCouncilBudgetSpendingDocument = gql`
-  query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
-    budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
-      ...CouncilSpendingEventFields
-    }
-  }
-  ${CouncilSpendingEventFieldsFragmentDoc}
-`
-
-/**
- * __useGetPastCouncilBudgetSpendingQuery__
- *
- * To run a query within a React component, call `useGetPastCouncilBudgetSpendingQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPastCouncilBudgetSpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPastCouncilBudgetSpendingQuery({
- *   variables: {
- *      fromBlock: // value for 'fromBlock'
- *      toBlock: // value for 'toBlock'
- *   },
- * });
- */
-export function useGetPastCouncilBudgetSpendingQuery(
-  baseOptions: Apollo.QueryHookOptions<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
-    GetPastCouncilBudgetSpendingDocument,
-    options
-  )
-}
-export function useGetPastCouncilBudgetSpendingLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetPastCouncilBudgetSpendingQuery,
-    GetPastCouncilBudgetSpendingQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
-    GetPastCouncilBudgetSpendingDocument,
-    options
-  )
-}
-export type GetPastCouncilBudgetSpendingQueryHookResult = ReturnType<typeof useGetPastCouncilBudgetSpendingQuery>
-export type GetPastCouncilBudgetSpendingLazyQueryHookResult = ReturnType<
-  typeof useGetPastCouncilBudgetSpendingLazyQuery
->
-export type GetPastCouncilBudgetSpendingQueryResult = Apollo.QueryResult<
-  GetPastCouncilBudgetSpendingQuery,
-  GetPastCouncilBudgetSpendingQueryVariables
 >
 export const GetPastCouncilProposalsDocument = gql`
   query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
@@ -1859,7 +1974,7 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+    candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
       totalCount
     }
     councilMembersConnection(where: { member: { id_eq: $memberId } }) {
@@ -2157,12 +2272,21 @@ export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
   GetCouncilBlockRangeQuery,
   GetCouncilBlockRangeQueryVariables
 >
-export const GetCouncilProposalsStatsDocument = gql`
-  query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
-    approved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+export const GetPastCouncilStatsDocument = gql`
+  query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
+    proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
       totalCount
     }
-    rejected: proposalDecisionMadeEventsConnection(
+    fundingRequestsApproved: proposalExecutedEvents(
+      where: {
+        inBlock_gt: $startBlock
+        inBlock_lt: $endBlock
+        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      }
+    ) {
+      ...FundingRequestApproved
+    }
+    proposalsRejected: proposalDecisionMadeEventsConnection(
       where: {
         inBlock_gt: $startBlock
         inBlock_lt: $endBlock
@@ -2171,7 +2295,7 @@ export const GetCouncilProposalsStatsDocument = gql`
     ) {
       totalCount
     }
-    slashed: proposalDecisionMadeEventsConnection(
+    proposalsSlashed: proposalDecisionMadeEventsConnection(
       where: {
         inBlock_gt: $startBlock
         inBlock_lt: $endBlock
@@ -2180,47 +2304,52 @@ export const GetCouncilProposalsStatsDocument = gql`
     ) {
       totalCount
     }
+    budgetSpendingEvents(where: { inBlock_gte: $startBlock, inBlock_lte: $endBlock }) {
+      ...CouncilSpendingEventFields
+    }
   }
+  ${FundingRequestApprovedFragmentDoc}
+  ${CouncilSpendingEventFieldsFragmentDoc}
 `
 
 /**
- * __useGetCouncilProposalsStatsQuery__
+ * __useGetPastCouncilStatsQuery__
  *
- * To run a query within a React component, call `useGetCouncilProposalsStatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCouncilProposalsStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPastCouncilStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCouncilProposalsStatsQuery({
+ * const { data, loading, error } = useGetPastCouncilStatsQuery({
  *   variables: {
  *      startBlock: // value for 'startBlock'
  *      endBlock: // value for 'endBlock'
  *   },
  * });
  */
-export function useGetCouncilProposalsStatsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>
+export function useGetPastCouncilStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>(
-    GetCouncilProposalsStatsDocument,
+  return Apollo.useQuery<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>(
+    GetPastCouncilStatsDocument,
     options
   )
 }
-export function useGetCouncilProposalsStatsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>
+export function useGetPastCouncilStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>(
-    GetCouncilProposalsStatsDocument,
+  return Apollo.useLazyQuery<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>(
+    GetPastCouncilStatsDocument,
     options
   )
 }
-export type GetCouncilProposalsStatsQueryHookResult = ReturnType<typeof useGetCouncilProposalsStatsQuery>
-export type GetCouncilProposalsStatsLazyQueryHookResult = ReturnType<typeof useGetCouncilProposalsStatsLazyQuery>
-export type GetCouncilProposalsStatsQueryResult = Apollo.QueryResult<
-  GetCouncilProposalsStatsQuery,
-  GetCouncilProposalsStatsQueryVariables
+export type GetPastCouncilStatsQueryHookResult = ReturnType<typeof useGetPastCouncilStatsQuery>
+export type GetPastCouncilStatsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilStatsLazyQuery>
+export type GetPastCouncilStatsQueryResult = Apollo.QueryResult<
+  GetPastCouncilStatsQuery,
+  GetPastCouncilStatsQueryVariables
 >

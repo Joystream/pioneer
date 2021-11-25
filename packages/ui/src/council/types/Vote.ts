@@ -37,6 +37,6 @@ export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,
   commitment: fields.commitment,
-  voteFor: fields.voteFor ? asMember(fields.voteFor) : undefined,
+  voteFor: fields.voteFor ? asMember(fields.voteFor.member) : undefined,
   cycleId: fields.electionRound.cycleId,
 })

@@ -40,6 +40,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   stubApi,
+  stubConst,
   stubDefaultBalances,
   stubProposalConstants,
   stubQuery,
@@ -56,6 +57,10 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
+}))
+
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
 describe('UI: AddNewProposalModal', () => {
@@ -113,6 +118,8 @@ describe('UI: AddNewProposalModal', () => {
       })
     )
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
+    stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 1000))
+    stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 1000))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
     changeModeTx = stubTransaction(api, 'api.tx.proposalsDiscussion.changeThreadMode', 10)
@@ -253,6 +260,43 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Proposal details validation', () => {
+        it('Title too long', async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          await finishStakingAccount()
+
+          await fillProposalDetails()
+
+          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Description too long', async () => {
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishStakingAccount()
+
+          await fillProposalDetails()
+
+          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Both fields too long', async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishStakingAccount()
+
+          await fillProposalDetails()
+
+          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
+      })
+
       describe('Trigger & Discussion', () => {
         beforeEach(async () => {
           await finishStakingAccount()
@@ -336,6 +380,29 @@ describe('UI: AddNewProposalModal', () => {
     describe('Specific parameters', () => {
       beforeEach(async () => {
         await finishWarning()
+      })
+
+      describe('Type - Signal', () => {
+        beforeEach(async () => {
+          await finishProposalType('signal')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Invalid - signal field not filled ', async () => {
+          expect(screen.queryByLabelText(/^signal/i)).toHaveValue('')
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - signal field filled', async () => {
+          await SpecificParameters.Signal.fillSignal('Foo')
+
+          const button = await getCreateButton()
+          expect(button).toBeEnabled()
+        })
       })
 
       describe('Type - Funding Request', () => {
@@ -700,7 +767,9 @@ describe('UI: AddNewProposalModal', () => {
       it('Success', async () => {
         stubTransactionSuccess(changeModeTx, 'proposalsDiscussion', 'ThreadModeChanged')
         const button = await getButton(/sign transaction and change mode/i)
-        await fireEvent.click(button as HTMLElement)
+        await act(async () => {
+          fireEvent.click(button)
+        })
         expect(screen.queryByText('See my Proposal')).not.toBeNull()
       })
 
@@ -807,6 +876,9 @@ describe('UI: AddNewProposalModal', () => {
 
   const SpecificParameters = {
     fillAmount: async (value: number) => await fillField('amount-input', value),
+    Signal: {
+      fillSignal: async (value: string) => await fillField('signal', value),
+    },
     FundingRequest: {
       selectRecipient: async (name: string) => {
         await selectFromDropdown('Recipient account', name)

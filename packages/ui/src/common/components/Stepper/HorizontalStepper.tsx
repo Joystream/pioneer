@@ -1,7 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { HorizontalStepperTheme } from '@/common/components/Stepper/themes'
 import { asStepsToRender, StepperStep, StepToRender } from '@/common/components/Stepper/types'
 import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
 
@@ -9,16 +8,15 @@ import { CheckboxIcon } from '../icons'
 
 export interface HorizontalStepperProps {
   steps: StepperStep[]
-  theme?: keyof typeof HorizontalStepperTheme
 }
 
-export const HorizontalStepper = ({ steps, theme = 'light' }: HorizontalStepperProps) => {
+export const HorizontalStepper = ({ steps }: HorizontalStepperProps) => {
   const stepsToRender = asStepsToRender(steps)
 
   return (
     <HorizontalStepperWrapper>
       {stepsToRender.map((step, index) => (
-        <Step theme={HorizontalStepperTheme[theme]} step={step} key={`horizontal-stepper-${index}`}>
+        <Step step={step} key={`horizontal-stepper-${index}`}>
           <StepCircle>{step.isPast ? <CheckboxIcon /> : index + 1}</StepCircle>
           <StepBody>
             <StepTitle>{step.title}</StepTitle>
@@ -47,6 +45,7 @@ const StepTitle = styled.h6`
   transition: ${Transitions.all};
   font-weight: 400;
   padding-left: 8px;
+  color: ${Colors.Black[400]};
 `
 
 export const StepCircle = styled.span`
@@ -69,7 +68,7 @@ export const StepCircle = styled.span`
   transition: ${Transitions.all};
 `
 
-export const Step = styled.div<{ step: StepToRender; theme: typeof HorizontalStepperTheme }>`
+export const Step = styled.div<{ step: StepToRender }>`
   display: flex;
   position: relative;
   align-items: center;
@@ -90,18 +89,13 @@ export const Step = styled.div<{ step: StepToRender; theme: typeof HorizontalSte
   }
 
   ${StepCircle} {
-    ${({ step: { isPast, isActive } }) => {
-      if (isPast) {
-        return pastStepCss
-      }
-      if (isActive) {
-        return activeStepCss
-      }
-    }};
+    ${({ step: { isActive } }) => (isActive ? activeStepCss : pastStepCss)};
   }
 
   ${StepTitle} {
-    ${({ theme }) => `color: ${theme.stepperText}`}
+    ${({ step: { isActive } }) => {
+      return isActive ? 'color: white; font-weight: 700' : `color: ${Colors.Black[400]}`
+    }};
   }
 `
 

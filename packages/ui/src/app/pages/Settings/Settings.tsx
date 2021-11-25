@@ -7,17 +7,14 @@ import { SimpleSelect } from '@/common/components/selects'
 import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
 
 export const Settings = () => {
-  const options: NetworkType[] = ['local', 'olympia-testnet']
+  const options: NetworkType[] = ['local', 'local-mocks', 'olympia-testnet']
   const [network, setNetwork] = useNetwork()
 
-  const switchNetwork = () => {
-    if (network === 'local') {
-      setNetwork('olympia-testnet')
-    } else {
-      setNetwork('local')
+  const switchNetwork = (network: NetworkType | null) => {
+    if (network) {
+      setNetwork(network)
+      window.location.reload()
     }
-
-    window.location.reload()
   }
 
   return (
