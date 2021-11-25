@@ -4,6 +4,7 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
@@ -22,6 +23,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
   const specifics = state.context.specifics
 
   switch (true) {
+    case state.matches('specificParameters.signal'): {
+      return !!specifics?.signal
+    }
     case state.matches('specificParameters.fundingRequest'): {
       return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
     }
@@ -57,6 +61,8 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
 
 export const SpecificParametersStep = ({ send, state }: SpecificParametersStepProps) => {
   switch (true) {
+    case state.matches('specificParameters.signal'):
+      return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
     case state.matches('specificParameters.fundingRequest'):
       return (
         <FundingRequest
