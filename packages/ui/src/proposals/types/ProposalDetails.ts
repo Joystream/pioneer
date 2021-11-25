@@ -6,6 +6,8 @@ import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 import { asMember, Member } from '../../memberships/types'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
 
+import { ProposalType } from '.'
+
 export type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
 
@@ -13,7 +15,7 @@ interface BaseProposalDetails {
   type: undefined
 }
 
-type ProposalDetailsNew<Type extends string, Details> = { type: Type } & Details
+type ProposalDetailsNew<Type extends ProposalType, Details> = { type: Type } & Details
 
 export type DestinationsDetail = {
   destinations?: {
@@ -139,13 +141,15 @@ const asRuntimeUpgrade: DetailsCast<'RuntimeUpgradeProposalDetails'> = (fragment
   newBytecodeId: fragment.newRuntimeBytecode?.id,
 })
 
-const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalDetails'> = (fragment): UpdateGroupBudgetDetails => ({
+const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalDetails'> = (
+  fragment
+): UpdateGroupBudgetDetails => ({
   type: 'updateWorkingGroupBudget',
   amount: new BN(fragment.amount),
   group: {
     id: fragment.group?.id as GroupIdName,
-    name: asWorkingGroupName(fragment.group?.name ?? 'Unknown')
-  }
+    name: asWorkingGroupName(fragment.group?.name ?? 'Unknown'),
+  },
 })
 
 interface DetailsCast<T extends ProposalDetailsTypename> {

@@ -1,5 +1,6 @@
 import { omit } from 'lodash'
 
+import { isDefined } from '@/common/utils'
 import {
   ProposalDetails,
   ProposalDetailsKeys,
@@ -14,6 +15,7 @@ import {
   OpeningDescriptionDetail,
   AmountDetail,
   DestinationsDetail,
+  ProposalType,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -171,14 +173,18 @@ const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWi
 }
 
 const getDetailsOrder = (proposalDetails: ProposalDetails): ProposalDetailsKeys[] => {
-  const definedOrders: { [key: string]: ProposalDetailsKeys[] } = {
+  const definedOrders: Partial<Record<ProposalType, ProposalDetailsKeys[]>> = {
     createWorkingGroupLeadOpening: ['group', 'stakeAmount', 'unstakingPeriod', 'rewardPerBlock', 'openingDescription'],
     decreaseWorkingGroupLeadStake: ['groupName', 'member', 'amount'],
     slashWorkingGroupLead: ['groupName', 'member', 'amount'],
+    updateWorkingGroupBudget: ['group', 'amount'],
   }
 
-  if (proposalDetails.type && definedOrders[proposalDetails.type]) {
-    return definedOrders[proposalDetails.type]
+  if (proposalDetails.type) {
+    const order = definedOrders[proposalDetails.type]
+    if (isDefined(order)) {
+      return order
+    }
   }
 
   return Object.keys(omit(proposalDetails, 'type')) as ProposalDetailsKeys[]

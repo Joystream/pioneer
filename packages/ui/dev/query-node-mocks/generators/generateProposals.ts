@@ -171,8 +171,10 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
   }),
   updateWorkingGroupBudget: (mocks) => ({
     type: 'updateWorkingGroupBudget',
-    groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
-    amount: randomFromRange(5, 20) * 1000,
+    data: {
+      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
+      amount: randomFromRange(5, 20) * 1000,
+    }
   })
 }
 
