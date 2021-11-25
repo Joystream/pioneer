@@ -1,21 +1,14 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
+import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { TermsRoutes } from '@/app/constants/routes'
-import { Arrow } from '@/common/components/icons'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
-import { useForm } from '@/common/hooks/useForm'
-import { useObservable } from '@/common/hooks/useObservable'
-
-import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
-import { ButtonGhost, ButtonPrimary } from '../../../common/components/buttons'
+import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -25,8 +18,9 @@ import {
   Label,
   LabelLink,
   ToggleCheckbox,
-} from '../../../common/components/forms'
-import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
+} from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { Arrow } from '@/common/components/icons'
 import {
   ModalFooter,
   ModalFooterGroup,
@@ -36,7 +30,13 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
   TransactionInfoContainer,
-} from '../../../common/components/Modal'
+} from '@/common/components/Modal'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { useForm } from '@/common/hooks/useForm'
+import { useObservable } from '@/common/hooks/useObservable'
+
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
@@ -102,9 +102,6 @@ export const BuyMembershipForm = ({
   const { isValid, errors, setContext } = validation
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
 
-  const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
-  const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
     handle,
@@ -156,11 +153,7 @@ export const BuyMembershipForm = ({
             <>
               <Row>
                 <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
-                  <SelectAccount
-                    filter={filterRoot}
-                    onChange={(account) => changeField('rootAccount', account)}
-                    selected={rootAccount}
-                  />
+                  <SelectAccount onChange={(account) => changeField('rootAccount', account)} selected={rootAccount} />
                 </InputComponent>
               </Row>
               <Row>
@@ -171,7 +164,6 @@ export const BuyMembershipForm = ({
                   tooltipText="Something about controller account"
                 >
                   <SelectAccount
-                    filter={filterController}
                     onChange={(account) => changeField('controllerAccount', account)}
                     selected={controllerAccount}
                   />
