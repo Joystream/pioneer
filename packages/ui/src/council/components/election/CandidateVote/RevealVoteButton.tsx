@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { MouseEventHandler, useCallback } from 'react'
 
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
@@ -13,12 +13,16 @@ interface Props {
 export const RevealVoteButton = ({ myVotes, voteForHandle }: Props) => {
   const { showModal } = useModal()
   const unrevealedVotes = myVotes.flatMap((vote) => vote.attempt ?? [])
-  const onClick = useCallback(() => {
-    showModal<RevealVoteModalCall>({
-      modal: 'RevealVote',
-      data: { votes: unrevealedVotes, voteForHandle },
-    })
-  }, [unrevealedVotes.length])
+  const onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => {
+      event.stopPropagation()
+      showModal<RevealVoteModalCall>({
+        modal: 'RevealVote',
+        data: { votes: unrevealedVotes, voteForHandle },
+      })
+    },
+    [unrevealedVotes.length]
+  )
   return (
     <TransactionButton style="primary" size="medium" onClick={onClick}>
       Reveal
