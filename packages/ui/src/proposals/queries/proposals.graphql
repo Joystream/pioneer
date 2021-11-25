@@ -1,3 +1,13 @@
+fragment WorkerProposalDetails on Worker {
+  group {
+    id
+    name
+  }
+  membership {
+    ...MemberFields
+  }
+}
+
 fragment ProposalFields on Proposal {
   id
   title
@@ -79,26 +89,14 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on DecreaseWorkingGroupLeadStakeProposalDetails {
       lead {
         createdAt
-        group {
-          id
-          name
-        }
-        membership {
-          ...MemberFields
-        }
+        ...WorkerProposalDetails
       }
       amount
     }
     ... on SlashWorkingGroupLeadProposalDetails {
       lead {
         createdAt
-        group {
-          id
-          name
-        }
-        membership {
-          ...MemberFields
-        }
+        ...WorkerProposalDetails
       }
       amount
     }
@@ -126,34 +124,19 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       application {
         applicant {
-          id
-          handle
+          ...MemberFields
         }
       }
     }
     ... on SetWorkingGroupLeadRewardProposalDetails {
       lead {
-        membership {
-          id
-          handle
-        }
-        group {
-          id
-          name
-        }
+        ...WorkerProposalDetails
       }
       newRewardPerBlock
     }
     ... on TerminateWorkingGroupLeadProposalDetails {
       lead {
-        membership {
-          id
-          handle
-        }
-        group {
-          id
-          name
-        }
+        ...WorkerProposalDetails
       }
       slashingAmount
     }

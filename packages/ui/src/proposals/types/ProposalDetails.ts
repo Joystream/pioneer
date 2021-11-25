@@ -4,7 +4,7 @@ import { KeysOfUnion } from '@/common/types/helpers'
 import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 
 import { asMember, Member } from '../../memberships/types'
-import { ProposalWithDetailsFieldsFragment } from '../queries'
+import { ProposalWithDetailsFieldsFragment, WorkerProposalDetailsFragment } from '../queries'
 
 import { ProposalType } from '.'
 
@@ -71,6 +71,23 @@ export type RuntimeUpgradeDetails = ProposalDetailsNew<'runtimeUpgrade', NewByte
 
 export type UpdateGroupBudgetDetails = ProposalDetailsNew<'updateWorkingGroupBudget', GroupDetail & AmountDetail>
 
+export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount', AmountDetail>
+
+export type FillWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
+  'fillWorkingGroupLeadOpening',
+  MemberDetail & GroupDetail
+>
+
+export type SetWorkingGroupLeadRewardDetails = ProposalDetailsNew<
+  'setWorkingGroupLeadReward',
+  MemberDetail & GroupDetail & AmountDetail
+>
+
+export type TerminateWorkingGroupLeadDetails = ProposalDetailsNew<
+  'terminateWorkingGroupLead',
+  MemberDetail & GroupDetail & AmountDetail
+>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -79,6 +96,10 @@ export type ProposalDetails =
   | SlashLeadDetails
   | RuntimeUpgradeDetails
   | UpdateGroupBudgetDetails
+  | MaxValidatorCountDetails
+  | FillWorkingGroupLeadOpeningDetails
+  | SetWorkingGroupLeadRewardDetails
+  | TerminateWorkingGroupLeadDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -88,6 +109,11 @@ const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment
     destinations: fragment.destinationsList?.destinations.map((d) => ({ account: d.account, amount: d.amount })),
   }
 }
+
+const asWorkerDetails = (fragment: WorkerProposalDetailsFragment | null | undefined) => ({
+  groupName: fragment ? asWorkingGroupName(fragment.group.name ?? 'Unknown') : 'Unknown',
+  member: fragment ? asMember(fragment.membership) : undefined,
+})
 
 const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDetails'> = (
   fragment
@@ -115,11 +141,8 @@ const asLeadStakeDetails = (
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     )
 ) => {
-  const groupName = asWorkingGroupName(fragment.lead?.group.name ?? 'Unknown')
-  const member = fragment.lead ? asMember(fragment.lead.membership) : undefined
   return {
-    member,
-    groupName,
+    ...asWorkerDetails(fragment.lead),
     amount: new BN(fragment.amount),
   }
 }
@@ -152,6 +175,42 @@ const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalD
   },
 })
 
+const asSetMaxValidatorCount: DetailsCast<'SetMaxValidatorCountProposalDetails'> = (
+  fragment
+): MaxValidatorCountDetails => ({
+  type: 'setMaxValidatorCount',
+  amount: new BN(fragment.newMaxValidatorCount),
+})
+
+const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDetails'> = (
+  fragment
+): FillWorkingGroupLeadOpeningDetails => ({
+  type: 'fillWorkingGroupLeadOpening',
+  member: fragment.application ? asMember(fragment.application.applicant) : undefined,
+  group: fragment.opening
+    ? {
+        id: fragment.opening.group.id as GroupIdName,
+        name: fragment.opening.group.name,
+      }
+    : undefined,
+})
+
+const asSetWorkingGroupLeadReward: DetailsCast<'SetWorkingGroupLeadRewardProposalDetails'> = (
+  fragment
+): SetWorkingGroupLeadRewardDetails => ({
+  type: 'setWorkingGroupLeadReward',
+  ...asWorkerDetails(fragment.lead),
+  amount: new BN(fragment.newRewardPerBlock),
+})
+
+const asTerminateWorkingGroupLead: DetailsCast<'TerminateWorkingGroupLeadProposalDetails'> = (
+  fragment
+): TerminateWorkingGroupLeadDetails => ({
+  type: 'terminateWorkingGroupLead',
+  ...asWorkerDetails(fragment.lead),
+  amount: new BN(fragment.slashingAmount),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -163,6 +222,10 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SlashWorkingGroupLeadProposalDetails: asSlashLead,
   RuntimeUpgradeProposalDetails: asRuntimeUpgrade,
   UpdateWorkingGroupBudgetProposalDetails: asUpdateWorkingGroupBudget,
+  SetMaxValidatorCountProposalDetails: asSetMaxValidatorCount,
+  FillWorkingGroupLeadOpeningProposalDetails: asFillGroupLeadOpening,
+  SetWorkingGroupLeadRewardProposalDetails: asSetWorkingGroupLeadReward,
+  TerminateWorkingGroupLeadProposalDetails: asTerminateWorkingGroupLead,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

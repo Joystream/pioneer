@@ -4,6 +4,31 @@ import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
+export type WorkerProposalDetailsFragment = {
+  __typename: 'Worker'
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
+  membership: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+}
+
 export type ProposalFieldsFragment = {
   __typename: 'Proposal'
   id: string
@@ -238,7 +263,30 @@ export type ProposalWithDetailsFieldsFragment = {
         application?:
           | {
               __typename: 'WorkingGroupApplication'
-              applicant: { __typename: 'Membership'; id: string; handle: string }
+              applicant: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
             }
           | null
           | undefined
@@ -272,8 +320,31 @@ export type ProposalWithDetailsFieldsFragment = {
         lead?:
           | {
               __typename: 'Worker'
-              membership: { __typename: 'Membership'; id: string; handle: string }
               group: { __typename: 'WorkingGroup'; id: string; name: string }
+              membership: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
             }
           | null
           | undefined
@@ -321,8 +392,31 @@ export type ProposalWithDetailsFieldsFragment = {
         lead?:
           | {
               __typename: 'Worker'
-              membership: { __typename: 'Membership'; id: string; handle: string }
               group: { __typename: 'WorkingGroup'; id: string; name: string }
+              membership: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
             }
           | null
           | undefined
@@ -757,7 +851,30 @@ export type GetProposalQuery = {
               application?:
                 | {
                     __typename: 'WorkingGroupApplication'
-                    applicant: { __typename: 'Membership'; id: string; handle: string }
+                    applicant: {
+                      __typename: 'Membership'
+                      id: string
+                      rootAccount: string
+                      controllerAccount: string
+                      boundAccounts: Array<string>
+                      handle: string
+                      isVerified: boolean
+                      isFoundingMember: boolean
+                      inviteCount: number
+                      createdAt: any
+                      metadata: {
+                        __typename: 'MemberMetadata'
+                        name?: string | null | undefined
+                        about?: string | null | undefined
+                      }
+                      roles: Array<{
+                        __typename: 'Worker'
+                        id: string
+                        createdAt: any
+                        isLead: boolean
+                        group: { __typename: 'WorkingGroup'; name: string }
+                      }>
+                    }
                   }
                 | null
                 | undefined
@@ -791,8 +908,31 @@ export type GetProposalQuery = {
               lead?:
                 | {
                     __typename: 'Worker'
-                    membership: { __typename: 'Membership'; id: string; handle: string }
                     group: { __typename: 'WorkingGroup'; id: string; name: string }
+                    membership: {
+                      __typename: 'Membership'
+                      id: string
+                      rootAccount: string
+                      controllerAccount: string
+                      boundAccounts: Array<string>
+                      handle: string
+                      isVerified: boolean
+                      isFoundingMember: boolean
+                      inviteCount: number
+                      createdAt: any
+                      metadata: {
+                        __typename: 'MemberMetadata'
+                        name?: string | null | undefined
+                        about?: string | null | undefined
+                      }
+                      roles: Array<{
+                        __typename: 'Worker'
+                        id: string
+                        createdAt: any
+                        isLead: boolean
+                        group: { __typename: 'WorkingGroup'; name: string }
+                      }>
+                    }
                   }
                 | null
                 | undefined
@@ -840,8 +980,31 @@ export type GetProposalQuery = {
               lead?:
                 | {
                     __typename: 'Worker'
-                    membership: { __typename: 'Membership'; id: string; handle: string }
                     group: { __typename: 'WorkingGroup'; id: string; name: string }
+                    membership: {
+                      __typename: 'Membership'
+                      id: string
+                      rootAccount: string
+                      controllerAccount: string
+                      boundAccounts: Array<string>
+                      handle: string
+                      isVerified: boolean
+                      isFoundingMember: boolean
+                      inviteCount: number
+                      createdAt: any
+                      metadata: {
+                        __typename: 'MemberMetadata'
+                        name?: string | null | undefined
+                        about?: string | null | undefined
+                      }
+                      roles: Array<{
+                        __typename: 'Worker'
+                        id: string
+                        createdAt: any
+                        isLead: boolean
+                        group: { __typename: 'WorkingGroup'; name: string }
+                      }>
+                    }
                   }
                 | null
                 | undefined
@@ -1130,6 +1293,18 @@ export const ProposalFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const WorkerProposalDetailsFragmentDoc = gql`
+  fragment WorkerProposalDetails on Worker {
+    group {
+      id
+      name
+    }
+    membership {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
 export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
   fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
     id
@@ -1203,26 +1378,14 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       ... on DecreaseWorkingGroupLeadStakeProposalDetails {
         lead {
           createdAt
-          group {
-            id
-            name
-          }
-          membership {
-            ...MemberFields
-          }
+          ...WorkerProposalDetails
         }
         amount
       }
       ... on SlashWorkingGroupLeadProposalDetails {
         lead {
           createdAt
-          group {
-            id
-            name
-          }
-          membership {
-            ...MemberFields
-          }
+          ...WorkerProposalDetails
         }
         amount
       }
@@ -1250,34 +1413,19 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         }
         application {
           applicant {
-            id
-            handle
+            ...MemberFields
           }
         }
       }
       ... on SetWorkingGroupLeadRewardProposalDetails {
         lead {
-          membership {
-            id
-            handle
-          }
-          group {
-            id
-            name
-          }
+          ...WorkerProposalDetails
         }
         newRewardPerBlock
       }
       ... on TerminateWorkingGroupLeadProposalDetails {
         lead {
-          membership {
-            id
-            handle
-          }
-          group {
-            id
-            name
-          }
+          ...WorkerProposalDetails
         }
         slashingAmount
       }
@@ -1307,6 +1455,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
   }
   ${ProposalFieldsFragmentDoc}
   ${VoteFieldsFragmentDoc}
+  ${WorkerProposalDetailsFragmentDoc}
   ${MemberFieldsFragmentDoc}
   ${DiscussionPostFieldsFragmentDoc}
 `
