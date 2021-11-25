@@ -110,7 +110,7 @@ const generateProposal = (type: ProposalType, mocks: MocksForProposals) => {
     councilApprovals: Math.round(Math.random())
   }
 }
-type MocksForProposals = Pick<Mocks, 'members' | 'workers' | 'workingGroups'>
+type MocksForProposals = Pick<Mocks, 'members' | 'workers' | 'workingGroups' | 'applications'>
 
 export type ProposalMock = ReturnType<typeof generateProposal>
 
@@ -119,7 +119,8 @@ export const generateProposals = (mocks?: MocksForProposals): ProposalMock[] => 
     mocks = {
       members: require('../../../src/mocks/data/raw/members.json'),
       workingGroups: require('../../../src/mocks/data/raw/workingGroups.json'),
-      workers: require('../../../src/mocks/data/raw/workers.json')
+      workers: require('../../../src/mocks/data/raw/workers.json'),
+      applications: require('../../../src/mocks/data/raw/applications.json'),
     }
   }
 
@@ -175,7 +176,46 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
       groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
       amount: randomFromRange(5, 20) * 1000,
     }
-  })
+  }),
+  setMaxValidatorCount: () => ({
+    type: 'setMaxValidatorCount',
+    data: {
+      newMaxValidatorCount: randomFromRange(5, 10),
+    }
+  }),
+  fillWorkingGroupLeadOpening: (mocks) => {
+    const application = mocks.applications[randomFromRange(0, mocks.applications.length - 1)]
+    return {
+      type: 'fillWorkingGroupLeadOpening',
+      data: {
+        openingId: application.openingId,
+        applicationId: application.id,
+      }
+    }
+  },
+  setWorkingGroupLeadReward: (mocks) => ({
+    type: 'setWorkingGroupLeadReward',
+    data: {
+      lead: mocks.workers[randomFromRange(0, mocks.workers.length)],
+      newRewardPerBlock: randomFromRange(100, 1000),
+    }
+  }),
+  terminateWorkingGroupLead: (mocks) => ({
+    type: 'terminateWorkingGroupLead',
+    data: getLeadStakeData(mocks)
+  }),
+  setMembershipPrice: () => ({
+    type: 'setMembershipPrice',
+    data: {
+      newPrice: randomFromRange(1000, 5000),
+    }
+  }),
+  setCouncilBudgetIncrement: () => ({
+    type: 'setCouncilBudgetIncrement',
+    data: {
+      newAmount: randomFromRange(1, 5) * 10000,
+    }
+  }),
 }
 
 const getLeadStakeData = (mocks: MocksForProposals) => ({
