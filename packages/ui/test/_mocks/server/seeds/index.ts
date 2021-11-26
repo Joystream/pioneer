@@ -114,7 +114,12 @@ export const PROPOSAL_DATA: ProposalMock = {
   status: 'deciding',
   statusSetAtBlock: 0,
   statusSetAtTime: '2021-06-16T02:37:48.929Z',
-  details: { type: 'updateWorkingGroupBudget' },
+  details: {
+    type: 'setMembershipPrice',
+    data: {
+      newPrice: 2135,
+    },
+  },
   creatorId: '0',
   createdAt: '2021-06-15T14:59:37.847Z',
   description:

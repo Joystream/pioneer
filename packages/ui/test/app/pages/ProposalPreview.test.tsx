@@ -24,6 +24,10 @@ jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
+jest.mock('@/proposals/hooks/useProposalConstants', () => ({
+  useProposalConstants: () => null,
+}))
+
 describe('ProposalPreview', () => {
   const mockServer = setupMockServer()
   const api = stubApi()
@@ -66,7 +70,7 @@ describe('ProposalPreview', () => {
 
     expect(await screen.findAllByText(/(?:Approval|Slashing) (?:Quorum|Threshold)/)).toHaveLength(4)
 
-    expect(await screen.findByText('Update Working Group Budget')).toBeDefined()
+    expect(await screen.findByText('Set Membership Price')).toBeDefined()
 
     expect(await screen.findByText('Rationale')).toBeDefined()
 
