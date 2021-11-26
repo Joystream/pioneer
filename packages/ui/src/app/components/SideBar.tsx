@@ -11,6 +11,7 @@ import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIc
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
 import { ContentIcon } from '@/common/components/page/Sidebar/LinksIcons/ContentIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
+import { ElectionIcon } from '@/common/components/page/Sidebar/LinksIcons/ElectionIcon'
 import { FinancialsIcon } from '@/common/components/page/Sidebar/LinksIcons/FinancialsIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
 import { GatewaysIcon } from '@/common/components/page/Sidebar/LinksIcons/GatewaysIcon'
@@ -81,7 +82,7 @@ export const SideBar = () => {
             </NavigationLinksItem>
             <NavigationLinksItem>
               <NavigationLink to={electionLink}>
-                <CouncilIcon />
+                <ElectionIcon />
                 Election
               </NavigationLink>
             </NavigationLinksItem>
