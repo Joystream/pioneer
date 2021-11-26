@@ -4,8 +4,8 @@ const path = require('path')
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
 const shared = require('./dev/webpack.shared')
@@ -68,6 +68,10 @@ module.exports = (env, argv) => {
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
           loader: 'graphql-tag/loader',
+        },
+        {
+          test: /\.md$/,
+          use: 'raw-loader',
         },
       ],
     },

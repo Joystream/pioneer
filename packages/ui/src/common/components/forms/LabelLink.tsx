@@ -1,24 +1,25 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Colors } from '../../constants'
 
 interface LabelLinkProps {
-  href?: string
+  to: string
   target?: string
-  children?: string | React.ReactElement
+  children?: React.ReactNode
   className?: string
 }
 
-export function LabelLink({ href, target, children, className }: LabelLinkProps) {
+export function LabelLink({ to, target, children, className }: LabelLinkProps) {
   return (
-    <Link onClick={(event) => event.stopPropagation()} href={href} target={target} className={className}>
+    <StyledLink onClick={(event) => event.stopPropagation()} to={to} target={target} className={className}>
       {children}
-    </Link>
+    </StyledLink>
   )
 }
 
-export const Link = styled.a`
+export const StyledLink = styled(Link)`
   font-size: inherit;
   line-height: inherit;
   font-weight: inherit;
@@ -29,11 +30,11 @@ export const Link = styled.a`
   text-underline-offset: 2px;
 
   &:hover {
-    color: ${Colors.Blue[500]};
+    color: ${Colors.Blue[400]};
   }
   &:active,
   &:focus {
     outline: none;
-    color: ${Colors.Blue[600]};
+    color: ${Colors.Blue[400]};
   }
 `

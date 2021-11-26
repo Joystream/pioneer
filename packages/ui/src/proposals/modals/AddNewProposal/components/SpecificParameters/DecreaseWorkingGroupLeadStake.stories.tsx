@@ -7,6 +7,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
+import { GroupIdName } from '@/working-groups/types'
 
 export default {
   title: 'Proposals/AddNewProposalModal/DecreaseWorkingGroupLeadStake',
@@ -15,7 +16,7 @@ export default {
 
 const Template: Story = () => {
   const [stakingAmount, setStakingAmount] = useState<BN>()
-  const [groupId, setGroupId] = useState<string>()
+  const [groupId, setGroupId] = useState<GroupIdName>()
   const [, setWorkerId] = useState<number>()
 
   return (

@@ -7,11 +7,12 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
+import { GroupIdName } from '@/working-groups/types'
 
 interface Props extends WorkingGroupAndOpeningDetailsParameters {
   setDescription(description: string): void
   setShortDescription(shortDescription: string): void
-  setGroupId(groupId: string): void
+  setGroupId(groupId: GroupIdName): void
 }
 
 export const CreateWorkingGroupLeadOpening = ({

@@ -36,6 +36,7 @@ export const enabledProposals: ProposalType[] = [
   'runtimeUpgrade',
   'decreaseWorkingGroupLeadStake',
   'slashWorkingGroupLead',
+  'signal',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {

@@ -14,7 +14,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -531,7 +531,7 @@ describe('UI: Announce Candidacy Modal', () => {
     })
 
     const lastPage = history.entries.pop()
-    expect(lastPage?.pathname).toEqual(CouncilRoutes.currentElection)
+    expect(lastPage?.pathname).toEqual(ElectionRoutes.currentElection)
     expect(lastPage?.search).toEqual('?candidate=0')
   })
 

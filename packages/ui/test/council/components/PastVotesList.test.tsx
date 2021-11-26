@@ -12,7 +12,7 @@ import {
 } from '@/mocks/data'
 
 import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
-import { alice } from '../../_mocks/keyring/signers'
+import { alice } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -44,6 +44,7 @@ describe('UI: PastVotesList', () => {
       server.server
     )
     seedCouncilCandidate(CANDIDATE_DATA, server.server)
+    seedCouncilCandidate({ ...CANDIDATE_DATA, id: '1', memberId: '1' }, server.server)
   })
 
   it('No votes', async () => {

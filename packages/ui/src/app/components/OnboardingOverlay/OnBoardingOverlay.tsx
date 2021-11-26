@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
@@ -12,8 +12,10 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
+import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
@@ -28,12 +30,7 @@ export const onBoardingSteps: StepperStep[] = [
     id: 'addAccount',
   },
   {
-    title: 'Get FREE tokens',
-    type: 'next',
-    id: 'getFreeTokens',
-  },
-  {
-    title: 'Create membership',
+    title: 'Create membership for FREE',
     type: 'next',
     id: 'createMembership',
   },
@@ -48,10 +45,7 @@ const innerStaticStepperSteps = [
     title: 'Create or select a Polkadot account',
   },
   {
-    title: 'Get FREE tokens',
-  },
-  {
-    title: 'Create membership',
+    title: 'Create membership for FREE',
   },
 ]
 
@@ -70,13 +64,13 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
   })
 }
 
-interface Props {
-  toggleModal: () => void
-}
-
-export const OnBoardingOverlay = ({ toggleModal }: Props) => {
+export const OnBoardingOverlay = () => {
+  const { showModal } = useModal<OnBoardingModalCall>()
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
+  const openOnBoardingModal = useCallback(() => {
+    showModal({ modal: 'OnBoardingModal' })
+  }, [])
 
   if (isLoading || !status || status === 'finished') {
     return null
@@ -95,7 +89,7 @@ export const OnBoardingOverlay = ({ toggleModal }: Props) => {
           <HorizontalStepper steps={steps} />
         </StepperContainer>
         <ButtonContainer>
-          <ButtonPrimary size="large" onClick={toggleModal}>
+          <ButtonPrimary size="large" onClick={openOnBoardingModal}>
             Join now
           </ButtonPrimary>
         </ButtonContainer>
@@ -107,11 +101,10 @@ export const OnBoardingOverlay = ({ toggleModal }: Props) => {
           </DrawerContainer>
           <DrawerContainer title="How to become a member?">
             <VerticalStaticStepper steps={innerStaticStepperSteps} />
+            <ButtonPrimary onClick={openOnBoardingModal} size="large">
+              Continue
+            </ButtonPrimary>
           </DrawerContainer>
-          <div />
-          <ButtonPrimary onClick={toggleModal} size="large">
-            Continue
-          </ButtonPrimary>
         </DropdownContent>
       </StyledDropDown>
     </MainWrapper>
@@ -131,7 +124,6 @@ const StyledDropDown = styled(DropDownToggle)`
 const DropdownContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-row-gap: 30px;
   padding: 40px;
 
   > *:first-child {

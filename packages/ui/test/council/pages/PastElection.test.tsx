@@ -5,10 +5,10 @@ import { generatePath, Route, Switch } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { PastElection } from '@/app/pages/Council/PastElections/PastElection'
+import { PastElection } from '@/app/pages/Election/PastElections/PastElection'
 import { NotFound } from '@/app/pages/NotFound'
 import { ApiContext } from '@/common/providers/api/context'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -70,7 +70,7 @@ const TEST_VOTE = {
   stake: 1000,
   stakeLocked: false,
   castBy: getMember('bob').controllerAccount,
-  voteForId: getMember('alice').id,
+  voteForId: '1',
   commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
 }
 
@@ -168,14 +168,14 @@ describe('UI: Past Election page', () => {
 
   async function renderComponent() {
     const rendered = await render(
-      <MemoryRouter initialEntries={[generatePath(CouncilRoutes.pastElection, { id: pageElectionId })]}>
+      <MemoryRouter initialEntries={[generatePath(ElectionRoutes.pastElection, { id: pageElectionId })]}>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Switch>
-                    <Route path={CouncilRoutes.pastElection} component={PastElection} />
+                    <Route path={ElectionRoutes.pastElection} component={PastElection} />
                     <Route path="/404" component={NotFound} />
                   </Switch>
                 </MembershipContext.Provider>

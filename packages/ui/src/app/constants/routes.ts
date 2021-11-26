@@ -11,6 +11,11 @@ export const MembersRoutes = {
   members: '/members/:id?',
 } as const
 
+export const TermsRoutes = {
+  termsOfService: '/tos',
+  privacyPolicy: '/privacy',
+} as const
+
 type ProfileRoutesType = typeof ProfileRoutes
 type SettingsRoutesType = typeof SettingsRoutes
 type MembersRoutesType = typeof MembersRoutes

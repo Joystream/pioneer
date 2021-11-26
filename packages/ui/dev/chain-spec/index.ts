@@ -1,12 +1,11 @@
 import { readFileSync, writeFileSync } from 'fs'
 
-import { DeepMerger } from '@apollo/client/utilities'
 import yargs from 'yargs'
 
-import { capitalizeFirstLetter } from '../../src/common/helpers'
-import { isDefined } from '../../src/common/utils'
+import { isDefined, objectEquals } from '../../src/common/utils'
 import rawCandidates from '../../src/mocks/data/raw/candidates.json'
 import rawMembers from '../../src/mocks/data/raw/members.json'
+import rawVotes from '../../src/mocks/data/raw/votes.json'
 
 import configs from './configs'
 
@@ -21,62 +20,60 @@ const members = rawMembers.map((member) => ({
 }))
 
 const CYCLE_ID = 4
-const ELECTION_ROUND_ID = String(CYCLE_ID)
-const candidates = rawCandidates
-  .filter((candidate) => candidate.electionRoundId === ELECTION_ROUND_ID)
-  .map((candidate) => [
-    Number(candidate.memberId),
-    {
-      staking_account_id: candidate.stakingAccountId,
-      reward_account_id: candidate.rewardAccountId,
-      cycle_id: CYCLE_ID,
-      stake: candidate.stake,
-      vote_power: 0,
-      note_hash: null,
-    },
-  ])
+const fromLastElection = objectEquals({ electionRoundId: String(CYCLE_ID) })
+
+const candidates = rawCandidates.filter(fromLastElection).map((candidate) => [
+  Number(candidate.memberId),
+  {
+    staking_account_id: candidate.stakingAccountId,
+    reward_account_id: candidate.rewardAccountId,
+    cycle_id: CYCLE_ID,
+    stake: candidate.stake,
+    vote_power: 0,
+    note_hash: null,
+  },
+])
+
+const votes = rawVotes.filter(fromLastElection).map((vote) => [
+  vote.castBy,
+  {
+    commitment: vote.commitment,
+    cycle_id: CYCLE_ID,
+    stake: vote.stake,
+    vote_for: vote.voteForId ? Number(vote.voteForId) : null,
+  },
+])
 
 const DefaultDurations = { voting: 5, revealing: 7 }
 
-type ReferendumStage<T extends any> = T extends Record<'Voting', infer U> | Record<'Revealing', infer V>
-  ? { [k in 'Voting' | 'Revealing']?: U & V }
-  : never
-const asReferendumStage = <T>(x: T) => (x as unknown) as ReferendumStage<T>
-
-const handlerFor = (stage: 'announcing' | 'voting' | 'revealing') => (args: any) => {
-  const merger = new DeepMerger()
+const handlerFor = (stageKind: 'announcing' | 'voting' | 'revealing') => (args: any) => {
   const pathName = `${__dirname}/data/chain-spec.json`
-  const oldSpec = JSON.parse(readFileSync(pathName, 'utf8'))
-  const config = configs[stage]
+  const stage = stageKind.toLowerCase() as typeof stageKind
 
-  const councilStageConf = config.genesis.runtime.council.stage.stage
-  const referendumStageConf = asReferendumStage(config.genesis.runtime.referendumInstance1.stage)
+  // Load the current chain spec
+  const spec = JSON.parse(readFileSync(pathName, 'utf8'))
+  const { membership, council, referendumInstance1: referendum } = spec.genesis.runtime
 
-  // Reset stages
-  oldSpec.genesis.runtime.council.stage.stage = {}
-  oldSpec.genesis.runtime.referendumInstance1.stage = {}
+  // Apply the stage config
+  council.stage = configs[stage].council.stage
+  referendum.stage = configs[stage].referendumInstance1.stage
 
-  // Set members
-  oldSpec.genesis.runtime.membership.members = members
+  // Mock the chain data
+  membership.members = members
+  council.announcementPeriodNr = CYCLE_ID
+  referendum.votes = votes
 
   if (stage === 'voting' || stage === 'revealing') {
-    // Set candidates (on Voting and Revealing stage)
-    if (councilStageConf.Election) {
-      oldSpec.genesis.runtime.council.candidates = candidates
-      councilStageConf.Election.candidates_count = candidates.length
-    }
+    council.candidates = candidates
+    council.stage.stage.Election.candidates_count = candidates.length
 
-    // Set stage length
-    const duration = args.duration as number | undefined
-    if (isDefined(duration)) {
-      const key = capitalizeFirstLetter(stage)
-      const ref = referendumStageConf[key]
-      if (ref) ref.started = duration - DefaultDurations[stage]
-    }
+    // HACK set stage length
+    const referendumStage = referendum.stage[Object.keys(referendum.stage)[0]]
+    referendumStage.started = isDefined(args.duration) ? args.duration - DefaultDurations[stage] : 0
   }
 
-  const newSpec = merger.merge(oldSpec, config)
-  writeFileSync(pathName, `${JSON.stringify(newSpec, null, 2)}\n`)
+  // Override the current chain spec
+  writeFileSync(pathName, JSON.stringify(spec, null, 2))
 }
 
 yargs(process.argv.slice(2))
