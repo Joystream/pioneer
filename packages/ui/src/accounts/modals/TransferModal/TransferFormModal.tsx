@@ -40,9 +40,23 @@ interface TransferTokensFormField {
   amount?: string
 }
 
-const TransferFormSchema = Yup.object().shape({
-  amount: Yup.number(),
-})
+const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
+  const schema = Yup.object().shape({
+    amount: Yup.number(),
+  })
+
+  if (senderBalance) {
+    schema.fields.amount = schema.fields.amount.max(senderBalance.toNumber(), 'Maximum amount allowed is ${max}')
+  }
+
+  if (maxValue && senderBalance && senderBalance.gt(maxValue)) {
+    schema.fields.amount = schema.fields.amount.max(maxValue.toNumber(), 'Maximum amount allowed is ${max}')
+  }
+  if (minValue) {
+    schema.fields.amount = schema.fields.amount.min(minValue.toNumber(), 'Minimum amount allowed is ${min}')
+  }
+  return schema
+}
 
 export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue, minValue, initialValue }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
@@ -53,29 +67,13 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
     (account: Account) => account.address !== recipient?.address && balances[account.address]?.transferable.gt(BN_ZERO),
     [recipient, balances]
   )
-  const schema = useMemo(() => {
-    if (sender) {
-      TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.max(
-        balances[sender.address]?.transferable.toNumber(),
-        'Maximum amount allowed is ${max}'
-      )
-    }
 
-    if (maxValue && sender && balances[sender.address].transferable.gt(maxValue)) {
-      TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.max(
-        maxValue.toNumber(),
-        'Maximum amount allowed is ${max}'
-      )
-    }
-    if (minValue) {
-      TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.min(
-        minValue.toNumber(),
-        'Minimum amount allowed is ${min}'
-      )
-    }
-
-    return TransferFormSchema
-  }, [maxValue, minValue, balances, sender])
+  const schema = useMemo(() => schemaFactory(maxValue, minValue, balances[sender?.address as string]?.transferable), [
+    maxValue,
+    minValue,
+    balances,
+    sender,
+  ])
 
   const { changeField, validation } = useForm<TransferTokensFormField>({ amount: undefined }, schema)
   const { isValid, errors } = validation
