@@ -88,6 +88,10 @@ export type TerminateWorkingGroupLeadDetails = ProposalDetailsNew<
   MemberDetail & GroupDetail & AmountDetail
 >
 
+export type SetMembershipPriceDetails = ProposalDetailsNew<'setMembershipPrice', AmountDetail>
+
+export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBudgetIncrement', AmountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -100,6 +104,8 @@ export type ProposalDetails =
   | FillWorkingGroupLeadOpeningDetails
   | SetWorkingGroupLeadRewardDetails
   | TerminateWorkingGroupLeadDetails
+  | SetMembershipPriceDetails
+  | SetCouncilBudgetIncrementDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -211,6 +217,20 @@ const asTerminateWorkingGroupLead: DetailsCast<'TerminateWorkingGroupLeadProposa
   amount: new BN(fragment.slashingAmount),
 })
 
+const asSetMembershipPrice: DetailsCast<'SetMembershipPriceProposalDetails'> = (
+  fragment
+): SetMembershipPriceDetails => ({
+  type: 'setMembershipPrice',
+  amount: new BN(fragment.newPrice),
+})
+
+const asSetCouncilBudgetIncrement: DetailsCast<'SetCouncilBudgetIncrementProposalDetails'> = (
+  fragment
+): SetCouncilBudgetIncrementDetails => ({
+  type: 'setCouncilBudgetIncrement',
+  amount: new BN(fragment.newAmount),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -226,6 +246,8 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   FillWorkingGroupLeadOpeningProposalDetails: asFillGroupLeadOpening,
   SetWorkingGroupLeadRewardProposalDetails: asSetWorkingGroupLeadReward,
   TerminateWorkingGroupLeadProposalDetails: asTerminateWorkingGroupLead,
+  SetMembershipPriceProposalDetails: asSetMembershipPrice,
+  SetCouncilBudgetIncrementProposalDetails: asSetCouncilBudgetIncrement,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
