@@ -1,10 +1,13 @@
 import BN from 'bn.js'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import * as Yup from 'yup'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { PickedTransferIcon } from '@/common/components/icons/TransferIcons'
 import { BN_ZERO } from '@/common/constants'
+import { useForm } from '@/common/hooks/useForm'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 
@@ -33,6 +36,14 @@ interface Props {
   initialValue?: BN
 }
 
+interface TransferTokensFormField {
+  amount?: string
+}
+
+const TransferFormSchema = Yup.object().shape({
+  amount: Yup.number(),
+})
+
 export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue, minValue, initialValue }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
@@ -42,14 +53,44 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
     (account: Account) => account.address !== recipient?.address && balances[account.address]?.transferable.gt(BN_ZERO),
     [recipient, balances]
   )
+  const schema = useMemo(() => {
+    if (sender) {
+      TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.max(
+        balances[sender.address]?.transferable.toNumber(),
+        'Maximum amount allowed is ${max}'
+      )
+    }
+
+    if (maxValue && sender && maxValue < balances[sender.address].transferable) {
+      TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.max(
+        maxValue.toNumber(),
+        'Maximum amount allowed is ${max}'
+      )
+    }
+    if (minValue) {
+      TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.min(
+        minValue.toNumber(),
+        'Minimum amount allowed is ${min}'
+      )
+    }
+
+    return TransferFormSchema
+  }, [maxValue, minValue, balances, sender])
+
+  const { changeField, validation } = useForm<TransferTokensFormField>({ amount: undefined }, schema)
+  const { isValid, errors } = validation
+
+  useEffect(() => {
+    changeField('amount', amount)
+  }, [amount])
+
   const transferableBalance = balances[sender?.address as string]?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
   const isZero = new BN(amount).lte(BN_ZERO)
   const isOverBalance = new BN(amount).gt(maxValue || transferableBalance || 0)
-  const isUnderMinimum = new BN(amount).lt(minValue || BN_ZERO)
-  const isTransferDisabled = isZero || isOverBalance || !recipient || isUnderMinimum
+  const isTransferDisabled = isZero || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
@@ -86,6 +127,8 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             required
             inputWidth="s"
             units="JOY"
+            validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
+            message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
           >
             <InputNumber
               id="amount-input"
