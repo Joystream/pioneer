@@ -6,7 +6,7 @@ import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/Spe
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
-import { TerminateWorkingGroupLead } from './TerminateWorkingGroupLead'
+import { TerminateWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/TerminateWorkingGroupLead'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
@@ -56,11 +56,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
       )
     }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
-      return !!(
-        specifics?.slashingAmount &&
-        specifics.groupId &&
-        specifics.workerId !== undefined
-      )
+      return !!(specifics?.slashingAmount && specifics.groupId && specifics.workerId !== undefined)
     }
     default:
       return false

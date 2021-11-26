@@ -22,7 +22,7 @@ import {
   DecreaseWorkingGroupLeadStakeParameters,
   FundingRequestParameters,
   SignalParameters,
-  TerminateWorkingGroupLeadParameters
+  TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
 import {
   StakingPolicyAndRewardParameters,
