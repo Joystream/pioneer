@@ -22,6 +22,7 @@ import {
   DecreaseWorkingGroupLeadStakeParameters,
   FundingRequestParameters,
   SignalParameters,
+  TerminateWorkingGroupLeadParameters
 } from './components/SpecificParameters'
 import {
   StakingPolicyAndRewardParameters,
@@ -60,6 +61,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
+    | TerminateWorkingGroupLeadParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -91,6 +93,10 @@ interface SlashWorkingGroupLeadContext extends SpecificParametersContext {
   specifics: SlashWorkingGroupLeadParameters
 }
 
+interface TerminateWorkingGroupLeadContext extends SpecificParametersContext {
+  specifics: TerminateWorkingGroupLeadParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -113,6 +119,7 @@ export type AddNewProposalContext = Partial<
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
+    TerminateWorkingGroupLeadContext &
     TransactionContext &
     DiscusisonContext
 >
@@ -135,6 +142,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
+  | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -344,6 +352,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+            { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
           ],
         },
         signal: {
@@ -411,6 +420,34 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         slashWorkingGroupLead: {
+          on: {
+            SET_SLASHING_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  slashingAmount: event.slashingAmount,
+                }),
+              }),
+            },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
+                }),
+              }),
+            },
+            SET_WORKER: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  workerId: event.workerId,
+                }),
+              }),
+            },
+          },
+        },
+        terminateWorkingGroupLead: {
           on: {
             SET_SLASHING_AMOUNT: {
               actions: assign({

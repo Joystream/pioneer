@@ -6,6 +6,7 @@ import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/Spe
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
+import { TerminateWorkingGroupLead } from './TerminateWorkingGroupLead'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
@@ -50,6 +51,13 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
       return !!(
         specifics?.slashingAmount &&
         specifics?.slashingAmount.gtn(0) &&
+        specifics.groupId &&
+        specifics.workerId !== undefined
+      )
+    }
+    case state.matches('specificParameters.terminateWorkingGroupLead'): {
+      return !!(
+        specifics?.slashingAmount &&
         specifics.groupId &&
         specifics.workerId !== undefined
       )
@@ -117,6 +125,17 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
     case state.matches('specificParameters.slashWorkingGroupLead'):
       return (
         <SlashWorkingGroupLead
+          slashingAmount={state.context.specifics?.slashingAmount}
+          groupId={state.context.specifics?.groupId}
+          workerId={state.context.specifics?.workerId}
+          setSlashingAmount={(slashingAmount) => send('SET_SLASHING_AMOUNT', { slashingAmount })}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.terminateWorkingGroupLead'):
+      return (
+        <TerminateWorkingGroupLead
           slashingAmount={state.context.specifics?.slashingAmount}
           groupId={state.context.specifics?.groupId}
           workerId={state.context.specifics?.workerId}
