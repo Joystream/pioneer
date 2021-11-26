@@ -164,7 +164,7 @@ export const AddNewProposalModal = () => {
     }
   }, [state, stakingStatus])
 
-  if (!api || !activeMember || !transaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo || state.matches('requirementsVerification')) {
     return null
   }
 

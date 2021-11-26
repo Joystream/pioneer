@@ -32,6 +32,7 @@ export const proposalDetails: ProposalType[] = [
 export const enabledProposals: ProposalType[] = [
   'fundingRequest',
   'createWorkingGroupLeadOpening',
+  'cancelWorkingGroupLeadOpening',
   'runtimeUpgrade',
   'decreaseWorkingGroupLeadStake',
   'slashWorkingGroupLead',

@@ -24,6 +24,7 @@ import {
   SignalParameters,
 } from './components/SpecificParameters'
 import {
+  CancelWorkingGroupLeadOpeningParameters,
   StakingPolicyAndRewardParameters,
   WorkingGroupAndOpeningDetailsParameters,
 } from './components/SpecificParameters/WorkingGroupLeadOpening/types'
@@ -57,6 +58,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SignalParameters
     | FundingRequestParameters
     | WorkingGroupAndOpeningDetailsParameters
+    | CancelWorkingGroupLeadOpeningParameters
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
@@ -73,6 +75,10 @@ interface FundingRequestContext extends SpecificParametersContext {
 
 interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
   specifics: WorkingGroupAndOpeningDetailsParameters
+}
+
+interface CancelWorkingGroupLeadOpeningContext extends SpecificParametersContext {
+  specifics: CancelWorkingGroupLeadOpeningParameters
 }
 
 interface StakingPolicyAndRewardContext extends SpecificParametersContext {
@@ -109,6 +115,7 @@ export type AddNewProposalContext = Partial<
     SignalContext &
     FundingRequestContext &
     WorkingGroupLeadOpeningContext &
+    CancelWorkingGroupLeadOpeningContext &
     StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
@@ -143,6 +150,10 @@ export type AddNewProposalState =
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
       context: StakingPolicyAndRewardContext
     }
+  | {
+      value: { specificParameters: 'cancelWorkingGroupLeadOpening' }
+      context: CancelWorkingGroupLeadOpeningContext
+    }
   | { value: 'beforeTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
@@ -162,6 +173,7 @@ type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
+type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: number }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
@@ -186,6 +198,7 @@ export type AddNewProposalEvent =
   | SetDiscussionWhitelistEvent
   | SetDescriptionEvent
   | SetWorkingGroupEvent
+  | SetOpeningIdEvent
   | SetWorkerEvent
   | SetShortDescriptionEvent
   | SetStakingAmount
@@ -341,6 +354,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'signal', cond: isType('signal') },
             { target: 'fundingRequest', cond: isType('fundingRequest') },
             { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+            { target: 'cancelWorkingGroupLeadOpening', cond: isType('cancelWorkingGroupLeadOpening') },
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
@@ -507,6 +521,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   }),
                 },
               },
+            },
+          },
+        },
+        cancelWorkingGroupLeadOpening: {
+          on: {
+            SET_OPENING_ID: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  openingId: event.openingId,
+                }),
+              }),
             },
           },
         },

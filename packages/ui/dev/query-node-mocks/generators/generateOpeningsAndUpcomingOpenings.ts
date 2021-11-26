@@ -45,7 +45,7 @@ const generateOpening = (status: string, groupId: string) => () => {
   const isInPast = status !== 'open'
   return {
     ...generateBaseOpening(groupId),
-    type: isLead ? 'LEAD' : 'REGULAR',
+    type: isLead ? 'LEADER' : 'REGULAR',
     status,
     unstakingPeriod: randomFromRange(14400, 40000),
     metadata: {
