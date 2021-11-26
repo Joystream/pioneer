@@ -13,10 +13,11 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
-import { FillWorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FillWorkingGroupLeadOpening'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SlashWorkingGroupLeadParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
+import { FillWorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
 import { ProposalType } from '@/proposals/types'
+import { GroupIdName } from '@/working-groups/types'
 
 import {
   DecreaseWorkingGroupLeadStakeParameters,
@@ -24,6 +25,7 @@ import {
   SignalParameters,
 } from './components/SpecificParameters'
 import {
+  CancelWorkingGroupLeadOpeningParameters,
   StakingPolicyAndRewardParameters,
   WorkingGroupAndOpeningDetailsParameters,
 } from './components/SpecificParameters/WorkingGroupLeadOpening/types'
@@ -57,6 +59,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SignalParameters
     | FundingRequestParameters
     | WorkingGroupAndOpeningDetailsParameters
+    | CancelWorkingGroupLeadOpeningParameters
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
@@ -78,6 +81,10 @@ interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
 
 interface FillWorkingGroupLeadOpeningContext extends SpecificParametersContext {
   specifics: FillWorkingGroupLeadOpeningParameters
+}
+
+interface CancelWorkingGroupLeadOpeningContext extends SpecificParametersContext {
+  specifics: CancelWorkingGroupLeadOpeningParameters
 }
 
 interface StakingPolicyAndRewardContext extends SpecificParametersContext {
@@ -114,6 +121,7 @@ export type AddNewProposalContext = Partial<
     SignalContext &
     FundingRequestContext &
     WorkingGroupLeadOpeningContext &
+    CancelWorkingGroupLeadOpeningContext &
     FillWorkingGroupLeadOpeningContext &
     StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
@@ -150,6 +158,10 @@ export type AddNewProposalState =
       context: StakingPolicyAndRewardContext
     }
   | { value: { specificParameters: 'fillWorkingGroupLeadOpening' }; context: FillWorkingGroupLeadOpeningContext }
+  | {
+      value: { specificParameters: 'cancelWorkingGroupLeadOpening' }
+      context: CancelWorkingGroupLeadOpeningContext
+    }
   | { value: 'beforeTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
@@ -168,7 +180,7 @@ type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscu
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
-type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: string }
+type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: number }
 type SetApplicationId = { type: 'SET_APPLICATION_ID'; applicationId: number }
@@ -352,6 +364,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'signal', cond: isType('signal') },
             { target: 'fundingRequest', cond: isType('fundingRequest') },
             { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+            { target: 'cancelWorkingGroupLeadOpening', cond: isType('cancelWorkingGroupLeadOpening') },
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
@@ -547,6 +560,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   }),
                 },
               },
+            },
+          },
+        },
+        cancelWorkingGroupLeadOpening: {
+          on: {
+            SET_OPENING_ID: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  openingId: event.openingId,
+                }),
+              }),
             },
           },
         },

@@ -16,7 +16,7 @@ interface Props {
   disabled?: boolean
   className?: string
   id?: string
-  openingId?: string
+  openingId?: number
 }
 
 const SelectWorkingGroupApplicationBase = ({

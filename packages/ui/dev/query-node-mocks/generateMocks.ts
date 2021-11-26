@@ -6,7 +6,7 @@ import { councilModule, generateCouncils } from './generators/generateCouncils'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
-import { generateProposals } from './generators/generateProposals'
+import { generateProposals, proposalsModule } from './generators/generateProposals'
 import { generateWithdrawnApplications, generateWorkers } from './generators/generateWorkers'
 import { generateWorkingGroups, getWorkingGroupsWithLead } from './generators/generateWorkingGroups'
 import { saveFile } from './helpers/saveFile'
@@ -54,6 +54,7 @@ yargs(process.argv.slice(2))
   .command(allModule)
   .command(membersModule)
   .command(eventsModule)
+  .command(proposalsModule)
   .command(forumModule)
   .command(councilModule)
   .demandCommand().argv

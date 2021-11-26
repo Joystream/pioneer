@@ -3,7 +3,6 @@ import { OpeningMock, UpcomingOpeningMock } from './generateOpeningsAndUpcomingO
 import { ProposalMock } from './generateProposals'
 import { ApplicationMock, WorkerMock } from './generateWorkers'
 import { WorkingGroupMock } from './generateWorkingGroups'
-import { eventGenerators } from './generateEvents'
 
 export interface Mocks {
   members: MemberMock[]

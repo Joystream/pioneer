@@ -2,11 +2,11 @@ import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
 import { asApplication } from '../types/WorkingGroupApplication'
 
-export const useApplications = (openingId?: string) => {
+export const useApplications = (openingId?: number) => {
   const { loading, data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
-        opening: { id_eq: openingId },
+        opening: { runtimeId_eq: openingId },
       },
     },
   })

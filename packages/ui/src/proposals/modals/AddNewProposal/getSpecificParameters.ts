@@ -1,9 +1,25 @@
 import { createType } from '@joystream/types'
-import { WorkingGroupDef } from '@joystream/types/common'
+import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
+import { GroupIdName } from '@/working-groups/types'
+
+const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
+  contentDirectoryWorkingGroup: 'Content',
+  forumWorkingGroup: 'Forum',
+  gatewayWorkingGroup: 'Gateway',
+  membershipWorkingGroup: 'Membership',
+  operationsWorkingGroup: 'Operations',
+  storageWorkingGroup: 'Storage',
+}
+
+const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
+  if (!groupId) return null
+
+  return GroupIdToGroupParam[groupId]
+}
 
 export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): any => {
   if (!isValidSpecificParameters(state)) {
@@ -37,19 +53,30 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
             leaving_unstaking_period: specifics?.leavingUnstakingPeriod,
           },
           reward_per_block: specifics?.rewardPerBlock,
-          workingGroup: WorkingGroupDef.Membership,
+          working_group: getWorkingGroupParam(specifics?.groupId),
         },
       }
     }
     case 'decreaseWorkingGroupLeadStake': {
       return {
-        DecreaseWorkingGroupLeadStake: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
+        DecreaseWorkingGroupLeadStake: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
       }
     }
     case 'slashWorkingGroupLead': {
       return {
-        SlashWorkingGroupLead: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
+        SlashWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
       }
+    }
+    case 'cancelWorkingGroupLeadOpening': {
+      return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
     case 'fillWorkingGroupLeadOpening': {
       return {

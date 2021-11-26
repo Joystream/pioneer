@@ -12,12 +12,13 @@ import { ButtonGhostStyles, ButtonPrimary, ButtonInnerWrapper, ButtonPrimaryStyl
 
 export interface HintIconProps {
   isActive?: boolean
+  isOnTop?: boolean
   tooltip?: string
   onTooltipClose?: () => void
   onClick?: () => void
 }
 
-export function HintButton({ isActive, tooltip, onTooltipClose, onClick }: HintIconProps) {
+export function HintButton({ isActive, isOnTop, tooltip, onTooltipClose, onClick }: HintIconProps) {
   return (
     <>
       {tooltip ? (
@@ -34,13 +35,13 @@ export function HintButton({ isActive, tooltip, onTooltipClose, onClick }: HintI
               </>
             }
           >
-            <HintButtonElement size="small" isActive={isActive} onClick={onClick}>
+            <HintButtonElement size="small" isActive={isActive} onClick={onClick} isOnTop={isOnTop}>
               <HintIcon />
             </HintButtonElement>
           </HintTooltip>
         </>
       ) : (
-        <HintButtonElement size="small" isActive={isActive} onClick={onClick}>
+        <HintButtonElement size="small" isActive={isActive} onClick={onClick} isOnTop={isOnTop}>
           <HintIcon />
         </HintButtonElement>
       )}
@@ -55,12 +56,12 @@ export const HintButtonWrapper = styled.div<{ isActive?: boolean }>`
   }
 `
 
-const HintButtonElement = styled(ButtonPrimary)<{ isActive?: boolean }>`
+const HintButtonElement = styled(ButtonPrimary)<{ isActive?: boolean; isOnTop?: boolean }>`
   width: 32px;
   height: 32px;
   padding: 0;
   border-radius: ${BorderRad.full};
-  z-index: ${ZIndex.tooltip};
+  z-index: ${({ isOnTop }) => isOnTop && ZIndex.tooltip};
 
   ${({ isActive }) =>
     isActive

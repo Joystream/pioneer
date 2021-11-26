@@ -36,7 +36,7 @@
     "stakeAmount": 3000,
     "rewardPerBlock": 200,
     "version": 1,
-    "type": "REGULAR",
+    "type": "LEADER",
     "status": "open",
     "unstakingPeriod": 35293,
     "metadata": {
@@ -66,9 +66,9 @@
     "stakeAmount": 5000,
     "rewardPerBlock": 500,
     "version": 1,
-    "type": "REGULAR",
-    "status": "open",
-    "unstakingPeriod": 14889,
+    "type": "LEADER",
+    "status": "filled",
+    "unstakingPeriod": 28536,
     "metadata": {
       "shortDescription": "Et voluptate at quod distinctio dicta harum culpa corrupti consequuntur enim quis aut sunt minus omnis voluptatem nemo consequatur dolor vel expedita quia vero unde quia adipisci quasi sit libero facere est dignissimos dolor.",
       "description": "# quia numquam et quia eligendi\n\nOmnis repellat eos animi ad placeat doloremque quis error dolore. Magnam culpa et nostrum voluptatem. Ut expedita iste similique vel est omnis est est aliquam.\n\n## porro sint qui dolorum nihil\n\nMagni est velit. Tempora quod expedita dolore minima veritatis. Non eos rerum rerum quia rem sed natus nihil. Est totam aut voluptate veniam ut asperiores officiis.\n \rQuia adipisci alias nulla. Omnis voluptatibus occaecati omnis doloribus nesciunt soluta molestias qui qui. Quam facere magnam sed.\n \rMagni assumenda sit deleniti. Dolorem repellat molestiae nihil voluptatem dolor. Dolorem ut deleniti. Deleniti officiis quas quam soluta quia dolorum dolor est.",
@@ -276,7 +276,7 @@
     "stakeAmount": 9000,
     "rewardPerBlock": 500,
     "version": 1,
-    "type": "LEAD",
+    "type": "REGULAR",
     "status": "open",
     "unstakingPeriod": 19670,
     "metadata": {
@@ -306,7 +306,7 @@
     "stakeAmount": 6000,
     "rewardPerBlock": 300,
     "version": 1,
-    "type": "LEAD",
+    "type": "REGULAR",
     "status": "open",
     "unstakingPeriod": 20524,
     "metadata": {
@@ -426,7 +426,7 @@
     "stakeAmount": 7000,
     "rewardPerBlock": 400,
     "version": 1,
-    "type": "REGULAR",
+    "type": "LEADER",
     "status": "filled",
     "unstakingPeriod": 16487,
     "metadata": {
@@ -486,9 +486,9 @@
     "stakeAmount": 2000,
     "rewardPerBlock": 300,
     "version": 1,
-    "type": "LEAD",
-    "status": "open",
-    "unstakingPeriod": 39822,
+    "type": "REGULAR",
+    "status": "cancelled",
+    "unstakingPeriod": 39400,
     "metadata": {
       "shortDescription": "Ullam odit rerum explicabo numquam aut velit fugit optio a eos at culpa repellat reiciendis est eos necessitatibus voluptas atque repellendus nemo aut ab autem id dignissimos reprehenderit ab aut omnis iusto voluptatum quam recusandae magni sunt illum libero provident vero.",
       "description": "# ut sit distinctio\n\nAlias vitae autem quod nesciunt assumenda quam eaque expedita. Ducimus numquam odio aspernatur repellendus qui ipsum pariatur. Hic eligendi unde dolorem rerum qui aliquam fugiat voluptatem consequatur. Aut quasi sapiente qui voluptas sed a ea nemo sed. Aliquam placeat consequuntur maiores minus dolore non eos soluta.\n\n## non voluptatibus velit modi qui\n\nVoluptate maxime ut praesentium sed. Ex sunt voluptates autem quo dignissimos at est tenetur. Alias accusamus rerum ea in nesciunt autem ipsa. Provident aliquid pariatur.",
@@ -846,9 +846,9 @@
     "stakeAmount": 9000,
     "rewardPerBlock": 200,
     "version": 1,
-    "type": "REGULAR",
-    "status": "filled",
-    "unstakingPeriod": 31316,
+    "type": "LEADER",
+    "status": "open",
+    "unstakingPeriod": 31836,
     "metadata": {
       "shortDescription": "Ut tempora nulla quasi doloremque minus iure blanditiis omnis aliquid inventore tenetur repudiandae et quas ipsam ut sint dignissimos eaque numquam quia facilis eligendi deserunt vel ea non ipsum quod recusandae provident voluptatum.",
       "description": "# ab natus voluptatem et\n\nAliquam sint rerum atque in. Adipisci dolore quia et ut quia odit quia quidem animi. Nam totam distinctio impedit enim. Numquam vel consequatur rerum et tenetur dolores cum odio. Cum ipsa quidem et doloremque unde ab et quam dolore.\n\n## ut molestiae quaerat magni\n\nEt sint molestias. Minus possimus deleniti quos error tempore excepturi molestiae voluptatem quam. Quis voluptatem ut in et occaecati suscipit debitis perferendis. Ipsa atque voluptate ut praesentium minima eveniet aut doloribus dolor. Aut perferendis et eos similique sapiente blanditiis.\n \rAb vel ea. Ab eveniet fugiat vel quam id voluptates. Assumenda aut excepturi excepturi natus et vero. Incidunt cupiditate assumenda placeat odit rem aut. Fuga illum non quidem. Occaecati est maxime voluptatem autem odit odio sunt et fugiat.\n \rExcepturi laborum dolores id architecto et delectus magnam. A dignissimos reiciendis explicabo voluptatem laboriosam ad sit unde. Cumque perferendis qui quas quae soluta accusantium porro vero at. Voluptatum fugit quas et quibusdam vitae porro ratione. Debitis error illum nostrum est. Aperiam aspernatur provident temporibus.",
@@ -906,7 +906,7 @@
     "stakeAmount": 7000,
     "rewardPerBlock": 300,
     "version": 1,
-    "type": "REGULAR",
+    "type": "LEADER",
     "status": "filled",
     "unstakingPeriod": 30201,
     "metadata": {
@@ -938,7 +938,7 @@
     "version": 1,
     "type": "REGULAR",
     "status": "filled",
-    "unstakingPeriod": 29312,
+    "unstakingPeriod": 16276,
     "metadata": {
       "shortDescription": "Ut dicta unde sit temporibus vel quidem commodi quas mollitia et id officiis velit cupiditate quia id architecto ab expedita error incidunt quia tenetur odit mollitia mollitia facere quia ea nihil harum hic dolorum dolores harum minus sunt quod asperiores aliquam ut adipisci repellendus facere impedit et.",
       "description": "# saepe dolor ipsum molestias et\n\nNihil laudantium quia delectus fugit maxime molestiae. Odit suscipit quis commodi officia non et dolore rerum sint. Quis et dolore magni. Porro culpa cupiditate eaque voluptatum harum.\n\n## sint deserunt et\n\nAtque dolorum atque et aut rerum et in ullam molestiae. Rem explicabo expedita ea rem qui. Dolorem corrupti possimus eum sint. Quae ut id. Voluptatem soluta consequuntur maiores nisi odio pariatur harum.\n \rQuos et voluptas illum alias sed enim rerum. Quisquam incidunt enim. Libero est aut alias. Quis consequatur illo velit assumenda occaecati sunt minima qui.",

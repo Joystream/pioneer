@@ -2,12 +2,13 @@ import React from 'react'
 import { State, Typestate } from 'xstate'
 
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
-import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FillWorkingGroupLeadOpening'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
+import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
   AddNewProposalContext,
@@ -38,6 +39,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
       return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
+    }
+    case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
+      return !!specifics?.openingId
     }
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
       return !!(
@@ -92,7 +96,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           applicationId={specifics?.applicationId}
           openingId={specifics?.openingId}
           setApplicationId={(applicationId: number) => send('SET_APPLICATION_ID', { applicationId })}
-          setOpeningId={(openingId: number) => send('SET_APPLICATION_ID', { openingId })}
+          setOpeningId={(openingId: number) => send('SET_OPENING_ID', { openingId })}
         />
       )
     }
@@ -105,6 +109,15 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setDescription={(description) => send('SET_DESCRIPTION', { description })}
           setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
+    case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):
+      return (
+        <CancelWorkingGroupLeadOpening
+          groupId={state.context.specifics?.groupId}
+          openingId={state.context.specifics?.openingId}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+          setOpeningId={(openingId) => send('SET_OPENING_ID', { openingId })}
         />
       )
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
