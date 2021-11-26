@@ -14,6 +14,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useQueryNodeTransactionStatus } from '@/common/hooks/useQueryNodeTransactionStatus'
 import { onBoardingMachine } from '@/common/modals/OnBoardingModal/machine'
@@ -24,12 +25,21 @@ import { SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
+const getMembershipFaucetURL = (network: NetworkType) => {
+  if (network === 'olympia-testnet') {
+    return MEMBERSHIP_FAUCET_URL
+  }
+
+  return MEMBERSHIP_FAUCET_URL
+}
+
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
   const { isLoading, status, membershipAccount, setMembershipAccount } = useOnBoarding()
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
+  const [network] = useNetwork()
 
   const step = useMemo(() => {
     switch (status) {
@@ -56,11 +66,12 @@ export const OnBoardingModal = () => {
         const membershipData = {
           account: membershipAccount,
           handle: form.handle,
+          name: form.name,
           avatar: form.avatarUri,
           about: form.about,
         }
 
-        const response = await fetch(MEMBERSHIP_FAUCET_URL, {
+        const response = await fetch(getMembershipFaucetURL(network), {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -70,6 +81,7 @@ export const OnBoardingModal = () => {
         })
 
         const { error, memberId, blockHash } = await response.json()
+
         if (error) {
           send({ type: 'ERROR' })
         } else {
