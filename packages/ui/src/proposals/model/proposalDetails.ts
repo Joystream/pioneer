@@ -1,5 +1,4 @@
-import { lowerFirstLetter } from '@/common/helpers'
-
+import { lowerFirstLetter } from '../../common/helpers'
 import { ProposalType } from '../types'
 
 export const proposalDetails: ProposalType[] = [
