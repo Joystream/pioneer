@@ -6,7 +6,9 @@ import styled, { css } from 'styled-components'
 import { BorderRad, Colors, Transitions, Overflow } from '../../../constants'
 
 interface NavigationLinkProps extends DisabledNavigationLinkProps {
+  icon?: React.ReactElement
   children: React.ReactNode
+  indicate?: boolean
   exact?: boolean
   className?: string
   to: string
@@ -16,7 +18,7 @@ interface DisabledNavigationLinkProps {
   disabled?: boolean
 }
 
-export const NavigationLink = ({ children, exact, className, to, disabled }: NavigationLinkProps) => {
+export const NavigationLink = ({ icon, children, indicate, exact, className, to, disabled }: NavigationLinkProps) => {
   const match = useRouteMatch(to)
 
   return (
@@ -40,7 +42,11 @@ export const NavigationLink = ({ children, exact, className, to, disabled }: Nav
           transition={{ default: { duration: 0.25 } }}
         />
       )}
-      <NavigationItemLinkChildren>{children}</NavigationItemLinkChildren>
+      <NavigationItemLinkChildren>
+        {icon}
+        {children}
+        {indicate && <NavigationItemLinkIndicator />}
+      </NavigationItemLinkChildren>
     </NavigationItemLink>
   )
 }
@@ -76,10 +82,12 @@ const ActivePageIndicator = styled(motion.div)`
   }
 `
 
+const NAVIGATION_LINK_GAP = 16
+
 const NavigationItemLinkChildren = styled.div`
   display: grid;
   grid-auto-flow: column;
-  grid-column-gap: 16px;
+  grid-column-gap: ${NAVIGATION_LINK_GAP}px;
   justify-content: start;
   align-items: center;
   width: 100%;
@@ -92,6 +100,16 @@ const NavigationItemLinkChildren = styled.div`
   color: inherit;
   z-index: 20;
   ${Overflow.FullDots};
+`
+
+const NavigationItemLinkIndicator = styled.div`
+  position: relative;
+  width: 6px;
+  height: 6px;
+  margin-left: -${NAVIGATION_LINK_GAP - 2}px;
+  border-radius: ${BorderRad.round};
+  background-color: ${Colors.Green[400]};
+  transform: translateY(-6px);
 `
 
 const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
