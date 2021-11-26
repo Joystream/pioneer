@@ -61,7 +61,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
       )
     }
 
-    if (maxValue && sender && maxValue < balances[sender.address].transferable) {
+    if (maxValue && sender && balances[sender.address].transferable.gt(maxValue)) {
       TransferFormSchema.fields.amount = TransferFormSchema.fields.amount.max(
         maxValue.toNumber(),
         'Maximum amount allowed is ${max}'
