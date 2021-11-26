@@ -12,6 +12,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
+import { getAccount } from '../../../dev/node-mocks/data/addresses'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -81,18 +82,11 @@ describe('useOnBoarding', () => {
         expect(status).toEqual('addAccount')
       })
 
-      it('Get tokens', async () => {
-        useMyAccounts.hasAccounts = true
-        mockUseLocalStorage = ['address', jest.fn()]
-        const { isLoading, status } = await renderUseOnBoarding()
-
-        expect(isLoading).toEqual(false)
-        expect(status).toEqual('getFreeTokens')
-      })
-
       it('Create membership', async () => {
         useMyAccounts.hasAccounts = true
-        mockUseLocalStorage = ['redeemed', jest.fn()]
+        useMyAccounts.allAccounts = [{ name: 'Account', address: getAccount('alice') }]
+        mockUseLocalStorage = [getAccount('alice'), jest.fn()]
+
         const { isLoading, status } = await renderUseOnBoarding()
 
         expect(isLoading).toEqual(false)

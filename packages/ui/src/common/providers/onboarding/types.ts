@@ -1,10 +1,9 @@
-export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'getFreeTokens' | 'createMembership' | 'finished'
+export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'createMembership' | 'finished'
+export type SetMembershipAccount = (value: string | undefined) => void
 
-export interface UseMembershipOnBoarding {
+export interface UseOnBoarding {
   isLoading: boolean
   status?: OnBoardingStatus
-}
-
-export interface UseOnBoarding extends UseMembershipOnBoarding {
-  setFreeTokens?: (value: string) => void
+  membershipAccount?: string
+  setMembershipAccount?: SetMembershipAccount
 }

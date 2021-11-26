@@ -5,6 +5,7 @@ import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
+import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
@@ -64,8 +65,9 @@ export type ModalNames =
   | ModalName<VoteForProposalModalCall>
   | ModalName<RevealVoteModalCall>
   | ModalName<RecoverBalanceModalCall>
-  | ModalName<RestoreVotesModalCall>
   | ModalName<IncreaseWorkerStakeModalCall>
+  | ModalName<OnBoardingModalCall>
+  | ModalName<RestoreVotesModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -94,8 +96,9 @@ const modals: Record<ModalNames, ReactElement> = {
   VoteForProposalModal: <VoteForProposalModal />,
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
-  RestoreVotes: <RestoreVotesModal />,
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
+  OnBoardingModal: <OnBoardingModal />,
+  RestoreVotes: <RestoreVotesModal />,
 }
 
 export const GlobalModals = () => {

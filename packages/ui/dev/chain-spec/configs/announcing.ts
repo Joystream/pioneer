@@ -1,19 +1,15 @@
 export default {
-  genesis: {
-    runtime: {
-      council: {
-        stage: {
-          stage: {
-            Announcing: {
-              candidates_count: 0,
-            },
-            Election: undefined,
-          },
+  council: {
+    stage: {
+      stage: {
+        Announcing: {
+          candidates_count: 0,
         },
       },
-      referendumInstance1: {
-        stage: 'Inactive',
-      },
+      changed_at: 0,
     },
+  },
+  referendumInstance1: {
+    stage: 'Inactive',
   },
 }

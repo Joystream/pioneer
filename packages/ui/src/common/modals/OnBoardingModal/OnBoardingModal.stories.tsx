@@ -114,7 +114,7 @@ const Template: Story<Props> = ({ extension = false, account = false, accountPic
               <BalancesContext.Provider value={useMyBalances}>
                 <OnBoardingProvider>
                   <TemplateBlock>
-                    <OnBoardingModal toggleModal={() => undefined} />
+                    <OnBoardingModal />
                   </TemplateBlock>
                 </OnBoardingProvider>
               </BalancesContext.Provider>

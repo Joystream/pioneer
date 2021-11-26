@@ -16,8 +16,13 @@ import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SlashWorkingGroupLeadParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { ProposalType } from '@/proposals/types'
+import { GroupIdName } from '@/working-groups/types'
 
-import { DecreaseWorkingGroupLeadStakeParameters, FundingRequestParameters } from './components/SpecificParameters'
+import {
+  DecreaseWorkingGroupLeadStakeParameters,
+  FundingRequestParameters,
+  SignalParameters,
+} from './components/SpecificParameters'
 import {
   StakingPolicyAndRewardParameters,
   WorkingGroupAndOpeningDetailsParameters,
@@ -49,12 +54,17 @@ export interface TriggerAndDiscussionContext extends Required<BaseDetailsContext
 export interface SpecificParametersContext extends Required<TriggerAndDiscussionContext> {
   specifics:
     | EmptyObject
+    | SignalParameters
     | FundingRequestParameters
     | WorkingGroupAndOpeningDetailsParameters
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+}
+
+interface SignalContext extends SpecificParametersContext {
+  specifics: SignalParameters
 }
 
 interface FundingRequestContext extends SpecificParametersContext {
@@ -96,6 +106,7 @@ export type AddNewProposalContext = Partial<
     BaseDetailsContext &
     TriggerAndDiscussionContext &
     SpecificParametersContext &
+    SignalContext &
     FundingRequestContext &
     WorkingGroupLeadOpeningContext &
     StakingPolicyAndRewardContext &
@@ -119,6 +130,7 @@ export type AddNewProposalState =
   | { value: 'generalParameters.triggerAndDiscussion'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
+  | { value: { specificParameters: 'signal' }; context: SignalContext }
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
@@ -143,12 +155,13 @@ type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
+type SetSignalEvent = { type: 'SET_SIGNAL'; signal: string }
 type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalTrigger | undefined }
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
-type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: string }
+type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
@@ -167,6 +180,7 @@ export type AddNewProposalEvent =
   | SetAmountEvent
   | SetTitleEvent
   | SetRationaleEvent
+  | SetSignalEvent
   | SetTriggerBlockEvent
   | SetDiscussionModeEvent
   | SetDiscussionWhitelistEvent
@@ -324,12 +338,24 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       states: {
         entry: {
           always: [
+            { target: 'signal', cond: isType('signal') },
             { target: 'fundingRequest', cond: isType('fundingRequest') },
             { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
           ],
+        },
+        signal: {
+          on: {
+            SET_SIGNAL: {
+              actions: assign({
+                specifics: (context, event) => {
+                  return { ...context.specifics, signal: event.signal }
+                },
+              }),
+            },
+          },
         },
         fundingRequest: {
           on: {

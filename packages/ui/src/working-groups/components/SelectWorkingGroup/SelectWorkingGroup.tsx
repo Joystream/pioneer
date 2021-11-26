@@ -9,7 +9,7 @@ import {
   OptionWorkingGroupTitle,
 } from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
-import { WorkingGroup } from '@/working-groups/types'
+import { GroupIdName, WorkingGroup } from '@/working-groups/types'
 
 import { OptionsListWorkingGroup } from './OptionsListWorkingGroup'
 
@@ -28,7 +28,7 @@ const filterByText = (options: WorkingGroup[], text: string) => {
 
 interface Props {
   onChange: (selected: WorkingGroup) => void
-  selectedGroupId?: string
+  selectedGroupId?: GroupIdName
   disabled?: boolean
   className?: string
   disableNoLead?: boolean

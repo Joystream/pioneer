@@ -169,6 +169,7 @@ export const makeServer = (environment = 'development') => {
           },
         })
       )
+      this.passthrough('http://localhost:4000/register')
     },
 
     ...(environment !== 'development'

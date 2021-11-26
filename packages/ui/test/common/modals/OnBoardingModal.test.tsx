@@ -1,6 +1,7 @@
 import { cleanup, render } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -11,6 +12,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
+import { MockApolloProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
 
 const mockUseMyAccounts: UseAccounts = {
@@ -23,7 +25,7 @@ const mockUseMyAccounts: UseAccounts = {
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setFreeTokens: jest.fn(),
+  setMembershipAccount: jest.fn(),
 }
 
 let mockMyBalances: AddressToBalanceMap = {}
@@ -80,7 +82,7 @@ describe('UI: OnBoardingModal', () => {
       const pluginButton = getByText('Install extension')
       expect(pluginButton).toBeDefined()
 
-      pluginButton.click()
+      act(() => pluginButton.click())
 
       expect(windowSpy).toBeCalledWith('https://polkadot.js.org/extension/', '_blank')
     })
@@ -163,40 +165,11 @@ describe('UI: OnBoardingModal', () => {
       it('Proceed to next step', () => {
         const { getByText } = renderModal()
 
-        getByText('Alice').click()
-        getByText('Connect Account').click()
+        act(() => getByText('Alice').click())
+        act(() => getByText('Connect Account').click())
 
-        expect(mockOnBoarding.setFreeTokens).toBeCalledWith('123')
+        expect(mockOnBoarding.setMembershipAccount).toBeCalledWith('123')
       })
-    })
-  })
-
-  describe('Status: getFreeTokens', () => {
-    beforeAll(() => {
-      mockOnBoarding.status = 'getFreeTokens'
-    })
-
-    it('Step matches', () => {
-      const { getByText } = renderModal()
-
-      const tokenCircle = getStepperStepCircle('Get FREE tokens', getByText)
-
-      expect(tokenCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
-    })
-
-    it('Shows correct screen', () => {
-      const { queryByText } = renderModal()
-
-      expect(queryByText('One Last Thing')).toBeDefined()
-      expect(queryByText('Continue And Get Free Tokens')).toBeDefined()
-    })
-
-    it('Proceed to next step', () => {
-      const { getByText } = renderModal()
-
-      getByText(/Continue And Get Tokens/i)?.click()
-
-      expect(mockOnBoarding.setFreeTokens).toBeCalledWith('redeemed')
     })
   })
 
@@ -208,7 +181,7 @@ describe('UI: OnBoardingModal', () => {
     it('Step matches', () => {
       const { getByText } = renderModal()
 
-      const membershipCircle = getStepperStepCircle('Create membership', getByText)
+      const membershipCircle = getStepperStepCircle('Create membership for FREE', getByText)
 
       expect(membershipCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
@@ -226,9 +199,11 @@ describe('UI: OnBoardingModal', () => {
   const renderModal = () =>
     render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
-          <OnBoardingModal toggleModal={() => undefined} />
-        </ModalContext.Provider>
+        <MockApolloProvider>
+          <ModalContext.Provider value={useModal}>
+            <OnBoardingModal />
+          </ModalContext.Provider>
+        </MockApolloProvider>
       </MemoryRouter>
     )
 })

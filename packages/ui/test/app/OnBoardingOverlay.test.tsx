@@ -8,7 +8,7 @@ import { UseOnBoarding } from '@/common/providers/onboarding/types'
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
-  setFreeTokens: jest.fn(),
+  setMembershipAccount: jest.fn(),
 }
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
@@ -58,25 +58,16 @@ describe('OnBoardingOverlay', () => {
       expect(accountCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
 
-    it('Get FREE Tokens', () => {
-      mockOnBoarding.status = 'getFreeTokens'
-      const { getByText } = renderComponent()
-
-      const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
-      const tokensCircle = getStepCircle('Get FREE tokens', getByText)
-
-      expect(accountCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
-      expect(tokensCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
-    })
-
     it('Create membership', () => {
       mockOnBoarding.status = 'createMembership'
       const { getByText } = renderComponent()
 
-      const tokensCircle = getStepCircle('Get FREE tokens', getByText)
-      const membershipCircle = getStepCircle('Create membership', getByText)
+      const pluginCircle = getStepCircle('Add Polkadot plugin', getByText)
+      const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
+      const membershipCircle = getStepCircle('Create membership for FREE', getByText)
 
-      expect(tokensCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
+      expect(pluginCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
+      expect(accountCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
       expect(membershipCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
 
@@ -90,5 +81,5 @@ describe('OnBoardingOverlay', () => {
 
   const getStepCircle = (text: string, getByText: any) => getByText(text)?.parentElement?.previousElementSibling
 
-  const renderComponent = () => render(<OnBoardingOverlay toggleModal={() => undefined} />)
+  const renderComponent = () => render(<OnBoardingOverlay />)
 })
