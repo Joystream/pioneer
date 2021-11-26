@@ -77,7 +77,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={electionLink} icon={<ElectionIcon />}>
+              <NavigationLink to={electionLink} icon={<ElectionIcon />} indicate={false}>
                 Election
               </NavigationLink>
             </NavigationLinksItem>
