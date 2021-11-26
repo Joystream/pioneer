@@ -58,12 +58,63 @@ const seedRuntimeUpgradeData = (data: RawRuntimeUpgradeData, server: any) => {
   }
 }
 
+interface RawUpdateGroupBudgetData {
+  groupId: string
+  amount: number
+}
+
+const seedUpdateGroupBudgetData = (data: RawUpdateGroupBudgetData) => data
+
+interface RawSetMaxValidatorCountData {
+  newMaxValidatorCount: number
+}
+
+const seedSetMaxValidatorCount = (data: RawSetMaxValidatorCountData) => data
+
+interface FillLeadOpeiningData {
+  openingId: string
+  applicationId: string
+}
+
+const seedFillLeadOpening = (data: FillLeadOpeiningData) => data
+
+interface SetGroupLeadRewardDetails {
+  leadId: string
+  newRewardPerBlock: number
+}
+
+const seedSetGroupLeadReward = (data: SetGroupLeadRewardDetails) => data
+
+const seedTerminateGroupLead = (data: RawLeadStakeData) => ({
+  leadId: data.leadId,
+  slashingAmount: data.amount,
+})
+
+interface SetMembershipPriceDetails {
+  newPrice: number
+}
+
+const seedSetMembershipPrice = (data: SetMembershipPriceDetails) => data
+
+interface SetCouncilBudgetIncrementDetails {
+  newAmount: number
+}
+
+const seedSetCouncilBudgetIncrement = (data: SetCouncilBudgetIncrementDetails) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
   decreaseWorkingGroupLeadStake: seedLeadStakeProposalData,
   slashWorkingGroupLead: seedLeadStakeProposalData,
   runtimeUpgrade: seedRuntimeUpgradeData,
+  updateWorkingGroupBudget: seedUpdateGroupBudgetData,
+  setMaxValidatorCount: seedSetMaxValidatorCount,
+  fillWorkingGroupLeadOpening: seedFillLeadOpening,
+  setWorkingGroupLeadReward: seedSetGroupLeadReward,
+  terminateWorkingGroupLead: seedTerminateGroupLead,
+  setMembershipPrice: seedSetMembershipPrice,
+  setCouncilBudgetIncrement: seedSetCouncilBudgetIncrement,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

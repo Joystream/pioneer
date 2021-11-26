@@ -4,6 +4,31 @@ import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
+export type WorkerProposalDetailsFragment = {
+  __typename: 'Worker'
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
+  membership: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+}
+
 export type ProposalFieldsFragment = {
   __typename: 'Proposal'
   id: string
@@ -229,7 +254,43 @@ export type ProposalWithDetailsFieldsFragment = {
           | undefined
       }
     | { __typename: 'EditBlogPostProposalDetails' }
-    | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
+        opening?:
+          | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+          | null
+          | undefined
+        application?:
+          | {
+              __typename: 'WorkingGroupApplication'
+              applicant: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
+            }
+          | null
+          | undefined
+      }
     | {
         __typename: 'FundingRequestProposalDetails'
         destinationsList?:
@@ -245,15 +306,49 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'RuntimeUpgradeProposalDetails'
         newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
       }
-    | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
     | { __typename: 'SetInitialInvitationCountProposalDetails' }
-    | { __typename: 'SetMaxValidatorCountProposalDetails' }
+    | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-    | { __typename: 'SetMembershipPriceProposalDetails' }
+    | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
     | { __typename: 'SetReferralCutProposalDetails' }
-    | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+    | {
+        __typename: 'SetWorkingGroupLeadRewardProposalDetails'
+        newRewardPerBlock: any
+        lead?:
+          | {
+              __typename: 'Worker'
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+              membership: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
+            }
+          | null
+          | undefined
+      }
     | { __typename: 'SignalProposalDetails' }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
@@ -291,9 +386,47 @@ export type ProposalWithDetailsFieldsFragment = {
           | null
           | undefined
       }
-    | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | {
+        __typename: 'TerminateWorkingGroupLeadProposalDetails'
+        slashingAmount?: any | null | undefined
+        lead?:
+          | {
+              __typename: 'Worker'
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+              membership: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
+            }
+          | null
+          | undefined
+      }
     | { __typename: 'UnlockBlogPostProposalDetails' }
-    | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+    | {
+        __typename: 'UpdateWorkingGroupBudgetProposalDetails'
+        amount: any
+        group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
+      }
     | { __typename: 'VetoProposalDetails' }
   discussionThread: {
     __typename: 'ProposalDiscussionThread'
@@ -709,7 +842,43 @@ export type GetProposalQuery = {
                 | undefined
             }
           | { __typename: 'EditBlogPostProposalDetails' }
-          | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+          | {
+              __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
+              opening?:
+                | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+                | null
+                | undefined
+              application?:
+                | {
+                    __typename: 'WorkingGroupApplication'
+                    applicant: {
+                      __typename: 'Membership'
+                      id: string
+                      rootAccount: string
+                      controllerAccount: string
+                      boundAccounts: Array<string>
+                      handle: string
+                      isVerified: boolean
+                      isFoundingMember: boolean
+                      inviteCount: number
+                      createdAt: any
+                      metadata: {
+                        __typename: 'MemberMetadata'
+                        name?: string | null | undefined
+                        about?: string | null | undefined
+                      }
+                      roles: Array<{
+                        __typename: 'Worker'
+                        id: string
+                        createdAt: any
+                        isLead: boolean
+                        group: { __typename: 'WorkingGroup'; name: string }
+                      }>
+                    }
+                  }
+                | null
+                | undefined
+            }
           | {
               __typename: 'FundingRequestProposalDetails'
               destinationsList?:
@@ -725,15 +894,49 @@ export type GetProposalQuery = {
               __typename: 'RuntimeUpgradeProposalDetails'
               newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
             }
-          | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+          | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
           | { __typename: 'SetCouncilorRewardProposalDetails' }
           | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
           | { __typename: 'SetInitialInvitationCountProposalDetails' }
-          | { __typename: 'SetMaxValidatorCountProposalDetails' }
+          | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
           | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-          | { __typename: 'SetMembershipPriceProposalDetails' }
+          | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
           | { __typename: 'SetReferralCutProposalDetails' }
-          | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+          | {
+              __typename: 'SetWorkingGroupLeadRewardProposalDetails'
+              newRewardPerBlock: any
+              lead?:
+                | {
+                    __typename: 'Worker'
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                    membership: {
+                      __typename: 'Membership'
+                      id: string
+                      rootAccount: string
+                      controllerAccount: string
+                      boundAccounts: Array<string>
+                      handle: string
+                      isVerified: boolean
+                      isFoundingMember: boolean
+                      inviteCount: number
+                      createdAt: any
+                      metadata: {
+                        __typename: 'MemberMetadata'
+                        name?: string | null | undefined
+                        about?: string | null | undefined
+                      }
+                      roles: Array<{
+                        __typename: 'Worker'
+                        id: string
+                        createdAt: any
+                        isLead: boolean
+                        group: { __typename: 'WorkingGroup'; name: string }
+                      }>
+                    }
+                  }
+                | null
+                | undefined
+            }
           | { __typename: 'SignalProposalDetails' }
           | {
               __typename: 'SlashWorkingGroupLeadProposalDetails'
@@ -771,9 +974,47 @@ export type GetProposalQuery = {
                 | null
                 | undefined
             }
-          | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+          | {
+              __typename: 'TerminateWorkingGroupLeadProposalDetails'
+              slashingAmount?: any | null | undefined
+              lead?:
+                | {
+                    __typename: 'Worker'
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                    membership: {
+                      __typename: 'Membership'
+                      id: string
+                      rootAccount: string
+                      controllerAccount: string
+                      boundAccounts: Array<string>
+                      handle: string
+                      isVerified: boolean
+                      isFoundingMember: boolean
+                      inviteCount: number
+                      createdAt: any
+                      metadata: {
+                        __typename: 'MemberMetadata'
+                        name?: string | null | undefined
+                        about?: string | null | undefined
+                      }
+                      roles: Array<{
+                        __typename: 'Worker'
+                        id: string
+                        createdAt: any
+                        isLead: boolean
+                        group: { __typename: 'WorkingGroup'; name: string }
+                      }>
+                    }
+                  }
+                | null
+                | undefined
+            }
           | { __typename: 'UnlockBlogPostProposalDetails' }
-          | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+          | {
+              __typename: 'UpdateWorkingGroupBudgetProposalDetails'
+              amount: any
+              group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
+            }
           | { __typename: 'VetoProposalDetails' }
         discussionThread: {
           __typename: 'ProposalDiscussionThread'
@@ -1052,6 +1293,18 @@ export const ProposalFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const WorkerProposalDetailsFragmentDoc = gql`
+  fragment WorkerProposalDetails on Worker {
+    group {
+      id
+      name
+    }
+    membership {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
 export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
   fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
     id
@@ -1125,26 +1378,14 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       ... on DecreaseWorkingGroupLeadStakeProposalDetails {
         lead {
           createdAt
-          group {
-            id
-            name
-          }
-          membership {
-            ...MemberFields
-          }
+          ...WorkerProposalDetails
         }
         amount
       }
       ... on SlashWorkingGroupLeadProposalDetails {
         lead {
           createdAt
-          group {
-            id
-            name
-          }
-          membership {
-            ...MemberFields
-          }
+          ...WorkerProposalDetails
         }
         amount
       }
@@ -1152,6 +1393,47 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         newRuntimeBytecode {
           id
         }
+      }
+      ... on UpdateWorkingGroupBudgetProposalDetails {
+        group {
+          id
+          name
+        }
+        amount
+      }
+      ... on SetMaxValidatorCountProposalDetails {
+        newMaxValidatorCount
+      }
+      ... on FillWorkingGroupLeadOpeningProposalDetails {
+        opening {
+          group {
+            id
+            name
+          }
+        }
+        application {
+          applicant {
+            ...MemberFields
+          }
+        }
+      }
+      ... on SetWorkingGroupLeadRewardProposalDetails {
+        lead {
+          ...WorkerProposalDetails
+        }
+        newRewardPerBlock
+      }
+      ... on TerminateWorkingGroupLeadProposalDetails {
+        lead {
+          ...WorkerProposalDetails
+        }
+        slashingAmount
+      }
+      ... on SetMembershipPriceProposalDetails {
+        newPrice
+      }
+      ... on SetCouncilBudgetIncrementProposalDetails {
+        newAmount
       }
     }
     discussionThread {
@@ -1173,6 +1455,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
   }
   ${ProposalFieldsFragmentDoc}
   ${VoteFieldsFragmentDoc}
+  ${WorkerProposalDetailsFragmentDoc}
   ${MemberFieldsFragmentDoc}
   ${DiscussionPostFieldsFragmentDoc}
 `
