@@ -2,8 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TextMedium } from '@/common/components/typography'
-import { Overflow, Transitions } from '@/common/constants'
-import { camelCaseToText } from '@/common/helpers'
+import { Colors, Overflow, Transitions } from '@/common/constants'
 import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 interface Props {
@@ -12,7 +11,8 @@ interface Props {
 
 export const OptionWorkingGroupApplication = ({ application }: Props) => (
   <OptionWorkingGroupApplicationWrapper>
-    <OptionWorkingGroupApplicationTitle>{camelCaseToText(application.id)}</OptionWorkingGroupApplicationTitle>
+    <TextMedium>ID: {application.id}</TextMedium>
+    <OptionWorkingGroupApplicationTitle>{application.applicant?.handle}</OptionWorkingGroupApplicationTitle>
   </OptionWorkingGroupApplicationWrapper>
 )
 
@@ -24,9 +24,11 @@ const OptionWorkingGroupApplicationWrapper = styled.div`
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
+  justify-content: center;
 
   ${TextMedium} {
     ${Overflow.DotsTwoLine};
+    color: ${Colors.Black[500]};
   }
 `
 

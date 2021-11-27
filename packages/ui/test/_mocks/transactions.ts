@@ -128,7 +128,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as ApiRx,
+    api: ({} as unknown) as ApiRx,
     isConnected: true,
     connectionState: 'connected',
   }
@@ -180,16 +180,22 @@ export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number
 
 export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: number }) => {
   for (const proposalType of proposalDetails) {
-    set(api, `api.consts.proposalsCodex.${proposalType}ProposalParameters`, {
-      votingPeriod: new BN(10),
-      gracePeriod: new BN(10),
-      approvalQuorumPercentage: new BN(10),
-      approvalThresholdPercentage: new BN(10),
-      slashingQuorumPercentage: new BN(10),
-      slashingThresholdPercentage: new BN(10),
-      requiredStake: new BN(constants && constants.requiredStake ? constants.requiredStake : 10),
-      constitutionality: new BN(10),
-    })
+    set(
+      api,
+      `api.consts.proposalsCodex.${
+        proposalType === 'fillWorkingGroupLeadOpening' ? 'fillWorkingGroupOpening' : proposalType
+      }ProposalParameters`,
+      {
+        votingPeriod: new BN(10),
+        gracePeriod: new BN(10),
+        approvalQuorumPercentage: new BN(10),
+        approvalThresholdPercentage: new BN(10),
+        slashingQuorumPercentage: new BN(10),
+        slashingThresholdPercentage: new BN(10),
+        requiredStake: new BN(constants && constants.requiredStake ? constants.requiredStake : 10),
+        constitutionality: new BN(10),
+      }
+    )
   }
 }
 

@@ -581,6 +581,7 @@ describe('UI: AddNewProposalModal', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
           seedOpenings(server.server)
+          seedApplications(server.server)
         })
 
         beforeEach(async () => {
@@ -599,6 +600,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('Forum Working Group-83')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -924,6 +926,10 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Opening$', name)
   }
 
+  const selectApplication = async (name: string) => {
+    await selectFromDropdown('^Application$', name)
+  }
+
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     await fireEvent.change(amountInput, { target: { value } })
@@ -961,6 +967,7 @@ describe('UI: AddNewProposalModal', () => {
     },
     FillWorkingGroupLeadOpening: {
       selectedOpening,
+      selectApplication,
     },
   }
 

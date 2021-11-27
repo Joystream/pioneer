@@ -31,8 +31,15 @@ export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicati
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Opening" required inputSize="l" tooltipText="Please select an identifier for Opening">
+          <InputComponent
+            id="opening-input"
+            label="Opening"
+            required
+            inputSize="l"
+            tooltipText="Please select an identifier for Opening"
+          >
             <SelectWorkingGroupOpening
+              id="opening"
               selectedOpeningId={openingId}
               onChange={(selected) => setOpeningId(selected.runtimeId)}
               openingsPositionType={WorkingGroupOpeningType.Leader}
@@ -43,13 +50,15 @@ export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicati
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="application-input"
             label="Application"
             required
             inputSize="l"
             tooltipText="Please select an identifier for Application"
             disabled={!openingId}
           >
-            <SelectWorkingGroupApplication
+            <SelectWorkingGroupApplication {/* todo add no application handle and fetch only filled applications */}
+              id="application"
               selectedApplicationId={applicationId}
               onChange={(selected) => setApplicationId(selected.runtimeId)}
               disabled={!openingId}
