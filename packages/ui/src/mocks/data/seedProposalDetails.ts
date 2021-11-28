@@ -102,6 +102,12 @@ interface SetCouncilBudgetIncrementDetails {
 
 const seedSetCouncilBudgetIncrement = (data: SetCouncilBudgetIncrementDetails) => data
 
+interface SignalDetails {
+  text: string
+}
+
+const seedSingal = (data: SignalDetails) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
@@ -115,6 +121,7 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   terminateWorkingGroupLead: seedTerminateGroupLead,
   setMembershipPrice: seedSetMembershipPrice,
   setCouncilBudgetIncrement: seedSetCouncilBudgetIncrement,
+  signal: seedSingal,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

@@ -146,6 +146,9 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on SetCouncilBudgetIncrementProposalDetails {
       newAmount
     }
+    ... on SignalProposalDetails {
+      text
+    }
   }
   discussionThread {
     id

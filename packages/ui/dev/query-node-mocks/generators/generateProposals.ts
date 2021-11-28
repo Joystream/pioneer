@@ -216,6 +216,12 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
       newAmount: randomFromRange(1, 5) * 10000,
     }
   }),
+  signal: () => ({
+    type: 'signal',
+    data: {
+      text: faker.lorem.words(30),
+    }
+  }),
 }
 
 const getLeadStakeData = (mocks: MocksForProposals) => ({

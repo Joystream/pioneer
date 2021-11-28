@@ -16,6 +16,7 @@ import {
   AmountDetail,
   DestinationsDetail,
   ProposalType,
+  SignalTextDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -81,7 +82,16 @@ const groupMapper: Mapper<GroupDetail, 'group'> = (value): RenderNode[] => {
 const openingDescriptionMapper: Mapper<OpeningDescriptionDetail, 'openingDescription'> = (value): RenderNode[] => {
   return [
     {
-      label: 'Description',
+      label: 'Opening Description',
+      value: value,
+      renderType: 'Markdown',
+    },
+  ]
+}
+const signalTextMapper: Mapper<SignalTextDetail, 'signalText'> = (value): RenderNode[] => {
+  return [
+    {
+      label: 'Signal Text',
       value: value,
       renderType: 'Markdown',
     },
@@ -154,6 +164,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   newBytecodeId: newBytecodeIdMapper,
   group: groupMapper,
   openingDescription: openingDescriptionMapper,
+  signalText: signalTextMapper,
   rewardPerBlock: rewardPerBlockMapper,
   stakeAmount: stakeAmountMapper,
   unstakingPeriod: unstakingPeriodMapper,

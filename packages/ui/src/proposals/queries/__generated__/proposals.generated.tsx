@@ -349,7 +349,7 @@ export type ProposalWithDetailsFieldsFragment = {
           | null
           | undefined
       }
-    | { __typename: 'SignalProposalDetails' }
+    | { __typename: 'SignalProposalDetails'; text: string }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
         amount: any
@@ -937,7 +937,7 @@ export type GetProposalQuery = {
                 | null
                 | undefined
             }
-          | { __typename: 'SignalProposalDetails' }
+          | { __typename: 'SignalProposalDetails'; text: string }
           | {
               __typename: 'SlashWorkingGroupLeadProposalDetails'
               amount: any
@@ -1434,6 +1434,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SetCouncilBudgetIncrementProposalDetails {
         newAmount
+      }
+      ... on SignalProposalDetails {
+        text
       }
     }
     discussionThread {

@@ -25,7 +25,7 @@ export const Markdown = ({ label, value }: Props) => {
       >
         <FileIcon />
         <TextInlineBig bold value>
-          {`Opening ${label}`}
+          {label}
         </TextInlineBig>
       </StatisticButton>
       {isDescriptionVisible && (

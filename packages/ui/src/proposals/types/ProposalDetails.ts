@@ -47,6 +47,9 @@ export type RewardPerBlockDetail = {
 export type OpeningDescriptionDetail = {
   openingDescription?: string
 }
+export type SignalTextDetail = {
+  signalText: string
+}
 export type MemberDetail = {
   member?: Member
 }
@@ -88,6 +91,8 @@ export type TerminateWorkingGroupLeadDetails = ProposalDetailsNew<
   MemberDetail & GroupDetail & AmountDetail
 >
 
+export type SignalDetails = ProposalDetailsNew<'signal', SignalTextDetail>
+
 export type SetMembershipPriceDetails = ProposalDetailsNew<'setMembershipPrice', AmountDetail>
 
 export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBudgetIncrement', AmountDetail>
@@ -106,6 +111,7 @@ export type ProposalDetails =
   | TerminateWorkingGroupLeadDetails
   | SetMembershipPriceDetails
   | SetCouncilBudgetIncrementDetails
+  | SignalDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -231,6 +237,11 @@ const asSetCouncilBudgetIncrement: DetailsCast<'SetCouncilBudgetIncrementProposa
   amount: new BN(fragment.newAmount),
 })
 
+const asSignal: DetailsCast<'SignalProposalDetails'> = (fragment): SignalDetails => ({
+  type: 'signal',
+  signalText: fragment.text,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -248,6 +259,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   TerminateWorkingGroupLeadProposalDetails: asTerminateWorkingGroupLead,
   SetMembershipPriceProposalDetails: asSetMembershipPrice,
   SetCouncilBudgetIncrementProposalDetails: asSetCouncilBudgetIncrement,
+  SignalProposalDetails: asSignal,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
