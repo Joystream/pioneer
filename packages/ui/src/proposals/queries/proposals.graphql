@@ -128,6 +128,17 @@ fragment ProposalWithDetailsFields on Proposal {
         }
       }
     }
+    ... on CancelWorkingGroupLeadOpeningProposalDetails {
+      opening {
+        group {
+          id
+          name
+        }
+        metadata {
+          description
+        }
+      }
+    }
     ... on SetWorkingGroupLeadRewardProposalDetails {
       lead {
         ...WorkerProposalDetails

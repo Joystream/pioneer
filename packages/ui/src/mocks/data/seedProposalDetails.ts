@@ -108,6 +108,12 @@ interface SignalDetails {
 
 const seedSingal = (data: SignalDetails) => data
 
+interface CancelGroupLeadOpeningDetails {
+  openingId: string
+}
+
+const seedCancelGroupOpening = (data: CancelGroupLeadOpeningDetails) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
@@ -122,6 +128,7 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   setMembershipPrice: seedSetMembershipPrice,
   setCouncilBudgetIncrement: seedSetCouncilBudgetIncrement,
   signal: seedSingal,
+  cancelWorkingGroupLeadOpening: seedCancelGroupOpening,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

@@ -110,7 +110,7 @@ const generateProposal = (type: ProposalType, mocks: MocksForProposals) => {
     councilApprovals: Math.round(Math.random())
   }
 }
-type MocksForProposals = Pick<Mocks, 'members' | 'workers' | 'workingGroups' | 'applications'>
+type MocksForProposals = Pick<Mocks, 'members' | 'workers' | 'workingGroups' | 'openings' | 'applications'>
 
 export type ProposalMock = ReturnType<typeof generateProposal>
 
@@ -120,6 +120,7 @@ export const generateProposals = (mocks?: MocksForProposals): ProposalMock[] => 
       members: require('../../../src/mocks/data/raw/members.json'),
       workingGroups: require('../../../src/mocks/data/raw/workingGroups.json'),
       workers: require('../../../src/mocks/data/raw/workers.json'),
+      openings: require('../../../src/mocks/data/raw/openings.json'),
       applications: require('../../../src/mocks/data/raw/applications.json'),
     }
   }
@@ -220,6 +221,12 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
     type: 'signal',
     data: {
       text: faker.lorem.words(30),
+    }
+  }),
+  cancelWorkingGroupLeadOpening: (mocks) => ({
+    type: 'cancelWorkingGroupLeadOpening',
+    data: {
+      openingId: mocks.openings[randomFromRange(0, mocks.openings.length - 1)].id,
     }
   }),
 }

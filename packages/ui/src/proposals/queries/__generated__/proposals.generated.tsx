@@ -204,7 +204,17 @@ export type ProposalWithDetailsFieldsFragment = {
   }>
   details:
     | { __typename: 'AmendConstitutionProposalDetails' }
-    | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'CancelWorkingGroupLeadOpeningProposalDetails'
+        opening?:
+          | {
+              __typename: 'WorkingGroupOpening'
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+              metadata: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
+            }
+          | null
+          | undefined
+      }
     | { __typename: 'CreateBlogPostProposalDetails' }
     | {
         __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
@@ -792,7 +802,17 @@ export type GetProposalQuery = {
         }>
         details:
           | { __typename: 'AmendConstitutionProposalDetails' }
-          | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+          | {
+              __typename: 'CancelWorkingGroupLeadOpeningProposalDetails'
+              opening?:
+                | {
+                    __typename: 'WorkingGroupOpening'
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                    metadata: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
+                  }
+                | null
+                | undefined
+            }
           | { __typename: 'CreateBlogPostProposalDetails' }
           | {
               __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
@@ -1414,6 +1434,17 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         application {
           applicant {
             ...MemberFields
+          }
+        }
+      }
+      ... on CancelWorkingGroupLeadOpeningProposalDetails {
+        opening {
+          group {
+            id
+            name
+          }
+          metadata {
+            description
           }
         }
       }
