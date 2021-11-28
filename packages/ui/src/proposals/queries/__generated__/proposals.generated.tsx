@@ -323,7 +323,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
     | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
-    | { __typename: 'SetReferralCutProposalDetails' }
+    | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
     | {
         __typename: 'SetWorkingGroupLeadRewardProposalDetails'
         newRewardPerBlock: any
@@ -921,7 +921,7 @@ export type GetProposalQuery = {
           | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
           | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
           | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
-          | { __typename: 'SetReferralCutProposalDetails' }
+          | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
           | {
               __typename: 'SetWorkingGroupLeadRewardProposalDetails'
               newRewardPerBlock: any
@@ -1468,6 +1468,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SignalProposalDetails {
         text
+      }
+      ... on SetReferralCutProposalDetails {
+        newReferralCut
       }
     }
     discussionThread {

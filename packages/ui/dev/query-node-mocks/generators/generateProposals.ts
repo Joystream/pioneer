@@ -229,6 +229,12 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
       openingId: mocks.openings[randomFromRange(0, mocks.openings.length - 1)].id,
     }
   }),
+  setReferralCut: () => ({
+    type: 'setReferralCut',
+    data: {
+      newReferralCut: randomFromRange(1000, 5000),
+    }
+  }),
 }
 
 const getLeadStakeData = (mocks: MocksForProposals) => ({

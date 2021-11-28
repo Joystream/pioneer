@@ -102,6 +102,8 @@ export type CancelWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
   GroupNameDetail | OpeningDescriptionDetail
 >
 
+export type SetReferralCutDetails = ProposalDetailsNew<'setReferralCut', AmountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -118,6 +120,7 @@ export type ProposalDetails =
   | SetCouncilBudgetIncrementDetails
   | SignalDetails
   | CancelWorkingGroupLeadOpeningDetails
+  | SetReferralCutDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -256,6 +259,11 @@ const asCancelGroupOpening: DetailsCast<'CancelWorkingGroupLeadOpeningProposalDe
   openingDescription: fragment.opening?.metadata.description ?? undefined,
 })
 
+const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment): SetReferralCutDetails => ({
+  type: 'setReferralCut',
+  amount: new BN(fragment.newReferralCut),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -275,6 +283,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetCouncilBudgetIncrementProposalDetails: asSetCouncilBudgetIncrement,
   SignalProposalDetails: asSignal,
   CancelWorkingGroupLeadOpeningProposalDetails: asCancelGroupOpening,
+  SetReferralCutProposalDetails: asSetReferralCut,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

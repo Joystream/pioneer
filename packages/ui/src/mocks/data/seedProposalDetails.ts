@@ -114,6 +114,12 @@ interface CancelGroupLeadOpeningDetails {
 
 const seedCancelGroupOpening = (data: CancelGroupLeadOpeningDetails) => data
 
+interface SetReferralCutDetails {
+  newReferralCut: number
+}
+
+const seedSetReferralCut = (data: SetReferralCutDetails) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
@@ -129,6 +135,7 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   setCouncilBudgetIncrement: seedSetCouncilBudgetIncrement,
   signal: seedSingal,
   cancelWorkingGroupLeadOpening: seedCancelGroupOpening,
+  setReferralCut: seedSetReferralCut,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

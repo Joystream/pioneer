@@ -160,6 +160,9 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on SignalProposalDetails {
       text
     }
+    ... on SetReferralCutProposalDetails {
+      newReferralCut
+    }
   }
   discussionThread {
     id
