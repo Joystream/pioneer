@@ -13,10 +13,8 @@ export interface FillWorkingGroupLeadOpeningParameters {
   applicationId?: number
 }
 
-interface Props {
-  openingId?: number
+interface Props extends FillWorkingGroupLeadOpeningParameters {
   setOpeningId: (openingId: number) => void
-  applicationId?: number
   setApplicationId: (applicationId: number) => void
 }
 
