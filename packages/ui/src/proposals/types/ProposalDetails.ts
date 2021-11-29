@@ -112,6 +112,8 @@ export type SetInitialInvitationBalanceDetails = ProposalDetailsNew<'setInitialI
 
 export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInvitationCount', InvitationsCountDetail>
 
+export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward', AmountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -131,6 +133,7 @@ export type ProposalDetails =
   | SetReferralCutDetails
   | SetInitialInvitationBalanceDetails
   | SetInitialInvitationCountDetails
+  | SetCouncilorRewardDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -288,6 +291,13 @@ const asSetInitialInvitationCount: DetailsCast<'SetInitialInvitationCountProposa
   invitationsCount: new BN(fragment.newInitialInvitationsCount),
 })
 
+const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
+  fragment
+): SetCouncilorRewardDetails => ({
+  type: 'setCouncilorReward',
+  amount: new BN(fragment.newRewardPerBlock),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -310,6 +320,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetReferralCutProposalDetails: asSetReferralCut,
   SetInitialInvitationBalanceProposalDetails: asSetInitialInvitationBalance,
   SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
+  SetCouncilorRewardProposalDetails: asSetCouncilorReward,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

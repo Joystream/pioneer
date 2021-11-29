@@ -317,7 +317,7 @@ export type ProposalWithDetailsFieldsFragment = {
         newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
       }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
-    | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: any }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
     | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
@@ -915,7 +915,7 @@ export type GetProposalQuery = {
               newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
             }
           | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
-          | { __typename: 'SetCouncilorRewardProposalDetails' }
+          | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: any }
           | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
           | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
           | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
@@ -1477,6 +1477,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SetInitialInvitationCountProposalDetails {
         newInitialInvitationsCount
+      }
+      ... on SetCouncilorRewardProposalDetails {
+        newRewardPerBlock
       }
     }
     discussionThread {
