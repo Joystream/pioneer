@@ -84,7 +84,13 @@ fragment ElectionRoundFields on ElectionRound {
 fragment PastElectionRoundFields on ElectionRound {
   id
   cycleId
-  updatedAt
+  referendumResult: referendumstagerevealingoptionresultelectionRound {
+    referendumFinishedEvent {
+      inBlock
+      network
+      createdAt
+    }
+  }
   candidates {
     stake
   }

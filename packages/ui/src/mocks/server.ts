@@ -23,7 +23,7 @@ import {
   seedCouncilCandidates,
   seedCouncilElections,
   seedProposalsEvents,
-  seedCouncilVotes,
+  seedCouncilVotes, seedCouncilReferendumResults
 } from './data'
 import {
   getConnectionResolver,
@@ -196,6 +196,7 @@ export const makeServer = (environment = 'development') => {
             seedElectedCouncils(server)
             seedCouncilMembers(server)
             seedCouncilElections(server)
+            seedCouncilReferendumResults(server)
             seedCouncilCandidates(server)
             seedCouncilVotes(server)
           },

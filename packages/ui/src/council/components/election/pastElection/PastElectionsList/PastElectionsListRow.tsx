@@ -26,11 +26,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
     >
       <Info>#{election.id}</Info>
       <BlockTime
-        block={{
-          network: 'OLYMPIA',
-          timestamp: formatDateString(election.finishedAt),
-          number: parseFloat(election.finishedAt),
-        }}
+        block={election.finishedAtBlock}
         layout="reverse-start"
         lessInfo
       />

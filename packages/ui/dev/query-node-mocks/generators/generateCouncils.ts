@@ -4,7 +4,7 @@ import {
   RawCouncilCandidateMock,
   RawCouncilElectionMock,
   RawCouncilMock,
-  RawCouncilorMock,
+  RawCouncilorMock, RawCouncilReferendumResultMock,
   RawCouncilVoteMock
 } from '@/mocks/data/seedCouncils'
 import { RawNewMissedRewardLevelReachedEvent, RawProposalVotedEvent } from '@/mocks/data/seedEvents'
@@ -39,6 +39,7 @@ export const generateCouncils = (mocks?: MocksForCouncil) => {
     councils: [],
     councilors: [],
     electionRounds: [],
+    referendumStageRevealingOptionResults: [],
     candidates: [],
     votes: [],
     proposalVotedEvents: [],
@@ -50,6 +51,7 @@ interface CouncilData {
   councils: RawCouncilMock[]
   councilors: RawCouncilorMock[]
   electionRounds: RawCouncilElectionMock[]
+  referendumStageRevealingOptionResults: RawCouncilReferendumResultMock[]
   candidates: RawCouncilCandidateMock[]
   votes: RawCouncilVoteMock[]
   proposalVotedEvents: RawProposalVotedEvent[]
@@ -142,6 +144,12 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     electedCouncilId: council.id
   }
 
+  const referendumResult: RawCouncilReferendumResultMock | undefined = isFinished ? {
+    id: electionRound.id,
+    referendumFinishedEvent: randomBlock(),
+    electionRoundId: electionRound.id
+  } : undefined
+
   const createVote = (voteIndex: number, override: Partial<RawCouncilVoteMock> = {}): RawCouncilVoteMock => ({
     electionRoundId: council.id,
     stake: randomFromRange(1, 10) * 1000,
@@ -170,10 +178,16 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
       ])
   ]
 
+  const referendumStageRevealingOptionResults = data.referendumStageRevealingOptionResults
+  if (referendumResult) {
+    referendumStageRevealingOptionResults.push(referendumResult)
+  }
+
   return {
     councils: [...data.councils, council],
     councilors: [...data.councilors, ...councilors],
     electionRounds: [...data.electionRounds, electionRound],
+    referendumStageRevealingOptionResults: referendumStageRevealingOptionResults,
     candidates: [...data.candidates, ...candidates],
     votes: [...data.votes, ...votes],
     proposalVotedEvents: [...data.proposalVotedEvents, ...proposalVotedEvents],

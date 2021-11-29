@@ -1,9 +1,11 @@
 import BN from 'bn.js'
 
 import { BN_ZERO } from '@/common/constants'
+import { asBlock, Block } from '@/common/types'
 import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
 import { asPastElectionVote, PastElectionVote } from '@/council/types/Vote'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export interface ElectionVotingResult {
   candidate: ElectionCandidate
@@ -14,7 +16,7 @@ export interface ElectionVotingResult {
 export interface PastElection {
   id: string
   cycleId: number
-  finishedAt: string
+  finishedAtBlock: Block
   totalStake: BN
   totalCandidates: number
   revealedVotes: number
@@ -25,15 +27,17 @@ export interface PastElectionWithDetails extends PastElection {
   votingResults: ElectionVotingResult[]
 }
 
-export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
-  id: fields.id,
-  cycleId: fields.cycleId,
-  finishedAt: fields.updatedAt,
-  totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
-  totalCandidates: fields.candidates.length,
-  revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
-  totalVotes: fields.castVotes.length,
-})
+export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => {
+  return {
+    id: fields.id,
+    cycleId: fields.cycleId,
+    finishedAtBlock: fields.referendumResult ? asBlock(fields.referendumResult[0].referendumFinishedEvent) : randomBlock(),
+    totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
+    totalCandidates: fields.candidates.length,
+    revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
+    totalVotes: fields.castVotes.length
+  }
+}
 
 export const asPastElectionWithDetails = (
   fields: PastElectionRoundDetailedFieldsFragment
@@ -47,11 +51,11 @@ export const asPastElectionWithDetails = (
       .map((castVote) =>
         asPastElectionVote({
           ...castVote,
-          electionRound: fields.cycleId,
+          electionRound: fields.cycleId
         })
       ),
     totalStake: fields.castVotes
       .filter((castVote) => castVote.voteForId === candidate.member.id)
-      .reduce((a, b) => a.addn(b.stake), BN_ZERO),
-  })),
+      .reduce((a, b) => a.addn(b.stake), BN_ZERO)
+  }))
 })

@@ -19,7 +19,7 @@ import rawStakeSlashedEvents from './raw/stakeSlashedEvents.json'
 import rawWorkerRewardAccountEvents from './raw/workerRewardAccountUpdatedEvents.json'
 import rawWorkerRewardAmountEvents from './raw/workerRewardAmountUpdatedEvents.json'
 
-interface BaseEvent {
+export interface BaseEvent {
   id?: string
   inBlock?: number
   network?: string
