@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
-import { TransactionState } from '@/common/model/machines'
+import { TransactionStateValue } from '@/common/model/machines'
 
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
 export const TransactionStatus = () => {
-  const {status} = useTransactionStatus()
+  const { status } = useTransactionStatus()
   const [isVisible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -27,11 +27,11 @@ export const TransactionStatus = () => {
 }
 
 interface Props {
-  status: TransactionState['value'],
+  status: TransactionStateValue
   onClose: () => void
 }
 
-const TransactionStatusContent = ({status, onClose}: Props) => {
+const TransactionStatusContent = ({ status, onClose }: Props) => {
   if (status === 'signWithExtension') {
     return (
       <TransactionStatusNotification

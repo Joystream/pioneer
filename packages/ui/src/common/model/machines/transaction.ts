@@ -34,6 +34,8 @@ export type TransactionState =
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: Required<TransactionContext> }
 
+export type TransactionStateValue = TransactionState['value']
+
 export const transactionMachine = createMachine<TransactionContext, TransactionEvent, TransactionState>({
   id: 'transaction',
   initial: 'prepare',

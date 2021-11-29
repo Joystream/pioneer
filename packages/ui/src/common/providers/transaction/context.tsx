@@ -1,11 +1,11 @@
 import { createContext } from 'react'
 import { ActorRef, State } from 'xstate'
 
-import { TransactionEvent, TransactionContext as TxContext, TransactionState } from '@/common/model/machines'
+import { TransactionEvent, TransactionContext as TxContext, TransactionStateValue } from '@/common/model/machines'
 
 export interface UseTransaction {
   isTransactionPending: boolean
-  status: TransactionState['value'] | null
+  status: TransactionStateValue | null
   setService: (service: ActorRef<TransactionEvent, State<TxContext>>) => void
 }
 

@@ -16,7 +16,7 @@ export default {
 } as Meta
 
 const Template: Story<UseTransaction> = (args) => (
-  <TransactionContext.Provider value={{ ...args}}>
+  <TransactionContext.Provider value={{ ...args }}>
     <TemplateBlock>
       <Row>
         <TransactionButton style="primary" size="large">

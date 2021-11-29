@@ -83,7 +83,6 @@ export const useProcessTransaction = ({
     setService(service)
   }, [])
 
-
   useEffect(() => {
     if (!state.matches('signing') || !transaction || !paymentInfo) {
       return
@@ -92,12 +91,7 @@ export const useProcessTransaction = ({
     const fee = paymentInfo.partialFee.toBn()
 
     web3FromAddress(signer).then((extension) => {
-      observeTransaction(
-        transaction.signAndSend(signer, { signer: extension.signer }),
-        send,
-        fee,
-        setBlockHash
-      )
+      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee, setBlockHash)
     })
     send('SIGN_EXTERNAL')
   }, [state.value.toString(), paymentInfo])

@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ActorRef, State, Subscription } from 'xstate'
 
-import { TransactionContext as TxContext, TransactionEvent, TransactionState } from '@/common/model/machines'
+import { TransactionContext as TxContext, TransactionEvent, TransactionStateValue } from '@/common/model/machines'
 
 import { TransactionContext } from './context'
 
@@ -9,45 +9,36 @@ interface Props {
   children: ReactNode
 }
 
-export const TransactionContextProvider = ({children}: Props) => {
-  const [isTransactionPending, setPending] = useState(false)
+const PENDING_STATUS: TransactionStateValue[] = ['signWithExtension', 'signing', 'pending', 'finalizing', 'processing']
+
+const getIsPendingStatus = (status: TransactionStateValue | null): boolean => {
+  return !!status && PENDING_STATUS.includes(status)
+}
+
+export const TransactionContextProvider = ({ children }: Props) => {
   const [transactionService, setService] = useState<ActorRef<TransactionEvent, State<TxContext>>>()
-  const [status, setStatus] = useState<TransactionState['value'] | null>(null)
+  const [status, setStatus] = useState<TransactionStateValue | null>(null)
 
   useEffect(() => {
     let subscription: Subscription
 
     if (transactionService) {
-      // TODO: Do better
-      subscription = transactionService.subscribe((state) => {
-        setStatus(state.value as TransactionState['value'])
-
-        if (state.matches('signWithExtension')) {
-          setPending(true)
-        } else if (state.matches('canceled')) {
-          setPending(false)
-        } else if (state.matches('pending')) {
-          setPending(true)
-        } else if (state.matches('finalizing')) {
-          setPending(true)
-        } else if (state.matches('processing')) {
-          setPending(true)
-        } else if (state.matches('success')) {
-          setPending(false)
-        } else if (state.matches('error')) {
-          setPending(false)
-        }
-      })
+      subscription = transactionService.subscribe((state) => setStatus(state.value as TransactionStateValue))
     } else {
       setStatus(null)
-      setPending(false)
     }
 
     return () => subscription?.unsubscribe()
   }, [transactionService])
 
   return (
-    <TransactionContext.Provider value={{isTransactionPending, status, setService}}>
+    <TransactionContext.Provider
+      value={{
+        isTransactionPending: getIsPendingStatus(status),
+        status,
+        setService,
+      }}
+    >
       {children}
     </TransactionContext.Provider>
   )
