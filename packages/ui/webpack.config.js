@@ -30,6 +30,7 @@ module.exports = (env, argv) => {
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
+      ...envVariables,
     }),
     new CopyPlugin({
       patterns: [
@@ -40,7 +41,6 @@ module.exports = (env, argv) => {
       ],
     }),
     new ForkTsCheckerWebpackPlugin(),
-    new webpack.DefinePlugin(envVariables),
   ]
 
   return {
