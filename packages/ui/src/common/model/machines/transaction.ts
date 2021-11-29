@@ -18,12 +18,12 @@ export type TransactionEvent =
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
-interface TransactionContext {
+export interface TransactionContext {
   events?: EventRecord[]
   fee?: BN
 }
 
-type TransactionState =
+export type TransactionState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'signing'; context: EmptyObject }
   | { value: 'signWithExtension'; context: EmptyObject }

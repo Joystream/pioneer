@@ -16,7 +16,7 @@ export default {
 } as Meta
 
 const Template: Story<UseTransaction> = (args) => (
-  <TransactionContext.Provider value={{ ...args, setPending: () => undefined }}>
+  <TransactionContext.Provider value={{ ...args}}>
     <TemplateBlock>
       <Row>
         <TransactionButton style="primary" size="large">
@@ -37,5 +37,4 @@ export const Buttons = Template.bind({})
 
 Buttons.args = {
   isTransactionPending: false,
-  setPending: () => undefined,
 }

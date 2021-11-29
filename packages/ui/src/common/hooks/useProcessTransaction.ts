@@ -28,7 +28,6 @@ const observeTransaction = (
   transaction: Observable<ISubmittableResult>,
   send: Sender<any>,
   fee: BN,
-  setPending: (b: boolean) => void,
   setBlockHash?: SetBlockHash
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
@@ -38,7 +37,6 @@ const observeTransaction = (
 
     if (status.isReady) {
       send('PENDING')
-      setPending(true)
     }
 
     if (status.isInBlock) {
@@ -53,8 +51,6 @@ const observeTransaction = (
       } else {
         send({ type: 'FINALIZING', fee })
       }
-
-      setPending(false)
     }
 
     if (status.isFinalized) {
@@ -81,7 +77,12 @@ export const useProcessTransaction = ({
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
-  const { setPending } = useTransactionStatus()
+  const { showStatus } = useTransactionStatus()
+
+  useEffect(() => {
+    showStatus(service)
+  }, [])
+
 
   useEffect(() => {
     if (!state.matches('signing') || !transaction || !paymentInfo) {
@@ -95,7 +96,6 @@ export const useProcessTransaction = ({
         transaction.signAndSend(signer, { signer: extension.signer }),
         send,
         fee,
-        setPending,
         setBlockHash
       )
     })

@@ -1,8 +1,9 @@
 import { useActor } from '@xstate/react'
 import React from 'react'
-import { ActorRef } from 'xstate'
+import { ActorRef, State } from 'xstate'
 
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+import { TransactionContext, TransactionEvent } from '@/common/model/machines'
 
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
@@ -17,7 +18,7 @@ export const TransactionStatus = () => {
 }
 
 interface Props {
-  service: ActorRef<any>,
+  service: ActorRef<TransactionEvent, State<TransactionContext>>,
   onClose: () => void
 }
 
