@@ -267,7 +267,7 @@ describe('UI: ApplyForRoleModal', () => {
         })
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
@@ -283,7 +283,7 @@ describe('UI: ApplyForRoleModal', () => {
         })
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()

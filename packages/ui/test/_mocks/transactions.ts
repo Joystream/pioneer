@@ -4,7 +4,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of } from 'rxjs'
+import { from, of, asyncScheduler } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
@@ -50,7 +50,7 @@ export const stubTransactionResult = (events: any[]) =>
       status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
       events: [...events],
     },
-  ])
+  ], asyncScheduler)
 
 const createBatchSuccessEvents = () => [
   {

@@ -612,7 +612,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
           })
 
-          expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
         })
 
@@ -624,10 +624,10 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionSuccess(batchTx, 'proposalsCodex', 'ProposalCreated', [createType('ProposalId', 1337)])
 
           await act(async () => {
-            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+            fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -638,7 +638,7 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionFailure(batchTx)
 
           await act(async () => {
-            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+            fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
           expect(await screen.findByText('Failure')).toBeDefined()
@@ -677,7 +677,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -725,7 +725,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -786,8 +786,8 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Arrives at the transaction modal', async () => {
-        expect(screen.queryByText(/You intend to change the proposal discussion thread mode./i)).not.toBeNull()
-        expect(screen.queryByText(/Sign transaction and change mode/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to change the proposal discussion thread mode./i)).toBeDefined()
+        expect(await screen.findByText(/Sign transaction and change mode/i)).toBeDefined()
       })
 
       it('Success', async () => {
@@ -796,13 +796,15 @@ describe('UI: AddNewProposalModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(screen.queryByText('See my Proposal')).not.toBeNull()
+        expect(await screen.findByText('See my Proposal')).toBeDefined()
       })
 
       it('Failure', async () => {
         stubTransactionFailure(changeModeTx)
         const button = await getButton(/sign transaction and change mode/i)
-        await fireEvent.click(button as HTMLElement)
+
+        fireEvent.click(button)
+
         expect(await screen.findByText('Failure')).toBeDefined()
       })
     })
