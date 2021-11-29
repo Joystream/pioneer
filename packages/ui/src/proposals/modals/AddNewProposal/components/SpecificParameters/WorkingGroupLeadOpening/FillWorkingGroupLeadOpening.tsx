@@ -63,6 +63,7 @@ export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicati
               onChange={(selected) => setApplicationId(selected.runtimeId)}
               disabled={!openingId}
               openingId={openingId}
+              applicationsStatus="pending"
             />
           </InputComponent>
         </RowGapBlock>

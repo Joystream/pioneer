@@ -7,12 +7,13 @@ import { Colors } from '@/common/constants'
 import { OptionWorkingGroupTitle } from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
 import { OptionsListWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/OptionsListWorkingGroupApplication'
 import { OptionWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/OptionWorkingGroupApplication'
-import { useApplications } from '@/working-groups/hooks/useApplications'
+import { ApplicationStatus, useApplications } from '@/working-groups/hooks/useApplications'
 import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 interface Props {
   onChange: (selected: WorkingGroupApplication) => void
   selectedApplicationId?: number
+  applicationsStatus?: ApplicationStatus
   disabled?: boolean
   className?: string
   id?: string
@@ -26,8 +27,9 @@ const SelectWorkingGroupApplicationBase = ({
   disabled,
   className,
   openingId,
+  applicationsStatus,
 }: Props) => {
-  const { applications } = useApplications(openingId)
+  const { applications } = useApplications({ applicationsStatus, openingId })
   const selectedApplication = useMemo(
     () => applications?.find((application) => application.runtimeId === selectedApplicationId),
     [selectedApplicationId, applications?.length]

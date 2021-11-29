@@ -599,8 +599,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('Forum Working Group-83')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-2')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-2')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
