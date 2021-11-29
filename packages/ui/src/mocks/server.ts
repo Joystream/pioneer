@@ -2,6 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { MEMBERSHIP_FAUCET_URL } from '@/app/config'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
@@ -169,7 +170,7 @@ export const makeServer = (environment = 'development') => {
           },
         })
       )
-      this.passthrough('http://localhost:4000/register')
+      this.passthrough(`${MEMBERSHIP_FAUCET_URL}/register`)
     },
 
     ...(environment !== 'development'
