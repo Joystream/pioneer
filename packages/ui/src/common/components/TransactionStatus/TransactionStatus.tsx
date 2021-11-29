@@ -7,21 +7,22 @@ import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
 export const TransactionStatus = () => {
-  const { transactionService, statusShown } = useTransactionStatus()
+  const { transactionService, statusShown, hideStatus } = useTransactionStatus()
 
   if (statusShown && transactionService) {
-    return <TransactionStatusContent service={transactionService} />
+    return <TransactionStatusContent service={transactionService} onClose={hideStatus} />
   }
+
   return null
 }
 
 interface Props {
-  service: ActorRef<any>
+  service: ActorRef<any>,
+  onClose: () => void
 }
 
-const TransactionStatusContent = ({ service }: Props) => {
+const TransactionStatusContent = ({ service, onClose }: Props) => {
   const [state] = useActor(service)
-  const { hideStatus } = useTransactionStatus()
 
   if (state.matches('signWithExtension')) {
     return (
@@ -39,7 +40,7 @@ const TransactionStatusContent = ({ service }: Props) => {
         title="Transaction canceled"
         message="Something went wrong with your extension."
         state="failure"
-        onClose={hideStatus}
+        onClose={onClose}
       />
     )
   }
@@ -84,7 +85,7 @@ const TransactionStatusContent = ({ service }: Props) => {
         message="The entire process was a success."
         state="successful"
         stepNumber={4}
-        onClose={hideStatus}
+        onClose={onClose}
       />
     )
   }
@@ -95,7 +96,7 @@ const TransactionStatusContent = ({ service }: Props) => {
         title="Transaction failed"
         message="Something went wrong with your transaction."
         state="failure"
-        onClose={hideStatus}
+        onClose={onClose}
       />
     )
   }
