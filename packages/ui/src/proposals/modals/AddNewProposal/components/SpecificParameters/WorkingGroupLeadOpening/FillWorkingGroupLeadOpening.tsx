@@ -57,7 +57,7 @@ export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicati
             tooltipText="Please select an identifier for Application"
             disabled={!openingId}
           >
-            <SelectWorkingGroupApplication {/* todo add no application handle and fetch only filled applications */}
+            <SelectWorkingGroupApplication
               id="application"
               selectedApplicationId={applicationId}
               onChange={(selected) => setApplicationId(selected.runtimeId)}
