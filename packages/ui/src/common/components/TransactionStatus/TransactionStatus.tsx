@@ -1,31 +1,38 @@
-import { useActor } from '@xstate/react'
-import React from 'react'
-import { ActorRef, State } from 'xstate'
+import React, { useEffect, useState } from 'react'
 
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
-import { TransactionContext, TransactionEvent } from '@/common/model/machines'
+import { TransactionState } from '@/common/model/machines'
 
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
 export const TransactionStatus = () => {
-  const { transactionService, statusShown, hideStatus } = useTransactionStatus()
+  const {status} = useTransactionStatus()
+  const [isVisible, setVisible] = useState(false)
 
-  if (statusShown && transactionService) {
-    return <TransactionStatusContent service={transactionService} onClose={hideStatus} />
+  useEffect(() => {
+    if (!status) {
+      setVisible(false)
+    }
+
+    if (status === 'signWithExtension') {
+      setVisible(true)
+    }
+  }, [status])
+
+  if (isVisible && status) {
+    return <TransactionStatusContent status={status} onClose={() => setVisible(false)} />
   }
 
   return null
 }
 
 interface Props {
-  service: ActorRef<TransactionEvent, State<TransactionContext>>,
+  status: TransactionState['value'],
   onClose: () => void
 }
 
-const TransactionStatusContent = ({ service, onClose }: Props) => {
-  const [state] = useActor(service)
-
-  if (state.matches('signWithExtension')) {
+const TransactionStatusContent = ({status, onClose}: Props) => {
+  if (status === 'signWithExtension') {
     return (
       <TransactionStatusNotification
         title="Waiting for the extension"
@@ -35,7 +42,7 @@ const TransactionStatusContent = ({ service, onClose }: Props) => {
     )
   }
 
-  if (state.matches('canceled')) {
+  if (status === 'canceled') {
     return (
       <TransactionStatusNotification
         title="Transaction canceled"
@@ -46,18 +53,18 @@ const TransactionStatusContent = ({ service, onClose }: Props) => {
     )
   }
 
-  if (state.matches('pending')) {
+  if (status === 'pending') {
     return (
       <TransactionStatusNotification
         title="Pending transaction"
-        message="We are waiting for your trasaction to be mined. Please wait."
+        message="We are waiting for your transaction to be mined. Please wait."
         state="pending"
         stepNumber={1}
       />
     )
   }
 
-  if (state.matches('finalizing')) {
+  if (status === 'finalizing') {
     return (
       <TransactionStatusNotification
         title="Finalizing transaction"
@@ -68,7 +75,7 @@ const TransactionStatusContent = ({ service, onClose }: Props) => {
     )
   }
 
-  if (state.matches('processing')) {
+  if (status === 'processing') {
     return (
       <TransactionStatusNotification
         title="Processing transaction"
@@ -79,7 +86,7 @@ const TransactionStatusContent = ({ service, onClose }: Props) => {
     )
   }
 
-  if (state.matches('success')) {
+  if (status === 'success') {
     return (
       <TransactionStatusNotification
         title="Transaction succeeded"
@@ -91,7 +98,7 @@ const TransactionStatusContent = ({ service, onClose }: Props) => {
     )
   }
 
-  if (state.matches('error')) {
+  if (status === 'error') {
     return (
       <TransactionStatusNotification
         title="Transaction failed"

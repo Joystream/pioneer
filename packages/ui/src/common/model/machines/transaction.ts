@@ -28,6 +28,7 @@ export type TransactionState =
   | { value: 'signing'; context: EmptyObject }
   | { value: 'signWithExtension'; context: EmptyObject }
   | { value: 'canceled'; context: EmptyObject }
+  | { value: 'pending'; context: EmptyObject }
   | { value: 'finalizing'; context: EmptyObject }
   | { value: 'processing'; context: Required<TransactionContext> }
   | { value: 'success'; context: Required<TransactionContext> }
