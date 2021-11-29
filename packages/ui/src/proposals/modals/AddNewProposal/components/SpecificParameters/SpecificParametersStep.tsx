@@ -138,6 +138,8 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
       )
+    case state.matches('specificParameters.updateWorkingGroupBudget'):
+      return <div>Test</div>
     default:
       return null
   }

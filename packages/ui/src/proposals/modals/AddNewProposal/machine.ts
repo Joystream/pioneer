@@ -22,6 +22,7 @@ import {
   DecreaseWorkingGroupLeadStakeParameters,
   FundingRequestParameters,
   SignalParameters,
+  UpdateWorkingGroupBudgetParameters,
 } from './components/SpecificParameters'
 import {
   CancelWorkingGroupLeadOpeningParameters,
@@ -63,6 +64,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | UpdateWorkingGroupBudgetParameters
 }
 
 interface SignalContext extends SpecificParametersContext {
@@ -97,6 +99,10 @@ interface SlashWorkingGroupLeadContext extends SpecificParametersContext {
   specifics: SlashWorkingGroupLeadParameters
 }
 
+interface UpdateWorkingGroupBudgetContext extends SpecificParametersContext {
+  specifics: UpdateWorkingGroupBudgetParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -120,6 +126,7 @@ export type AddNewProposalContext = Partial<
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
+    UpdateWorkingGroupBudgetContext &
     TransactionContext &
     DiscusisonContext
 >
@@ -358,6 +365,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+            { target: 'updateWorkingGroupBudget', cond: isType('updateWorkingGroupBudget') },
           ],
         },
         signal: {
@@ -531,6 +539,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   openingId: event.openingId,
+                }),
+              }),
+            },
+          },
+        },
+        updateWorkingGroupBudget: {
+          on: {
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
                 }),
               }),
             },
