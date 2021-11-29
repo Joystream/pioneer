@@ -170,7 +170,7 @@ export const makeServer = (environment = 'development') => {
           },
         })
       )
-      this.passthrough(`${MEMBERSHIP_FAUCET_URL}/register`)
+      this.passthrough(MEMBERSHIP_FAUCET_URL)
     },
 
     ...(environment !== 'development'

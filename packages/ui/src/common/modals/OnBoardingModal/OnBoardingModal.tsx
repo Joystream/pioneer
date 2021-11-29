@@ -60,7 +60,7 @@ export const OnBoardingModal = () => {
           about: form.about,
         }
 
-        const response = await fetch(`${MEMBERSHIP_FAUCET_URL}/register`, {
+        const response = await fetch(MEMBERSHIP_FAUCET_URL, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
