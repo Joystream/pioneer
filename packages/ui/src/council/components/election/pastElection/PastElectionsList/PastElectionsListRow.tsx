@@ -8,7 +8,6 @@ import { TableListItem, TableListItemAsLinkHover } from '@/common/components/Lis
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
-import { formatDateString } from '@/common/model/formatters'
 import { ElectionRoutes } from '@/council/constants'
 import { PastElection } from '@/council/types/PastElection'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
@@ -25,11 +24,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
       to={generatePath(ElectionRoutes.pastElection, { id: election.id })}
     >
       <Info>#{election.id}</Info>
-      <BlockTime
-        block={election.finishedAtBlock}
-        layout="reverse-start"
-        lessInfo
-      />
+      <BlockTime block={election.finishedAtBlock} layout='reverse-start' lessInfo />
       <TokenValue value={election.totalStake} />
       <Fraction numerator={election.revealedVotes} denominator={election.totalVotes} sameSize />
       <CountInfo count={election.totalCandidates} />

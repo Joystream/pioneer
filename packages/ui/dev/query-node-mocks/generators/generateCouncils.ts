@@ -155,8 +155,9 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     stake: randomFromRange(1, 10) * 1000,
     stakeLocked: isFinished ? Math.random() > 0.5 : true,
     castBy: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].id : null,
+    voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].id : undefined,
     commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    voteCastEvent: randomBlock(),
     ...override
   })
 
@@ -173,7 +174,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
         createVote(22, {
           castBy: ALICE,
           commitment: '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806',
-          voteForId: null
+          voteForId: undefined
         })
       ])
   ]

@@ -41,11 +41,7 @@ export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
   return (
     <PastVoteTableListItem $isPast $colLayout={$colLayout}>
       <TextInlineMedium>#{vote.cycleId}</TextInlineMedium>
-      <BlockTime
-        block={{ number: -1, network: 'BABYLON', timestamp: vote.createdAt }}
-        lessInfo
-        layout="reverse-start"
-      />
+      <BlockTime block={vote.createdAtBlock} lessInfo layout="reverse-start" />
       {vote.voteFor ? <MemberInfo member={vote.voteFor} /> : <TextInlineMedium>not revealed</TextInlineMedium>}
       <TokenValue value={vote.stake} />
       <AccountInfo account={accountOrNamed(allAccounts, vote.castBy, 'Staking account')} />

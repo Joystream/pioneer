@@ -31,11 +31,13 @@ export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastEle
   return {
     id: fields.id,
     cycleId: fields.cycleId,
-    finishedAtBlock: fields.referendumResult ? asBlock(fields.referendumResult[0].referendumFinishedEvent) : randomBlock(),
+    finishedAtBlock: fields.referendumResult
+      ? asBlock(fields.referendumResult[0].referendumFinishedEvent)
+      : randomBlock(),
     totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
     totalCandidates: fields.candidates.length,
     revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
-    totalVotes: fields.castVotes.length
+    totalVotes: fields.castVotes.length,
   }
 }
 
@@ -51,11 +53,11 @@ export const asPastElectionWithDetails = (
       .map((castVote) =>
         asPastElectionVote({
           ...castVote,
-          electionRound: fields.cycleId
+          electionRound: fields.cycleId,
         })
       ),
     totalStake: fields.castVotes
       .filter((castVote) => castVote.voteForId === candidate.member.id)
-      .reduce((a, b) => a.addn(b.stake), BN_ZERO)
-  }))
+      .reduce((a, b) => a.addn(b.stake), BN_ZERO),
+  })),
 })

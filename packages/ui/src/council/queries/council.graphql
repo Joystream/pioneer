@@ -124,7 +124,6 @@ fragment ElectionCandidateDetailedFields on Candidate {
 
 fragment CastVoteFields on CastVote {
   id
-  createdAt
   stake
   stakeLocked
   castBy
@@ -134,6 +133,11 @@ fragment CastVoteFields on CastVote {
   }
   electionRound {
     cycleId
+  }
+  castEvent: votecasteventcastVote {
+    inBlock
+    network
+    createdAt
   }
 }
 

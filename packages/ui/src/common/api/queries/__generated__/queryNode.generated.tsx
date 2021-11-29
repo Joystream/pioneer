@@ -1,24 +1,31 @@
-import * as Types from './baseTypes.generated';
+import * as Types from './baseTypes.generated'
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
-export type GetQueryNodeStateSubscriptionVariables = Types.Exact<{ [key: string]: never; }>;
+import { gql } from '@apollo/client'
+import * as Apollo from '@apollo/client'
+const defaultOptions = {}
+export type GetQueryNodeStateSubscriptionVariables = Types.Exact<{ [key: string]: never }>
 
-
-export type GetQueryNodeStateSubscription = { __typename: 'Subscription', stateSubscription: { __typename: 'ProcessorState', chainHead: number, indexerHead: number, lastCompleteBlock: number, lastProcessedEvent: string } };
-
-
-export const GetQueryNodeStateDocument = gql`
-    subscription GetQueryNodeState {
-  stateSubscription {
-    chainHead
-    indexerHead
-    lastCompleteBlock
-    lastProcessedEvent
+export type GetQueryNodeStateSubscription = {
+  __typename: 'Subscription'
+  stateSubscription: {
+    __typename: 'ProcessorState'
+    chainHead: number
+    indexerHead: number
+    lastCompleteBlock: number
+    lastProcessedEvent: string
   }
 }
-    `;
+
+export const GetQueryNodeStateDocument = gql`
+  subscription GetQueryNodeState {
+    stateSubscription {
+      chainHead
+      indexerHead
+      lastCompleteBlock
+      lastProcessedEvent
+    }
+  }
+`
 
 /**
  * __useGetQueryNodeStateSubscription__
@@ -35,9 +42,14 @@ export const GetQueryNodeStateDocument = gql`
  *   },
  * });
  */
-export function useGetQueryNodeStateSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetQueryNodeStateSubscription, GetQueryNodeStateSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<GetQueryNodeStateSubscription, GetQueryNodeStateSubscriptionVariables>(GetQueryNodeStateDocument, options);
-      }
-export type GetQueryNodeStateSubscriptionHookResult = ReturnType<typeof useGetQueryNodeStateSubscription>;
-export type GetQueryNodeStateSubscriptionResult = Apollo.SubscriptionResult<GetQueryNodeStateSubscription>;
+export function useGetQueryNodeStateSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<GetQueryNodeStateSubscription, GetQueryNodeStateSubscriptionVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSubscription<GetQueryNodeStateSubscription, GetQueryNodeStateSubscriptionVariables>(
+    GetQueryNodeStateDocument,
+    options
+  )
+}
+export type GetQueryNodeStateSubscriptionHookResult = ReturnType<typeof useGetQueryNodeStateSubscription>
+export type GetQueryNodeStateSubscriptionResult = Apollo.SubscriptionResult<GetQueryNodeStateSubscription>

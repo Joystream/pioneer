@@ -23,7 +23,8 @@ import {
   seedCouncilCandidates,
   seedCouncilElections,
   seedProposalsEvents,
-  seedCouncilVotes, seedCouncilReferendumResults
+  seedCouncilVotes,
+  seedCouncilReferendumResults,
 } from './data'
 import {
   getConnectionResolver,
