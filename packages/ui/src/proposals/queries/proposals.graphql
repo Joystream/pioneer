@@ -172,6 +172,12 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on SetCouncilorRewardProposalDetails {
       newRewardPerBlock
     }
+    ... on VetoProposalDetails {
+      proposal {
+        id
+        title
+      }
+    }
   }
   discussionThread {
     id

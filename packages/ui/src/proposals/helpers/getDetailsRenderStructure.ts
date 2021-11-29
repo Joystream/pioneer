@@ -18,6 +18,7 @@ import {
   ProposalType,
   SignalTextDetail,
   InvitationsCountDetail,
+  ProposalDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -30,6 +31,7 @@ export type RenderType =
   | 'Member'
   | 'Address'
   | 'Divider'
+  | 'Proposal'
 
 export interface RenderNode {
   label?: string
@@ -169,6 +171,15 @@ const invitationsCountMapper: Mapper<InvitationsCountDetail, 'invitationsCount'>
     },
   ]
 }
+const proposalMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
+  return [
+    {
+      label: 'Proposal',
+      value,
+      renderType: 'Proposal',
+    },
+  ]
+}
 
 const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   destinations: destinationsMapper,
@@ -183,6 +194,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   member: memberMapper,
   amount: amountMapper,
   invitationsCount: invitationsCountMapper,
+  proposal: proposalMapper,
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {

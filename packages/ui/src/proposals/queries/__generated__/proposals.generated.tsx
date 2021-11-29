@@ -437,7 +437,10 @@ export type ProposalWithDetailsFieldsFragment = {
         amount: any
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
       }
-    | { __typename: 'VetoProposalDetails' }
+    | {
+        __typename: 'VetoProposalDetails'
+        proposal?: { __typename: 'Proposal'; id: string; title: string } | null | undefined
+      }
   discussionThread: {
     __typename: 'ProposalDiscussionThread'
     id: string
@@ -1035,7 +1038,10 @@ export type GetProposalQuery = {
               amount: any
               group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
             }
-          | { __typename: 'VetoProposalDetails' }
+          | {
+              __typename: 'VetoProposalDetails'
+              proposal?: { __typename: 'Proposal'; id: string; title: string } | null | undefined
+            }
         discussionThread: {
           __typename: 'ProposalDiscussionThread'
           id: string
@@ -1480,6 +1486,12 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SetCouncilorRewardProposalDetails {
         newRewardPerBlock
+      }
+      ... on VetoProposalDetails {
+        proposal {
+          id
+          title
+        }
       }
     }
     discussionThread {

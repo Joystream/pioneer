@@ -6,6 +6,7 @@ import { ProposalWithDetails } from '@/proposals/types'
 
 import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text, Divider } from './renderers'
 import { Numeric } from './renderers/Numeric'
+import { Proposal } from './renderers/Proposal'
 
 interface Props {
   proposalDetails?: ProposalWithDetails['details']
@@ -25,6 +26,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Address: Address,
   RuntimeBlob: RuntimeBlob,
   Divider: Divider,
+  Proposal: Proposal,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {

@@ -61,6 +61,13 @@ export type InvitationsCountDetail = {
   invitationsCount: BN
 }
 
+export type ProposalDetail = {
+  proposal?: {
+    id: string
+    title: string
+  }
+}
+
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
   'createWorkingGroupLeadOpening',
@@ -114,6 +121,8 @@ export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInv
 
 export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward', AmountDetail>
 
+export type VetoDetails = ProposalDetailsNew<'veto', ProposalDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -134,6 +143,7 @@ export type ProposalDetails =
   | SetInitialInvitationBalanceDetails
   | SetInitialInvitationCountDetails
   | SetCouncilorRewardDetails
+  | VetoDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -298,6 +308,11 @@ const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
   amount: new BN(fragment.newRewardPerBlock),
 })
 
+const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({
+  type: 'veto',
+  proposal: fragment.proposal ?? undefined,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -321,6 +336,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetInitialInvitationBalanceProposalDetails: asSetInitialInvitationBalance,
   SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
   SetCouncilorRewardProposalDetails: asSetCouncilorReward,
+  VetoProposalDetails: asVeto,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
