@@ -26,7 +26,7 @@ export const asPastElectionVote = (
   stake: new BN(fields.stake),
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,
-  cycleId: fields.electionRound
+  cycleId: fields.electionRound,
 })
 
 export type PastElectionVote = BaseVote
@@ -39,5 +39,5 @@ export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   castBy: fields.castBy,
   commitment: fields.commitment,
   voteFor: fields.voteFor ? asMember(fields.voteFor.member) : undefined,
-  cycleId: fields.electionRound.cycleId
+  cycleId: fields.electionRound.cycleId,
 })

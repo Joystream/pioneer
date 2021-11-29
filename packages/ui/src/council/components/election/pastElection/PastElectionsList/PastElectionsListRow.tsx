@@ -24,7 +24,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
       to={generatePath(ElectionRoutes.pastElection, { id: election.id })}
     >
       <Info>#{election.id}</Info>
-      <BlockTime block={election.finishedAtBlock} layout='reverse-start' lessInfo />
+      <BlockTime block={election.finishedAtBlock} layout="reverse-start" lessInfo />
       <TokenValue value={election.totalStake} />
       <Fraction numerator={election.revealedVotes} denominator={election.totalVotes} sameSize />
       <CountInfo count={election.totalCandidates} />

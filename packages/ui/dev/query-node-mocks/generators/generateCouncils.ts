@@ -4,11 +4,11 @@ import {
   RawCouncilCandidateMock,
   RawCouncilElectionMock,
   RawCouncilMock,
-  RawCouncilorMock, RawCouncilReferendumResultMock,
-  RawCouncilVoteMock
+  RawCouncilorMock,
+  RawCouncilReferendumResultMock,
+  RawCouncilVoteMock,
 } from '@/mocks/data/seedCouncils'
 import { RawNewMissedRewardLevelReachedEvent, RawProposalVotedEvent } from '@/mocks/data/seedEvents'
-
 
 import { ALICE, ALICE_STASH, BOB_STASH } from '../../node-mocks/data/addresses'
 import { saveFile } from '../helpers/saveFile'
@@ -31,7 +31,7 @@ export const generateCouncils = (mocks?: MocksForCouncil) => {
     mocks = {
       proposals: require('../../../src/mocks/data/raw/proposals.json'),
       workers: require('../../../src/mocks/data/raw/workers.json'),
-      members: require('../../../src/mocks/data/raw/members.json')
+      members: require('../../../src/mocks/data/raw/members.json'),
     }
   }
 
@@ -43,7 +43,7 @@ export const generateCouncils = (mocks?: MocksForCouncil) => {
     candidates: [],
     votes: [],
     proposalVotedEvents: [],
-    newMissedRewardLevelReachedEvents: []
+    newMissedRewardLevelReachedEvents: [],
   })
 }
 
@@ -68,7 +68,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
   const council = {
     id: String(councilIndex),
     electedAtBlock,
-    endedAtBlock: hasEnded ? randomFromRange(electedAtBlock, 100000) : null
+    endedAtBlock: hasEnded ? randomFromRange(electedAtBlock, 100000) : null,
   }
 
   const councilors: RawCouncilorMock[] = repeat(
@@ -78,7 +78,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
       memberId: randomMember(mocks.members).id,
       unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
       accumulatedReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
-      stake: randomFromRange(10000, 1000000)
+      stake: randomFromRange(10000, 1000000),
     }),
     isFinished ? randomFromRange(5, 8) : 0
   )
@@ -95,8 +95,8 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
       header: faker.lorem.words(4),
       bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),
       bannerImageUri: 'https://picsum.photos/500/300',
-      description: faker.lorem.words(10)
-    }
+      description: faker.lorem.words(10),
+    },
   })
 
   const candidates: RawCouncilCandidateMock[] = repeat(
@@ -118,7 +118,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
         ...{ ...randomBlock(), inBlock: randomFromRange(council.electedAtBlock, council.endedAtBlock as number) },
         proposalId: mocks.proposals[randomFromRange(0, mocks.proposals.length - 1)].id,
         voteKind: voteKinds[randomFromRange(0, 3)],
-        votingRound: 1
+        votingRound: 1,
       })
     })
 
@@ -131,7 +131,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
           groupId: randomWorker?.groupId as string,
           workerId: randomWorker?.id as string,
           newMissedRewardAmount: randomFromRange(0, 10000),
-          ...{ ...randomBlock(), inBlock: randomFromRange(council.electedAtBlock, council.endedAtBlock as number) }
+          ...{ ...randomBlock(), inBlock: randomFromRange(council.electedAtBlock, council.endedAtBlock as number) },
         }
       }, randomFromRange(2, 6))
     )
@@ -141,14 +141,16 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     id: council.id,
     cycleId: Number(council.id),
     isFinished,
-    electedCouncilId: council.id
+    electedCouncilId: council.id,
   }
 
-  const referendumResult: RawCouncilReferendumResultMock | undefined = isFinished ? {
-    id: electionRound.id,
-    referendumFinishedEvent: randomBlock(),
-    electionRoundId: electionRound.id
-  } : undefined
+  const referendumResult: RawCouncilReferendumResultMock | undefined = isFinished
+    ? {
+        id: electionRound.id,
+        referendumFinishedEvent: randomBlock(),
+        electionRoundId: electionRound.id,
+      }
+    : undefined
 
   const createVote = (voteIndex: number, override: Partial<RawCouncilVoteMock> = {}): RawCouncilVoteMock => ({
     electionRoundId: council.id,
@@ -158,7 +160,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].id : undefined,
     commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
     voteCastEvent: randomBlock(),
-    ...override
+    ...override,
   })
 
   const votes: RawCouncilVoteMock[] = [
@@ -168,15 +170,15 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     ...(isFinished
       ? [createVote(22, { castBy: ALICE }), createVote(23, { castBy: BOB_STASH })]
       : [
-        // Add a revealable vote (matching the local storage entry below) on the on going election
-        // key: votes:4
-        // value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
-        createVote(22, {
-          castBy: ALICE,
-          commitment: '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806',
-          voteForId: undefined
-        })
-      ])
+          // Add a revealable vote (matching the local storage entry below) on the on going election
+          // key: votes:4
+          // value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
+          createVote(22, {
+            castBy: ALICE,
+            commitment: '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806',
+            voteForId: undefined,
+          }),
+        ]),
   ]
 
   const referendumStageRevealingOptionResults = data.referendumStageRevealingOptionResults
@@ -194,13 +196,13 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     proposalVotedEvents: [...data.proposalVotedEvents, ...proposalVotedEvents],
     newMissedRewardLevelReachedEvents: [
       ...data.newMissedRewardLevelReachedEvents,
-      ...newMissedRewardLevelReachedEvents
-    ]
+      ...newMissedRewardLevelReachedEvents,
+    ],
   }
 }
 
 export const councilModule = {
   command: 'council',
   describe: 'Generate council from other mocks',
-  handler: () => Object.entries(generateCouncils()).forEach(([fileName, contents]) => saveFile(fileName, contents))
+  handler: () => Object.entries(generateCouncils()).forEach(([fileName, contents]) => saveFile(fileName, contents)),
 }
