@@ -318,8 +318,8 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
-    | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-    | { __typename: 'SetInitialInvitationCountProposalDetails' }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
+    | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
     | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
@@ -916,8 +916,8 @@ export type GetProposalQuery = {
             }
           | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
           | { __typename: 'SetCouncilorRewardProposalDetails' }
-          | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-          | { __typename: 'SetInitialInvitationCountProposalDetails' }
+          | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
+          | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
           | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
           | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
           | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
@@ -1471,6 +1471,12 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SetReferralCutProposalDetails {
         newReferralCut
+      }
+      ... on SetInitialInvitationBalanceProposalDetails {
+        newInitialInvitationBalance
+      }
+      ... on SetInitialInvitationCountProposalDetails {
+        newInitialInvitationsCount
       }
     }
     discussionThread {

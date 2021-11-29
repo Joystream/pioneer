@@ -163,6 +163,12 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on SetReferralCutProposalDetails {
       newReferralCut
     }
+    ... on SetInitialInvitationBalanceProposalDetails {
+      newInitialInvitationBalance
+    }
+    ... on SetInitialInvitationCountProposalDetails {
+      newInitialInvitationsCount
+    }
   }
   discussionThread {
     id

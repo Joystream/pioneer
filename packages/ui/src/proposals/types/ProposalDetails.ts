@@ -57,6 +57,10 @@ export type GroupNameDetail = {
   groupName: string
 }
 
+export type InvitationsCountDetail = {
+  invitationsCount: BN
+}
+
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
   'createWorkingGroupLeadOpening',
@@ -104,6 +108,10 @@ export type CancelWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
 
 export type SetReferralCutDetails = ProposalDetailsNew<'setReferralCut', AmountDetail>
 
+export type SetInitialInvitationBalanceDetails = ProposalDetailsNew<'setInitialInvitationBalance', AmountDetail>
+
+export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInvitationCount', InvitationsCountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -121,6 +129,8 @@ export type ProposalDetails =
   | SignalDetails
   | CancelWorkingGroupLeadOpeningDetails
   | SetReferralCutDetails
+  | SetInitialInvitationBalanceDetails
+  | SetInitialInvitationCountDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -264,6 +274,20 @@ const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment
   amount: new BN(fragment.newReferralCut),
 })
 
+const asSetInitialInvitationBalance: DetailsCast<'SetInitialInvitationBalanceProposalDetails'> = (
+  fragment
+): SetInitialInvitationBalanceDetails => ({
+  type: 'setInitialInvitationBalance',
+  amount: new BN(fragment.newInitialInvitationBalance),
+})
+
+const asSetInitialInvitationCount: DetailsCast<'SetInitialInvitationCountProposalDetails'> = (
+  fragment
+): SetInitialInvitationCountDetails => ({
+  type: 'setInitialInvitationCount',
+  invitationsCount: new BN(fragment.newInitialInvitationsCount),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -284,6 +308,8 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SignalProposalDetails: asSignal,
   CancelWorkingGroupLeadOpeningProposalDetails: asCancelGroupOpening,
   SetReferralCutProposalDetails: asSetReferralCut,
+  SetInitialInvitationBalanceProposalDetails: asSetInitialInvitationBalance,
+  SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

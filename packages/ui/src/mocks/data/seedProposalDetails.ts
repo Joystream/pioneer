@@ -120,6 +120,18 @@ interface SetReferralCutDetails {
 
 const seedSetReferralCut = (data: SetReferralCutDetails) => data
 
+interface SetInitialInvitationBalanceDetails {
+  newInitialInvitationBalance: number
+}
+
+const seedInitialInvitationBalance = (data: SetInitialInvitationBalanceDetails) => data
+
+interface InitialInvitationCountDetails {
+  newInitialInvitationsCount: number
+}
+
+const seedInitialInvitationCount = (data: InitialInvitationCountDetails) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
@@ -136,6 +148,8 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   signal: seedSingal,
   cancelWorkingGroupLeadOpening: seedCancelGroupOpening,
   setReferralCut: seedSetReferralCut,
+  setInitialInvitationBalance: seedInitialInvitationBalance,
+  setInitialInvitationCount: seedInitialInvitationCount,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

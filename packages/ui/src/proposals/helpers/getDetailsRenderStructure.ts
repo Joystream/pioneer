@@ -17,11 +17,13 @@ import {
   DestinationsDetail,
   ProposalType,
   SignalTextDetail,
+  InvitationsCountDetail,
 } from '@/proposals/types'
 
 export type RenderType =
   | 'Text'
   | 'Amount'
+  | 'Numeric'
   | 'Markdown'
   | 'RuntimeBlob'
   | 'NumberOfBlocks'
@@ -158,6 +160,15 @@ const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[]
     },
   ]
 }
+const invitationsCountMapper: Mapper<InvitationsCountDetail, 'invitationsCount'> = (value) => {
+  return [
+    {
+      label: 'Invitations',
+      value,
+      renderType: 'Numeric',
+    },
+  ]
+}
 
 const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   destinations: destinationsMapper,
@@ -171,6 +182,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   groupName: groupNameMapper,
   member: memberMapper,
   amount: amountMapper,
+  invitationsCount: invitationsCountMapper,
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {

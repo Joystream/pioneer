@@ -235,6 +235,18 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
       newReferralCut: randomFromRange(1000, 5000),
     }
   }),
+  setInitialInvitationBalance: () => ({
+    type: 'setInitialInvitationBalance',
+    data: {
+      newInitialInvitationBalance: randomFromRange(1, 5),
+    }
+  }),
+  setInitialInvitationCount: () => ({
+    type: 'setInitialInvitationCount',
+    data: {
+      newInitialInvitationsCount: randomFromRange(1, 5),
+    }
+  }),
 }
 
 const getLeadStakeData = (mocks: MocksForProposals) => ({
