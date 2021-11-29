@@ -68,12 +68,10 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
     [recipient, balances]
   )
 
-  const schema = useMemo(() => schemaFactory(maxValue, minValue, balances[sender?.address as string]?.transferable), [
-    maxValue,
-    minValue,
-    balances,
-    sender,
-  ])
+  const schema = useMemo(
+    () => schemaFactory(maxValue, minValue, balances[sender?.address as string]?.transferable),
+    [maxValue, minValue, balances, sender]
+  )
 
   const { changeField, validation } = useForm<TransferTokensFormField>({ amount: undefined }, schema)
   const { isValid, errors } = validation
