@@ -132,6 +132,18 @@ interface InitialInvitationCountDetails {
 
 const seedInitialInvitationCount = (data: InitialInvitationCountDetails) => data
 
+interface SetCouncilorRewardDetails {
+  newRewardPerBlock: number
+}
+
+const seedCouncilorReward = (data: SetCouncilorRewardDetails) => data
+
+interface VetoDetails {
+  proposalId: string
+}
+
+const seedVeto = (data: VetoDetails) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
@@ -150,6 +162,8 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   setReferralCut: seedSetReferralCut,
   setInitialInvitationBalance: seedInitialInvitationBalance,
   setInitialInvitationCount: seedInitialInvitationCount,
+  setCouncilorReward: seedCouncilorReward,
+  veto: seedVeto,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

@@ -247,6 +247,18 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
       newInitialInvitationsCount: randomFromRange(1, 5),
     }
   }),
+  setCouncilorReward: () => ({
+    type: 'setCouncilorReward',
+    data: {
+      newRewardPerBlock: randomFromRange(100, 500),
+    }
+  }),
+  veto: () => ({
+    type: 'veto',
+    data: {
+      proposalId: '0',
+    }
+  }),
 }
 
 const getLeadStakeData = (mocks: MocksForProposals) => ({
