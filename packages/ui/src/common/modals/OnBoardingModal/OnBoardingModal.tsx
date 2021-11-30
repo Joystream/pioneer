@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
+import { MEMBERSHIP_FAUCET_URL } from '@/app/config'
 import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
@@ -59,7 +60,7 @@ export const OnBoardingModal = () => {
           about: form.about,
         }
 
-        const response = await fetch('http://localhost:4000/register', {
+        const response = await fetch(MEMBERSHIP_FAUCET_URL, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
