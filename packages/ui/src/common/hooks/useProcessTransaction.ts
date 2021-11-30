@@ -5,7 +5,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import { Dispatch, SetStateAction, useEffect } from 'react'
-import { Observable, Subscription } from 'rxjs'
+import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
 import { hasErrorEvent } from '../model/JoystreamNode'
@@ -29,8 +29,6 @@ const observeTransaction = (
   fee: BN,
   setBlockHash?: SetBlockHash
 ) => {
-  let subscription: Subscription
-
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
 
@@ -43,7 +41,7 @@ const observeTransaction = (
       setBlockHash && setBlockHash(hash.toString())
 
       if (hasErrorEvent(events)) {
-        subscription?.unsubscribe()
+        subscription.unsubscribe()
         send('ERROR')
       } else {
         send({ type: 'FINALIZING', fee })
@@ -59,11 +57,11 @@ const observeTransaction = (
   }
 
   const errorHandler = () => {
-    subscription?.unsubscribe()
+    subscription.unsubscribe()
     send({type: 'CANCELED', events: []})
   }
 
-  subscription = transaction.subscribe({
+  const subscription = transaction.subscribe({
     next: statusCallback,
     error: errorHandler,
   })
