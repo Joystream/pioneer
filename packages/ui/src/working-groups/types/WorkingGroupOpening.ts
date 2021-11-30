@@ -101,12 +101,12 @@ export const asUpcomingWorkingGroupOpening = (
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => {
   const groupName = asWorkingGroupName(fields.group.name)
-
+  const type = fields.type === 'LEADER' ? 'LEAD' : 'REGULAR'
   return {
     ...asBaseOpening(fields),
     runtimeId: fields.runtimeId,
     title: `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
-    type: fields.type as WorkingGroupOpeningType,
+    type: type as WorkingGroupOpeningType,
     status: fields.status.__typename,
     leadId: fields.group.leaderId,
     applicants: fields.applications?.length || 0,

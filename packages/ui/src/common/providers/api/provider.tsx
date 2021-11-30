@@ -5,6 +5,8 @@ import { ApiRx, WsProvider } from '@polkadot/api'
 import rpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 
+import { OLYMPIA_TESTNET_NODE_SOCKET } from '@/app/config'
+
 import { NetworkType, useNetwork } from '../../hooks/useNetwork'
 
 import { ApiContext } from './context'
@@ -44,7 +46,7 @@ export type UseApi = APIConnecting | APIConnected | APIDisconnected
 const endpoints: Record<NetworkType, string> = {
   local: 'ws://127.0.0.1:9944',
   'local-mocks': 'ws://127.0.0.1:9944',
-  'olympia-testnet': 'wss://olympia-dev.joystream.app/rpc',
+  'olympia-testnet': OLYMPIA_TESTNET_NODE_SOCKET,
 }
 
 const getEndPoint = (network: NetworkType) => {

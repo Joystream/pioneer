@@ -13,3 +13,7 @@ export interface WorkingGroupAndOpeningDetailsParameters {
   shortDescription?: string
   groupId?: GroupIdName
 }
+
+export interface CancelWorkingGroupLeadOpeningParameters {
+  openingId?: number
+}

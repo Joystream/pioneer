@@ -4,6 +4,7 @@ import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import React, { ReactNode } from 'react'
 
+import { OLYMPIA_TESTNET_QUERY_NODE, OLYMPIA_TESTNET_QUERY_NODE_SOCKET } from '@/app/config'
 import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
 import { error } from '@/common/logger'
 import { ServerContextProvider } from '@/common/providers/server/provider'
@@ -16,13 +17,13 @@ interface Props {
 const SUBSCRIPTION_ENDPOINTS: Record<NetworkType, string> = {
   local: 'ws://localhost:8081/graphql',
   'local-mocks': 'ws://localhost:8081/graphql',
-  'olympia-testnet': 'wss://olympia-dev.joystream.app/query/server/graphql',
+  'olympia-testnet': OLYMPIA_TESTNET_QUERY_NODE_SOCKET,
 }
 
 const ENDPOINTS: Record<NetworkType, string> = {
   local: 'http://localhost:8081/graphql',
   'local-mocks': 'http://localhost:8081/graphql',
-  'olympia-testnet': 'https://olympia-dev.joystream.app/query/server/graphql',
+  'olympia-testnet': OLYMPIA_TESTNET_QUERY_NODE,
 }
 
 export const QueryNodeProvider = ({ children }: Props) => {
