@@ -578,6 +578,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.SetWorkingGroupLeadReward.selectGroup('Forum')
+          await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(100)
           expect(await getCreateButton()).toBeEnabled()
         })

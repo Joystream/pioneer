@@ -44,7 +44,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
       return !!specifics?.openingId
     }
     case state.matches('specificParameters.setWorkingGroupLeadReward'): {
-      // console.log(specifics, ' spec')
       return !!(
         specifics?.rewardPerBlock &&
         specifics?.rewardPerBlock.gtn(0) &&

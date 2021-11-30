@@ -38,7 +38,7 @@ export const SetWorkingGroupLeadReward = ({
 
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
-  // console.log(groupId, group, 'lll')
+
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => setRewardPerBlock(new BN(amount)), [amount])
