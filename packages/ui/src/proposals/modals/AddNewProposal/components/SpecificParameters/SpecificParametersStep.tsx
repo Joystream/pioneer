@@ -4,6 +4,7 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
@@ -41,6 +42,14 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
+    }
+    case state.matches('specificParameters.setWorkingGroupLeadReward'): {
+      return !!(
+        specifics?.rewardPerBlock &&
+        specifics?.rewardPerBlock.gtn(0) &&
+        specifics.groupId &&
+        specifics.workerId
+      )
     }
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
       return !!(
@@ -134,6 +143,17 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           groupId={state.context.specifics?.groupId}
           workerId={state.context.specifics?.workerId}
           setSlashingAmount={(slashingAmount) => send('SET_SLASHING_AMOUNT', { slashingAmount })}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.setWorkingGroupLeadReward'):
+      return (
+        <SetWorkingGroupLeadReward
+          rewardPerBlock={state.context.specifics?.rewardPerBlock}
+          groupId={state.context.specifics?.groupId}
+          workerId={state.context.specifics?.workerId}
+          setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
