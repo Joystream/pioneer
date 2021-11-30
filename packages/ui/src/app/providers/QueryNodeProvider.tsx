@@ -19,7 +19,7 @@ export const QueryNodeProvider = ({ children }: Props) => {
 
   if (network === 'local-mocks') {
     return (
-      <ServerContextProvider value={makeServer()}>
+      <ServerContextProvider value={makeServer('development', network)}>
         <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
       </ServerContextProvider>
     )
