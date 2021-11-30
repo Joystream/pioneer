@@ -25,12 +25,10 @@ import { SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
-const getMembershipFaucetURL = (network: NetworkType) => {
-  if (network === 'olympia-testnet') {
-    return MEMBERSHIP_FAUCET_URL
-  }
-
-  return MEMBERSHIP_FAUCET_URL
+const MEMBERSHIP_FAUCET_ENDPOINT: Record<NetworkType, string> = {
+  local: 'http://localhost:4004/register',
+  'local-mocks': 'http://localhost:4004/register',
+  'olympia-testnet': MEMBERSHIP_FAUCET_URL,
 }
 
 export const OnBoardingModal = () => {
@@ -71,7 +69,7 @@ export const OnBoardingModal = () => {
           about: form.about,
         }
 
-        const response = await fetch(getMembershipFaucetURL(network), {
+        const response = await fetch(MEMBERSHIP_FAUCET_ENDPOINT[network], {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
