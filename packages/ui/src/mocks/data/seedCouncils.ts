@@ -50,7 +50,7 @@ export interface RawCouncilVoteMock {
   electionRoundId: string
   stake: number
   stakeLocked: boolean
-  voteForId?: string
+  voteForId?: string | null
   castBy: string
   commitment: string
   voteCastEvent: Omit<Required<BaseEvent>, 'id'>
