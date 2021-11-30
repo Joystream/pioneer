@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
@@ -13,7 +14,6 @@ import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 export interface TerminateWorkingGroupLeadParameters {
   slashingAmount?: BN
@@ -76,7 +76,7 @@ export const TerminateWorkingGroupLead = ({
             />
           </InputComponent>
           <SelectedMember label="Working Group Lead" member={lead} disabled />
-          
+
           <InlineToggleWrap>
             <Label>Slash: </Label>
             <ToggleCheckbox
