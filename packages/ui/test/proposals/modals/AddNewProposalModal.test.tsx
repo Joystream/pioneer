@@ -492,6 +492,47 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Terminate Working Group Lead', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpeningStatuses(server.server)
+          seedOpenings(server.server)
+          seedUpcomingOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('terminateWorkingGroupLead')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - not filled amount, no selected group', async () => {
+          expect(await screen.findByLabelText('Working Group', { selector: 'input' })).toHaveValue('')
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - group selected, amount: not filled/filled', async () => {
+          await SpecificParameters.TerminateWorkingGroupLead.selectGroup('Forum')
+          const workingGroup = server?.server?.schema.find('WorkingGroup', 'forumWorkingGroup') as any
+          const leadHandle = workingGroup?.leader.membership.handle
+          expect(await screen.findByText(leadHandle)).toBeDefined()
+
+          const button = await getCreateButton()
+          expect(button).not.toBeDisabled()
+
+          await triggerYes()
+          await SpecificParameters.fillAmount(100)
+
+          expect(button).not.toBeDisabled()
+        })
+      })
+
       describe('Type - Create Working Group Lead Opening', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
@@ -985,6 +1026,9 @@ describe('UI: AddNewProposalModal', () => {
       },
     },
     DecreaseWorkingGroupLeadStake: {
+      selectGroup,
+    },
+    TerminateWorkingGroupLead: {
       selectGroup,
     },
     CreateWorkingGroupLeadOpening: {

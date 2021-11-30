@@ -24,6 +24,7 @@ import {
   DecreaseWorkingGroupLeadStakeParameters,
   FundingRequestParameters,
   SignalParameters,
+  TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
 import {
   CancelWorkingGroupLeadOpeningParameters,
@@ -64,6 +65,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
+    | TerminateWorkingGroupLeadParameters
     | FillWorkingGroupLeadOpeningParameters
     | SetWorkingGroupLeadRewardParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
@@ -105,6 +107,10 @@ interface SlashWorkingGroupLeadContext extends SpecificParametersContext {
   specifics: SlashWorkingGroupLeadParameters
 }
 
+interface TerminateWorkingGroupLeadContext extends SpecificParametersContext {
+  specifics: TerminateWorkingGroupLeadParameters
+}
+
 interface SetWorkingGroupLeadRewardContext extends SpecificParametersContext {
   specifics: SetWorkingGroupLeadRewardParameters
 }
@@ -133,6 +139,7 @@ export type AddNewProposalContext = Partial<
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
+    TerminateWorkingGroupLeadContext &
     TransactionContext &
     SetWorkingGroupLeadRewardContext &
     DiscusisonContext
@@ -156,6 +163,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
+  | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
@@ -376,6 +384,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+            { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
           ],
@@ -445,6 +454,34 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         slashWorkingGroupLead: {
+          on: {
+            SET_SLASHING_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  slashingAmount: event.slashingAmount,
+                }),
+              }),
+            },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
+                }),
+              }),
+            },
+            SET_WORKER: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  workerId: event.workerId,
+                }),
+              }),
+            },
+          },
+        },
+        terminateWorkingGroupLead: {
           on: {
             SET_SLASHING_AMOUNT: {
               actions: assign({

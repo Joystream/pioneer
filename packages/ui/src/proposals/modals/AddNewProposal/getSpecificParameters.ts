@@ -75,6 +75,15 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         ],
       }
     }
+    case 'terminateWorkingGroupLead': {
+      return {
+        TerminateWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
+      }
+    }
     case 'setWorkingGroupLeadReward': {
       return {
         SlashWorkingGroupLead: [
