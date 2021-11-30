@@ -177,9 +177,11 @@ export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number
     minimumStake: new BN(constants?.minStake ?? 10),
   })
 }
+// remapping to cover typo on runtime naming
+const testProposalDetails = [...proposalDetails, 'fillWorkingGroupOpening']
 
 export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: number }) => {
-  for (const proposalType of proposalDetails) {
+  for (const proposalType of testProposalDetails) {
     set(api, `api.consts.proposalsCodex.${proposalType}ProposalParameters`, {
       votingPeriod: new BN(10),
       gracePeriod: new BN(10),

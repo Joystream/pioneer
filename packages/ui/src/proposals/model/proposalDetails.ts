@@ -39,6 +39,7 @@ export const enabledProposals: ProposalType[] = [
   'slashWorkingGroupLead',
   'setWorkingGroupLeadReward',
   'terminateWorkingGroupLead',
+  'fillWorkingGroupLeadOpening',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {

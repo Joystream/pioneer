@@ -10,6 +10,7 @@ import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/compone
 import { TerminateWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/TerminateWorkingGroupLead'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
   AddNewProposalContext,
@@ -71,12 +72,18 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
+    case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
+      return !!(specifics?.applicationId && specifics?.openingId)
+    }
     default:
       return false
   }
 }
 
 export const SpecificParametersStep = ({ send, state }: SpecificParametersStepProps) => {
+  const {
+    context: { specifics },
+  } = state
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
@@ -96,6 +103,16 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
         />
       )
+    case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
+      return (
+        <FillWorkingGroupLeadOpening
+          applicationId={specifics?.applicationId}
+          openingId={specifics?.openingId}
+          setApplicationId={(applicationId: number) => send('SET_APPLICATION_ID', { applicationId })}
+          setOpeningId={(openingId: number) => send('SET_OPENING_ID', { openingId })}
+        />
+      )
+    }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'):
       return (
         <CreateWorkingGroupLeadOpening

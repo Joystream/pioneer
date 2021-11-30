@@ -96,6 +96,15 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
+    case 'fillWorkingGroupLeadOpening': {
+      return {
+        FillWorkingGroupLeadOpening: {
+          opening_id: specifics?.openingId,
+          successful_application_id: specifics?.applicationId,
+          workingGroup: WorkingGroupDef.Forum,
+        },
+      }
+    }
     default:
       return { Signal: '' }
   }
