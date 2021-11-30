@@ -204,7 +204,18 @@ export type ProposalWithDetailsFieldsFragment = {
   }>
   details:
     | { __typename: 'AmendConstitutionProposalDetails' }
-    | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'CancelWorkingGroupLeadOpeningProposalDetails'
+        opening?:
+          | {
+              __typename: 'WorkingGroupOpening'
+              id: string
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+              metadata: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
+            }
+          | null
+          | undefined
+      }
     | { __typename: 'CreateBlogPostProposalDetails' }
     | {
         __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
@@ -257,7 +268,11 @@ export type ProposalWithDetailsFieldsFragment = {
     | {
         __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
         opening?:
-          | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+          | {
+              __typename: 'WorkingGroupOpening'
+              id: string
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+            }
           | null
           | undefined
         application?:
@@ -307,13 +322,13 @@ export type ProposalWithDetailsFieldsFragment = {
         newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
       }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
-    | { __typename: 'SetCouncilorRewardProposalDetails' }
-    | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-    | { __typename: 'SetInitialInvitationCountProposalDetails' }
+    | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: any }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
+    | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
     | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
-    | { __typename: 'SetReferralCutProposalDetails' }
+    | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
     | {
         __typename: 'SetWorkingGroupLeadRewardProposalDetails'
         newRewardPerBlock: any
@@ -349,7 +364,7 @@ export type ProposalWithDetailsFieldsFragment = {
           | null
           | undefined
       }
-    | { __typename: 'SignalProposalDetails' }
+    | { __typename: 'SignalProposalDetails'; text: string }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
         amount: any
@@ -427,7 +442,10 @@ export type ProposalWithDetailsFieldsFragment = {
         amount: any
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
       }
-    | { __typename: 'VetoProposalDetails' }
+    | {
+        __typename: 'VetoProposalDetails'
+        proposal?: { __typename: 'Proposal'; id: string; title: string } | null | undefined
+      }
   discussionThread: {
     __typename: 'ProposalDiscussionThread'
     id: string
@@ -792,7 +810,18 @@ export type GetProposalQuery = {
         }>
         details:
           | { __typename: 'AmendConstitutionProposalDetails' }
-          | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+          | {
+              __typename: 'CancelWorkingGroupLeadOpeningProposalDetails'
+              opening?:
+                | {
+                    __typename: 'WorkingGroupOpening'
+                    id: string
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                    metadata: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
+                  }
+                | null
+                | undefined
+            }
           | { __typename: 'CreateBlogPostProposalDetails' }
           | {
               __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
@@ -845,7 +874,11 @@ export type GetProposalQuery = {
           | {
               __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
               opening?:
-                | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+                | {
+                    __typename: 'WorkingGroupOpening'
+                    id: string
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                  }
                 | null
                 | undefined
               application?:
@@ -895,13 +928,13 @@ export type GetProposalQuery = {
               newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
             }
           | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
-          | { __typename: 'SetCouncilorRewardProposalDetails' }
-          | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-          | { __typename: 'SetInitialInvitationCountProposalDetails' }
+          | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: any }
+          | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
+          | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
           | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
           | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
           | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
-          | { __typename: 'SetReferralCutProposalDetails' }
+          | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
           | {
               __typename: 'SetWorkingGroupLeadRewardProposalDetails'
               newRewardPerBlock: any
@@ -937,7 +970,7 @@ export type GetProposalQuery = {
                 | null
                 | undefined
             }
-          | { __typename: 'SignalProposalDetails' }
+          | { __typename: 'SignalProposalDetails'; text: string }
           | {
               __typename: 'SlashWorkingGroupLeadProposalDetails'
               amount: any
@@ -1015,7 +1048,10 @@ export type GetProposalQuery = {
               amount: any
               group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
             }
-          | { __typename: 'VetoProposalDetails' }
+          | {
+              __typename: 'VetoProposalDetails'
+              proposal?: { __typename: 'Proposal'; id: string; title: string } | null | undefined
+            }
         discussionThread: {
           __typename: 'ProposalDiscussionThread'
           id: string
@@ -1406,6 +1442,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on FillWorkingGroupLeadOpeningProposalDetails {
         opening {
+          id
           group {
             id
             name
@@ -1414,6 +1451,18 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         application {
           applicant {
             ...MemberFields
+          }
+        }
+      }
+      ... on CancelWorkingGroupLeadOpeningProposalDetails {
+        opening {
+          id
+          group {
+            id
+            name
+          }
+          metadata {
+            description
           }
         }
       }
@@ -1434,6 +1483,27 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SetCouncilBudgetIncrementProposalDetails {
         newAmount
+      }
+      ... on SignalProposalDetails {
+        text
+      }
+      ... on SetReferralCutProposalDetails {
+        newReferralCut
+      }
+      ... on SetInitialInvitationBalanceProposalDetails {
+        newInitialInvitationBalance
+      }
+      ... on SetInitialInvitationCountProposalDetails {
+        newInitialInvitationsCount
+      }
+      ... on SetCouncilorRewardProposalDetails {
+        newRewardPerBlock
+      }
+      ... on VetoProposalDetails {
+        proposal {
+          id
+          title
+        }
       }
     }
     discussionThread {

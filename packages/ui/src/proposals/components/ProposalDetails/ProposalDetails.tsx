@@ -4,7 +4,19 @@ import { StatisticsThreeColumns } from '@/common/components/statistics'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
 
-import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text, Divider } from './renderers'
+import {
+  Address,
+  Amount,
+  RuntimeBlob,
+  Markdown,
+  Member,
+  NumberOfBlocks,
+  Text,
+  Divider,
+  Numeric,
+  ProposalLink,
+  OpeningLink,
+} from './renderers'
 
 interface Props {
   proposalDetails?: ProposalWithDetails['details']
@@ -17,12 +29,15 @@ export interface ProposalDetailContent {
 const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Text: Text,
   Amount: Amount,
+  Numeric: Numeric,
   NumberOfBlocks: NumberOfBlocks,
   Markdown: Markdown,
   Member: Member,
   Address: Address,
   RuntimeBlob: RuntimeBlob,
   Divider: Divider,
+  ProposalLink: ProposalLink,
+  OpeningLink: OpeningLink,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {

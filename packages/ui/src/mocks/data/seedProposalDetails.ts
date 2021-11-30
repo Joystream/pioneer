@@ -48,6 +48,11 @@ interface RawLeadStakeData {
 
 const seedLeadStakeProposalData = (data: RawLeadStakeData) => data
 
+const seedTerminateGroupLead = (data: RawLeadStakeData) => ({
+  leadId: data.leadId,
+  slashingAmount: data.amount,
+})
+
 interface RawRuntimeUpgradeData {
   bytecode: string
 }
@@ -58,49 +63,7 @@ const seedRuntimeUpgradeData = (data: RawRuntimeUpgradeData, server: any) => {
   }
 }
 
-interface RawUpdateGroupBudgetData {
-  groupId: string
-  amount: number
-}
-
-const seedUpdateGroupBudgetData = (data: RawUpdateGroupBudgetData) => data
-
-interface RawSetMaxValidatorCountData {
-  newMaxValidatorCount: number
-}
-
-const seedSetMaxValidatorCount = (data: RawSetMaxValidatorCountData) => data
-
-interface FillLeadOpeiningData {
-  openingId: string
-  applicationId: string
-}
-
-const seedFillLeadOpening = (data: FillLeadOpeiningData) => data
-
-interface SetGroupLeadRewardDetails {
-  leadId: string
-  newRewardPerBlock: number
-}
-
-const seedSetGroupLeadReward = (data: SetGroupLeadRewardDetails) => data
-
-const seedTerminateGroupLead = (data: RawLeadStakeData) => ({
-  leadId: data.leadId,
-  slashingAmount: data.amount,
-})
-
-interface SetMembershipPriceDetails {
-  newPrice: number
-}
-
-const seedSetMembershipPrice = (data: SetMembershipPriceDetails) => data
-
-interface SetCouncilBudgetIncrementDetails {
-  newAmount: number
-}
-
-const seedSetCouncilBudgetIncrement = (data: SetCouncilBudgetIncrementDetails) => data
+const seedObjectCopy = (data: any) => data
 
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
@@ -108,13 +71,20 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   decreaseWorkingGroupLeadStake: seedLeadStakeProposalData,
   slashWorkingGroupLead: seedLeadStakeProposalData,
   runtimeUpgrade: seedRuntimeUpgradeData,
-  updateWorkingGroupBudget: seedUpdateGroupBudgetData,
-  setMaxValidatorCount: seedSetMaxValidatorCount,
-  fillWorkingGroupLeadOpening: seedFillLeadOpening,
-  setWorkingGroupLeadReward: seedSetGroupLeadReward,
+  updateWorkingGroupBudget: seedObjectCopy,
+  setMaxValidatorCount: seedObjectCopy,
+  fillWorkingGroupLeadOpening: seedObjectCopy,
+  setWorkingGroupLeadReward: seedObjectCopy,
   terminateWorkingGroupLead: seedTerminateGroupLead,
-  setMembershipPrice: seedSetMembershipPrice,
-  setCouncilBudgetIncrement: seedSetCouncilBudgetIncrement,
+  setMembershipPrice: seedObjectCopy,
+  setCouncilBudgetIncrement: seedObjectCopy,
+  signal: seedObjectCopy,
+  cancelWorkingGroupLeadOpening: seedObjectCopy,
+  setReferralCut: seedObjectCopy,
+  setInitialInvitationBalance: seedObjectCopy,
+  setInitialInvitationCount: seedObjectCopy,
+  setCouncilorReward: seedObjectCopy,
+  veto: seedObjectCopy,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {
