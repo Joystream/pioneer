@@ -5,23 +5,20 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { RouterLink } from '@/common/components/RouterLink'
 import { Label, TextMedium } from '@/common/components/typography'
-import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 interface Props {
   label: string
-  value: {
-    id: string
-    title: string
-  }
+  value: string
 }
 
-export const ProposalLink = ({ label, value }: Props) => (
+export const OpeningLink = ({ label, value }: Props) => (
   <Row>
     <RowGapBlock gap={4}>
       <Label>{label}</Label>
       <TextMedium lighter>
-        <RouterLink to={generatePath(ProposalsRoutes.preview, { id: value.id })} target="_blank">
-          {value.title}
+        <RouterLink to={generatePath(WorkingGroupsRoutes.openingById, { id: value })} target="_blank">
+          View the opening
         </RouterLink>
       </TextMedium>
     </RowGapBlock>

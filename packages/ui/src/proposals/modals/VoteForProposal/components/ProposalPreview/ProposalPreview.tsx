@@ -16,6 +16,7 @@ import {
   Text,
   Numeric,
   ProposalLink,
+  OpeningLink,
 } from './renderers'
 
 interface Props {
@@ -39,6 +40,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Address: Address,
   RuntimeBlob: RuntimeBlob,
   ProposalLink: ProposalLink,
+  OpeningLink: OpeningLink,
 }
 
 export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale, proposalDetails }: Props) => {
