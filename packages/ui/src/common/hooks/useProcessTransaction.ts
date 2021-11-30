@@ -58,7 +58,7 @@ const observeTransaction = (
 
   const errorHandler = () => {
     subscription.unsubscribe()
-    send({type: 'CANCELED', events: []})
+    send({ type: 'CANCELED', events: [] })
   }
 
   const subscription = transaction.subscribe({
