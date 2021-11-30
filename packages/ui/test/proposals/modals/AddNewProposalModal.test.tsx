@@ -609,6 +609,33 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+      describe('Type - Fill Working Group Lead Opening', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpenings(server.server)
+          seedApplications(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('fillWorkingGroupLeadOpening')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Fill Working Group Lead Opening$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-2')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-2')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
     })
 
     describe('Authorize', () => {
@@ -931,6 +958,10 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Opening$', name)
   }
 
+  const selectApplication = async (name: string) => {
+    await selectFromDropdown('^Application$', name)
+  }
+
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     await fireEvent.change(amountInput, { target: { value } })
@@ -969,6 +1000,10 @@ describe('UI: AddNewProposalModal', () => {
     SetWorkingGroupLeadReward: {
       selectGroup,
       fillRewardAmount: async (value: number) => await fillField('amount-input', value),
+    },
+    FillWorkingGroupLeadOpening: {
+      selectedOpening,
+      selectApplication,
     },
   }
 

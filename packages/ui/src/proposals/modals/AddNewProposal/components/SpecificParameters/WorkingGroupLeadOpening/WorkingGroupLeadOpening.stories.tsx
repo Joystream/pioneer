@@ -18,7 +18,7 @@ const OpeningTemplate: Story = () => {
   const [groupId, setGroupId] = useState<GroupIdName>()
 
   return (
-    <MockApolloProvider members workingGroups>
+    <MockApolloProvider members council forum proposals workers workingGroups>
       <CreateWorkingGroupLeadOpening
         description={description}
         shortDescription={shortDescription}

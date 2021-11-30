@@ -55,7 +55,8 @@ const generateWorker = (
   const runtimeId = nextId++
 
   const application = generateApplication(opening, 'filled')(String(memberId))
-  applications.push(application)
+  const applicationPending = generateApplication(opening)(String(memberId))
+  applications.push(application, applicationPending)
   const id = `${groupId}-${runtimeId}`
 
   return {
