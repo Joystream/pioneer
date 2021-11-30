@@ -443,6 +443,32 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Referral Cut', () => {
+        beforeEach(async () => {
+          await finishProposalType('setReferralCut')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - Invalid', async () => {
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Blocks value bigger than 255', async () => {
+          await SpecificParameters.fillAmount(300)
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Decrease Working Group Lead Stake', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
