@@ -5,7 +5,6 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectedMember } from '@/memberships/components/SelectMember'
@@ -39,12 +38,11 @@ export const SetWorkingGroupLeadReward = ({
 
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
-
+  // console.log(groupId, group, 'lll')
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => setRewardPerBlock(new BN(amount)), [amount])
   useEffect(() => {
-    setRewardPerBlock(BN_ZERO)
     setWorkerId(group?.leadWorker?.runtimeId)
   }, [groupId, group?.leadWorker?.runtimeId])
 
@@ -59,12 +57,14 @@ export const SetWorkingGroupLeadReward = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="working-group-input"
             label="Working Group"
             required
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
             <SelectWorkingGroup
+              id="working-group"
               selectedGroupId={groupId}
               onChange={(selected) => setGroupId(selected.id)}
               disableNoLead

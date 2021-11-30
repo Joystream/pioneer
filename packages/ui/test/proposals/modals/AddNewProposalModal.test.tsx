@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -552,6 +552,37 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Working Group Lead Reward', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setWorkingGroupLeadReward')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Working Group Lead Reward$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.SetWorkingGroupLeadReward.selectGroup('Forum')
+          await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Cancel Working Group Lead Opening', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
@@ -933,6 +964,10 @@ describe('UI: AddNewProposalModal', () => {
     },
     CancelWorkingGroupLeadOpening: {
       selectedOpening,
+    },
+    SetWorkingGroupLeadReward: {
+      selectGroup,
+      fillRewardAmount: async (value: number) => await fillField('amount-input', value),
     },
   }
 
