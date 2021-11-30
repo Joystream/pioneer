@@ -78,6 +78,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
+    case 'setReferralCut': {
+      return { SetReferralCut: specifics?.amount?.toNumber() }
+    }
     default:
       return { Signal: '' }
   }

@@ -14,6 +14,7 @@ import {
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SlashWorkingGroupLeadParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
@@ -62,6 +63,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
+    | SetReferralCutParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -71,6 +73,10 @@ interface SignalContext extends SpecificParametersContext {
 
 interface FundingRequestContext extends SpecificParametersContext {
   specifics: FundingRequestParameters
+}
+
+interface SetReferralCutContext extends SpecificParametersContext {
+  specifics: SetReferralCutParameters
 }
 
 interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
@@ -121,6 +127,7 @@ export type AddNewProposalContext = Partial<
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
     TransactionContext &
+    SetReferralCutContext &
     DiscusisonContext
 >
 
@@ -140,6 +147,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'signal' }; context: SignalContext }
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
+  | { value: { specificParameters: 'setReferralCut' }; context: SetReferralCutContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | {
@@ -358,6 +366,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+            { target: 'setReferralCut', cond: isType('setReferralCut') },
           ],
         },
         signal: {
@@ -366,6 +375,17 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
               actions: assign({
                 specifics: (context, event) => {
                   return { ...context.specifics, signal: event.signal }
+                },
+              }),
+            },
+          },
+        },
+        setReferralCut: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => {
+                  return { ...context.specifics, amount: event.amount }
                 },
               }),
             },

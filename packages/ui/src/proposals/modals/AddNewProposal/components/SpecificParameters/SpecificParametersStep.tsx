@@ -4,6 +4,7 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
@@ -22,7 +23,6 @@ interface SpecificParametersStepProps {
 
 export const isValidSpecificParameters = (state: AddNewProposalMachineState): boolean => {
   const specifics = state.context.specifics
-
   switch (true) {
     case state.matches('specificParameters.signal'): {
       return !!specifics?.signal
@@ -57,6 +57,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
         specifics.groupId &&
         specifics.workerId !== undefined
       )
+    }
+    case state.matches('specificParameters.setReferralCut'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
     }
     default:
       return false
@@ -138,6 +141,14 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
       )
+    case state.matches('specificParameters.setReferralCut'): {
+      return (
+        <SetReferralCut
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+          amount={state.context.specifics?.amount}
+        />
+      )
+    }
     default:
       return null
   }
