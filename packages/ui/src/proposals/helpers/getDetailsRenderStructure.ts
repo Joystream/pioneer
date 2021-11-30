@@ -17,7 +17,7 @@ import {
   DestinationsDetail,
   ProposalType,
   SignalTextDetail,
-  InvitationsCountDetail,
+  CountDetail,
   ProposalDetail,
 } from '@/proposals/types'
 
@@ -148,7 +148,7 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
 }
 const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
   const defaultLabel = 'Amount'
-  const overriddenLabelsBy: { [key: string]: string } = {
+  const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
     decreaseWorkingGroupLeadStake: 'Decrease stake amount',
     slashWorkingGroupLead: 'Slashing amount',
   }
@@ -162,10 +162,15 @@ const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[]
     },
   ]
 }
-const invitationsCountMapper: Mapper<InvitationsCountDetail, 'invitationsCount'> = (value) => {
+const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
+  const countLabels: Partial<Record<ProposalType, string>> = {
+    setInitialInvitationCount: 'Invitations',
+    setMaxValidatorCount: 'Validators',
+  }
+  const label = type && type in countLabels ? countLabels[type] : 'Count'
   return [
     {
-      label: 'Invitations',
+      label,
       value,
       renderType: 'Numeric',
     },
@@ -193,7 +198,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   groupName: groupNameMapper,
   member: memberMapper,
   amount: amountMapper,
-  invitationsCount: invitationsCountMapper,
+  count: countMapper,
   proposal: proposalMapper,
 }
 

@@ -57,8 +57,8 @@ export type GroupNameDetail = {
   groupName: string
 }
 
-export type InvitationsCountDetail = {
-  invitationsCount: BN
+export type CountDetail = {
+  count: BN
 }
 
 export type ProposalDetail = {
@@ -85,7 +85,7 @@ export type RuntimeUpgradeDetails = ProposalDetailsNew<'runtimeUpgrade', NewByte
 
 export type UpdateGroupBudgetDetails = ProposalDetailsNew<'updateWorkingGroupBudget', GroupDetail & AmountDetail>
 
-export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount', AmountDetail>
+export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount', CountDetail>
 
 export type FillWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
   'fillWorkingGroupLeadOpening',
@@ -117,7 +117,7 @@ export type SetReferralCutDetails = ProposalDetailsNew<'setReferralCut', AmountD
 
 export type SetInitialInvitationBalanceDetails = ProposalDetailsNew<'setInitialInvitationBalance', AmountDetail>
 
-export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInvitationCount', InvitationsCountDetail>
+export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInvitationCount', CountDetail>
 
 export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward', AmountDetail>
 
@@ -223,7 +223,7 @@ const asSetMaxValidatorCount: DetailsCast<'SetMaxValidatorCountProposalDetails'>
   fragment
 ): MaxValidatorCountDetails => ({
   type: 'setMaxValidatorCount',
-  amount: new BN(fragment.newMaxValidatorCount),
+  count: new BN(fragment.newMaxValidatorCount),
 })
 
 const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDetails'> = (
@@ -298,7 +298,7 @@ const asSetInitialInvitationCount: DetailsCast<'SetInitialInvitationCountProposa
   fragment
 ): SetInitialInvitationCountDetails => ({
   type: 'setInitialInvitationCount',
-  invitationsCount: new BN(fragment.newInitialInvitationsCount),
+  count: new BN(fragment.newInitialInvitationsCount),
 })
 
 const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
