@@ -58,7 +58,7 @@ const StatsButtonInnerWrapper = styled.div<StatiscticBlockProps>`
         return '100px'
     }
   }};
-  padding: 12px 16px 20px;
+  padding: 12px 32px 20px 16px;
   border-radius: ${BorderRad.m};
   overflow: hidden;
 

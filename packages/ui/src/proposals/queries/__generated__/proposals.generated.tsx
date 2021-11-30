@@ -209,6 +209,7 @@ export type ProposalWithDetailsFieldsFragment = {
         opening?:
           | {
               __typename: 'WorkingGroupOpening'
+              id: string
               group: { __typename: 'WorkingGroup'; id: string; name: string }
               metadata: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
             }
@@ -267,7 +268,11 @@ export type ProposalWithDetailsFieldsFragment = {
     | {
         __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
         opening?:
-          | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+          | {
+              __typename: 'WorkingGroupOpening'
+              id: string
+              group: { __typename: 'WorkingGroup'; id: string; name: string }
+            }
           | null
           | undefined
         application?:
@@ -810,6 +815,7 @@ export type GetProposalQuery = {
               opening?:
                 | {
                     __typename: 'WorkingGroupOpening'
+                    id: string
                     group: { __typename: 'WorkingGroup'; id: string; name: string }
                     metadata: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
                   }
@@ -868,7 +874,11 @@ export type GetProposalQuery = {
           | {
               __typename: 'FillWorkingGroupLeadOpeningProposalDetails'
               opening?:
-                | { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; id: string; name: string } }
+                | {
+                    __typename: 'WorkingGroupOpening'
+                    id: string
+                    group: { __typename: 'WorkingGroup'; id: string; name: string }
+                  }
                 | null
                 | undefined
               application?:
@@ -1432,6 +1442,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on FillWorkingGroupLeadOpeningProposalDetails {
         opening {
+          id
           group {
             id
             name
@@ -1445,6 +1456,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on CancelWorkingGroupLeadOpeningProposalDetails {
         opening {
+          id
           group {
             id
             name

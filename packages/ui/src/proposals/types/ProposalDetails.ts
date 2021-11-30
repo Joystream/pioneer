@@ -68,6 +68,10 @@ export type ProposalDetail = {
   }
 }
 
+export type OpeningLinkDetail = {
+  openingId?: string
+}
+
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
   'createWorkingGroupLeadOpening',
@@ -89,7 +93,7 @@ export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount'
 
 export type FillWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
   'fillWorkingGroupLeadOpening',
-  MemberDetail & GroupDetail
+  MemberDetail & GroupDetail & OpeningLinkDetail
 >
 
 export type SetWorkingGroupLeadRewardDetails = ProposalDetailsNew<
@@ -110,7 +114,7 @@ export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBud
 
 export type CancelWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
   'cancelWorkingGroupLeadOpening',
-  GroupNameDetail | OpeningDescriptionDetail
+  GroupNameDetail | OpeningLinkDetail
 >
 
 export type SetReferralCutDetails = ProposalDetailsNew<'setReferralCut', AmountDetail>
@@ -234,9 +238,10 @@ const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDe
   group: fragment.opening
     ? {
         id: fragment.opening.group.id as GroupIdName,
-        name: fragment.opening.group.name,
+        name: asWorkingGroupName(fragment.opening.group.name),
       }
     : undefined,
+  openingId: fragment.opening?.id,
 })
 
 const asSetWorkingGroupLeadReward: DetailsCast<'SetWorkingGroupLeadRewardProposalDetails'> = (
@@ -279,7 +284,7 @@ const asCancelGroupOpening: DetailsCast<'CancelWorkingGroupLeadOpeningProposalDe
 ): CancelWorkingGroupLeadOpeningDetails => ({
   type: 'cancelWorkingGroupLeadOpening',
   groupName: asWorkingGroupName(fragment.opening?.group.name ?? 'Unknown'),
-  openingDescription: fragment.opening?.metadata.description ?? undefined,
+  openingId: fragment.opening?.id,
 })
 
 const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment): SetReferralCutDetails => ({

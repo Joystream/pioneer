@@ -19,6 +19,7 @@ import {
   SignalTextDetail,
   CountDetail,
   ProposalDetail,
+  OpeningLinkDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -31,7 +32,8 @@ export type RenderType =
   | 'Member'
   | 'Address'
   | 'Divider'
-  | 'Proposal'
+  | 'ProposalLink'
+  | 'OpeningLink'
 
 export interface RenderNode {
   label?: string
@@ -176,12 +178,21 @@ const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
     },
   ]
 }
-const proposalMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
+const proposalLinkMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
   return [
     {
       label: 'Proposal',
       value,
-      renderType: 'Proposal',
+      renderType: 'ProposalLink',
+    },
+  ]
+}
+const openingLinkMapper: Mapper<OpeningLinkDetail, 'openingId'> = (value) => {
+  return [
+    {
+      label: 'Opening',
+      value,
+      renderType: 'OpeningLink',
     },
   ]
 }
@@ -199,7 +210,8 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   member: memberMapper,
   amount: amountMapper,
   count: countMapper,
-  proposal: proposalMapper,
+  proposal: proposalLinkMapper,
+  openingId: openingLinkMapper,
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {
