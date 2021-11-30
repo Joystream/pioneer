@@ -1,6 +1,7 @@
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
+import { SetMaxValidatorCount } from '@/proposals/modals/AddNewProposal/components/SetMaxValidatorCount'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -156,6 +157,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.setMaxValidatorCount'):
+      return (
+        <SetMaxValidatorCount
+          setValidatorCount={(amount) => send('SET_AMOUNT', { amount })}
+          validatorCount={state.context.specifics?.amount}
         />
       )
     default:

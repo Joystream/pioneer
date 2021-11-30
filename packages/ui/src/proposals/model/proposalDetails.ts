@@ -38,6 +38,7 @@ export const enabledProposals: ProposalType[] = [
   'slashWorkingGroupLead',
   'signal',
   'setWorkingGroupLeadReward',
+  'setMaxValidatorCount',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {

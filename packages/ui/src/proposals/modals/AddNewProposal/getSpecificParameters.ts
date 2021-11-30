@@ -87,6 +87,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
+    case 'setMaxValidatorCount': {
+      return { SetMaxValidatorCount: specifics?.amount?.toNumber() }
+    }
     default:
       return { Signal: '' }
   }
