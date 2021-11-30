@@ -6,7 +6,17 @@ import { camelCaseToText } from '@/common/helpers'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
 
-import { Address, Amount, RuntimeBlob, Markdown, Member, NumberOfBlocks, Text, Numeric } from './renderers'
+import {
+  Address,
+  Amount,
+  RuntimeBlob,
+  Markdown,
+  Member,
+  NumberOfBlocks,
+  Text,
+  Numeric,
+  ProposalLink,
+} from './renderers'
 
 interface Props {
   proposalTitle: string
@@ -28,6 +38,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Member: Member,
   Address: Address,
   RuntimeBlob: RuntimeBlob,
+  ProposalLink: ProposalLink,
 }
 
 export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale, proposalDetails }: Props) => {
