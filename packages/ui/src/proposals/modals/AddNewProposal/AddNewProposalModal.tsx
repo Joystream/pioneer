@@ -29,6 +29,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
@@ -64,6 +65,7 @@ const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create pr
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
+  const minCount = useMinimumValidatorCount()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const constants = useProposalConstants(state.context.type)
@@ -152,7 +154,7 @@ export const AddNewProposalModal = () => {
     }
 
     if (state.matches('specificParameters')) {
-      return setValidNext(isValidSpecificParameters(state as AddNewProposalMachineState))
+      return setValidNext(isValidSpecificParameters(state as AddNewProposalMachineState, minCount))
     }
 
     return setValidNext(false)
