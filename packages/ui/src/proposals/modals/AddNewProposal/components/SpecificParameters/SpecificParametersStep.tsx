@@ -56,7 +56,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
       )
     }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
-      return !!(specifics?.slashingAmount && specifics.groupId && specifics.workerId !== undefined)
+      return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     default:
       return false

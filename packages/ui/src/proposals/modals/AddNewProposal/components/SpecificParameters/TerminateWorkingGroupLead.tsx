@@ -1,7 +1,7 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -13,6 +13,7 @@ import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 export interface TerminateWorkingGroupLeadParameters {
   slashingAmount?: BN
@@ -42,6 +43,8 @@ export const TerminateWorkingGroupLead = ({
 
   const isDisabled = !group || (group && !group.leadId)
 
+  const [showSlash, setShowSlash] = useState(false)
+
   useEffect(() => setSlashingAmount(new BN(amount)), [amount])
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
@@ -59,33 +62,52 @@ export const TerminateWorkingGroupLead = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="working-group-input"
             label="Working Group"
             required
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
             <SelectWorkingGroup
+              id="working-group"
               selectedGroupId={groupId}
               onChange={(selected) => setGroupId(selected.id)}
               disableNoLead
             />
           </InputComponent>
           <SelectedMember label="Working Group Lead" member={lead} disabled />
-          <InputComponent
-            label="Slashing Amount"
-            tight
-            units="JOY"
-            inputWidth="s"
-            tooltipText="Optional amount to be slashed"
-            disabled={isDisabled}
-          >
-            <InputNumber
-              id="amount-input"
-              value={formatTokenValue(new BN(amount))}
-              onChange={(event) => setAmount(event.target.value)}
-              disabled={isDisabled}
+          
+          <InlineToggleWrap>
+            <Label>Slash: </Label>
+            <ToggleCheckbox
+              falseLabel="No"
+              trueLabel="Yes"
+              checked={showSlash}
+              onChange={(isSet) => setShowSlash(isSet)}
             />
-          </InputComponent>
+            <Tooltip tooltipText="Lorem ipsum...">
+              <TooltipDefault />
+            </Tooltip>
+          </InlineToggleWrap>
+
+          {showSlash && (
+            <InputComponent
+              label="Optional slashing Amount"
+              tight
+              units="JOY"
+              inputWidth="s"
+              tooltipText="Optional amount to be slashed"
+              disabled={isDisabled}
+            >
+              <InputNumber
+                id="amount-input"
+                value={formatTokenValue(new BN(amount))}
+                placeholder="0"
+                onChange={(event) => setAmount(event.target.value)}
+                disabled={isDisabled}
+              />
+            </InputComponent>
+          )}
         </RowGapBlock>
       </Row>
     </RowGapBlock>
