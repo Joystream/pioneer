@@ -74,10 +74,11 @@ export const StatisticLabel = styled(TextSmall)`
   color: ${Colors.Black[500]};
 `
 
-export const TwoColumnsStatistic = styled.div`
+export const MultiColumnsStatistic = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-auto-flow: column;
   grid-column-gap: 16px;
+  width: fit-content;
   height: 100%;
 `
 

@@ -1,5 +1,5 @@
 import { createType } from '@joystream/types'
-import { WorkingGroupKey } from '@joystream/types/common'
+import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
@@ -83,6 +83,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           getWorkingGroupParam(specifics?.groupId),
         ],
       }
+    }
+    case 'cancelWorkingGroupLeadOpening': {
+      return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
     default:
       return { Signal: '' }

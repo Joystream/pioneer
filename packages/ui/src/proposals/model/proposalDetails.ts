@@ -34,6 +34,7 @@ export const enabledProposals: ProposalType[] = [
   'runtimeUpgrade',
   'fundingRequest',
   'createWorkingGroupLeadOpening',
+  'cancelWorkingGroupLeadOpening',
   'decreaseWorkingGroupLeadStake',
   'slashWorkingGroupLead',
   'terminateWorkingGroupLead',

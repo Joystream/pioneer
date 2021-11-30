@@ -1,3 +1,13 @@
+fragment WorkerProposalDetails on Worker {
+  group {
+    id
+    name
+  }
+  membership {
+    ...MemberFields
+  }
+}
+
 fragment ProposalFields on Proposal {
   id
   title
@@ -79,26 +89,14 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on DecreaseWorkingGroupLeadStakeProposalDetails {
       lead {
         createdAt
-        group {
-          id
-          name
-        }
-        membership {
-          ...MemberFields
-        }
+        ...WorkerProposalDetails
       }
       amount
     }
     ... on SlashWorkingGroupLeadProposalDetails {
       lead {
         createdAt
-        group {
-          id
-          name
-        }
-        membership {
-          ...MemberFields
-        }
+        ...WorkerProposalDetails
       }
       amount
     }
@@ -106,6 +104,47 @@ fragment ProposalWithDetailsFields on Proposal {
       newRuntimeBytecode {
         id
       }
+    }
+    ... on UpdateWorkingGroupBudgetProposalDetails {
+      group {
+        id
+        name
+      }
+      amount
+    }
+    ... on SetMaxValidatorCountProposalDetails {
+      newMaxValidatorCount
+    }
+    ... on FillWorkingGroupLeadOpeningProposalDetails {
+      opening {
+        group {
+          id
+          name
+        }
+      }
+      application {
+        applicant {
+          ...MemberFields
+        }
+      }
+    }
+    ... on SetWorkingGroupLeadRewardProposalDetails {
+      lead {
+        ...WorkerProposalDetails
+      }
+      newRewardPerBlock
+    }
+    ... on TerminateWorkingGroupLeadProposalDetails {
+      lead {
+        ...WorkerProposalDetails
+      }
+      slashingAmount
+    }
+    ... on SetMembershipPriceProposalDetails {
+      newPrice
+    }
+    ... on SetCouncilBudgetIncrementProposalDetails {
+      newAmount
     }
   }
   discussionThread {

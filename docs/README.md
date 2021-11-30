@@ -179,3 +179,12 @@ To add any of the above:
   * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`
 
 By default, only `Alice`, `Alice_Stash`, `Bob` and `Bob_Stash` accounts has any funds.
+
+## Using custom addresses to connect with node/query node
+To use custom addresses add the `.env` file in `packages/ui` (example: `packages/ui/.env.example`) and set
+
+1. `REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET` default `wss://olympia-dev.joystream.app/rpc`
+2. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE` default `https://olympia-dev.joystream.app/query/server/graphql`
+3. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET` default `wss://olympia-dev.joystream.app/query/server/graphql`
+
+Please remember to restart the webpack process after each change.

@@ -4,7 +4,9 @@ import { KeysOfUnion } from '@/common/types/helpers'
 import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 
 import { asMember, Member } from '../../memberships/types'
-import { ProposalWithDetailsFieldsFragment } from '../queries'
+import { ProposalWithDetailsFieldsFragment, WorkerProposalDetailsFragment } from '../queries'
+
+import { ProposalType } from '.'
 
 export type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
@@ -13,7 +15,7 @@ interface BaseProposalDetails {
   type: undefined
 }
 
-type ProposalDetailsNew<Type extends string, Details> = { type: Type } & Details
+type ProposalDetailsNew<Type extends ProposalType, Details> = { type: Type } & Details
 
 export type DestinationsDetail = {
   destinations?: {
@@ -67,6 +69,29 @@ export type SlashLeadDetails = ProposalDetailsNew<
 >
 export type RuntimeUpgradeDetails = ProposalDetailsNew<'runtimeUpgrade', NewByteCodeIdDetail>
 
+export type UpdateGroupBudgetDetails = ProposalDetailsNew<'updateWorkingGroupBudget', GroupDetail & AmountDetail>
+
+export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount', AmountDetail>
+
+export type FillWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
+  'fillWorkingGroupLeadOpening',
+  MemberDetail & GroupDetail
+>
+
+export type SetWorkingGroupLeadRewardDetails = ProposalDetailsNew<
+  'setWorkingGroupLeadReward',
+  MemberDetail & GroupDetail & AmountDetail
+>
+
+export type TerminateWorkingGroupLeadDetails = ProposalDetailsNew<
+  'terminateWorkingGroupLead',
+  MemberDetail & GroupDetail & AmountDetail
+>
+
+export type SetMembershipPriceDetails = ProposalDetailsNew<'setMembershipPrice', AmountDetail>
+
+export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBudgetIncrement', AmountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -74,6 +99,13 @@ export type ProposalDetails =
   | DecreaseLeadStakeDetails
   | SlashLeadDetails
   | RuntimeUpgradeDetails
+  | UpdateGroupBudgetDetails
+  | MaxValidatorCountDetails
+  | FillWorkingGroupLeadOpeningDetails
+  | SetWorkingGroupLeadRewardDetails
+  | TerminateWorkingGroupLeadDetails
+  | SetMembershipPriceDetails
+  | SetCouncilBudgetIncrementDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -83,6 +115,11 @@ const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment
     destinations: fragment.destinationsList?.destinations.map((d) => ({ account: d.account, amount: d.amount })),
   }
 }
+
+const asWorkerDetails = (fragment: WorkerProposalDetailsFragment | null | undefined) => ({
+  groupName: fragment ? asWorkingGroupName(fragment.group.name ?? 'Unknown') : 'Unknown',
+  member: fragment ? asMember(fragment.membership) : undefined,
+})
 
 const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDetails'> = (
   fragment
@@ -110,11 +147,8 @@ const asLeadStakeDetails = (
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     )
 ) => {
-  const groupName = asWorkingGroupName(fragment.lead?.group.name ?? 'Unknown')
-  const member = fragment.lead ? asMember(fragment.lead.membership) : undefined
   return {
-    member,
-    groupName,
+    ...asWorkerDetails(fragment.lead),
     amount: new BN(fragment.amount),
   }
 }
@@ -136,6 +170,67 @@ const asRuntimeUpgrade: DetailsCast<'RuntimeUpgradeProposalDetails'> = (fragment
   newBytecodeId: fragment.newRuntimeBytecode?.id,
 })
 
+const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalDetails'> = (
+  fragment
+): UpdateGroupBudgetDetails => ({
+  type: 'updateWorkingGroupBudget',
+  amount: new BN(fragment.amount),
+  group: {
+    id: fragment.group?.id as GroupIdName,
+    name: asWorkingGroupName(fragment.group?.name ?? 'Unknown'),
+  },
+})
+
+const asSetMaxValidatorCount: DetailsCast<'SetMaxValidatorCountProposalDetails'> = (
+  fragment
+): MaxValidatorCountDetails => ({
+  type: 'setMaxValidatorCount',
+  amount: new BN(fragment.newMaxValidatorCount),
+})
+
+const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDetails'> = (
+  fragment
+): FillWorkingGroupLeadOpeningDetails => ({
+  type: 'fillWorkingGroupLeadOpening',
+  member: fragment.application ? asMember(fragment.application.applicant) : undefined,
+  group: fragment.opening
+    ? {
+        id: fragment.opening.group.id as GroupIdName,
+        name: fragment.opening.group.name,
+      }
+    : undefined,
+})
+
+const asSetWorkingGroupLeadReward: DetailsCast<'SetWorkingGroupLeadRewardProposalDetails'> = (
+  fragment
+): SetWorkingGroupLeadRewardDetails => ({
+  type: 'setWorkingGroupLeadReward',
+  ...asWorkerDetails(fragment.lead),
+  amount: new BN(fragment.newRewardPerBlock),
+})
+
+const asTerminateWorkingGroupLead: DetailsCast<'TerminateWorkingGroupLeadProposalDetails'> = (
+  fragment
+): TerminateWorkingGroupLeadDetails => ({
+  type: 'terminateWorkingGroupLead',
+  ...asWorkerDetails(fragment.lead),
+  amount: new BN(fragment.slashingAmount),
+})
+
+const asSetMembershipPrice: DetailsCast<'SetMembershipPriceProposalDetails'> = (
+  fragment
+): SetMembershipPriceDetails => ({
+  type: 'setMembershipPrice',
+  amount: new BN(fragment.newPrice),
+})
+
+const asSetCouncilBudgetIncrement: DetailsCast<'SetCouncilBudgetIncrementProposalDetails'> = (
+  fragment
+): SetCouncilBudgetIncrementDetails => ({
+  type: 'setCouncilBudgetIncrement',
+  amount: new BN(fragment.newAmount),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -146,6 +241,13 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   DecreaseWorkingGroupLeadStakeProposalDetails: asDecreaseLeadStake,
   SlashWorkingGroupLeadProposalDetails: asSlashLead,
   RuntimeUpgradeProposalDetails: asRuntimeUpgrade,
+  UpdateWorkingGroupBudgetProposalDetails: asUpdateWorkingGroupBudget,
+  SetMaxValidatorCountProposalDetails: asSetMaxValidatorCount,
+  FillWorkingGroupLeadOpeningProposalDetails: asFillGroupLeadOpening,
+  SetWorkingGroupLeadRewardProposalDetails: asSetWorkingGroupLeadReward,
+  TerminateWorkingGroupLeadProposalDetails: asTerminateWorkingGroupLead,
+  SetMembershipPriceProposalDetails: asSetMembershipPrice,
+  SetCouncilBudgetIncrementProposalDetails: asSetCouncilBudgetIncrement,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

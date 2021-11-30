@@ -3,7 +3,7 @@ import React from 'react'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
+import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { useModal } from '@/common/hooks/useModal'
@@ -39,7 +39,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
             <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
-            <TwoColumnsStatistic>
+            <MultiColumnsStatistic>
               {past && (
                 <StatiscticContentColumn>
                   <TextBig value bold>
@@ -54,7 +54,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
                 </TextBig>
                 <Subscription>Target no. of Hires</Subscription>
               </StatiscticContentColumn>
-            </TwoColumnsStatistic>
+            </MultiColumnsStatistic>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TextBig>
