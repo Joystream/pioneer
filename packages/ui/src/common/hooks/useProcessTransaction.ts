@@ -49,10 +49,12 @@ const observeTransaction = (
     }
 
     if (status.isFinalized) {
-      send({
-        type: hasErrorEvent(events) ? 'ERROR' : 'PROCESSING',
-        events,
-      })
+      if (hasErrorEvent(events)) {
+        subscription.unsubscribe()
+        send({ type: 'ERROR', events })
+      } else {
+        send({ type: 'PROCESSING', events })
+      }
     }
   }
 
