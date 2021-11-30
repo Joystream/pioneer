@@ -75,6 +75,15 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         ],
       }
     }
+    case 'setWorkingGroupLeadReward': {
+      return {
+        SlashWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.rewardPerBlock,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
+      }
+    }
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }

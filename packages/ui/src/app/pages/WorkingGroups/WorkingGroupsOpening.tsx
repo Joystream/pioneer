@@ -24,7 +24,7 @@ import {
   Statistics,
   StatsBlock,
   TokenValueStat,
-  TwoColumnsStatistic,
+  MultiColumnsStatistic,
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -184,7 +184,7 @@ const ApplicationStats = ({
   status,
 }: Pick<WorkingGroupOpeningType, 'applicants' | 'hiring' | 'status'>) => (
   <ApplicationStatsStyles>
-    <TwoColumnsStatistic>
+    <MultiColumnsStatistic>
       <StatiscticContentColumn>
         <StatisticHeader title="Applicants" />
         <NumericValue>{applicants}</NumericValue>
@@ -200,7 +200,7 @@ const ApplicationStats = ({
           <NumericValue>{hiring.limit}</NumericValue>
         </StatiscticContentColumn>
       )}
-    </TwoColumnsStatistic>
+    </MultiColumnsStatistic>
   </ApplicationStatsStyles>
 )
 

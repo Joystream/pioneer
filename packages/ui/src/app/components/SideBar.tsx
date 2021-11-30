@@ -11,6 +11,7 @@ import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIc
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
 import { ContentIcon } from '@/common/components/page/Sidebar/LinksIcons/ContentIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
+import { ElectionIcon } from '@/common/components/page/Sidebar/LinksIcons/ElectionIcon'
 import { FinancialsIcon } from '@/common/components/page/Sidebar/LinksIcons/FinancialsIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
 import { GatewaysIcon } from '@/common/components/page/Sidebar/LinksIcons/GatewaysIcon'
@@ -56,50 +57,42 @@ export const SideBar = () => {
         <AnimateSharedLayout>
           <NavigationLinks>
             <NavigationLinksItem>
-              <NavigationLink to={ProfileRoutes.profile}>
-                <MyProfileIcon />
+              <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={WorkingGroupsRoutes.groups}>
-                <WorkingGroupsIcon />
+              <NavigationLink to={WorkingGroupsRoutes.groups} icon={<WorkingGroupsIcon />}>
                 Working Groups
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={ProposalsRoutes.current}>
-                <ProposalsIcon />
+              <NavigationLink to={ProposalsRoutes.current} icon={<ProposalsIcon />}>
                 Proposals
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={CouncilRoutes.council}>
-                <CouncilIcon />
+              <NavigationLink to={CouncilRoutes.council} icon={<CouncilIcon />}>
                 Council
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={electionLink}>
-                <CouncilIcon />
+              <NavigationLink to={electionLink} icon={<ElectionIcon />} indicate={false}>
                 Election
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={ForumRoutes.forum}>
-                <ForumIcon />
+              <NavigationLink to={ForumRoutes.forum} icon={<ForumIcon />}>
                 Forum
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={generatePath(MembersRoutes.members)}>
-                <MembersIcon />
+              <NavigationLink to={generatePath(MembersRoutes.members)} icon={<MembersIcon />}>
                 Members
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={SettingsRoutes.settings}>
-                <SettingsIcon />
+              <NavigationLink to={SettingsRoutes.settings} icon={<SettingsIcon />}>
                 Settings
               </NavigationLink>
             </NavigationLinksItem>
@@ -118,56 +111,47 @@ export const SideBar = () => {
                   transition={{ duration: 0.25 }}
                 >
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <ConstitutionIcon />
+                    <NavigationLink to="/inexisting" icon={<ConstitutionIcon />} disabled>
                       Constitution
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <BountyIcon />
+                    <NavigationLink to="/inexisting" icon={<BountyIcon />} disabled>
                       Bounty
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <OverviewIcon />
+                    <NavigationLink to="/inexisting" icon={<OverviewIcon />} disabled>
                       Overview
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <FinancialsIcon />
+                    <NavigationLink to="/inexisting" icon={<FinancialsIcon />} disabled>
                       Financials
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <ValidatorsIcon />
+                    <NavigationLink to="/inexisting" icon={<ValidatorsIcon />} disabled>
                       Validators
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <GatewaysIcon />
+                    <NavigationLink to="/inexisting" icon={<GatewaysIcon />} disabled>
                       Gateways
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <StorageIcon />
+                    <NavigationLink to="/inexisting" icon={<StorageIcon />} disabled>
                       Storage
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <BandwidthIcon />
+                    <NavigationLink to="/inexisting" icon={<BandwidthIcon />} disabled>
                       Bandwidth
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled>
-                      <ContentIcon />
+                    <NavigationLink to="/inexisting" disabled icon={<ContentIcon />}>
                       Content
                     </NavigationLink>
                   </NavigationLinksItem>
