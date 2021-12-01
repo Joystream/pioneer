@@ -2,8 +2,8 @@
   {
     "id": "0",
     "referendumFinishedEvent": {
-      "inBlock": 60803,
-      "createdAt": "2021-06-17T04:54:27.458Z",
+      "inBlock": 56431,
+      "createdAt": "2021-08-20T10:51:05.792Z",
       "network": "OLYMPIA"
     },
     "electionRoundId": "0"
@@ -11,8 +11,8 @@
   {
     "id": "1",
     "referendumFinishedEvent": {
-      "inBlock": 68831,
-      "createdAt": "2021-10-13T09:46:57.229Z",
+      "inBlock": 65669,
+      "createdAt": "2021-08-02T05:22:42.885Z",
       "network": "OLYMPIA"
     },
     "electionRoundId": "1"
@@ -20,8 +20,8 @@
   {
     "id": "2",
     "referendumFinishedEvent": {
-      "inBlock": 38016,
-      "createdAt": "2021-07-15T03:06:53.426Z",
+      "inBlock": 61277,
+      "createdAt": "2021-06-06T18:54:25.032Z",
       "network": "OLYMPIA"
     },
     "electionRoundId": "2"
@@ -29,8 +29,8 @@
   {
     "id": "3",
     "referendumFinishedEvent": {
-      "inBlock": 89721,
-      "createdAt": "2021-11-02T02:52:27.823Z",
+      "inBlock": 91100,
+      "createdAt": "2021-08-15T05:38:40.395Z",
       "network": "OLYMPIA"
     },
     "electionRoundId": "3"

@@ -5,7 +5,6 @@ import { asBlock, Block } from '@/common/types'
 import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
 import { asPastElectionVote, PastElectionVote } from '@/council/types/Vote'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export interface ElectionVotingResult {
   candidate: ElectionCandidate
@@ -27,19 +26,15 @@ export interface PastElectionWithDetails extends PastElection {
   votingResults: ElectionVotingResult[]
 }
 
-export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => {
-  return {
-    id: fields.id,
-    cycleId: fields.cycleId,
-    finishedAtBlock: fields.referendumResult
-      ? asBlock(fields.referendumResult[0].referendumFinishedEvent)
-      : randomBlock(),
-    totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
-    totalCandidates: fields.candidates.length,
-    revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
-    totalVotes: fields.castVotes.length,
-  }
-}
+export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
+  id: fields.id,
+  cycleId: fields.cycleId,
+  finishedAtBlock: asBlock((fields.referendumResult as any[])[0].referendumFinishedEvent),
+  totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
+  totalCandidates: fields.candidates.length,
+  revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
+  totalVotes: fields.castVotes.length,
+})
 
 export const asPastElectionWithDetails = (
   fields: PastElectionRoundDetailedFieldsFragment

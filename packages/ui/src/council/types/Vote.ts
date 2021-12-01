@@ -2,7 +2,6 @@ import BN from 'bn.js'
 
 import { Address, asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { CastVoteFieldsFragment, PastElectionRoundDetailedFieldsFragment } from '../queries'
 
@@ -33,7 +32,7 @@ export type PastElectionVote = BaseVote
 
 export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   id: fields.id,
-  createdAtBlock: fields.castEvent ? asBlock(fields.castEvent[0]) : randomBlock(),
+  createdAtBlock: asBlock((fields.castEvent as any[])[0]),
   stake: new BN(fields.stake),
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,
