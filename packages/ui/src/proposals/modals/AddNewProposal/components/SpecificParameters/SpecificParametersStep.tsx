@@ -4,6 +4,7 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
@@ -74,6 +75,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return !!(specifics?.applicationId && specifics?.openingId)
+    }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     default:
       return false
@@ -188,6 +192,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
+      return (
+        <SetMembershipLeadInvitationQuota
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     default:
