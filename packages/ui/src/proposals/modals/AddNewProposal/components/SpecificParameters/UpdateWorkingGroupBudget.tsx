@@ -35,7 +35,10 @@ export const UpdateWorkingGroupBudget = ({
 
   const isDisabled = !group
 
-  useEffect(() => setBudgetUpdate(new BN(amount)), [amount])
+  useEffect(() => {
+    setBudgetUpdate(new BN(amount))
+    console.log('Final', { amount })
+  }, [amount])
   useEffect(() => {
     setBudgetUpdate(BN_ZERO)
   }, [groupId])
@@ -56,11 +59,7 @@ export const UpdateWorkingGroupBudget = ({
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
-            <SelectWorkingGroup
-              selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
-              disableNoLead
-            />
+            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
           <InputComponent
             label="Budget Update"

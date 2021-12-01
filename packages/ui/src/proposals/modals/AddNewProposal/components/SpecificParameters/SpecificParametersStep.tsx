@@ -6,6 +6,7 @@ import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/Spe
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
+import { UpdateWorkingGroupBudget } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/UpdateWorkingGroupBudget'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
@@ -57,6 +58,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
         specifics.groupId &&
         specifics.workerId !== undefined
       )
+    }
+    case state.matches('specificParameters.updateWorkingGroupBudget'): {
+      return !!(specifics?.groupId && !specifics.budgetUpdate?.isZero())
     }
     default:
       return false
@@ -139,7 +143,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         />
       )
     case state.matches('specificParameters.updateWorkingGroupBudget'):
-      return <div>Test</div>
+      return (
+        <UpdateWorkingGroupBudget
+          setBudgetUpdate={(amount) => send('SET_BUDGET_UPDATE', { amount })}
+          groupId={state.context.specifics?.groupId}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
     default:
       return null
   }

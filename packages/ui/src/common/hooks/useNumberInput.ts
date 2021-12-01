@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import { useEffect, useState } from 'react'
 
-const NUMBER_REGEX = /^\d*(\.\d*)?$/
+const NUMBER_REGEX = /^-?\d*(\.\d*)?$/
 
 export function useNumberInput(decimals = 6, initialValue?: BN | number) {
   const [value, setValue] = useState(initialValue ? initialValue.toString() : '')

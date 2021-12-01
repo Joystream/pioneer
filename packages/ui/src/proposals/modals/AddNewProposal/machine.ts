@@ -149,6 +149,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
+  | { value: { specificParameters: 'UpdateWorkingGroupBudget' }; context: UpdateWorkingGroupBudgetContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -171,6 +172,7 @@ export type AddNewProposalState =
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type SetSignalEvent = { type: 'SET_SIGNAL'; signal: string }
@@ -200,6 +202,7 @@ export type AddNewProposalEvent =
   | SetTitleEvent
   | SetRationaleEvent
   | SetSignalEvent
+  | SetBudgetUpdateEvent
   | SetTriggerBlockEvent
   | SetDiscussionModeEvent
   | SetDiscussionWhitelistEvent
@@ -551,6 +554,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   groupId: event.groupId,
+                }),
+              }),
+            },
+            SET_BUDGET_UPDATE: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  budgetUpdate: event.amount,
                 }),
               }),
             },
