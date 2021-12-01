@@ -1,11 +1,11 @@
 import { createType } from '@joystream/types'
 import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
+import BN from 'bn.js'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
-import BN from 'bn.js'
 
 const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   contentDirectoryWorkingGroup: 'Content',

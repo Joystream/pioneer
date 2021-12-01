@@ -2,17 +2,17 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
+import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
-import { Info } from '@/common/components/Info'
-import { capitalizeFirstLetter } from '@/common/helpers'
 
 export interface UpdateWorkingGroupBudgetParameters {
   budgetUpdate?: BN
