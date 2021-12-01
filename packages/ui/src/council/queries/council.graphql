@@ -189,7 +189,7 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
 }
 
 query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-  councilMembers(where: { electedInCouncil_eq: $councilId }) {
+  councilMembers(where: { electedInCouncil: { id_eq: $councilId } }) {
     member {
       ...MemberFields
     }
