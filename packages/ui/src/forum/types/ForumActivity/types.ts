@@ -3,9 +3,11 @@ import { BaseActivity, MemberDisplayFields } from '@/common/types'
 export type ForumActivity =
   | PostAddedActivity
   | PostEditedActivity
+  | PostModeratedActivity
   | PostDeletedActivity
   | ThreadCreatedActivity
   | CategoryCreatedActivity
+  | CategoryDeletedActivity
 
 interface PostActivity extends BaseActivity {
   postId: string
@@ -19,6 +21,13 @@ export interface PostAddedActivity extends PostActivity {
 
 export interface PostEditedActivity extends PostActivity {
   eventType: 'PostTextUpdatedEvent'
+}
+
+export interface PostModeratedActivity extends BaseActivity {
+  eventType: 'PostModeratedEvent'
+  postId: string
+  threadId: string
+  actor: MemberDisplayFields
 }
 
 export interface PostDeletedActivity extends BaseActivity {
@@ -40,6 +49,18 @@ export interface ThreadCreatedActivity extends BaseActivity {
 
 export interface CategoryCreatedActivity extends BaseActivity {
   eventType: 'CategoryCreatedEvent'
+  category: {
+    id: string
+    title: string
+  }
+  parentCategory?: {
+    id: string
+    title: string
+  }
+}
+
+export interface CategoryDeletedActivity extends BaseActivity {
+  eventType: 'CategoryDeletedEvent'
   category: {
     id: string
     title: string

@@ -462,9 +462,9 @@ export type GetElectedCouncilQuery = {
 }
 
 export type GetPastCouncilsQueryVariables = Types.Exact<{
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
 }>
 
 export type GetPastCouncilsQuery = {
@@ -784,9 +784,9 @@ export type GetCurrentElectionQuery = {
 }
 
 export type GetPastElectionsQueryVariables = Types.Exact<{
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
 }>
 
 export type GetPastElectionsQuery = {
@@ -937,7 +937,7 @@ export type GetCurrentCandidateIdByMemberQuery = {
 }
 
 export type GetCandidateStatsQueryVariables = Types.Exact<{
-  memberId?: Types.Maybe<Types.Scalars['ID']>
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type GetCandidateStatsQuery = {
@@ -948,10 +948,10 @@ export type GetCandidateStatsQuery = {
 }
 
 export type GetCouncilVotesQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
-  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetCouncilVotesQuery = {
@@ -1008,8 +1008,8 @@ export type GetCouncilVotesQuery = {
 }
 
 export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
-  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
 }>
 
 export type GetCouncilVotesCommitmentsQuery = {
@@ -1018,7 +1018,7 @@ export type GetCouncilVotesCommitmentsQuery = {
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
 }>
 
 export type GetCouncilVotesCountQuery = {
@@ -1027,7 +1027,7 @@ export type GetCouncilVotesCountQuery = {
 }
 
 export type GetPastVotesResultsQueryVariables = Types.Exact<{
-  myAccounts?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+  myAccounts?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
 }>
 
 export type GetPastVotesResultsQuery = {

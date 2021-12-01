@@ -44,6 +44,23 @@ fragment PostDeletedEventFields on PostDeletedEvent {
   }
 }
 
+fragment PostModeratedEventFields on PostModeratedEvent {
+  id
+  createdAt
+  post {
+    id
+    thread {
+      id
+    }
+  }
+  actor {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
 fragment ThreadCreatedEventFields on ThreadCreatedEvent {
   id
   createdAt
@@ -70,12 +87,28 @@ fragment CategoryCreatedEventFields on CategoryCreatedEvent {
   }
 }
 
+fragment CategoryDeletedEventFields on CategoryDeletedEvent {
+  id
+  createdAt
+  category {
+    id
+    title
+    parent {
+      id
+      title
+    }
+  }
+}
+
 query GetForumEvents {
   postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostAddedEventFields
   }
   postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostTextUpdatedEventFields
+  }
+  postModeratedEvents(orderBy: createdAt_DESC, limit: 10) {
+    ...PostModeratedEventFields
   }
   postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostDeletedEventFields
@@ -85,5 +118,8 @@ query GetForumEvents {
   }
   categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
     ...CategoryCreatedEventFields
+  }
+  categoryDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
+    ...CategoryDeletedEventFields
   }
 }

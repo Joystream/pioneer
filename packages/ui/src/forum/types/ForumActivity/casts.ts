@@ -1,13 +1,15 @@
 import { asBaseActivity, asMemberDisplayFields } from '@/common/types'
 import {
   CategoryCreatedEventFieldsFragment,
+  CategoryDeletedEventFieldsFragment,
   PostAddedEventFieldsFragment,
   PostDeletedEventFieldsFragment,
+  PostModeratedEventFieldsFragment,
   PostTextUpdatedEventFieldsFragment,
   ThreadCreatedEventFieldsFragment,
 } from '@/forum/queries/__generated__/forumEvents.generated'
 
-import { PostDeletedActivity } from '.'
+import { CategoryDeletedActivity, PostDeletedActivity, PostModeratedActivity } from '.'
 import { CategoryCreatedActivity, PostAddedActivity, PostEditedActivity, ThreadCreatedActivity } from './types'
 
 export function asPostActivity(
@@ -34,6 +36,16 @@ export function asThreadCreatedActivity(fields: ThreadCreatedEventFieldsFragment
   }
 }
 
+export function asPostModeratedActivity(fields: PostModeratedEventFieldsFragment): PostModeratedActivity {
+  return {
+    eventType: fields.__typename,
+    ...asBaseActivity(fields),
+    postId: fields.post.id,
+    threadId: fields.post.thread.id,
+    actor: { id: fields.actor.membership.id, handle: fields.actor.membership.handle },
+  }
+}
+
 export function asPostDeletedActivity(fields: PostDeletedEventFieldsFragment): PostDeletedActivity {
   return {
     eventType: fields.__typename,
@@ -46,6 +58,18 @@ export function asPostDeletedActivity(fields: PostDeletedEventFieldsFragment): P
 }
 
 export function asCategoryCreatedActivity(fields: CategoryCreatedEventFieldsFragment): CategoryCreatedActivity {
+  return {
+    eventType: fields.__typename,
+    ...asBaseActivity(fields),
+    category: {
+      id: fields.category.id,
+      title: fields.category.title,
+    },
+    parentCategory: fields.category.parent ? fields.category.parent : undefined,
+  }
+}
+
+export function asCategoryDeletedActivity(fields: CategoryDeletedEventFieldsFragment): CategoryDeletedActivity {
   return {
     eventType: fields.__typename,
     ...asBaseActivity(fields),
