@@ -462,9 +462,9 @@ export type GetElectedCouncilQuery = {
 }
 
 export type GetPastCouncilsQueryVariables = Types.Exact<{
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
 }>
 
 export type GetPastCouncilsQuery = {
@@ -784,9 +784,9 @@ export type GetCurrentElectionQuery = {
 }
 
 export type GetPastElectionsQueryVariables = Types.Exact<{
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
 }>
 
 export type GetPastElectionsQuery = {
@@ -937,21 +937,21 @@ export type GetCurrentCandidateIdByMemberQuery = {
 }
 
 export type GetCandidateStatsQueryVariables = Types.Exact<{
-  memberId?: Types.Maybe<Types.Scalars['ID']>
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type GetCandidateStatsQuery = {
   __typename: 'Query'
-  candidacyWithdrawEventsConnection: { __typename: 'CandidacyWithdrawEventConnection'; totalCount: number }
-  councilMembersConnection: { __typename: 'CouncilMemberConnection'; totalCount: number }
-  candidatesConnection: { __typename: 'CandidateConnection'; totalCount: number }
+  withdrawn: { __typename: 'CandidateConnection'; totalCount: number }
+  successful: { __typename: 'CandidateConnection'; totalCount: number }
+  failed: { __typename: 'CandidateConnection'; totalCount: number }
 }
 
 export type GetCouncilVotesQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
-  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetCouncilVotesQuery = {
@@ -1008,8 +1008,8 @@ export type GetCouncilVotesQuery = {
 }
 
 export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
-  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
 }>
 
 export type GetCouncilVotesCommitmentsQuery = {
@@ -1018,7 +1018,7 @@ export type GetCouncilVotesCommitmentsQuery = {
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
 }>
 
 export type GetCouncilVotesCountQuery = {
@@ -1027,7 +1027,7 @@ export type GetCouncilVotesCountQuery = {
 }
 
 export type GetPastVotesResultsQueryVariables = Types.Exact<{
-  myAccounts?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+  myAccounts?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
 }>
 
 export type GetPastVotesResultsQuery = {
@@ -1487,7 +1487,7 @@ export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCoun
 export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
 export const GetPastCouncilMembersDocument = gql`
   query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-    councilMembers(where: { electedInCouncil_eq: $councilId }) {
+    councilMembers(where: { electedInCouncil: { id_eq: $councilId } }) {
       member {
         ...MemberFields
       }
@@ -1974,13 +1974,19 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
+    withdrawn: candidatesConnection(
+      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusWithdrawn" } }
+    ) {
       totalCount
     }
-    councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+    successful: candidatesConnection(
+      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusElected" } }
+    ) {
       totalCount
     }
-    candidatesConnection(where: { member: { id_eq: $memberId } }) {
+    failed: candidatesConnection(
+      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusLost" } }
+    ) {
       totalCount
     }
   }
