@@ -676,7 +676,7 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Validate max and min value', async () => {
+        it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
           await SpecificParameters.fillAmount(Math.pow(2, 32))
           expect(await screen.queryByTestId('amount-input')).toHaveValue('0')

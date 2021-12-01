@@ -44,7 +44,13 @@ export const SetMembershipLeadInvitationQuota = ({ amount: initialAmount, setAmo
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Amount" tight units="JOY" required disabled={isLoading || !group?.leadId}>
+          <InputComponent
+            label="Lead Invitation Quota Amount"
+            tight
+            units="JOY"
+            required
+            disabled={isLoading || !group?.leadId}
+          >
             <InputNumber
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
