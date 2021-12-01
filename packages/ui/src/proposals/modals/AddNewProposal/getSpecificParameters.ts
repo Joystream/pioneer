@@ -107,7 +107,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'setInitialInvitationCount': {
       return {
-        SetInitialInvitationCount: [],
+        SetInitialInvitationCount: [specifics?.invitationCount],
       }
     }
     default:
