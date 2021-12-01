@@ -166,7 +166,7 @@ describe('UI: AddNewProposalModal', () => {
       const button = await getWarningNextButton()
 
       const checkbox = await screen.findByRole('checkbox')
-      await fireEvent.click(checkbox)
+      fireEvent.click(checkbox)
 
       expect(button).toBeEnabled()
     })
@@ -205,7 +205,7 @@ describe('UI: AddNewProposalModal', () => {
 
       it('Selected', async () => {
         const type = (await screen.findByText('Funding Request')).parentElement?.parentElement as HTMLElement
-        await fireEvent.click(type)
+        fireEvent.click(type)
 
         const button = await getNextStepButton()
         expect(button).not.toBeDisabled()
@@ -375,7 +375,7 @@ describe('UI: AddNewProposalModal', () => {
 
             expect(await screen.getByTestId('removeMember')).toBeDefined()
 
-            await fireEvent.click(await screen.getByTestId('removeMember'))
+            fireEvent.click(await screen.getByTestId('removeMember'))
             expect(screen.queryByTestId('removeMember')).toBeNull()
 
             const button = await getNextStepButton()
@@ -907,14 +907,14 @@ describe('UI: AddNewProposalModal', () => {
     const button = await getWarningNextButton()
 
     const checkbox = await screen.findByRole('checkbox')
-    await fireEvent.click(checkbox)
-    await fireEvent.click(button as HTMLElement)
+    fireEvent.click(checkbox)
+    fireEvent.click(button as HTMLElement)
   }
 
   async function finishProposalType(type?: ProposalType) {
     const typeElement = (await screen.findByText(camelCaseToText(type || 'fundingRequest'))).parentElement
       ?.parentElement as HTMLElement
-    await fireEvent.click(typeElement)
+    fireEvent.click(typeElement)
 
     await clickNextButton()
   }
@@ -937,25 +937,25 @@ describe('UI: AddNewProposalModal', () => {
 
   async function fillProposalDetails() {
     const titleInput = await screen.findByLabelText(/Proposal title/i)
-    await fireEvent.change(titleInput, { target: { value: 'Some title' } })
+    fireEvent.change(titleInput, { target: { value: 'Some title' } })
 
     const rationaleInput = await screen.findByLabelText(/Rationale/i)
-    await fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
+    fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
   }
 
   async function triggerYes() {
     const triggerToggle = await screen.findByText('Yes')
-    await fireEvent.click(triggerToggle)
+    fireEvent.click(triggerToggle)
   }
 
   async function fillTriggerBlock(value: number) {
     const blockInput = await screen.getByTestId('triggerBlock')
-    await fireEvent.change(blockInput, { target: { value } })
+    fireEvent.change(blockInput, { target: { value } })
   }
 
   async function discussionClosed() {
     const discussionToggle = (await screen.findAllByRole('checkbox'))[1]
-    await fireEvent.click(discussionToggle)
+    fireEvent.click(discussionToggle)
   }
 
   async function getWarningNextButton() {
@@ -968,7 +968,7 @@ describe('UI: AddNewProposalModal', () => {
 
   async function clickPreviousButton() {
     const button = await getPreviousStepButton()
-    await fireEvent.click(button as HTMLElement)
+    fireEvent.click(button as HTMLElement)
   }
 
   async function getNextStepButton() {
@@ -981,7 +981,7 @@ describe('UI: AddNewProposalModal', () => {
 
   async function clickNextButton() {
     const button = await getNextStepButton()
-    await fireEvent.click(button as HTMLElement)
+    fireEvent.click(button as HTMLElement)
   }
 
   const selectGroup = async (name: string) => {
@@ -998,7 +998,7 @@ describe('UI: AddNewProposalModal', () => {
 
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
-    await fireEvent.change(amountInput, { target: { value } })
+    fireEvent.change(amountInput, { target: { value } })
   }
 
   const SpecificParameters = {
@@ -1015,7 +1015,7 @@ describe('UI: AddNewProposalModal', () => {
         await SpecificParameters.FundingRequest.selectRecipient(recipient)
 
         const button = await getCreateButton()
-        await fireEvent.click(button as HTMLElement)
+        fireEvent.click(button as HTMLElement)
       },
     },
     DecreaseWorkingGroupLeadStake: {
