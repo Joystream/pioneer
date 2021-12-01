@@ -42,7 +42,6 @@ export const useOpenings = ({ groupId: group_eq, type, openingsPositionType }: U
     () => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [],
     [loading, data]
   )
-
   return {
     openings,
     isLoading: loading,

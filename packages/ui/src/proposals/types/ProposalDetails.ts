@@ -47,11 +47,29 @@ export type RewardPerBlockDetail = {
 export type OpeningDescriptionDetail = {
   openingDescription?: string
 }
+export type SignalTextDetail = {
+  signalText: string
+}
 export type MemberDetail = {
   member?: Member
 }
 export type GroupNameDetail = {
   groupName: string
+}
+
+export type CountDetail = {
+  count: BN
+}
+
+export type ProposalDetail = {
+  proposal?: {
+    id: string
+    title: string
+  }
+}
+
+export type OpeningLinkDetail = {
+  openingId?: string
 }
 
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
@@ -71,11 +89,11 @@ export type RuntimeUpgradeDetails = ProposalDetailsNew<'runtimeUpgrade', NewByte
 
 export type UpdateGroupBudgetDetails = ProposalDetailsNew<'updateWorkingGroupBudget', GroupDetail & AmountDetail>
 
-export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount', AmountDetail>
+export type MaxValidatorCountDetails = ProposalDetailsNew<'setMaxValidatorCount', CountDetail>
 
 export type FillWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
   'fillWorkingGroupLeadOpening',
-  MemberDetail & GroupDetail
+  MemberDetail & GroupDetail & OpeningLinkDetail
 >
 
 export type SetWorkingGroupLeadRewardDetails = ProposalDetailsNew<
@@ -88,9 +106,26 @@ export type TerminateWorkingGroupLeadDetails = ProposalDetailsNew<
   MemberDetail & GroupDetail & AmountDetail
 >
 
+export type SignalDetails = ProposalDetailsNew<'signal', SignalTextDetail>
+
 export type SetMembershipPriceDetails = ProposalDetailsNew<'setMembershipPrice', AmountDetail>
 
 export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBudgetIncrement', AmountDetail>
+
+export type CancelWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
+  'cancelWorkingGroupLeadOpening',
+  GroupNameDetail | OpeningLinkDetail
+>
+
+export type SetReferralCutDetails = ProposalDetailsNew<'setReferralCut', AmountDetail>
+
+export type SetInitialInvitationBalanceDetails = ProposalDetailsNew<'setInitialInvitationBalance', AmountDetail>
+
+export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInvitationCount', CountDetail>
+
+export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward', AmountDetail>
+
+export type VetoDetails = ProposalDetailsNew<'veto', ProposalDetail>
 
 export type ProposalDetails =
   | BaseProposalDetails
@@ -106,6 +141,13 @@ export type ProposalDetails =
   | TerminateWorkingGroupLeadDetails
   | SetMembershipPriceDetails
   | SetCouncilBudgetIncrementDetails
+  | SignalDetails
+  | CancelWorkingGroupLeadOpeningDetails
+  | SetReferralCutDetails
+  | SetInitialInvitationBalanceDetails
+  | SetInitialInvitationCountDetails
+  | SetCouncilorRewardDetails
+  | VetoDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -185,7 +227,7 @@ const asSetMaxValidatorCount: DetailsCast<'SetMaxValidatorCountProposalDetails'>
   fragment
 ): MaxValidatorCountDetails => ({
   type: 'setMaxValidatorCount',
-  amount: new BN(fragment.newMaxValidatorCount),
+  count: new BN(fragment.newMaxValidatorCount),
 })
 
 const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDetails'> = (
@@ -196,9 +238,10 @@ const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDe
   group: fragment.opening
     ? {
         id: fragment.opening.group.id as GroupIdName,
-        name: fragment.opening.group.name,
+        name: asWorkingGroupName(fragment.opening.group.name),
       }
     : undefined,
+  openingId: fragment.opening?.id,
 })
 
 const asSetWorkingGroupLeadReward: DetailsCast<'SetWorkingGroupLeadRewardProposalDetails'> = (
@@ -231,6 +274,50 @@ const asSetCouncilBudgetIncrement: DetailsCast<'SetCouncilBudgetIncrementProposa
   amount: new BN(fragment.newAmount),
 })
 
+const asSignal: DetailsCast<'SignalProposalDetails'> = (fragment): SignalDetails => ({
+  type: 'signal',
+  signalText: fragment.text,
+})
+
+const asCancelGroupOpening: DetailsCast<'CancelWorkingGroupLeadOpeningProposalDetails'> = (
+  fragment
+): CancelWorkingGroupLeadOpeningDetails => ({
+  type: 'cancelWorkingGroupLeadOpening',
+  groupName: asWorkingGroupName(fragment.opening?.group.name ?? 'Unknown'),
+  openingId: fragment.opening?.id,
+})
+
+const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment): SetReferralCutDetails => ({
+  type: 'setReferralCut',
+  amount: new BN(fragment.newReferralCut),
+})
+
+const asSetInitialInvitationBalance: DetailsCast<'SetInitialInvitationBalanceProposalDetails'> = (
+  fragment
+): SetInitialInvitationBalanceDetails => ({
+  type: 'setInitialInvitationBalance',
+  amount: new BN(fragment.newInitialInvitationBalance),
+})
+
+const asSetInitialInvitationCount: DetailsCast<'SetInitialInvitationCountProposalDetails'> = (
+  fragment
+): SetInitialInvitationCountDetails => ({
+  type: 'setInitialInvitationCount',
+  count: new BN(fragment.newInitialInvitationsCount),
+})
+
+const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
+  fragment
+): SetCouncilorRewardDetails => ({
+  type: 'setCouncilorReward',
+  amount: new BN(fragment.newRewardPerBlock),
+})
+
+const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({
+  type: 'veto',
+  proposal: fragment.proposal ?? undefined,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -248,6 +335,13 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   TerminateWorkingGroupLeadProposalDetails: asTerminateWorkingGroupLead,
   SetMembershipPriceProposalDetails: asSetMembershipPrice,
   SetCouncilBudgetIncrementProposalDetails: asSetCouncilBudgetIncrement,
+  SignalProposalDetails: asSignal,
+  CancelWorkingGroupLeadOpeningProposalDetails: asCancelGroupOpening,
+  SetReferralCutProposalDetails: asSetReferralCut,
+  SetInitialInvitationBalanceProposalDetails: asSetInitialInvitationBalance,
+  SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
+  SetCouncilorRewardProposalDetails: asSetCouncilorReward,
+  VetoProposalDetails: asVeto,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

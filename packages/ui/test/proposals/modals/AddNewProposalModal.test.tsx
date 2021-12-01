@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -518,6 +518,47 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Terminate Working Group Lead', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpeningStatuses(server.server)
+          seedOpenings(server.server)
+          seedUpcomingOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('terminateWorkingGroupLead')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - not filled amount, no selected group', async () => {
+          expect(await screen.findByLabelText('Working Group', { selector: 'input' })).toHaveValue('')
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - group selected, amount: not filled/filled', async () => {
+          await SpecificParameters.TerminateWorkingGroupLead.selectGroup('Forum')
+          const workingGroup = server?.server?.schema.find('WorkingGroup', 'forumWorkingGroup') as any
+          const leadHandle = workingGroup?.leader.membership.handle
+          expect(await screen.findByText(leadHandle)).toBeDefined()
+
+          const button = await getCreateButton()
+          expect(button).not.toBeDisabled()
+
+          await triggerYes()
+          await SpecificParameters.fillAmount(100)
+
+          expect(button).not.toBeDisabled()
+        })
+      })
+
       describe('Type - Create Working Group Lead Opening', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
@@ -578,6 +619,38 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Working Group Lead Reward', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setWorkingGroupLeadReward')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Working Group Lead Reward$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.SetWorkingGroupLeadReward.selectGroup('Forum')
+          await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
+          await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Cancel Working Group Lead Opening', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
@@ -600,6 +673,33 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+      describe('Type - Fill Working Group Lead Opening', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpenings(server.server)
+          seedApplications(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('fillWorkingGroupLeadOpening')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Fill Working Group Lead Opening$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-2')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-2')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -638,7 +738,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
           })
 
-          expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
         })
 
@@ -650,10 +750,10 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionSuccess(batchTx, 'proposalsCodex', 'ProposalCreated', [createType('ProposalId', 1337)])
 
           await act(async () => {
-            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+            fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -664,7 +764,7 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionFailure(batchTx)
 
           await act(async () => {
-            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+            fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
           expect(await screen.findByText('Failure')).toBeDefined()
@@ -703,7 +803,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -751,7 +851,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -812,8 +912,8 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Arrives at the transaction modal', async () => {
-        expect(screen.queryByText(/You intend to change the proposal discussion thread mode./i)).not.toBeNull()
-        expect(screen.queryByText(/Sign transaction and change mode/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to change the proposal discussion thread mode./i)).toBeDefined()
+        expect(await screen.findByText(/Sign transaction and change mode/i)).toBeDefined()
       })
 
       it('Success', async () => {
@@ -822,13 +922,15 @@ describe('UI: AddNewProposalModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(screen.queryByText('See my Proposal')).not.toBeNull()
+        expect(await screen.findByText('See my Proposal')).toBeDefined()
       })
 
       it('Failure', async () => {
         stubTransactionFailure(changeModeTx)
         const button = await getButton(/sign transaction and change mode/i)
-        await fireEvent.click(button as HTMLElement)
+
+        fireEvent.click(button)
+
         expect(await screen.findByText('Failure')).toBeDefined()
       })
     })
@@ -925,6 +1027,10 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Opening$', name)
   }
 
+  const selectApplication = async (name: string) => {
+    await selectFromDropdown('^Application$', name)
+  }
+
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     await fireEvent.change(amountInput, { target: { value } })
@@ -950,6 +1056,9 @@ describe('UI: AddNewProposalModal', () => {
     DecreaseWorkingGroupLeadStake: {
       selectGroup,
     },
+    TerminateWorkingGroupLead: {
+      selectGroup,
+    },
     CreateWorkingGroupLeadOpening: {
       selectGroup,
       fillShortDescription: async (value: string) => await fillField('short-description', value),
@@ -959,6 +1068,14 @@ describe('UI: AddNewProposalModal', () => {
     },
     CancelWorkingGroupLeadOpening: {
       selectedOpening,
+    },
+    SetWorkingGroupLeadReward: {
+      selectGroup,
+      fillRewardAmount: async (value: number) => await fillField('amount-input', value),
+    },
+    FillWorkingGroupLeadOpening: {
+      selectedOpening,
+      selectApplication,
     },
   }
 

@@ -8,7 +8,6 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
-import { info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
@@ -28,46 +27,43 @@ const observeTransaction = (
   transaction: Observable<ISubmittableResult>,
   send: Sender<any>,
   fee: BN,
-  setPending: (b: boolean) => void,
   setBlockHash?: SetBlockHash
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
 
-    info(`Current transaction status: ${status.type}`)
-
     if (status.isReady) {
       send('PENDING')
-      setPending(true)
     }
 
     if (status.isInBlock) {
       const hash = status.asInBlock
-      info('Included at block hash', JSON.stringify(hash))
-      info('Events:')
-      info(JSON.stringify(events))
       setBlockHash && setBlockHash(hash.toString())
 
       if (hasErrorEvent(events)) {
+        subscription.unsubscribe()
         send('ERROR')
       } else {
         send({ type: 'FINALIZING', fee })
       }
-
-      setPending(false)
     }
 
     if (status.isFinalized) {
-      send({
-        type: hasErrorEvent(events) ? 'ERROR' : 'PROCESSING',
-        events,
-      })
+      if (hasErrorEvent(events)) {
+        subscription.unsubscribe()
+        send({ type: 'ERROR', events })
+      } else {
+        send({ type: 'PROCESSING', events })
+      }
     }
   }
 
-  const errorHandler = () => send({ type: 'CANCELED', events: [] })
+  const errorHandler = () => {
+    subscription.unsubscribe()
+    send({ type: 'CANCELED', events: [] })
+  }
 
-  transaction.subscribe({
+  const subscription = transaction.subscribe({
     next: statusCallback,
     error: errorHandler,
   })
@@ -81,7 +77,11 @@ export const useProcessTransaction = ({
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
-  const { setPending } = useTransactionStatus()
+  const { setService } = useTransactionStatus()
+
+  useEffect(() => {
+    setService(service)
+  }, [])
 
   useEffect(() => {
     if (!state.matches('signing') || !transaction || !paymentInfo) {
@@ -91,13 +91,7 @@ export const useProcessTransaction = ({
     const fee = paymentInfo.partialFee.toBn()
 
     web3FromAddress(signer).then((extension) => {
-      observeTransaction(
-        transaction.signAndSend(signer, { signer: extension.signer }),
-        send,
-        fee,
-        setPending,
-        setBlockHash
-      )
+      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee, setBlockHash)
     })
     send('SIGN_EXTERNAL')
   }, [state.value.toString(), paymentInfo])

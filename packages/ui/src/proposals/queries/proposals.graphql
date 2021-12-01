@@ -117,6 +117,7 @@ fragment ProposalWithDetailsFields on Proposal {
     }
     ... on FillWorkingGroupLeadOpeningProposalDetails {
       opening {
+        id
         group {
           id
           name
@@ -125,6 +126,18 @@ fragment ProposalWithDetailsFields on Proposal {
       application {
         applicant {
           ...MemberFields
+        }
+      }
+    }
+    ... on CancelWorkingGroupLeadOpeningProposalDetails {
+      opening {
+        id
+        group {
+          id
+          name
+        }
+        metadata {
+          description
         }
       }
     }
@@ -145,6 +158,27 @@ fragment ProposalWithDetailsFields on Proposal {
     }
     ... on SetCouncilBudgetIncrementProposalDetails {
       newAmount
+    }
+    ... on SignalProposalDetails {
+      text
+    }
+    ... on SetReferralCutProposalDetails {
+      newReferralCut
+    }
+    ... on SetInitialInvitationBalanceProposalDetails {
+      newInitialInvitationBalance
+    }
+    ... on SetInitialInvitationCountProposalDetails {
+      newInitialInvitationsCount
+    }
+    ... on SetCouncilorRewardProposalDetails {
+      newRewardPerBlock
+    }
+    ... on VetoProposalDetails {
+      proposal {
+        id
+        title
+      }
     }
   }
   discussionThread {

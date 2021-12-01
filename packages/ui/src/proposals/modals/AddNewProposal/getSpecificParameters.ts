@@ -75,8 +75,35 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         ],
       }
     }
+    case 'terminateWorkingGroupLead': {
+      return {
+        TerminateWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
+      }
+    }
+    case 'setWorkingGroupLeadReward': {
+      return {
+        SlashWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.rewardPerBlock,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
+      }
+    }
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
+    }
+    case 'fillWorkingGroupLeadOpening': {
+      return {
+        FillWorkingGroupLeadOpening: {
+          opening_id: specifics?.openingId,
+          successful_application_id: specifics?.applicationId,
+          workingGroup: WorkingGroupDef.Forum,
+        },
+      }
     }
     case 'setReferralCut': {
       return { SetReferralCut: specifics?.amount?.toNumber() }

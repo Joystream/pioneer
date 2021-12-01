@@ -162,7 +162,7 @@ describe('UI: Vote for Proposal Modal', () => {
         fireEvent.click(await getButton(/^sign transaction and vote/i))
       })
 
-      expect(screen.queryByText('Success')).not.toBeNull()
+      expect(await screen.findByText('Success')).toBeDefined()
       expect(await getButton(/See my proposal/i)).toBeDefined()
     })
 
@@ -174,7 +174,7 @@ describe('UI: Vote for Proposal Modal', () => {
         fireEvent.click(await getButton(/^sign transaction and vote/i))
       })
 
-      expect(screen.queryByText('Failure')).not.toBeNull()
+      expect(await screen.findByText('Failure')).toBeDefined()
       expect(
         includesTextWithMarkup(screen.getByText, `There was a problem while Approve proposal "${PROPOSAL_DATA.title}".`)
       ).toBeInTheDocument()
