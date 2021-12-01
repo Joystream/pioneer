@@ -92,7 +92,15 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
+
     seedMembers(server.server)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpenings(server.server)
+    seedUpcomingOpenings(server.server)
+    seedApplications(server.server)
+    seedWorkers(server.server)
+    updateWorkingGroups(server.server)
 
     useAccounts = {
       isLoading: false,
@@ -470,16 +478,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Decrease Working Group Lead Stake', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpeningStatuses(server.server)
-          seedOpenings(server.server)
-          seedUpcomingOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('decreaseWorkingGroupLeadStake')
           await finishStakingAccount()
@@ -519,16 +517,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Terminate Working Group Lead', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpeningStatuses(server.server)
-          seedOpenings(server.server)
-          seedUpcomingOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('terminateWorkingGroupLead')
           await finishStakingAccount()
@@ -560,10 +548,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Create Working Group Lead Opening', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('createWorkingGroupLeadOpening')
           await finishStakingAccount()
@@ -620,14 +604,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Set Working Group Lead Reward', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('setWorkingGroupLeadReward')
           await finishStakingAccount()
@@ -652,11 +628,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Cancel Working Group Lead Opening', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpenings(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('cancelWorkingGroupLeadOpening')
           await finishStakingAccount()
@@ -677,12 +648,6 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
       describe('Type - Fill Working Group Lead Opening', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpenings(server.server)
-          seedApplications(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('fillWorkingGroupLeadOpening')
           await finishStakingAccount()
