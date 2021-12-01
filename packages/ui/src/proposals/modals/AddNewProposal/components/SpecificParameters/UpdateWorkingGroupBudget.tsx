@@ -4,13 +4,15 @@ import React, { useEffect } from 'react'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
+import { Info } from '@/common/components/Info'
+import { capitalizeFirstLetter } from '@/common/helpers'
 
 export interface UpdateWorkingGroupBudgetParameters {
   budgetUpdate?: BN
@@ -61,6 +63,14 @@ export const UpdateWorkingGroupBudget = ({
           >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
+          {group && (
+            <Info>
+              <TextMedium>
+                Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
+                <TextInlineMedium bold>{formatTokenValue(group.budget)} JOY</TextInlineMedium>.
+              </TextMedium>
+            </Info>
+          )}
           <InputComponent
             label="Budget Update"
             tight
