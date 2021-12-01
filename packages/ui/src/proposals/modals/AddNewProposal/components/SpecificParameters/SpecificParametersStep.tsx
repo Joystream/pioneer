@@ -18,6 +18,8 @@ import {
   AddNewProposalMachineState,
 } from '@/proposals/modals/AddNewProposal/machine'
 
+import { SetInitialInvitationCount } from './SetInitialInvitationCount'
+
 interface SpecificParametersStepProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
@@ -74,6 +76,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return !!(specifics?.applicationId && specifics?.openingId)
+    }
+    case state.matches('specificParameters.setInitialInvitationCount'): {
+      return !!specifics?.invitationCount
     }
     default:
       return false
@@ -190,6 +195,8 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
       )
+    case state.matches('specificParameters.setInitialInvitationCount'):
+      return <SetInitialInvitationCount setNewCount={(count) => send('SET_INVITATION_COUNT', { count })} />
     default:
       return null
   }

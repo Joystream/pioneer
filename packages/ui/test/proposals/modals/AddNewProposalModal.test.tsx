@@ -677,6 +677,20 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+      describe('Type - Set Initial Invitation Count', () => {
+        beforeEach(async () => {
+          await finishProposalType('setInitialInvitationCount')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Initial Invitation Count$/i)).toBeDefined()
+        })
+
+        it('Valid form', async () => {
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
     })
 
     describe('Authorize', () => {
