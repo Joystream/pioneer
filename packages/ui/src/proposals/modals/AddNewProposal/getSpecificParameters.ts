@@ -105,6 +105,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         },
       }
     }
+    case 'setReferralCut': {
+      return { SetReferralCut: specifics?.amount?.toNumber() }
+    }
     default:
       return { Signal: '' }
   }
