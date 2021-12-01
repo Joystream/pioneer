@@ -165,7 +165,7 @@ describe('UI: AddNewProposalModal', () => {
     it('Checked', async () => {
       const button = await getWarningNextButton()
 
-      const checkbox = await screen.findByRole('checkbox')
+      const checkbox = await getCheckbox()
       fireEvent.click(checkbox)
 
       expect(button).toBeEnabled()
@@ -901,12 +901,14 @@ describe('UI: AddNewProposalModal', () => {
     })
   })
 
+  const getCheckbox = async () => await screen.findByLabelText(/I’m aware of/i)
+
   async function finishWarning() {
     await renderModal()
 
     const button = await getWarningNextButton()
 
-    const checkbox = await screen.findByRole('checkbox')
+    const checkbox = await getCheckbox()
     fireEvent.click(checkbox)
     fireEvent.click(button as HTMLElement)
   }
