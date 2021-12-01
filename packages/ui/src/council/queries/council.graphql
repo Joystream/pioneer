@@ -263,13 +263,19 @@ query GetCurrentCandidateIdByMember($memberId: ID!) {
 }
 
 query GetCandidateStats($memberId: ID) {
-  candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
+  withdrawn: candidatesConnection(
+    where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusWithdrawn" } }
+  ) {
     totalCount
   }
-  councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+  successful: candidatesConnection(
+    where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusElected" } }
+  ) {
     totalCount
   }
-  candidatesConnection(where: { member: { id_eq: $memberId } }) {
+  failed: candidatesConnection(
+    where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusLost" } }
+  ) {
     totalCount
   }
 }
