@@ -584,6 +584,35 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Max Validator Count', () => {
+        beforeEach(async () => {
+          await finishProposalType('setMaxValidatorCount')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set max validator count$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max and min value', async () => {
+          await SpecificParameters.fillAmount(400)
+          expect(await screen.queryByText('Maximal amount allowed is'))
+
+          await SpecificParameters.fillAmount(0)
+          expect(await screen.queryByText('Minimal amount allowed is'))
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Cancel Working Group Lead Opening', () => {
         beforeAll(() => {
           seedWorkingGroups(server.server)
