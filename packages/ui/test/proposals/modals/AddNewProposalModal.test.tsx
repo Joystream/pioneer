@@ -677,6 +677,45 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+      describe('Type - Update Working Group Budget', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpeningStatuses(server.server)
+          seedOpenings(server.server)
+          seedUpcomingOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('updateWorkingGroupBudget')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - no selected group, amount not filled', async () => {
+          expect(await screen.findByLabelText('Working Group', { selector: 'input' })).toHaveValue('')
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Invalid - group selected, amount not filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid - group selected, amount filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(-100)
+
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
     })
 
     describe('Authorize', () => {
@@ -1048,6 +1087,9 @@ describe('UI: AddNewProposalModal', () => {
     FillWorkingGroupLeadOpening: {
       selectedOpening,
       selectApplication,
+    },
+    UpdateWorkingGroupBudget: {
+      selectGroup,
     },
   }
 

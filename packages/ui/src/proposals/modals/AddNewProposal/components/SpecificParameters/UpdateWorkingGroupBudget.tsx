@@ -55,12 +55,17 @@ export const UpdateWorkingGroupBudget = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="working-group-input"
             label="Working Group"
             required
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
-            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
+            <SelectWorkingGroup
+              id="working-group"
+              selectedGroupId={groupId}
+              onChange={(selected) => setGroupId(selected.id)}
+            />
           </InputComponent>
           {group && (
             <Info>
