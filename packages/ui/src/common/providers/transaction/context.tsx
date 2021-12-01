@@ -1,19 +1,16 @@
 import { createContext } from 'react'
-import { ActorRef } from 'xstate'
+import { ActorRef, State } from 'xstate'
+
+import { TransactionEvent, TransactionContext as TxContext, TransactionStateValue } from '@/common/model/machines'
 
 export interface UseTransaction {
   isTransactionPending: boolean
-  setPending: (state: boolean) => void
-  transactionService?: ActorRef<any>
-  showStatus: (service: ActorRef<any>) => void
-  hideStatus: () => void
-  statusShown: boolean
+  status: TransactionStateValue | null
+  setService: (service: ActorRef<TransactionEvent, State<TxContext>>) => void
 }
 
 export const TransactionContext = createContext<UseTransaction>({
   isTransactionPending: false,
-  setPending: () => undefined,
-  showStatus: () => undefined,
-  hideStatus: () => undefined,
-  statusShown: false,
+  status: null,
+  setService: () => undefined,
 })
