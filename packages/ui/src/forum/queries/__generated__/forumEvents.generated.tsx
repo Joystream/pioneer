@@ -56,7 +56,23 @@ export type ThreadCreatedEventFieldsFragment = {
     id: string
     title: string
     author: { __typename: 'Membership'; id: string; handle: string }
+    category: { __typename: 'ForumCategory'; id: string; title: string }
   }
+}
+
+export type ThreadDeletedEventFieldsFragment = {
+  __typename: 'ThreadDeletedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+}
+
+export type ThreadModeratedEventFieldsFragment = {
+  __typename: 'ThreadModeratedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+  actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
 export type CategoryCreatedEventFieldsFragment = {
@@ -136,7 +152,21 @@ export type GetForumEventsQuery = {
       id: string
       title: string
       author: { __typename: 'Membership'; id: string; handle: string }
+      category: { __typename: 'ForumCategory'; id: string; title: string }
     }
+  }>
+  threadDeletedEvents: Array<{
+    __typename: 'ThreadDeletedEvent'
+    id: string
+    createdAt: any
+    thread: { __typename: 'ForumThread'; id: string; title: string }
+  }>
+  threadModeratedEvents: Array<{
+    __typename: 'ThreadModeratedEvent'
+    id: string
+    createdAt: any
+    thread: { __typename: 'ForumThread'; id: string; title: string }
+    actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   categoryCreatedEvents: Array<{
     __typename: 'CategoryCreatedEvent'
@@ -240,6 +270,36 @@ export const ThreadCreatedEventFieldsFragmentDoc = gql`
         id
         handle
       }
+      category {
+        id
+        title
+      }
+    }
+  }
+`
+export const ThreadDeletedEventFieldsFragmentDoc = gql`
+  fragment ThreadDeletedEventFields on ThreadDeletedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+  }
+`
+export const ThreadModeratedEventFieldsFragmentDoc = gql`
+  fragment ThreadModeratedEventFields on ThreadModeratedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+    actor {
+      membership {
+        id
+        handle
+      }
     }
   }
 `
@@ -288,6 +348,12 @@ export const GetForumEventsDocument = gql`
     threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
       ...ThreadCreatedEventFields
     }
+    threadDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...ThreadDeletedEventFields
+    }
+    threadModeratedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...ThreadModeratedEventFields
+    }
     categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
       ...CategoryCreatedEventFields
     }
@@ -300,6 +366,8 @@ export const GetForumEventsDocument = gql`
   ${PostModeratedEventFieldsFragmentDoc}
   ${PostDeletedEventFieldsFragmentDoc}
   ${ThreadCreatedEventFieldsFragmentDoc}
+  ${ThreadDeletedEventFieldsFragmentDoc}
+  ${ThreadModeratedEventFieldsFragmentDoc}
   ${CategoryCreatedEventFieldsFragmentDoc}
   ${CategoryDeletedEventFieldsFragmentDoc}
 `

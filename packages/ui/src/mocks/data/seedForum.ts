@@ -79,19 +79,28 @@ export const seedForumCategories = (server: any) => {
 const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
 
-const seedThreadStatus = ({ __typename, ...data }: RawForumThreadMock['status'], server: any) => {
+const seedThreadStatus = ({ __typename, ...data }: RawForumThreadMock['status'], threadId: string, server: any) => {
   const { threadDeletedEvent } = data
   const isArchived = __typename === 'ThreadStatusLocked'
-  const event = isArchived ? { threadDeletedEvent: server.schema.create('ThreadDeletedEvent', threadDeletedEvent) } : {}
+  const event = isArchived
+    ? {
+        threadDeletedEvent: server.schema.create('ThreadDeletedEvent', {
+          ...threadDeletedEvent,
+          threadId,
+        }),
+      }
+    : {}
   return server.schema.create(__typename, event)
 }
 
-export function seedForumThread(data: RawForumThreadMock, server: any) {
-  return server.schema.create('ForumThread', {
+export async function seedForumThread(data: RawForumThreadMock, server: any) {
+  const thread = server.schema.create('ForumThread', {
     ...data,
     createdInEvent: seedThreadCreatedInEvent(data.createdInEvent, server),
-    status: seedThreadStatus(data.status, server),
+    status: null,
   })
+
+  return thread.update({ status: seedThreadStatus(data.status, data.id, server) })
 }
 
 export const seedForumThreads = (server: any) => {

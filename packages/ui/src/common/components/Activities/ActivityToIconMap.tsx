@@ -45,6 +45,8 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   PostModeratedEvent: [UpcomingIcon, 'joystream'],
   PostDeletedEvent: [TerminatedIcon, 'negative'],
   ThreadCreatedEvent: [CreatedIcon, 'joystream'],
+  ThreadDeletedEvent: [TerminatedIcon, 'negative'],
+  ThreadModeratedEvent: [UpcomingIcon, 'joystream'],
   CategoryCreatedEvent: [CreatedIcon, 'joystream'],
   CategoryDeletedEvent: [TerminatedIcon, 'negative'],
   ProposalCreatedEvent: [CreatedIcon, 'joystream'],

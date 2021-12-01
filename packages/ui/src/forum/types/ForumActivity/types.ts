@@ -6,6 +6,8 @@ export type ForumActivity =
   | PostModeratedActivity
   | PostDeletedActivity
   | ThreadCreatedActivity
+  | ThreadDeletedActivity
+  | ThreadModeratedActivity
   | CategoryCreatedActivity
   | CategoryDeletedActivity
 
@@ -44,7 +46,28 @@ export interface ThreadCreatedActivity extends BaseActivity {
     id: string
     title: string
   }
+  category: {
+    id: string
+    title: string
+  }
   author: MemberDisplayFields
+}
+
+export interface ThreadDeletedActivity extends BaseActivity {
+  eventType: 'ThreadDeletedEvent'
+  thread: {
+    id: string
+    title: string
+  }
+}
+
+export interface ThreadModeratedActivity extends BaseActivity {
+  eventType: 'ThreadModeratedEvent'
+  thread: {
+    id: string
+    title: string
+  }
+  actor: MemberDisplayFields
 }
 
 export interface CategoryCreatedActivity extends BaseActivity {

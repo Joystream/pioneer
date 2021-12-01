@@ -18,6 +18,8 @@ import { PostDeletedContent } from '@/forum/components/Activities/PostDeletedCon
 import { PostEditedContent } from '@/forum/components/Activities/PostEditedContent'
 import { PostModeratedContent } from '@/forum/components/Activities/PostModeratedContent'
 import { ThreadCreatedContent } from '@/forum/components/Activities/ThreadCreatedContent'
+import { ThreadDeletedContent } from '@/forum/components/Activities/ThreadDeletedContent'
+import { ThreadModeratedContent } from '@/forum/components/Activities/ThreadModeratedContent'
 import { ProposalCancelledContent } from '@/proposals/components/Activities/ProposalCancelledContent'
 import { ProposalCreatedContent } from '@/proposals/components/Activities/ProposalCreatedContent'
 import { ProposalDecisionMadeContent } from '@/proposals/components/Activities/ProposalDecisionMadeContent'
@@ -73,6 +75,8 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   PostDeletedEvent: PostDeletedContent,
   PostModeratedEvent: PostModeratedContent,
   ThreadCreatedEvent: ThreadCreatedContent,
+  ThreadDeletedEvent: ThreadDeletedContent,
+  ThreadModeratedEvent: ThreadModeratedContent,
   CategoryCreatedEvent: CategoryCreatedContent,
   CategoryDeletedEvent: CategoryDeletedContent,
   ProposalCreatedEvent: ProposalCreatedContent,

@@ -71,6 +71,34 @@ fragment ThreadCreatedEventFields on ThreadCreatedEvent {
       id
       handle
     }
+    category {
+      id
+      title
+    }
+  }
+}
+
+fragment ThreadDeletedEventFields on ThreadDeletedEvent {
+  id
+  createdAt
+  thread {
+    id
+    title
+  }
+}
+
+fragment ThreadModeratedEventFields on ThreadModeratedEvent {
+  id
+  createdAt
+  thread {
+    id
+    title
+  }
+  actor {
+    membership {
+      id
+      handle
+    }
   }
 }
 
@@ -115,6 +143,12 @@ query GetForumEvents {
   }
   threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
     ...ThreadCreatedEventFields
+  }
+  threadDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
+    ...ThreadDeletedEventFields
+  }
+  threadModeratedEvents(orderBy: createdAt_DESC, limit: 5) {
+    ...ThreadModeratedEventFields
   }
   categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
     ...CategoryCreatedEventFields

@@ -7,9 +7,17 @@ import {
   PostModeratedEventFieldsFragment,
   PostTextUpdatedEventFieldsFragment,
   ThreadCreatedEventFieldsFragment,
+  ThreadDeletedEventFieldsFragment,
+  ThreadModeratedEventFieldsFragment,
 } from '@/forum/queries/__generated__/forumEvents.generated'
 
-import { CategoryDeletedActivity, PostDeletedActivity, PostModeratedActivity } from '.'
+import {
+  CategoryDeletedActivity,
+  PostDeletedActivity,
+  PostModeratedActivity,
+  ThreadDeletedActivity,
+  ThreadModeratedActivity,
+} from '.'
 import { CategoryCreatedActivity, PostAddedActivity, PostEditedActivity, ThreadCreatedActivity } from './types'
 
 export function asPostActivity(
@@ -32,7 +40,34 @@ export function asThreadCreatedActivity(fields: ThreadCreatedEventFieldsFragment
       id: fields.thread.id,
       title: fields.thread.title,
     },
+    category: {
+      id: fields.thread.category.id,
+      title: fields.thread.category.title,
+    },
     author: asMemberDisplayFields(fields.thread.author),
+  }
+}
+
+export function asThreadDeletedActivity(fields: ThreadDeletedEventFieldsFragment): ThreadDeletedActivity {
+  return {
+    eventType: fields.__typename,
+    ...asBaseActivity(fields),
+    thread: {
+      id: fields.thread.id,
+      title: fields.thread.title,
+    },
+  }
+}
+
+export function asThreadModeratedActivity(fields: ThreadModeratedEventFieldsFragment): ThreadModeratedActivity {
+  return {
+    eventType: fields.__typename,
+    ...asBaseActivity(fields),
+    thread: {
+      id: fields.thread.id,
+      title: fields.thread.title,
+    },
+    actor: asMemberDisplayFields(fields.actor.membership),
   }
 }
 

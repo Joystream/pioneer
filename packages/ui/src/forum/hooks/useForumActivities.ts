@@ -6,6 +6,8 @@ import {
   asPostDeletedActivity,
   asPostModeratedActivity,
   asThreadCreatedActivity,
+  asThreadDeletedActivity,
+  asThreadModeratedActivity,
 } from '../types/ForumActivity'
 
 export const useForumActivities = () => {
@@ -18,6 +20,8 @@ export const useForumActivities = () => {
         ...data.postModeratedEvents.map(asPostModeratedActivity),
         ...data.postDeletedEvents.map(asPostDeletedActivity),
         ...data.threadCreatedEvents.map(asThreadCreatedActivity),
+        ...data.threadDeletedEvents.map(asThreadDeletedActivity),
+        ...data.threadModeratedEvents.map(asThreadModeratedActivity),
         ...data.categoryCreatedEvents.map(asCategoryCreatedActivity),
         ...data.categoryDeletedEvents.map(asCategoryDeletedActivity),
       ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
