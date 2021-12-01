@@ -1,11 +1,13 @@
 import { createType } from '@joystream/types'
-import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
+import { BalanceKind, WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
+
+type BalanceKindValue = keyof typeof BalanceKind.typeDefinitions
 
 const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   contentDirectoryWorkingGroup: 'Content',
@@ -22,7 +24,7 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   return GroupIdToGroupParam[groupId]
 }
 
-const getUpdateBalance = (budgetUpdate: BN | undefined) => {
+const getUpdateBalance = (budgetUpdate: BN | undefined): BalanceKindValue | null => {
   if (!budgetUpdate) return null
 
   return budgetUpdate.isNeg() ? 'Negative' : 'Positive'
