@@ -678,6 +678,10 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
       describe('Type - Set Initial Invitation Count', () => {
+        beforeAll(() => {
+          stubQuery(api, 'members.initialInvitationCount', createType('u32', 13))
+        })
+
         beforeEach(async () => {
           await finishProposalType('setInitialInvitationCount')
           await finishStakingAccount()
@@ -685,6 +689,10 @@ describe('UI: AddNewProposalModal', () => {
           await finishTriggerAndDiscussion()
 
           expect(screen.getByText(/^Set Initial Invitation Count$/i)).toBeDefined()
+        })
+
+        it('Displays current invitations count', async () => {
+          expect(await screen.findByText('The current initial invitation count is 13.')).toBeDefined()
         })
 
         it('Valid form', async () => {

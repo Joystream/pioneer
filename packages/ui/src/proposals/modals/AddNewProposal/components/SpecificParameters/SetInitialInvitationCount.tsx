@@ -5,7 +5,9 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { useObservable } from '@/common/hooks/useObservable'
 import { formatTokenValue } from '@/common/model/formatters'
 
 export interface SetInitialInvitationCountParameters {
@@ -18,6 +20,8 @@ interface InvitationCountProps {
 
 export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps) => {
   const [count, setCount] = useNumberInput(0)
+  const { api } = useApi()
+  const currentCount = useObservable(api?.query.members.initialInvitationCount(), [])
 
   useEffect(() => {
     setNewCount(new BN(count))
@@ -31,16 +35,21 @@ export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps)
           <TextMedium lighter>Set Initial Invitation Count</TextMedium>
         </RowGapBlock>
       </Row>
-      <Row>
-        <InputComponent label="New Count" tight required>
-          <InputNumber
-            id="count-input"
-            value={formatTokenValue(new BN(count))}
-            placeholder="0"
-            onChange={(event) => setCount(event.target.value)}
-          />
-        </InputComponent>
-      </Row>
+      <RowGapBlock gap={12}>
+        <Row>
+          <InputComponent label="New Count" tight required>
+            <InputNumber
+              id="count-input"
+              value={formatTokenValue(new BN(count))}
+              placeholder="0"
+              onChange={(event) => setCount(event.target.value)}
+            />
+          </InputComponent>
+        </Row>
+        <Row>
+          <TextMedium lighter>The current initial invitation count is {currentCount?.toString()}.</TextMedium>
+        </Row>
+      </RowGapBlock>
     </RowGapBlock>
   )
 }
