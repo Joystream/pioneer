@@ -39,7 +39,6 @@ export const UpdateWorkingGroupBudget = ({
 
   useEffect(() => {
     setBudgetUpdate(new BN(amount))
-    console.log('Final', { amount })
   }, [amount])
   useEffect(() => {
     setBudgetUpdate(BN_ZERO)

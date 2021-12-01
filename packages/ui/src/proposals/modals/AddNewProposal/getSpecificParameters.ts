@@ -5,6 +5,7 @@ import { ApiRx } from '@polkadot/api'
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
+import BN from 'bn.js'
 
 const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   contentDirectoryWorkingGroup: 'Content',
@@ -19,6 +20,12 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   if (!groupId) return null
 
   return GroupIdToGroupParam[groupId]
+}
+
+const getUpdateBalance = (budgetUpdate: BN | undefined) => {
+  if (!budgetUpdate) return null
+
+  return budgetUpdate.isNeg() ? 'Negative' : 'Positive'
 }
 
 export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): any => {
@@ -77,6 +84,15 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
+    }
+    case 'updateWorkingGroupBudget': {
+      return {
+        UpdateWorkingGroupBudget: [
+          specifics?.budgetUpdate,
+          getWorkingGroupParam(specifics?.groupId),
+          getUpdateBalance(specifics?.budgetUpdate),
+        ],
+      }
     }
     default:
       return { Signal: '' }
