@@ -16,17 +16,24 @@ import {
   AmountDetail,
   DestinationsDetail,
   ProposalType,
+  SignalTextDetail,
+  CountDetail,
+  ProposalDetail,
+  OpeningLinkDetail,
 } from '@/proposals/types'
 
 export type RenderType =
   | 'Text'
   | 'Amount'
+  | 'Numeric'
   | 'Markdown'
   | 'RuntimeBlob'
   | 'NumberOfBlocks'
   | 'Member'
   | 'Address'
   | 'Divider'
+  | 'ProposalLink'
+  | 'OpeningLink'
 
 export interface RenderNode {
   label?: string
@@ -81,7 +88,16 @@ const groupMapper: Mapper<GroupDetail, 'group'> = (value): RenderNode[] => {
 const openingDescriptionMapper: Mapper<OpeningDescriptionDetail, 'openingDescription'> = (value): RenderNode[] => {
   return [
     {
-      label: 'Description',
+      label: 'Opening Description',
+      value: value,
+      renderType: 'Markdown',
+    },
+  ]
+}
+const signalTextMapper: Mapper<SignalTextDetail, 'signalText'> = (value): RenderNode[] => {
+  return [
+    {
+      label: 'Signal Text',
       value: value,
       renderType: 'Markdown',
     },
@@ -134,7 +150,7 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
 }
 const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
   const defaultLabel = 'Amount'
-  const overriddenLabelsBy: { [key: string]: string } = {
+  const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
     decreaseWorkingGroupLeadStake: 'Decrease stake amount',
     slashWorkingGroupLead: 'Slashing amount',
   }
@@ -148,18 +164,54 @@ const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[]
     },
   ]
 }
+const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
+  const countLabels: Partial<Record<ProposalType, string>> = {
+    setInitialInvitationCount: 'Invitations',
+    setMaxValidatorCount: 'Validators',
+  }
+  const label = type && type in countLabels ? countLabels[type] : 'Count'
+  return [
+    {
+      label,
+      value,
+      renderType: 'Numeric',
+    },
+  ]
+}
+const proposalLinkMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
+  return [
+    {
+      label: 'Proposal',
+      value,
+      renderType: 'ProposalLink',
+    },
+  ]
+}
+const openingLinkMapper: Mapper<OpeningLinkDetail, 'openingId'> = (value) => {
+  return [
+    {
+      label: 'Opening',
+      value,
+      renderType: 'OpeningLink',
+    },
+  ]
+}
 
 const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   destinations: destinationsMapper,
   newBytecodeId: newBytecodeIdMapper,
   group: groupMapper,
   openingDescription: openingDescriptionMapper,
+  signalText: signalTextMapper,
   rewardPerBlock: rewardPerBlockMapper,
   stakeAmount: stakeAmountMapper,
   unstakingPeriod: unstakingPeriodMapper,
   groupName: groupNameMapper,
   member: memberMapper,
   amount: amountMapper,
+  count: countMapper,
+  proposal: proposalLinkMapper,
+  openingId: openingLinkMapper,
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {

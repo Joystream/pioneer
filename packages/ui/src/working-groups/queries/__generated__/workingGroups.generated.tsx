@@ -1,7 +1,7 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
 import { gql } from '@apollo/client'
-import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { MemberFieldsFragmentDoc } from '@/memberships/queries'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type WorkingGroupMetadataFieldsFragment = {
@@ -820,7 +820,7 @@ export type WorkingGroupApplicationFieldsFragment = {
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
-  applicantId_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
@@ -1998,8 +1998,8 @@ export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGrou
 export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
-  query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-    workingGroupApplications(where: { applicant: { id_in: $applicantId_in } }) {
+  query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {
+    workingGroupApplications(where: $where) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -2018,7 +2018,7 @@ export const GetWorkingGroupApplicationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupApplicationsQuery({
  *   variables: {
- *      applicantId_in: // value for 'applicantId_in'
+ *      where: // value for 'where'
  *   },
  * });
  */
