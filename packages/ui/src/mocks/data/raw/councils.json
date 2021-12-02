@@ -1,27 +1,27 @@
 [
   {
     "id": "0",
-    "electedAtBlock": 9482,
-    "endedAtBlock": 19003
+    "electedAtBlock": 8325,
+    "endedAtBlock": 17983
   },
   {
     "id": "1",
-    "electedAtBlock": 5052,
-    "endedAtBlock": 17154
+    "electedAtBlock": 5719,
+    "endedAtBlock": 66693
   },
   {
     "id": "2",
-    "electedAtBlock": 3243,
-    "endedAtBlock": 81685
+    "electedAtBlock": 7757,
+    "endedAtBlock": 58648
   },
   {
     "id": "3",
-    "electedAtBlock": 4683,
+    "electedAtBlock": 3442,
     "endedAtBlock": null
   },
   {
     "id": "4",
-    "electedAtBlock": 1563,
+    "electedAtBlock": 5034,
     "endedAtBlock": null
   }
 ]

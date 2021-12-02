@@ -119,11 +119,6 @@ export const generateWorkers = (mocks: Mocks) => {
   }
 
   const workers = WORKING_GROUPS.map(generateAllWorkers).flatMap((a: any) => a)
-  mocks.openings
-    .filter((opening) => opening.type == 'LEADER')
-    .forEach((opening) => applications.push(
-      generateApplication(opening)(mocks.members[randomFromRange(0, mocks.members.length - 1)].id)
-    ))
 
   return {
     workers,
