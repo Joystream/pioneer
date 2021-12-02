@@ -4,7 +4,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of } from 'rxjs'
+import { from, of, asyncScheduler, scheduled } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
@@ -38,19 +38,22 @@ const createErrorEvents = () => [
 ]
 
 export const stubTransactionResult = (events: any[]) =>
-  from([
-    {
-      status: { isReady: true, type: 'Ready' },
-    },
-    {
-      status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
-      events: [...events],
-    },
-    {
-      status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
-      events: [...events],
-    },
-  ])
+  scheduled(
+    from([
+      {
+        status: { isReady: true, type: 'Ready' },
+      },
+      {
+        status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
+        events: [...events],
+      },
+      {
+        status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
+        events: [...events],
+      },
+    ]),
+    asyncScheduler
+  )
 
 const createBatchSuccessEvents = () => [
   {

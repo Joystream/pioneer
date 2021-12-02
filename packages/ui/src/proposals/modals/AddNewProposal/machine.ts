@@ -15,6 +15,8 @@ import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrementParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
+import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { SlashWorkingGroupLeadParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { FillWorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
@@ -66,10 +68,12 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
     | SlashWorkingGroupLeadParameters
+    | SetReferralCutParameters
     | TerminateWorkingGroupLeadParameters
     | FillWorkingGroupLeadOpeningParameters
     | SetWorkingGroupLeadRewardParameters
     | SetCouncilBudgetIncrementParameters
+    | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -83,6 +87,10 @@ interface FundingRequestContext extends SpecificParametersContext {
 
 interface SetCouncilBudgetIncrementContext extends SpecificParametersContext {
   specifics: SetCouncilBudgetIncrementParameters
+}
+
+interface SetReferralCutContext extends SpecificParametersContext {
+  specifics: SetReferralCutParameters
 }
 
 interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
@@ -121,6 +129,10 @@ interface SetWorkingGroupLeadRewardContext extends SpecificParametersContext {
   specifics: SetWorkingGroupLeadRewardParameters
 }
 
+interface SetMembershipLeadInvitationContext extends SpecificParametersContext {
+  specifics: SetMembershipLeadInvitationParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -148,8 +160,10 @@ export type AddNewProposalContext = Partial<
     SlashWorkingGroupLeadContext &
     TerminateWorkingGroupLeadContext &
     TransactionContext &
+    SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
-    DiscusisonContext
+    DiscusisonContext &
+    SetMembershipLeadInvitationContext
 >
 
 export type AddNewProposalState =
@@ -168,11 +182,13 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'signal' }; context: SignalContext }
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
+  | { value: { specificParameters: 'setReferralCut' }; context: SetReferralCutContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
   | { value: { specificParameters: 'setCouncilBudgetIncrement' }; context: SetCouncilBudgetIncrementContext }
+  | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -392,9 +408,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+            { target: 'setReferralCut', cond: isType('setReferralCut') },
             { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
+            { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
           ],
         },
@@ -404,6 +422,17 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
               actions: assign({
                 specifics: (context, event) => {
                   return { ...context.specifics, signal: event.signal }
+                },
+              }),
+            },
+          },
+        },
+        setReferralCut: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => {
+                  return { ...context.specifics, amount: event.amount }
                 },
               }),
             },
@@ -652,6 +681,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   }),
                 },
               },
+            },
+          },
+        },
+        setMembershipLeadInvitationQuota: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, amount: event.amount }),
+              }),
             },
           },
         },

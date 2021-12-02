@@ -5,6 +5,8 @@ import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
+import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
@@ -73,11 +75,17 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
         specifics.workerId !== undefined
       )
     }
+    case state.matches('specificParameters.setReferralCut'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return !!(specifics?.applicationId && specifics?.openingId)
+    }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     default:
       return false
@@ -200,6 +208,21 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.setReferralCut'): {
+      return (
+        <SetReferralCut
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+          amount={state.context.specifics?.amount}
+        />
+      )
+    }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
+      return (
+        <SetMembershipLeadInvitationQuota
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     default:

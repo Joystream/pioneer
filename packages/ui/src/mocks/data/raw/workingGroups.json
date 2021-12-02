@@ -51,7 +51,7 @@
     "id": "membershipWorkingGroup",
     "name": "membershipWorkingGroup",
     "workers": [],
-    "leadId": null,
+    "leadId": "membershipWorkingGroup-52",
     "budget": 3609,
     "metadata": {
       "name": "nihil sequi",

@@ -150,7 +150,7 @@ describe('UI: DeletePostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
-    expect(await screen.getByText('There was a problem deleting your post.')).toBeDefined()
+    expect(await screen.findByText('There was a problem deleting your post.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -159,7 +159,7 @@ describe('UI: DeletePostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
-    expect(await screen.getByText('Your post has been deleted.')).toBeDefined()
+    expect(await screen.findByText('Your post has been deleted.')).toBeDefined()
   })
 
   const renderModal = () =>

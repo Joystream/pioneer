@@ -326,7 +326,7 @@ describe('UI: Announce Candidacy Modal', () => {
             fireEvent.click(await getButton(/^Sign transaction/i))
           })
 
-          expect(screen.queryByText(/You intend to announce candidacy/i)).not.toBeNull()
+          expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
         })
 
@@ -337,7 +337,7 @@ describe('UI: Announce Candidacy Modal', () => {
             fireEvent.click(await getButton(/^Sign transaction/i))
           })
 
-          expect(screen.queryByText('Failure')).not.toBeNull()
+          expect(await screen.findByText('Failure')).toBeDefined()
         })
       })
 
@@ -358,7 +358,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
         await fillSummary(true)
 
-        expect(screen.queryByText(/You intend to announce candidacy/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
         expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
       })
 
@@ -379,7 +379,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
         await fillSummary(true)
 
-        expect(screen.queryByText(/You intend to announce candidacy/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
         expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20')
       })
     })
@@ -412,7 +412,7 @@ describe('UI: Announce Candidacy Modal', () => {
           fireEvent.click(await getButton(/^Sign transaction/i))
         })
 
-        expect(screen.queryByText(/You intend to set candidacy note/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to set candidacy note/i)).toBeDefined()
       })
 
       it('Success: Staking account not confirmed', async () => {
@@ -423,7 +423,7 @@ describe('UI: Announce Candidacy Modal', () => {
           fireEvent.click(await getButton(/^Sign transaction/i))
         })
 
-        expect(screen.queryByText(/You intend to set candidacy note/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to set candidacy note/i)).toBeDefined()
       })
 
       it('Failure', async () => {
@@ -469,7 +469,7 @@ describe('UI: Announce Candidacy Modal', () => {
           fireEvent.click(await getButton(/^Sign transaction/i))
         })
 
-        expect(screen.queryByText(/^Success/i)).not.toBeNull()
+        expect(await screen.findByText(/^Success/i)).toBeDefined()
       })
 
       it('Failure', async () => {
@@ -524,7 +524,7 @@ describe('UI: Announce Candidacy Modal', () => {
       fireEvent.click(await getButton(/^Sign transaction/i))
     })
 
-    expect(screen.queryByText(/^Success/i)).not.toBeNull()
+    expect(await screen.findByText(/^Success/i)).toBeDefined()
     await waitFor(async () => expect(await getButton(/^See my announcement/i)).not.toBeDisabled())
     await act(async () => {
       fireEvent.click(await getButton(/^See my announcement/i))
