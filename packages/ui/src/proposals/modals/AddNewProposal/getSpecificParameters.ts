@@ -57,6 +57,11 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         },
       }
     }
+    case 'amendConstitution': {
+      return {
+        AmendConstitution: specifics?.description,
+      }
+    }
     case 'decreaseWorkingGroupLeadStake': {
       return {
         DecreaseWorkingGroupLeadStake: [

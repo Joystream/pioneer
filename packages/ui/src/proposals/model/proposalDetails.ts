@@ -42,6 +42,7 @@ export const enabledProposals: ProposalType[] = [
   'fillWorkingGroupLeadOpening',
   'setMembershipLeadInvitationQuota',
   'setReferralCut',
+  'amendConstitution',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {

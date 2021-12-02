@@ -1,6 +1,7 @@
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
+import { AmendConstitution } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/AmendConstitution'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -39,6 +40,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
       return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
+    }
+    case state.matches('specificParameters.amendConstitution'): {
+      return !!specifics?.description
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
       return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
@@ -129,6 +133,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setDescription={(description) => send('SET_DESCRIPTION', { description })}
           setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
+    case state.matches('specificParameters.amendConstitution'):
+      return (
+        <AmendConstitution
+          description={state.context.specifics?.description}
+          setDescription={(description) => send('SET_DESCRIPTION', { description })}
         />
       )
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):

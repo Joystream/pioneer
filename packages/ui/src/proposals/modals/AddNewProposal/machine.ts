@@ -13,6 +13,7 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
+import { AmendConstitutionParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/AmendConstitution'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
@@ -72,6 +73,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | FillWorkingGroupLeadOpeningParameters
     | SetWorkingGroupLeadRewardParameters
     | SetMembershipLeadInvitationParameters
+    | AmendConstitutionParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -81,6 +83,10 @@ interface SignalContext extends SpecificParametersContext {
 
 interface FundingRequestContext extends SpecificParametersContext {
   specifics: FundingRequestParameters
+}
+
+interface AmendConstitutionContext extends SpecificParametersContext {
+  specifics: AmendConstitutionParameters
 }
 
 interface SetReferralCutContext extends SpecificParametersContext {
@@ -144,6 +150,7 @@ export type AddNewProposalContext = Partial<
     SpecificParametersContext &
     SignalContext &
     FundingRequestContext &
+    AmendConstitutionContext &
     WorkingGroupLeadOpeningContext &
     CancelWorkingGroupLeadOpeningContext &
     FillWorkingGroupLeadOpeningContext &
@@ -181,6 +188,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
   | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
+  | { value: { specificParameters: 'amendConstitution' }; context: AmendConstitutionContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -405,6 +413,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
             { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
+            { target: 'amendConstitution', cond: isType('amendConstitution') },
           ],
         },
         signal: {
@@ -414,6 +423,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => {
                   return { ...context.specifics, signal: event.signal }
                 },
+              }),
+            },
+          },
+        },
+        amendConstitution: {
+          on: {
+            SET_DESCRIPTION: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  description: event.description,
+                }),
               }),
             },
           },
