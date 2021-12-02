@@ -46,9 +46,9 @@ const votes = rawVotes.filter(fromLastElection).map((vote) => [
 
 const DefaultDurations = { voting: 5, revealing: 7 }
 
-const handlerFor = (stageKind: 'announcing' | 'voting' | 'revealing') => (args: any) => {
+const handler = (args: TransferArgs) => {
   const pathName = `${__dirname}/data/chain-spec.json`
-  const stage = stageKind.toLowerCase() as typeof stageKind
+  const stage = args.stage.toLowerCase() as typeof args.stage
 
   // Load the current chain spec
   const spec = JSON.parse(readFileSync(pathName, 'utf8'))
@@ -77,14 +77,18 @@ const handlerFor = (stageKind: 'announcing' | 'voting' | 'revealing') => (args: 
   writeFileSync(pathName, JSON.stringify(spec, null, 2))
 }
 
-yargs(process.argv.slice(2))
-  .usage('yarn set-chain-spec <command>')
-  .scriptName('')
-  .command('announcing', 'Make the node start at the Announcing stage', handlerFor('announcing'))
-  .command('voting', 'Make the node start at the Voting stage', builder, handlerFor('voting'))
-  .command('revealing', 'Make the node start at the Revealing stage', builder, handlerFor('revealing'))
-  .demandCommand().argv
+const stages = ['announcing' as const, 'voting' as const, 'revealing' as const]
+const options = {
+  duration: { type: 'number', alias: 'd' },
+  stage: { choices: stages, alias: 's', demand: true },
+} as const
 
-function builder(argv: yargs.Argv<unknown>) {
-  argv.options({ d: { type: 'number', alias: 'duration' } })
+type CommandOptions = yargs.InferredOptionTypes<typeof options>
+type TransferArgs = yargs.Arguments<CommandOptions>
+
+export const setChainSpecModule = {
+  command: 'setChainSpec',
+  describe: 'Generate a chain spec making the node start at the given stage',
+  handler,
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
 }
