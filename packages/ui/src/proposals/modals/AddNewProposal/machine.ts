@@ -650,7 +650,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           on: {
             SET_AMOUNT: {
               actions: assign({
-                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
+                specifics: (context, event) => ({ ...context.specifics, amount: event.amount }),
               }),
             },
           },

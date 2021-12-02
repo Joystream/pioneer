@@ -50,6 +50,7 @@ export const SetMembershipLeadInvitationQuota = ({ amount: initialAmount, setAmo
             units="JOY"
             required
             disabled={isLoading || !group?.leadId}
+            message={!group?.leadId ? "Proposal can't be created because there's no working group lead" : undefined}
           >
             <InputNumber
               id="amount-input"
