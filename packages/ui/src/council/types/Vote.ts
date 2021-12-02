@@ -14,7 +14,7 @@ interface BaseVote {
 
 export interface Vote extends BaseVote {
   id: string
-  createdAtBlock: Block
+  createdAtBlock?: Block
   commitment: string
   voteFor?: Member
 }
@@ -32,7 +32,7 @@ export type PastElectionVote = BaseVote
 
 export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   id: fields.id,
-  createdAtBlock: asBlock((fields.castEvent as any[])[0]),
+  createdAtBlock: fields.castEvent ? asBlock(fields.castEvent[0]) : undefined,
   stake: new BN(fields.stake),
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,

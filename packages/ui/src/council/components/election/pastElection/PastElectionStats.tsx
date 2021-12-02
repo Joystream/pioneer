@@ -6,7 +6,7 @@ import { formatDateString } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 
 interface PastElectionStatsProps {
-  finishedAtBlock: Block
+  finishedAtBlock?: Block
   cycleId: number
   totalCandidates: number
   revealedVotes: number
@@ -21,7 +21,9 @@ export const PastElectionStats = ({
   totalVotes,
 }: PastElectionStatsProps) => (
   <Statistics>
-    <StatisticItem title="Ended at">{formatDateString(finishedAtBlock.timestamp)}</StatisticItem>
+    <StatisticItem title="Ended at">
+      {finishedAtBlock ? formatDateString(finishedAtBlock.timestamp) : '-'}
+    </StatisticItem>
     <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
       <TextHuge bold>{cycleId} round</TextHuge>
     </StatisticItem>

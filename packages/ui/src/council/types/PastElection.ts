@@ -15,7 +15,7 @@ export interface ElectionVotingResult {
 export interface PastElection {
   id: string
   cycleId: number
-  finishedAtBlock: Block
+  finishedAtBlock?: Block
   totalStake: BN
   totalCandidates: number
   revealedVotes: number
@@ -29,7 +29,7 @@ export interface PastElectionWithDetails extends PastElection {
 export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
   id: fields.id,
   cycleId: fields.cycleId,
-  finishedAtBlock: asBlock((fields.referendumResult as any[])[0].referendumFinishedEvent),
+  finishedAtBlock: fields.referendumResult ? asBlock(fields.referendumResult[0].referendumFinishedEvent) : undefined,
   totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
   totalCandidates: fields.candidates.length,
   revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
