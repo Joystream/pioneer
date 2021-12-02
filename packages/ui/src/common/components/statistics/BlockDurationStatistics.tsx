@@ -7,7 +7,7 @@ import { TextInlineSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { AN_HOUR, A_DAY, A_MINUTE, A_WEEK, Fonts } from '@/common/constants'
 import { plural } from '@/common/helpers'
-import { formatTokenValue, MILISECOND_PER_BLOCK, splitDuration } from '@/common/model/formatters'
+import { formatTokenValue, MILLISECONDS_PER_BLOCK, splitDuration } from '@/common/model/formatters'
 import { isDefined, toNumber } from '@/common/utils'
 
 import { ColumnGapBlock } from '../page/PageContent'
@@ -16,10 +16,10 @@ import { MultiStatisticItem } from './MultiValueStat'
 import { StatisticItem, StatisticItemProps, StatisticItemSpacedContent } from './StatisticItem'
 
 const format = splitDuration([
-  [A_WEEK / MILISECOND_PER_BLOCK, 'w'],
-  [A_DAY / MILISECOND_PER_BLOCK, 'd'],
-  [AN_HOUR / MILISECOND_PER_BLOCK, 'h'],
-  [A_MINUTE / MILISECOND_PER_BLOCK, 'min'],
+  [A_WEEK / MILLISECONDS_PER_BLOCK, 'w'],
+  [A_DAY / MILLISECONDS_PER_BLOCK, 'd'],
+  [AN_HOUR / MILLISECONDS_PER_BLOCK, 'h'],
+  [A_MINUTE / MILLISECONDS_PER_BLOCK, 'min'],
 ])
 
 interface BlockDurationStatisticsProps extends StatisticItemProps {
@@ -40,7 +40,7 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   return (
     <MultiStatisticItem {...props}>
       <ItemRow>
-        <DurationValue value={duration > A_MINUTE / MILISECOND_PER_BLOCK ? format(duration) : [['< 1', 'min']]} />
+        <DurationValue value={duration > A_MINUTE / MILLISECONDS_PER_BLOCK ? format(duration) : [['< 1', 'min']]} />
       </ItemRow>
 
       <ItemRow>
