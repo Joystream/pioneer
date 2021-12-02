@@ -19,6 +19,8 @@ import {
   AddNewProposalMachineState,
 } from '@/proposals/modals/AddNewProposal/machine'
 
+import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
+
 interface SpecificParametersStepProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
@@ -200,6 +202,9 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           amount={state.context.specifics?.amount}
         />
       )
+    }
+    case state.matches('specificParameters.setInitialInvitationBalance'): {
+      return <SetInitialInvitationBalance setAmount={(amount) => send('SET_AMOUNT', { amount })} />
     }
     default:
       return null

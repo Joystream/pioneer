@@ -27,6 +27,7 @@ import {
   SignalParameters,
   TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
+import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
 import {
   CancelWorkingGroupLeadOpeningParameters,
   StakingPolicyAndRewardParameters,
@@ -121,6 +122,10 @@ interface SetWorkingGroupLeadRewardContext extends SpecificParametersContext {
   specifics: SetWorkingGroupLeadRewardParameters
 }
 
+interface SetInitialInvitationBalanceContext extends SpecificParametersContext {
+  specifics: SetInitialInvitationBalanceParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -149,7 +154,8 @@ export type AddNewProposalContext = Partial<
     TransactionContext &
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
-    DiscusisonContext
+    DiscusisonContext &
+    SetInitialInvitationBalanceContext
 >
 
 export type AddNewProposalState =
@@ -396,6 +402,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
+            { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
           ],
         },
         signal: {
@@ -664,6 +671,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   openingId: event.openingId,
+                }),
+              }),
+            },
+          },
+        },
+        setInitialInvitationBalance: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  amount: event.amount,
                 }),
               }),
             },
