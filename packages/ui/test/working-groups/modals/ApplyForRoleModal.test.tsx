@@ -263,11 +263,13 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
+        await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
+
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
@@ -279,11 +281,13 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionFailure(batchTx)
         await fillSteps()
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
+        await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
+
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()

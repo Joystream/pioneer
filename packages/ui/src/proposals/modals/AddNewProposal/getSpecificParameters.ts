@@ -110,6 +110,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         SetInitialInvitationCount: [specifics?.invitationCount],
       }
     }
+    case 'setReferralCut': {
+      return { SetReferralCut: specifics?.amount?.toNumber() }
+    }
     default:
       return { Signal: '' }
   }
