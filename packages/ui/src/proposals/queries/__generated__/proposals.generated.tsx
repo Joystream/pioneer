@@ -219,9 +219,9 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'CreateBlogPostProposalDetails' }
     | {
         __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
-        stakeAmount: any
+        stakeAmount: number
         unstakingPeriod: number
-        rewardPerBlock: any
+        rewardPerBlock: number
         metadata?:
           | { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
           | null
@@ -230,7 +230,7 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | {
         __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
-        amount: any
+        amount: number
         lead?:
           | {
               __typename: 'Worker'
@@ -321,17 +321,17 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'RuntimeUpgradeProposalDetails'
         newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
       }
-    | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
-    | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: any }
-    | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: number }
+    | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: number }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: number }
     | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-    | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
+    | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: number }
     | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
     | {
         __typename: 'SetWorkingGroupLeadRewardProposalDetails'
-        newRewardPerBlock: any
+        newRewardPerBlock: number
         lead?:
           | {
               __typename: 'Worker'
@@ -367,7 +367,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'SignalProposalDetails'; text: string }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
-        amount: any
+        amount: number
         lead?:
           | {
               __typename: 'Worker'
@@ -403,7 +403,7 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | {
         __typename: 'TerminateWorkingGroupLeadProposalDetails'
-        slashingAmount?: any | null | undefined
+        slashingAmount?: number | null | undefined
         lead?:
           | {
               __typename: 'Worker'
@@ -439,7 +439,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'UnlockBlogPostProposalDetails' }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
-        amount: any
+        amount: number
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
       }
     | {
@@ -825,9 +825,9 @@ export type GetProposalQuery = {
           | { __typename: 'CreateBlogPostProposalDetails' }
           | {
               __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
-              stakeAmount: any
+              stakeAmount: number
               unstakingPeriod: number
-              rewardPerBlock: any
+              rewardPerBlock: number
               metadata?:
                 | { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null | undefined }
                 | null
@@ -836,7 +836,7 @@ export type GetProposalQuery = {
             }
           | {
               __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
-              amount: any
+              amount: number
               lead?:
                 | {
                     __typename: 'Worker'
@@ -927,17 +927,17 @@ export type GetProposalQuery = {
               __typename: 'RuntimeUpgradeProposalDetails'
               newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null | undefined
             }
-          | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: any }
-          | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: any }
-          | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: any }
+          | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: number }
+          | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: number }
+          | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: number }
           | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
           | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
           | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-          | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: any }
+          | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: number }
           | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
           | {
               __typename: 'SetWorkingGroupLeadRewardProposalDetails'
-              newRewardPerBlock: any
+              newRewardPerBlock: number
               lead?:
                 | {
                     __typename: 'Worker'
@@ -973,7 +973,7 @@ export type GetProposalQuery = {
           | { __typename: 'SignalProposalDetails'; text: string }
           | {
               __typename: 'SlashWorkingGroupLeadProposalDetails'
-              amount: any
+              amount: number
               lead?:
                 | {
                     __typename: 'Worker'
@@ -1009,7 +1009,7 @@ export type GetProposalQuery = {
             }
           | {
               __typename: 'TerminateWorkingGroupLeadProposalDetails'
-              slashingAmount?: any | null | undefined
+              slashingAmount?: number | null | undefined
               lead?:
                 | {
                     __typename: 'Worker'
@@ -1045,7 +1045,7 @@ export type GetProposalQuery = {
           | { __typename: 'UnlockBlogPostProposalDetails' }
           | {
               __typename: 'UpdateWorkingGroupBudgetProposalDetails'
-              amount: any
+              amount: number
               group?: { __typename: 'WorkingGroup'; id: string; name: string } | null | undefined
             }
           | {

@@ -9,11 +9,11 @@
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2600,
-    "missingRewardAmount": 300,
+    "earnedTotal": 2000,
+    "missingRewardAmount": 1600,
     "stake": 6000,
-    "nextPaymentAt": "2021-11-29T12:36:39.571Z",
-    "createdAt": "2021-11-03T02:58:33.927Z"
+    "nextPaymentAt": "2021-12-03T04:18:23.245Z",
+    "createdAt": "2021-11-23T21:07:51.157Z"
   },
   {
     "id": "forumWorkingGroup-1",
@@ -24,236 +24,214 @@
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2100,
-    "missingRewardAmount": 1800,
+    "rewardPerBlock": 100,
+    "earnedTotal": 3200,
+    "missingRewardAmount": 1500,
     "stake": 7000,
-    "nextPaymentAt": "2021-11-30T00:00:44.320Z",
-    "createdAt": "2021-11-16T06:29:28.251Z"
+    "nextPaymentAt": "2021-12-05T05:30:42.762Z",
+    "createdAt": "2021-12-02T14:46:29.518Z"
   },
   {
     "id": "forumWorkingGroup-2",
     "runtimeId": 2,
-    "membershipId": 42,
+    "membershipId": 46,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-4",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1200,
-    "missingRewardAmount": 500,
+    "rewardPerBlock": 200,
+    "earnedTotal": 2300,
+    "missingRewardAmount": 100,
     "stake": 5000,
-    "nextPaymentAt": "2021-12-01T14:37:04.623Z",
-    "createdAt": "2021-11-04T05:26:40.376Z"
+    "nextPaymentAt": "2021-12-05T20:43:11.475Z",
+    "createdAt": "2021-11-23T08:52:24.034Z"
   },
   {
     "id": "forumWorkingGroup-3",
     "runtimeId": 3,
-    "membershipId": 4,
+    "membershipId": 37,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-6",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3100,
-    "missingRewardAmount": 1200,
-    "stake": 7000,
-    "nextPaymentAt": "2021-11-30T10:39:56.578Z",
-    "createdAt": "2021-11-01T23:53:26.710Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 2500,
+    "missingRewardAmount": 1600,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-11T10:05:14.940Z",
+    "createdAt": "2021-11-15T17:27:56.752Z"
   },
   {
     "id": "forumWorkingGroup-4",
     "runtimeId": 4,
-    "membershipId": 38,
+    "membershipId": 36,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-8",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 1900,
-    "missingRewardAmount": 200,
-    "stake": 5000,
-    "nextPaymentAt": "2021-11-29T23:26:43.304Z",
-    "createdAt": "2021-11-14T14:09:56.331Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 1800,
+    "missingRewardAmount": 1900,
+    "stake": 8000,
+    "nextPaymentAt": "2021-12-05T01:18:56.334Z",
+    "createdAt": "2021-11-26T23:36:39.360Z"
   },
   {
     "id": "forumWorkingGroup-5",
     "runtimeId": 5,
-    "membershipId": 49,
+    "membershipId": 45,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-10",
     "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 45770,
-        "createdAt": "2021-06-29T07:44:35.584Z",
-        "network": "OLYMPIA",
-        "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-5",
-        "penalty": 0
-      }
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 3400,
-    "missingRewardAmount": 1200,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-01T11:07:17.926Z",
-    "createdAt": "2021-11-27T08:59:05.544Z"
+    "earnedTotal": 1500,
+    "missingRewardAmount": 0,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-08T00:59:38.040Z",
+    "createdAt": "2021-11-06T22:24:33.591Z"
   },
   {
     "id": "forumWorkingGroup-6",
     "runtimeId": 6,
-    "membershipId": 35,
+    "membershipId": 25,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-12",
     "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 76312,
-        "createdAt": "2021-07-06T19:28:27.233Z",
-        "network": "OLYMPIA",
-        "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-6",
-        "penalty": 0
-      }
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2900,
-    "missingRewardAmount": 200,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-08T02:41:25.629Z",
-    "createdAt": "2021-11-29T09:50:46.163Z"
+    "earnedTotal": 3700,
+    "missingRewardAmount": 900,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-08T02:26:37.069Z",
+    "createdAt": "2021-11-24T09:12:04.582Z"
   },
   {
     "id": "forumWorkingGroup-7",
     "runtimeId": 7,
-    "membershipId": 29,
+    "membershipId": 40,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-14",
     "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 76095,
-        "createdAt": "2021-09-24T10:29:13.845Z",
-        "network": "OLYMPIA",
-        "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-7",
-        "penalty": 0
-      }
+      "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 1200,
-    "missingRewardAmount": 1900,
-    "stake": 6000,
-    "nextPaymentAt": "2021-12-01T11:01:42.457Z",
-    "createdAt": "2021-11-17T19:59:31.587Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 1600,
+    "missingRewardAmount": 300,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-02T17:03:51.052Z",
+    "createdAt": "2021-11-13T21:35:08.021Z"
   },
   {
     "id": "forumWorkingGroup-8",
     "runtimeId": 8,
-    "membershipId": 10,
+    "membershipId": 33,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-16",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 81907,
-        "createdAt": "2021-08-11T01:02:08.604Z",
+        "inBlock": 38258,
+        "createdAt": "2021-07-30T07:01:09.504Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-8"
+        "workerId": "forumWorkingGroup-8",
+        "penalty": 0
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2100,
-    "missingRewardAmount": 0,
-    "stake": 6000,
-    "nextPaymentAt": "2021-12-05T13:48:03.304Z",
-    "createdAt": "2021-11-02T03:52:57.611Z"
+    "earnedTotal": 2800,
+    "missingRewardAmount": 1100,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-11T01:53:14.115Z",
+    "createdAt": "2021-11-26T17:50:05.020Z"
   },
   {
     "id": "forumWorkingGroup-9",
     "runtimeId": 9,
-    "membershipId": 12,
+    "membershipId": 24,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-18",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 50672,
-        "createdAt": "2021-07-14T00:33:36.639Z",
+        "inBlock": 59695,
+        "createdAt": "2021-09-23T20:15:54.873Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-9"
+        "workerId": "forumWorkingGroup-9",
+        "penalty": 0
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 1400,
-    "missingRewardAmount": 500,
-    "stake": 5000,
-    "nextPaymentAt": "2021-11-30T02:48:11.064Z",
-    "createdAt": "2021-11-17T04:56:27.646Z"
+    "earnedTotal": 3200,
+    "missingRewardAmount": 1700,
+    "stake": 8000,
+    "nextPaymentAt": "2021-12-03T05:44:37.422Z",
+    "createdAt": "2021-11-06T02:24:44.124Z"
   },
   {
     "id": "forumWorkingGroup-10",
     "runtimeId": 10,
-    "membershipId": 23,
+    "membershipId": 14,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-20",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 16126,
-        "createdAt": "2021-07-30T20:22:06.011Z",
+        "inBlock": 46015,
+        "createdAt": "2021-06-10T19:10:48.370Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
         "workerId": "forumWorkingGroup-10"
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2200,
-    "missingRewardAmount": 2000,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-05T10:12:39.132Z",
-    "createdAt": "2021-11-17T00:06:24.702Z"
+    "earnedTotal": 2600,
+    "missingRewardAmount": 1700,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-03T07:59:24.075Z",
+    "createdAt": "2021-11-29T01:42:16.695Z"
   },
   {
     "id": "forumWorkingGroup-11",
     "runtimeId": 11,
-    "membershipId": 24,
+    "membershipId": 12,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-22",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 35761,
-        "createdAt": "2021-11-11T04:34:37.346Z",
+        "inBlock": 90048,
+        "createdAt": "2021-06-23T03:21:01.793Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
         "workerId": "forumWorkingGroup-11"
       }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2500,
-    "missingRewardAmount": 400,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-05T00:37:49.869Z",
-    "createdAt": "2021-11-11T09:27:56.264Z"
+    "earnedTotal": 1200,
+    "missingRewardAmount": 100,
+    "stake": 3000,
+    "nextPaymentAt": "2021-12-06T04:31:06.953Z",
+    "createdAt": "2021-11-15T12:16:51.715Z"
   },
   {
     "id": "forumWorkingGroup-12",
     "runtimeId": 12,
-    "membershipId": 37,
+    "membershipId": 27,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-24",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 60029,
-        "createdAt": "2021-06-30T16:35:50.822Z",
+        "inBlock": 3502,
+        "createdAt": "2021-07-21T01:23:40.787Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
         "workerId": "forumWorkingGroup-12"
@@ -261,234 +239,228 @@
     },
     "rewardPerBlock": 200,
     "earnedTotal": 3400,
-    "missingRewardAmount": 800,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-02T22:55:08.604Z",
-    "createdAt": "2021-11-04T20:27:36.524Z"
+    "missingRewardAmount": 1900,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-08T13:42:56.267Z",
+    "createdAt": "2021-11-14T00:12:06.273Z"
   },
   {
     "id": "forumWorkingGroup-13",
     "runtimeId": 13,
-    "membershipId": 22,
+    "membershipId": 39,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-26",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusLeaving",
       "event": {
-        "inBlock": 68657,
-        "createdAt": "2021-09-30T06:18:11.930Z",
+        "inBlock": 16581,
+        "createdAt": "2021-07-07T04:37:31.299Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
         "workerId": "forumWorkingGroup-13"
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3300,
-    "missingRewardAmount": 1700,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-29T18:50:08.750Z",
-    "createdAt": "2021-11-14T16:27:25.926Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3900,
+    "missingRewardAmount": 100,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-04T22:25:56.409Z",
+    "createdAt": "2021-11-19T10:55:00.647Z"
   },
   {
     "id": "forumWorkingGroup-14",
     "runtimeId": 14,
-    "membershipId": 6,
+    "membershipId": 26,
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-28",
     "status": {
       "type": "WorkerStatusLeaving",
       "event": {
-        "inBlock": 76176,
-        "createdAt": "2021-06-03T11:23:12.063Z",
+        "inBlock": 55245,
+        "createdAt": "2021-08-20T15:25:30.858Z",
         "network": "OLYMPIA",
         "groupId": "forumWorkingGroup",
         "workerId": "forumWorkingGroup-14"
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1400,
-    "missingRewardAmount": 500,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-29T19:31:24.936Z",
-    "createdAt": "2021-11-06T01:47:17.356Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3300,
+    "missingRewardAmount": 1500,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-07T14:47:18.697Z",
+    "createdAt": "2021-11-14T16:52:30.667Z"
   },
   {
-    "id": "forumWorkingGroup-15",
+    "id": "storageWorkingGroup-15",
     "runtimeId": 15,
-    "membershipId": 15,
-    "groupId": "forumWorkingGroup",
-    "applicationId": "forumWorkingGroup-30",
+    "membershipId": 0,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-30",
     "status": {
-      "type": "WorkerStatusLeaving",
-      "event": {
-        "inBlock": 36646,
-        "createdAt": "2021-10-20T21:49:05.438Z",
-        "network": "OLYMPIA",
-        "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-15"
-      }
+      "type": "WorkerStatusActive"
+    },
+    "rewardPerBlock": 100,
+    "earnedTotal": 2700,
+    "missingRewardAmount": 700,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-05T12:52:27.514Z",
+    "createdAt": "2021-11-09T22:35:24.738Z"
+  },
+  {
+    "id": "storageWorkingGroup-16",
+    "runtimeId": 16,
+    "membershipId": 1,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-32",
+    "status": {
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2500,
-    "missingRewardAmount": 1500,
-    "stake": 3000,
-    "nextPaymentAt": "2021-11-30T11:44:30.146Z",
-    "createdAt": "2021-11-26T17:06:02.832Z"
-  },
-  {
-    "id": "forumWorkingGroup-16",
-    "runtimeId": 16,
-    "membershipId": 26,
-    "groupId": "forumWorkingGroup",
-    "applicationId": "forumWorkingGroup-32",
-    "status": {
-      "type": "WorkerStatusLeaving",
-      "event": {
-        "inBlock": 32814,
-        "createdAt": "2021-07-21T01:44:54.537Z",
-        "network": "OLYMPIA",
-        "groupId": "forumWorkingGroup",
-        "workerId": "forumWorkingGroup-16"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2000,
-    "missingRewardAmount": 1300,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-05T15:42:20.853Z",
-    "createdAt": "2021-11-20T01:00:36.942Z"
+    "earnedTotal": 3900,
+    "missingRewardAmount": 1000,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-03T20:51:13.565Z",
+    "createdAt": "2021-11-11T00:46:35.174Z"
   },
   {
     "id": "storageWorkingGroup-17",
     "runtimeId": 17,
-    "membershipId": 0,
+    "membershipId": 13,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-34",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2600,
-    "missingRewardAmount": 800,
+    "rewardPerBlock": 100,
+    "earnedTotal": 3200,
+    "missingRewardAmount": 200,
     "stake": 4000,
-    "nextPaymentAt": "2021-12-04T16:31:04.710Z",
-    "createdAt": "2021-11-16T19:27:08.099Z"
+    "nextPaymentAt": "2021-12-02T17:41:58.695Z",
+    "createdAt": "2021-11-14T23:10:32.721Z"
   },
   {
     "id": "storageWorkingGroup-18",
     "runtimeId": 18,
-    "membershipId": 1,
+    "membershipId": 36,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-36",
     "status": {
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 3900,
-    "missingRewardAmount": 600,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-04T09:36:32.854Z",
-    "createdAt": "2021-11-04T10:44:53.227Z"
+    "earnedTotal": 1300,
+    "missingRewardAmount": 900,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-05T18:12:18.216Z",
+    "createdAt": "2021-12-02T02:26:10.695Z"
   },
   {
     "id": "storageWorkingGroup-19",
     "runtimeId": 19,
-    "membershipId": 11,
+    "membershipId": 24,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-38",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2900,
-    "missingRewardAmount": 100,
-    "stake": 8000,
-    "nextPaymentAt": "2021-12-06T07:01:14.724Z",
-    "createdAt": "2021-11-21T03:28:57.218Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 1300,
+    "missingRewardAmount": 500,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-04T19:47:17.316Z",
+    "createdAt": "2021-11-05T11:03:22.864Z"
   },
   {
     "id": "storageWorkingGroup-20",
     "runtimeId": 20,
-    "membershipId": 34,
+    "membershipId": 35,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-40",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1500,
-    "missingRewardAmount": 800,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-30T19:05:19.815Z",
-    "createdAt": "2021-11-07T13:33:29.710Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3900,
+    "missingRewardAmount": 500,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-04T03:45:34.021Z",
+    "createdAt": "2021-11-30T00:52:10.120Z"
   },
   {
     "id": "storageWorkingGroup-21",
     "runtimeId": 21,
-    "membershipId": 23,
+    "membershipId": 3,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-42",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3300,
-    "missingRewardAmount": 1700,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-07T03:17:06.404Z",
-    "createdAt": "2021-11-22T10:22:23.950Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3600,
+    "missingRewardAmount": 900,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-03T10:25:00.800Z",
+    "createdAt": "2021-11-26T09:15:16.657Z"
   },
   {
     "id": "storageWorkingGroup-22",
     "runtimeId": 22,
-    "membershipId": 40,
+    "membershipId": 39,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-44",
     "status": {
-      "type": "WorkerStatusActive"
+      "type": "WorkerStatusTerminated",
+      "event": {
+        "inBlock": 93729,
+        "createdAt": "2021-08-02T01:51:02.575Z",
+        "network": "OLYMPIA",
+        "groupId": "storageWorkingGroup",
+        "workerId": "storageWorkingGroup-22",
+        "penalty": 0
+      }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 1700,
-    "missingRewardAmount": 100,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-05T01:23:23.018Z",
-    "createdAt": "2021-11-01T06:28:23.447Z"
+    "earnedTotal": 1200,
+    "missingRewardAmount": 1300,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-05T03:11:41.525Z",
+    "createdAt": "2021-11-21T05:45:45.246Z"
   },
   {
     "id": "storageWorkingGroup-23",
     "runtimeId": 23,
-    "membershipId": 5,
+    "membershipId": 12,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-46",
     "status": {
       "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 89656,
-        "createdAt": "2021-07-28T02:43:21.748Z",
+        "inBlock": 10777,
+        "createdAt": "2021-08-05T21:56:20.816Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-23",
         "penalty": 0
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1300,
-    "missingRewardAmount": 1000,
-    "stake": 6000,
-    "nextPaymentAt": "2021-12-03T01:35:55.001Z",
-    "createdAt": "2021-11-11T12:18:12.943Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 2400,
+    "missingRewardAmount": 900,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-05T07:57:22.386Z",
+    "createdAt": "2021-11-10T01:07:15.395Z"
   },
   {
     "id": "storageWorkingGroup-24",
     "runtimeId": 24,
-    "membershipId": 47,
+    "membershipId": 45,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-48",
     "status": {
       "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 21543,
-        "createdAt": "2021-11-12T04:42:18.497Z",
+        "inBlock": 74626,
+        "createdAt": "2021-08-19T06:08:45.905Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-24",
@@ -496,23 +468,23 @@
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 3000,
-    "missingRewardAmount": 800,
+    "earnedTotal": 2600,
+    "missingRewardAmount": 1500,
     "stake": 5000,
-    "nextPaymentAt": "2021-12-02T09:56:59.858Z",
-    "createdAt": "2021-11-13T00:43:28.331Z"
+    "nextPaymentAt": "2021-12-04T22:15:45.213Z",
+    "createdAt": "2021-11-03T01:26:56.697Z"
   },
   {
     "id": "storageWorkingGroup-25",
     "runtimeId": 25,
-    "membershipId": 21,
+    "membershipId": 11,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-50",
     "status": {
       "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 12943,
-        "createdAt": "2021-09-01T02:40:01.441Z",
+        "inBlock": 6083,
+        "createdAt": "2021-06-07T01:29:50.721Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-25",
@@ -520,23 +492,23 @@
       }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 1900,
-    "missingRewardAmount": 1000,
-    "stake": 3000,
-    "nextPaymentAt": "2021-11-29T15:30:08.557Z",
-    "createdAt": "2021-11-11T01:59:41.070Z"
+    "earnedTotal": 3000,
+    "missingRewardAmount": 600,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-03T05:16:07.780Z",
+    "createdAt": "2021-11-05T07:10:00.154Z"
   },
   {
     "id": "storageWorkingGroup-26",
     "runtimeId": 26,
-    "membershipId": 49,
+    "membershipId": 15,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-52",
     "status": {
       "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 29178,
-        "createdAt": "2021-08-12T21:27:56.091Z",
+        "inBlock": 866,
+        "createdAt": "2021-10-26T06:10:51.278Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-26",
@@ -544,440 +516,424 @@
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2600,
-    "missingRewardAmount": 400,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-01T12:29:48.833Z",
-    "createdAt": "2021-11-28T14:31:55.519Z"
+    "earnedTotal": 2500,
+    "missingRewardAmount": 700,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-07T11:58:02.753Z",
+    "createdAt": "2021-11-20T14:59:25.658Z"
   },
   {
     "id": "storageWorkingGroup-27",
     "runtimeId": 27,
-    "membershipId": 26,
+    "membershipId": 35,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-54",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 78689,
-        "createdAt": "2021-06-20T09:29:55.624Z",
+        "inBlock": 26799,
+        "createdAt": "2021-10-29T06:00:02.055Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-27"
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2800,
-    "missingRewardAmount": 1400,
-    "stake": 3000,
-    "nextPaymentAt": "2021-11-30T08:17:15.823Z",
-    "createdAt": "2021-11-07T05:49:36.516Z"
+    "earnedTotal": 3300,
+    "missingRewardAmount": 1500,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-03T04:57:42.936Z",
+    "createdAt": "2021-11-08T23:16:42.673Z"
   },
   {
     "id": "storageWorkingGroup-28",
     "runtimeId": 28,
-    "membershipId": 38,
+    "membershipId": 9,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-56",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 88400,
-        "createdAt": "2021-07-18T13:38:54.497Z",
+        "inBlock": 10175,
+        "createdAt": "2021-07-13T15:31:50.077Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-28"
       }
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 1400,
-    "missingRewardAmount": 1100,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-05T06:37:37.171Z",
-    "createdAt": "2021-11-22T10:51:19.395Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 3700,
+    "missingRewardAmount": 0,
+    "stake": 3000,
+    "nextPaymentAt": "2021-12-04T02:25:46.866Z",
+    "createdAt": "2021-11-22T07:33:17.910Z"
   },
   {
     "id": "storageWorkingGroup-29",
     "runtimeId": 29,
-    "membershipId": 14,
+    "membershipId": 33,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-58",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 91733,
-        "createdAt": "2021-11-07T14:05:07.973Z",
+        "inBlock": 58784,
+        "createdAt": "2021-06-24T19:45:23.311Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-29"
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 1900,
-    "missingRewardAmount": 800,
+    "earnedTotal": 3100,
+    "missingRewardAmount": 1100,
     "stake": 5000,
-    "nextPaymentAt": "2021-12-01T09:01:39.332Z",
-    "createdAt": "2021-11-21T18:35:07.487Z"
+    "nextPaymentAt": "2021-12-06T06:13:41.281Z",
+    "createdAt": "2021-11-21T00:41:04.685Z"
   },
   {
     "id": "storageWorkingGroup-30",
     "runtimeId": 30,
-    "membershipId": 11,
+    "membershipId": 28,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-60",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 74674,
-        "createdAt": "2021-11-19T02:11:33.263Z",
+        "inBlock": 6950,
+        "createdAt": "2021-09-23T01:38:38.435Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-30"
       }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 3800,
-    "missingRewardAmount": 700,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-30T15:47:34.532Z",
-    "createdAt": "2021-11-10T06:40:48.226Z"
+    "earnedTotal": 1900,
+    "missingRewardAmount": 1100,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-04T17:11:28.498Z",
+    "createdAt": "2021-11-07T03:14:12.030Z"
   },
   {
     "id": "storageWorkingGroup-31",
     "runtimeId": 31,
-    "membershipId": 7,
+    "membershipId": 21,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-62",
     "status": {
-      "type": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 26505,
-        "createdAt": "2021-10-23T10:21:44.149Z",
+        "inBlock": 55432,
+        "createdAt": "2021-07-01T21:13:36.373Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-31"
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3700,
-    "missingRewardAmount": 1000,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-30T13:21:41.031Z",
-    "createdAt": "2021-11-11T02:14:11.069Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3000,
+    "missingRewardAmount": 1300,
+    "stake": 3000,
+    "nextPaymentAt": "2021-12-05T04:11:56.417Z",
+    "createdAt": "2021-11-23T00:31:20.326Z"
   },
   {
     "id": "storageWorkingGroup-32",
     "runtimeId": 32,
-    "membershipId": 5,
+    "membershipId": 15,
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-64",
     "status": {
-      "type": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 18933,
-        "createdAt": "2021-10-14T11:10:58.970Z",
+        "inBlock": 60243,
+        "createdAt": "2021-12-02T11:55:38.418Z",
         "network": "OLYMPIA",
         "groupId": "storageWorkingGroup",
         "workerId": "storageWorkingGroup-32"
       }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2500,
-    "missingRewardAmount": 900,
-    "stake": 8000,
-    "nextPaymentAt": "2021-12-06T21:11:25.535Z",
-    "createdAt": "2021-10-31T13:45:22.958Z"
+    "earnedTotal": 2600,
+    "missingRewardAmount": 1600,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-03T05:38:24.023Z",
+    "createdAt": "2021-12-02T01:56:09.834Z"
   },
   {
-    "id": "contentDirectoryWorkingGroup-33",
+    "id": "storageWorkingGroup-33",
     "runtimeId": 33,
-    "membershipId": 0,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-66",
+    "membershipId": 19,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-66",
     "status": {
-      "type": "WorkerStatusActive"
+      "type": "WorkerStatusLeft",
+      "event": {
+        "inBlock": 93966,
+        "createdAt": "2021-08-17T17:05:41.495Z",
+        "network": "OLYMPIA",
+        "groupId": "storageWorkingGroup",
+        "workerId": "storageWorkingGroup-33"
+      }
+    },
+    "rewardPerBlock": 200,
+    "earnedTotal": 3700,
+    "missingRewardAmount": 600,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-11T13:37:40.919Z",
+    "createdAt": "2021-11-05T16:38:39.519Z"
+  },
+  {
+    "id": "storageWorkingGroup-34",
+    "runtimeId": 34,
+    "membershipId": 3,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-68",
+    "status": {
+      "type": "WorkerStatusLeft",
+      "event": {
+        "inBlock": 50608,
+        "createdAt": "2021-11-22T10:00:17.028Z",
+        "network": "OLYMPIA",
+        "groupId": "storageWorkingGroup",
+        "workerId": "storageWorkingGroup-34"
+      }
+    },
+    "rewardPerBlock": 200,
+    "earnedTotal": 3900,
+    "missingRewardAmount": 1600,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-05T02:29:16.666Z",
+    "createdAt": "2021-11-19T17:07:20.953Z"
+  },
+  {
+    "id": "storageWorkingGroup-35",
+    "runtimeId": 35,
+    "membershipId": 45,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-70",
+    "status": {
+      "type": "WorkerStatusLeaving",
+      "event": {
+        "inBlock": 7733,
+        "createdAt": "2021-08-02T00:56:09.922Z",
+        "network": "OLYMPIA",
+        "groupId": "storageWorkingGroup",
+        "workerId": "storageWorkingGroup-35"
+      }
+    },
+    "rewardPerBlock": 200,
+    "earnedTotal": 2100,
+    "missingRewardAmount": 1800,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-08T08:23:52.642Z",
+    "createdAt": "2021-12-01T22:17:44.944Z"
+  },
+  {
+    "id": "storageWorkingGroup-36",
+    "runtimeId": 36,
+    "membershipId": 27,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-72",
+    "status": {
+      "type": "WorkerStatusLeaving",
+      "event": {
+        "inBlock": 61538,
+        "createdAt": "2021-11-11T08:13:13.502Z",
+        "network": "OLYMPIA",
+        "groupId": "storageWorkingGroup",
+        "workerId": "storageWorkingGroup-36"
+      }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 3500,
-    "missingRewardAmount": 1400,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-02T22:59:20.718Z",
-    "createdAt": "2021-11-04T21:49:46.979Z"
+    "earnedTotal": 1200,
+    "missingRewardAmount": 1800,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-09T01:27:14.475Z",
+    "createdAt": "2021-11-23T16:50:11.687Z"
   },
   {
-    "id": "contentDirectoryWorkingGroup-34",
-    "runtimeId": 34,
-    "membershipId": 1,
+    "id": "storageWorkingGroup-37",
+    "runtimeId": 37,
+    "membershipId": 20,
+    "groupId": "storageWorkingGroup",
+    "applicationId": "storageWorkingGroup-74",
+    "status": {
+      "type": "WorkerStatusLeaving",
+      "event": {
+        "inBlock": 83632,
+        "createdAt": "2021-11-27T22:22:30.461Z",
+        "network": "OLYMPIA",
+        "groupId": "storageWorkingGroup",
+        "workerId": "storageWorkingGroup-37"
+      }
+    },
+    "rewardPerBlock": 200,
+    "earnedTotal": 3500,
+    "missingRewardAmount": 800,
+    "stake": 8000,
+    "nextPaymentAt": "2021-12-05T02:13:53.946Z",
+    "createdAt": "2021-11-05T01:59:19.999Z"
+  },
+  {
+    "id": "contentDirectoryWorkingGroup-38",
+    "runtimeId": 38,
+    "membershipId": 0,
     "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-68",
+    "applicationId": "contentDirectoryWorkingGroup-76",
     "status": {
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 3500,
-    "missingRewardAmount": 1800,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-04T08:13:32.513Z",
-    "createdAt": "2021-11-21T05:39:34.212Z"
+    "missingRewardAmount": 800,
+    "stake": 3000,
+    "nextPaymentAt": "2021-12-06T20:08:18.879Z",
+    "createdAt": "2021-11-26T07:27:22.199Z"
   },
   {
-    "id": "contentDirectoryWorkingGroup-35",
-    "runtimeId": 35,
-    "membershipId": 8,
+    "id": "contentDirectoryWorkingGroup-39",
+    "runtimeId": 39,
+    "membershipId": 1,
     "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-70",
+    "applicationId": "contentDirectoryWorkingGroup-78",
     "status": {
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2800,
+    "earnedTotal": 3200,
     "missingRewardAmount": 1600,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-02T18:30:27.404Z",
-    "createdAt": "2021-11-18T13:47:21.795Z"
+    "stake": 3000,
+    "nextPaymentAt": "2021-12-04T17:44:42.578Z",
+    "createdAt": "2021-11-15T18:33:06.506Z"
   },
   {
-    "id": "contentDirectoryWorkingGroup-36",
-    "runtimeId": 36,
-    "membershipId": 29,
+    "id": "contentDirectoryWorkingGroup-40",
+    "runtimeId": 40,
+    "membershipId": 31,
     "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-72",
+    "applicationId": "contentDirectoryWorkingGroup-80",
     "status": {
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 1400,
-    "missingRewardAmount": 100,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-02T03:00:17.647Z",
-    "createdAt": "2021-11-17T12:00:50.331Z"
+    "earnedTotal": 3800,
+    "missingRewardAmount": 0,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-05T18:02:45.813Z",
+    "createdAt": "2021-11-05T18:42:24.141Z"
   },
   {
-    "id": "contentDirectoryWorkingGroup-37",
-    "runtimeId": 37,
-    "membershipId": 38,
+    "id": "contentDirectoryWorkingGroup-41",
+    "runtimeId": 41,
+    "membershipId": 40,
     "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-74",
+    "applicationId": "contentDirectoryWorkingGroup-82",
+    "status": {
+      "type": "WorkerStatusActive"
+    },
+    "rewardPerBlock": 200,
+    "earnedTotal": 3300,
+    "missingRewardAmount": 1600,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-03T02:26:39.727Z",
+    "createdAt": "2021-11-10T20:05:01.371Z"
+  },
+  {
+    "id": "contentDirectoryWorkingGroup-42",
+    "runtimeId": 42,
+    "membershipId": 17,
+    "groupId": "contentDirectoryWorkingGroup",
+    "applicationId": "contentDirectoryWorkingGroup-84",
+    "status": {
+      "type": "WorkerStatusActive"
+    },
+    "rewardPerBlock": 100,
+    "earnedTotal": 3800,
+    "missingRewardAmount": 1300,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-05T10:39:39.545Z",
+    "createdAt": "2021-12-02T12:29:11.106Z"
+  },
+  {
+    "id": "contentDirectoryWorkingGroup-43",
+    "runtimeId": 43,
+    "membershipId": 10,
+    "groupId": "contentDirectoryWorkingGroup",
+    "applicationId": "contentDirectoryWorkingGroup-86",
     "status": {
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 3600,
-    "missingRewardAmount": 200,
-    "stake": 4000,
-    "nextPaymentAt": "2021-11-30T16:27:57.546Z",
-    "createdAt": "2021-11-14T19:56:43.676Z"
-  },
-  {
-    "id": "contentDirectoryWorkingGroup-38",
-    "runtimeId": 38,
-    "membershipId": 41,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-76",
-    "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 58439,
-        "createdAt": "2021-11-28T23:12:49.231Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-38",
-        "penalty": 0
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 1400,
     "missingRewardAmount": 400,
-    "stake": 3000,
-    "nextPaymentAt": "2021-12-07T14:02:53.451Z",
-    "createdAt": "2021-11-24T02:45:39.469Z"
-  },
-  {
-    "id": "contentDirectoryWorkingGroup-39",
-    "runtimeId": 39,
-    "membershipId": 2,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-78",
-    "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 70165,
-        "createdAt": "2021-07-06T11:35:47.282Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-39",
-        "penalty": 0
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3000,
-    "missingRewardAmount": 1100,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-04T20:32:02.757Z",
-    "createdAt": "2021-11-19T12:25:25.524Z"
-  },
-  {
-    "id": "contentDirectoryWorkingGroup-40",
-    "runtimeId": 40,
-    "membershipId": 34,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-80",
-    "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 57472,
-        "createdAt": "2021-08-06T19:17:14.340Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-40",
-        "penalty": 0
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1900,
-    "missingRewardAmount": 1800,
-    "stake": 5000,
-    "nextPaymentAt": "2021-11-30T15:46:50.555Z",
-    "createdAt": "2021-10-31T23:51:34.031Z"
-  },
-  {
-    "id": "contentDirectoryWorkingGroup-41",
-    "runtimeId": 41,
-    "membershipId": 6,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-82",
-    "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 97510,
-        "createdAt": "2021-06-29T02:25:01.975Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-41",
-        "penalty": 0
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2500,
-    "missingRewardAmount": 1000,
-    "stake": 7000,
-    "nextPaymentAt": "2021-11-29T19:54:47.525Z",
-    "createdAt": "2021-10-31T13:57:03.479Z"
-  },
-  {
-    "id": "contentDirectoryWorkingGroup-42",
-    "runtimeId": 42,
-    "membershipId": 25,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-84",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 56480,
-        "createdAt": "2021-09-26T13:45:53.973Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-42"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1200,
-    "missingRewardAmount": 300,
     "stake": 4000,
-    "nextPaymentAt": "2021-12-02T13:40:54.622Z",
-    "createdAt": "2021-11-08T23:40:53.666Z"
-  },
-  {
-    "id": "contentDirectoryWorkingGroup-43",
-    "runtimeId": 43,
-    "membershipId": 8,
-    "groupId": "contentDirectoryWorkingGroup",
-    "applicationId": "contentDirectoryWorkingGroup-86",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 53906,
-        "createdAt": "2021-06-16T07:51:27.499Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-43"
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 1600,
-    "missingRewardAmount": 600,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-02T04:27:51.862Z",
-    "createdAt": "2021-11-21T03:08:30.079Z"
+    "nextPaymentAt": "2021-12-07T02:43:11.240Z",
+    "createdAt": "2021-11-12T13:47:15.042Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-44",
     "runtimeId": 44,
-    "membershipId": 21,
+    "membershipId": 38,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-88",
     "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 19188,
-        "createdAt": "2021-10-29T23:34:28.047Z",
-        "network": "OLYMPIA",
-        "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-44"
-      }
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2100,
-    "missingRewardAmount": 1100,
+    "earnedTotal": 1300,
+    "missingRewardAmount": 500,
     "stake": 6000,
-    "nextPaymentAt": "2021-12-09T00:53:46.074Z",
-    "createdAt": "2021-11-25T00:02:12.273Z"
+    "nextPaymentAt": "2021-12-03T08:13:07.808Z",
+    "createdAt": "2021-11-11T21:07:29.722Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-45",
     "runtimeId": 45,
-    "membershipId": 20,
+    "membershipId": 40,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-90",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 59826,
-        "createdAt": "2021-11-11T23:05:59.543Z",
+        "inBlock": 8105,
+        "createdAt": "2021-06-10T12:04:07.981Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-45"
+        "workerId": "contentDirectoryWorkingGroup-45",
+        "penalty": 0
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 1600,
-    "missingRewardAmount": 500,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-07T11:55:18.454Z",
-    "createdAt": "2021-11-10T22:37:15.248Z"
+    "earnedTotal": 2000,
+    "missingRewardAmount": 1700,
+    "stake": 4000,
+    "nextPaymentAt": "2021-12-10T15:17:38.586Z",
+    "createdAt": "2021-11-25T20:53:32.774Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-46",
     "runtimeId": 46,
-    "membershipId": 27,
+    "membershipId": 49,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-92",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 51089,
-        "createdAt": "2021-11-27T23:03:53.771Z",
+        "inBlock": 43537,
+        "createdAt": "2021-07-17T14:58:15.982Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-46"
+        "workerId": "contentDirectoryWorkingGroup-46",
+        "penalty": 0
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 3900,
-    "missingRewardAmount": 1600,
+    "earnedTotal": 1500,
+    "missingRewardAmount": 1800,
     "stake": 7000,
-    "nextPaymentAt": "2021-12-06T05:34:29.177Z",
-    "createdAt": "2021-11-17T15:13:24.877Z"
+    "nextPaymentAt": "2021-12-03T09:39:45.356Z",
+    "createdAt": "2021-11-08T12:07:59.366Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-47",
@@ -986,595 +942,387 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-94",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 58640,
-        "createdAt": "2021-09-05T11:34:51.873Z",
+        "inBlock": 27885,
+        "createdAt": "2021-10-18T01:35:50.687Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-47"
+        "workerId": "contentDirectoryWorkingGroup-47",
+        "penalty": 0
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2300,
-    "missingRewardAmount": 1300,
-    "stake": 6000,
-    "nextPaymentAt": "2021-12-06T13:29:55.042Z",
-    "createdAt": "2021-11-10T10:10:21.346Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3000,
+    "missingRewardAmount": 700,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-04T23:25:30.951Z",
+    "createdAt": "2021-11-23T13:10:40.827Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-48",
     "runtimeId": 48,
-    "membershipId": 19,
+    "membershipId": 22,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-96",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 61166,
-        "createdAt": "2021-11-19T03:12:14.917Z",
+        "inBlock": 68648,
+        "createdAt": "2021-06-05T20:29:16.924Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
-        "workerId": "contentDirectoryWorkingGroup-48"
+        "workerId": "contentDirectoryWorkingGroup-48",
+        "penalty": 0
       }
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 3300,
-    "missingRewardAmount": 300,
-    "stake": 8000,
-    "nextPaymentAt": "2021-12-02T09:34:28.409Z",
-    "createdAt": "2021-11-20T16:32:14.733Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 1400,
+    "missingRewardAmount": 1100,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-03T12:49:45.890Z",
+    "createdAt": "2021-11-09T11:16:21.311Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-49",
     "runtimeId": 49,
-    "membershipId": 34,
+    "membershipId": 20,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-98",
     "status": {
       "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 69036,
-        "createdAt": "2021-11-02T07:09:53.882Z",
+        "inBlock": 50367,
+        "createdAt": "2021-11-25T18:41:29.820Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
         "workerId": "contentDirectoryWorkingGroup-49"
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 3700,
-    "missingRewardAmount": 1200,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-01T12:22:27.223Z",
-    "createdAt": "2021-11-10T15:18:43.452Z"
+    "earnedTotal": 3800,
+    "missingRewardAmount": 100,
+    "stake": 8000,
+    "nextPaymentAt": "2021-12-03T20:32:58.934Z",
+    "createdAt": "2021-11-22T09:04:56.692Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-50",
     "runtimeId": 50,
-    "membershipId": 27,
+    "membershipId": 47,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-100",
     "status": {
-      "type": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 52766,
-        "createdAt": "2021-09-10T20:59:37.595Z",
+        "inBlock": 67139,
+        "createdAt": "2021-06-11T10:53:10.995Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
         "workerId": "contentDirectoryWorkingGroup-50"
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2500,
+    "earnedTotal": 1900,
     "missingRewardAmount": 600,
     "stake": 6000,
-    "nextPaymentAt": "2021-12-02T00:29:40.139Z",
-    "createdAt": "2021-11-20T05:59:45.145Z"
+    "nextPaymentAt": "2021-12-06T10:58:33.315Z",
+    "createdAt": "2021-11-15T20:04:18.087Z"
   },
   {
     "id": "contentDirectoryWorkingGroup-51",
     "runtimeId": 51,
-    "membershipId": 13,
+    "membershipId": 16,
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-102",
     "status": {
       "type": "WorkerStatusLeaving",
       "event": {
-        "inBlock": 44712,
-        "createdAt": "2021-09-26T21:18:58.366Z",
+        "inBlock": 1815,
+        "createdAt": "2021-07-19T19:34:17.652Z",
         "network": "OLYMPIA",
         "groupId": "contentDirectoryWorkingGroup",
         "workerId": "contentDirectoryWorkingGroup-51"
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 1400,
-    "missingRewardAmount": 100,
-    "stake": 7000,
-    "nextPaymentAt": "2021-11-30T21:59:17.124Z",
-    "createdAt": "2021-11-07T07:57:59.377Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 1900,
+    "missingRewardAmount": 1900,
+    "stake": 3000,
+    "nextPaymentAt": "2021-12-10T16:48:34.742Z",
+    "createdAt": "2021-11-12T19:03:46.819Z"
   },
   {
-    "id": "membershipWorkingGroup-52",
+    "id": "contentDirectoryWorkingGroup-52",
     "runtimeId": 52,
-    "membershipId": 0,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-104",
+    "membershipId": 43,
+    "groupId": "contentDirectoryWorkingGroup",
+    "applicationId": "contentDirectoryWorkingGroup-104",
     "status": {
-      "type": "WorkerStatusActive"
+      "type": "WorkerStatusLeaving",
+      "event": {
+        "inBlock": 16436,
+        "createdAt": "2021-06-24T09:07:58.340Z",
+        "network": "OLYMPIA",
+        "groupId": "contentDirectoryWorkingGroup",
+        "workerId": "contentDirectoryWorkingGroup-52"
+      }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 3500,
-    "missingRewardAmount": 600,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-30T20:57:01.570Z",
-    "createdAt": "2021-11-18T11:50:14.738Z"
+    "earnedTotal": 3100,
+    "missingRewardAmount": 1000,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-10T14:01:25.919Z",
+    "createdAt": "2021-11-17T22:58:33.071Z"
   },
   {
-    "id": "membershipWorkingGroup-53",
+    "id": "contentDirectoryWorkingGroup-53",
     "runtimeId": 53,
-    "membershipId": 1,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-106",
+    "membershipId": 47,
+    "groupId": "contentDirectoryWorkingGroup",
+    "applicationId": "contentDirectoryWorkingGroup-106",
     "status": {
-      "type": "WorkerStatusActive"
+      "type": "WorkerStatusLeaving",
+      "event": {
+        "inBlock": 21545,
+        "createdAt": "2021-10-06T01:55:23.101Z",
+        "network": "OLYMPIA",
+        "groupId": "contentDirectoryWorkingGroup",
+        "workerId": "contentDirectoryWorkingGroup-53"
+      }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 2000,
-    "missingRewardAmount": 800,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-02T00:03:10.768Z",
-    "createdAt": "2021-11-10T22:38:27.847Z"
+    "earnedTotal": 2800,
+    "missingRewardAmount": 2000,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-10T05:32:11.864Z",
+    "createdAt": "2021-11-25T21:00:55.667Z"
   },
   {
     "id": "membershipWorkingGroup-54",
     "runtimeId": 54,
-    "membershipId": 22,
+    "membershipId": 0,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-108",
     "status": {
       "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2300,
-    "missingRewardAmount": 600,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-07T21:15:23.562Z",
-    "createdAt": "2021-11-20T03:40:04.606Z"
+    "earnedTotal": 3200,
+    "missingRewardAmount": 1100,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-09T18:18:25.930Z",
+    "createdAt": "2021-11-28T01:37:48.265Z"
   },
   {
     "id": "membershipWorkingGroup-55",
     "runtimeId": 55,
-    "membershipId": 36,
+    "membershipId": 1,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-110",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 3200,
-    "missingRewardAmount": 300,
-    "stake": 3000,
-    "nextPaymentAt": "2021-11-30T03:41:34.805Z",
-    "createdAt": "2021-11-10T15:09:39.184Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 1300,
+    "missingRewardAmount": 1600,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-11T15:16:44.021Z",
+    "createdAt": "2021-11-11T14:00:25.895Z"
   },
   {
     "id": "membershipWorkingGroup-56",
     "runtimeId": 56,
-    "membershipId": 46,
+    "membershipId": 50,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-112",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2500,
-    "missingRewardAmount": 100,
+    "rewardPerBlock": 100,
+    "earnedTotal": 3700,
+    "missingRewardAmount": 900,
     "stake": 4000,
-    "nextPaymentAt": "2021-12-03T13:18:35.291Z",
-    "createdAt": "2021-11-25T13:30:50.695Z"
+    "nextPaymentAt": "2021-12-08T07:35:04.080Z",
+    "createdAt": "2021-11-21T02:19:12.922Z"
   },
   {
     "id": "membershipWorkingGroup-57",
     "runtimeId": 57,
-    "membershipId": 16,
+    "membershipId": 7,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-114",
     "status": {
       "type": "WorkerStatusActive"
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 3500,
-    "missingRewardAmount": 700,
-    "stake": 3000,
-    "nextPaymentAt": "2021-12-01T21:37:02.927Z",
-    "createdAt": "2021-11-09T08:55:16.737Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 1100,
+    "missingRewardAmount": 1000,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-05T09:00:46.181Z",
+    "createdAt": "2021-11-04T18:58:26.695Z"
   },
   {
     "id": "membershipWorkingGroup-58",
     "runtimeId": 58,
-    "membershipId": 11,
+    "membershipId": 49,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-116",
     "status": {
-      "type": "WorkerStatusActive"
+      "type": "WorkerStatusTerminated",
+      "event": {
+        "inBlock": 75930,
+        "createdAt": "2021-11-10T07:04:13.529Z",
+        "network": "OLYMPIA",
+        "groupId": "membershipWorkingGroup",
+        "workerId": "membershipWorkingGroup-58",
+        "penalty": 0
+      }
     },
     "rewardPerBlock": 200,
-    "earnedTotal": 3300,
-    "missingRewardAmount": 200,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-30T01:28:23.818Z",
-    "createdAt": "2021-11-06T21:00:52.483Z"
+    "earnedTotal": 1200,
+    "missingRewardAmount": 0,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-05T11:42:38.978Z",
+    "createdAt": "2021-11-24T12:32:27.500Z"
   },
   {
     "id": "membershipWorkingGroup-59",
     "runtimeId": 59,
-    "membershipId": 38,
+    "membershipId": 2,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-118",
     "status": {
       "type": "WorkerStatusTerminated",
       "event": {
-        "inBlock": 77627,
-        "createdAt": "2021-08-28T05:46:15.564Z",
+        "inBlock": 18072,
+        "createdAt": "2021-07-04T05:50:08.481Z",
         "network": "OLYMPIA",
         "groupId": "membershipWorkingGroup",
         "workerId": "membershipWorkingGroup-59",
         "penalty": 0
       }
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2600,
-    "missingRewardAmount": 1500,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-06T11:36:56.804Z",
-    "createdAt": "2021-11-25T09:39:35.033Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 2500,
+    "missingRewardAmount": 1400,
+    "stake": 8000,
+    "nextPaymentAt": "2021-12-05T23:21:48.561Z",
+    "createdAt": "2021-11-17T06:05:57.838Z"
   },
   {
     "id": "membershipWorkingGroup-60",
     "runtimeId": 60,
-    "membershipId": 48,
+    "membershipId": 34,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-120",
     "status": {
-      "type": "WorkerStatusTerminated",
+      "type": "WorkerStatusLeft",
       "event": {
-        "inBlock": 46443,
-        "createdAt": "2021-10-13T14:00:05.686Z",
+        "inBlock": 62034,
+        "createdAt": "2021-06-10T11:33:44.385Z",
         "network": "OLYMPIA",
         "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-60",
-        "penalty": 0
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2200,
-    "missingRewardAmount": 1900,
-    "stake": 8000,
-    "nextPaymentAt": "2021-11-30T17:59:02.581Z",
-    "createdAt": "2021-11-20T18:33:11.587Z"
-  },
-  {
-    "id": "membershipWorkingGroup-61",
-    "runtimeId": 61,
-    "membershipId": 17,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-122",
-    "status": {
-      "type": "WorkerStatusTerminated",
-      "event": {
-        "inBlock": 8867,
-        "createdAt": "2021-10-09T04:28:53.352Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-61",
-        "penalty": 0
+        "workerId": "membershipWorkingGroup-60"
       }
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2700,
-    "missingRewardAmount": 700,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-01T04:06:53.713Z",
-    "createdAt": "2021-11-20T18:13:50.676Z"
+    "missingRewardAmount": 1300,
+    "stake": 7000,
+    "nextPaymentAt": "2021-12-03T13:45:18.209Z",
+    "createdAt": "2021-11-22T11:37:27.789Z"
+  },
+  {
+    "id": "membershipWorkingGroup-61",
+    "runtimeId": 61,
+    "membershipId": 5,
+    "groupId": "membershipWorkingGroup",
+    "applicationId": "membershipWorkingGroup-122",
+    "status": {
+      "type": "WorkerStatusLeft",
+      "event": {
+        "inBlock": 26867,
+        "createdAt": "2021-06-14T05:05:09.278Z",
+        "network": "OLYMPIA",
+        "groupId": "membershipWorkingGroup",
+        "workerId": "membershipWorkingGroup-61"
+      }
+    },
+    "rewardPerBlock": 100,
+    "earnedTotal": 3800,
+    "missingRewardAmount": 500,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-04T14:40:07.234Z",
+    "createdAt": "2021-12-01T04:58:51.859Z"
   },
   {
     "id": "membershipWorkingGroup-62",
     "runtimeId": 62,
-    "membershipId": 27,
+    "membershipId": 5,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-124",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusLeaving",
       "event": {
-        "inBlock": 29825,
-        "createdAt": "2021-08-27T02:25:54.610Z",
+        "inBlock": 77550,
+        "createdAt": "2021-07-08T20:40:49.974Z",
         "network": "OLYMPIA",
         "groupId": "membershipWorkingGroup",
         "workerId": "membershipWorkingGroup-62"
       }
     },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2100,
-    "missingRewardAmount": 700,
-    "stake": 3000,
-    "nextPaymentAt": "2021-11-29T22:38:10.692Z",
-    "createdAt": "2021-11-25T09:13:13.577Z"
+    "rewardPerBlock": 200,
+    "earnedTotal": 3400,
+    "missingRewardAmount": 100,
+    "stake": 5000,
+    "nextPaymentAt": "2021-12-04T20:10:51.469Z",
+    "createdAt": "2021-11-04T07:16:39.837Z"
   },
   {
     "id": "membershipWorkingGroup-63",
     "runtimeId": 63,
-    "membershipId": 45,
+    "membershipId": 37,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-126",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusLeaving",
       "event": {
-        "inBlock": 44849,
-        "createdAt": "2021-08-25T21:16:32.526Z",
+        "inBlock": 87606,
+        "createdAt": "2021-09-15T10:39:28.483Z",
         "network": "OLYMPIA",
         "groupId": "membershipWorkingGroup",
         "workerId": "membershipWorkingGroup-63"
       }
     },
-    "rewardPerBlock": 200,
-    "earnedTotal": 3700,
-    "missingRewardAmount": 300,
-    "stake": 4000,
-    "nextPaymentAt": "2021-11-30T23:02:10.114Z",
-    "createdAt": "2021-11-19T08:59:33.011Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 1300,
+    "missingRewardAmount": 1100,
+    "stake": 6000,
+    "nextPaymentAt": "2021-12-07T11:20:20.826Z",
+    "createdAt": "2021-11-10T09:43:02.219Z"
   },
   {
     "id": "membershipWorkingGroup-64",
     "runtimeId": 64,
-    "membershipId": 32,
+    "membershipId": 36,
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-128",
     "status": {
-      "type": "WorkerStatusLeft",
+      "type": "WorkerStatusLeaving",
       "event": {
-        "inBlock": 99889,
-        "createdAt": "2021-07-27T20:18:13.070Z",
+        "inBlock": 5123,
+        "createdAt": "2021-08-11T20:07:49.846Z",
         "network": "OLYMPIA",
         "groupId": "membershipWorkingGroup",
         "workerId": "membershipWorkingGroup-64"
       }
     },
     "rewardPerBlock": 100,
-    "earnedTotal": 2900,
+    "earnedTotal": 1600,
     "missingRewardAmount": 1400,
-    "stake": 6000,
-    "nextPaymentAt": "2021-12-05T14:40:07.543Z",
-    "createdAt": "2021-11-20T08:36:54.985Z"
-  },
-  {
-    "id": "membershipWorkingGroup-65",
-    "runtimeId": 65,
-    "membershipId": 23,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-130",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 60337,
-        "createdAt": "2021-07-15T18:11:18.820Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-65"
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2800,
-    "missingRewardAmount": 500,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-04T17:40:44.791Z",
-    "createdAt": "2021-11-27T17:20:46.631Z"
-  },
-  {
-    "id": "membershipWorkingGroup-66",
-    "runtimeId": 66,
-    "membershipId": 13,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-132",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 2834,
-        "createdAt": "2021-08-23T09:01:10.212Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-66"
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 3900,
-    "missingRewardAmount": 700,
-    "stake": 4000,
-    "nextPaymentAt": "2021-11-30T17:46:01.985Z",
-    "createdAt": "2021-11-14T08:57:18.002Z"
-  },
-  {
-    "id": "membershipWorkingGroup-67",
-    "runtimeId": 67,
-    "membershipId": 30,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-134",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 79468,
-        "createdAt": "2021-08-19T15:45:27.517Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-67"
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 1400,
-    "missingRewardAmount": 900,
-    "stake": 7000,
-    "nextPaymentAt": "2021-12-03T07:54:27.316Z",
-    "createdAt": "2021-11-10T07:21:25.687Z"
-  },
-  {
-    "id": "membershipWorkingGroup-68",
-    "runtimeId": 68,
-    "membershipId": 2,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-136",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 48635,
-        "createdAt": "2021-10-14T19:45:48.912Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-68"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2600,
-    "missingRewardAmount": 900,
-    "stake": 3000,
-    "nextPaymentAt": "2021-11-30T00:01:58.604Z",
-    "createdAt": "2021-11-01T03:22:56.293Z"
-  },
-  {
-    "id": "membershipWorkingGroup-69",
-    "runtimeId": 69,
-    "membershipId": 38,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-138",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 75853,
-        "createdAt": "2021-08-25T06:45:24.658Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-69"
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 2300,
-    "missingRewardAmount": 1300,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-04T04:13:24.699Z",
-    "createdAt": "2021-11-28T17:52:55.785Z"
-  },
-  {
-    "id": "membershipWorkingGroup-70",
-    "runtimeId": 70,
-    "membershipId": 39,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-140",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 88390,
-        "createdAt": "2021-07-11T07:35:18.797Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-70"
-      }
-    },
-    "rewardPerBlock": 200,
-    "earnedTotal": 3500,
-    "missingRewardAmount": 1500,
-    "stake": 6000,
-    "nextPaymentAt": "2021-11-30T04:07:03.806Z",
-    "createdAt": "2021-11-24T07:58:14.240Z"
-  },
-  {
-    "id": "membershipWorkingGroup-71",
-    "runtimeId": 71,
-    "membershipId": 5,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-142",
-    "status": {
-      "type": "WorkerStatusLeft",
-      "event": {
-        "inBlock": 92469,
-        "createdAt": "2021-10-27T17:08:22.678Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-71"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3300,
-    "missingRewardAmount": 400,
-    "stake": 4000,
-    "nextPaymentAt": "2021-12-04T13:30:56.982Z",
-    "createdAt": "2021-11-19T04:06:25.484Z"
-  },
-  {
-    "id": "membershipWorkingGroup-72",
-    "runtimeId": 72,
-    "membershipId": 15,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-144",
-    "status": {
-      "type": "WorkerStatusLeaving",
-      "event": {
-        "inBlock": 77681,
-        "createdAt": "2021-11-09T19:53:40.372Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-72"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 2300,
-    "missingRewardAmount": 100,
-    "stake": 3000,
-    "nextPaymentAt": "2021-12-01T02:16:50.406Z",
-    "createdAt": "2021-11-15T18:35:19.731Z"
-  },
-  {
-    "id": "membershipWorkingGroup-73",
-    "runtimeId": 73,
-    "membershipId": 11,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-146",
-    "status": {
-      "type": "WorkerStatusLeaving",
-      "event": {
-        "inBlock": 87622,
-        "createdAt": "2021-09-03T14:26:15.835Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-73"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3500,
-    "missingRewardAmount": 1700,
-    "stake": 5000,
-    "nextPaymentAt": "2021-12-02T21:41:29.252Z",
-    "createdAt": "2021-11-04T09:37:27.861Z"
-  },
-  {
-    "id": "membershipWorkingGroup-74",
-    "runtimeId": 74,
-    "membershipId": 48,
-    "groupId": "membershipWorkingGroup",
-    "applicationId": "membershipWorkingGroup-148",
-    "status": {
-      "type": "WorkerStatusLeaving",
-      "event": {
-        "inBlock": 2020,
-        "createdAt": "2021-09-23T18:27:16.588Z",
-        "network": "OLYMPIA",
-        "groupId": "membershipWorkingGroup",
-        "workerId": "membershipWorkingGroup-74"
-      }
-    },
-    "rewardPerBlock": 100,
-    "earnedTotal": 3700,
-    "missingRewardAmount": 900,
-    "stake": 3000,
-    "nextPaymentAt": "2021-12-02T02:31:37.973Z",
-    "createdAt": "2021-11-25T22:28:09.320Z"
+    "stake": 8000,
+    "nextPaymentAt": "2021-12-09T13:38:12.930Z",
+    "createdAt": "2021-11-04T10:21:38.084Z"
   }
 ]

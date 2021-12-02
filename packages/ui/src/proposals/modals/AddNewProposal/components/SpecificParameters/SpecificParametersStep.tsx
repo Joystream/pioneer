@@ -4,6 +4,9 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
+import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
@@ -45,6 +48,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
     }
+    case state.matches('specificParameters.setCouncilBudgetIncrement'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
+    }
     case state.matches('specificParameters.setWorkingGroupLeadReward'): {
       return !!(
         specifics?.rewardPerBlock &&
@@ -69,11 +75,17 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
         specifics.workerId !== undefined
       )
     }
+    case state.matches('specificParameters.setReferralCut'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return !!(specifics?.applicationId && specifics?.openingId)
+    }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     default:
       return false
@@ -84,6 +96,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
   const {
     context: { specifics },
   } = state
+
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
@@ -101,6 +114,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         <RuntimeUpgrade
           runtime={state.context.specifics?.runtime}
           setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
+        />
+      )
+    case state.matches('specificParameters.setCouncilBudgetIncrement'):
+      return (
+        <SetCouncilBudgetIncrement
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
@@ -188,6 +208,21 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.setReferralCut'): {
+      return (
+        <SetReferralCut
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+          amount={state.context.specifics?.amount}
+        />
+      )
+    }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
+      return (
+        <SetMembershipLeadInvitationQuota
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     default:
