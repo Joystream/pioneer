@@ -41,7 +41,7 @@ const generateBaseOpening = (groupId: string) => {
 }
 
 const generateOpening = (status: string, groupId: string) => () => {
-  const isLead = Math.random() > 0.9
+  const isLead = Math.random() > 0.5
   const isInPast = status !== 'open'
   return {
     ...generateBaseOpening(groupId),

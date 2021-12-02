@@ -643,20 +643,11 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('\\w+WorkingGroup-\\d+')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
       describe('Type - Set Membership lead invitation quota proposal', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpeningStatuses(server.server)
-          seedOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('setMembershipLeadInvitationQuota')
           await finishStakingAccount()
@@ -702,8 +693,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-2')
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-2')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('\\w+WorkingGroup-\\d+')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('\\w+WorkingGroup-\\d+')
           expect(await getCreateButton()).toBeEnabled()
         })
       })

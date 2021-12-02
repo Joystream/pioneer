@@ -42,10 +42,6 @@ export const generateWorkingGroups = () => {
 
 export const getWorkingGroupsWithLead = (mocks: Mocks) => {
   const getLead = (groupId: string) => {
-    if (groupId === 'membershipWorkingGroup') {
-      return null
-    }
-
     const workers = mocks.workers.filter((worker) => worker?.groupId === groupId)
 
     return workers[randomFromRange(0, workers.length - 1)]?.id as string
