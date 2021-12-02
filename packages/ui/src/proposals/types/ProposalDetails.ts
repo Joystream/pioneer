@@ -257,7 +257,7 @@ const asTerminateWorkingGroupLead: DetailsCast<'TerminateWorkingGroupLeadProposa
 ): TerminateWorkingGroupLeadDetails => ({
   type: 'terminateWorkingGroupLead',
   ...asWorkerDetails(fragment.lead),
-  amount: new BN(fragment.slashingAmount),
+  amount: new BN(fragment.slashingAmount ?? 0),
 })
 
 const asSetMembershipPrice: DetailsCast<'SetMembershipPriceProposalDetails'> = (

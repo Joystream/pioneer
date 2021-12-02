@@ -81,6 +81,8 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     isFinished ? randomFromRange(5, 8) : 0
   )
 
+  const pastCandidacyStatusType = () =>
+    faker.random.arrayElement(['CandidacyStatusWithdrawn', 'CandidacyStatusElected', 'CandidacyStatusLost'])
   const createCandidate = (candidateIndex: number, member = randomMember(mocks.members)) => ({
     id: `${council.id}-${candidateIndex}`,
     memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
@@ -88,6 +90,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
     stakingAccountId: member.controllerAccount,
     rewardAccountId: member.rootAccount,
+    statusType: isFinished ? pastCandidacyStatusType() : 'CandidacyStatusActive',
     note: faker.lorem.words(10),
     noteMetadata: {
       header: faker.lorem.words(4),
