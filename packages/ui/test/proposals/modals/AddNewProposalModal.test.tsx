@@ -17,8 +17,10 @@ import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
+  seedApplication,
   seedApplications,
   seedMembers,
+  seedOpening,
   seedOpenings,
   seedOpeningStatuses,
   seedUpcomingOpenings,
@@ -63,6 +65,35 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const OPENING_DATA = {
+  id: 'forumWorkingGroup-1337',
+  runtimeId: 1337,
+  groupId: 'forumWorkingGroup',
+  stakeAmount: 4000,
+  rewardPerBlock: 200,
+  version: 1,
+  type: 'LEADER',
+  status: 'open',
+  unstakingPeriod: 25110,
+  metadata: {
+    shortDescription: '',
+    description: '',
+    hiringLimit: 1,
+    applicationDetails: '',
+    applicationFormQuestions: [],
+    expectedEnding: '2021-12-06T14:26:06.283Z',
+  },
+}
+
+const APPLICATION_DATA = {
+  id: 'forumWorkingGroup-1337',
+  runtimeId: 1337,
+  openingId: 'forumWorkingGroup-1337',
+  applicantId: '0',
+  answers: [],
+  status: 'pending',
+}
+
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -99,6 +130,8 @@ describe('UI: AddNewProposalModal', () => {
     seedOpenings(server.server)
     seedUpcomingOpenings(server.server)
     seedApplications(server.server)
+    seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
     seedWorkers(server.server)
     updateWorkingGroups(server.server)
 
@@ -643,7 +676,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -723,8 +756,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-2')
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-2')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
