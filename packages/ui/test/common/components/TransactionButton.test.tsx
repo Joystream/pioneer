@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { useMachine } from '@xstate/react'
 import React from 'react'
 
@@ -65,7 +65,10 @@ describe('UI: TransactionButton', () => {
       fireEvent.click(await getButton('Sign and recover stake'))
     })
 
-    expect(await getButton('Start new transaction')).not.toBeDisabled()
+    // Buttons gets disabled eventually
+    await waitFor(async () => {
+      expect(await getButton('Start new transaction')).not.toBeDisabled()
+    })
   })
 
   const TestButton = () => {
