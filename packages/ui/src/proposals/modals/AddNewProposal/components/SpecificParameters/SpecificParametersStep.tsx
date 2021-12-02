@@ -80,6 +80,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return !!(specifics?.applicationId && specifics?.openingId)
     }
+    case state.matches('specificParameters.setInitialInvitationBalance'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
     default:
       return false
   }
