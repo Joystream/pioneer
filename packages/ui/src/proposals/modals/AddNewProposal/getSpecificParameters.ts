@@ -96,6 +96,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
+    case 'setCouncilBudgetIncrement': {
+      return { SetCouncilBudgetIncrement: specifics?.amount }
+    }
     case 'fillWorkingGroupLeadOpening': {
       return {
         FillWorkingGroupLeadOpening: {
@@ -104,6 +107,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           workingGroup: WorkingGroupDef.Forum,
         },
       }
+    }
+    case 'setMembershipLeadInvitationQuota': {
+      return { SetMembershipLeadInvitationQuota: specifics?.amount }
     }
     case 'setReferralCut': {
       return { SetReferralCut: specifics?.amount?.toNumber() }
