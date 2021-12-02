@@ -105,6 +105,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         },
       }
     }
+    case 'setMembershipLeadInvitationQuota': {
+      return { SetMembershipLeadInvitationQuota: specifics?.amount }
+    }
     case 'setReferralCut': {
       return { SetReferralCut: specifics?.amount?.toNumber() }
     }

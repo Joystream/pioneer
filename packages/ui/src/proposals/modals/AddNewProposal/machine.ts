@@ -14,6 +14,7 @@ import {
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { SlashWorkingGroupLeadParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
@@ -70,6 +71,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | TerminateWorkingGroupLeadParameters
     | FillWorkingGroupLeadOpeningParameters
     | SetWorkingGroupLeadRewardParameters
+    | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -121,6 +123,10 @@ interface SetWorkingGroupLeadRewardContext extends SpecificParametersContext {
   specifics: SetWorkingGroupLeadRewardParameters
 }
 
+interface SetMembershipLeadInvitationContext extends SpecificParametersContext {
+  specifics: SetMembershipLeadInvitationParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -149,7 +155,8 @@ export type AddNewProposalContext = Partial<
     TransactionContext &
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
-    DiscusisonContext
+    DiscusisonContext &
+    SetMembershipLeadInvitationContext
 >
 
 export type AddNewProposalState =
@@ -173,6 +180,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
+  | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -396,6 +404,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
+            { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
           ],
         },
         signal: {
@@ -654,6 +663,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   }),
                 },
               },
+            },
+          },
+        },
+        setMembershipLeadInvitationQuota: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, amount: event.amount }),
+              }),
             },
           },
         },

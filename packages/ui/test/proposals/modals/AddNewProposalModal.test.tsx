@@ -647,6 +647,45 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+      describe('Type - Set Membership lead invitation quota proposal', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpeningStatuses(server.server)
+          seedOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setMembershipLeadInvitationQuota')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Membership Lead Invitation Quota$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max value', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await SpecificParameters.fillAmount(Math.pow(2, 32))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+        })
+
+        it('Valid form', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
       describe('Type - Fill Working Group Lead Opening', () => {
         beforeEach(async () => {
           await finishProposalType('fillWorkingGroupLeadOpening')
