@@ -989,9 +989,9 @@ export type GetCandidateStatsQueryVariables = Types.Exact<{
 
 export type GetCandidateStatsQuery = {
   __typename: 'Query'
-  candidacyWithdrawEventsConnection: { __typename: 'CandidacyWithdrawEventConnection'; totalCount: number }
-  councilMembersConnection: { __typename: 'CouncilMemberConnection'; totalCount: number }
-  candidatesConnection: { __typename: 'CandidateConnection'; totalCount: number }
+  withdrawn: { __typename: 'CandidateConnection'; totalCount: number }
+  successful: { __typename: 'CandidateConnection'; totalCount: number }
+  failed: { __typename: 'CandidateConnection'; totalCount: number }
 }
 
 export type GetCouncilVotesQueryVariables = Types.Exact<{
@@ -1547,7 +1547,7 @@ export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCoun
 export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
 export const GetPastCouncilMembersDocument = gql`
   query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-    councilMembers(where: { electedInCouncil_eq: $councilId }) {
+    councilMembers(where: { electedInCouncil: { id_eq: $councilId } }) {
       member {
         ...MemberFields
       }
@@ -2034,13 +2034,19 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    candidacyWithdrawEventsConnection(where: { candidate: { member: { id_eq: $memberId } } }) {
+    withdrawn: candidatesConnection(
+      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusWithdrawn" } }
+    ) {
       totalCount
     }
-    councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+    successful: candidatesConnection(
+      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusElected" } }
+    ) {
       totalCount
     }
-    candidatesConnection(where: { member: { id_eq: $memberId } }) {
+    failed: candidatesConnection(
+      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusLost" } }
+    ) {
       totalCount
     }
   }

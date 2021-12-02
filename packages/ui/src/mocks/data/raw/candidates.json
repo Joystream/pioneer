@@ -1,610 +1,722 @@
 [
   {
     "id": "0-0",
-    "memberId": "47",
+    "memberId": "36",
     "electionRoundId": "0",
-    "stake": 625636,
+    "stake": 410892,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "voluptas et tenetur consequatur et est sequi et et mollitia",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "itaque et fugit autem dolor magnam cupiditate eligendi facilis voluptatem",
     "noteMetadata": {
-      "header": "molestiae ab aut est",
+      "header": "suscipit minima iste quis",
       "bulletPoints": [
-        "saepe aut quaerat quo porro tenetur expedita consequuntur",
-        "nisi accusamus blanditiis dolorem aperiam dolores odit quos",
-        "incidunt et error neque necessitatibus veniam reprehenderit ea"
+        "consequatur rem id sit molestias voluptas molestias numquam",
+        "error error reiciendis necessitatibus culpa vel quia natus",
+        "iusto cum illo quo libero aspernatur fugit quo"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "expedita mollitia eveniet ratione ullam aliquid optio fugit deleniti ea"
+      "description": "enim quod itaque error eos voluptatem voluptatem est autem quia"
     }
   },
   {
     "id": "0-1",
     "memberId": "23",
     "electionRoundId": "0",
-    "stake": 646262,
+    "stake": 721012,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "magni voluptatem voluptatem facere ullam ad voluptas quos est voluptatem",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "eius at quod officia consequatur omnis officiis sint quod voluptates",
     "noteMetadata": {
-      "header": "facilis sapiente dignissimos aut",
+      "header": "aut impedit harum nulla",
       "bulletPoints": [
-        "velit nesciunt aut consequuntur est ad voluptatum cumque",
-        "maiores iure cum eveniet quasi quia numquam inventore",
-        "voluptatem corrupti enim quam quos repellendus velit ducimus"
+        "quae ea cupiditate aut et itaque consequatur non",
+        "voluptatum aliquid quod aut cum vero omnis facilis",
+        "enim dolor cum vel aut sit ipsam sequi"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "molestias expedita modi nulla tenetur voluptate harum quia aperiam accusantium"
+      "description": "molestiae iste ullam rerum ea expedita aut quod impedit harum"
     }
   },
   {
     "id": "0-2",
-    "memberId": "7",
+    "memberId": "28",
     "electionRoundId": "0",
-    "stake": 324385,
+    "stake": 296459,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "et pariatur quia sapiente deserunt recusandae assumenda enim non dicta",
+    "statusType": "CandidacyStatusLost",
+    "note": "quia corrupti est eaque et ad voluptatem laudantium illum in",
     "noteMetadata": {
-      "header": "vel nobis libero sint",
+      "header": "voluptatem beatae eligendi natus",
       "bulletPoints": [
-        "a cupiditate deserunt non in nihil sapiente reprehenderit",
-        "et blanditiis et laboriosam tenetur non voluptas dolorum",
-        "ab quia natus tenetur quo atque dicta voluptas"
+        "quis voluptatem qui vel est occaecati aut eum",
+        "asperiores sed adipisci eveniet aut doloremque voluptate ut",
+        "aperiam dolor in incidunt cupiditate iure corrupti eum"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "dolorem natus labore nisi esse et facere nesciunt optio molestias"
+      "description": "aut autem sapiente quam eos dolore reiciendis expedita est omnis"
     }
   },
   {
     "id": "0-3",
-    "memberId": "36",
+    "memberId": "25",
     "electionRoundId": "0",
-    "stake": 217411,
+    "stake": 374789,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "quo ut est sapiente amet dolor quia quia doloremque quam",
+    "statusType": "CandidacyStatusLost",
+    "note": "enim vel illum assumenda quod est et iste blanditiis non",
     "noteMetadata": {
-      "header": "vero consectetur occaecati debitis",
+      "header": "aut ipsam ut qui",
       "bulletPoints": [
-        "dignissimos odio optio velit et maxime velit placeat",
-        "sit atque sunt ut expedita ut et autem",
-        "odio et reiciendis temporibus ab totam error rerum"
+        "facere voluptatem aut delectus corporis ipsam repudiandae asperiores",
+        "provident eligendi hic est harum similique et qui",
+        "error laborum exercitationem veritatis ipsum dolorem culpa ea"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "et officiis eum nesciunt dolorem dolor illo et voluptatem provident"
+      "description": "id eius dolore omnis nihil facere temporibus provident rem consectetur"
     }
   },
   {
     "id": "0-4",
-    "memberId": "39",
+    "memberId": "43",
     "electionRoundId": "0",
-    "stake": 841386,
-    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "velit deserunt quia rem est necessitatibus eos est corporis et",
+    "stake": 674217,
+    "stakingAccountId": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+    "rewardAccountId": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+    "statusType": "CandidacyStatusElected",
+    "note": "illum cumque fugit est nihil nostrum dolor ex cupiditate aliquid",
     "noteMetadata": {
-      "header": "at nihil commodi dolor",
+      "header": "enim labore ex exercitationem",
       "bulletPoints": [
-        "voluptatem illum libero autem vero perspiciatis minus velit",
-        "et quia mollitia repellat consequuntur aperiam voluptas tenetur",
-        "consequuntur repudiandae velit alias nesciunt similique placeat veniam"
+        "quisquam aut molestiae commodi laboriosam molestiae illo occaecati",
+        "dignissimos asperiores voluptatibus nam cum fugit atque magnam",
+        "ipsa vitae atque consequatur et corrupti aut quasi"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "et ut quo voluptatem blanditiis ullam vel aspernatur aliquid quisquam"
+      "description": "sapiente rem sunt a iure et incidunt odio nulla qui"
     }
   },
   {
     "id": "0-5",
-    "memberId": "40",
+    "memberId": "37",
     "electionRoundId": "0",
-    "stake": 696532,
+    "stake": 554172,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "maiores perspiciatis velit quidem aliquam laborum perspiciatis et iusto itaque",
+    "statusType": "CandidacyStatusLost",
+    "note": "enim impedit ea nostrum quos earum quasi distinctio non aut",
     "noteMetadata": {
-      "header": "esse optio adipisci itaque",
+      "header": "libero aspernatur ad non",
       "bulletPoints": [
-        "perspiciatis facere iure quo nulla est quaerat nulla",
-        "rerum beatae voluptas et sed natus saepe excepturi",
-        "qui maxime inventore reiciendis a est quas repellat"
+        "consequatur aspernatur ea debitis consequatur asperiores quidem quas",
+        "est labore eius et nobis qui consequatur commodi",
+        "sunt commodi a recusandae consectetur provident et accusantium"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "sunt laborum dolores qui vitae eveniet veniam blanditiis rerum repellat"
+      "description": "a reiciendis quibusdam nemo ipsum omnis consectetur porro ipsa illum"
     }
   },
   {
     "id": "0-6",
-    "memberId": "18",
+    "memberId": "4",
     "electionRoundId": "0",
-    "stake": 203142,
+    "stake": 641031,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "dicta aliquam qui provident voluptas dolorum eos velit molestias eaque",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "eius aspernatur ea dolorem exercitationem est est itaque veniam aut",
     "noteMetadata": {
-      "header": "beatae nemo cupiditate omnis",
+      "header": "sunt laborum ad asperiores",
       "bulletPoints": [
-        "aperiam architecto aut eos molestiae a ut est",
-        "nesciunt dolorem exercitationem laborum sapiente est voluptatibus aperiam",
-        "mollitia deserunt qui et corrupti quod possimus rem"
+        "impedit deserunt maxime consequatur voluptatem veniam aut molestiae",
+        "amet ut numquam nulla autem ut mollitia eos",
+        "ea sit inventore explicabo sed quidem occaecati nam"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "cumque soluta minus consequatur porro officia adipisci non consequuntur consequatur"
+      "description": "omnis ipsum libero eaque qui et ad sit optio ratione"
     }
   },
   {
     "id": "1-0",
-    "memberId": "28",
+    "memberId": "10",
     "electionRoundId": "1",
-    "stake": 565592,
+    "stake": 85846,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "hic vitae id ut et mollitia accusantium rerum laborum veritatis",
+    "statusType": "CandidacyStatusLost",
+    "note": "maiores sit temporibus magnam nemo magni rerum voluptatem illum sed",
     "noteMetadata": {
-      "header": "maxime eos omnis dolor",
+      "header": "molestiae culpa quasi reiciendis",
       "bulletPoints": [
-        "dolore quia dolores fugiat non et corrupti a",
-        "a quam repellendus harum ut quia excepturi eos",
-        "quia aut suscipit in odit mollitia consequatur excepturi"
+        "voluptatem alias eius earum error et perferendis et",
+        "unde modi repellendus rerum doloribus pariatur eos quam",
+        "aut repudiandae ullam error sunt eligendi quasi explicabo"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "mollitia possimus voluptas sed delectus voluptas porro explicabo officia eum"
+      "description": "aspernatur aperiam ratione sed fuga nam eos rerum eveniet quo"
     }
   },
   {
     "id": "1-1",
-    "memberId": "20",
+    "memberId": "30",
     "electionRoundId": "1",
-    "stake": 809829,
+    "stake": 918830,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "asperiores aliquid rem aut est quas non quod dolores culpa",
+    "statusType": "CandidacyStatusElected",
+    "note": "dolore aliquid delectus qui delectus quibusdam aut tempore dolore voluptas",
     "noteMetadata": {
-      "header": "tempore voluptatem fugiat qui",
+      "header": "suscipit fuga reiciendis iure",
       "bulletPoints": [
-        "autem distinctio deserunt fuga quo quisquam ut et",
-        "non ut dignissimos itaque est corrupti quam laborum",
-        "provident est id perferendis libero nihil qui in"
+        "officia voluptate id ex neque tempore consequuntur commodi",
+        "non consequatur a eveniet cumque aut molestiae repellendus",
+        "et quidem dignissimos magnam consequuntur est aliquam placeat"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "omnis dolor ipsam laboriosam necessitatibus veritatis nesciunt aut perferendis recusandae"
+      "description": "sunt earum quibusdam vitae facere sit fugiat in cupiditate nisi"
     }
   },
   {
     "id": "1-2",
-    "memberId": "41",
+    "memberId": "39",
     "electionRoundId": "1",
-    "stake": 622744,
+    "stake": 23347,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "eaque fugit possimus ea ducimus excepturi molestias nam quia animi",
+    "statusType": "CandidacyStatusElected",
+    "note": "corrupti maiores ipsum sapiente blanditiis eius dolorum cupiditate vero expedita",
     "noteMetadata": {
-      "header": "optio molestiae dolorem repudiandae",
+      "header": "amet aut eum unde",
       "bulletPoints": [
-        "et quidem nisi libero suscipit totam ipsa saepe",
-        "maxime dolore id velit deserunt non itaque laborum",
-        "alias quisquam sapiente quaerat ut praesentium architecto dolor"
+        "incidunt officiis sint quas et dolorem architecto nam",
+        "quaerat provident necessitatibus facilis laudantium qui mollitia suscipit",
+        "repudiandae similique blanditiis autem cupiditate error dolorum est"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "fugiat facilis ea temporibus sapiente praesentium incidunt officiis totam expedita"
+      "description": "non officiis et debitis ex cum quisquam iure repellendus iste"
     }
   },
   {
     "id": "1-3",
-    "memberId": "10",
+    "memberId": "0",
     "electionRoundId": "1",
-    "stake": 802315,
+    "stake": 35528,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "aut sint quisquam vero fugit nostrum magni tempora delectus facilis",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "rerum doloribus ratione aspernatur rerum et quae nostrum molestias quisquam",
     "noteMetadata": {
-      "header": "sunt vitae dolorum laudantium",
+      "header": "deserunt fugiat at aspernatur",
       "bulletPoints": [
-        "assumenda illo nobis expedita consequatur suscipit provident veritatis",
-        "exercitationem consequatur aut natus rerum sed rerum suscipit",
-        "voluptatem in a id velit omnis velit enim"
+        "deleniti modi nesciunt est quo ea id voluptatem",
+        "libero ut sapiente tempore ipsam excepturi libero et",
+        "earum voluptates numquam repellendus qui iure velit voluptatem"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "consequuntur ut omnis itaque dolor ipsam blanditiis est impedit et"
+      "description": "dolores rem dolor quia nulla enim provident voluptates qui et"
     }
   },
   {
     "id": "1-4",
-    "memberId": "28",
+    "memberId": "32",
     "electionRoundId": "1",
-    "stake": 710109,
+    "stake": 326656,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "enim laborum est odio magnam nisi dolorem impedit eveniet repellat",
+    "statusType": "CandidacyStatusElected",
+    "note": "occaecati omnis fugit molestiae sed nostrum unde maxime fugiat qui",
     "noteMetadata": {
-      "header": "eos quia et sint",
+      "header": "quibusdam vero qui voluptatem",
       "bulletPoints": [
-        "ipsum explicabo ullam maxime aut quis minima rerum",
-        "ea quod nisi ratione quos voluptatum fuga facilis",
-        "dolores pariatur et inventore perspiciatis aut quasi saepe"
+        "voluptate accusantium iusto sed consequuntur inventore atque voluptatem",
+        "neque sit quo voluptate repellat eos sunt illo",
+        "veritatis dolorem tempore neque quia omnis quo dignissimos"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "et quam itaque dolore non similique ullam hic expedita ut"
+      "description": "eos eveniet omnis et possimus quia quos illum quae ex"
     }
   },
   {
     "id": "1-5",
-    "memberId": "36",
+    "memberId": "11",
     "electionRoundId": "1",
-    "stake": 786780,
+    "stake": 442662,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "eveniet amet ut ducimus delectus deleniti sunt atque repudiandae voluptas",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "nisi odio error eveniet sunt quibusdam ut sit reiciendis facilis",
     "noteMetadata": {
-      "header": "eos laudantium molestiae vel",
+      "header": "expedita nulla doloremque magnam",
       "bulletPoints": [
-        "fugiat quisquam quis ea deserunt et ea deserunt",
-        "similique dolores ut eum cum consequatur deleniti est",
-        "earum eius modi culpa et qui exercitationem officia"
+        "et necessitatibus saepe tempora cumque et dolorem labore",
+        "sit pariatur voluptatum ducimus distinctio quod quo distinctio",
+        "asperiores occaecati optio voluptas quia est rerum fugiat"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "dolorem voluptas eum quam beatae temporibus vero voluptatum architecto alias"
+      "description": "labore quidem quas aspernatur recusandae et architecto qui autem temporibus"
+    }
+  },
+  {
+    "id": "1-6",
+    "memberId": "40",
+    "electionRoundId": "1",
+    "stake": 821030,
+    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "consequatur sed inventore aut rerum sit corrupti est dolor libero",
+    "noteMetadata": {
+      "header": "animi excepturi ut veniam",
+      "bulletPoints": [
+        "esse illo unde quia labore quam ipsa cum",
+        "consequatur recusandae soluta voluptatibus qui dolores id aut",
+        "voluptas animi consequatur laudantium eum praesentium tenetur non"
+      ],
+      "bannerImageUri": "https://picsum.photos/500/300",
+      "description": "dolores et blanditiis qui voluptatum fugit dolores eaque sint cupiditate"
     }
   },
   {
     "id": "2-0",
-    "memberId": "46",
+    "memberId": "14",
     "electionRoundId": "2",
-    "stake": 91679,
+    "stake": 335133,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "mollitia molestias eius dolor minima quo deleniti saepe quia iure",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "perferendis eaque non excepturi aut rerum rerum rerum voluptas et",
     "noteMetadata": {
-      "header": "ut eius est qui",
+      "header": "et et veniam neque",
       "bulletPoints": [
-        "est voluptatem esse totam et molestias modi dolor",
-        "aperiam distinctio culpa culpa incidunt ducimus delectus debitis",
-        "dignissimos omnis in et perspiciatis debitis sint beatae"
+        "id ea et fugiat modi vero ex vel",
+        "commodi eum debitis optio aliquam sint voluptas dolores",
+        "cum veritatis ex rerum similique numquam quo alias"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "cupiditate vitae distinctio occaecati alias eius quia sapiente nam qui"
+      "description": "est voluptas consectetur qui dolor accusamus vel id rem qui"
     }
   },
   {
     "id": "2-1",
-    "memberId": "24",
+    "memberId": "30",
     "electionRoundId": "2",
-    "stake": 87060,
+    "stake": 22315,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "et animi dolore laudantium eum reiciendis et reiciendis distinctio explicabo",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "accusantium illum dolorem aut dolorem quisquam perspiciatis eius quia dolor",
     "noteMetadata": {
-      "header": "deleniti ut non et",
+      "header": "blanditiis earum et nostrum",
       "bulletPoints": [
-        "dolores perspiciatis officiis sit qui laudantium in esse",
-        "maxime accusantium architecto dolores quasi laborum dolores nesciunt",
-        "molestias voluptatem tenetur sint id non voluptate commodi"
+        "et quae et amet qui placeat et voluptas",
+        "non molestiae porro sed velit facilis qui in",
+        "doloremque consectetur omnis quisquam praesentium animi qui enim"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "eum excepturi corrupti quidem et rerum quidem qui aut placeat"
+      "description": "ea et doloremque aut quas sapiente voluptatum sed aperiam excepturi"
     }
   },
   {
     "id": "2-2",
-    "memberId": "16",
+    "memberId": "9",
     "electionRoundId": "2",
-    "stake": 119912,
+    "stake": 288184,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "quis vel dolorem dolorem qui libero sit aut excepturi aut",
+    "statusType": "CandidacyStatusLost",
+    "note": "quam blanditiis asperiores neque ratione quia sint architecto saepe dolore",
     "noteMetadata": {
-      "header": "accusamus omnis fugiat ex",
+      "header": "ut veniam sunt autem",
       "bulletPoints": [
-        "recusandae sint itaque placeat voluptatem optio totam sunt",
-        "illum nihil aut et voluptas officiis magni consectetur",
-        "blanditiis dolorum nam voluptatem dicta possimus maiores sint"
+        "iure tenetur consectetur incidunt alias laudantium suscipit et",
+        "ducimus sit placeat quia qui et earum facere",
+        "accusamus debitis natus voluptates voluptatibus aut eos officia"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "iure rerum omnis fugit voluptatem maxime fugit non est natus"
+      "description": "debitis omnis non iste quia porro illo omnis deserunt fugiat"
     }
   },
   {
     "id": "2-3",
-    "memberId": "39",
+    "memberId": "3",
     "electionRoundId": "2",
-    "stake": 866806,
-    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "rem quaerat reprehenderit fugiat facere possimus nobis quam expedita est",
+    "stake": 614770,
+    "stakingAccountId": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
+    "rewardAccountId": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
+    "statusType": "CandidacyStatusElected",
+    "note": "quae aut numquam praesentium qui consequuntur animi illum eos et",
     "noteMetadata": {
-      "header": "et natus et et",
+      "header": "eveniet porro enim voluptas",
       "bulletPoints": [
-        "quae quis nemo explicabo mollitia asperiores officia molestiae",
-        "nesciunt voluptatem omnis eaque iste illo tenetur reprehenderit",
-        "ut voluptatum est laborum eveniet ea doloribus aliquid"
+        "deserunt voluptates similique voluptatem eos laboriosam vitae eaque",
+        "ad commodi sunt laudantium deserunt id unde quod",
+        "omnis eaque est aliquam fuga quod laboriosam dolorum"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "consequuntur voluptate voluptatem incidunt qui dicta est non et laudantium"
+      "description": "vel rerum deleniti rerum consectetur sunt aspernatur ab quo dolores"
     }
   },
   {
     "id": "2-4",
-    "memberId": "35",
+    "memberId": "16",
     "electionRoundId": "2",
-    "stake": 256080,
+    "stake": 789562,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "in et est cumque in nisi unde est voluptatem magni",
+    "statusType": "CandidacyStatusElected",
+    "note": "ut repudiandae quidem dolore alias facere blanditiis aliquam quasi assumenda",
     "noteMetadata": {
-      "header": "rerum perferendis eum vitae",
+      "header": "et ut ducimus officiis",
       "bulletPoints": [
-        "fugiat ipsam at dolor quod voluptate qui corrupti",
-        "nemo corrupti nisi qui nam eos possimus harum",
-        "quidem ratione nemo ut exercitationem est dicta in"
+        "consectetur eos rerum qui reprehenderit vel totam magni",
+        "facere voluptatem ut voluptatem est numquam quibusdam accusantium",
+        "reiciendis repellendus excepturi quod porro deserunt ut ducimus"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "eligendi recusandae in modi pariatur impedit illo impedit odit qui"
+      "description": "maiores facere illum unde temporibus dolor et voluptas rerum iste"
+    }
+  },
+  {
+    "id": "2-5",
+    "memberId": "5",
+    "electionRoundId": "2",
+    "stake": 203405,
+    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "statusType": "CandidacyStatusLost",
+    "note": "aut voluptatem quaerat iusto ea ut repudiandae nulla perferendis impedit",
+    "noteMetadata": {
+      "header": "voluptatem eveniet est quaerat",
+      "bulletPoints": [
+        "sit maxime dicta illo quia dolore tempora soluta",
+        "aut voluptatem qui dolor et enim rerum aut",
+        "fugit atque est illo qui et et facilis"
+      ],
+      "bannerImageUri": "https://picsum.photos/500/300",
+      "description": "earum aut velit placeat fugit non velit ex rerum voluptatibus"
+    }
+  },
+  {
+    "id": "2-6",
+    "memberId": "19",
+    "electionRoundId": "2",
+    "stake": 573556,
+    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "ducimus assumenda aut voluptas sit tempore animi dolores inventore recusandae",
+    "noteMetadata": {
+      "header": "voluptatem vero commodi quae",
+      "bulletPoints": [
+        "saepe ut voluptas distinctio consequatur nihil quis quas",
+        "aut quis quia soluta autem beatae exercitationem est",
+        "nobis perferendis fugit dolore et dolore quia velit"
+      ],
+      "bannerImageUri": "https://picsum.photos/500/300",
+      "description": "nisi quia a autem eligendi ea officiis ea sed sapiente"
+    }
+  },
+  {
+    "id": "2-7",
+    "memberId": "12",
+    "electionRoundId": "2",
+    "stake": 549623,
+    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "statusType": "CandidacyStatusElected",
+    "note": "ea blanditiis consequatur dolores aliquid expedita id explicabo voluptas quas",
+    "noteMetadata": {
+      "header": "eligendi iusto perspiciatis doloribus",
+      "bulletPoints": [
+        "voluptatem facilis voluptatem nulla et esse eaque atque",
+        "est non est totam soluta suscipit pariatur et",
+        "voluptas rerum fuga quidem commodi accusantium eligendi dolorem"
+      ],
+      "bannerImageUri": "https://picsum.photos/500/300",
+      "description": "enim eaque distinctio sint sed placeat inventore sit excepturi neque"
     }
   },
   {
     "id": "3-0",
-    "memberId": "35",
+    "memberId": "18",
     "electionRoundId": "3",
-    "stake": 957523,
+    "stake": 581684,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "ratione perferendis occaecati labore id et praesentium molestias ratione hic",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "est et id qui qui quia molestiae ducimus quo quia",
     "noteMetadata": {
-      "header": "dignissimos repellendus doloribus praesentium",
+      "header": "aut at voluptatem maiores",
       "bulletPoints": [
-        "consectetur facilis qui illum dolorum consectetur et nihil",
-        "quaerat qui quam non ullam ut aut autem",
-        "dicta harum eos asperiores rem et consequatur voluptatem"
+        "cumque quos aut fuga perferendis hic esse qui",
+        "vel molestias blanditiis fuga consectetur aut omnis nostrum",
+        "consequatur maiores porro similique et eos aut quod"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "et eius debitis inventore quia occaecati suscipit rerum iusto fugit"
+      "description": "consectetur voluptatum rem unde aspernatur aliquid ab animi suscipit sed"
     }
   },
   {
     "id": "3-1",
-    "memberId": "24",
+    "memberId": "34",
     "electionRoundId": "3",
-    "stake": 555155,
+    "stake": 760280,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "et eaque dolore similique est sed deserunt iure dolore culpa",
+    "statusType": "CandidacyStatusElected",
+    "note": "ut dolor et ut enim quisquam eius quas et accusamus",
     "noteMetadata": {
-      "header": "placeat cupiditate quaerat eos",
+      "header": "fugiat consequatur vel quisquam",
       "bulletPoints": [
-        "ad blanditiis sunt aliquid autem neque maiores sed",
-        "quis quia sit repudiandae illum sint inventore aut",
-        "quia optio quasi voluptas fugit voluptas enim dolores"
+        "non et facere nobis ab et et ipsam",
+        "velit consectetur reiciendis sed rerum incidunt rem et",
+        "necessitatibus quisquam enim dolorem vitae quidem eius omnis"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "dolor dolorem qui rerum eligendi nemo consequatur aut quos sint"
+      "description": "et rerum repellat aut a et nihil ratione omnis et"
     }
   },
   {
     "id": "3-2",
-    "memberId": "36",
+    "memberId": "46",
     "electionRoundId": "3",
-    "stake": 992435,
+    "stake": 256828,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "inventore velit illum a beatae maiores sint reprehenderit quaerat ipsa",
+    "statusType": "CandidacyStatusLost",
+    "note": "sed sed inventore vitae explicabo magnam quos exercitationem qui ut",
     "noteMetadata": {
-      "header": "possimus nisi omnis voluptatem",
+      "header": "molestiae voluptas et est",
       "bulletPoints": [
-        "in ut libero voluptas quas expedita aut repudiandae",
-        "et aliquam sunt id asperiores quia perferendis illum",
-        "qui ut voluptas ut sequi ducimus nihil quod"
+        "illo non iusto ipsum sint impedit nihil illum",
+        "ea et doloremque libero distinctio velit consequuntur consequatur",
+        "ea ipsum ducimus similique nisi sed est recusandae"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "nostrum explicabo earum quia omnis unde esse officiis ut quidem"
+      "description": "voluptas et itaque pariatur explicabo cum quasi non eum quod"
     }
   },
   {
     "id": "3-3",
-    "memberId": "33",
+    "memberId": "47",
     "electionRoundId": "3",
-    "stake": 186393,
-    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "deleniti quae non possimus sequi sunt nulla exercitationem qui quae",
+    "stake": 705012,
+    "stakingAccountId": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
+    "rewardAccountId": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
+    "statusType": "CandidacyStatusWithdrawn",
+    "note": "voluptatibus quibusdam tenetur mollitia mollitia quam laborum suscipit voluptatem quod",
     "noteMetadata": {
-      "header": "expedita nihil perferendis quis",
+      "header": "in soluta et voluptates",
       "bulletPoints": [
-        "aut necessitatibus quibusdam corrupti sit ullam atque sapiente",
-        "fugiat eveniet eos non distinctio ducimus eveniet exercitationem",
-        "ipsum vitae veniam sint quis earum repudiandae at"
+        "inventore officiis est ipsam pariatur ut aut perferendis",
+        "natus commodi laboriosam harum ipsam illum porro rerum",
+        "maxime veniam nostrum libero consequatur officiis dolores eum"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "unde qui quis maxime corrupti dolor quod itaque porro consectetur"
+      "description": "reprehenderit voluptas occaecati magnam eos corporis tempore distinctio pariatur aut"
     }
   },
   {
     "id": "3-4",
-    "memberId": "42",
+    "memberId": "31",
     "electionRoundId": "3",
-    "stake": 40433,
+    "stake": 595313,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "et voluptate qui consectetur sed nisi eligendi quis repudiandae possimus",
+    "statusType": "CandidacyStatusLost",
+    "note": "corrupti laboriosam eveniet dolorem blanditiis quo voluptas asperiores dolorum qui",
     "noteMetadata": {
-      "header": "quibusdam quo numquam sint",
+      "header": "cum minima vero animi",
       "bulletPoints": [
-        "quaerat architecto ea illo impedit iusto quia quia",
-        "et harum beatae blanditiis assumenda culpa quod soluta",
-        "enim nulla quia est voluptate voluptatem omnis sed"
+        "eius nobis fugit pariatur quod iusto ut tempora",
+        "qui perferendis consequatur fugiat autem ut aliquam non",
+        "ab est dolorem tempore rerum facilis nisi omnis"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "iure est sapiente molestiae sunt molestias eveniet laudantium ut ducimus"
+      "description": "aliquam rerum error sint reprehenderit excepturi soluta veniam vero adipisci"
     }
   },
   {
     "id": "3-5",
-    "memberId": "41",
+    "memberId": "25",
     "electionRoundId": "3",
-    "stake": 121080,
+    "stake": 626942,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "tenetur eligendi rerum quam quos quia nihil et quis maiores",
+    "statusType": "CandidacyStatusLost",
+    "note": "sit quas nulla sequi sed sint voluptatibus ipsam dolores et",
     "noteMetadata": {
-      "header": "id aperiam sed minima",
+      "header": "iusto mollitia rerum aspernatur",
       "bulletPoints": [
-        "commodi aspernatur reprehenderit ea dignissimos in officia quia",
-        "ut perferendis molestiae veritatis velit ab vitae quos",
-        "quis tempore omnis consequatur consequatur ipsa non accusamus"
+        "consequatur eius doloremque porro iure vitae sit laboriosam",
+        "blanditiis et ratione qui veritatis consequatur alias magni",
+        "excepturi in voluptatem velit nam ullam fuga qui"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "voluptate eligendi earum et omnis dolor dolorem nulla molestiae ea"
-    }
-  },
-  {
-    "id": "3-6",
-    "memberId": "2",
-    "electionRoundId": "3",
-    "stake": 587387,
-    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "mollitia qui quis alias eum mollitia saepe iste enim rerum",
-    "noteMetadata": {
-      "header": "nihil ad eum cumque",
-      "bulletPoints": [
-        "inventore rerum quidem provident repellendus dolores dolor incidunt",
-        "rerum aut minus illum quia ut eius molestiae",
-        "qui quis distinctio qui magni qui rerum voluptas"
-      ],
-      "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "nobis odio necessitatibus beatae repellendus qui est nemo et est"
+      "description": "inventore quam sunt corrupti ea blanditiis est eaque aut fugit"
     }
   },
   {
     "id": "4-0",
-    "memberId": "28",
+    "memberId": "50",
     "electionRoundId": "4",
-    "stake": 835049,
+    "stake": 717407,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "adipisci nostrum inventore eaque sit qui nulla repellat quam ut",
+    "statusType": "CandidacyStatusActive",
+    "note": "iure debitis et assumenda consequatur hic ipsam ut non laborum",
     "noteMetadata": {
-      "header": "vel neque blanditiis consequatur",
+      "header": "possimus quidem quia sequi",
       "bulletPoints": [
-        "omnis atque rerum aut quis et veniam dolore",
-        "sunt tempore voluptatem error consequuntur et aut animi",
-        "et sed eveniet tempore fugit ipsum quod vel"
+        "natus ut praesentium ut consequatur eius autem temporibus",
+        "aspernatur qui sit quidem non non itaque officia",
+        "provident doloremque nulla omnis dolorem enim quia voluptate"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "in dolorem placeat velit nostrum voluptas aut atque et sunt"
+      "description": "facilis fuga illo vel excepturi quod et ipsa et voluptates"
     }
   },
   {
     "id": "4-1",
-    "memberId": "23",
+    "memberId": "31",
     "electionRoundId": "4",
-    "stake": 339177,
+    "stake": 92455,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "optio voluptatibus aut voluptas saepe ea itaque possimus nulla reprehenderit",
+    "statusType": "CandidacyStatusActive",
+    "note": "ut ad nisi molestiae eius vitae eaque aut quis veniam",
     "noteMetadata": {
-      "header": "architecto enim perspiciatis omnis",
+      "header": "et omnis est repellat",
       "bulletPoints": [
-        "sint sed repellat velit tenetur nobis dolores eveniet",
-        "accusamus voluptatem quod inventore et nihil fugiat repellat",
-        "rem voluptas deserunt voluptas aut reprehenderit sed quia"
+        "in soluta fugiat vel laborum dolores quia exercitationem",
+        "qui maxime qui qui aut et soluta hic",
+        "officiis et est et quia qui placeat et"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "sit quia ducimus eius sed minima voluptatem odio illum sed"
+      "description": "iste in id impedit dignissimos et quibusdam eligendi id quis"
     }
   },
   {
     "id": "4-2",
-    "memberId": "10",
+    "memberId": "47",
     "electionRoundId": "4",
-    "stake": 132216,
+    "stake": 113496,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "praesentium tempora quo sequi et et vero officia nisi tempore",
+    "statusType": "CandidacyStatusActive",
+    "note": "voluptatem numquam velit earum mollitia vel labore velit est est",
     "noteMetadata": {
-      "header": "aut autem ullam nemo",
+      "header": "consequatur sit totam et",
       "bulletPoints": [
-        "itaque voluptatibus tenetur sint voluptatem cupiditate similique esse",
-        "officiis fugiat voluptatum harum animi qui architecto ut",
-        "temporibus eum id perferendis ex cum qui ipsum"
+        "molestiae adipisci numquam consequatur et aspernatur aspernatur quia",
+        "harum consequuntur ratione dolore pariatur hic sed magnam",
+        "aut ullam sapiente quo culpa corrupti in impedit"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "distinctio quaerat eligendi ipsam tempore et quos rem sapiente dolores"
+      "description": "odio dolor beatae suscipit magni soluta id omnis ipsam perferendis"
     }
   },
   {
     "id": "4-3",
-    "memberId": "15",
+    "memberId": "23",
     "electionRoundId": "4",
-    "stake": 392887,
+    "stake": 910752,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "quidem in quam dicta doloremque cum nihil placeat sit libero",
+    "statusType": "CandidacyStatusActive",
+    "note": "in non unde vero harum dignissimos aliquam quia quam harum",
     "noteMetadata": {
-      "header": "cupiditate nihil nulla excepturi",
+      "header": "ratione non harum aliquid",
       "bulletPoints": [
-        "dolores officiis natus odio fugit ipsa explicabo et",
-        "velit eos qui qui non quas molestiae odio",
-        "saepe assumenda dicta totam libero accusantium vel reprehenderit"
+        "non in ut vero pariatur alias voluptates aspernatur",
+        "voluptatem ipsa voluptate qui rerum possimus ut exercitationem",
+        "sint earum dolore molestiae fugiat ut autem earum"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "tenetur quia ut alias est excepturi in vitae nobis est"
+      "description": "saepe deleniti dolores facere repellat velit aut enim minima rerum"
     }
   },
   {
     "id": "4-4",
-    "memberId": "41",
+    "memberId": "23",
     "electionRoundId": "4",
-    "stake": 928327,
+    "stake": 324657,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "voluptates tenetur ea sunt est soluta rem earum distinctio ratione",
+    "statusType": "CandidacyStatusActive",
+    "note": "culpa modi eos suscipit molestiae earum veniam cum libero ipsum",
     "noteMetadata": {
-      "header": "nulla dolorem ut beatae",
+      "header": "consectetur dolorem numquam ab",
       "bulletPoints": [
-        "mollitia corrupti autem eum ipsa sunt quibusdam voluptas",
-        "itaque qui non excepturi cupiditate occaecati occaecati ducimus",
-        "mollitia dolorem et a optio voluptatem est quas"
+        "fugiat reprehenderit odio voluptatem culpa facere accusamus eligendi",
+        "deleniti veniam quisquam suscipit temporibus deleniti facere magni",
+        "hic praesentium quas laboriosam inventore blanditiis saepe sit"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "minima officiis optio nesciunt repellendus repudiandae cupiditate veniam ipsum neque"
+      "description": "ab consequatur sed consectetur doloremque itaque velit blanditiis et quibusdam"
     }
   },
   {
     "id": "4-5",
-    "memberId": "23",
+    "memberId": "37",
     "electionRoundId": "4",
-    "stake": 277151,
+    "stake": 760643,
     "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "note": "nihil ratione dolorem asperiores laborum quos rerum architecto dolore est",
+    "statusType": "CandidacyStatusActive",
+    "note": "doloribus repellendus quo blanditiis ipsum sint fuga at nisi officia",
     "noteMetadata": {
-      "header": "doloremque unde qui odit",
+      "header": "quisquam voluptas autem molestiae",
       "bulletPoints": [
-        "maiores autem error accusamus fugit cum blanditiis incidunt",
-        "sit nisi nesciunt dolor qui velit quis ad",
-        "sit deserunt non quo provident eius vero blanditiis"
+        "sed omnis voluptatem minima perspiciatis quas qui libero",
+        "error officiis nobis voluptate nisi quo sequi ut",
+        "ea quis cupiditate est deleniti architecto eaque deserunt"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "at sed sint a voluptatem rerum aut iste velit saepe"
+      "description": "ex sunt cupiditate debitis vel reiciendis et alias velit quae"
     }
   },
   {
     "id": "4-6",
-    "memberId": "0",
+    "memberId": "8",
     "electionRoundId": "4",
-    "stake": 236665,
-    "stakingAccountId": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    "rewardAccountId": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "note": "ut similique atque sed doloribus adipisci rem ad quis aperiam",
+    "stake": 920598,
+    "stakingAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "rewardAccountId": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
+    "statusType": "CandidacyStatusActive",
+    "note": "laboriosam laboriosam vel quas quia dolor dolorum esse aliquam sed",
     "noteMetadata": {
-      "header": "doloremque molestiae officiis doloremque",
+      "header": "aut voluptates amet maxime",
       "bulletPoints": [
-        "ea consequuntur unde accusamus eveniet officiis modi optio",
-        "dolor laboriosam ullam dignissimos itaque qui officia inventore",
-        "quia atque omnis consectetur sunt ut aspernatur dicta"
+        "quis velit fuga pariatur omnis dolore ipsum ut",
+        "voluptatem eos magnam harum explicabo temporibus rem debitis",
+        "fugit consequatur excepturi alias repellendus laborum occaecati enim"
       ],
       "bannerImageUri": "https://picsum.photos/500/300",
-      "description": "atque ratione laudantium doloribus quia ut doloribus sit dolorem sint"
+      "description": "aut consequatur error ut sed minima maiores nam aspernatur nulla"
+    }
+  },
+  {
+    "id": "4-7",
+    "memberId": "0",
+    "electionRoundId": "4",
+    "stake": 796668,
+    "stakingAccountId": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "rewardAccountId": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "statusType": "CandidacyStatusActive",
+    "note": "accusantium molestias qui ipsa cumque maxime et sapiente dolores sed",
+    "noteMetadata": {
+      "header": "commodi adipisci autem nihil",
+      "bulletPoints": [
+        "eum eaque maxime iste error neque non hic",
+        "sint nostrum error sint ea est quis est",
+        "illo expedita eveniet qui accusantium id impedit ut"
+      ],
+      "bannerImageUri": "https://picsum.photos/500/300",
+      "description": "autem eos accusantium impedit aut enim atque et fugit beatae"
     }
   }
 ]

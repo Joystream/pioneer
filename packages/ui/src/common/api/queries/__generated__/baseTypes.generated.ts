@@ -26,52 +26,6 @@ export type AmendConstitutionProposalDetails = {
   text: Scalars['String']
 }
 
-export type AmendConstitutionProposalDetailsCreateInput = {
-  text: Scalars['String']
-}
-
-export type AmendConstitutionProposalDetailsUpdateInput = {
-  text?: InputMaybe<Scalars['String']>
-}
-
-export type AmendConstitutionProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<AmendConstitutionProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<AmendConstitutionProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  text_contains?: InputMaybe<Scalars['String']>
-  text_endsWith?: InputMaybe<Scalars['String']>
-  text_eq?: InputMaybe<Scalars['String']>
-  text_in?: InputMaybe<Array<Scalars['String']>>
-  text_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type AmendConstitutionProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type AnnouncingPeriodStartedEvent = BaseGraphQlObject &
   Event & {
     __typename: 'AnnouncingPeriodStartedEvent'
@@ -279,8 +233,6 @@ export type ApplicationFormQuestionAnswerWhereInput = {
   answer_in?: InputMaybe<Array<Scalars['String']>>
   answer_startsWith?: InputMaybe<Scalars['String']>
   application?: InputMaybe<WorkingGroupApplicationWhereInput>
-  application_eq?: InputMaybe<Scalars['ID']>
-  application_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -299,8 +251,6 @@ export type ApplicationFormQuestionAnswerWhereInput = {
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   question?: InputMaybe<ApplicationFormQuestionWhereInput>
-  question_eq?: InputMaybe<Scalars['ID']>
-  question_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -393,8 +343,6 @@ export type ApplicationFormQuestionWhereInput = {
   index_lt?: InputMaybe<Scalars['Int']>
   index_lte?: InputMaybe<Scalars['Int']>
   openingMetadata?: InputMaybe<WorkingGroupOpeningMetadataWhereInput>
-  openingMetadata_eq?: InputMaybe<Scalars['ID']>
-  openingMetadata_in?: InputMaybe<Array<Scalars['ID']>>
   question_contains?: InputMaybe<Scalars['String']>
   question_endsWith?: InputMaybe<Scalars['String']>
   question_eq?: InputMaybe<Scalars['String']>
@@ -430,53 +378,6 @@ export type ApplicationStatusCancelled = {
 export type ApplicationStatusPending = {
   __typename: 'ApplicationStatusPending'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type ApplicationStatusPendingCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ApplicationStatusPendingUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ApplicationStatusPendingWhereInput = {
-  AND?: InputMaybe<Array<ApplicationStatusPendingWhereInput>>
-  OR?: InputMaybe<Array<ApplicationStatusPendingWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type ApplicationStatusPendingWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type ApplicationStatusRejected = {
@@ -574,8 +475,6 @@ export type ApplicationWithdrawnEventWhereInput = {
   AND?: InputMaybe<Array<ApplicationWithdrawnEventWhereInput>>
   OR?: InputMaybe<Array<ApplicationWithdrawnEventWhereInput>>
   application?: InputMaybe<WorkingGroupApplicationWhereInput>
-  application_eq?: InputMaybe<Scalars['ID']>
-  application_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -592,8 +491,6 @@ export type ApplicationWithdrawnEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -717,8 +614,6 @@ export type AppliedOnOpeningEventWhereInput = {
   AND?: InputMaybe<Array<AppliedOnOpeningEventWhereInput>>
   OR?: InputMaybe<Array<AppliedOnOpeningEventWhereInput>>
   application?: InputMaybe<WorkingGroupApplicationWhereInput>
-  application_eq?: InputMaybe<Scalars['ID']>
-  application_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -735,8 +630,6 @@ export type AppliedOnOpeningEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -759,8 +652,6 @@ export type AppliedOnOpeningEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   opening?: InputMaybe<WorkingGroupOpeningWhereInput>
-  opening_eq?: InputMaybe<Scalars['ID']>
-  opening_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -782,52 +673,6 @@ export type AssetExternal = {
   urls: Scalars['String']
 }
 
-export type AssetExternalCreateInput = {
-  urls: Scalars['String']
-}
-
-export type AssetExternalUpdateInput = {
-  urls?: InputMaybe<Scalars['String']>
-}
-
-export type AssetExternalWhereInput = {
-  AND?: InputMaybe<Array<AssetExternalWhereInput>>
-  OR?: InputMaybe<Array<AssetExternalWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-  urls_contains?: InputMaybe<Scalars['String']>
-  urls_endsWith?: InputMaybe<Scalars['String']>
-  urls_eq?: InputMaybe<Scalars['String']>
-  urls_in?: InputMaybe<Array<Scalars['String']>>
-  urls_startsWith?: InputMaybe<Scalars['String']>
-}
-
-export type AssetExternalWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type AssetJoystreamStorage = {
   __typename: 'AssetJoystreamStorage'
   /** Related DataObject entity */
@@ -837,53 +682,6 @@ export type AssetJoystreamStorage = {
 export type AssetNone = {
   __typename: 'AssetNone'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type AssetNoneCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type AssetNoneUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type AssetNoneWhereInput = {
-  AND?: InputMaybe<Array<AssetNoneWhereInput>>
-  OR?: InputMaybe<Array<AssetNoneWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type AssetNoneWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type BaseGraphQlObject = {
@@ -978,7 +776,7 @@ export type BudgetBalanceSetEventConnection = {
 }
 
 export type BudgetBalanceSetEventCreateInput = {
-  balance: Scalars['BigInt']
+  balance: Scalars['String']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
@@ -1011,7 +809,7 @@ export enum BudgetBalanceSetEventOrderByInput {
 }
 
 export type BudgetBalanceSetEventUpdateInput = {
-  balance?: InputMaybe<Scalars['BigInt']>
+  balance?: InputMaybe<Scalars['String']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
@@ -1109,7 +907,7 @@ export type BudgetIncrementUpdatedEventConnection = {
 }
 
 export type BudgetIncrementUpdatedEventCreateInput = {
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
@@ -1142,7 +940,7 @@ export enum BudgetIncrementUpdatedEventOrderByInput {
 }
 
 export type BudgetIncrementUpdatedEventUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
@@ -1240,7 +1038,7 @@ export type BudgetRefillEventConnection = {
 }
 
 export type BudgetRefillEventCreateInput = {
-  balance: Scalars['BigInt']
+  balance: Scalars['String']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
@@ -1273,7 +1071,7 @@ export enum BudgetRefillEventOrderByInput {
 }
 
 export type BudgetRefillEventUpdateInput = {
-  balance?: InputMaybe<Scalars['BigInt']>
+  balance?: InputMaybe<Scalars['String']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
@@ -1508,7 +1306,7 @@ export type BudgetSetEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  newBudget: Scalars['BigInt']
+  newBudget: Scalars['String']
 }
 
 export type BudgetSetEventEdge = {
@@ -1544,7 +1342,7 @@ export type BudgetSetEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  newBudget?: InputMaybe<Scalars['BigInt']>
+  newBudget?: InputMaybe<Scalars['String']>
 }
 
 export type BudgetSetEventWhereInput = {
@@ -1566,8 +1364,6 @@ export type BudgetSetEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -1647,7 +1443,7 @@ export type BudgetSpendingEventConnection = {
 }
 
 export type BudgetSpendingEventCreateInput = {
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   group: Scalars['ID']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -1689,7 +1485,7 @@ export enum BudgetSpendingEventOrderByInput {
 }
 
 export type BudgetSpendingEventUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   group?: InputMaybe<Scalars['ID']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -1724,8 +1520,6 @@ export type BudgetSpendingEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -1848,6 +1642,9 @@ export type CandidacyNoteMetadataWhereInput = {
   bannerImageUri_eq?: InputMaybe<Scalars['String']>
   bannerImageUri_in?: InputMaybe<Array<Scalars['String']>>
   bannerImageUri_startsWith?: InputMaybe<Scalars['String']>
+  bulletPoints_containsAll?: InputMaybe<Array<Scalars['String']>>
+  bulletPoints_containsAny?: InputMaybe<Array<Scalars['String']>>
+  bulletPoints_containsNone?: InputMaybe<Array<Scalars['String']>>
   candidacynoteseteventnoteMetadata_every?: InputMaybe<CandidacyNoteSetEventWhereInput>
   candidacynoteseteventnoteMetadata_none?: InputMaybe<CandidacyNoteSetEventWhereInput>
   candidacynoteseteventnoteMetadata_some?: InputMaybe<CandidacyNoteSetEventWhereInput>
@@ -1977,8 +1774,6 @@ export type CandidacyNoteSetEventWhereInput = {
   AND?: InputMaybe<Array<CandidacyNoteSetEventWhereInput>>
   OR?: InputMaybe<Array<CandidacyNoteSetEventWhereInput>>
   candidate?: InputMaybe<CandidateWhereInput>
-  candidate_eq?: InputMaybe<Scalars['ID']>
-  candidate_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2016,8 +1811,6 @@ export type CandidacyNoteSetEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   noteMetadata?: InputMaybe<CandidacyNoteMetadataWhereInput>
-  noteMetadata_eq?: InputMaybe<Scalars['ID']>
-  noteMetadata_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2108,8 +1901,6 @@ export type CandidacyStakeReleaseEventWhereInput = {
   AND?: InputMaybe<Array<CandidacyStakeReleaseEventWhereInput>>
   OR?: InputMaybe<Array<CandidacyStakeReleaseEventWhereInput>>
   candidate?: InputMaybe<CandidateWhereInput>
-  candidate_eq?: InputMaybe<Scalars['ID']>
-  candidate_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2157,6 +1948,32 @@ export type CandidacyStakeReleaseEventWhereInput = {
 
 export type CandidacyStakeReleaseEventWhereUniqueInput = {
   id: Scalars['ID']
+}
+
+export type CandidacyStatus =
+  | CandidacyStatusActive
+  | CandidacyStatusElected
+  | CandidacyStatusLost
+  | CandidacyStatusWithdrawn
+
+export type CandidacyStatusActive = {
+  __typename: 'CandidacyStatusActive'
+  dummy?: Maybe<Scalars['Int']>
+}
+
+export type CandidacyStatusElected = {
+  __typename: 'CandidacyStatusElected'
+  dummy?: Maybe<Scalars['Int']>
+}
+
+export type CandidacyStatusLost = {
+  __typename: 'CandidacyStatusLost'
+  dummy?: Maybe<Scalars['Int']>
+}
+
+export type CandidacyStatusWithdrawn = {
+  __typename: 'CandidacyStatusWithdrawn'
+  dummy?: Maybe<Scalars['Int']>
 }
 
 export type CandidacyWithdrawEvent = BaseGraphQlObject &
@@ -2236,8 +2053,6 @@ export type CandidacyWithdrawEventWhereInput = {
   AND?: InputMaybe<Array<CandidacyWithdrawEventWhereInput>>
   OR?: InputMaybe<Array<CandidacyWithdrawEventWhereInput>>
   candidate?: InputMaybe<CandidateWhereInput>
-  candidate_eq?: InputMaybe<Scalars['ID']>
-  candidate_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2289,8 +2104,6 @@ export type CandidacyWithdrawEventWhereUniqueInput = {
 
 export type Candidate = BaseGraphQlObject & {
   __typename: 'Candidate'
-  /** Reflects if the candidacy was withdrawn before voting started. */
-  candidacyWithdrawn: Scalars['Boolean']
   candidacynoteseteventcandidate?: Maybe<Array<CandidacyNoteSetEvent>>
   candidacystakereleaseeventcandidate?: Maybe<Array<CandidacyStakeReleaseEvent>>
   candidacywithdraweventcandidate?: Maybe<Array<CandidacyWithdrawEvent>>
@@ -2314,6 +2127,8 @@ export type Candidate = BaseGraphQlObject & {
   stakeLocked: Scalars['Boolean']
   /** Account used for staking currency needed for the candidacy. */
   stakingAccountId: Scalars['String']
+  /** Current candidate status */
+  status: CandidacyStatus
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['String']>
   version: Scalars['Int']
@@ -2330,15 +2145,15 @@ export type CandidateConnection = {
 }
 
 export type CandidateCreateInput = {
-  candidacyWithdrawn: Scalars['Boolean']
   electionRound: Scalars['ID']
   member: Scalars['ID']
   noteMetadata: Scalars['ID']
   rewardAccountId: Scalars['String']
-  stake: Scalars['BigInt']
+  stake: Scalars['String']
   stakeLocked: Scalars['Boolean']
   stakingAccountId: Scalars['String']
-  votePower: Scalars['BigInt']
+  status: Scalars['JSONObject']
+  votePower: Scalars['String']
 }
 
 export type CandidateEdge = {
@@ -2348,8 +2163,6 @@ export type CandidateEdge = {
 }
 
 export enum CandidateOrderByInput {
-  CandidacyWithdrawnAsc = 'candidacyWithdrawn_ASC',
-  CandidacyWithdrawnDesc = 'candidacyWithdrawn_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
@@ -2375,22 +2188,20 @@ export enum CandidateOrderByInput {
 }
 
 export type CandidateUpdateInput = {
-  candidacyWithdrawn?: InputMaybe<Scalars['Boolean']>
   electionRound?: InputMaybe<Scalars['ID']>
   member?: InputMaybe<Scalars['ID']>
   noteMetadata?: InputMaybe<Scalars['ID']>
   rewardAccountId?: InputMaybe<Scalars['String']>
-  stake?: InputMaybe<Scalars['BigInt']>
+  stake?: InputMaybe<Scalars['String']>
   stakeLocked?: InputMaybe<Scalars['Boolean']>
   stakingAccountId?: InputMaybe<Scalars['String']>
-  votePower?: InputMaybe<Scalars['BigInt']>
+  status?: InputMaybe<Scalars['JSONObject']>
+  votePower?: InputMaybe<Scalars['String']>
 }
 
 export type CandidateWhereInput = {
   AND?: InputMaybe<Array<CandidateWhereInput>>
   OR?: InputMaybe<Array<CandidateWhereInput>>
-  candidacyWithdrawn_eq?: InputMaybe<Scalars['Boolean']>
-  candidacyWithdrawn_in?: InputMaybe<Array<Scalars['Boolean']>>
   candidacynoteseteventcandidate_every?: InputMaybe<CandidacyNoteSetEventWhereInput>
   candidacynoteseteventcandidate_none?: InputMaybe<CandidacyNoteSetEventWhereInput>
   candidacynoteseteventcandidate_some?: InputMaybe<CandidacyNoteSetEventWhereInput>
@@ -2416,19 +2227,13 @@ export type CandidateWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electionRound?: InputMaybe<ElectionRoundWhereInput>
-  electionRound_eq?: InputMaybe<Scalars['ID']>
-  electionRound_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   newcandidateeventcandidate_every?: InputMaybe<NewCandidateEventWhereInput>
   newcandidateeventcandidate_none?: InputMaybe<NewCandidateEventWhereInput>
   newcandidateeventcandidate_some?: InputMaybe<NewCandidateEventWhereInput>
   noteMetadata?: InputMaybe<CandidacyNoteMetadataWhereInput>
-  noteMetadata_eq?: InputMaybe<Scalars['ID']>
-  noteMetadata_in?: InputMaybe<Array<Scalars['ID']>>
   rewardAccountId_contains?: InputMaybe<Scalars['String']>
   rewardAccountId_endsWith?: InputMaybe<Scalars['String']>
   rewardAccountId_eq?: InputMaybe<Scalars['String']>
@@ -2447,6 +2252,7 @@ export type CandidateWhereInput = {
   stakingAccountId_eq?: InputMaybe<Scalars['String']>
   stakingAccountId_in?: InputMaybe<Array<Scalars['String']>>
   stakingAccountId_startsWith?: InputMaybe<Scalars['String']>
+  status_json?: InputMaybe<Scalars['JSONObject']>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2508,10 +2314,10 @@ export type CastVoteCreateInput = {
   castBy: Scalars['String']
   commitment: Scalars['String']
   electionRound: Scalars['ID']
-  stake: Scalars['BigInt']
+  stake: Scalars['String']
   stakeLocked: Scalars['Boolean']
   voteFor?: InputMaybe<Scalars['ID']>
-  votePower: Scalars['BigInt']
+  votePower: Scalars['String']
 }
 
 export type CastVoteEdge = {
@@ -2547,10 +2353,10 @@ export type CastVoteUpdateInput = {
   castBy?: InputMaybe<Scalars['String']>
   commitment?: InputMaybe<Scalars['String']>
   electionRound?: InputMaybe<Scalars['ID']>
-  stake?: InputMaybe<Scalars['BigInt']>
+  stake?: InputMaybe<Scalars['String']>
   stakeLocked?: InputMaybe<Scalars['Boolean']>
   voteFor?: InputMaybe<Scalars['ID']>
-  votePower?: InputMaybe<Scalars['BigInt']>
+  votePower?: InputMaybe<Scalars['String']>
 }
 
 export type CastVoteWhereInput = {
@@ -2582,8 +2388,6 @@ export type CastVoteWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electionRound?: InputMaybe<ElectionRoundWhereInput>
-  electionRound_eq?: InputMaybe<Scalars['ID']>
-  electionRound_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   stakeLocked_eq?: InputMaybe<Scalars['Boolean']>
@@ -2602,8 +2406,6 @@ export type CastVoteWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   voteFor?: InputMaybe<CandidateWhereInput>
-  voteFor_eq?: InputMaybe<Scalars['ID']>
-  voteFor_in?: InputMaybe<Array<Scalars['ID']>>
   votePower_eq?: InputMaybe<Scalars['BigInt']>
   votePower_gt?: InputMaybe<Scalars['BigInt']>
   votePower_gte?: InputMaybe<Scalars['BigInt']>
@@ -2708,11 +2510,7 @@ export type CategoryArchivalStatusUpdatedEventWhereInput = {
   AND?: InputMaybe<Array<CategoryArchivalStatusUpdatedEventWhereInput>>
   OR?: InputMaybe<Array<CategoryArchivalStatusUpdatedEventWhereInput>>
   actor?: InputMaybe<WorkerWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   category?: InputMaybe<ForumCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2838,8 +2636,6 @@ export type CategoryCreatedEventWhereInput = {
   AND?: InputMaybe<Array<CategoryCreatedEventWhereInput>>
   OR?: InputMaybe<Array<CategoryCreatedEventWhereInput>>
   category?: InputMaybe<ForumCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -2969,11 +2765,7 @@ export type CategoryDeletedEventWhereInput = {
   AND?: InputMaybe<Array<CategoryDeletedEventWhereInput>>
   OR?: InputMaybe<Array<CategoryDeletedEventWhereInput>>
   actor?: InputMaybe<WorkerWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   category?: InputMaybe<ForumCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -3109,8 +2901,6 @@ export type CategoryMembershipOfModeratorUpdatedEventWhereInput = {
   AND?: InputMaybe<Array<CategoryMembershipOfModeratorUpdatedEventWhereInput>>
   OR?: InputMaybe<Array<CategoryMembershipOfModeratorUpdatedEventWhereInput>>
   category?: InputMaybe<ForumCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -3146,8 +2936,6 @@ export type CategoryMembershipOfModeratorUpdatedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   moderator?: InputMaybe<WorkerWhereInput>
-  moderator_eq?: InputMaybe<Scalars['ID']>
-  moderator_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   newCanModerateValue_eq?: InputMaybe<Scalars['Boolean']>
@@ -3170,53 +2958,6 @@ export type CategoryStatus = CategoryStatusActive | CategoryStatusArchived | Cat
 export type CategoryStatusActive = {
   __typename: 'CategoryStatusActive'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type CategoryStatusActiveCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type CategoryStatusActiveUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type CategoryStatusActiveWhereInput = {
-  AND?: InputMaybe<Array<CategoryStatusActiveWhereInput>>
-  OR?: InputMaybe<Array<CategoryStatusActiveWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type CategoryStatusActiveWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type CategoryStatusArchived = {
@@ -3312,11 +3053,7 @@ export type CategoryStickyThreadUpdateEventWhereInput = {
   AND?: InputMaybe<Array<CategoryStickyThreadUpdateEventWhereInput>>
   OR?: InputMaybe<Array<CategoryStickyThreadUpdateEventWhereInput>>
   actor?: InputMaybe<WorkerWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   category?: InputMaybe<ForumCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -3592,8 +3329,6 @@ export type ChannelWhereInput = {
   OR?: InputMaybe<Array<ChannelWhereInput>>
   avatarPhoto_json?: InputMaybe<Scalars['JSONObject']>
   category?: InputMaybe<ChannelCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   coverPhoto_json?: InputMaybe<Scalars['JSONObject']>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -3628,14 +3363,8 @@ export type ChannelWhereInput = {
   isPublic_eq?: InputMaybe<Scalars['Boolean']>
   isPublic_in?: InputMaybe<Array<Scalars['Boolean']>>
   language?: InputMaybe<LanguageWhereInput>
-  language_eq?: InputMaybe<Scalars['ID']>
-  language_in?: InputMaybe<Array<Scalars['ID']>>
   ownerCuratorGroup?: InputMaybe<CuratorGroupWhereInput>
-  ownerCuratorGroup_eq?: InputMaybe<Scalars['ID']>
-  ownerCuratorGroup_in?: InputMaybe<Array<Scalars['ID']>>
   ownerMember?: InputMaybe<MembershipWhereInput>
-  ownerMember_eq?: InputMaybe<Scalars['ID']>
-  ownerMember_in?: InputMaybe<Array<Scalars['ID']>>
   rewardAccount_contains?: InputMaybe<Scalars['String']>
   rewardAccount_endsWith?: InputMaybe<Scalars['String']>
   rewardAccount_eq?: InputMaybe<Scalars['String']>
@@ -3699,14 +3428,14 @@ export type CouncilMemberConnection = {
 }
 
 export type CouncilMemberCreateInput = {
-  accumulatedReward: Scalars['BigInt']
+  accumulatedReward: Scalars['String']
   electedInCouncil: Scalars['ID']
-  lastPaymentBlock: Scalars['BigInt']
+  lastPaymentBlock: Scalars['String']
   member: Scalars['ID']
   rewardAccountId: Scalars['String']
-  stake: Scalars['BigInt']
+  stake: Scalars['String']
   stakingAccountId: Scalars['String']
-  unpaidReward: Scalars['BigInt']
+  unpaidReward: Scalars['String']
 }
 
 export type CouncilMemberEdge = {
@@ -3741,14 +3470,14 @@ export enum CouncilMemberOrderByInput {
 }
 
 export type CouncilMemberUpdateInput = {
-  accumulatedReward?: InputMaybe<Scalars['BigInt']>
+  accumulatedReward?: InputMaybe<Scalars['String']>
   electedInCouncil?: InputMaybe<Scalars['ID']>
-  lastPaymentBlock?: InputMaybe<Scalars['BigInt']>
+  lastPaymentBlock?: InputMaybe<Scalars['String']>
   member?: InputMaybe<Scalars['ID']>
   rewardAccountId?: InputMaybe<Scalars['String']>
-  stake?: InputMaybe<Scalars['BigInt']>
+  stake?: InputMaybe<Scalars['String']>
   stakingAccountId?: InputMaybe<Scalars['String']>
-  unpaidReward?: InputMaybe<Scalars['BigInt']>
+  unpaidReward?: InputMaybe<Scalars['String']>
 }
 
 export type CouncilMemberWhereInput = {
@@ -3776,8 +3505,6 @@ export type CouncilMemberWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electedInCouncil?: InputMaybe<ElectedCouncilWhereInput>
-  electedInCouncil_eq?: InputMaybe<Scalars['ID']>
-  electedInCouncil_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   lastPaymentBlock_eq?: InputMaybe<Scalars['BigInt']>
@@ -3787,8 +3514,6 @@ export type CouncilMemberWhereInput = {
   lastPaymentBlock_lt?: InputMaybe<Scalars['BigInt']>
   lastPaymentBlock_lte?: InputMaybe<Scalars['BigInt']>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   rewardAccountId_contains?: InputMaybe<Scalars['String']>
   rewardAccountId_endsWith?: InputMaybe<Scalars['String']>
   rewardAccountId_eq?: InputMaybe<Scalars['String']>
@@ -3832,159 +3557,18 @@ export type CouncilStage = CouncilStageAnnouncing | CouncilStageElection | Counc
 export type CouncilStageAnnouncing = {
   __typename: 'CouncilStageAnnouncing'
   /** Number of candidates aspiring to be elected as council members. */
-  candidatesCount: Scalars['BigInt']
-}
-
-export type CouncilStageAnnouncingCreateInput = {
-  candidatesCount: Scalars['BigInt']
-}
-
-export type CouncilStageAnnouncingUpdateInput = {
-  candidatesCount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type CouncilStageAnnouncingWhereInput = {
-  AND?: InputMaybe<Array<CouncilStageAnnouncingWhereInput>>
-  OR?: InputMaybe<Array<CouncilStageAnnouncingWhereInput>>
-  candidatesCount_eq?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_gt?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_gte?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  candidatesCount_lt?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_lte?: InputMaybe<Scalars['BigInt']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type CouncilStageAnnouncingWhereUniqueInput = {
-  id: Scalars['ID']
+  candidatesCount: Scalars['Float']
 }
 
 export type CouncilStageElection = {
   __typename: 'CouncilStageElection'
   /** Number of candidates aspiring to be elected as council members. */
-  candidatesCount: Scalars['BigInt']
-}
-
-export type CouncilStageElectionCreateInput = {
-  candidatesCount: Scalars['BigInt']
-}
-
-export type CouncilStageElectionUpdateInput = {
-  candidatesCount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type CouncilStageElectionWhereInput = {
-  AND?: InputMaybe<Array<CouncilStageElectionWhereInput>>
-  OR?: InputMaybe<Array<CouncilStageElectionWhereInput>>
-  candidatesCount_eq?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_gt?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_gte?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  candidatesCount_lt?: InputMaybe<Scalars['BigInt']>
-  candidatesCount_lte?: InputMaybe<Scalars['BigInt']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type CouncilStageElectionWhereUniqueInput = {
-  id: Scalars['ID']
+  candidatesCount: Scalars['Float']
 }
 
 export type CouncilStageIdle = {
   __typename: 'CouncilStageIdle'
   dummy?: Maybe<Scalars['Int']>
-}
-
-export type CouncilStageIdleCreateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type CouncilStageIdleUpdateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type CouncilStageIdleWhereInput = {
-  AND?: InputMaybe<Array<CouncilStageIdleWhereInput>>
-  OR?: InputMaybe<Array<CouncilStageIdleWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  dummy_eq?: InputMaybe<Scalars['Int']>
-  dummy_gt?: InputMaybe<Scalars['Int']>
-  dummy_gte?: InputMaybe<Scalars['Int']>
-  dummy_in?: InputMaybe<Array<Scalars['Int']>>
-  dummy_lt?: InputMaybe<Scalars['Int']>
-  dummy_lte?: InputMaybe<Scalars['Int']>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type CouncilStageIdleWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type CouncilStageUpdate = BaseGraphQlObject & {
@@ -4015,7 +3599,7 @@ export type CouncilStageUpdateConnection = {
 }
 
 export type CouncilStageUpdateCreateInput = {
-  changedAt: Scalars['BigInt']
+  changedAt: Scalars['String']
   electedCouncil?: InputMaybe<Scalars['ID']>
   electionProblem?: InputMaybe<ElectionProblem>
   stage: Scalars['JSONObject']
@@ -4043,7 +3627,7 @@ export enum CouncilStageUpdateOrderByInput {
 }
 
 export type CouncilStageUpdateUpdateInput = {
-  changedAt?: InputMaybe<Scalars['BigInt']>
+  changedAt?: InputMaybe<Scalars['String']>
   electedCouncil?: InputMaybe<Scalars['ID']>
   electionProblem?: InputMaybe<ElectionProblem>
   stage?: InputMaybe<Scalars['JSONObject']>
@@ -4074,8 +3658,6 @@ export type CouncilStageUpdateWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electedCouncil?: InputMaybe<ElectedCouncilWhereInput>
-  electedCouncil_eq?: InputMaybe<Scalars['ID']>
-  electedCouncil_in?: InputMaybe<Array<Scalars['ID']>>
   electionProblem_eq?: InputMaybe<ElectionProblem>
   electionProblem_in?: InputMaybe<Array<ElectionProblem>>
   id_eq?: InputMaybe<Scalars['ID']>
@@ -4131,7 +3713,7 @@ export type CouncilorRewardUpdatedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  rewardAmount: Scalars['BigInt']
+  rewardAmount: Scalars['String']
 }
 
 export type CouncilorRewardUpdatedEventEdge = {
@@ -4164,7 +3746,7 @@ export type CouncilorRewardUpdatedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  rewardAmount?: InputMaybe<Scalars['BigInt']>
+  rewardAmount?: InputMaybe<Scalars['String']>
 }
 
 export type CouncilorRewardUpdatedEventWhereInput = {
@@ -4233,59 +3815,6 @@ export type CreateBlogPostProposalDetails = {
   title: Scalars['String']
 }
 
-export type CreateBlogPostProposalDetailsCreateInput = {
-  body: Scalars['String']
-  title: Scalars['String']
-}
-
-export type CreateBlogPostProposalDetailsUpdateInput = {
-  body?: InputMaybe<Scalars['String']>
-  title?: InputMaybe<Scalars['String']>
-}
-
-export type CreateBlogPostProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<CreateBlogPostProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<CreateBlogPostProposalDetailsWhereInput>>
-  body_contains?: InputMaybe<Scalars['String']>
-  body_endsWith?: InputMaybe<Scalars['String']>
-  body_eq?: InputMaybe<Scalars['String']>
-  body_in?: InputMaybe<Array<Scalars['String']>>
-  body_startsWith?: InputMaybe<Scalars['String']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  title_contains?: InputMaybe<Scalars['String']>
-  title_endsWith?: InputMaybe<Scalars['String']>
-  title_eq?: InputMaybe<Scalars['String']>
-  title_in?: InputMaybe<Array<Scalars['String']>>
-  title_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type CreateBlogPostProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type CreateWorkingGroupLeadOpeningProposalDetails = {
   __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
   /** Related working group */
@@ -4293,74 +3822,11 @@ export type CreateWorkingGroupLeadOpeningProposalDetails = {
   /** The opening metadata */
   metadata?: Maybe<WorkingGroupOpeningMetadata>
   /** Initial workers' reward per block */
-  rewardPerBlock: Scalars['BigInt']
+  rewardPerBlock: Scalars['Float']
   /** Min. application / role stake amount */
-  stakeAmount: Scalars['BigInt']
+  stakeAmount: Scalars['Float']
   /** Role stake unstaking period in blocks */
   unstakingPeriod: Scalars['Int']
-}
-
-export type CreateWorkingGroupLeadOpeningProposalDetailsCreateInput = {
-  rewardPerBlock: Scalars['BigInt']
-  stakeAmount: Scalars['BigInt']
-  unstakingPeriod: Scalars['Float']
-}
-
-export type CreateWorkingGroupLeadOpeningProposalDetailsUpdateInput = {
-  rewardPerBlock?: InputMaybe<Scalars['BigInt']>
-  stakeAmount?: InputMaybe<Scalars['BigInt']>
-  unstakingPeriod?: InputMaybe<Scalars['Float']>
-}
-
-export type CreateWorkingGroupLeadOpeningProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<CreateWorkingGroupLeadOpeningProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<CreateWorkingGroupLeadOpeningProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  rewardPerBlock_eq?: InputMaybe<Scalars['BigInt']>
-  rewardPerBlock_gt?: InputMaybe<Scalars['BigInt']>
-  rewardPerBlock_gte?: InputMaybe<Scalars['BigInt']>
-  rewardPerBlock_in?: InputMaybe<Array<Scalars['BigInt']>>
-  rewardPerBlock_lt?: InputMaybe<Scalars['BigInt']>
-  rewardPerBlock_lte?: InputMaybe<Scalars['BigInt']>
-  stakeAmount_eq?: InputMaybe<Scalars['BigInt']>
-  stakeAmount_gt?: InputMaybe<Scalars['BigInt']>
-  stakeAmount_gte?: InputMaybe<Scalars['BigInt']>
-  stakeAmount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  stakeAmount_lt?: InputMaybe<Scalars['BigInt']>
-  stakeAmount_lte?: InputMaybe<Scalars['BigInt']>
-  unstakingPeriod_eq?: InputMaybe<Scalars['Int']>
-  unstakingPeriod_gt?: InputMaybe<Scalars['Int']>
-  unstakingPeriod_gte?: InputMaybe<Scalars['Int']>
-  unstakingPeriod_in?: InputMaybe<Array<Scalars['Int']>>
-  unstakingPeriod_lt?: InputMaybe<Scalars['Int']>
-  unstakingPeriod_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type CreateWorkingGroupLeadOpeningProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type CuratorGroup = BaseGraphQlObject & {
@@ -4427,6 +3893,9 @@ export type CuratorGroupWhereInput = {
   createdAt_lte?: InputMaybe<Scalars['DateTime']>
   createdById_eq?: InputMaybe<Scalars['ID']>
   createdById_in?: InputMaybe<Array<Scalars['ID']>>
+  curatorIds_containsAll?: InputMaybe<Array<Scalars['Int']>>
+  curatorIds_containsAny?: InputMaybe<Array<Scalars['Int']>>
+  curatorIds_containsNone?: InputMaybe<Array<Scalars['Int']>>
   deletedAt_all?: InputMaybe<Scalars['Boolean']>
   deletedAt_eq?: InputMaybe<Scalars['DateTime']>
   deletedAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -4496,7 +3965,7 @@ export type DataObjectCreateInput = {
   liaison?: InputMaybe<Scalars['ID']>
   liaisonJudgement: LiaisonJudgement
   owner: Scalars['JSONObject']
-  size: Scalars['BigInt']
+  size: Scalars['String']
   typeId: Scalars['Float']
 }
 
@@ -4544,104 +4013,10 @@ export type DataObjectOwnerChannel = {
   dummy?: Maybe<Scalars['Int']>
 }
 
-export type DataObjectOwnerChannelCreateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerChannelUpdateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerChannelWhereInput = {
-  AND?: InputMaybe<Array<DataObjectOwnerChannelWhereInput>>
-  OR?: InputMaybe<Array<DataObjectOwnerChannelWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  dummy_eq?: InputMaybe<Scalars['Int']>
-  dummy_gt?: InputMaybe<Scalars['Int']>
-  dummy_gte?: InputMaybe<Scalars['Int']>
-  dummy_in?: InputMaybe<Array<Scalars['Int']>>
-  dummy_lt?: InputMaybe<Scalars['Int']>
-  dummy_lte?: InputMaybe<Scalars['Int']>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type DataObjectOwnerChannelWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type DataObjectOwnerCouncil = {
   __typename: 'DataObjectOwnerCouncil'
   /** Variant needs to have at least one property. This value is not used. */
   dummy?: Maybe<Scalars['Int']>
-}
-
-export type DataObjectOwnerCouncilCreateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerCouncilUpdateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerCouncilWhereInput = {
-  AND?: InputMaybe<Array<DataObjectOwnerCouncilWhereInput>>
-  OR?: InputMaybe<Array<DataObjectOwnerCouncilWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  dummy_eq?: InputMaybe<Scalars['Int']>
-  dummy_gt?: InputMaybe<Scalars['Int']>
-  dummy_gte?: InputMaybe<Scalars['Int']>
-  dummy_in?: InputMaybe<Array<Scalars['Int']>>
-  dummy_lt?: InputMaybe<Scalars['Int']>
-  dummy_lte?: InputMaybe<Scalars['Int']>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type DataObjectOwnerCouncilWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type DataObjectOwnerDao = {
@@ -4650,106 +4025,12 @@ export type DataObjectOwnerDao = {
   dao: Scalars['Int']
 }
 
-export type DataObjectOwnerDaoCreateInput = {
-  dao: Scalars['Float']
-}
-
-export type DataObjectOwnerDaoUpdateInput = {
-  dao?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerDaoWhereInput = {
-  AND?: InputMaybe<Array<DataObjectOwnerDaoWhereInput>>
-  OR?: InputMaybe<Array<DataObjectOwnerDaoWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  dao_eq?: InputMaybe<Scalars['Int']>
-  dao_gt?: InputMaybe<Scalars['Int']>
-  dao_gte?: InputMaybe<Scalars['Int']>
-  dao_in?: InputMaybe<Array<Scalars['Int']>>
-  dao_lt?: InputMaybe<Scalars['Int']>
-  dao_lte?: InputMaybe<Scalars['Int']>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type DataObjectOwnerDaoWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type DataObjectOwnerMember = {
   __typename: 'DataObjectOwnerMember'
   /** Variant needs to have at least one property. This value is not used. */
   dummy?: Maybe<Scalars['Int']>
   /** Related member */
   member?: Maybe<Membership>
-}
-
-export type DataObjectOwnerMemberCreateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerMemberUpdateInput = {
-  dummy?: InputMaybe<Scalars['Float']>
-}
-
-export type DataObjectOwnerMemberWhereInput = {
-  AND?: InputMaybe<Array<DataObjectOwnerMemberWhereInput>>
-  OR?: InputMaybe<Array<DataObjectOwnerMemberWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  dummy_eq?: InputMaybe<Scalars['Int']>
-  dummy_gt?: InputMaybe<Scalars['Int']>
-  dummy_gte?: InputMaybe<Scalars['Int']>
-  dummy_in?: InputMaybe<Array<Scalars['Int']>>
-  dummy_lt?: InputMaybe<Scalars['Int']>
-  dummy_lte?: InputMaybe<Scalars['Int']>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type DataObjectOwnerMemberWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type DataObjectOwnerWorkingGroup = {
@@ -4765,7 +4046,7 @@ export type DataObjectUpdateInput = {
   liaison?: InputMaybe<Scalars['ID']>
   liaisonJudgement?: InputMaybe<LiaisonJudgement>
   owner?: InputMaybe<Scalars['JSONObject']>
-  size?: InputMaybe<Scalars['BigInt']>
+  size?: InputMaybe<Scalars['String']>
   typeId?: InputMaybe<Scalars['Float']>
 }
 
@@ -4808,8 +4089,6 @@ export type DataObjectWhereInput = {
   liaison?: InputMaybe<WorkerWhereInput>
   liaisonJudgement_eq?: InputMaybe<LiaisonJudgement>
   liaisonJudgement_in?: InputMaybe<Array<LiaisonJudgement>>
-  liaison_eq?: InputMaybe<Scalars['ID']>
-  liaison_in?: InputMaybe<Array<Scalars['ID']>>
   membermetadataavatar_every?: InputMaybe<MemberMetadataWhereInput>
   membermetadataavatar_none?: InputMaybe<MemberMetadataWhereInput>
   membermetadataavatar_some?: InputMaybe<MemberMetadataWhereInput>
@@ -4842,56 +4121,9 @@ export type DataObjectWhereUniqueInput = {
 export type DecreaseWorkingGroupLeadStakeProposalDetails = {
   __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
   /** Amount to decrease the stake by */
-  amount: Scalars['BigInt']
+  amount: Scalars['Float']
   /** The lead that should be affected */
   lead?: Maybe<Worker>
-}
-
-export type DecreaseWorkingGroupLeadStakeProposalDetailsCreateInput = {
-  amount: Scalars['BigInt']
-}
-
-export type DecreaseWorkingGroupLeadStakeProposalDetailsUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type DecreaseWorkingGroupLeadStakeProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<DecreaseWorkingGroupLeadStakeProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<DecreaseWorkingGroupLeadStakeProposalDetailsWhereInput>>
-  amount_eq?: InputMaybe<Scalars['BigInt']>
-  amount_gt?: InputMaybe<Scalars['BigInt']>
-  amount_gte?: InputMaybe<Scalars['BigInt']>
-  amount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  amount_lt?: InputMaybe<Scalars['BigInt']>
-  amount_lte?: InputMaybe<Scalars['BigInt']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type DecreaseWorkingGroupLeadStakeProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type DeleteResponse = {
@@ -4906,66 +4138,6 @@ export type EditBlogPostProposalDetails = {
   newBody?: Maybe<Scalars['String']>
   /** The new blog post title (if should be updated) */
   newTitle?: Maybe<Scalars['String']>
-}
-
-export type EditBlogPostProposalDetailsCreateInput = {
-  blogPost: Scalars['String']
-  newBody?: InputMaybe<Scalars['String']>
-  newTitle?: InputMaybe<Scalars['String']>
-}
-
-export type EditBlogPostProposalDetailsUpdateInput = {
-  blogPost?: InputMaybe<Scalars['String']>
-  newBody?: InputMaybe<Scalars['String']>
-  newTitle?: InputMaybe<Scalars['String']>
-}
-
-export type EditBlogPostProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<EditBlogPostProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<EditBlogPostProposalDetailsWhereInput>>
-  blogPost_contains?: InputMaybe<Scalars['String']>
-  blogPost_endsWith?: InputMaybe<Scalars['String']>
-  blogPost_eq?: InputMaybe<Scalars['String']>
-  blogPost_in?: InputMaybe<Array<Scalars['String']>>
-  blogPost_startsWith?: InputMaybe<Scalars['String']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newBody_contains?: InputMaybe<Scalars['String']>
-  newBody_endsWith?: InputMaybe<Scalars['String']>
-  newBody_eq?: InputMaybe<Scalars['String']>
-  newBody_in?: InputMaybe<Array<Scalars['String']>>
-  newBody_startsWith?: InputMaybe<Scalars['String']>
-  newTitle_contains?: InputMaybe<Scalars['String']>
-  newTitle_endsWith?: InputMaybe<Scalars['String']>
-  newTitle_eq?: InputMaybe<Scalars['String']>
-  newTitle_in?: InputMaybe<Array<Scalars['String']>>
-  newTitle_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type EditBlogPostProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type ElectedCouncil = BaseGraphQlObject & {
@@ -5196,15 +4368,11 @@ export type ElectionRoundWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electedCouncil?: InputMaybe<ElectedCouncilWhereInput>
-  electedCouncil_eq?: InputMaybe<Scalars['ID']>
-  electedCouncil_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   isFinished_eq?: InputMaybe<Scalars['Boolean']>
   isFinished_in?: InputMaybe<Array<Scalars['Boolean']>>
   nextElectedCouncil?: InputMaybe<ElectedCouncilWhereInput>
-  nextElectedCouncil_eq?: InputMaybe<Scalars['ID']>
-  nextElectedCouncil_in?: InputMaybe<Array<Scalars['ID']>>
   referendumstagerevealingoptionresultelectionRound_every?: InputMaybe<ReferendumStageRevealingOptionResultWhereInput>
   referendumstagerevealingoptionresultelectionRound_none?: InputMaybe<ReferendumStageRevealingOptionResultWhereInput>
   referendumstagerevealingoptionresultelectionRound_some?: InputMaybe<ReferendumStageRevealingOptionResultWhereInput>
@@ -5520,8 +4688,6 @@ export type ForumCategoryWhereInput = {
   moderators_none?: InputMaybe<WorkerWhereInput>
   moderators_some?: InputMaybe<WorkerWhereInput>
   parent?: InputMaybe<ForumCategoryWhereInput>
-  parent_eq?: InputMaybe<Scalars['ID']>
-  parent_in?: InputMaybe<Array<Scalars['ID']>>
   status_json?: InputMaybe<Scalars['JSONObject']>
   threadmovedeventnewCategory_every?: InputMaybe<ThreadMovedEventWhereInput>
   threadmovedeventnewCategory_none?: InputMaybe<ThreadMovedEventWhereInput>
@@ -5655,8 +4821,6 @@ export type ForumPollAlternativeWhereInput = {
   index_lt?: InputMaybe<Scalars['Int']>
   index_lte?: InputMaybe<Scalars['Int']>
   poll?: InputMaybe<ForumPollWhereInput>
-  poll_eq?: InputMaybe<Scalars['ID']>
-  poll_in?: InputMaybe<Array<Scalars['ID']>>
   text_contains?: InputMaybe<Scalars['String']>
   text_endsWith?: InputMaybe<Scalars['String']>
   text_eq?: InputMaybe<Scalars['String']>
@@ -5752,8 +4916,6 @@ export type ForumPollWhereInput = {
   pollAlternatives_none?: InputMaybe<ForumPollAlternativeWhereInput>
   pollAlternatives_some?: InputMaybe<ForumPollAlternativeWhereInput>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -5926,11 +5088,7 @@ export type ForumPostReactionWhereInput = {
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   post?: InputMaybe<ForumPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   reaction_eq?: InputMaybe<PostReaction>
   reaction_in?: InputMaybe<Array<PostReaction>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -5961,8 +5119,6 @@ export type ForumPostWhereInput = {
   AND?: InputMaybe<Array<ForumPostWhereInput>>
   OR?: InputMaybe<Array<ForumPostWhereInput>>
   author?: InputMaybe<MembershipWhereInput>
-  author_eq?: InputMaybe<Scalars['ID']>
-  author_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -5979,8 +5135,6 @@ export type ForumPostWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   deletedInEvent?: InputMaybe<PostDeletedEventWhereInput>
-  deletedInEvent_eq?: InputMaybe<Scalars['ID']>
-  deletedInEvent_in?: InputMaybe<Array<Scalars['ID']>>
   edits_every?: InputMaybe<PostTextUpdatedEventWhereInput>
   edits_none?: InputMaybe<PostTextUpdatedEventWhereInput>
   edits_some?: InputMaybe<PostTextUpdatedEventWhereInput>
@@ -6008,8 +5162,6 @@ export type ForumPostWhereInput = {
   reactions_none?: InputMaybe<ForumPostReactionWhereInput>
   reactions_some?: InputMaybe<ForumPostReactionWhereInput>
   repliesTo?: InputMaybe<ForumPostWhereInput>
-  repliesTo_eq?: InputMaybe<Scalars['ID']>
-  repliesTo_in?: InputMaybe<Array<Scalars['ID']>>
   status_json?: InputMaybe<Scalars['JSONObject']>
   text_contains?: InputMaybe<Scalars['String']>
   text_endsWith?: InputMaybe<Scalars['String']>
@@ -6017,8 +5169,6 @@ export type ForumPostWhereInput = {
   text_in?: InputMaybe<Array<Scalars['String']>>
   text_startsWith?: InputMaybe<Scalars['String']>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -6220,11 +5370,7 @@ export type ForumThreadWhereInput = {
   AND?: InputMaybe<Array<ForumThreadWhereInput>>
   OR?: InputMaybe<Array<ForumThreadWhereInput>>
   author?: InputMaybe<MembershipWhereInput>
-  author_eq?: InputMaybe<Scalars['ID']>
-  author_in?: InputMaybe<Array<Scalars['ID']>>
   category?: InputMaybe<ForumCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -6244,8 +5390,6 @@ export type ForumThreadWhereInput = {
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   initialPost?: InputMaybe<ForumPostWhereInput>
-  initialPost_eq?: InputMaybe<Scalars['ID']>
-  initialPost_in?: InputMaybe<Array<Scalars['ID']>>
   isSticky_eq?: InputMaybe<Scalars['Boolean']>
   isSticky_in?: InputMaybe<Array<Scalars['Boolean']>>
   isVisible_eq?: InputMaybe<Scalars['Boolean']>
@@ -6324,7 +5468,7 @@ export type FundingRequestDestinationConnection = {
 
 export type FundingRequestDestinationCreateInput = {
   account: Scalars['String']
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   list: Scalars['ID']
 }
 
@@ -6351,7 +5495,7 @@ export enum FundingRequestDestinationOrderByInput {
 
 export type FundingRequestDestinationUpdateInput = {
   account?: InputMaybe<Scalars['String']>
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   list?: InputMaybe<Scalars['ID']>
 }
 
@@ -6387,8 +5531,6 @@ export type FundingRequestDestinationWhereInput = {
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   list?: InputMaybe<FundingRequestDestinationsListWhereInput>
-  list_eq?: InputMaybe<Scalars['ID']>
-  list_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -6533,7 +5675,7 @@ export type InitialInvitationBalanceUpdatedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  newInitialBalance: Scalars['BigInt']
+  newInitialBalance: Scalars['String']
 }
 
 export type InitialInvitationBalanceUpdatedEventEdge = {
@@ -6566,7 +5708,7 @@ export type InitialInvitationBalanceUpdatedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  newInitialBalance?: InputMaybe<Scalars['BigInt']>
+  newInitialBalance?: InputMaybe<Scalars['String']>
 }
 
 export type InitialInvitationBalanceUpdatedEventWhereInput = {
@@ -6764,52 +5906,6 @@ export type InvalidActionMetadata = {
   reason: Scalars['String']
 }
 
-export type InvalidActionMetadataCreateInput = {
-  reason: Scalars['String']
-}
-
-export type InvalidActionMetadataUpdateInput = {
-  reason?: InputMaybe<Scalars['String']>
-}
-
-export type InvalidActionMetadataWhereInput = {
-  AND?: InputMaybe<Array<InvalidActionMetadataWhereInput>>
-  OR?: InputMaybe<Array<InvalidActionMetadataWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  reason_contains?: InputMaybe<Scalars['String']>
-  reason_endsWith?: InputMaybe<Scalars['String']>
-  reason_eq?: InputMaybe<Scalars['String']>
-  reason_in?: InputMaybe<Array<Scalars['String']>>
-  reason_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type InvalidActionMetadataWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type InvitesTransferredEvent = BaseGraphQlObject &
   Event & {
     __typename: 'InvitesTransferredEvent'
@@ -6941,11 +6037,7 @@ export type InvitesTransferredEventWhereInput = {
   numberOfInvites_lt?: InputMaybe<Scalars['Int']>
   numberOfInvites_lte?: InputMaybe<Scalars['Int']>
   sourceMember?: InputMaybe<MembershipWhereInput>
-  sourceMember_eq?: InputMaybe<Scalars['ID']>
-  sourceMember_in?: InputMaybe<Array<Scalars['ID']>>
   targetMember?: InputMaybe<MembershipWhereInput>
-  targetMember_eq?: InputMaybe<Scalars['ID']>
-  targetMember_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -7291,8 +6383,6 @@ export type LeaderSetEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -7322,8 +6412,6 @@ export type LeaderSetEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type LeaderSetEventWhereUniqueInput = {
@@ -7428,8 +6516,6 @@ export type LeaderUnsetEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -7450,8 +6536,6 @@ export type LeaderUnsetEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   leader?: InputMaybe<WorkerWhereInput>
-  leader_eq?: InputMaybe<Scalars['ID']>
-  leader_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -7589,52 +6673,6 @@ export type LockBlogPostProposalDetails = {
   blogPost: Scalars['String']
 }
 
-export type LockBlogPostProposalDetailsCreateInput = {
-  blogPost: Scalars['String']
-}
-
-export type LockBlogPostProposalDetailsUpdateInput = {
-  blogPost?: InputMaybe<Scalars['String']>
-}
-
-export type LockBlogPostProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<LockBlogPostProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<LockBlogPostProposalDetailsWhereInput>>
-  blogPost_contains?: InputMaybe<Scalars['String']>
-  blogPost_endsWith?: InputMaybe<Scalars['String']>
-  blogPost_eq?: InputMaybe<Scalars['String']>
-  blogPost_in?: InputMaybe<Array<Scalars['String']>>
-  blogPost_startsWith?: InputMaybe<Scalars['String']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type LockBlogPostProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type MemberAccountsUpdatedEvent = BaseGraphQlObject &
   Event & {
     __typename: 'MemberAccountsUpdatedEvent'
@@ -7758,8 +6796,6 @@ export type MemberAccountsUpdatedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   newControllerAccount_contains?: InputMaybe<Scalars['String']>
@@ -7936,16 +6972,10 @@ export type MemberInvitedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   invitingMember?: InputMaybe<MembershipWhereInput>
-  invitingMember_eq?: InputMaybe<Scalars['ID']>
-  invitingMember_in?: InputMaybe<Array<Scalars['ID']>>
   metadata?: InputMaybe<MemberMetadataWhereInput>
-  metadata_eq?: InputMaybe<Scalars['ID']>
-  metadata_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   newMember?: InputMaybe<MembershipWhereInput>
-  newMember_eq?: InputMaybe<Scalars['ID']>
-  newMember_in?: InputMaybe<Array<Scalars['ID']>>
   rootAccount_contains?: InputMaybe<Scalars['String']>
   rootAccount_endsWith?: InputMaybe<Scalars['String']>
   rootAccount_eq?: InputMaybe<Scalars['String']>
@@ -8035,8 +7065,6 @@ export type MemberMetadataWhereInput = {
   about_in?: InputMaybe<Array<Scalars['String']>>
   about_startsWith?: InputMaybe<Scalars['String']>
   avatar?: InputMaybe<DataObjectWhereInput>
-  avatar_eq?: InputMaybe<Scalars['ID']>
-  avatar_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -8207,8 +7235,6 @@ export type MemberProfileUpdatedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   newHandle_contains?: InputMaybe<Scalars['String']>
@@ -8217,8 +7243,6 @@ export type MemberProfileUpdatedEventWhereInput = {
   newHandle_in?: InputMaybe<Array<Scalars['String']>>
   newHandle_startsWith?: InputMaybe<Scalars['String']>
   newMetadata?: InputMaybe<MemberMetadataWhereInput>
-  newMetadata_eq?: InputMaybe<Scalars['ID']>
-  newMetadata_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -8357,8 +7381,6 @@ export type MemberVerificationStatusUpdatedEventWhereInput = {
   isVerified_eq?: InputMaybe<Scalars['Boolean']>
   isVerified_in?: InputMaybe<Array<Scalars['Boolean']>>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -8369,8 +7391,6 @@ export type MemberVerificationStatusUpdatedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type MemberVerificationStatusUpdatedEventWhereUniqueInput = {
@@ -8607,16 +7627,10 @@ export type MembershipBoughtEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   metadata?: InputMaybe<MemberMetadataWhereInput>
-  metadata_eq?: InputMaybe<Scalars['ID']>
-  metadata_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   newMember?: InputMaybe<MembershipWhereInput>
-  newMember_eq?: InputMaybe<Scalars['ID']>
-  newMember_in?: InputMaybe<Array<Scalars['ID']>>
   referrer?: InputMaybe<MembershipWhereInput>
-  referrer_eq?: InputMaybe<Scalars['ID']>
-  referrer_in?: InputMaybe<Array<Scalars['ID']>>
   rootAccount_contains?: InputMaybe<Scalars['String']>
   rootAccount_endsWith?: InputMaybe<Scalars['String']>
   rootAccount_eq?: InputMaybe<Scalars['String']>
@@ -8666,53 +7680,6 @@ export type MembershipEdge = {
 export type MembershipEntryGenesis = {
   __typename: 'MembershipEntryGenesis'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type MembershipEntryGenesisCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type MembershipEntryGenesisUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type MembershipEntryGenesisWhereInput = {
-  AND?: InputMaybe<Array<MembershipEntryGenesisWhereInput>>
-  OR?: InputMaybe<Array<MembershipEntryGenesisWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type MembershipEntryGenesisWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type MembershipEntryInvited = {
@@ -8795,7 +7762,7 @@ export type MembershipPriceUpdatedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  newPrice: Scalars['BigInt']
+  newPrice: Scalars['String']
 }
 
 export type MembershipPriceUpdatedEventEdge = {
@@ -8828,7 +7795,7 @@ export type MembershipPriceUpdatedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  newPrice?: InputMaybe<Scalars['BigInt']>
+  newPrice?: InputMaybe<Scalars['String']>
 }
 
 export type MembershipPriceUpdatedEventWhereInput = {
@@ -8920,8 +7887,8 @@ export type MembershipSystemSnapshotConnection = {
 
 export type MembershipSystemSnapshotCreateInput = {
   defaultInviteCount: Scalars['Float']
-  invitedInitialBalance: Scalars['BigInt']
-  membershipPrice: Scalars['BigInt']
+  invitedInitialBalance: Scalars['String']
+  membershipPrice: Scalars['String']
   referralCut: Scalars['Float']
   snapshotBlock: Scalars['Float']
 }
@@ -8953,8 +7920,8 @@ export enum MembershipSystemSnapshotOrderByInput {
 
 export type MembershipSystemSnapshotUpdateInput = {
   defaultInviteCount?: InputMaybe<Scalars['Float']>
-  invitedInitialBalance?: InputMaybe<Scalars['BigInt']>
-  membershipPrice?: InputMaybe<Scalars['BigInt']>
+  invitedInitialBalance?: InputMaybe<Scalars['String']>
+  membershipPrice?: InputMaybe<Scalars['String']>
   referralCut?: InputMaybe<Scalars['Float']>
   snapshotBlock?: InputMaybe<Scalars['Float']>
 }
@@ -9040,6 +8007,9 @@ export type MembershipUpdateInput = {
 export type MembershipWhereInput = {
   AND?: InputMaybe<Array<MembershipWhereInput>>
   OR?: InputMaybe<Array<MembershipWhereInput>>
+  boundAccounts_containsAll?: InputMaybe<Array<Scalars['String']>>
+  boundAccounts_containsAny?: InputMaybe<Array<Scalars['String']>>
+  boundAccounts_containsNone?: InputMaybe<Array<Scalars['String']>>
   candidatemember_every?: InputMaybe<CandidateWhereInput>
   candidatemember_none?: InputMaybe<CandidateWhereInput>
   candidatemember_some?: InputMaybe<CandidateWhereInput>
@@ -9093,8 +8063,6 @@ export type MembershipWhereInput = {
   inviteCount_lt?: InputMaybe<Scalars['Int']>
   inviteCount_lte?: InputMaybe<Scalars['Int']>
   invitedBy?: InputMaybe<MembershipWhereInput>
-  invitedBy_eq?: InputMaybe<Scalars['ID']>
-  invitedBy_in?: InputMaybe<Array<Scalars['ID']>>
   invitees_every?: InputMaybe<MembershipWhereInput>
   invitees_none?: InputMaybe<MembershipWhereInput>
   invitees_some?: InputMaybe<MembershipWhereInput>
@@ -9132,8 +8100,6 @@ export type MembershipWhereInput = {
   memberverificationstatusupdatedeventmember_none?: InputMaybe<MemberVerificationStatusUpdatedEventWhereInput>
   memberverificationstatusupdatedeventmember_some?: InputMaybe<MemberVerificationStatusUpdatedEventWhereInput>
   metadata?: InputMaybe<MemberMetadataWhereInput>
-  metadata_eq?: InputMaybe<Scalars['ID']>
-  metadata_in?: InputMaybe<Array<Scalars['ID']>>
   postdeletedeventactor_every?: InputMaybe<PostDeletedEventWhereInput>
   postdeletedeventactor_none?: InputMaybe<PostDeletedEventWhereInput>
   postdeletedeventactor_some?: InputMaybe<PostDeletedEventWhereInput>
@@ -9159,8 +8125,6 @@ export type MembershipWhereInput = {
   referendumStageRevealingOptionResults_none?: InputMaybe<ReferendumStageRevealingOptionResultWhereInput>
   referendumStageRevealingOptionResults_some?: InputMaybe<ReferendumStageRevealingOptionResultWhereInput>
   referredBy?: InputMaybe<MembershipWhereInput>
-  referredBy_eq?: InputMaybe<Scalars['ID']>
-  referredBy_in?: InputMaybe<Array<Scalars['ID']>>
   referredMembers_every?: InputMaybe<MembershipWhereInput>
   referredMembers_none?: InputMaybe<MembershipWhereInput>
   referredMembers_some?: InputMaybe<MembershipWhereInput>
@@ -9250,7 +8214,7 @@ export type NewCandidateEventConnection = {
 }
 
 export type NewCandidateEventCreateInput = {
-  balance: Scalars['BigInt']
+  balance: Scalars['String']
   candidate: Scalars['ID']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -9292,7 +8256,7 @@ export enum NewCandidateEventOrderByInput {
 }
 
 export type NewCandidateEventUpdateInput = {
-  balance?: InputMaybe<Scalars['BigInt']>
+  balance?: InputMaybe<Scalars['String']>
   candidate?: InputMaybe<Scalars['ID']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -9312,8 +8276,6 @@ export type NewCandidateEventWhereInput = {
   balance_lt?: InputMaybe<Scalars['BigInt']>
   balance_lte?: InputMaybe<Scalars['BigInt']>
   candidate?: InputMaybe<CandidateWhereInput>
-  candidate_eq?: InputMaybe<Scalars['ID']>
-  candidate_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -9465,8 +8427,6 @@ export type NewCouncilElectedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electedCouncil?: InputMaybe<ElectedCouncilWhereInput>
-  electedCouncil_eq?: InputMaybe<Scalars['ID']>
-  electedCouncil_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -9662,7 +8622,7 @@ export type NewMissedRewardLevelReachedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  newMissedRewardAmount: Scalars['BigInt']
+  newMissedRewardAmount: Scalars['String']
   worker: Scalars['ID']
 }
 
@@ -9701,7 +8661,7 @@ export type NewMissedRewardLevelReachedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  newMissedRewardAmount?: InputMaybe<Scalars['BigInt']>
+  newMissedRewardAmount?: InputMaybe<Scalars['String']>
   worker?: InputMaybe<Scalars['ID']>
 }
 
@@ -9724,8 +8684,6 @@ export type NewMissedRewardLevelReachedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -9761,8 +8719,6 @@ export type NewMissedRewardLevelReachedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type NewMissedRewardLevelReachedEventWhereUniqueInput = {
@@ -9986,8 +8942,6 @@ export type OpeningAddedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -10010,8 +8964,6 @@ export type OpeningAddedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   opening?: InputMaybe<WorkingGroupOpeningWhereInput>
-  opening_eq?: InputMaybe<Scalars['ID']>
-  opening_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -10123,8 +9075,6 @@ export type OpeningCanceledEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -10147,8 +9097,6 @@ export type OpeningCanceledEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   opening?: InputMaybe<WorkingGroupOpeningWhereInput>
-  opening_eq?: InputMaybe<Scalars['ID']>
-  opening_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -10261,8 +9209,6 @@ export type OpeningFilledEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -10285,8 +9231,6 @@ export type OpeningFilledEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   opening?: InputMaybe<WorkingGroupOpeningWhereInput>
-  opening_eq?: InputMaybe<Scalars['ID']>
-  opening_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -10318,53 +9262,6 @@ export type OpeningStatusFilled = {
 export type OpeningStatusOpen = {
   __typename: 'OpeningStatusOpen'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type OpeningStatusOpenCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type OpeningStatusOpenUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type OpeningStatusOpenWhereInput = {
-  AND?: InputMaybe<Array<OpeningStatusOpenWhereInput>>
-  OR?: InputMaybe<Array<OpeningStatusOpenWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type OpeningStatusOpenWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type PageInfo = {
@@ -10499,8 +9396,6 @@ export type PostAddedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   post?: InputMaybe<ForumPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   text_contains?: InputMaybe<Scalars['String']>
   text_endsWith?: InputMaybe<Scalars['String']>
   text_eq?: InputMaybe<Scalars['String']>
@@ -10600,8 +9495,6 @@ export type PostDeletedEventWhereInput = {
   AND?: InputMaybe<Array<PostDeletedEventWhereInput>>
   OR?: InputMaybe<Array<PostDeletedEventWhereInput>>
   actor?: InputMaybe<MembershipWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -10745,8 +9638,6 @@ export type PostModeratedEventWhereInput = {
   AND?: InputMaybe<Array<PostModeratedEventWhereInput>>
   OR?: InputMaybe<Array<PostModeratedEventWhereInput>>
   actor?: InputMaybe<WorkerWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -10784,8 +9675,6 @@ export type PostModeratedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   post?: InputMaybe<ForumPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   rationale_contains?: InputMaybe<Scalars['String']>
   rationale_endsWith?: InputMaybe<Scalars['String']>
   rationale_eq?: InputMaybe<Scalars['String']>
@@ -10941,11 +9830,7 @@ export type PostReactedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   post?: InputMaybe<ForumPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   reactingMember?: InputMaybe<MembershipWhereInput>
-  reactingMember_eq?: InputMaybe<Scalars['ID']>
-  reactingMember_in?: InputMaybe<Array<Scalars['ID']>>
   reactionResult_json?: InputMaybe<Scalars['JSONObject']>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -10971,103 +9856,9 @@ export type PostReactionResultCancel = {
   phantom?: Maybe<Scalars['Int']>
 }
 
-export type PostReactionResultCancelCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type PostReactionResultCancelUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type PostReactionResultCancelWhereInput = {
-  AND?: InputMaybe<Array<PostReactionResultCancelWhereInput>>
-  OR?: InputMaybe<Array<PostReactionResultCancelWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type PostReactionResultCancelWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type PostReactionResultInvalid = {
   __typename: 'PostReactionResultInvalid'
   reactionId: Scalars['Int']
-}
-
-export type PostReactionResultInvalidCreateInput = {
-  reactionId: Scalars['Float']
-}
-
-export type PostReactionResultInvalidUpdateInput = {
-  reactionId?: InputMaybe<Scalars['Float']>
-}
-
-export type PostReactionResultInvalidWhereInput = {
-  AND?: InputMaybe<Array<PostReactionResultInvalidWhereInput>>
-  OR?: InputMaybe<Array<PostReactionResultInvalidWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  reactionId_eq?: InputMaybe<Scalars['Int']>
-  reactionId_gt?: InputMaybe<Scalars['Int']>
-  reactionId_gte?: InputMaybe<Scalars['Int']>
-  reactionId_in?: InputMaybe<Array<Scalars['Int']>>
-  reactionId_lt?: InputMaybe<Scalars['Int']>
-  reactionId_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type PostReactionResultInvalidWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type PostReactionResultValid = {
@@ -11078,12 +9869,10 @@ export type PostReactionResultValid = {
 
 export type PostReactionResultValidCreateInput = {
   reaction: PostReaction
-  reactionId: Scalars['Float']
 }
 
 export type PostReactionResultValidUpdateInput = {
   reaction?: InputMaybe<PostReaction>
-  reactionId?: InputMaybe<Scalars['Float']>
 }
 
 export type PostReactionResultValidWhereInput = {
@@ -11106,12 +9895,6 @@ export type PostReactionResultValidWhereInput = {
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
-  reactionId_eq?: InputMaybe<Scalars['Int']>
-  reactionId_gt?: InputMaybe<Scalars['Int']>
-  reactionId_gte?: InputMaybe<Scalars['Int']>
-  reactionId_in?: InputMaybe<Array<Scalars['Int']>>
-  reactionId_lt?: InputMaybe<Scalars['Int']>
-  reactionId_lte?: InputMaybe<Scalars['Int']>
   reaction_eq?: InputMaybe<PostReaction>
   reaction_in?: InputMaybe<Array<PostReaction>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -11132,53 +9915,6 @@ export type PostStatus = PostStatusActive | PostStatusLocked | PostStatusModerat
 export type PostStatusActive = {
   __typename: 'PostStatusActive'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type PostStatusActiveCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type PostStatusActiveUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type PostStatusActiveWhereInput = {
-  AND?: InputMaybe<Array<PostStatusActiveWhereInput>>
-  OR?: InputMaybe<Array<PostStatusActiveWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type PostStatusActiveWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type PostStatusLocked = {
@@ -11320,8 +10056,6 @@ export type PostTextUpdatedEventWhereInput = {
   newText_in?: InputMaybe<Array<Scalars['String']>>
   newText_startsWith?: InputMaybe<Scalars['String']>
   post?: InputMaybe<ForumPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -11507,8 +10241,6 @@ export type ProposalCancelledEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -11656,8 +10388,6 @@ export type ProposalCreatedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -11789,8 +10519,6 @@ export type ProposalDecisionMadeEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12004,8 +10732,6 @@ export type ProposalDiscussionPostCreatedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   post?: InputMaybe<ProposalDiscussionPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   text_contains?: InputMaybe<Scalars['String']>
   text_endsWith?: InputMaybe<Scalars['String']>
   text_eq?: InputMaybe<Scalars['String']>
@@ -12107,8 +10833,6 @@ export type ProposalDiscussionPostDeletedEventWhereInput = {
   AND?: InputMaybe<Array<ProposalDiscussionPostDeletedEventWhereInput>>
   OR?: InputMaybe<Array<ProposalDiscussionPostDeletedEventWhereInput>>
   actor?: InputMaybe<MembershipWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12146,8 +10870,6 @@ export type ProposalDiscussionPostDeletedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   post?: InputMaybe<ProposalDiscussionPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12194,53 +10916,6 @@ export type ProposalDiscussionPostStatus =
 export type ProposalDiscussionPostStatusActive = {
   __typename: 'ProposalDiscussionPostStatusActive'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type ProposalDiscussionPostStatusActiveCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ProposalDiscussionPostStatusActiveUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ProposalDiscussionPostStatusActiveWhereInput = {
-  AND?: InputMaybe<Array<ProposalDiscussionPostStatusActiveWhereInput>>
-  OR?: InputMaybe<Array<ProposalDiscussionPostStatusActiveWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type ProposalDiscussionPostStatusActiveWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type ProposalDiscussionPostStatusLocked = {
@@ -12383,8 +11058,6 @@ export type ProposalDiscussionPostUpdatedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   post?: InputMaybe<ProposalDiscussionPostWhereInput>
-  post_eq?: InputMaybe<Scalars['ID']>
-  post_in?: InputMaybe<Array<Scalars['ID']>>
   text_contains?: InputMaybe<Scalars['String']>
   text_endsWith?: InputMaybe<Scalars['String']>
   text_eq?: InputMaybe<Scalars['String']>
@@ -12407,8 +11080,6 @@ export type ProposalDiscussionPostWhereInput = {
   AND?: InputMaybe<Array<ProposalDiscussionPostWhereInput>>
   OR?: InputMaybe<Array<ProposalDiscussionPostWhereInput>>
   author?: InputMaybe<MembershipWhereInput>
-  author_eq?: InputMaybe<Scalars['ID']>
-  author_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12426,8 +11097,6 @@ export type ProposalDiscussionPostWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   discussionThread?: InputMaybe<ProposalDiscussionThreadWhereInput>
-  discussionThread_eq?: InputMaybe<Scalars['ID']>
-  discussionThread_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   isVisible_eq?: InputMaybe<Scalars['Boolean']>
@@ -12439,8 +11108,6 @@ export type ProposalDiscussionPostWhereInput = {
   proposaldiscussionpostrepliesTo_none?: InputMaybe<ProposalDiscussionPostWhereInput>
   proposaldiscussionpostrepliesTo_some?: InputMaybe<ProposalDiscussionPostWhereInput>
   repliesTo?: InputMaybe<ProposalDiscussionPostWhereInput>
-  repliesTo_eq?: InputMaybe<Scalars['ID']>
-  repliesTo_in?: InputMaybe<Array<Scalars['ID']>>
   status_json?: InputMaybe<Scalars['JSONObject']>
   text_contains?: InputMaybe<Scalars['String']>
   text_endsWith?: InputMaybe<Scalars['String']>
@@ -12588,8 +11255,6 @@ export type ProposalDiscussionThreadModeChangedEventWhereInput = {
   AND?: InputMaybe<Array<ProposalDiscussionThreadModeChangedEventWhereInput>>
   OR?: InputMaybe<Array<ProposalDiscussionThreadModeChangedEventWhereInput>>
   actor?: InputMaybe<MembershipWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12628,8 +11293,6 @@ export type ProposalDiscussionThreadModeChangedEventWhereInput = {
   network_in?: InputMaybe<Array<Network>>
   newMode_json?: InputMaybe<Scalars['JSONObject']>
   thread?: InputMaybe<ProposalDiscussionThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12652,53 +11315,6 @@ export type ProposalDiscussionThreadModeClosed = {
 export type ProposalDiscussionThreadModeOpen = {
   __typename: 'ProposalDiscussionThreadModeOpen'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type ProposalDiscussionThreadModeOpenCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ProposalDiscussionThreadModeOpenUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ProposalDiscussionThreadModeOpenWhereInput = {
-  AND?: InputMaybe<Array<ProposalDiscussionThreadModeOpenWhereInput>>
-  OR?: InputMaybe<Array<ProposalDiscussionThreadModeOpenWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type ProposalDiscussionThreadModeOpenWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export enum ProposalDiscussionThreadOrderByInput {
@@ -12745,8 +11361,6 @@ export type ProposalDiscussionThreadWhereInput = {
   posts_none?: InputMaybe<ProposalDiscussionPostWhereInput>
   posts_some?: InputMaybe<ProposalDiscussionPostWhereInput>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -12972,8 +11586,6 @@ export type ProposalExecutedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -13067,52 +11679,6 @@ export type ProposalStatusExecutionFailed = {
   errorMessage: Scalars['String']
   /** Related ProposalExecutedEvent */
   proposalExecutedEvent?: Maybe<ProposalExecutedEvent>
-}
-
-export type ProposalStatusExecutionFailedCreateInput = {
-  errorMessage: Scalars['String']
-}
-
-export type ProposalStatusExecutionFailedUpdateInput = {
-  errorMessage?: InputMaybe<Scalars['String']>
-}
-
-export type ProposalStatusExecutionFailedWhereInput = {
-  AND?: InputMaybe<Array<ProposalStatusExecutionFailedWhereInput>>
-  OR?: InputMaybe<Array<ProposalStatusExecutionFailedWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  errorMessage_contains?: InputMaybe<Scalars['String']>
-  errorMessage_endsWith?: InputMaybe<Scalars['String']>
-  errorMessage_eq?: InputMaybe<Scalars['String']>
-  errorMessage_in?: InputMaybe<Array<Scalars['String']>>
-  errorMessage_startsWith?: InputMaybe<Scalars['String']>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type ProposalStatusExecutionFailedWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type ProposalStatusExpired = {
@@ -13257,8 +11823,6 @@ export type ProposalStatusUpdatedEventWhereInput = {
   network_in?: InputMaybe<Array<Network>>
   newStatus_json?: InputMaybe<Scalars['JSONObject']>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -13440,8 +12004,6 @@ export type ProposalVotedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   proposal?: InputMaybe<ProposalWhereInput>
-  proposal_eq?: InputMaybe<Scalars['ID']>
-  proposal_in?: InputMaybe<Array<Scalars['ID']>>
   rationale_contains?: InputMaybe<Scalars['String']>
   rationale_endsWith?: InputMaybe<Scalars['String']>
   rationale_eq?: InputMaybe<Scalars['String']>
@@ -13457,8 +12019,6 @@ export type ProposalVotedEventWhereInput = {
   voteKind_eq?: InputMaybe<ProposalVoteKind>
   voteKind_in?: InputMaybe<Array<ProposalVoteKind>>
   voter?: InputMaybe<MembershipWhereInput>
-  voter_eq?: InputMaybe<Scalars['ID']>
-  voter_in?: InputMaybe<Array<Scalars['ID']>>
   votingRound_eq?: InputMaybe<Scalars['Int']>
   votingRound_gt?: InputMaybe<Scalars['Int']>
   votingRound_gte?: InputMaybe<Scalars['Int']>
@@ -13489,8 +12049,6 @@ export type ProposalWhereInput = {
   createdById_in?: InputMaybe<Array<Scalars['ID']>>
   createdInEvent?: InputMaybe<ProposalCreatedEventWhereInput>
   creator?: InputMaybe<MembershipWhereInput>
-  creator_eq?: InputMaybe<Scalars['ID']>
-  creator_in?: InputMaybe<Array<Scalars['ID']>>
   deletedAt_all?: InputMaybe<Scalars['Boolean']>
   deletedAt_eq?: InputMaybe<Scalars['DateTime']>
   deletedAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -16784,7 +15342,7 @@ export type ReferendumStageRevealingOptionResultCreateInput = {
   electionRound: Scalars['ID']
   option: Scalars['ID']
   referendumFinishedEvent: Scalars['ID']
-  votePower: Scalars['BigInt']
+  votePower: Scalars['String']
 }
 
 export type ReferendumStageRevealingOptionResultEdge = {
@@ -16814,7 +15372,7 @@ export type ReferendumStageRevealingOptionResultUpdateInput = {
   electionRound?: InputMaybe<Scalars['ID']>
   option?: InputMaybe<Scalars['ID']>
   referendumFinishedEvent?: InputMaybe<Scalars['ID']>
-  votePower?: InputMaybe<Scalars['BigInt']>
+  votePower?: InputMaybe<Scalars['String']>
 }
 
 export type ReferendumStageRevealingOptionResultWhereInput = {
@@ -16836,16 +15394,10 @@ export type ReferendumStageRevealingOptionResultWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   electionRound?: InputMaybe<ElectionRoundWhereInput>
-  electionRound_eq?: InputMaybe<Scalars['ID']>
-  electionRound_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   option?: InputMaybe<MembershipWhereInput>
-  option_eq?: InputMaybe<Scalars['ID']>
-  option_in?: InputMaybe<Array<Scalars['ID']>>
   referendumFinishedEvent?: InputMaybe<ReferendumFinishedEventWhereInput>
-  referendumFinishedEvent_eq?: InputMaybe<Scalars['ID']>
-  referendumFinishedEvent_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -16902,7 +15454,7 @@ export type ReferendumStartedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  winningTargetCount: Scalars['BigInt']
+  winningTargetCount: Scalars['String']
 }
 
 export type ReferendumStartedEventEdge = {
@@ -16935,7 +15487,7 @@ export type ReferendumStartedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  winningTargetCount?: InputMaybe<Scalars['BigInt']>
+  winningTargetCount?: InputMaybe<Scalars['String']>
 }
 
 export type ReferendumStartedEventWhereInput = {
@@ -17033,7 +15585,7 @@ export type ReferendumStartedForcefullyEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  winningTargetCount: Scalars['BigInt']
+  winningTargetCount: Scalars['String']
 }
 
 export type ReferendumStartedForcefullyEventEdge = {
@@ -17066,7 +15618,7 @@ export type ReferendumStartedForcefullyEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  winningTargetCount?: InputMaybe<Scalars['BigInt']>
+  winningTargetCount?: InputMaybe<Scalars['String']>
 }
 
 export type ReferendumStartedForcefullyEventWhereInput = {
@@ -17294,7 +15846,7 @@ export type RequestFundedEventConnection = {
 
 export type RequestFundedEventCreateInput = {
   account: Scalars['String']
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
@@ -17330,7 +15882,7 @@ export enum RequestFundedEventOrderByInput {
 
 export type RequestFundedEventUpdateInput = {
   account?: InputMaybe<Scalars['String']>
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
@@ -17560,7 +16112,7 @@ export type RewardPaidEventConnection = {
 }
 
 export type RewardPaidEventCreateInput = {
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   group: Scalars['ID']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -17605,7 +16157,7 @@ export enum RewardPaidEventOrderByInput {
 }
 
 export type RewardPaidEventUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   group?: InputMaybe<Scalars['ID']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -17641,8 +16193,6 @@ export type RewardPaidEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -17679,8 +16229,6 @@ export type RewardPaidEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type RewardPaidEventWhereUniqueInput = {
@@ -17730,9 +16278,9 @@ export type RewardPaymentEventCreateInput = {
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
-  missingBalance: Scalars['BigInt']
+  missingBalance: Scalars['String']
   network: Network
-  paidBalance: Scalars['BigInt']
+  paidBalance: Scalars['String']
   rewardAccount: Scalars['String']
 }
 
@@ -17772,9 +16320,9 @@ export type RewardPaymentEventUpdateInput = {
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
-  missingBalance?: InputMaybe<Scalars['BigInt']>
+  missingBalance?: InputMaybe<Scalars['String']>
   network?: InputMaybe<Network>
-  paidBalance?: InputMaybe<Scalars['BigInt']>
+  paidBalance?: InputMaybe<Scalars['String']>
   rewardAccount?: InputMaybe<Scalars['String']>
 }
 
@@ -17782,8 +16330,6 @@ export type RewardPaymentEventWhereInput = {
   AND?: InputMaybe<Array<RewardPaymentEventWhereInput>>
   OR?: InputMaybe<Array<RewardPaymentEventWhereInput>>
   councilMember?: InputMaybe<CouncilMemberWhereInput>
-  councilMember_eq?: InputMaybe<Scalars['ID']>
-  councilMember_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -17883,7 +16429,7 @@ export type RuntimeWasmBytecodeConnection = {
 }
 
 export type RuntimeWasmBytecodeCreateInput = {
-  bytecode: Scalars['Bytes']
+  bytecode: Scalars['String']
 }
 
 export type RuntimeWasmBytecodeEdge = {
@@ -17904,7 +16450,7 @@ export enum RuntimeWasmBytecodeOrderByInput {
 }
 
 export type RuntimeWasmBytecodeUpdateInput = {
-  bytecode?: InputMaybe<Scalars['Bytes']>
+  bytecode?: InputMaybe<Scalars['String']>
 }
 
 export type RuntimeWasmBytecodeWhereInput = {
@@ -17955,160 +16501,19 @@ export type SearchSearchResult = Channel | Video
 export type SetCouncilBudgetIncrementProposalDetails = {
   __typename: 'SetCouncilBudgetIncrementProposalDetails'
   /** New (proposed) amount the council budget should be increased by per each budget period */
-  newAmount: Scalars['BigInt']
-}
-
-export type SetCouncilBudgetIncrementProposalDetailsCreateInput = {
-  newAmount: Scalars['BigInt']
-}
-
-export type SetCouncilBudgetIncrementProposalDetailsUpdateInput = {
-  newAmount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type SetCouncilBudgetIncrementProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetCouncilBudgetIncrementProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetCouncilBudgetIncrementProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newAmount_eq?: InputMaybe<Scalars['BigInt']>
-  newAmount_gt?: InputMaybe<Scalars['BigInt']>
-  newAmount_gte?: InputMaybe<Scalars['BigInt']>
-  newAmount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  newAmount_lt?: InputMaybe<Scalars['BigInt']>
-  newAmount_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetCouncilBudgetIncrementProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
+  newAmount: Scalars['Float']
 }
 
 export type SetCouncilorRewardProposalDetails = {
   __typename: 'SetCouncilorRewardProposalDetails'
   /** New (proposed) council members' reward per block */
-  newRewardPerBlock: Scalars['BigInt']
-}
-
-export type SetCouncilorRewardProposalDetailsCreateInput = {
-  newRewardPerBlock: Scalars['BigInt']
-}
-
-export type SetCouncilorRewardProposalDetailsUpdateInput = {
-  newRewardPerBlock?: InputMaybe<Scalars['BigInt']>
-}
-
-export type SetCouncilorRewardProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetCouncilorRewardProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetCouncilorRewardProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newRewardPerBlock_eq?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_gt?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_gte?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_in?: InputMaybe<Array<Scalars['BigInt']>>
-  newRewardPerBlock_lt?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetCouncilorRewardProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
+  newRewardPerBlock: Scalars['Float']
 }
 
 export type SetInitialInvitationBalanceProposalDetails = {
   __typename: 'SetInitialInvitationBalanceProposalDetails'
   /** The new (proposed) initial balance credited to controller account of an invitee (locked for transaction fee payments only) */
-  newInitialInvitationBalance: Scalars['BigInt']
-}
-
-export type SetInitialInvitationBalanceProposalDetailsCreateInput = {
-  newInitialInvitationBalance: Scalars['BigInt']
-}
-
-export type SetInitialInvitationBalanceProposalDetailsUpdateInput = {
-  newInitialInvitationBalance?: InputMaybe<Scalars['BigInt']>
-}
-
-export type SetInitialInvitationBalanceProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetInitialInvitationBalanceProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetInitialInvitationBalanceProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newInitialInvitationBalance_eq?: InputMaybe<Scalars['BigInt']>
-  newInitialInvitationBalance_gt?: InputMaybe<Scalars['BigInt']>
-  newInitialInvitationBalance_gte?: InputMaybe<Scalars['BigInt']>
-  newInitialInvitationBalance_in?: InputMaybe<Array<Scalars['BigInt']>>
-  newInitialInvitationBalance_lt?: InputMaybe<Scalars['BigInt']>
-  newInitialInvitationBalance_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetInitialInvitationBalanceProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
+  newInitialInvitationBalance: Scalars['Float']
 }
 
 export type SetInitialInvitationCountProposalDetails = {
@@ -18117,104 +16522,10 @@ export type SetInitialInvitationCountProposalDetails = {
   newInitialInvitationsCount: Scalars['Int']
 }
 
-export type SetInitialInvitationCountProposalDetailsCreateInput = {
-  newInitialInvitationsCount: Scalars['Float']
-}
-
-export type SetInitialInvitationCountProposalDetailsUpdateInput = {
-  newInitialInvitationsCount?: InputMaybe<Scalars['Float']>
-}
-
-export type SetInitialInvitationCountProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetInitialInvitationCountProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetInitialInvitationCountProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newInitialInvitationsCount_eq?: InputMaybe<Scalars['Int']>
-  newInitialInvitationsCount_gt?: InputMaybe<Scalars['Int']>
-  newInitialInvitationsCount_gte?: InputMaybe<Scalars['Int']>
-  newInitialInvitationsCount_in?: InputMaybe<Array<Scalars['Int']>>
-  newInitialInvitationsCount_lt?: InputMaybe<Scalars['Int']>
-  newInitialInvitationsCount_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetInitialInvitationCountProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type SetMaxValidatorCountProposalDetails = {
   __typename: 'SetMaxValidatorCountProposalDetails'
   /** The new (propsed) max. number of active validators */
   newMaxValidatorCount: Scalars['Int']
-}
-
-export type SetMaxValidatorCountProposalDetailsCreateInput = {
-  newMaxValidatorCount: Scalars['Float']
-}
-
-export type SetMaxValidatorCountProposalDetailsUpdateInput = {
-  newMaxValidatorCount?: InputMaybe<Scalars['Float']>
-}
-
-export type SetMaxValidatorCountProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetMaxValidatorCountProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetMaxValidatorCountProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newMaxValidatorCount_eq?: InputMaybe<Scalars['Int']>
-  newMaxValidatorCount_gt?: InputMaybe<Scalars['Int']>
-  newMaxValidatorCount_gte?: InputMaybe<Scalars['Int']>
-  newMaxValidatorCount_in?: InputMaybe<Array<Scalars['Int']>>
-  newMaxValidatorCount_lt?: InputMaybe<Scalars['Int']>
-  newMaxValidatorCount_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetMaxValidatorCountProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type SetMembershipLeadInvitationQuotaProposalDetails = {
@@ -18223,104 +16534,10 @@ export type SetMembershipLeadInvitationQuotaProposalDetails = {
   newLeadInvitationQuota: Scalars['Int']
 }
 
-export type SetMembershipLeadInvitationQuotaProposalDetailsCreateInput = {
-  newLeadInvitationQuota: Scalars['Float']
-}
-
-export type SetMembershipLeadInvitationQuotaProposalDetailsUpdateInput = {
-  newLeadInvitationQuota?: InputMaybe<Scalars['Float']>
-}
-
-export type SetMembershipLeadInvitationQuotaProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetMembershipLeadInvitationQuotaProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetMembershipLeadInvitationQuotaProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newLeadInvitationQuota_eq?: InputMaybe<Scalars['Int']>
-  newLeadInvitationQuota_gt?: InputMaybe<Scalars['Int']>
-  newLeadInvitationQuota_gte?: InputMaybe<Scalars['Int']>
-  newLeadInvitationQuota_in?: InputMaybe<Array<Scalars['Int']>>
-  newLeadInvitationQuota_lt?: InputMaybe<Scalars['Int']>
-  newLeadInvitationQuota_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetMembershipLeadInvitationQuotaProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type SetMembershipPriceProposalDetails = {
   __typename: 'SetMembershipPriceProposalDetails'
   /** New (proposed) membership price */
-  newPrice: Scalars['BigInt']
-}
-
-export type SetMembershipPriceProposalDetailsCreateInput = {
-  newPrice: Scalars['BigInt']
-}
-
-export type SetMembershipPriceProposalDetailsUpdateInput = {
-  newPrice?: InputMaybe<Scalars['BigInt']>
-}
-
-export type SetMembershipPriceProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetMembershipPriceProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetMembershipPriceProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newPrice_eq?: InputMaybe<Scalars['BigInt']>
-  newPrice_gt?: InputMaybe<Scalars['BigInt']>
-  newPrice_gte?: InputMaybe<Scalars['BigInt']>
-  newPrice_in?: InputMaybe<Array<Scalars['BigInt']>>
-  newPrice_lt?: InputMaybe<Scalars['BigInt']>
-  newPrice_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetMembershipPriceProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
+  newPrice: Scalars['Float']
 }
 
 export type SetReferralCutProposalDetails = {
@@ -18329,106 +16546,12 @@ export type SetReferralCutProposalDetails = {
   newReferralCut: Scalars['Int']
 }
 
-export type SetReferralCutProposalDetailsCreateInput = {
-  newReferralCut: Scalars['Float']
-}
-
-export type SetReferralCutProposalDetailsUpdateInput = {
-  newReferralCut?: InputMaybe<Scalars['Float']>
-}
-
-export type SetReferralCutProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetReferralCutProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetReferralCutProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newReferralCut_eq?: InputMaybe<Scalars['Int']>
-  newReferralCut_gt?: InputMaybe<Scalars['Int']>
-  newReferralCut_gte?: InputMaybe<Scalars['Int']>
-  newReferralCut_in?: InputMaybe<Array<Scalars['Int']>>
-  newReferralCut_lt?: InputMaybe<Scalars['Int']>
-  newReferralCut_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetReferralCutProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type SetWorkingGroupLeadRewardProposalDetails = {
   __typename: 'SetWorkingGroupLeadRewardProposalDetails'
   /** The lead that should be affected */
   lead?: Maybe<Worker>
   /** Lead's new (proposed) reward per block */
-  newRewardPerBlock: Scalars['BigInt']
-}
-
-export type SetWorkingGroupLeadRewardProposalDetailsCreateInput = {
-  newRewardPerBlock: Scalars['BigInt']
-}
-
-export type SetWorkingGroupLeadRewardProposalDetailsUpdateInput = {
-  newRewardPerBlock?: InputMaybe<Scalars['BigInt']>
-}
-
-export type SetWorkingGroupLeadRewardProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SetWorkingGroupLeadRewardProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SetWorkingGroupLeadRewardProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  newRewardPerBlock_eq?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_gt?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_gte?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_in?: InputMaybe<Array<Scalars['BigInt']>>
-  newRewardPerBlock_lt?: InputMaybe<Scalars['BigInt']>
-  newRewardPerBlock_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SetWorkingGroupLeadRewardProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
+  newRewardPerBlock: Scalars['Float']
 }
 
 export type SignalProposalDetails = {
@@ -18437,105 +16560,12 @@ export type SignalProposalDetails = {
   text: Scalars['String']
 }
 
-export type SignalProposalDetailsCreateInput = {
-  text: Scalars['String']
-}
-
-export type SignalProposalDetailsUpdateInput = {
-  text?: InputMaybe<Scalars['String']>
-}
-
-export type SignalProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SignalProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SignalProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  text_contains?: InputMaybe<Scalars['String']>
-  text_endsWith?: InputMaybe<Scalars['String']>
-  text_eq?: InputMaybe<Scalars['String']>
-  text_in?: InputMaybe<Array<Scalars['String']>>
-  text_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SignalProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type SlashWorkingGroupLeadProposalDetails = {
   __typename: 'SlashWorkingGroupLeadProposalDetails'
   /** Amount to slash the stake by */
-  amount: Scalars['BigInt']
+  amount: Scalars['Float']
   /** The lead that should be affected */
   lead?: Maybe<Worker>
-}
-
-export type SlashWorkingGroupLeadProposalDetailsCreateInput = {
-  amount: Scalars['BigInt']
-}
-
-export type SlashWorkingGroupLeadProposalDetailsUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type SlashWorkingGroupLeadProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<SlashWorkingGroupLeadProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<SlashWorkingGroupLeadProposalDetailsWhereInput>>
-  amount_eq?: InputMaybe<Scalars['BigInt']>
-  amount_gt?: InputMaybe<Scalars['BigInt']>
-  amount_gte?: InputMaybe<Scalars['BigInt']>
-  amount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  amount_lt?: InputMaybe<Scalars['BigInt']>
-  amount_lte?: InputMaybe<Scalars['BigInt']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type SlashWorkingGroupLeadProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type StakeDecreasedEvent = BaseGraphQlObject &
@@ -18575,7 +16605,7 @@ export type StakeDecreasedEventConnection = {
 }
 
 export type StakeDecreasedEventCreateInput = {
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   group: Scalars['ID']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -18614,7 +16644,7 @@ export enum StakeDecreasedEventOrderByInput {
 }
 
 export type StakeDecreasedEventUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   group?: InputMaybe<Scalars['ID']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -18648,8 +16678,6 @@ export type StakeDecreasedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -18679,8 +16707,6 @@ export type StakeDecreasedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type StakeDecreasedEventWhereUniqueInput = {
@@ -18724,7 +16750,7 @@ export type StakeIncreasedEventConnection = {
 }
 
 export type StakeIncreasedEventCreateInput = {
-  amount: Scalars['BigInt']
+  amount: Scalars['String']
   group: Scalars['ID']
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -18763,7 +16789,7 @@ export enum StakeIncreasedEventOrderByInput {
 }
 
 export type StakeIncreasedEventUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
+  amount?: InputMaybe<Scalars['String']>
   group?: InputMaybe<Scalars['ID']>
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
@@ -18797,8 +16823,6 @@ export type StakeIncreasedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -18828,8 +16852,6 @@ export type StakeIncreasedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type StakeIncreasedEventWhereUniqueInput = {
@@ -19013,8 +17035,8 @@ export type StakeSlashedEventCreateInput = {
   indexInBlock: Scalars['Float']
   network: Network
   rationale?: InputMaybe<Scalars['String']>
-  requestedAmount: Scalars['BigInt']
-  slashedAmount: Scalars['BigInt']
+  requestedAmount: Scalars['String']
+  slashedAmount: Scalars['String']
   worker: Scalars['ID']
 }
 
@@ -19058,8 +17080,8 @@ export type StakeSlashedEventUpdateInput = {
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
   rationale?: InputMaybe<Scalars['String']>
-  requestedAmount?: InputMaybe<Scalars['BigInt']>
-  slashedAmount?: InputMaybe<Scalars['BigInt']>
+  requestedAmount?: InputMaybe<Scalars['String']>
+  slashedAmount?: InputMaybe<Scalars['String']>
   worker?: InputMaybe<Scalars['ID']>
 }
 
@@ -19082,8 +17104,6 @@ export type StakeSlashedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -19130,8 +17150,6 @@ export type StakeSlashedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type StakeSlashedEventWhereUniqueInput = {
@@ -19260,8 +17278,6 @@ export type StakingAccountAddedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -19399,8 +17415,6 @@ export type StakingAccountConfirmedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -19538,8 +17552,6 @@ export type StakingAccountRemovedEventWhereInput = {
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   member?: InputMaybe<MembershipWhereInput>
-  member_eq?: InputMaybe<Scalars['ID']>
-  member_in?: InputMaybe<Array<Scalars['ID']>>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
@@ -19664,8 +17676,6 @@ export type StatusTextChangedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -19722,54 +17732,7 @@ export type TerminateWorkingGroupLeadProposalDetails = {
   /** Lead that's supposed to be terminated */
   lead?: Maybe<Worker>
   /** Optionally - the amount to slash the lead's stake by */
-  slashingAmount?: Maybe<Scalars['BigInt']>
-}
-
-export type TerminateWorkingGroupLeadProposalDetailsCreateInput = {
-  slashingAmount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type TerminateWorkingGroupLeadProposalDetailsUpdateInput = {
-  slashingAmount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type TerminateWorkingGroupLeadProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<TerminateWorkingGroupLeadProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<TerminateWorkingGroupLeadProposalDetailsWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  slashingAmount_eq?: InputMaybe<Scalars['BigInt']>
-  slashingAmount_gt?: InputMaybe<Scalars['BigInt']>
-  slashingAmount_gte?: InputMaybe<Scalars['BigInt']>
-  slashingAmount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  slashingAmount_lt?: InputMaybe<Scalars['BigInt']>
-  slashingAmount_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type TerminateWorkingGroupLeadProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
+  slashingAmount?: Maybe<Scalars['Float']>
 }
 
 export type TerminatedLeaderEvent = BaseGraphQlObject &
@@ -19816,7 +17779,7 @@ export type TerminatedLeaderEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  penalty?: InputMaybe<Scalars['BigInt']>
+  penalty?: InputMaybe<Scalars['String']>
   rationale?: InputMaybe<Scalars['String']>
   worker: Scalars['ID']
 }
@@ -19858,7 +17821,7 @@ export type TerminatedLeaderEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  penalty?: InputMaybe<Scalars['BigInt']>
+  penalty?: InputMaybe<Scalars['String']>
   rationale?: InputMaybe<Scalars['String']>
   worker?: InputMaybe<Scalars['ID']>
 }
@@ -19882,8 +17845,6 @@ export type TerminatedLeaderEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -19924,8 +17885,6 @@ export type TerminatedLeaderEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type TerminatedLeaderEventWhereUniqueInput = {
@@ -19976,7 +17935,7 @@ export type TerminatedWorkerEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  penalty?: InputMaybe<Scalars['BigInt']>
+  penalty?: InputMaybe<Scalars['String']>
   rationale?: InputMaybe<Scalars['String']>
   worker: Scalars['ID']
 }
@@ -20018,7 +17977,7 @@ export type TerminatedWorkerEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  penalty?: InputMaybe<Scalars['BigInt']>
+  penalty?: InputMaybe<Scalars['String']>
   rationale?: InputMaybe<Scalars['String']>
   worker?: InputMaybe<Scalars['ID']>
 }
@@ -20042,8 +18001,6 @@ export type TerminatedWorkerEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -20084,8 +18041,6 @@ export type TerminatedWorkerEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type TerminatedWorkerEventWhereUniqueInput = {
@@ -20219,8 +18174,6 @@ export type ThreadCreatedEventWhereInput = {
   text_in?: InputMaybe<Array<Scalars['String']>>
   text_startsWith?: InputMaybe<Scalars['String']>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   title_contains?: InputMaybe<Scalars['String']>
   title_endsWith?: InputMaybe<Scalars['String']>
   title_eq?: InputMaybe<Scalars['String']>
@@ -20349,8 +18302,6 @@ export type ThreadDeletedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -20485,8 +18436,6 @@ export type ThreadMetadataUpdatedEventWhereInput = {
   newTitle_in?: InputMaybe<Array<Scalars['String']>>
   newTitle_startsWith?: InputMaybe<Scalars['String']>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -20586,8 +18535,6 @@ export type ThreadModeratedEventWhereInput = {
   AND?: InputMaybe<Array<ThreadModeratedEventWhereInput>>
   OR?: InputMaybe<Array<ThreadModeratedEventWhereInput>>
   actor?: InputMaybe<WorkerWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -20630,8 +18577,6 @@ export type ThreadModeratedEventWhereInput = {
   rationale_in?: InputMaybe<Array<Scalars['String']>>
   rationale_startsWith?: InputMaybe<Scalars['String']>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -20737,8 +18682,6 @@ export type ThreadMovedEventWhereInput = {
   AND?: InputMaybe<Array<ThreadMovedEventWhereInput>>
   OR?: InputMaybe<Array<ThreadMovedEventWhereInput>>
   actor?: InputMaybe<WorkerWhereInput>
-  actor_eq?: InputMaybe<Scalars['ID']>
-  actor_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -20776,14 +18719,8 @@ export type ThreadMovedEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   newCategory?: InputMaybe<ForumCategoryWhereInput>
-  newCategory_eq?: InputMaybe<Scalars['ID']>
-  newCategory_in?: InputMaybe<Array<Scalars['ID']>>
   oldCategory?: InputMaybe<ForumCategoryWhereInput>
-  oldCategory_eq?: InputMaybe<Scalars['ID']>
-  oldCategory_in?: InputMaybe<Array<Scalars['ID']>>
   thread?: InputMaybe<ForumThreadWhereInput>
-  thread_eq?: InputMaybe<Scalars['ID']>
-  thread_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -20802,53 +18739,6 @@ export type ThreadStatus = ThreadStatusActive | ThreadStatusLocked | ThreadStatu
 export type ThreadStatusActive = {
   __typename: 'ThreadStatusActive'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type ThreadStatusActiveCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ThreadStatusActiveUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type ThreadStatusActiveWhereInput = {
-  AND?: InputMaybe<Array<ThreadStatusActiveWhereInput>>
-  OR?: InputMaybe<Array<ThreadStatusActiveWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type ThreadStatusActiveWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type ThreadStatusLocked = {
@@ -20885,152 +18775,14 @@ export type UnlockBlogPostProposalDetails = {
   blogPost: Scalars['String']
 }
 
-export type UnlockBlogPostProposalDetailsCreateInput = {
-  blogPost: Scalars['String']
-}
-
-export type UnlockBlogPostProposalDetailsUpdateInput = {
-  blogPost?: InputMaybe<Scalars['String']>
-}
-
-export type UnlockBlogPostProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<UnlockBlogPostProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<UnlockBlogPostProposalDetailsWhereInput>>
-  blogPost_contains?: InputMaybe<Scalars['String']>
-  blogPost_endsWith?: InputMaybe<Scalars['String']>
-  blogPost_eq?: InputMaybe<Scalars['String']>
-  blogPost_in?: InputMaybe<Array<Scalars['String']>>
-  blogPost_startsWith?: InputMaybe<Scalars['String']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type UnlockBlogPostProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type UpcomingOpeningAdded = {
   __typename: 'UpcomingOpeningAdded'
   upcomingOpeningId: Scalars['String']
 }
 
-export type UpcomingOpeningAddedCreateInput = {
-  upcomingOpeningId: Scalars['String']
-}
-
-export type UpcomingOpeningAddedUpdateInput = {
-  upcomingOpeningId?: InputMaybe<Scalars['String']>
-}
-
-export type UpcomingOpeningAddedWhereInput = {
-  AND?: InputMaybe<Array<UpcomingOpeningAddedWhereInput>>
-  OR?: InputMaybe<Array<UpcomingOpeningAddedWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  upcomingOpeningId_contains?: InputMaybe<Scalars['String']>
-  upcomingOpeningId_endsWith?: InputMaybe<Scalars['String']>
-  upcomingOpeningId_eq?: InputMaybe<Scalars['String']>
-  upcomingOpeningId_in?: InputMaybe<Array<Scalars['String']>>
-  upcomingOpeningId_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type UpcomingOpeningAddedWhereUniqueInput = {
-  id: Scalars['ID']
-}
-
 export type UpcomingOpeningRemoved = {
   __typename: 'UpcomingOpeningRemoved'
   upcomingOpeningId: Scalars['String']
-}
-
-export type UpcomingOpeningRemovedCreateInput = {
-  upcomingOpeningId: Scalars['String']
-}
-
-export type UpcomingOpeningRemovedUpdateInput = {
-  upcomingOpeningId?: InputMaybe<Scalars['String']>
-}
-
-export type UpcomingOpeningRemovedWhereInput = {
-  AND?: InputMaybe<Array<UpcomingOpeningRemovedWhereInput>>
-  OR?: InputMaybe<Array<UpcomingOpeningRemovedWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  upcomingOpeningId_contains?: InputMaybe<Scalars['String']>
-  upcomingOpeningId_endsWith?: InputMaybe<Scalars['String']>
-  upcomingOpeningId_eq?: InputMaybe<Scalars['String']>
-  upcomingOpeningId_in?: InputMaybe<Array<Scalars['String']>>
-  upcomingOpeningId_startsWith?: InputMaybe<Scalars['String']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type UpcomingOpeningRemovedWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type UpcomingWorkingGroupOpening = BaseGraphQlObject & {
@@ -21069,8 +18821,8 @@ export type UpcomingWorkingGroupOpeningCreateInput = {
   expectedStart?: InputMaybe<Scalars['DateTime']>
   group: Scalars['ID']
   metadata: Scalars['ID']
-  rewardPerBlock?: InputMaybe<Scalars['BigInt']>
-  stakeAmount?: InputMaybe<Scalars['BigInt']>
+  rewardPerBlock?: InputMaybe<Scalars['String']>
+  stakeAmount?: InputMaybe<Scalars['String']>
 }
 
 export type UpcomingWorkingGroupOpeningEdge = {
@@ -21105,8 +18857,8 @@ export type UpcomingWorkingGroupOpeningUpdateInput = {
   expectedStart?: InputMaybe<Scalars['DateTime']>
   group?: InputMaybe<Scalars['ID']>
   metadata?: InputMaybe<Scalars['ID']>
-  rewardPerBlock?: InputMaybe<Scalars['BigInt']>
-  stakeAmount?: InputMaybe<Scalars['BigInt']>
+  rewardPerBlock?: InputMaybe<Scalars['String']>
+  stakeAmount?: InputMaybe<Scalars['String']>
 }
 
 export type UpcomingWorkingGroupOpeningWhereInput = {
@@ -21120,8 +18872,6 @@ export type UpcomingWorkingGroupOpeningWhereInput = {
   createdById_eq?: InputMaybe<Scalars['ID']>
   createdById_in?: InputMaybe<Array<Scalars['ID']>>
   createdInEvent?: InputMaybe<StatusTextChangedEventWhereInput>
-  createdInEvent_eq?: InputMaybe<Scalars['ID']>
-  createdInEvent_in?: InputMaybe<Array<Scalars['ID']>>
   deletedAt_all?: InputMaybe<Scalars['Boolean']>
   deletedAt_eq?: InputMaybe<Scalars['DateTime']>
   deletedAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -21136,13 +18886,9 @@ export type UpcomingWorkingGroupOpeningWhereInput = {
   expectedStart_lt?: InputMaybe<Scalars['DateTime']>
   expectedStart_lte?: InputMaybe<Scalars['DateTime']>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   metadata?: InputMaybe<WorkingGroupOpeningMetadataWhereInput>
-  metadata_eq?: InputMaybe<Scalars['ID']>
-  metadata_in?: InputMaybe<Array<Scalars['ID']>>
   rewardPerBlock_eq?: InputMaybe<Scalars['BigInt']>
   rewardPerBlock_gt?: InputMaybe<Scalars['BigInt']>
   rewardPerBlock_gte?: InputMaybe<Scalars['BigInt']>
@@ -21171,108 +18917,14 @@ export type UpcomingWorkingGroupOpeningWhereUniqueInput = {
 export type UpdateWorkingGroupBudgetProposalDetails = {
   __typename: 'UpdateWorkingGroupBudgetProposalDetails'
   /** Amount to increase / decrease the working group budget by (will be decudted from / appended to council budget accordingly) */
-  amount: Scalars['BigInt']
+  amount: Scalars['Float']
   /** Related working group */
   group?: Maybe<WorkingGroup>
-}
-
-export type UpdateWorkingGroupBudgetProposalDetailsCreateInput = {
-  amount: Scalars['BigInt']
-}
-
-export type UpdateWorkingGroupBudgetProposalDetailsUpdateInput = {
-  amount?: InputMaybe<Scalars['BigInt']>
-}
-
-export type UpdateWorkingGroupBudgetProposalDetailsWhereInput = {
-  AND?: InputMaybe<Array<UpdateWorkingGroupBudgetProposalDetailsWhereInput>>
-  OR?: InputMaybe<Array<UpdateWorkingGroupBudgetProposalDetailsWhereInput>>
-  amount_eq?: InputMaybe<Scalars['BigInt']>
-  amount_gt?: InputMaybe<Scalars['BigInt']>
-  amount_gte?: InputMaybe<Scalars['BigInt']>
-  amount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  amount_lt?: InputMaybe<Scalars['BigInt']>
-  amount_lte?: InputMaybe<Scalars['BigInt']>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type UpdateWorkingGroupBudgetProposalDetailsWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type VariantNone = {
   __typename: 'VariantNone'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type VariantNoneCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type VariantNoneUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type VariantNoneWhereInput = {
-  AND?: InputMaybe<Array<VariantNoneWhereInput>>
-  OR?: InputMaybe<Array<VariantNoneWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type VariantNoneWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type VetoProposalDetails = {
@@ -21612,7 +19264,7 @@ export type VideoMediaMetadataCreateInput = {
   encoding?: InputMaybe<Scalars['ID']>
   pixelHeight?: InputMaybe<Scalars['Float']>
   pixelWidth?: InputMaybe<Scalars['Float']>
-  size?: InputMaybe<Scalars['BigInt']>
+  size?: InputMaybe<Scalars['String']>
 }
 
 export type VideoMediaMetadataEdge = {
@@ -21645,7 +19297,7 @@ export type VideoMediaMetadataUpdateInput = {
   encoding?: InputMaybe<Scalars['ID']>
   pixelHeight?: InputMaybe<Scalars['Float']>
   pixelWidth?: InputMaybe<Scalars['Float']>
-  size?: InputMaybe<Scalars['BigInt']>
+  size?: InputMaybe<Scalars['String']>
 }
 
 export type VideoMediaMetadataWhereInput = {
@@ -21673,8 +19325,6 @@ export type VideoMediaMetadataWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   encoding?: InputMaybe<VideoMediaEncodingWhereInput>
-  encoding_eq?: InputMaybe<Scalars['ID']>
-  encoding_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   pixelHeight_eq?: InputMaybe<Scalars['Int']>
@@ -21772,11 +19422,7 @@ export type VideoWhereInput = {
   AND?: InputMaybe<Array<VideoWhereInput>>
   OR?: InputMaybe<Array<VideoWhereInput>>
   category?: InputMaybe<VideoCategoryWhereInput>
-  category_eq?: InputMaybe<Scalars['ID']>
-  category_in?: InputMaybe<Array<Scalars['ID']>>
   channel?: InputMaybe<ChannelWhereInput>
-  channel_eq?: InputMaybe<Scalars['ID']>
-  channel_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -21822,14 +19468,8 @@ export type VideoWhereInput = {
   isPublic_eq?: InputMaybe<Scalars['Boolean']>
   isPublic_in?: InputMaybe<Array<Scalars['Boolean']>>
   language?: InputMaybe<LanguageWhereInput>
-  language_eq?: InputMaybe<Scalars['ID']>
-  language_in?: InputMaybe<Array<Scalars['ID']>>
   license?: InputMaybe<LicenseWhereInput>
-  license_eq?: InputMaybe<Scalars['ID']>
-  license_in?: InputMaybe<Array<Scalars['ID']>>
   mediaMetadata?: InputMaybe<VideoMediaMetadataWhereInput>
-  mediaMetadata_eq?: InputMaybe<Scalars['ID']>
-  mediaMetadata_in?: InputMaybe<Array<Scalars['ID']>>
   media_json?: InputMaybe<Scalars['JSONObject']>
   publishedBeforeJoystream_eq?: InputMaybe<Scalars['DateTime']>
   publishedBeforeJoystream_gt?: InputMaybe<Scalars['DateTime']>
@@ -21932,8 +19572,6 @@ export type VoteCastEventWhereInput = {
   AND?: InputMaybe<Array<VoteCastEventWhereInput>>
   OR?: InputMaybe<Array<VoteCastEventWhereInput>>
   castVote?: InputMaybe<CastVoteWhereInput>
-  castVote_eq?: InputMaybe<Scalars['ID']>
-  castVote_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -22099,8 +19737,6 @@ export type VoteOnPollEventWhereInput = {
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
   pollAlternative?: InputMaybe<ForumPollAlternativeWhereInput>
-  pollAlternative_eq?: InputMaybe<Scalars['ID']>
-  pollAlternative_in?: InputMaybe<Array<Scalars['ID']>>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -22109,8 +19745,6 @@ export type VoteOnPollEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   votingMember?: InputMaybe<MembershipWhereInput>
-  votingMember_eq?: InputMaybe<Scalars['ID']>
-  votingMember_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type VoteOnPollEventWhereUniqueInput = {
@@ -22194,8 +19828,6 @@ export type VoteRevealedEventWhereInput = {
   AND?: InputMaybe<Array<VoteRevealedEventWhereInput>>
   OR?: InputMaybe<Array<VoteRevealedEventWhereInput>>
   castVote?: InputMaybe<CastVoteWhereInput>
-  castVote_eq?: InputMaybe<Scalars['ID']>
-  castVote_in?: InputMaybe<Array<Scalars['ID']>>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -22282,7 +19914,7 @@ export type VotingPeriodStartedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  numOfCandidates: Scalars['BigInt']
+  numOfCandidates: Scalars['String']
 }
 
 export type VotingPeriodStartedEventEdge = {
@@ -22315,7 +19947,7 @@ export type VotingPeriodStartedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  numOfCandidates?: InputMaybe<Scalars['BigInt']>
+  numOfCandidates?: InputMaybe<Scalars['String']>
 }
 
 export type VotingPeriodStartedEventWhereInput = {
@@ -22454,12 +20086,12 @@ export type WorkerCreateInput = {
   group: Scalars['ID']
   isLead: Scalars['Boolean']
   membership: Scalars['ID']
-  missingRewardAmount?: InputMaybe<Scalars['BigInt']>
+  missingRewardAmount?: InputMaybe<Scalars['String']>
   rewardAccount: Scalars['String']
-  rewardPerBlock: Scalars['BigInt']
+  rewardPerBlock: Scalars['String']
   roleAccount: Scalars['String']
   runtimeId: Scalars['Float']
-  stake: Scalars['BigInt']
+  stake: Scalars['String']
   stakeAccount: Scalars['String']
   status: Scalars['JSONObject']
   storage?: InputMaybe<Scalars['String']>
@@ -22569,8 +20201,6 @@ export type WorkerExitedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -22600,8 +20230,6 @@ export type WorkerExitedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type WorkerExitedEventWhereUniqueInput = {
@@ -22747,8 +20375,6 @@ export type WorkerRewardAccountUpdatedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -22783,8 +20409,6 @@ export type WorkerRewardAccountUpdatedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type WorkerRewardAccountUpdatedEventWhereUniqueInput = {
@@ -22833,7 +20457,7 @@ export type WorkerRewardAmountUpdatedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
-  newRewardPerBlock: Scalars['BigInt']
+  newRewardPerBlock: Scalars['String']
   worker: Scalars['ID']
 }
 
@@ -22872,7 +20496,7 @@ export type WorkerRewardAmountUpdatedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
-  newRewardPerBlock?: InputMaybe<Scalars['BigInt']>
+  newRewardPerBlock?: InputMaybe<Scalars['String']>
   worker?: InputMaybe<Scalars['ID']>
 }
 
@@ -22895,8 +20519,6 @@ export type WorkerRewardAmountUpdatedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -22932,8 +20554,6 @@ export type WorkerRewardAmountUpdatedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type WorkerRewardAmountUpdatedEventWhereUniqueInput = {
@@ -23044,8 +20664,6 @@ export type WorkerRoleAccountUpdatedEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -23080,8 +20698,6 @@ export type WorkerRoleAccountUpdatedEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type WorkerRoleAccountUpdatedEventWhereUniqueInput = {
@@ -23192,8 +20808,6 @@ export type WorkerStartedLeavingEventWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   inBlock_eq?: InputMaybe<Scalars['Int']>
@@ -23228,8 +20842,6 @@ export type WorkerStartedLeavingEventWhereInput = {
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
   worker?: InputMaybe<WorkerWhereInput>
-  worker_eq?: InputMaybe<Scalars['ID']>
-  worker_in?: InputMaybe<Array<Scalars['ID']>>
 }
 
 export type WorkerStartedLeavingEventWhereUniqueInput = {
@@ -23241,53 +20853,6 @@ export type WorkerStatus = WorkerStatusActive | WorkerStatusLeaving | WorkerStat
 export type WorkerStatusActive = {
   __typename: 'WorkerStatusActive'
   phantom?: Maybe<Scalars['Int']>
-}
-
-export type WorkerStatusActiveCreateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type WorkerStatusActiveUpdateInput = {
-  phantom?: InputMaybe<Scalars['Float']>
-}
-
-export type WorkerStatusActiveWhereInput = {
-  AND?: InputMaybe<Array<WorkerStatusActiveWhereInput>>
-  OR?: InputMaybe<Array<WorkerStatusActiveWhereInput>>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  phantom_eq?: InputMaybe<Scalars['Int']>
-  phantom_gt?: InputMaybe<Scalars['Int']>
-  phantom_gte?: InputMaybe<Scalars['Int']>
-  phantom_in?: InputMaybe<Array<Scalars['Int']>>
-  phantom_lt?: InputMaybe<Scalars['Int']>
-  phantom_lte?: InputMaybe<Scalars['Int']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-}
-
-export type WorkerStatusActiveWhereUniqueInput = {
-  id: Scalars['ID']
 }
 
 export type WorkerStatusLeaving = {
@@ -23316,12 +20881,12 @@ export type WorkerUpdateInput = {
   group?: InputMaybe<Scalars['ID']>
   isLead?: InputMaybe<Scalars['Boolean']>
   membership?: InputMaybe<Scalars['ID']>
-  missingRewardAmount?: InputMaybe<Scalars['BigInt']>
+  missingRewardAmount?: InputMaybe<Scalars['String']>
   rewardAccount?: InputMaybe<Scalars['String']>
-  rewardPerBlock?: InputMaybe<Scalars['BigInt']>
+  rewardPerBlock?: InputMaybe<Scalars['String']>
   roleAccount?: InputMaybe<Scalars['String']>
   runtimeId?: InputMaybe<Scalars['Float']>
-  stake?: InputMaybe<Scalars['BigInt']>
+  stake?: InputMaybe<Scalars['String']>
   stakeAccount?: InputMaybe<Scalars['String']>
   status?: InputMaybe<Scalars['JSONObject']>
   storage?: InputMaybe<Scalars['String']>
@@ -23331,8 +20896,6 @@ export type WorkerWhereInput = {
   AND?: InputMaybe<Array<WorkerWhereInput>>
   OR?: InputMaybe<Array<WorkerWhereInput>>
   application?: InputMaybe<WorkingGroupApplicationWhereInput>
-  application_eq?: InputMaybe<Scalars['ID']>
-  application_in?: InputMaybe<Array<Scalars['ID']>>
   categoryarchivalstatusupdatedeventactor_every?: InputMaybe<CategoryArchivalStatusUpdatedEventWhereInput>
   categoryarchivalstatusupdatedeventactor_none?: InputMaybe<CategoryArchivalStatusUpdatedEventWhereInput>
   categoryarchivalstatusupdatedeventactor_some?: InputMaybe<CategoryArchivalStatusUpdatedEventWhereInput>
@@ -23364,11 +20927,7 @@ export type WorkerWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   entry?: InputMaybe<OpeningFilledEventWhereInput>
-  entry_eq?: InputMaybe<Scalars['ID']>
-  entry_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   isLead_eq?: InputMaybe<Scalars['Boolean']>
@@ -23383,8 +20942,6 @@ export type WorkerWhereInput = {
   managedForumCategories_none?: InputMaybe<ForumCategoryWhereInput>
   managedForumCategories_some?: InputMaybe<ForumCategoryWhereInput>
   membership?: InputMaybe<MembershipWhereInput>
-  membership_eq?: InputMaybe<Scalars['ID']>
-  membership_in?: InputMaybe<Array<Scalars['ID']>>
   memberverificationstatusupdatedeventworker_every?: InputMaybe<MemberVerificationStatusUpdatedEventWhereInput>
   memberverificationstatusupdatedeventworker_none?: InputMaybe<MemberVerificationStatusUpdatedEventWhereInput>
   memberverificationstatusupdatedeventworker_some?: InputMaybe<MemberVerificationStatusUpdatedEventWhereInput>
@@ -23585,7 +21142,7 @@ export type WorkingGroupApplicationCreateInput = {
   rewardAccount: Scalars['String']
   roleAccount: Scalars['String']
   runtimeId: Scalars['Float']
-  stake: Scalars['BigInt']
+  stake: Scalars['String']
   stakingAccount: Scalars['String']
   status: Scalars['JSONObject']
 }
@@ -23632,7 +21189,7 @@ export type WorkingGroupApplicationUpdateInput = {
   rewardAccount?: InputMaybe<Scalars['String']>
   roleAccount?: InputMaybe<Scalars['String']>
   runtimeId?: InputMaybe<Scalars['Float']>
-  stake?: InputMaybe<Scalars['BigInt']>
+  stake?: InputMaybe<Scalars['String']>
   stakingAccount?: InputMaybe<Scalars['String']>
   status?: InputMaybe<Scalars['JSONObject']>
 }
@@ -23644,8 +21201,6 @@ export type WorkingGroupApplicationWhereInput = {
   answers_none?: InputMaybe<ApplicationFormQuestionAnswerWhereInput>
   answers_some?: InputMaybe<ApplicationFormQuestionAnswerWhereInput>
   applicant?: InputMaybe<MembershipWhereInput>
-  applicant_eq?: InputMaybe<Scalars['ID']>
-  applicant_in?: InputMaybe<Array<Scalars['ID']>>
   applicationwithdrawneventapplication_every?: InputMaybe<ApplicationWithdrawnEventWhereInput>
   applicationwithdrawneventapplication_none?: InputMaybe<ApplicationWithdrawnEventWhereInput>
   applicationwithdrawneventapplication_some?: InputMaybe<ApplicationWithdrawnEventWhereInput>
@@ -23668,8 +21223,6 @@ export type WorkingGroupApplicationWhereInput = {
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   opening?: InputMaybe<WorkingGroupOpeningWhereInput>
-  opening_eq?: InputMaybe<Scalars['ID']>
-  opening_in?: InputMaybe<Array<Scalars['ID']>>
   rewardAccount_contains?: InputMaybe<Scalars['String']>
   rewardAccount_endsWith?: InputMaybe<Scalars['String']>
   rewardAccount_eq?: InputMaybe<Scalars['String']>
@@ -23722,7 +21275,7 @@ export type WorkingGroupConnection = {
 }
 
 export type WorkingGroupCreateInput = {
-  budget: Scalars['BigInt']
+  budget: Scalars['String']
   leader?: InputMaybe<Scalars['ID']>
   metadata?: InputMaybe<Scalars['ID']>
   name: Scalars['String']
@@ -23852,13 +21405,9 @@ export type WorkingGroupMetadataWhereInput = {
   description_in?: InputMaybe<Array<Scalars['String']>>
   description_startsWith?: InputMaybe<Scalars['String']>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   setInEvent?: InputMaybe<StatusTextChangedEventWhereInput>
-  setInEvent_eq?: InputMaybe<Scalars['ID']>
-  setInEvent_in?: InputMaybe<Array<Scalars['ID']>>
   statusMessage_contains?: InputMaybe<Scalars['String']>
   statusMessage_endsWith?: InputMaybe<Scalars['String']>
   statusMessage_eq?: InputMaybe<Scalars['String']>
@@ -23930,9 +21479,9 @@ export type WorkingGroupOpeningCreateInput = {
   createdAt: Scalars['DateTime']
   group: Scalars['ID']
   metadata: Scalars['ID']
-  rewardPerBlock: Scalars['BigInt']
+  rewardPerBlock: Scalars['String']
   runtimeId: Scalars['Float']
-  stakeAmount: Scalars['BigInt']
+  stakeAmount: Scalars['String']
   status: Scalars['JSONObject']
   type: WorkingGroupOpeningType
   unstakingPeriod: Scalars['Float']
@@ -24127,9 +21676,9 @@ export type WorkingGroupOpeningUpdateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>
   group?: InputMaybe<Scalars['ID']>
   metadata?: InputMaybe<Scalars['ID']>
-  rewardPerBlock?: InputMaybe<Scalars['BigInt']>
+  rewardPerBlock?: InputMaybe<Scalars['String']>
   runtimeId?: InputMaybe<Scalars['Float']>
-  stakeAmount?: InputMaybe<Scalars['BigInt']>
+  stakeAmount?: InputMaybe<Scalars['String']>
   status?: InputMaybe<Scalars['JSONObject']>
   type?: InputMaybe<WorkingGroupOpeningType>
   unstakingPeriod?: InputMaybe<Scalars['Float']>
@@ -24161,13 +21710,9 @@ export type WorkingGroupOpeningWhereInput = {
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   group?: InputMaybe<WorkingGroupWhereInput>
-  group_eq?: InputMaybe<Scalars['ID']>
-  group_in?: InputMaybe<Array<Scalars['ID']>>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   metadata?: InputMaybe<WorkingGroupOpeningMetadataWhereInput>
-  metadata_eq?: InputMaybe<Scalars['ID']>
-  metadata_in?: InputMaybe<Array<Scalars['ID']>>
   openingcanceledeventopening_every?: InputMaybe<OpeningCanceledEventWhereInput>
   openingcanceledeventopening_none?: InputMaybe<OpeningCanceledEventWhereInput>
   openingcanceledeventopening_some?: InputMaybe<OpeningCanceledEventWhereInput>
@@ -24232,7 +21777,7 @@ export enum WorkingGroupOrderByInput {
 }
 
 export type WorkingGroupUpdateInput = {
-  budget?: InputMaybe<Scalars['BigInt']>
+  budget?: InputMaybe<Scalars['String']>
   leader?: InputMaybe<Scalars['ID']>
   metadata?: InputMaybe<Scalars['ID']>
   name?: InputMaybe<Scalars['String']>
@@ -24277,8 +21822,6 @@ export type WorkingGroupWhereInput = {
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   leader?: InputMaybe<WorkerWhereInput>
-  leader_eq?: InputMaybe<Scalars['ID']>
-  leader_in?: InputMaybe<Array<Scalars['ID']>>
   leaderseteventgroup_every?: InputMaybe<LeaderSetEventWhereInput>
   leaderseteventgroup_none?: InputMaybe<LeaderSetEventWhereInput>
   leaderseteventgroup_some?: InputMaybe<LeaderSetEventWhereInput>
@@ -24286,8 +21829,6 @@ export type WorkingGroupWhereInput = {
   leaderunseteventgroup_none?: InputMaybe<LeaderUnsetEventWhereInput>
   leaderunseteventgroup_some?: InputMaybe<LeaderUnsetEventWhereInput>
   metadata?: InputMaybe<WorkingGroupMetadataWhereInput>
-  metadata_eq?: InputMaybe<Scalars['ID']>
-  metadata_in?: InputMaybe<Array<Scalars['ID']>>
   name_contains?: InputMaybe<Scalars['String']>
   name_endsWith?: InputMaybe<Scalars['String']>
   name_eq?: InputMaybe<Scalars['String']>

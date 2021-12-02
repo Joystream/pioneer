@@ -29,6 +29,7 @@ export interface RawCouncilCandidateMock {
   stake: number
   stakingAccountId: string
   rewardAccountId: string
+  statusType?: string
   note?: string
   noteMetadata: {
     header: string
@@ -94,9 +95,11 @@ export const seedCouncilReferendumResults = (server: any) => {
 }
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
   const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
+  const status = server.schema.create(data.statusType ?? 'CandidacyStatusActive')
 
   return server.schema.create('Candidate', {
     ...data,
+    status,
     noteMetadata,
   })
 }
