@@ -4,6 +4,7 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
 import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
@@ -27,6 +28,7 @@ interface SpecificParametersStepProps {
 
 export const isValidSpecificParameters = (state: AddNewProposalMachineState): boolean => {
   const specifics = state.context.specifics
+
   switch (true) {
     case state.matches('specificParameters.signal'): {
       return !!specifics?.signal
@@ -45,6 +47,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
+    }
+    case state.matches('specificParameters.setCouncilBudgetIncrement'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     case state.matches('specificParameters.setWorkingGroupLeadReward'): {
       return !!(
@@ -91,6 +96,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
   const {
     context: { specifics },
   } = state
+
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
@@ -108,6 +114,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         <RuntimeUpgrade
           runtime={state.context.specifics?.runtime}
           setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
+        />
+      )
+    case state.matches('specificParameters.setCouncilBudgetIncrement'):
+      return (
+        <SetCouncilBudgetIncrement
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
