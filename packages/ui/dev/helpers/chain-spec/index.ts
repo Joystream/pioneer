@@ -2,10 +2,10 @@ import { readFileSync, writeFileSync } from 'fs'
 
 import yargs from 'yargs'
 
-import { isDefined, objectEquals } from '../../src/common/utils'
-import rawCandidates from '../../src/mocks/data/raw/candidates.json'
-import rawMembers from '../../src/mocks/data/raw/members.json'
-import rawVotes from '../../src/mocks/data/raw/votes.json'
+import { isDefined, objectEquals } from '../../../src/common/utils'
+import rawCandidates from '../../../src/mocks/data/raw/candidates.json'
+import rawMembers from '../../../src/mocks/data/raw/members.json'
+import rawVotes from '../../../src/mocks/data/raw/votes.json'
 
 import configs from './configs'
 
@@ -63,6 +63,7 @@ const handlerFor = (stageKind: 'announcing' | 'voting' | 'revealing') => (args: 
   council.announcementPeriodNr = CYCLE_ID
   referendum.votes = votes
 
+  council.candidates = []
   if (stage === 'voting' || stage === 'revealing') {
     council.candidates = candidates
     council.stage.stage.Election.candidates_count = candidates.length
