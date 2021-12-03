@@ -27,6 +27,7 @@ import { GroupIdName } from '@/working-groups/types'
 import {
   DecreaseWorkingGroupLeadStakeParameters,
   FundingRequestParameters,
+  SetMembershipPriceParameters,
   SignalParameters,
   TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
@@ -78,6 +79,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
     | SetMaxValidatorCountParameters
+    | SetMembershipPriceParameters
 }
 
 interface SignalContext extends SpecificParametersContext {
@@ -153,6 +155,10 @@ interface SetMaxValidatorCountContext extends SpecificParametersContext {
   specifics: SetMaxValidatorCountParameters
 }
 
+interface SetMembershipPriceContext extends SpecificParametersContext {
+  specifics: SetMembershipPriceParameters
+}
+
 export type AddNewProposalContext = Partial<
   ProposalTypeContext &
     StakingAccountContext &
@@ -176,7 +182,8 @@ export type AddNewProposalContext = Partial<
     SetMaxValidatorCountContext &
     DiscusisonContext &
     SetMembershipLeadInvitationContext &
-    SetInitialInvitationBalanceContext
+    SetInitialInvitationBalanceContext &
+    SetMembershipPriceContext
 >
 
 export type AddNewProposalState =
@@ -196,6 +203,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'setReferralCut' }; context: SetReferralCutContext }
+  | { value: { specificParameters: 'setMembershipPrice' }; context: SetMembershipPriceContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
@@ -733,6 +741,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         setInitialInvitationBalance: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  amount: event.amount,
+                }),
+              }),
+            },
+          },
+        },
+        setMembershipPrice: {
           on: {
             SET_AMOUNT: {
               actions: assign({
