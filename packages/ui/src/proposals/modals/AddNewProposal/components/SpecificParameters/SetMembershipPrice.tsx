@@ -19,16 +19,9 @@ interface Props extends SetMembershipPriceParameters {
 export const SetMembershipPrice = ({ amount: price, setAmount: setPrice }: Props) => {
   const [amount, setAmount] = useNumberInput(0, price)
 
-  useEffect(() => setPrice(new BN(amount)), [amount])
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { value },
-    } = e
-    if (Number(value) > 255) return
-
-    setAmount(value)
-  }
+  useEffect(() => {
+    setPrice(new BN(amount))
+  }, [amount])
 
   return (
     <RowGapBlock gap={24}>
@@ -45,7 +38,7 @@ export const SetMembershipPrice = ({ amount: price, setAmount: setPrice }: Props
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
               placeholder="0"
-              onChange={onChange}
+              onChange={(event) => setAmount(event.target.value)}
             />
           </InputComponent>
         </RowGapBlock>
