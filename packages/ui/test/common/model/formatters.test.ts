@@ -28,6 +28,16 @@ describe('formatters', () => {
       expect(formatTokenValue(null)).toBe('-')
       expect(formatTokenValue(NaN)).toBe('-')
     })
+
+    it('Formats strings', () => {
+      expect(formatTokenValue('')).toBe('')
+      expect(formatTokenValue('100')).toBe('100')
+      expect(formatTokenValue('1000')).toBe('1,000')
+      expect(formatTokenValue('10000')).toBe('10,000')
+      expect(formatTokenValue('1000000')).toBe('1,000,000')
+      expect(formatTokenValue('Random string')).toBe('Random string')
+      expect(formatTokenValue('3120 out of 100000 dentists agree')).toBe('3,120 out of 100,000 dentists agree')
+    })
   })
 
   describe('shortenAddress', () => {
