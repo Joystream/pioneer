@@ -15,6 +15,7 @@ import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrementParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetCouncilorRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilorReward'
 import { SetMaxValidatorCountParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
@@ -80,6 +81,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
     | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
+    | SetCouncilorRewardParameters
 }
 
 interface SignalContext extends SpecificParametersContext {
@@ -91,7 +93,7 @@ interface FundingRequestContext extends SpecificParametersContext {
 }
 
 interface SetCouncilorRewardContext extends SpecificParametersContext {
-  specifics: SignalParameters
+  specifics: SetCouncilorRewardParameters
 }
 
 interface SetCouncilBudgetIncrementContext extends SpecificParametersContext {
