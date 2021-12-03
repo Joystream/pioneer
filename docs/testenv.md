@@ -6,10 +6,10 @@ The Pioneer 2 is targeted for the Olympia release and it is compatible with the 
 https://github.com/Joystream/joystream/tree/olympia
 ```
 
-However, the current version of Pioneer 2 is ahead of the olympia branch in terms of the query-node support. While the query-node related features are under development, we track the most recent changes at:
+However, the current version of Pioneer 2 is ahead of the olympia branch in terms of the query-node support. While the query-node related features are under development, we track the most recent changes at a forked repo:
 
 ```
-https://github.com/thesan/joystream/tree/debug-pioneer-elections
+https://github.com/thesan/joystream/tree/olympia
 ```
 In order to use the compatible version of the Joystream ecosystem
 
@@ -22,9 +22,9 @@ This guide assumes that [docker](https://www.docker.com/) is installed.
 ### 2. Checkout integration branch
 
 ```shell
-git origin add thesan https://github.com/thesan/joystream/tree/olympia
+git remote add thesan https://github.com/thesan/joystream
 git fetch
-git checkout debug-pioneer-elections
+git checkout -b olympia thesan/olympia
 ```
 
 ### 3. Fetch proper `joystream-node` image
