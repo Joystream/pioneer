@@ -103,7 +103,7 @@ export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400
 }
 
 export const last = <T extends any>(list: ArrayLike<T>): T => list[list.length - 1]
-export const flatten = <T extends any>(nested: T[][]) => ([] as T[]).concat(...nested)
+export const flatten = <T extends any>(nested: (T | T[])[]) => ([] as T[]).concat(...nested)
 
 export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, index: number) => boolean): T[][] => {
   if (!list.length) return []
@@ -127,3 +127,12 @@ export const arrayGroupBy = (items: Item[], key: keyof Item) =>
     }),
     {}
   )
+
+// Promises:
+
+type MapperP<T, R> = (value: T, index: number, array: T[] | readonly T[]) => Promise<R>
+export const mapP = <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R>): Promise<R[]> =>
+  Promise.all(list.map(mapper))
+
+export const flatMapP = async <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R | R[]>): Promise<R[]> =>
+  Promise.all(flatten(await mapP(list, mapper)))
