@@ -17,8 +17,10 @@ import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
+  seedApplication,
   seedApplications,
   seedMembers,
+  seedOpening,
   seedOpenings,
   seedOpeningStatuses,
   seedUpcomingOpenings,
@@ -63,6 +65,35 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const OPENING_DATA = {
+  id: 'forumWorkingGroup-1337',
+  runtimeId: 1337,
+  groupId: 'forumWorkingGroup',
+  stakeAmount: 4000,
+  rewardPerBlock: 200,
+  version: 1,
+  type: 'LEADER',
+  status: 'open',
+  unstakingPeriod: 25110,
+  metadata: {
+    shortDescription: '',
+    description: '',
+    hiringLimit: 1,
+    applicationDetails: '',
+    applicationFormQuestions: [],
+    expectedEnding: '2021-12-06T14:26:06.283Z',
+  },
+}
+
+const APPLICATION_DATA = {
+  id: 'forumWorkingGroup-1337',
+  runtimeId: 1337,
+  openingId: 'forumWorkingGroup-1337',
+  applicantId: '0',
+  answers: [],
+  status: 'pending',
+}
+
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -99,6 +130,8 @@ describe('UI: AddNewProposalModal', () => {
     seedOpenings(server.server)
     seedUpcomingOpenings(server.server)
     seedApplications(server.server)
+    seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
     seedWorkers(server.server)
     updateWorkingGroups(server.server)
 
@@ -627,6 +660,35 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Max Validator Count', () => {
+        beforeEach(async () => {
+          await finishProposalType('setMaxValidatorCount')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set max validator count$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max and min value', async () => {
+          await SpecificParameters.fillAmount(400)
+          expect(await screen.queryByText('Maximal amount allowed is'))
+
+          await SpecificParameters.fillAmount(0)
+          expect(await screen.queryByText('Minimal amount allowed is'))
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Cancel Working Group Lead Opening', () => {
         beforeEach(async () => {
           await finishProposalType('cancelWorkingGroupLeadOpening')
@@ -643,7 +705,67 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
+      describe('Type - Set Council Budget Increment', () => {
+        beforeEach(async () => {
+          await finishProposalType('setCouncilBudgetIncrement')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Council Budget Increment$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max value', async () => {
+          await SpecificParameters.fillAmount(Math.pow(2, 128))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
+      describe('Type - Set Membership lead invitation quota proposal', () => {
+        beforeEach(async () => {
+          await finishProposalType('setMembershipLeadInvitationQuota')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Membership Lead Invitation Quota$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max value', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await SpecificParameters.fillAmount(Math.pow(2, 32))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+        })
+
+        it('Valid form', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await SpecificParameters.fillAmount(100)
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -663,8 +785,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-2')
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-2')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -688,6 +810,34 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+      describe('Type - Set Initial Invitation Balance', () => {
+        beforeAll(() => {
+          stubQuery(api, 'members.initialInvitationBalance', createType('Balance', 2137))
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setInitialInvitationBalance')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Initial Invitation Balance$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(1000)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Displays current balance', async () => {
+          expect(await screen.findByText('The current balance is 2137 JOY.')).toBeDefined()
         })
       })
     })

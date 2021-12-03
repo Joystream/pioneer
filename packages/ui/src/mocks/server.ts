@@ -2,28 +2,29 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { MEMBERSHIP_FAUCET_URL } from '@/app/config'
+import { MEMBERSHIP_FAUCET_ENDPOINT, NetworkType, QUERY_NODE_ENDPOINT } from '@/app/config'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedCouncilCandidates,
+  seedCouncilElections,
   seedCouncilMembers,
+  seedCouncilReferendumResults,
+  seedCouncilVotes,
   seedElectedCouncils,
+  seedEvents,
   seedMembers,
-  seedOpeningStatuses,
   seedOpenings,
+  seedOpeningStatuses,
+  seedProposals,
+  seedProposalsEvents,
   seedUpcomingOpenings,
   seedWorkers,
   seedWorkingGroups,
-  seedProposals,
-  seedEvents,
   updateWorkingGroups,
-  seedCouncilCandidates,
-  seedCouncilElections,
-  seedProposalsEvents,
-  seedCouncilVotes,
 } from './data'
 import {
   getConnectionResolver,
@@ -78,13 +79,13 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   electedCouncilModel.class.prototype.associations.councilElections.opts.inverse = null
 }
 
-export const makeServer = (environment = 'development') => {
+export const makeServer = (environment = 'development', network: NetworkType = 'local') => {
   return createServer({
     environment,
 
     routes() {
       this.post(
-        'http://localhost:8081/graphql',
+        QUERY_NODE_ENDPOINT[network],
         createGraphQLHandler(schema, this.schema, {
           context: undefined,
           root: undefined,
@@ -124,7 +125,6 @@ export const makeServer = (environment = 'development') => {
               openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
-              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposalVotedEvents: getWhereResolver('ProposalVotedEvent'),
@@ -165,12 +165,19 @@ export const makeServer = (environment = 'development') => {
               workingGroups: getWhereResolver('WorkingGroup'),
               postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
               postAddedEvents: getWhereResolver('PostAddedEvent'),
+              postModeratedEvents: getWhereResolver('PostModeratedEvent'),
+              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
+              categoryCreatedEvents: getWhereResolver('CategoryCreatedEvent'),
+              categoryDeletedEvents: getWhereResolver('CategoryDeletedEvent'),
+              threadCreatedEvents: getWhereResolver('ThreadCreatedEvent'),
+              threadDeletedEvents: getWhereResolver('ThreadDeletedEvent'),
+              threadModeratedEvents: getWhereResolver('ThreadModeratedEvent'),
               events: getInterfaceResolver(),
             },
           },
         })
       )
-      this.passthrough(MEMBERSHIP_FAUCET_URL)
+      this.passthrough(MEMBERSHIP_FAUCET_ENDPOINT[network])
     },
 
     ...(environment !== 'development'
@@ -196,6 +203,7 @@ export const makeServer = (environment = 'development') => {
             seedElectedCouncils(server)
             seedCouncilMembers(server)
             seedCouncilElections(server)
+            seedCouncilReferendumResults(server)
             seedCouncilCandidates(server)
             seedCouncilVotes(server)
           },

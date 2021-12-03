@@ -54,6 +54,11 @@ export const VOTE_DATA = {
   castBy: alice.address,
   voteForId: null,
   commitment: '0x3db26e2bd023ccf2d1167fd42d48cc76b1c1e5c1de9003f61e63ec6a337b91a2',
+  voteCastEvent: {
+    inBlock: 1,
+    createdAt: '2021-07-02T04:22:13.523Z',
+    network: 'OLYMPIA',
+  },
   // For:
   //  cycleId: 1,
   //  salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a",

@@ -39,6 +39,14 @@ export type PostDeletedEventFieldsFragment = {
   actor: { __typename: 'Membership'; id: string; handle: string }
 }
 
+export type PostModeratedEventFieldsFragment = {
+  __typename: 'PostModeratedEvent'
+  id: string
+  createdAt: any
+  post: { __typename: 'ForumPost'; id: string; thread: { __typename: 'ForumThread'; id: string } }
+  actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
 export type ThreadCreatedEventFieldsFragment = {
   __typename: 'ThreadCreatedEvent'
   id: string
@@ -48,11 +56,39 @@ export type ThreadCreatedEventFieldsFragment = {
     id: string
     title: string
     author: { __typename: 'Membership'; id: string; handle: string }
+    category: { __typename: 'ForumCategory'; id: string; title: string }
   }
+}
+
+export type ThreadDeletedEventFieldsFragment = {
+  __typename: 'ThreadDeletedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+}
+
+export type ThreadModeratedEventFieldsFragment = {
+  __typename: 'ThreadModeratedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+  actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
 export type CategoryCreatedEventFieldsFragment = {
   __typename: 'CategoryCreatedEvent'
+  id: string
+  createdAt: any
+  category: {
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+  }
+}
+
+export type CategoryDeletedEventFieldsFragment = {
+  __typename: 'CategoryDeletedEvent'
   id: string
   createdAt: any
   category: {
@@ -89,6 +125,13 @@ export type GetForumEventsQuery = {
       author: { __typename: 'Membership'; id: string; handle: string }
     }
   }>
+  postModeratedEvents: Array<{
+    __typename: 'PostModeratedEvent'
+    id: string
+    createdAt: any
+    post: { __typename: 'ForumPost'; id: string; thread: { __typename: 'ForumThread'; id: string } }
+    actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+  }>
   postDeletedEvents: Array<{
     __typename: 'PostDeletedEvent'
     id: string
@@ -109,10 +152,35 @@ export type GetForumEventsQuery = {
       id: string
       title: string
       author: { __typename: 'Membership'; id: string; handle: string }
+      category: { __typename: 'ForumCategory'; id: string; title: string }
     }
+  }>
+  threadDeletedEvents: Array<{
+    __typename: 'ThreadDeletedEvent'
+    id: string
+    createdAt: any
+    thread: { __typename: 'ForumThread'; id: string; title: string }
+  }>
+  threadModeratedEvents: Array<{
+    __typename: 'ThreadModeratedEvent'
+    id: string
+    createdAt: any
+    thread: { __typename: 'ForumThread'; id: string; title: string }
+    actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   categoryCreatedEvents: Array<{
     __typename: 'CategoryCreatedEvent'
+    id: string
+    createdAt: any
+    category: {
+      __typename: 'ForumCategory'
+      id: string
+      title: string
+      parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+    }
+  }>
+  categoryDeletedEvents: Array<{
+    __typename: 'CategoryDeletedEvent'
     id: string
     createdAt: any
     category: {
@@ -173,6 +241,24 @@ export const PostDeletedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const PostModeratedEventFieldsFragmentDoc = gql`
+  fragment PostModeratedEventFields on PostModeratedEvent {
+    id
+    createdAt
+    post {
+      id
+      thread {
+        id
+      }
+    }
+    actor {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
 export const ThreadCreatedEventFieldsFragmentDoc = gql`
   fragment ThreadCreatedEventFields on ThreadCreatedEvent {
     id
@@ -181,6 +267,36 @@ export const ThreadCreatedEventFieldsFragmentDoc = gql`
       id
       title
       author {
+        id
+        handle
+      }
+      category {
+        id
+        title
+      }
+    }
+  }
+`
+export const ThreadDeletedEventFieldsFragmentDoc = gql`
+  fragment ThreadDeletedEventFields on ThreadDeletedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+  }
+`
+export const ThreadModeratedEventFieldsFragmentDoc = gql`
+  fragment ThreadModeratedEventFields on ThreadModeratedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+    actor {
+      membership {
         id
         handle
       }
@@ -201,6 +317,20 @@ export const CategoryCreatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const CategoryDeletedEventFieldsFragmentDoc = gql`
+  fragment CategoryDeletedEventFields on CategoryDeletedEvent {
+    id
+    createdAt
+    category {
+      id
+      title
+      parent {
+        id
+        title
+      }
+    }
+  }
+`
 export const GetForumEventsDocument = gql`
   query GetForumEvents {
     postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
@@ -209,21 +339,37 @@ export const GetForumEventsDocument = gql`
     postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostTextUpdatedEventFields
     }
+    postModeratedEvents(orderBy: createdAt_DESC, limit: 10) {
+      ...PostModeratedEventFields
+    }
     postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostDeletedEventFields
     }
     threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
       ...ThreadCreatedEventFields
     }
+    threadDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...ThreadDeletedEventFields
+    }
+    threadModeratedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...ThreadModeratedEventFields
+    }
     categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
       ...CategoryCreatedEventFields
+    }
+    categoryDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...CategoryDeletedEventFields
     }
   }
   ${PostAddedEventFieldsFragmentDoc}
   ${PostTextUpdatedEventFieldsFragmentDoc}
+  ${PostModeratedEventFieldsFragmentDoc}
   ${PostDeletedEventFieldsFragmentDoc}
   ${ThreadCreatedEventFieldsFragmentDoc}
+  ${ThreadDeletedEventFieldsFragmentDoc}
+  ${ThreadModeratedEventFieldsFragmentDoc}
   ${CategoryCreatedEventFieldsFragmentDoc}
+  ${CategoryDeletedEventFieldsFragmentDoc}
 `
 
 /**

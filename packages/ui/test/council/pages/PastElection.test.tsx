@@ -15,11 +15,13 @@ import {
   RawCouncilCandidateMock,
   seedCouncilCandidate,
   seedCouncilElection,
+  seedCouncilReferendumResult,
   seedCouncilVote,
   seedElectedCouncil,
   seedMembers,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
+import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -72,6 +74,7 @@ const TEST_VOTE = {
   castBy: getMember('bob').controllerAccount,
   voteForId: '1',
   commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  voteCastEvent: randomRawBlock(),
 }
 
 describe('UI: Past Election page', () => {
@@ -107,6 +110,10 @@ describe('UI: Past Election page', () => {
       mockServer.server
     )
     seedCouncilElection({ id: '1', cycleId: 1, isFinished: true, electedCouncilId: '1' }, mockServer.server)
+    seedCouncilReferendumResult(
+      { id: '1', electionRoundId: '1', referendumFinishedEvent: randomRawBlock() },
+      mockServer.server
+    )
     TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
     seedCouncilVote(TEST_VOTE, mockServer.server)
   })

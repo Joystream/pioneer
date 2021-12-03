@@ -1,9 +1,10 @@
-import faker from 'faker'
+import { BaseEvent } from '@/mocks/data/seedEvents'
 
 import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
 import rawElections from './raw/electionRounds.json'
+import rawReferendumResults from './raw/referendumStageRevealingOptionResults.json'
 import rawVotes from './raw/votes.json'
 
 export interface RawCouncilorMock {
@@ -50,9 +51,16 @@ export interface RawCouncilVoteMock {
   electionRoundId: string
   stake: number
   stakeLocked: boolean
-  voteForId: string | null
+  voteForId?: string | null
   castBy: string
   commitment: string
+  voteCastEvent: Omit<Required<BaseEvent>, 'id'>
+}
+
+export interface RawCouncilReferendumResultMock {
+  id: string
+  referendumFinishedEvent: Omit<Required<BaseEvent>, 'id'>
+  electionRoundId: string
 }
 
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)
@@ -76,6 +84,15 @@ export const seedCouncilElections = (server: any, overrides?: Partial<RawCouncil
   optionalOverride(rawElections, overrides).map((data) => seedCouncilElection(data, server))
 }
 
+export const seedCouncilReferendumResult = (data: RawCouncilReferendumResultMock, server: any) =>
+  server.schema.create('ReferendumStageRevealingOptionResult', {
+    ...data,
+    referendumFinishedEvent: server.schema.create('ReferendumFinishedEvent', data.referendumFinishedEvent),
+  })
+
+export const seedCouncilReferendumResults = (server: any) => {
+  rawReferendumResults.map((data) => seedCouncilReferendumResult(data, server))
+}
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
   const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
   const status = server.schema.create(data.statusType ?? 'CandidacyStatusActive')
@@ -91,10 +108,10 @@ export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCounci
   optionalOverride(rawCandidates, overrides).map((data) => seedCouncilCandidate(data, server))
 
 export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
-  const roundNumber = parseInt(data.electionRoundId)
   return server.schema.create('CastVote', {
     ...data,
-    createdAt: faker.date.recent(10, roundNumber == 4 ? undefined : faker.date.past(4 - roundNumber)).toISOString(),
+    createdAt: new Date(data.voteCastEvent.createdAt).toISOString(),
+    votecasteventcastVote: [server.schema.create('VoteCastEvent', data.voteCastEvent)],
   })
 }
 
