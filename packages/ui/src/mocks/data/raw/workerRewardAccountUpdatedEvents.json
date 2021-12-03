@@ -1,82 +1,82 @@
 [
   {
-    "inBlock": 68976,
-    "createdAt": "2021-07-30T14:38:57.171Z",
+    "inBlock": 35017,
+    "createdAt": "2021-09-14T03:53:42.889Z",
+    "network": "OLYMPIA",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-91",
+    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
+  },
+  {
+    "inBlock": 42850,
+    "createdAt": "2021-07-04T19:03:01.411Z",
     "network": "OLYMPIA",
     "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-29",
+    "workerId": "storageWorkingGroup-39",
     "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
   },
   {
-    "inBlock": 75,
-    "createdAt": "2021-11-08T05:46:48.470Z",
-    "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-85",
-    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
-  },
-  {
-    "inBlock": 54134,
-    "createdAt": "2021-08-04T21:52:18.726Z",
+    "inBlock": 86558,
+    "createdAt": "2021-07-02T23:14:36.140Z",
     "network": "OLYMPIA",
     "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-45",
+    "workerId": "contentDirectoryWorkingGroup-49",
     "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
   },
   {
-    "inBlock": 155,
-    "createdAt": "2021-10-23T16:31:52.328Z",
+    "inBlock": 61211,
+    "createdAt": "2021-10-06T23:45:34.907Z",
+    "network": "OLYMPIA",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-93",
+    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
+  },
+  {
+    "inBlock": 36842,
+    "createdAt": "2021-11-18T05:46:52.516Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-53",
+    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
+  },
+  {
+    "inBlock": 5432,
+    "createdAt": "2021-11-09T08:54:11.923Z",
+    "network": "OLYMPIA",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-69",
+    "newRewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY"
+  },
+  {
+    "inBlock": 35259,
+    "createdAt": "2021-11-05T11:09:36.197Z",
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-14",
-    "newRewardAccount": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy"
+    "workerId": "forumWorkingGroup-24",
+    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
   },
   {
-    "inBlock": 27998,
-    "createdAt": "2021-07-06T21:46:34.019Z",
+    "inBlock": 97828,
+    "createdAt": "2021-11-24T19:00:41.042Z",
     "network": "OLYMPIA",
     "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-64",
-    "newRewardAccount": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc"
-  },
-  {
-    "inBlock": 46310,
-    "createdAt": "2021-09-05T06:58:26.279Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-48",
+    "workerId": "membershipWorkingGroup-93",
     "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
   },
   {
-    "inBlock": 76387,
-    "createdAt": "2021-11-07T04:36:22.856Z",
+    "inBlock": 66183,
+    "createdAt": "2021-10-01T08:41:05.508Z",
     "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-68",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-11",
     "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
   },
   {
-    "inBlock": 56925,
-    "createdAt": "2021-07-01T10:11:03.526Z",
+    "inBlock": 89395,
+    "createdAt": "2021-06-17T22:18:49.253Z",
     "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-57",
-    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
-  },
-  {
-    "inBlock": 74410,
-    "createdAt": "2021-09-21T17:50:48.901Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-57",
-    "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
-  },
-  {
-    "inBlock": 1234,
-    "createdAt": "2021-10-06T01:13:02.977Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-57",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-35",
     "newRewardAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU"
   }
 ]

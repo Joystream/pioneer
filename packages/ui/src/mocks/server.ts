@@ -12,6 +12,7 @@ import {
   seedCouncilCandidates,
   seedCouncilElections,
   seedCouncilMembers,
+  seedCouncilReferendumResults,
   seedCouncilVotes,
   seedElectedCouncils,
   seedEvents,
@@ -202,6 +203,7 @@ export const makeServer = (environment = 'development') => {
             seedElectedCouncils(server)
             seedCouncilMembers(server)
             seedCouncilElections(server)
+            seedCouncilReferendumResults(server)
             seedCouncilCandidates(server)
             seedCouncilVotes(server)
           },

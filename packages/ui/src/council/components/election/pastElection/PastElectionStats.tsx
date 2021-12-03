@@ -3,9 +3,10 @@ import React from 'react'
 import { NumericValueStat, StatisticBar, StatisticItem, Statistics, StatsBlock } from '@/common/components/statistics'
 import { TextHuge } from '@/common/components/typography'
 import { formatDateString } from '@/common/model/formatters'
+import { Block } from '@/common/types'
 
 interface PastElectionStatsProps {
-  finishedAt: string
+  finishedAtBlock?: Block
   cycleId: number
   totalCandidates: number
   revealedVotes: number
@@ -13,14 +14,16 @@ interface PastElectionStatsProps {
 }
 
 export const PastElectionStats = ({
-  finishedAt,
+  finishedAtBlock,
   cycleId,
   totalCandidates,
   revealedVotes,
   totalVotes,
 }: PastElectionStatsProps) => (
   <Statistics>
-    <StatisticItem title="Ended at">{formatDateString(finishedAt)}</StatisticItem>
+    <StatisticItem title="Ended at">
+      {finishedAtBlock ? formatDateString(finishedAtBlock.timestamp) : '-'}
+    </StatisticItem>
     <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
       <TextHuge bold>{cycleId} round</TextHuge>
     </StatisticItem>
