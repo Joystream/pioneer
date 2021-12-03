@@ -27,11 +27,7 @@ git fetch
 git checkout debug-pioneer-elections
 ```
 
-### 3. Install dependencies
-
-Run `yarn install` inside the main repo. The full setup is not need (especially if you'd like to avoid using Volta).
-
-### 4. Fetch proper `joystream-node` image
+### 3. Fetch proper `joystream-node` image
 
 ```shell
 docker pull joystream/node:258e839bac52701553b5ded593b0359dd3296ee8
