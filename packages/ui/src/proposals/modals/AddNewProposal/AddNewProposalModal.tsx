@@ -250,6 +250,7 @@ export const AddNewProposalModal = () => {
     return (
       <SuccessModal
         onClose={hideModal}
+        proposalId={state.context.proposalId}
         proposalType={state.context.type as ProposalType}
         proposalTitle={state.context.title as string}
       />

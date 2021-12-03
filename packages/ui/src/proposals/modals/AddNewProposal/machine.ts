@@ -142,10 +142,10 @@ interface SetInitialInvitationBalanceContext extends SpecificParametersContext {
 
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
+  proposalId?: number
 }
 
-interface DiscusisonContext {
-  transactionEvents?: EventRecord[]
+interface DiscussionContext extends Required<TransactionContext> {
   discussionId?: number
 }
 
@@ -174,7 +174,7 @@ export type AddNewProposalContext = Partial<
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
     SetMaxValidatorCountContext &
-    DiscusisonContext &
+    DiscussionContext &
     SetMembershipLeadInvitationContext &
     SetInitialInvitationBalanceContext
 >
@@ -782,7 +782,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         onDone: [
           {
             target: 'success',
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            actions: assign({
+              transactionEvents: (context, event) => event.data.events,
+              proposalId: (_, event) =>
+                parseInt(getDataFromEvent(event.data.events, 'proposalsCodex', 'ProposalCreated')?.toString() ?? '-1'),
+            }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode !== 'closed',
           },
           {
