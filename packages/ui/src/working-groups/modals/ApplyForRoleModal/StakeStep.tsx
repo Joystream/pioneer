@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 

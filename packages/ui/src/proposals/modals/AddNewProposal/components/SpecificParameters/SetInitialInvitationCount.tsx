@@ -40,7 +40,7 @@ export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps)
           <InputComponent label="New Count" tight required>
             <InputNumber
               id="count-input"
-              value={formatTokenValue(new BN(count))}
+              value={formatTokenValue(count)}
               placeholder="0"
               onChange={(event) => setCount(event.target.value)}
             />

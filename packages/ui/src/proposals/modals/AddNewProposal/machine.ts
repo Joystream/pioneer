@@ -183,7 +183,6 @@ export type AddNewProposalContext = Partial<
     TransactionContext &
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
-    DiscusisonContext &
     SetMaxValidatorCountContext &
     DiscussionContext &
     SetMembershipLeadInvitationContext &

@@ -82,7 +82,7 @@ export const SlashWorkingGroupLead = ({
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder="0"
               onChange={(event) => setAmount(event.target.value)}
               disabled={isDisabled}
