@@ -43,6 +43,7 @@ export const enabledProposals: ProposalType[] = [
   'fillWorkingGroupLeadOpening',
   'setInitialInvitationCount',
   'setCouncilBudgetIncrement',
+  'setCouncilorReward',
   'setMembershipLeadInvitationQuota',
   'setReferralCut',
   'setInitialInvitationBalance',
