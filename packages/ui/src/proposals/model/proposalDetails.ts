@@ -43,6 +43,7 @@ export const enabledProposals: ProposalType[] = [
   'setCouncilBudgetIncrement',
   'setMembershipLeadInvitationQuota',
   'setReferralCut',
+  'setInitialInvitationBalance',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {
