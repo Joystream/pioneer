@@ -1,6 +1,11 @@
+import { u32 } from '@polkadot/types'
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
+import {
+  MAX_VALIDATOR_COUNT,
+  SetMaxValidatorCount,
+} from '@/proposals/modals/AddNewProposal/components/SetMaxValidatorCount'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -28,7 +33,7 @@ interface SpecificParametersStepProps {
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
 }
 
-export const isValidSpecificParameters = (state: AddNewProposalMachineState): boolean => {
+export const isValidSpecificParameters = (state: AddNewProposalMachineState, minimumValidatorCount?: u32): boolean => {
   const specifics = state.context.specifics
 
   switch (true) {
@@ -49,6 +54,13 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
+    }
+    case state.matches('specificParameters.setMaxValidatorCount'): {
+      return !!(
+        specifics?.amount &&
+        specifics.amount.ltn(MAX_VALIDATOR_COUNT) &&
+        specifics.amount.gtn(minimumValidatorCount?.toNumber() || 0)
+      )
     }
     case state.matches('specificParameters.setCouncilBudgetIncrement'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
@@ -233,6 +245,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
     case state.matches('specificParameters.setInitialInvitationBalance'): {
       return <SetInitialInvitationBalance setAmount={(amount) => send('SET_AMOUNT', { amount })} />
     }
+    case state.matches('specificParameters.setMaxValidatorCount'):
+      return (
+        <SetMaxValidatorCount
+          setValidatorCount={(amount) => send('SET_AMOUNT', { amount })}
+          validatorCount={state.context.specifics?.amount}
+        />
+      )
     default:
       return null
   }

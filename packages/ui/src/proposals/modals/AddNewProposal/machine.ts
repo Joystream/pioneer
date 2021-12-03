@@ -13,6 +13,7 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
+import { SetMaxValidatorCountParameters } from '@/proposals/modals/AddNewProposal/components/SetMaxValidatorCount'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrementParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
 import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
@@ -76,6 +77,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetCouncilBudgetIncrementParameters
     | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | SetMaxValidatorCountParameters
 }
 
 interface SignalContext extends SpecificParametersContext {
@@ -147,6 +149,10 @@ interface DiscusisonContext {
   discussionId?: number
 }
 
+interface SetMaxValidatorCountContext extends SpecificParametersContext {
+  specifics: SetMaxValidatorCountParameters
+}
+
 export type AddNewProposalContext = Partial<
   ProposalTypeContext &
     StakingAccountContext &
@@ -167,6 +173,7 @@ export type AddNewProposalContext = Partial<
     TransactionContext &
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
+    SetMaxValidatorCountContext &
     DiscusisonContext &
     SetMembershipLeadInvitationContext &
     SetInitialInvitationBalanceContext
@@ -193,6 +200,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
+  | { value: { specificParameters: 'setMaxValidatorCount' }; context: SetMaxValidatorCountContext }
   | { value: { specificParameters: 'setCouncilBudgetIncrement' }; context: SetCouncilBudgetIncrementContext }
   | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
@@ -418,6 +426,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
+            { target: 'setMaxValidatorCount', cond: isType('setMaxValidatorCount') },
             { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
             { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
@@ -429,6 +438,17 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
               actions: assign({
                 specifics: (context, event) => {
                   return { ...context.specifics, signal: event.signal }
+                },
+              }),
+            },
+          },
+        },
+        setMaxValidatorCount: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => {
+                  return { ...context.specifics, amount: event.amount }
                 },
               }),
             },

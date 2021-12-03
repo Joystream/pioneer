@@ -38,6 +38,7 @@ export const enabledProposals: ProposalType[] = [
   'decreaseWorkingGroupLeadStake',
   'slashWorkingGroupLead',
   'setWorkingGroupLeadReward',
+  'setMaxValidatorCount',
   'terminateWorkingGroupLead',
   'fillWorkingGroupLeadOpening',
   'setCouncilBudgetIncrement',
