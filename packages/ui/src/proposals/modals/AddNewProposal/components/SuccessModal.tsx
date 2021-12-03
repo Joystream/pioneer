@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { generatePath, useHistory } from 'react-router-dom'
 
 import { ButtonGhost } from '@/common/components/buttons'
 import { SuccessSymbol } from '@/common/components/icons/symbols'
@@ -6,10 +7,8 @@ import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
-import { ProposalType } from '@/proposals/types'
-import { GhostRouterLink } from '@/common/components/RouterLink'
-import { generatePath, useHistory } from 'react-router-dom'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { ProposalType } from '@/proposals/types'
 
 interface SuccessModalProps {
   onClose: () => void
