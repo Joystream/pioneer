@@ -43,12 +43,7 @@ export const SetCouncilBudgetIncrement = ({ amount: initialAmount, setAmount: se
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent label="New Council Budget Increment Value" tight units="JOY" required>
-            <InputNumber
-              id="amount-input"
-              value={formatTokenValue(new BN(amount))}
-              placeholder="0"
-              onChange={onChange}
-            />
+            <InputNumber id="amount-input" value={formatTokenValue(amount)} placeholder="0" onChange={onChange} />
           </InputComponent>
         </RowGapBlock>
       </Row>

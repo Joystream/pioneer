@@ -53,7 +53,7 @@ export const StakingPolicyAndReward = ({
           >
             <InputNumber
               id="staking-amount"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder="0"
               onChange={(event) => setAmount(event.target.value)}
             />
@@ -76,7 +76,7 @@ export const StakingPolicyAndReward = ({
           <InputComponent id="reward-per-block" label="Reward amount per Block" units="JOY" tight required>
             <InputNumber
               id="reward-per-block"
-              value={formatTokenValue(new BN(reward))}
+              value={formatTokenValue(reward)}
               placeholder="0"
               onChange={(event) => setReward(event.target.value)}
             />

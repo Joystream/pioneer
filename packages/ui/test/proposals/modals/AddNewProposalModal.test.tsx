@@ -493,13 +493,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Blocks value bigger than 255', async () => {
           await SpecificParameters.fillAmount(300)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -615,9 +615,9 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
           await clickNextButton()
 
-          expect(screen.queryByLabelText(/^staking amount/i, { selector: 'input' })).toHaveValue('0')
+          expect(screen.queryByLabelText(/^staking amount/i, { selector: 'input' })).toHaveValue('')
           expect(screen.queryByLabelText(/^leaving unstaking period/i, { selector: 'input' })).toHaveValue('0')
-          expect(screen.queryByLabelText(/^reward amount per block/i, { selector: 'input' })).toHaveValue('0')
+          expect(screen.queryByLabelText(/^reward amount per block/i, { selector: 'input' })).toHaveValue('')
 
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -648,7 +648,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -692,14 +692,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Validate max value', async () => {
           await SpecificParameters.fillAmount(Math.pow(2, 128))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -722,7 +722,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -730,7 +730,7 @@ describe('UI: AddNewProposalModal', () => {
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
           await SpecificParameters.fillAmount(Math.pow(2, 32))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
         })
 
@@ -776,7 +776,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 

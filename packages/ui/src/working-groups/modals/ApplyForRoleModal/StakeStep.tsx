@@ -107,7 +107,7 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder={minStake.toString()}
               onChange={(event) => setAmount(event.target.value)}
             />

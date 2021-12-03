@@ -128,7 +128,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               onChange={(event) => setAmount(event.target.value)}
               disabled={isValueDisabled}
               placeholder="0"
