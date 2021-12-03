@@ -8,11 +8,11 @@ import { TextMedium } from '@/common/components/typography'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 
-export interface SetCouncilBudgetIncrementParameters {
+export interface SetCouncilorRewardParameters {
   amount?: BN
 }
 
-interface Props extends SetCouncilBudgetIncrementParameters {
+interface Props extends SetCouncilorRewardParameters {
   setAmount: (amount: BN) => void
 }
 

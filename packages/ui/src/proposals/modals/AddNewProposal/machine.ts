@@ -15,6 +15,7 @@ import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrementParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetCouncilorRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilorReward'
 import { SetMaxValidatorCountParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
@@ -80,6 +81,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
     | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
+    | SetCouncilorRewardParameters
 }
 
 interface SignalContext extends SpecificParametersContext {
@@ -91,7 +93,7 @@ interface FundingRequestContext extends SpecificParametersContext {
 }
 
 interface SetCouncilorRewardContext extends SpecificParametersContext {
-  specifics: SignalParameters
+  specifics: SetCouncilorRewardParameters
 }
 
 interface SetCouncilBudgetIncrementContext extends SpecificParametersContext {
@@ -152,10 +154,10 @@ interface SetInitialInvitationCountContext extends SpecificParametersContext {
 
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
+  proposalId?: number
 }
 
-interface DiscussionContext {
-  transactionEvents?: EventRecord[]
+interface DiscussionContext extends Required<TransactionContext> {
   discussionId?: number
 }
 
@@ -175,6 +177,7 @@ export type AddNewProposalContext = Partial<
     CancelWorkingGroupLeadOpeningContext &
     FillWorkingGroupLeadOpeningContext &
     SetCouncilBudgetIncrementContext &
+    SetCouncilorRewardContext &
     StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
@@ -183,7 +186,6 @@ export type AddNewProposalContext = Partial<
     TransactionContext &
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
-    DiscusisonContext &
     SetMaxValidatorCountContext &
     DiscussionContext &
     SetMembershipLeadInvitationContext &
@@ -213,8 +215,8 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
   | { value: { specificParameters: 'setMaxValidatorCount' }; context: SetMaxValidatorCountContext }
-  | { value: { specificParameters: 'setCouncilorReward' }; context: SetCouncilorRewardContext }
   | { value: { specificParameters: 'setCouncilBudgetIncrement' }; context: SetCouncilBudgetIncrementContext }
+  | { value: { specificParameters: 'setCouncilorReward' }; context: SetCouncilorRewardContext }
   | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
@@ -508,15 +510,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
-        setCouncilorReward: {
-          on: {
-            SET_AMOUNT: {
-              actions: assign({
-                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
-              }),
-            },
-          },
-        },
         setCouncilBudgetIncrement: {
           on: {
             SET_AMOUNT: {
@@ -606,6 +599,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   ...context.specifics,
                   workerId: event.workerId,
                 }),
+              }),
+            },
+          },
+        },
+        setCouncilorReward: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
               }),
             },
           },
