@@ -761,6 +761,34 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+      describe('Type - Set Initial Invitation Balance', () => {
+        beforeAll(() => {
+          stubQuery(api, 'members.initialInvitationBalance', createType('Balance', 2137))
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setInitialInvitationBalance')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Initial Invitation Balance$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(1000)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Displays current balance', async () => {
+          expect(await screen.findByText('The current balance is 2137 JOY.')).toBeDefined()
+        })
+      })
     })
 
     describe('Authorize', () => {

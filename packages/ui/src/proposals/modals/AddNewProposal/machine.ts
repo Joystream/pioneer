@@ -29,6 +29,7 @@ import {
   SignalParameters,
   TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
+import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
 import {
   CancelWorkingGroupLeadOpeningParameters,
   StakingPolicyAndRewardParameters,
@@ -133,6 +134,10 @@ interface SetMembershipLeadInvitationContext extends SpecificParametersContext {
   specifics: SetMembershipLeadInvitationParameters
 }
 
+interface SetInitialInvitationBalanceContext extends SpecificParametersContext {
+  specifics: SetInitialInvitationBalanceParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -163,7 +168,8 @@ export type AddNewProposalContext = Partial<
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
     DiscusisonContext &
-    SetMembershipLeadInvitationContext
+    SetMembershipLeadInvitationContext &
+    SetInitialInvitationBalanceContext
 >
 
 export type AddNewProposalState =
@@ -414,6 +420,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'setWorkingGroupLeadReward', cond: isType('setWorkingGroupLeadReward') },
             { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
+            { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
           ],
         },
         signal: {
@@ -700,6 +707,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   openingId: event.openingId,
+                }),
+              }),
+            },
+          },
+        },
+        setInitialInvitationBalance: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  amount: event.amount,
                 }),
               }),
             },

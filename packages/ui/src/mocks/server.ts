@@ -175,7 +175,7 @@ export const makeServer = (environment = 'development') => {
               events: getInterfaceResolver(),
             },
           },
-        }),
+        })
       )
       this.passthrough(MEMBERSHIP_FAUCET_URL)
     },
@@ -183,30 +183,30 @@ export const makeServer = (environment = 'development') => {
     ...(environment !== 'development'
       ? {}
       : {
-        seeds(server: Server<AnyRegistry>) {
-          fixAssociations(server)
+          seeds(server: Server<AnyRegistry>) {
+            fixAssociations(server)
 
-          seedMembers(server)
-          seedWorkingGroups(server)
-          seedOpeningStatuses(server)
-          seedOpenings(server)
-          seedUpcomingOpenings(server)
-          seedApplications(server)
-          seedWorkers(server)
-          updateWorkingGroups(server)
-          seedProposals(server)
-          seedEvents(server)
-          seedForumCategories(server)
-          seedForumThreads(server)
-          seedForumPosts(server)
-          seedProposalsEvents(server)
-          seedElectedCouncils(server)
-          seedCouncilMembers(server)
-          seedCouncilElections(server)
-          seedCouncilReferendumResults(server)
-          seedCouncilCandidates(server)
-          seedCouncilVotes(server)
-        },
-      }),
+            seedMembers(server)
+            seedWorkingGroups(server)
+            seedOpeningStatuses(server)
+            seedOpenings(server)
+            seedUpcomingOpenings(server)
+            seedApplications(server)
+            seedWorkers(server)
+            updateWorkingGroups(server)
+            seedProposals(server)
+            seedEvents(server)
+            seedForumCategories(server)
+            seedForumThreads(server)
+            seedForumPosts(server)
+            seedProposalsEvents(server)
+            seedElectedCouncils(server)
+            seedCouncilMembers(server)
+            seedCouncilElections(server)
+            seedCouncilReferendumResults(server)
+            seedCouncilCandidates(server)
+            seedCouncilVotes(server)
+          },
+        }),
   })
 }
