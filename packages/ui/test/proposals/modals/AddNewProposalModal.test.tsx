@@ -739,6 +739,28 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Councilor Reward', () => {
+        beforeEach(async () => {
+          await finishProposalType('setCouncilorReward')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Councilor Reward$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Set Membership lead invitation quota proposal', () => {
         beforeEach(async () => {
           await finishProposalType('setMembershipLeadInvitationQuota')

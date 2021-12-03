@@ -96,6 +96,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
     }
+    case 'setCouncilorReward': {
+      return { SetCouncilorReward: specifics?.amount }
+    }
     case 'setCouncilBudgetIncrement': {
       return { SetCouncilBudgetIncrement: specifics?.amount }
     }
