@@ -18,20 +18,23 @@ export type TransactionEvent =
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
-interface TransactionContext {
+export interface TransactionContext {
   events?: EventRecord[]
   fee?: BN
 }
 
-type TransactionState =
+export type TransactionState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'signing'; context: EmptyObject }
   | { value: 'signWithExtension'; context: EmptyObject }
   | { value: 'canceled'; context: EmptyObject }
+  | { value: 'pending'; context: EmptyObject }
   | { value: 'finalizing'; context: EmptyObject }
   | { value: 'processing'; context: Required<TransactionContext> }
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: Required<TransactionContext> }
+
+export type TransactionStateValue = TransactionState['value']
 
 export const transactionMachine = createMachine<TransactionContext, TransactionEvent, TransactionState>({
   id: 'transaction',

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { Account } from '@/accounts/types'
 import { useApi } from '@/common/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
@@ -23,11 +24,16 @@ const hasAccount = (allAccounts: Account[], address: string) => {
 const useOnBoarding = (): UseOnBoarding => {
   const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts } = useMyAccounts()
+  const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
 
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
+  }
+
+  if (totalBalance.gtn(0)) {
+    return { isLoading: false, status: 'finished' }
   }
 
   if (accountsError === 'EXTENSION') {

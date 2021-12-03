@@ -106,7 +106,7 @@ describe('UI: EditPostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
     })
-    expect(screen.queryByText('There was a problem submitting an edit to your post.')).not.toBeNull()
+    expect(await screen.findByText('There was a problem submitting an edit to your post.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -115,7 +115,7 @@ describe('UI: EditPostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
     })
-    expect(screen.queryByText('Your edit has been submitted.')).not.toBeNull()
+    expect(await screen.findByText('Your edit has been submitted.')).toBeDefined()
   })
 
   const renderModal = () =>

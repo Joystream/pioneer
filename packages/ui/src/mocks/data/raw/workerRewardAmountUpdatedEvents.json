@@ -1,82 +1,82 @@
 [
   {
-    "inBlock": 45915,
-    "createdAt": "2021-06-27T23:46:57.303Z",
+    "inBlock": 81102,
+    "createdAt": "2021-07-30T06:05:25.812Z",
     "network": "OLYMPIA",
     "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-21",
-    "newRewardPerBlock": 8
+    "workerId": "storageWorkingGroup-17",
+    "newRewardPerBlock": 18
   },
   {
-    "inBlock": 5896,
-    "createdAt": "2021-07-17T21:41:13.418Z",
-    "network": "OLYMPIA",
-    "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-9",
-    "newRewardPerBlock": 36
-  },
-  {
-    "inBlock": 4449,
-    "createdAt": "2021-09-20T16:47:11.708Z",
+    "inBlock": 21855,
+    "createdAt": "2021-10-16T18:47:27.848Z",
     "network": "OLYMPIA",
     "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-49",
-    "newRewardPerBlock": 40
+    "workerId": "contentDirectoryWorkingGroup-51",
+    "newRewardPerBlock": 43
   },
   {
-    "inBlock": 22742,
-    "createdAt": "2021-09-29T02:55:56.184Z",
+    "inBlock": 12929,
+    "createdAt": "2021-07-29T04:02:46.123Z",
     "network": "OLYMPIA",
     "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-56",
-    "newRewardPerBlock": 11
+    "workerId": "contentDirectoryWorkingGroup-42",
+    "newRewardPerBlock": 3
   },
   {
-    "inBlock": 93742,
-    "createdAt": "2021-10-22T18:54:34.643Z",
+    "inBlock": 86780,
+    "createdAt": "2021-06-29T11:07:14.928Z",
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-4",
-    "newRewardPerBlock": 25
+    "workerId": "forumWorkingGroup-3",
+    "newRewardPerBlock": 37
   },
   {
-    "inBlock": 3558,
-    "createdAt": "2021-09-07T21:13:00.444Z",
+    "inBlock": 23598,
+    "createdAt": "2021-09-14T20:39:37.720Z",
     "network": "OLYMPIA",
-    "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-8",
-    "newRewardPerBlock": 34
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-46",
+    "newRewardPerBlock": 24
   },
   {
-    "inBlock": 477,
-    "createdAt": "2021-11-21T06:29:22.683Z",
+    "inBlock": 43385,
+    "createdAt": "2021-07-29T20:11:46.568Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-40",
+    "newRewardPerBlock": 16
+  },
+  {
+    "inBlock": 19905,
+    "createdAt": "2021-11-20T02:47:16.282Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-61",
+    "newRewardPerBlock": 3
+  },
+  {
+    "inBlock": 83100,
+    "createdAt": "2021-08-05T02:36:36.470Z",
     "network": "OLYMPIA",
     "groupId": "contentDirectoryWorkingGroup",
     "workerId": "contentDirectoryWorkingGroup-53",
-    "newRewardPerBlock": 42
+    "newRewardPerBlock": 5
   },
   {
-    "inBlock": 42338,
-    "createdAt": "2021-10-29T16:09:07.269Z",
+    "inBlock": 85426,
+    "createdAt": "2021-11-08T23:45:29.597Z",
     "network": "OLYMPIA",
-    "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-21",
-    "newRewardPerBlock": 2
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-11",
+    "newRewardPerBlock": 41
   },
   {
-    "inBlock": 57310,
-    "createdAt": "2021-09-16T03:08:14.124Z",
+    "inBlock": 68988,
+    "createdAt": "2021-11-08T13:17:34.160Z",
     "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-78",
-    "newRewardPerBlock": 39
-  },
-  {
-    "inBlock": 90265,
-    "createdAt": "2021-08-09T11:14:54.429Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-53",
-    "newRewardPerBlock": 33
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-12",
+    "newRewardPerBlock": 9
   }
 ]

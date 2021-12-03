@@ -16,6 +16,10 @@ export const ThreadCreatedContent: ActivityContentComponent<ThreadCreatedActivit
     <ActivityRouterLink to={generatePath(ForumRoutes.thread, { id: activity.thread.id })}>
       {activity.thread.title}
     </ActivityRouterLink>
-    ".
+    " in "
+    <ActivityRouterLink to={generatePath(ForumRoutes.category, { id: activity.category.id })}>
+      {activity.category.title}
+    </ActivityRouterLink>
+    " category.
   </>
 )

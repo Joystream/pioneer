@@ -113,7 +113,7 @@ describe('UI: CreatePostModal', () => {
       fireEvent.click(await getButton(/Sign and post/i))
     })
 
-    expect(await screen.getByText('There was a problem posting your message.')).toBeDefined()
+    expect(await screen.findByText('There was a problem posting your message.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -124,7 +124,7 @@ describe('UI: CreatePostModal', () => {
       fireEvent.click(await getButton(/Sign and post/i))
     })
 
-    expect(await screen.getByText('Your post has been submitted.')).toBeDefined()
+    expect(await screen.findByText('Your post has been submitted.')).toBeDefined()
   })
 
   it('Displays post deposit', () => {

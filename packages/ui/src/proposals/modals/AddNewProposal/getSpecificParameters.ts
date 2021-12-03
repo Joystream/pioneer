@@ -31,7 +31,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
   switch (state.context.type) {
     case 'signal': {
       return {
-        Signal: [specifics?.signal],
+        Signal: specifics?.signal,
       }
     }
     case 'fundingRequest': {
@@ -75,6 +75,15 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         ],
       }
     }
+    case 'terminateWorkingGroupLead': {
+      return {
+        TerminateWorkingGroupLead: [
+          specifics?.workerId,
+          specifics?.stakingAmount,
+          getWorkingGroupParam(specifics?.groupId),
+        ],
+      }
+    }
     case 'setWorkingGroupLeadReward': {
       return {
         SlashWorkingGroupLead: [
@@ -86,6 +95,27 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'cancelWorkingGroupLeadOpening': {
       return { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] }
+    }
+    case 'setCouncilBudgetIncrement': {
+      return { SetCouncilBudgetIncrement: specifics?.amount }
+    }
+    case 'fillWorkingGroupLeadOpening': {
+      return {
+        FillWorkingGroupLeadOpening: {
+          opening_id: specifics?.openingId,
+          successful_application_id: specifics?.applicationId,
+          workingGroup: WorkingGroupDef.Forum,
+        },
+      }
+    }
+    case 'setMembershipLeadInvitationQuota': {
+      return { SetMembershipLeadInvitationQuota: specifics?.amount }
+    }
+    case 'setReferralCut': {
+      return { SetReferralCut: specifics?.amount?.toNumber() }
+    }
+    case 'setInitialInvitationBalance': {
+      return { SetInitialInvitationBalance: specifics?.amount }
     }
     case 'setMaxValidatorCount': {
       return { SetMaxValidatorCount: specifics?.amount?.toNumber() }

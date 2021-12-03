@@ -17,8 +17,10 @@ import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
+  seedApplication,
   seedApplications,
   seedMembers,
+  seedOpening,
   seedOpenings,
   seedOpeningStatuses,
   seedUpcomingOpenings,
@@ -63,6 +65,35 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const OPENING_DATA = {
+  id: 'forumWorkingGroup-1337',
+  runtimeId: 1337,
+  groupId: 'forumWorkingGroup',
+  stakeAmount: 4000,
+  rewardPerBlock: 200,
+  version: 1,
+  type: 'LEADER',
+  status: 'open',
+  unstakingPeriod: 25110,
+  metadata: {
+    shortDescription: '',
+    description: '',
+    hiringLimit: 1,
+    applicationDetails: '',
+    applicationFormQuestions: [],
+    expectedEnding: '2021-12-06T14:26:06.283Z',
+  },
+}
+
+const APPLICATION_DATA = {
+  id: 'forumWorkingGroup-1337',
+  runtimeId: 1337,
+  openingId: 'forumWorkingGroup-1337',
+  applicantId: '0',
+  answers: [],
+  status: 'pending',
+}
+
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -92,7 +123,17 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
+
     seedMembers(server.server)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpenings(server.server)
+    seedUpcomingOpenings(server.server)
+    seedApplications(server.server)
+    seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
+    seedWorkers(server.server)
+    updateWorkingGroups(server.server)
 
     useAccounts = {
       isLoading: false,
@@ -157,8 +198,8 @@ describe('UI: AddNewProposalModal', () => {
     it('Checked', async () => {
       const button = await getWarningNextButton()
 
-      const checkbox = await screen.findByRole('checkbox')
-      await fireEvent.click(checkbox)
+      const checkbox = await getCheckbox()
+      fireEvent.click(checkbox)
 
       expect(button).toBeEnabled()
     })
@@ -197,7 +238,7 @@ describe('UI: AddNewProposalModal', () => {
 
       it('Selected', async () => {
         const type = (await screen.findByText('Funding Request')).parentElement?.parentElement as HTMLElement
-        await fireEvent.click(type)
+        fireEvent.click(type)
 
         const button = await getNextStepButton()
         expect(button).not.toBeDisabled()
@@ -367,7 +408,7 @@ describe('UI: AddNewProposalModal', () => {
 
             expect(await screen.getByTestId('removeMember')).toBeDefined()
 
-            await fireEvent.click(await screen.getByTestId('removeMember'))
+            fireEvent.click(await screen.getByTestId('removeMember'))
             expect(screen.queryByTestId('removeMember')).toBeNull()
 
             const button = await getNextStepButton()
@@ -443,17 +484,33 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
-      describe('Type - Decrease Working Group Lead Stake', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpeningStatuses(server.server)
-          seedOpenings(server.server)
-          seedUpcomingOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
+      describe('Type - Set Referral Cut', () => {
+        beforeEach(async () => {
+          await finishProposalType('setReferralCut')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
         })
 
+        it('Default - Invalid', async () => {
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Blocks value bigger than 255', async () => {
+          await SpecificParameters.fillAmount(300)
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
+      describe('Type - Decrease Working Group Lead Stake', () => {
         beforeEach(async () => {
           await finishProposalType('decreaseWorkingGroupLeadStake')
           await finishStakingAccount()
@@ -492,11 +549,38 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
-      describe('Type - Create Working Group Lead Opening', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
+      describe('Type - Terminate Working Group Lead', () => {
+        beforeEach(async () => {
+          await finishProposalType('terminateWorkingGroupLead')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
         })
 
+        it('Default - not filled amount, no selected group', async () => {
+          expect(await screen.findByLabelText('Working Group', { selector: 'input' })).toHaveValue('')
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - group selected, amount: not filled/filled', async () => {
+          await SpecificParameters.TerminateWorkingGroupLead.selectGroup('Forum')
+          const workingGroup = server?.server?.schema.find('WorkingGroup', 'forumWorkingGroup') as any
+          const leadHandle = workingGroup?.leader.membership.handle
+          expect(await screen.findByText(leadHandle)).toBeDefined()
+
+          const button = await getCreateButton()
+          expect(button).not.toBeDisabled()
+
+          await triggerYes()
+          await SpecificParameters.fillAmount(100)
+
+          expect(button).not.toBeDisabled()
+        })
+      })
+
+      describe('Type - Create Working Group Lead Opening', () => {
         beforeEach(async () => {
           await finishProposalType('createWorkingGroupLeadOpening')
           await finishStakingAccount()
@@ -553,14 +637,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Set Working Group Lead Reward', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('setWorkingGroupLeadReward')
           await finishStakingAccount()
@@ -614,11 +690,6 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Type - Cancel Working Group Lead Opening', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpenings(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('cancelWorkingGroupLeadOpening')
           await finishStakingAccount()
@@ -634,8 +705,117 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1')
+          await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
           expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
+      describe('Type - Set Council Budget Increment', () => {
+        beforeEach(async () => {
+          await finishProposalType('setCouncilBudgetIncrement')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Council Budget Increment$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max value', async () => {
+          await SpecificParameters.fillAmount(Math.pow(2, 128))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
+      describe('Type - Set Membership lead invitation quota proposal', () => {
+        beforeEach(async () => {
+          await finishProposalType('setMembershipLeadInvitationQuota')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Membership Lead Invitation Quota$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Validate max value', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await SpecificParameters.fillAmount(Math.pow(2, 32))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+        })
+
+        it('Valid form', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+      describe('Type - Fill Working Group Lead Opening', () => {
+        beforeEach(async () => {
+          await finishProposalType('fillWorkingGroupLeadOpening')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Fill Working Group Lead Opening$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByLabelText(/^Opening/i, { selector: 'input' })).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+      describe('Type - Set Initial Invitation Balance', () => {
+        beforeAll(() => {
+          stubQuery(api, 'members.initialInvitationBalance', createType('Balance', 2137))
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setInitialInvitationBalance')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Initial Invitation Balance$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(1000)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Displays current balance', async () => {
+          expect(await screen.findByText('The current balance is 2137 JOY.')).toBeDefined()
         })
       })
     })
@@ -673,7 +853,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
           })
 
-          expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
         })
 
@@ -685,10 +865,10 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionSuccess(batchTx, 'proposalsCodex', 'ProposalCreated', [createType('ProposalId', 1337)])
 
           await act(async () => {
-            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+            fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -699,7 +879,7 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionFailure(batchTx)
 
           await act(async () => {
-            fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+            fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
           expect(await screen.findByText('Failure')).toBeDefined()
@@ -738,7 +918,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -786,7 +966,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+          expect(await screen.findByText('See my Proposal')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -847,8 +1027,8 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Arrives at the transaction modal', async () => {
-        expect(screen.queryByText(/You intend to change the proposal discussion thread mode./i)).not.toBeNull()
-        expect(screen.queryByText(/Sign transaction and change mode/i)).not.toBeNull()
+        expect(await screen.findByText(/You intend to change the proposal discussion thread mode./i)).toBeDefined()
+        expect(await screen.findByText(/Sign transaction and change mode/i)).toBeDefined()
       })
 
       it('Success', async () => {
@@ -857,32 +1037,36 @@ describe('UI: AddNewProposalModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(screen.queryByText('See my Proposal')).not.toBeNull()
+        expect(await screen.findByText('See my Proposal')).toBeDefined()
       })
 
       it('Failure', async () => {
         stubTransactionFailure(changeModeTx)
         const button = await getButton(/sign transaction and change mode/i)
-        await fireEvent.click(button as HTMLElement)
+
+        fireEvent.click(button)
+
         expect(await screen.findByText('Failure')).toBeDefined()
       })
     })
   })
+
+  const getCheckbox = async () => await screen.findByLabelText(/I’m aware of/i)
 
   async function finishWarning() {
     await renderModal()
 
     const button = await getWarningNextButton()
 
-    const checkbox = await screen.findByRole('checkbox')
-    await fireEvent.click(checkbox)
-    await fireEvent.click(button as HTMLElement)
+    const checkbox = await getCheckbox()
+    fireEvent.click(checkbox)
+    fireEvent.click(button as HTMLElement)
   }
 
   async function finishProposalType(type?: ProposalType) {
     const typeElement = (await screen.findByText(camelCaseToText(type || 'fundingRequest'))).parentElement
       ?.parentElement as HTMLElement
-    await fireEvent.click(typeElement)
+    fireEvent.click(typeElement)
 
     await clickNextButton()
   }
@@ -905,25 +1089,25 @@ describe('UI: AddNewProposalModal', () => {
 
   async function fillProposalDetails() {
     const titleInput = await screen.findByLabelText(/Proposal title/i)
-    await fireEvent.change(titleInput, { target: { value: 'Some title' } })
+    fireEvent.change(titleInput, { target: { value: 'Some title' } })
 
     const rationaleInput = await screen.findByLabelText(/Rationale/i)
-    await fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
+    fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
   }
 
   async function triggerYes() {
     const triggerToggle = await screen.findByText('Yes')
-    await fireEvent.click(triggerToggle)
+    fireEvent.click(triggerToggle)
   }
 
   async function fillTriggerBlock(value: number) {
     const blockInput = await screen.getByTestId('triggerBlock')
-    await fireEvent.change(blockInput, { target: { value } })
+    fireEvent.change(blockInput, { target: { value } })
   }
 
   async function discussionClosed() {
     const discussionToggle = (await screen.findAllByRole('checkbox'))[1]
-    await fireEvent.click(discussionToggle)
+    fireEvent.click(discussionToggle)
   }
 
   async function getWarningNextButton() {
@@ -936,7 +1120,7 @@ describe('UI: AddNewProposalModal', () => {
 
   async function clickPreviousButton() {
     const button = await getPreviousStepButton()
-    await fireEvent.click(button as HTMLElement)
+    fireEvent.click(button as HTMLElement)
   }
 
   async function getNextStepButton() {
@@ -949,7 +1133,7 @@ describe('UI: AddNewProposalModal', () => {
 
   async function clickNextButton() {
     const button = await getNextStepButton()
-    await fireEvent.click(button as HTMLElement)
+    fireEvent.click(button as HTMLElement)
   }
 
   const selectGroup = async (name: string) => {
@@ -960,9 +1144,13 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Opening$', name)
   }
 
+  const selectApplication = async (name: string) => {
+    await selectFromDropdown('^Application$', name)
+  }
+
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
-    await fireEvent.change(amountInput, { target: { value } })
+    fireEvent.change(amountInput, { target: { value } })
   }
 
   const SpecificParameters = {
@@ -979,10 +1167,13 @@ describe('UI: AddNewProposalModal', () => {
         await SpecificParameters.FundingRequest.selectRecipient(recipient)
 
         const button = await getCreateButton()
-        await fireEvent.click(button as HTMLElement)
+        fireEvent.click(button as HTMLElement)
       },
     },
     DecreaseWorkingGroupLeadStake: {
+      selectGroup,
+    },
+    TerminateWorkingGroupLead: {
       selectGroup,
     },
     CreateWorkingGroupLeadOpening: {
@@ -998,6 +1189,10 @@ describe('UI: AddNewProposalModal', () => {
     SetWorkingGroupLeadReward: {
       selectGroup,
       fillRewardAmount: async (value: number) => await fillField('amount-input', value),
+    },
+    FillWorkingGroupLeadOpening: {
+      selectedOpening,
+      selectApplication,
     },
   }
 

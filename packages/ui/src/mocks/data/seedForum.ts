@@ -41,6 +41,10 @@ interface PostDeletedEventMock extends BlockFieldsMock {
   rationale: string
 }
 
+interface PostModeratedEventMock extends BlockFieldsMock {
+  actorId: string
+}
+
 export interface RawForumPostMock {
   id: string
   threadId: string
@@ -51,6 +55,7 @@ export interface RawForumPostMock {
   postAddedEvent: PostAddedEventMock
   status: string
   deletedInEvent: PostDeletedEventMock | null
+  postModeratedEvent: PostModeratedEventMock | null
 }
 
 const seedCategoryStatus = (status: RawForumCategoryMock['status'], server: any) => {
@@ -74,19 +79,28 @@ export const seedForumCategories = (server: any) => {
 const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
 
-const seedThreadStatus = ({ __typename, ...data }: RawForumThreadMock['status'], server: any) => {
+const seedThreadStatus = ({ __typename, ...data }: RawForumThreadMock['status'], threadId: string, server: any) => {
   const { threadDeletedEvent } = data
   const isArchived = __typename === 'ThreadStatusLocked'
-  const event = isArchived ? { threadDeletedEvent: server.schema.create('ThreadDeletedEvent', threadDeletedEvent) } : {}
+  const event = isArchived
+    ? {
+        threadDeletedEvent: server.schema.create('ThreadDeletedEvent', {
+          ...threadDeletedEvent,
+          threadId,
+        }),
+      }
+    : {}
   return server.schema.create(__typename, event)
 }
 
-export function seedForumThread(data: RawForumThreadMock, server: any) {
-  return server.schema.create('ForumThread', {
+export async function seedForumThread(data: RawForumThreadMock, server: any) {
+  const thread = server.schema.create('ForumThread', {
     ...data,
     createdInEvent: seedThreadCreatedInEvent(data.createdInEvent, server),
-    status: seedThreadStatus(data.status, server),
+    status: null,
   })
+
+  return thread.update({ status: seedThreadStatus(data.status, data.id, server) })
 }
 
 export const seedForumThreads = (server: any) => {
@@ -105,6 +119,9 @@ export function seedForumPost(data: RawForumPostMock, server: any) {
     status: server.schema.create(data.status),
     isVisible: ['PostStatusActive', 'PostStatusLocked'].includes(data.status),
     deletedInEvent: data.deletedInEvent ? server.schema.create('PostDeletedEvent', data.deletedInEvent) : null,
+    postmoderatedeventpost: data.postModeratedEvent
+      ? [server.schema.create('PostModeratedEvent', data.postModeratedEvent)]
+      : [],
   })
 }
 

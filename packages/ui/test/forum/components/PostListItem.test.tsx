@@ -28,6 +28,7 @@ const post: RawForumPostMock = {
   },
   status: 'PostStatusActive',
   deletedInEvent: null,
+  postModeratedEvent: null,
 }
 
 describe('UI: Post list item', () => {

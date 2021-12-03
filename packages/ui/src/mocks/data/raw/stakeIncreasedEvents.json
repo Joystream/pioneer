@@ -1,62 +1,62 @@
 [
   {
-    "createdAt": "2021-11-18T13:00:30.537Z",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-44",
-    "amount": 6181
+    "createdAt": "2021-11-30T01:07:04.886Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-25",
+    "amount": 9085
   },
   {
-    "createdAt": "2021-11-20T02:28:01.920Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-75",
-    "amount": 4478
+    "createdAt": "2021-11-27T05:36:55.001Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-29",
+    "amount": 3294
   },
   {
-    "createdAt": "2021-11-21T14:48:46.364Z",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-41",
-    "amount": 2937
-  },
-  {
-    "createdAt": "2021-11-18T19:56:29.808Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-65",
-    "amount": 2619
-  },
-  {
-    "createdAt": "2021-11-19T04:27:13.536Z",
-    "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-14",
-    "amount": 7856
-  },
-  {
-    "createdAt": "2021-11-17T20:16:43.506Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-72",
-    "amount": 9065
-  },
-  {
-    "createdAt": "2021-11-19T10:08:21.509Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-75",
-    "amount": 8374
-  },
-  {
-    "createdAt": "2021-11-20T22:56:48.651Z",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-50",
-    "amount": 3170
-  },
-  {
-    "createdAt": "2021-11-22T06:05:49.455Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-65",
-    "amount": 9298
-  },
-  {
-    "createdAt": "2021-11-19T01:18:48.778Z",
+    "createdAt": "2021-11-30T23:22:54.097Z",
     "groupId": "membershipWorkingGroup",
     "workerId": "membershipWorkingGroup-73",
-    "amount": 8441
+    "amount": 4572
+  },
+  {
+    "createdAt": "2021-12-02T07:49:03.245Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-25",
+    "amount": 676
+  },
+  {
+    "createdAt": "2021-11-27T07:49:27.169Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-66",
+    "amount": 6620
+  },
+  {
+    "createdAt": "2021-11-30T11:39:44.712Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-80",
+    "amount": 5988
+  },
+  {
+    "createdAt": "2021-12-02T16:35:15.512Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-50",
+    "amount": 5560
+  },
+  {
+    "createdAt": "2021-12-01T21:28:35.301Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-48",
+    "amount": 5627
+  },
+  {
+    "createdAt": "2021-11-29T23:34:57.752Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-82",
+    "amount": 6852
+  },
+  {
+    "createdAt": "2021-11-30T02:46:20.376Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-85",
+    "amount": 1799
   }
 ]

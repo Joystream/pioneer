@@ -153,7 +153,7 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Amount',
         },
         {
-          label: 'Description',
+          label: 'Opening Description',
           value: 'description',
           renderType: 'Markdown',
         },

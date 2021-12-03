@@ -5,52 +5,6 @@ type AmendConstitutionProposalDetails {
   text: String!
 }
 
-input AmendConstitutionProposalDetailsCreateInput {
-  text: String!
-}
-
-input AmendConstitutionProposalDetailsUpdateInput {
-  text: String
-}
-
-input AmendConstitutionProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  text_eq: String
-  text_contains: String
-  text_startsWith: String
-  text_endsWith: String
-  text_in: [String!]
-  AND: [AmendConstitutionProposalDetailsWhereInput!]
-  OR: [AmendConstitutionProposalDetailsWhereInput!]
-}
-
-input AmendConstitutionProposalDetailsWhereUniqueInput {
-  id: ID!
-}
-
 type AnnouncingPeriodStartedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -292,10 +246,6 @@ input ApplicationFormQuestionAnswerWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  application_eq: ID
-  application_in: [ID!]
-  question_eq: ID
-  question_in: [ID!]
   answer_eq: String
   answer_contains: String
   answer_startsWith: String
@@ -383,8 +333,6 @@ input ApplicationFormQuestionWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  openingMetadata_eq: ID
-  openingMetadata_in: [ID!]
   question_eq: String
   question_contains: String
   question_startsWith: String
@@ -426,53 +374,6 @@ type ApplicationStatusCancelled {
 
 type ApplicationStatusPending {
   phantom: Int
-}
-
-input ApplicationStatusPendingCreateInput {
-  phantom: Float
-}
-
-input ApplicationStatusPendingUpdateInput {
-  phantom: Float
-}
-
-input ApplicationStatusPendingWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [ApplicationStatusPendingWhereInput!]
-  OR: [ApplicationStatusPendingWhereInput!]
-}
-
-input ApplicationStatusPendingWhereUniqueInput {
-  id: ID!
 }
 
 type ApplicationStatusRejected {
@@ -622,10 +523,6 @@ input ApplicationWithdrawnEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  application_eq: ID
-  application_in: [ID!]
   group: WorkingGroupWhereInput
   application: WorkingGroupApplicationWhereInput
   AND: [ApplicationWithdrawnEventWhereInput!]
@@ -775,12 +672,6 @@ input AppliedOnOpeningEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  opening_eq: ID
-  opening_in: [ID!]
-  application_eq: ID
-  application_in: [ID!]
   group: WorkingGroupWhereInput
   opening: WorkingGroupOpeningWhereInput
   application: WorkingGroupApplicationWhereInput
@@ -801,52 +692,6 @@ type AssetExternal {
   urls: String!
 }
 
-input AssetExternalCreateInput {
-  urls: String!
-}
-
-input AssetExternalUpdateInput {
-  urls: String
-}
-
-input AssetExternalWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  urls_eq: String
-  urls_contains: String
-  urls_startsWith: String
-  urls_endsWith: String
-  urls_in: [String!]
-  AND: [AssetExternalWhereInput!]
-  OR: [AssetExternalWhereInput!]
-}
-
-input AssetExternalWhereUniqueInput {
-  id: ID!
-}
-
 type AssetJoystreamStorage {
   """
   Related DataObject entity
@@ -856,53 +701,6 @@ type AssetJoystreamStorage {
 
 type AssetNone {
   phantom: Int
-}
-
-input AssetNoneCreateInput {
-  phantom: Float
-}
-
-input AssetNoneUpdateInput {
-  phantom: Float
-}
-
-input AssetNoneWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [AssetNoneWhereInput!]
-  OR: [AssetNoneWhereInput!]
-}
-
-input AssetNoneWhereUniqueInput {
-  id: ID!
 }
 
 interface BaseGraphQLObject {
@@ -1018,7 +816,7 @@ input BudgetBalanceSetEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  balance: BigInt!
+  balance: String!
 }
 
 type BudgetBalanceSetEventEdge {
@@ -1050,7 +848,7 @@ input BudgetBalanceSetEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  balance: BigInt
+  balance: String
 }
 
 input BudgetBalanceSetEventWhereInput {
@@ -1162,7 +960,7 @@ input BudgetIncrementUpdatedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  amount: BigInt!
+  amount: String!
 }
 
 type BudgetIncrementUpdatedEventEdge {
@@ -1194,7 +992,7 @@ input BudgetIncrementUpdatedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  amount: BigInt
+  amount: String
 }
 
 input BudgetIncrementUpdatedEventWhereInput {
@@ -1306,7 +1104,7 @@ input BudgetRefillEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  balance: BigInt!
+  balance: String!
 }
 
 type BudgetRefillEventEdge {
@@ -1338,7 +1136,7 @@ input BudgetRefillEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  balance: BigInt
+  balance: String
 }
 
 input BudgetRefillEventWhereInput {
@@ -1593,7 +1391,7 @@ input BudgetSetEventCreateInput {
   network: Network!
   indexInBlock: Float!
   group: ID!
-  newBudget: BigInt!
+  newBudget: String!
 }
 
 type BudgetSetEventEdge {
@@ -1628,7 +1426,7 @@ input BudgetSetEventUpdateInput {
   network: Network
   indexInBlock: Float
   group: ID
-  newBudget: BigInt
+  newBudget: String
 }
 
 input BudgetSetEventWhereInput {
@@ -1675,8 +1473,6 @@ input BudgetSetEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
   newBudget_eq: BigInt
   newBudget_gt: BigInt
   newBudget_gte: BigInt
@@ -1757,7 +1553,7 @@ input BudgetSpendingEventCreateInput {
   indexInBlock: Float!
   group: ID!
   reciever: String!
-  amount: BigInt!
+  amount: String!
   rationale: String
 }
 
@@ -1798,7 +1594,7 @@ input BudgetSpendingEventUpdateInput {
   indexInBlock: Float
   group: ID
   reciever: String
-  amount: BigInt
+  amount: String
   rationale: String
 }
 
@@ -1846,8 +1642,6 @@ input BudgetSpendingEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
   reciever_eq: String
   reciever_contains: String
   reciever_startsWith: String
@@ -1988,6 +1782,9 @@ input CandidacyNoteMetadataWhereInput {
   header_startsWith: String
   header_endsWith: String
   header_in: [String!]
+  bulletPoints_containsAll: [String!]
+  bulletPoints_containsNone: [String!]
+  bulletPoints_containsAny: [String!]
   bannerImageUri_eq: String
   bannerImageUri_contains: String
   bannerImageUri_startsWith: String
@@ -2145,10 +1942,6 @@ input CandidacyNoteSetEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  candidate_eq: ID
-  candidate_in: [ID!]
-  noteMetadata_eq: ID
-  noteMetadata_in: [ID!]
   candidate: CandidateWhereInput
   noteMetadata: CandidacyNoteMetadataWhereInput
   AND: [CandidacyNoteSetEventWhereInput!]
@@ -2286,8 +2079,6 @@ input CandidacyStakeReleaseEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  candidate_eq: ID
-  candidate_in: [ID!]
   candidate: CandidateWhereInput
   AND: [CandidacyStakeReleaseEventWhereInput!]
   OR: [CandidacyStakeReleaseEventWhereInput!]
@@ -2295,6 +2086,24 @@ input CandidacyStakeReleaseEventWhereInput {
 
 input CandidacyStakeReleaseEventWhereUniqueInput {
   id: ID!
+}
+
+union CandidacyStatus = CandidacyStatusActive | CandidacyStatusWithdrawn | CandidacyStatusElected | CandidacyStatusLost
+
+type CandidacyStatusActive {
+  dummy: Int
+}
+
+type CandidacyStatusElected {
+  dummy: Int
+}
+
+type CandidacyStatusLost {
+  dummy: Int
+}
+
+type CandidacyStatusWithdrawn {
+  dummy: Int
 }
 
 type CandidacyWithdrawEvent implements Event & BaseGraphQLObject {
@@ -2424,8 +2233,6 @@ input CandidacyWithdrawEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  candidate_eq: ID
-  candidate_in: [ID!]
   candidate: CandidateWhereInput
   AND: [CandidacyWithdrawEventWhereInput!]
   OR: [CandidacyWithdrawEventWhereInput!]
@@ -2470,9 +2277,9 @@ type Candidate implements BaseGraphQLObject {
   stakeLocked: Boolean!
 
   """
-  Reflects if the candidacy was withdrawn before voting started.
+  Current candidate status
   """
-  candidacyWithdrawn: Boolean!
+  status: CandidacyStatus!
 
   """
   Sum of power of all votes received.
@@ -2498,10 +2305,10 @@ input CandidateCreateInput {
   rewardAccountId: String!
   member: ID!
   electionRound: ID!
-  stake: BigInt!
+  stake: String!
   stakeLocked: Boolean!
-  candidacyWithdrawn: Boolean!
-  votePower: BigInt!
+  status: JSONObject!
+  votePower: String!
   noteMetadata: ID!
 }
 
@@ -2529,8 +2336,6 @@ enum CandidateOrderByInput {
   stake_DESC
   stakeLocked_ASC
   stakeLocked_DESC
-  candidacyWithdrawn_ASC
-  candidacyWithdrawn_DESC
   votePower_ASC
   votePower_DESC
   noteMetadata_ASC
@@ -2542,10 +2347,10 @@ input CandidateUpdateInput {
   rewardAccountId: String
   member: ID
   electionRound: ID
-  stake: BigInt
+  stake: String
   stakeLocked: Boolean
-  candidacyWithdrawn: Boolean
-  votePower: BigInt
+  status: JSONObject
+  votePower: String
   noteMetadata: ID
 }
 
@@ -2584,10 +2389,6 @@ input CandidateWhereInput {
   rewardAccountId_startsWith: String
   rewardAccountId_endsWith: String
   rewardAccountId_in: [String!]
-  member_eq: ID
-  member_in: [ID!]
-  electionRound_eq: ID
-  electionRound_in: [ID!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
@@ -2596,16 +2397,13 @@ input CandidateWhereInput {
   stake_in: [BigInt!]
   stakeLocked_eq: Boolean
   stakeLocked_in: [Boolean!]
-  candidacyWithdrawn_eq: Boolean
-  candidacyWithdrawn_in: [Boolean!]
+  status_json: JSONObject
   votePower_eq: BigInt
   votePower_gt: BigInt
   votePower_gte: BigInt
   votePower_lt: BigInt
   votePower_lte: BigInt
   votePower_in: [BigInt!]
-  noteMetadata_eq: ID
-  noteMetadata_in: [ID!]
   member: MembershipWhereInput
   electionRound: ElectionRoundWhereInput
   noteMetadata: CandidacyNoteMetadataWhereInput
@@ -2683,11 +2481,11 @@ type CastVoteConnection {
 input CastVoteCreateInput {
   commitment: String!
   electionRound: ID!
-  stake: BigInt!
+  stake: String!
   stakeLocked: Boolean!
   castBy: String!
   voteFor: ID
-  votePower: BigInt!
+  votePower: String!
 }
 
 type CastVoteEdge {
@@ -2721,11 +2519,11 @@ enum CastVoteOrderByInput {
 input CastVoteUpdateInput {
   commitment: String
   electionRound: ID
-  stake: BigInt
+  stake: String
   stakeLocked: Boolean
   castBy: String
   voteFor: ID
-  votePower: BigInt
+  votePower: String
 }
 
 input CastVoteWhereInput {
@@ -2758,8 +2556,6 @@ input CastVoteWhereInput {
   commitment_startsWith: String
   commitment_endsWith: String
   commitment_in: [String!]
-  electionRound_eq: ID
-  electionRound_in: [ID!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
@@ -2773,8 +2569,6 @@ input CastVoteWhereInput {
   castBy_startsWith: String
   castBy_endsWith: String
   castBy_in: [String!]
-  voteFor_eq: ID
-  voteFor_in: [ID!]
   votePower_eq: BigInt
   votePower_gt: BigInt
   votePower_gte: BigInt
@@ -2935,12 +2729,8 @@ input CategoryArchivalStatusUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  category_eq: ID
-  category_in: [ID!]
   newArchivalStatus_eq: Boolean
   newArchivalStatus_in: [Boolean!]
-  actor_eq: ID
-  actor_in: [ID!]
   category: ForumCategoryWhereInput
   actor: WorkerWhereInput
   AND: [CategoryArchivalStatusUpdatedEventWhereInput!]
@@ -3074,8 +2864,6 @@ input CategoryCreatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  category_eq: ID
-  category_in: [ID!]
   category: ForumCategoryWhereInput
   AND: [CategoryCreatedEventWhereInput!]
   OR: [CategoryCreatedEventWhereInput!]
@@ -3214,10 +3002,6 @@ input CategoryDeletedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  category_eq: ID
-  category_in: [ID!]
-  actor_eq: ID
-  actor_in: [ID!]
   category: ForumCategoryWhereInput
   actor: WorkerWhereInput
   AND: [CategoryDeletedEventWhereInput!]
@@ -3366,10 +3150,6 @@ input CategoryMembershipOfModeratorUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  moderator_eq: ID
-  moderator_in: [ID!]
-  category_eq: ID
-  category_in: [ID!]
   newCanModerateValue_eq: Boolean
   newCanModerateValue_in: [Boolean!]
   moderator: WorkerWhereInput
@@ -3386,53 +3166,6 @@ union CategoryStatus = CategoryStatusActive | CategoryStatusArchived | CategoryS
 
 type CategoryStatusActive {
   phantom: Int
-}
-
-input CategoryStatusActiveCreateInput {
-  phantom: Float
-}
-
-input CategoryStatusActiveUpdateInput {
-  phantom: Float
-}
-
-input CategoryStatusActiveWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [CategoryStatusActiveWhereInput!]
-  OR: [CategoryStatusActiveWhereInput!]
-}
-
-input CategoryStatusActiveWhereUniqueInput {
-  id: ID!
 }
 
 type CategoryStatusArchived {
@@ -3579,10 +3312,6 @@ input CategoryStickyThreadUpdateEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  category_eq: ID
-  category_in: [ID!]
-  actor_eq: ID
-  actor_in: [ID!]
   category: ForumCategoryWhereInput
   newStickyThreads_none: ForumThreadWhereInput
   newStickyThreads_some: ForumThreadWhereInput
@@ -3858,12 +3587,6 @@ input ChannelWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  ownerMember_eq: ID
-  ownerMember_in: [ID!]
-  ownerCuratorGroup_eq: ID
-  ownerCuratorGroup_in: [ID!]
-  category_eq: ID
-  category_in: [ID!]
   rewardAccount_eq: String
   rewardAccount_contains: String
   rewardAccount_startsWith: String
@@ -3885,8 +3608,6 @@ input ChannelWhereInput {
   isPublic_in: [Boolean!]
   isCensored_eq: Boolean
   isCensored_in: [Boolean!]
-  language_eq: ID
-  language_in: [ID!]
   createdInBlock_eq: Int
   createdInBlock_gt: Int
   createdInBlock_gte: Int
@@ -3964,10 +3685,10 @@ input CouncilMemberCreateInput {
   stakingAccountId: String!
   rewardAccountId: String!
   member: ID!
-  stake: BigInt!
-  lastPaymentBlock: BigInt!
-  unpaidReward: BigInt!
-  accumulatedReward: BigInt!
+  stake: String!
+  lastPaymentBlock: String!
+  unpaidReward: String!
+  accumulatedReward: String!
   electedInCouncil: ID!
 }
 
@@ -4005,10 +3726,10 @@ input CouncilMemberUpdateInput {
   stakingAccountId: String
   rewardAccountId: String
   member: ID
-  stake: BigInt
-  lastPaymentBlock: BigInt
-  unpaidReward: BigInt
-  accumulatedReward: BigInt
+  stake: String
+  lastPaymentBlock: String
+  unpaidReward: String
+  accumulatedReward: String
   electedInCouncil: ID
 }
 
@@ -4047,8 +3768,6 @@ input CouncilMemberWhereInput {
   rewardAccountId_startsWith: String
   rewardAccountId_endsWith: String
   rewardAccountId_in: [String!]
-  member_eq: ID
-  member_in: [ID!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
@@ -4073,8 +3792,6 @@ input CouncilMemberWhereInput {
   accumulatedReward_lt: BigInt
   accumulatedReward_lte: BigInt
   accumulatedReward_in: [BigInt!]
-  electedInCouncil_eq: ID
-  electedInCouncil_in: [ID!]
   member: MembershipWhereInput
   electedInCouncil: ElectedCouncilWhereInput
   rewardpaymenteventcouncilMember_none: RewardPaymentEventWhereInput
@@ -4139,7 +3856,7 @@ input CouncilorRewardUpdatedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  rewardAmount: BigInt!
+  rewardAmount: String!
 }
 
 type CouncilorRewardUpdatedEventEdge {
@@ -4171,7 +3888,7 @@ input CouncilorRewardUpdatedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  rewardAmount: BigInt
+  rewardAmount: String
 }
 
 input CouncilorRewardUpdatedEventWhereInput {
@@ -4238,159 +3955,18 @@ type CouncilStageAnnouncing {
   """
   Number of candidates aspiring to be elected as council members.
   """
-  candidatesCount: BigInt!
-}
-
-input CouncilStageAnnouncingCreateInput {
-  candidatesCount: BigInt!
-}
-
-input CouncilStageAnnouncingUpdateInput {
-  candidatesCount: BigInt
-}
-
-input CouncilStageAnnouncingWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  candidatesCount_eq: BigInt
-  candidatesCount_gt: BigInt
-  candidatesCount_gte: BigInt
-  candidatesCount_lt: BigInt
-  candidatesCount_lte: BigInt
-  candidatesCount_in: [BigInt!]
-  AND: [CouncilStageAnnouncingWhereInput!]
-  OR: [CouncilStageAnnouncingWhereInput!]
-}
-
-input CouncilStageAnnouncingWhereUniqueInput {
-  id: ID!
+  candidatesCount: Float!
 }
 
 type CouncilStageElection {
   """
   Number of candidates aspiring to be elected as council members.
   """
-  candidatesCount: BigInt!
-}
-
-input CouncilStageElectionCreateInput {
-  candidatesCount: BigInt!
-}
-
-input CouncilStageElectionUpdateInput {
-  candidatesCount: BigInt
-}
-
-input CouncilStageElectionWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  candidatesCount_eq: BigInt
-  candidatesCount_gt: BigInt
-  candidatesCount_gte: BigInt
-  candidatesCount_lt: BigInt
-  candidatesCount_lte: BigInt
-  candidatesCount_in: [BigInt!]
-  AND: [CouncilStageElectionWhereInput!]
-  OR: [CouncilStageElectionWhereInput!]
-}
-
-input CouncilStageElectionWhereUniqueInput {
-  id: ID!
+  candidatesCount: Float!
 }
 
 type CouncilStageIdle {
   dummy: Int
-}
-
-input CouncilStageIdleCreateInput {
-  dummy: Float
-}
-
-input CouncilStageIdleUpdateInput {
-  dummy: Float
-}
-
-input CouncilStageIdleWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [CouncilStageIdleWhereInput!]
-  OR: [CouncilStageIdleWhereInput!]
-}
-
-input CouncilStageIdleWhereUniqueInput {
-  id: ID!
 }
 
 type CouncilStageUpdate implements BaseGraphQLObject {
@@ -4429,7 +4005,7 @@ type CouncilStageUpdateConnection {
 
 input CouncilStageUpdateCreateInput {
   stage: JSONObject!
-  changedAt: BigInt!
+  changedAt: String!
   electedCouncil: ID
   electionProblem: ElectionProblem
 }
@@ -4456,7 +4032,7 @@ enum CouncilStageUpdateOrderByInput {
 
 input CouncilStageUpdateUpdateInput {
   stage: JSONObject
-  changedAt: BigInt
+  changedAt: String
   electedCouncil: ID
   electionProblem: ElectionProblem
 }
@@ -4493,8 +4069,6 @@ input CouncilStageUpdateWhereInput {
   changedAt_lt: BigInt
   changedAt_lte: BigInt
   changedAt_in: [BigInt!]
-  electedCouncil_eq: ID
-  electedCouncil_in: [ID!]
   electionProblem_eq: ElectionProblem
   electionProblem_in: [ElectionProblem!]
   electedCouncil: ElectedCouncilWhereInput
@@ -4518,59 +4092,6 @@ type CreateBlogPostProposalDetails {
   body: String!
 }
 
-input CreateBlogPostProposalDetailsCreateInput {
-  title: String!
-  body: String!
-}
-
-input CreateBlogPostProposalDetailsUpdateInput {
-  title: String
-  body: String
-}
-
-input CreateBlogPostProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  title_eq: String
-  title_contains: String
-  title_startsWith: String
-  title_endsWith: String
-  title_in: [String!]
-  body_eq: String
-  body_contains: String
-  body_startsWith: String
-  body_endsWith: String
-  body_in: [String!]
-  AND: [CreateBlogPostProposalDetailsWhereInput!]
-  OR: [CreateBlogPostProposalDetailsWhereInput!]
-}
-
-input CreateBlogPostProposalDetailsWhereUniqueInput {
-  id: ID!
-}
-
 type CreateWorkingGroupLeadOpeningProposalDetails {
   """
   The opening metadata
@@ -4580,7 +4101,7 @@ type CreateWorkingGroupLeadOpeningProposalDetails {
   """
   Min. application / role stake amount
   """
-  stakeAmount: BigInt!
+  stakeAmount: Float!
 
   """
   Role stake unstaking period in blocks
@@ -4590,75 +4111,12 @@ type CreateWorkingGroupLeadOpeningProposalDetails {
   """
   Initial workers' reward per block
   """
-  rewardPerBlock: BigInt!
+  rewardPerBlock: Float!
 
   """
   Related working group
   """
   group: WorkingGroup
-}
-
-input CreateWorkingGroupLeadOpeningProposalDetailsCreateInput {
-  stakeAmount: BigInt!
-  unstakingPeriod: Float!
-  rewardPerBlock: BigInt!
-}
-
-input CreateWorkingGroupLeadOpeningProposalDetailsUpdateInput {
-  stakeAmount: BigInt
-  unstakingPeriod: Float
-  rewardPerBlock: BigInt
-}
-
-input CreateWorkingGroupLeadOpeningProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  stakeAmount_eq: BigInt
-  stakeAmount_gt: BigInt
-  stakeAmount_gte: BigInt
-  stakeAmount_lt: BigInt
-  stakeAmount_lte: BigInt
-  stakeAmount_in: [BigInt!]
-  unstakingPeriod_eq: Int
-  unstakingPeriod_gt: Int
-  unstakingPeriod_gte: Int
-  unstakingPeriod_lt: Int
-  unstakingPeriod_lte: Int
-  unstakingPeriod_in: [Int!]
-  rewardPerBlock_eq: BigInt
-  rewardPerBlock_gt: BigInt
-  rewardPerBlock_gte: BigInt
-  rewardPerBlock_lt: BigInt
-  rewardPerBlock_lte: BigInt
-  rewardPerBlock_in: [BigInt!]
-  AND: [CreateWorkingGroupLeadOpeningProposalDetailsWhereInput!]
-  OR: [CreateWorkingGroupLeadOpeningProposalDetailsWhereInput!]
-}
-
-input CreateWorkingGroupLeadOpeningProposalDetailsWhereUniqueInput {
-  id: ID!
 }
 
 type CuratorGroup implements BaseGraphQLObject {
@@ -4740,6 +4198,9 @@ input CuratorGroupWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
+  curatorIds_containsAll: [Int!]
+  curatorIds_containsNone: [Int!]
+  curatorIds_containsAny: [Int!]
   isActive_eq: Boolean
   isActive_in: [Boolean!]
   channels_none: ChannelWhereInput
@@ -4815,7 +4276,7 @@ input DataObjectCreateInput {
   owner: JSONObject!
   createdInBlock: Float!
   typeId: Float!
-  size: BigInt!
+  size: String!
   liaison: ID
   liaisonJudgement: LiaisonJudgement!
   ipfsContentId: String!
@@ -4869,53 +4330,6 @@ type DataObjectOwnerChannel {
   dummy: Int
 }
 
-input DataObjectOwnerChannelCreateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerChannelUpdateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerChannelWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [DataObjectOwnerChannelWhereInput!]
-  OR: [DataObjectOwnerChannelWhereInput!]
-}
-
-input DataObjectOwnerChannelWhereUniqueInput {
-  id: ID!
-}
-
 type DataObjectOwnerCouncil {
   """
   Variant needs to have at least one property. This value is not used.
@@ -4923,105 +4337,11 @@ type DataObjectOwnerCouncil {
   dummy: Int
 }
 
-input DataObjectOwnerCouncilCreateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerCouncilUpdateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerCouncilWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [DataObjectOwnerCouncilWhereInput!]
-  OR: [DataObjectOwnerCouncilWhereInput!]
-}
-
-input DataObjectOwnerCouncilWhereUniqueInput {
-  id: ID!
-}
-
 type DataObjectOwnerDao {
   """
   DAO identifier
   """
   dao: Int!
-}
-
-input DataObjectOwnerDaoCreateInput {
-  dao: Float!
-}
-
-input DataObjectOwnerDaoUpdateInput {
-  dao: Float
-}
-
-input DataObjectOwnerDaoWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dao_eq: Int
-  dao_gt: Int
-  dao_gte: Int
-  dao_lt: Int
-  dao_lte: Int
-  dao_in: [Int!]
-  AND: [DataObjectOwnerDaoWhereInput!]
-  OR: [DataObjectOwnerDaoWhereInput!]
-}
-
-input DataObjectOwnerDaoWhereUniqueInput {
-  id: ID!
 }
 
 type DataObjectOwnerMember {
@@ -5036,53 +4356,6 @@ type DataObjectOwnerMember {
   dummy: Int
 }
 
-input DataObjectOwnerMemberCreateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerMemberUpdateInput {
-  dummy: Float
-}
-
-input DataObjectOwnerMemberWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  dummy_eq: Int
-  dummy_gt: Int
-  dummy_gte: Int
-  dummy_lt: Int
-  dummy_lte: Int
-  dummy_in: [Int!]
-  AND: [DataObjectOwnerMemberWhereInput!]
-  OR: [DataObjectOwnerMemberWhereInput!]
-}
-
-input DataObjectOwnerMemberWhereUniqueInput {
-  id: ID!
-}
-
 type DataObjectOwnerWorkingGroup {
   """
   Working group
@@ -5094,7 +4367,7 @@ input DataObjectUpdateInput {
   owner: JSONObject
   createdInBlock: Float
   typeId: Float
-  size: BigInt
+  size: String
   liaison: ID
   liaisonJudgement: LiaisonJudgement
   ipfsContentId: String
@@ -5145,8 +4418,6 @@ input DataObjectWhereInput {
   size_lt: BigInt
   size_lte: BigInt
   size_in: [BigInt!]
-  liaison_eq: ID
-  liaison_in: [ID!]
   liaisonJudgement_eq: LiaisonJudgement
   liaisonJudgement_in: [LiaisonJudgement!]
   ipfsContentId_eq: String
@@ -5185,54 +4456,7 @@ type DecreaseWorkingGroupLeadStakeProposalDetails {
   """
   Amount to decrease the stake by
   """
-  amount: BigInt!
-}
-
-input DecreaseWorkingGroupLeadStakeProposalDetailsCreateInput {
-  amount: BigInt!
-}
-
-input DecreaseWorkingGroupLeadStakeProposalDetailsUpdateInput {
-  amount: BigInt
-}
-
-input DecreaseWorkingGroupLeadStakeProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  amount_eq: BigInt
-  amount_gt: BigInt
-  amount_gte: BigInt
-  amount_lt: BigInt
-  amount_lte: BigInt
-  amount_in: [BigInt!]
-  AND: [DecreaseWorkingGroupLeadStakeProposalDetailsWhereInput!]
-  OR: [DecreaseWorkingGroupLeadStakeProposalDetailsWhereInput!]
-}
-
-input DecreaseWorkingGroupLeadStakeProposalDetailsWhereUniqueInput {
-  id: ID!
+  amount: Float!
 }
 
 interface DeleteResponse {
@@ -5254,66 +4478,6 @@ type EditBlogPostProposalDetails {
   The new blog post body (if should be updated)
   """
   newBody: String
-}
-
-input EditBlogPostProposalDetailsCreateInput {
-  blogPost: String!
-  newTitle: String
-  newBody: String
-}
-
-input EditBlogPostProposalDetailsUpdateInput {
-  blogPost: String
-  newTitle: String
-  newBody: String
-}
-
-input EditBlogPostProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  blogPost_eq: String
-  blogPost_contains: String
-  blogPost_startsWith: String
-  blogPost_endsWith: String
-  blogPost_in: [String!]
-  newTitle_eq: String
-  newTitle_contains: String
-  newTitle_startsWith: String
-  newTitle_endsWith: String
-  newTitle_in: [String!]
-  newBody_eq: String
-  newBody_contains: String
-  newBody_startsWith: String
-  newBody_endsWith: String
-  newBody_in: [String!]
-  AND: [EditBlogPostProposalDetailsWhereInput!]
-  OR: [EditBlogPostProposalDetailsWhereInput!]
-}
-
-input EditBlogPostProposalDetailsWhereUniqueInput {
-  id: ID!
 }
 
 type ElectedCouncil implements BaseGraphQLObject {
@@ -5555,10 +4719,6 @@ input ElectionRoundWhereInput {
   cycleId_in: [Int!]
   isFinished_eq: Boolean
   isFinished_in: [Boolean!]
-  electedCouncil_eq: ID
-  electedCouncil_in: [ID!]
-  nextElectedCouncil_eq: ID
-  nextElectedCouncil_in: [ID!]
   castVotes_none: CastVoteWhereInput
   castVotes_some: CastVoteWhereInput
   castVotes_every: CastVoteWhereInput
@@ -5881,8 +5041,6 @@ input ForumCategoryWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  parent_eq: ID
-  parent_in: [ID!]
   title_eq: String
   title_contains: String
   title_startsWith: String
@@ -6048,8 +5206,6 @@ input ForumPollAlternativeWhereInput {
   index_lt: Int
   index_lte: Int
   index_in: [Int!]
-  poll_eq: ID
-  poll_in: [ID!]
   text_eq: String
   text_contains: String
   text_startsWith: String
@@ -6130,8 +5286,6 @@ input ForumPollWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  thread_eq: ID
-  thread_in: [ID!]
   description_eq: String
   description_contains: String
   description_startsWith: String
@@ -6326,10 +5480,6 @@ input ForumPostReactionWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  member_eq: ID
-  member_in: [ID!]
-  post_eq: ID
-  post_in: [ID!]
   reaction_eq: PostReaction
   reaction_in: [PostReaction!]
   member: MembershipWhereInput
@@ -6378,23 +5528,15 @@ input ForumPostWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  author_eq: ID
-  author_in: [ID!]
-  thread_eq: ID
-  thread_in: [ID!]
   text_eq: String
   text_contains: String
   text_startsWith: String
   text_endsWith: String
   text_in: [String!]
-  repliesTo_eq: ID
-  repliesTo_in: [ID!]
   status_json: JSONObject
   isVisible_eq: Boolean
   isVisible_in: [Boolean!]
   origin_json: JSONObject
-  deletedInEvent_eq: ID
-  deletedInEvent_in: [ID!]
   author: MembershipWhereInput
   thread: ForumThreadWhereInput
   repliesTo: ForumPostWhereInput
@@ -6649,17 +5791,11 @@ input ForumThreadWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  author_eq: ID
-  author_in: [ID!]
-  category_eq: ID
-  category_in: [ID!]
   title_eq: String
   title_contains: String
   title_startsWith: String
   title_endsWith: String
   title_in: [String!]
-  initialPost_eq: ID
-  initialPost_in: [ID!]
   visiblePostsCount_eq: Int
   visiblePostsCount_gt: Int
   visiblePostsCount_gte: Int
@@ -6735,7 +5871,7 @@ type FundingRequestDestinationConnection {
 }
 
 input FundingRequestDestinationCreateInput {
-  amount: BigInt!
+  amount: String!
   account: String!
   list: ID!
 }
@@ -6846,7 +5982,7 @@ input FundingRequestDestinationsListWhereUniqueInput {
 }
 
 input FundingRequestDestinationUpdateInput {
-  amount: BigInt
+  amount: String
   account: String
   list: ID
 }
@@ -6887,8 +6023,6 @@ input FundingRequestDestinationWhereInput {
   account_startsWith: String
   account_endsWith: String
   account_in: [String!]
-  list_eq: ID
-  list_in: [ID!]
   list: FundingRequestDestinationsListWhereInput
   AND: [FundingRequestDestinationWhereInput!]
   OR: [FundingRequestDestinationWhereInput!]
@@ -6956,7 +6090,7 @@ input InitialInvitationBalanceUpdatedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  newInitialBalance: BigInt!
+  newInitialBalance: String!
 }
 
 type InitialInvitationBalanceUpdatedEventEdge {
@@ -6988,7 +6122,7 @@ input InitialInvitationBalanceUpdatedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  newInitialBalance: BigInt
+  newInitialBalance: String
 }
 
 input InitialInvitationBalanceUpdatedEventWhereInput {
@@ -7200,52 +6334,6 @@ type InvalidActionMetadata {
   reason: String!
 }
 
-input InvalidActionMetadataCreateInput {
-  reason: String!
-}
-
-input InvalidActionMetadataUpdateInput {
-  reason: String
-}
-
-input InvalidActionMetadataWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  reason_eq: String
-  reason_contains: String
-  reason_startsWith: String
-  reason_endsWith: String
-  reason_in: [String!]
-  AND: [InvalidActionMetadataWhereInput!]
-  OR: [InvalidActionMetadataWhereInput!]
-}
-
-input InvalidActionMetadataWhereUniqueInput {
-  id: ID!
-}
-
 type InvitesTransferredEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -7388,10 +6476,6 @@ input InvitesTransferredEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  sourceMember_eq: ID
-  sourceMember_in: [ID!]
-  targetMember_eq: ID
-  targetMember_in: [ID!]
   numberOfInvites_eq: Int
   numberOfInvites_gt: Int
   numberOfInvites_gte: Int
@@ -7793,10 +6877,6 @@ input LeaderSetEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   group: WorkingGroupWhereInput
   worker: WorkerWhereInput
   AND: [LeaderSetEventWhereInput!]
@@ -7940,10 +7020,6 @@ input LeaderUnsetEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  leader_eq: ID
-  leader_in: [ID!]
   group: WorkingGroupWhereInput
   leader: WorkerWhereInput
   AND: [LeaderUnsetEventWhereInput!]
@@ -8081,52 +7157,6 @@ type LockBlogPostProposalDetails {
   The blog post that should be locked
   """
   blogPost: String!
-}
-
-input LockBlogPostProposalDetailsCreateInput {
-  blogPost: String!
-}
-
-input LockBlogPostProposalDetailsUpdateInput {
-  blogPost: String
-}
-
-input LockBlogPostProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  blogPost_eq: String
-  blogPost_contains: String
-  blogPost_startsWith: String
-  blogPost_endsWith: String
-  blogPost_in: [String!]
-  AND: [LockBlogPostProposalDetailsWhereInput!]
-  OR: [LockBlogPostProposalDetailsWhereInput!]
-}
-
-input LockBlogPostProposalDetailsWhereUniqueInput {
-  id: ID!
 }
 
 type MemberAccountsUpdatedEvent implements Event & BaseGraphQLObject {
@@ -8274,8 +7304,6 @@ input MemberAccountsUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
   newRootAccount_eq: String
   newRootAccount_contains: String
   newRootAccount_startsWith: String
@@ -8461,10 +7489,6 @@ input MemberInvitedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  invitingMember_eq: ID
-  invitingMember_in: [ID!]
-  newMember_eq: ID
-  newMember_in: [ID!]
   rootAccount_eq: String
   rootAccount_contains: String
   rootAccount_startsWith: String
@@ -8480,8 +7504,6 @@ input MemberInvitedEventWhereInput {
   handle_startsWith: String
   handle_endsWith: String
   handle_in: [String!]
-  metadata_eq: ID
-  metadata_in: [ID!]
   invitingMember: MembershipWhereInput
   newMember: MembershipWhereInput
   metadata: MemberMetadataWhereInput
@@ -8588,8 +7610,6 @@ input MemberMetadataWhereInput {
   name_startsWith: String
   name_endsWith: String
   name_in: [String!]
-  avatar_eq: ID
-  avatar_in: [ID!]
   about_eq: String
   about_contains: String
   about_startsWith: String
@@ -8758,15 +7778,11 @@ input MemberProfileUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
   newHandle_eq: String
   newHandle_contains: String
   newHandle_startsWith: String
   newHandle_endsWith: String
   newHandle_in: [String!]
-  newMetadata_eq: ID
-  newMetadata_in: [ID!]
   member: MembershipWhereInput
   newMetadata: MemberMetadataWhereInput
   AND: [MemberProfileUpdatedEventWhereInput!]
@@ -9049,8 +8065,6 @@ input MembershipBoughtEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  newMember_eq: ID
-  newMember_in: [ID!]
   rootAccount_eq: String
   rootAccount_contains: String
   rootAccount_startsWith: String
@@ -9066,10 +8080,6 @@ input MembershipBoughtEventWhereInput {
   handle_startsWith: String
   handle_endsWith: String
   handle_in: [String!]
-  metadata_eq: ID
-  metadata_in: [ID!]
-  referrer_eq: ID
-  referrer_in: [ID!]
   newMember: MembershipWhereInput
   metadata: MemberMetadataWhereInput
   referrer: MembershipWhereInput
@@ -9109,53 +8119,6 @@ type MembershipEdge {
 
 type MembershipEntryGenesis {
   phantom: Int
-}
-
-input MembershipEntryGenesisCreateInput {
-  phantom: Float
-}
-
-input MembershipEntryGenesisUpdateInput {
-  phantom: Float
-}
-
-input MembershipEntryGenesisWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [MembershipEntryGenesisWhereInput!]
-  OR: [MembershipEntryGenesisWhereInput!]
-}
-
-input MembershipEntryGenesisWhereUniqueInput {
-  id: ID!
 }
 
 type MembershipEntryInvited {
@@ -9254,7 +8217,7 @@ input MembershipPriceUpdatedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  newPrice: BigInt!
+  newPrice: String!
 }
 
 type MembershipPriceUpdatedEventEdge {
@@ -9286,7 +8249,7 @@ input MembershipPriceUpdatedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  newPrice: BigInt
+  newPrice: String
 }
 
 input MembershipPriceUpdatedEventWhereInput {
@@ -9392,9 +8355,9 @@ type MembershipSystemSnapshotConnection {
 input MembershipSystemSnapshotCreateInput {
   snapshotBlock: Float!
   defaultInviteCount: Float!
-  membershipPrice: BigInt!
+  membershipPrice: String!
   referralCut: Float!
-  invitedInitialBalance: BigInt!
+  invitedInitialBalance: String!
 }
 
 type MembershipSystemSnapshotEdge {
@@ -9424,9 +8387,9 @@ enum MembershipSystemSnapshotOrderByInput {
 input MembershipSystemSnapshotUpdateInput {
   snapshotBlock: Float
   defaultInviteCount: Float
-  membershipPrice: BigInt
+  membershipPrice: String
   referralCut: Float
-  invitedInitialBalance: BigInt
+  invitedInitialBalance: String
 }
 
 input MembershipSystemSnapshotWhereInput {
@@ -9537,8 +8500,6 @@ input MembershipWhereInput {
   handle_startsWith: String
   handle_endsWith: String
   handle_in: [String!]
-  metadata_eq: ID
-  metadata_in: [ID!]
   controllerAccount_eq: String
   controllerAccount_contains: String
   controllerAccount_startsWith: String
@@ -9552,16 +8513,15 @@ input MembershipWhereInput {
   entry_json: JSONObject
   isVerified_eq: Boolean
   isVerified_in: [Boolean!]
+  boundAccounts_containsAll: [String!]
+  boundAccounts_containsNone: [String!]
+  boundAccounts_containsAny: [String!]
   inviteCount_eq: Int
   inviteCount_gt: Int
   inviteCount_gte: Int
   inviteCount_lt: Int
   inviteCount_lte: Int
   inviteCount_in: [Int!]
-  invitedBy_eq: ID
-  invitedBy_in: [ID!]
-  referredBy_eq: ID
-  referredBy_in: [ID!]
   isFoundingMember_eq: Boolean
   isFoundingMember_in: [Boolean!]
   isCouncilMember_eq: Boolean
@@ -9816,10 +8776,6 @@ input MemberVerificationStatusUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   isVerified_eq: Boolean
   isVerified_in: [Boolean!]
   member: MembershipWhereInput
@@ -9905,7 +8861,7 @@ input NewCandidateEventCreateInput {
   candidate: ID!
   stakingAccount: String!
   rewardAccount: String!
-  balance: BigInt!
+  balance: String!
 }
 
 type NewCandidateEventEdge {
@@ -9946,7 +8902,7 @@ input NewCandidateEventUpdateInput {
   candidate: ID
   stakingAccount: String
   rewardAccount: String
-  balance: BigInt
+  balance: String
 }
 
 input NewCandidateEventWhereInput {
@@ -9993,8 +8949,6 @@ input NewCandidateEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  candidate_eq: ID
-  candidate_in: [ID!]
   stakingAccount_eq: String
   stakingAccount_contains: String
   stakingAccount_startsWith: String
@@ -10147,8 +9101,6 @@ input NewCouncilElectedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  electedCouncil_eq: ID
-  electedCouncil_in: [ID!]
   electedCouncil: ElectedCouncilWhereInput
   AND: [NewCouncilElectedEventWhereInput!]
   OR: [NewCouncilElectedEventWhereInput!]
@@ -10344,7 +9296,7 @@ input NewMissedRewardLevelReachedEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  newMissedRewardAmount: BigInt!
+  newMissedRewardAmount: String!
 }
 
 type NewMissedRewardLevelReachedEventEdge {
@@ -10382,7 +9334,7 @@ input NewMissedRewardLevelReachedEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  newMissedRewardAmount: BigInt
+  newMissedRewardAmount: String
 }
 
 input NewMissedRewardLevelReachedEventWhereInput {
@@ -10429,10 +9381,6 @@ input NewMissedRewardLevelReachedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   newMissedRewardAmount_eq: BigInt
   newMissedRewardAmount_gt: BigInt
   newMissedRewardAmount_gte: BigInt
@@ -10711,10 +9659,6 @@ input OpeningAddedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  opening_eq: ID
-  opening_in: [ID!]
   group: WorkingGroupWhereInput
   opening: WorkingGroupOpeningWhereInput
   AND: [OpeningAddedEventWhereInput!]
@@ -10858,10 +9802,6 @@ input OpeningCanceledEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  opening_eq: ID
-  opening_in: [ID!]
   group: WorkingGroupWhereInput
   opening: WorkingGroupOpeningWhereInput
   AND: [OpeningCanceledEventWhereInput!]
@@ -11006,10 +9946,6 @@ input OpeningFilledEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  opening_eq: ID
-  opening_in: [ID!]
   group: WorkingGroupWhereInput
   opening: WorkingGroupOpeningWhereInput
   workersHired_none: WorkerWhereInput
@@ -11039,53 +9975,6 @@ type OpeningStatusFilled {
 
 type OpeningStatusOpen {
   phantom: Int
-}
-
-input OpeningStatusOpenCreateInput {
-  phantom: Float
-}
-
-input OpeningStatusOpenUpdateInput {
-  phantom: Float
-}
-
-input OpeningStatusOpenWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [OpeningStatusOpenWhereInput!]
-  OR: [OpeningStatusOpenWhereInput!]
-}
-
-input OpeningStatusOpenWhereUniqueInput {
-  id: ID!
 }
 
 type PageInfo {
@@ -11236,8 +10125,6 @@ input PostAddedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
   isEditable_eq: Boolean
   isEditable_in: [Boolean!]
   text_eq: String
@@ -11387,8 +10274,6 @@ input PostDeletedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  actor_eq: ID
-  actor_in: [ID!]
   rationale_eq: String
   rationale_contains: String
   rationale_startsWith: String
@@ -11544,15 +10429,11 @@ input PostModeratedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
   rationale_eq: String
   rationale_contains: String
   rationale_startsWith: String
   rationale_endsWith: String
   rationale_in: [String!]
-  actor_eq: ID
-  actor_in: [ID!]
   post: ForumPostWhereInput
   actor: WorkerWhereInput
   AND: [PostModeratedEventWhereInput!]
@@ -11716,11 +10597,7 @@ input PostReactedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
   reactionResult_json: JSONObject
-  reactingMember_eq: ID
-  reactingMember_in: [ID!]
   post: ForumPostWhereInput
   reactingMember: MembershipWhereInput
   AND: [PostReactedEventWhereInput!]
@@ -11741,102 +10618,8 @@ type PostReactionResultCancel {
   phantom: Int
 }
 
-input PostReactionResultCancelCreateInput {
-  phantom: Float
-}
-
-input PostReactionResultCancelUpdateInput {
-  phantom: Float
-}
-
-input PostReactionResultCancelWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [PostReactionResultCancelWhereInput!]
-  OR: [PostReactionResultCancelWhereInput!]
-}
-
-input PostReactionResultCancelWhereUniqueInput {
-  id: ID!
-}
-
 type PostReactionResultInvalid {
   reactionId: Int!
-}
-
-input PostReactionResultInvalidCreateInput {
-  reactionId: Float!
-}
-
-input PostReactionResultInvalidUpdateInput {
-  reactionId: Float
-}
-
-input PostReactionResultInvalidWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  reactionId_eq: Int
-  reactionId_gt: Int
-  reactionId_gte: Int
-  reactionId_lt: Int
-  reactionId_lte: Int
-  reactionId_in: [Int!]
-  AND: [PostReactionResultInvalidWhereInput!]
-  OR: [PostReactionResultInvalidWhereInput!]
-}
-
-input PostReactionResultInvalidWhereUniqueInput {
-  id: ID!
 }
 
 type PostReactionResultValid {
@@ -11846,12 +10629,10 @@ type PostReactionResultValid {
 
 input PostReactionResultValidCreateInput {
   reaction: PostReaction!
-  reactionId: Float!
 }
 
 input PostReactionResultValidUpdateInput {
   reaction: PostReaction
-  reactionId: Float
 }
 
 input PostReactionResultValidWhereInput {
@@ -11881,12 +10662,6 @@ input PostReactionResultValidWhereInput {
   deletedById_in: [ID!]
   reaction_eq: PostReaction
   reaction_in: [PostReaction!]
-  reactionId_eq: Int
-  reactionId_gt: Int
-  reactionId_gte: Int
-  reactionId_lt: Int
-  reactionId_lte: Int
-  reactionId_in: [Int!]
   AND: [PostReactionResultValidWhereInput!]
   OR: [PostReactionResultValidWhereInput!]
 }
@@ -11908,53 +10683,6 @@ union PostStatus = PostStatusActive | PostStatusLocked | PostStatusModerated | P
 
 type PostStatusActive {
   phantom: Int
-}
-
-input PostStatusActiveCreateInput {
-  phantom: Float
-}
-
-input PostStatusActiveUpdateInput {
-  phantom: Float
-}
-
-input PostStatusActiveWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [PostStatusActiveWhereInput!]
-  OR: [PostStatusActiveWhereInput!]
-}
-
-input PostStatusActiveWhereUniqueInput {
-  id: ID!
 }
 
 type PostStatusLocked {
@@ -12110,8 +10838,6 @@ input PostTextUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
   newText_eq: String
   newText_contains: String
   newText_startsWith: String
@@ -12330,8 +11056,6 @@ input ProposalCancelledEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   proposal: ProposalWhereInput
   AND: [ProposalCancelledEventWhereInput!]
   OR: [ProposalCancelledEventWhereInput!]
@@ -12474,8 +11198,6 @@ input ProposalCreatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   proposal: ProposalWhereInput
   AND: [ProposalCreatedEventWhereInput!]
   OR: [ProposalCreatedEventWhereInput!]
@@ -12633,8 +11355,6 @@ input ProposalDecisionMadeEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   decisionStatus_json: JSONObject
   proposal: ProposalWhereInput
   AND: [ProposalDecisionMadeEventWhereInput!]
@@ -12860,8 +11580,6 @@ input ProposalDiscussionPostCreatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
   text_eq: String
   text_contains: String
   text_startsWith: String
@@ -13018,10 +11736,6 @@ input ProposalDiscussionPostDeletedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
-  actor_eq: ID
-  actor_in: [ID!]
   post: ProposalDiscussionPostWhereInput
   actor: MembershipWhereInput
   AND: [ProposalDiscussionPostDeletedEventWhereInput!]
@@ -13063,53 +11777,6 @@ union ProposalDiscussionPostStatus =
 
 type ProposalDiscussionPostStatusActive {
   phantom: Int
-}
-
-input ProposalDiscussionPostStatusActiveCreateInput {
-  phantom: Float
-}
-
-input ProposalDiscussionPostStatusActiveUpdateInput {
-  phantom: Float
-}
-
-input ProposalDiscussionPostStatusActiveWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [ProposalDiscussionPostStatusActiveWhereInput!]
-  OR: [ProposalDiscussionPostStatusActiveWhereInput!]
-}
-
-input ProposalDiscussionPostStatusActiveWhereUniqueInput {
-  id: ID!
 }
 
 type ProposalDiscussionPostStatusLocked {
@@ -13262,8 +11929,6 @@ input ProposalDiscussionPostUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  post_eq: ID
-  post_in: [ID!]
   text_eq: String
   text_contains: String
   text_startsWith: String
@@ -13312,10 +11977,6 @@ input ProposalDiscussionPostWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  discussionThread_eq: ID
-  discussionThread_in: [ID!]
-  author_eq: ID
-  author_in: [ID!]
   status_json: JSONObject
   isVisible_eq: Boolean
   isVisible_in: [Boolean!]
@@ -13324,8 +11985,6 @@ input ProposalDiscussionPostWhereInput {
   text_startsWith: String
   text_endsWith: String
   text_in: [String!]
-  repliesTo_eq: ID
-  repliesTo_in: [ID!]
   discussionThread: ProposalDiscussionThreadWhereInput
   author: MembershipWhereInput
   repliesTo: ProposalDiscussionPostWhereInput
@@ -13525,11 +12184,7 @@ input ProposalDiscussionThreadModeChangedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  thread_eq: ID
-  thread_in: [ID!]
   newMode_json: JSONObject
-  actor_eq: ID
-  actor_in: [ID!]
   thread: ProposalDiscussionThreadWhereInput
   actor: MembershipWhereInput
   AND: [ProposalDiscussionThreadModeChangedEventWhereInput!]
@@ -13549,53 +12204,6 @@ type ProposalDiscussionThreadModeClosed {
 
 type ProposalDiscussionThreadModeOpen {
   phantom: Int
-}
-
-input ProposalDiscussionThreadModeOpenCreateInput {
-  phantom: Float
-}
-
-input ProposalDiscussionThreadModeOpenUpdateInput {
-  phantom: Float
-}
-
-input ProposalDiscussionThreadModeOpenWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [ProposalDiscussionThreadModeOpenWhereInput!]
-  OR: [ProposalDiscussionThreadModeOpenWhereInput!]
-}
-
-input ProposalDiscussionThreadModeOpenWhereUniqueInput {
-  id: ID!
 }
 
 enum ProposalDiscussionThreadOrderByInput {
@@ -13639,8 +12247,6 @@ input ProposalDiscussionThreadWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   mode_json: JSONObject
   proposal: ProposalWhereInput
   posts_none: ProposalDiscussionPostWhereInput
@@ -13881,8 +12487,6 @@ input ProposalExecutedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   executionStatus_json: JSONObject
   proposal: ProposalWhereInput
   AND: [ProposalExecutedEventWhereInput!]
@@ -14000,52 +12604,6 @@ type ProposalStatusExecutionFailed {
   The runtime execution error message
   """
   errorMessage: String!
-}
-
-input ProposalStatusExecutionFailedCreateInput {
-  errorMessage: String!
-}
-
-input ProposalStatusExecutionFailedUpdateInput {
-  errorMessage: String
-}
-
-input ProposalStatusExecutionFailedWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  errorMessage_eq: String
-  errorMessage_contains: String
-  errorMessage_startsWith: String
-  errorMessage_endsWith: String
-  errorMessage_in: [String!]
-  AND: [ProposalStatusExecutionFailedWhereInput!]
-  OR: [ProposalStatusExecutionFailedWhereInput!]
-}
-
-input ProposalStatusExecutionFailedWhereUniqueInput {
-  id: ID!
 }
 
 type ProposalStatusExpired {
@@ -14210,8 +12768,6 @@ input ProposalStatusUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   newStatus_json: JSONObject
   proposal: ProposalWhereInput
   AND: [ProposalStatusUpdatedEventWhereInput!]
@@ -14405,12 +12961,8 @@ input ProposalVotedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  voter_eq: ID
-  voter_in: [ID!]
   voteKind_eq: ProposalVoteKind
   voteKind_in: [ProposalVoteKind!]
-  proposal_eq: ID
-  proposal_in: [ID!]
   rationale_eq: String
   rationale_contains: String
   rationale_startsWith: String
@@ -14480,8 +13032,6 @@ input ProposalWhereInput {
   stakingAccount_startsWith: String
   stakingAccount_endsWith: String
   stakingAccount_in: [String!]
-  creator_eq: ID
-  creator_in: [ID!]
   exactExecutionBlock_eq: Int
   exactExecutionBlock_gt: Int
   exactExecutionBlock_gte: Int
@@ -16701,7 +15251,7 @@ type ReferendumStageRevealingOptionResultConnection {
 
 input ReferendumStageRevealingOptionResultCreateInput {
   option: ID!
-  votePower: BigInt!
+  votePower: String!
   electionRound: ID!
   referendumFinishedEvent: ID!
 }
@@ -16730,7 +15280,7 @@ enum ReferendumStageRevealingOptionResultOrderByInput {
 
 input ReferendumStageRevealingOptionResultUpdateInput {
   option: ID
-  votePower: BigInt
+  votePower: String
   electionRound: ID
   referendumFinishedEvent: ID
 }
@@ -16760,18 +15310,12 @@ input ReferendumStageRevealingOptionResultWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  option_eq: ID
-  option_in: [ID!]
   votePower_eq: BigInt
   votePower_gt: BigInt
   votePower_gte: BigInt
   votePower_lt: BigInt
   votePower_lte: BigInt
   votePower_in: [BigInt!]
-  electionRound_eq: ID
-  electionRound_in: [ID!]
-  referendumFinishedEvent_eq: ID
-  referendumFinishedEvent_in: [ID!]
   option: MembershipWhereInput
   electionRound: ElectionRoundWhereInput
   referendumFinishedEvent: ReferendumFinishedEventWhereInput
@@ -16834,7 +15378,7 @@ input ReferendumStartedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  winningTargetCount: BigInt!
+  winningTargetCount: String!
 }
 
 type ReferendumStartedEventEdge {
@@ -16866,7 +15410,7 @@ input ReferendumStartedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  winningTargetCount: BigInt
+  winningTargetCount: String
 }
 
 input ReferendumStartedEventWhereInput {
@@ -16978,7 +15522,7 @@ input ReferendumStartedForcefullyEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  winningTargetCount: BigInt!
+  winningTargetCount: String!
 }
 
 type ReferendumStartedForcefullyEventEdge {
@@ -17010,7 +15554,7 @@ input ReferendumStartedForcefullyEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  winningTargetCount: BigInt
+  winningTargetCount: String
 }
 
 input ReferendumStartedForcefullyEventWhereInput {
@@ -17272,7 +15816,7 @@ input RequestFundedEventCreateInput {
   network: Network!
   indexInBlock: Float!
   account: String!
-  amount: BigInt!
+  amount: String!
 }
 
 type RequestFundedEventEdge {
@@ -17307,7 +15851,7 @@ input RequestFundedEventUpdateInput {
   network: Network
   indexInBlock: Float
   account: String
-  amount: BigInt
+  amount: String
 }
 
 input RequestFundedEventWhereInput {
@@ -17570,7 +16114,7 @@ input RewardPaidEventCreateInput {
   group: ID!
   worker: ID!
   rewardAccount: String!
-  amount: BigInt!
+  amount: String!
   paymentType: RewardPaymentType!
 }
 
@@ -17614,7 +16158,7 @@ input RewardPaidEventUpdateInput {
   group: ID
   worker: ID
   rewardAccount: String
-  amount: BigInt
+  amount: String
   paymentType: RewardPaymentType
 }
 
@@ -17662,10 +16206,6 @@ input RewardPaidEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   rewardAccount_eq: String
   rewardAccount_contains: String
   rewardAccount_startsWith: String
@@ -17754,8 +16294,8 @@ input RewardPaymentEventCreateInput {
   indexInBlock: Float!
   councilMember: ID!
   rewardAccount: String!
-  paidBalance: BigInt!
-  missingBalance: BigInt!
+  paidBalance: String!
+  missingBalance: String!
 }
 
 type RewardPaymentEventEdge {
@@ -17795,8 +16335,8 @@ input RewardPaymentEventUpdateInput {
   indexInBlock: Float
   councilMember: ID
   rewardAccount: String
-  paidBalance: BigInt
-  missingBalance: BigInt
+  paidBalance: String
+  missingBalance: String
 }
 
 input RewardPaymentEventWhereInput {
@@ -17843,8 +16383,6 @@ input RewardPaymentEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  councilMember_eq: ID
-  councilMember_in: [ID!]
   rewardAccount_eq: String
   rewardAccount_contains: String
   rewardAccount_startsWith: String
@@ -17906,7 +16444,7 @@ type RuntimeWasmBytecodeConnection {
 }
 
 input RuntimeWasmBytecodeCreateInput {
-  bytecode: Bytes!
+  bytecode: String!
 }
 
 type RuntimeWasmBytecodeEdge {
@@ -17926,7 +16464,7 @@ enum RuntimeWasmBytecodeOrderByInput {
 }
 
 input RuntimeWasmBytecodeUpdateInput {
-  bytecode: Bytes
+  bytecode: String
 }
 
 input RuntimeWasmBytecodeWhereInput {
@@ -17977,162 +16515,21 @@ type SetCouncilBudgetIncrementProposalDetails {
   """
   New (proposed) amount the council budget should be increased by per each budget period
   """
-  newAmount: BigInt!
-}
-
-input SetCouncilBudgetIncrementProposalDetailsCreateInput {
-  newAmount: BigInt!
-}
-
-input SetCouncilBudgetIncrementProposalDetailsUpdateInput {
-  newAmount: BigInt
-}
-
-input SetCouncilBudgetIncrementProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newAmount_eq: BigInt
-  newAmount_gt: BigInt
-  newAmount_gte: BigInt
-  newAmount_lt: BigInt
-  newAmount_lte: BigInt
-  newAmount_in: [BigInt!]
-  AND: [SetCouncilBudgetIncrementProposalDetailsWhereInput!]
-  OR: [SetCouncilBudgetIncrementProposalDetailsWhereInput!]
-}
-
-input SetCouncilBudgetIncrementProposalDetailsWhereUniqueInput {
-  id: ID!
+  newAmount: Float!
 }
 
 type SetCouncilorRewardProposalDetails {
   """
   New (proposed) council members' reward per block
   """
-  newRewardPerBlock: BigInt!
-}
-
-input SetCouncilorRewardProposalDetailsCreateInput {
-  newRewardPerBlock: BigInt!
-}
-
-input SetCouncilorRewardProposalDetailsUpdateInput {
-  newRewardPerBlock: BigInt
-}
-
-input SetCouncilorRewardProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newRewardPerBlock_eq: BigInt
-  newRewardPerBlock_gt: BigInt
-  newRewardPerBlock_gte: BigInt
-  newRewardPerBlock_lt: BigInt
-  newRewardPerBlock_lte: BigInt
-  newRewardPerBlock_in: [BigInt!]
-  AND: [SetCouncilorRewardProposalDetailsWhereInput!]
-  OR: [SetCouncilorRewardProposalDetailsWhereInput!]
-}
-
-input SetCouncilorRewardProposalDetailsWhereUniqueInput {
-  id: ID!
+  newRewardPerBlock: Float!
 }
 
 type SetInitialInvitationBalanceProposalDetails {
   """
   The new (proposed) initial balance credited to controller account of an invitee (locked for transaction fee payments only)
   """
-  newInitialInvitationBalance: BigInt!
-}
-
-input SetInitialInvitationBalanceProposalDetailsCreateInput {
-  newInitialInvitationBalance: BigInt!
-}
-
-input SetInitialInvitationBalanceProposalDetailsUpdateInput {
-  newInitialInvitationBalance: BigInt
-}
-
-input SetInitialInvitationBalanceProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newInitialInvitationBalance_eq: BigInt
-  newInitialInvitationBalance_gt: BigInt
-  newInitialInvitationBalance_gte: BigInt
-  newInitialInvitationBalance_lt: BigInt
-  newInitialInvitationBalance_lte: BigInt
-  newInitialInvitationBalance_in: [BigInt!]
-  AND: [SetInitialInvitationBalanceProposalDetailsWhereInput!]
-  OR: [SetInitialInvitationBalanceProposalDetailsWhereInput!]
-}
-
-input SetInitialInvitationBalanceProposalDetailsWhereUniqueInput {
-  id: ID!
+  newInitialInvitationBalance: Float!
 }
 
 type SetInitialInvitationCountProposalDetails {
@@ -18142,105 +16539,11 @@ type SetInitialInvitationCountProposalDetails {
   newInitialInvitationsCount: Int!
 }
 
-input SetInitialInvitationCountProposalDetailsCreateInput {
-  newInitialInvitationsCount: Float!
-}
-
-input SetInitialInvitationCountProposalDetailsUpdateInput {
-  newInitialInvitationsCount: Float
-}
-
-input SetInitialInvitationCountProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newInitialInvitationsCount_eq: Int
-  newInitialInvitationsCount_gt: Int
-  newInitialInvitationsCount_gte: Int
-  newInitialInvitationsCount_lt: Int
-  newInitialInvitationsCount_lte: Int
-  newInitialInvitationsCount_in: [Int!]
-  AND: [SetInitialInvitationCountProposalDetailsWhereInput!]
-  OR: [SetInitialInvitationCountProposalDetailsWhereInput!]
-}
-
-input SetInitialInvitationCountProposalDetailsWhereUniqueInput {
-  id: ID!
-}
-
 type SetMaxValidatorCountProposalDetails {
   """
   The new (propsed) max. number of active validators
   """
   newMaxValidatorCount: Int!
-}
-
-input SetMaxValidatorCountProposalDetailsCreateInput {
-  newMaxValidatorCount: Float!
-}
-
-input SetMaxValidatorCountProposalDetailsUpdateInput {
-  newMaxValidatorCount: Float
-}
-
-input SetMaxValidatorCountProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newMaxValidatorCount_eq: Int
-  newMaxValidatorCount_gt: Int
-  newMaxValidatorCount_gte: Int
-  newMaxValidatorCount_lt: Int
-  newMaxValidatorCount_lte: Int
-  newMaxValidatorCount_in: [Int!]
-  AND: [SetMaxValidatorCountProposalDetailsWhereInput!]
-  OR: [SetMaxValidatorCountProposalDetailsWhereInput!]
-}
-
-input SetMaxValidatorCountProposalDetailsWhereUniqueInput {
-  id: ID!
 }
 
 type SetMembershipLeadInvitationQuotaProposalDetails {
@@ -18250,105 +16553,11 @@ type SetMembershipLeadInvitationQuotaProposalDetails {
   newLeadInvitationQuota: Int!
 }
 
-input SetMembershipLeadInvitationQuotaProposalDetailsCreateInput {
-  newLeadInvitationQuota: Float!
-}
-
-input SetMembershipLeadInvitationQuotaProposalDetailsUpdateInput {
-  newLeadInvitationQuota: Float
-}
-
-input SetMembershipLeadInvitationQuotaProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newLeadInvitationQuota_eq: Int
-  newLeadInvitationQuota_gt: Int
-  newLeadInvitationQuota_gte: Int
-  newLeadInvitationQuota_lt: Int
-  newLeadInvitationQuota_lte: Int
-  newLeadInvitationQuota_in: [Int!]
-  AND: [SetMembershipLeadInvitationQuotaProposalDetailsWhereInput!]
-  OR: [SetMembershipLeadInvitationQuotaProposalDetailsWhereInput!]
-}
-
-input SetMembershipLeadInvitationQuotaProposalDetailsWhereUniqueInput {
-  id: ID!
-}
-
 type SetMembershipPriceProposalDetails {
   """
   New (proposed) membership price
   """
-  newPrice: BigInt!
-}
-
-input SetMembershipPriceProposalDetailsCreateInput {
-  newPrice: BigInt!
-}
-
-input SetMembershipPriceProposalDetailsUpdateInput {
-  newPrice: BigInt
-}
-
-input SetMembershipPriceProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newPrice_eq: BigInt
-  newPrice_gt: BigInt
-  newPrice_gte: BigInt
-  newPrice_lt: BigInt
-  newPrice_lte: BigInt
-  newPrice_in: [BigInt!]
-  AND: [SetMembershipPriceProposalDetailsWhereInput!]
-  OR: [SetMembershipPriceProposalDetailsWhereInput!]
-}
-
-input SetMembershipPriceProposalDetailsWhereUniqueInput {
-  id: ID!
+  newPrice: Float!
 }
 
 type SetReferralCutProposalDetails {
@@ -18356,53 +16565,6 @@ type SetReferralCutProposalDetails {
   The new (proposed) percentage of tokens diverted to referrer (from referred member's membership price).
   """
   newReferralCut: Int!
-}
-
-input SetReferralCutProposalDetailsCreateInput {
-  newReferralCut: Float!
-}
-
-input SetReferralCutProposalDetailsUpdateInput {
-  newReferralCut: Float
-}
-
-input SetReferralCutProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newReferralCut_eq: Int
-  newReferralCut_gt: Int
-  newReferralCut_gte: Int
-  newReferralCut_lt: Int
-  newReferralCut_lte: Int
-  newReferralCut_in: [Int!]
-  AND: [SetReferralCutProposalDetailsWhereInput!]
-  OR: [SetReferralCutProposalDetailsWhereInput!]
-}
-
-input SetReferralCutProposalDetailsWhereUniqueInput {
-  id: ID!
 }
 
 type SetWorkingGroupLeadRewardProposalDetails {
@@ -18414,54 +16576,7 @@ type SetWorkingGroupLeadRewardProposalDetails {
   """
   Lead's new (proposed) reward per block
   """
-  newRewardPerBlock: BigInt!
-}
-
-input SetWorkingGroupLeadRewardProposalDetailsCreateInput {
-  newRewardPerBlock: BigInt!
-}
-
-input SetWorkingGroupLeadRewardProposalDetailsUpdateInput {
-  newRewardPerBlock: BigInt
-}
-
-input SetWorkingGroupLeadRewardProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  newRewardPerBlock_eq: BigInt
-  newRewardPerBlock_gt: BigInt
-  newRewardPerBlock_gte: BigInt
-  newRewardPerBlock_lt: BigInt
-  newRewardPerBlock_lte: BigInt
-  newRewardPerBlock_in: [BigInt!]
-  AND: [SetWorkingGroupLeadRewardProposalDetailsWhereInput!]
-  OR: [SetWorkingGroupLeadRewardProposalDetailsWhereInput!]
-}
-
-input SetWorkingGroupLeadRewardProposalDetailsWhereUniqueInput {
-  id: ID!
+  newRewardPerBlock: Float!
 }
 
 type SignalProposalDetails {
@@ -18469,52 +16584,6 @@ type SignalProposalDetails {
   Signal proposal content
   """
   text: String!
-}
-
-input SignalProposalDetailsCreateInput {
-  text: String!
-}
-
-input SignalProposalDetailsUpdateInput {
-  text: String
-}
-
-input SignalProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  text_eq: String
-  text_contains: String
-  text_startsWith: String
-  text_endsWith: String
-  text_in: [String!]
-  AND: [SignalProposalDetailsWhereInput!]
-  OR: [SignalProposalDetailsWhereInput!]
-}
-
-input SignalProposalDetailsWhereUniqueInput {
-  id: ID!
 }
 
 type SlashWorkingGroupLeadProposalDetails {
@@ -18526,54 +16595,7 @@ type SlashWorkingGroupLeadProposalDetails {
   """
   Amount to slash the stake by
   """
-  amount: BigInt!
-}
-
-input SlashWorkingGroupLeadProposalDetailsCreateInput {
-  amount: BigInt!
-}
-
-input SlashWorkingGroupLeadProposalDetailsUpdateInput {
-  amount: BigInt
-}
-
-input SlashWorkingGroupLeadProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  amount_eq: BigInt
-  amount_gt: BigInt
-  amount_gte: BigInt
-  amount_lt: BigInt
-  amount_lte: BigInt
-  amount_in: [BigInt!]
-  AND: [SlashWorkingGroupLeadProposalDetailsWhereInput!]
-  OR: [SlashWorkingGroupLeadProposalDetailsWhereInput!]
-}
-
-input SlashWorkingGroupLeadProposalDetailsWhereUniqueInput {
-  id: ID!
+  amount: Float!
 }
 
 type StakeDecreasedEvent implements Event & BaseGraphQLObject {
@@ -18633,7 +16655,7 @@ input StakeDecreasedEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  amount: BigInt!
+  amount: String!
 }
 
 type StakeDecreasedEventEdge {
@@ -18671,7 +16693,7 @@ input StakeDecreasedEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  amount: BigInt
+  amount: String
 }
 
 input StakeDecreasedEventWhereInput {
@@ -18718,10 +16740,6 @@ input StakeDecreasedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   amount_eq: BigInt
   amount_gt: BigInt
   amount_gte: BigInt
@@ -18795,7 +16813,7 @@ input StakeIncreasedEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  amount: BigInt!
+  amount: String!
 }
 
 type StakeIncreasedEventEdge {
@@ -18833,7 +16851,7 @@ input StakeIncreasedEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  amount: BigInt
+  amount: String
 }
 
 input StakeIncreasedEventWhereInput {
@@ -18880,10 +16898,6 @@ input StakeIncreasedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   amount_eq: BigInt
   amount_gt: BigInt
   amount_gte: BigInt
@@ -19110,8 +17124,8 @@ input StakeSlashedEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  requestedAmount: BigInt!
-  slashedAmount: BigInt!
+  requestedAmount: String!
+  slashedAmount: String!
   rationale: String
 }
 
@@ -19154,8 +17168,8 @@ input StakeSlashedEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  requestedAmount: BigInt
-  slashedAmount: BigInt
+  requestedAmount: String
+  slashedAmount: String
   rationale: String
 }
 
@@ -19203,10 +17217,6 @@ input StakeSlashedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   requestedAmount_eq: BigInt
   requestedAmount_gt: BigInt
   requestedAmount_gte: BigInt
@@ -19370,8 +17380,6 @@ input StakingAccountAddedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
   account_eq: String
   account_contains: String
   account_startsWith: String
@@ -19522,8 +17530,6 @@ input StakingAccountConfirmedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
   account_eq: String
   account_contains: String
   account_startsWith: String
@@ -19674,8 +17680,6 @@ input StakingAccountRemovedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  member_eq: ID
-  member_in: [ID!]
   account_eq: String
   account_contains: String
   account_startsWith: String
@@ -19839,8 +17843,6 @@ input StatusTextChangedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
   metadata_eq: String
   metadata_contains: String
   metadata_startsWith: String
@@ -19928,7 +17930,7 @@ input TerminatedLeaderEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  penalty: BigInt
+  penalty: String
   rationale: String
 }
 
@@ -19969,7 +17971,7 @@ input TerminatedLeaderEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  penalty: BigInt
+  penalty: String
   rationale: String
 }
 
@@ -20017,10 +18019,6 @@ input TerminatedLeaderEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   penalty_eq: BigInt
   penalty_gt: BigInt
   penalty_gte: BigInt
@@ -20104,7 +18102,7 @@ input TerminatedWorkerEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  penalty: BigInt
+  penalty: String
   rationale: String
 }
 
@@ -20145,7 +18143,7 @@ input TerminatedWorkerEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  penalty: BigInt
+  penalty: String
   rationale: String
 }
 
@@ -20193,10 +18191,6 @@ input TerminatedWorkerEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   penalty_eq: BigInt
   penalty_gt: BigInt
   penalty_gte: BigInt
@@ -20227,54 +18221,7 @@ type TerminateWorkingGroupLeadProposalDetails {
   """
   Optionally - the amount to slash the lead's stake by
   """
-  slashingAmount: BigInt
-}
-
-input TerminateWorkingGroupLeadProposalDetailsCreateInput {
-  slashingAmount: BigInt
-}
-
-input TerminateWorkingGroupLeadProposalDetailsUpdateInput {
-  slashingAmount: BigInt
-}
-
-input TerminateWorkingGroupLeadProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  slashingAmount_eq: BigInt
-  slashingAmount_gt: BigInt
-  slashingAmount_gte: BigInt
-  slashingAmount_lt: BigInt
-  slashingAmount_lte: BigInt
-  slashingAmount_in: [BigInt!]
-  AND: [TerminateWorkingGroupLeadProposalDetailsWhereInput!]
-  OR: [TerminateWorkingGroupLeadProposalDetailsWhereInput!]
-}
-
-input TerminateWorkingGroupLeadProposalDetailsWhereUniqueInput {
-  id: ID!
+  slashingAmount: Float
 }
 
 type ThreadCreatedEvent implements BaseGraphQLObject {
@@ -20418,8 +18365,6 @@ input ThreadCreatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  thread_eq: ID
-  thread_in: [ID!]
   title_eq: String
   title_contains: String
   title_startsWith: String
@@ -20562,8 +18507,6 @@ input ThreadDeletedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  thread_eq: ID
-  thread_in: [ID!]
   thread: ForumThreadWhereInput
   AND: [ThreadDeletedEventWhereInput!]
   OR: [ThreadDeletedEventWhereInput!]
@@ -20705,8 +18648,6 @@ input ThreadMetadataUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  thread_eq: ID
-  thread_in: [ID!]
   newTitle_eq: String
   newTitle_contains: String
   newTitle_startsWith: String
@@ -20859,15 +18800,11 @@ input ThreadModeratedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  thread_eq: ID
-  thread_in: [ID!]
   rationale_eq: String
   rationale_contains: String
   rationale_startsWith: String
   rationale_endsWith: String
   rationale_in: [String!]
-  actor_eq: ID
-  actor_in: [ID!]
   thread: ForumThreadWhereInput
   actor: WorkerWhereInput
   AND: [ThreadModeratedEventWhereInput!]
@@ -21019,14 +18956,6 @@ input ThreadMovedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  thread_eq: ID
-  thread_in: [ID!]
-  oldCategory_eq: ID
-  oldCategory_in: [ID!]
-  newCategory_eq: ID
-  newCategory_in: [ID!]
-  actor_eq: ID
-  actor_in: [ID!]
   thread: ForumThreadWhereInput
   oldCategory: ForumCategoryWhereInput
   newCategory: ForumCategoryWhereInput
@@ -21052,53 +18981,6 @@ union ThreadStatus = ThreadStatusActive | ThreadStatusLocked | ThreadStatusModer
 
 type ThreadStatusActive {
   phantom: Int
-}
-
-input ThreadStatusActiveCreateInput {
-  phantom: Float
-}
-
-input ThreadStatusActiveUpdateInput {
-  phantom: Float
-}
-
-input ThreadStatusActiveWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [ThreadStatusActiveWhereInput!]
-  OR: [ThreadStatusActiveWhereInput!]
-}
-
-input ThreadStatusActiveWhereUniqueInput {
-  id: ID!
 }
 
 type ThreadStatusLocked {
@@ -21129,150 +19011,12 @@ type UnlockBlogPostProposalDetails {
   blogPost: String!
 }
 
-input UnlockBlogPostProposalDetailsCreateInput {
-  blogPost: String!
-}
-
-input UnlockBlogPostProposalDetailsUpdateInput {
-  blogPost: String
-}
-
-input UnlockBlogPostProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  blogPost_eq: String
-  blogPost_contains: String
-  blogPost_startsWith: String
-  blogPost_endsWith: String
-  blogPost_in: [String!]
-  AND: [UnlockBlogPostProposalDetailsWhereInput!]
-  OR: [UnlockBlogPostProposalDetailsWhereInput!]
-}
-
-input UnlockBlogPostProposalDetailsWhereUniqueInput {
-  id: ID!
-}
-
 type UpcomingOpeningAdded {
   upcomingOpeningId: String!
 }
 
-input UpcomingOpeningAddedCreateInput {
-  upcomingOpeningId: String!
-}
-
-input UpcomingOpeningAddedUpdateInput {
-  upcomingOpeningId: String
-}
-
-input UpcomingOpeningAddedWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  upcomingOpeningId_eq: String
-  upcomingOpeningId_contains: String
-  upcomingOpeningId_startsWith: String
-  upcomingOpeningId_endsWith: String
-  upcomingOpeningId_in: [String!]
-  AND: [UpcomingOpeningAddedWhereInput!]
-  OR: [UpcomingOpeningAddedWhereInput!]
-}
-
-input UpcomingOpeningAddedWhereUniqueInput {
-  id: ID!
-}
-
 type UpcomingOpeningRemoved {
   upcomingOpeningId: String!
-}
-
-input UpcomingOpeningRemovedCreateInput {
-  upcomingOpeningId: String!
-}
-
-input UpcomingOpeningRemovedUpdateInput {
-  upcomingOpeningId: String
-}
-
-input UpcomingOpeningRemovedWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  upcomingOpeningId_eq: String
-  upcomingOpeningId_contains: String
-  upcomingOpeningId_startsWith: String
-  upcomingOpeningId_endsWith: String
-  upcomingOpeningId_in: [String!]
-  AND: [UpcomingOpeningRemovedWhereInput!]
-  OR: [UpcomingOpeningRemovedWhereInput!]
-}
-
-input UpcomingOpeningRemovedWhereUniqueInput {
-  id: ID!
 }
 
 type UpcomingWorkingGroupOpening implements BaseGraphQLObject {
@@ -21317,8 +19061,8 @@ input UpcomingWorkingGroupOpeningCreateInput {
   createdInEvent: ID!
   group: ID!
   expectedStart: DateTime
-  stakeAmount: BigInt
-  rewardPerBlock: BigInt
+  stakeAmount: String
+  rewardPerBlock: String
   metadata: ID!
 }
 
@@ -21352,8 +19096,8 @@ input UpcomingWorkingGroupOpeningUpdateInput {
   createdInEvent: ID
   group: ID
   expectedStart: DateTime
-  stakeAmount: BigInt
-  rewardPerBlock: BigInt
+  stakeAmount: String
+  rewardPerBlock: String
   metadata: ID
 }
 
@@ -21382,10 +19126,6 @@ input UpcomingWorkingGroupOpeningWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  createdInEvent_eq: ID
-  createdInEvent_in: [ID!]
-  group_eq: ID
-  group_in: [ID!]
   expectedStart_eq: DateTime
   expectedStart_lt: DateTime
   expectedStart_lte: DateTime
@@ -21403,8 +19143,6 @@ input UpcomingWorkingGroupOpeningWhereInput {
   rewardPerBlock_lt: BigInt
   rewardPerBlock_lte: BigInt
   rewardPerBlock_in: [BigInt!]
-  metadata_eq: ID
-  metadata_in: [ID!]
   createdInEvent: StatusTextChangedEventWhereInput
   group: WorkingGroupWhereInput
   metadata: WorkingGroupOpeningMetadataWhereInput
@@ -21420,7 +19158,7 @@ type UpdateWorkingGroupBudgetProposalDetails {
   """
   Amount to increase / decrease the working group budget by (will be decudted from / appended to council budget accordingly)
   """
-  amount: BigInt!
+  amount: Float!
 
   """
   Related working group
@@ -21428,102 +19166,8 @@ type UpdateWorkingGroupBudgetProposalDetails {
   group: WorkingGroup
 }
 
-input UpdateWorkingGroupBudgetProposalDetailsCreateInput {
-  amount: BigInt!
-}
-
-input UpdateWorkingGroupBudgetProposalDetailsUpdateInput {
-  amount: BigInt
-}
-
-input UpdateWorkingGroupBudgetProposalDetailsWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  amount_eq: BigInt
-  amount_gt: BigInt
-  amount_gte: BigInt
-  amount_lt: BigInt
-  amount_lte: BigInt
-  amount_in: [BigInt!]
-  AND: [UpdateWorkingGroupBudgetProposalDetailsWhereInput!]
-  OR: [UpdateWorkingGroupBudgetProposalDetailsWhereInput!]
-}
-
-input UpdateWorkingGroupBudgetProposalDetailsWhereUniqueInput {
-  id: ID!
-}
-
 type VariantNone {
   phantom: Int
-}
-
-input VariantNoneCreateInput {
-  phantom: Float
-}
-
-input VariantNoneUpdateInput {
-  phantom: Float
-}
-
-input VariantNoneWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [VariantNoneWhereInput!]
-  OR: [VariantNoneWhereInput!]
-}
-
-input VariantNoneWhereUniqueInput {
-  id: ID!
 }
 
 type VetoProposalDetails {
@@ -21905,7 +19549,7 @@ input VideoMediaMetadataCreateInput {
   encoding: ID
   pixelWidth: Float
   pixelHeight: Float
-  size: BigInt
+  size: String
   createdInBlock: Float!
 }
 
@@ -21937,7 +19581,7 @@ input VideoMediaMetadataUpdateInput {
   encoding: ID
   pixelWidth: Float
   pixelHeight: Float
-  size: BigInt
+  size: String
   createdInBlock: Float
 }
 
@@ -21966,8 +19610,6 @@ input VideoMediaMetadataWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  encoding_eq: ID
-  encoding_in: [ID!]
   pixelWidth_eq: Int
   pixelWidth_gt: Int
   pixelWidth_gte: Int
@@ -22086,10 +19728,6 @@ input VideoWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  channel_eq: ID
-  channel_in: [ID!]
-  category_eq: ID
-  category_in: [ID!]
   title_eq: String
   title_contains: String
   title_startsWith: String
@@ -22107,8 +19745,6 @@ input VideoWhereInput {
   duration_lte: Int
   duration_in: [Int!]
   thumbnailPhoto_json: JSONObject
-  language_eq: ID
-  language_in: [ID!]
   hasMarketing_eq: Boolean
   hasMarketing_in: [Boolean!]
   publishedBeforeJoystream_eq: DateTime
@@ -22122,11 +19758,7 @@ input VideoWhereInput {
   isCensored_in: [Boolean!]
   isExplicit_eq: Boolean
   isExplicit_in: [Boolean!]
-  license_eq: ID
-  license_in: [ID!]
   media_json: JSONObject
-  mediaMetadata_eq: ID
-  mediaMetadata_in: [ID!]
   createdInBlock_eq: Int
   createdInBlock_gt: Int
   createdInBlock_gte: Int
@@ -22275,8 +19907,6 @@ input VoteCastEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  castVote_eq: ID
-  castVote_in: [ID!]
   castVote: CastVoteWhereInput
   AND: [VoteCastEventWhereInput!]
   OR: [VoteCastEventWhereInput!]
@@ -22415,10 +20045,6 @@ input VoteOnPollEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  pollAlternative_eq: ID
-  pollAlternative_in: [ID!]
-  votingMember_eq: ID
-  votingMember_in: [ID!]
   pollAlternative: ForumPollAlternativeWhereInput
   votingMember: MembershipWhereInput
   AND: [VoteOnPollEventWhereInput!]
@@ -22556,8 +20182,6 @@ input VoteRevealedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  castVote_eq: ID
-  castVote_in: [ID!]
   castVote: CastVoteWhereInput
   AND: [VoteRevealedEventWhereInput!]
   OR: [VoteRevealedEventWhereInput!]
@@ -22618,7 +20242,7 @@ input VotingPeriodStartedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
-  numOfCandidates: BigInt!
+  numOfCandidates: String!
 }
 
 type VotingPeriodStartedEventEdge {
@@ -22650,7 +20274,7 @@ input VotingPeriodStartedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
-  numOfCandidates: BigInt
+  numOfCandidates: String
 }
 
 input VotingPeriodStartedEventWhereInput {
@@ -22820,9 +20444,9 @@ input WorkerCreateInput {
   stakeAccount: String!
   status: JSONObject!
   isLead: Boolean!
-  stake: BigInt!
-  rewardPerBlock: BigInt!
-  missingRewardAmount: BigInt
+  stake: String!
+  rewardPerBlock: String!
+  missingRewardAmount: String
   entry: ID!
   application: ID!
   storage: String
@@ -22966,10 +20590,6 @@ input WorkerExitedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   group: WorkingGroupWhereInput
   worker: WorkerWhereInput
   AND: [WorkerExitedEventWhereInput!]
@@ -23157,10 +20777,6 @@ input WorkerRewardAccountUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   newRewardAccount_eq: String
   newRewardAccount_contains: String
   newRewardAccount_startsWith: String
@@ -23233,7 +20849,7 @@ input WorkerRewardAmountUpdatedEventCreateInput {
   indexInBlock: Float!
   group: ID!
   worker: ID!
-  newRewardPerBlock: BigInt!
+  newRewardPerBlock: String!
 }
 
 type WorkerRewardAmountUpdatedEventEdge {
@@ -23271,7 +20887,7 @@ input WorkerRewardAmountUpdatedEventUpdateInput {
   indexInBlock: Float
   group: ID
   worker: ID
-  newRewardPerBlock: BigInt
+  newRewardPerBlock: String
 }
 
 input WorkerRewardAmountUpdatedEventWhereInput {
@@ -23318,10 +20934,6 @@ input WorkerRewardAmountUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   newRewardPerBlock_eq: BigInt
   newRewardPerBlock_gt: BigInt
   newRewardPerBlock_gte: BigInt
@@ -23480,10 +21092,6 @@ input WorkerRoleAccountUpdatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   newRoleAccount_eq: String
   newRoleAccount_contains: String
   newRoleAccount_startsWith: String
@@ -23641,10 +21249,6 @@ input WorkerStartedLeavingEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  worker_eq: ID
-  worker_in: [ID!]
   rationale_eq: String
   rationale_contains: String
   rationale_startsWith: String
@@ -23664,53 +21268,6 @@ union WorkerStatus = WorkerStatusActive | WorkerStatusLeaving | WorkerStatusLeft
 
 type WorkerStatusActive {
   phantom: Int
-}
-
-input WorkerStatusActiveCreateInput {
-  phantom: Float
-}
-
-input WorkerStatusActiveUpdateInput {
-  phantom: Float
-}
-
-input WorkerStatusActiveWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  phantom_eq: Int
-  phantom_gt: Int
-  phantom_gte: Int
-  phantom_lt: Int
-  phantom_lte: Int
-  phantom_in: [Int!]
-  AND: [WorkerStatusActiveWhereInput!]
-  OR: [WorkerStatusActiveWhereInput!]
-}
-
-input WorkerStatusActiveWhereUniqueInput {
-  id: ID!
 }
 
 type WorkerStatusLeaving {
@@ -23748,9 +21305,9 @@ input WorkerUpdateInput {
   stakeAccount: String
   status: JSONObject
   isLead: Boolean
-  stake: BigInt
-  rewardPerBlock: BigInt
-  missingRewardAmount: BigInt
+  stake: String
+  rewardPerBlock: String
+  missingRewardAmount: String
   entry: ID
   application: ID
   storage: String
@@ -23787,10 +21344,6 @@ input WorkerWhereInput {
   runtimeId_lt: Int
   runtimeId_lte: Int
   runtimeId_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
-  membership_eq: ID
-  membership_in: [ID!]
   roleAccount_eq: String
   roleAccount_contains: String
   roleAccount_startsWith: String
@@ -23827,10 +21380,6 @@ input WorkerWhereInput {
   missingRewardAmount_lt: BigInt
   missingRewardAmount_lte: BigInt
   missingRewardAmount_in: [BigInt!]
-  entry_eq: ID
-  entry_in: [ID!]
-  application_eq: ID
-  application_in: [ID!]
   storage_eq: String
   storage_contains: String
   storage_startsWith: String
@@ -24033,7 +21582,7 @@ input WorkingGroupApplicationCreateInput {
   runtimeId: Float!
   opening: ID!
   applicant: ID!
-  stake: BigInt!
+  stake: String!
   roleAccount: String!
   rewardAccount: String!
   stakingAccount: String!
@@ -24079,7 +21628,7 @@ input WorkingGroupApplicationUpdateInput {
   runtimeId: Float
   opening: ID
   applicant: ID
-  stake: BigInt
+  stake: String
   roleAccount: String
   rewardAccount: String
   stakingAccount: String
@@ -24117,10 +21666,6 @@ input WorkingGroupApplicationWhereInput {
   runtimeId_lt: Int
   runtimeId_lte: Int
   runtimeId_in: [Int!]
-  opening_eq: ID
-  opening_in: [ID!]
-  applicant_eq: ID
-  applicant_in: [ID!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
@@ -24173,7 +21718,7 @@ input WorkingGroupCreateInput {
   name: String!
   metadata: ID
   leader: ID
-  budget: BigInt!
+  budget: String!
 }
 
 type WorkingGroupEdge {
@@ -24325,10 +21870,6 @@ input WorkingGroupMetadataWhereInput {
   description_startsWith: String
   description_endsWith: String
   description_in: [String!]
-  setInEvent_eq: ID
-  setInEvent_in: [ID!]
-  group_eq: ID
-  group_in: [ID!]
   setInEvent: StatusTextChangedEventWhereInput
   group: WorkingGroupWhereInput
   workinggroupmetadata_none: WorkingGroupWhereInput
@@ -24409,9 +21950,9 @@ input WorkingGroupOpeningCreateInput {
   type: WorkingGroupOpeningType!
   status: JSONObject!
   metadata: ID!
-  stakeAmount: BigInt!
+  stakeAmount: String!
   unstakingPeriod: Float!
-  rewardPerBlock: BigInt!
+  rewardPerBlock: String!
 }
 
 type WorkingGroupOpeningEdge {
@@ -24620,9 +22161,9 @@ input WorkingGroupOpeningUpdateInput {
   type: WorkingGroupOpeningType
   status: JSONObject
   metadata: ID
-  stakeAmount: BigInt
+  stakeAmount: String
   unstakingPeriod: Float
-  rewardPerBlock: BigInt
+  rewardPerBlock: String
 }
 
 input WorkingGroupOpeningWhereInput {
@@ -24656,13 +22197,9 @@ input WorkingGroupOpeningWhereInput {
   runtimeId_lt: Int
   runtimeId_lte: Int
   runtimeId_in: [Int!]
-  group_eq: ID
-  group_in: [ID!]
   type_eq: WorkingGroupOpeningType
   type_in: [WorkingGroupOpeningType!]
   status_json: JSONObject
-  metadata_eq: ID
-  metadata_in: [ID!]
   stakeAmount_eq: BigInt
   stakeAmount_gt: BigInt
   stakeAmount_gte: BigInt
@@ -24725,7 +22262,7 @@ input WorkingGroupUpdateInput {
   name: String
   metadata: ID
   leader: ID
-  budget: BigInt
+  budget: String
 }
 
 input WorkingGroupWhereInput {
@@ -24758,10 +22295,6 @@ input WorkingGroupWhereInput {
   name_startsWith: String
   name_endsWith: String
   name_in: [String!]
-  metadata_eq: ID
-  metadata_in: [ID!]
-  leader_eq: ID
-  leader_in: [ID!]
   budget_eq: BigInt
   budget_gt: BigInt
   budget_gte: BigInt
