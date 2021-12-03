@@ -1,6 +1,7 @@
 import yargs from 'yargs'
 
 import { announceCandidaciesModule } from './commands/council/announce'
+import { revealVotesModule } from './commands/council/reveal'
 import { createMembersModule } from './commands/members/create'
 import { createOpeningModule } from './commands/opening/create'
 import { fillOpeningModule } from './commands/opening/fill'
@@ -11,6 +12,7 @@ yargs(process.argv.slice(2))
   .usage('yarn node-mocks <command>')
   .scriptName('')
   .command(announceCandidaciesModule)
+  .command(castVotesModule)
   .command(createMembersModule)
   .command(setBudgetModule)
   .command(createOpeningModule)
