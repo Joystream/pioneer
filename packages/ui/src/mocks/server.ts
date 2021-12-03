@@ -9,22 +9,22 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedCouncilCandidates,
+  seedCouncilElections,
   seedCouncilMembers,
+  seedCouncilReferendumResults,
+  seedCouncilVotes,
   seedElectedCouncils,
+  seedEvents,
   seedMembers,
-  seedOpeningStatuses,
   seedOpenings,
+  seedOpeningStatuses,
+  seedProposals,
+  seedProposalsEvents,
   seedUpcomingOpenings,
   seedWorkers,
   seedWorkingGroups,
-  seedProposals,
-  seedEvents,
   updateWorkingGroups,
-  seedCouncilCandidates,
-  seedCouncilElections,
-  seedProposalsEvents,
-  seedCouncilVotes,
-  seedCouncilReferendumResults,
 } from './data'
 import {
   getConnectionResolver,
@@ -125,7 +125,6 @@ export const makeServer = (environment = 'development') => {
               openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
-              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposalVotedEvents: getWhereResolver('ProposalVotedEvent'),
@@ -166,10 +165,17 @@ export const makeServer = (environment = 'development') => {
               workingGroups: getWhereResolver('WorkingGroup'),
               postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
               postAddedEvents: getWhereResolver('PostAddedEvent'),
+              postModeratedEvents: getWhereResolver('PostModeratedEvent'),
+              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
+              categoryCreatedEvents: getWhereResolver('CategoryCreatedEvent'),
+              categoryDeletedEvents: getWhereResolver('CategoryDeletedEvent'),
+              threadCreatedEvents: getWhereResolver('ThreadCreatedEvent'),
+              threadDeletedEvents: getWhereResolver('ThreadDeletedEvent'),
+              threadModeratedEvents: getWhereResolver('ThreadModeratedEvent'),
               events: getInterfaceResolver(),
             },
           },
-        })
+        }),
       )
       this.passthrough(MEMBERSHIP_FAUCET_URL)
     },
@@ -177,30 +183,30 @@ export const makeServer = (environment = 'development') => {
     ...(environment !== 'development'
       ? {}
       : {
-          seeds(server: Server<AnyRegistry>) {
-            fixAssociations(server)
+        seeds(server: Server<AnyRegistry>) {
+          fixAssociations(server)
 
-            seedMembers(server)
-            seedWorkingGroups(server)
-            seedOpeningStatuses(server)
-            seedOpenings(server)
-            seedUpcomingOpenings(server)
-            seedApplications(server)
-            seedWorkers(server)
-            updateWorkingGroups(server)
-            seedProposals(server)
-            seedEvents(server)
-            seedForumCategories(server)
-            seedForumThreads(server)
-            seedForumPosts(server)
-            seedProposalsEvents(server)
-            seedElectedCouncils(server)
-            seedCouncilMembers(server)
-            seedCouncilElections(server)
-            seedCouncilReferendumResults(server)
-            seedCouncilCandidates(server)
-            seedCouncilVotes(server)
-          },
-        }),
+          seedMembers(server)
+          seedWorkingGroups(server)
+          seedOpeningStatuses(server)
+          seedOpenings(server)
+          seedUpcomingOpenings(server)
+          seedApplications(server)
+          seedWorkers(server)
+          updateWorkingGroups(server)
+          seedProposals(server)
+          seedEvents(server)
+          seedForumCategories(server)
+          seedForumThreads(server)
+          seedForumPosts(server)
+          seedProposalsEvents(server)
+          seedElectedCouncils(server)
+          seedCouncilMembers(server)
+          seedCouncilElections(server)
+          seedCouncilReferendumResults(server)
+          seedCouncilCandidates(server)
+          seedCouncilVotes(server)
+        },
+      }),
   })
 }

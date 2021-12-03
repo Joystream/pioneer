@@ -108,6 +108,7 @@ const forum: {
       },
       status: 'PostStatusActive',
       deletedInEvent: null,
+      postModeratedEvent: null,
     },
   ],
 }
