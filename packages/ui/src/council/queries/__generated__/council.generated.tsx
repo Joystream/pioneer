@@ -238,7 +238,18 @@ export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  updatedAt?: any | null | undefined
+  referendumResult?:
+    | Array<{
+        __typename: 'ReferendumStageRevealingOptionResult'
+        referendumFinishedEvent: {
+          __typename: 'ReferendumFinishedEvent'
+          inBlock: number
+          network: Types.Network
+          createdAt: any
+        }
+      }>
+    | null
+    | undefined
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
 }
@@ -247,7 +258,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  updatedAt?: any | null | undefined
   candidates: Array<{
     __typename: 'Candidate'
     stake: any
@@ -287,6 +297,18 @@ export type PastElectionRoundDetailedFieldsFragment = {
     voteForId?: string | null | undefined
     castBy: string
   }>
+  referendumResult?:
+    | Array<{
+        __typename: 'ReferendumStageRevealingOptionResult'
+        referendumFinishedEvent: {
+          __typename: 'ReferendumFinishedEvent'
+          inBlock: number
+          network: Types.Network
+          createdAt: any
+        }
+      }>
+    | null
+    | undefined
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -328,7 +350,6 @@ export type ElectionCandidateDetailedFieldsFragment = {
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
   id: string
-  createdAt: any
   stake: any
   stakeLocked: boolean
   castBy: string
@@ -373,6 +394,10 @@ export type CastVoteFieldsFragment = {
     | null
     | undefined
   electionRound: { __typename: 'ElectionRound'; cycleId: number }
+  castEvent?:
+    | Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }>
+    | null
+    | undefined
 }
 
 export type CouncilSpendingEventFieldsFragment = {
@@ -795,7 +820,18 @@ export type GetPastElectionsQuery = {
     __typename: 'ElectionRound'
     id: string
     cycleId: number
-    updatedAt?: any | null | undefined
+    referendumResult?:
+      | Array<{
+          __typename: 'ReferendumStageRevealingOptionResult'
+          referendumFinishedEvent: {
+            __typename: 'ReferendumFinishedEvent'
+            inBlock: number
+            network: Types.Network
+            createdAt: any
+          }
+        }>
+      | null
+      | undefined
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
   }>
@@ -819,7 +855,6 @@ export type GetPastElectionQuery = {
         __typename: 'ElectionRound'
         id: string
         cycleId: number
-        updatedAt?: any | null | undefined
         candidates: Array<{
           __typename: 'Candidate'
           stake: any
@@ -863,6 +898,18 @@ export type GetPastElectionQuery = {
           voteForId?: string | null | undefined
           castBy: string
         }>
+        referendumResult?:
+          | Array<{
+              __typename: 'ReferendumStageRevealingOptionResult'
+              referendumFinishedEvent: {
+                __typename: 'ReferendumFinishedEvent'
+                inBlock: number
+                network: Types.Network
+                createdAt: any
+              }
+            }>
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -959,7 +1006,6 @@ export type GetCouncilVotesQuery = {
   castVotes: Array<{
     __typename: 'CastVote'
     id: string
-    createdAt: any
     stake: any
     stakeLocked: boolean
     castBy: string
@@ -1004,6 +1050,10 @@ export type GetCouncilVotesQuery = {
       | null
       | undefined
     electionRound: { __typename: 'ElectionRound'; cycleId: number }
+    castEvent?:
+      | Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }>
+      | null
+      | undefined
   }>
 }
 
@@ -1221,7 +1271,13 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
     id
     cycleId
-    updatedAt
+    referendumResult: referendumstagerevealingoptionresultelectionRound {
+      referendumFinishedEvent {
+        inBlock
+        network
+        createdAt
+      }
+    }
     candidates {
       stake
     }
@@ -1261,7 +1317,6 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
     id
-    createdAt
     stake
     stakeLocked
     castBy
@@ -1271,6 +1326,11 @@ export const CastVoteFieldsFragmentDoc = gql`
     }
     electionRound {
       cycleId
+    }
+    castEvent: votecasteventcastVote {
+      inBlock
+      network
+      createdAt
     }
   }
   ${ElectionCandidateFieldsFragmentDoc}
