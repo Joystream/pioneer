@@ -13,9 +13,9 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
-import { SetMaxValidatorCountParameters } from '@/proposals/modals/AddNewProposal/components/SetMaxValidatorCount'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrementParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetMaxValidatorCountParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetReferralCutParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
@@ -31,6 +31,7 @@ import {
   TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
 import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
+import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
 import {
   CancelWorkingGroupLeadOpeningParameters,
   StakingPolicyAndRewardParameters,
@@ -77,6 +78,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetCouncilBudgetIncrementParameters
     | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
 }
 
@@ -86,6 +88,10 @@ interface SignalContext extends SpecificParametersContext {
 
 interface FundingRequestContext extends SpecificParametersContext {
   specifics: FundingRequestParameters
+}
+
+interface SetCouncilorRewardContext extends SpecificParametersContext {
+  specifics: SignalParameters
 }
 
 interface SetCouncilBudgetIncrementContext extends SpecificParametersContext {
@@ -140,6 +146,10 @@ interface SetInitialInvitationBalanceContext extends SpecificParametersContext {
   specifics: SetInitialInvitationBalanceParameters
 }
 
+interface SetInitialInvitationCountContext extends SpecificParametersContext {
+  specifics: SetInitialInvitationCountParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
   proposalId?: number
@@ -165,6 +175,7 @@ export type AddNewProposalContext = Partial<
     CancelWorkingGroupLeadOpeningContext &
     FillWorkingGroupLeadOpeningContext &
     SetCouncilBudgetIncrementContext &
+    SetCouncilorRewardContext &
     StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
@@ -176,7 +187,8 @@ export type AddNewProposalContext = Partial<
     SetMaxValidatorCountContext &
     DiscussionContext &
     SetMembershipLeadInvitationContext &
-    SetInitialInvitationBalanceContext
+    SetInitialInvitationBalanceContext &
+    SetInitialInvitationCountContext
 >
 
 export type AddNewProposalState =
@@ -202,6 +214,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
   | { value: { specificParameters: 'setMaxValidatorCount' }; context: SetMaxValidatorCountContext }
   | { value: { specificParameters: 'setCouncilBudgetIncrement' }; context: SetCouncilBudgetIncrementContext }
+  | { value: { specificParameters: 'setCouncilorReward' }; context: SetCouncilorRewardContext }
   | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
@@ -216,6 +229,7 @@ export type AddNewProposalState =
       value: { specificParameters: 'cancelWorkingGroupLeadOpening' }
       context: CancelWorkingGroupLeadOpeningContext
     }
+  | { value: { specificParameters: 'setInitialInvitationCount' }; context: SetInitialInvitationCountContext }
   | { value: 'beforeTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
@@ -243,6 +257,7 @@ type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leaving
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
 type SetRuntime = { type: 'SET_RUNTIME'; runtime: ArrayBuffer }
 type SetSlashingAmount = { type: 'SET_SLASHING_AMOUNT'; slashingAmount: BN }
+type SetInvitationCount = { type: 'SET_INVITATION_COUNT'; count: BN }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -270,6 +285,7 @@ export type AddNewProposalEvent =
   | SetRewardPerBlock
   | SetRuntime
   | SetSlashingAmount
+  | SetInvitationCount
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
@@ -429,7 +445,9 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'setMaxValidatorCount', cond: isType('setMaxValidatorCount') },
             { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
+            { target: 'setCouncilorReward', cond: isType('setCouncilorReward') },
             { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
+            { target: 'setInitialInvitationCount', cond: isType('setInitialInvitationCount') },
           ],
         },
         signal: {
@@ -579,6 +597,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   ...context.specifics,
                   workerId: event.workerId,
                 }),
+              }),
+            },
+          },
+        },
+        setCouncilorReward: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
               }),
             },
           },
@@ -744,6 +771,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
+        setInitialInvitationCount: {
+          on: {
+            SET_INVITATION_COUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  invitationCount: event.count,
+                }),
+              }),
+            },
+          },
+        },
       },
     },
     beforeTransaction: {
@@ -782,23 +821,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         onDone: [
           {
             target: 'success',
-            actions: assign({
-              transactionEvents: (context, event) => event.data.events,
-              proposalId: (_, event) =>
-                parseInt(getDataFromEvent(event.data.events, 'proposalsCodex', 'ProposalCreated')?.toString() ?? '-1'),
-            }),
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode !== 'closed',
           },
           {
             target: 'discussionTransaction',
             actions: assign({
               transactionEvents: (context, event) => event.data.events,
-              proposalId: (_, event) =>
-                parseInt(getDataFromEvent(event.data.events, 'proposalsCodex', 'ProposalCreated')?.toString() ?? '-1'),
               discussionId: (_, event) =>
-                parseInt(
-                  getDataFromEvent(event.data.events, 'proposalsDiscussion', 'ThreadCreated')?.toString() ?? '-1'
-                ),
+                parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 1)?.toString() ?? '-1'),
             }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode === 'closed',
           },

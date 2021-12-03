@@ -739,6 +739,28 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
+      describe('Type - Set Councilor Reward', () => {
+        beforeEach(async () => {
+          await finishProposalType('setCouncilorReward')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Councilor Reward$/i)).toBeDefined()
+        })
+
+        it('Invalid form', async () => {
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid form', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+
       describe('Type - Set Membership lead invitation quota proposal', () => {
         beforeEach(async () => {
           await finishProposalType('setMembershipLeadInvitationQuota')
@@ -787,6 +809,28 @@ describe('UI: AddNewProposalModal', () => {
         it('Valid form', async () => {
           await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
           await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
+      describe('Type - Set Initial Invitation Count', () => {
+        beforeAll(() => {
+          stubQuery(api, 'members.initialInvitationCount', createType('u32', 13))
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setInitialInvitationCount')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Initial Invitation Count$/i)).toBeDefined()
+        })
+
+        it('Displays current invitations count', async () => {
+          expect(await screen.findByText('The current initial invitation count is 13.')).toBeDefined()
+        })
+
+        it('Valid form', async () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
