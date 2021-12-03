@@ -15,7 +15,7 @@ export interface SetInitialInvitationCountParameters {
 }
 
 interface InvitationCountProps {
-  setNewCount: (count: BN) => void
+  setNewCount: (count: BN | undefined) => void
 }
 
 export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps) => {
@@ -24,7 +24,7 @@ export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps)
   const currentCount = useObservable(api?.query.members.initialInvitationCount(), [])
 
   useEffect(() => {
-    setNewCount(new BN(count))
+    setNewCount(count ? new BN(count) : undefined)
   }, [count])
 
   return (
@@ -37,7 +37,7 @@ export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps)
       </Row>
       <RowGapBlock gap={12}>
         <Row>
-          <InputComponent label="New Count" tight required>
+          <InputComponent label="New Count" tight required id="count-input">
             <InputNumber
               id="count-input"
               value={formatTokenValue(count)}

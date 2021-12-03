@@ -497,6 +497,12 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
+        it('Invalid - zero entered', async () => {
+          await SpecificParameters.fillAmount(0)
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
         it('Blocks value bigger than 255', async () => {
           await SpecificParameters.fillAmount(300)
           expect(await screen.getByTestId('amount-input')).toHaveValue('')
@@ -531,6 +537,15 @@ describe('UI: AddNewProposalModal', () => {
           await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
 
           expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Zero amount entered', async () => {
+          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
+          await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
+          await SpecificParameters.fillAmount(0)
 
           const button = await getCreateButton()
           expect(button).toBeDisabled()
@@ -620,6 +635,11 @@ describe('UI: AddNewProposalModal', () => {
           expect(screen.queryByLabelText(/^reward amount per block/i, { selector: 'input' })).toHaveValue('')
 
           expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(0)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(0)
+
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Step 2: Invalid to valid', async () => {
@@ -649,6 +669,9 @@ describe('UI: AddNewProposalModal', () => {
         it('Invalid form', async () => {
           expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(0)
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -724,6 +747,9 @@ describe('UI: AddNewProposalModal', () => {
           expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.fillAmount(0)
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Validate max value', async () => {
@@ -753,6 +779,9 @@ describe('UI: AddNewProposalModal', () => {
           expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.fillAmount(0)
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid form', async () => {
@@ -775,6 +804,9 @@ describe('UI: AddNewProposalModal', () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
           expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.fillAmount(0)
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -830,7 +862,15 @@ describe('UI: AddNewProposalModal', () => {
           expect(await screen.findByText('The current initial invitation count is 13.')).toBeDefined()
         })
 
+        it('Invalid form', async () => {
+          expect(await screen.findByLabelText(/^New Count$/i, { selector: 'input' })).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
         it('Valid form', async () => {
+          await SpecificParameters.SetInitialInvitationCount.fillCount(1)
+          expect(await getCreateButton()).toBeEnabled()
+          await SpecificParameters.SetInitialInvitationCount.fillCount(0)
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -850,6 +890,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.fillAmount(0)
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -1237,6 +1280,9 @@ describe('UI: AddNewProposalModal', () => {
     FillWorkingGroupLeadOpening: {
       selectedOpening,
       selectApplication,
+    },
+    SetInitialInvitationCount: {
+      fillCount: async (value: number) => await fillField('count-input', value),
     },
   }
 

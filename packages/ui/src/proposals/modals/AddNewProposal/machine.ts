@@ -256,7 +256,7 @@ type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leaving
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
 type SetRuntime = { type: 'SET_RUNTIME'; runtime: ArrayBuffer }
 type SetSlashingAmount = { type: 'SET_SLASHING_AMOUNT'; slashingAmount: BN }
-type SetInvitationCount = { type: 'SET_INVITATION_COUNT'; count: BN }
+type SetInvitationCount = { type: 'SET_INVITATION_COUNT'; count: BN | undefined }
 
 const isType = (type: string) => (context: any) => type === context.type
 
