@@ -27,6 +27,7 @@ import {
 } from '@/proposals/modals/AddNewProposal/machine'
 
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
+import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 
 interface SpecificParametersStepProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
@@ -103,6 +104,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     }
     case state.matches('specificParameters.setInitialInvitationBalance'): {
       return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
+    case state.matches('specificParameters.setInitialInvitationCount'): {
+      return !!specifics?.invitationCount
     }
     default:
       return false
@@ -227,6 +231,8 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
       )
+    case state.matches('specificParameters.setInitialInvitationCount'):
+      return <SetInitialInvitationCount setNewCount={(count) => send('SET_INVITATION_COUNT', { count })} />
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut

@@ -117,6 +117,11 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'setInitialInvitationBalance': {
       return { SetInitialInvitationBalance: specifics?.amount }
     }
+    case 'setInitialInvitationCount': {
+      return {
+        SetInitialInvitationCount: [specifics?.invitationCount],
+      }
+    }
     case 'setMaxValidatorCount': {
       return { SetMaxValidatorCount: specifics?.amount?.toNumber() }
     }

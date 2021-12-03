@@ -31,6 +31,7 @@ import {
   TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
 import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
+import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
 import {
   CancelWorkingGroupLeadOpeningParameters,
   StakingPolicyAndRewardParameters,
@@ -77,6 +78,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetCouncilBudgetIncrementParameters
     | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
 }
 
@@ -140,6 +142,10 @@ interface SetInitialInvitationBalanceContext extends SpecificParametersContext {
   specifics: SetInitialInvitationBalanceParameters
 }
 
+interface SetInitialInvitationCountContext extends SpecificParametersContext {
+  specifics: SetInitialInvitationCountParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -173,10 +179,12 @@ export type AddNewProposalContext = Partial<
     TransactionContext &
     SetReferralCutContext &
     SetWorkingGroupLeadRewardContext &
+    DiscusisonContext &
     SetMaxValidatorCountContext &
     DiscusisonContext &
     SetMembershipLeadInvitationContext &
-    SetInitialInvitationBalanceContext
+    SetInitialInvitationBalanceContext &
+    SetInitialInvitationCountContext
 >
 
 export type AddNewProposalState =
@@ -216,6 +224,7 @@ export type AddNewProposalState =
       value: { specificParameters: 'cancelWorkingGroupLeadOpening' }
       context: CancelWorkingGroupLeadOpeningContext
     }
+  | { value: { specificParameters: 'setInitialInvitationCount' }; context: SetInitialInvitationCountContext }
   | { value: 'beforeTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
@@ -243,6 +252,7 @@ type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leaving
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
 type SetRuntime = { type: 'SET_RUNTIME'; runtime: ArrayBuffer }
 type SetSlashingAmount = { type: 'SET_SLASHING_AMOUNT'; slashingAmount: BN }
+type SetInvitationCount = { type: 'SET_INVITATION_COUNT'; count: BN }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -270,6 +280,7 @@ export type AddNewProposalEvent =
   | SetRewardPerBlock
   | SetRuntime
   | SetSlashingAmount
+  | SetInvitationCount
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
@@ -430,6 +441,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
             { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
+            { target: 'setInitialInvitationCount', cond: isType('setInitialInvitationCount') },
           ],
         },
         signal: {
@@ -739,6 +751,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   amount: event.amount,
+                }),
+              }),
+            },
+          },
+        },
+        setInitialInvitationCount: {
+          on: {
+            SET_INVITATION_COUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  invitationCount: event.count,
                 }),
               }),
             },

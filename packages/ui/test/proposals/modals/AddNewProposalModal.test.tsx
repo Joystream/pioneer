@@ -790,6 +790,28 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+      describe('Type - Set Initial Invitation Count', () => {
+        beforeAll(() => {
+          stubQuery(api, 'members.initialInvitationCount', createType('u32', 13))
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('setInitialInvitationCount')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Set Initial Invitation Count$/i)).toBeDefined()
+        })
+
+        it('Displays current invitations count', async () => {
+          expect(await screen.findByText('The current initial invitation count is 13.')).toBeDefined()
+        })
+
+        it('Valid form', async () => {
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
       describe('Type - Set Initial Invitation Balance', () => {
         beforeAll(() => {
           stubQuery(api, 'members.initialInvitationBalance', createType('Balance', 2137))
