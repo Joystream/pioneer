@@ -5,9 +5,9 @@ import { ApiRx, WsProvider } from '@polkadot/api'
 import rpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 
-import { OLYMPIA_TESTNET_NODE_SOCKET } from '@/app/config'
+import { NODE_RPC_ENDPOINT } from '@/app/config'
 
-import { NetworkType, useNetwork } from '../../hooks/useNetwork'
+import { useNetwork } from '../../hooks/useNetwork'
 
 import { ApiContext } from './context'
 
@@ -43,22 +43,12 @@ interface APIDisconnected extends BaseAPI {
 
 export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
-const endpoints: Record<NetworkType, string> = {
-  local: 'ws://127.0.0.1:9944',
-  'local-mocks': 'ws://127.0.0.1:9944',
-  'olympia-testnet': OLYMPIA_TESTNET_NODE_SOCKET,
-}
-
-const getEndPoint = (network: NetworkType) => {
-  return endpoints[network] || endpoints['local']
-}
-
 export const ApiContextProvider = ({ children }: Props) => {
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
   const [network] = useNetwork()
 
   const api = useMemo(() => {
-    const provider = new WsProvider(getEndPoint(network))
+    const provider = new WsProvider(NODE_RPC_ENDPOINT[network])
     return new ApiRx({ provider, rpc, types, registry })
   }, [])
 

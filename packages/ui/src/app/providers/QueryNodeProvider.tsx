@@ -4,8 +4,8 @@ import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import React, { ReactNode } from 'react'
 
-import { OLYMPIA_TESTNET_QUERY_NODE, OLYMPIA_TESTNET_QUERY_NODE_SOCKET } from '@/app/config'
-import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
+import { NetworkType, QUERY_NODE_ENDPOINT, QUERY_NODE_ENDPOINT_SUBSCRIPTION } from '@/app/config'
+import { useNetwork } from '@/common/hooks/useNetwork'
 import { error } from '@/common/logger'
 import { ServerContextProvider } from '@/common/providers/server/provider'
 import { makeServer } from '@/mocks/server'
@@ -14,24 +14,12 @@ interface Props {
   children: ReactNode
 }
 
-const SUBSCRIPTION_ENDPOINTS: Record<NetworkType, string> = {
-  local: 'ws://localhost:8081/graphql',
-  'local-mocks': 'ws://localhost:8081/graphql',
-  'olympia-testnet': OLYMPIA_TESTNET_QUERY_NODE_SOCKET,
-}
-
-const ENDPOINTS: Record<NetworkType, string> = {
-  local: 'http://localhost:8081/graphql',
-  'local-mocks': 'http://localhost:8081/graphql',
-  'olympia-testnet': OLYMPIA_TESTNET_QUERY_NODE,
-}
-
 export const QueryNodeProvider = ({ children }: Props) => {
   const [network] = useNetwork()
 
   if (network === 'local-mocks') {
     return (
-      <ServerContextProvider value={makeServer()}>
+      <ServerContextProvider value={makeServer('development', network)}>
         <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
       </ServerContextProvider>
     )
@@ -42,7 +30,7 @@ export const QueryNodeProvider = ({ children }: Props) => {
 
 const getApolloClient = (network: NetworkType) => {
   const httpLink = new HttpLink({
-    uri: ENDPOINTS[network],
+    uri: QUERY_NODE_ENDPOINT[network],
   })
 
   const errorLink = onError((errorResponse) => {
@@ -57,7 +45,7 @@ const getApolloClient = (network: NetworkType) => {
 
   const queryLink = from([errorLink, httpLink])
   const subscriptionLink = new WebSocketLink({
-    uri: SUBSCRIPTION_ENDPOINTS[network],
+    uri: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
     options: {
       reconnect: true,
       reconnectionAttempts: 5,

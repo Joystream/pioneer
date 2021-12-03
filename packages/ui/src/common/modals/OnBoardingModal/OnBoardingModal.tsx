@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
-import { MEMBERSHIP_FAUCET_URL } from '@/app/config'
+import { MEMBERSHIP_FAUCET_ENDPOINT } from '@/app/config'
 import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
@@ -14,7 +14,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
+import { useNetwork } from '@/common/hooks/useNetwork'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useQueryNodeTransactionStatus } from '@/common/hooks/useQueryNodeTransactionStatus'
 import { onBoardingMachine } from '@/common/modals/OnBoardingModal/machine'
@@ -24,12 +24,6 @@ import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlug
 import { SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
-
-const MEMBERSHIP_FAUCET_ENDPOINT: Record<NetworkType, string> = {
-  local: 'http://localhost:4004/register',
-  'local-mocks': 'http://localhost:4004/register',
-  'olympia-testnet': MEMBERSHIP_FAUCET_URL,
-}
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()

@@ -2,7 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { MEMBERSHIP_FAUCET_URL } from '@/app/config'
+import { MEMBERSHIP_FAUCET_ENDPOINT, NetworkType, QUERY_NODE_ENDPOINT } from '@/app/config'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
@@ -79,13 +79,13 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   electedCouncilModel.class.prototype.associations.councilElections.opts.inverse = null
 }
 
-export const makeServer = (environment = 'development') => {
+export const makeServer = (environment = 'development', network: NetworkType = 'local') => {
   return createServer({
     environment,
 
     routes() {
       this.post(
-        'http://localhost:8081/graphql',
+        QUERY_NODE_ENDPOINT[network],
         createGraphQLHandler(schema, this.schema, {
           context: undefined,
           root: undefined,
@@ -177,7 +177,7 @@ export const makeServer = (environment = 'development') => {
           },
         })
       )
-      this.passthrough(MEMBERSHIP_FAUCET_URL)
+      this.passthrough(MEMBERSHIP_FAUCET_ENDPOINT[network])
     },
 
     ...(environment !== 'development'
