@@ -818,6 +818,25 @@ describe('UI: AddNewProposalModal', () => {
           expect(await screen.findByText('The current balance is 2137 JOY.')).toBeDefined()
         })
       })
+      describe('Type - Set Membership price', () => {
+        beforeEach(async () => {
+          await finishProposalType('setMembershipPrice')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - Invalid', async () => {
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid', async () => {
+          await SpecificParameters.fillAmount(100)
+          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
     })
 
     describe('Authorize', () => {
