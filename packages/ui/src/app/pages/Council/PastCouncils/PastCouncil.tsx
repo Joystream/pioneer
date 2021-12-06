@@ -84,5 +84,5 @@ export const PastCouncil = () => {
     )
   }
 
-  return <PageLayout header={displayHeader()} main={displayMain()} />
+  return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Council #' + id} />
 }
