@@ -40,7 +40,7 @@ export const SetInitialInvitationBalance = ({ setAmount: saveAmount }: FundingRe
           <InputComponent label="Invitation Balance" tight units="JOY" required>
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder="0"
               onChange={(event) => setAmount(event.target.value)}
             />

@@ -82,7 +82,7 @@ export const SetMaxValidatorCount = ({
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(validatorCount))}
+              value={formatTokenValue(validatorCount)}
               placeholder="0"
               onChange={onChange}
             />

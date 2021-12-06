@@ -49,12 +49,7 @@ export const SetReferralCut = ({ amount: cutAmount, setAmount: setCutAmount }: P
             message="Maximal value for referral is 255 JOY"
             required
           >
-            <InputNumber
-              id="amount-input"
-              value={formatTokenValue(new BN(amount))}
-              placeholder="0"
-              onChange={onChange}
-            />
+            <InputNumber id="amount-input" value={formatTokenValue(amount)} placeholder="0" onChange={onChange} />
           </InputComponent>
         </RowGapBlock>
       </Row>

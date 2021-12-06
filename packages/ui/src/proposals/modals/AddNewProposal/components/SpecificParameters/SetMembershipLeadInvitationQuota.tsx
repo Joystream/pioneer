@@ -54,7 +54,7 @@ export const SetMembershipLeadInvitationQuota = ({ amount: initialAmount, setAmo
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder="0"
               onChange={setInvitationQuota}
               disabled={isLoading || !group?.leadId}
