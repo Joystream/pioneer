@@ -66,9 +66,9 @@ describe('UI: Past Council page', () => {
 
   describe('Council found', () => {
     it('Renders', async () => {
-      const { queryByText } = await renderComponent()
+      const { queryByText, findAllByText } = await renderComponent()
 
-      expect(queryByText(/Council #1/i)).not.toBeNull()
+      expect(await findAllByText(/Council #1/i)).toHaveLength(2)
       expect(queryByText(/^Past Council$/i)).not.toBeNull()
       expect(queryByText(/Council members/i)).not.toBeNull()
       expect(queryByText(/^Proposals$/i)).not.toBeNull()

@@ -119,9 +119,9 @@ describe('UI: Past Election page', () => {
   })
 
   it('Renders', async () => {
-    const { queryByText } = await renderComponent()
+    const { queryByText, findAllByText } = await renderComponent()
 
-    expect(queryByText(/Election #1/i)).not.toBeNull()
+    expect(await findAllByText(/Election #1/i)).toHaveLength(2)
     expect(queryByText(/Voting results/i)).not.toBeNull()
   })
 
