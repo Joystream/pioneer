@@ -12,6 +12,7 @@ import {
   SetMaxValidatorCount,
 } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
+import { SetMembershipPrice } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipPrice'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
@@ -107,6 +108,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     case state.matches('specificParameters.setInitialInvitationBalance'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
+    case state.matches('specificParameters.setMembershipPrice'): {
       return !!(specifics?.amount && specifics?.amount.gtn(0))
     }
     case state.matches('specificParameters.setInitialInvitationCount'): {
@@ -269,6 +273,14 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           validatorCount={state.context.specifics?.amount}
         />
       )
+    case state.matches('specificParameters.setMembershipPrice'): {
+      return (
+        <SetMembershipPrice
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+          amount={state.context.specifics?.amount}
+        />
+      )
+    }
     default:
       return null
   }

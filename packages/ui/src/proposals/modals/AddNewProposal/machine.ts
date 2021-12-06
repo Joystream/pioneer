@@ -28,6 +28,7 @@ import { GroupIdName } from '@/working-groups/types'
 import {
   DecreaseWorkingGroupLeadStakeParameters,
   FundingRequestParameters,
+  SetMembershipPriceParameters,
   SignalParameters,
   TerminateWorkingGroupLeadParameters,
 } from './components/SpecificParameters'
@@ -81,6 +82,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
     | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
+    | SetMembershipPriceParameters
     | SetCouncilorRewardParameters
 }
 
@@ -165,6 +167,10 @@ interface SetMaxValidatorCountContext extends SpecificParametersContext {
   specifics: SetMaxValidatorCountParameters
 }
 
+interface SetMembershipPriceContext extends SpecificParametersContext {
+  specifics: SetMembershipPriceParameters
+}
+
 export type AddNewProposalContext = Partial<
   ProposalTypeContext &
     StakingAccountContext &
@@ -190,6 +196,7 @@ export type AddNewProposalContext = Partial<
     DiscussionContext &
     SetMembershipLeadInvitationContext &
     SetInitialInvitationBalanceContext &
+    SetMembershipPriceContext &
     SetInitialInvitationCountContext
 >
 
@@ -210,6 +217,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'setReferralCut' }; context: SetReferralCutContext }
+  | { value: { specificParameters: 'setMembershipPrice' }; context: SetMembershipPriceContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
@@ -449,6 +457,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
             { target: 'setCouncilorReward', cond: isType('setCouncilorReward') },
             { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
+            { target: 'setMembershipPrice', cond: isType('setMembershipPrice') },
             { target: 'setInitialInvitationCount', cond: isType('setInitialInvitationCount') },
           ],
         },
@@ -762,6 +771,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         setInitialInvitationBalance: {
+          on: {
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  amount: event.amount,
+                }),
+              }),
+            },
+          },
+        },
+        setMembershipPrice: {
           on: {
             SET_AMOUNT: {
               actions: assign({

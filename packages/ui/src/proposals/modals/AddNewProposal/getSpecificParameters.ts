@@ -128,6 +128,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'setMaxValidatorCount': {
       return { SetMaxValidatorCount: specifics?.amount?.toNumber() }
     }
+    case 'setMembershipPrice': {
+      return { SetMembershipPrice: specifics?.amount?.toNumber() }
+    }
     default:
       return { Signal: '' }
   }
