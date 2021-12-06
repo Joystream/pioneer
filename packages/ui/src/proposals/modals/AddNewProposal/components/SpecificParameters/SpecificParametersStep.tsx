@@ -2,14 +2,15 @@ import { u32 } from '@polkadot/types'
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
-import {
-  MAX_VALIDATOR_COUNT,
-  SetMaxValidatorCount,
-} from '@/proposals/modals/AddNewProposal/components/SetMaxValidatorCount'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetCouncilorReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilorReward'
+import {
+  MAX_VALIDATOR_COUNT,
+  SetMaxValidatorCount,
+} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetMembershipPrice } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipPrice'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
@@ -28,6 +29,7 @@ import {
 } from '@/proposals/modals/AddNewProposal/machine'
 
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
+import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 
 interface SpecificParametersStepProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
@@ -62,6 +64,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
         specifics.amount.ltn(MAX_VALIDATOR_COUNT) &&
         specifics.amount.gtn(minimumValidatorCount?.toNumber() || 0)
       )
+    }
+    case state.matches('specificParameters.setCouncilorReward'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     case state.matches('specificParameters.setCouncilBudgetIncrement'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
@@ -108,6 +113,9 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.setMembershipPrice'): {
       return !!(specifics?.amount && specifics?.amount.gtn(0))
     }
+    case state.matches('specificParameters.setInitialInvitationCount'): {
+      return !!specifics?.invitationCount
+    }
     default:
       return false
   }
@@ -135,6 +143,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         <RuntimeUpgrade
           runtime={state.context.specifics?.runtime}
           setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
+        />
+      )
+    case state.matches('specificParameters.setCouncilorReward'):
+      return (
+        <SetCouncilorReward
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     case state.matches('specificParameters.setCouncilBudgetIncrement'):
@@ -231,6 +246,8 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
       )
+    case state.matches('specificParameters.setInitialInvitationCount'):
+      return <SetInitialInvitationCount setNewCount={(count) => send('SET_INVITATION_COUNT', { count })} />
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut

@@ -13,7 +13,12 @@ export default {
 const Template: Story = () => {
   return (
     <MemoryRouter>
-      <SuccessModal onClose={() => info('close')} proposalType="fundingRequest" proposalTitle="Lorem ipsum..." />
+      <SuccessModal
+        onClose={() => info('close')}
+        proposalId={1}
+        proposalType="fundingRequest"
+        proposalTitle="Lorem ipsum..."
+      />
     </MemoryRouter>
   )
 }
