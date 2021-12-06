@@ -134,23 +134,16 @@ describe('UI: Election page', () => {
   })
 
   describe('Active', () => {
-    it('Displays election round', async () => {
-      stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
-
-      const { queryByText } = await renderComponent()
-
-      expect(queryByText(/1 round/i)).not.toBeNull()
-    })
-
     describe('Announcing stage', () => {
       beforeEach(() => {
         stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
       })
 
-      it('Displays stage', async () => {
-        const { queryByText } = await renderComponent()
+      it('Displays stage and round', async () => {
+        const { queryAllByText } = await renderComponent()
 
-        expect(queryByText(/Announcing period/i)).not.toBeNull()
+        // Except to see 'Announcing period' in 2 places: Election stage and Election round
+        expect(queryAllByText(/Announcing period/i)).toHaveLength(2)
       })
 
       describe('Tabs', () => {
@@ -205,6 +198,12 @@ describe('UI: Election page', () => {
       beforeEach(() => {
         stubCouncilAndReferendum(api, 'Election', 'Voting')
         window.localStorage.clear()
+      })
+
+      it('Displays election round', async () => {
+        const { queryByText } = await renderComponent()
+
+        expect(queryByText(/1 round/i)).not.toBeNull()
       })
 
       it('Displays stage', async () => {
@@ -297,6 +296,13 @@ describe('UI: Election page', () => {
       beforeEach(() => {
         stubCouncilAndReferendum(api, 'Election', 'Revealing')
         window.localStorage.clear()
+      })
+
+      it('Displays no election round, no period remaining length', async () => {
+        const { queryAllByText } = await renderComponent()
+
+        // Except to see '-' in 2 places: Election stage and Period remaining length
+        expect(queryAllByText('-')).toHaveLength(2)
       })
 
       it('Displays stage', async () => {
