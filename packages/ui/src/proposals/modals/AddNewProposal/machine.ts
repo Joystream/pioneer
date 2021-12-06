@@ -438,6 +438,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'setMembershipLeadInvitationQuota', cond: isType('setMembershipLeadInvitationQuota') },
             { target: 'setCouncilBudgetIncrement', cond: isType('setCouncilBudgetIncrement') },
             { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
+            { target: 'setMembershipPrice', cond: isType('setMembershipPrice') },
           ],
         },
         signal: {
