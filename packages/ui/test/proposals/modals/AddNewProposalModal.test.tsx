@@ -946,10 +946,21 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Valid - group selected, amount filled', async () => {
+        it('Valid - group selected, positive amount filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          await SpecificParameters.fillAmount(-100)
+          await SpecificParameters.fillAmount(100)
+
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Valid - group selected, negative amount filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+
+          // Switch to 'Decrease budget', input will be handled as negative
+          await triggerYes()
+          await SpecificParameters.fillAmount(100)
 
           expect(await getCreateButton()).toBeEnabled()
         })
