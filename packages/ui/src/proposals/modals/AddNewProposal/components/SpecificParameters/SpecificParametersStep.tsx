@@ -106,7 +106,12 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.applicationId && specifics?.openingId)
     }
     case state.matches('specificParameters.updateWorkingGroupBudget'): {
-      return !!(specifics?.groupId && specifics?.budgetUpdate && specifics?.budgetUpdate.gtn(0))
+      return !!(
+        specifics?.groupId &&
+        specifics?.budgetUpdate &&
+        specifics.budgetUpdate.gtn(0) &&
+        specifics.budgetUpdateKind
+      )
     }
     case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
@@ -254,6 +259,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
       return (
         <UpdateWorkingGroupBudget
           setBudgetUpdate={(amount) => send('SET_BUDGET_UPDATE', { amount })}
+          setBudgetUpdateKind={(kind) => send('SET_BUDGET_UPDATE_KIND', { kind })}
           groupId={state.context.specifics?.groupId}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />

@@ -32,6 +32,7 @@ import {
   SignalParameters,
   UpdateWorkingGroupBudgetParameters,
   TerminateWorkingGroupLeadParameters,
+  UpdateKind,
 } from './components/SpecificParameters'
 import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
 import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
@@ -259,6 +260,7 @@ type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
+type SetBudgetUpdateKindEvent = { type: 'SET_BUDGET_UPDATE_KIND'; kind: UpdateKind }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type SetSignalEvent = { type: 'SET_SIGNAL'; signal: string }
@@ -293,6 +295,7 @@ export type AddNewProposalEvent =
   | SetRationaleEvent
   | SetSignalEvent
   | SetBudgetUpdateEvent
+  | SetBudgetUpdateKindEvent
   | SetTriggerBlockEvent
   | SetDiscussionModeEvent
   | SetDiscussionWhitelistEvent
@@ -832,6 +835,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   budgetUpdate: event.amount,
+                }),
+              }),
+            },
+            SET_BUDGET_UPDATE_KIND: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  budgetUpdateKind: event.kind,
                 }),
               }),
             },

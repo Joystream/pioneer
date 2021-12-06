@@ -1,10 +1,12 @@
+import { BalanceKind } from '@joystream/types/common'
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
@@ -14,20 +16,24 @@ import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGro
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
 
+export type UpdateKind = keyof typeof BalanceKind.typeDefinitions
+
 export interface UpdateWorkingGroupBudgetParameters {
   budgetUpdate?: BN
+  budgetUpdateKind?: UpdateKind
   groupId?: GroupIdName
 }
 
 interface UpdateWorkingGroupBudgetProps extends UpdateWorkingGroupBudgetParameters {
   setBudgetUpdate: (amount: BN) => void
-
+  setBudgetUpdateKind: (kind: UpdateKind) => void
   setGroupId(groupId: string): void
 }
 
 export const UpdateWorkingGroupBudget = ({
   budgetUpdate,
   setBudgetUpdate,
+  setBudgetUpdateKind,
   groupId,
   setGroupId,
 }: UpdateWorkingGroupBudgetProps) => {
@@ -35,14 +41,21 @@ export const UpdateWorkingGroupBudget = ({
 
   const { group } = useWorkingGroup({ name: groupId })
 
+  const [updateKind, setUpdateKind] = useState<UpdateKind>('Positive')
+
   const isDisabled = !group
 
   useEffect(() => {
     setBudgetUpdate(new BN(amount))
   }, [amount])
+
   useEffect(() => {
     setBudgetUpdate(BN_ZERO)
   }, [groupId])
+
+  useEffect(() => {
+    setBudgetUpdateKind(updateKind)
+  }, [updateKind])
 
   return (
     <RowGapBlock gap={24}>
@@ -75,6 +88,20 @@ export const UpdateWorkingGroupBudget = ({
               </TextMedium>
             </Info>
           )}
+
+          <InlineToggleWrap>
+            <Label>Decrease budget: </Label>
+            <ToggleCheckbox
+              falseLabel="No"
+              trueLabel="Yes"
+              checked={updateKind === 'Negative'}
+              onChange={(isSet) => setUpdateKind(isSet ? 'Positive' : 'Negative')}
+            />
+            <Tooltip tooltipText="Lorem ipsum...">
+              <TooltipDefault />
+            </Tooltip>
+          </InlineToggleWrap>
+
           <InputComponent
             label="Budget Update"
             tight

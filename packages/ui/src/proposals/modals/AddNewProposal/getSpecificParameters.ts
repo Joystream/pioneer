@@ -1,13 +1,10 @@
 import { createType } from '@joystream/types'
-import { BalanceKind, WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
+import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
-import BN from 'bn.js'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
-
-type BalanceKindValue = keyof typeof BalanceKind.typeDefinitions
 
 const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   contentDirectoryWorkingGroup: 'Content',
@@ -22,12 +19,6 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   if (!groupId) return null
 
   return GroupIdToGroupParam[groupId]
-}
-
-const getUpdateBalance = (budgetUpdate: BN | undefined): BalanceKindValue | null => {
-  if (!budgetUpdate) return null
-
-  return budgetUpdate.isNeg() ? 'Negative' : 'Positive'
 }
 
 export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): any => {
@@ -123,9 +114,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'updateWorkingGroupBudget': {
       return {
         UpdateWorkingGroupBudget: [
-          specifics?.budgetUpdate,
           getWorkingGroupParam(specifics?.groupId),
-          getUpdateBalance(specifics?.budgetUpdate),
+          specifics?.budgetUpdate,
+          specifics?.budgetUpdateKind,
         ],
       }
     }

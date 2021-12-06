@@ -924,6 +924,7 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+
       describe('Type - Update Working Group Budget', () => {
         beforeEach(async () => {
           await finishProposalType('updateWorkingGroupBudget')
