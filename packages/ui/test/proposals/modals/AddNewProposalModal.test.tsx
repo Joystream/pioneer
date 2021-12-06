@@ -925,16 +925,6 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
       describe('Type - Update Working Group Budget', () => {
-        beforeAll(() => {
-          seedWorkingGroups(server.server)
-          seedOpeningStatuses(server.server)
-          seedOpenings(server.server)
-          seedUpcomingOpenings(server.server)
-          seedApplications(server.server)
-          seedWorkers(server.server)
-          updateWorkingGroups(server.server)
-        })
-
         beforeEach(async () => {
           await finishProposalType('updateWorkingGroupBudget')
           await finishStakingAccount()
