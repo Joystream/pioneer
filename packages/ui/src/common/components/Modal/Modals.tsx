@@ -42,7 +42,7 @@ export const TransactionAmount = styled.div`
   grid-template-columns: 320px auto;
   grid-template-rows: 1fr;
   grid-column-gap: 12px;
-  align-items: end;
+  align-items: center;
 `
 
 export const TransactionInfoContainer = styled.div`
