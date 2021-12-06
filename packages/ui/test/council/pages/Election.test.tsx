@@ -202,7 +202,7 @@ describe('UI: Election page', () => {
 
       it('Displays election round', async () => {
         const { queryByText } = await renderComponent()
-  
+
         expect(queryByText(/1 round/i)).not.toBeNull()
       })
 
@@ -300,7 +300,7 @@ describe('UI: Election page', () => {
 
       it('Displays no election round, no period remaining length', async () => {
         const { queryAllByText } = await renderComponent()
-  
+
         // Except to see '-' in 2 places: Election stage and Period remaining length
         expect(queryAllByText('-')).toHaveLength(2)
       })
