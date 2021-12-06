@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router'
 
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
@@ -16,6 +16,7 @@ export const ProposalsModule = () => {
       <Route exact path={`${ProposalsRoutes.preview}/vote/:voteId`} component={ProposalPreview} />
       <Route exact path={`${ProposalsRoutes.preview}/post/:postId`} component={ProposalPreview} />
       <Route exact path={`${ProposalsRoutes.preview}`} component={ProposalPreview} />
+      <Redirect exact path={ProposalsRoutes.home} to={ProposalsRoutes.current} />
     </Switch>
   )
 }
