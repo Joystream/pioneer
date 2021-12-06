@@ -97,8 +97,8 @@ export const StakeStep = ({
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
-              placeholder={minStake.toString()}
+              value={formatTokenValue(amount)}
+              placeholder={formatTokenValue(minStake)}
               onChange={(event) => setAmount(event.target.value)}
             />
           </InputComponent>
@@ -118,7 +118,7 @@ const defaultAmountText = (minStake: BN) => (
   <RowGapBlock gap={8}>
     <h4>2. Stake</h4>
     <TextMedium light>
-      You must stake at least <ValueInJoys>{formatTokenValue(minStake.toNumber())}</ValueInJoys>.
+      You must stake at least <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys>.
     </TextMedium>
   </RowGapBlock>
 )

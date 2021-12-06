@@ -55,6 +55,10 @@ To build a production ready version:
 yarn run build
 ```
 
+## Running Pioneer 2 with local Joystream dev environment
+
+Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer 2 with the Olympia testnet locally.
+
 ## Coding standards
 
 For code quality & standards we rely on ESLint and Prettier. To run both checks execute inside `packages/ui`:
@@ -69,7 +73,7 @@ yarn lint:fix
 
 ## Testing
 
-See [testing documentation](tests.md)
+Read more on testing in [testing documentation](tests.md).
 
 ## Joystream API
 

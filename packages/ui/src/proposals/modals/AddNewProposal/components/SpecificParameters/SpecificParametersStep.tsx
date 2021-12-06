@@ -1,9 +1,18 @@
+import { u32 } from '@polkadot/types'
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
+import { SetCouncilorReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilorReward'
+import {
+  MAX_VALIDATOR_COUNT,
+  SetMaxValidatorCount,
+} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
+import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
+import { SetMembershipPrice } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipPrice'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetWorkingGroupLeadReward'
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
@@ -20,13 +29,17 @@ import {
   AddNewProposalMachineState,
 } from '@/proposals/modals/AddNewProposal/machine'
 
+import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
+import { SetInitialInvitationCount } from './SetInitialInvitationCount'
+
 interface SpecificParametersStepProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
 }
 
-export const isValidSpecificParameters = (state: AddNewProposalMachineState): boolean => {
+export const isValidSpecificParameters = (state: AddNewProposalMachineState, minimumValidatorCount?: u32): boolean => {
   const specifics = state.context.specifics
+
   switch (true) {
     case state.matches('specificParameters.signal'): {
       return !!specifics?.signal
@@ -45,6 +58,19 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
+    }
+    case state.matches('specificParameters.setMaxValidatorCount'): {
+      return !!(
+        specifics?.amount &&
+        specifics.amount.ltn(MAX_VALIDATOR_COUNT) &&
+        specifics.amount.gtn(minimumValidatorCount?.toNumber() || 0)
+      )
+    }
+    case state.matches('specificParameters.setCouncilorReward'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
+    }
+    case state.matches('specificParameters.setCouncilBudgetIncrement'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
     }
     case state.matches('specificParameters.setWorkingGroupLeadReward'): {
       return !!(
@@ -82,6 +108,18 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.updateWorkingGroupBudget'): {
       return !!(specifics?.groupId && !specifics.budgetUpdate?.isZero())
     }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
+      return !!(specifics?.amount && specifics.amount.gtn(0))
+    }
+    case state.matches('specificParameters.setInitialInvitationBalance'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
+    case state.matches('specificParameters.setMembershipPrice'): {
+      return !!(specifics?.amount && specifics?.amount.gtn(0))
+    }
+    case state.matches('specificParameters.setInitialInvitationCount'): {
+      return !!specifics?.invitationCount
+    }
     default:
       return false
   }
@@ -91,6 +129,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
   const {
     context: { specifics },
   } = state
+
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
@@ -108,6 +147,20 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         <RuntimeUpgrade
           runtime={state.context.specifics?.runtime}
           setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
+        />
+      )
+    case state.matches('specificParameters.setCouncilorReward'):
+      return (
+        <SetCouncilorReward
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+        />
+      )
+    case state.matches('specificParameters.setCouncilBudgetIncrement'):
+      return (
+        <SetCouncilBudgetIncrement
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
@@ -205,9 +258,36 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
       )
+    case state.matches('specificParameters.setInitialInvitationCount'):
+      return <SetInitialInvitationCount setNewCount={(count) => send('SET_INVITATION_COUNT', { count })} />
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+          amount={state.context.specifics?.amount}
+        />
+      )
+    }
+    case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
+      return (
+        <SetMembershipLeadInvitationQuota
+          amount={state.context.specifics?.amount}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+        />
+      )
+    case state.matches('specificParameters.setInitialInvitationBalance'): {
+      return <SetInitialInvitationBalance setAmount={(amount) => send('SET_AMOUNT', { amount })} />
+    }
+    case state.matches('specificParameters.setMaxValidatorCount'):
+      return (
+        <SetMaxValidatorCount
+          setValidatorCount={(amount) => send('SET_AMOUNT', { amount })}
+          validatorCount={state.context.specifics?.amount}
+        />
+      )
+    case state.matches('specificParameters.setMembershipPrice'): {
+      return (
+        <SetMembershipPrice
           setAmount={(amount) => send('SET_AMOUNT', { amount })}
           amount={state.context.specifics?.amount}
         />

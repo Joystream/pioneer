@@ -41,6 +41,6 @@ function truncateDecimals(value: string, decimals: number) {
   }
 }
 
-function cleanInputValue(value: string) {
+export function cleanInputValue(value: string) {
   return value.replace(/,/g, '')
 }

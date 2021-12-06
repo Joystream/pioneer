@@ -10,9 +10,11 @@
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write --loglevel warn",
     "lint:prettier": "yarn prettier \"./{src,test}/**/*.{ts,tsx,html,graphql}\"",
     "node-mocks": "ts-node --transpile-only dev/node-mocks/index.ts",
+    "node-mocks:announce-vote": "yarn node-mocks council:announce && yarn helpers nextCouncilStage && yarn node-mocks council:vote",
+    "node-mocks:announce-vote-reveal": "yarn node-mocks:announce-vote && yarn helpers nextCouncilStage && yarn node-mocks council:reveal",
     "queries:generate": "graphql-codegen --config codegen.config.yml && yarn lint:fix",
     "query-node-mocks": "ts-node --transpile-only dev/query-node-mocks/generateMocks.ts",
-    "set-chain-spec": "ts-node --transpile-only dev/chain-spec/index.ts",
+    "helpers": "ts-node --transpile-only dev/helpers/index.ts",
     "start": "cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack serve --mode development --progress",
     "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
     "test": "jest"

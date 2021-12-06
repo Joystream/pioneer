@@ -47,7 +47,7 @@ export const FundingRequest = ({
           <InputComponent label="Amount" tight units="JOY" required>
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder="0"
               onChange={(event) => setAmount(event.target.value)}
             />

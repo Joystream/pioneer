@@ -30,6 +30,7 @@ export const mockPosts: RawForumPostMock[] = [
     },
     status: 'PostStatusActive',
     deletedInEvent: null,
+    postModeratedEvent: null,
   },
   {
     id: '1',
@@ -45,5 +46,6 @@ export const mockPosts: RawForumPostMock[] = [
     },
     status: 'PostStatusActive',
     deletedInEvent: null,
+    postModeratedEvent: null,
   },
 ]

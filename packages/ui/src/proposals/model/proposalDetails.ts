@@ -38,10 +38,17 @@ export const enabledProposals: ProposalType[] = [
   'decreaseWorkingGroupLeadStake',
   'slashWorkingGroupLead',
   'setWorkingGroupLeadReward',
+  'setMaxValidatorCount',
   'terminateWorkingGroupLead',
   'fillWorkingGroupLeadOpening',
   'updateWorkingGroupBudget',
+  'setInitialInvitationCount',
+  'setCouncilBudgetIncrement',
+  'setCouncilorReward',
+  'setMembershipLeadInvitationQuota',
   'setReferralCut',
+  'setInitialInvitationBalance',
+  'setMembershipPrice',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {
