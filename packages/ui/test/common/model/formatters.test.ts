@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND } from '@/common/constants'
 import {
-  durationFormater,
+  durationFormatter,
   formatBlocksToDuration,
   formatDateString,
   formatTokenValue,
@@ -73,9 +73,9 @@ describe('formatters', () => {
     })
   })
 
-  describe('durationFormater', () => {
+  describe('durationFormatter', () => {
     it('Default', () => {
-      const format = durationFormater()
+      const format = durationFormatter()
       const duration = 3 * A_DAY + 2 * AN_HOUR + A_MINUTE
 
       expect(format(duration)).toBe('3 days 2 hours 1 minute')
@@ -88,7 +88,7 @@ describe('formatters', () => {
     })
 
     it('Custom units', () => {
-      const format = durationFormater([
+      const format = durationFormatter([
         [60, 'minute'],
         [1, 'second'],
       ])
