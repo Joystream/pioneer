@@ -684,6 +684,20 @@ export type AssetNone = {
   phantom?: Maybe<Scalars['Int']>
 }
 
+export type Avatar = AvatarObject | AvatarUri
+
+export type AvatarObject = {
+  __typename: 'AvatarObject'
+  /** The avatar data object */
+  avatarObject?: Maybe<DataObject>
+}
+
+export type AvatarUri = {
+  __typename: 'AvatarUri'
+  /** The avatar URL */
+  avatarUri: Scalars['String']
+}
+
 export type BaseGraphQlObject = {
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
@@ -3939,7 +3953,6 @@ export type DataObject = BaseGraphQlObject & {
   liaisonId?: Maybe<Scalars['String']>
   /** Storage provider as liaison judgment */
   liaisonJudgement: LiaisonJudgement
-  membermetadataavatar?: Maybe<Array<MemberMetadata>>
   /** Content owner */
   owner: DataObjectOwner
   /** Content size in bytes */
@@ -4089,9 +4102,6 @@ export type DataObjectWhereInput = {
   liaison?: InputMaybe<WorkerWhereInput>
   liaisonJudgement_eq?: InputMaybe<LiaisonJudgement>
   liaisonJudgement_in?: InputMaybe<Array<LiaisonJudgement>>
-  membermetadataavatar_every?: InputMaybe<MemberMetadataWhereInput>
-  membermetadataavatar_none?: InputMaybe<MemberMetadataWhereInput>
-  membermetadataavatar_some?: InputMaybe<MemberMetadataWhereInput>
   owner_json?: InputMaybe<Scalars['JSONObject']>
   size_eq?: InputMaybe<Scalars['BigInt']>
   size_gt?: InputMaybe<Scalars['BigInt']>
@@ -6998,8 +7008,8 @@ export type MemberMetadata = BaseGraphQlObject & {
   __typename: 'MemberMetadata'
   /** Short text chosen by member to share information about themselves */
   about?: Maybe<Scalars['String']>
-  avatar?: Maybe<DataObject>
-  avatarId?: Maybe<Scalars['String']>
+  /** Avatar data object */
+  avatar?: Maybe<Avatar>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   deletedAt?: Maybe<Scalars['DateTime']>
@@ -7025,7 +7035,7 @@ export type MemberMetadataConnection = {
 
 export type MemberMetadataCreateInput = {
   about?: InputMaybe<Scalars['String']>
-  avatar?: InputMaybe<Scalars['ID']>
+  avatar: Scalars['JSONObject']
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -7038,8 +7048,6 @@ export type MemberMetadataEdge = {
 export enum MemberMetadataOrderByInput {
   AboutAsc = 'about_ASC',
   AboutDesc = 'about_DESC',
-  AvatarAsc = 'avatar_ASC',
-  AvatarDesc = 'avatar_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
@@ -7052,7 +7060,7 @@ export enum MemberMetadataOrderByInput {
 
 export type MemberMetadataUpdateInput = {
   about?: InputMaybe<Scalars['String']>
-  avatar?: InputMaybe<Scalars['ID']>
+  avatar?: InputMaybe<Scalars['JSONObject']>
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -7064,7 +7072,7 @@ export type MemberMetadataWhereInput = {
   about_eq?: InputMaybe<Scalars['String']>
   about_in?: InputMaybe<Array<Scalars['String']>>
   about_startsWith?: InputMaybe<Scalars['String']>
-  avatar?: InputMaybe<DataObjectWhereInput>
+  avatar_json?: InputMaybe<Scalars['JSONObject']>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
