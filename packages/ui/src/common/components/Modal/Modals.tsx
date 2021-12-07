@@ -129,3 +129,8 @@ export const AmountButton = styled(ButtonGhost)`
   line-height: 16px;
   text-transform: uppercase;
 `
+
+export const ItemWrapper = styled.div`
+  max-height: 450px;
+  overflow: auto;
+`
