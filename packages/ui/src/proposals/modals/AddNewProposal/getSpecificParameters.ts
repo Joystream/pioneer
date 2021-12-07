@@ -17,12 +17,17 @@ const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   storageWorkingGroup: 'Storage',
 }
 
-
 type SpecificParameters<PARAM extends string> = Extract<keyof ProposalDetailsOf, `as${PARAM}`> extends `${infer KEY}` ?
   KEY extends keyof ProposalDetailsOf ?
-      ProposalDetailsOf[KEY] extends ITuple<infer TUPLE> ? TUPLE : never
+    ProposalDetailsOf[KEY] extends ITuple<infer TUPLE> ? TUPLE : ProposalDetailsOf[KEY]
     : never
   : never
+
+const buildSpecificParams = <PARAM extends string>(name: PARAM, params: SpecificParameters<PARAM>) => {
+  return {
+    [name]: params
+  }
+}
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   if (!groupId) return null
@@ -30,7 +35,7 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   return GroupIdToGroupParam[groupId]
 }
 
-export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): any => {
+export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState) => {
   if (!isValidSpecificParameters(state)) {
     return { Signal: '' }
   }
@@ -39,9 +44,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
 
   switch (state.context.type) {
     case 'signal': {
-      return {
-        Signal: specifics?.signal,
-      }
+      return buildSpecificParams('Signal', createType('Text', specifics?.signal ?? ''))
     }
     case 'fundingRequest': {
       return {
@@ -121,14 +124,11 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
       }
     }
     case 'updateWorkingGroupBudget': {
-      const params: SpecificParameters<'UpdateWorkingGroupBudget'> = [
+      return buildSpecificParams('UpdateWorkingGroupBudget', [
         createType('Balance', specifics?.budgetUpdate ?? 0),
         createType('WorkingGroup', getWorkingGroupParam(specifics?.groupId)),
-        createType('BalanceKind', specifics?.budgetUpdateKind ?? 'Positive')
-      ]
-      return {
-        UpdateWorkingGroupBudget: params,
-      }
+        createType('BalanceKind', specifics?.budgetUpdateKind ?? 'Positive'),
+      ])
     }
     case 'setMembershipLeadInvitationQuota': {
       return { SetMembershipLeadInvitationQuota: specifics?.amount }
