@@ -95,7 +95,7 @@ export const UpdateWorkingGroupBudget = ({
               falseLabel="No"
               trueLabel="Yes"
               checked={updateKind === 'Negative'}
-              onChange={(isSet) => setUpdateKind(isSet ? 'Positive' : 'Negative')}
+              onChange={(isSet) => setUpdateKind(isSet ? 'Negative' : 'Positive')}
             />
             <Tooltip tooltipText="Lorem ipsum...">
               <TooltipDefault />
