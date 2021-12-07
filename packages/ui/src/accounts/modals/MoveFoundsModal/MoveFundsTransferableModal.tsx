@@ -28,7 +28,7 @@ export interface MoveFoundsTransferableModalProps {
   accounts?: Address[]
 }
 
-export const MoveFoundsTransferableModal = ({
+export const MoveFundsTransferableModal = ({
   onClose,
   onManageAccountsClick,
   requiredStake,

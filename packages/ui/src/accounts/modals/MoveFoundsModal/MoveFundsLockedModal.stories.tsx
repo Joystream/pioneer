@@ -8,11 +8,11 @@ import { ModalContext } from '@/common/providers/modal/context'
 
 import { alice, aliceStash, bob, bobStash } from '../../../../test/_mocks/keyring'
 
-import { MoveFoundsLockedModal, MoveFoundsLockedModalProps } from './MoveFoundsLockedModal'
+import { MoveFundsLockedModal, MoveFoundsLockedModalProps } from './MoveFundsLockedModal'
 
 export default {
-  title: 'Accounts/MoveFoundsLockedModal',
-  component: MoveFoundsLockedModal,
+  title: 'Accounts/MoveFundsLockedModal',
+  component: MoveFundsLockedModal,
 } as Meta
 
 const balanceMock = () => ({
@@ -47,7 +47,7 @@ const Template: Story<MoveFoundsLockedModalProps> = (args) => {
               showModal: () => undefined,
             }}
           >
-            <MoveFoundsLockedModal {...args} />
+            <MoveFundsLockedModal {...args} />
           </ModalContext.Provider>
         </AccountsContext.Provider>
       </HashRouter>

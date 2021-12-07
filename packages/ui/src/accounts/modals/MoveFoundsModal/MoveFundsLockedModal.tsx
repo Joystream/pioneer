@@ -8,7 +8,7 @@ import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
-import { MoveFoundsAccountItem } from './MoveFoundsAccountItem'
+import { MoveFundsAccountItem } from './MoveFundsAccountItem'
 import { ModalBody } from './styles'
 
 export interface MoveFoundsLockedModalProps {
@@ -18,7 +18,7 @@ export interface MoveFoundsLockedModalProps {
   balances: AddressToBalanceMap
 }
 
-export const MoveFoundsLockedModal = ({
+export const MoveFundsLockedModal = ({
   onClose,
   onManageAccountsClick,
   requiredStake,
@@ -42,7 +42,7 @@ export const MoveFoundsLockedModal = ({
         </TextMedium>
         {accountsWithCompatibleLocks &&
           Object.keys(accountsWithCompatibleLocks).map((address) => (
-            <MoveFoundsAccountItem
+            <MoveFundsAccountItem
               key={address}
               account={allAccounts.find((account) => account.address === address)}
               balances={balances}

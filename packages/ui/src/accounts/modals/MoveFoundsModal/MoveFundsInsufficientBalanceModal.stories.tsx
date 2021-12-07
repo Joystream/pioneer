@@ -5,13 +5,13 @@ import { HashRouter } from 'react-router-dom'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import {
-  MoveFoundsInsufficientBalanceModal,
+  MoveFundsInsufficientBalanceModal,
   MoveFoundsInsufficientBalanceModalProps,
-} from './MoveFoundsInsufficientBalanceModal'
+} from './MoveFundsInsufficientBalanceModal'
 
 export default {
-  title: 'Accounts/MoveFoundsInsufficientBalanceModal',
-  component: MoveFoundsInsufficientBalanceModal,
+  title: 'Accounts/MoveFundsInsufficientBalanceModal',
+  component: MoveFundsInsufficientBalanceModal,
 } as Meta
 
 const Template: Story<MoveFoundsInsufficientBalanceModalProps> = (args) => {
@@ -26,7 +26,7 @@ const Template: Story<MoveFoundsInsufficientBalanceModalProps> = (args) => {
             showModal: () => undefined,
           }}
         >
-          <MoveFoundsInsufficientBalanceModal {...args} />
+          <MoveFundsInsufficientBalanceModal {...args} />
         </ModalContext.Provider>
       </HashRouter>
     </>
