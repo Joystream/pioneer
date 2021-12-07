@@ -1,4 +1,5 @@
 import { asBlock } from '@/common/types'
+import { castQueryResult } from '@/common/utils/casting'
 import { asWorkingGroupName } from '@/working-groups/types'
 
 import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
@@ -9,7 +10,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   id: data.id,
   handle: data.handle,
   name: data.metadata.name ?? undefined,
-  avatar: undefined,
+  avatar: castQueryResult(data.metadata.avatar, 'AvatarUri')?.avatarUri,
   inviteCount: data.inviteCount,
   isFoundingMember: data.isFoundingMember,
   // See https://github.com/Joystream/pioneer/issues/1536
