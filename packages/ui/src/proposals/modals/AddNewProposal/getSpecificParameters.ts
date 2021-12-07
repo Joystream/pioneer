@@ -1,6 +1,8 @@
 import { createType } from '@joystream/types'
+import { ProposalDetailsOf } from '@joystream/types/augment'
 import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
+import { ITuple } from '@polkadot/types/types'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
@@ -14,6 +16,13 @@ const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   operationsWorkingGroup: 'Operations',
   storageWorkingGroup: 'Storage',
 }
+
+
+type SpecificParameters<PARAM extends string> = Extract<keyof ProposalDetailsOf, `as${PARAM}`> extends `${infer KEY}` ?
+  KEY extends keyof ProposalDetailsOf ?
+      ProposalDetailsOf[KEY] extends ITuple<infer TUPLE> ? TUPLE : never
+    : never
+  : never
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   if (!groupId) return null
@@ -112,12 +121,13 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
       }
     }
     case 'updateWorkingGroupBudget': {
+      const params: SpecificParameters<'UpdateWorkingGroupBudget'> = [
+        createType('Balance', specifics?.budgetUpdate ?? 0),
+        createType('WorkingGroup', getWorkingGroupParam(specifics?.groupId)),
+        createType('BalanceKind', specifics?.budgetUpdateKind ?? 'Positive')
+      ]
       return {
-        UpdateWorkingGroupBudget: [
-          getWorkingGroupParam(specifics?.groupId),
-          specifics?.budgetUpdate,
-          specifics?.budgetUpdateKind,
-        ],
+        UpdateWorkingGroupBudget: params,
       }
     }
     case 'setMembershipLeadInvitationQuota': {
