@@ -21,8 +21,21 @@ import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidate
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
+import { Election as ElectionType, ElectionStage } from '@/council/types/Election'
 
 import { ElectionTabs } from './components/ElectionTabs'
+
+const displayElectionRound = (election: ElectionType | undefined, electionStage: ElectionStage): string => {
+  if (electionStage === 'announcing') {
+    return 'Announcing period'
+  }
+
+  if (!election) {
+    return '-'
+  }
+
+  return `${election.cycleId} round`
+}
 
 export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
@@ -71,7 +84,7 @@ export const Election = () => {
         </StatisticItem>
         <BlockDurationStatistics title="Period remaining length" tooltipText="Lorem ipsum..." value={remainingPeriod} />
         <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
-          <TextHuge bold>{election ? `${election.cycleId} round` : '-'}</TextHuge>
+          <TextHuge bold>{displayElectionRound(election, electionStage)}</TextHuge>
         </StatisticItem>
       </Statistics>
       {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
