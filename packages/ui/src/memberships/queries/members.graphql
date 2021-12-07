@@ -7,8 +7,14 @@ fragment MemberFields on Membership {
   metadata {
     name
     about
-    # avatar {} - Should be fetched from the Storage system.
-    # See https://github.com/Joystream/pioneer/issues/54
+    avatar {
+      __typename
+      ... on AvatarUri {
+        avatarUri
+      }
+      # ...on AvatarObject {} - Should be fetched from the Storage system.
+      # See https://github.com/Joystream/pioneer/issues/54
+    }
   }
   isVerified
   isFoundingMember
