@@ -12,7 +12,7 @@ export interface MoveFoundsInsufficientBalanceModalProps {
   requiredStake: number
 }
 
-export const MoveFoundsInsufficientBalanceModal = ({
+export const MoveFundsInsufficientBalanceModal = ({
   onClose,
   onManageAccountsClick,
   requiredStake,

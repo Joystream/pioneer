@@ -7,11 +7,11 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 
 import { alice, aliceStash, bob, bobStash } from '../../../../test/_mocks/keyring'
 
-import { MoveFoundsTransferableModal, MoveFoundsTransferableModalProps } from './MoveFoundsTransferableModal'
+import { MoveFundsTransferableModal, MoveFoundsTransferableModalProps } from './MoveFundsTransferableModal'
 
 export default {
-  title: 'Accounts/MoveFoundsTransferableModal',
-  component: MoveFoundsTransferableModal,
+  title: 'Accounts/MoveFundsTransferableModal',
+  component: MoveFundsTransferableModal,
 } as Meta
 
 const balanceMock = () => ({
@@ -32,7 +32,7 @@ const Template: Story<MoveFoundsTransferableModalProps> = (args) => {
       }}
     >
       <HashRouter>
-        <MoveFoundsTransferableModal {...args} />
+        <MoveFundsTransferableModal {...args} />
       </HashRouter>
     </AccountsContext.Provider>
   )

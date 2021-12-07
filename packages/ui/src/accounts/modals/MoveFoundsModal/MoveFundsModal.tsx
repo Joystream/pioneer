@@ -5,9 +5,9 @@ import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useModal } from '@/common/hooks/useModal'
 
 import { MoveFundsModalCall } from '.'
-import { MoveFoundsInsufficientBalanceModal } from './MoveFoundsInsufficientBalanceModal'
-import { MoveFoundsLockedModal } from './MoveFoundsLockedModal'
-import { MoveFoundsTransferableModal } from './MoveFoundsTransferableModal'
+import { MoveFundsInsufficientBalanceModal } from './MoveFundsInsufficientBalanceModal'
+import { MoveFundsLockedModal } from './MoveFundsLockedModal'
+import { MoveFundsTransferableModal } from './MoveFundsTransferableModal'
 
 export const MoveFundsModal = () => {
   const {
@@ -24,7 +24,7 @@ export const MoveFundsModal = () => {
 
   if (accountsWithTransferableBalance) {
     return (
-      <MoveFoundsTransferableModal
+      <MoveFundsTransferableModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
         requiredStake={requiredStake}
@@ -34,7 +34,7 @@ export const MoveFundsModal = () => {
     )
   } else if (accountsWithCompatibleLocks && Object.keys(accountsWithCompatibleLocks).length) {
     return (
-      <MoveFoundsLockedModal
+      <MoveFundsLockedModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
         requiredStake={requiredStake}
@@ -43,7 +43,7 @@ export const MoveFundsModal = () => {
     )
   } else {
     return (
-      <MoveFoundsInsufficientBalanceModal
+      <MoveFundsInsufficientBalanceModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
         requiredStake={requiredStake}

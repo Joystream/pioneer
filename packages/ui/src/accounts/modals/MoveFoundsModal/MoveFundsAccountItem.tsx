@@ -22,7 +22,7 @@ interface Props {
   balances: AddressToBalanceMap
 }
 
-export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
+export const MoveFundsAccountItem = memo(({ account, balances }: Props) => {
   const {
     modalData: { accountsWithCompatibleLocks },
   } = useModal<MoveFundsModalCall>()
@@ -41,7 +41,7 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
 
   return (
     <>
-      <LockedFoundsMemberRow key={account?.address}>
+      <LockedFundsMemberRow key={account?.address}>
         {account && <AccountInfo account={account} />}
         <LockedBalanceInfoRow>
           <div>
@@ -56,8 +56,8 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
             <TokenValue value={balances[account?.address as string].total} />
           </LockedFoundsInfoValue>
         </LockedBalanceInfoRow>
-        <LockedFoundsDropDownButton onClick={setIsDropped} isDropped={isDropped} size="medium" />
-      </LockedFoundsMemberRow>
+        <LockedFundsDropDownButton onClick={setIsDropped} isDropped={isDropped} size="medium" />
+      </LockedFundsMemberRow>
       <DropDownToggleStyled isDropped={isDropped}>
         <TextSmall margin="l">Other accounts with transferable balances:</TextSmall>
         {accountsWithCompatibleLocks &&
@@ -121,7 +121,7 @@ const LockedBalanceInfoRow = styled.div`
   align-items: center;
 `
 
-const LockedFoundsMemberRow = styled(MemberRow)`
+const LockedFundsMemberRow = styled(MemberRow)`
   grid-template-columns: 1fr 1fr 0.2fr;
 `
 const LockedFoundsInfoValue = styled.div`
@@ -129,7 +129,7 @@ const LockedFoundsInfoValue = styled.div`
   line-height: 20px;
 `
 
-const LockedFoundsDropDownButton = styled(DropDownButton)`
+const LockedFundsDropDownButton = styled(DropDownButton)`
   margin-left: auto;
 `
 
