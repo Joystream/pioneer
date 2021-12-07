@@ -703,6 +703,22 @@ type AssetNone {
   phantom: Int
 }
 
+union Avatar = AvatarObject | AvatarUri
+
+type AvatarObject {
+  """
+  The avatar data object
+  """
+  avatarObject: DataObject
+}
+
+type AvatarUri {
+  """
+  The avatar URL
+  """
+  avatarUri: String!
+}
+
 interface BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -4263,7 +4279,6 @@ type DataObject implements BaseGraphQLObject {
   Joystream runtime content
   """
   joystreamContentId: String!
-  membermetadataavatar: [MemberMetadata!]
 }
 
 type DataObjectConnection {
@@ -4431,9 +4446,6 @@ input DataObjectWhereInput {
   joystreamContentId_endsWith: String
   joystreamContentId_in: [String!]
   liaison: WorkerWhereInput
-  membermetadataavatar_none: MemberMetadataWhereInput
-  membermetadataavatar_some: MemberMetadataWhereInput
-  membermetadataavatar_every: MemberMetadataWhereInput
   AND: [DataObjectWhereInput!]
   OR: [DataObjectWhereInput!]
 }
@@ -7529,8 +7541,11 @@ type MemberMetadata implements BaseGraphQLObject {
   Member's name
   """
   name: String
-  avatar: DataObject
-  avatarId: String
+
+  """
+  Avatar data object
+  """
+  avatar: Avatar
 
   """
   Short text chosen by member to share information about themselves
@@ -7550,7 +7565,7 @@ type MemberMetadataConnection {
 
 input MemberMetadataCreateInput {
   name: String
-  avatar: ID
+  avatar: JSONObject!
   about: String
 }
 
@@ -7568,15 +7583,13 @@ enum MemberMetadataOrderByInput {
   deletedAt_DESC
   name_ASC
   name_DESC
-  avatar_ASC
-  avatar_DESC
   about_ASC
   about_DESC
 }
 
 input MemberMetadataUpdateInput {
   name: String
-  avatar: ID
+  avatar: JSONObject
   about: String
 }
 
@@ -7610,12 +7623,12 @@ input MemberMetadataWhereInput {
   name_startsWith: String
   name_endsWith: String
   name_in: [String!]
+  avatar_json: JSONObject
   about_eq: String
   about_contains: String
   about_startsWith: String
   about_endsWith: String
   about_in: [String!]
-  avatar: DataObjectWhereInput
   memberinvitedeventmetadata_none: MemberInvitedEventWhereInput
   memberinvitedeventmetadata_some: MemberInvitedEventWhereInput
   memberinvitedeventmetadata_every: MemberInvitedEventWhereInput
