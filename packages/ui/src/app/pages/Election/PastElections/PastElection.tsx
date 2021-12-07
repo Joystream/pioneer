@@ -75,5 +75,5 @@ export const PastElection = () => {
     )
   }
 
-  return <PageLayout header={displayHeader()} main={displayMain()} />
+  return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Election #' + id} />
 }
