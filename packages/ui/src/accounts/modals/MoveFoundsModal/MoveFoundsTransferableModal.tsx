@@ -5,7 +5,15 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Info } from '@/common/components/Info'
-import { BalanceInfoInRow, InfoTitle, InfoValue, Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import {
+  BalanceInfoInRow,
+  InfoTitle,
+  InfoValue,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  ItemWrapper,
+} from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Address } from '@/common/types'
@@ -35,7 +43,7 @@ export const MoveFoundsTransferableModal = ({
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Move founds" />
+      <ModalHeader onClick={onClose} title="Move funds" />
       <ModalBody>
         <RowGapBlock gap={32}>
           <TextMedium light>
@@ -45,7 +53,7 @@ export const MoveFoundsTransferableModal = ({
           <RowGapBlock gap={4}>
             <TextMedium bold>Accounts with transferable balances:</TextMedium>
             <RowGapBlock gap={16}>
-              <div>
+              <ItemWrapper>
                 {accounts.map((address) => (
                   <MemberRow key={address}>
                     <AccountInfo account={allAccounts.find((account) => account.address === address) as Account} />
@@ -57,7 +65,7 @@ export const MoveFoundsTransferableModal = ({
                     </BalanceInfoInRow>
                   </MemberRow>
                 ))}
-              </div>
+              </ItemWrapper>
               <Info title="Info">
                 <TextMedium light>
                   You can combine balances in one of your account or transfer tokens into new account.
