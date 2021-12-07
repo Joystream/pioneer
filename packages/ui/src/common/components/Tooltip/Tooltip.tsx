@@ -80,12 +80,12 @@ export const Tooltip = ({
     },
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
-    onMouseEnter: mouseIsOver,
-    onMouseLeave: mouseLeft,
+    onPointerEnter: mouseIsOver,
+    onPointerLeave: mouseLeft,
   }
   const popUpHandlers = {
-    onMouseEnter: mouseIsOver,
-    onMouseLeave: mouseLeft,
+    onPointerEnter: mouseIsOver,
+    onPointerLeave: mouseLeft,
   }
 
   const isExternalLink = () =>
