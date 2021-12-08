@@ -10,6 +10,7 @@ import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
+import { useMember } from '@/memberships/hooks/useMembership'
 
 import { RecoverBalanceSignModal } from './RecoverBalanceSignModal'
 import { RecoverBalanceSuccessModal } from './RecoverBalanceSuccessModal'
@@ -26,7 +27,11 @@ export const RecoverBalanceModal = () => {
       ? api.tx.council.releaseCandidacyStake(modalData.memberId)
       : api.tx.referendum.releaseVoteStake()
   }, [connectionState, modalData?.memberId, modalData.lock.type])
-  const feeInfo = useTransactionFee(modalData.address, transaction)
+
+  const { member } = useMember(modalData?.memberId)
+  const signer = member?.controllerAccount ?? modalData.address
+
+  const feeInfo = useTransactionFee(signer, transaction)
 
   useLayoutEffect(() => {
     if (state.matches('requirementsVerification') && isDefined(feeInfo?.canAfford)) {
@@ -39,7 +44,7 @@ export const RecoverBalanceModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return <InsufficientFundsModal onClose={hideModal} address={modalData.address} amount={feeInfo.transactionFee} />
+    return <InsufficientFundsModal onClose={hideModal} address={signer} amount={feeInfo.transactionFee} />
   }
 
   if (state.matches('transaction')) {
@@ -50,6 +55,7 @@ export const RecoverBalanceModal = () => {
         onClose={hideModal}
         service={transactionService}
         address={modalData.address}
+        signer={signer}
         transaction={transaction}
         lock={modalData.lock}
       />
