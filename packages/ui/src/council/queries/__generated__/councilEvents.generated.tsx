@@ -77,6 +77,11 @@ export type GetCouncilEventsQuery = {
         createdAt: any
         candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; handle: string } }
       }
+    | { __typename: 'CategoryArchivalStatusUpdatedEvent' }
+    | { __typename: 'CategoryCreatedEvent' }
+    | { __typename: 'CategoryDeletedEvent' }
+    | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
+    | { __typename: 'CategoryStickyThreadUpdateEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: any }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
@@ -111,6 +116,11 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'OpeningAddedEvent' }
     | { __typename: 'OpeningCanceledEvent' }
     | { __typename: 'OpeningFilledEvent' }
+    | { __typename: 'PostAddedEvent' }
+    | { __typename: 'PostDeletedEvent' }
+    | { __typename: 'PostModeratedEvent' }
+    | { __typename: 'PostReactedEvent' }
+    | { __typename: 'PostTextUpdatedEvent' }
     | { __typename: 'ProposalCancelledEvent' }
     | { __typename: 'ProposalCreatedEvent' }
     | { __typename: 'ProposalDecisionMadeEvent' }
@@ -139,7 +149,13 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'StatusTextChangedEvent' }
     | { __typename: 'TerminatedLeaderEvent' }
     | { __typename: 'TerminatedWorkerEvent' }
+    | { __typename: 'ThreadCreatedEvent' }
+    | { __typename: 'ThreadDeletedEvent' }
+    | { __typename: 'ThreadMetadataUpdatedEvent' }
+    | { __typename: 'ThreadModeratedEvent' }
+    | { __typename: 'ThreadMovedEvent' }
     | { __typename: 'VoteCastEvent' }
+    | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent'; id: string; createdAt: any }
     | { __typename: 'WorkerExitedEvent' }
