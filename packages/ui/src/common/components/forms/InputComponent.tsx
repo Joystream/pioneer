@@ -448,6 +448,7 @@ const InputUnits = styled.span`
 
 const InputNotification = styled.div<InputProps>`
   display: grid;
+  min-height: 18px;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;

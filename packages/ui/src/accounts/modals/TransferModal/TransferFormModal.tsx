@@ -124,7 +124,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             inputWidth="s"
             units="JOY"
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
+            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           >
             <InputNumber
               id="amount-input"

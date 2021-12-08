@@ -101,7 +101,7 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
             tight
             units="JOY"
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
+            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
             required
           >
             <InputNumber
