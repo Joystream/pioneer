@@ -80,7 +80,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               required
               tooltipText="Something about root accounts"
               validation={hasError('rootAccount', errors) ? 'invalid' : undefined}
-              message={hasError('rootAccount', errors) ? getErrorMessage('rootAccount', errors) : ''}
+              message={hasError('rootAccount', errors) ? getErrorMessage('rootAccount', errors) : ' '}
             >
               <InputText
                 id="root-account"
@@ -98,7 +98,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               required
               tooltipText="Something about controller accounts"
               validation={hasError('controllerAccount', errors) ? 'invalid' : undefined}
-              message={hasError('controllerAccount', errors) ? getErrorMessage('controllerAccount', errors) : ''}
+              message={hasError('controllerAccount', errors) ? getErrorMessage('controllerAccount', errors) : ' '}
             >
               <InputText
                 id="controller-account"

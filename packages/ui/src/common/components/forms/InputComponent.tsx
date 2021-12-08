@@ -452,6 +452,7 @@ const InputNotification = styled.div<InputProps>`
   position: absolute;
   bottom: 0;
   display: grid;
+  min-height: 18px;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
