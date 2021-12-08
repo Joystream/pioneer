@@ -39,24 +39,24 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
 
 export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): ProposalDetailsOf => {
   if (!isValidSpecificParameters(state)) {
-    return createType('ProposalDetailsOf', { Signal: '' } )
+    return createType('ProposalDetailsOf', { Signal: '' })
   }
 
   const specifics = state.context.specifics
 
   switch (state.context.type) {
     case 'signal': {
-      return createType('ProposalDetailsOf', buildSpecificParams('Signal', createType('Text', specifics?.signal ?? '')) )
+      return createType('ProposalDetailsOf', buildSpecificParams('Signal', createType('Text', specifics?.signal ?? '')))
     }
     case 'fundingRequest': {
       return createType('ProposalDetailsOf', {
         FundingRequest: [{ amount: specifics?.amount, account: specifics?.account?.address }],
-      } )
+      })
     }
     case 'runtimeUpgrade': {
       return createType('ProposalDetailsOf', {
         RuntimeUpgrade: createType('Bytes', specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array()),
-      } )
+      })
     }
     case 'createWorkingGroupLeadOpening': {
       return createType('ProposalDetailsOf', {
@@ -69,7 +69,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           reward_per_block: specifics?.rewardPerBlock,
           working_group: getWorkingGroupParam(specifics?.groupId),
         },
-      } )
+      })
     }
     case 'decreaseWorkingGroupLeadStake': {
       return createType('ProposalDetailsOf', {
@@ -96,7 +96,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           specifics?.stakingAmount,
           getWorkingGroupParam(specifics?.groupId),
         ],
-      } )
+      })
     }
     case 'setWorkingGroupLeadReward': {
       return createType('ProposalDetailsOf', {
@@ -105,16 +105,18 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           specifics?.rewardPerBlock,
           getWorkingGroupParam(specifics?.groupId),
         ],
-      } )
+      })
     }
     case 'cancelWorkingGroupLeadOpening': {
-      return createType('ProposalDetailsOf', { CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum] } )
+      return createType('ProposalDetailsOf', {
+        CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum],
+      })
     }
     case 'setCouncilorReward': {
-      return createType('ProposalDetailsOf', { SetCouncilorReward: specifics?.amount } )
+      return createType('ProposalDetailsOf', { SetCouncilorReward: specifics?.amount })
     }
     case 'setCouncilBudgetIncrement': {
-      return createType('ProposalDetailsOf', { SetCouncilBudgetIncrement: specifics?.amount } )
+      return createType('ProposalDetailsOf', { SetCouncilBudgetIncrement: specifics?.amount })
     }
     case 'fillWorkingGroupLeadOpening': {
       return createType('ProposalDetailsOf', {
@@ -123,36 +125,39 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           successful_application_id: specifics?.applicationId,
           workingGroup: WorkingGroupDef.Forum,
         },
-      } )
+      })
     }
     case 'updateWorkingGroupBudget': {
-      return createType('ProposalDetailsOf', buildSpecificParams('UpdateWorkingGroupBudget', [
-        createType('Balance', specifics?.budgetUpdate ?? 0),
-        createType('WorkingGroup', getWorkingGroupParam(specifics?.groupId)),
-        createType('BalanceKind', specifics?.budgetUpdateKind ?? 'Positive'),
-      ]) )
+      return createType(
+        'ProposalDetailsOf',
+        buildSpecificParams('UpdateWorkingGroupBudget', [
+          createType('Balance', specifics?.budgetUpdate ?? 0),
+          createType('WorkingGroup', getWorkingGroupParam(specifics?.groupId)),
+          createType('BalanceKind', specifics?.budgetUpdateKind ?? 'Positive'),
+        ])
+      )
     }
     case 'setMembershipLeadInvitationQuota': {
-      return createType('ProposalDetailsOf', { SetMembershipLeadInvitationQuota: specifics?.amount } )
+      return createType('ProposalDetailsOf', { SetMembershipLeadInvitationQuota: specifics?.amount })
     }
     case 'setReferralCut': {
-      return createType('ProposalDetailsOf', { SetReferralCut: specifics?.amount?.toNumber() } )
+      return createType('ProposalDetailsOf', { SetReferralCut: specifics?.amount?.toNumber() })
     }
     case 'setInitialInvitationBalance': {
-      return createType('ProposalDetailsOf', { SetInitialInvitationBalance: specifics?.amount } )
+      return createType('ProposalDetailsOf', { SetInitialInvitationBalance: specifics?.amount })
     }
     case 'setInitialInvitationCount': {
       return createType('ProposalDetailsOf', {
         SetInitialInvitationCount: [specifics?.invitationCount],
-      } )
+      })
     }
     case 'setMaxValidatorCount': {
-      return createType('ProposalDetailsOf', { SetMaxValidatorCount: specifics?.amount?.toNumber() } )
+      return createType('ProposalDetailsOf', { SetMaxValidatorCount: specifics?.amount?.toNumber() })
     }
     case 'setMembershipPrice': {
-      return createType('ProposalDetailsOf', { SetMembershipPrice: specifics?.amount?.toNumber() } )
+      return createType('ProposalDetailsOf', { SetMembershipPrice: specifics?.amount?.toNumber() })
     }
     default:
-      return createType('ProposalDetailsOf', { Signal: '' } )
+      return createType('ProposalDetailsOf', { Signal: '' })
   }
 }
