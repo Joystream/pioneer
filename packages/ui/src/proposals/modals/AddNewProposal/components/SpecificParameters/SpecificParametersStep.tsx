@@ -18,6 +18,7 @@ import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/com
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { TerminateWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/TerminateWorkingGroupLead'
+import { UpdateWorkingGroupBudget } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/UpdateWorkingGroupBudget'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
@@ -103,6 +104,14 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return !!(specifics?.applicationId && specifics?.openingId)
+    }
+    case state.matches('specificParameters.updateWorkingGroupBudget'): {
+      return !!(
+        specifics?.groupId &&
+        specifics?.budgetUpdate &&
+        specifics.budgetUpdate.gtn(0) &&
+        specifics.budgetUpdateKind
+      )
     }
     case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
@@ -244,6 +253,15 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.updateWorkingGroupBudget'):
+      return (
+        <UpdateWorkingGroupBudget
+          setBudgetUpdate={(amount) => send('SET_BUDGET_UPDATE', { amount })}
+          setBudgetUpdateKind={(kind) => send('SET_BUDGET_UPDATE_KIND', { kind })}
+          groupId={state.context.specifics?.groupId}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
       )
     case state.matches('specificParameters.setInitialInvitationCount'):
