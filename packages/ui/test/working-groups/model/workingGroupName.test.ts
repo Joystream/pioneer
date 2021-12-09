@@ -1,4 +1,5 @@
 import { groupNameToURLParam, urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
+import { asWorkingGroupName } from '@/working-groups/types'
 
 describe('urlParamToWorkingGroupId()', () => {
   it('forum', () => {
@@ -23,7 +24,22 @@ describe('groupNameToURLParam()', () => {
     expect(groupNameToURLParam('content directory')).toBe('content-directory')
   })
 
+  it('Content Directory', () => {
+    expect(groupNameToURLParam('Content Directory')).toBe('content-directory')
+  })
+
   it('CONTENT DIRECTORY', () => {
     expect(groupNameToURLParam('CONTENT DIRECTORY')).toBe('content-directory')
+  })
+})
+
+describe('asWorkingGroupName', () => {
+  it('Single word name', () => {
+    expect(asWorkingGroupName('forumWorkingGroup')).toBe('Forum')
+    expect(asWorkingGroupName('ForumWorkingGroup')).toBe('Forum')
+  })
+
+  it('Multiple word name', () => {
+    expect(asWorkingGroupName('contentDirectoryWorkingGroup')).toBe('Content Directory')
   })
 })
