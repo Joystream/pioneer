@@ -4501,6 +4501,26 @@ type ElectedCouncil implements BaseGraphQLObject {
   Block number at which the council reign ended and a new council was elected.
   """
   endedAtBlock: Int
+
+  """
+  Time at which the council was elected.
+  """
+  electedAtTime: DateTime!
+
+  """
+  Time at which the council reign ended and a new council was elected.
+  """
+  endedAtTime: DateTime
+
+  """
+  Network running at the time of election.
+  """
+  electedAtNetwork: Network!
+
+  """
+  Network running at the time of resignation.
+  """
+  endedAtNetwork: Network
   councilElections: [ElectionRound!]!
   nextCouncilElections: [ElectionRound!]!
 
@@ -4520,6 +4540,10 @@ type ElectedCouncilConnection {
 input ElectedCouncilCreateInput {
   electedAtBlock: Float!
   endedAtBlock: Float
+  electedAtTime: DateTime!
+  endedAtTime: DateTime
+  electedAtNetwork: Network!
+  endedAtNetwork: Network
   isResigned: Boolean!
 }
 
@@ -4539,6 +4563,14 @@ enum ElectedCouncilOrderByInput {
   electedAtBlock_DESC
   endedAtBlock_ASC
   endedAtBlock_DESC
+  electedAtTime_ASC
+  electedAtTime_DESC
+  endedAtTime_ASC
+  endedAtTime_DESC
+  electedAtNetwork_ASC
+  electedAtNetwork_DESC
+  endedAtNetwork_ASC
+  endedAtNetwork_DESC
   isResigned_ASC
   isResigned_DESC
 }
@@ -4546,6 +4578,10 @@ enum ElectedCouncilOrderByInput {
 input ElectedCouncilUpdateInput {
   electedAtBlock: Float
   endedAtBlock: Float
+  electedAtTime: DateTime
+  endedAtTime: DateTime
+  electedAtNetwork: Network
+  endedAtNetwork: Network
   isResigned: Boolean
 }
 
@@ -4586,6 +4622,20 @@ input ElectedCouncilWhereInput {
   endedAtBlock_lt: Int
   endedAtBlock_lte: Int
   endedAtBlock_in: [Int!]
+  electedAtTime_eq: DateTime
+  electedAtTime_lt: DateTime
+  electedAtTime_lte: DateTime
+  electedAtTime_gt: DateTime
+  electedAtTime_gte: DateTime
+  endedAtTime_eq: DateTime
+  endedAtTime_lt: DateTime
+  endedAtTime_lte: DateTime
+  endedAtTime_gt: DateTime
+  endedAtTime_gte: DateTime
+  electedAtNetwork_eq: Network
+  electedAtNetwork_in: [Network!]
+  endedAtNetwork_eq: Network
+  endedAtNetwork_in: [Network!]
   isResigned_eq: Boolean
   isResigned_in: [Boolean!]
   councilMembers_none: CouncilMemberWhereInput
