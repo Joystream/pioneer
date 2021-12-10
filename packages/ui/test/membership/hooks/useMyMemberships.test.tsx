@@ -31,12 +31,15 @@ jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
 describe('useMyMemberships', () => {
   const mockServer = setupMockServer()
 
-  afterEach(() => {
+  beforeEach(() => {
+    useMyAccounts.isLoading = false
     useMyAccounts.hasAccounts = false
     useMyAccounts.allAccounts.splice(0)
   })
 
   it('Returns loading state', () => {
+    useMyAccounts.isLoading = true
+
     const { result } = renderUseMembership()
 
     expect(result.current).toMatchObject({
@@ -48,9 +51,7 @@ describe('useMyMemberships', () => {
   })
 
   it('No matches returns empty state', async () => {
-    const { result, waitForNextUpdate } = renderUseMembership()
-
-    await waitForNextUpdate()
+    const { result } = renderUseMembership()
 
     expect(result.current).toMatchObject({
       active: undefined,
