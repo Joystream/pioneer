@@ -4150,8 +4150,16 @@ export type ElectedCouncil = BaseGraphQlObject & {
   deletedById?: Maybe<Scalars['String']>
   /** Block number at which the council was elected. */
   electedAtBlock: Scalars['Int']
+  /** Network running at the time of election. */
+  electedAtNetwork: Network
+  /** Time at which the council was elected. */
+  electedAtTime: Scalars['DateTime']
   /** Block number at which the council reign ended and a new council was elected. */
   endedAtBlock?: Maybe<Scalars['Int']>
+  /** Network running at the time of resignation. */
+  endedAtNetwork?: Maybe<Network>
+  /** Time at which the council reign ended and a new council was elected. */
+  endedAtTime?: Maybe<Scalars['DateTime']>
   id: Scalars['ID']
   /** Sign if council is already resigned. */
   isResigned: Scalars['Boolean']
@@ -4172,7 +4180,11 @@ export type ElectedCouncilConnection = {
 
 export type ElectedCouncilCreateInput = {
   electedAtBlock: Scalars['Float']
+  electedAtNetwork: Network
+  electedAtTime: Scalars['DateTime']
   endedAtBlock?: InputMaybe<Scalars['Float']>
+  endedAtNetwork?: InputMaybe<Network>
+  endedAtTime?: InputMaybe<Scalars['DateTime']>
   isResigned: Scalars['Boolean']
 }
 
@@ -4189,8 +4201,16 @@ export enum ElectedCouncilOrderByInput {
   DeletedAtDesc = 'deletedAt_DESC',
   ElectedAtBlockAsc = 'electedAtBlock_ASC',
   ElectedAtBlockDesc = 'electedAtBlock_DESC',
+  ElectedAtNetworkAsc = 'electedAtNetwork_ASC',
+  ElectedAtNetworkDesc = 'electedAtNetwork_DESC',
+  ElectedAtTimeAsc = 'electedAtTime_ASC',
+  ElectedAtTimeDesc = 'electedAtTime_DESC',
   EndedAtBlockAsc = 'endedAtBlock_ASC',
   EndedAtBlockDesc = 'endedAtBlock_DESC',
+  EndedAtNetworkAsc = 'endedAtNetwork_ASC',
+  EndedAtNetworkDesc = 'endedAtNetwork_DESC',
+  EndedAtTimeAsc = 'endedAtTime_ASC',
+  EndedAtTimeDesc = 'endedAtTime_DESC',
   IsResignedAsc = 'isResigned_ASC',
   IsResignedDesc = 'isResigned_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -4199,7 +4219,11 @@ export enum ElectedCouncilOrderByInput {
 
 export type ElectedCouncilUpdateInput = {
   electedAtBlock?: InputMaybe<Scalars['Float']>
+  electedAtNetwork?: InputMaybe<Network>
+  electedAtTime?: InputMaybe<Scalars['DateTime']>
   endedAtBlock?: InputMaybe<Scalars['Float']>
+  endedAtNetwork?: InputMaybe<Network>
+  endedAtTime?: InputMaybe<Scalars['DateTime']>
   isResigned?: InputMaybe<Scalars['Boolean']>
 }
 
@@ -4233,12 +4257,26 @@ export type ElectedCouncilWhereInput = {
   electedAtBlock_in?: InputMaybe<Array<Scalars['Int']>>
   electedAtBlock_lt?: InputMaybe<Scalars['Int']>
   electedAtBlock_lte?: InputMaybe<Scalars['Int']>
+  electedAtNetwork_eq?: InputMaybe<Network>
+  electedAtNetwork_in?: InputMaybe<Array<Network>>
+  electedAtTime_eq?: InputMaybe<Scalars['DateTime']>
+  electedAtTime_gt?: InputMaybe<Scalars['DateTime']>
+  electedAtTime_gte?: InputMaybe<Scalars['DateTime']>
+  electedAtTime_lt?: InputMaybe<Scalars['DateTime']>
+  electedAtTime_lte?: InputMaybe<Scalars['DateTime']>
   endedAtBlock_eq?: InputMaybe<Scalars['Int']>
   endedAtBlock_gt?: InputMaybe<Scalars['Int']>
   endedAtBlock_gte?: InputMaybe<Scalars['Int']>
   endedAtBlock_in?: InputMaybe<Array<Scalars['Int']>>
   endedAtBlock_lt?: InputMaybe<Scalars['Int']>
   endedAtBlock_lte?: InputMaybe<Scalars['Int']>
+  endedAtNetwork_eq?: InputMaybe<Network>
+  endedAtNetwork_in?: InputMaybe<Array<Network>>
+  endedAtTime_eq?: InputMaybe<Scalars['DateTime']>
+  endedAtTime_gt?: InputMaybe<Scalars['DateTime']>
+  endedAtTime_gte?: InputMaybe<Scalars['DateTime']>
+  endedAtTime_lt?: InputMaybe<Scalars['DateTime']>
+  endedAtTime_lte?: InputMaybe<Scalars['DateTime']>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   isResigned_eq?: InputMaybe<Scalars['Boolean']>

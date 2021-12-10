@@ -122,6 +122,8 @@ export type ElectedCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   electedAtBlock: number
+  electedAtTime: any
+  electedAtNetwork: Types.Network
   councilMembers: Array<{
     __typename: 'CouncilMember'
     id: string
@@ -155,12 +157,16 @@ export type PastCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
+  endedAtTime?: any | null | undefined
 }
 
 export type PastCouncilDetailedFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
+  endedAtTime?: any | null | undefined
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
 }
 
@@ -456,6 +462,8 @@ export type GetElectedCouncilQuery = {
     __typename: 'ElectedCouncil'
     id: string
     electedAtBlock: number
+    electedAtTime: any
+    electedAtNetwork: Types.Network
     councilMembers: Array<{
       __typename: 'CouncilMember'
       id: string
@@ -494,7 +502,13 @@ export type GetPastCouncilsQueryVariables = Types.Exact<{
 
 export type GetPastCouncilsQuery = {
   __typename: 'Query'
-  electedCouncils: Array<{ __typename: 'ElectedCouncil'; id: string; endedAtBlock?: number | null | undefined }>
+  electedCouncils: Array<{
+    __typename: 'ElectedCouncil'
+    id: string
+    endedAtBlock?: number | null | undefined
+    endedAtNetwork?: Types.Network | null | undefined
+    endedAtTime?: any | null | undefined
+  }>
 }
 
 export type GetPastCouncilsCountQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -517,6 +531,8 @@ export type GetPastCouncilQuery = {
         __typename: 'ElectedCouncil'
         id: string
         endedAtBlock?: number | null | undefined
+        endedAtNetwork?: Types.Network | null | undefined
+        endedAtTime?: any | null | undefined
         councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
       }
     | null
@@ -1220,6 +1236,8 @@ export const ElectedCouncilFieldsFragmentDoc = gql`
   fragment ElectedCouncilFields on ElectedCouncil {
     id
     electedAtBlock
+    electedAtTime
+    electedAtNetwork
     councilMembers {
       ...CouncilMemberFields
     }
@@ -1230,6 +1248,8 @@ export const PastCouncilFieldsFragmentDoc = gql`
   fragment PastCouncilFields on ElectedCouncil {
     id
     endedAtBlock
+    endedAtNetwork
+    endedAtTime
   }
 `
 export const PastCouncilDetailedFieldsFragmentDoc = gql`
