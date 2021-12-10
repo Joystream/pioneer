@@ -1,3 +1,4 @@
+import { ApolloQueryResult } from '@apollo/client'
 import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -22,23 +23,18 @@ export interface MyMemberships {
   helpers: {
     getMemberIdByBoundAccountAddress: (address: Address) => Member['id'] | undefined
   }
+  refetch?: () => Promise<ApolloQueryResult<unknown>>
 }
-
-const POLL_INTERVAL = 10_000
 
 export const MembershipContextProvider = (props: Props) => {
   const [active, setActive] = useState<Member>()
 
-  const { allAccounts } = useMyAccounts()
+  const { allAccounts, isLoading: isLoadingAccounts } = useMyAccounts()
   const addresses = allAccounts.map((account) => account.address)
 
-  const {
-    data,
-    loading,
-    error: err,
-  } = useGetMembersQuery({
+  const { data, loading, error: err, refetch } = useGetMembersQuery({
     variables: { where: { rootAccount_in: addresses, controllerAccount_in: addresses } },
-    pollInterval: POLL_INTERVAL,
+    skip: addresses.length < 1,
   })
 
   if (err) {
@@ -64,20 +60,21 @@ export const MembershipContextProvider = (props: Props) => {
       }, {}),
     [members]
   )
-  const getMemberIdByBoundAccountAddress = useCallback(
-    (address: Address) => boundAccountsMap[address],
-    [boundAccountsMap]
-  )
+
+  const getMemberIdByBoundAccountAddress = useCallback((address: Address) => boundAccountsMap[address], [
+    boundAccountsMap,
+  ])
 
   const value = {
     active,
     setActive,
     members,
     hasMembers: !!members.length,
-    isLoading: loading,
+    isLoading: loading || isLoadingAccounts,
     helpers: {
       getMemberIdByBoundAccountAddress,
     },
+    refetch,
   }
 
   return <MembershipContext.Provider value={value}>{props.children}</MembershipContext.Provider>

@@ -1,7 +1,7 @@
 import { web3Accounts, web3AccountsSubscribe, web3Enable } from '@polkadot/extension-dapp'
 import { Keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { debounceTime } from 'rxjs/operators'
+import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useObservable } from '@/common/hooks/useObservable'
@@ -98,8 +98,14 @@ export const AccountsContextProvider = (props: Props) => {
     loadKeysFromExtension(keyring).catch(error)
   }, [isExtensionLoaded])
 
-  const accounts = useObservable(keyring.accounts.subject.asObservable().pipe(debounceTime(20)), [keyring])
-
+  const accounts = useObservable(
+    keyring.accounts.subject.asObservable().pipe(
+      debounceTime(20),
+      filter((accounts) => !!accounts),
+      skip(1)
+    ),
+    [keyring]
+  )
   const allAccounts: Account[] = []
 
   if (accounts) {
@@ -113,7 +119,7 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded }
+  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded || !accounts }
 
   if (extensionUnavailable) {
     value.error = 'EXTENSION'
