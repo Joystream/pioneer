@@ -1,4 +1,5 @@
-import { createMachine } from 'xstate'
+import { EventRecord } from '@polkadot/types/interfaces/system'
+import { assign, createMachine } from 'xstate'
 
 import {
   isTransactionCanceled,
@@ -16,7 +17,9 @@ export type WithdrawCandidacyState =
 
 export type WithdrawCandidacyEvent = { type: 'NEXT' }
 
-type WithdrawCandidacyContext = EmptyObject
+interface WithdrawCandidacyContext {
+  transactionEvents?: EventRecord[]
+}
 
 export const machine = createMachine<WithdrawCandidacyContext, WithdrawCandidacyEvent, WithdrawCandidacyState>({
   initial: 'warning',
@@ -38,6 +41,9 @@ export const machine = createMachine<WithdrawCandidacyContext, WithdrawCandidacy
           },
           {
             target: 'error',
+            actions: assign({
+              transactionEvents: (context, event) => event.data.events,
+            }),
             cond: isTransactionError,
           },
           {
