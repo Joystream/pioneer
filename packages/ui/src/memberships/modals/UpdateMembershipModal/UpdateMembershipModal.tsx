@@ -2,6 +2,7 @@ import { useMachine } from '@xstate/react'
 import React from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { Member } from '../../types'
 
@@ -17,6 +18,7 @@ interface MembershipModalProps {
 
 export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
   const [state, send] = useMachine(updateMembershipMachine)
+  const { refetch: refetchMemberships } = useMyMemberships()
 
   if (state.matches('prepare')) {
     return (
@@ -42,6 +44,7 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
   }
 
   if (state.matches('success')) {
+    refetchMemberships?.()
     return <UpdateMembershipSuccessModal onClose={onClose} member={member} />
   }
 
