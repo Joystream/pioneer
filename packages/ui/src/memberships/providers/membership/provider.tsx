@@ -32,7 +32,12 @@ export const MembershipContextProvider = (props: Props) => {
   const { allAccounts, isLoading: isLoadingAccounts } = useMyAccounts()
   const addresses = allAccounts.map((account) => account.address)
 
-  const { data, loading, error: err, refetch } = useGetMembersQuery({
+  const {
+    data,
+    loading,
+    error: err,
+    refetch,
+  } = useGetMembersQuery({
     variables: { where: { rootAccount_in: addresses, controllerAccount_in: addresses } },
     skip: addresses.length < 1,
   })
@@ -61,9 +66,10 @@ export const MembershipContextProvider = (props: Props) => {
     [members]
   )
 
-  const getMemberIdByBoundAccountAddress = useCallback((address: Address) => boundAccountsMap[address], [
-    boundAccountsMap,
-  ])
+  const getMemberIdByBoundAccountAddress = useCallback(
+    (address: Address) => boundAccountsMap[address],
+    [boundAccountsMap]
+  )
 
   const value = {
     active,
