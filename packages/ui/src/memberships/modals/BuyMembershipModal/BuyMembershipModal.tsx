@@ -5,6 +5,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -15,6 +16,7 @@ import { buyMembershipMachine } from './machine'
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
   const { api, connectionState } = useApi()
+  const { refetch: refetchMemberships } = useMyMemberships()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(buyMembershipMachine)
 
@@ -43,6 +45,7 @@ export const BuyMembershipModal = () => {
 
   if (state.matches('success')) {
     const { form, memberId } = state.context
+    refetchMemberships?.()
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
   }
 
