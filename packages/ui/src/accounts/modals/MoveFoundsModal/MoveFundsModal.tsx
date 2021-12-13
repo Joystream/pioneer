@@ -12,7 +12,7 @@ import { MoveFundsTransferableModal } from './MoveFundsTransferableModal'
 export const MoveFundsModal = () => {
   const {
     hideModal,
-    modalData: { requiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks },
+    modalData: { requiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks, lock },
   } = useModal<MoveFundsModalCall>()
   const { push } = useHistory()
   const balances = useMyBalances()
@@ -30,6 +30,7 @@ export const MoveFundsModal = () => {
         requiredStake={requiredStake}
         balances={balances}
         accounts={accountsWithTransferableBalance}
+        lock={lock}
       />
     )
   } else if (accountsWithCompatibleLocks && Object.keys(accountsWithCompatibleLocks).length) {

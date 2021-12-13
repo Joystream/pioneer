@@ -2,7 +2,7 @@ import React from 'react'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { Account, AddressToBalanceMap } from '@/accounts/types'
+import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Info } from '@/common/components/Info'
 import {
@@ -18,7 +18,9 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Address } from '@/common/types'
 
-import { MemberRow, ModalBody } from './styles'
+import { AccountLocksWrapper, InlineLockIconWrapper, MemberRow, ModalBody } from './styles'
+import { conflictingLocks } from '@/accounts/model/lockTypes'
+import { lockIcon } from '@/accounts/components/AccountLocks'
 
 export interface MoveFoundsTransferableModalProps {
   onClose: () => void
@@ -26,6 +28,7 @@ export interface MoveFoundsTransferableModalProps {
   requiredStake: number
   balances: AddressToBalanceMap
   accounts?: Address[]
+  lock?: LockType
 }
 
 export const MoveFundsTransferableModal = ({
@@ -34,12 +37,19 @@ export const MoveFundsTransferableModal = ({
   requiredStake,
   accounts,
   balances,
+  lock,
 }: MoveFoundsTransferableModalProps) => {
   const { allAccounts } = useMyAccounts()
 
   if (!accounts || !accounts.length) {
     return null
   }
+
+  const accountsWithIncompatibleLocks = Object.entries(balances).map(
+    ([address, balances]) => ({address: address, locks: conflictingLocks(lock ?? 'Proposals', balances.locks)})
+  ).filter((el) => el.locks.length)
+
+  const addressesWithIncompatibleLocks = accountsWithIncompatibleLocks.map((account) => account.address)
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -58,7 +68,21 @@ export const MoveFundsTransferableModal = ({
                   <MemberRow key={address}>
                     <AccountInfo account={allAccounts.find((account) => account.address === address) as Account} />
                     <BalanceInfoInRow>
-                      <InfoTitle>Transferable balance</InfoTitle>
+                      <InfoTitle>
+                        Transferable balance
+                        {addressesWithIncompatibleLocks.includes(address) && (
+                          <AccountLocksWrapper>
+                            Locks:
+                            {accountsWithIncompatibleLocks.find((el) => el.address === address)?.locks.map((lock) => (
+                              <InlineLockIconWrapper title={lock.toString()}>
+                                {lockIcon(lock)}
+                              </InlineLockIconWrapper>
+                              )
+                            )}
+                          </AccountLocksWrapper>
+                          )
+                        }
+                      </InfoTitle>
                       <InfoValue>
                         <TokenValue value={balances[address] && balances[address].transferable} />
                       </InfoValue>
