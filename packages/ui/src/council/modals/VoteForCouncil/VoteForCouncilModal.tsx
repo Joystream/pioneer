@@ -5,6 +5,7 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -17,7 +18,6 @@ import { VoteForCouncilModalCall } from './types'
 import { VoteForCouncilFormModal } from './VoteForCouncilFormModal'
 import { VoteForCouncilSignModal } from './VoteForCouncilSignModal'
 import { VoteForCouncilSuccessModal } from './VoteForCouncilSuccessModal'
-import { LockType } from '@/accounts/types'
 
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
@@ -44,7 +44,12 @@ export const VoteForCouncilModal = () => {
       if (!activeMember) {
         showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
       } else if (!hasRequiredStake) {
-        const data = { accountsWithCompatibleLocks, accountsWithTransferableBalance, requiredStake, lock: 'Voting' as LockType}
+        const data = {
+          accountsWithCompatibleLocks,
+          accountsWithTransferableBalance,
+          requiredStake,
+          lock: 'Voting' as LockType,
+        }
         showModal<MoveFundsModalCall>({ modal: 'MoveFundsModal', data })
       } else if (feeInfo) {
         send(feeInfo.canAfford ? 'PASS' : 'FAIL')

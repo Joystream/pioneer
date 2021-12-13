@@ -96,7 +96,7 @@ const isLockType = (item: LockType | undefined): item is LockType => {
 }
 
 export const conflictingLocks = (lock: LockType, existingLocks: BalanceLock[]) => {
-  return existingLocks.map(({ type }) => !COMPATIBLE_LOCKS[lock].has(type) ? type : undefined).filter(isLockType)
+  return existingLocks.map(({ type }) => (!COMPATIBLE_LOCKS[lock].has(type) ? type : undefined)).filter(isLockType)
 }
 
 export const lockLookup = (id: LockIdentifier): LockType => {

@@ -191,7 +191,7 @@ export const AddNewProposalModal = () => {
         accountsWithCompatibleLocks,
         accountsWithTransferableBalance,
         requiredStake: (constants?.requiredStake as BN).toNumber(),
-        lock: 'Proposals'
+        lock: 'Proposals',
       },
     })
 

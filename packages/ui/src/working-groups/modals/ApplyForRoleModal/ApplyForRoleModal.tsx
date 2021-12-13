@@ -75,7 +75,7 @@ export const ApplyForRoleModal = () => {
           accountsWithCompatibleLocks,
           accountsWithTransferableBalance,
           requiredStake,
-          lock: 'Forum Worker'
+          lock: 'Forum Worker',
         },
       })
 
