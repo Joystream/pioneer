@@ -17,6 +17,7 @@ import { VoteForCouncilModalCall } from './types'
 import { VoteForCouncilFormModal } from './VoteForCouncilFormModal'
 import { VoteForCouncilSignModal } from './VoteForCouncilSignModal'
 import { VoteForCouncilSuccessModal } from './VoteForCouncilSuccessModal'
+import { LockType } from '@/accounts/types'
 
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
@@ -43,7 +44,7 @@ export const VoteForCouncilModal = () => {
       if (!activeMember) {
         showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
       } else if (!hasRequiredStake) {
-        const data = { accountsWithCompatibleLocks, accountsWithTransferableBalance, requiredStake }
+        const data = { accountsWithCompatibleLocks, accountsWithTransferableBalance, requiredStake, lock: 'Voting' as LockType}
         showModal<MoveFundsModalCall>({ modal: 'MoveFundsModal', data })
       } else if (feeInfo) {
         send(feeInfo.canAfford ? 'PASS' : 'FAIL')

@@ -10,6 +10,6 @@ export type MoveFundsModalCall = ModalWithDataCall<
     requiredStake: number
     accountsWithTransferableBalance?: Address[] | null
     accountsWithCompatibleLocks?: { [key in Address]: Address[] } | null
-    lock?: LockType
+    lock: LockType
   }
 >
