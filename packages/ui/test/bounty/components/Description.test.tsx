@@ -5,7 +5,7 @@ import { Description } from '@/bounty/components/Descriptions'
 
 describe('Description', () => {
   const title = 'Description Title'
-  const imageUrl = ''
+  const imageUrl = 'tst://ima.ge'
   const description = 'Description'
   const props = {
     title,
