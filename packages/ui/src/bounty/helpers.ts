@@ -4,7 +4,7 @@ import { Colors } from '@/common/constants'
 export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
   funding: Colors.Orange[500],
   working: Colors.Blue[500],
-  judgment: Colors.LogoPurple[500],
+  judgment: Colors.Purple[200],
   withdrawal: Colors.Green[500],
   expired: Colors.Red[300],
 }

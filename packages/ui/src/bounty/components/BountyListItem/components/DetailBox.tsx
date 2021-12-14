@@ -24,6 +24,7 @@ const Wrapper = styled.div`
 
   ${TextSmall} {
     color: ${Colors.Black[500]};
+    width: max-content;
   }
 
   > div {
