@@ -15,6 +15,12 @@ describe('Description', () => {
   beforeEach(() => {
     render(<Description {...props} />)
   })
+  it('should render proper image', () => {
+    expect(screen.queryByRole('img')).toHaveAttribute('src', imageUrl)
+  })
+  it('should render proper title', () => {
+    expect(screen.queryByText(title)).toBeInTheDocument()
+  })
   it('should render proper description', () => {
     expect(screen.queryByText(description)).toBeInTheDocument()
   })
