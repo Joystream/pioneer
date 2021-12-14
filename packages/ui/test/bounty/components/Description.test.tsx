@@ -4,12 +4,18 @@ import React from 'react'
 import { Description } from '@/bounty/components/Descriptions'
 
 describe('Description', () => {
+  const title = 'Description Title'
+  const imageUrl = 'https://picsum.photos/500/300'
+  const description = 'Description'
+  const props = {
+    title,
+    imageUrl,
+    description,
+  }
   beforeEach(() => {
-    render(<Description title="Description" imageUrl="https://picsum.photos/500/300" description="Some description" />)
+    render(<Description {...props} />)
   })
-  it('It should render the description', () => {
-    expect(screen.queryByRole('img')).toBeDefined()
-    expect(screen.getByText('Description')).toBeDefined()
-    expect(screen.getByText('Some description')).toBeDefined()
+  it('should render proper description', () => {
+    expect(screen.queryByText(description)).toBeInTheDocument()
   })
 })
