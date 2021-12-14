@@ -5,7 +5,7 @@ import { Description } from '@/bounty/components/Descriptions'
 
 describe('Description', () => {
   const title = 'Description Title'
-  const imageUrl = 'https://picsum.photos/500/300'
+  const imageUrl = ''
   const description = 'Description'
   const props = {
     title,
