@@ -1,4 +1,3 @@
-import { Identicon } from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +5,7 @@ import { BountyPeriod } from '@/bounty/types/Bounty'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { DurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
-import { BorderRad } from '@/common/constants'
+import { MemberAvatar } from '@/memberships/components/Avatar'
 
 export const BountyInformations = ({ type }: { type: BountyPeriod }) => {
   return (
@@ -14,7 +13,9 @@ export const BountyInformations = ({ type }: { type: BountyPeriod }) => {
       <TitleContainer>
         <TextMedium bold>
           Gabriel
-          <Avatar size={40} theme={'beachball'} />
+          <AvatarWrapper>
+            <MemberAvatar isLead avatarUri={null} />
+          </AvatarWrapper>
         </TextMedium>
         <TextHuge bold>The blood alcohol</TextHuge>
       </TitleContainer>
@@ -64,10 +65,8 @@ const BadgeDurationContainer = styled.div`
     max-width: 160px;
   }
 `
-const Avatar = styled(Identicon)`
+const AvatarWrapper = styled.div`
   position: absolute;
   top: -10px;
   left: -45px;
-  border-radius: ${BorderRad.full};
-  background-color: darkred;
 `
