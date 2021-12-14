@@ -7,24 +7,31 @@ import { DurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { MemberAvatar } from '@/memberships/components/Avatar'
 
-export const BountyInformations = ({ type }: { type: BountyPeriod }) => {
+interface Props {
+  period: BountyPeriod
+  title: string
+  creator: string
+  date?: Date
+}
+
+export const BountyInformations = ({ period, creator, date, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
         <TextMedium bold>
-          Gabriel
+          {creator}
           <AvatarWrapper>
             <MemberAvatar isLead avatarUri={null} />
           </AvatarWrapper>
         </TextMedium>
-        <TextHuge bold>The blood alcohol</TextHuge>
+        <TextHuge bold>{title}</TextHuge>
       </TitleContainer>
       <BadgeDurationContainer>
         <BadgesRow space={8}>
           <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
           <BadgeStatus inverted>ELECTION #6</BadgeStatus>
         </BadgesRow>
-        {type !== 'expired' && <DurationStatistics size="s" value={new Date().toISOString()} title="Time" />}
+        {period !== 'expired' && date && <DurationStatistics size="s" value={date.toISOString()} title="Time" />}
       </BadgeDurationContainer>
     </Wrapper>
   )

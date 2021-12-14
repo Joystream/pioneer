@@ -14,7 +14,7 @@ const Template: Story = (args) => {
   return (
     <MemoryRouter>
       <MockApolloProvider workingGroups members workers>
-        <BountyListItem period="funding" {...args} />
+        <BountyListItem title="Title" creator="User" date={new Date()} imageUrl="url" period="funding" {...args} />
       </MockApolloProvider>
     </MemoryRouter>
   )
@@ -23,4 +23,8 @@ const Template: Story = (args) => {
 export const Default = Template.bind({})
 Default.args = {
   period: 'funding',
+  title: 'Title',
+  creator: 'User',
+  date: new Date(),
+  imageUrl: 'https://picsum.photos/500/300',
 }

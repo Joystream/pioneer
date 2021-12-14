@@ -9,12 +9,20 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors } from '@/common/constants'
 
-export const BountyListItem = ({ period }: { period: BountyPeriod }) => {
+interface Props {
+  period: BountyPeriod
+  title: string
+  creator: string
+  date?: Date
+  imageUrl: string
+}
+
+export const BountyListItem = ({ period, date, creator, title, imageUrl }: Props) => {
   return (
     <Wrapper>
-      <BountyImage src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg" />
+      <BountyImage src={imageUrl} />
       <Info>
-        <BountyInformations type={period} />
+        <BountyInformations period={period} date={date} creator={creator} title={title} />
         <BountyDetails type={period} />
       </Info>
       <ArrowWrapper>
