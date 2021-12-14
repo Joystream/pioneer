@@ -3,7 +3,7 @@ import React from 'react'
 
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 
-import { ProgressBarWithRange, ProgressBarWithRangeProps } from './'
+import { ProgressBarWithRange, ProgressBarWithRangeProps } from '.'
 
 export default {
   title: 'Common/ProgressBarWithRange',
@@ -12,11 +12,11 @@ export default {
 
 export const Default: Story<ProgressBarWithRangeProps> = (value) => (
   <TemplateBlock>
-    <ProgressBarWithRange {...value}/>
+    <ProgressBarWithRange {...value} />
   </TemplateBlock>
 )
 Default.args = {
   value: 1000,
   minRange: 1200,
-  maxRange: 1500
+  maxRange: 1500,
 }
