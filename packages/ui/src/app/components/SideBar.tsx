@@ -121,7 +121,7 @@ export const SideBar = () => {
                       Constitution
                     </NavigationLink>
                   </NavigationLinksItem>
-                  
+
                   <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<OverviewIcon />} disabled>
                       Overview
