@@ -80,7 +80,7 @@ const StepBody = styled.div`
   row-gap: 8px;
 `
 
-type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'> & { onClick?: () => void }
+type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'hideNumber' | 'isBaby'> & { onClick?: () => void }
 
 const StepWrap = styled.div<StepNumberProps>`
   display: grid;
@@ -123,14 +123,14 @@ const StepWrap = styled.div<StepNumberProps>`
         `
     }};
 
-    ${({ isActive, isPast, theme }) => {
+    ${({ isActive, isPast, hideNumber, theme }) => {
       if (isActive)
         return css`
           background-color: ${Colors.Blue[500]};
           border-color: ${Colors.Blue[500]};
           color: ${Colors.White};
         `
-      if (isPast)
+      if (isPast || hideNumber)
         return css`
           background-color: ${theme.stepperPastBackground};
           border-color: ${theme.stepperPastBackground};
