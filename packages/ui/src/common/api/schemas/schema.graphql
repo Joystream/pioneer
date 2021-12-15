@@ -703,6 +703,22 @@ type AssetNone {
   phantom: Int
 }
 
+union Avatar = AvatarObject | AvatarUri
+
+type AvatarObject {
+  """
+  The avatar data object
+  """
+  avatarObject: DataObject
+}
+
+type AvatarUri {
+  """
+  The avatar URL
+  """
+  avatarUri: String!
+}
+
 interface BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -1695,7 +1711,7 @@ type CandidacyNoteMetadata implements BaseGraphQLObject {
   header: String
 
   """
-  Candidate program in form of bullet points.
+  Candidate program in form of bullet points. Takes array with one empty string [''] as deletion request.
   """
   bulletPoints: [String!]!
 
@@ -2088,22 +2104,11 @@ input CandidacyStakeReleaseEventWhereUniqueInput {
   id: ID!
 }
 
-union CandidacyStatus = CandidacyStatusActive | CandidacyStatusWithdrawn | CandidacyStatusElected | CandidacyStatusLost
-
-type CandidacyStatusActive {
-  dummy: Int
-}
-
-type CandidacyStatusElected {
-  dummy: Int
-}
-
-type CandidacyStatusLost {
-  dummy: Int
-}
-
-type CandidacyStatusWithdrawn {
-  dummy: Int
+enum CandidacyStatus {
+  ACTIVE
+  WITHDRAWN
+  ELECTED
+  FAILED
 }
 
 type CandidacyWithdrawEvent implements Event & BaseGraphQLObject {
@@ -2285,9 +2290,19 @@ type Candidate implements BaseGraphQLObject {
   Sum of power of all votes received.
   """
   votePower: BigInt!
+
+  """
+  Block in which the last vote was received.
+  """
+  lastVoteReceivedAtBlock: BigInt
+
+  """
+  Event number in block in which the last vote was received.
+  """
+  lastVoteReceivedAtEventNumber: Int
   noteMetadata: CandidacyNoteMetadata!
   noteMetadataId: String!
-  votesRecieved: [CastVote!]!
+  votesReceived: [CastVote!]!
   candidacynoteseteventcandidate: [CandidacyNoteSetEvent!]
   candidacystakereleaseeventcandidate: [CandidacyStakeReleaseEvent!]
   candidacywithdraweventcandidate: [CandidacyWithdrawEvent!]
@@ -2307,8 +2322,10 @@ input CandidateCreateInput {
   electionRound: ID!
   stake: String!
   stakeLocked: Boolean!
-  status: JSONObject!
+  status: CandidacyStatus!
   votePower: String!
+  lastVoteReceivedAtBlock: String
+  lastVoteReceivedAtEventNumber: Float
   noteMetadata: ID!
 }
 
@@ -2336,8 +2353,14 @@ enum CandidateOrderByInput {
   stake_DESC
   stakeLocked_ASC
   stakeLocked_DESC
+  status_ASC
+  status_DESC
   votePower_ASC
   votePower_DESC
+  lastVoteReceivedAtBlock_ASC
+  lastVoteReceivedAtBlock_DESC
+  lastVoteReceivedAtEventNumber_ASC
+  lastVoteReceivedAtEventNumber_DESC
   noteMetadata_ASC
   noteMetadata_DESC
 }
@@ -2349,8 +2372,10 @@ input CandidateUpdateInput {
   electionRound: ID
   stake: String
   stakeLocked: Boolean
-  status: JSONObject
+  status: CandidacyStatus
   votePower: String
+  lastVoteReceivedAtBlock: String
+  lastVoteReceivedAtEventNumber: Float
   noteMetadata: ID
 }
 
@@ -2397,19 +2422,32 @@ input CandidateWhereInput {
   stake_in: [BigInt!]
   stakeLocked_eq: Boolean
   stakeLocked_in: [Boolean!]
-  status_json: JSONObject
+  status_eq: CandidacyStatus
+  status_in: [CandidacyStatus!]
   votePower_eq: BigInt
   votePower_gt: BigInt
   votePower_gte: BigInt
   votePower_lt: BigInt
   votePower_lte: BigInt
   votePower_in: [BigInt!]
+  lastVoteReceivedAtBlock_eq: BigInt
+  lastVoteReceivedAtBlock_gt: BigInt
+  lastVoteReceivedAtBlock_gte: BigInt
+  lastVoteReceivedAtBlock_lt: BigInt
+  lastVoteReceivedAtBlock_lte: BigInt
+  lastVoteReceivedAtBlock_in: [BigInt!]
+  lastVoteReceivedAtEventNumber_eq: Int
+  lastVoteReceivedAtEventNumber_gt: Int
+  lastVoteReceivedAtEventNumber_gte: Int
+  lastVoteReceivedAtEventNumber_lt: Int
+  lastVoteReceivedAtEventNumber_lte: Int
+  lastVoteReceivedAtEventNumber_in: [Int!]
   member: MembershipWhereInput
   electionRound: ElectionRoundWhereInput
   noteMetadata: CandidacyNoteMetadataWhereInput
-  votesRecieved_none: CastVoteWhereInput
-  votesRecieved_some: CastVoteWhereInput
-  votesRecieved_every: CastVoteWhereInput
+  votesReceived_none: CastVoteWhereInput
+  votesReceived_some: CastVoteWhereInput
+  votesReceived_every: CastVoteWhereInput
   candidacynoteseteventcandidate_none: CandidacyNoteSetEventWhereInput
   candidacynoteseteventcandidate_some: CandidacyNoteSetEventWhereInput
   candidacynoteseteventcandidate_every: CandidacyNoteSetEventWhereInput
@@ -2591,16 +2629,7 @@ input CastVoteWhereUniqueInput {
   id: ID!
 }
 
-type CategoryArchivalStatusUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryArchivalStatusUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -2620,6 +2649,19 @@ type CategoryArchivalStatusUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
 
@@ -2741,16 +2783,7 @@ input CategoryArchivalStatusUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
-type CategoryCreatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryCreatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -2770,6 +2803,19 @@ type CategoryCreatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
 }
@@ -2873,16 +2919,7 @@ input CategoryCreatedEventWhereUniqueInput {
   id: ID!
 }
 
-type CategoryDeletedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryDeletedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -2902,6 +2939,19 @@ type CategoryDeletedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
   actor: Worker!
@@ -3012,16 +3062,7 @@ input CategoryDeletedEventWhereUniqueInput {
   id: ID!
 }
 
-type CategoryMembershipOfModeratorUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryMembershipOfModeratorUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -3041,6 +3082,19 @@ type CategoryMembershipOfModeratorUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   moderator: Worker!
   moderatorId: String!
   category: ForumCategory!
@@ -3182,16 +3236,7 @@ type CategoryStatusRemoved {
   categoryDeletedEvent: CategoryDeletedEvent
 }
 
-type CategoryStickyThreadUpdateEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryStickyThreadUpdateEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -3211,6 +3256,19 @@ type CategoryStickyThreadUpdateEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
   newStickyThreads: [ForumThread!]!
@@ -3657,7 +3715,7 @@ type CouncilMember implements BaseGraphQLObject {
   stake: BigInt!
 
   """
-  Block number in which council member recieved the last reward payment.
+  Block number in which council member received the last reward payment.
   """
   lastPaymentBlock: BigInt!
 
@@ -4263,7 +4321,6 @@ type DataObject implements BaseGraphQLObject {
   Joystream runtime content
   """
   joystreamContentId: String!
-  membermetadataavatar: [MemberMetadata!]
 }
 
 type DataObjectConnection {
@@ -4431,9 +4488,6 @@ input DataObjectWhereInput {
   joystreamContentId_endsWith: String
   joystreamContentId_in: [String!]
   liaison: WorkerWhereInput
-  membermetadataavatar_none: MemberMetadataWhereInput
-  membermetadataavatar_some: MemberMetadataWhereInput
-  membermetadataavatar_every: MemberMetadataWhereInput
   AND: [DataObjectWhereInput!]
   OR: [DataObjectWhereInput!]
 }
@@ -4501,6 +4555,26 @@ type ElectedCouncil implements BaseGraphQLObject {
   Block number at which the council reign ended and a new council was elected.
   """
   endedAtBlock: Int
+
+  """
+  Time at which the council was elected.
+  """
+  electedAtTime: DateTime!
+
+  """
+  Time at which the council reign ended and a new council was elected.
+  """
+  endedAtTime: DateTime
+
+  """
+  Network running at the time of election.
+  """
+  electedAtNetwork: Network!
+
+  """
+  Network running at the time of resignation.
+  """
+  endedAtNetwork: Network
   councilElections: [ElectionRound!]!
   nextCouncilElections: [ElectionRound!]!
 
@@ -4520,6 +4594,10 @@ type ElectedCouncilConnection {
 input ElectedCouncilCreateInput {
   electedAtBlock: Float!
   endedAtBlock: Float
+  electedAtTime: DateTime!
+  endedAtTime: DateTime
+  electedAtNetwork: Network!
+  endedAtNetwork: Network
   isResigned: Boolean!
 }
 
@@ -4539,6 +4617,14 @@ enum ElectedCouncilOrderByInput {
   electedAtBlock_DESC
   endedAtBlock_ASC
   endedAtBlock_DESC
+  electedAtTime_ASC
+  electedAtTime_DESC
+  endedAtTime_ASC
+  endedAtTime_DESC
+  electedAtNetwork_ASC
+  electedAtNetwork_DESC
+  endedAtNetwork_ASC
+  endedAtNetwork_DESC
   isResigned_ASC
   isResigned_DESC
 }
@@ -4546,6 +4632,10 @@ enum ElectedCouncilOrderByInput {
 input ElectedCouncilUpdateInput {
   electedAtBlock: Float
   endedAtBlock: Float
+  electedAtTime: DateTime
+  endedAtTime: DateTime
+  electedAtNetwork: Network
+  endedAtNetwork: Network
   isResigned: Boolean
 }
 
@@ -4586,6 +4676,20 @@ input ElectedCouncilWhereInput {
   endedAtBlock_lt: Int
   endedAtBlock_lte: Int
   endedAtBlock_in: [Int!]
+  electedAtTime_eq: DateTime
+  electedAtTime_lt: DateTime
+  electedAtTime_lte: DateTime
+  electedAtTime_gt: DateTime
+  electedAtTime_gte: DateTime
+  endedAtTime_eq: DateTime
+  endedAtTime_lt: DateTime
+  endedAtTime_lte: DateTime
+  endedAtTime_gt: DateTime
+  endedAtTime_gte: DateTime
+  electedAtNetwork_eq: Network
+  electedAtNetwork_in: [Network!]
+  endedAtNetwork_eq: Network
+  endedAtNetwork_in: [Network!]
   isResigned_eq: Boolean
   isResigned_in: [Boolean!]
   councilMembers_none: CouncilMemberWhereInput
@@ -4635,13 +4739,29 @@ type ElectionRound implements BaseGraphQLObject {
   Sign if election has already finished.
   """
   isFinished: Boolean!
+
+  """
+  Block number at which the election ended.
+  """
+  endedAtBlock: Int
+
+  """
+  Time at which the election ended.
+  """
+  endedAtTime: DateTime
+
+  """
+  Network running at the time the election ended.
+  """
+  endedAtNetwork: Network
   castVotes: [CastVote!]!
+  referendumStageVoting: ReferendumStageVoting
+  referendumStageRevealing: ReferendumStageRevealing
   electedCouncil: ElectedCouncil!
   electedCouncilId: String!
   nextElectedCouncil: ElectedCouncil
   nextElectedCouncilId: String
   candidates: [Candidate!]!
-  referendumstagerevealingoptionresultelectionRound: [ReferendumStageRevealingOptionResult!]
 }
 
 type ElectionRoundConnection {
@@ -4653,6 +4773,9 @@ type ElectionRoundConnection {
 input ElectionRoundCreateInput {
   cycleId: Float!
   isFinished: Boolean!
+  endedAtBlock: Float
+  endedAtTime: DateTime
+  endedAtNetwork: Network
   electedCouncil: ID!
   nextElectedCouncil: ID
 }
@@ -4673,6 +4796,12 @@ enum ElectionRoundOrderByInput {
   cycleId_DESC
   isFinished_ASC
   isFinished_DESC
+  endedAtBlock_ASC
+  endedAtBlock_DESC
+  endedAtTime_ASC
+  endedAtTime_DESC
+  endedAtNetwork_ASC
+  endedAtNetwork_DESC
   electedCouncil_ASC
   electedCouncil_DESC
   nextElectedCouncil_ASC
@@ -4682,6 +4811,9 @@ enum ElectionRoundOrderByInput {
 input ElectionRoundUpdateInput {
   cycleId: Float
   isFinished: Boolean
+  endedAtBlock: Float
+  endedAtTime: DateTime
+  endedAtNetwork: Network
   electedCouncil: ID
   nextElectedCouncil: ID
 }
@@ -4719,17 +4851,29 @@ input ElectionRoundWhereInput {
   cycleId_in: [Int!]
   isFinished_eq: Boolean
   isFinished_in: [Boolean!]
+  endedAtBlock_eq: Int
+  endedAtBlock_gt: Int
+  endedAtBlock_gte: Int
+  endedAtBlock_lt: Int
+  endedAtBlock_lte: Int
+  endedAtBlock_in: [Int!]
+  endedAtTime_eq: DateTime
+  endedAtTime_lt: DateTime
+  endedAtTime_lte: DateTime
+  endedAtTime_gt: DateTime
+  endedAtTime_gte: DateTime
+  endedAtNetwork_eq: Network
+  endedAtNetwork_in: [Network!]
   castVotes_none: CastVoteWhereInput
   castVotes_some: CastVoteWhereInput
   castVotes_every: CastVoteWhereInput
+  referendumStageVoting: ReferendumStageVotingWhereInput
+  referendumStageRevealing: ReferendumStageRevealingWhereInput
   electedCouncil: ElectedCouncilWhereInput
   nextElectedCouncil: ElectedCouncilWhereInput
   candidates_none: CandidateWhereInput
   candidates_some: CandidateWhereInput
   candidates_every: CandidateWhereInput
-  referendumstagerevealingoptionresultelectionRound_none: ReferendumStageRevealingOptionResultWhereInput
-  referendumstagerevealingoptionresultelectionRound_some: ReferendumStageRevealingOptionResultWhereInput
-  referendumstagerevealingoptionresultelectionRound_every: ReferendumStageRevealingOptionResultWhereInput
   AND: [ElectionRoundWhereInput!]
   OR: [ElectionRoundWhereInput!]
 }
@@ -4805,6 +4949,11 @@ enum EventTypeOptions {
   CandidacyNoteSetEvent
   CandidacyStakeReleaseEvent
   CandidacyWithdrawEvent
+  CategoryArchivalStatusUpdatedEvent
+  CategoryCreatedEvent
+  CategoryDeletedEvent
+  CategoryMembershipOfModeratorUpdatedEvent
+  CategoryStickyThreadUpdateEvent
   CouncilorRewardUpdatedEvent
   InitialInvitationBalanceUpdatedEvent
   InitialInvitationCountUpdatedEvent
@@ -4826,6 +4975,11 @@ enum EventTypeOptions {
   OpeningAddedEvent
   OpeningCanceledEvent
   OpeningFilledEvent
+  PostAddedEvent
+  PostDeletedEvent
+  PostModeratedEvent
+  PostReactedEvent
+  PostTextUpdatedEvent
   ProposalCancelledEvent
   ProposalCreatedEvent
   ProposalDecisionMadeEvent
@@ -4854,7 +5008,13 @@ enum EventTypeOptions {
   StatusTextChangedEvent
   TerminatedLeaderEvent
   TerminatedWorkerEvent
+  ThreadCreatedEvent
+  ThreadDeletedEvent
+  ThreadMetadataUpdatedEvent
+  ThreadModeratedEvent
+  ThreadMovedEvent
   VoteCastEvent
+  VoteOnPollEvent
   VoteRevealedEvent
   VotingPeriodStartedEvent
   WorkerExitedEvent
@@ -7529,8 +7689,11 @@ type MemberMetadata implements BaseGraphQLObject {
   Member's name
   """
   name: String
-  avatar: DataObject
-  avatarId: String
+
+  """
+  Avatar data object
+  """
+  avatar: Avatar
 
   """
   Short text chosen by member to share information about themselves
@@ -7550,7 +7713,7 @@ type MemberMetadataConnection {
 
 input MemberMetadataCreateInput {
   name: String
-  avatar: ID
+  avatar: JSONObject!
   about: String
 }
 
@@ -7568,15 +7731,13 @@ enum MemberMetadataOrderByInput {
   deletedAt_DESC
   name_ASC
   name_DESC
-  avatar_ASC
-  avatar_DESC
   about_ASC
   about_DESC
 }
 
 input MemberMetadataUpdateInput {
   name: String
-  avatar: ID
+  avatar: JSONObject
   about: String
 }
 
@@ -7610,12 +7771,12 @@ input MemberMetadataWhereInput {
   name_startsWith: String
   name_endsWith: String
   name_in: [String!]
+  avatar_json: JSONObject
   about_eq: String
   about_contains: String
   about_startsWith: String
   about_endsWith: String
   about_in: [String!]
-  avatar: DataObjectWhereInput
   memberinvitedeventmetadata_none: MemberInvitedEventWhereInput
   memberinvitedeventmetadata_some: MemberInvitedEventWhereInput
   memberinvitedeventmetadata_every: MemberInvitedEventWhereInput
@@ -7870,9 +8031,8 @@ type Membership implements BaseGraphQLObject {
   roles: [Worker!]!
   whitelistedIn: [ProposalDiscussionWhitelist!]!
   channels: [Channel!]!
+  councilCandidacies: [Candidate!]!
   councilMembers: [CouncilMember!]!
-  referendumStageRevealingOptionResults: [ReferendumStageRevealingOptionResult!]!
-  candidatemember: [Candidate!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
   forumthreadauthor: [ForumThread!]
@@ -8544,15 +8704,12 @@ input MembershipWhereInput {
   channels_none: ChannelWhereInput
   channels_some: ChannelWhereInput
   channels_every: ChannelWhereInput
+  councilCandidacies_none: CandidateWhereInput
+  councilCandidacies_some: CandidateWhereInput
+  councilCandidacies_every: CandidateWhereInput
   councilMembers_none: CouncilMemberWhereInput
   councilMembers_some: CouncilMemberWhereInput
   councilMembers_every: CouncilMemberWhereInput
-  referendumStageRevealingOptionResults_none: ReferendumStageRevealingOptionResultWhereInput
-  referendumStageRevealingOptionResults_some: ReferendumStageRevealingOptionResultWhereInput
-  referendumStageRevealingOptionResults_every: ReferendumStageRevealingOptionResultWhereInput
-  candidatemember_none: CandidateWhereInput
-  candidatemember_some: CandidateWhereInput
-  candidatemember_every: CandidateWhereInput
   forumpostauthor_none: ForumPostWhereInput
   forumpostauthor_some: ForumPostWhereInput
   forumpostauthor_every: ForumPostWhereInput
@@ -9984,16 +10141,7 @@ type PageInfo {
   endCursor: String
 }
 
-type PostAddedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostAddedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10013,6 +10161,19 @@ type PostAddedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -10141,16 +10302,7 @@ input PostAddedEventWhereUniqueInput {
   id: ID!
 }
 
-type PostDeletedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostDeletedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10170,6 +10322,19 @@ type PostDeletedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   posts: [ForumPost!]!
   actor: Membership!
   actorId: String!
@@ -10291,16 +10456,7 @@ input PostDeletedEventWhereUniqueInput {
   id: ID!
 }
 
-type PostModeratedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostModeratedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10320,6 +10476,19 @@ type PostModeratedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -10460,16 +10629,7 @@ type PostOriginThreadReply {
   postAddedEvent: PostAddedEvent
 }
 
-type PostReactedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostReactedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10489,6 +10649,19 @@ type PostReactedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -10706,16 +10879,7 @@ type PostStatusRemoved {
   postDeletedEvent: PostDeletedEvent
 }
 
-type PostTextUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostTextUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10735,6 +10899,19 @@ type PostTextUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -14414,23 +14591,36 @@ type Query {
     where: ReferendumFinishedEventWhereInput
     orderBy: [ReferendumFinishedEventOrderByInput!]
   ): ReferendumFinishedEventConnection!
-  referendumStageRevealingOptionResults(
+  referendumStageRevealings(
     offset: Int
     limit: Int = 50
-    where: ReferendumStageRevealingOptionResultWhereInput
-    orderBy: [ReferendumStageRevealingOptionResultOrderByInput!]
-  ): [ReferendumStageRevealingOptionResult!]!
-  referendumStageRevealingOptionResultByUniqueInput(
-    where: ReferendumStageRevealingOptionResultWhereUniqueInput!
-  ): ReferendumStageRevealingOptionResult
-  referendumStageRevealingOptionResultsConnection(
+    where: ReferendumStageRevealingWhereInput
+    orderBy: [ReferendumStageRevealingOrderByInput!]
+  ): [ReferendumStageRevealing!]!
+  referendumStageRevealingByUniqueInput(where: ReferendumStageRevealingWhereUniqueInput!): ReferendumStageRevealing
+  referendumStageRevealingsConnection(
     first: Int
     after: String
     last: Int
     before: String
-    where: ReferendumStageRevealingOptionResultWhereInput
-    orderBy: [ReferendumStageRevealingOptionResultOrderByInput!]
-  ): ReferendumStageRevealingOptionResultConnection!
+    where: ReferendumStageRevealingWhereInput
+    orderBy: [ReferendumStageRevealingOrderByInput!]
+  ): ReferendumStageRevealingConnection!
+  referendumStageVotings(
+    offset: Int
+    limit: Int = 50
+    where: ReferendumStageVotingWhereInput
+    orderBy: [ReferendumStageVotingOrderByInput!]
+  ): [ReferendumStageVoting!]!
+  referendumStageVotingByUniqueInput(where: ReferendumStageVotingWhereUniqueInput!): ReferendumStageVoting
+  referendumStageVotingsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ReferendumStageVotingWhereInput
+    orderBy: [ReferendumStageVotingOrderByInput!]
+  ): ReferendumStageVotingConnection!
   referendumStartedEvents(
     offset: Int
     limit: Int = 50
@@ -15121,7 +15311,6 @@ type ReferendumFinishedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  optionResults: [ReferendumStageRevealingOptionResult!]!
 }
 
 type ReferendumFinishedEventConnection {
@@ -15210,9 +15399,6 @@ input ReferendumFinishedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  optionResults_none: ReferendumStageRevealingOptionResultWhereInput
-  optionResults_some: ReferendumStageRevealingOptionResultWhereInput
-  optionResults_every: ReferendumStageRevealingOptionResultWhereInput
   AND: [ReferendumFinishedEventWhereInput!]
   OR: [ReferendumFinishedEventWhereInput!]
 }
@@ -15221,7 +15407,7 @@ input ReferendumFinishedEventWhereUniqueInput {
   id: ID!
 }
 
-type ReferendumStageRevealingOptionResult implements BaseGraphQLObject {
+type ReferendumStageRevealing implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
   createdById: String!
@@ -15230,62 +15416,59 @@ type ReferendumStageRevealingOptionResult implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  option: Membership!
-  optionId: String!
 
   """
-  Sum of votes' power received.
+  Block in which referendum started
   """
-  votePower: BigInt!
+  startedAtBlock: BigInt!
+
+  """
+  Target number of winners
+  """
+  winningTargetCount: BigInt!
   electionRound: ElectionRound!
   electionRoundId: String!
-  referendumFinishedEvent: ReferendumFinishedEvent!
-  referendumFinishedEventId: String!
 }
 
-type ReferendumStageRevealingOptionResultConnection {
+type ReferendumStageRevealingConnection {
   totalCount: Int!
-  edges: [ReferendumStageRevealingOptionResultEdge!]!
+  edges: [ReferendumStageRevealingEdge!]!
   pageInfo: PageInfo!
 }
 
-input ReferendumStageRevealingOptionResultCreateInput {
-  option: ID!
-  votePower: String!
+input ReferendumStageRevealingCreateInput {
+  startedAtBlock: String!
+  winningTargetCount: String!
   electionRound: ID!
-  referendumFinishedEvent: ID!
 }
 
-type ReferendumStageRevealingOptionResultEdge {
-  node: ReferendumStageRevealingOptionResult!
+type ReferendumStageRevealingEdge {
+  node: ReferendumStageRevealing!
   cursor: String!
 }
 
-enum ReferendumStageRevealingOptionResultOrderByInput {
+enum ReferendumStageRevealingOrderByInput {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
-  option_ASC
-  option_DESC
-  votePower_ASC
-  votePower_DESC
+  startedAtBlock_ASC
+  startedAtBlock_DESC
+  winningTargetCount_ASC
+  winningTargetCount_DESC
   electionRound_ASC
   electionRound_DESC
-  referendumFinishedEvent_ASC
-  referendumFinishedEvent_DESC
 }
 
-input ReferendumStageRevealingOptionResultUpdateInput {
-  option: ID
-  votePower: String
+input ReferendumStageRevealingUpdateInput {
+  startedAtBlock: String
+  winningTargetCount: String
   electionRound: ID
-  referendumFinishedEvent: ID
 }
 
-input ReferendumStageRevealingOptionResultWhereInput {
+input ReferendumStageRevealingWhereInput {
   id_eq: ID
   id_in: [ID!]
   createdAt_eq: DateTime
@@ -15310,20 +15493,131 @@ input ReferendumStageRevealingOptionResultWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  votePower_eq: BigInt
-  votePower_gt: BigInt
-  votePower_gte: BigInt
-  votePower_lt: BigInt
-  votePower_lte: BigInt
-  votePower_in: [BigInt!]
-  option: MembershipWhereInput
+  startedAtBlock_eq: BigInt
+  startedAtBlock_gt: BigInt
+  startedAtBlock_gte: BigInt
+  startedAtBlock_lt: BigInt
+  startedAtBlock_lte: BigInt
+  startedAtBlock_in: [BigInt!]
+  winningTargetCount_eq: BigInt
+  winningTargetCount_gt: BigInt
+  winningTargetCount_gte: BigInt
+  winningTargetCount_lt: BigInt
+  winningTargetCount_lte: BigInt
+  winningTargetCount_in: [BigInt!]
   electionRound: ElectionRoundWhereInput
-  referendumFinishedEvent: ReferendumFinishedEventWhereInput
-  AND: [ReferendumStageRevealingOptionResultWhereInput!]
-  OR: [ReferendumStageRevealingOptionResultWhereInput!]
+  AND: [ReferendumStageRevealingWhereInput!]
+  OR: [ReferendumStageRevealingWhereInput!]
 }
 
-input ReferendumStageRevealingOptionResultWhereUniqueInput {
+input ReferendumStageRevealingWhereUniqueInput {
+  id: ID!
+}
+
+type ReferendumStageVoting implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Block in which referendum started.
+  """
+  startedAtBlock: BigInt!
+
+  """
+  Target number of winners.
+  """
+  winningTargetCount: BigInt!
+  electionRound: ElectionRound!
+  electionRoundId: String!
+}
+
+type ReferendumStageVotingConnection {
+  totalCount: Int!
+  edges: [ReferendumStageVotingEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ReferendumStageVotingCreateInput {
+  startedAtBlock: String!
+  winningTargetCount: String!
+  electionRound: ID!
+}
+
+type ReferendumStageVotingEdge {
+  node: ReferendumStageVoting!
+  cursor: String!
+}
+
+enum ReferendumStageVotingOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  startedAtBlock_ASC
+  startedAtBlock_DESC
+  winningTargetCount_ASC
+  winningTargetCount_DESC
+  electionRound_ASC
+  electionRound_DESC
+}
+
+input ReferendumStageVotingUpdateInput {
+  startedAtBlock: String
+  winningTargetCount: String
+  electionRound: ID
+}
+
+input ReferendumStageVotingWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  startedAtBlock_eq: BigInt
+  startedAtBlock_gt: BigInt
+  startedAtBlock_gte: BigInt
+  startedAtBlock_lt: BigInt
+  startedAtBlock_lte: BigInt
+  startedAtBlock_in: [BigInt!]
+  winningTargetCount_eq: BigInt
+  winningTargetCount_gt: BigInt
+  winningTargetCount_gte: BigInt
+  winningTargetCount_lt: BigInt
+  winningTargetCount_lte: BigInt
+  winningTargetCount_in: [BigInt!]
+  electionRound: ElectionRoundWhereInput
+  AND: [ReferendumStageVotingWhereInput!]
+  OR: [ReferendumStageVotingWhereInput!]
+}
+
+input ReferendumStageVotingWhereUniqueInput {
   id: ID!
 }
 
@@ -18224,16 +18518,7 @@ type TerminateWorkingGroupLeadProposalDetails {
   slashingAmount: Float
 }
 
-type ThreadCreatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadCreatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18253,6 +18538,19 @@ type ThreadCreatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 
@@ -18384,16 +18682,7 @@ input ThreadCreatedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadDeletedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadDeletedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18413,6 +18702,19 @@ type ThreadDeletedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 }
@@ -18516,16 +18818,7 @@ input ThreadDeletedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadMetadataUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadMetadataUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18545,6 +18838,19 @@ type ThreadMetadataUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 
@@ -18662,16 +18968,7 @@ input ThreadMetadataUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadModeratedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadModeratedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18691,6 +18988,19 @@ type ThreadModeratedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 
@@ -18815,16 +19125,7 @@ input ThreadModeratedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadMovedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadMovedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18844,6 +19145,19 @@ type ThreadMovedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
   oldCategory: ForumCategory!
@@ -19916,16 +20230,7 @@ input VoteCastEventWhereUniqueInput {
   id: ID!
 }
 
-type VoteOnPollEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type VoteOnPollEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -19945,6 +20250,19 @@ type VoteOnPollEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   pollAlternative: ForumPollAlternative!
   pollAlternativeId: String!
   votingMember: Membership!
