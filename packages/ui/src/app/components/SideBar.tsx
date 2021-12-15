@@ -4,6 +4,7 @@ import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
+import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
 import { Notifications, NotificationsButton } from '@/common/components/Notifications'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
@@ -77,6 +78,11 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
+              <NavigationLink to={BountyRoutes.bounties} icon={<BountyIcon />}>
+                Bounty
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
               <NavigationLink to={electionLink} icon={<ElectionIcon />} indicate={false}>
                 Election
               </NavigationLink>
@@ -114,12 +120,7 @@ export const SideBar = () => {
                     <NavigationLink to="/inexisting" icon={<ConstitutionIcon />} disabled>
                       Constitution
                     </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<BountyIcon />} disabled>
-                      Bounty
-                    </NavigationLink>
-                  </NavigationLinksItem>
+                  </NavigationLinksItem>s
                   <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<OverviewIcon />} disabled>
                       Overview
