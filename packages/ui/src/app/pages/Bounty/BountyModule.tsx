@@ -9,7 +9,7 @@ import { BountiesMyContributions } from './BountiesMyContributions'
 import { BountiesMyEntries } from './BountiesMyEntries'
 import { BountiesPast } from './BountiesPast'
 import { BountiesTags } from './BountiesTags'
-import { Bounty } from './Bounty';
+import { Bounty } from './Bounty'
 
 export const BountyModule = () => {
   return (

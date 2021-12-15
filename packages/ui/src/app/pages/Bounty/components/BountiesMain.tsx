@@ -1,11 +1,7 @@
-import React from 'react';
+import React from 'react'
 
-import { MainPanel } from '@/common/components/page/PageContent';
+import { MainPanel } from '@/common/components/page/PageContent'
 
 export const BountiesMain = () => {
-  return (
-    <MainPanel>
-      Main
-    </MainPanel>
-  )
+  return <MainPanel>Main</MainPanel>
 }

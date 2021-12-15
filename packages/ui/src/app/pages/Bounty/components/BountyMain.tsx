@@ -1,16 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { MainPanel } from '@/common/components/page/PageContent';
+import { MainPanel } from '@/common/components/page/PageContent'
 
 export interface BountyMainProps {
-  id: string;
+  id: string
 }
 
-export const BountyMain = ({id}: BountyMainProps) => {
-
-  return (
-    <MainPanel>
-      Bounty: {id}
-    </MainPanel>
-  )
+export const BountyMain = ({ id }: BountyMainProps) => {
+  return <MainPanel>Bounty: {id}</MainPanel>
 }

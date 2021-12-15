@@ -12,7 +12,7 @@ export const BountyRoutes = {
 type BountyRoutesType = typeof BountyRoutes
 
 export interface BountyRouteParams {
-  id: string;
+  id: string
 }
 
 declare module '@/app/constants/routes' {
