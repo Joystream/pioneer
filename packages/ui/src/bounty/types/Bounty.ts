@@ -1,1 +1,1 @@
-export type BountyPeriod = 'funding' | 'working' | 'judgment' | 'withdrawal' | 'expired'
+export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
