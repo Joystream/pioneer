@@ -1,67 +1,48 @@
 import React, { useMemo } from 'react'
 
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageHeader } from '@/app/components/PageHeader'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { PageTitle } from '@/common/components/page/PageTitle'
-import { PreviousPage } from '@/common/components/page/PreviousPage'
+import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 
-interface Props {
-  type: 'funding' | 'withdrawal' | 'judgment' | 'working' | 'expired'
+interface IButtonFactory {
+  label: string
+  type: 'primary' | 'ghost'
+  onClick: () => void
 }
 
-export const BountyPreviewHeader = ({ type }: Props) => {
-  const buttons = useMemo(() => {
-    switch (type) {
-      case 'funding': {
-        return <ButtonPrimary size="large">Contribute</ButtonPrimary>
-      }
-      case 'working': {
-        return (
-          <>
-            <ButtonPrimary size="large">Announce Entry</ButtonPrimary>
-          </>
-        )
-      }
-      case 'judgment': {
-        return <ButtonGhost size="large">Notify me about changes</ButtonGhost>
-      }
-      case 'withdrawal': {
-        return (
-          <>
-            <ButtonGhost size="large">Notify me about changes</ButtonGhost>
-            <ButtonPrimary size="large">Claim Reward</ButtonPrimary>
-          </>
-        )
-      }
-      case 'expired': {
-        return (
-          <>
-            <ButtonPrimary size="large">Cancel Bounty</ButtonPrimary>
-          </>
-        )
-      }
-      default: {
-        return null
-      }
-    }
-  }, [type])
+interface Props {
+  title: string
+  badgeNames?: string[]
+  buttons?: IButtonFactory[]
+}
 
-  return (
-    <PageHeaderWrapper>
-      <PageHeaderRow>
-        <PreviousPage>
-          <PageTitle>Long title</PageTitle>
-        </PreviousPage>
-        <ButtonsGroup>{buttons}</ButtonsGroup>
-      </PageHeaderRow>
-      <PageHeaderRow>
-        <BadgesRow space={8}>
-          <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
-          <BadgeStatus inverted>BOUNTIES</BadgeStatus>
-        </BadgesRow>
-      </PageHeaderRow>
-    </PageHeaderWrapper>
+export const BountyPreviewHeader = ({ title, badgeNames, buttons }: Props) => {
+  const compiledButtons = useMemo(() => {
+    // todo: replace it with correct logic when api schema arrives
+    return buttons?.map((button) =>
+      button.type === 'primary' ? (
+        <ButtonPrimary size="large" onClick={button.onClick}>
+          {button.label}
+        </ButtonPrimary>
+      ) : (
+        <ButtonGhost size="large" onClick={button.onClick}>
+          {button.label}
+        </ButtonGhost>
+      )
+    )
+  }, [buttons])
+
+  const badges = useMemo(
+    () => (
+      <BadgesRow space={8}>
+        {badgeNames?.map((badge) => (
+          <BadgeStatus inverted>{badge}</BadgeStatus>
+        ))}
+      </BadgesRow>
+    ),
+    [badgeNames]
   )
+
+  return <PageHeader title={title} buttons={compiledButtons} badges={badges} canGoBack />
 }

@@ -9,10 +9,18 @@ export default {
 } as Meta
 
 const Template: Story = (args) => {
-  return <BountyPreviewHeader type="funding" {...args} />
+  return <BountyPreviewHeader title="Long title" {...args} />
 }
 
 export const Default = Template.bind({})
 Default.args = {
-  type: 'funding',
+  title: 'Long title',
+  badgeNames: ['GOVERNANCE BUDGET', 'ELECTION #6'],
+  buttons: [
+    {
+      label: 'Continue',
+      type: 'primary',
+      onClick: () => undefined,
+    },
+  ],
 }

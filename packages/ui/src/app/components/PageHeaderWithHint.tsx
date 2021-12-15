@@ -1,20 +1,15 @@
 import { AnimatePresence } from 'framer-motion'
-import React, { ReactNode, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
-import { ButtonsGroup } from '@/common/components/buttons'
+import { PageHeader, PageHeaderProps } from '@/app/components/PageHeader'
 import { HintButton } from '@/common/components/buttons/HintButton'
-import { PageTitle } from '@/common/components/page/PageTitle'
 import { VideoHint } from '@/common/components/VideoHint'
 import { videoHints, VideoHintType } from '@/common/constants/videoHints'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useToggle } from '@/common/hooks/useToggle'
 
-interface PageHeaderWithHintProps {
-  title: string
+interface PageHeaderWithHintProps extends PageHeaderProps {
   hintType: VideoHintType
-  buttons?: ReactNode
-  tabs?: ReactNode
 }
 
 export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeaderWithHintProps) => {
@@ -38,25 +33,30 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
     }
   }, [experiencedCloseTooltip])
 
-  return (
-    <PageHeaderWrapper>
-      <PageHeaderRow>
-        <PageTitle>{title}</PageTitle>
-        <ButtonsGroup>
-          {buttons}
-          <HintButton
-            isActive={isHintVisible}
-            onClick={toggleHint}
-            tooltip={showCloseTooltip ? 'Click here to see video again' : undefined}
-            onTooltipClose={() => toggleCloseTooltip()}
-            isOnTop={showCloseTooltip}
-          />
-        </ButtonsGroup>
-      </PageHeaderRow>
-      {tabs}
+  const compiledButtons = useMemo(
+    () => (
+      <>
+        {buttons}
+        <HintButton
+          isActive={isHintVisible}
+          onClick={toggleHint}
+          tooltip={showCloseTooltip ? 'Click here to see video again' : undefined}
+          onTooltipClose={() => toggleCloseTooltip()}
+          isOnTop={showCloseTooltip}
+        />
+      </>
+    ),
+    [isHintVisible, showCloseTooltip]
+  )
+
+  const video = useMemo(
+    () => (
       <AnimatePresence>
         {isHintVisible && <VideoHint videoURI={videoHints[hintType]} onClose={closeHint} />}
       </AnimatePresence>
-    </PageHeaderWrapper>
+    ),
+    [hintType, closeHint, isHintVisible]
   )
+
+  return <PageHeader title={title} tabs={tabs} buttons={compiledButtons} video={video} />
 }
