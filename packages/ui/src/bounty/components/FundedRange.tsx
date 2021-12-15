@@ -5,7 +5,7 @@ import { ProgressBarWithRange } from '@/common/components/Progress'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextSmall, TokenValue } from '@/common/components/typography'
 
-export interface TileSectionProps {
+export interface FundedRangeProps {
   rangeTitle: string
   rangeValue: number
   maxRangeTitle: string
@@ -15,7 +15,7 @@ export interface TileSectionProps {
 }
 
 export const FundedRange = React.memo(
-  ({ rangeTitle, rangeValue, maxRangeTitle, maxRangeValue, minRangeTitle, minRangeValue }: TileSectionProps) => {
+  ({ rangeTitle, rangeValue, maxRangeTitle, maxRangeValue, minRangeTitle, minRangeValue }: FundedRangeProps) => {
     return (
       <FundedRangeWrapper>
         <FundedTitle>
