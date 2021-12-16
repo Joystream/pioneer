@@ -2,20 +2,21 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { CommunityTile } from '@/common/components/icons/CommunityTile'
 import { StatisticItem } from '@/common/components/statistics'
-import { TextSmall, TokenValue } from '@/common/components/typography'
+import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
 interface Props {
-  contributors: Member[]
+  contributors: Member[] | undefined
 }
 
 export const TopContributors = ({ contributors }: Props) => {
-  const tiles = useMemo(
-    () =>
-      contributors.map((member, index) => (
+  const tiles = useMemo(() => {
+    if (contributors) {
+      return contributors.map((member, index) => (
         <StyledTile>
           <MemberInfo member={member} size="s" hideGroup onlyTop />
           <ValueWrapper>
@@ -24,12 +25,37 @@ export const TopContributors = ({ contributors }: Props) => {
           </ValueWrapper>
           <TileNumber>{index + 1}</TileNumber>
         </StyledTile>
-      )),
-    [contributors]
-  )
+      ))
+    }
+    return (
+      <EmptyStateWrapper>
+        <CommunityTile />
+        <div>
+          <TextExtraHuge bold>No contributors</TextExtraHuge>
+          <TextBig>Lorem ipsum dolor sit amet enim</TextBig>
+        </div>
+      </EmptyStateWrapper>
+    )
+  }, [contributors])
 
-  return <HorizontalScroller items={tiles} />
+  return <HorizontalScroller items={tiles} title="Top contributors past week" />
 }
+
+const EmptyStateWrapper = styled.div`
+  display: flex;
+  column-gap: 24px;
+  margin: 0 auto;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    ${TextBig} {
+      color: ${Colors.Black[500]};
+    }
+  }
+`
 
 const StyledTile = styled(StatisticItem)`
   min-width: 200px;

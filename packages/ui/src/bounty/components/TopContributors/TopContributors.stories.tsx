@@ -15,3 +15,8 @@ export const Default = Template.bind({})
 Default.args = {
   contributors: members.slice(0, 20),
 }
+
+export const NoContributors = Template.bind({})
+NoContributors.args = {
+  contributors: undefined,
+}
