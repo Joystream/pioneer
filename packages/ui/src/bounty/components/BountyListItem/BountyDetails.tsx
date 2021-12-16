@@ -25,7 +25,7 @@ export const BountyDetails = ({ type }: Props) => {
       case 'working': {
         return <WorkingDetails />
       }
-      case 'judgment': {
+      case 'judgement': {
         return <JudgmentDetails />
       }
       case 'withdrawal': {

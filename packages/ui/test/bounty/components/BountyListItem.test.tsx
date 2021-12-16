@@ -41,9 +41,9 @@ describe('UI: BountyListItem', () => {
   })
 
   it('Period: Judgment', async () => {
-    renderItem('judgment')
+    renderItem('judgement')
 
-    checkTypeLayout(['JUDGMENT PERIOD', 'Entries', 'Submitted work', 'Withdrawn work'])
+    checkTypeLayout(['JUDGEMENT PERIOD', 'Entries', 'Submitted work', 'Withdrawn work'])
   })
 
   it('Period: Withdrawal', async () => {
