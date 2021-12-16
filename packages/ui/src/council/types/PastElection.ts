@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 
-import { BN_ZERO } from '@/common/constants'
 import { asBlock, Block } from '@/common/types'
+import { sumStakes } from '@/common/utils/bn'
 import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
 import { asPastElectionVote, PastElectionVote } from '@/council/types/Vote'
@@ -30,7 +30,7 @@ export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastEle
   id: fields.id,
   cycleId: fields.cycleId,
   finishedAtBlock: fields.referendumResult ? asBlock(fields.referendumResult[0].referendumFinishedEvent) : undefined,
-  totalStake: fields.candidates.reduce((a, b) => a.addn(b.stake), new BN(0)),
+  totalStake: sumStakes(fields.candidates),
   totalCandidates: fields.candidates.length,
   revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
   totalVotes: fields.castVotes.length,
@@ -40,19 +40,18 @@ export const asPastElectionWithDetails = (
   fields: PastElectionRoundDetailedFieldsFragment
 ): PastElectionWithDetails => ({
   ...asPastElection(fields),
-  totalStake: fields.castVotes.reduce((a, b) => a.addn(b.stake), BN_ZERO),
-  votingResults: fields.candidates.map((candidate) => ({
-    candidate: asElectionCandidate(candidate),
-    votes: fields.castVotes
-      .filter((castVote) => castVote.voteForId === candidate.member.id)
-      .map((castVote) =>
+  totalStake: sumStakes(fields.castVotes),
+  votingResults: fields.candidates.map((candidate) => {
+    const candidateVotes = fields.castVotes.filter(({ voteForId }) => voteForId === candidate.member.id)
+    return {
+      candidate: asElectionCandidate(candidate),
+      votes: candidateVotes.map((castVote) =>
         asPastElectionVote({
           ...castVote,
           electionRound: fields.cycleId,
         })
       ),
-    totalStake: fields.castVotes
-      .filter((castVote) => castVote.voteForId === candidate.member.id)
-      .reduce((a, b) => a.addn(b.stake), BN_ZERO),
-  })),
+      totalStake: sumStakes(candidateVotes),
+    }
+  }),
 })
