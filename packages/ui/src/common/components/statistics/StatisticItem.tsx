@@ -10,6 +10,7 @@ import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
 
 export interface StatisticItemProps extends StatisticHeaderProps, StatiscticBlockProps {
   className?: string
+  counter?: number
 }
 
 export const StatisticItem: FC<StatisticItemProps> = ({ className, size, children, centered, ...headerProps }) => (
