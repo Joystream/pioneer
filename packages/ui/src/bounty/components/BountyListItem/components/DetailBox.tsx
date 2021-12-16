@@ -6,7 +6,7 @@ import { Colors } from '@/common/constants'
 
 interface Props {
   title: string
-  children: React.ReactNode | string | number
+  children: React.ReactNode
 }
 
 export const DetailBox = ({ title, children }: Props) => {
