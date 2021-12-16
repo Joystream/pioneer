@@ -2,11 +2,11 @@ import BN from 'bn.js'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { CountBadge } from '@/common/components/CountBadge'
 import { ArrowUpExpandedIcon } from '@/common/components/icons'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
-import { Badge, TokenValue, TextSmall, TextExtraSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { TokenValue, TextSmall, TextExtraSmall } from '@/common/components/typography'
+import { Colors, Fonts } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -25,18 +25,19 @@ export const ContributorsList = ({ contributions }: ContributorsListProps) => {
   return (
     <div>
       <Header>
-        <TitleText bold>CONTRIBUTORS </TitleText>
-        <Counter inverted>{contributions.length}</Counter>
-        <ArrowWrapper onClick={handleOnClick}>
-          {show ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
-        </ArrowWrapper>
+        <TitleText lighter bold>
+          CONTRIBUTORS{' '}
+        </TitleText>
+        <CountBadge count={contributions.length} />
+        <ArrowWrapper onClick={handleOnClick}>{show ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}</ArrowWrapper>
       </Header>
       {show
         ? contributions.map((el, index) => (
             <Wrapper key={index}>
               <MemberInfo member={el.actor} />
-              <ValueText>
-                Contributed <TokenValue value={el.amount.toNumber()} />
+              <ValueText lighter>
+                Contributed
+                <Amount value={el.amount.toNumber()} />
               </ValueText>
             </Wrapper>
           ))
@@ -56,23 +57,24 @@ const Header = styled.div`
 `
 
 const TitleText = styled(TextExtraSmall)`
-  color: ${Colors.Black[400]};
+  margin-right: 8px;
 `
 
 const ArrowWrapper = styled.span`
+  margin-left: 10px;
   cursor: pointer;
   & path {
     fill: ${Colors.Black[600]};
   }
 `
 
-const Counter = styled(BadgeStatus)`
-  text-align: center;
-  padding: 0;
-  margin: 0 10px;
-`
-
 const ValueText = styled(TextSmall)`
   margin: 8px 0 0 48px;
-  color: ${Colors.Black[400]};
+`
+
+const Amount = styled(TokenValue)`
+  margin-left: 12px;
+  color: ${Colors.Black[700]};
+  font-size: 16px;
+  font-family: ${Fonts.Grotesk};
 `
