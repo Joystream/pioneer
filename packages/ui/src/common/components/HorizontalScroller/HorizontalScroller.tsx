@@ -13,32 +13,32 @@ interface Props {
 }
 
 export const HorizontalScroller = React.memo(({ items, className, title }: Props) => {
-  const [wrapperWidth, setWrapperWidth] = useState()
-  const wrapperRef = useRef<any>()
+  const [wrapperWidth, setWrapperWidth] = useState<number>()
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const calcContentMaxHeight = () => {
-      wrapperRef && setWrapperWidth(wrapperRef.current?.clientWidth)
+      setWrapperWidth(wrapperRef.current?.clientWidth)
     }
 
     calcContentMaxHeight()
 
-    window.addEventListener('resize', () => calcContentMaxHeight())
+    window.addEventListener('resize', calcContentMaxHeight)
 
     return () => window.removeEventListener('resize', calcContentMaxHeight)
   }, [wrapperRef, wrapperWidth])
 
   const scrollNumber = useMemo(() => {
-    const childrenWidth = wrapperRef.current?.children[0]?.clientWidth + 16
+    const childrenWidth = (wrapperRef.current?.children[0]?.clientWidth ?? 0) + 16
     return Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth
   }, [wrapperRef, wrapperWidth])
 
   const scrollRight = useCallback(() => {
-    wrapperRef.current.scrollBy({ left: scrollNumber, behavior: 'smooth' })
+    wrapperRef.current?.scrollBy({ left: scrollNumber, behavior: 'smooth' })
   }, [wrapperRef, scrollNumber])
 
   const scrollLeft = useCallback(() => {
-    wrapperRef.current.scrollBy({ left: scrollNumber * -1, behavior: 'smooth' })
+    wrapperRef.current?.scrollBy({ left: scrollNumber * -1, behavior: 'smooth' })
   }, [wrapperRef, scrollNumber])
 
   return (
