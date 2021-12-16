@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ProgressBarWithRange } from '@/common/components/Progress'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextSmall, TokenValue } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
 export interface FundedRangeProps {
   rangeTitle: string
@@ -23,8 +24,11 @@ export const FundedRange = React.memo(
           <TokenValue value={rangeValue} size="l" />
         </FundedTitle>
         <ProgressBarWrapper>
-          <ProgressBarWithRange value={20} minRange={50} maxRange={100} /> <TextSmall>{maxRangeTitle}</TextSmall>
-          <TokenValue value={maxRangeValue} size="l" />
+          <ProgressBarWithRange value={20} minRange={50} maxRange={100} />
+          <MaxRangeWrapper>
+            <MaxRangeTitle>{maxRangeTitle}</MaxRangeTitle>
+            <TokenValue value={maxRangeValue} size="l" />
+          </MaxRangeWrapper>
           <ProgressBarInfoVertical inset="45px 40% 0">
             <TextSmall>{minRangeTitle}</TextSmall>
             <TokenValue value={minRangeValue} />
@@ -35,13 +39,21 @@ export const FundedRange = React.memo(
   }
 )
 
+const MaxRangeWrapper = styled.div``
+
+const MaxRangeTitle = styled(TextSmall)`
+  color: ${Colors.Black[500]};
+`
+
 const FundedRangeWrapper = styled(StatisticItem)`
+  min-width: 55%;
   display: inline;
 `
 
 const FundedTitle = styled.div`
   display: flex;
   column-gap: 10px;
+  position: absolute;
 `
 
 const ProgressBarWrapper = styled.div`

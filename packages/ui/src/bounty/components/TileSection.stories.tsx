@@ -3,7 +3,9 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { TileSection, TileSectionProps } from '@/bounty/components/TileSection'
+import { Member } from '@/memberships/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import memberMock from '@/mocks/data/raw/members.json'
 
 export default {
   title: 'Bounty/TileSection',
@@ -18,8 +20,8 @@ const Template: Story<TileSectionProps> = (args) => (
   </MemoryRouter>
 )
 
-export const Default = Template.bind({})
-Default.args = {
+export const FundingPeriod = Template.bind({})
+FundingPeriod.args = {
   stage: 'Funding period',
   labelTitle: 'Stage',
   tooltipText: 'Tooltip text for bounty tile section',
@@ -30,21 +32,44 @@ Default.args = {
   cherryLabel: 'Cherry',
   cherryTooltipText: 'cherry tooltip',
   cherryValue: 1000,
-  entrantLabel: 'Entrant stake',
-  entrantTooltipText: 'entrant tooltip',
-  entrantValue: 2000,
-  member: {
-    id: '0',
-    name: 'Alice member',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    handle: 'alice',
-    isVerified: true,
-    isFoundingMember: true,
-    isCouncilMember: true,
-    roles: [],
-    boundAccounts: [],
-    inviteCount: 0,
-    createdAt: '',
-  },
+  endLabel: 'Entrant stake',
+  endTooltipText: 'entrant tooltip',
+  endValue: 2000,
+  oracleMember: (memberMock[1] as unknown) as Member,
+  bountyMember: (memberMock[2] as unknown) as Member,
+  isProgressBarVisible: true,
+}
+
+export const WorkingPeriod = Template.bind({})
+WorkingPeriod.args = {
+  ...FundingPeriod.args,
+  stage: 'Working period',
+  labelTitle: 'Stage',
+  tooltipText: 'Tooltip text for bounty tile section',
+  firstTileLabel: 'Funded',
+  firstTooltipText: 'Funded tooltip text',
+  firstValue: 15000,
+  isProgressBarVisible: false,
+  endLabel: 'Work submitted',
+  endTooltipText: 'work tooltip',
+  endValue: 10,
+}
+
+export const WithdrawalPeriod = Template.bind({})
+WithdrawalPeriod.args = {
+  ...FundingPeriod.args,
+  firstTileLabel: 'Withdrawn funds',
+  firstTooltipText: 'Withdrawn tooltip text',
+  firstValue: 15000,
+  winnersAvailable: true,
+  winnerMember: (memberMock as unknown) as Member[],
+  isProgressBarVisible: false,
+}
+
+export const FundingLimitedClosed = Template.bind({})
+FundingLimitedClosed.args = {
+  ...FundingPeriod.args,
+  whitelistedLabel: 'Whitelisted Label',
+  member: (memberMock as unknown) as Member[],
+  isProgressBarVisible: true,
 }
