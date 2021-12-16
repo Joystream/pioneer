@@ -8,6 +8,7 @@ export interface ProgressBarWithRangeProps {
   value: number
   minRange: number
   maxRange: number
+  size?: 'small' | 'big' | 'medium'
 }
 
 export interface ThresholdBarProps {
@@ -15,7 +16,7 @@ export interface ThresholdBarProps {
   threshold: number
 }
 
-export const ProgressBarWithRange = ({ value, minRange, maxRange }: ProgressBarWithRangeProps) => {
+export const ProgressBarWithRange = ({ size, value, minRange, maxRange }: ProgressBarWithRangeProps) => {
   const color = value < minRange ? Colors.Orange[300] : Colors.Blue[500]
   // convert data to fractions:
   const current = value / maxRange
@@ -23,7 +24,7 @@ export const ProgressBarWithRange = ({ value, minRange, maxRange }: ProgressBarW
 
   return (
     <ThresholdBar current={current} threshold={threshold}>
-      <ProgressBar end={current} color={color} backgroundColor={Colors.Black[75]} size="big" />
+      <ProgressBar size={size} end={current} color={color} backgroundColor={Colors.Black[75]} />
     </ThresholdBar>
   )
 }
@@ -33,6 +34,7 @@ const ThresholdBar = styled.div<ThresholdBarProps>`
   display: flex;
   align-items: center;
   width: 100%;
+  height: min-content;
 
   &::after {
     background-color: ${Colors.Black[200]};

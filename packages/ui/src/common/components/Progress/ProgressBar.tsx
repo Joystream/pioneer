@@ -5,7 +5,7 @@ import { Colors } from '@/common/constants'
 export interface ProgressBarProps {
   start?: number
   end: number
-  size?: 'small' | 'big'
+  size?: 'small' | 'big' | 'medium'
   color?: string
   backgroundColor?: string
 }
@@ -17,6 +17,8 @@ export const ProgressBar = styled.div<ProgressBarProps>`
     switch (size) {
       case 'big':
         return '20px'
+      case 'medium':
+        return '10px'
       case 'small':
       default:
         return '4px'

@@ -72,6 +72,10 @@ export const Colors = {
     100: '#FFEFCE',
     50: '#FFFAF0',
   },
+
+  Purple: {
+    200: '#bb6bd9',
+  },
 }
 
 export const ZIndex = {
