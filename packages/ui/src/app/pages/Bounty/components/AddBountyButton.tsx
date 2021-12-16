@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
-import { useModal } from '@/common/hooks/useModal'
+// import { useModal } from '@/common/hooks/useModal'
 
 export const AddBountyButton = () => {
   // TODO: uncomment when modalCall is ready:
