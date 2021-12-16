@@ -3,13 +3,16 @@ import styled from 'styled-components'
 
 import { ButtonGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
+import { TextExtraSmall } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
 interface Props {
-  items: React.ReactNode[]
+  items: React.ReactNode[] | React.ReactNode
+  title?: string
   className?: string
 }
 
-export const HorizontalScroller = React.memo(({ items, className }: Props) => {
+export const HorizontalScroller = React.memo(({ items, className, title }: Props) => {
   const [wrapperWidth, setWrapperWidth] = useState()
   const wrapperRef = useRef<any>()
 
@@ -39,35 +42,53 @@ export const HorizontalScroller = React.memo(({ items, className }: Props) => {
   }, [wrapperRef, scrollNumber])
 
   return (
-    <Wrapper ref={wrapperRef} className={className}>
-      {items}
-      <ButtonWrapper>
-        <ButtonGhost size="small" square onClick={scrollLeft}>
-          <Arrow direction="left" />
-        </ButtonGhost>
-        <ButtonGhost size="small" square onClick={scrollRight}>
-          <Arrow direction="right" />
-        </ButtonGhost>
-      </ButtonWrapper>
+    <Wrapper>
+      <HeaderWrapper>
+        <Title>{title}</Title>
+        <ButtonWrapper>
+          <ButtonGhost size="small" square onClick={scrollLeft}>
+            <Arrow direction="left" />
+          </ButtonGhost>
+          <ButtonGhost size="small" square onClick={scrollRight}>
+            <Arrow direction="right" />
+          </ButtonGhost>
+        </ButtonWrapper>
+      </HeaderWrapper>
+      <ItemsWrapper ref={wrapperRef} className={className}>
+        {items}
+      </ItemsWrapper>
     </Wrapper>
   )
 })
 
 const Wrapper = styled.div`
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 8px;
+`
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const ItemsWrapper = styled.div`
   display: flex;
   column-gap: 16px;
   flex-wrap: nowrap;
   overflow-x: hidden;
   height: min-content;
   width: 100%;
-  padding: 40px 8px 15px 8px;
-  position: relative;
+  padding-top: 10px;
 `
 
 const ButtonWrapper = styled.div`
-  position: fixed;
-  top: 5px;
-  right: 20px;
   display: flex;
   column-gap: 5px;
+`
+
+const Title = styled(TextExtraSmall)`
+  text-transform: uppercase;
+  color: ${Colors.Black[500]};
 `
