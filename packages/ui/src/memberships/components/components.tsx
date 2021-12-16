@@ -55,8 +55,8 @@ export const MemberPhoto = styled.div<MemberPhotoProps>`
   position: relative;
   justify-content: center;
   align-items: center;
-  width: ${({ small }) => (small ? '24px' : '40px')};
-  height: ${({ small }) => (small ? '24px' : '40px')};
+  max-width: ${({ small }) => (small ? '24px' : '40px')};
+  max-height: ${({ small }) => (small ? '24px' : '40px')};
   ${({ noArea }) =>
     !noArea &&
     css`

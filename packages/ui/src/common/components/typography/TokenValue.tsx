@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { isDefined } from '@/common/utils'
 
@@ -49,4 +49,27 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
     text-transform: uppercase;
     font-family: ${Fonts.Grotesk};
   }
+
+  ${({ size }) => {
+    switch (size) {
+      case 'm': {
+        return css`
+          font-size: 18px;
+          :after {
+            font-size: 14px;
+          }
+        `
+      }
+      case 'l': {
+        return css`
+          font-size: 20px;
+          :after {
+            font-size: 16px;
+          }
+        `
+      }
+      default:
+        break
+    }
+  }}
 `
