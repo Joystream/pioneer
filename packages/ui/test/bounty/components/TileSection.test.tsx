@@ -18,11 +18,11 @@ describe('TileSection', () => {
   const endValue = 2000
   const firstLabel = 'Enter label'
   const firstValue = 2000
-  const oracleMember = (memberMock[1] as unknown) as Member
-  const bountyMember = (memberMock[2] as unknown) as Member
+  const oracleMember = memberMock[1] as unknown as Member
+  const bountyMember = memberMock[2] as unknown as Member
   const whitelistedLabel = 'Whitelisted Label'
-  const member = (memberMock as unknown) as Member[]
-  const winnerMember = (memberMock as unknown) as Member[]
+  const member = memberMock as unknown as Member[]
+  const winnerMember = memberMock as unknown as Member[]
   const props = {
     stage,
     labelTitle,

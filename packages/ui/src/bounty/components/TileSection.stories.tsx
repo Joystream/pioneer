@@ -35,8 +35,8 @@ FundingPeriod.args = {
   endLabel: 'Entrant stake',
   endTooltipText: 'entrant tooltip',
   endValue: 2000,
-  oracleMember: (memberMock[1] as unknown) as Member,
-  bountyMember: (memberMock[2] as unknown) as Member,
+  oracleMember: memberMock[1] as unknown as Member,
+  bountyMember: memberMock[2] as unknown as Member,
   isProgressBarVisible: true,
 }
 
@@ -62,7 +62,7 @@ WithdrawalPeriod.args = {
   firstTooltipText: 'Withdrawn tooltip text',
   firstValue: 15000,
   winnersAvailable: true,
-  winnerMember: (memberMock as unknown) as Member[],
+  winnerMember: memberMock as unknown as Member[],
   isProgressBarVisible: false,
 }
 
@@ -70,6 +70,6 @@ export const FundingLimitedClosed = Template.bind({})
 FundingLimitedClosed.args = {
   ...FundingPeriod.args,
   whitelistedLabel: 'Whitelisted Label',
-  member: (memberMock as unknown) as Member[],
+  member: memberMock as unknown as Member[],
   isProgressBarVisible: true,
 }
