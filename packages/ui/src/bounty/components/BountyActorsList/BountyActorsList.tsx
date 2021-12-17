@@ -10,6 +10,7 @@ import { Colors, Fonts } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
+import { Infobox, InfoboxProps } from './Infobox'
 
 interface BountyActorItem {
   actor: Member
@@ -20,10 +21,12 @@ interface BountyActorItem {
 export interface BountyActorsListProps {
   title: 'CONTRIBUTORS' | 'ENTRANTS' | 'WITHDRAWN'
   elements: BountyActorItem[]
+  infobox?: InfoboxProps
 }
 
-export const BountyActorsList = ({ title, elements }: BountyActorsListProps) => {
+export const BountyActorsList = ({ title, elements, infobox }: BountyActorsListProps) => {
   const [isVisible, toggleVisibility] = useToggle(true)
+
   return (
     <>
       <Header>
@@ -35,6 +38,9 @@ export const BountyActorsList = ({ title, elements }: BountyActorsListProps) => 
           {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
         </ArrowWrapper>
       </Header>
+      {infobox && (
+        <Infobox {...infobox} />
+      )}
       {isVisible &&
         elements.map((el, index) => (
           <Wrapper key={index}>

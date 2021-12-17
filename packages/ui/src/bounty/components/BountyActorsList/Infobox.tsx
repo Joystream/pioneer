@@ -35,6 +35,7 @@ const Wrapper = styled.div<{ color: string }>`
   width: 100%;
   max-width: 255px;
   padding: 16px;
+  margin: 16px 0 20px;
 `
 
 const StyledCloseButton = styled(CloseButton)`
