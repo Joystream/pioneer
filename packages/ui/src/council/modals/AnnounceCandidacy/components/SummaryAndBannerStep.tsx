@@ -30,11 +30,7 @@ export const SummaryAndBannerStep = ({ summary, banner, setSummary, setBanner }:
             />
           </InputComponent>
           <InputComponent label="Banner" inputSize="s">
-            <InputText
-              placeholder="Image URL"
-              value={banner}
-              onChange={(event) => setBanner(event.target.value)}
-            />
+            <InputText placeholder="Image URL" value={banner} onChange={(event) => setBanner(event.target.value)} />
           </InputComponent>
         </RowGapBlock>
       </Row>
