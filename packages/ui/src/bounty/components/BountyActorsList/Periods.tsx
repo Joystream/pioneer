@@ -7,14 +7,13 @@ import { Stepper } from '@/common/components/Stepper'
 import { TextSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Colors } from '@/common/constants'
+import { BountyPeriod } from '@/bounty/types/Bounty'
 
 interface PeriodStep {
   title: 'Funding Period' | 'Working Period' | 'Judgement Period'
   details: ReactNode
   type: 'past' | 'active' | 'hideNumber'
 }
-
-export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
 
 export interface PeriodsProps {
   stage: BountyPeriod
