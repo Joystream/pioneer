@@ -2,12 +2,12 @@ import BN from 'bn.js'
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
+import { BountyPeriod } from '@/bounty/types/Bounty'
 import { formatDuration } from '@/common/components/statistics'
 import { Stepper } from '@/common/components/Stepper'
 import { TextSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Colors } from '@/common/constants'
-import { BountyPeriod } from '@/bounty/types/Bounty'
 
 interface PeriodStep {
   title: 'Funding Period' | 'Working Period' | 'Judgement Period'

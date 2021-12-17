@@ -10,6 +10,7 @@ import { Colors, Fonts } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
+
 import { Infobox, InfoboxProps } from './Infobox'
 
 interface BountyActorItem {
@@ -38,9 +39,7 @@ export const BountyActorsList = ({ title, elements, infobox }: BountyActorsListP
           {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
         </ArrowWrapper>
       </Header>
-      {infobox && (
-        <Infobox {...infobox} />
-      )}
+      {infobox && <Infobox {...infobox} />}
       {isVisible &&
         elements.map((el, index) => (
           <Wrapper key={index}>
