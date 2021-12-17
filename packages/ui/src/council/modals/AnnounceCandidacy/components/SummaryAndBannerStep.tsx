@@ -29,9 +29,8 @@ export const SummaryAndBannerStep = ({ summary, banner, setSummary, setBanner }:
               onReady={(editor) => editor.setData(summary || '')}
             />
           </InputComponent>
-          <InputComponent label="Banner" disabled inputSize="s">
+          <InputComponent label="Banner" inputSize="s">
             <InputText
-              disabled
               placeholder="Image URL"
               value={banner}
               onChange={(event) => setBanner(event.target.value)}
