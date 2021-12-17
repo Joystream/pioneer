@@ -3,11 +3,17 @@ import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
 import { Member } from '@/memberships/types'
+import {
+  isTransactionCanceled,
+  isTransactionError,
+  isTransactionSuccess,
+  transactionMachine,
+} from '@/common/model/machines'
 
 export type FundingPeriodType = 'perpetual' | 'limited'
 export type WorkingPeriodType = 'open' | 'closed'
 
-interface GeneralParametersContext {
+export interface GeneralParametersContext {
   creator: Member
   title: string
   coverPhotoLink: string
@@ -71,7 +77,7 @@ export type AddBountyState =
   | { value: AddBountyStates.workingPeriodDetails; context: WorkingPeriodDetailsContext }
   | { value: AddBountyStates.judgingPeriodDetails; context: JudgingPeriodDetailsContext }
   | { value: AddBountyStates.forumThreadDetails; context: ForumThreadDetailsContext }
-  | { value: AddBountyStates.beforeTransaction; context: Required<AddBountyContext> }
+  // | { value: AddBountyStates.beforeTransaction; context: Required<AddBountyContext> }
   // | { value: 'bindStakingAccount'; context: Required<AddBountyContext> }
   | { value: AddBountyStates.transaction; context: Required<AddBountyContext> }
   | { value: AddBountyStates.success; context: Required<AddBountyContext> }
@@ -128,6 +134,7 @@ export type AddBountyModalMachineState = State<
 export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, AddBountyState>({
   initial: AddBountyStates.generalParameters,
   context: {
+    description: '',
     fundingPeriodType: 'perpetual',
     workingPeriodType: 'open',
     workingPeriodStakeAllowance: true,
@@ -241,7 +248,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     },
     [AddBountyStates.forumThreadDetails]: {
       on: {
-        NEXT: AddBountyStates.beforeTransaction,
+        NEXT: AddBountyStates.transaction,
         SET_FORUM_THREAD_TOPIC: {
           actions: assign({
             forumThreadTopic: (context, event) => (event as SetForumThreadTopicEvent).forumThreadTopic,
@@ -254,6 +261,32 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
           }),
         },
       },
+      meta: { isStep: true, stepTitle: 'Forum Thread' },
     },
+    transaction: {
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: (context, event) => isTransactionSuccess(context, event),
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
+    success: { type: 'final' },
+    error: { type: 'final' },
+    canceled: { type: 'final' },
   },
 })
