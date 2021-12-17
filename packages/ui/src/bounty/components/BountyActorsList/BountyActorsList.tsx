@@ -9,24 +9,19 @@ import { TokenValue, TextSmall, TextExtraSmall, TextBig } from '@/common/compone
 import { Colors, Fonts } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 import { MemberInfo } from '@/memberships/components'
-import { Member } from '@/memberships/types'
 
-import { Infobox, InfoboxProps } from './Infobox'
-
-interface BountyActorItem {
-  actor: Member
-  amount?: BN
-  count?: number
-}
+import { Infobox } from './Infobox'
+import { BountyActorItem, EntrantResult } from '@/bounty/types/Bounty'
 
 export interface BountyActorsListProps {
   title: 'CONTRIBUTORS' | 'ENTRANTS' | 'WITHDRAWN'
   elements: BountyActorItem[]
-  infobox?: InfoboxProps
+  entrantResult?: EntrantResult
+  open?: boolean
 }
 
-export const BountyActorsList = ({ title, elements, infobox }: BountyActorsListProps) => {
-  const [isVisible, toggleVisibility] = useToggle(true)
+export const BountyActorsList = ({ title, elements, entrantResult, open = true }: BountyActorsListProps) => {
+  const [isVisible, toggleVisibility] = useToggle(open)
 
   return (
     <>
@@ -39,9 +34,10 @@ export const BountyActorsList = ({ title, elements, infobox }: BountyActorsListP
           {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
         </ArrowWrapper>
       </Header>
-      {infobox && <Infobox {...infobox} />}
-      {isVisible &&
-        elements.map((el, index) => (
+      {isVisible && (
+        <>
+        {entrantResult && <Infobox result={entrantResult} />}
+        {elements.map((el, index) => (
           <Wrapper key={index}>
             <MemberInfo member={el.actor} />
             {el.amount && (
@@ -61,6 +57,8 @@ export const BountyActorsList = ({ title, elements, infobox }: BountyActorsListP
             {title === 'WITHDRAWN' && <ValueText lighter>Work withdrawn</ValueText>}
           </Wrapper>
         ))}
+        </>)
+      }
     </>
   )
 }

@@ -1,20 +1,19 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { entrantResultColorMapper } from '@/bounty/helpers'
+import { entrantResultMapper } from '@/bounty/helpers'
 import { CloseButton } from '@/common/components/buttons'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Fonts } from '@/common/constants'
+import { EntrantResult } from '@/bounty/types/Bounty'
 
 export interface InfoboxProps {
-  result: 'winner' | 'loser' | 'slashed'
-  title: string
-  text: string
+  result: EntrantResult
 }
 
-export const Infobox = ({ result, title, text }: InfoboxProps) => {
+export const Infobox = ({ result }: InfoboxProps) => {
   const [closed, setClosed] = useState(false)
-  const color = entrantResultColorMapper[result]
+  const { title, text, color } = entrantResultMapper[result]
   return (
     <>
       {!closed && (
