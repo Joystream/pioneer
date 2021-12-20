@@ -1,5 +1,6 @@
 import BN from 'bn.js'
-import { Member } from "@/memberships/types"
+
+import { Member } from '@/memberships/types'
 
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
 

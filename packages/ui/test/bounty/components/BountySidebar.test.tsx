@@ -1,6 +1,6 @@
-import { act, fireEvent, getByTestId, render, screen } from '@testing-library/react'
-import React from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
+import React from 'react'
 
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { Member } from '@/memberships/types'
@@ -24,8 +24,8 @@ describe('UI: Bounty Sidebar', () => {
     { actor: memberMock[2] as unknown as Member },
   ]
   const fundingProps = { contributors, periodsLengths }
-  const props = {...fundingProps, entrants, withdrawns}
-  
+  const props = { ...fundingProps, entrants, withdrawns }
+
   describe('in Funding period', () => {
     const stage = 'funding'
     it('displays Contributors list', () => {
@@ -75,5 +75,4 @@ describe('UI: Bounty Sidebar', () => {
       expect(screen.queryByText('alice')).not.toBeNull()
     })
   })
-
 })

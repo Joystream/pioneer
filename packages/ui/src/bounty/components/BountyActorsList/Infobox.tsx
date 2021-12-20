@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { entrantResultMapper } from '@/bounty/helpers'
+import { EntrantResult } from '@/bounty/types/Bounty'
 import { CloseButton } from '@/common/components/buttons'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Fonts } from '@/common/constants'
-import { EntrantResult } from '@/bounty/types/Bounty'
 
 export interface InfoboxProps {
   result: EntrantResult

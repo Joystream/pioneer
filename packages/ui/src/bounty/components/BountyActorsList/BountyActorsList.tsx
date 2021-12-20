@@ -1,7 +1,7 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
+import { BountyActorItem, EntrantResult } from '@/bounty/types/Bounty'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ArrowUpExpandedIcon } from '@/common/components/icons'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
@@ -11,7 +11,6 @@ import { useToggle } from '@/common/hooks/useToggle'
 import { MemberInfo } from '@/memberships/components'
 
 import { Infobox } from './Infobox'
-import { BountyActorItem, EntrantResult } from '@/bounty/types/Bounty'
 
 export interface BountyActorsListProps {
   title: 'CONTRIBUTORS' | 'ENTRANTS' | 'WITHDRAWN'
@@ -36,29 +35,29 @@ export const BountyActorsList = ({ title, elements, entrantResult, open = true }
       </Header>
       {isVisible && (
         <>
-        {entrantResult && <Infobox result={entrantResult} />}
-        {elements.map((el, index) => (
-          <Wrapper key={index}>
-            <MemberInfo member={el.actor} />
-            {el.amount && (
-              <ValueText lighter>
-                Contributed
-                <Amount value={el.amount.toNumber()} />
-              </ValueText>
-            )}
-            {el.count && (
-              <ValueText lighter>
-                Work entries
-                <CountValue bold dark>
-                  {el.count}
-                </CountValue>
-              </ValueText>
-            )}
-            {title === 'WITHDRAWN' && <ValueText lighter>Work withdrawn</ValueText>}
-          </Wrapper>
-        ))}
-        </>)
-      }
+          {entrantResult && <Infobox result={entrantResult} />}
+          {elements.map((el, index) => (
+            <Wrapper key={index}>
+              <MemberInfo member={el.actor} />
+              {el.amount && (
+                <ValueText lighter>
+                  Contributed
+                  <Amount value={el.amount.toNumber()} />
+                </ValueText>
+              )}
+              {el.count && (
+                <ValueText lighter>
+                  Work entries
+                  <CountValue bold dark>
+                    {el.count}
+                  </CountValue>
+                </ValueText>
+              )}
+              {title === 'WITHDRAWN' && <ValueText lighter>Work withdrawn</ValueText>}
+            </Wrapper>
+          ))}
+        </>
+      )}
     </>
   )
 }

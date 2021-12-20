@@ -4,9 +4,9 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { getMember } from '@/mocks/helpers'
 
 import { BountySidebar, BountySidebarProps } from './BountySidebar'
-import { getMember } from '@/mocks/helpers'
 
 export default {
   title: 'Bounty/BountySidebar',
@@ -41,14 +41,11 @@ Default.args = {
     { actor: getMember('alice'), count: 2 },
     { actor: getMember('bob'), count: 1 },
   ],
-  withdrawns: [
-    { actor: getMember('alice') },
-    { actor: getMember('bob') },
-  ],
+  withdrawns: [{ actor: getMember('alice') }, { actor: getMember('bob') }],
   entrantResult: 'winner',
   stage: 'funding',
   periodsLengths: {
     workPeriodLength: new BN(200),
-    judgingPeriodLength: new BN(125,)
-  }
+    judgingPeriodLength: new BN(125),
+  },
 }
