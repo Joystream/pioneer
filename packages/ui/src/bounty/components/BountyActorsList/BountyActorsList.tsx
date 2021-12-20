@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BountyActorItem, EntrantResult, Contributor, Entrant, Withdrawn } from '@/bounty/types/Bounty'
+import { BountyActorItem, EntrantResult, isContributor, isEntrant } from '@/bounty/types/Bounty'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ArrowUpExpandedIcon } from '@/common/components/icons'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
@@ -19,27 +19,26 @@ export interface BountyActorsListProps {
   open?: boolean
 }
 
-const actorsMapFunction = (el: BountyActorItem, index: number) => {
-  return (
-    <Wrapper key={index}>
-      <MemberInfo member={el.actor} />
-      {(el as Contributor) && (
-        <ValueText lighter>
-          Contributed
-          <Amount value={(el as Contributor).amount.toNumber()} />
-        </ValueText>
-      )}
-      {(el as Entrant) && (
-        <ValueText lighter>
-          Work entries
-          <CountValue bold dark>
-            {(el as Entrant).count}
-          </CountValue>
-        </ValueText>
-      )}
-      {(el as Withdrawn) && <ValueText lighter>Work withdrawn</ValueText>}
-    </Wrapper>
-  )
+const actorsMapFunction = (el: BountyActorItem) => {
+  if (isContributor(el)) {
+    return (
+      <ValueText lighter>
+        Contributed
+        <Amount value={el.amount.toNumber()} />
+      </ValueText>
+    )
+  }
+  if (isEntrant(el)) {
+    return (
+      <ValueText lighter>
+        Work entries
+        <CountValue bold dark>
+          {el.count}
+        </CountValue>
+      </ValueText>
+    )
+  }
+  return <ValueText lighter>Work withdrawn</ValueText>
 }
 
 export const BountyActorsList = ({ title, elements, entrantResult, open = true }: BountyActorsListProps) => {
@@ -59,7 +58,12 @@ export const BountyActorsList = ({ title, elements, entrantResult, open = true }
       {isVisible && (
         <>
           {entrantResult && <Infobox result={entrantResult} />}
-          {elements.map(actorsMapFunction)}
+          {elements.map((el, index) => (
+            <Wrapper key={index}>
+              <MemberInfo member={el.actor} />
+              {actorsMapFunction(el)}
+            </Wrapper>
+          ))}
         </>
       )}
     </>

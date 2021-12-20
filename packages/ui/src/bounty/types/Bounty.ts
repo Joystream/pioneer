@@ -11,9 +11,17 @@ export interface Contributor {
   amount: BN
 }
 
+export const isContributor = (actor: BountyActorItem): actor is Contributor => {
+  return (actor as Contributor).amount !== undefined
+}
+
 export interface Entrant {
   actor: Member
   count: number
+}
+
+export const isEntrant = (actor: BountyActorItem): actor is Entrant => {
+  return (actor as Entrant).count !== undefined
 }
 
 export interface Withdrawn {

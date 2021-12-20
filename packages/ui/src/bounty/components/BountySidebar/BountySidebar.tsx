@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { BountyActorItem, BountyPeriod, EntrantResult } from '@/bounty/types/Bounty'
+import { BountyPeriod, Contributor, Entrant, EntrantResult, Withdrawn } from '@/bounty/types/Bounty'
 
 import { BountyActorsList } from '../BountyActorsList/BountyActorsList'
 
@@ -14,9 +14,9 @@ interface PeriodsLengthsType {
 }
 
 export interface BountySidebarProps {
-  contributors?: BountyActorItem[]
-  entrants?: BountyActorItem[]
-  withdrawns?: BountyActorItem[]
+  contributors?: Contributor[]
+  entrants?: Entrant[]
+  withdrawns?: Withdrawn[]
   entrantResult?: EntrantResult
   stage: BountyPeriod
   periodsLengths: PeriodsLengthsType

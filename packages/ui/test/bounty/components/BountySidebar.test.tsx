@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
+import { Contributor, Entrant, Withdrawn } from '@/bounty/types/Bounty'
 import { Member } from '@/memberships/types'
 import memberMock from '@/mocks/data/raw/members.json'
 
@@ -11,15 +12,15 @@ describe('UI: Bounty Sidebar', () => {
     workPeriodLength: new BN(200),
     judgingPeriodLength: new BN(350),
   }
-  const contributors = [
+  const contributors: Contributor[] = [
     // Alice
     { actor: memberMock[0] as unknown as Member, amount: new BN(1000) },
   ]
-  const entrants = [
+  const entrants: Entrant[] = [
     // Bob
     { actor: memberMock[1] as unknown as Member, count: 2 },
   ]
-  const withdrawns = [
+  const withdrawns: Withdrawn[] = [
     // Charlie
     { actor: memberMock[2] as unknown as Member },
   ]
