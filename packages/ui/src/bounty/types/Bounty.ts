@@ -6,8 +6,18 @@ export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
-export interface BountyActorItem {
+export interface Contributor {
   actor: Member
-  amount?: BN
-  count?: number
+  amount: BN
 }
+
+export interface Entrant {
+  actor: Member
+  count: number
+}
+
+export interface Withdrawn {
+  actor: Member
+}
+
+export type BountyActorItem = Contributor | Entrant | Withdrawn
