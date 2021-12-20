@@ -11,9 +11,9 @@ interface PeriodsLengthsType {
 }
 
 export interface BountySidebarProps {
-  contributors: BountyActorItem[]
-  entrants: BountyActorItem[]
-  withdrawns: BountyActorItem[]
+  contributors?: BountyActorItem[]
+  entrants?: BountyActorItem[]
+  withdrawns?: BountyActorItem[]
   entrantResult?: EntrantResult
   stage: BountyPeriod
   periodsLengths: PeriodsLengthsType

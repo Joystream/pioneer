@@ -30,7 +30,7 @@ export const BountyActorsList = ({ title, elements, entrantResult, open = true }
           {title}{' '}
         </TitleText>
         <CountBadge count={elements.length} />
-        <ArrowWrapper onClick={toggleVisibility}>
+        <ArrowWrapper data-testid={`${title}-EXPAND`} onClick={toggleVisibility}>
           {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
         </ArrowWrapper>
       </Header>
