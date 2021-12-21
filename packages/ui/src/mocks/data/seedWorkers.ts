@@ -1,6 +1,8 @@
 import { Worker, WorkerStatus } from '@/common/api/queries'
 import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 
+import { seedOverridableEntities } from '../helpers/seedEntities'
+
 import rawWorkers from './raw/workers.json'
 import { TerminatedEvent, WorkerLeavingEvent } from './seedEvents'
 
@@ -72,4 +74,4 @@ const seedWorkerStatus = (status: WorkerStatusData, server: any) => {
   }
 }
 
-export const seedWorkers = (server: any) => mockWorkers.map((worker) => seedWorker(worker, server))
+export const seedWorkers = seedOverridableEntities(mockWorkers, seedWorker)

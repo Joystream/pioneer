@@ -530,6 +530,11 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'CandidacyNoteSetEvent' }
     | { __typename: 'CandidacyStakeReleaseEvent' }
     | { __typename: 'CandidacyWithdrawEvent' }
+    | { __typename: 'CategoryArchivalStatusUpdatedEvent' }
+    | { __typename: 'CategoryCreatedEvent' }
+    | { __typename: 'CategoryDeletedEvent' }
+    | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
+    | { __typename: 'CategoryStickyThreadUpdateEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
@@ -581,6 +586,11 @@ export type GetOpeningsEventsQuery = {
           membership: { __typename: 'Membership'; id: string; handle: string }
         }>
       }
+    | { __typename: 'PostAddedEvent' }
+    | { __typename: 'PostDeletedEvent' }
+    | { __typename: 'PostModeratedEvent' }
+    | { __typename: 'PostReactedEvent' }
+    | { __typename: 'PostTextUpdatedEvent' }
     | { __typename: 'ProposalCancelledEvent' }
     | { __typename: 'ProposalCreatedEvent' }
     | { __typename: 'ProposalDecisionMadeEvent' }
@@ -649,7 +659,13 @@ export type GetOpeningsEventsQuery = {
         group: { __typename: 'WorkingGroup'; name: string }
         worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
       }
+    | { __typename: 'ThreadCreatedEvent' }
+    | { __typename: 'ThreadDeletedEvent' }
+    | { __typename: 'ThreadMetadataUpdatedEvent' }
+    | { __typename: 'ThreadModeratedEvent' }
+    | { __typename: 'ThreadMovedEvent' }
     | { __typename: 'VoteCastEvent' }
+    | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
     | {
