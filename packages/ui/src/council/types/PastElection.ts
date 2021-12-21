@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { asBlock, Block } from '@/common/types'
+import { Block, maybeAsBlock } from '@/common/types'
 import { sumStakes } from '@/common/utils/bn'
 import { PastElectionRoundDetailedFieldsFragment, PastElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
@@ -29,7 +29,7 @@ export interface PastElectionWithDetails extends PastElection {
 export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
   id: fields.id,
   cycleId: fields.cycleId,
-  finishedAtBlock: fields.referendumResult ? asBlock(fields.referendumResult[0].referendumFinishedEvent) : undefined,
+  finishedAtBlock: maybeAsBlock(fields.endedAtBlock, fields.endedAtTime, fields.endedAtNetwork),
   totalStake: sumStakes(fields.candidates),
   totalCandidates: fields.candidates.length,
   revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,

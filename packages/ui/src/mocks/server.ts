@@ -12,7 +12,6 @@ import {
   seedCouncilCandidates,
   seedCouncilElections,
   seedCouncilMembers,
-  seedCouncilReferendumResults,
   seedCouncilVotes,
   seedElectedCouncils,
   seedEvents,
@@ -203,7 +202,6 @@ export const makeServer = (environment = 'development', network: NetworkType = '
             seedElectedCouncils(server)
             seedCouncilMembers(server)
             seedCouncilElections(server)
-            seedCouncilReferendumResults(server)
             seedCouncilCandidates(server)
             seedCouncilVotes(server)
           },

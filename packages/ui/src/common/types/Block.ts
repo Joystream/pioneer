@@ -1,4 +1,5 @@
-import * as Types from '@/common/api/queries/__generated__/baseTypes.generated'
+import * as Types from '@/common/api/queries'
+import { isNumber } from '@/common/utils'
 
 export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
 
@@ -19,3 +20,11 @@ export const asBlock = (fields: BlockFields): Block => ({
   network: fields.network,
   timestamp: fields.createdAt,
 })
+
+export const maybeAsBlock = (
+  number?: number | null,
+  dateTime?: string,
+  network?: Types.Network | null
+): Block | undefined => {
+  if (isNumber(number) && dateTime && network) return asBlock({ inBlock: number, createdAt: dateTime, network })
+}
