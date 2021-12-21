@@ -2,13 +2,13 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
-import { Member } from '@/memberships/types'
 import {
   isTransactionCanceled,
   isTransactionError,
   isTransactionSuccess,
   transactionMachine,
 } from '@/common/model/machines'
+import { Member } from '@/memberships/types'
 
 export type FundingPeriodType = 'perpetual' | 'limited'
 export type WorkingPeriodType = 'open' | 'closed'
@@ -20,7 +20,7 @@ export interface GeneralParametersContext {
   description: string
 }
 
-interface FundingPeriodDetailsContext extends GeneralParametersContext {
+export interface FundingPeriodDetailsContext extends GeneralParametersContext {
   cherry: number
   fundingPeriodType: FundingPeriodType
   fundingPeriodLength?: number
@@ -28,20 +28,20 @@ interface FundingPeriodDetailsContext extends GeneralParametersContext {
   fundingMaximalRange: number
 }
 
-interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext {
+export interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext {
   workingPeriodType: WorkingPeriodType
   workingPeriodLength: number
-  workingPeriodWhitelist?: Member[]
+  workingPeriodWhitelist: Member[]
   workingPeriodStakeAllowance: boolean
   workingPeriodStake?: number
 }
 
-interface JudgingPeriodDetailsContext extends WorkingPeriodDetailsContext {
+export interface JudgingPeriodDetailsContext extends WorkingPeriodDetailsContext {
   judgingPeriodLength: number
   oracle: Member
 }
 
-interface ForumThreadDetailsContext extends JudgingPeriodDetailsContext {
+export interface ForumThreadDetailsContext extends JudgingPeriodDetailsContext {
   forumThreadTopic: string
   forumThreadDescription: string
 }
@@ -138,6 +138,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     fundingPeriodType: 'perpetual',
     workingPeriodType: 'open',
     workingPeriodStakeAllowance: true,
+    workingPeriodWhitelist: [],
   },
   states: {
     [AddBountyStates.generalParameters]: {
