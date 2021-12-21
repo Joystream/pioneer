@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { memo } from 'react'
 
 import { BountyPeriod, Contributor, Entrant, EntrantResult, Withdrawn } from '@/bounty/types/Bounty'
 
@@ -22,20 +22,15 @@ export interface BountySidebarProps {
   periodsLengths: PeriodsLengthsType
 }
 
-export const BountySidebar = ({
-  contributors,
-  entrants,
-  withdrawns,
-  entrantResult,
-  stage,
-  periodsLengths,
-}: BountySidebarProps) => {
-  return (
-    <>
-      {entrants && <BountyActorsList title="ENTRANTS" elements={entrants} entrantResult={entrantResult} />}
-      {withdrawns && <BountyActorsList title="WITHDRAWN" elements={withdrawns} />}
-      {contributors && <BountyActorsList title="CONTRIBUTORS" elements={contributors} open={stage === 'funding'} />}
-      <Periods stage={stage} {...periodsLengths} />
-    </>
-  )
-}
+export const BountySidebar = memo(
+  ({ contributors, entrants, withdrawns, entrantResult, stage, periodsLengths }: BountySidebarProps) => {
+    return (
+      <>
+        {entrants && <BountyActorsList title="ENTRANTS" elements={entrants} entrantResult={entrantResult} />}
+        {withdrawns && <BountyActorsList title="WITHDRAWN" elements={withdrawns} />}
+        {contributors && <BountyActorsList title="CONTRIBUTORS" elements={contributors} open={stage === 'funding'} />}
+        <Periods stage={stage} {...periodsLengths} />
+      </>
+    )
+  }
+)

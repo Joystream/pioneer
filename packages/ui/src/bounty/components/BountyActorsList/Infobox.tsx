@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import styled from 'styled-components'
 
 import { entrantResultMapper } from '@/bounty/helpers'
@@ -11,7 +11,7 @@ export interface InfoboxProps {
   result: EntrantResult
 }
 
-export const Infobox = ({ result }: InfoboxProps) => {
+export const Infobox = memo(({ result }: InfoboxProps) => {
   const [closed, setClosed] = useState(false)
   const { title, text, color } = entrantResultMapper[result]
   return (
@@ -25,7 +25,7 @@ export const Infobox = ({ result }: InfoboxProps) => {
       )}
     </>
   )
-}
+})
 
 const Wrapper = styled.div<{ color: string }>`
   position: relative;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { BountyActorItem, EntrantResult, isContributor, isEntrant } from '@/bounty/types/Bounty'
@@ -41,7 +41,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
   return <ValueText lighter>Work withdrawn</ValueText>
 }
 
-export const BountyActorsList = ({ title, elements, entrantResult, open = true }: BountyActorsListProps) => {
+export const BountyActorsList = memo(({ title, elements, entrantResult, open = true }: BountyActorsListProps) => {
   const [isVisible, toggleVisibility] = useToggle(open)
 
   return (
@@ -68,7 +68,7 @@ export const BountyActorsList = ({ title, elements, entrantResult, open = true }
       )}
     </>
   )
-}
+})
 
 const Wrapper = styled.div`
   margin-bottom: 18px;

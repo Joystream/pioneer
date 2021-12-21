@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, memo, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { BountyPeriod } from '@/bounty/types/Bounty'
@@ -33,31 +33,34 @@ const formatPeriodLength = (value?: BN) => {
   )
 }
 
-export const Periods = ({ stage, fundingPeriodLength, workPeriodLength, judgingPeriodLength }: PeriodsProps) => {
-  const steps: PeriodStep[] = [
-    {
-      title: 'Funding Period',
-      details: formatPeriodLength(fundingPeriodLength),
-      type: stage === 'funding' ? 'active' : 'past',
-    },
-    {
-      title: 'Working Period',
-      details: formatPeriodLength(workPeriodLength),
-      type: stage === 'working' ? 'active' : stage === 'funding' ? 'hideNumber' : 'past',
-    },
-    {
-      title: 'Judgement Period',
-      details: formatPeriodLength(judgingPeriodLength),
-      type: stage === 'judgement' ? 'active' : 'hideNumber',
-    },
-  ]
+export const Periods = memo(({ stage, fundingPeriodLength, workPeriodLength, judgingPeriodLength }: PeriodsProps) => {
+  const steps: PeriodStep[] = useMemo(
+    () => [
+      {
+        title: 'Funding Period',
+        details: formatPeriodLength(fundingPeriodLength),
+        type: stage === 'funding' ? 'active' : 'past',
+      },
+      {
+        title: 'Working Period',
+        details: formatPeriodLength(workPeriodLength),
+        type: stage === 'working' ? 'active' : stage === 'funding' ? 'hideNumber' : 'past',
+      },
+      {
+        title: 'Judgement Period',
+        details: formatPeriodLength(judgingPeriodLength),
+        type: stage === 'judgement' ? 'active' : 'hideNumber',
+      },
+    ],
+    []
+  )
   return (
     <>
       <TitleText bold>PERIODS</TitleText>
       <Stepper steps={steps} theme="light" />
     </>
   )
-}
+})
 
 const TitleText = styled(TextSmall)`
   margin-bottom: 16px;
