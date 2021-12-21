@@ -390,7 +390,7 @@ describe('UI: Past Council page', () => {
           const workingGroupTotalBudget = workingGroupItem?.children.item(3)?.textContent
           const workingGroupBudgetPercentage = workingGroupItem?.children.item(4)?.textContent
 
-          expect(workingGroupName).toBe('forum')
+          expect(workingGroupName).toBe('Forum')
           expect(workingGroupPaidRewards).toBe('6,050')
           expect(workingGroupMissedRewards).toBe('3,145')
           expect(workingGroupTotalBudget).toBe('80,000')

@@ -30,7 +30,9 @@ import {
   FundingRequestParameters,
   SetMembershipPriceParameters,
   SignalParameters,
+  UpdateWorkingGroupBudgetParameters,
   TerminateWorkingGroupLeadParameters,
+  UpdateKind,
 } from './components/SpecificParameters'
 import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
 import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
@@ -80,6 +82,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetCouncilBudgetIncrementParameters
     | SetMembershipLeadInvitationParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | UpdateWorkingGroupBudgetParameters
     | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
     | SetMembershipPriceParameters
@@ -132,6 +135,10 @@ interface DecreaseWorkingGroupLeadStakeContext extends SpecificParametersContext
 
 interface SlashWorkingGroupLeadContext extends SpecificParametersContext {
   specifics: SlashWorkingGroupLeadParameters
+}
+
+interface UpdateWorkingGroupBudgetContext extends SpecificParametersContext {
+  specifics: UpdateWorkingGroupBudgetParameters
 }
 
 interface TerminateWorkingGroupLeadContext extends SpecificParametersContext {
@@ -188,6 +195,7 @@ export type AddNewProposalContext = Partial<
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
+    UpdateWorkingGroupBudgetContext &
     TerminateWorkingGroupLeadContext &
     TransactionContext &
     SetReferralCutContext &
@@ -220,6 +228,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'setMembershipPrice' }; context: SetMembershipPriceContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
+  | { value: { specificParameters: 'updateWorkingGroupBudget' }; context: UpdateWorkingGroupBudgetContext }
   | { value: { specificParameters: 'terminateWorkingGroupLead' }; context: TerminateWorkingGroupLeadContext }
   | { value: { specificParameters: 'setWorkingGroupLeadReward' }; context: SetWorkingGroupLeadRewardContext }
   | { value: { specificParameters: 'setMaxValidatorCount' }; context: SetMaxValidatorCountContext }
@@ -250,6 +259,8 @@ export type AddNewProposalState =
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
+type SetBudgetUpdateKindEvent = { type: 'SET_BUDGET_UPDATE_KIND'; kind: UpdateKind }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type SetSignalEvent = { type: 'SET_SIGNAL'; signal: string }
@@ -283,6 +294,8 @@ export type AddNewProposalEvent =
   | SetTitleEvent
   | SetRationaleEvent
   | SetSignalEvent
+  | SetBudgetUpdateEvent
+  | SetBudgetUpdateKindEvent
   | SetTriggerBlockEvent
   | SetDiscussionModeEvent
   | SetDiscussionWhitelistEvent
@@ -448,6 +461,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+            { target: 'updateWorkingGroupBudget', cond: isType('updateWorkingGroupBudget') },
             { target: 'setReferralCut', cond: isType('setReferralCut') },
             { target: 'terminateWorkingGroupLead', cond: isType('terminateWorkingGroupLead') },
             { target: 'fillWorkingGroupLeadOpening', cond: isType('fillWorkingGroupLeadOpening') },
@@ -801,6 +815,34 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   invitationCount: event.count,
+                }),
+              }),
+            },
+          },
+        },
+        updateWorkingGroupBudget: {
+          on: {
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
+                }),
+              }),
+            },
+            SET_BUDGET_UPDATE: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  budgetUpdate: event.amount,
+                }),
+              }),
+            },
+            SET_BUDGET_UPDATE_KIND: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  budgetUpdateKind: event.kind,
                 }),
               }),
             },

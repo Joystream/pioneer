@@ -43,7 +43,7 @@ export const CandidacyPreview = React.memo(() => {
   const currentVotingCycleId = electionStage === 'voting' ? candidate?.cycleId : undefined
   const myVotes = useVerifiedVotingAttempts(currentVotingCycleId, candidate?.member.id)
   const { votesTotal } = useMyCurrentVotesCount(currentVotingCycleId)
-  const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
+  const canVote = electionStage === 'voting' && isDefined(votesTotal) && allAccounts.length > votesTotal
 
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)

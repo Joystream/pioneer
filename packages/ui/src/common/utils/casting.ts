@@ -2,7 +2,7 @@
 // See https://spin.atomicobject.com/2021/11/10/discriminated-unions-typescript-project
 
 type TypedUnion<TypeKey extends string, TypeValue extends string = string> = { [key in TypeKey]: TypeValue }
-type CastTypedUnion<
+export type NarrowTypedUnion<
   Union extends TypedUnion<TypeKey>,
   TypeKey extends string,
   TypeValue extends Union[TypeKey]
@@ -18,6 +18,11 @@ export const castTypedUnion =
     result: Result | null | undefined,
     typeValue: TypeValue
   ) =>
-    result ? (result as CastTypedUnion<Result, TypeKey, TypeValue>) : undefined
+    result ? (result as NarrowTypedUnion<Result, TypeKey, TypeValue>) : undefined
+
+export type NarrowQueryResult<
+  QueryResult extends TypedUnion<'__typename'>,
+  TypeName extends QueryResult['__typename']
+> = NarrowTypedUnion<QueryResult, '__typename', TypeName>
 
 export const castQueryResult = castTypedUnion('__typename')

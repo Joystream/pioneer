@@ -924,6 +924,47 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeEnabled()
         })
       })
+
+      describe('Type - Update Working Group Budget', () => {
+        beforeEach(async () => {
+          await finishProposalType('updateWorkingGroupBudget')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - no selected group, amount not filled', async () => {
+          expect(await screen.findByLabelText('Working Group', { selector: 'input' })).toHaveValue('')
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Invalid - group selected, amount not filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid - group selected, positive amount filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(100)
+
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Valid - group selected, negative amount filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+
+          // Switch to 'Decrease budget', input will be handled as negative
+          await triggerYes()
+          await SpecificParameters.fillAmount(100)
+
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
     })
 
     describe('Authorize', () => {
@@ -1299,6 +1340,9 @@ describe('UI: AddNewProposalModal', () => {
     FillWorkingGroupLeadOpening: {
       selectedOpening,
       selectApplication,
+    },
+    UpdateWorkingGroupBudget: {
+      selectGroup,
     },
     SetInitialInvitationCount: {
       fillCount: async (value: number) => await fillField('count-input', value),

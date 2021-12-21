@@ -74,7 +74,7 @@ export const SetMaxValidatorCount = ({
         <RowGapBlock gap={20}>
           <InputComponent
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
+            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
             label="Amount"
             tight
             units="JOY"

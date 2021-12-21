@@ -2607,16 +2607,7 @@ input CastVoteWhereUniqueInput {
   id: ID!
 }
 
-type CategoryArchivalStatusUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryArchivalStatusUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -2636,6 +2627,19 @@ type CategoryArchivalStatusUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
 
@@ -2757,16 +2761,7 @@ input CategoryArchivalStatusUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
-type CategoryCreatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryCreatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -2786,6 +2781,19 @@ type CategoryCreatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
 }
@@ -2889,16 +2897,7 @@ input CategoryCreatedEventWhereUniqueInput {
   id: ID!
 }
 
-type CategoryDeletedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryDeletedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -2918,6 +2917,19 @@ type CategoryDeletedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
   actor: Worker!
@@ -3028,16 +3040,7 @@ input CategoryDeletedEventWhereUniqueInput {
   id: ID!
 }
 
-type CategoryMembershipOfModeratorUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryMembershipOfModeratorUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -3057,6 +3060,19 @@ type CategoryMembershipOfModeratorUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   moderator: Worker!
   moderatorId: String!
   category: ForumCategory!
@@ -3198,16 +3214,7 @@ type CategoryStatusRemoved {
   categoryDeletedEvent: CategoryDeletedEvent
 }
 
-type CategoryStickyThreadUpdateEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type CategoryStickyThreadUpdateEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -3227,6 +3234,19 @@ type CategoryStickyThreadUpdateEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   category: ForumCategory!
   categoryId: String!
   newStickyThreads: [ForumThread!]!
@@ -4817,6 +4837,11 @@ enum EventTypeOptions {
   CandidacyNoteSetEvent
   CandidacyStakeReleaseEvent
   CandidacyWithdrawEvent
+  CategoryArchivalStatusUpdatedEvent
+  CategoryCreatedEvent
+  CategoryDeletedEvent
+  CategoryMembershipOfModeratorUpdatedEvent
+  CategoryStickyThreadUpdateEvent
   CouncilorRewardUpdatedEvent
   InitialInvitationBalanceUpdatedEvent
   InitialInvitationCountUpdatedEvent
@@ -4838,6 +4863,11 @@ enum EventTypeOptions {
   OpeningAddedEvent
   OpeningCanceledEvent
   OpeningFilledEvent
+  PostAddedEvent
+  PostDeletedEvent
+  PostModeratedEvent
+  PostReactedEvent
+  PostTextUpdatedEvent
   ProposalCancelledEvent
   ProposalCreatedEvent
   ProposalDecisionMadeEvent
@@ -4866,7 +4896,13 @@ enum EventTypeOptions {
   StatusTextChangedEvent
   TerminatedLeaderEvent
   TerminatedWorkerEvent
+  ThreadCreatedEvent
+  ThreadDeletedEvent
+  ThreadMetadataUpdatedEvent
+  ThreadModeratedEvent
+  ThreadMovedEvent
   VoteCastEvent
+  VoteOnPollEvent
   VoteRevealedEvent
   VotingPeriodStartedEvent
   WorkerExitedEvent
@@ -9997,16 +10033,7 @@ type PageInfo {
   endCursor: String
 }
 
-type PostAddedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostAddedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10026,6 +10053,19 @@ type PostAddedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -10154,16 +10194,7 @@ input PostAddedEventWhereUniqueInput {
   id: ID!
 }
 
-type PostDeletedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostDeletedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10183,6 +10214,19 @@ type PostDeletedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   posts: [ForumPost!]!
   actor: Membership!
   actorId: String!
@@ -10304,16 +10348,7 @@ input PostDeletedEventWhereUniqueInput {
   id: ID!
 }
 
-type PostModeratedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostModeratedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10333,6 +10368,19 @@ type PostModeratedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -10473,16 +10521,7 @@ type PostOriginThreadReply {
   postAddedEvent: PostAddedEvent
 }
 
-type PostReactedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostReactedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10502,6 +10541,19 @@ type PostReactedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -10719,16 +10771,7 @@ type PostStatusRemoved {
   postDeletedEvent: PostDeletedEvent
 }
 
-type PostTextUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type PostTextUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -10748,6 +10791,19 @@ type PostTextUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   post: ForumPost!
   postId: String!
 
@@ -18237,16 +18293,7 @@ type TerminateWorkingGroupLeadProposalDetails {
   slashingAmount: Float
 }
 
-type ThreadCreatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadCreatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18266,6 +18313,19 @@ type ThreadCreatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 
@@ -18397,16 +18457,7 @@ input ThreadCreatedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadDeletedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadDeletedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18426,6 +18477,19 @@ type ThreadDeletedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 }
@@ -18529,16 +18593,7 @@ input ThreadDeletedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadMetadataUpdatedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadMetadataUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18558,6 +18613,19 @@ type ThreadMetadataUpdatedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 
@@ -18675,16 +18743,7 @@ input ThreadMetadataUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadModeratedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadModeratedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18704,6 +18763,19 @@ type ThreadModeratedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
 
@@ -18828,16 +18900,7 @@ input ThreadModeratedEventWhereUniqueInput {
   id: ID!
 }
 
-type ThreadMovedEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type ThreadMovedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -18857,6 +18920,19 @@ type ThreadMovedEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   thread: ForumThread!
   threadId: String!
   oldCategory: ForumCategory!
@@ -19929,16 +20005,7 @@ input VoteCastEventWhereUniqueInput {
   id: ID!
 }
 
-type VoteOnPollEvent implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
+type VoteOnPollEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
   """
@@ -19958,6 +20025,19 @@ type VoteOnPollEvent implements BaseGraphQLObject {
   Index of event in block from which it was emitted.
   """
   indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   pollAlternative: ForumPollAlternative!
   pollAlternativeId: String!
   votingMember: Membership!

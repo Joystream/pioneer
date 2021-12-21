@@ -6,10 +6,12 @@ export interface ProgressBarProps {
   start?: number
   end: number
   size?: 'small' | 'big'
+  color?: string
+  backgroundColor?: string
 }
 
 export const ProgressBar = styled.div<ProgressBarProps>`
-  background-color: ${Colors.Black[200]};
+  background-color: ${({ backgroundColor = Colors.Black[200] }) => `${backgroundColor}`};
   border-radius: 4px;
   height: ${({ size }) => {
     switch (size) {
@@ -25,7 +27,7 @@ export const ProgressBar = styled.div<ProgressBarProps>`
   width: 100%;
 
   &::after {
-    background-color: ${Colors.Blue[500]};
+    background-color: ${({ color = Colors.Blue[500] }) => `${color}`};
     content: '';
     display: block;
     height: 100%;

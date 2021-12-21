@@ -22,13 +22,14 @@ interface Props {
   service: ActorRef<any>
   transaction: SubmittableExtrinsic<'rxjs'>
   address: Address
+  signer: Address
   lock: RecoverableLock
 }
 
-export const RecoverBalanceSignModal = ({ onClose, service, transaction, address, lock }: Props) => {
+export const RecoverBalanceSignModal = ({ onClose, service, transaction, address, signer, lock }: Props) => {
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
-    signer: address || '',
+    signer: signer,
     service,
   })
   const { allAccounts } = useMyAccounts()
