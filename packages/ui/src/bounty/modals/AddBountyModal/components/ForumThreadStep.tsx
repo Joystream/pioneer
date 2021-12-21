@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 
 import { ForumThreadDetailsContext, JudgingPeriodDetailsContext } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditor } from '@/common/components/CKEditor'
@@ -18,7 +18,6 @@ export const ForumThreadStep = ({
   setForumThreadTopic,
   setForumThreadDescription,
 }: Props) => {
-  const editorRef = useRef<HTMLDivElement>(null)
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -40,9 +39,8 @@ export const ForumThreadStep = ({
       <Row>
         <InputComponent label="Thread description" required inputSize="auto" id="forum-description">
           <CKEditor
-            ref={editorRef}
             id="forum-description"
-            onReady={(editor) => editor.setData(forumThreadDescription)}
+            onReady={(editor) => editor.setData(forumThreadDescription || '')}
             onChange={(event, editor) => setForumThreadDescription(editor.getData())}
             minRows={3}
           />
