@@ -1,4 +1,5 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
+import BN from 'bn.js'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
@@ -8,6 +9,7 @@ import {
   isTransactionSuccess,
   transactionMachine,
 } from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 export type FundingPeriodType = 'perpetual' | 'limited'
@@ -21,11 +23,11 @@ export interface GeneralParametersContext {
 }
 
 export interface FundingPeriodDetailsContext extends GeneralParametersContext {
-  cherry: number
+  cherry: BN
   fundingPeriodType: FundingPeriodType
   fundingPeriodLength?: number
-  fundingMinimalRange?: number
-  fundingMaximalRange: number
+  fundingMinimalRange?: BN
+  fundingMaximalRange: BN
 }
 
 export interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext {
@@ -33,7 +35,7 @@ export interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext
   workingPeriodLength: number
   workingPeriodWhitelist: Member[]
   workingPeriodStakeAllowance: boolean
-  workingPeriodStake?: number
+  workingPeriodStake?: BN
 }
 
 export interface JudgingPeriodDetailsContext extends WorkingPeriodDetailsContext {
@@ -60,6 +62,8 @@ export type AddBountyContext = Partial<
 >
 
 export enum AddBountyStates {
+  requirementsVerification = 'requirementsVerification',
+  requirementsFailed = 'requirementsFailed',
   generalParameters = 'generalParameters',
   fundingPeriodDetails = 'fundingPeriodDetails',
   workingPeriodDetails = 'workingPeriodDetails',
@@ -72,6 +76,8 @@ export enum AddBountyStates {
 }
 
 export type AddBountyState =
+  | { value: AddBountyStates.requirementsVerification; context: EmptyObject }
+  | { value: AddBountyStates.requirementsFailed; context: EmptyObject }
   | { value: AddBountyStates.generalParameters; context: GeneralParametersContext }
   | { value: AddBountyStates.fundingPeriodDetails; context: FundingPeriodDetailsContext }
   | { value: AddBountyStates.workingPeriodDetails; context: WorkingPeriodDetailsContext }
@@ -87,15 +93,15 @@ type SetCreatorEvent = { type: 'SET_CREATOR'; creator: Member }
 type SetBountyTitleEvent = { type: 'SET_BOUNTY_TITLE'; title: string }
 type SetCoverPhotoEvent = { type: 'SET_COVER_PHOTO'; coverPhotoLink: string }
 type SetBountyDescriptionEvent = { type: 'SET_BOUNTY_DESCRIPTION'; description: string }
-type SetCherryEvent = { type: 'SET_CHERRY'; cherry: number }
+type SetCherryEvent = { type: 'SET_CHERRY'; cherry: BN }
 type SetFundingPeriodTypeEvent = { type: 'SET_FUNDING_PERIOD_TYPE'; fundingPeriodType: FundingPeriodType }
 type SetFundingPeriodLengthEvent = { type: 'SET_FUNDING_PERIOD_LENGTH'; fundingPeriodLength: number }
-type SetFundingMinimalRangeEvent = { type: 'SET_FUNDING_MINIMAL_RANGE'; fundingMinimalRange: number }
-type SetFundingMaximalRangeEvent = { type: 'SET_FUNDING_MAXIMAL_RANGE'; fundingMaximalRange: number }
+type SetFundingMinimalRangeEvent = { type: 'SET_FUNDING_MINIMAL_RANGE'; fundingMinimalRange: BN }
+type SetFundingMaximalRangeEvent = { type: 'SET_FUNDING_MAXIMAL_RANGE'; fundingMaximalRange: BN }
 type SetWorkingPeriodTypeEvent = { type: 'SET_WORKING_PERIOD_TYPE'; workingPeriodType: WorkingPeriodType }
 type SetWorkingPeriodLengthEvent = { type: 'SET_WORKING_PERIOD_LENGTH'; workingPeriodLength: number }
 type SetAllowWorkingPeriodEvent = { type: 'SET_ALLOW_WORKING_PERIOD_STAKE'; workingPeriodStakeAllowance: boolean }
-type SetWorkingPeriodStakeEvent = { type: 'SET_WORKING_PERIOD_STAKE'; workingPeriodStake: number }
+type SetWorkingPeriodStakeEvent = { type: 'SET_WORKING_PERIOD_STAKE'; workingPeriodStake: BN }
 type SetWorkingPeriodWhitelistEvent = { type: 'SET_WORKING_PERIOD_WHITELIST'; workingPeriodWhitelist: Member[] }
 type SetJudgingPeriodLengthEvent = { type: 'SET_JUDGING_PERIOD_LENGTH'; judgingPeriodLength: number }
 type SetOracleEvent = { type: 'SET_ORACLE'; oracle: Member }
@@ -132,7 +138,7 @@ export type AddBountyModalMachineState = State<
 >
 
 export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, AddBountyState>({
-  initial: AddBountyStates.generalParameters,
+  initial: AddBountyStates.requirementsVerification,
   context: {
     description: '',
     fundingPeriodType: 'perpetual',
@@ -141,6 +147,13 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     workingPeriodWhitelist: [],
   },
   states: {
+    [AddBountyStates.requirementsVerification]: {
+      on: {
+        FAIL: AddBountyStates.requirementsFailed,
+        NEXT: AddBountyStates.generalParameters,
+      },
+    },
+    [AddBountyStates.requirementsFailed]: { type: 'final' },
     [AddBountyStates.generalParameters]: {
       on: {
         NEXT: AddBountyStates.fundingPeriodDetails,
