@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { TooltipContainer } from '@/common/components/Tooltip'
@@ -12,8 +12,8 @@ export interface Props {
   disabled?: boolean
   checked: boolean
   onChange: (value: boolean) => void
-  trueLabel: string
-  falseLabel: string
+  trueLabel: ReactNode
+  falseLabel: ReactNode
 }
 
 export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: Props) {

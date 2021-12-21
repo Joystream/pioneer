@@ -7,7 +7,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { SelectedMember } from '@/memberships/components/SelectMember'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
 interface Props extends Omit<GeneralParametersContext, 'creator'> {
@@ -15,6 +14,7 @@ interface Props extends Omit<GeneralParametersContext, 'creator'> {
   setTitle: (title: string) => void
   setCoverPhoto: (link: string) => void
   setDescription: (description: string) => void
+  activeMember?: Member
 }
 
 export const GeneralParametersStep = ({
@@ -25,9 +25,8 @@ export const GeneralParametersStep = ({
   setTitle,
   coverPhotoLink,
   setCoverPhoto,
+  activeMember,
 }: Props) => {
-  const { active: activeMember } = useMyMemberships()
-
   useEffect(() => {
     if (activeMember) setCreator(activeMember)
   }, [activeMember])
