@@ -31,15 +31,7 @@ export const PastCouncilListItem = ({ council }: Props) => {
       to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
     >
       <Info>#{council.id}</Info>
-      <BlockTime
-        block={{
-          network: 'OLYMPIA',
-          timestamp: new Date().toString(),
-          number: council.endedAtBlock,
-        }}
-        layout="reverse-start"
-        lessInfo
-      />
+      <BlockTime block={council.endedAt} layout="reverse-start" lessInfo />
       {isLoading ? <Loading /> : <TokenValue value={totalSpent} />}
       {isLoading ? <Loading /> : <TokenValue value={spentOnProposals} />}
       {isLoading ? <Loading /> : <CountInfo count={proposalsApproved} />}
