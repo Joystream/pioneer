@@ -1,5 +1,7 @@
 import { BaseEvent } from '@/mocks/data/seedEvents'
 
+import { seedOverridableEntities } from '../helpers/seedEntities'
+
 import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
@@ -69,16 +71,12 @@ export const seedElectedCouncil = (data: RawCouncilMock, server: any) => {
   return server.schema.create('ElectedCouncil', { ...data, isResigned: !!data.endedAtBlock })
 }
 
-export const seedElectedCouncils = (server: any, overrides?: Partial<RawCouncilMock>[]) => {
-  optionalOverride(rawCouncils, overrides).map((data) => seedElectedCouncil(data, server))
-}
+export const seedElectedCouncils = seedOverridableEntities(rawCouncils, seedElectedCouncil)
 
 export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =>
   server.schema.create('ElectionRound', { ...data, updatedAt: new Date().toISOString() })
 
-export const seedCouncilElections = (server: any, overrides?: Partial<RawCouncilElectionMock>[]) => {
-  optionalOverride(rawElections, overrides).map((data) => seedCouncilElection(data, server))
-}
+export const seedCouncilElections = seedOverridableEntities(rawElections, seedCouncilElection)
 
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
   const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
@@ -90,8 +88,7 @@ export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any)
   })
 }
 
-export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCouncilCandidateMock>[]) =>
-  optionalOverride(rawCandidates, overrides).map((data) => seedCouncilCandidate(data, server))
+export const seedCouncilCandidates = seedOverridableEntities(rawCandidates, seedCouncilCandidate)
 
 export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
   return server.schema.create('CastVote', {
@@ -101,8 +98,4 @@ export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
   })
 }
 
-export const seedCouncilVotes = (server: any, overrides?: Partial<RawCouncilVoteMock>[]) =>
-  optionalOverride(rawVotes, overrides).map((data) => seedCouncilVote(data, server))
-
-const optionalOverride = <T>(data: T[], overrides?: Partial<T>[]): T[] =>
-  overrides?.map<T>((override, index) => ({ ...data[index], ...override })) ?? data
+export const seedCouncilVotes = seedOverridableEntities<RawCouncilVoteMock>(rawVotes, seedCouncilVote)

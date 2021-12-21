@@ -7,6 +7,7 @@ import { Route, Router, Switch } from 'react-router-dom'
 import { GlobalModals } from '@/app/GlobalModals'
 import { Members } from '@/app/pages/Members/Members'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { repeat } from '@/common/utils'
 import { seedMembers, mockMembers } from '@/mocks/data'
 import { seedApplications } from '@/mocks/data/seedApplications'
 import { seedOpenings } from '@/mocks/data/seedOpenings'
@@ -16,21 +17,29 @@ import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { MockApiProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
+const seededMembers = mockMembers.slice(0, 10)
+
 describe('Members', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(cryptoWaitReady)
 
   beforeAll(() => {
-    seedMembers(server.server)
+    seedMembers(server.server, 10)
     seedWorkingGroups(server.server)
     seedOpenings(server.server)
-    seedApplications(server.server)
-    seedWorkers(server.server)
+    seedApplications(
+      server.server,
+      repeat((i) => ({ applicantId: String(i) }), 10)
+    )
+    seedWorkers(
+      server.server,
+      repeat((i) => ({ membershipId: i, applicationId: `forumWorkingGroup-${i}` }), 10)
+    )
   })
 
   it('Renders the page', async () => {
-    const membersCount = mockMembers.length
+    const membersCount = seededMembers.length
 
     renderPage()
 
@@ -39,7 +48,7 @@ describe('Members', () => {
   })
 
   it('Filter: only verified', async () => {
-    const membersCount = mockMembers.filter((member) => member.isVerified).length
+    const membersCount = seededMembers.filter((member) => member.isVerified).length
 
     renderPage()
 
@@ -50,7 +59,7 @@ describe('Members', () => {
   })
 
   it('Filter: only founder', async () => {
-    const membersCount = mockMembers.filter((member) => member.isFoundingMember).length
+    const membersCount = seededMembers.filter((member) => member.isFoundingMember).length
 
     renderPage()
     await clickIsFoundingMember()
@@ -60,7 +69,7 @@ describe('Members', () => {
   })
 
   it('Filter: founder and verified', async () => {
-    const membersCount = mockMembers.filter((member) => member.isFoundingMember && member.isVerified).length
+    const membersCount = seededMembers.filter((member) => member.isFoundingMember && member.isVerified).length
 
     renderPage()
 
