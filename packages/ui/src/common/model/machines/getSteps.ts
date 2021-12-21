@@ -9,8 +9,7 @@ export interface Step {
 }
 
 const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: StateNode) => {
-  console.log(state?.meta, ' meta', state?.context)
-  if (state?.matches(stateNode.path.join('.'))) {
+  if (state.matches(stateNode.path.join('.'))) {
     return stateNode.order
   }
 
@@ -39,8 +38,6 @@ const getParentStateNode = (node: StateNode): StateNode | null => {
 
 const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
   const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
-  console.log(stateNodes, ' state nodes')
-  console.log(state, ' state')
   const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(state), -1)
 
   const idToStep = new Map()
@@ -81,6 +78,5 @@ const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state
 }
 
 export const getSteps = (service: Interpreter<any, any, any, any>): Step[] => {
-  console.log(service, ' getSteps', service.state)
   return getStepsFromMachineAndState(service.machine, service.state)
 }
