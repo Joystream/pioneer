@@ -12,8 +12,8 @@ export interface Props {
   disabled?: boolean
   checked: boolean
   onChange: (value: boolean) => void
-  trueLabel: string
-  falseLabel: string
+  trueLabel: React.ReactNode
+  falseLabel: React.ReactNode
 }
 
 export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: Props) {
