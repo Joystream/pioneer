@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 
 import { Address, asBlock, Block } from '@/common/types'
+import { castQueryResult } from '@/common/utils/casting'
 import { asMember, Member } from '@/memberships/types'
 import { PastWorkerFieldsFragment, WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupName, GroupIdName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
@@ -82,20 +83,13 @@ export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): Worke
   hiredAtBlock: asBlock(fields.entry),
 })
 
-export const asPastWorker = (fields: PastWorkerFieldsFragment): PastWorker => {
-  let dateFinished: Block = asBlock(fields.entry)
-
-  if (fields.status.__typename === 'WorkerStatusLeft' && fields.status.workerExitedEvent) {
-    dateFinished = asBlock(fields.status.workerExitedEvent)
-  }
-  if (fields.status.__typename === 'WorkerStatusTerminated' && fields.status.terminatedWorkerEvent) {
-    dateFinished = asBlock(fields.status.terminatedWorkerEvent)
-  }
-
-  return {
-    id: fields.id,
-    member: asMember(fields.membership),
-    dateStarted: asBlock(fields.entry),
-    dateFinished,
-  }
-}
+export const asPastWorker = (fields: PastWorkerFieldsFragment): PastWorker => ({
+  id: fields.id,
+  member: asMember(fields.membership),
+  dateStarted: asBlock(fields.entry),
+  dateFinished: asBlock(
+    castQueryResult(fields.status, 'WorkerStatusTerminated')?.terminatedWorkerEvent ??
+      castQueryResult(fields.status, 'WorkerStatusLeft')?.workerExitedEvent ??
+      fields.entry
+  ),
+})

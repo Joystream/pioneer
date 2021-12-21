@@ -14,7 +14,12 @@ export type MemberFieldsFragment = {
   isFoundingMember: boolean
   inviteCount: number
   createdAt: any
-  metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+  metadata: {
+    __typename: 'MemberMetadata'
+    name?: string | null | undefined
+    about?: string | null | undefined
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+  }
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -62,7 +67,12 @@ export type MemberWithDetailsFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -71,7 +81,12 @@ export type MemberWithDetailsFieldsFragment = {
       group: { __typename: 'WorkingGroup'; name: string }
     }>
   }>
-  metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+  metadata: {
+    __typename: 'MemberMetadata'
+    name?: string | null | undefined
+    about?: string | null | undefined
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+  }
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -101,7 +116,12 @@ export type GetMembersQuery = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -170,6 +190,7 @@ export type GetMemberQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -179,7 +200,12 @@ export type GetMemberQuery = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }>
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -210,7 +236,12 @@ export type SearchMembersQuery = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -247,6 +278,12 @@ export const MemberFieldsFragmentDoc = gql`
     metadata {
       name
       about
+      avatar {
+        __typename
+        ... on AvatarUri {
+          avatarUri
+        }
+      }
     }
     isVerified
     isFoundingMember
