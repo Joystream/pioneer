@@ -18,7 +18,12 @@ export type WorkerProposalDetailsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -85,7 +90,12 @@ export type ProposalFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -112,7 +122,12 @@ export type VoteFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -144,7 +159,12 @@ export type VoteWithDetailsFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -181,7 +201,12 @@ export type ProposalWithDetailsFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -251,6 +276,11 @@ export type ProposalWithDetailsFieldsFragment = {
                   __typename: 'MemberMetadata'
                   name?: string | null | undefined
                   about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
                 }
                 roles: Array<{
                   __typename: 'Worker'
@@ -293,6 +323,11 @@ export type ProposalWithDetailsFieldsFragment = {
                   __typename: 'MemberMetadata'
                   name?: string | null | undefined
                   about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
                 }
                 roles: Array<{
                   __typename: 'Worker'
@@ -351,6 +386,11 @@ export type ProposalWithDetailsFieldsFragment = {
                   __typename: 'MemberMetadata'
                   name?: string | null | undefined
                   about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
                 }
                 roles: Array<{
                   __typename: 'Worker'
@@ -388,6 +428,11 @@ export type ProposalWithDetailsFieldsFragment = {
                   __typename: 'MemberMetadata'
                   name?: string | null | undefined
                   about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
                 }
                 roles: Array<{
                   __typename: 'Worker'
@@ -423,6 +468,11 @@ export type ProposalWithDetailsFieldsFragment = {
                   __typename: 'MemberMetadata'
                   name?: string | null | undefined
                   about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
                 }
                 roles: Array<{
                   __typename: 'Worker'
@@ -483,6 +533,11 @@ export type ProposalWithDetailsFieldsFragment = {
                 __typename: 'MemberMetadata'
                 name?: string | null | undefined
                 about?: string | null | undefined
+                avatar?:
+                  | { __typename: 'AvatarObject' }
+                  | { __typename: 'AvatarUri'; avatarUri: string }
+                  | null
+                  | undefined
               }
               roles: Array<{
                 __typename: 'Worker'
@@ -512,7 +567,12 @@ export type ProposalWithDetailsFieldsFragment = {
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -555,7 +615,12 @@ export type ProposalWithDetailsFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -600,6 +665,7 @@ export type DiscussionPostFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -629,7 +695,12 @@ export type DiscussionPostFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -663,7 +734,12 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -738,7 +814,12 @@ export type GetProposalsQuery = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -787,6 +868,11 @@ export type GetProposalQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -857,6 +943,11 @@ export type GetProposalQuery = {
                         __typename: 'MemberMetadata'
                         name?: string | null | undefined
                         about?: string | null | undefined
+                        avatar?:
+                          | { __typename: 'AvatarObject' }
+                          | { __typename: 'AvatarUri'; avatarUri: string }
+                          | null
+                          | undefined
                       }
                       roles: Array<{
                         __typename: 'Worker'
@@ -899,6 +990,11 @@ export type GetProposalQuery = {
                         __typename: 'MemberMetadata'
                         name?: string | null | undefined
                         about?: string | null | undefined
+                        avatar?:
+                          | { __typename: 'AvatarObject' }
+                          | { __typename: 'AvatarUri'; avatarUri: string }
+                          | null
+                          | undefined
                       }
                       roles: Array<{
                         __typename: 'Worker'
@@ -957,6 +1053,11 @@ export type GetProposalQuery = {
                         __typename: 'MemberMetadata'
                         name?: string | null | undefined
                         about?: string | null | undefined
+                        avatar?:
+                          | { __typename: 'AvatarObject' }
+                          | { __typename: 'AvatarUri'; avatarUri: string }
+                          | null
+                          | undefined
                       }
                       roles: Array<{
                         __typename: 'Worker'
@@ -994,6 +1095,11 @@ export type GetProposalQuery = {
                         __typename: 'MemberMetadata'
                         name?: string | null | undefined
                         about?: string | null | undefined
+                        avatar?:
+                          | { __typename: 'AvatarObject' }
+                          | { __typename: 'AvatarUri'; avatarUri: string }
+                          | null
+                          | undefined
                       }
                       roles: Array<{
                         __typename: 'Worker'
@@ -1029,6 +1135,11 @@ export type GetProposalQuery = {
                         __typename: 'MemberMetadata'
                         name?: string | null | undefined
                         about?: string | null | undefined
+                        avatar?:
+                          | { __typename: 'AvatarObject' }
+                          | { __typename: 'AvatarUri'; avatarUri: string }
+                          | null
+                          | undefined
                       }
                       roles: Array<{
                         __typename: 'Worker'
@@ -1089,6 +1200,11 @@ export type GetProposalQuery = {
                       __typename: 'MemberMetadata'
                       name?: string | null | undefined
                       about?: string | null | undefined
+                      avatar?:
+                        | { __typename: 'AvatarObject' }
+                        | { __typename: 'AvatarUri'; avatarUri: string }
+                        | null
+                        | undefined
                     }
                     roles: Array<{
                       __typename: 'Worker'
@@ -1122,6 +1238,11 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null | undefined
                 about?: string | null | undefined
+                avatar?:
+                  | { __typename: 'AvatarObject' }
+                  | { __typename: 'AvatarUri'; avatarUri: string }
+                  | null
+                  | undefined
               }
               roles: Array<{
                 __typename: 'Worker'
@@ -1172,6 +1293,7 @@ export type GetProposalQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -1218,6 +1340,7 @@ export type GetVoteWithDetailsQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -1276,7 +1399,12 @@ export type GetProposalVotesQuery = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string

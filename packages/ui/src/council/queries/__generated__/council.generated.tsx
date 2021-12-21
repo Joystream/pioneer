@@ -22,7 +22,12 @@ export type CouncilMemberFieldsFragment = {
     inviteCount: number
     createdAt: any
     councilMembers: Array<{ __typename: 'CouncilMember' }>
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -93,7 +98,12 @@ export type PastCouncilProposalsFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -139,7 +149,12 @@ export type ElectedCouncilFieldsFragment = {
       inviteCount: number
       createdAt: any
       councilMembers: Array<{ __typename: 'CouncilMember' }>
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -179,7 +194,12 @@ export type ElectionCandidateFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -215,7 +235,12 @@ export type ElectionRoundFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -267,7 +292,12 @@ export type PastElectionRoundDetailedFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -311,7 +341,12 @@ export type ElectionCandidateDetailedFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -356,6 +391,7 @@ export type CastVoteFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -455,7 +491,12 @@ export type GetElectedCouncilQuery = {
         inviteCount: number
         createdAt: any
         councilMembers: Array<{ __typename: 'CouncilMember' }>
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -572,7 +613,12 @@ export type GetPastCouncilMembersQuery = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -642,7 +688,12 @@ export type GetPastCouncilMembersQuery = {
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -718,7 +769,12 @@ export type GetPastCouncilProposalsQuery = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -770,7 +826,12 @@ export type GetCurrentElectionQuery = {
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -850,6 +911,11 @@ export type GetPastElectionQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -908,6 +974,7 @@ export type GetCandidateQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -994,6 +1061,11 @@ export type GetCouncilVotesQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
