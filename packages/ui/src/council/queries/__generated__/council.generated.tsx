@@ -238,18 +238,9 @@ export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  referendumResult?:
-    | Array<{
-        __typename: 'ReferendumStageRevealingOptionResult'
-        referendumFinishedEvent: {
-          __typename: 'ReferendumFinishedEvent'
-          inBlock: number
-          network: Types.Network
-          createdAt: any
-        }
-      }>
-    | null
-    | undefined
+  endedAtBlock?: number | null | undefined
+  endedAtTime?: any | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
 }
@@ -258,6 +249,9 @@ export type PastElectionRoundDetailedFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
+  endedAtBlock?: number | null | undefined
+  endedAtTime?: any | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
   candidates: Array<{
     __typename: 'Candidate'
     stake: any
@@ -297,18 +291,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
     voteForId?: string | null | undefined
     castBy: string
   }>
-  referendumResult?:
-    | Array<{
-        __typename: 'ReferendumStageRevealingOptionResult'
-        referendumFinishedEvent: {
-          __typename: 'ReferendumFinishedEvent'
-          inBlock: number
-          network: Types.Network
-          createdAt: any
-        }
-      }>
-    | null
-    | undefined
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -820,18 +802,9 @@ export type GetPastElectionsQuery = {
     __typename: 'ElectionRound'
     id: string
     cycleId: number
-    referendumResult?:
-      | Array<{
-          __typename: 'ReferendumStageRevealingOptionResult'
-          referendumFinishedEvent: {
-            __typename: 'ReferendumFinishedEvent'
-            inBlock: number
-            network: Types.Network
-            createdAt: any
-          }
-        }>
-      | null
-      | undefined
+    endedAtBlock?: number | null | undefined
+    endedAtTime?: any | null | undefined
+    endedAtNetwork?: Types.Network | null | undefined
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
   }>
@@ -855,6 +828,9 @@ export type GetPastElectionQuery = {
         __typename: 'ElectionRound'
         id: string
         cycleId: number
+        endedAtBlock?: number | null | undefined
+        endedAtTime?: any | null | undefined
+        endedAtNetwork?: Types.Network | null | undefined
         candidates: Array<{
           __typename: 'Candidate'
           stake: any
@@ -898,18 +874,6 @@ export type GetPastElectionQuery = {
           voteForId?: string | null | undefined
           castBy: string
         }>
-        referendumResult?:
-          | Array<{
-              __typename: 'ReferendumStageRevealingOptionResult'
-              referendumFinishedEvent: {
-                __typename: 'ReferendumFinishedEvent'
-                inBlock: number
-                network: Types.Network
-                createdAt: any
-              }
-            }>
-          | null
-          | undefined
       }
     | null
     | undefined
@@ -1271,13 +1235,9 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
     id
     cycleId
-    referendumResult: referendumstagerevealingoptionresultelectionRound {
-      referendumFinishedEvent {
-        inBlock
-        network
-        createdAt
-      }
-    }
+    endedAtBlock
+    endedAtTime
+    endedAtNetwork
     candidates {
       stake
     }
@@ -2034,19 +1994,13 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    withdrawn: candidatesConnection(
-      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusWithdrawn" } }
-    ) {
+    withdrawn: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: WITHDRAWN }) {
       totalCount
     }
-    successful: candidatesConnection(
-      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusElected" } }
-    ) {
+    successful: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: ELECTED }) {
       totalCount
     }
-    failed: candidatesConnection(
-      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusLost" } }
-    ) {
+    failed: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: FAILED }) {
       totalCount
     }
   }

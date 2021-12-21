@@ -6,7 +6,6 @@ import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
 import rawElections from './raw/electionRounds.json'
-import rawReferendumResults from './raw/referendumStageRevealingOptionResults.json'
 import rawVotes from './raw/votes.json'
 
 export interface RawCouncilorMock {
@@ -31,7 +30,7 @@ export interface RawCouncilCandidateMock {
   stake: number
   stakingAccountId: string
   rewardAccountId: string
-  statusType?: string
+  status?: string
   note?: string
   noteMetadata: {
     header: string
@@ -45,6 +44,9 @@ export interface RawCouncilElectionMock {
   id: string
   cycleId: number
   isFinished: boolean
+  endedAtBlock?: number
+  endedAtTime?: string
+  endedAtNetwork?: string
   electedCouncilId: string
 }
 
@@ -57,12 +59,6 @@ export interface RawCouncilVoteMock {
   castBy: string
   commitment: string
   voteCastEvent: Omit<Required<BaseEvent>, 'id'>
-}
-
-export interface RawCouncilReferendumResultMock {
-  id: string
-  referendumFinishedEvent: Omit<Required<BaseEvent>, 'id'>
-  electionRoundId: string
 }
 
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)
@@ -82,22 +78,12 @@ export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =
 
 export const seedCouncilElections = seedOverridableEntities(rawElections, seedCouncilElection)
 
-export const seedCouncilReferendumResult = (data: RawCouncilReferendumResultMock, server: any) =>
-  server.schema.create('ReferendumStageRevealingOptionResult', {
-    ...data,
-    referendumFinishedEvent: server.schema.create('ReferendumFinishedEvent', data.referendumFinishedEvent),
-  })
-
-export const seedCouncilReferendumResults = (server: any) => {
-  rawReferendumResults.map((data) => seedCouncilReferendumResult(data, server))
-}
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
   const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
-  const status = server.schema.create(data.statusType ?? 'CandidacyStatusActive')
 
   return server.schema.create('Candidate', {
+    status: 'ACTIVE',
     ...data,
-    status,
     noteMetadata,
   })
 }
