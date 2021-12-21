@@ -105,12 +105,11 @@ export const WorkingDetailsStep = ({
           label="Working period length"
           required
           units="blocks"
-          inputSize="s"
+          inputSize="m"
           tight
           message={workingPeriodLength ? `≈ ${inBlocksDate(new BN(workingPeriodLength))}` : ''}
         >
           <InputNumber
-            placeholder="0"
             id="periodLength"
             value={workingPeriodLength?.toString()}
             onChange={(event) => setWorkingPeriodLength(Number(event.target.value))}
@@ -146,11 +145,10 @@ export const WorkingDetailsStep = ({
 
       {workingPeriodStakeAllowance && (
         <Row>
-          <InputComponent units="JOY" inputSize="s" tight>
+          <InputComponent units="JOY" inputSize="m" tight>
             <InputNumber
               id="periodStake"
               value={workingPeriodStake?.toString()}
-              placeholder="0"
               onChange={(event) => setWorkingPeriodStake(new BN(event.target.value))}
             />
           </InputComponent>

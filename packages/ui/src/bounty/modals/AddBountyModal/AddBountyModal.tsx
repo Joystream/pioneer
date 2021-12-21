@@ -48,6 +48,8 @@ export const AddBountyModal = () => {
         minCherryLimit: bountyApi?.minCherryLimit,
         maxCherryLimit: transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
+        maxWhitelistSize: bountyApi?.closedContractSizeLimit,
+        minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
   }, [state])
@@ -72,27 +74,27 @@ export const AddBountyModal = () => {
               />
             )}
 
-            {state.matches(AddBountyStates.fundingPeriodDetails) &&
-            <FundingDetailsStep
-              cherry={state.context.cherry}
-              setCherry={(cherry) => send('SET_CHERRY', { cherry })}
-              fundingMaximalRange={state.context.fundingMaximalRange}
-              setFundingMaximalRange={(fundingMaximalRange) =>
-                send('SET_FUNDING_MAXIMAL_RANGE', { fundingMaximalRange })
-              }
-              fundingMinimalRange={state.context.fundingMinimalRange}
-              setFundingMinimalRange={(fundingMinimalRange) =>
-                send('SET_FUNDING_MINIMAL_RANGE', { fundingMinimalRange })
-              }
-              fundingPeriodType={state.context.fundingPeriodType}
-              setFundingPeriodType={(fundingPeriodType) => send('SET_FUNDING_PERIOD_TYPE', { fundingPeriodType })}
-              account={activeMember?.controllerAccount}
-              fundingPeriodLength={state.context.fundingPeriodLength}
-              setFundingPeriodLength={(fundingPeriodLength) =>
-                send('SET_FUNDING_PERIOD_LENGTH', { fundingPeriodLength })
-              }
-            />
-            }
+            {state.matches(AddBountyStates.fundingPeriodDetails) && (
+              <FundingDetailsStep
+                cherry={state.context.cherry}
+                setCherry={(cherry) => send('SET_CHERRY', { cherry })}
+                fundingMaximalRange={state.context.fundingMaximalRange}
+                setFundingMaximalRange={(fundingMaximalRange) =>
+                  send('SET_FUNDING_MAXIMAL_RANGE', { fundingMaximalRange })
+                }
+                fundingMinimalRange={state.context.fundingMinimalRange}
+                setFundingMinimalRange={(fundingMinimalRange) =>
+                  send('SET_FUNDING_MINIMAL_RANGE', { fundingMinimalRange })
+                }
+                fundingPeriodType={state.context.fundingPeriodType}
+                setFundingPeriodType={(fundingPeriodType) => send('SET_FUNDING_PERIOD_TYPE', { fundingPeriodType })}
+                account={activeMember?.controllerAccount}
+                fundingPeriodLength={state.context.fundingPeriodLength}
+                setFundingPeriodLength={(fundingPeriodLength) =>
+                  send('SET_FUNDING_PERIOD_LENGTH', { fundingPeriodLength })
+                }
+              />
+            )}
             {state.matches(AddBountyStates.workingPeriodDetails) && (
               <WorkingDetailsStep
                 workingPeriodType={state.context.workingPeriodType}

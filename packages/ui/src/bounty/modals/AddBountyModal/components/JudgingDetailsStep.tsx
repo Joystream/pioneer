@@ -31,7 +31,7 @@ export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, set
         <InputComponent
           label="Judging period length"
           required
-          inputSize="s"
+          inputSize="m"
           tight
           units="blocks"
           message={judgingPeriodLength ? `≈ ${inBlocksDate(new BN(judgingPeriodLength))}` : ''}
