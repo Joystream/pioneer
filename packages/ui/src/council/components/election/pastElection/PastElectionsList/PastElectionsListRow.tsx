@@ -23,7 +23,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
       as={GhostRouterLink}
       to={generatePath(ElectionRoutes.pastElection, { id: election.id })}
     >
-      <Info>#{election.id}</Info>
+      <Info>#{election.cycleId}</Info>
       {election.finishedAtBlock ? (
         <BlockTime block={election.finishedAtBlock} layout="reverse-start" lessInfo />
       ) : (
