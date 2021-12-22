@@ -781,6 +781,936 @@ GraphQL representation of BigInt
 """
 scalar BigInt
 
+type Bounty implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Bounty title
+  """
+  title: String!
+
+  """
+  Bounty description
+  """
+  description: String!
+
+  """
+  Amount of funding provided by the creator
+  """
+  cherry: BigInt!
+
+  """
+  Stake minimum amount required to submit work entry to the bounty
+  """
+  entrantStake: BigInt!
+  creator: Membership
+  creatorId: String
+  oracle: Membership
+  oracleId: String
+
+  """
+  Bounty funding type
+  """
+  fundingType: BountyFundingType!
+
+  """
+  Bounty assurance contract type
+  """
+  contractType: BountyContractType!
+
+  """
+  Number of blocks from end of funding period until people can no longer submit bounty submissions
+  """
+  workPeriod: Int!
+
+  """
+  Number of block from end of work period until oracle can no longer decide winners
+  """
+  judgingPeriod: Int!
+
+  """
+  Current bounty stage
+  """
+  stage: BountyStage!
+  totalFunding: BigInt!
+  discussionThread: ForumThread!
+  discussionThreadId: String!
+  createdInEvent: BountyCreatedEvent!
+  createdInEventId: String!
+  maxFundingReachedEvent: BountyMaxFundingReachedEvent
+  maxFundingReachedEventId: String
+  bountycontributionbounty: [BountyContribution!]
+  bountyentrybounty: [BountyEntry!]
+}
+
+type BountyConnection {
+  totalCount: Int!
+  edges: [BountyEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BountyContractClosed {
+  whitelist: [Membership!]
+}
+
+type BountyContractOpen {
+  dummy: Int
+}
+
+union BountyContractType = BountyContractOpen | BountyContractClosed
+
+type BountyContribution implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+  contributor: Membership
+  contributorId: String
+
+  """
+  Amount of the contribution
+  """
+  amount: BigInt!
+}
+
+type BountyContributionConnection {
+  totalCount: Int!
+  edges: [BountyContributionEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyContributionCreateInput {
+  bounty: ID!
+  contributor: ID
+  amount: String!
+}
+
+type BountyContributionEdge {
+  node: BountyContribution!
+  cursor: String!
+}
+
+enum BountyContributionOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  bounty_ASC
+  bounty_DESC
+  contributor_ASC
+  contributor_DESC
+  amount_ASC
+  amount_DESC
+}
+
+input BountyContributionUpdateInput {
+  bounty: ID
+  contributor: ID
+  amount: String
+}
+
+input BountyContributionWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  bounty: BountyWhereInput
+  contributor: MembershipWhereInput
+  AND: [BountyContributionWhereInput!]
+  OR: [BountyContributionWhereInput!]
+}
+
+input BountyContributionWhereUniqueInput {
+  id: ID!
+}
+
+type BountyCreatedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bountycreatedInEvent: [Bounty!]
+}
+
+type BountyCreatedEventConnection {
+  totalCount: Int!
+  edges: [BountyCreatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyCreatedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+}
+
+type BountyCreatedEventEdge {
+  node: BountyCreatedEvent!
+  cursor: String!
+}
+
+enum BountyCreatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+}
+
+input BountyCreatedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+}
+
+input BountyCreatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bountycreatedInEvent_none: BountyWhereInput
+  bountycreatedInEvent_some: BountyWhereInput
+  bountycreatedInEvent_every: BountyWhereInput
+  AND: [BountyCreatedEventWhereInput!]
+  OR: [BountyCreatedEventWhereInput!]
+}
+
+input BountyCreatedEventWhereUniqueInput {
+  id: ID!
+}
+
+input BountyCreateInput {
+  title: String!
+  description: String!
+  cherry: String!
+  entrantStake: String!
+  creator: ID
+  oracle: ID
+  fundingType: JSONObject!
+  contractType: JSONObject!
+  workPeriod: Float!
+  judgingPeriod: Float!
+  stage: BountyStage!
+  totalFunding: String!
+  discussionThread: ID!
+  createdInEvent: ID!
+  maxFundingReachedEvent: ID
+}
+
+type BountyEdge {
+  node: Bounty!
+  cursor: String!
+}
+
+type BountyEntry implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+  worker: Membership!
+  workerId: String!
+
+  """
+  Stake used to announce the work entry.
+  """
+  stake: BigInt!
+
+  """
+  Staking account with the work entry stake
+  """
+  stakingAccount: String
+
+  """
+  Whether at least one work has been submitted
+  """
+  workSubmitted: Boolean!
+  works: [BountyWorkData!]!
+
+  """
+  Work entry status
+  """
+  status: BountyEntryStatus!
+  announcedInEvent: WorkEntryAnnouncedEvent!
+  announcedInEventId: String!
+}
+
+type BountyEntryConnection {
+  totalCount: Int!
+  edges: [BountyEntryEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyEntryCreateInput {
+  bounty: ID!
+  worker: ID!
+  stake: String!
+  stakingAccount: String
+  workSubmitted: Boolean!
+  status: JSONObject!
+  announcedInEvent: ID!
+}
+
+type BountyEntryEdge {
+  node: BountyEntry!
+  cursor: String!
+}
+
+enum BountyEntryOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  bounty_ASC
+  bounty_DESC
+  worker_ASC
+  worker_DESC
+  stake_ASC
+  stake_DESC
+  stakingAccount_ASC
+  stakingAccount_DESC
+  workSubmitted_ASC
+  workSubmitted_DESC
+  announcedInEvent_ASC
+  announcedInEvent_DESC
+}
+
+union BountyEntryStatus =
+    BountyEntryStatusWorking
+  | BountyEntryStatusWithdrawn
+  | BountyEntryStatusWinner
+  | BountyEntryStatusPassed
+  | BountyEntryStatusRejected
+  | BountyEntryStatusCashedOut
+
+type BountyEntryStatusCashedOut {
+  dummy: Int
+}
+
+type BountyEntryStatusPassed {
+  dummy: Int
+}
+
+type BountyEntryStatusRejected {
+  dummy: Int
+}
+
+type BountyEntryStatusWinner {
+  reward: Float!
+}
+
+type BountyEntryStatusWithdrawn {
+  dummy: Int
+}
+
+type BountyEntryStatusWorking {
+  dummy: Int
+}
+
+input BountyEntryUpdateInput {
+  bounty: ID
+  worker: ID
+  stake: String
+  stakingAccount: String
+  workSubmitted: Boolean
+  status: JSONObject
+  announcedInEvent: ID
+}
+
+input BountyEntryWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  stake_eq: BigInt
+  stake_gt: BigInt
+  stake_gte: BigInt
+  stake_lt: BigInt
+  stake_lte: BigInt
+  stake_in: [BigInt!]
+  stakingAccount_eq: String
+  stakingAccount_contains: String
+  stakingAccount_startsWith: String
+  stakingAccount_endsWith: String
+  stakingAccount_in: [String!]
+  workSubmitted_eq: Boolean
+  workSubmitted_in: [Boolean!]
+  status_json: JSONObject
+  bounty: BountyWhereInput
+  worker: MembershipWhereInput
+  works_none: BountyWorkDataWhereInput
+  works_some: BountyWorkDataWhereInput
+  works_every: BountyWorkDataWhereInput
+  announcedInEvent: WorkEntryAnnouncedEventWhereInput
+  AND: [BountyEntryWhereInput!]
+  OR: [BountyEntryWhereInput!]
+}
+
+input BountyEntryWhereUniqueInput {
+  id: ID!
+}
+
+type BountyFundingLimited {
+  """
+  Minimum amount of funds for a successful bounty
+  """
+  minFundingAmount: Float!
+
+  """
+  Upper boundary for a bounty funding
+  """
+  maxFundingAmount: Float!
+
+  """
+  Maximum allowed funding period
+  """
+  fundingPeriod: Int!
+}
+
+type BountyFundingPerpetual {
+  """
+  Desired funding
+  """
+  target: Float!
+}
+
+union BountyFundingType = BountyFundingPerpetual | BountyFundingLimited
+
+type BountyMaxFundingReachedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bountymaxFundingReachedEvent: [Bounty!]
+}
+
+type BountyMaxFundingReachedEventConnection {
+  totalCount: Int!
+  edges: [BountyMaxFundingReachedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyMaxFundingReachedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+}
+
+type BountyMaxFundingReachedEventEdge {
+  node: BountyMaxFundingReachedEvent!
+  cursor: String!
+}
+
+enum BountyMaxFundingReachedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+}
+
+input BountyMaxFundingReachedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+}
+
+input BountyMaxFundingReachedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bountymaxFundingReachedEvent_none: BountyWhereInput
+  bountymaxFundingReachedEvent_some: BountyWhereInput
+  bountymaxFundingReachedEvent_every: BountyWhereInput
+  AND: [BountyMaxFundingReachedEventWhereInput!]
+  OR: [BountyMaxFundingReachedEventWhereInput!]
+}
+
+input BountyMaxFundingReachedEventWhereUniqueInput {
+  id: ID!
+}
+
+enum BountyOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  cherry_ASC
+  cherry_DESC
+  entrantStake_ASC
+  entrantStake_DESC
+  creator_ASC
+  creator_DESC
+  oracle_ASC
+  oracle_DESC
+  workPeriod_ASC
+  workPeriod_DESC
+  judgingPeriod_ASC
+  judgingPeriod_DESC
+  stage_ASC
+  stage_DESC
+  totalFunding_ASC
+  totalFunding_DESC
+  discussionThread_ASC
+  discussionThread_DESC
+  createdInEvent_ASC
+  createdInEvent_DESC
+  maxFundingReachedEvent_ASC
+  maxFundingReachedEvent_DESC
+}
+
+enum BountyStage {
+  Funding
+  Expired
+  WorkSubmission
+  Judgment
+  Successful
+  Failed
+  Terminated
+}
+
+input BountyUpdateInput {
+  title: String
+  description: String
+  cherry: String
+  entrantStake: String
+  creator: ID
+  oracle: ID
+  fundingType: JSONObject
+  contractType: JSONObject
+  workPeriod: Float
+  judgingPeriod: Float
+  stage: BountyStage
+  totalFunding: String
+  discussionThread: ID
+  createdInEvent: ID
+  maxFundingReachedEvent: ID
+}
+
+input BountyWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  title_eq: String
+  title_contains: String
+  title_startsWith: String
+  title_endsWith: String
+  title_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  cherry_eq: BigInt
+  cherry_gt: BigInt
+  cherry_gte: BigInt
+  cherry_lt: BigInt
+  cherry_lte: BigInt
+  cherry_in: [BigInt!]
+  entrantStake_eq: BigInt
+  entrantStake_gt: BigInt
+  entrantStake_gte: BigInt
+  entrantStake_lt: BigInt
+  entrantStake_lte: BigInt
+  entrantStake_in: [BigInt!]
+  fundingType_json: JSONObject
+  contractType_json: JSONObject
+  workPeriod_eq: Int
+  workPeriod_gt: Int
+  workPeriod_gte: Int
+  workPeriod_lt: Int
+  workPeriod_lte: Int
+  workPeriod_in: [Int!]
+  judgingPeriod_eq: Int
+  judgingPeriod_gt: Int
+  judgingPeriod_gte: Int
+  judgingPeriod_lt: Int
+  judgingPeriod_lte: Int
+  judgingPeriod_in: [Int!]
+  stage_eq: BountyStage
+  stage_in: [BountyStage!]
+  totalFunding_eq: BigInt
+  totalFunding_gt: BigInt
+  totalFunding_gte: BigInt
+  totalFunding_lt: BigInt
+  totalFunding_lte: BigInt
+  totalFunding_in: [BigInt!]
+  creator: MembershipWhereInput
+  oracle: MembershipWhereInput
+  discussionThread: ForumThreadWhereInput
+  createdInEvent: BountyCreatedEventWhereInput
+  maxFundingReachedEvent: BountyMaxFundingReachedEventWhereInput
+  bountycontributionbounty_none: BountyContributionWhereInput
+  bountycontributionbounty_some: BountyContributionWhereInput
+  bountycontributionbounty_every: BountyContributionWhereInput
+  bountyentrybounty_none: BountyEntryWhereInput
+  bountyentrybounty_some: BountyEntryWhereInput
+  bountyentrybounty_every: BountyEntryWhereInput
+  AND: [BountyWhereInput!]
+  OR: [BountyWhereInput!]
+}
+
+input BountyWhereUniqueInput {
+  id: ID!
+}
+
+"""
+Work data submitted into an entry
+"""
+type BountyWorkData implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  entry: [BountyEntry!]!
+
+  """
+  Title of the work
+  """
+  title: String!
+
+  """
+  Description which contains the work itself as a URL, a BLOB, or just text
+  """
+  description: String!
+}
+
+type BountyWorkDataConnection {
+  totalCount: Int!
+  edges: [BountyWorkDataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyWorkDataCreateInput {
+  title: String!
+  description: String!
+}
+
+type BountyWorkDataEdge {
+  node: BountyWorkData!
+  cursor: String!
+}
+
+enum BountyWorkDataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+}
+
+input BountyWorkDataUpdateInput {
+  title: String
+  description: String
+}
+
+input BountyWorkDataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  title_eq: String
+  title_contains: String
+  title_startsWith: String
+  title_endsWith: String
+  title_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  entry_none: BountyEntryWhereInput
+  entry_some: BountyEntryWhereInput
+  entry_every: BountyEntryWhereInput
+  AND: [BountyWorkDataWhereInput!]
+  OR: [BountyWorkDataWhereInput!]
+}
+
+input BountyWorkDataWhereUniqueInput {
+  id: ID!
+}
+
 type BudgetBalanceSetEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -4940,6 +5870,8 @@ enum EventTypeOptions {
   AnnouncingPeriodStartedEvent
   ApplicationWithdrawnEvent
   AppliedOnOpeningEvent
+  BountyCreatedEvent
+  BountyMaxFundingReachedEvent
   BudgetBalanceSetEvent
   BudgetIncrementUpdatedEvent
   BudgetRefillEvent
@@ -5017,6 +5949,7 @@ enum EventTypeOptions {
   VoteOnPollEvent
   VoteRevealedEvent
   VotingPeriodStartedEvent
+  WorkEntryAnnouncedEvent
   WorkerExitedEvent
   WorkerRewardAccountUpdatedEvent
   WorkerRewardAmountUpdatedEvent
@@ -5777,6 +6710,7 @@ type ForumThread implements BaseGraphQLObject {
   madeStickyInEvents: [CategoryStickyThreadUpdateEvent!]!
   movedInEvents: [ThreadMovedEvent!]!
   tags: [ForumThreadTag!]!
+  bountydiscussionThread: [Bounty!]
   threaddeletedeventthread: [ThreadDeletedEvent!]
   threadmoderatedeventthread: [ThreadModeratedEvent!]
 }
@@ -5987,6 +6921,9 @@ input ForumThreadWhereInput {
   tags_none: ForumThreadTagWhereInput
   tags_some: ForumThreadTagWhereInput
   tags_every: ForumThreadTagWhereInput
+  bountydiscussionThread_none: BountyWhereInput
+  bountydiscussionThread_some: BountyWhereInput
+  bountydiscussionThread_every: BountyWhereInput
   threaddeletedeventthread_none: ThreadDeletedEventWhereInput
   threaddeletedeventthread_some: ThreadDeletedEventWhereInput
   threaddeletedeventthread_every: ThreadDeletedEventWhereInput
@@ -8033,6 +8970,10 @@ type Membership implements BaseGraphQLObject {
   channels: [Channel!]!
   councilCandidacies: [Candidate!]!
   councilMembers: [CouncilMember!]!
+  bountycreator: [Bounty!]
+  bountyoracle: [Bounty!]
+  bountycontributioncontributor: [BountyContribution!]
+  bountyentryworker: [BountyEntry!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
   forumthreadauthor: [ForumThread!]
@@ -8710,6 +9651,18 @@ input MembershipWhereInput {
   councilMembers_none: CouncilMemberWhereInput
   councilMembers_some: CouncilMemberWhereInput
   councilMembers_every: CouncilMemberWhereInput
+  bountycreator_none: BountyWhereInput
+  bountycreator_some: BountyWhereInput
+  bountycreator_every: BountyWhereInput
+  bountyoracle_none: BountyWhereInput
+  bountyoracle_some: BountyWhereInput
+  bountyoracle_every: BountyWhereInput
+  bountycontributioncontributor_none: BountyContributionWhereInput
+  bountycontributioncontributor_some: BountyContributionWhereInput
+  bountycontributioncontributor_every: BountyContributionWhereInput
+  bountyentryworker_none: BountyEntryWhereInput
+  bountyentryworker_some: BountyEntryWhereInput
+  bountyentryworker_every: BountyEntryWhereInput
   forumpostauthor_none: ForumPostWhereInput
   forumpostauthor_some: ForumPostWhereInput
   forumpostauthor_every: ForumPostWhereInput
@@ -13341,6 +14294,93 @@ type Query {
     where: AppliedOnOpeningEventWhereInput
     orderBy: [AppliedOnOpeningEventOrderByInput!]
   ): AppliedOnOpeningEventConnection!
+  bountyContributions(
+    offset: Int
+    limit: Int = 50
+    where: BountyContributionWhereInput
+    orderBy: [BountyContributionOrderByInput!]
+  ): [BountyContribution!]!
+  bountyContributionByUniqueInput(where: BountyContributionWhereUniqueInput!): BountyContribution
+  bountyContributionsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyContributionWhereInput
+    orderBy: [BountyContributionOrderByInput!]
+  ): BountyContributionConnection!
+  bountyCreatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyCreatedEventWhereInput
+    orderBy: [BountyCreatedEventOrderByInput!]
+  ): [BountyCreatedEvent!]!
+  bountyCreatedEventByUniqueInput(where: BountyCreatedEventWhereUniqueInput!): BountyCreatedEvent
+  bountyCreatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyCreatedEventWhereInput
+    orderBy: [BountyCreatedEventOrderByInput!]
+  ): BountyCreatedEventConnection!
+  bountyEntries(
+    offset: Int
+    limit: Int = 50
+    where: BountyEntryWhereInput
+    orderBy: [BountyEntryOrderByInput!]
+  ): [BountyEntry!]!
+  bountyEntryByUniqueInput(where: BountyEntryWhereUniqueInput!): BountyEntry
+  bountyEntriesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyEntryWhereInput
+    orderBy: [BountyEntryOrderByInput!]
+  ): BountyEntryConnection!
+  bountyMaxFundingReachedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyMaxFundingReachedEventWhereInput
+    orderBy: [BountyMaxFundingReachedEventOrderByInput!]
+  ): [BountyMaxFundingReachedEvent!]!
+  bountyMaxFundingReachedEventByUniqueInput(
+    where: BountyMaxFundingReachedEventWhereUniqueInput!
+  ): BountyMaxFundingReachedEvent
+  bountyMaxFundingReachedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyMaxFundingReachedEventWhereInput
+    orderBy: [BountyMaxFundingReachedEventOrderByInput!]
+  ): BountyMaxFundingReachedEventConnection!
+  bountyWorkData(
+    offset: Int
+    limit: Int = 50
+    where: BountyWorkDataWhereInput
+    orderBy: [BountyWorkDataOrderByInput!]
+  ): [BountyWorkData!]!
+  bountyWorkDataByUniqueInput(where: BountyWorkDataWhereUniqueInput!): BountyWorkData
+  bountyWorkDataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyWorkDataWhereInput
+    orderBy: [BountyWorkDataOrderByInput!]
+  ): BountyWorkDataConnection!
+  bounties(offset: Int, limit: Int = 50, where: BountyWhereInput, orderBy: [BountyOrderByInput!]): [Bounty!]!
+  bountyByUniqueInput(where: BountyWhereUniqueInput!): Bounty
+  bountiesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyWhereInput
+    orderBy: [BountyOrderByInput!]
+  ): BountyConnection!
   budgetBalanceSetEvents(
     offset: Int
     limit: Int = 50
@@ -15108,6 +16148,21 @@ type Query {
     where: VotingPeriodStartedEventWhereInput
     orderBy: [VotingPeriodStartedEventOrderByInput!]
   ): VotingPeriodStartedEventConnection!
+  workEntryAnnouncedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkEntryAnnouncedEventWhereInput
+    orderBy: [WorkEntryAnnouncedEventOrderByInput!]
+  ): [WorkEntryAnnouncedEvent!]!
+  workEntryAnnouncedEventByUniqueInput(where: WorkEntryAnnouncedEventWhereUniqueInput!): WorkEntryAnnouncedEvent
+  workEntryAnnouncedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkEntryAnnouncedEventWhereInput
+    orderBy: [WorkEntryAnnouncedEventOrderByInput!]
+  ): WorkEntryAnnouncedEventConnection!
   workerExitedEvents(
     offset: Int
     limit: Int = 50
@@ -20650,6 +21705,139 @@ input VotingPeriodStartedEventWhereInput {
 }
 
 input VotingPeriodStartedEventWhereUniqueInput {
+  id: ID!
+}
+
+type WorkEntryAnnouncedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bountyentryannouncedInEvent: [BountyEntry!]
+}
+
+type WorkEntryAnnouncedEventConnection {
+  totalCount: Int!
+  edges: [WorkEntryAnnouncedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkEntryAnnouncedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+}
+
+type WorkEntryAnnouncedEventEdge {
+  node: WorkEntryAnnouncedEvent!
+  cursor: String!
+}
+
+enum WorkEntryAnnouncedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+}
+
+input WorkEntryAnnouncedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+}
+
+input WorkEntryAnnouncedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bountyentryannouncedInEvent_none: BountyEntryWhereInput
+  bountyentryannouncedInEvent_some: BountyEntryWhereInput
+  bountyentryannouncedInEvent_every: BountyEntryWhereInput
+  AND: [WorkEntryAnnouncedEventWhereInput!]
+  OR: [WorkEntryAnnouncedEventWhereInput!]
+}
+
+input WorkEntryAnnouncedEventWhereUniqueInput {
   id: ID!
 }
 

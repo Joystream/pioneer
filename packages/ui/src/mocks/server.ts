@@ -9,6 +9,9 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedBounties,
+  seedBountyContributions,
+  seedBountyEntries,
   seedCouncilCandidates,
   seedCouncilElections,
   seedCouncilMembers,
@@ -76,6 +79,13 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const electedCouncilModel = schema.modelFor('electedCouncil')
   // Mirage: The elected-council model has multiple possible inverse associations for the election-round.electedCouncil association.
   electedCouncilModel.class.prototype.associations.councilElections.opts.inverse = null
+
+  const bountyModel = schema.modelFor('bounty')
+  // The membership model has multiple possible inverse associations for the bounty.creator association.
+  membershipModel.class.prototype.associations.bountycreator.opts.inverse =
+    bountyModel.class.prototype.associations.creator
+  bountyModel.class.prototype.associations.creator.opts.inverse =
+    membershipModel.class.prototype.associations.bountycreator
 }
 
 export const makeServer = (environment = 'development', network: NetworkType = 'local') => {
@@ -204,6 +214,9 @@ export const makeServer = (environment = 'development', network: NetworkType = '
             seedCouncilElections(server)
             seedCouncilCandidates(server)
             seedCouncilVotes(server)
+            seedBounties(server)
+            seedBountyContributions(server)
+            seedBountyEntries(server)
           },
         }),
   })
