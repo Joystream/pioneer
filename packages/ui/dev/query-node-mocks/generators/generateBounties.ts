@@ -104,6 +104,7 @@ const generateContribution = (mocks: DependOnMocks, bounty: RawBountyMock) => (
   return {
     id: `${bounty.id}:${contributionIndex}`,
     bountyId: bounty.id,
+    ...(datatype.boolean() ? { contributorId: randomMember(mocks.members).id } : {}),
     amount: String(randomFromRange(1, 5) * 1000),
   }
 }
@@ -118,7 +119,7 @@ const generateEntry = (mocks: DependOnMocks, bounty: RawBountyMock) => (entryInd
     [1, { type: 'CashedOut' }]
   )
   const worker = randomMember(mocks.members)
-  const works = repeat(() => randomMessage(), randomFromRange(0, 5))
+  const works = repeat(() => ({ title: lorem.sentence(), description: randomMessage() }), randomFromRange(0, 5))
 
   return {
     id: `${bounty.id}:${entryIndex}`,

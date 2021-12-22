@@ -25,6 +25,7 @@ export interface RawBountyMock {
 export interface RawBountyContributionMock {
   id: string
   bountyId: string
+  contributor?: string
   amount: string
 }
 
@@ -35,8 +36,13 @@ export interface RawBountyEntryMock {
   stake: string
   stakingAccount: string
   workSubmitted: boolean
-  works: string[]
+  works: RawBountyWorkDataMock[]
   status: { type: string; reward?: string }
+}
+
+export interface RawBountyWorkDataMock {
+  title: string
+  description: string
 }
 
 const seedFundingType = ({ type, ...data }: RawBountyMock['fundingType'], server: any) =>
@@ -65,7 +71,11 @@ export const seedBountyContributions = seedOverridableEntities<RawBountyContribu
 const seedEntryStatus = ({ type, ...data }: RawBountyEntryMock['status'], server: any) =>
   server.schema.create(`BountyEntryStatus${type}`, data)
 
-export const seedBountyEntry = ({ status, ...data }: RawBountyEntryMock, server: any) =>
-  server.schema.create('BountyEntry', { ...data, status: seedEntryStatus(status, server) })
+export const seedBountyEntry = ({ works, status, ...data }: RawBountyEntryMock, server: any) =>
+  server.schema.create('BountyEntry', {
+    ...data,
+    works: works.map((work) => server.schema.create('BountyWorkData', work)),
+    status: seedEntryStatus(status, server),
+  })
 
 export const seedBountyEntries = seedOverridableEntities(rawEntries, seedBountyEntry)
