@@ -35,7 +35,7 @@ export const Stepper = ({ steps, theme = 'dark' }: StepperProps) => {
   return (
     <StepperWrap theme={StepperTheme[theme]}>
       {stepsToRender.map((step, index) => (
-        <StepWrap key={index} theme={StepperTheme[theme]} {...step}>
+        <StepWrap data-testid={`${step.title}-${step.type}`} key={index} theme={StepperTheme[theme]} {...step}>
           <StepNumber>
             <StepNumberText value>{getStepFace(step)}</StepNumberText>
           </StepNumber>
