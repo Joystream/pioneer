@@ -16,7 +16,7 @@ const FundingDetailsTemplate: Story = () => {
   const [fundingMinimalRange, setFundingMinimalRange] = useState(BN_ZERO)
   const [cherry, setCherry] = useState(BN_ZERO)
   const [, setFundingPeriodType] = useState('')
-  const [fundingPeriodLength, setFundingPeriodLength] = useState(0)
+  const [fundingPeriodLength, setFundingPeriodLength] = useState(BN_ZERO)
 
   return (
     <MockApolloProvider members>

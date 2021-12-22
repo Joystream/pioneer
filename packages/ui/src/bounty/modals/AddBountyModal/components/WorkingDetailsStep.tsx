@@ -1,3 +1,5 @@
+import { AugmentedConst } from '@polkadot/api/types'
+import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
@@ -20,11 +22,12 @@ import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 interface Props extends Omit<WorkingPeriodDetailsContext, keyof FundingPeriodDetailsContext> {
-  setWorkingPeriodLength: (workingPeriodLength: number) => void
+  setWorkingPeriodLength: (workingPeriodLength: BN) => void
   setWorkingPeriodWhitelist: (members: Member[]) => void
   setWorkingPeriodType: (type: WorkingPeriodType) => void
   setWorkingPeriodStake: (stake: BN) => void
   setWorkingPeriodStakeAllowance: (allowance: boolean) => void
+  whitelistLimit?: u32 & AugmentedConst<'rxjs'>
 }
 
 export const WorkingDetailsStep = ({
@@ -38,6 +41,7 @@ export const WorkingDetailsStep = ({
   setWorkingPeriodStakeAllowance,
   setWorkingPeriodType,
   setWorkingPeriodWhitelist,
+  whitelistLimit,
 }: Props) => {
   const onMemberAdd = (member: Member) => {
     setWorkingPeriodWhitelist([...workingPeriodWhitelist, member])
@@ -85,9 +89,17 @@ export const WorkingDetailsStep = ({
       {workingPeriodType === 'closed' && (
         <RowGapBlock gap={10}>
           <TextMedium bold>Whitelist</TextMedium>
-          <TextMedium>The upper bound for whitelist is 15.</TextMedium>
-          <InputComponent tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit." inputSize="l">
-            <SelectMember filter={whitelistFilter} onChange={onMemberAdd} />
+          <TextMedium>The upper bound for whitelist is {whitelistLimit?.toHuman() || 0}.</TextMedium>
+          <InputComponent
+            disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
+            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+            inputSize="l"
+          >
+            <SelectMember
+              disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
+              filter={whitelistFilter}
+              onChange={onMemberAdd}
+            />
           </InputComponent>
           <WhitelistWrapper>
             {workingPeriodWhitelist?.map((member) => (
@@ -107,13 +119,13 @@ export const WorkingDetailsStep = ({
           units="blocks"
           inputSize="m"
           tight
-          message={workingPeriodLength ? `≈ ${inBlocksDate(new BN(workingPeriodLength))}` : ''}
+          message={workingPeriodLength ? `≈ ${inBlocksDate(workingPeriodLength)}` : ''}
         >
           <InputNumber
             id="periodLength"
             placeholder="0"
             value={workingPeriodLength?.toString()}
-            onChange={(_, numberValue) => setWorkingPeriodLength(numberValue)}
+            onChange={(_, numberValue) => setWorkingPeriodLength(new BN(numberValue))}
           />
         </InputComponent>
       </Row>
@@ -171,6 +183,8 @@ const WhitelistWrapper = styled.div`
   flex-wrap: wrap;
   column-gap: 15px;
   row-gap: 10px;
+  max-height: 160px;
+  overflow-y: auto;
 `
 
 const MemberWrapper = styled.div`
@@ -178,7 +192,7 @@ const MemberWrapper = styled.div`
   column-gap: 5px;
   height: min-content;
   padding: 10px;
-  max-width: 180px;
+  max-width: min-content;
   min-width: 180px;
   align-items: center;
   border: 1px solid ${Colors.Black[300]};

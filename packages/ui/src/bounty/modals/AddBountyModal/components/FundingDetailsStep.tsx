@@ -15,7 +15,7 @@ export interface FundingDetailsStepProps extends Omit<FundingPeriodDetailsContex
   setFundingMaximalRange: (fundingMaximalRange: BN) => void
   setFundingMinimalRange: (fundingMinimalRange: BN) => void
   setCherry: (cherry: BN) => void
-  setFundingPeriodLength: (fundingPeriodLength: number) => void
+  setFundingPeriodLength: (fundingPeriodLength: BN) => void
   setFundingPeriodType: (fundingPeriodType: string) => void
   account?: Address
 }
@@ -87,12 +87,13 @@ export const FundingDetailsStep = ({
             required
             units="block"
             tight
-            message={fundingPeriodLength ? `≈ ${inBlocksDate(new BN(fundingPeriodLength))}` : ''}
+            message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
             <InputNumber
               value={fundingPeriodLength?.toString()}
               placeholder="0"
-              onChange={(_, value) => setFundingPeriodLength(value)}
+              isTokenValue
+              onChange={(_, value) => setFundingPeriodLength(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>

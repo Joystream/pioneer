@@ -25,21 +25,21 @@ export interface GeneralParametersContext {
 export interface FundingPeriodDetailsContext extends GeneralParametersContext {
   cherry: BN
   fundingPeriodType: FundingPeriodType
-  fundingPeriodLength?: number
+  fundingPeriodLength?: BN
   fundingMinimalRange?: BN
   fundingMaximalRange: BN
 }
 
 export interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext {
   workingPeriodType: WorkingPeriodType
-  workingPeriodLength: number
+  workingPeriodLength: BN
   workingPeriodWhitelist: Member[]
   workingPeriodStakeAllowance: boolean
   workingPeriodStake?: BN
 }
 
 export interface JudgingPeriodDetailsContext extends WorkingPeriodDetailsContext {
-  judgingPeriodLength: number
+  judgingPeriodLength: BN
   oracle: Member
 }
 
@@ -95,15 +95,15 @@ type SetCoverPhotoEvent = { type: 'SET_COVER_PHOTO'; coverPhotoLink: string }
 type SetBountyDescriptionEvent = { type: 'SET_BOUNTY_DESCRIPTION'; description: string }
 type SetCherryEvent = { type: 'SET_CHERRY'; cherry: BN }
 type SetFundingPeriodTypeEvent = { type: 'SET_FUNDING_PERIOD_TYPE'; fundingPeriodType: FundingPeriodType }
-type SetFundingPeriodLengthEvent = { type: 'SET_FUNDING_PERIOD_LENGTH'; fundingPeriodLength: number }
+type SetFundingPeriodLengthEvent = { type: 'SET_FUNDING_PERIOD_LENGTH'; fundingPeriodLength: BN }
 type SetFundingMinimalRangeEvent = { type: 'SET_FUNDING_MINIMAL_RANGE'; fundingMinimalRange: BN }
 type SetFundingMaximalRangeEvent = { type: 'SET_FUNDING_MAXIMAL_RANGE'; fundingMaximalRange: BN }
 type SetWorkingPeriodTypeEvent = { type: 'SET_WORKING_PERIOD_TYPE'; workingPeriodType: WorkingPeriodType }
-type SetWorkingPeriodLengthEvent = { type: 'SET_WORKING_PERIOD_LENGTH'; workingPeriodLength: number }
+type SetWorkingPeriodLengthEvent = { type: 'SET_WORKING_PERIOD_LENGTH'; workingPeriodLength: BN }
 type SetAllowWorkingPeriodEvent = { type: 'SET_ALLOW_WORKING_PERIOD_STAKE'; workingPeriodStakeAllowance: boolean }
 type SetWorkingPeriodStakeEvent = { type: 'SET_WORKING_PERIOD_STAKE'; workingPeriodStake: BN }
 type SetWorkingPeriodWhitelistEvent = { type: 'SET_WORKING_PERIOD_WHITELIST'; workingPeriodWhitelist: Member[] }
-type SetJudgingPeriodLengthEvent = { type: 'SET_JUDGING_PERIOD_LENGTH'; judgingPeriodLength: number }
+type SetJudgingPeriodLengthEvent = { type: 'SET_JUDGING_PERIOD_LENGTH'; judgingPeriodLength: BN }
 type SetOracleEvent = { type: 'SET_ORACLE'; oracle: Member }
 type SetForumThreadTopicEvent = { type: 'SET_FORUM_THREAD_TOPIC'; forumThreadTopic: string }
 type SetForumThreadDescriptionEvent = { type: 'SET_FORUM_THREAD_DESCRIPTION'; forumThreadDescription: string }

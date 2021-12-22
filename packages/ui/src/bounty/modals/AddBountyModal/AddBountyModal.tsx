@@ -126,6 +126,7 @@ export const AddBountyModal = () => {
                   send('SET_ALLOW_WORKING_PERIOD_STAKE', { workingPeriodStakeAllowance })
                 }
                 setWorkingPeriodType={(workingPeriodType) => send('SET_WORKING_PERIOD_TYPE', { workingPeriodType })}
+                whitelistLimit={bountyApi?.closedContractSizeLimit}
               />
             )}
             {state.matches(AddBountyStates.judgingPeriodDetails) && (

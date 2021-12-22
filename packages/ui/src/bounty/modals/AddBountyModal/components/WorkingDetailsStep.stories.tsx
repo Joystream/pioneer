@@ -13,7 +13,7 @@ export default {
 } as Meta
 
 const WorkingDetailsStepTemplate: Story = () => {
-  const [workingPeriodLength, setWorkingPeriodLength] = useState(0)
+  const [workingPeriodLength, setWorkingPeriodLength] = useState(BN_ZERO)
   const [workingPeriodWhitelist, setWorkingPeriodWhitelist] = useState<Member[]>([])
   const [, setWorkingPeriodType] = useState<WorkingPeriodType>()
   const [workingPeriodStake, setWorkingPeriodStake] = useState(BN_ZERO)

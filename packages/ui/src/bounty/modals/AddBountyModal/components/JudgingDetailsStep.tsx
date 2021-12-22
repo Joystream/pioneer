@@ -12,7 +12,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
 interface Props extends Omit<JudgingPeriodDetailsContext, keyof WorkingPeriodDetailsContext> {
-  setJudgingPeriodLength: (length: number) => void
+  setJudgingPeriodLength: (length: BN) => void
   setOracle: (oracle: Member) => void
 }
 
@@ -34,12 +34,12 @@ export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, set
           inputSize="m"
           tight
           units="blocks"
-          message={judgingPeriodLength ? `≈ ${inBlocksDate(new BN(judgingPeriodLength))}` : ''}
+          message={judgingPeriodLength ? `≈ ${inBlocksDate(judgingPeriodLength)}` : ''}
         >
           <InputNumber
             isTokenValue
             placeholder="0"
-            onChange={(_, value) => setJudgingPeriodLength(value)}
+            onChange={(_, value) => setJudgingPeriodLength(new BN(value))}
             value={judgingPeriodLength?.toString()}
           />
         </InputComponent>
