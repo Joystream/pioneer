@@ -2,6 +2,7 @@ import yargs from 'yargs'
 
 import { eventsModule } from './generateEventMocks'
 import { forumModule, generateForum } from './generators/forum/generateForumMocks'
+import { bountyModule, generateBounties } from './generators/generateBounties'
 import { councilModule, generateCouncils } from './generators/generateCouncils'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
@@ -19,7 +20,7 @@ const generateAll = () => {
     upcomingOpenings: [],
     workers: [],
     applications: [],
-    proposals: []
+    proposals: [],
   }
 
   mocks.members = generateMembers()
@@ -32,6 +33,7 @@ const generateAll = () => {
   mocks.proposals = generateProposals(mocks)
   Object.assign(mocks, generateCouncils(mocks))
   Object.assign(mocks, generateForum(mocks))
+  Object.assign(mocks, generateBounties(mocks))
 
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
@@ -39,13 +41,13 @@ const generateAll = () => {
 const membersModule = {
   command: 'members',
   describe: 'Generate members',
-  handler: () => saveFile('members', generateMembers())
+  handler: () => saveFile('members', generateMembers()),
 }
 
 const allModule = {
   command: 'all',
   describe: 'Generate all mocks',
-  handler: generateAll
+  handler: generateAll,
 }
 
 yargs(process.argv.slice(2))
@@ -57,4 +59,5 @@ yargs(process.argv.slice(2))
   .command(proposalsModule)
   .command(forumModule)
   .command(councilModule)
+  .command(bountyModule)
   .demandCommand().argv

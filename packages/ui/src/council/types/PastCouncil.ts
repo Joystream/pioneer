@@ -1,6 +1,8 @@
 import { BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 
+import { Network } from '@/common/api/queries'
+import { asBlock, Block } from '@/common/types'
 import {
   CouncilSpendingEventFieldsFragment,
   FundingRequestApprovedFragment,
@@ -11,7 +13,7 @@ import { asProposalDetails, DetailsFragment, FundingRequestDetails } from '@/pro
 
 export interface PastCouncil {
   id: string
-  endedAtBlock: number
+  endedAt: Block
 }
 
 export interface PastCouncilWithDetails extends PastCouncil {
@@ -23,7 +25,11 @@ export interface PastCouncilWithDetails extends PastCouncil {
 
 export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil => ({
   id: fields.id,
-  endedAtBlock: fields.endedAtBlock as number,
+  endedAt: asBlock({
+    createdAt: fields.endedAtTime,
+    inBlock: fields.endedAtBlock ?? -1,
+    network: fields.endedAtNetwork ?? Network.Olympia,
+  }),
 })
 
 export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment[]) =>

@@ -5,7 +5,6 @@ import {
   RawCouncilElectionMock,
   RawCouncilMock,
   RawCouncilorMock,
-  RawCouncilReferendumResultMock,
   RawCouncilVoteMock,
 } from '@/mocks/data/seedCouncils'
 import { RawNewMissedRewardLevelReachedEvent, RawProposalVotedEvent } from '@/mocks/data/seedEvents'
@@ -39,7 +38,6 @@ export const generateCouncils = (mocks?: MocksForCouncil) => {
     councils: [],
     councilors: [],
     electionRounds: [],
-    referendumStageRevealingOptionResults: [],
     candidates: [],
     votes: [],
     proposalVotedEvents: [],
@@ -51,7 +49,6 @@ interface CouncilData {
   councils: RawCouncilMock[]
   councilors: RawCouncilorMock[]
   electionRounds: RawCouncilElectionMock[]
-  referendumStageRevealingOptionResults: RawCouncilReferendumResultMock[]
   candidates: RawCouncilCandidateMock[]
   votes: RawCouncilVoteMock[]
   proposalVotedEvents: RawProposalVotedEvent[]
@@ -83,8 +80,8 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     isFinished ? randomFromRange(5, 8) : 0
   )
 
-  const pastCandidacyStatusType = () =>
-    faker.random.arrayElement(['CandidacyStatusWithdrawn', 'CandidacyStatusElected', 'CandidacyStatusLost'])
+  const candidacyStatus = ['ACTIVE', 'WITHDRAWN', 'ELECTED', 'FAILED']
+  const pastCandidacyStatusType = () => faker.random.arrayElement(candidacyStatus.slice(1))
   const createCandidate = (candidateIndex: number, member = randomMember(mocks.members)) => ({
     id: `${council.id}-${candidateIndex}`,
     memberId: isFinished ? councilors[candidateIndex].memberId : member.id,
@@ -92,7 +89,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
     stakingAccountId: member.controllerAccount,
     rewardAccountId: member.rootAccount,
-    statusType: isFinished ? pastCandidacyStatusType() : 'CandidacyStatusActive',
+    status: isFinished ? pastCandidacyStatusType() : candidacyStatus[0],
     note: faker.lorem.words(10),
     noteMetadata: {
       header: faker.lorem.words(4),
@@ -140,20 +137,20 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     )
   }
 
+  const endedAtBlock = randomBlock()
   const electionRound: RawCouncilElectionMock = {
     id: council.id,
     cycleId: Number(council.id),
     isFinished,
+    ...(isFinished
+      ? {
+          endedAtBlock: endedAtBlock.inBlock,
+          endedAtTime: endedAtBlock.createdAt,
+          endedAtNetwork: endedAtBlock.network,
+        }
+      : {}),
     electedCouncilId: council.id,
   }
-
-  const referendumResult: RawCouncilReferendumResultMock | undefined = isFinished
-    ? {
-        id: electionRound.id,
-        referendumFinishedEvent: randomBlock(),
-        electionRoundId: electionRound.id,
-      }
-    : undefined
 
   const createVote = (voteIndex: number, override: Partial<RawCouncilVoteMock> = {}): RawCouncilVoteMock => ({
     electionRoundId: council.id,
@@ -184,16 +181,10 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
         ]),
   ]
 
-  const referendumStageRevealingOptionResults = data.referendumStageRevealingOptionResults
-  if (referendumResult) {
-    referendumStageRevealingOptionResults.push(referendumResult)
-  }
-
   return {
     councils: [...data.councils, council],
     councilors: [...data.councilors, ...councilors],
     electionRounds: [...data.electionRounds, electionRound],
-    referendumStageRevealingOptionResults: referendumStageRevealingOptionResults,
     candidates: [...data.candidates, ...candidates],
     votes: [...data.votes, ...votes],
     proposalVotedEvents: [...data.proposalVotedEvents, ...proposalVotedEvents],

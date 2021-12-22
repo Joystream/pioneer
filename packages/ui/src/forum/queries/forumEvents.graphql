@@ -129,31 +129,49 @@ fragment CategoryDeletedEventFields on CategoryDeletedEvent {
 }
 
 query GetForumEvents {
-  postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostAddedEventFields
-  }
-  postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostTextUpdatedEventFields
-  }
-  postModeratedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostModeratedEventFields
-  }
-  postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostDeletedEventFields
-  }
-  threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...ThreadCreatedEventFields
-  }
-  threadDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...ThreadDeletedEventFields
-  }
-  threadModeratedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...ThreadModeratedEventFields
-  }
-  categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...CategoryCreatedEventFields
-  }
-  categoryDeletedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...CategoryDeletedEventFields
+  events(
+    where: {
+      type_in: [
+        PostAddedEvent
+        PostTextUpdatedEvent
+        PostModeratedEvent
+        PostDeletedEvent
+        ThreadCreatedEvent
+        ThreadDeletedEvent
+        ThreadModeratedEvent
+        CategoryCreatedEvent
+        CategoryDeletedEvent
+      ]
+    }
+    limit: 25
+    orderBy: [createdAt_DESC]
+  ) {
+    ... on PostAddedEvent {
+      ...PostAddedEventFields
+    }
+    ... on PostTextUpdatedEvent {
+      ...PostTextUpdatedEventFields
+    }
+    ... on PostModeratedEvent {
+      ...PostModeratedEventFields
+    }
+    ... on PostDeletedEvent {
+      ...PostDeletedEventFields
+    }
+    ... on ThreadCreatedEvent {
+      ...ThreadCreatedEventFields
+    }
+    ... on ThreadDeletedEvent {
+      ...ThreadDeletedEventFields
+    }
+    ... on ThreadModeratedEvent {
+      ...ThreadModeratedEventFields
+    }
+    ... on CategoryCreatedEvent {
+      ...CategoryCreatedEventFields
+    }
+    ... on CategoryDeletedEvent {
+      ...CategoryDeletedEventFields
+    }
   }
 }
