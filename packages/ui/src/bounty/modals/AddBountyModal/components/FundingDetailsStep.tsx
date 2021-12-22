@@ -8,6 +8,7 @@ import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageConten
 import { Tooltip, TooltipContainer, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, Colors } from '@/common/constants'
+import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { Address } from '@/common/types'
 
 export interface FundingDetailsStepProps extends Omit<FundingPeriodDetailsContext, keyof GeneralParametersContext> {
@@ -47,9 +48,10 @@ export const FundingDetailsStep = ({
       <RowGapBlock gap={20}>
         <InputComponent label="Cherry" tight units="JOY" required tooltipText="Funding period tooltip">
           <InputNumber
+            isTokenValue
             value={cherry?.toString()}
             placeholder="0"
-            onChange={(event) => setCherry(new BN(event.target.value))}
+            onChange={(_, value) => setCherry(new BN(value))}
           />
         </InputComponent>
       </RowGapBlock>
@@ -80,10 +82,17 @@ export const FundingDetailsStep = ({
       </RowGapBlock>
       {fundingPeriodType === 'limited' && (
         <RowGapBlock gap={20}>
-          <InputComponent label="Funding period length *" units="block" tight>
+          <InputComponent
+            label="Funding period length"
+            required
+            units="block"
+            tight
+            message={fundingPeriodLength ? `≈ ${inBlocksDate(new BN(fundingPeriodLength))}` : ''}
+          >
             <InputNumber
               value={fundingPeriodLength?.toString()}
-              onChange={(event) => setFundingPeriodLength(Number(event.target.value))}
+              placeholder="0"
+              onChange={(_, value) => setFundingPeriodLength(value)}
             />
           </InputComponent>
         </RowGapBlock>
@@ -98,17 +107,19 @@ export const FundingDetailsStep = ({
       <ColumnGapBlock gap={20}>
         <InputComponent tight units="JOY" required disabled={fundingPeriodType === 'perpetual'}>
           <InputNumber
+            isTokenValue
             disabled={fundingPeriodType === 'perpetual'}
             value={fundingMinimalRange?.toString()}
             placeholder="0"
-            onChange={(event) => setFundingMinimalRange(new BN(event.target.value))}
+            onChange={(_, value) => setFundingMinimalRange(new BN(value))}
           />
         </InputComponent>
         <InputComponent tight units="JOY" required>
           <InputNumber
+            isTokenValue
             value={fundingMaximalRange?.toString()}
             placeholder="0"
-            onChange={(event) => setFundingMaximalRange(new BN(event.target.value))}
+            onChange={(_, value) => setFundingMaximalRange(new BN(value))}
           />
         </InputComponent>
       </ColumnGapBlock>

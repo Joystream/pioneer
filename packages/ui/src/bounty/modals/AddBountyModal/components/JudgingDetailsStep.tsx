@@ -37,13 +37,13 @@ export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, set
           message={judgingPeriodLength ? `≈ ${inBlocksDate(new BN(judgingPeriodLength))}` : ''}
         >
           <InputNumber
+            isTokenValue
             placeholder="0"
-            onChange={(event) => setJudgingPeriodLength(Number(event.target.value))}
+            onChange={(_, value) => setJudgingPeriodLength(value)}
             value={judgingPeriodLength?.toString()}
           />
         </InputComponent>
       </Row>
-
       <Row>
         <InputComponent label="Oracle" required inputSize="l">
           <SelectMember onChange={(newOracle) => setOracle(newOracle)} selected={oracle} filter={oracleFilter} />

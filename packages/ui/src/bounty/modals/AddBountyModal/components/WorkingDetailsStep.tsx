@@ -111,8 +111,9 @@ export const WorkingDetailsStep = ({
         >
           <InputNumber
             id="periodLength"
+            placeholder="0"
             value={workingPeriodLength?.toString()}
-            onChange={(event) => setWorkingPeriodLength(Number(event.target.value))}
+            onChange={(_, numberValue) => setWorkingPeriodLength(numberValue)}
           />
         </InputComponent>
       </Row>
@@ -147,9 +148,10 @@ export const WorkingDetailsStep = ({
         <Row>
           <InputComponent units="JOY" inputSize="m" tight>
             <InputNumber
+              isTokenValue
               id="periodStake"
               value={workingPeriodStake?.toString()}
-              onChange={(event) => setWorkingPeriodStake(new BN(event.target.value))}
+              onChange={(_, value) => setWorkingPeriodStake(new BN(value))}
             />
           </InputComponent>
         </Row>
