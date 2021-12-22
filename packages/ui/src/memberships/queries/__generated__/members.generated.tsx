@@ -8,12 +8,18 @@ export type MemberFieldsFragment = {
   id: string
   rootAccount: string
   controllerAccount: string
+  boundAccounts: Array<string>
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
   inviteCount: number
   createdAt: any
-  metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+  metadata: {
+    __typename: 'MemberMetadata'
+    name?: string | null | undefined
+    about?: string | null | undefined
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+  }
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -28,6 +34,7 @@ export type MemberWithDetailsFieldsFragment = {
   id: string
   rootAccount: string
   controllerAccount: string
+  boundAccounts: Array<string>
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
@@ -54,12 +61,18 @@ export type MemberWithDetailsFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -68,7 +81,12 @@ export type MemberWithDetailsFieldsFragment = {
       group: { __typename: 'WorkingGroup'; name: string }
     }>
   }>
-  metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+  metadata: {
+    __typename: 'MemberMetadata'
+    name?: string | null | undefined
+    about?: string | null | undefined
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+  }
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -79,10 +97,10 @@ export type MemberWithDetailsFieldsFragment = {
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.MembershipWhereInput>
-  orderBy?: Types.Maybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetMembersQuery = {
@@ -92,12 +110,18 @@ export type GetMembersQuery = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -109,7 +133,7 @@ export type GetMembersQuery = {
 }
 
 export type GetMembersCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.MembershipWhereInput>
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
 }>
 
 export type GetMembersCountQuery = {
@@ -129,6 +153,7 @@ export type GetMemberQuery = {
         id: string
         rootAccount: string
         controllerAccount: string
+        boundAccounts: Array<string>
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
@@ -155,6 +180,7 @@ export type GetMemberQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -164,6 +190,7 @@ export type GetMemberQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -173,7 +200,12 @@ export type GetMemberQuery = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }>
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -188,7 +220,7 @@ export type GetMemberQuery = {
 
 export type SearchMembersQueryVariables = Types.Exact<{
   text: Types.Scalars['String']
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type SearchMembersQuery = {
@@ -198,12 +230,18 @@ export type SearchMembersQuery = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -235,10 +273,17 @@ export const MemberFieldsFragmentDoc = gql`
     id
     rootAccount
     controllerAccount
+    boundAccounts
     handle
     metadata {
       name
       about
+      avatar {
+        __typename
+        ... on AvatarUri {
+          avatarUri
+        }
+      }
     }
     isVerified
     isFoundingMember

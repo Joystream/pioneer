@@ -24,14 +24,48 @@ export type ForumBaseCategoryFieldsFragment = {
           | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
+}
+
+export type ForumCategoryFieldsFragment = {
+  __typename: 'ForumCategory'
+  id: string
+  title: string
+  description: string
   moderators: Array<{
     __typename: 'Worker'
     id: string
     membership: { __typename: 'Membership'; id: string; handle: string }
   }>
+  forumcategoryparent?:
+    | Array<{
+        __typename: 'ForumCategory'
+        id: string
+        title: string
+        status:
+          | { __typename: 'CategoryStatusActive' }
+          | { __typename: 'CategoryStatusArchived' }
+          | { __typename: 'CategoryStatusRemoved' }
+      }>
+    | null
+    | undefined
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?:
+          | {
+              __typename: 'CategoryArchivalStatusUpdatedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            }
+          | null
+          | undefined
+      }
+    | { __typename: 'CategoryStatusRemoved' }
 }
 
-export type ForumCategoryFieldsFragment = {
+export type ArchivedForumCategoryFieldsFragment = {
   __typename: 'ForumCategory'
   id: string
   title: string
@@ -63,11 +97,6 @@ export type ForumCategoryFieldsFragment = {
           | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
-  moderators: Array<{
-    __typename: 'Worker'
-    id: string
-    membership: { __typename: 'Membership'; id: string; handle: string }
-  }>
 }
 
 export type ForumCategoryWithDetailsFieldsFragment = {
@@ -81,6 +110,11 @@ export type ForumCategoryWithDetailsFieldsFragment = {
         id: string
         title: string
         description: string
+        moderators: Array<{
+          __typename: 'Worker'
+          id: string
+          membership: { __typename: 'Membership'; id: string; handle: string }
+        }>
         forumcategoryparent?:
           | Array<{
               __typename: 'ForumCategory'
@@ -108,11 +142,6 @@ export type ForumCategoryWithDetailsFieldsFragment = {
                 | undefined
             }
           | { __typename: 'CategoryStatusRemoved' }
-        moderators: Array<{
-          __typename: 'Worker'
-          id: string
-          membership: { __typename: 'Membership'; id: string; handle: string }
-        }>
       }>
     | null
     | undefined
@@ -131,11 +160,6 @@ export type ForumCategoryWithDetailsFieldsFragment = {
           | undefined
       }
     | { __typename: 'CategoryStatusRemoved' }
-  moderators: Array<{
-    __typename: 'Worker'
-    id: string
-    membership: { __typename: 'Membership'; id: string; handle: string }
-  }>
 }
 
 export type ForumModeratorFieldsFragment = {
@@ -287,6 +311,7 @@ export type ForumPostFieldsFragment = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -296,6 +321,7 @@ export type ForumPostFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -323,12 +349,18 @@ export type ForumPostFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -361,12 +393,18 @@ export type ForumPostWithoutReplyFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -415,10 +453,56 @@ export type ForumPostParentsFragment = {
 }
 
 export type GetForumCategoriesQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ForumCategoryWhereInput>
+  where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
 }>
 
 export type GetForumCategoriesQuery = {
+  __typename: 'Query'
+  forumCategories: Array<{
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    description: string
+    moderators: Array<{
+      __typename: 'Worker'
+      id: string
+      membership: { __typename: 'Membership'; id: string; handle: string }
+    }>
+    forumcategoryparent?:
+      | Array<{
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          status:
+            | { __typename: 'CategoryStatusActive' }
+            | { __typename: 'CategoryStatusArchived' }
+            | { __typename: 'CategoryStatusRemoved' }
+        }>
+      | null
+      | undefined
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | {
+          __typename: 'CategoryStatusArchived'
+          categoryArchivalStatusUpdatedEvent?:
+            | {
+                __typename: 'CategoryArchivalStatusUpdatedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              }
+            | null
+            | undefined
+        }
+      | { __typename: 'CategoryStatusRemoved' }
+  }>
+}
+
+export type GetArchivedForumCategoriesQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
+}>
+
+export type GetArchivedForumCategoriesQuery = {
   __typename: 'Query'
   forumCategories: Array<{
     __typename: 'ForumCategory'
@@ -452,11 +536,6 @@ export type GetForumCategoriesQuery = {
             | undefined
         }
       | { __typename: 'CategoryStatusRemoved' }
-    moderators: Array<{
-      __typename: 'Worker'
-      id: string
-      membership: { __typename: 'Membership'; id: string; handle: string }
-    }>
   }>
 }
 
@@ -478,6 +557,11 @@ export type GetForumCategoryQuery = {
               id: string
               title: string
               description: string
+              moderators: Array<{
+                __typename: 'Worker'
+                id: string
+                membership: { __typename: 'Membership'; id: string; handle: string }
+              }>
               forumcategoryparent?:
                 | Array<{
                     __typename: 'ForumCategory'
@@ -505,11 +589,6 @@ export type GetForumCategoryQuery = {
                       | undefined
                   }
                 | { __typename: 'CategoryStatusRemoved' }
-              moderators: Array<{
-                __typename: 'Worker'
-                id: string
-                membership: { __typename: 'Membership'; id: string; handle: string }
-              }>
             }>
           | null
           | undefined
@@ -528,11 +607,6 @@ export type GetForumCategoryQuery = {
                 | undefined
             }
           | { __typename: 'CategoryStatusRemoved' }
-        moderators: Array<{
-          __typename: 'Worker'
-          id: string
-          membership: { __typename: 'Membership'; id: string; handle: string }
-        }>
       }
     | null
     | undefined
@@ -676,10 +750,10 @@ export type GetForumThreadBreadcrumbsQuery = {
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ForumThreadWhereInput>
-  orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.ForumThreadWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetForumThreadsQuery = {
@@ -708,7 +782,7 @@ export type GetForumThreadsQuery = {
 }
 
 export type GetForumThreadsCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ForumThreadWhereInput>
+  where?: Types.InputMaybe<Types.ForumThreadWhereInput>
 }>
 
 export type GetForumThreadsCountQuery = {
@@ -757,9 +831,9 @@ export type GetForumThreadQuery = {
 
 export type GetForumPostsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetForumPostsQuery = {
@@ -784,6 +858,7 @@ export type GetForumPostsQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -793,6 +868,11 @@ export type GetForumPostsQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -820,12 +900,18 @@ export type GetForumPostsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -880,8 +966,8 @@ export type GetForumPostsCountQuery = {
 
 export type GetForumPostsIdsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetForumPostsIdsQuery = { __typename: 'Query'; forumPosts: Array<{ __typename: 'ForumPost'; id: string }> }
@@ -903,9 +989,9 @@ export type GetForumPostParentsQuery = {
 
 export type SearchForumPostQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type SearchForumPostQuery = {
@@ -918,15 +1004,6 @@ export type SearchForumPostQuery = {
   }>
 }
 
-export const ForumModeratorFieldsFragmentDoc = gql`
-  fragment ForumModeratorFields on Worker {
-    id
-    membership {
-      id
-      handle
-    }
-  }
-`
 export const ForumBaseCategoryFieldsFragmentDoc = gql`
   fragment ForumBaseCategoryFields on ForumCategory {
     id
@@ -942,11 +1019,7 @@ export const ForumBaseCategoryFieldsFragmentDoc = gql`
         }
       }
     }
-    moderators {
-      ...ForumModeratorFields
-    }
   }
-  ${ForumModeratorFieldsFragmentDoc}
 `
 export const ForumSubCategoryFieldsFragmentDoc = gql`
   fragment ForumSubCategoryFields on ForumCategory {
@@ -954,8 +1027,8 @@ export const ForumSubCategoryFieldsFragmentDoc = gql`
     title
   }
 `
-export const ForumCategoryFieldsFragmentDoc = gql`
-  fragment ForumCategoryFields on ForumCategory {
+export const ArchivedForumCategoryFieldsFragmentDoc = gql`
+  fragment ArchivedForumCategoryFields on ForumCategory {
     ...ForumBaseCategoryFields
     forumcategoryparent {
       ...ForumSubCategoryFields
@@ -965,6 +1038,32 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     }
   }
   ${ForumBaseCategoryFieldsFragmentDoc}
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
+export const ForumModeratorFieldsFragmentDoc = gql`
+  fragment ForumModeratorFields on Worker {
+    id
+    membership {
+      id
+      handle
+    }
+  }
+`
+export const ForumCategoryFieldsFragmentDoc = gql`
+  fragment ForumCategoryFields on ForumCategory {
+    ...ForumBaseCategoryFields
+    moderators {
+      ...ForumModeratorFields
+    }
+    forumcategoryparent {
+      ...ForumSubCategoryFields
+      status {
+        __typename
+      }
+    }
+  }
+  ${ForumBaseCategoryFieldsFragmentDoc}
+  ${ForumModeratorFieldsFragmentDoc}
   ${ForumSubCategoryFieldsFragmentDoc}
 `
 export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
@@ -1130,6 +1229,55 @@ export type GetForumCategoriesLazyQueryHookResult = ReturnType<typeof useGetForu
 export type GetForumCategoriesQueryResult = Apollo.QueryResult<
   GetForumCategoriesQuery,
   GetForumCategoriesQueryVariables
+>
+export const GetArchivedForumCategoriesDocument = gql`
+  query GetArchivedForumCategories($where: ForumCategoryWhereInput) {
+    forumCategories(where: $where) {
+      ...ArchivedForumCategoryFields
+    }
+  }
+  ${ArchivedForumCategoryFieldsFragmentDoc}
+`
+
+/**
+ * __useGetArchivedForumCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetArchivedForumCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetArchivedForumCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArchivedForumCategoriesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetArchivedForumCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>(
+    GetArchivedForumCategoriesDocument,
+    options
+  )
+}
+export function useGetArchivedForumCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetArchivedForumCategoriesQuery, GetArchivedForumCategoriesQueryVariables>(
+    GetArchivedForumCategoriesDocument,
+    options
+  )
+}
+export type GetArchivedForumCategoriesQueryHookResult = ReturnType<typeof useGetArchivedForumCategoriesQuery>
+export type GetArchivedForumCategoriesLazyQueryHookResult = ReturnType<typeof useGetArchivedForumCategoriesLazyQuery>
+export type GetArchivedForumCategoriesQueryResult = Apollo.QueryResult<
+  GetArchivedForumCategoriesQuery,
+  GetArchivedForumCategoriesQueryVariables
 >
 export const GetForumCategoryDocument = gql`
   query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {

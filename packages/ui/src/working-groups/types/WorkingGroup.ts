@@ -58,9 +58,8 @@ export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment
     : {}),
 })
 
-export const asWorkingGroupName = (name: string) => {
-  return name
+export const asWorkingGroupName = (name: string) =>
+  name
     .replace('WorkingGroup', '')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .toLowerCase()
-}
+    .replace(/^[a-z]/, (match) => match.toUpperCase())

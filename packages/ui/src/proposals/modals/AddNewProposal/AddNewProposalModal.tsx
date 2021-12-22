@@ -29,6 +29,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
@@ -64,6 +65,7 @@ const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create pr
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
+  const minCount = useMinimumValidatorCount()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const constants = useProposalConstants(state.context.type)
@@ -138,8 +140,8 @@ export const AddNewProposalModal = () => {
       return setValidNext(true)
     }
 
-    if (state.matches('generalParameters.proposalDetails') && state.context.title && state.context.rationale) {
-      return setValidNext(true)
+    if (state.matches('generalParameters.proposalDetails')) {
+      return
     }
 
     if (
@@ -152,7 +154,7 @@ export const AddNewProposalModal = () => {
     }
 
     if (state.matches('specificParameters')) {
-      return setValidNext(isValidSpecificParameters(state as AddNewProposalMachineState))
+      return setValidNext(isValidSpecificParameters(state as AddNewProposalMachineState, minCount))
     }
 
     return setValidNext(false)
@@ -164,7 +166,7 @@ export const AddNewProposalModal = () => {
     }
   }, [state, stakingStatus])
 
-  if (!api || !activeMember || !transaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo || state.matches('requirementsVerification')) {
     return null
   }
 
@@ -248,6 +250,7 @@ export const AddNewProposalModal = () => {
     return (
       <SuccessModal
         onClose={hideModal}
+        proposalId={state.context.proposalId}
         proposalType={state.context.type as ProposalType}
         proposalTitle={state.context.title as string}
       />
@@ -296,6 +299,7 @@ export const AddNewProposalModal = () => {
                 rationale={state.context.rationale}
                 setTitle={(title) => send('SET_TITLE', { title })}
                 setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
+                setValidNext={setValidNext}
               />
             )}
             {state.matches('generalParameters.triggerAndDiscussion') && (

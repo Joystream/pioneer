@@ -204,6 +204,11 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   applications {
     id
   }
+  openingfilledeventopening {
+    workersHired {
+      id
+    }
+  }
 }
 
 fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
@@ -294,8 +299,8 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   }
 }
 
-query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-  workingGroupApplications(where: { applicant: { id_in: $applicantId_in } }) {
+query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {
+  workingGroupApplications(where: $where) {
     ...WorkingGroupApplicationFields
   }
 }

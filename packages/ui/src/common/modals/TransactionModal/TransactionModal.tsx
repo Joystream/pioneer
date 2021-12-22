@@ -5,7 +5,6 @@ import { ActorRef } from 'xstate'
 import { MultiTransactionModalHeader } from '@/common/modals/TransactionModal/MultiTransactionModalHeader'
 
 import { Modal, ModalHeader } from '../../components/Modal'
-import { WaitModal } from '../../components/WaitModal'
 
 import { MultiTransactionConfig } from './types'
 
@@ -34,26 +33,6 @@ export const TransactionModal = ({ onClose, children, service, title, useMultiTr
         )}
         {children}
       </Modal>
-    )
-  }
-
-  if (state.matches('signWithExtension')) {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Waiting for the extension"
-        description="Please, sign the transaction using external signer app."
-      />
-    )
-  }
-
-  if (state.matches('pending')) {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Pending transaction"
-        description="We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim."
-      />
     )
   }
 

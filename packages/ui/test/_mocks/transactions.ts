@@ -4,7 +4,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of } from 'rxjs'
+import { from, of, asyncScheduler, scheduled } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
@@ -38,19 +38,22 @@ const createErrorEvents = () => [
 ]
 
 export const stubTransactionResult = (events: any[]) =>
-  from([
-    {
-      status: { isReady: true, type: 'Ready' },
-    },
-    {
-      status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
-      events: [...events],
-    },
-    {
-      status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
-      events: [...events],
-    },
-  ])
+  scheduled(
+    from([
+      {
+        status: { isReady: true, type: 'Ready' },
+      },
+      {
+        status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
+        events: [...events],
+      },
+      {
+        status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
+        events: [...events],
+      },
+    ]),
+    asyncScheduler
+  )
 
 const createBatchSuccessEvents = () => [
   {
@@ -99,6 +102,10 @@ export const stubTransactionSuccess = <
   )
 }
 
+export const stubTransactionPending = (transaction: any) => {
+  set(transaction, 'signAndSend', () => from([{ status: { isReady: true, type: 'Ready' } }]))
+}
+
 export const stubBatchTransactionFailure = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(createBatchErrorEvents()))
 }
@@ -145,6 +152,9 @@ export const stubApi = () => {
     ])
   )
   stubDefaultBalances(api)
+  set(api, 'api.rpc.chain.getBlockHash', () => {
+    from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
+  })
 
   return api
 }
@@ -170,9 +180,11 @@ export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number
     minimumStake: new BN(constants?.minStake ?? 10),
   })
 }
+// remapping to cover typo on runtime naming
+const testProposalDetails = [...proposalDetails, 'fillWorkingGroupOpening', 'setInvitationCount']
 
 export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: number }) => {
-  for (const proposalType of proposalDetails) {
+  for (const proposalType of testProposalDetails) {
     set(api, `api.consts.proposalsCodex.${proposalType}ProposalParameters`, {
       votingPeriod: new BN(10),
       gracePeriod: new BN(10),

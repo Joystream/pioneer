@@ -1,8 +1,11 @@
-import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 import React, { ReactNode } from 'react'
 
-import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
+import { NetworkType, QUERY_NODE_ENDPOINT, QUERY_NODE_ENDPOINT_SUBSCRIPTION } from '@/app/config'
+import { useNetwork } from '@/common/hooks/useNetwork'
 import { error } from '@/common/logger'
 import { ServerContextProvider } from '@/common/providers/server/provider'
 import { makeServer } from '@/mocks/server'
@@ -11,28 +14,23 @@ interface Props {
   children: ReactNode
 }
 
-const ENDPOINTS: Record<NetworkType, string> = {
-  local: 'http://localhost:8081/graphql',
-  'olympia-testnet': 'https://olympia-dev.joystream.app/query/server/graphql',
-}
-
 export const QueryNodeProvider = ({ children }: Props) => {
   const [network] = useNetwork()
 
-  if (network === 'olympia-testnet') {
-    return <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
+  if (network === 'local-mocks') {
+    return (
+      <ServerContextProvider value={makeServer('development', network)}>
+        <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
+      </ServerContextProvider>
+    )
   }
 
-  return (
-    <ServerContextProvider value={makeServer()}>
-      <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
-    </ServerContextProvider>
-  )
+  return <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
 }
 
-const getApolloClient = (network: 'local' | 'olympia-testnet') => {
+const getApolloClient = (network: NetworkType) => {
   const httpLink = new HttpLink({
-    uri: ENDPOINTS[network],
+    uri: QUERY_NODE_ENDPOINT[network],
   })
 
   const errorLink = onError((errorResponse) => {
@@ -45,8 +43,26 @@ const getApolloClient = (network: 'local' | 'olympia-testnet') => {
     }
   })
 
+  const queryLink = from([errorLink, httpLink])
+  const subscriptionLink = new WebSocketLink({
+    uri: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
+    options: {
+      reconnect: true,
+      reconnectionAttempts: 5,
+    },
+  })
+
+  const splitLink = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+    },
+    subscriptionLink,
+    queryLink
+  )
+
   return new ApolloClient({
-    link: from([errorLink, httpLink]),
+    link: splitLink,
     cache: new InMemoryCache(),
     connectToDevTools: true,
     defaultOptions: {

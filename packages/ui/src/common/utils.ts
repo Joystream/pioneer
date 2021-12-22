@@ -61,11 +61,21 @@ export const propsEquals =
 
 // Lists:
 
+export const dedupeObjects = <T>(list: T[], options?: EqualsOption): T[] =>
+  list.reduce((remain: T[], item) => [...remain, ...(remain.some(objectEquals(item, options)) ? [] : [item])], [])
+
 export const intersperse = <T extends any, S extends any>(
   list: T[],
   toSeparator: (index: number, list: T[]) => S
 ): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item, index) => [toSeparator(index, list), item])]
+
+export const partition = <T extends any>(list: T[], predicate: (x: T) => boolean): [T[], T[]] =>
+  list.reduce(
+    ([pass, fail]: [T[], T[]], item): [T[], T[]] =>
+      predicate(item) ? [[...pass, item], fail] : [pass, [...fail, item]],
+    [[], []]
+  )
 
 export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
   Array.from({ length: times }, (_, i) => getItem(i))
@@ -93,7 +103,7 @@ export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400
 }
 
 export const last = <T extends any>(list: ArrayLike<T>): T => list[list.length - 1]
-export const flatten = <T extends any>(nested: T[][]) => ([] as T[]).concat(...nested)
+export const flatten = <T extends any>(nested: (T | T[])[]) => ([] as T[]).concat(...nested)
 
 export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, index: number) => boolean): T[][] => {
   if (!list.length) return []
@@ -117,3 +127,12 @@ export const arrayGroupBy = (items: Item[], key: keyof Item) =>
     }),
     {}
   )
+
+// Promises:
+
+type MapperP<T, R> = (value: T, index: number, array: T[] | readonly T[]) => Promise<R>
+export const mapP = <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R>): Promise<R[]> =>
+  Promise.all(list.map(mapper))
+
+export const flatMapP = async <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R | R[]>): Promise<R[]> =>
+  Promise.all(flatten(await mapP(list, mapper)))

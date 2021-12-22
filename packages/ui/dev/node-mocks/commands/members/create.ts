@@ -25,6 +25,18 @@ export const createMembersCommand = async () => {
     const tx = api.tx.utility.batch(createMembers)
 
     await signAndSend(tx, getSudoAccount())
+
+    await Promise.all(
+      members.map(async ({ id, boundAccounts, controllerAccount }) => {
+        for (const boundAccount of boundAccounts) {
+          // Bind staking account
+          await signAndSend(api.tx.members.addStakingAccountCandidate(id), boundAccount)
+
+          // Confirm staking account
+          await signAndSend(api.tx.members.confirmStakingAccount(id, boundAccount), controllerAccount)
+        }
+      })
+    )
   })
 }
 

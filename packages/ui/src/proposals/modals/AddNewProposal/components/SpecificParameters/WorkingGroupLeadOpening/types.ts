@@ -1,5 +1,7 @@
 import BN from 'bn.js'
 
+import { GroupIdName } from '@/working-groups/types'
+
 export interface StakingPolicyAndRewardParameters {
   stakingAmount?: BN
   leavingUnstakingPeriod?: number
@@ -9,5 +11,9 @@ export interface StakingPolicyAndRewardParameters {
 export interface WorkingGroupAndOpeningDetailsParameters {
   description?: string
   shortDescription?: string
-  groupId?: string
+  groupId?: GroupIdName
+}
+
+export interface CancelWorkingGroupLeadOpeningParameters {
+  openingId?: number
 }

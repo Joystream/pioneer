@@ -1,22 +1,8 @@
-import { useGetForumEventsQuery } from '../queries/__generated__/forumEvents.generated'
-import {
-  asCategoryCreatedActivity,
-  asPostActivity,
-  asPostDeletedActivity,
-  asThreadCreatedActivity,
-} from '../types/ForumActivity'
+import { useGetForumEventsQuery } from '../queries'
+import { asForumActivities } from '../types/ForumActivity'
 
 export const useForumActivities = () => {
   const { loading, data } = useGetForumEventsQuery()
-  const activities = data
-    ? [
-        ...data.postAddedEvents.map(asPostActivity),
-        ...data.postTextUpdatedEvents.map(asPostActivity),
-        ...data.postDeletedEvents.map(asPostDeletedActivity),
-        ...data.threadCreatedEvents.map(asThreadCreatedActivity),
-        ...data.categoryCreatedEvents.map(asCategoryCreatedActivity),
-      ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-    : []
-
+  const activities = asForumActivities(data?.events ?? [])
   return { isLoading: loading, activities }
 }

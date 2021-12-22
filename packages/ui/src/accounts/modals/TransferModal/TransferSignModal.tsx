@@ -1,3 +1,5 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
@@ -19,6 +21,7 @@ import {
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
@@ -33,19 +36,23 @@ interface Props {
   amount: BN
   to: Account
   service: ActorRef<any>
+  transactionFactory?: (amount: BN) => SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
-export function TransferSignModal({ onClose, from, amount, to, service }: Props) {
+export function TransferSignModal({ onClose, from, amount, to, service, transactionFactory }: Props) {
   const toAddress = to.address
   const fromAddress = from.address
   const balanceFrom = useBalance(fromAddress)
   const balanceTo = useBalance(toAddress)
   const { api, connectionState } = useApi()
+
   const transaction = useMemo(
-    () => api?.tx?.balances?.transfer(toAddress, amount),
-    [toAddress, amount, connectionState]
+    () => (transactionFactory ? transactionFactory(amount) : api?.tx?.balances?.transfer(toAddress, amount)),
+    [toAddress, amount, connectionState, transactionFactory]
   )
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
+
+  const isDisabled = !isReady || balanceFrom?.transferable.lt(amount.add(paymentInfo?.partialFee || BN_ZERO))
 
   return (
     <TransactionModal service={service} onClose={onClose}>
@@ -96,7 +103,7 @@ export function TransferSignModal({ onClose, from, amount, to, service }: Props)
             }
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={isDisabled}>
           Sign transaction and Transfer
         </ButtonPrimary>
       </ModalFooter>

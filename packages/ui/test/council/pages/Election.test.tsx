@@ -3,17 +3,17 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { Election } from '@/app/pages/Council/Election'
+import { Election } from '@/app/pages/Election/Election'
 import { ApiContext } from '@/common/providers/api/context'
+import { calculateCommitment } from '@/council/model/calculateCommitment'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
   RawCouncilCandidateMock,
   seedCouncilCandidate,
-  seedCouncilElection,
+  seedCouncilElections,
   seedCouncilVote,
-  seedElectedCouncil,
+  seedElectedCouncils,
   seedMembers,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
@@ -37,11 +37,18 @@ jest.mock('../../../src/memberships/hooks/useMemberCandidacyStats', () => ({
   useMemberCandidacyStats: () => mockCandidateStats,
 }))
 
+const aliceMemberId = getMember('alice').id
+const bobMemberId = getMember('bob').id
+
+// NOTE in these tests, ids of candidates and members/options are used interchangeably for simplicity
+const aliceCandidateId = aliceMemberId
+const bobCandidateId = bobMemberId
+
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
-    id: '1',
+    id: aliceCandidateId,
     electionRoundId: '1',
-    memberId: getMember('bob').id,
+    memberId: aliceMemberId,
     stake: 1000,
     stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
     rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -57,9 +64,9 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
     },
   },
   {
-    id: '2',
+    id: bobCandidateId,
     electionRoundId: '1',
-    memberId: getMember('bob').id,
+    memberId: bobMemberId,
     stake: 1000,
     stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
     rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -76,34 +83,46 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   },
 ]
 
+const TEST_SALT = '0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a'
+const TEST_COMMITMENT = '0x3db26e2bd023ccf2d1167fd42d48cc76b1c1e5c1de9003f61e63ec6a337b91a2'
+
 describe('UI: Election page', () => {
   const mockServer = setupMockServer()
   const api = stubApi()
 
-  const useAccounts: UseAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [alice],
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [getMember('alice')],
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
+  }
+
+  URL.createObjectURL = jest.fn()
+  URL.revokeObjectURL = jest.fn()
+
+  const castVote = (
+    castBy: string,
+    optionId: string,
+    salt: string,
+    commitment = calculateCommitment(castBy, optionId, salt, 1)
+  ) => {
+    seedCouncilVote({ ...VOTE_DATA, castBy, voteForId: optionId, commitment, electionRoundId: '1' }, mockServer.server)
+    const oldVotes = JSON.parse(window.localStorage.getItem('votes:1') ?? '[]')
+    const newVotes = [...oldVotes, { salt, accountId: castBy, optionId }]
+    window.localStorage.setItem('votes:1', JSON.stringify(newVotes))
   }
 
   beforeEach(() => {
-    seedMembers(mockServer.server)
-    seedElectedCouncil(
-      {
-        id: '1',
-        electedAtBlock: 0,
-        endedAtBlock: null,
-      },
-      mockServer.server
-    )
-    seedCouncilElection({ id: '1', cycleId: 1, isFinished: false, electedCouncilId: '1' }, mockServer.server)
+    seedMembers(mockServer.server, 2)
+    seedElectedCouncils(mockServer.server, [{}, { endedAtBlock: null }])
+    seedCouncilElections(mockServer.server, [{}, { isFinished: false }])
+
+    const commitment = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    seedCouncilVote({ ...VOTE_DATA, castBy: alice.address, commitment, electionRoundId: '0' }, mockServer.server)
   })
 
   it('Inactive', async () => {
@@ -115,23 +134,16 @@ describe('UI: Election page', () => {
   })
 
   describe('Active', () => {
-    it('Displays election round', async () => {
-      stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
-
-      const { queryByText } = await renderComponent()
-
-      expect(queryByText(/1 round/i)).not.toBeNull()
-    })
-
     describe('Announcing stage', () => {
       beforeEach(() => {
         stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
       })
 
-      it('Displays stage', async () => {
-        const { queryByText } = await renderComponent()
+      it('Displays stage and round', async () => {
+        const { queryAllByText } = await renderComponent()
 
-        expect(queryByText(/Announcing period/i)).not.toBeNull()
+        // Except to see 'Announcing period' in 2 places: Election stage and Election round
+        expect(queryAllByText(/Announcing period/i)).toHaveLength(2)
       })
 
       describe('Tabs', () => {
@@ -153,7 +165,9 @@ describe('UI: Election page', () => {
 
         describe('My candidates', () => {
           it('No my candidates', async () => {
-            TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+            TEST_CANDIDATES.forEach((candidate) =>
+              seedCouncilCandidate({ ...candidate, memberId: bobMemberId }, mockServer.server)
+            )
 
             const { queryByText } = await renderComponent()
 
@@ -162,9 +176,7 @@ describe('UI: Election page', () => {
           })
 
           it('Has my candidates', async () => {
-            TEST_CANDIDATES.forEach((candidate, index) =>
-              seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
-            )
+            TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
             const { queryAllByText, findByText } = await renderComponent()
 
@@ -183,20 +195,15 @@ describe('UI: Election page', () => {
     })
 
     describe('Voting stage', () => {
-      const prepareVoteWithSalt = (salt: string) => {
-        TEST_CANDIDATES.forEach((candidate, index) =>
-          seedCouncilCandidate(index === 0 ? { ...candidate, memberId: '0' } : candidate, mockServer.server)
-        )
-        seedCouncilVote({ ...VOTE_DATA, electionRoundId: '1' }, mockServer.server)
-        window.localStorage.setItem(
-          'votes:1',
-          `[{"salt":"${salt}","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]`
-        )
-      }
-
       beforeEach(() => {
         stubCouncilAndReferendum(api, 'Election', 'Voting')
         window.localStorage.clear()
+      })
+
+      it('Displays election round', async () => {
+        const { queryByText } = await renderComponent()
+
+        expect(queryByText(/1 round/i)).not.toBeNull()
       })
 
       it('Displays stage', async () => {
@@ -208,7 +215,8 @@ describe('UI: Election page', () => {
       it('No accounts', async () => {
         TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-        await renderComponent({ isLoading: false, hasAccounts: false, allAccounts: [] })
+        await renderComponent([])
+        await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote')).toBeNull()
@@ -219,12 +227,14 @@ describe('UI: Election page', () => {
 
         await renderComponent()
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText(/My Votes/i)).toBeNull()
+        expect(screen.queryByText('Vote again')).toBeNull()
       })
 
       it('One account and One valid vote', async () => {
-        prepareVoteWithSalt('0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a')
+        TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+        castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
 
         await renderComponent()
 
@@ -234,9 +244,10 @@ describe('UI: Election page', () => {
       })
 
       it('Multiple accounts and One valid vote', async () => {
-        prepareVoteWithSalt('0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a')
+        TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+        castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
 
-        await renderComponent({ isLoading: false, hasAccounts: true, allAccounts: [alice, bob] })
+        await renderComponent([alice, bob])
 
         expect(await screen.findByText(/My Votes/i)).toBeDefined()
         expect(await screen.findAllByText('Vote')).toHaveLength(1)
@@ -244,32 +255,97 @@ describe('UI: Election page', () => {
       })
 
       it('One vote not matching query node', async () => {
-        prepareVoteWithSalt('0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a')
+        TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+        const salt = '0x000000000000000000000000e774424abcd5d60fc58658a35341c9181b09e94a'
+        castVote(alice.address, aliceCandidateId, salt, TEST_COMMITMENT)
 
         await renderComponent()
+        await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
         expect(screen.queryByText(/My Votes/i)).toBeNull()
-        expect(await screen.findAllByText('Vote')).toHaveLength(2)
+        expect(screen.queryByText('Vote')).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
+      })
+
+      describe('Votes count', () => {
+        it('Two votes for different candidates', async () => {
+          TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, bobCandidateId, TEST_SALT)
+
+          await renderComponent([alice, bob])
+
+          const myVotesTab = await screen.findByText(/My Votes/i)
+          expect(myVotesTab.firstElementChild).toHaveTextContent('2')
+        })
+
+        it('Two votes for the same candidate', async () => {
+          TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, aliceCandidateId, TEST_SALT)
+
+          await renderComponent([alice, bob])
+
+          const myVotesTab = await screen.findByText(/My Votes/i)
+          expect(myVotesTab.firstElementChild).toHaveTextContent('2')
+        })
       })
     })
 
-    it('Revealing stage', async () => {
-      stubCouncilAndReferendum(api, 'Election', 'Revealing')
+    describe('Revealing stage', () => {
+      beforeEach(() => {
+        stubCouncilAndReferendum(api, 'Election', 'Revealing')
+        window.localStorage.clear()
+      })
 
-      const { queryByText } = await renderComponent()
+      it('Displays no election round, no period remaining length', async () => {
+        const { queryAllByText } = await renderComponent()
 
-      expect(queryByText(/Revealing period/i)).not.toBeNull()
+        // Except to see '-' in 2 places: Election stage and Period remaining length
+        expect(queryAllByText('-')).toHaveLength(2)
+      })
+
+      it('Displays stage', async () => {
+        const { queryByText } = await renderComponent()
+
+        expect(queryByText(/Revealing period/i)).not.toBeNull()
+      })
+
+      describe('Votes count', () => {
+        it('Two votes for different candidates', async () => {
+          TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, bobCandidateId, TEST_SALT)
+
+          await renderComponent([alice, bob])
+
+          const myVotesTab = await screen.findByText(/My Votes/i)
+          expect(myVotesTab.firstElementChild).toHaveTextContent('2')
+        })
+
+        it('Two votes for the same candidate', async () => {
+          TEST_CANDIDATES.forEach((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+          castVote(alice.address, aliceCandidateId, TEST_SALT, TEST_COMMITMENT)
+          castVote(bob.address, aliceCandidateId, TEST_SALT)
+
+          await renderComponent([alice, bob])
+
+          const myVotesTab = await screen.findByText(/My Votes/i)
+          expect(myVotesTab.firstElementChild).toHaveTextContent('2')
+        })
+      })
     })
   })
 
-  async function renderComponent(account = useAccounts) {
-    const rendered = await render(
+  async function renderComponent(accounts = [alice]) {
+    const rendered = render(
       <MemoryRouter>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={account}>
+              <AccountsContext.Provider
+                value={{ isLoading: false, hasAccounts: accounts.length > 0, allAccounts: accounts }}
+              >
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Election />
                 </MembershipContext.Provider>

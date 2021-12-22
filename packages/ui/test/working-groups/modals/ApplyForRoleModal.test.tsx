@@ -1,4 +1,5 @@
 import { createType } from '@joystream/types'
+import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -19,7 +20,7 @@ import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
 import { applyForRoleMachine } from '@/working-groups/modals/ApplyForRoleModal/machine'
 import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
-import { asWorkingGroupOpening } from '@/working-groups/types'
+import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { getButton } from '../../_helpers/getButton'
@@ -47,6 +48,10 @@ jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
   }
 })
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
 
@@ -62,6 +67,9 @@ describe('UI: ApplyForRoleModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   let useAccounts: UseAccounts
@@ -87,9 +95,10 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
-    const fields = server.server?.schema.first('WorkingGroupOpening') as unknown as WorkingGroupOpeningFieldsFragment
+    const fields = adaptRecord(server.server?.schema.first('WorkingGroupOpening')) as WorkingGroupOpeningFieldsFragment
     fields.stakeAmount = 2000
-    const opening = asWorkingGroupOpening(fields)
+    fields.openingfilledeventopening = []
+    const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
     useMyMemberships.setActive(getMember('alice'))
 
@@ -254,11 +263,13 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
+        await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
+
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
@@ -270,11 +281,13 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionFailure(batchTx)
         await fillSteps()
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
+        await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
+
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()

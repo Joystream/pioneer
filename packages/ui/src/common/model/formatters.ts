@@ -5,11 +5,14 @@ import { isDefined, isNumber } from '../utils'
 
 const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
-export const formatTokenValue = (value: BN | number | undefined | null) => {
+export const formatTokenValue = (value: BN | number | string | undefined | null) => {
   if (!isDefined(value) || value === null || Number.isNaN(value)) {
     return '-'
   }
-  return new BN(value || 0).toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')
+  if (typeof value !== 'string') {
+    value = new BN(value || 0).toString()
+  }
+  return value.replace(NUMBER_SEPARATOR_REG_EXP, ',')
 }
 
 export function shortenAddress(address: string, length = 18) {
@@ -46,7 +49,7 @@ const defaultDurationUnits: TimeUnit[] = [
   [AN_HOUR, 'hour'],
   [A_MINUTE, 'minute'],
 ]
-export const durationFormater =
+export const durationFormatter =
   (units = defaultDurationUnits) =>
   (duration: number | BN) =>
     splitDuration(units)(Math.abs(isNumber(duration) ? duration : duration.toNumber()))
@@ -56,11 +59,11 @@ export const durationFormater =
 const formatDurationUnit = (duration: number, unit: Intl.RelativeTimeFormatUnit) =>
   duration.toLocaleString('en', { style: 'unit', unit, unitDisplay: 'long' })
 
-export const MILISECOND_PER_BLOCK = A_SECOND * SECONDS_PER_BLOCK
-export const formatBlocksToDuration = durationFormater([
-  [A_DAY / MILISECOND_PER_BLOCK, 'day'],
-  [AN_HOUR / MILISECOND_PER_BLOCK, 'hour'],
-  [A_MINUTE / MILISECOND_PER_BLOCK, 'minute'],
+export const MILLISECONDS_PER_BLOCK = A_SECOND * SECONDS_PER_BLOCK
+export const formatBlocksToDuration = durationFormatter([
+  [A_DAY / MILLISECONDS_PER_BLOCK, 'day'],
+  [AN_HOUR / MILLISECONDS_PER_BLOCK, 'hour'],
+  [A_MINUTE / MILLISECONDS_PER_BLOCK, 'minute'],
 ])
 
 export const splitDuration =

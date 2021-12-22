@@ -1,10 +1,9 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -13,7 +12,7 @@ import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/compo
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
@@ -28,17 +27,10 @@ interface Props {
 
 export const VoteForProposalSignModal = ({ service, signer, transaction, voteStatus, proposalTitle }: Props) => {
   const { allAccounts } = useMyAccounts()
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({ transaction, signer, service })
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const balance = useBalance(signerAccount.address)
 
-  const hasFunds = useMemo(() => {
-    if (balance?.transferable && paymentInfo?.partialFee) {
-      return balance.transferable.gte(paymentInfo?.partialFee)
-    }
-    return false
-  }, [signerAccount.address, balance?.transferable, paymentInfo?.partialFee])
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady
 
   return (
     <TransactionModal onClose={() => undefined} service={service}>
@@ -52,17 +44,7 @@ export const VoteForProposalSignModal = ({ service, signer, transaction, voteSta
               A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
             </TextMedium>
           </RowGapBlock>
-          <InputComponent
-            label="Fee paid by account"
-            inputSize="l"
-            disabled
-            borderless
-            message={
-              hasFunds
-                ? undefined
-                : `Insufficient funds to cover the transaction fee. You need at least ${paymentInfo?.partialFee?.toString()} JOY on your account for this action.`
-            }
-          >
+          <InputComponent label="Fee paid by account" inputSize="l" disabled borderless>
             <SelectedAccount account={signerAccount} />
           </InputComponent>
         </RowGapBlock>

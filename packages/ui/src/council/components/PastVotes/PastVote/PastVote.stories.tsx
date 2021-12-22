@@ -2,6 +2,8 @@ import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
 
+import { randomBlock } from '@/mocks/helpers/randomBlock'
+
 import { PastVoteColumns } from '../styles'
 
 import { PastVote, PastVoteProps } from './PastVote'
@@ -23,12 +25,13 @@ const revealedArgs: PastVoteProps = {
   $colLayout: PastVoteColumns,
   vote: {
     id: '0',
-    createdAt: '2021-10-29T10:48:33.179Z',
+    createdAtBlock: randomBlock(),
     stake: new BN(10000000),
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     voteFor: getMember('alice'),
     cycleId: 6,
+    commitment: 'foo',
   },
 }
 Default.args = revealedArgs
@@ -38,11 +41,12 @@ const unrevealedArgs: PastVoteProps = {
   $colLayout: PastVoteColumns,
   vote: {
     id: '0',
-    createdAt: '2021-10-29T10:48:33.179Z',
+    createdAtBlock: randomBlock(),
     stake: new BN(10000000),
     stakeLocked: true,
     castBy: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     cycleId: 6,
+    commitment: 'foo',
   },
 }
 Unrevealed.args = unrevealedArgs

@@ -30,6 +30,10 @@ jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('CreateThreadModal', () => {
   const api = stubApi()
   stubDefaultBalances(api)
@@ -53,6 +57,9 @@ describe('CreateThreadModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeEach(async () => {

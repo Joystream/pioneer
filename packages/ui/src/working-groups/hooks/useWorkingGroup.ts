@@ -6,7 +6,7 @@ interface WhereInput {
 }
 
 export function useWorkingGroup(where: WhereInput) {
-  const { data, loading } = useGetWorkingGroupQuery({ variables: { where: where } })
+  const { data, loading } = useGetWorkingGroupQuery({ variables: { where } })
   const group = data?.workingGroupByUniqueInput
 
   return {

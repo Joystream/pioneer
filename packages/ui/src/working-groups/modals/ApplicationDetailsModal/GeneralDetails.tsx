@@ -3,6 +3,7 @@ import React from 'react'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
 import { BlockTime } from '@/common/components/BlockTime'
+import { LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 import { SidePaneTable, SidePaneText, SidePaneRow, SidePaneLabel } from '@/common/components/SidePane'
 import { TokenValue } from '@/common/components/typography'
 
@@ -17,7 +18,9 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
   <SidePaneTable>
     <SidePaneRow>
       <SidePaneLabel text="Opening" />
-      <SidePaneText>{openingTitle(application)}</SidePaneText>
+      <LinkButtonLink size="small" to={`/working-groups/openings/${application?.opening?.id}`}>
+        {openingTitle(application)}
+      </LinkButtonLink>
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Status" />

@@ -11,7 +11,7 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
 import { Worker } from '../../types'
@@ -26,7 +26,7 @@ interface Props {
 export const LeaveRoleSignModal = ({ onClose, transaction, worker, service }: Props) => {
   const { allAccounts } = useMyAccounts()
   const signer = accountOrNamed(allAccounts, worker.membership.controllerAccount, 'Controller account')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
     transaction,
     signer: signer?.address ?? '',
     service,
@@ -38,7 +38,7 @@ export const LeaveRoleSignModal = ({ onClose, transaction, worker, service }: Pr
         <Row>
           <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
         </Row>
-        <InputComponent label="From" inputSize="l" disabled={true}>
+        <InputComponent label="From" inputSize="l" disabled>
           <SelectedAccount account={signer} />
         </InputComponent>
       </ModalBody>

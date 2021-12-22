@@ -2,27 +2,31 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { MEMBERSHIP_FAUCET_ENDPOINT, NetworkType, QUERY_NODE_ENDPOINT } from '@/app/config'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedBounties,
+  seedBountyContributions,
+  seedBountyEntries,
+  seedCouncilCandidates,
+  seedCouncilElections,
   seedCouncilMembers,
+  seedCouncilVotes,
   seedElectedCouncils,
+  seedEvents,
   seedMembers,
-  seedOpeningStatuses,
   seedOpenings,
+  seedOpeningStatuses,
+  seedProposals,
+  seedProposalsEvents,
   seedUpcomingOpenings,
   seedWorkers,
   seedWorkingGroups,
-  seedProposals,
-  seedEvents,
   updateWorkingGroups,
-  seedCouncilCandidates,
-  seedCouncilElections,
-  seedProposalsEvents,
-  seedCouncilVotes,
 } from './data'
 import {
   getConnectionResolver,
@@ -75,15 +79,22 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const electedCouncilModel = schema.modelFor('electedCouncil')
   // Mirage: The elected-council model has multiple possible inverse associations for the election-round.electedCouncil association.
   electedCouncilModel.class.prototype.associations.councilElections.opts.inverse = null
+
+  const bountyModel = schema.modelFor('bounty')
+  // The membership model has multiple possible inverse associations for the bounty.creator association.
+  membershipModel.class.prototype.associations.bountycreator.opts.inverse =
+    bountyModel.class.prototype.associations.creator
+  bountyModel.class.prototype.associations.creator.opts.inverse =
+    membershipModel.class.prototype.associations.bountycreator
 }
 
-export const makeServer = (environment = 'development') => {
+export const makeServer = (environment = 'development', network: NetworkType = 'local') => {
   return createServer({
     environment,
 
     routes() {
       this.post(
-        'http://localhost:8081/graphql',
+        QUERY_NODE_ENDPOINT[network],
         createGraphQLHandler(schema, this.schema, {
           context: undefined,
           root: undefined,
@@ -123,11 +134,11 @@ export const makeServer = (environment = 'development') => {
               openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
-              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposalVotedEvents: getWhereResolver('ProposalVotedEvent'),
               proposals: getWhereResolver('Proposal'),
+              proposalExecutedEvents: getWhereResolver('ProposalExecutedEvent'),
               proposalExecutedEventsConnection: getConnectionResolver('ProposalExecutedEventConnection'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
               runtimeWasmBytecodeByUniqueInput: getUniqueResolver('RuntimeWasmBytecode'),
@@ -163,11 +174,19 @@ export const makeServer = (environment = 'development') => {
               workingGroups: getWhereResolver('WorkingGroup'),
               postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
               postAddedEvents: getWhereResolver('PostAddedEvent'),
+              postModeratedEvents: getWhereResolver('PostModeratedEvent'),
+              postDeletedEvents: getWhereResolver('PostDeletedEvent'),
+              categoryCreatedEvents: getWhereResolver('CategoryCreatedEvent'),
+              categoryDeletedEvents: getWhereResolver('CategoryDeletedEvent'),
+              threadCreatedEvents: getWhereResolver('ThreadCreatedEvent'),
+              threadDeletedEvents: getWhereResolver('ThreadDeletedEvent'),
+              threadModeratedEvents: getWhereResolver('ThreadModeratedEvent'),
               events: getInterfaceResolver(),
             },
           },
         })
       )
+      this.passthrough(MEMBERSHIP_FAUCET_ENDPOINT[network])
     },
 
     ...(environment !== 'development'
@@ -195,6 +214,9 @@ export const makeServer = (environment = 'development') => {
             seedCouncilElections(server)
             seedCouncilCandidates(server)
             seedCouncilVotes(server)
+            seedBounties(server)
+            seedBountyContributions(server)
+            seedBountyEntries(server)
           },
         }),
   })

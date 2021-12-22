@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND } from '@/common/constants'
 import {
-  durationFormater,
+  durationFormatter,
   formatBlocksToDuration,
   formatDateString,
   formatTokenValue,
@@ -27,6 +27,16 @@ describe('formatters', () => {
       expect(formatTokenValue(undefined)).toBe('-')
       expect(formatTokenValue(null)).toBe('-')
       expect(formatTokenValue(NaN)).toBe('-')
+    })
+
+    it('Formats strings', () => {
+      expect(formatTokenValue('')).toBe('')
+      expect(formatTokenValue('100')).toBe('100')
+      expect(formatTokenValue('1000')).toBe('1,000')
+      expect(formatTokenValue('10000')).toBe('10,000')
+      expect(formatTokenValue('1000000')).toBe('1,000,000')
+      expect(formatTokenValue('Random string')).toBe('Random string')
+      expect(formatTokenValue('3120 out of 100000 dentists agree')).toBe('3,120 out of 100,000 dentists agree')
     })
   })
 
@@ -63,9 +73,9 @@ describe('formatters', () => {
     })
   })
 
-  describe('durationFormater', () => {
+  describe('durationFormatter', () => {
     it('Default', () => {
-      const format = durationFormater()
+      const format = durationFormatter()
       const duration = 3 * A_DAY + 2 * AN_HOUR + A_MINUTE
 
       expect(format(duration)).toBe('3 days 2 hours 1 minute')
@@ -78,7 +88,7 @@ describe('formatters', () => {
     })
 
     it('Custom units', () => {
-      const format = durationFormater([
+      const format = durationFormatter([
         [60, 'minute'],
         [1, 'second'],
       ])

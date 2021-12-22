@@ -16,6 +16,7 @@ export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 
 
 export interface TooltipPopupProps {
   className?: string
+  tooltipOpen?: boolean
   tooltipText?: string
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
@@ -36,6 +37,7 @@ export const Tooltip = ({
   absolute,
   children,
   tooltipText,
+  tooltipOpen = false,
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
@@ -43,8 +45,8 @@ export const Tooltip = ({
   className,
   forBig,
 }: TooltipProps) => {
-  const [isTooltipActive, setTooltipActive] = useState(false)
-  const [referenceElementRef, setReferenceElementRef] = useState<HTMLButtonElement | null>(null)
+  const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
+  const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
     placement: 'bottom-start',
@@ -59,30 +61,39 @@ export const Tooltip = ({
   })
 
   const mouseIsOver = () => {
-    setTooltipActive(true)
+    if (!tooltipOpen) {
+      setTooltipActive(true)
+    }
   }
   const mouseLeft = () => {
-    setTooltipActive(false)
+    if (!tooltipOpen) {
+      setTooltipActive(false)
+    }
   }
 
   const tooltipHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
-      event.stopPropagation()
-      setTooltipActive(false)
+      if (!tooltipOpen) {
+        event.stopPropagation()
+        setTooltipActive(false)
+      }
     },
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
-    onMouseEnter: mouseIsOver,
-    onMouseLeave: mouseLeft,
+    onPointerEnter: mouseIsOver,
+    onPointerLeave: mouseLeft,
   }
   const popUpHandlers = {
-    onMouseEnter: mouseIsOver,
-    onMouseLeave: mouseLeft,
+    onPointerEnter: mouseIsOver,
+    onPointerLeave: mouseLeft,
   }
+
+  const isExternalLink = () =>
+    tooltipLinkURL && (tooltipLinkURL.startsWith('http://') || tooltipLinkURL.startsWith('https://'))
 
   return (
     <TooltipContainer absolute={absolute}>
-      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0}>
+      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0}>
         {children}
       </TooltipComponent>
       {isTooltipActive &&
@@ -113,12 +124,18 @@ export const Tooltip = ({
               >
                 {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
                 <TooltipText>{tooltipText}</TooltipText>
-                {tooltipLinkURL && (
-                  <TooltipLink to={tooltipLinkURL} target="_blank">
-                    {tooltipLinkText ?? 'Link'}
-                    <LinkSymbol />
-                  </TooltipLink>
-                )}
+                {tooltipLinkURL &&
+                  (isExternalLink() ? (
+                    <TooltipExternalLink href={tooltipLinkURL} target="_blank">
+                      {tooltipLinkText ?? 'Link'}
+                      <LinkSymbol />
+                    </TooltipExternalLink>
+                  ) : (
+                    <TooltipLink to={tooltipLinkURL} target="_blank">
+                      {tooltipLinkText ?? 'Link'}
+                      <LinkSymbol />
+                    </TooltipLink>
+                  ))}
               </TooltipPopupContainer>,
               document.body
             ))}
@@ -248,11 +265,52 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   }
 `
 
-export const TooltipComponent = styled.button`
+export const TooltipExternalLink = styled.a<{ href: string | undefined; target: string }>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  align-items: center;
+  width: fit-content;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  color: ${Colors.Black[400]};
+  transition: ${Transitions.all};
+  text-transform: capitalize;
+
+  ${LinkSymbolStyle} {
+    width: 12px;
+    height: 12px;
+
+    .blackPart,
+    .primaryPart {
+      fill: ${Colors.Black[300]};
+    }
+  }
+
+  &:hover {
+    color: ${Colors.Blue[500]};
+
+    ${LinkSymbolStyle} {
+      .blackPart,
+      .primaryPart {
+        fill: ${Colors.Blue[500]};
+      }
+    }
+  }
+`
+
+export const TooltipComponent = styled.i`
   display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
+  border: none;
+  outline: none;
+  font-style: normal;
+  background-color: transparent;
+  padding: 0;
 
   &:hover,
   &:focus {

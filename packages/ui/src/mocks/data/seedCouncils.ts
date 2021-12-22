@@ -1,4 +1,6 @@
-import faker from 'faker'
+import { BaseEvent } from '@/mocks/data/seedEvents'
+
+import { seedOverridableEntities } from '../helpers/seedEntities'
 
 import rawCandidates from './raw/candidates.json'
 import rawCouncilors from './raw/councilors.json'
@@ -28,6 +30,7 @@ export interface RawCouncilCandidateMock {
   stake: number
   stakingAccountId: string
   rewardAccountId: string
+  status?: string
   note?: string
   noteMetadata: {
     header: string
@@ -41,6 +44,9 @@ export interface RawCouncilElectionMock {
   id: string
   cycleId: number
   isFinished: boolean
+  endedAtBlock?: number
+  endedAtTime?: string
+  endedAtNetwork?: string
   electedCouncilId: string
 }
 
@@ -49,9 +55,10 @@ export interface RawCouncilVoteMock {
   electionRoundId: string
   stake: number
   stakeLocked: boolean
-  voteForId: string | null
+  voteForId?: string | null
   castBy: string
   commitment: string
+  voteCastEvent: Omit<Required<BaseEvent>, 'id'>
 }
 
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)
@@ -64,39 +71,31 @@ export const seedElectedCouncil = (data: RawCouncilMock, server: any) => {
   return server.schema.create('ElectedCouncil', { ...data, isResigned: !!data.endedAtBlock })
 }
 
-export const seedElectedCouncils = (server: any, howMany?: number) => {
-  rawCouncils.slice(0, howMany).map((data) => seedElectedCouncil(data, server))
-}
+export const seedElectedCouncils = seedOverridableEntities(rawCouncils, seedElectedCouncil)
 
 export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =>
   server.schema.create('ElectionRound', { ...data, updatedAt: new Date().toISOString() })
 
-export const seedCouncilElections = (server: any, howMany?: number) => {
-  rawElections.slice(0, howMany).map((data) => seedCouncilElection(data, server))
-}
+export const seedCouncilElections = seedOverridableEntities(rawElections, seedCouncilElection)
 
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
   const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
 
   return server.schema.create('Candidate', {
+    status: 'ACTIVE',
     ...data,
     noteMetadata,
   })
 }
 
-export const seedCouncilCandidates = (server: any, overrides?: Partial<RawCouncilCandidateMock>[]) =>
-  optionalOverride(rawCandidates, overrides).map((data) => seedCouncilCandidate(data, server))
+export const seedCouncilCandidates = seedOverridableEntities(rawCandidates, seedCouncilCandidate)
 
 export const seedCouncilVote = (data: RawCouncilVoteMock, server: any) => {
-  const roundNumber = parseInt(data.electionRoundId)
   return server.schema.create('CastVote', {
     ...data,
-    createdAt: faker.date.recent(10, roundNumber == 4 ? undefined : faker.date.past(4 - roundNumber)).toISOString(),
+    createdAt: new Date(data.voteCastEvent.createdAt).toISOString(),
+    votecasteventcastVote: [server.schema.create('VoteCastEvent', data.voteCastEvent)],
   })
 }
 
-export const seedCouncilVotes = (server: any, overrides?: Partial<RawCouncilVoteMock>[]) =>
-  optionalOverride(rawVotes, overrides).map((data) => seedCouncilVote(data, server))
-
-const optionalOverride = <T>(data: T[], overrides?: Partial<T>[]): T[] =>
-  overrides?.map<T>((override, index) => ({ ...data[index], ...override })) ?? data
+export const seedCouncilVotes = seedOverridableEntities<RawCouncilVoteMock>(rawVotes, seedCouncilVote)

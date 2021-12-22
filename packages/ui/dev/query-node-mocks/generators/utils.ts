@@ -2,7 +2,8 @@ import faker from 'faker'
 
 import { Reducer } from '../../../src/common/types/helpers'
 import { repeat } from '../../../src/common/utils'
-import members from '../../../src/mocks/data/raw/members.json'
+
+import { MemberMock } from './generateMembers'
 
 export { repeat }
 
@@ -69,9 +70,9 @@ export const shuffle = <T>(arr: Array<T>) => {
   return arr
 }
 
-export const randomMember = () => members[randomFromRange(0, members.length - 1)]
+export const randomMember = (mockMembers: MemberMock[]) => mockMembers[randomFromRange(0, mockMembers.length - 1)]
 
-export const memberAt = (index: number) => members[index]
+export const memberAt = (mockMembers: MemberMock[], index: number) => mockMembers[index]
 
 export const randomBlock = (date?: Date) => ({
   inBlock: faker.datatype.number(100000),

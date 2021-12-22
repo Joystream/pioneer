@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -30,6 +30,10 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: CreatePostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.addPost'
@@ -54,6 +58,9 @@ describe('UI: CreatePostModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
   let useAccounts: UseAccounts
 
@@ -101,15 +108,23 @@ describe('UI: CreatePostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and post/i))
-    expect(await screen.getByText('There was a problem posting your message.')).toBeDefined()
+
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and post/i))
+    })
+
+    expect(await screen.findByText('There was a problem posting your message.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, 'forum', 'PostTextUpdated')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and post/i))
-    expect(await screen.getByText('Your post has been submitted.')).toBeDefined()
+
+    await act(async () => {
+      fireEvent.click(await getButton(/Sign and post/i))
+    })
+
+    expect(await screen.findByText('Your post has been submitted.')).toBeDefined()
   })
 
   it('Displays post deposit', () => {

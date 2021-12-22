@@ -6,7 +6,7 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { StatiscticContentColumn, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
+import { StatiscticContentColumn, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
@@ -77,7 +77,7 @@ export const CandidateCard = ({
           {!loadingStats && (successful > 0 || failed > 0) && (
             <CandidateCardStatistics>
               <StatsBlock size="m" centered>
-                <TwoColumnsStatistic>
+                <MultiColumnsStatistic>
                   <StatiscticContentColumn>
                     <TextBig value bold>
                       {successful}
@@ -90,7 +90,7 @@ export const CandidateCard = ({
                     </TextBig>
                     <Subscription>Past Loses</Subscription>
                   </StatiscticContentColumn>
-                </TwoColumnsStatistic>
+                </MultiColumnsStatistic>
               </StatsBlock>
             </CandidateCardStatistics>
           )}

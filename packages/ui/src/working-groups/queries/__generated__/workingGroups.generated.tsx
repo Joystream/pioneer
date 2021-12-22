@@ -26,12 +26,18 @@ export type WorkerFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -59,12 +65,18 @@ export type PastWorkerFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -117,12 +129,18 @@ export type WorkerDetailedFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -187,7 +205,7 @@ export type BudgetSpendingEventFieldsFragment = {
 }
 
 export type GetBudgetSpendingQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.BudgetSpendingEventWhereInput>
+  where?: Types.InputMaybe<Types.BudgetSpendingEventWhereInput>
 }>
 
 export type GetBudgetSpendingQuery = {
@@ -235,9 +253,9 @@ export type GetWorkingGroupsQuery = {
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkersQuery = {
@@ -256,12 +274,18 @@ export type GetWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -280,10 +304,10 @@ export type GetWorkersQuery = {
 }
 
 export type GetPastWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.WorkerOrderByInput> | Types.WorkerOrderByInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.WorkerOrderByInput> | Types.WorkerOrderByInput>
 }>
 
 export type GetPastWorkersQuery = {
@@ -299,12 +323,18 @@ export type GetPastWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -335,7 +365,7 @@ export type GetPastWorkersQuery = {
 }
 
 export type GetWorkersCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
 }>
 
 export type GetWorkersCountQuery = {
@@ -344,7 +374,7 @@ export type GetWorkersCountQuery = {
 }
 
 export type GetDetailedWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
 }>
 
 export type GetDetailedWorkersQuery = {
@@ -373,12 +403,18 @@ export type GetDetailedWorkersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -427,6 +463,7 @@ export type GetWorkerQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -436,6 +473,7 @@ export type GetWorkerQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -466,7 +504,7 @@ export type GetGroupDebtQuery = {
 }
 
 export type GetRewardsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.RewardPaidEventWhereInput>
+  where?: Types.InputMaybe<Types.RewardPaidEventWhereInput>
 }>
 
 export type GetRewardsQuery = {
@@ -513,6 +551,10 @@ export type WorkingGroupOpeningFieldsFragment = {
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
   applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+  openingfilledeventopening?:
+    | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+    | null
+    | undefined
 }
 
 export type WorkingGroupOpeningDetailedFieldsFragment = {
@@ -538,12 +580,18 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -567,10 +615,14 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
     | { __typename: 'OpeningStatusCancelled' }
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
+  openingfilledeventopening?:
+    | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+    | null
+    | undefined
 }
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
+  where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
 }>
 
 export type CountWorkingGroupOpeningsQuery = {
@@ -579,8 +631,8 @@ export type CountWorkingGroupOpeningsQuery = {
 }
 
 export type CountWorkingGroupWorkersQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
-  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
+  groupId_eq?: Types.InputMaybe<Types.Scalars['ID']>
+  status_json?: Types.InputMaybe<Types.Scalars['JSONObject']>
 }>
 
 export type CountWorkingGroupWorkersQuery = {
@@ -589,9 +641,9 @@ export type CountWorkingGroupWorkersQuery = {
 }
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkingGroupOpeningsQuery = {
@@ -620,6 +672,10 @@ export type GetWorkingGroupOpeningsQuery = {
       | { __typename: 'OpeningStatusFilled' }
       | { __typename: 'OpeningStatusOpen' }
     applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+    openingfilledeventopening?:
+      | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+      | null
+      | undefined
   }>
 }
 
@@ -653,6 +709,7 @@ export type GetWorkingGroupOpeningQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -662,6 +719,11 @@ export type GetWorkingGroupOpeningQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -686,6 +748,10 @@ export type GetWorkingGroupOpeningQuery = {
           | { __typename: 'OpeningStatusCancelled' }
           | { __typename: 'OpeningStatusFilled' }
           | { __typename: 'OpeningStatusOpen' }
+        openingfilledeventopening?:
+          | Array<{ __typename: 'OpeningFilledEvent'; workersHired: Array<{ __typename: 'Worker'; id: string }> }>
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -770,12 +836,18 @@ export type WorkingGroupApplicationFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -794,7 +866,7 @@ export type WorkingGroupApplicationFieldsFragment = {
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
-  applicantId_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  where?: Types.InputMaybe<Types.WorkingGroupApplicationWhereInput>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
@@ -816,12 +888,18 @@ export type GetWorkingGroupApplicationsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -841,7 +919,7 @@ export type GetWorkingGroupApplicationsQuery = {
 }
 
 export type GetWorkingGroupApplicationIdsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>
+  where?: Types.InputMaybe<Types.WorkingGroupApplicationWhereInput>
 }>
 
 export type GetWorkingGroupApplicationIdsQuery = {
@@ -873,6 +951,7 @@ export type GetWorkingGroupApplicationQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -882,6 +961,7 @@ export type GetWorkingGroupApplicationQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -915,7 +995,7 @@ export type ApplicationFormQuestionAnswerFieldsFragment = {
 }
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
-  applicationId_eq?: Types.Maybe<Types.Scalars['ID']>
+  applicationId_eq?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type GetApplicationFormQuestionAnswerQuery = {
@@ -986,9 +1066,9 @@ export type GetUpcomingWorkingGroupOpeningQuery = {
 }
 
 export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.UpcomingWorkingGroupOpeningWhereInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.UpcomingWorkingGroupOpeningWhereInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetUpcomingWorkingGroupOpeningsQuery = {
@@ -1014,7 +1094,7 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
 }>
 
 export type GetWorkerIdsQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker'; id: string }> }
@@ -1211,6 +1291,11 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     unstakingPeriod
     applications {
       id
+    }
+    openingfilledeventopening {
+      workersHired {
+        id
+      }
     }
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
@@ -1965,8 +2050,8 @@ export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGrou
 export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
-  query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-    workingGroupApplications(where: { applicant: { id_in: $applicantId_in } }) {
+  query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {
+    workingGroupApplications(where: $where) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -1985,7 +2070,7 @@ export const GetWorkingGroupApplicationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupApplicationsQuery({
  *   variables: {
- *      applicantId_in: // value for 'applicantId_in'
+ *      where: // value for 'where'
  *   },
  * });
  */

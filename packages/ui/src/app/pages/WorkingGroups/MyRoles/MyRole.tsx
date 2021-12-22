@@ -1,13 +1,16 @@
+import BN from 'bn.js'
 import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -35,6 +38,7 @@ export const MyRole = () => {
 
   const { worker, isLoading } = useWorker(id)
   const { members } = useMyMemberships()
+  const stakeBalance = useBalance(worker?.stakeAccount)
 
   const isOwn = useMemo(() => {
     return !!members.find((member) => member.id === worker?.membership.id)
@@ -42,6 +46,17 @@ export const MyRole = () => {
 
   const isActive = worker && worker.status === 'WorkerStatusActive'
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
+  const isBelowMinStake = worker && worker.stake < worker.minStake
+  const shouldIncreaseStake = worker?.stakeAccount && isBelowMinStake && isOwn
+  const canMoveExcessTokens = worker && stakeBalance?.transferable && worker.stake > worker.minStake
+
+  const workerExcessValue = useMemo(() => {
+    if (canMoveExcessTokens) {
+      const excessValue = worker.stake - worker.minStake
+
+      return stakeBalance.transferable.gtn(excessValue) ? new BN(excessValue) : stakeBalance.transferable
+    }
+  }, [worker, stakeBalance])
 
   const { activities } = useRoleActivities(worker)
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
@@ -57,6 +72,7 @@ export const MyRole = () => {
       data: { applicationId: worker.applicationId },
     })
   }, [worker?.applicationId])
+
   const showLeaveRoleModal = useCallback(() => {
     worker &&
       showModal<LeaveRoleModalCall>({
@@ -71,6 +87,22 @@ export const MyRole = () => {
 
   const onChangeRewardClick = (): void => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
+  }
+
+  const onIncreaseStakeClick = (): void => {
+    showModal({
+      modal: 'IncreaseWorkerStake',
+      data: {
+        worker: worker,
+      },
+    })
+  }
+
+  const onMoveExcessClick = () => {
+    showModal({
+      modal: 'TransferTokens',
+      data: { from: worker?.stakeAccount, to: worker?.roleAccount, maxValue: workerExcessValue },
+    })
   }
 
   if (isLoading || !worker) {
@@ -94,12 +126,12 @@ export const MyRole = () => {
                 Opening
               </LinkButtonGhost>
               {isActive && isOwn && (
-                <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
+                <TransactionButton style="ghost" size="medium" onClick={showLeaveRoleModal}>
                   Leave this position
                   <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
                     <TooltipDefault />
                   </Tooltip>
-                </ButtonGhost>
+                </TransactionButton>
               )}
             </ButtonsGroup>
           </PageHeaderRow>
@@ -136,9 +168,9 @@ export const MyRole = () => {
               <Label>Role Account</Label>
               <ButtonsGroup>
                 {isActive && isOwn && (
-                  <ButtonGhost size="small" onClick={onChangeRoleClick}>
+                  <TransactionButton style="ghost" size="small" onClick={onChangeRoleClick}>
                     Change Role Account
-                  </ButtonGhost>
+                  </TransactionButton>
                 )}
               </ButtonsGroup>
             </RoleAccountHeader>
@@ -148,7 +180,17 @@ export const MyRole = () => {
             <RoleAccountHeader>
               <Label>Stake Account</Label>
               <ButtonsGroup>
-                {isActive || (isLeaving && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>)}
+                {isActive ||
+                  (canMoveExcessTokens && (
+                    <TransactionButton style="primary" size="small" onClick={onMoveExcessClick}>
+                      Move Excess Tokens
+                    </TransactionButton>
+                  ))}
+                {isActive && shouldIncreaseStake && (
+                  <TransactionButton style="primary" size="small" onClick={onIncreaseStakeClick}>
+                    Increase Stake
+                  </TransactionButton>
+                )}
               </ButtonsGroup>
             </RoleAccountHeader>
             <MyRoleAccount
@@ -161,9 +203,9 @@ export const MyRole = () => {
               <Label>Reward Account</Label>
               <ButtonsGroup>
                 {isActive && isOwn && (
-                  <ButtonGhost size="small" onClick={onChangeRewardClick}>
+                  <TransactionButton style="ghost" size="small" onClick={onChangeRewardClick}>
                     Change Reward Account
-                  </ButtonGhost>
+                  </TransactionButton>
                 )}
               </ButtonsGroup>
             </RoleAccountHeader>

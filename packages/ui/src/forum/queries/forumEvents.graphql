@@ -44,6 +44,23 @@ fragment PostDeletedEventFields on PostDeletedEvent {
   }
 }
 
+fragment PostModeratedEventFields on PostModeratedEvent {
+  id
+  createdAt
+  post {
+    id
+    thread {
+      id
+    }
+  }
+  actor {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
 fragment ThreadCreatedEventFields on ThreadCreatedEvent {
   id
   createdAt
@@ -51,6 +68,34 @@ fragment ThreadCreatedEventFields on ThreadCreatedEvent {
     id
     title
     author {
+      id
+      handle
+    }
+    category {
+      id
+      title
+    }
+  }
+}
+
+fragment ThreadDeletedEventFields on ThreadDeletedEvent {
+  id
+  createdAt
+  thread {
+    id
+    title
+  }
+}
+
+fragment ThreadModeratedEventFields on ThreadModeratedEvent {
+  id
+  createdAt
+  thread {
+    id
+    title
+  }
+  actor {
+    membership {
       id
       handle
     }
@@ -70,20 +115,63 @@ fragment CategoryCreatedEventFields on CategoryCreatedEvent {
   }
 }
 
+fragment CategoryDeletedEventFields on CategoryDeletedEvent {
+  id
+  createdAt
+  category {
+    id
+    title
+    parent {
+      id
+      title
+    }
+  }
+}
+
 query GetForumEvents {
-  postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostAddedEventFields
-  }
-  postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostTextUpdatedEventFields
-  }
-  postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
-    ...PostDeletedEventFields
-  }
-  threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...ThreadCreatedEventFields
-  }
-  categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
-    ...CategoryCreatedEventFields
+  events(
+    where: {
+      type_in: [
+        PostAddedEvent
+        PostTextUpdatedEvent
+        PostModeratedEvent
+        PostDeletedEvent
+        ThreadCreatedEvent
+        ThreadDeletedEvent
+        ThreadModeratedEvent
+        CategoryCreatedEvent
+        CategoryDeletedEvent
+      ]
+    }
+    limit: 25
+    orderBy: [createdAt_DESC]
+  ) {
+    ... on PostAddedEvent {
+      ...PostAddedEventFields
+    }
+    ... on PostTextUpdatedEvent {
+      ...PostTextUpdatedEventFields
+    }
+    ... on PostModeratedEvent {
+      ...PostModeratedEventFields
+    }
+    ... on PostDeletedEvent {
+      ...PostDeletedEventFields
+    }
+    ... on ThreadCreatedEvent {
+      ...ThreadCreatedEventFields
+    }
+    ... on ThreadDeletedEvent {
+      ...ThreadDeletedEventFields
+    }
+    ... on ThreadModeratedEvent {
+      ...ThreadModeratedEventFields
+    }
+    ... on CategoryCreatedEvent {
+      ...CategoryCreatedEventFields
+    }
+    ... on CategoryDeletedEvent {
+      ...CategoryDeletedEventFields
+    }
   }
 }

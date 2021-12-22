@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
-import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { useModal } from '@/common/hooks/useModal'
@@ -18,7 +19,7 @@ import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 
-export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
+export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
   const rewardPeriod = useRewardPeriod(opening.groupId)
 
@@ -38,20 +39,22 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
             <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
-            <TwoColumnsStatistic>
+            <MultiColumnsStatistic>
+              {past && (
+                <StatiscticContentColumn>
+                  <TextBig value bold>
+                    {opening.hiring.current}
+                  </TextBig>
+                  <Subscription>Hired</Subscription>
+                </StatiscticContentColumn>
+              )}
               <StatiscticContentColumn>
                 <TextBig value bold>
-                  {opening.applicants.total}
+                  {opening.hiring.limit}
                 </TextBig>
-                <Subscription>Applicant limit</Subscription>
+                <Subscription>Target no. of Hires</Subscription>
               </StatiscticContentColumn>
-              <StatiscticContentColumn>
-                <TextBig value bold>
-                  {opening.hiring.total}
-                </TextBig>
-                <Subscription>Target no of Hires</Subscription>
-              </StatiscticContentColumn>
-            </TwoColumnsStatistic>
+            </MultiColumnsStatistic>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TextBig>
@@ -65,12 +68,13 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
             Learn more
           </LinkButtonGhost>
           {isOpeningOpen(opening) && (
-            <ButtonPrimary
+            <TransactionButton
+              style="primary"
               onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
               size="medium"
             >
               Apply now
-            </ButtonPrimary>
+            </TransactionButton>
           )}
         </ButtonsGroup>
       </OpenedWrapper>

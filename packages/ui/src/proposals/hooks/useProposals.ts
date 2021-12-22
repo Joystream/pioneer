@@ -21,7 +21,7 @@ interface UseProposals {
 
 export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
   const variables = useMemo(() => {
-    let where: ProposalWhereInput = filters?.stage
+    const where: ProposalWhereInput = filters?.stage
       ? { status_json: { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) } }
       : { isFinalized_eq: status === 'past' }
 
@@ -31,22 +31,20 @@ export const useProposals = ({ status, filters }: UseProposalsProps): UseProposa
     if (filters?.lifetime) {
       const lifetime = filters.lifetime
       if ('start' in lifetime && 'end' in lifetime) {
-        const baseWhere = where
-        where = {
-          ...baseWhere,
-          createdAt_lte: lifetime.end,
-          OR: [
-            {
-              ...baseWhere,
-              statusSetAtTime_gte: lifetime.start,
-            },
-            {
-              ...baseWhere,
-              createdAt_lte: lifetime.start,
-              statusSetAtTime_gte: lifetime.end,
-            },
-          ],
-        }
+        where.OR = [
+          {
+            statusSetAtTime_gte: lifetime.start,
+            statusSetAtTime_lte: lifetime.end,
+          },
+          {
+            createdAt_gte: lifetime.start,
+            createdAt_lte: lifetime.end,
+          },
+          {
+            createdAt_lte: lifetime.start,
+            statusSetAtTime_gte: lifetime.end,
+          },
+        ]
       } else if ('start' in lifetime) {
         where.statusSetAtTime_gte = lifetime.start
       } else {

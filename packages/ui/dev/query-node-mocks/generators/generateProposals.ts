@@ -1,10 +1,10 @@
 import faker from 'faker'
 
 import { ProposalVoteKind } from '../../../src/common/api/queries'
-import { repeat } from '../../../src/common/utils'
 import { proposalDetails } from '../../../src/proposals/model/proposalDetails'
 import { proposalActiveStatuses } from '../../../src/proposals/model/proposalStatus'
 import { ProposalStatus, ProposalType } from '../../../src/proposals/types/proposals'
+import { saveFile } from '../helpers/saveFile'
 
 import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 import { Mocks } from './types'
@@ -14,7 +14,8 @@ import {
   randomMarkdown,
   randomMessage,
   randomsFromWeightedSet,
-  shuffle,
+  repeat,
+  shuffle
 } from './utils'
 
 let nextPostId = 0
@@ -51,7 +52,7 @@ const MAX_MESSAGES = 8
 let nextId = 0
 let nextVoteId = 0
 
-const generateProposal = (type: ProposalType, mocks: Mocks) => {
+const generateProposal = (type: ProposalType, mocks: MocksForProposals) => {
   const proposalId = String(nextId++)
   const statusHistory = [DECIDING, ...randomVoteRoundStatuses(), ...randomLastStatuses()]
 
@@ -77,7 +78,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     voterId: member.id,
     inBlock: randomFromRange(1000, 2000),
     rationale: randomMarkdown(),
-    votingRound: Math.floor(index / COUNCIL_SIZE),
+    votingRound: Math.floor(index / COUNCIL_SIZE) + 1
   }))
 
   const messageCount = randomFromWeightedSet([1, 0], [2, 1], [4, 2], [1, randomFromRange(3, MAX_MESSAGES)])()
@@ -87,7 +88,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     ...(Math.random() > 0.5 ? { updatedAt: faker.date.recent(20).toISOString() } : {}),
     authorId: arrayElement(mocks.members).id,
     text,
-    ...(index > 0 && Math.random() > 0.3 ? { repliesToId: randomFromRange(0, nextPostId - 2).toString() } : {}),
+    ...(index > 0 && Math.random() > 0.3 ? { repliesToId: randomFromRange(0, nextPostId - 2).toString() } : {})
   }))
 
   return {
@@ -104,24 +105,35 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     proposalStatusUpdates,
     discussionThread: {
       discussionPosts,
-      mode: `ProposalDiscussionThreadMode${arrayElement(['Open', 'Closed'])}`,
+      mode: `ProposalDiscussionThreadMode${arrayElement(['Open', 'Closed'])}`
     },
     councilApprovals: Math.round(Math.random())
   }
 }
+type MocksForProposals = Pick<Mocks, 'members' | 'workers' | 'workingGroups' | 'openings' | 'applications'>
 
 export type ProposalMock = ReturnType<typeof generateProposal>
 
-export const generateProposals = (mocks: Mocks): ProposalMock[] => {
-  return proposalTypes.map((type) => generateProposal(type, mocks))
+export const generateProposals = (mocks?: MocksForProposals): ProposalMock[] => {
+  if (!mocks) {
+    mocks = {
+      members: require('../../../src/mocks/data/raw/members.json'),
+      workingGroups: require('../../../src/mocks/data/raw/workingGroups.json'),
+      workers: require('../../../src/mocks/data/raw/workers.json'),
+      openings: require('../../../src/mocks/data/raw/openings.json'),
+      applications: require('../../../src/mocks/data/raw/applications.json'),
+    }
+  }
+
+  return proposalTypes.map((type) => generateProposal(type, mocks!))
 }
 
-const generateProposalDetails = (type: ProposalType, mocks: Mocks) => {
+const generateProposalDetails = (type: ProposalType, mocks: MocksForProposals) => {
   const details = ProposalDetailsGenerator[type]?.(mocks)
   return details ?? { type }
 }
 
-const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => any>> = {
+const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForProposals) => any>> = {
   fundingRequest: () => ({
     type: 'fundingRequest',
     data: {
@@ -129,11 +141,11 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
         destinations: [
           {
             account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-            amount: randomFromRange(1, 10) * 1000,
-          },
-        ],
-      },
-    },
+            amount: randomFromRange(1, 10) * 1000
+          }
+        ]
+      }
+    }
   }),
   createWorkingGroupLeadOpening: (mocks) => ({
     type: 'createWorkingGroupLeadOpening',
@@ -142,26 +154,120 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
       stakeAmount: randomFromRange(1, 5) * 1000,
       unstakingPeriod: randomFromRange(1, 3) * 14400,
       rewardPerBlock: randomFromRange(5, 15),
-      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
-    },
+      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id
+    }
   }),
   decreaseWorkingGroupLeadStake: (mocks) => ({
     type: 'decreaseWorkingGroupLeadStake',
-    data: getLeadStakeData(mocks),
+    data: getLeadStakeData(mocks)
   }),
   slashWorkingGroupLead: (mocks) => ({
     type: 'slashWorkingGroupLead',
-    data: getLeadStakeData(mocks),
+    data: getLeadStakeData(mocks)
   }),
   runtimeUpgrade: () => ({
     type: 'runtimeUpgrade',
     data: {
-      bytecode: '0x0061736d',
-    },
+      bytecode: '0x0061736d'
+    }
+  }),
+  updateWorkingGroupBudget: (mocks) => ({
+    type: 'updateWorkingGroupBudget',
+    data: {
+      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
+      amount: randomFromRange(5, 20) * 1000,
+    }
+  }),
+  setMaxValidatorCount: () => ({
+    type: 'setMaxValidatorCount',
+    data: {
+      newMaxValidatorCount: randomFromRange(5, 10),
+    }
+  }),
+  fillWorkingGroupLeadOpening: (mocks) => {
+    const application = mocks.applications[randomFromRange(0, mocks.applications.length - 1)]
+    return {
+      type: 'fillWorkingGroupLeadOpening',
+      data: {
+        openingId: application.openingId,
+        applicationId: application.id,
+      }
+    }
+  },
+  setWorkingGroupLeadReward: (mocks) => ({
+    type: 'setWorkingGroupLeadReward',
+    data: {
+      leadId: mocks.workers[randomFromRange(0, mocks.workers.length)]?.id,
+      newRewardPerBlock: randomFromRange(100, 1000),
+    }
+  }),
+  terminateWorkingGroupLead: (mocks) => ({
+    type: 'terminateWorkingGroupLead',
+    data: getLeadStakeData(mocks)
+  }),
+  setMembershipPrice: () => ({
+    type: 'setMembershipPrice',
+    data: {
+      newPrice: randomFromRange(1000, 5000),
+    }
+  }),
+  setCouncilBudgetIncrement: () => ({
+    type: 'setCouncilBudgetIncrement',
+    data: {
+      newAmount: randomFromRange(1, 5) * 10000,
+    }
+  }),
+  signal: () => ({
+    type: 'signal',
+    data: {
+      text: faker.lorem.words(30),
+    }
+  }),
+  cancelWorkingGroupLeadOpening: (mocks) => ({
+    type: 'cancelWorkingGroupLeadOpening',
+    data: {
+      openingId: mocks.openings[randomFromRange(0, mocks.openings.length - 1)].id,
+    }
+  }),
+  setReferralCut: () => ({
+    type: 'setReferralCut',
+    data: {
+      newReferralCut: randomFromRange(1000, 5000),
+    }
+  }),
+  setInitialInvitationBalance: () => ({
+    type: 'setInitialInvitationBalance',
+    data: {
+      newInitialInvitationBalance: randomFromRange(1, 5),
+    }
+  }),
+  setInitialInvitationCount: () => ({
+    type: 'setInitialInvitationCount',
+    data: {
+      newInitialInvitationsCount: randomFromRange(1, 5),
+    }
+  }),
+  setCouncilorReward: () => ({
+    type: 'setCouncilorReward',
+    data: {
+      newRewardPerBlock: randomFromRange(100, 500),
+    }
+  }),
+  veto: () => ({
+    type: 'veto',
+    data: {
+      proposalId: '0',
+    }
   }),
 }
 
-const getLeadStakeData = (mocks: Mocks) => ({
+const getLeadStakeData = (mocks: MocksForProposals) => ({
   leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
-  amount: randomFromRange(1, 10) * 1000,
+  amount: randomFromRange(1, 10) * 1000
 })
+
+export const proposalsModule = {
+  command: 'proposals',
+  describe: 'Generate proposals from other mocks',
+  handler: () => saveFile('proposals', generateProposals())
+}

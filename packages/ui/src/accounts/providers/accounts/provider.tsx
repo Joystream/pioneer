@@ -1,7 +1,7 @@
 import { web3Accounts, web3AccountsSubscribe, web3Enable } from '@polkadot/extension-dapp'
 import { Keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { debounceTime } from 'rxjs/operators'
+import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useObservable } from '@/common/hooks/useObservable'
@@ -79,27 +79,33 @@ const onExtensionLoaded = (onSuccess: () => void, onFail: () => void) => () => {
 
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
   const [extensionUnavailable, setExtensionUnavailable] = useState(false)
 
   useEffect(
     onExtensionLoaded(
-      () => setIsLoaded(true),
+      () => setIsExtensionLoaded(true),
       () => setExtensionUnavailable(true)
     ),
     []
   )
 
   useEffect(() => {
-    if (!isLoaded) {
+    if (!isExtensionLoaded) {
       return
     }
 
     loadKeysFromExtension(keyring).catch(error)
-  }, [isLoaded])
+  }, [isExtensionLoaded])
 
-  const accounts = useObservable(keyring.accounts.subject.asObservable().pipe(debounceTime(20)), [keyring])
-
+  const accounts = useObservable(
+    keyring.accounts.subject.asObservable().pipe(
+      debounceTime(20),
+      filter((accounts) => !!accounts),
+      skip(1)
+    ),
+    [keyring]
+  )
   const allAccounts: Account[] = []
 
   if (accounts) {
@@ -113,10 +119,11 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isLoaded }
+  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded || !accounts }
 
   if (extensionUnavailable) {
     value.error = 'EXTENSION'
+    value.isLoading = false
   }
 
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>

@@ -6,7 +6,8 @@ import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/P
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -17,12 +18,13 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import {
   DurationStatistics,
   FractionValue,
+  NumericValue,
   StatiscticContentColumn,
   StatisticHeader,
   Statistics,
   StatsBlock,
   TokenValueStat,
-  TwoColumnsStatistic,
+  MultiColumnsStatistic,
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -84,12 +86,13 @@ export const WorkingGroupOpening = () => {
   })
 
   const ApplyButton = memo(() => (
-    <ButtonPrimary
+    <TransactionButton
+      style="primary"
       size="medium"
       onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
     >
       Apply now!
-    </ButtonPrimary>
+    </TransactionButton>
   ))
 
   const ApplicationStatus = memo(() => (
@@ -144,7 +147,7 @@ export const WorkingGroupOpening = () => {
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
               <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
-              <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} />
+              <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>
         </PageHeaderWrapper>
@@ -175,18 +178,29 @@ export const WorkingGroupOpening = () => {
   )
 }
 
-const ApplicationStats = ({ applicants, hiring }: Pick<WorkingGroupOpeningType, 'applicants' | 'hiring'>) => (
+const ApplicationStats = ({
+  applicants,
+  hiring,
+  status,
+}: Pick<WorkingGroupOpeningType, 'applicants' | 'hiring' | 'status'>) => (
   <ApplicationStatsStyles>
-    <TwoColumnsStatistic>
+    <MultiColumnsStatistic>
       <StatiscticContentColumn>
         <StatisticHeader title="Applicants" />
-        <FractionValue numerator={applicants.current} denominator={applicants.total} />
+        <NumericValue>{applicants}</NumericValue>
       </StatiscticContentColumn>
-      <StatiscticContentColumn>
-        <StatisticHeader title="Hiring" />
-        <FractionValue numerator={hiring.current} denominator={hiring.total} />
-      </StatiscticContentColumn>
-    </TwoColumnsStatistic>
+      {status === OpeningStatuses.FILLED || status === OpeningStatuses.CANCELLED ? (
+        <StatiscticContentColumn>
+          <StatisticHeader title="Hired" />
+          <FractionValue numerator={hiring.current} denominator={hiring.limit} />
+        </StatiscticContentColumn>
+      ) : (
+        <StatiscticContentColumn>
+          <StatisticHeader title="Hiring limit" />
+          <NumericValue>{hiring.limit}</NumericValue>
+        </StatiscticContentColumn>
+      )}
+    </MultiColumnsStatistic>
   </ApplicationStatsStyles>
 )
 

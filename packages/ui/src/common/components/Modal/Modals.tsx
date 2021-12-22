@@ -42,7 +42,7 @@ export const TransactionAmount = styled.div`
   grid-template-columns: 320px auto;
   grid-template-rows: 1fr;
   grid-column-gap: 12px;
-  align-items: end;
+  align-items: center;
 `
 
 export const TransactionInfoContainer = styled.div`
@@ -128,4 +128,9 @@ export const AmountButton = styled(ButtonGhost)`
   font-size: 10px;
   line-height: 16px;
   text-transform: uppercase;
+`
+
+export const ItemWrapper = styled.div`
+  max-height: 450px;
+  overflow: auto;
 `

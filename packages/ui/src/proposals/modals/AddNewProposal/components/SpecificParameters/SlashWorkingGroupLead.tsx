@@ -12,10 +12,11 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
+import { GroupIdName } from '@/working-groups/types'
 
 export interface SlashWorkingGroupLeadParameters {
   slashingAmount?: BN
-  groupId?: string
+  groupId?: GroupIdName
   workerId?: number
 }
 
@@ -81,7 +82,7 @@ export const SlashWorkingGroupLead = ({
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder="0"
               onChange={(event) => setAmount(event.target.value)}
               disabled={isDisabled}

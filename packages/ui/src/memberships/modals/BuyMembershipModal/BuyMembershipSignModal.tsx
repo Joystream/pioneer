@@ -14,7 +14,7 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
 import { getMessage } from '../utils'
@@ -43,7 +43,11 @@ export const BuyMembershipSignModal = ({
     initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')
   )
   const fromAddress = from.address
-  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
+  const { isReady, paymentInfo, sign } = useSignAndSendQueryNodeTransaction({
+    transaction,
+    signer: fromAddress,
+    service,
+  })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(fromAddress)
 

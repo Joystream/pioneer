@@ -48,6 +48,11 @@ interface RawLeadStakeData {
 
 const seedLeadStakeProposalData = (data: RawLeadStakeData) => data
 
+const seedTerminateGroupLead = (data: RawLeadStakeData) => ({
+  leadId: data.leadId,
+  slashingAmount: data.amount,
+})
+
 interface RawRuntimeUpgradeData {
   bytecode: string
 }
@@ -58,12 +63,28 @@ const seedRuntimeUpgradeData = (data: RawRuntimeUpgradeData, server: any) => {
   }
 }
 
+const seedObjectCopy = (data: any) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
   decreaseWorkingGroupLeadStake: seedLeadStakeProposalData,
   slashWorkingGroupLead: seedLeadStakeProposalData,
   runtimeUpgrade: seedRuntimeUpgradeData,
+  updateWorkingGroupBudget: seedObjectCopy,
+  setMaxValidatorCount: seedObjectCopy,
+  fillWorkingGroupLeadOpening: seedObjectCopy,
+  setWorkingGroupLeadReward: seedObjectCopy,
+  terminateWorkingGroupLead: seedTerminateGroupLead,
+  setMembershipPrice: seedObjectCopy,
+  setCouncilBudgetIncrement: seedObjectCopy,
+  signal: seedObjectCopy,
+  cancelWorkingGroupLeadOpening: seedObjectCopy,
+  setReferralCut: seedObjectCopy,
+  setInitialInvitationBalance: seedObjectCopy,
+  setInitialInvitationCount: seedObjectCopy,
+  setCouncilorReward: seedObjectCopy,
+  veto: seedObjectCopy,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

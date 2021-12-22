@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { Address } from '@/common/types'
+import { Address, asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 
 import { CastVoteFieldsFragment, PastElectionRoundDetailedFieldsFragment } from '../queries'
@@ -14,7 +14,8 @@ interface BaseVote {
 
 export interface Vote extends BaseVote {
   id: string
-  createdAt: string
+  createdAtBlock?: Block
+  commitment: string
   voteFor?: Member
 }
 
@@ -31,10 +32,11 @@ export type PastElectionVote = BaseVote
 
 export const asVote = (fields: CastVoteFieldsFragment): Vote => ({
   id: fields.id,
-  createdAt: fields.createdAt,
+  createdAtBlock: fields.castEvent ? asBlock(fields.castEvent[0]) : undefined,
   stake: new BN(fields.stake),
   stakeLocked: fields.stakeLocked,
   castBy: fields.castBy,
-  voteFor: fields.voteFor ? asMember(fields.voteFor) : undefined,
+  commitment: fields.commitment,
+  voteFor: fields.voteFor ? asMember(fields.voteFor.member) : undefined,
   cycleId: fields.electionRound.cycleId,
 })

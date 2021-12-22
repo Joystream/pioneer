@@ -11,18 +11,24 @@ To test most of the extrinsics requires existing on-chain data. To create some o
 
 Available commands:
 
-- `yarn node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
-- `yarn node-mocks members:create` – generate memberships using query-node mocks data
-- `yarn node-mocks set-budget` - Set membership Working Group budget
-- `yarn node-mocks opening:create` - Create an opening
-- `yarn node-mocks opening:fill` - Fill existing opening
-- `yarn node-mocks transfer` - Transfer tokens between accounts
+- `yarn workspace ui node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
+- `yarn workspace ui node-mocks council:vote` - Vote for the announced by the previous command candidate to start the revealing stage next
+- `yarn workspace ui node-mocks council:reveal` - Reveal the votes casted by the previous command to start elect a new council and start the idle stage next
+- `yarn workspace ui node-mocks members:create` - generate memberships using query-node mocks data
+- `yarn workspace ui node-mocks set-budget` - Set membership Working Group budget
+- `yarn workspace ui node-mocks opening:create` - Create an opening
+- `yarn workspace ui node-mocks opening:fill` - Fill existing opening
+- `yarn workspace ui node-mocks transfer` - Transfer tokens between accounts
 
 To show help:
 
 ```shell
 yarn node-mocks --help
 ```
+
+Shortcuts:
+- `yarn workspace ui node-mocks:announce-vote` - Announce candidacies, wait, then vote on them
+- `yarn workspace ui node-mocks:announce-vote-reveal` - Announce candidacies, wait, vote on them, wait, then reveal these votes
 
 #### Chain spec
 
@@ -36,8 +42,8 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       ```
 
 2. _(optional)_ Change the starting Council/Referendum stage (the default is `Announcing`):
-   - Run `yarn workspace ui run set-chain-spec <stage>` (the stages are lowercase)
-   - Note that the voting and revealing periods are also extended thanks to `referendumInstance1.stage.{STAGE}.started` being set to a future block.
+   - Run `yarn workspace ui helpers setChainSpec -s <stage> [-d <duration>]` (the stages are lowercase)
+   - For the `voting` and `revealing` stages the `duration` option set the number of blocks this stage will last.
 
 3. Start the node:
    - Either with docker compose: `docker-compose up node`
@@ -45,6 +51,9 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       ```shell
       <path to the runtime> --tmp --alice --validator --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --chain packages/ui/dev/chain-spec/data/chain-spec.json --log runtime
       ```
+### Other helper commands
+- `yarn workspace ui run helpers commitment -s <salt> [-a <accountId>] [-o <optionId>] [-c <cycleId>]` - Calculate a commitment
+- `yarn workspace ui run helpers nextCouncilStage` - Wait until the next council stage start
 
 ### Polkadot apps
 

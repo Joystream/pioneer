@@ -44,10 +44,10 @@ const generateAppliedOnOpeningEvent = (mocks: Mocks) => () => {
 
   return {
     id: (nextAppliedOnOpeningEventId++).toString(),
-    createdAt: faker.date.recent(30),
     applicationId: application.id,
     openingId: application.openingId,
     groupId: opening?.groupId,
+    ...randomBlock(),
   }
 }
 
@@ -147,7 +147,7 @@ const generateWorkerRewardAmountUpdatedEvent = (mocks: Mocks) => () => {
   }
 }
 
-const generateCandidacyWithdrawEvent = (mocks:Mocks) => () => {
+const generateCandidacyWithdrawEvent = (mocks: Mocks) => () => {
   const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
   return {
     ...randomBlock(),
@@ -171,7 +171,7 @@ export const eventGenerators = {
     Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
   workerRewardAmountUpdatedEvents: (mocks: Mocks) =>
     Array.from({ length: 10 }).map(generateWorkerRewardAmountUpdatedEvent(mocks)),
-  candidacyWithdrawEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateCandidacyWithdrawEvent(mocks))
+  candidacyWithdrawEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateCandidacyWithdrawEvent(mocks)),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

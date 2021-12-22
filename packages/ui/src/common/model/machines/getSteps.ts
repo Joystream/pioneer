@@ -5,6 +5,7 @@ export interface Step {
   type: 'past' | 'active' | 'next' | 'hideNumber'
   isBaby?: boolean
   onClick?: () => void
+  id?: string
 }
 
 const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: StateNode) => {

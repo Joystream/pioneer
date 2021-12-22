@@ -5,10 +5,10 @@ import { generatePath, Route, Switch } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { PastElection } from '@/app/pages/Council/PastElections/PastElection'
+import { PastElection } from '@/app/pages/Election/PastElections/PastElection'
 import { NotFound } from '@/app/pages/NotFound'
 import { ApiContext } from '@/common/providers/api/context'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -20,8 +20,8 @@ import {
   seedMembers,
 } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
+import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
-import { COMMITMENT } from '../../../dev/query-node-mocks/generators/council/generateCouncils'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -66,16 +66,15 @@ const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   },
 ]
 
-const TEST_VOTES = [
-  {
-    electionRoundId: '1',
-    stake: 1000,
-    stakeLocked: false,
-    castBy: getMember('bob').controllerAccount,
-    voteForId: getMember('alice').id,
-    commitment: COMMITMENT,
-  },
-]
+const TEST_VOTE = {
+  electionRoundId: '1',
+  stake: 1000,
+  stakeLocked: false,
+  castBy: getMember('bob').controllerAccount,
+  voteForId: '1',
+  commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  voteCastEvent: randomRawBlock(),
+}
 
 describe('UI: Past Election page', () => {
   const mockServer = setupMockServer()
@@ -93,6 +92,9 @@ describe('UI: Past Election page', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   beforeEach(() => {
@@ -106,15 +108,27 @@ describe('UI: Past Election page', () => {
       },
       mockServer.server
     )
-    seedCouncilElection({ id: '1', cycleId: 1, isFinished: true, electedCouncilId: '1' }, mockServer.server)
+    const endedAtBlock = randomRawBlock()
+    seedCouncilElection(
+      {
+        id: '1',
+        cycleId: 1,
+        isFinished: true,
+        endedAtBlock: endedAtBlock.inBlock,
+        endedAtTime: endedAtBlock.createdAt,
+        endedAtNetwork: endedAtBlock.network,
+        electedCouncilId: '1',
+      },
+      mockServer.server
+    )
     TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
-    TEST_VOTES.map((vote) => seedCouncilVote(vote, mockServer.server))
+    seedCouncilVote(TEST_VOTE, mockServer.server)
   })
 
   it('Renders', async () => {
-    const { queryByText } = await renderComponent()
+    const { queryByText, findAllByText } = await renderComponent()
 
-    expect(queryByText(/Election #1/i)).not.toBeNull()
+    expect(await findAllByText(/Election #1/i)).toHaveLength(2)
     expect(queryByText(/Voting results/i)).not.toBeNull()
   })
 
@@ -143,12 +157,10 @@ describe('UI: Past Election page', () => {
       it('Has', async () => {
         seedCouncilVote(
           {
-            electionRoundId: '1',
+            ...TEST_VOTE,
             stake: 2000,
-            stakeLocked: false,
             castBy: getMember('alice').controllerAccount,
             voteForId: getMember('bob').id,
-            commitment: COMMITMENT,
           },
           mockServer.server
         )
@@ -170,14 +182,14 @@ describe('UI: Past Election page', () => {
 
   async function renderComponent() {
     const rendered = await render(
-      <MemoryRouter initialEntries={[generatePath(CouncilRoutes.pastElection, { id: pageElectionId })]}>
+      <MemoryRouter initialEntries={[generatePath(ElectionRoutes.pastElection, { id: pageElectionId })]}>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Switch>
-                    <Route path={CouncilRoutes.pastElection} component={PastElection} />
+                    <Route path={ElectionRoutes.pastElection} component={PastElection} />
                     <Route path="/404" component={NotFound} />
                   </Switch>
                 </MembershipContext.Provider>

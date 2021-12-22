@@ -4,6 +4,8 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
+import { MemberModalCall } from '@/memberships/components/MemberProfile'
 import { MemberRow } from '@/memberships/modals/components'
 
 import { MemberInfo } from '../../components'
@@ -15,6 +17,13 @@ interface Props {
 }
 
 export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
+  const { showModal } = useModal()
+
+  const viewMember = () => {
+    onClose()
+    showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
+  }
+
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
@@ -25,7 +34,7 @@ export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" disabled>
+        <ButtonPrimary size="medium" onClick={viewMember}>
           View my profile
         </ButtonPrimary>
       </ModalFooter>

@@ -3,13 +3,12 @@ import { useGetCandidateStatsQuery } from '@/council/queries'
 export const useMemberCandidacyStats = (memberId?: string) => {
   const { loading, data } = useGetCandidateStatsQuery({ variables: { memberId } })
 
-  const withdrawn = data?.candidacyWithdrawEventsConnection.totalCount ?? 0
-  const successful = data?.councilMembersConnection.totalCount ?? 0
-  const total = data?.candidatesConnection.totalCount ?? 0
-  const failed = (total && successful && withdrawn && total - successful - withdrawn) ?? 0
+  const withdrawn = data?.withdrawn.totalCount ?? 0
+  const successful = data?.successful.totalCount ?? 0
+  const failed = data?.failed.totalCount ?? 0
   return {
     isLoading: loading,
-    total,
+    total: withdrawn + successful + failed,
     withdrawn,
     successful,
     failed,

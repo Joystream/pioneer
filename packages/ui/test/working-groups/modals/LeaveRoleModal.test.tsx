@@ -32,6 +32,10 @@ import {
 } from '../../_mocks/transactions'
 import { WORKER } from '../../_mocks/working-groups'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: LeaveRoleModal', () => {
   const api = stubApi()
 
@@ -41,6 +45,9 @@ describe('UI: LeaveRoleModal', () => {
     hasMembers: true,
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   let useAccounts: UseAccounts

@@ -1,11 +1,25 @@
 import React, { ReactElement } from 'react'
 
 import { Activity, ActivityCategory, BaseActivity } from '@/common/types/Activity'
+import {
+  AnnouncingPeriodStartedContent,
+  CandidacyWithdrawContent,
+  CouncilorRewardUpdatedContent,
+  NewCandidateContent,
+  NewCouncilElectedContent,
+  NotEnoughCandidatesContent,
+  RevealingStageStartedContent,
+  VotingPeriodStartedContent,
+} from '@/council/components/Activities'
 import { CategoryCreatedContent } from '@/forum/components/Activities/CategoryCreatedContent'
+import { CategoryDeletedContent } from '@/forum/components/Activities/CategoryDeletedContent'
 import { PostAddedContent } from '@/forum/components/Activities/PostAddedContent'
 import { PostDeletedContent } from '@/forum/components/Activities/PostDeletedContent'
 import { PostEditedContent } from '@/forum/components/Activities/PostEditedContent'
+import { PostModeratedContent } from '@/forum/components/Activities/PostModeratedContent'
 import { ThreadCreatedContent } from '@/forum/components/Activities/ThreadCreatedContent'
+import { ThreadDeletedContent } from '@/forum/components/Activities/ThreadDeletedContent'
+import { ThreadModeratedContent } from '@/forum/components/Activities/ThreadModeratedContent'
 import { ProposalCancelledContent } from '@/proposals/components/Activities/ProposalCancelledContent'
 import { ProposalCreatedContent } from '@/proposals/components/Activities/ProposalCreatedContent'
 import { ProposalDecisionMadeContent } from '@/proposals/components/Activities/ProposalDecisionMadeContent'
@@ -59,8 +73,12 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   PostAddedEvent: PostAddedContent,
   PostTextUpdatedEvent: PostEditedContent,
   PostDeletedEvent: PostDeletedContent,
+  PostModeratedEvent: PostModeratedContent,
   ThreadCreatedEvent: ThreadCreatedContent,
+  ThreadDeletedEvent: ThreadDeletedContent,
+  ThreadModeratedEvent: ThreadModeratedContent,
   CategoryCreatedEvent: CategoryCreatedContent,
+  CategoryDeletedEvent: CategoryDeletedContent,
   ProposalCreatedEvent: ProposalCreatedContent,
   ProposalCancelledEvent: ProposalCancelledContent,
   ProposalStatusUpdatedEvent: ProposalStatusUpdatedContent,
@@ -71,6 +89,14 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   ProposalDiscussionPostCreatedEvent: ProposalDiscussionPostCreatedContent,
   ProposalDiscussionPostUpdatedEvent: ProposalDiscussionPostEditedContent,
   ProposalDiscussionPostDeletedEvent: ProposalDiscussionPostDeletedContent,
+  NotEnoughCandidatesEvent: NotEnoughCandidatesContent,
+  CandidacyWithdrawEvent: CandidacyWithdrawContent,
+  NewCandidateEvent: NewCandidateContent,
+  NewCouncilElectedEvent: NewCouncilElectedContent,
+  VotingPeriodStartedEvent: VotingPeriodStartedContent,
+  AnnouncingPeriodStartedEvent: AnnouncingPeriodStartedContent,
+  CouncilorRewardUpdatedEvent: CouncilorRewardUpdatedContent,
+  RevealingStageStartedEvent: RevealingStageStartedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {

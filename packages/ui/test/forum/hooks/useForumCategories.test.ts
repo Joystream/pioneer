@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import { ActiveStatus, ArchivedStatus, useForumCategories } from '@/forum/hooks/useForumCategories'
+import { ActiveStatus, useForumCategories } from '@/forum/hooks/useForumCategories'
 import { useGetForumCategoriesQuery } from '@/forum/queries'
 
 type Props = Parameters<typeof useForumCategories>
@@ -32,17 +32,6 @@ describe('useForumCategories', () => {
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: { parent: { id_eq: null }, status_json: { isTypeOf_eq: ActiveStatus } },
-      },
-    })
-
-    rerender([{ isArchive: true }])
-
-    expect(mockedQueryHook).toBeCalledWith({
-      variables: {
-        where: {
-          status_json: { isTypeOf_eq: ArchivedStatus },
-          OR: [{ parent: { id_eq: null } }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }],
-        },
       },
     })
   })

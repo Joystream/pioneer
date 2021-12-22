@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 import { generatePath } from 'react-router'
 
@@ -11,8 +10,7 @@ import {
   PastCouncilTableListItem,
 } from '@/council/components/pastCouncil/PastCouncilsList/styles'
 import { CouncilRoutes } from '@/council/constants'
-import { useCouncilTotalSpend } from '@/council/hooks/useCouncilTotalSpend'
-import { usePastCouncilProposalsStats } from '@/council/hooks/usePastCouncilProposalsStats'
+import { usePastCouncilStats } from '@/council/hooks/usePastCouncilStats'
 import { PastCouncil } from '@/council/types/PastCouncil'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
 
@@ -21,8 +19,9 @@ interface Props {
 }
 
 export const PastCouncilListItem = ({ council }: Props) => {
-  const { approved, rejected, slashed } = usePastCouncilProposalsStats(council.id)
-  const { isLoading: isLoadingTotal, totalSpent } = useCouncilTotalSpend(council.id)
+  const { isLoading, proposalsApproved, proposalsRejected, totalSpent, spentOnProposals } = usePastCouncilStats(
+    council.id
+  )
 
   return (
     <PastCouncilTableListItem
@@ -32,19 +31,11 @@ export const PastCouncilListItem = ({ council }: Props) => {
       to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
     >
       <Info>#{council.id}</Info>
-      <BlockTime
-        block={{
-          network: 'OLYMPIA',
-          timestamp: new Date().toString(),
-          number: council.endedAtBlock,
-        }}
-        layout="reverse-start"
-        lessInfo
-      />
-      {isLoadingTotal ? <Loading /> : <TokenValue value={totalSpent} />}
-      <TokenValue value={new BN(0)} />
-      <CountInfo count={approved} />
-      <CountInfo count={rejected + slashed} />
+      <BlockTime block={council.endedAt} layout="reverse-start" lessInfo />
+      {isLoading ? <Loading /> : <TokenValue value={totalSpent} />}
+      {isLoading ? <Loading /> : <TokenValue value={spentOnProposals} />}
+      {isLoading ? <Loading /> : <CountInfo count={proposalsApproved} />}
+      {isLoading ? <Loading /> : <CountInfo count={proposalsRejected} />}
     </PastCouncilTableListItem>
   )
 }

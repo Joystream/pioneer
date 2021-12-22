@@ -1,8 +1,10 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useCallback } from 'react'
 
-import { ButtonSize } from '../../common/components/buttons'
-import { useModal } from '../../common/hooks/useModal'
-import { BuyMembershipModalCall } from '../modals/BuyMembershipModal'
+import { ButtonSize } from '@/common/components/buttons'
+import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
+import { useModal } from '@/common/hooks/useModal'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 
 import { MembershipActionButton } from './CurrentMember'
 
@@ -14,14 +16,18 @@ interface AddMembershipButtonProps {
 
 export const AddMembershipButton = ({ className, children, size }: AddMembershipButtonProps) => {
   const { showModal } = useModal()
+  const { isTransactionPending } = useTransactionStatus()
+  const { status } = useOnBoarding()
+
+  const openModal = useCallback(() => {
+    showModal({ modal: status === 'finished' ? 'BuyMembership' : 'OnBoardingModal' })
+  }, [status])
 
   return (
-    <MembershipActionButton
-      onClick={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
-      className={className}
-      size={size}
-    >
-      {children}
-    </MembershipActionButton>
+    <TransactionButtonWrapper>
+      <MembershipActionButton onClick={openModal} className={className} size={size} disabled={isTransactionPending}>
+        {children}
+      </MembershipActionButton>
+    </TransactionButtonWrapper>
   )
 }

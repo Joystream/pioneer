@@ -28,6 +28,10 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: EditPostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.editPostText'
@@ -53,6 +57,9 @@ describe('UI: EditPostModal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
   let useAccounts: UseAccounts
 
@@ -99,7 +106,7 @@ describe('UI: EditPostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
     })
-    expect(screen.queryByText('There was a problem submitting an edit to your post.')).not.toBeNull()
+    expect(await screen.findByText('There was a problem submitting an edit to your post.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -108,7 +115,7 @@ describe('UI: EditPostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
     })
-    expect(screen.queryByText('Your edit has been submitted.')).not.toBeNull()
+    expect(await screen.findByText('Your edit has been submitted.')).toBeDefined()
   })
 
   const renderModal = () =>

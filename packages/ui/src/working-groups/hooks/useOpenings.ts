@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 
 import { error } from '@/common/logger'
-import { getOpeningsWhere, OpeningType } from '@/working-groups/hooks/utils/queries'
+import {
+  getOpeningsPositionType,
+  getOpeningsWhere,
+  OpeningPositionType,
+  OpeningType,
+} from '@/working-groups/hooks/utils/queries'
 import { useGetWorkingGroupOpeningsQuery } from '@/working-groups/queries'
 import {
   asWorkingGroupOpening,
@@ -12,6 +17,7 @@ import {
 export interface UseOpeningsParams {
   groupId?: string
   type: OpeningType
+  openingsPositionType?: OpeningPositionType
 }
 
 export const getStatusWhere = (statusIn?: WorkingGroupOpeningStatus[]) => {
@@ -22,9 +28,10 @@ export const getStatusWhere = (statusIn?: WorkingGroupOpeningStatus[]) => {
   return { isTypeOf_in: statusIn.map((status) => WorkingGroupOpeningStatusTypename[status]) }
 }
 
-export const useOpenings = ({ groupId: group_eq, type }: UseOpeningsParams) => {
+export const useOpenings = ({ groupId: group_eq, type, openingsPositionType }: UseOpeningsParams) => {
   const where = {
     group: { id_eq: group_eq },
+    ...getOpeningsPositionType(openingsPositionType),
     ...getOpeningsWhere(type),
   }
 
@@ -35,7 +42,6 @@ export const useOpenings = ({ groupId: group_eq, type }: UseOpeningsParams) => {
     () => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [],
     [loading, data]
   )
-
   return {
     openings,
     isLoading: loading,

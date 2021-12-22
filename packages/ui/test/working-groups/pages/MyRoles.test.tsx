@@ -38,6 +38,9 @@ describe('UI: My Role Page', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
   const api = stubApi()
   stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))

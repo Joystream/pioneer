@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
+import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { Election } from '@/council/types/Election'
 
 import { CandidateCardList } from '../CandidateCard/CandidateCardList'
 import { RevealingStageVotes } from '../CandidateVote/RevealingStageVotes'
-import { ElectionTabs, RevealingStageTab } from '../ElectionTabs'
+import { CurrentElectionTabs, RevealingStageTab } from '../CurrentElectionTabs'
 
 interface Props {
   election: Election | undefined
@@ -15,8 +16,10 @@ interface Props {
 
 export const RevealingStage = ({ election, isLoading }: Props) => {
   const [tab, setTab] = useState<RevealingStageTab>('results')
+  const { votesTotal } = useMyCurrentVotesCount(election?.cycleId)
+
   const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
-  const myVotesTotal = votesPerCandidate.filter((vote) => vote.myVotes.length).length
+  const asDisplayableVotes = votesPerCandidate.some((vote) => vote.myVotes.length)
 
   if (isLoading) {
     return <Loading />
@@ -24,9 +27,9 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
 
   return (
     <>
-      <ElectionTabs
+      <CurrentElectionTabs
         stage="revealing"
-        myVotes={myVotesTotal}
+        myVotes={asDisplayableVotes && votesTotal}
         tab={tab}
         onSetTab={(tab) => setTab(tab as RevealingStageTab)}
       />

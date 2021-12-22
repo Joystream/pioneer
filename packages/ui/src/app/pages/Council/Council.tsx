@@ -1,12 +1,14 @@
 import React, { useMemo, useState } from 'react'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
+import { PageLayout } from '@/app/components/PageLayout'
+import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
+import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { Councilor } from '@/council/types'
@@ -15,19 +17,13 @@ import { CouncilTabs } from './components/CouncilTabs'
 
 export const Council = () => {
   const { council, isLoading } = useElectedCouncil()
-  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAtBlock)
+  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
+  const { activities } = useCouncilActivities()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
 
-  const header = (
-    <PageHeaderWrapper>
-      <PageHeaderRow>
-        <PageTitle>Council</PageTitle>
-      </PageHeaderRow>
-      <CouncilTabs />
-    </PageHeaderWrapper>
-  )
+  const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
   const main = (
     <MainPanel>
@@ -57,7 +53,11 @@ export const Council = () => {
     </MainPanel>
   )
 
-  const sidebar = <SidePanel />
+  const sidebar = (
+    <SidePanel>
+      <ActivitiesBlock activities={activities} label="Council Activities" />
+    </SidePanel>
+  )
 
   return <PageLayout header={header} main={main} sidebar={sidebar} />
 }

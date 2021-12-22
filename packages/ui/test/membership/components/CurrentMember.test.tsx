@@ -25,7 +25,7 @@ describe('UI: CurrentMember component', () => {
     it('Displays create button', async () => {
       renderComponent()
 
-      expect(await getButton(/create membership/i)).toBeDefined()
+      expect(await getButton(/join now/i)).toBeDefined()
     })
   })
 
@@ -111,6 +111,6 @@ describe('UI: CurrentMember component', () => {
   async function renderAndWait() {
     renderComponent()
 
-    await waitForElementToBeRemoved(() => screen.getByText(/create membership/i))
+    await waitForElementToBeRemoved(() => screen.getByText(/join now/i))
   }
 })

@@ -72,6 +72,7 @@ export function WorkingGroup() {
       main={displayTabsContent()}
       sidebar={displayTabsSidebar()}
       sidebarScrollable
+      lastBreadcrumb={group?.name}
     />
   )
 }

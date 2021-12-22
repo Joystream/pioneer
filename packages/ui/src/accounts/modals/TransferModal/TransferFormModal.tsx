@@ -1,13 +1,17 @@
 import BN from 'bn.js'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import * as Yup from 'yup'
 
-import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { PickedTransferIcon } from '@/common/components/icons/TransferIcons'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
+import { useForm } from '@/common/hooks/useForm'
+import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { formatTokenValue } from '@/common/model/formatters'
 
-import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
-import { PickedTransferIcon } from '../../../common/components/icons/TransferIcons'
 import {
   AmountButton,
   AmountButtons,
@@ -18,10 +22,7 @@ import {
   Row,
   TransactionAmount,
 } from '../../../common/components/Modal'
-import { useNumberInput } from '../../../common/hooks/useNumberInput'
-import { formatTokenValue } from '../../../common/model/formatters'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
-import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../types'
 
 interface Props {
@@ -30,32 +31,65 @@ interface Props {
   onClose: () => void
   onAccept: (amount: BN, from: Account, to: Account) => void
   title: string
+  minValue?: BN
+  maxValue?: BN
+  initialValue?: BN
 }
 
-export function TransferFormModal({ from, to, onClose, onAccept, title }: Props) {
+interface TransferTokensFormField {
+  amount?: string
+}
+
+const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
+  const schema = Yup.object().shape({
+    amount: Yup.number(),
+  })
+
+  if (senderBalance) {
+    schema.fields.amount = schema.fields.amount.max(senderBalance.toNumber(), 'Maximum amount allowed is ${max}')
+  }
+
+  if (maxValue && senderBalance && senderBalance.gt(maxValue)) {
+    schema.fields.amount = schema.fields.amount.max(maxValue.toNumber(), 'Maximum amount allowed is ${max}')
+  }
+  if (minValue) {
+    schema.fields.amount = schema.fields.amount.min(minValue.toNumber(), 'Minimum amount allowed is ${min}')
+  }
+  return schema
+}
+
+export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue, minValue, initialValue }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
-  const [amount, setAmount] = useNumberInput(0)
-  const senderBalance = useBalance(sender?.address)
-  const filterSender = useCallback(filterAccount(recipient), [recipient])
-  const transferableBalance = senderBalance?.transferable ?? BN_ZERO
+  const [amount, setAmount] = useNumberInput(0, initialValue)
+  const balances = useMyBalances()
+  const filterSender = useCallback(
+    (account: Account) => account.address !== recipient?.address && balances[account.address]?.transferable.gt(BN_ZERO),
+    [recipient, balances]
+  )
+
+  const schema = useMemo(
+    () => schemaFactory(maxValue, minValue, balances[sender?.address as string]?.transferable),
+    [maxValue, minValue, balances, sender]
+  )
+
+  const { changeField, validation } = useForm<TransferTokensFormField>({ amount: undefined }, schema)
+  const { isValid, errors } = validation
+
+  useEffect(() => {
+    changeField('amount', amount)
+  }, [amount])
+
+  const transferableBalance = balances[sender?.address as string]?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
   const isZero = new BN(amount).lte(BN_ZERO)
-  const isOverBalance = new BN(amount).gt(transferableBalance || 0)
-  const isTransferDisabled = isZero || isOverBalance || !recipient
+  const isOverBalance = new BN(amount).gt(maxValue || transferableBalance || 0)
+  const isTransferDisabled = isZero || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const { api } = useApi()
-  const [maxAmount, setMaxAmount] = useState(transferableBalance)
-  const maxFee = useTransactionFee(sender?.address, api?.tx.balances.transfer(recipient?.address || '', maxAmount))
-  useEffect(() => {
-    setMaxAmount(transferableBalance.sub(maxFee?.transactionFee ?? BN_ZERO))
-  }, [maxFee?.transactionFee.toString()])
-
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
-  const setMax = () => setAmount(maxAmount.toString())
   const onClick = () => {
     if (amount && recipient && sender) {
       onAccept(new BN(amount), sender, recipient)
@@ -89,10 +123,12 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
             required
             inputWidth="s"
             units="JOY"
+            validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
+            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               onChange={(event) => setAmount(event.target.value)}
               disabled={isValueDisabled}
               placeholder="0"
@@ -101,9 +137,6 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
           <AmountButtons>
             <AmountButton size="small" onClick={setHalf} disabled={isValueDisabled}>
               Use half
-            </AmountButton>
-            <AmountButton size="small" onClick={setMax} disabled={isValueDisabled}>
-              Use max
             </AmountButton>
           </AmountButtons>
         </TransactionAmount>

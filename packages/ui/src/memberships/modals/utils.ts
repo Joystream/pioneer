@@ -16,6 +16,7 @@ export const toMemberTransactionParams = (formData: MemberFormFields) => ({
   metadata: metadataToBytes(MembershipMetadata, {
     name: formData.name,
     about: formData.about,
+    avatarUri: formData.avatarUri,
   }),
   referrer_id: formData.referrer?.id,
 })

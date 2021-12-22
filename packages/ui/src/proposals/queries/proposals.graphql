@@ -1,3 +1,13 @@
+fragment WorkerProposalDetails on Worker {
+  group {
+    id
+    name
+  }
+  membership {
+    ...MemberFields
+  }
+}
+
 fragment ProposalFields on Proposal {
   id
   title
@@ -79,32 +89,95 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on DecreaseWorkingGroupLeadStakeProposalDetails {
       lead {
         createdAt
-        group {
-          id
-          name
-        }
-        membership {
-          ...MemberFields
-        }
+        ...WorkerProposalDetails
       }
       amount
     }
     ... on SlashWorkingGroupLeadProposalDetails {
       lead {
         createdAt
-        group {
-          id
-          name
-        }
-        membership {
-          ...MemberFields
-        }
+        ...WorkerProposalDetails
       }
       amount
     }
     ... on RuntimeUpgradeProposalDetails {
       newRuntimeBytecode {
         id
+      }
+    }
+    ... on UpdateWorkingGroupBudgetProposalDetails {
+      group {
+        id
+        name
+      }
+      amount
+    }
+    ... on SetMaxValidatorCountProposalDetails {
+      newMaxValidatorCount
+    }
+    ... on FillWorkingGroupLeadOpeningProposalDetails {
+      opening {
+        id
+        group {
+          id
+          name
+        }
+      }
+      application {
+        applicant {
+          ...MemberFields
+        }
+      }
+    }
+    ... on CancelWorkingGroupLeadOpeningProposalDetails {
+      opening {
+        id
+        group {
+          id
+          name
+        }
+        metadata {
+          description
+        }
+      }
+    }
+    ... on SetWorkingGroupLeadRewardProposalDetails {
+      lead {
+        ...WorkerProposalDetails
+      }
+      newRewardPerBlock
+    }
+    ... on TerminateWorkingGroupLeadProposalDetails {
+      lead {
+        ...WorkerProposalDetails
+      }
+      slashingAmount
+    }
+    ... on SetMembershipPriceProposalDetails {
+      newPrice
+    }
+    ... on SetCouncilBudgetIncrementProposalDetails {
+      newAmount
+    }
+    ... on SignalProposalDetails {
+      text
+    }
+    ... on SetReferralCutProposalDetails {
+      newReferralCut
+    }
+    ... on SetInitialInvitationBalanceProposalDetails {
+      newInitialInvitationBalance
+    }
+    ... on SetInitialInvitationCountProposalDetails {
+      newInitialInvitationsCount
+    }
+    ... on SetCouncilorRewardProposalDetails {
+      newRewardPerBlock
+    }
+    ... on VetoProposalDetails {
+      proposal {
+        id
+        title
       }
     }
   }

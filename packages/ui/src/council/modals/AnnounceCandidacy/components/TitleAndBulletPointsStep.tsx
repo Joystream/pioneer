@@ -67,7 +67,7 @@ export const TitleAndBulletPointsStep = ({
             required
             inputSize="s"
             validation={hasError('title', validation.errors) ? 'invalid' : undefined}
-            message={hasError('title', validation.errors) ? getErrorMessage('title', validation.errors) : undefined}
+            message={hasError('title', validation.errors) ? getErrorMessage('title', validation.errors) : ' '}
           >
             <InputText id="title" value={fields.title} onChange={(event) => changeField('title', event.target.value)} />
           </InputComponent>

@@ -37,6 +37,10 @@ jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 describe('UI: Vote for Proposal Modal', () => {
   const api = stubApi()
   const useModal: UseModal<ModalCallData<VoteForProposalModalCall>> = {
@@ -51,6 +55,9 @@ describe('UI: Vote for Proposal Modal', () => {
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
   }
 
   let useAccounts: UseAccounts
@@ -155,7 +162,7 @@ describe('UI: Vote for Proposal Modal', () => {
         fireEvent.click(await getButton(/^sign transaction and vote/i))
       })
 
-      expect(screen.queryByText('Success')).not.toBeNull()
+      expect(await screen.findByText('Success')).toBeDefined()
       expect(await getButton(/See my proposal/i)).toBeDefined()
     })
 
@@ -167,7 +174,7 @@ describe('UI: Vote for Proposal Modal', () => {
         fireEvent.click(await getButton(/^sign transaction and vote/i))
       })
 
-      expect(screen.queryByText('Failure')).not.toBeNull()
+      expect(await screen.findByText('Failure')).toBeDefined()
       expect(
         includesTextWithMarkup(screen.getByText, `There was a problem while Approve proposal "${PROPOSAL_DATA.title}".`)
       ).toBeInTheDocument()

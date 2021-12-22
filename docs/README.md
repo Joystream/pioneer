@@ -35,6 +35,8 @@ Libraries
 
 The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
 
+The CKEditor 5 build is available in `packages/markdown-editor` packages. [More on editor development](/packages/markdown-editor/README.md).
+
 ### Build tools
 
 The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc.).
@@ -53,6 +55,10 @@ To build a production ready version:
 yarn run build
 ```
 
+## Running Pioneer 2 with local Joystream dev environment
+
+Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer 2 with the Olympia testnet locally.
+
 ## Coding standards
 
 For code quality & standards we rely on ESLint and Prettier. To run both checks execute inside `packages/ui`:
@@ -67,7 +73,7 @@ yarn lint:fix
 
 ## Testing
 
-See [testing documentation](tests.md)
+Read more on testing in [testing documentation](tests.md).
 
 ## Joystream API
 
@@ -177,3 +183,12 @@ To add any of the above:
   * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`
 
 By default, only `Alice`, `Alice_Stash`, `Bob` and `Bob_Stash` accounts has any funds.
+
+## Using custom addresses to connect with node/query node
+To use custom addresses add the `.env` file in `packages/ui` (example: `packages/ui/.env.example`) and set
+
+1. `REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET` default `wss://olympia-dev.joystream.app/rpc`
+2. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE` default `https://olympia-dev.joystream.app/query/server/graphql`
+3. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET` default `wss://olympia-dev.joystream.app/query/server/graphql`
+
+Please remember to restart the webpack process after each change.

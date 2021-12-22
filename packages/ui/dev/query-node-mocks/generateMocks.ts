@@ -1,19 +1,19 @@
 import yargs from 'yargs'
 
 import { eventsModule } from './generateEventMocks'
-import { councilModule } from './generators/council/generateCouncils'
-import { forumModule } from './generators/forum/generateForumMocks'
+import { forumModule, generateForum } from './generators/forum/generateForumMocks'
+import { bountyModule, generateBounties } from './generators/generateBounties'
+import { councilModule, generateCouncils } from './generators/generateCouncils'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
-import { generateProposals } from './generators/generateProposals'
+import { generateProposals, proposalsModule } from './generators/generateProposals'
 import { generateWithdrawnApplications, generateWorkers } from './generators/generateWorkers'
 import { generateWorkingGroups, getWorkingGroupsWithLead } from './generators/generateWorkingGroups'
-import { Mocks } from './generators/types'
 import { saveFile } from './helpers/saveFile'
 
-const main = () => {
-  const mocks: Mocks = {
+const generateAll = () => {
+  const mocks: any = {
     members: [],
     workingGroups: [],
     openings: [],
@@ -31,6 +31,9 @@ const main = () => {
   mocks.applications = [...mocks.applications, ...generateWithdrawnApplications(mocks)]
   Object.assign(mocks, generateAllEvents(mocks))
   mocks.proposals = generateProposals(mocks)
+  Object.assign(mocks, generateCouncils(mocks))
+  Object.assign(mocks, generateForum(mocks))
+  Object.assign(mocks, generateBounties(mocks))
 
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
@@ -44,7 +47,7 @@ const membersModule = {
 const allModule = {
   command: 'all',
   describe: 'Generate all mocks',
-  handler: main,
+  handler: generateAll,
 }
 
 yargs(process.argv.slice(2))
@@ -53,6 +56,8 @@ yargs(process.argv.slice(2))
   .command(allModule)
   .command(membersModule)
   .command(eventsModule)
+  .command(proposalsModule)
   .command(forumModule)
   .command(councilModule)
+  .command(bountyModule)
   .demandCommand().argv

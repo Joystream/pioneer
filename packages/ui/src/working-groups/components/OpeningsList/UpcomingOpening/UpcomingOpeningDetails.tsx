@@ -4,7 +4,7 @@ import { generatePath } from 'react-router-dom'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
-import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
+import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
@@ -36,14 +36,14 @@ export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
             <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
-            <TwoColumnsStatistic>
+            <MultiColumnsStatistic>
               <StatiscticContentColumn>
                 <TextBig value bold>
                   {opening.hiringLimit}
                 </TextBig>
                 <Subscription>Target no of Hires</Subscription>
               </StatiscticContentColumn>
-            </TwoColumnsStatistic>
+            </MultiColumnsStatistic>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <TextBig>

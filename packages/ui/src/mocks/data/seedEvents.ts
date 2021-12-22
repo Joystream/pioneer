@@ -19,7 +19,7 @@ import rawStakeSlashedEvents from './raw/stakeSlashedEvents.json'
 import rawWorkerRewardAccountEvents from './raw/workerRewardAccountUpdatedEvents.json'
 import rawWorkerRewardAmountEvents from './raw/workerRewardAmountUpdatedEvents.json'
 
-interface BaseEvent {
+export interface BaseEvent {
   id?: string
   inBlock?: number
   network?: string
@@ -178,7 +178,7 @@ export function seedProposalsEvents(server: any) {
   server.schema.create('ProposalExecutedEvent', {
     ...randomRawBlock(),
     createdAt: faker.date.recent(1),
-    proposalId: '2',
+    proposalId: '4',
     executionStatus: server.schema.create('ProposalStatusExecuted'),
   })
   server.schema.create('ProposalDiscussionPostCreatedEvent', {

@@ -15,13 +15,19 @@ export type CouncilMemberFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
     councilMembers: Array<{ __typename: 'CouncilMember' }>
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -86,12 +92,18 @@ export type PastCouncilProposalsFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -120,6 +132,8 @@ export type ElectedCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   electedAtBlock: number
+  electedAtTime: any
+  electedAtNetwork: Types.Network
   councilMembers: Array<{
     __typename: 'CouncilMember'
     id: string
@@ -130,13 +144,19 @@ export type ElectedCouncilFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
       councilMembers: Array<{ __typename: 'CouncilMember' }>
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -152,12 +172,16 @@ export type PastCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
+  endedAtTime?: any | null | undefined
 }
 
 export type PastCouncilDetailedFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
+  endedAtTime?: any | null | undefined
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
 }
 
@@ -170,12 +194,18 @@ export type ElectionCandidateFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -205,12 +235,18 @@ export type ElectionRoundFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -233,7 +269,9 @@ export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  updatedAt?: any | null | undefined
+  endedAtBlock?: number | null | undefined
+  endedAtTime?: any | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
 }
@@ -242,7 +280,9 @@ export type PastElectionRoundDetailedFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  updatedAt?: any | null | undefined
+  endedAtBlock?: number | null | undefined
+  endedAtTime?: any | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
   candidates: Array<{
     __typename: 'Candidate'
     stake: any
@@ -252,12 +292,18 @@ export type PastElectionRoundDetailedFieldsFragment = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -295,12 +341,18 @@ export type ElectionCandidateDetailedFieldsFragment = {
     id: string
     rootAccount: string
     controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -321,39 +373,103 @@ export type ElectionCandidateDetailedFieldsFragment = {
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
   id: string
-  createdAt: any
   stake: any
   stakeLocked: boolean
   castBy: string
+  commitment: string
   voteFor?:
     | {
-        __typename: 'Membership'
+        __typename: 'Candidate'
         id: string
-        rootAccount: string
-        controllerAccount: string
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
-        roles: Array<{
-          __typename: 'Worker'
+        stake: any
+        member: {
+          __typename: 'Membership'
           id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
           createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        noteMetadata: {
+          __typename: 'CandidacyNoteMetadata'
+          header?: string | null | undefined
+          bulletPoints: Array<string>
+          bannerImageUri?: string | null | undefined
+          description?: string | null | undefined
+        }
       }
     | null
     | undefined
   electionRound: { __typename: 'ElectionRound'; cycleId: number }
+  castEvent?:
+    | Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }>
+    | null
+    | undefined
 }
 
 export type CouncilSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
   amount: any
   type?: Types.EventTypeOptions | null | undefined
+}
+
+export type FundingRequestApprovedFragment = {
+  __typename: 'ProposalExecutedEvent'
+  proposal: {
+    __typename: 'Proposal'
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateBlogPostProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'EditBlogPostProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | {
+          __typename: 'FundingRequestProposalDetails'
+          destinationsList?:
+            | {
+                __typename: 'FundingRequestDestinationsList'
+                destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+              }
+            | null
+            | undefined
+        }
+      | { __typename: 'LockBlogPostProposalDetails' }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UnlockBlogPostProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
+  }
 }
 
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -364,6 +480,8 @@ export type GetElectedCouncilQuery = {
     __typename: 'ElectedCouncil'
     id: string
     electedAtBlock: number
+    electedAtTime: any
+    electedAtNetwork: Types.Network
     councilMembers: Array<{
       __typename: 'CouncilMember'
       id: string
@@ -374,13 +492,19 @@ export type GetElectedCouncilQuery = {
         id: string
         rootAccount: string
         controllerAccount: string
+        boundAccounts: Array<string>
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
         councilMembers: Array<{ __typename: 'CouncilMember' }>
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -394,14 +518,20 @@ export type GetElectedCouncilQuery = {
 }
 
 export type GetPastCouncilsQueryVariables = Types.Exact<{
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ElectedCouncilOrderByInput> | Types.ElectedCouncilOrderByInput>
 }>
 
 export type GetPastCouncilsQuery = {
   __typename: 'Query'
-  electedCouncils: Array<{ __typename: 'ElectedCouncil'; id: string; endedAtBlock?: number | null | undefined }>
+  electedCouncils: Array<{
+    __typename: 'ElectedCouncil'
+    id: string
+    endedAtBlock?: number | null | undefined
+    endedAtNetwork?: Types.Network | null | undefined
+    endedAtTime?: any | null | undefined
+  }>
 }
 
 export type GetPastCouncilsCountQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -424,6 +554,8 @@ export type GetPastCouncilQuery = {
         __typename: 'ElectedCouncil'
         id: string
         endedAtBlock?: number | null | undefined
+        endedAtNetwork?: Types.Network | null | undefined
+        endedAtTime?: any | null | undefined
         councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
       }
     | null
@@ -432,6 +564,47 @@ export type GetPastCouncilQuery = {
     __typename: 'BudgetSpendingEvent'
     amount: any
     type?: Types.EventTypeOptions | null | undefined
+  }>
+  fundingRequestsApproved: Array<{
+    __typename: 'ProposalExecutedEvent'
+    proposal: {
+      __typename: 'Proposal'
+      details:
+        | { __typename: 'AmendConstitutionProposalDetails' }
+        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'CreateBlogPostProposalDetails' }
+        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+        | { __typename: 'EditBlogPostProposalDetails' }
+        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+        | {
+            __typename: 'FundingRequestProposalDetails'
+            destinationsList?:
+              | {
+                  __typename: 'FundingRequestDestinationsList'
+                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+                }
+              | null
+              | undefined
+          }
+        | { __typename: 'LockBlogPostProposalDetails' }
+        | { __typename: 'RuntimeUpgradeProposalDetails' }
+        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+        | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+        | { __typename: 'SetInitialInvitationCountProposalDetails' }
+        | { __typename: 'SetMaxValidatorCountProposalDetails' }
+        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+        | { __typename: 'SetMembershipPriceProposalDetails' }
+        | { __typename: 'SetReferralCutProposalDetails' }
+        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+        | { __typename: 'SignalProposalDetails' }
+        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UnlockBlogPostProposalDetails' }
+        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+        | { __typename: 'VetoProposalDetails' }
+    }
   }>
 }
 
@@ -450,12 +623,18 @@ export type GetPastCouncilMembersQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -519,12 +698,18 @@ export type GetPastCouncilMembersQuery = {
         id: string
         rootAccount: string
         controllerAccount: string
+        boundAccounts: Array<string>
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -534,20 +719,6 @@ export type GetPastCouncilMembersQuery = {
         }>
       }
     }
-  }>
-}
-
-export type GetPastCouncilBudgetSpendingQueryVariables = Types.Exact<{
-  fromBlock: Types.Scalars['Int']
-  toBlock: Types.Scalars['Int']
-}>
-
-export type GetPastCouncilBudgetSpendingQuery = {
-  __typename: 'Query'
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    amount: any
-    type?: Types.EventTypeOptions | null | undefined
   }>
 }
 
@@ -608,12 +779,18 @@ export type GetPastCouncilProposalsQuery = {
       id: string
       rootAccount: string
       controllerAccount: string
+      boundAccounts: Array<string>
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -659,12 +836,18 @@ export type GetCurrentElectionQuery = {
         id: string
         rootAccount: string
         controllerAccount: string
+        boundAccounts: Array<string>
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -685,9 +868,9 @@ export type GetCurrentElectionQuery = {
 }
 
 export type GetPastElectionsQueryVariables = Types.Exact<{
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.ElectionRoundOrderByInput> | Types.ElectionRoundOrderByInput>
 }>
 
 export type GetPastElectionsQuery = {
@@ -696,7 +879,9 @@ export type GetPastElectionsQuery = {
     __typename: 'ElectionRound'
     id: string
     cycleId: number
-    updatedAt?: any | null | undefined
+    endedAtBlock?: number | null | undefined
+    endedAtTime?: any | null | undefined
+    endedAtNetwork?: Types.Network | null | undefined
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
   }>
@@ -720,7 +905,9 @@ export type GetPastElectionQuery = {
         __typename: 'ElectionRound'
         id: string
         cycleId: number
-        updatedAt?: any | null | undefined
+        endedAtBlock?: number | null | undefined
+        endedAtTime?: any | null | undefined
+        endedAtNetwork?: Types.Network | null | undefined
         candidates: Array<{
           __typename: 'Candidate'
           stake: any
@@ -730,6 +917,7 @@ export type GetPastElectionQuery = {
             id: string
             rootAccount: string
             controllerAccount: string
+            boundAccounts: Array<string>
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
@@ -739,6 +927,11 @@ export type GetPastElectionQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -787,6 +980,7 @@ export type GetCandidateQuery = {
           id: string
           rootAccount: string
           controllerAccount: string
+          boundAccounts: Array<string>
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
@@ -796,6 +990,7 @@ export type GetCandidateQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -836,21 +1031,21 @@ export type GetCurrentCandidateIdByMemberQuery = {
 }
 
 export type GetCandidateStatsQueryVariables = Types.Exact<{
-  memberId?: Types.Maybe<Types.Scalars['ID']>
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type GetCandidateStatsQuery = {
   __typename: 'Query'
-  candidacyWithdrawEventsConnection: { __typename: 'CandidacyWithdrawEventConnection'; totalCount: number }
-  councilMembersConnection: { __typename: 'CouncilMemberConnection'; totalCount: number }
-  candidatesConnection: { __typename: 'CandidateConnection'; totalCount: number }
+  withdrawn: { __typename: 'CandidateConnection'; totalCount: number }
+  successful: { __typename: 'CandidateConnection'; totalCount: number }
+  failed: { __typename: 'CandidateConnection'; totalCount: number }
 }
 
 export type GetCouncilVotesQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
-  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetCouncilVotesQuery = {
@@ -858,52 +1053,74 @@ export type GetCouncilVotesQuery = {
   castVotes: Array<{
     __typename: 'CastVote'
     id: string
-    createdAt: any
     stake: any
     stakeLocked: boolean
     castBy: string
+    commitment: string
     voteFor?:
       | {
-          __typename: 'Membership'
+          __typename: 'Candidate'
           id: string
-          rootAccount: string
-          controllerAccount: string
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
+          stake: any
+          member: {
+            __typename: 'Membership'
             id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
             createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+          noteMetadata: {
+            __typename: 'CandidacyNoteMetadata'
+            header?: string | null | undefined
+            bulletPoints: Array<string>
+            bannerImageUri?: string | null | undefined
+            description?: string | null | undefined
+          }
         }
       | null
       | undefined
     electionRound: { __typename: 'ElectionRound'; cycleId: number }
+    castEvent?:
+      | Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }>
+      | null
+      | undefined
   }>
 }
 
 export type GetCouncilVotesCommitmentsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
-  orderBy?: Types.Maybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.CastVoteOrderByInput> | Types.CastVoteOrderByInput>
 }>
 
 export type GetCouncilVotesCommitmentsQuery = {
   __typename: 'Query'
-  castVotes: Array<{ __typename: 'CastVote'; id: string; commitment: string }>
+  castVotes: Array<{ __typename: 'CastVote'; commitment: string }>
 }
 
 export type GetCouncilVotesCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.CastVoteWhereInput>
+  where?: Types.InputMaybe<Types.CastVoteWhereInput>
 }>
 
 export type GetCouncilVotesCountQuery = {
@@ -912,7 +1129,7 @@ export type GetCouncilVotesCountQuery = {
 }
 
 export type GetPastVotesResultsQueryVariables = Types.Exact<{
-  myAccounts?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+  myAccounts?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
 }>
 
 export type GetPastVotesResultsQuery = {
@@ -927,7 +1144,7 @@ export type GetPastVotesResultsQuery = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    voteFor?: { __typename: 'Membership'; id: string } | null | undefined
+    voteFor?: { __typename: 'Candidate'; id: string } | null | undefined
     electionRound: { __typename: 'ElectionRound'; id: string }
   }>
 }
@@ -944,16 +1161,62 @@ export type GetCouncilBlockRangeQuery = {
     | undefined
 }
 
-export type GetCouncilProposalsStatsQueryVariables = Types.Exact<{
+export type GetPastCouncilStatsQueryVariables = Types.Exact<{
   startBlock: Types.Scalars['Int']
   endBlock: Types.Scalars['Int']
 }>
 
-export type GetCouncilProposalsStatsQuery = {
+export type GetPastCouncilStatsQuery = {
   __typename: 'Query'
-  approved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
-  rejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
-  slashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  proposalsApproved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
+  fundingRequestsApproved: Array<{
+    __typename: 'ProposalExecutedEvent'
+    proposal: {
+      __typename: 'Proposal'
+      details:
+        | { __typename: 'AmendConstitutionProposalDetails' }
+        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'CreateBlogPostProposalDetails' }
+        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+        | { __typename: 'EditBlogPostProposalDetails' }
+        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+        | {
+            __typename: 'FundingRequestProposalDetails'
+            destinationsList?:
+              | {
+                  __typename: 'FundingRequestDestinationsList'
+                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+                }
+              | null
+              | undefined
+          }
+        | { __typename: 'LockBlogPostProposalDetails' }
+        | { __typename: 'RuntimeUpgradeProposalDetails' }
+        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+        | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+        | { __typename: 'SetInitialInvitationCountProposalDetails' }
+        | { __typename: 'SetMaxValidatorCountProposalDetails' }
+        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+        | { __typename: 'SetMembershipPriceProposalDetails' }
+        | { __typename: 'SetReferralCutProposalDetails' }
+        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+        | { __typename: 'SignalProposalDetails' }
+        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UnlockBlogPostProposalDetails' }
+        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+        | { __typename: 'VetoProposalDetails' }
+    }
+  }>
+  proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: any
+    type?: Types.EventTypeOptions | null | undefined
+  }>
 }
 
 export const PastCouncilProposalsFieldsFragmentDoc = gql`
@@ -1009,6 +1272,8 @@ export const ElectedCouncilFieldsFragmentDoc = gql`
   fragment ElectedCouncilFields on ElectedCouncil {
     id
     electedAtBlock
+    electedAtTime
+    electedAtNetwork
     councilMembers {
       ...CouncilMemberFields
     }
@@ -1019,6 +1284,8 @@ export const PastCouncilFieldsFragmentDoc = gql`
   fragment PastCouncilFields on ElectedCouncil {
     id
     endedAtBlock
+    endedAtNetwork
+    endedAtTime
   }
 `
 export const PastCouncilDetailedFieldsFragmentDoc = gql`
@@ -1060,7 +1327,9 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
     id
     cycleId
-    updatedAt
+    endedAtBlock
+    endedAtTime
+    endedAtNetwork
     candidates {
       stake
     }
@@ -1100,23 +1369,45 @@ export const ElectionCandidateDetailedFieldsFragmentDoc = gql`
 export const CastVoteFieldsFragmentDoc = gql`
   fragment CastVoteFields on CastVote {
     id
-    createdAt
     stake
     stakeLocked
     castBy
+    commitment
     voteFor {
-      ...MemberFields
+      ...ElectionCandidateFields
     }
     electionRound {
       cycleId
     }
+    castEvent: votecasteventcastVote {
+      inBlock
+      network
+      createdAt
+    }
   }
-  ${MemberFieldsFragmentDoc}
+  ${ElectionCandidateFieldsFragmentDoc}
 `
 export const CouncilSpendingEventFieldsFragmentDoc = gql`
   fragment CouncilSpendingEventFields on BudgetSpendingEvent {
     amount
     type
+  }
+`
+export const FundingRequestApprovedFragmentDoc = gql`
+  fragment FundingRequestApproved on ProposalExecutedEvent {
+    proposal {
+      details {
+        __typename
+        ... on FundingRequestProposalDetails {
+          destinationsList {
+            destinations {
+              amount
+              account
+            }
+          }
+        }
+      }
+    }
   }
 `
 export const GetElectedCouncilDocument = gql`
@@ -1258,9 +1549,19 @@ export const GetPastCouncilDocument = gql`
     budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...CouncilSpendingEventFields
     }
+    fundingRequestsApproved: proposalExecutedEvents(
+      where: {
+        inBlock_gt: $fromBlock
+        inBlock_lt: $toBlock
+        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      }
+    ) {
+      ...FundingRequestApproved
+    }
   }
   ${PastCouncilDetailedFieldsFragmentDoc}
   ${CouncilSpendingEventFieldsFragmentDoc}
+  ${FundingRequestApprovedFragmentDoc}
 `
 
 /**
@@ -1298,7 +1599,7 @@ export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCoun
 export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
 export const GetPastCouncilMembersDocument = gql`
   query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-    councilMembers(where: { electedInCouncil_eq: $councilId }) {
+    councilMembers(where: { electedInCouncil: { id_eq: $councilId } }) {
       member {
         ...MemberFields
       }
@@ -1352,61 +1653,6 @@ export type GetPastCouncilMembersLazyQueryHookResult = ReturnType<typeof useGetP
 export type GetPastCouncilMembersQueryResult = Apollo.QueryResult<
   GetPastCouncilMembersQuery,
   GetPastCouncilMembersQueryVariables
->
-export const GetPastCouncilBudgetSpendingDocument = gql`
-  query GetPastCouncilBudgetSpending($fromBlock: Int!, $toBlock: Int!) {
-    budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
-      ...CouncilSpendingEventFields
-    }
-  }
-  ${CouncilSpendingEventFieldsFragmentDoc}
-`
-
-/**
- * __useGetPastCouncilBudgetSpendingQuery__
- *
- * To run a query within a React component, call `useGetPastCouncilBudgetSpendingQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPastCouncilBudgetSpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPastCouncilBudgetSpendingQuery({
- *   variables: {
- *      fromBlock: // value for 'fromBlock'
- *      toBlock: // value for 'toBlock'
- *   },
- * });
- */
-export function useGetPastCouncilBudgetSpendingQuery(
-  baseOptions: Apollo.QueryHookOptions<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
-    GetPastCouncilBudgetSpendingDocument,
-    options
-  )
-}
-export function useGetPastCouncilBudgetSpendingLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetPastCouncilBudgetSpendingQuery,
-    GetPastCouncilBudgetSpendingQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPastCouncilBudgetSpendingQuery, GetPastCouncilBudgetSpendingQueryVariables>(
-    GetPastCouncilBudgetSpendingDocument,
-    options
-  )
-}
-export type GetPastCouncilBudgetSpendingQueryHookResult = ReturnType<typeof useGetPastCouncilBudgetSpendingQuery>
-export type GetPastCouncilBudgetSpendingLazyQueryHookResult = ReturnType<
-  typeof useGetPastCouncilBudgetSpendingLazyQuery
->
-export type GetPastCouncilBudgetSpendingQueryResult = Apollo.QueryResult<
-  GetPastCouncilBudgetSpendingQuery,
-  GetPastCouncilBudgetSpendingQueryVariables
 >
 export const GetPastCouncilProposalsDocument = gql`
   query GetPastCouncilProposals($fromBlock: Int!, $toBlock: Int!) {
@@ -1840,13 +2086,13 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    candidacyWithdrawEventsConnection(where: { member: { id_eq: $memberId } }) {
+    withdrawn: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: WITHDRAWN }) {
       totalCount
     }
-    councilMembersConnection(where: { member: { id_eq: $memberId } }) {
+    successful: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: ELECTED }) {
       totalCount
     }
-    candidatesConnection(where: { member: { id_eq: $memberId } }) {
+    failed: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: FAILED }) {
       totalCount
     }
   }
@@ -1932,7 +2178,6 @@ export type GetCouncilVotesQueryResult = Apollo.QueryResult<GetCouncilVotesQuery
 export const GetCouncilVotesCommitmentsDocument = gql`
   query GetCouncilVotesCommitments($where: CastVoteWhereInput, $orderBy: [CastVoteOrderByInput!]) {
     castVotes(where: $where, orderBy: $orderBy) {
-      id
       commitment
     }
   }
@@ -2139,12 +2384,21 @@ export type GetCouncilBlockRangeQueryResult = Apollo.QueryResult<
   GetCouncilBlockRangeQuery,
   GetCouncilBlockRangeQueryVariables
 >
-export const GetCouncilProposalsStatsDocument = gql`
-  query GetCouncilProposalsStats($startBlock: Int!, $endBlock: Int!) {
-    approved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
+export const GetPastCouncilStatsDocument = gql`
+  query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
+    proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
       totalCount
     }
-    rejected: proposalDecisionMadeEventsConnection(
+    fundingRequestsApproved: proposalExecutedEvents(
+      where: {
+        inBlock_gt: $startBlock
+        inBlock_lt: $endBlock
+        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      }
+    ) {
+      ...FundingRequestApproved
+    }
+    proposalsRejected: proposalDecisionMadeEventsConnection(
       where: {
         inBlock_gt: $startBlock
         inBlock_lt: $endBlock
@@ -2153,7 +2407,7 @@ export const GetCouncilProposalsStatsDocument = gql`
     ) {
       totalCount
     }
-    slashed: proposalDecisionMadeEventsConnection(
+    proposalsSlashed: proposalDecisionMadeEventsConnection(
       where: {
         inBlock_gt: $startBlock
         inBlock_lt: $endBlock
@@ -2162,47 +2416,52 @@ export const GetCouncilProposalsStatsDocument = gql`
     ) {
       totalCount
     }
+    budgetSpendingEvents(where: { inBlock_gte: $startBlock, inBlock_lte: $endBlock }) {
+      ...CouncilSpendingEventFields
+    }
   }
+  ${FundingRequestApprovedFragmentDoc}
+  ${CouncilSpendingEventFieldsFragmentDoc}
 `
 
 /**
- * __useGetCouncilProposalsStatsQuery__
+ * __useGetPastCouncilStatsQuery__
  *
- * To run a query within a React component, call `useGetCouncilProposalsStatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCouncilProposalsStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPastCouncilStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastCouncilStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCouncilProposalsStatsQuery({
+ * const { data, loading, error } = useGetPastCouncilStatsQuery({
  *   variables: {
  *      startBlock: // value for 'startBlock'
  *      endBlock: // value for 'endBlock'
  *   },
  * });
  */
-export function useGetCouncilProposalsStatsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>
+export function useGetPastCouncilStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>(
-    GetCouncilProposalsStatsDocument,
+  return Apollo.useQuery<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>(
+    GetPastCouncilStatsDocument,
     options
   )
 }
-export function useGetCouncilProposalsStatsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>
+export function useGetPastCouncilStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCouncilProposalsStatsQuery, GetCouncilProposalsStatsQueryVariables>(
-    GetCouncilProposalsStatsDocument,
+  return Apollo.useLazyQuery<GetPastCouncilStatsQuery, GetPastCouncilStatsQueryVariables>(
+    GetPastCouncilStatsDocument,
     options
   )
 }
-export type GetCouncilProposalsStatsQueryHookResult = ReturnType<typeof useGetCouncilProposalsStatsQuery>
-export type GetCouncilProposalsStatsLazyQueryHookResult = ReturnType<typeof useGetCouncilProposalsStatsLazyQuery>
-export type GetCouncilProposalsStatsQueryResult = Apollo.QueryResult<
-  GetCouncilProposalsStatsQuery,
-  GetCouncilProposalsStatsQueryVariables
+export type GetPastCouncilStatsQueryHookResult = ReturnType<typeof useGetPastCouncilStatsQuery>
+export type GetPastCouncilStatsLazyQueryHookResult = ReturnType<typeof useGetPastCouncilStatsLazyQuery>
+export type GetPastCouncilStatsQueryResult = Apollo.QueryResult<
+  GetPastCouncilStatsQuery,
+  GetPastCouncilStatsQueryVariables
 >

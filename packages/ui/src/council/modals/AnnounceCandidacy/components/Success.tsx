@@ -6,7 +6,7 @@ import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
 
 interface SuccessModalProps {
@@ -20,7 +20,7 @@ export const SuccessModal = ({ onClose, memberId }: SuccessModalProps) => {
 
   const redirect = () => {
     onClose()
-    history.push(`${CouncilRoutes.currentElection}?candidate=${candidateId}`)
+    history.push(`${ElectionRoutes.currentElection}?candidate=${candidateId}`)
   }
 
   return (

@@ -32,6 +32,9 @@ describe('WorkingGroupsTabs', () => {
             members: [],
             isLoading: false,
             hasMembers,
+            helpers: {
+              getMemberIdByBoundAccountAddress: () => undefined,
+            },
           }}
         >
           <WorkingGroupsTabs />

@@ -228,8 +228,6 @@ export const ModalWrap = styled.section<ModalWrapProps>`
     }
   }};
   height: ${({ modalHeight }) => (modalHeight === 'xl' ? '100%' : 'min-content')};
-  max-height: 800px;
-  overflow: auto;
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
   ${Animations.showModalBlock};

@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
@@ -102,12 +101,12 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
             tight
             units="JOY"
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
+            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
             required
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              value={formatTokenValue(amount)}
               placeholder={minStake.toString()}
               onChange={(event) => setAmount(event.target.value)}
             />

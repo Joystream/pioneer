@@ -39,6 +39,14 @@ export type PostDeletedEventFieldsFragment = {
   actor: { __typename: 'Membership'; id: string; handle: string }
 }
 
+export type PostModeratedEventFieldsFragment = {
+  __typename: 'PostModeratedEvent'
+  id: string
+  createdAt: any
+  post: { __typename: 'ForumPost'; id: string; thread: { __typename: 'ForumThread'; id: string } }
+  actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
 export type ThreadCreatedEventFieldsFragment = {
   __typename: 'ThreadCreatedEvent'
   id: string
@@ -48,7 +56,23 @@ export type ThreadCreatedEventFieldsFragment = {
     id: string
     title: string
     author: { __typename: 'Membership'; id: string; handle: string }
+    category: { __typename: 'ForumCategory'; id: string; title: string }
   }
+}
+
+export type ThreadDeletedEventFieldsFragment = {
+  __typename: 'ThreadDeletedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+}
+
+export type ThreadModeratedEventFieldsFragment = {
+  __typename: 'ThreadModeratedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+  actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
 export type CategoryCreatedEventFieldsFragment = {
@@ -63,65 +87,190 @@ export type CategoryCreatedEventFieldsFragment = {
   }
 }
 
+export type CategoryDeletedEventFieldsFragment = {
+  __typename: 'CategoryDeletedEvent'
+  id: string
+  createdAt: any
+  category: {
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+  }
+}
+
 export type GetForumEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetForumEventsQuery = {
   __typename: 'Query'
-  postAddedEvents: Array<{
-    __typename: 'PostAddedEvent'
-    id: string
-    createdAt: any
-    post: {
-      __typename: 'ForumPost'
-      id: string
-      thread: { __typename: 'ForumThread'; id: string }
-      author: { __typename: 'Membership'; id: string; handle: string }
-    }
-  }>
-  postTextUpdatedEvents: Array<{
-    __typename: 'PostTextUpdatedEvent'
-    id: string
-    createdAt: any
-    post: {
-      __typename: 'ForumPost'
-      id: string
-      thread: { __typename: 'ForumThread'; id: string }
-      author: { __typename: 'Membership'; id: string; handle: string }
-    }
-  }>
-  postDeletedEvents: Array<{
-    __typename: 'PostDeletedEvent'
-    id: string
-    createdAt: any
-    posts: Array<{
-      __typename: 'ForumPost'
-      id: string
-      thread: { __typename: 'ForumThread'; id: string; title: string }
-    }>
-    actor: { __typename: 'Membership'; id: string; handle: string }
-  }>
-  threadCreatedEvents: Array<{
-    __typename: 'ThreadCreatedEvent'
-    id: string
-    createdAt: any
-    thread: {
-      __typename: 'ForumThread'
-      id: string
-      title: string
-      author: { __typename: 'Membership'; id: string; handle: string }
-    }
-  }>
-  categoryCreatedEvents: Array<{
-    __typename: 'CategoryCreatedEvent'
-    id: string
-    createdAt: any
-    category: {
-      __typename: 'ForumCategory'
-      id: string
-      title: string
-      parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
-    }
-  }>
+  events: Array<
+    | { __typename: 'AnnouncingPeriodStartedEvent' }
+    | { __typename: 'ApplicationWithdrawnEvent' }
+    | { __typename: 'AppliedOnOpeningEvent' }
+    | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyMaxFundingReachedEvent' }
+    | { __typename: 'BudgetBalanceSetEvent' }
+    | { __typename: 'BudgetIncrementUpdatedEvent' }
+    | { __typename: 'BudgetRefillEvent' }
+    | { __typename: 'BudgetRefillPlannedEvent' }
+    | { __typename: 'BudgetSetEvent' }
+    | { __typename: 'BudgetSpendingEvent' }
+    | { __typename: 'CandidacyNoteSetEvent' }
+    | { __typename: 'CandidacyStakeReleaseEvent' }
+    | { __typename: 'CandidacyWithdrawEvent' }
+    | { __typename: 'CategoryArchivalStatusUpdatedEvent' }
+    | {
+        __typename: 'CategoryCreatedEvent'
+        id: string
+        createdAt: any
+        category: {
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+        }
+      }
+    | {
+        __typename: 'CategoryDeletedEvent'
+        id: string
+        createdAt: any
+        category: {
+          __typename: 'ForumCategory'
+          id: string
+          title: string
+          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+        }
+      }
+    | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
+    | { __typename: 'CategoryStickyThreadUpdateEvent' }
+    | { __typename: 'CouncilorRewardUpdatedEvent' }
+    | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
+    | { __typename: 'InitialInvitationCountUpdatedEvent' }
+    | { __typename: 'InvitesTransferredEvent' }
+    | { __typename: 'LeaderInvitationQuotaUpdatedEvent' }
+    | { __typename: 'LeaderSetEvent' }
+    | { __typename: 'LeaderUnsetEvent' }
+    | { __typename: 'MemberAccountsUpdatedEvent' }
+    | { __typename: 'MemberInvitedEvent' }
+    | { __typename: 'MemberProfileUpdatedEvent' }
+    | { __typename: 'MemberVerificationStatusUpdatedEvent' }
+    | { __typename: 'MembershipBoughtEvent' }
+    | { __typename: 'MembershipPriceUpdatedEvent' }
+    | { __typename: 'NewCandidateEvent' }
+    | { __typename: 'NewCouncilElectedEvent' }
+    | { __typename: 'NewCouncilNotElectedEvent' }
+    | { __typename: 'NewMissedRewardLevelReachedEvent' }
+    | { __typename: 'NotEnoughCandidatesEvent' }
+    | { __typename: 'OpeningAddedEvent' }
+    | { __typename: 'OpeningCanceledEvent' }
+    | { __typename: 'OpeningFilledEvent' }
+    | {
+        __typename: 'PostAddedEvent'
+        id: string
+        createdAt: any
+        post: {
+          __typename: 'ForumPost'
+          id: string
+          thread: { __typename: 'ForumThread'; id: string }
+          author: { __typename: 'Membership'; id: string; handle: string }
+        }
+      }
+    | {
+        __typename: 'PostDeletedEvent'
+        id: string
+        createdAt: any
+        posts: Array<{
+          __typename: 'ForumPost'
+          id: string
+          thread: { __typename: 'ForumThread'; id: string; title: string }
+        }>
+        actor: { __typename: 'Membership'; id: string; handle: string }
+      }
+    | {
+        __typename: 'PostModeratedEvent'
+        id: string
+        createdAt: any
+        post: { __typename: 'ForumPost'; id: string; thread: { __typename: 'ForumThread'; id: string } }
+        actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+      }
+    | { __typename: 'PostReactedEvent' }
+    | {
+        __typename: 'PostTextUpdatedEvent'
+        id: string
+        createdAt: any
+        post: {
+          __typename: 'ForumPost'
+          id: string
+          thread: { __typename: 'ForumThread'; id: string }
+          author: { __typename: 'Membership'; id: string; handle: string }
+        }
+      }
+    | { __typename: 'ProposalCancelledEvent' }
+    | { __typename: 'ProposalCreatedEvent' }
+    | { __typename: 'ProposalDecisionMadeEvent' }
+    | { __typename: 'ProposalDiscussionPostCreatedEvent' }
+    | { __typename: 'ProposalDiscussionPostDeletedEvent' }
+    | { __typename: 'ProposalDiscussionPostUpdatedEvent' }
+    | { __typename: 'ProposalDiscussionThreadModeChangedEvent' }
+    | { __typename: 'ProposalExecutedEvent' }
+    | { __typename: 'ProposalStatusUpdatedEvent' }
+    | { __typename: 'ProposalVotedEvent' }
+    | { __typename: 'ReferendumFinishedEvent' }
+    | { __typename: 'ReferendumStartedEvent' }
+    | { __typename: 'ReferendumStartedForcefullyEvent' }
+    | { __typename: 'ReferralCutUpdatedEvent' }
+    | { __typename: 'RequestFundedEvent' }
+    | { __typename: 'RevealingStageStartedEvent' }
+    | { __typename: 'RewardPaidEvent' }
+    | { __typename: 'RewardPaymentEvent' }
+    | { __typename: 'StakeDecreasedEvent' }
+    | { __typename: 'StakeIncreasedEvent' }
+    | { __typename: 'StakeReleasedEvent' }
+    | { __typename: 'StakeSlashedEvent' }
+    | { __typename: 'StakingAccountAddedEvent' }
+    | { __typename: 'StakingAccountConfirmedEvent' }
+    | { __typename: 'StakingAccountRemovedEvent' }
+    | { __typename: 'StatusTextChangedEvent' }
+    | { __typename: 'TerminatedLeaderEvent' }
+    | { __typename: 'TerminatedWorkerEvent' }
+    | {
+        __typename: 'ThreadCreatedEvent'
+        id: string
+        createdAt: any
+        thread: {
+          __typename: 'ForumThread'
+          id: string
+          title: string
+          author: { __typename: 'Membership'; id: string; handle: string }
+          category: { __typename: 'ForumCategory'; id: string; title: string }
+        }
+      }
+    | {
+        __typename: 'ThreadDeletedEvent'
+        id: string
+        createdAt: any
+        thread: { __typename: 'ForumThread'; id: string; title: string }
+      }
+    | { __typename: 'ThreadMetadataUpdatedEvent' }
+    | {
+        __typename: 'ThreadModeratedEvent'
+        id: string
+        createdAt: any
+        thread: { __typename: 'ForumThread'; id: string; title: string }
+        actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+      }
+    | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VoteCastEvent' }
+    | { __typename: 'VoteOnPollEvent' }
+    | { __typename: 'VoteRevealedEvent' }
+    | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkerExitedEvent' }
+    | { __typename: 'WorkerRewardAccountUpdatedEvent' }
+    | { __typename: 'WorkerRewardAmountUpdatedEvent' }
+    | { __typename: 'WorkerRoleAccountUpdatedEvent' }
+    | { __typename: 'WorkerStartedLeavingEvent' }
+  >
 }
 
 export const PostAddedEventFieldsFragmentDoc = gql`
@@ -173,6 +322,24 @@ export const PostDeletedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const PostModeratedEventFieldsFragmentDoc = gql`
+  fragment PostModeratedEventFields on PostModeratedEvent {
+    id
+    createdAt
+    post {
+      id
+      thread {
+        id
+      }
+    }
+    actor {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
 export const ThreadCreatedEventFieldsFragmentDoc = gql`
   fragment ThreadCreatedEventFields on ThreadCreatedEvent {
     id
@@ -181,6 +348,36 @@ export const ThreadCreatedEventFieldsFragmentDoc = gql`
       id
       title
       author {
+        id
+        handle
+      }
+      category {
+        id
+        title
+      }
+    }
+  }
+`
+export const ThreadDeletedEventFieldsFragmentDoc = gql`
+  fragment ThreadDeletedEventFields on ThreadDeletedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+  }
+`
+export const ThreadModeratedEventFieldsFragmentDoc = gql`
+  fragment ThreadModeratedEventFields on ThreadModeratedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+    actor {
+      membership {
         id
         handle
       }
@@ -201,29 +398,77 @@ export const CategoryCreatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const CategoryDeletedEventFieldsFragmentDoc = gql`
+  fragment CategoryDeletedEventFields on CategoryDeletedEvent {
+    id
+    createdAt
+    category {
+      id
+      title
+      parent {
+        id
+        title
+      }
+    }
+  }
+`
 export const GetForumEventsDocument = gql`
   query GetForumEvents {
-    postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
-      ...PostAddedEventFields
-    }
-    postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
-      ...PostTextUpdatedEventFields
-    }
-    postDeletedEvents(orderBy: createdAt_DESC, limit: 10) {
-      ...PostDeletedEventFields
-    }
-    threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
-      ...ThreadCreatedEventFields
-    }
-    categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
-      ...CategoryCreatedEventFields
+    events(
+      where: {
+        type_in: [
+          PostAddedEvent
+          PostTextUpdatedEvent
+          PostModeratedEvent
+          PostDeletedEvent
+          ThreadCreatedEvent
+          ThreadDeletedEvent
+          ThreadModeratedEvent
+          CategoryCreatedEvent
+          CategoryDeletedEvent
+        ]
+      }
+      limit: 25
+      orderBy: [createdAt_DESC]
+    ) {
+      ... on PostAddedEvent {
+        ...PostAddedEventFields
+      }
+      ... on PostTextUpdatedEvent {
+        ...PostTextUpdatedEventFields
+      }
+      ... on PostModeratedEvent {
+        ...PostModeratedEventFields
+      }
+      ... on PostDeletedEvent {
+        ...PostDeletedEventFields
+      }
+      ... on ThreadCreatedEvent {
+        ...ThreadCreatedEventFields
+      }
+      ... on ThreadDeletedEvent {
+        ...ThreadDeletedEventFields
+      }
+      ... on ThreadModeratedEvent {
+        ...ThreadModeratedEventFields
+      }
+      ... on CategoryCreatedEvent {
+        ...CategoryCreatedEventFields
+      }
+      ... on CategoryDeletedEvent {
+        ...CategoryDeletedEventFields
+      }
     }
   }
   ${PostAddedEventFieldsFragmentDoc}
   ${PostTextUpdatedEventFieldsFragmentDoc}
+  ${PostModeratedEventFieldsFragmentDoc}
   ${PostDeletedEventFieldsFragmentDoc}
   ${ThreadCreatedEventFieldsFragmentDoc}
+  ${ThreadDeletedEventFieldsFragmentDoc}
+  ${ThreadModeratedEventFieldsFragmentDoc}
   ${CategoryCreatedEventFieldsFragmentDoc}
+  ${CategoryDeletedEventFieldsFragmentDoc}
 `
 
 /**

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ButtonSecondary } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
 import { Member } from '@/memberships/types'
@@ -21,9 +21,9 @@ export const WithdrawButton = ({ member }: Props) => {
 
   return (
     <>
-      <ButtonSecondary size="medium" onClick={onClick}>
+      <TransactionButton style="secondary" size="medium" onClick={onClick}>
         Withdraw Candidacy
-      </ButtonSecondary>
+      </TransactionButton>
     </>
   )
 }

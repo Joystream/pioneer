@@ -66,9 +66,9 @@ describe('UI: Past Council page', () => {
 
   describe('Council found', () => {
     it('Renders', async () => {
-      const { queryByText } = await renderComponent()
+      const { queryByText, findAllByText } = await renderComponent()
 
-      expect(queryByText(/Council #1/i)).not.toBeNull()
+      expect(await findAllByText(/Council #1/i)).toHaveLength(2)
       expect(queryByText(/^Past Council$/i)).not.toBeNull()
       expect(queryByText(/Council members/i)).not.toBeNull()
       expect(queryByText(/^Proposals$/i)).not.toBeNull()
@@ -77,6 +77,18 @@ describe('UI: Past Council page', () => {
 
     describe('Stats', () => {
       beforeEach(async () => {
+        seedProposal(testProposals[0], mockServer.server)
+        seedEvent(
+          {
+            id: '0',
+            inBlock: 5,
+            createdAt: '2021-10-07T11:47:39.042Z',
+            network: 'OLYMPIA',
+            proposalId: testProposals[0].id,
+          },
+          'ProposalExecutedEvent',
+          mockServer.server
+        )
         seedEvent(
           {
             id: '0',
@@ -122,7 +134,7 @@ describe('UI: Past Council page', () => {
       it('Total spent on proposals', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent on proposals$/i).parentElement?.nextSibling?.textContent).toBe('0')
+        expect(getByText(/^Total spent on proposals$/i).parentElement?.nextSibling?.textContent).toBe('5,000')
       })
     })
 
@@ -378,7 +390,7 @@ describe('UI: Past Council page', () => {
           const workingGroupTotalBudget = workingGroupItem?.children.item(3)?.textContent
           const workingGroupBudgetPercentage = workingGroupItem?.children.item(4)?.textContent
 
-          expect(workingGroupName).toBe('forum')
+          expect(workingGroupName).toBe('Forum')
           expect(workingGroupPaidRewards).toBe('6,050')
           expect(workingGroupMissedRewards).toBe('3,145')
           expect(workingGroupTotalBudget).toBe('80,000')
