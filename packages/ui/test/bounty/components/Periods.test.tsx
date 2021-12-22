@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import React from 'react'
 import BN from 'bn.js'
+import React from 'react'
 
 import { Periods } from '@/bounty/components/BountySidebar/Periods'
 
@@ -13,7 +13,7 @@ describe('Periods', () => {
     workPeriodLength,
     judgingPeriodLength,
   }
-  
+
   it('should display proper periods length', () => {
     const stage = 'funding'
     render(<Periods {...props} stage={stage} />)
