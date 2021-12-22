@@ -1,0 +1,39 @@
+fragment BountyFields on Bounty {
+  id
+  createdAt
+  title
+  cherry
+  entrantStake
+  creator {
+    ...MemberFields
+  }
+  oracle {
+    ...MemberFields
+  }
+  fundingType {
+    ... on BountyFundingLimited {
+      minFundingAmount
+      maxFundingAmount
+      fundingPeriod
+    }
+    ... on BountyFundingPerpetual {
+      target
+    }
+  }
+  workPeriod
+  judgingPeriod
+  stage
+  totalFunding
+}
+
+query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
+  bounties(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...BountyFields
+  }
+}
+
+query GetBountiesCount($where: BountyWhereInput) {
+  bountiesConnection(where: $where) {
+    totalCount
+  }
+}
