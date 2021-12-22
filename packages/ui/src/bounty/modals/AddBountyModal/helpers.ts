@@ -61,3 +61,30 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
       return false
   }
 }
+
+// export const createBountyParametersFactory = (
+//   state: AddBountyModalMachineState
+// ): {
+//   cherry: BN | undefined
+//   oracle: { asMember: string | undefined; isMember: boolean; isCouncil: boolean }
+//   funding_type: FundingPeriodType | undefined
+// } => ({
+//   oracle: {
+//     isCouncil: false,
+//     isMember: true,
+//     asMember: state.context.oracle?.id,
+//   },
+//   cherry: state.context.cherry,
+//   funding_type: state.context.fundingPeriodType,
+//   fundingPeriodLength: state.context.fundingPeriodLength,
+//   fundingMinimalRange: state.context.fundingMinimalRange,
+//   fundingMaximalRange: state.context.fundingMaximalRange,
+//   // readonly oracle: BountyActor;
+//   // readonly contract_type: AssuranceContractType;
+//   // readonly creator: BountyActor;
+//   // readonly cherry: u128;
+//   // readonly entrant_stake: u128;
+//   // readonly funding_type: FundingType;
+//   // readonly work_period: u32;
+//   // readonly judging_period: u32;
+// })

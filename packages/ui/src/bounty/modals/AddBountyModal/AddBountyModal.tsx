@@ -53,6 +53,19 @@ export const AddBountyModal = () => {
       })
     )
   }, [state])
+  // if (state.matches(AddBountyStates.transaction)) {
+  //   const transaction = api.tx.bounty.createBounty({})
+  //   return (
+  //     <SignTransactionModal
+  //       onClose={hideModal}
+  //       transaction={transaction}
+  //       // signer={activeMember.controllerAccount}
+  //       // stake={constants?.requiredStake as BN}
+  //       // service={state.children['transaction']}
+  //       // steps={transactionsSteps}
+  //     />
+  //   )
+  // }
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
