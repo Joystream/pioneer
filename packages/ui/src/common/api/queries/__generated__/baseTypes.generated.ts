@@ -825,6 +825,8 @@ export type BountyContribution = BaseGraphQlObject & {
   amount: Scalars['BigInt']
   bounty: Bounty
   bountyId: Scalars['String']
+  contributor?: Maybe<Membership>
+  contributorId?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   deletedAt?: Maybe<Scalars['DateTime']>
@@ -845,6 +847,7 @@ export type BountyContributionConnection = {
 export type BountyContributionCreateInput = {
   amount: Scalars['String']
   bounty: Scalars['ID']
+  contributor?: InputMaybe<Scalars['ID']>
 }
 
 export type BountyContributionEdge = {
@@ -858,6 +861,8 @@ export enum BountyContributionOrderByInput {
   AmountDesc = 'amount_DESC',
   BountyAsc = 'bounty_ASC',
   BountyDesc = 'bounty_DESC',
+  ContributorAsc = 'contributor_ASC',
+  ContributorDesc = 'contributor_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
@@ -869,6 +874,7 @@ export enum BountyContributionOrderByInput {
 export type BountyContributionUpdateInput = {
   amount?: InputMaybe<Scalars['String']>
   bounty?: InputMaybe<Scalars['ID']>
+  contributor?: InputMaybe<Scalars['ID']>
 }
 
 export type BountyContributionWhereInput = {
@@ -881,6 +887,7 @@ export type BountyContributionWhereInput = {
   amount_lt?: InputMaybe<Scalars['BigInt']>
   amount_lte?: InputMaybe<Scalars['BigInt']>
   bounty?: InputMaybe<BountyWhereInput>
+  contributor?: InputMaybe<MembershipWhereInput>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -1082,7 +1089,7 @@ export type BountyEntry = BaseGraphQlObject & {
   workSubmitted: Scalars['Boolean']
   worker: Membership
   workerId: Scalars['String']
-  works: Array<Scalars['String']>
+  works: Array<BountyWorkData>
 }
 
 export type BountyEntryConnection = {
@@ -1100,7 +1107,6 @@ export type BountyEntryCreateInput = {
   status: Scalars['JSONObject']
   workSubmitted: Scalars['Boolean']
   worker: Scalars['ID']
-  works: Array<Scalars['String']>
 }
 
 export type BountyEntryEdge = {
@@ -1176,7 +1182,6 @@ export type BountyEntryUpdateInput = {
   status?: InputMaybe<Scalars['JSONObject']>
   workSubmitted?: InputMaybe<Scalars['Boolean']>
   worker?: InputMaybe<Scalars['ID']>
-  works?: InputMaybe<Array<Scalars['String']>>
 }
 
 export type BountyEntryWhereInput = {
@@ -1223,9 +1228,9 @@ export type BountyEntryWhereInput = {
   workSubmitted_eq?: InputMaybe<Scalars['Boolean']>
   workSubmitted_in?: InputMaybe<Array<Scalars['Boolean']>>
   worker?: InputMaybe<MembershipWhereInput>
-  works_containsAll?: InputMaybe<Array<Scalars['String']>>
-  works_containsAny?: InputMaybe<Array<Scalars['String']>>
-  works_containsNone?: InputMaybe<Array<Scalars['String']>>
+  works_every?: InputMaybe<BountyWorkDataWhereInput>
+  works_none?: InputMaybe<BountyWorkDataWhereInput>
+  works_some?: InputMaybe<BountyWorkDataWhereInput>
 }
 
 export type BountyEntryWhereUniqueInput = {
@@ -1521,6 +1526,106 @@ export type BountyWhereInput = {
 }
 
 export type BountyWhereUniqueInput = {
+  id: Scalars['ID']
+}
+
+/** Work data submitted into an entry */
+export type BountyWorkData = BaseGraphQlObject & {
+  __typename: 'BountyWorkData'
+  createdAt: Scalars['DateTime']
+  createdById: Scalars['String']
+  deletedAt?: Maybe<Scalars['DateTime']>
+  deletedById?: Maybe<Scalars['String']>
+  /** Description which contains the work itself as a URL, a BLOB, or just text */
+  description: Scalars['String']
+  entry: Array<BountyEntry>
+  id: Scalars['ID']
+  /** Title of the work */
+  title: Scalars['String']
+  updatedAt?: Maybe<Scalars['DateTime']>
+  updatedById?: Maybe<Scalars['String']>
+  version: Scalars['Int']
+}
+
+export type BountyWorkDataConnection = {
+  __typename: 'BountyWorkDataConnection'
+  edges: Array<BountyWorkDataEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+}
+
+export type BountyWorkDataCreateInput = {
+  description: Scalars['String']
+  title: Scalars['String']
+}
+
+export type BountyWorkDataEdge = {
+  __typename: 'BountyWorkDataEdge'
+  cursor: Scalars['String']
+  node: BountyWorkData
+}
+
+export enum BountyWorkDataOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+}
+
+export type BountyWorkDataUpdateInput = {
+  description?: InputMaybe<Scalars['String']>
+  title?: InputMaybe<Scalars['String']>
+}
+
+export type BountyWorkDataWhereInput = {
+  AND?: InputMaybe<Array<BountyWorkDataWhereInput>>
+  OR?: InputMaybe<Array<BountyWorkDataWhereInput>>
+  createdAt_eq?: InputMaybe<Scalars['DateTime']>
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>
+  createdById_eq?: InputMaybe<Scalars['ID']>
+  createdById_in?: InputMaybe<Array<Scalars['ID']>>
+  deletedAt_all?: InputMaybe<Scalars['Boolean']>
+  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
+  deletedById_eq?: InputMaybe<Scalars['ID']>
+  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
+  description_contains?: InputMaybe<Scalars['String']>
+  description_endsWith?: InputMaybe<Scalars['String']>
+  description_eq?: InputMaybe<Scalars['String']>
+  description_in?: InputMaybe<Array<Scalars['String']>>
+  description_startsWith?: InputMaybe<Scalars['String']>
+  entry_every?: InputMaybe<BountyEntryWhereInput>
+  entry_none?: InputMaybe<BountyEntryWhereInput>
+  entry_some?: InputMaybe<BountyEntryWhereInput>
+  id_eq?: InputMaybe<Scalars['ID']>
+  id_in?: InputMaybe<Array<Scalars['ID']>>
+  title_contains?: InputMaybe<Scalars['String']>
+  title_endsWith?: InputMaybe<Scalars['String']>
+  title_eq?: InputMaybe<Scalars['String']>
+  title_in?: InputMaybe<Array<Scalars['String']>>
+  title_startsWith?: InputMaybe<Scalars['String']>
+  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
+  updatedById_eq?: InputMaybe<Scalars['ID']>
+  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+}
+
+export type BountyWorkDataWhereUniqueInput = {
   id: Scalars['ID']
 }
 
@@ -8302,6 +8407,7 @@ export type Membership = BaseGraphQlObject & {
   __typename: 'Membership'
   /** Staking accounts bounded to membership. */
   boundAccounts: Array<Scalars['String']>
+  bountycontributioncontributor?: Maybe<Array<BountyContribution>>
   bountycreator?: Maybe<Array<Bounty>>
   bountyentryworker?: Maybe<Array<BountyEntry>>
   bountyoracle?: Maybe<Array<Bounty>>
@@ -8902,6 +9008,9 @@ export type MembershipWhereInput = {
   boundAccounts_containsAll?: InputMaybe<Array<Scalars['String']>>
   boundAccounts_containsAny?: InputMaybe<Array<Scalars['String']>>
   boundAccounts_containsNone?: InputMaybe<Array<Scalars['String']>>
+  bountycontributioncontributor_every?: InputMaybe<BountyContributionWhereInput>
+  bountycontributioncontributor_none?: InputMaybe<BountyContributionWhereInput>
+  bountycontributioncontributor_some?: InputMaybe<BountyContributionWhereInput>
   bountycreator_every?: InputMaybe<BountyWhereInput>
   bountycreator_none?: InputMaybe<BountyWhereInput>
   bountycreator_some?: InputMaybe<BountyWhereInput>
@@ -13089,6 +13198,9 @@ export type Query = {
   bountyMaxFundingReachedEventByUniqueInput?: Maybe<BountyMaxFundingReachedEvent>
   bountyMaxFundingReachedEvents: Array<BountyMaxFundingReachedEvent>
   bountyMaxFundingReachedEventsConnection: BountyMaxFundingReachedEventConnection
+  bountyWorkData: Array<BountyWorkData>
+  bountyWorkDataByUniqueInput?: Maybe<BountyWorkData>
+  bountyWorkDataConnection: BountyWorkDataConnection
   budgetBalanceSetEventByUniqueInput?: Maybe<BudgetBalanceSetEvent>
   budgetBalanceSetEvents: Array<BudgetBalanceSetEvent>
   budgetBalanceSetEventsConnection: BudgetBalanceSetEventConnection
@@ -13676,6 +13788,26 @@ export type QueryBountyMaxFundingReachedEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<BountyMaxFundingReachedEventOrderByInput>>
   where?: InputMaybe<BountyMaxFundingReachedEventWhereInput>
+}
+
+export type QueryBountyWorkDataArgs = {
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<BountyWorkDataOrderByInput>>
+  where?: InputMaybe<BountyWorkDataWhereInput>
+}
+
+export type QueryBountyWorkDataByUniqueInputArgs = {
+  where: BountyWorkDataWhereUniqueInput
+}
+
+export type QueryBountyWorkDataConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<BountyWorkDataOrderByInput>>
+  where?: InputMaybe<BountyWorkDataWhereInput>
 }
 
 export type QueryBudgetBalanceSetEventByUniqueInputArgs = {
