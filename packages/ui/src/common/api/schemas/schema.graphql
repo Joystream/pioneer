@@ -877,6 +877,8 @@ type BountyContribution implements BaseGraphQLObject {
   version: Int!
   bounty: Bounty!
   bountyId: String!
+  contributor: Membership
+  contributorId: String
 
   """
   Amount of the contribution
@@ -892,6 +894,7 @@ type BountyContributionConnection {
 
 input BountyContributionCreateInput {
   bounty: ID!
+  contributor: ID
   amount: String!
 }
 
@@ -909,12 +912,15 @@ enum BountyContributionOrderByInput {
   deletedAt_DESC
   bounty_ASC
   bounty_DESC
+  contributor_ASC
+  contributor_DESC
   amount_ASC
   amount_DESC
 }
 
 input BountyContributionUpdateInput {
   bounty: ID
+  contributor: ID
   amount: String
 }
 
@@ -950,6 +956,7 @@ input BountyContributionWhereInput {
   amount_lte: BigInt
   amount_in: [BigInt!]
   bounty: BountyWhereInput
+  contributor: MembershipWhereInput
   AND: [BountyContributionWhereInput!]
   OR: [BountyContributionWhereInput!]
 }
@@ -1142,7 +1149,7 @@ type BountyEntry implements BaseGraphQLObject {
   Whether at least one work has been submitted
   """
   workSubmitted: Boolean!
-  works: [String!]!
+  works: [BountyWorkData!]!
 
   """
   Work entry status
@@ -1164,7 +1171,6 @@ input BountyEntryCreateInput {
   stake: String!
   stakingAccount: String
   workSubmitted: Boolean!
-  works: [String!]!
   status: JSONObject!
   announcedInEvent: ID!
 }
@@ -1233,7 +1239,6 @@ input BountyEntryUpdateInput {
   stake: String
   stakingAccount: String
   workSubmitted: Boolean
-  works: [String!]
   status: JSONObject
   announcedInEvent: ID
 }
@@ -1276,12 +1281,12 @@ input BountyEntryWhereInput {
   stakingAccount_in: [String!]
   workSubmitted_eq: Boolean
   workSubmitted_in: [Boolean!]
-  works_containsAll: [String!]
-  works_containsNone: [String!]
-  works_containsAny: [String!]
   status_json: JSONObject
   bounty: BountyWhereInput
   worker: MembershipWhereInput
+  works_none: BountyWorkDataWhereInput
+  works_some: BountyWorkDataWhereInput
+  works_every: BountyWorkDataWhereInput
   announcedInEvent: WorkEntryAnnouncedEventWhereInput
   AND: [BountyEntryWhereInput!]
   OR: [BountyEntryWhereInput!]
@@ -1598,6 +1603,111 @@ input BountyWhereInput {
 }
 
 input BountyWhereUniqueInput {
+  id: ID!
+}
+
+"""
+Work data submitted into an entry
+"""
+type BountyWorkData implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  entry: [BountyEntry!]!
+
+  """
+  Title of the work
+  """
+  title: String!
+
+  """
+  Description which contains the work itself as a URL, a BLOB, or just text
+  """
+  description: String!
+}
+
+type BountyWorkDataConnection {
+  totalCount: Int!
+  edges: [BountyWorkDataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyWorkDataCreateInput {
+  title: String!
+  description: String!
+}
+
+type BountyWorkDataEdge {
+  node: BountyWorkData!
+  cursor: String!
+}
+
+enum BountyWorkDataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+}
+
+input BountyWorkDataUpdateInput {
+  title: String
+  description: String
+}
+
+input BountyWorkDataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  title_eq: String
+  title_contains: String
+  title_startsWith: String
+  title_endsWith: String
+  title_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  entry_none: BountyEntryWhereInput
+  entry_some: BountyEntryWhereInput
+  entry_every: BountyEntryWhereInput
+  AND: [BountyWorkDataWhereInput!]
+  OR: [BountyWorkDataWhereInput!]
+}
+
+input BountyWorkDataWhereUniqueInput {
   id: ID!
 }
 
@@ -8862,6 +8972,7 @@ type Membership implements BaseGraphQLObject {
   councilMembers: [CouncilMember!]!
   bountycreator: [Bounty!]
   bountyoracle: [Bounty!]
+  bountycontributioncontributor: [BountyContribution!]
   bountyentryworker: [BountyEntry!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
@@ -9546,6 +9657,9 @@ input MembershipWhereInput {
   bountyoracle_none: BountyWhereInput
   bountyoracle_some: BountyWhereInput
   bountyoracle_every: BountyWhereInput
+  bountycontributioncontributor_none: BountyContributionWhereInput
+  bountycontributioncontributor_some: BountyContributionWhereInput
+  bountycontributioncontributor_every: BountyContributionWhereInput
   bountyentryworker_none: BountyEntryWhereInput
   bountyentryworker_some: BountyEntryWhereInput
   bountyentryworker_every: BountyEntryWhereInput
@@ -14242,6 +14356,21 @@ type Query {
     where: BountyMaxFundingReachedEventWhereInput
     orderBy: [BountyMaxFundingReachedEventOrderByInput!]
   ): BountyMaxFundingReachedEventConnection!
+  bountyWorkData(
+    offset: Int
+    limit: Int = 50
+    where: BountyWorkDataWhereInput
+    orderBy: [BountyWorkDataOrderByInput!]
+  ): [BountyWorkData!]!
+  bountyWorkDataByUniqueInput(where: BountyWorkDataWhereUniqueInput!): BountyWorkData
+  bountyWorkDataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyWorkDataWhereInput
+    orderBy: [BountyWorkDataOrderByInput!]
+  ): BountyWorkDataConnection!
   bounties(offset: Int, limit: Int = 50, where: BountyWhereInput, orderBy: [BountyOrderByInput!]): [Bounty!]!
   bountyByUniqueInput(where: BountyWhereUniqueInput!): Bounty
   bountiesConnection(
