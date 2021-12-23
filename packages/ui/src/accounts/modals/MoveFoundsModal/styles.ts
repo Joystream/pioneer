@@ -26,3 +26,14 @@ export const ModalBody = styled.div`
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
 `
+
+export const AccountLocksWrapper = styled.div`
+  text-align: left;
+`
+
+export const InlineLockIconWrapper = styled.div`
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+  margin-left: 8px;
+`
