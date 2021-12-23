@@ -4,6 +4,7 @@ import { Reducer } from '@/common/types/helpers'
 import { RawBountyMock, RawBountyContributionMock, RawBountyEntryMock } from '@/mocks/data/seedBounties'
 import { RawForumThreadMock } from '@/mocks/data/seedForum'
 
+import { randomRawBlock } from '../../../src/mocks/helpers/randomBlock'
 import { saveFile } from '../helpers/saveFile'
 
 import { ForumThreadStatus } from './forum/generateForumThreads'
@@ -71,6 +72,8 @@ const generateBounty = (mocks: DependOnMocks): Reducer<BountyData, any> => (data
     stage: bountyStage(),
     totalFunding: String(randomFromRange(5, 10) * 1000),
     discussionThreadId: random.arrayElement(mocks.forumThreads).id,
+    createdInEvent: randomRawBlock(),
+    ...(datatype.boolean() ? { maxFundingReachedEvent: randomRawBlock() } : {}),
   }
 
   // Generate the bounty contributions
@@ -118,6 +121,7 @@ const generateEntry = (mocks: DependOnMocks, bounty: RawBountyMock) => (entryInd
     workSubmitted: works.length > 0,
     works,
     status: randomStatus(),
+    announcedInEvent: randomRawBlock(),
   }
 }
 
