@@ -1,5 +1,6 @@
-import { Member } from "@/memberships/types";
-import BN from "bn.js";
+import BN from 'bn.js'
+
+import { Member } from '@/memberships/types'
 
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
 
@@ -41,14 +42,7 @@ type FundingPerpetual = {
   target: BN
 }
 
-export type BountyStage =
-  | 'funding'
-  | 'expired'
-  | 'workSubmission'
-  | 'judgment'
-  | 'successful'
-  | 'failed'
-  | 'terminate'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
 
 export interface Bounty {
   id: string
@@ -63,4 +57,4 @@ export interface Bounty {
   judgingPeriod: BN
   stage: BountyStage
   totalFunding: BN
-} 
+}

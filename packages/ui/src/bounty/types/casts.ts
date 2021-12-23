@@ -1,19 +1,21 @@
-import { BountyFundingType, BountyStage as SchemaBountyStage} from "@/common/api/queries"
-import { lowerFirstLetter } from "@/common/helpers"
-import { asMember } from "@/memberships/types"
-import BN from "bn.js"
-import { BountyFieldsFragment } from "../queries"
-import { Bounty, BountyStage, FundingType } from "./Bounty"
+import BN from 'bn.js'
 
+import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
+import { lowerFirstLetter } from '@/common/helpers'
+import { asMember } from '@/memberships/types'
+
+import { BountyFieldsFragment } from '../queries'
+
+import { Bounty, BountyStage, FundingType } from './Bounty'
 
 const asFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
     return { target: new BN(field.target) }
   }
-  return { 
+  return {
     minAmount: new BN(field.minFundingAmount),
     maxAmount: new BN(field.maxFundingAmount),
-    maxPeriod: field.fundingPeriod
+    maxPeriod: field.fundingPeriod,
   }
 }
 
@@ -34,5 +36,5 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   workPeriod: new BN(fields.workPeriod),
   judgingPeriod: new BN(fields.judgingPeriod),
   stage: asStage(fields.stage),
-  totalFunding: new BN(fields.totalFunding)
+  totalFunding: new BN(fields.totalFunding),
 })

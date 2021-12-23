@@ -1,7 +1,8 @@
+import { useGetBountiesCountQuery, useGetBountiesQuery } from '@/bounty/queries'
 import { BountyOrderByInput } from '@/common/api/queries'
 import { usePagination } from '@/common/hooks/usePagination'
 import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
-import { useGetBountiesCountQuery, useGetBountiesQuery } from '@/bounty/queries'
+
 import { asBounty } from '../types/casts'
 
 interface UseBountiesProps {
