@@ -38,7 +38,11 @@ export const WithdrawCandidacyModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={onClose}>There was a problem with withdrawing your candidacy.</FailureModal>
+    return (
+      <FailureModal events={state.context.transactionEvents} onClose={onClose}>
+        There was a problem while withdrawing your candidacy.
+      </FailureModal>
+    )
   }
 
   return null

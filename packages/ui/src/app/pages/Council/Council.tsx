@@ -17,7 +17,7 @@ import { CouncilTabs } from './components/CouncilTabs'
 
 export const Council = () => {
   const { council, isLoading } = useElectedCouncil()
-  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAtBlock)
+  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
   const { activities } = useCouncilActivities()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })

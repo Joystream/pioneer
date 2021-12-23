@@ -42,6 +42,8 @@ fragment PastCouncilNewMissedRewardLevelReachedEventFields on NewMissedRewardLev
 fragment ElectedCouncilFields on ElectedCouncil {
   id
   electedAtBlock
+  electedAtTime
+  electedAtNetwork
   councilMembers {
     ...CouncilMemberFields
   }
@@ -50,6 +52,8 @@ fragment ElectedCouncilFields on ElectedCouncil {
 fragment PastCouncilFields on ElectedCouncil {
   id
   endedAtBlock
+  endedAtNetwork
+  endedAtTime
 }
 
 fragment PastCouncilDetailedFields on ElectedCouncil {
@@ -84,13 +88,9 @@ fragment ElectionRoundFields on ElectionRound {
 fragment PastElectionRoundFields on ElectionRound {
   id
   cycleId
-  referendumResult: referendumstagerevealingoptionresultelectionRound {
-    referendumFinishedEvent {
-      inBlock
-      network
-      createdAt
-    }
-  }
+  endedAtBlock
+  endedAtTime
+  endedAtNetwork
   candidates {
     stake
   }
@@ -273,19 +273,13 @@ query GetCurrentCandidateIdByMember($memberId: ID!) {
 }
 
 query GetCandidateStats($memberId: ID) {
-  withdrawn: candidatesConnection(
-    where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusWithdrawn" } }
-  ) {
+  withdrawn: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: WITHDRAWN }) {
     totalCount
   }
-  successful: candidatesConnection(
-    where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusElected" } }
-  ) {
+  successful: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: ELECTED }) {
     totalCount
   }
-  failed: candidatesConnection(
-    where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusLost" } }
-  ) {
+  failed: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: FAILED }) {
     totalCount
   }
 }

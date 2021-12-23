@@ -67,7 +67,12 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
             fee: (_, event) => event.fee,
           }),
         },
-        ERROR: 'error',
+        ERROR: {
+          target: 'error',
+          actions: assign({
+            events: (_, event) => event.events,
+          }),
+        },
       },
     },
     finalizing: {
@@ -78,7 +83,12 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
             events: (_, event) => event.events,
           }),
         },
-        ERROR: 'error',
+        ERROR: {
+          target: 'error',
+          actions: assign({
+            events: (_, event) => event.events,
+          }),
+        },
       },
     },
     processing: {

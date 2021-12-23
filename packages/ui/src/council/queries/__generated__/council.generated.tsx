@@ -22,7 +22,12 @@ export type CouncilMemberFieldsFragment = {
     inviteCount: number
     createdAt: any
     councilMembers: Array<{ __typename: 'CouncilMember' }>
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -93,7 +98,12 @@ export type PastCouncilProposalsFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -122,6 +132,8 @@ export type ElectedCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   electedAtBlock: number
+  electedAtTime: any
+  electedAtNetwork: Types.Network
   councilMembers: Array<{
     __typename: 'CouncilMember'
     id: string
@@ -139,7 +151,12 @@ export type ElectedCouncilFieldsFragment = {
       inviteCount: number
       createdAt: any
       councilMembers: Array<{ __typename: 'CouncilMember' }>
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -155,12 +172,16 @@ export type PastCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
+  endedAtTime?: any | null | undefined
 }
 
 export type PastCouncilDetailedFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
   endedAtBlock?: number | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
+  endedAtTime?: any | null | undefined
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
 }
 
@@ -179,7 +200,12 @@ export type ElectionCandidateFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -215,7 +241,12 @@ export type ElectionRoundFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -238,18 +269,9 @@ export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  referendumResult?:
-    | Array<{
-        __typename: 'ReferendumStageRevealingOptionResult'
-        referendumFinishedEvent: {
-          __typename: 'ReferendumFinishedEvent'
-          inBlock: number
-          network: Types.Network
-          createdAt: any
-        }
-      }>
-    | null
-    | undefined
+  endedAtBlock?: number | null | undefined
+  endedAtTime?: any | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
 }
@@ -258,6 +280,9 @@ export type PastElectionRoundDetailedFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
+  endedAtBlock?: number | null | undefined
+  endedAtTime?: any | null | undefined
+  endedAtNetwork?: Types.Network | null | undefined
   candidates: Array<{
     __typename: 'Candidate'
     stake: any
@@ -273,7 +298,12 @@ export type PastElectionRoundDetailedFieldsFragment = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -297,18 +327,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
     voteForId?: string | null | undefined
     castBy: string
   }>
-  referendumResult?:
-    | Array<{
-        __typename: 'ReferendumStageRevealingOptionResult'
-        referendumFinishedEvent: {
-          __typename: 'ReferendumFinishedEvent'
-          inBlock: number
-          network: Types.Network
-          createdAt: any
-        }
-      }>
-    | null
-    | undefined
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -329,7 +347,12 @@ export type ElectionCandidateDetailedFieldsFragment = {
     isFoundingMember: boolean
     inviteCount: number
     createdAt: any
-    metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -374,6 +397,7 @@ export type CastVoteFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -456,6 +480,8 @@ export type GetElectedCouncilQuery = {
     __typename: 'ElectedCouncil'
     id: string
     electedAtBlock: number
+    electedAtTime: any
+    electedAtNetwork: Types.Network
     councilMembers: Array<{
       __typename: 'CouncilMember'
       id: string
@@ -473,7 +499,12 @@ export type GetElectedCouncilQuery = {
         inviteCount: number
         createdAt: any
         councilMembers: Array<{ __typename: 'CouncilMember' }>
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -494,7 +525,13 @@ export type GetPastCouncilsQueryVariables = Types.Exact<{
 
 export type GetPastCouncilsQuery = {
   __typename: 'Query'
-  electedCouncils: Array<{ __typename: 'ElectedCouncil'; id: string; endedAtBlock?: number | null | undefined }>
+  electedCouncils: Array<{
+    __typename: 'ElectedCouncil'
+    id: string
+    endedAtBlock?: number | null | undefined
+    endedAtNetwork?: Types.Network | null | undefined
+    endedAtTime?: any | null | undefined
+  }>
 }
 
 export type GetPastCouncilsCountQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -517,6 +554,8 @@ export type GetPastCouncilQuery = {
         __typename: 'ElectedCouncil'
         id: string
         endedAtBlock?: number | null | undefined
+        endedAtNetwork?: Types.Network | null | undefined
+        endedAtTime?: any | null | undefined
         councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
       }
     | null
@@ -590,7 +629,12 @@ export type GetPastCouncilMembersQuery = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -660,7 +704,12 @@ export type GetPastCouncilMembersQuery = {
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -736,7 +785,12 @@ export type GetPastCouncilProposalsQuery = {
       isFoundingMember: boolean
       inviteCount: number
       createdAt: any
-      metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
       roles: Array<{
         __typename: 'Worker'
         id: string
@@ -788,7 +842,12 @@ export type GetCurrentElectionQuery = {
         isFoundingMember: boolean
         inviteCount: number
         createdAt: any
-        metadata: { __typename: 'MemberMetadata'; name?: string | null | undefined; about?: string | null | undefined }
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
         roles: Array<{
           __typename: 'Worker'
           id: string
@@ -820,18 +879,9 @@ export type GetPastElectionsQuery = {
     __typename: 'ElectionRound'
     id: string
     cycleId: number
-    referendumResult?:
-      | Array<{
-          __typename: 'ReferendumStageRevealingOptionResult'
-          referendumFinishedEvent: {
-            __typename: 'ReferendumFinishedEvent'
-            inBlock: number
-            network: Types.Network
-            createdAt: any
-          }
-        }>
-      | null
-      | undefined
+    endedAtBlock?: number | null | undefined
+    endedAtTime?: any | null | undefined
+    endedAtNetwork?: Types.Network | null | undefined
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
   }>
@@ -855,6 +905,9 @@ export type GetPastElectionQuery = {
         __typename: 'ElectionRound'
         id: string
         cycleId: number
+        endedAtBlock?: number | null | undefined
+        endedAtTime?: any | null | undefined
+        endedAtNetwork?: Types.Network | null | undefined
         candidates: Array<{
           __typename: 'Candidate'
           stake: any
@@ -874,6 +927,11 @@ export type GetPastElectionQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -898,18 +956,6 @@ export type GetPastElectionQuery = {
           voteForId?: string | null | undefined
           castBy: string
         }>
-        referendumResult?:
-          | Array<{
-              __typename: 'ReferendumStageRevealingOptionResult'
-              referendumFinishedEvent: {
-                __typename: 'ReferendumFinishedEvent'
-                inBlock: number
-                network: Types.Network
-                createdAt: any
-              }
-            }>
-          | null
-          | undefined
       }
     | null
     | undefined
@@ -944,6 +990,7 @@ export type GetCandidateQuery = {
             __typename: 'MemberMetadata'
             name?: string | null | undefined
             about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
           }
           roles: Array<{
             __typename: 'Worker'
@@ -1030,6 +1077,11 @@ export type GetCouncilVotesQuery = {
               __typename: 'MemberMetadata'
               name?: string | null | undefined
               about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
             }
             roles: Array<{
               __typename: 'Worker'
@@ -1220,6 +1272,8 @@ export const ElectedCouncilFieldsFragmentDoc = gql`
   fragment ElectedCouncilFields on ElectedCouncil {
     id
     electedAtBlock
+    electedAtTime
+    electedAtNetwork
     councilMembers {
       ...CouncilMemberFields
     }
@@ -1230,6 +1284,8 @@ export const PastCouncilFieldsFragmentDoc = gql`
   fragment PastCouncilFields on ElectedCouncil {
     id
     endedAtBlock
+    endedAtNetwork
+    endedAtTime
   }
 `
 export const PastCouncilDetailedFieldsFragmentDoc = gql`
@@ -1271,13 +1327,9 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
     id
     cycleId
-    referendumResult: referendumstagerevealingoptionresultelectionRound {
-      referendumFinishedEvent {
-        inBlock
-        network
-        createdAt
-      }
-    }
+    endedAtBlock
+    endedAtTime
+    endedAtNetwork
     candidates {
       stake
     }
@@ -2034,19 +2086,13 @@ export type GetCurrentCandidateIdByMemberQueryResult = Apollo.QueryResult<
 >
 export const GetCandidateStatsDocument = gql`
   query GetCandidateStats($memberId: ID) {
-    withdrawn: candidatesConnection(
-      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusWithdrawn" } }
-    ) {
+    withdrawn: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: WITHDRAWN }) {
       totalCount
     }
-    successful: candidatesConnection(
-      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusElected" } }
-    ) {
+    successful: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: ELECTED }) {
       totalCount
     }
-    failed: candidatesConnection(
-      where: { member: { id_eq: $memberId }, status_json: { isTypeOf_eq: "CandidacyStatusLost" } }
-    ) {
+    failed: candidatesConnection(where: { member: { id_eq: $memberId }, status_eq: FAILED }) {
       totalCount
     }
   }
