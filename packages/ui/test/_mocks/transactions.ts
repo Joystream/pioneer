@@ -131,7 +131,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as ApiRx,
+    api: ({} as unknown) as ApiRx,
     isConnected: true,
     connectionState: 'connected',
   }
@@ -196,6 +196,16 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
       constitutionality: new BN(10),
     })
   }
+}
+
+export const stubBountyConstants = (api: UseApi) => {
+  set(api, 'api.consts.bounty', {
+    minCherryLimit: createType('BalanceOf', 10),
+    minFundingLimit: createType('BalanceOf', 10),
+    closedContractSizeLimit: createType('u32', 10),
+    minWorkEntrantStake: createType('BalanceOf', 10),
+    bountyLockId: createType('LockIdentifier', 1),
+  })
 }
 
 export const stubCouncilAndReferendum = (
