@@ -20,6 +20,7 @@ export interface RawBountyMock {
   judgingPeriod: number
   stage: string
   totalFunding: string
+  discussionThreadId: string
 }
 
 export interface RawBountyContributionMock {
