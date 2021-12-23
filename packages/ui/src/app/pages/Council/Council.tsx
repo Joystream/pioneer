@@ -8,9 +8,11 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
+import { ViewElectionButton } from '@/council/components/ViewElectionButton'
 import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
+import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Councilor } from '@/council/types'
 
 import { CouncilTabs } from './components/CouncilTabs'
@@ -19,6 +21,7 @@ export const Council = () => {
   const { council, isLoading } = useElectedCouncil()
   const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
   const { activities } = useCouncilActivities()
+  const { stage: electionStage } = useElectionStage()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
@@ -28,7 +31,11 @@ export const Council = () => {
   const main = (
     <MainPanel>
       <Statistics>
-        <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
+        {electionStage === 'inactive' ? (
+          <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
+        ) : (
+          <ViewElectionButton />
+        )}
         <MultiValueStat
           title="Budget"
           values={[
