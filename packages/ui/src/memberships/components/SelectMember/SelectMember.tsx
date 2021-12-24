@@ -31,18 +31,19 @@ interface Props {
   filter?: (option: Member) => boolean
   selected?: Member
   disabled?: boolean
+  id?: string
 }
 
-export const SelectMember = ({ onChange, filter, selected, disabled }: Props) => {
+export const SelectMember = ({ onChange, filter, selected, disabled, id }: Props) => {
   const baseFilter = filter || (() => true)
   const [search, setSearch] = useState('')
   const searchDebounced = useDebounce(search, 400)
   const { data } = useSearchMembersQuery({ variables: { text: searchDebounced, limit: 10 } })
   const foundMembers = (data?.memberships || []).map(asMember)
-  const filteredFoundMembers = useMemo(
-    () => filterByText(foundMembers.filter(baseFilter), searchDebounced),
-    [searchDebounced, foundMembers]
-  )
+  const filteredFoundMembers = useMemo(() => filterByText(foundMembers.filter(baseFilter), searchDebounced), [
+    searchDebounced,
+    foundMembers,
+  ])
 
   const change = (selected: Member, close: () => void) => {
     onChange(selected)
@@ -51,6 +52,7 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
 
   return (
     <Select
+      id={id}
       selected={selected}
       onChange={change}
       disabled={disabled}

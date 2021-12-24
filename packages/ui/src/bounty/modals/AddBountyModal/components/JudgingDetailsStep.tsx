@@ -34,10 +34,12 @@ export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, set
           inputSize="m"
           tight
           units="blocks"
+          id="field-periodLength"
           message={judgingPeriodLength ? `≈ ${inBlocksDate(judgingPeriodLength)}` : ''}
         >
           <InputNumber
             isTokenValue
+            id="field-periodLength"
             placeholder="0"
             onChange={(_, value) => setJudgingPeriodLength(new BN(value))}
             value={judgingPeriodLength?.toString()}

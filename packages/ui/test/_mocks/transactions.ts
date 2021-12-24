@@ -202,7 +202,7 @@ export const stubBountyConstants = (api: UseApi) => {
   set(api, 'api.consts.bounty', {
     minCherryLimit: createType('BalanceOf', 10),
     minFundingLimit: createType('BalanceOf', 10),
-    closedContractSizeLimit: createType('u32', 10),
+    closedContractSizeLimit: createType('u32', 2),
     minWorkEntrantStake: createType('BalanceOf', 10),
     bountyLockId: createType('LockIdentifier', 1),
   })

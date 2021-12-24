@@ -25,9 +25,9 @@ export const ForumThreadStep = ({
       </Row>
 
       <Row>
-        <InputComponent id="forum-title" label="Topic of the Thread" required inputSize="m">
+        <InputComponent id="field-topic" label="Topic of the Thread" required inputSize="m">
           <InputText
-            id="forum-title"
+            id="field-topic"
             value={forumThreadTopic}
             required
             max={70}
@@ -37,9 +37,9 @@ export const ForumThreadStep = ({
       </Row>
 
       <Row>
-        <InputComponent label="Thread description" required inputSize="auto" id="forum-description">
+        <InputComponent label="Thread description" required inputSize="auto" id="field-description">
           <CKEditor
-            id="forum-description"
+            id="field-description"
             onReady={(editor) => editor.setData(forumThreadDescription || '')}
             onChange={(event, editor) => setForumThreadDescription(editor.getData())}
             minRows={3}

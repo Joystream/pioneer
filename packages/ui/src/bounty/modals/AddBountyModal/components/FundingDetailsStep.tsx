@@ -43,11 +43,19 @@ export const FundingDetailsStep = ({
   return (
     <RowGapBlock gap={24}>
       <RowGapBlock gap={8}>
-        <h4>Funding period details</h4>
+        <h4>Funding Period Details</h4>
       </RowGapBlock>
       <RowGapBlock gap={20}>
-        <InputComponent label="Cherry" tight units="JOY" required tooltipText="Funding period tooltip">
+        <InputComponent
+          id="field-cherry"
+          label="Cherry"
+          tight
+          units="JOY"
+          required
+          tooltipText="Funding period tooltip"
+        >
           <InputNumber
+            id="field-cherry"
             isTokenValue
             value={cherry?.toString()}
             placeholder="0"
@@ -87,11 +95,13 @@ export const FundingDetailsStep = ({
             required
             units="block"
             tight
+            id="field-periodLength"
             message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
             <InputNumber
               value={fundingPeriodLength?.toString()}
               placeholder="0"
+              id="field-periodLength"
               isTokenValue
               onChange={(_, value) => setFundingPeriodLength(new BN(value))}
             />
@@ -106,18 +116,20 @@ export const FundingDetailsStep = ({
         </Subtitle>
       </RowGapBlock>
       <ColumnGapBlock gap={20}>
-        <InputComponent tight units="JOY" required disabled={fundingPeriodType === 'perpetual'}>
+        <InputComponent id="field-minRange" tight units="JOY" required disabled={fundingPeriodType === 'perpetual'}>
           <InputNumber
             isTokenValue
+            id="field-minRange"
             disabled={fundingPeriodType === 'perpetual'}
             value={fundingMinimalRange?.toString()}
             placeholder="0"
             onChange={(_, value) => setFundingMinimalRange(new BN(value))}
           />
         </InputComponent>
-        <InputComponent tight units="JOY" required>
+        <InputComponent id="field-maxRange" tight units="JOY" required>
           <InputNumber
             isTokenValue
+            id="field-maxRange"
             value={fundingMaximalRange?.toString()}
             placeholder="0"
             onChange={(_, value) => setFundingMaximalRange(new BN(value))}

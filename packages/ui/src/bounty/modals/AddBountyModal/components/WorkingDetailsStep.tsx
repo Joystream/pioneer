@@ -96,6 +96,7 @@ export const WorkingDetailsStep = ({
             inputSize="l"
           >
             <SelectMember
+              id="select-whitelist"
               disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
               filter={whitelistFilter}
               onChange={onMemberAdd}
@@ -115,6 +116,7 @@ export const WorkingDetailsStep = ({
       <Row>
         <InputComponent
           label="Working period length"
+          id="field-periodLength"
           required
           units="blocks"
           inputSize="m"
@@ -122,7 +124,7 @@ export const WorkingDetailsStep = ({
           message={workingPeriodLength ? `≈ ${inBlocksDate(workingPeriodLength)}` : ''}
         >
           <InputNumber
-            id="periodLength"
+            id="field-periodLength"
             placeholder="0"
             value={workingPeriodLength?.toString()}
             onChange={(_, numberValue) => setWorkingPeriodLength(new BN(numberValue))}
@@ -158,10 +160,10 @@ export const WorkingDetailsStep = ({
 
       {workingPeriodStakeAllowance && (
         <Row>
-          <InputComponent units="JOY" inputSize="m" tight>
+          <InputComponent id="field-periodStake" units="JOY" inputSize="m" tight>
             <InputNumber
               isTokenValue
-              id="periodStake"
+              id="field-periodStake"
               value={workingPeriodStake?.toString()}
               onChange={(_, value) => setWorkingPeriodStake(new BN(value))}
             />
