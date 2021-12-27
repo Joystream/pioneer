@@ -7,37 +7,32 @@ import { TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 export interface FundedRangeProps {
-  rangeTitle: string
   rangeValue: number
-  maxRangeTitle: string
   maxRangeValue: number
-  minRangeTitle: string
   minRangeValue: number
 }
 
-export const FundedRange = React.memo(
-  ({ rangeTitle, rangeValue, maxRangeTitle, maxRangeValue, minRangeTitle, minRangeValue }: FundedRangeProps) => {
-    return (
-      <FundedRangeWrapper>
-        <FundedTitle>
-          <TextSmall>{rangeTitle}</TextSmall>
-          <TokenValue value={rangeValue} size="l" />
-        </FundedTitle>
-        <ProgressBarWrapper>
-          <ProgressBarWithRange value={20} minRange={50} maxRange={100} />
-          <MaxRangeWrapper>
-            <MaxRangeTitle>{maxRangeTitle}</MaxRangeTitle>
-            <TokenValue value={maxRangeValue} size="l" />
-          </MaxRangeWrapper>
-          <ProgressBarInfoVertical inset="45px 40% 0">
-            <TextSmall>{minRangeTitle}</TextSmall>
-            <TokenValue value={minRangeValue} />
-          </ProgressBarInfoVertical>
-        </ProgressBarWrapper>
-      </FundedRangeWrapper>
-    )
-  }
-)
+export const FundedRange = React.memo(({ rangeValue, maxRangeValue, minRangeValue }: FundedRangeProps) => {
+  return (
+    <FundedRangeWrapper>
+      <FundedTitle>
+        <TextSmall>Funded</TextSmall>
+        <TokenValue value={rangeValue} size="l" />
+      </FundedTitle>
+      <ProgressBarWrapper>
+        <ProgressBarWithRange value={20} minRange={50} maxRange={100} />
+        <MaxRangeWrapper>
+          <MaxRangeTitle>Maximal Range</MaxRangeTitle>
+          <TokenValue value={maxRangeValue} size="l" />
+        </MaxRangeWrapper>
+        <ProgressBarInfoVertical inset="45px 40% 0">
+          <TextSmall>Minimal range</TextSmall>
+          <TokenValue value={minRangeValue} />
+        </ProgressBarInfoVertical>
+      </ProgressBarWrapper>
+    </FundedRangeWrapper>
+  )
+})
 
 const MaxRangeWrapper = styled.div``
 

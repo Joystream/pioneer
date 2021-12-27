@@ -10,5 +10,5 @@ const Header = () => <div>Header</div>
 export const Bounty = () => {
   const { id } = useParams<BountyRouteParams>()
 
-  return <PageLayout main={<BountyMain id={id} />} header={<Header />} />
+  return <PageLayout main={<BountyMain bountyStage="Expired" />} header={<Header />} />
 }
