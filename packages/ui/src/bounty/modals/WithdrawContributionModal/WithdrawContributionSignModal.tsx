@@ -35,7 +35,7 @@ export const WithdrawContributionSignModal = ({ onClose, transaction, service, c
   return (
     <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
-        <TextMedium light>You intend to withdraw your contribution from this bounty.</TextMedium>
+        <TextMedium light>You intend to withdraw your contribution for this bounty.</TextMedium>
         <TextMedium light>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
