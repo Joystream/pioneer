@@ -2,13 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
-import { ButtonGhost, ButtonInnerWrapper } from '@/common/components/buttons'
-import { ArrowRightIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
-import { TextInlineSmall, TokenValue } from '@/common/components/typography'
-import { Fonts, Overflow } from '@/common/constants'
+import { TokenValue } from '@/common/components/typography'
 import { CandidateStatistics } from '@/council/components/candidate/CandidateStatistics'
 import { ElectionCandidateWithDetails } from '@/council/types'
 
@@ -26,17 +23,6 @@ export const CandidacyDetails = ({ candidate }: Props) => {
       <RowGapBlock gap={4}>
         <h6>Past elections results</h6>
         <CandidateStatistics memberId={candidate.member.id} />
-      </RowGapBlock>
-      <RowGapBlock gap={4}>
-        <h6>Candidacy discussion thread</h6>
-        <MessagesButton size="large">
-          30 messages <ArrowRightIcon />
-        </MessagesButton>
-        <LastMessageInfo>
-          <TextInlineSmall lighter>
-            last message from <TextInlineSmall bold>Agatha</TextInlineSmall> 1 hour ago
-          </TextInlineSmall>
-        </LastMessageInfo>
       </RowGapBlock>
       <RowGapBlock gap={4}>
         <h6>Candidate summary</h6>
@@ -62,30 +48,4 @@ const Details = styled(RowGapBlock)`
 
 const HeaderImage = styled.img`
   width: 100%;
-`
-
-const MessagesButton = styled(ButtonGhost)`
-  justify-content: space-between;
-  width: 100%;
-  font-family: ${Fonts.Inter};
-  font-weight: 400;
-  text-transform: none;
-
-  ${ButtonInnerWrapper} {
-    justify-content: space-between;
-    width: 100%;
-  }
-`
-
-const LastMessageInfo = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  width: fit-content;
-  margin-top: 4px;
-  ${Overflow.FullDots};
-
-  ${TextInlineSmall} {
-    ${Overflow.FullDots};
-  }
 `
