@@ -37,6 +37,10 @@ import {
   IncreaseWorkerStakeModalCall,
 } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
+import {
+  BountyWithdrawContributionModalCall,
+  WithdrawContributionModal,
+} from '@/bounty/modals/WithdrawContributionModal'
 
 export type ModalNames =
   | ModalName<TransferInvitesModalCall>
@@ -68,6 +72,7 @@ export type ModalNames =
   | ModalName<IncreaseWorkerStakeModalCall>
   | ModalName<OnBoardingModalCall>
   | ModalName<RestoreVotesModalCall>
+  | ModalName<BountyWithdrawContributionModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -99,6 +104,7 @@ const modals: Record<ModalNames, ReactElement> = {
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
+  BountyWithdrawContributionModal: <WithdrawContributionModal />,
 }
 
 export const GlobalModals = () => {

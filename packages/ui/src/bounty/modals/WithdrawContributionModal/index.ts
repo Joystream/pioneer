@@ -1,4 +1,7 @@
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 
 export * from './WithdrawContributionModal'
-export type WithdrawFundingModalCall = ModalWithDataCall<'WithdrawContributionModal', { bountyId: string }>
+export type BountyWithdrawContributionModalCall = ModalWithDataCall<
+  'BountyWithdrawContributionModal',
+  { bountyId: string }
+>

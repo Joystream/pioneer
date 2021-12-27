@@ -14,14 +14,14 @@ import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { WithdrawFundingModalCall } from '.'
+import { BountyWithdrawContributionModalCall } from '.'
 
 export const WithdrawContributionModal = () => {
   const { api, connectionState } = useApi()
   const {
     modalData: { bountyId },
     hideModal,
-  } = useModal<WithdrawFundingModalCall>()
+  } = useModal<BountyWithdrawContributionModalCall>()
 
   const [state, send] = useMachine(defaultTransactionModalMachine)
 
