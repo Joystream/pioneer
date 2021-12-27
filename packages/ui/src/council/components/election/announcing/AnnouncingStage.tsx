@@ -19,11 +19,11 @@ export const AnnouncingStage = ({ election, isLoading }: AnnouncingStageProps) =
 
   const [allCandidates, myCandidates] = useMemo(() => {
     const allCandidates = election?.candidates
-      ?.map((candidate) => ({
+      .filter((candidate) => candidate.status === CandidacyStatus.Active)
+      .map((candidate) => ({
         ...candidate,
         isMyCandidate: myMemberIds.includes(candidate.member.id),
       }))
-      .filter((candidate) => candidate.status === CandidacyStatus.Active)
     const myCandidates = allCandidates?.filter(({ isMyCandidate }) => isMyCandidate)
 
     return [allCandidates, myCandidates]
