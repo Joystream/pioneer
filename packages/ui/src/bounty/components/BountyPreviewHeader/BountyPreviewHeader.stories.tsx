@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
+import bountyRaw from '@/mocks/data/raw/bounties.json'
 
 export default {
   title: 'Bounty/BountyPreviewHeader',
@@ -9,18 +10,10 @@ export default {
 } as Meta
 
 const Template: Story = (args) => {
-  return <BountyPreviewHeader title="Long title" {...args} />
+  return <BountyPreviewHeader bounty={bountyRaw[1] as any} {...args} />
 }
 
 export const Default = Template.bind({})
 Default.args = {
-  title: 'Long title',
   badgeNames: ['GOVERNANCE BUDGET', 'ELECTION #6'],
-  buttons: [
-    {
-      label: 'Continue',
-      type: 'primary',
-      onClick: () => undefined,
-    },
-  ],
 }

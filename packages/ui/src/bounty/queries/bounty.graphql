@@ -1,0 +1,39 @@
+fragment BountyFields on Bounty {
+  id
+  title
+  description
+  cherry
+  entrantStake
+  creatorId
+  oracleId
+  fundingType {
+    __typename
+  }
+  contractType {
+    __typename
+    ... on BountyContractClosed {
+      whitelist {
+        id
+      }
+    }
+  }
+  workPeriod
+  judgingPeriod
+  stage
+  totalFunding
+  bountycontributionbounty {
+    contributorId
+  }
+  bountyentrybounty {
+    workerId
+    works {
+      id
+    }
+  }
+}
+
+query GetBounty($where: BountyWhereUniqueInput!) {
+  bountyByUniqueInput(where: $where) {
+    ...BountyFields
+  }
+}
