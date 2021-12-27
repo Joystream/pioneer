@@ -3,6 +3,10 @@ import React, { ReactElement } from 'react'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
+import {
+  BountyWithdrawContributionModalCall,
+  WithdrawContributionModal,
+} from '@/bounty/modals/WithdrawContributionModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -37,10 +41,6 @@ import {
   IncreaseWorkerStakeModalCall,
 } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
-import {
-  BountyWithdrawContributionModalCall,
-  WithdrawContributionModal,
-} from '@/bounty/modals/WithdrawContributionModal'
 
 export type ModalNames =
   | ModalName<TransferInvitesModalCall>
