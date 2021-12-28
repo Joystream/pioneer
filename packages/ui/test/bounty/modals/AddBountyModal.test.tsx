@@ -26,7 +26,14 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubBountyConstants, stubDefaultBalances } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubBountyConstants,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -62,6 +69,7 @@ describe('UI: AddNewBountyModal', () => {
   }
 
   let useAccounts: UseAccounts
+  let createTransaction: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -83,6 +91,7 @@ describe('UI: AddNewBountyModal', () => {
 
     stubDefaultBalances(api)
     stubBountyConstants(api)
+    createTransaction = stubTransaction(api, 'api.tx.bounty.createBounty', 100)
   })
 
   describe('Requirements', () => {
@@ -309,6 +318,38 @@ describe('UI: AddNewBountyModal', () => {
         })
       })
     })
+
+    describe('Transaction', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+        await fillFundingPeriod()
+        await fillWorkingPeriod()
+        await fillJudgingPeriod()
+        await fillForumThread()
+      })
+
+      it('Renders', async () => {
+        const signButton = await getButton(/^Sign transaction and Create$/i)
+        expect(signButton).not.toBeDisabled()
+      })
+
+      it('Success', async () => {
+        stubTransactionSuccess(createTransaction, 'bounty', 'BountyCreated')
+        const button = await getButton(/^Sign transaction and Create$/i)
+        fireEvent.click(button)
+
+        expect(await screen.findByText(/^Success$/i)).toBeDefined()
+      })
+
+      it('Failure', async () => {
+        stubTransactionFailure(createTransaction)
+        const button = await getButton(/^Sign transaction and Create$/i)
+        fireEvent.click(button)
+
+        expect(await screen.findByText(/^Failure$/i)).toBeDefined()
+      })
+    })
   })
 
   const fillGeneralParameters = async (proceedToNextStep = true) => {
@@ -370,7 +411,7 @@ describe('UI: AddNewBountyModal', () => {
     if (proceedToNextStep) {
       await createBounty()
 
-      // await waitFor(async () => expect(await screen.queryByText(/^Topic$/)).toBeDefined())
+      await waitFor(async () => expect(await screen.queryByText(/^Sign transaction and Create$/i)).toBeDefined())
     }
   }
 

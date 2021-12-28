@@ -104,7 +104,7 @@ export const WorkingDetailsStep = ({
           </InputComponent>
           <WhitelistWrapper>
             {workingPeriodWhitelist?.map((member) => (
-              <MemberWrapper>
+              <MemberWrapper key={member.id}>
                 <MemberInfo member={member} />
                 <CloseButton onClick={removeMemberFromWhitelist(member)} />
               </MemberWrapper>
