@@ -9,8 +9,11 @@ import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors } from '@/common/constants'
+import { BountyRoutes } from '@/bounty/constants'
+import { generatePath, useHistory } from 'react-router-dom'
 
 export const BountyListItem = ({
+  id,
   title,
   createdAt,
   cherry,
@@ -24,6 +27,8 @@ export const BountyListItem = ({
   totalFunding,
   entries,
 }: Bounty) => {
+  const history = useHistory()
+
   const period = asPeriod(stage)
 
   return (
@@ -40,7 +45,7 @@ export const BountyListItem = ({
           totalFunding={totalFunding}
         />
       </Info>
-      <ArrowWrapper>
+      <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
         <Arrow direction="right" />
       </ArrowWrapper>
 
