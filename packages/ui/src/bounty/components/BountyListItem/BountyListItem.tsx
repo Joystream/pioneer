@@ -4,32 +4,47 @@ import styled from 'styled-components'
 import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
 import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
-import { BountyPeriod } from '@/bounty/types/Bounty'
+import { Bounty, BountyPeriod } from '@/bounty/types/Bounty'
+import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors } from '@/common/constants'
 
-interface Props {
-  period: BountyPeriod
-  title: string
-  creator: string
-  date?: Date
-  imageUrl: string
-}
+export const BountyListItem = ({
+  title,
+  createdAt,
+  cherry,
+  entrantStake,
+  creator,
+  oracle,
+  fundingType,
+  workPeriod,
+  judgingPeriod,
+  stage,
+  totalFunding,
+  entries,
+}: Bounty) => {
+  const period = asPeriod(stage)
 
-export const BountyListItem = ({ period, date, creator, title, imageUrl }: Props) => {
   return (
     <Wrapper>
-      <BountyImage src={imageUrl} />
+      {/* TODO: add image url to schema */}
+      <BountyImage src="https://picsum.photos/500/300" />
       <Info>
-        <BountyInformations period={period} date={date} creator={creator} title={title} />
-        <BountyDetails type={period} />
+        <BountyInformations period={period} date={new Date(createdAt)} creator={creator} title={title} />
+        <BountyDetails
+          type={period}
+          oracle={oracle}
+          cherry={cherry}
+          fundingType={fundingType}
+          totalFunding={totalFunding}
+        />
       </Info>
       <ArrowWrapper>
         <Arrow direction="right" />
       </ArrowWrapper>
 
-      <TypeBadge color={BountyPeriodColorMapper[period]}>{period} PERIOD</TypeBadge>
+      <TypeBadge color={BountyPeriodColorMapper[period]}>{`${period.toUpperCase()} PERIOD`}</TypeBadge>
     </Wrapper>
   )
 }

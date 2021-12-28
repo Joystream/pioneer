@@ -1,29 +1,49 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
+import { FundingType, isFundingLimited } from '@/bounty/types/Bounty'
 import { ProgressBarWithRange } from '@/common/components/Progress'
 import { TextSmall, TokenValue } from '@/common/components/typography'
 
-export const FundingDetails = () => {
+interface Props {
+  fundingType: FundingType
+  totalFunding: BN
+  cherry: BN
+}
+
+export const FundingDetails = ({ fundingType, totalFunding, cherry }: Props) => {
+  if (!isFundingLimited(fundingType)) {
+    // TODO: add component for ProgressBar without maximum and use fundingLimit.target as minimum
+    return null
+  }
+
+  const { minAmount, maxAmount } = fundingType
+
   return (
     <>
       <ProgressBarWrapper>
-        <ProgressBarWithRange value={20} minRange={50} maxRange={100} size="medium" />
+        <ProgressBarWithRange
+          value={totalFunding.toNumber()}
+          minRange={minAmount.toNumber()}
+          maxRange={maxAmount.toNumber()}
+          size="medium"
+        />
         <DetailBox title="Maximal range">
-          <TokenValue value={10000} />
+          <TokenValue value={maxAmount} />
         </DetailBox>
         <ProgressBarInfoVertical inset="">
           <TextSmall>Funded</TextSmall>
-          <TokenValue value={10000} size="l" />
+          <TokenValue value={totalFunding} size="l" />
         </ProgressBarInfoVertical>
         <ProgressBarInfoVertical inset="45px 40% 0">
           <TextSmall>Minimal range</TextSmall>
-          <TokenValue value={10000} />
+          <TokenValue value={minAmount} />
         </ProgressBarInfoVertical>
       </ProgressBarWrapper>
       <DetailBox title="Cherry">
-        <TokenValue value={10000} />
+        <TokenValue value={cherry} />
       </DetailBox>
     </>
   )

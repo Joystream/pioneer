@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -6,21 +7,23 @@ import { FundingDetails } from '@/bounty/components/BountyListItem/components/Fu
 import { JudgmentDetails } from '@/bounty/components/BountyListItem/components/JudgmentDetails'
 import { WithdrawalDetails } from '@/bounty/components/BountyListItem/components/WithdrawalDetails'
 import { WorkingDetails } from '@/bounty/components/BountyListItem/components/WorkingDetails'
-import { BountyPeriod } from '@/bounty/types/Bounty'
+import { BountyPeriod, FundingType } from '@/bounty/types/Bounty'
 import { MemberInfo } from '@/memberships/components'
-import { useMember } from '@/memberships/hooks/useMembership'
+import { Member } from '@/memberships/types'
 
 interface Props {
   type: BountyPeriod
+  oracle?: Member
+  cherry: BN
+  fundingType: FundingType
+  totalFunding: BN
 }
 
-export const BountyDetails = ({ type }: Props) => {
-  const { isLoading, member } = useMember('0')
-
+export const BountyDetails = ({ type, oracle, cherry, fundingType, totalFunding }: Props) => {
   const content = useMemo(() => {
     switch (type) {
       case 'funding': {
-        return <FundingDetails />
+        return <FundingDetails cherry={cherry} fundingType={fundingType} totalFunding={totalFunding} />
       }
       case 'working': {
         return <WorkingDetails />
@@ -43,9 +46,7 @@ export const BountyDetails = ({ type }: Props) => {
     <Wrapper>
       {content}
       <DetailBox title="Oracle">
-        {!isLoading && member && (
-          <MemberInfo avatarSmall={true} size="s" memberSize="s" hideGroup onlyTop member={member} />
-        )}
+        {oracle && <MemberInfo avatarSmall={true} size="s" memberSize="s" hideGroup onlyTop member={oracle} />}
       </DetailBox>
     </Wrapper>
   )

@@ -6,7 +6,20 @@ import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyStage, EntryMiniature, FundingType } from './Bounty'
+import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType } from './Bounty'
+
+export const asPeriod = (stage: BountyStage): BountyPeriod => {
+  switch (stage) {
+    case 'successful' || 'failed' || 'terminated':
+      return 'withdrawal'
+    case 'workSubmission':
+      return 'working'
+    case 'judgment':
+      return 'judgement'
+    default:
+      return stage as BountyPeriod
+  }
+}
 
 const asFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {

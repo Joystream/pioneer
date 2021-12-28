@@ -5,12 +5,13 @@ import { BountyPeriod } from '@/bounty/types/Bounty'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { DurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
-import { MemberAvatar } from '@/memberships/components/Avatar'
+import { MemberInfoAvatar } from '@/memberships/components/Avatar'
+import { Member } from '@/memberships/types'
 
 interface Props {
   period: BountyPeriod
   title: string
-  creator: string
+  creator?: Member
   date?: Date
 }
 
@@ -18,20 +19,24 @@ export const BountyInformations = ({ period, creator, date, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
-        <TextMedium bold>
-          {creator}
-          <AvatarWrapper>
-            <MemberAvatar isLead avatarUri={null} />
-          </AvatarWrapper>
-        </TextMedium>
+        {creator && (
+          <TextMedium bold>
+            {creator.handle}
+            <AvatarWrapper>
+              <MemberInfoAvatar member={creator} />
+            </AvatarWrapper>
+          </TextMedium>
+        )}
+        {/* TODO: convert to link */}
         <TextHuge bold>{title}</TextHuge>
       </TitleContainer>
       <BadgeDurationContainer>
         <BadgesRow space={8}>
+          {/* TODO: add tags to schema */}
           <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
           <BadgeStatus inverted>ELECTION #6</BadgeStatus>
         </BadgesRow>
-        {period !== 'expired' && date && <DurationStatistics size="s" value={date.toISOString()} title="Time" />}
+        {period !== 'expired' && date && <DurationStatistics size="s" value={date.toISOString()} title="Time left" />}
       </BadgeDurationContainer>
     </Wrapper>
   )

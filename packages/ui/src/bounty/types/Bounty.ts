@@ -42,6 +42,10 @@ type FundingPerpetual = {
   target: BN
 }
 
+export const isFundingLimited = (funding: FundingType): funding is FundingLimited => {
+  return (funding as FundingLimited).minAmount !== undefined
+}
+
 export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
 
 export interface EntryMiniature {
