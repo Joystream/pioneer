@@ -7,10 +7,17 @@ import { ForumThreadStep } from '@/bounty/modals/AddBountyModal/components/Forum
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
 import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/JudgingDetailsStep'
+import { SignTransactionModal } from '@/bounty/modals/AddBountyModal/components/SignTransactionModal'
+import { SuccessModal } from '@/bounty/modals/AddBountyModal/components/SuccessModal'
 import { WorkingDetailsStep } from '@/bounty/modals/AddBountyModal/components/WorkingDetailsStep'
-import { isNextStepValid } from '@/bounty/modals/AddBountyModal/helpers'
+import {
+  createBountyMetadataFactory,
+  createBountyParametersFactory,
+  isNextStepValid,
+} from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -43,6 +50,7 @@ export const AddBountyModal = () => {
         send('NEXT')
       }
     }
+
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
         minCherryLimit: bountyApi?.minCherryLimit,
@@ -53,19 +61,40 @@ export const AddBountyModal = () => {
       })
     )
   }, [state])
-  // if (state.matches(AddBountyStates.transaction)) {
-  //   const transaction = api.tx.bounty.createBounty({})
-  //   return (
-  //     <SignTransactionModal
-  //       onClose={hideModal}
-  //       transaction={transaction}
-  //       // signer={activeMember.controllerAccount}
-  //       // stake={constants?.requiredStake as BN}
-  //       // service={state.children['transaction']}
-  //       // steps={transactionsSteps}
-  //     />
-  //   )
-  // }
+
+  if (state.matches(AddBountyStates.transaction)) {
+    const transaction = api?.tx.bounty.createBounty(
+      createBountyParametersFactory(state as AddBountyModalMachineState),
+      createBountyMetadataFactory(state as AddBountyModalMachineState)
+    )
+    // todo check creating bounty on node with worker
+    return (
+      <SignTransactionModal
+        onClose={hideModal}
+        transaction={transaction}
+        service={state.children['transaction']}
+        cherry={state.context.cherry}
+        signer={state.context.creator}
+      />
+    )
+  }
+
+  if (state.matches(AddBountyStates.success)) {
+    // todo extract bountyId from success event and pass it here
+    return <SuccessModal onClose={hideModal} bountyId={1} />
+  }
+
+  if (state.matches(AddBountyStates.error)) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem while creating bounty.
+      </FailureModal>
+    )
+  }
+
+  if (state.matches(AddBountyStates.canceled)) {
+    return <FailureModal onClose={hideModal}>Transaction has been canceled.</FailureModal>
+  }
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">

@@ -73,6 +73,7 @@ export enum AddBountyStates {
   transaction = 'transaction',
   success = 'success',
   error = 'error',
+  canceled = 'canceled',
 }
 
 export type AddBountyState =
@@ -83,11 +84,10 @@ export type AddBountyState =
   | { value: AddBountyStates.workingPeriodDetails; context: WorkingPeriodDetailsContext }
   | { value: AddBountyStates.judgingPeriodDetails; context: JudgingPeriodDetailsContext }
   | { value: AddBountyStates.forumThreadDetails; context: ForumThreadDetailsContext }
-  // | { value: AddBountyStates.beforeTransaction; context: Required<AddBountyContext> }
-  // | { value: 'bindStakingAccount'; context: Required<AddBountyContext> }
   | { value: AddBountyStates.transaction; context: Required<AddBountyContext> }
   | { value: AddBountyStates.success; context: Required<AddBountyContext> }
   | { value: AddBountyStates.error; context: AddBountyContext }
+  | { value: AddBountyStates.canceled; context: AddBountyContext }
 
 type SetCreatorEvent = { type: 'SET_CREATOR'; creator: Member }
 type SetBountyTitleEvent = { type: 'SET_BOUNTY_TITLE'; title: string }
@@ -277,30 +277,30 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
       },
       meta: { isStep: true, stepTitle: 'Forum Thread' },
     },
-    transaction: {
+    [AddBountyStates.transaction]: {
       invoke: {
-        id: 'transaction',
+        id: AddBountyStates.transaction,
         src: transactionMachine,
         onDone: [
           {
-            target: 'success',
+            target: [AddBountyStates.success],
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: (context, event) => isTransactionSuccess(context, event),
           },
           {
-            target: 'error',
+            target: [AddBountyStates.error],
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionError,
           },
           {
-            target: 'canceled',
+            target: [AddBountyStates.canceled],
             cond: isTransactionCanceled,
           },
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    [AddBountyStates.success]: { type: 'final' },
+    [AddBountyStates.error]: { type: 'final' },
+    [AddBountyStates.canceled]: { type: 'final' },
   },
 })
