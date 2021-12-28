@@ -1,12 +1,12 @@
 import BN from 'bn.js'
 
-import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
+import { BountyEntry, BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
 import { lowerFirstLetter } from '@/common/helpers'
 import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyStage, FundingType } from './Bounty'
+import { Bounty, BountyStage, EntryMiniature, FundingType } from './Bounty'
 
 const asFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
@@ -23,6 +23,31 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
   return lowerFirstLetter(`${stageField}`) as BountyStage
 }
 
+// TODO: handle this type better
+type SchemaEntryFields = Array<{
+  __typename: 'BountyEntry'
+  createdById: string
+  status:
+    | { __typename: 'BountyEntryStatusCashedOut' }
+    | { __typename: 'BountyEntryStatusPassed' }
+    | { __typename: 'BountyEntryStatusRejected' }
+    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWithdrawn' }
+    | { __typename: 'BountyEntryStatusWorking' }
+}>
+| null
+| undefined
+
+
+const asEntries = (entriesFields?: SchemaEntryFields): EntryMiniature[] | undefined => {
+  return entriesFields?.map((entry) => {
+    return {
+      createdById: entry.createdById,
+      winner: entry.status.__typename === 'BountyEntryStatusWinner',
+    }
+  })
+}
+
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title,
@@ -37,4 +62,5 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   judgingPeriod: new BN(fields.judgingPeriod),
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
+  entries: asEntries(fields.bountyentrybounty),
 })

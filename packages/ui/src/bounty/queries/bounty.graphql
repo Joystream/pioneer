@@ -24,6 +24,14 @@ fragment BountyFields on Bounty {
   judgingPeriod
   stage
   totalFunding
+  bountyentrybounty {
+    createdById
+    status {
+      ... on BountyEntryStatusWinner {
+        reward
+      }
+    }
+  }
 }
 
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {

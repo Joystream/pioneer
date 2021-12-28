@@ -44,6 +44,11 @@ type FundingPerpetual = {
 
 export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
 
+export interface EntryMiniature {
+  createdById: string
+  winner: boolean
+}
+
 export interface Bounty {
   id: string
   title: string
@@ -57,4 +62,5 @@ export interface Bounty {
   judgingPeriod: BN
   stage: BountyStage
   totalFunding: BN
+  entries?: EntryMiniature[]
 }
