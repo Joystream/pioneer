@@ -23,23 +23,7 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
   return lowerFirstLetter(`${stageField}`) as BountyStage
 }
 
-// TODO: handle this type better
-type SchemaEntryFields =
-  | Array<{
-      __typename: 'BountyEntry'
-      createdById: string
-      status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
-        | { __typename: 'BountyEntryStatusPassed' }
-        | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
-        | { __typename: 'BountyEntryStatusWithdrawn' }
-        | { __typename: 'BountyEntryStatusWorking' }
-    }>
-  | null
-  | undefined
-
-const asEntries = (entriesFields?: SchemaEntryFields): EntryMiniature[] | undefined => {
+const asEntries = (entriesFields: BountyFieldsFragment['bountyentrybounty']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
       createdById: entry.createdById,
