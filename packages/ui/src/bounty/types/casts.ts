@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { BountyEntry, BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
+import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
 import { lowerFirstLetter } from '@/common/helpers'
 import { asMember } from '@/memberships/types'
 
@@ -24,20 +24,20 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
 }
 
 // TODO: handle this type better
-type SchemaEntryFields = Array<{
-  __typename: 'BountyEntry'
-  createdById: string
-  status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
-    | { __typename: 'BountyEntryStatusPassed' }
-    | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
-    | { __typename: 'BountyEntryStatusWithdrawn' }
-    | { __typename: 'BountyEntryStatusWorking' }
-}>
-| null
-| undefined
-
+type SchemaEntryFields =
+  | Array<{
+      __typename: 'BountyEntry'
+      createdById: string
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+    }>
+  | null
+  | undefined
 
 const asEntries = (entriesFields?: SchemaEntryFields): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
