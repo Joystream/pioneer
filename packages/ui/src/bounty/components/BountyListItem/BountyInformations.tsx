@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +7,6 @@ import { BlockDurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
 import { Member } from '@/memberships/types'
-import BN from 'bn.js'
 
 interface Props {
   title: string

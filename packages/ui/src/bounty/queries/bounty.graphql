@@ -25,7 +25,9 @@ fragment BountyFields on Bounty {
   stage
   totalFunding
   entries {
-    createdById
+    worker {
+      ...MemberFields
+    }
     status {
       ... on BountyEntryStatusWinner {
         reward

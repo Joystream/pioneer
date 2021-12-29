@@ -39,7 +39,7 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
 const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
-      createdById: entry.createdById,
+      worker: asMember(entry.worker),
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
     }
   })

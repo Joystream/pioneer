@@ -49,7 +49,7 @@ export const isFundingLimited = (funding: FundingType): funding is FundingLimite
 export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
 
 export interface EntryMiniature {
-  createdById: string
+  worker: Member
   winner: boolean
 }
 

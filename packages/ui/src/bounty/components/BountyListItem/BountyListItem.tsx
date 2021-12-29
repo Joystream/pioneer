@@ -1,17 +1,17 @@
-import React, { useMemo } from 'react'
 import BN from 'bn.js'
+import React, { useMemo } from 'react'
+import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
 import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
+import { BountyRoutes } from '@/bounty/constants'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
 import { Bounty, BountyPeriod, isFundingLimited } from '@/bounty/types/Bounty'
 import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors } from '@/common/constants'
-import { BountyRoutes } from '@/bounty/constants'
-import { generatePath, useHistory } from 'react-router-dom'
 
 export const BountyListItem = ({
   id,
