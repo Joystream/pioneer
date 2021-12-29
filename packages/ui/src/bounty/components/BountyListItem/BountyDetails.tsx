@@ -22,22 +22,21 @@ interface Props {
 }
 
 export const BountyDetails = ({ type, oracle, cherry, fundingType, totalFunding, entrantStake, entries }: Props) => {
+  const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries])
+  const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [entries])
   const content = useMemo(() => {
     switch (type) {
       case 'funding': {
         return <FundingDetails cherry={cherry} fundingType={fundingType} totalFunding={totalFunding} />
       }
       case 'working': {
-        return <WorkingDetails totalFunding={totalFunding} entrantStake={entrantStake} entries={entries} />
+        return <WorkingDetails totalFunding={totalFunding} entrantStake={entrantStake} entrants={entrants} />
       }
       case 'judgement': {
-        return <JudgmentDetails />
+        return <JudgmentDetails entrants={entrants} />
       }
-      case 'withdrawal': {
-        return <WithdrawalDetails />
-      }
-      case 'expired': {
-        return <WithdrawalDetails />
+      case ('withdrawal' || 'expired'): {
+        return <WithdrawalDetails winners={winners} entrants={entrants} />
       }
       default:
         return null

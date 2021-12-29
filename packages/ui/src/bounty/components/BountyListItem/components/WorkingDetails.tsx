@@ -4,16 +4,15 @@ import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailB
 import { TokenValue } from '@/common/components/typography'
 import { MemberStack } from '@/memberships/components/MemberStack'
 import BN from 'bn.js'
-import { EntryMiniature } from '@/bounty/types/Bounty'
+import { Member } from '@/memberships/types'
 
 interface Props {
   totalFunding: BN
   entrantStake: BN
-  entries?: EntryMiniature[]
+  entrants?: Member[]
 }
 
-export const WorkingDetails = ({ totalFunding, entrantStake, entries }: Props) => {
-  const entrants = entries?.map((entry) => entry.worker)
+export const WorkingDetails = ({ totalFunding, entrantStake, entrants }: Props) => {
 
   return (
     <>
