@@ -24,7 +24,7 @@ fragment BountyFields on Bounty {
   judgingPeriod
   stage
   totalFunding
-  bountyentrybounty {
+  entries {
     createdById
     status {
       ... on BountyEntryStatusWinner {

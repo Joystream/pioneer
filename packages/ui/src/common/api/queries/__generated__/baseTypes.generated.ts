@@ -758,12 +758,11 @@ export type BaseWhereInput = {
 
 export type Bounty = BaseGraphQlObject & {
   __typename: 'Bounty'
-  bountycontributionbounty?: Maybe<Array<BountyContribution>>
-  bountyentrybounty?: Maybe<Array<BountyEntry>>
   /** Amount of funding provided by the creator */
   cherry: Scalars['BigInt']
   /** Bounty assurance contract type */
   contractType: BountyContractType
+  contributions: Array<BountyContribution>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   createdInEvent: BountyCreatedEvent
@@ -778,6 +777,7 @@ export type Bounty = BaseGraphQlObject & {
   discussionThreadId: Scalars['String']
   /** Stake minimum amount required to submit work entry to the bounty */
   entrantStake: Scalars['BigInt']
+  entries: Array<BountyEntry>
   /** Bounty funding type */
   fundingType: BountyFundingType
   id: Scalars['ID']
@@ -791,6 +791,7 @@ export type Bounty = BaseGraphQlObject & {
   stage: BountyStage
   /** Bounty title */
   title: Scalars['String']
+  /** Total amount available for the reward */
   totalFunding: Scalars['BigInt']
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['String']>
@@ -822,8 +823,7 @@ export type BountyContribution = BaseGraphQlObject & {
   __typename: 'BountyContribution'
   /** Amount of the contribution */
   amount: Scalars['BigInt']
-  bounty: Bounty
-  bountyId: Scalars['String']
+  bounty: Array<Bounty>
   contributor?: Maybe<Membership>
   contributorId?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
@@ -845,7 +845,6 @@ export type BountyContributionConnection = {
 
 export type BountyContributionCreateInput = {
   amount: Scalars['String']
-  bounty: Scalars['ID']
   contributor?: Maybe<Scalars['ID']>
 }
 
@@ -858,8 +857,6 @@ export type BountyContributionEdge = {
 export enum BountyContributionOrderByInput {
   AmountAsc = 'amount_ASC',
   AmountDesc = 'amount_DESC',
-  BountyAsc = 'bounty_ASC',
-  BountyDesc = 'bounty_DESC',
   ContributorAsc = 'contributor_ASC',
   ContributorDesc = 'contributor_DESC',
   CreatedAtAsc = 'createdAt_ASC',
@@ -872,7 +869,6 @@ export enum BountyContributionOrderByInput {
 
 export type BountyContributionUpdateInput = {
   amount?: Maybe<Scalars['String']>
-  bounty?: Maybe<Scalars['ID']>
   contributor?: Maybe<Scalars['ID']>
 }
 
@@ -885,7 +881,9 @@ export type BountyContributionWhereInput = {
   amount_in?: Maybe<Array<Scalars['BigInt']>>
   amount_lt?: Maybe<Scalars['BigInt']>
   amount_lte?: Maybe<Scalars['BigInt']>
-  bounty?: Maybe<BountyWhereInput>
+  bounty_every?: Maybe<BountyWhereInput>
+  bounty_none?: Maybe<BountyWhereInput>
+  bounty_some?: Maybe<BountyWhereInput>
   contributor?: Maybe<MembershipWhereInput>
   createdAt_eq?: Maybe<Scalars['DateTime']>
   createdAt_gt?: Maybe<Scalars['DateTime']>
@@ -1068,8 +1066,7 @@ export type BountyEntry = BaseGraphQlObject & {
   __typename: 'BountyEntry'
   announcedInEvent: WorkEntryAnnouncedEvent
   announcedInEventId: Scalars['String']
-  bounty: Bounty
-  bountyId: Scalars['String']
+  bounty: Array<Bounty>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   deletedAt?: Maybe<Scalars['DateTime']>
@@ -1100,7 +1097,6 @@ export type BountyEntryConnection = {
 
 export type BountyEntryCreateInput = {
   announcedInEvent: Scalars['ID']
-  bounty: Scalars['ID']
   stake: Scalars['String']
   stakingAccount?: Maybe<Scalars['String']>
   status: Scalars['JSONObject']
@@ -1117,8 +1113,6 @@ export type BountyEntryEdge = {
 export enum BountyEntryOrderByInput {
   AnnouncedInEventAsc = 'announcedInEvent_ASC',
   AnnouncedInEventDesc = 'announcedInEvent_DESC',
-  BountyAsc = 'bounty_ASC',
-  BountyDesc = 'bounty_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
@@ -1175,7 +1169,6 @@ export type BountyEntryStatusWorking = {
 
 export type BountyEntryUpdateInput = {
   announcedInEvent?: Maybe<Scalars['ID']>
-  bounty?: Maybe<Scalars['ID']>
   stake?: Maybe<Scalars['String']>
   stakingAccount?: Maybe<Scalars['String']>
   status?: Maybe<Scalars['JSONObject']>
@@ -1187,7 +1180,9 @@ export type BountyEntryWhereInput = {
   AND?: Maybe<Array<BountyEntryWhereInput>>
   OR?: Maybe<Array<BountyEntryWhereInput>>
   announcedInEvent?: Maybe<WorkEntryAnnouncedEventWhereInput>
-  bounty?: Maybe<BountyWhereInput>
+  bounty_every?: Maybe<BountyWhereInput>
+  bounty_none?: Maybe<BountyWhereInput>
+  bounty_some?: Maybe<BountyWhereInput>
   createdAt_eq?: Maybe<Scalars['DateTime']>
   createdAt_gt?: Maybe<Scalars['DateTime']>
   createdAt_gte?: Maybe<Scalars['DateTime']>
@@ -1443,12 +1438,6 @@ export type BountyUpdateInput = {
 export type BountyWhereInput = {
   AND?: Maybe<Array<BountyWhereInput>>
   OR?: Maybe<Array<BountyWhereInput>>
-  bountycontributionbounty_every?: Maybe<BountyContributionWhereInput>
-  bountycontributionbounty_none?: Maybe<BountyContributionWhereInput>
-  bountycontributionbounty_some?: Maybe<BountyContributionWhereInput>
-  bountyentrybounty_every?: Maybe<BountyEntryWhereInput>
-  bountyentrybounty_none?: Maybe<BountyEntryWhereInput>
-  bountyentrybounty_some?: Maybe<BountyEntryWhereInput>
   cherry_eq?: Maybe<Scalars['BigInt']>
   cherry_gt?: Maybe<Scalars['BigInt']>
   cherry_gte?: Maybe<Scalars['BigInt']>
@@ -1456,6 +1445,9 @@ export type BountyWhereInput = {
   cherry_lt?: Maybe<Scalars['BigInt']>
   cherry_lte?: Maybe<Scalars['BigInt']>
   contractType_json?: Maybe<Scalars['JSONObject']>
+  contributions_every?: Maybe<BountyContributionWhereInput>
+  contributions_none?: Maybe<BountyContributionWhereInput>
+  contributions_some?: Maybe<BountyContributionWhereInput>
   createdAt_eq?: Maybe<Scalars['DateTime']>
   createdAt_gt?: Maybe<Scalars['DateTime']>
   createdAt_gte?: Maybe<Scalars['DateTime']>
@@ -1485,6 +1477,9 @@ export type BountyWhereInput = {
   entrantStake_in?: Maybe<Array<Scalars['BigInt']>>
   entrantStake_lt?: Maybe<Scalars['BigInt']>
   entrantStake_lte?: Maybe<Scalars['BigInt']>
+  entries_every?: Maybe<BountyEntryWhereInput>
+  entries_none?: Maybe<BountyEntryWhereInput>
+  entries_some?: Maybe<BountyEntryWhereInput>
   fundingType_json?: Maybe<Scalars['JSONObject']>
   id_eq?: Maybe<Scalars['ID']>
   id_in?: Maybe<Array<Scalars['ID']>>

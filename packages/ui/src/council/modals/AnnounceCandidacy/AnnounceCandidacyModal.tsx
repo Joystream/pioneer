@@ -208,6 +208,7 @@ export const AnnounceCandidacyModal = () => {
         accountsWithCompatibleLocks,
         accountsWithTransferableBalance,
         requiredStake: (constants?.election.minCandidacyStake as BN).toNumber(),
+        lock: 'Council Candidate',
       },
     })
 
