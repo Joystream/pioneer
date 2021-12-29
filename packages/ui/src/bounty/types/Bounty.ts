@@ -29,3 +29,38 @@ export interface Withdrawn {
 }
 
 export type BountyActorItem = Contributor | Entrant | Withdrawn
+
+export type FundingType = FundingLimited | FundingPerpetual
+
+type FundingLimited = {
+  minAmount: BN
+  maxAmount: BN
+  maxPeriod: number
+}
+
+type FundingPerpetual = {
+  target: BN
+}
+
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
+
+export interface EntryMiniature {
+  createdById: string
+  winner: boolean
+}
+
+export interface Bounty {
+  id: string
+  title: string
+  createdAt: string
+  cherry: BN
+  entrantStake: BN
+  creator?: Member
+  oracle?: Member
+  fundingType: FundingType
+  workPeriod: BN
+  judgingPeriod: BN
+  stage: BountyStage
+  totalFunding: BN
+  entries?: EntryMiniature[]
+}

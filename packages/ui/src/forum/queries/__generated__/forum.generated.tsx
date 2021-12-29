@@ -453,7 +453,7 @@ export type ForumPostParentsFragment = {
 }
 
 export type GetForumCategoriesQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
+  where?: Types.Maybe<Types.ForumCategoryWhereInput>
 }>
 
 export type GetForumCategoriesQuery = {
@@ -499,7 +499,7 @@ export type GetForumCategoriesQuery = {
 }
 
 export type GetArchivedForumCategoriesQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
+  where?: Types.Maybe<Types.ForumCategoryWhereInput>
 }>
 
 export type GetArchivedForumCategoriesQuery = {
@@ -750,10 +750,10 @@ export type GetForumThreadBreadcrumbsQuery = {
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.ForumThreadWhereInput>
-  orderBy?: Types.InputMaybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
-  offset?: Types.InputMaybe<Types.Scalars['Int']>
-  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  where?: Types.Maybe<Types.ForumThreadWhereInput>
+  orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetForumThreadsQuery = {
@@ -782,7 +782,7 @@ export type GetForumThreadsQuery = {
 }
 
 export type GetForumThreadsCountQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.ForumThreadWhereInput>
+  where?: Types.Maybe<Types.ForumThreadWhereInput>
 }>
 
 export type GetForumThreadsCountQuery = {
@@ -831,9 +831,9 @@ export type GetForumThreadQuery = {
 
 export type GetForumPostsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
-  offset?: Types.InputMaybe<Types.Scalars['Int']>
-  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetForumPostsQuery = {
@@ -966,8 +966,8 @@ export type GetForumPostsCountQuery = {
 
 export type GetForumPostsIdsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
-  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetForumPostsIdsQuery = { __typename: 'Query'; forumPosts: Array<{ __typename: 'ForumPost'; id: string }> }
@@ -989,9 +989,9 @@ export type GetForumPostParentsQuery = {
 
 export type SearchForumPostQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
-  offset?: Types.InputMaybe<Types.Scalars['Int']>
-  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type SearchForumPostQuery = {
