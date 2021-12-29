@@ -15,10 +15,12 @@ export const WithdrawalDetails = ({ winners, entrants }: Props) => {
     <>
       <DetailBox title="Winners">
         {winners ? (
-        <MemberStack members={winners} max={5} />
-         ) : (
-          <TextMedium black bold>None</TextMedium>
-         )}
+          <MemberStack members={winners} max={5} />
+        ) : (
+          <TextMedium black bold>
+            None
+          </TextMedium>
+        )}
       </DetailBox>
       {entrants && (
         <DetailBox title="Entries">

@@ -1,9 +1,9 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { TokenValue } from '@/common/components/typography'
 import { MemberStack } from '@/memberships/components/MemberStack'
-import BN from 'bn.js'
 import { Member } from '@/memberships/types'
 
 interface Props {
@@ -13,7 +13,6 @@ interface Props {
 }
 
 export const WorkingDetails = ({ totalFunding, entrantStake, entrants }: Props) => {
-
   return (
     <>
       <DetailBox title="Bounty">

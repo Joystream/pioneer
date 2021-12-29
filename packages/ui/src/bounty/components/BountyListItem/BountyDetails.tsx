@@ -35,7 +35,7 @@ export const BountyDetails = ({ type, oracle, cherry, fundingType, totalFunding,
       case 'judgement': {
         return <JudgmentDetails entrants={entrants} />
       }
-      case ('withdrawal' || 'expired'): {
+      case 'withdrawal' || 'expired': {
         return <WithdrawalDetails winners={winners} entrants={entrants} />
       }
       default:
