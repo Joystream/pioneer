@@ -17,7 +17,7 @@ const Template: Story = (args) => {
   const funding = {
     minAmount: new BN(10000),
     maxAmount: new BN(12000),
-    maxPeriod: 200,
+    maxPeriod: new BN(2000),
   }
 
   return (

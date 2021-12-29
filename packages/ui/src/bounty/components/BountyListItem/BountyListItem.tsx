@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import BN from 'bn.js'
 import styled from 'styled-components'
 
 import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
 import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
-import { Bounty, BountyPeriod } from '@/bounty/types/Bounty'
+import { Bounty, BountyPeriod, isFundingLimited } from '@/bounty/types/Bounty'
 import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
@@ -15,7 +16,6 @@ import { generatePath, useHistory } from 'react-router-dom'
 export const BountyListItem = ({
   id,
   title,
-  createdAt,
   cherry,
   entrantStake,
   creator,
@@ -31,12 +31,24 @@ export const BountyListItem = ({
 
   const period = asPeriod(stage)
 
+  const timeToPeriodEnd = useMemo(() => {
+    if (period === 'funding' && isFundingLimited(fundingType)) {
+      return new BN(fundingType.maxPeriod)
+    }
+    if (period === 'working') {
+      return workPeriod
+    }
+    if (period === 'judgement') {
+      return judgingPeriod
+    }
+  }, [period, fundingType])
+
   return (
     <Wrapper>
       {/* TODO: add image url to schema */}
       <BountyImage src="https://picsum.photos/500/300" />
       <Info>
-        <BountyInformations period={period} date={new Date(createdAt)} creator={creator} title={title} />
+        <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
         <BountyDetails
           type={period}
           oracle={oracle}

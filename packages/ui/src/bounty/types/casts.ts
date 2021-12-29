@@ -28,7 +28,7 @@ const asFunding = (field: BountyFundingType): FundingType => {
   return {
     minAmount: new BN(field.minFundingAmount),
     maxAmount: new BN(field.maxFundingAmount),
-    maxPeriod: field.fundingPeriod,
+    maxPeriod: new BN(field.fundingPeriod),
   }
 }
 

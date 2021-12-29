@@ -1,21 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BountyPeriod } from '@/bounty/types/Bounty'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
-import { DurationStatistics } from '@/common/components/statistics'
+import { BlockDurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
 import { Member } from '@/memberships/types'
+import BN from 'bn.js'
 
 interface Props {
-  period: BountyPeriod
   title: string
   creator?: Member
-  date?: Date
+  timeToEnd?: BN
 }
 
-export const BountyInformations = ({ period, creator, date, title }: Props) => {
+export const BountyInformations = ({ creator, timeToEnd, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
@@ -27,7 +26,6 @@ export const BountyInformations = ({ period, creator, date, title }: Props) => {
             </AvatarWrapper>
           </TextMedium>
         )}
-        {/* TODO: convert to link */}
         <TextHuge bold>{title}</TextHuge>
       </TitleContainer>
       <BadgeDurationContainer>
@@ -36,7 +34,7 @@ export const BountyInformations = ({ period, creator, date, title }: Props) => {
           <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
           <BadgeStatus inverted>ELECTION #6</BadgeStatus>
         </BadgesRow>
-        {period !== 'expired' && date && <DurationStatistics size="s" value={date.toISOString()} title="Time left" />}
+        {timeToEnd && <BlockDurationStatistics size="s" value={timeToEnd} title="Time left" hideBlockNumber />}
       </BadgeDurationContainer>
     </Wrapper>
   )

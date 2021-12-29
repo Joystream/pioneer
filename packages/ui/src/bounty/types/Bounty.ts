@@ -35,7 +35,7 @@ export type FundingType = FundingLimited | FundingPerpetual
 type FundingLimited = {
   minAmount: BN
   maxAmount: BN
-  maxPeriod: number
+  maxPeriod: BN
 }
 
 type FundingPerpetual = {
