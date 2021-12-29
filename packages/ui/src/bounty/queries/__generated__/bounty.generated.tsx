@@ -74,20 +74,17 @@ export type BountyFieldsFragment = {
   fundingType:
     | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
     | { __typename: 'BountyFundingPerpetual'; target: number }
-  bountyentrybounty?:
-    | Array<{
-        __typename: 'BountyEntry'
-        createdById: string
-        status:
-          | { __typename: 'BountyEntryStatusCashedOut' }
-          | { __typename: 'BountyEntryStatusPassed' }
-          | { __typename: 'BountyEntryStatusRejected' }
-          | { __typename: 'BountyEntryStatusWinner'; reward: number }
-          | { __typename: 'BountyEntryStatusWithdrawn' }
-          | { __typename: 'BountyEntryStatusWorking' }
-      }>
-    | null
-    | undefined
+  entries: Array<{
+    __typename: 'BountyEntry'
+    createdById: string
+    status:
+      | { __typename: 'BountyEntryStatusCashedOut' }
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+  }>
 }
 
 export type GetBountiesQueryVariables = Types.Exact<{
@@ -174,20 +171,17 @@ export type GetBountiesQuery = {
           fundingPeriod: number
         }
       | { __typename: 'BountyFundingPerpetual'; target: number }
-    bountyentrybounty?:
-      | Array<{
-          __typename: 'BountyEntry'
-          createdById: string
-          status:
-            | { __typename: 'BountyEntryStatusCashedOut' }
-            | { __typename: 'BountyEntryStatusPassed' }
-            | { __typename: 'BountyEntryStatusRejected' }
-            | { __typename: 'BountyEntryStatusWinner'; reward: number }
-            | { __typename: 'BountyEntryStatusWithdrawn' }
-            | { __typename: 'BountyEntryStatusWorking' }
-        }>
-      | null
-      | undefined
+    entries: Array<{
+      __typename: 'BountyEntry'
+      createdById: string
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+    }>
   }>
 }
 
@@ -227,7 +221,7 @@ export const BountyFieldsFragmentDoc = gql`
     judgingPeriod
     stage
     totalFunding
-    bountyentrybounty {
+    entries {
       createdById
       status {
         ... on BountyEntryStatusWinner {

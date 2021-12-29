@@ -1,5 +1,4 @@
 export type Maybe<T> = T | null
-export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
@@ -846,7 +845,7 @@ export type BountyContributionConnection = {
 
 export type BountyContributionCreateInput = {
   amount: Scalars['String']
-  contributor?: InputMaybe<Scalars['ID']>
+  contributor?: Maybe<Scalars['ID']>
 }
 
 export type BountyContributionEdge = {
@@ -869,47 +868,47 @@ export enum BountyContributionOrderByInput {
 }
 
 export type BountyContributionUpdateInput = {
-  amount?: InputMaybe<Scalars['String']>
-  contributor?: InputMaybe<Scalars['ID']>
+  amount?: Maybe<Scalars['String']>
+  contributor?: Maybe<Scalars['ID']>
 }
 
 export type BountyContributionWhereInput = {
-  AND?: InputMaybe<Array<BountyContributionWhereInput>>
-  OR?: InputMaybe<Array<BountyContributionWhereInput>>
-  amount_eq?: InputMaybe<Scalars['BigInt']>
-  amount_gt?: InputMaybe<Scalars['BigInt']>
-  amount_gte?: InputMaybe<Scalars['BigInt']>
-  amount_in?: InputMaybe<Array<Scalars['BigInt']>>
-  amount_lt?: InputMaybe<Scalars['BigInt']>
-  amount_lte?: InputMaybe<Scalars['BigInt']>
-  bounty_every?: InputMaybe<BountyWhereInput>
-  bounty_none?: InputMaybe<BountyWhereInput>
-  bounty_some?: InputMaybe<BountyWhereInput>
-  contributor?: InputMaybe<MembershipWhereInput>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+  AND?: Maybe<Array<BountyContributionWhereInput>>
+  OR?: Maybe<Array<BountyContributionWhereInput>>
+  amount_eq?: Maybe<Scalars['BigInt']>
+  amount_gt?: Maybe<Scalars['BigInt']>
+  amount_gte?: Maybe<Scalars['BigInt']>
+  amount_in?: Maybe<Array<Scalars['BigInt']>>
+  amount_lt?: Maybe<Scalars['BigInt']>
+  amount_lte?: Maybe<Scalars['BigInt']>
+  bounty_every?: Maybe<BountyWhereInput>
+  bounty_none?: Maybe<BountyWhereInput>
+  bounty_some?: Maybe<BountyWhereInput>
+  contributor?: Maybe<MembershipWhereInput>
+  createdAt_eq?: Maybe<Scalars['DateTime']>
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  createdById_eq?: Maybe<Scalars['ID']>
+  createdById_in?: Maybe<Array<Scalars['ID']>>
+  deletedAt_all?: Maybe<Scalars['Boolean']>
+  deletedAt_eq?: Maybe<Scalars['DateTime']>
+  deletedAt_gt?: Maybe<Scalars['DateTime']>
+  deletedAt_gte?: Maybe<Scalars['DateTime']>
+  deletedAt_lt?: Maybe<Scalars['DateTime']>
+  deletedAt_lte?: Maybe<Scalars['DateTime']>
+  deletedById_eq?: Maybe<Scalars['ID']>
+  deletedById_in?: Maybe<Array<Scalars['ID']>>
+  id_eq?: Maybe<Scalars['ID']>
+  id_in?: Maybe<Array<Scalars['ID']>>
+  updatedAt_eq?: Maybe<Scalars['DateTime']>
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  updatedById_eq?: Maybe<Scalars['ID']>
+  updatedById_in?: Maybe<Array<Scalars['ID']>>
 }
 
 export type BountyContributionWhereUniqueInput = {
@@ -1169,63 +1168,63 @@ export type BountyEntryStatusWorking = {
 }
 
 export type BountyEntryUpdateInput = {
-  announcedInEvent?: InputMaybe<Scalars['ID']>
-  stake?: InputMaybe<Scalars['String']>
-  stakingAccount?: InputMaybe<Scalars['String']>
-  status?: InputMaybe<Scalars['JSONObject']>
-  workSubmitted?: InputMaybe<Scalars['Boolean']>
-  worker?: InputMaybe<Scalars['ID']>
+  announcedInEvent?: Maybe<Scalars['ID']>
+  stake?: Maybe<Scalars['String']>
+  stakingAccount?: Maybe<Scalars['String']>
+  status?: Maybe<Scalars['JSONObject']>
+  workSubmitted?: Maybe<Scalars['Boolean']>
+  worker?: Maybe<Scalars['ID']>
 }
 
 export type BountyEntryWhereInput = {
-  AND?: InputMaybe<Array<BountyEntryWhereInput>>
-  OR?: InputMaybe<Array<BountyEntryWhereInput>>
-  announcedInEvent?: InputMaybe<WorkEntryAnnouncedEventWhereInput>
-  bounty_every?: InputMaybe<BountyWhereInput>
-  bounty_none?: InputMaybe<BountyWhereInput>
-  bounty_some?: InputMaybe<BountyWhereInput>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  stake_eq?: InputMaybe<Scalars['BigInt']>
-  stake_gt?: InputMaybe<Scalars['BigInt']>
-  stake_gte?: InputMaybe<Scalars['BigInt']>
-  stake_in?: InputMaybe<Array<Scalars['BigInt']>>
-  stake_lt?: InputMaybe<Scalars['BigInt']>
-  stake_lte?: InputMaybe<Scalars['BigInt']>
-  stakingAccount_contains?: InputMaybe<Scalars['String']>
-  stakingAccount_endsWith?: InputMaybe<Scalars['String']>
-  stakingAccount_eq?: InputMaybe<Scalars['String']>
-  stakingAccount_in?: InputMaybe<Array<Scalars['String']>>
-  stakingAccount_startsWith?: InputMaybe<Scalars['String']>
-  status_json?: InputMaybe<Scalars['JSONObject']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-  workSubmitted_eq?: InputMaybe<Scalars['Boolean']>
-  workSubmitted_in?: InputMaybe<Array<Scalars['Boolean']>>
-  worker?: InputMaybe<MembershipWhereInput>
-  works_every?: InputMaybe<BountyWorkDataWhereInput>
-  works_none?: InputMaybe<BountyWorkDataWhereInput>
-  works_some?: InputMaybe<BountyWorkDataWhereInput>
+  AND?: Maybe<Array<BountyEntryWhereInput>>
+  OR?: Maybe<Array<BountyEntryWhereInput>>
+  announcedInEvent?: Maybe<WorkEntryAnnouncedEventWhereInput>
+  bounty_every?: Maybe<BountyWhereInput>
+  bounty_none?: Maybe<BountyWhereInput>
+  bounty_some?: Maybe<BountyWhereInput>
+  createdAt_eq?: Maybe<Scalars['DateTime']>
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  createdById_eq?: Maybe<Scalars['ID']>
+  createdById_in?: Maybe<Array<Scalars['ID']>>
+  deletedAt_all?: Maybe<Scalars['Boolean']>
+  deletedAt_eq?: Maybe<Scalars['DateTime']>
+  deletedAt_gt?: Maybe<Scalars['DateTime']>
+  deletedAt_gte?: Maybe<Scalars['DateTime']>
+  deletedAt_lt?: Maybe<Scalars['DateTime']>
+  deletedAt_lte?: Maybe<Scalars['DateTime']>
+  deletedById_eq?: Maybe<Scalars['ID']>
+  deletedById_in?: Maybe<Array<Scalars['ID']>>
+  id_eq?: Maybe<Scalars['ID']>
+  id_in?: Maybe<Array<Scalars['ID']>>
+  stake_eq?: Maybe<Scalars['BigInt']>
+  stake_gt?: Maybe<Scalars['BigInt']>
+  stake_gte?: Maybe<Scalars['BigInt']>
+  stake_in?: Maybe<Array<Scalars['BigInt']>>
+  stake_lt?: Maybe<Scalars['BigInt']>
+  stake_lte?: Maybe<Scalars['BigInt']>
+  stakingAccount_contains?: Maybe<Scalars['String']>
+  stakingAccount_endsWith?: Maybe<Scalars['String']>
+  stakingAccount_eq?: Maybe<Scalars['String']>
+  stakingAccount_in?: Maybe<Array<Scalars['String']>>
+  stakingAccount_startsWith?: Maybe<Scalars['String']>
+  status_json?: Maybe<Scalars['JSONObject']>
+  updatedAt_eq?: Maybe<Scalars['DateTime']>
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  updatedById_eq?: Maybe<Scalars['ID']>
+  updatedById_in?: Maybe<Array<Scalars['ID']>>
+  workSubmitted_eq?: Maybe<Scalars['Boolean']>
+  workSubmitted_in?: Maybe<Array<Scalars['Boolean']>>
+  worker?: Maybe<MembershipWhereInput>
+  works_every?: Maybe<BountyWorkDataWhereInput>
+  works_none?: Maybe<BountyWorkDataWhereInput>
+  works_some?: Maybe<BountyWorkDataWhereInput>
 }
 
 export type BountyEntryWhereUniqueInput = {
@@ -1437,87 +1436,87 @@ export type BountyUpdateInput = {
 }
 
 export type BountyWhereInput = {
-  AND?: InputMaybe<Array<BountyWhereInput>>
-  OR?: InputMaybe<Array<BountyWhereInput>>
-  cherry_eq?: InputMaybe<Scalars['BigInt']>
-  cherry_gt?: InputMaybe<Scalars['BigInt']>
-  cherry_gte?: InputMaybe<Scalars['BigInt']>
-  cherry_in?: InputMaybe<Array<Scalars['BigInt']>>
-  cherry_lt?: InputMaybe<Scalars['BigInt']>
-  cherry_lte?: InputMaybe<Scalars['BigInt']>
-  contractType_json?: InputMaybe<Scalars['JSONObject']>
-  contributions_every?: InputMaybe<BountyContributionWhereInput>
-  contributions_none?: InputMaybe<BountyContributionWhereInput>
-  contributions_some?: InputMaybe<BountyContributionWhereInput>
-  createdAt_eq?: InputMaybe<Scalars['DateTime']>
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>
-  createdById_eq?: InputMaybe<Scalars['ID']>
-  createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  createdInEvent?: InputMaybe<BountyCreatedEventWhereInput>
-  creator?: InputMaybe<MembershipWhereInput>
-  deletedAt_all?: InputMaybe<Scalars['Boolean']>
-  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
-  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
-  deletedById_eq?: InputMaybe<Scalars['ID']>
-  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
-  description_contains?: InputMaybe<Scalars['String']>
-  description_endsWith?: InputMaybe<Scalars['String']>
-  description_eq?: InputMaybe<Scalars['String']>
-  description_in?: InputMaybe<Array<Scalars['String']>>
-  description_startsWith?: InputMaybe<Scalars['String']>
-  discussionThread?: InputMaybe<ForumThreadWhereInput>
-  entrantStake_eq?: InputMaybe<Scalars['BigInt']>
-  entrantStake_gt?: InputMaybe<Scalars['BigInt']>
-  entrantStake_gte?: InputMaybe<Scalars['BigInt']>
-  entrantStake_in?: InputMaybe<Array<Scalars['BigInt']>>
-  entrantStake_lt?: InputMaybe<Scalars['BigInt']>
-  entrantStake_lte?: InputMaybe<Scalars['BigInt']>
-  entries_every?: InputMaybe<BountyEntryWhereInput>
-  entries_none?: InputMaybe<BountyEntryWhereInput>
-  entries_some?: InputMaybe<BountyEntryWhereInput>
-  fundingType_json?: InputMaybe<Scalars['JSONObject']>
-  id_eq?: InputMaybe<Scalars['ID']>
-  id_in?: InputMaybe<Array<Scalars['ID']>>
-  judgingPeriod_eq?: InputMaybe<Scalars['Int']>
-  judgingPeriod_gt?: InputMaybe<Scalars['Int']>
-  judgingPeriod_gte?: InputMaybe<Scalars['Int']>
-  judgingPeriod_in?: InputMaybe<Array<Scalars['Int']>>
-  judgingPeriod_lt?: InputMaybe<Scalars['Int']>
-  judgingPeriod_lte?: InputMaybe<Scalars['Int']>
-  maxFundingReachedEvent?: InputMaybe<BountyMaxFundingReachedEventWhereInput>
-  oracle?: InputMaybe<MembershipWhereInput>
-  stage_eq?: InputMaybe<BountyStage>
-  stage_in?: InputMaybe<Array<BountyStage>>
-  title_contains?: InputMaybe<Scalars['String']>
-  title_endsWith?: InputMaybe<Scalars['String']>
-  title_eq?: InputMaybe<Scalars['String']>
-  title_in?: InputMaybe<Array<Scalars['String']>>
-  title_startsWith?: InputMaybe<Scalars['String']>
-  totalFunding_eq?: InputMaybe<Scalars['BigInt']>
-  totalFunding_gt?: InputMaybe<Scalars['BigInt']>
-  totalFunding_gte?: InputMaybe<Scalars['BigInt']>
-  totalFunding_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalFunding_lt?: InputMaybe<Scalars['BigInt']>
-  totalFunding_lte?: InputMaybe<Scalars['BigInt']>
-  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
-  updatedById_eq?: InputMaybe<Scalars['ID']>
-  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-  workPeriod_eq?: InputMaybe<Scalars['Int']>
-  workPeriod_gt?: InputMaybe<Scalars['Int']>
-  workPeriod_gte?: InputMaybe<Scalars['Int']>
-  workPeriod_in?: InputMaybe<Array<Scalars['Int']>>
-  workPeriod_lt?: InputMaybe<Scalars['Int']>
-  workPeriod_lte?: InputMaybe<Scalars['Int']>
+  AND?: Maybe<Array<BountyWhereInput>>
+  OR?: Maybe<Array<BountyWhereInput>>
+  cherry_eq?: Maybe<Scalars['BigInt']>
+  cherry_gt?: Maybe<Scalars['BigInt']>
+  cherry_gte?: Maybe<Scalars['BigInt']>
+  cherry_in?: Maybe<Array<Scalars['BigInt']>>
+  cherry_lt?: Maybe<Scalars['BigInt']>
+  cherry_lte?: Maybe<Scalars['BigInt']>
+  contractType_json?: Maybe<Scalars['JSONObject']>
+  contributions_every?: Maybe<BountyContributionWhereInput>
+  contributions_none?: Maybe<BountyContributionWhereInput>
+  contributions_some?: Maybe<BountyContributionWhereInput>
+  createdAt_eq?: Maybe<Scalars['DateTime']>
+  createdAt_gt?: Maybe<Scalars['DateTime']>
+  createdAt_gte?: Maybe<Scalars['DateTime']>
+  createdAt_lt?: Maybe<Scalars['DateTime']>
+  createdAt_lte?: Maybe<Scalars['DateTime']>
+  createdById_eq?: Maybe<Scalars['ID']>
+  createdById_in?: Maybe<Array<Scalars['ID']>>
+  createdInEvent?: Maybe<BountyCreatedEventWhereInput>
+  creator?: Maybe<MembershipWhereInput>
+  deletedAt_all?: Maybe<Scalars['Boolean']>
+  deletedAt_eq?: Maybe<Scalars['DateTime']>
+  deletedAt_gt?: Maybe<Scalars['DateTime']>
+  deletedAt_gte?: Maybe<Scalars['DateTime']>
+  deletedAt_lt?: Maybe<Scalars['DateTime']>
+  deletedAt_lte?: Maybe<Scalars['DateTime']>
+  deletedById_eq?: Maybe<Scalars['ID']>
+  deletedById_in?: Maybe<Array<Scalars['ID']>>
+  description_contains?: Maybe<Scalars['String']>
+  description_endsWith?: Maybe<Scalars['String']>
+  description_eq?: Maybe<Scalars['String']>
+  description_in?: Maybe<Array<Scalars['String']>>
+  description_startsWith?: Maybe<Scalars['String']>
+  discussionThread?: Maybe<ForumThreadWhereInput>
+  entrantStake_eq?: Maybe<Scalars['BigInt']>
+  entrantStake_gt?: Maybe<Scalars['BigInt']>
+  entrantStake_gte?: Maybe<Scalars['BigInt']>
+  entrantStake_in?: Maybe<Array<Scalars['BigInt']>>
+  entrantStake_lt?: Maybe<Scalars['BigInt']>
+  entrantStake_lte?: Maybe<Scalars['BigInt']>
+  entries_every?: Maybe<BountyEntryWhereInput>
+  entries_none?: Maybe<BountyEntryWhereInput>
+  entries_some?: Maybe<BountyEntryWhereInput>
+  fundingType_json?: Maybe<Scalars['JSONObject']>
+  id_eq?: Maybe<Scalars['ID']>
+  id_in?: Maybe<Array<Scalars['ID']>>
+  judgingPeriod_eq?: Maybe<Scalars['Int']>
+  judgingPeriod_gt?: Maybe<Scalars['Int']>
+  judgingPeriod_gte?: Maybe<Scalars['Int']>
+  judgingPeriod_in?: Maybe<Array<Scalars['Int']>>
+  judgingPeriod_lt?: Maybe<Scalars['Int']>
+  judgingPeriod_lte?: Maybe<Scalars['Int']>
+  maxFundingReachedEvent?: Maybe<BountyMaxFundingReachedEventWhereInput>
+  oracle?: Maybe<MembershipWhereInput>
+  stage_eq?: Maybe<BountyStage>
+  stage_in?: Maybe<Array<BountyStage>>
+  title_contains?: Maybe<Scalars['String']>
+  title_endsWith?: Maybe<Scalars['String']>
+  title_eq?: Maybe<Scalars['String']>
+  title_in?: Maybe<Array<Scalars['String']>>
+  title_startsWith?: Maybe<Scalars['String']>
+  totalFunding_eq?: Maybe<Scalars['BigInt']>
+  totalFunding_gt?: Maybe<Scalars['BigInt']>
+  totalFunding_gte?: Maybe<Scalars['BigInt']>
+  totalFunding_in?: Maybe<Array<Scalars['BigInt']>>
+  totalFunding_lt?: Maybe<Scalars['BigInt']>
+  totalFunding_lte?: Maybe<Scalars['BigInt']>
+  updatedAt_eq?: Maybe<Scalars['DateTime']>
+  updatedAt_gt?: Maybe<Scalars['DateTime']>
+  updatedAt_gte?: Maybe<Scalars['DateTime']>
+  updatedAt_lt?: Maybe<Scalars['DateTime']>
+  updatedAt_lte?: Maybe<Scalars['DateTime']>
+  updatedById_eq?: Maybe<Scalars['ID']>
+  updatedById_in?: Maybe<Array<Scalars['ID']>>
+  workPeriod_eq?: Maybe<Scalars['Int']>
+  workPeriod_gt?: Maybe<Scalars['Int']>
+  workPeriod_gte?: Maybe<Scalars['Int']>
+  workPeriod_in?: Maybe<Array<Scalars['Int']>>
+  workPeriod_lt?: Maybe<Scalars['Int']>
+  workPeriod_lte?: Maybe<Scalars['Int']>
 }
 
 export type BountyWhereUniqueInput = {
