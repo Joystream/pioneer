@@ -23,7 +23,7 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
   return lowerFirstLetter(`${stageField}`) as BountyStage
 }
 
-const asEntries = (entriesFields: BountyFieldsFragment['bountyentrybounty']): EntryMiniature[] | undefined => {
+const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
       createdById: entry.createdById,
@@ -46,5 +46,5 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   judgingPeriod: new BN(fields.judgingPeriod),
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
-  entries: asEntries(fields.bountyentrybounty),
+  entries: asEntries(fields.entries),
 })
