@@ -7,7 +7,7 @@ import { FundingDetails } from '@/bounty/components/BountyListItem/components/Fu
 import { JudgmentDetails } from '@/bounty/components/BountyListItem/components/JudgmentDetails'
 import { WithdrawalDetails } from '@/bounty/components/BountyListItem/components/WithdrawalDetails'
 import { WorkingDetails } from '@/bounty/components/BountyListItem/components/WorkingDetails'
-import { BountyPeriod, FundingType } from '@/bounty/types/Bounty'
+import { BountyPeriod, EntryMiniature, FundingType } from '@/bounty/types/Bounty'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -17,16 +17,18 @@ interface Props {
   cherry: BN
   fundingType: FundingType
   totalFunding: BN
+  entrantStake: BN
+  entries?: EntryMiniature[]
 }
 
-export const BountyDetails = ({ type, oracle, cherry, fundingType, totalFunding }: Props) => {
+export const BountyDetails = ({ type, oracle, cherry, fundingType, totalFunding, entrantStake, entries }: Props) => {
   const content = useMemo(() => {
     switch (type) {
       case 'funding': {
         return <FundingDetails cherry={cherry} fundingType={fundingType} totalFunding={totalFunding} />
       }
       case 'working': {
-        return <WorkingDetails />
+        return <WorkingDetails totalFunding={totalFunding} entrantStake={entrantStake} entries={entries} />
       }
       case 'judgement': {
         return <JudgmentDetails />

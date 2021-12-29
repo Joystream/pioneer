@@ -7,7 +7,7 @@ import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
 import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
 import { BountyRoutes } from '@/bounty/constants'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
-import { Bounty, BountyPeriod, isFundingLimited } from '@/bounty/types/Bounty'
+import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
@@ -55,6 +55,8 @@ export const BountyListItem = ({
           cherry={cherry}
           fundingType={fundingType}
           totalFunding={totalFunding}
+          entrantStake={entrantStake}
+          entries={entries}
         />
       </Info>
       <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
