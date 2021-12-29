@@ -1,8 +1,11 @@
 import BN from 'bn.js'
 
+import { CandidacyStatus } from '@/common/api/queries'
 import { asMember, Member } from '@/memberships/types'
 
 import { ElectionCandidateDetailedFieldsFragment, ElectionCandidateFieldsFragment } from '../queries'
+
+export { CandidacyStatus } from '@/common/api/queries'
 
 export interface ElectionCandidate {
   id: string
@@ -13,6 +16,7 @@ export interface ElectionCandidate {
     bulletPoints: string[]
     bannerUri?: string
   }
+  status: CandidacyStatus
 }
 
 export interface ElectionCandidateWithDetails extends ElectionCandidate {
@@ -32,6 +36,7 @@ export const asElectionCandidate = (fields: ElectionCandidateFieldsFragment): El
     bulletPoints: fields.noteMetadata.bulletPoints,
     bannerUri: fields.noteMetadata.bannerImageUri ?? undefined,
   },
+  status: fields.status,
 })
 
 export const asElectionCandidateWithDetails = (
