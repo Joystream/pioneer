@@ -76,6 +76,7 @@ fragment ElectionCandidateFields on Candidate {
     bannerImageUri
     description
   }
+  status
 }
 
 fragment ElectionRoundFields on ElectionRound {

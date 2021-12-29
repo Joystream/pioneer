@@ -189,6 +189,7 @@ export type ElectionCandidateFieldsFragment = {
   __typename: 'Candidate'
   id: string
   stake: any
+  status: Types.CandidacyStatus
   member: {
     __typename: 'Membership'
     id: string
@@ -230,6 +231,7 @@ export type ElectionRoundFieldsFragment = {
     __typename: 'Candidate'
     id: string
     stake: any
+    status: Types.CandidacyStatus
     member: {
       __typename: 'Membership'
       id: string
@@ -287,6 +289,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
     __typename: 'Candidate'
     stake: any
     id: string
+    status: Types.CandidacyStatus
     member: {
       __typename: 'Membership'
       id: string
@@ -335,6 +338,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
   rewardAccountId: string
   id: string
   stake: any
+  status: Types.CandidacyStatus
   electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
   member: {
     __typename: 'Membership'
@@ -382,6 +386,7 @@ export type CastVoteFieldsFragment = {
         __typename: 'Candidate'
         id: string
         stake: any
+        status: Types.CandidacyStatus
         member: {
           __typename: 'Membership'
           id: string
@@ -831,6 +836,7 @@ export type GetCurrentElectionQuery = {
       __typename: 'Candidate'
       id: string
       stake: any
+      status: Types.CandidacyStatus
       member: {
         __typename: 'Membership'
         id: string
@@ -912,6 +918,7 @@ export type GetPastElectionQuery = {
           __typename: 'Candidate'
           stake: any
           id: string
+          status: Types.CandidacyStatus
           member: {
             __typename: 'Membership'
             id: string
@@ -974,6 +981,7 @@ export type GetCandidateQuery = {
         rewardAccountId: string
         id: string
         stake: any
+        status: Types.CandidacyStatus
         electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
         member: {
           __typename: 'Membership'
@@ -1062,6 +1070,7 @@ export type GetCouncilVotesQuery = {
           __typename: 'Candidate'
           id: string
           stake: any
+          status: Types.CandidacyStatus
           member: {
             __typename: 'Membership'
             id: string
@@ -1311,6 +1320,7 @@ export const ElectionCandidateFieldsFragmentDoc = gql`
       bannerImageUri
       description
     }
+    status
   }
   ${MemberFieldsFragmentDoc}
 `
