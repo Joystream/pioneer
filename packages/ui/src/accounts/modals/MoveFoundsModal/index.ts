@@ -1,3 +1,4 @@
+import { LockType } from '@/accounts/types'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 import { Address } from '@/common/types'
 
@@ -9,5 +10,6 @@ export type MoveFundsModalCall = ModalWithDataCall<
     requiredStake: number
     accountsWithTransferableBalance?: Address[] | null
     accountsWithCompatibleLocks?: { [key in Address]: Address[] } | null
+    lock: LockType
   }
 >

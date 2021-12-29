@@ -70,6 +70,7 @@ const Active: ThreadStatusType = 'ThreadStatusActive'
 const Locked: ThreadStatusType = 'ThreadStatusLocked'
 const Moderated: ThreadStatusType = 'ThreadStatusModerated'
 const Removed: ThreadStatusType = 'ThreadStatusRemoved'
+export const ForumThreadStatus = { Active, Locked, Moderated, Removed }
 
 export const generateForumThreads =
   (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => (mocks: MocksForForum) => {
