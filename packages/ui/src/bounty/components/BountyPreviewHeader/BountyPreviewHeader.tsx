@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 
 import { PageHeader } from '@/app/components/PageHeader'
-import { Bounty } from '@/bounty/types/Bounty'
+import { Bounty, isPerpetual } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
@@ -21,17 +21,17 @@ export const BountyPreviewHeader = ({ bounty, badgeNames }: Props) => {
     if (!bounty) return null
 
     switch (bounty.stage) {
-      case 'Funding':
+      case 'funding':
         return <FundingStageButtons activeMember={active} bounty={bounty} />
-      case 'WorkSubmission':
+      case 'workSubmission':
         return <WorkingStageButtons activeMember={active} bounty={bounty} />
-      case 'Judgment':
+      case 'judgment':
         return <JudgingStageButtons activeMember={active} bounty={bounty} />
-      case 'Successful':
+      case 'successful':
         return <SuccessfulStageButtons bounty={bounty} />
-      case 'Failed':
+      case 'failed':
         return <FailedStageButtons bounty={bounty} />
-      case 'Expired':
+      case 'expired':
         return <ExpiredStageButtons activeMember={active} bounty={bounty} />
       default:
         return null
@@ -58,8 +58,7 @@ interface BountyHeaderButtonsProps {
 }
 
 const FundingStageButtons = ({ bounty }: BountyHeaderButtonsProps) => {
-  const shouldDisplayStatistics =
-    bounty?.fundingType === 'BountyFundingPerpetual' && bounty?.contractType.type === 'BountyContractClosed'
+  const shouldDisplayStatistics = isPerpetual(bounty.fundingType) && bounty?.contractType !== 'ContractOpen'
 
   return (
     <>
@@ -75,11 +74,10 @@ const FundingStageButtons = ({ bounty }: BountyHeaderButtonsProps) => {
 }
 
 const WorkingStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const hasAnnounced = bounty.entries?.some((entry) => entry.workerId === activeMember?.id)
-  const hasSubmitted =
-    hasAnnounced && bounty.entries?.some((entry) => entry.workerId === activeMember?.id && entry.works.length > 0)
+  const hasAnnounced = bounty.entries?.some((entry) => entry.createdById === activeMember?.id)
+  const hasSubmitted = bounty.entries?.some((entry) => entry.createdById === activeMember?.id && entry.hasSubmitted)
 
-  if (bounty?.contractType.type === 'BountyContractClosed') {
+  if (bounty?.contractType !== 'ContractOpen') {
     return (
       <ButtonGhost size="large">
         <BellIcon /> Notify me about changes
@@ -97,7 +95,7 @@ const WorkingStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps)
 }
 
 const JudgingStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const isOracle = bounty.oracleId === activeMember?.id
+  const isOracle = bounty.oracle?.id === activeMember?.id
 
   return (
     <>
@@ -110,9 +108,9 @@ const JudgingStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps)
 }
 
 const SuccessfulStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const isWinner = false // check in QN whether worker is a winner ???
-  const isLoser = false
-  const isContributor = bounty.contributorsId?.some((contributor) => contributor === activeMember?.id)
+  const isWinner = bounty.entries?.some((entry) => entry.createdById === activeMember?.id && entry.winner) // check in QN whether worker is a winner ???
+  const isLoser = bounty.entries?.some((entry) => entry.createdById === activeMember?.id) && !isWinner
+  const isContributor = bounty.contributors?.some((contributor) => contributor === activeMember?.id)
 
   return (
     <>
@@ -126,8 +124,8 @@ const SuccessfulStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsPro
 }
 
 const FailedStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const isWorker = bounty.entries?.some((entry) => entry.workerId === activeMember?.id)
-  const isContributor = bounty.contributorsId?.some((contributor) => contributor === activeMember?.id)
+  const isWorker = bounty.entries?.some((entry) => entry.createdById === activeMember?.id)
+  const isContributor = bounty.contributors?.some((contributor) => contributor === activeMember?.id)
 
   if (!isWorker && !isContributor) return null
 
@@ -142,7 +140,7 @@ const FailedStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) 
 }
 
 const ExpiredStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const isCreator = bounty.creatorId === activeMember?.id
+  const isCreator = bounty.creator?.id === activeMember?.id
 
   if (!isCreator) return null
 
