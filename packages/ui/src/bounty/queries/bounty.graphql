@@ -1,39 +1,47 @@
 fragment BountyFields on Bounty {
   id
+  createdAt
   title
-  description
   cherry
   entrantStake
-  creatorId
-  oracleId
-  fundingType {
-    __typename
+  creator {
+    ...MemberFields
   }
-  contractType {
-    __typename
-    ... on BountyContractClosed {
-      whitelist {
-        id
-      }
+  oracle {
+    ...MemberFields
+  }
+  fundingType {
+    ... on BountyFundingLimited {
+      minFundingAmount
+      maxFundingAmount
+      fundingPeriod
+    }
+    ... on BountyFundingPerpetual {
+      target
     }
   }
   workPeriod
   judgingPeriod
   stage
   totalFunding
-  bountycontributionbounty {
-    contributorId
-  }
-  bountyentrybounty {
-    workerId
-    works {
-      id
+  entries {
+    createdById
+    status {
+      ... on BountyEntryStatusWinner {
+        reward
+      }
     }
   }
 }
 
-query GetBounty($where: BountyWhereUniqueInput!) {
-  bountyByUniqueInput(where: $where) {
+query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
+  bounties(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...BountyFields
+  }
+}
+
+query GetBountiesCount($where: BountyWhereInput) {
+  bountiesConnection(where: $where) {
+    totalCount
   }
 }

@@ -1,6 +1,5 @@
 import BN from 'bn.js'
 
-import { BountyFieldsFragment } from '@/bounty/queries/__generated__/bounty.generated'
 import { Member } from '@/memberships/types'
 
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
@@ -31,39 +30,37 @@ export interface Withdrawn {
 
 export type BountyActorItem = Contributor | Entrant | Withdrawn
 
-export interface Bounty
-  extends Omit<
-    BountyFieldsFragment,
-    'fundingType' | 'contractType' | 'bountycontributionbounty' | 'bountyentrybounty'
-  > {
-  fundingType: BountyFieldsFragment['fundingType']['__typename']
-  contractType: {
-    type: BountyFieldsFragment['contractType']['__typename']
-    whitelist?: string[] | null
-  }
-  contributorsId: (string | null | undefined)[] | null
-  entries:
-    | {
-        workerId: string
-        works: string[]
-      }[]
-    | null
+export type FundingType = FundingLimited | FundingPerpetual
+
+type FundingLimited = {
+  minAmount: BN
+  maxAmount: BN
+  maxPeriod: number
 }
 
-export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
-  ...fields,
-  fundingType: fields.fundingType.__typename,
-  contractType: {
-    type: fields.contractType.__typename,
-    whitelist:
-      fields.contractType.__typename === 'BountyContractClosed'
-        ? fields.contractType?.whitelist?.map((member) => member.id)
-        : null,
-  },
-  contributorsId: fields.bountycontributionbounty?.map((contribution) => contribution.contributorId) || null,
-  entries:
-    fields.bountyentrybounty?.map((entry) => ({
-      workerId: entry.workerId,
-      works: entry.works.map((work) => work.id),
-    })) || null,
-})
+type FundingPerpetual = {
+  target: BN
+}
+
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
+
+export interface EntryMiniature {
+  createdById: string
+  winner: boolean
+}
+
+export interface Bounty {
+  id: string
+  title: string
+  createdAt: string
+  cherry: BN
+  entrantStake: BN
+  creator?: Member
+  oracle?: Member
+  fundingType: FundingType
+  workPeriod: BN
+  judgingPeriod: BN
+  stage: BountyStage
+  totalFunding: BN
+  entries?: EntryMiniature[]
+}
