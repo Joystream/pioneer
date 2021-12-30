@@ -23,6 +23,7 @@ export const WorkingDetails = ({ totalFunding, entrantStake, entrants }: Props) 
           <MemberStack members={entrants} max={5} />
         </DetailBox>
       )}
+      {/* TODO: handle works counting */}
       <DetailBox title="Submitted work">1</DetailBox>
       <DetailBox title="Stake">
         <TokenValue value={entrantStake} />

@@ -17,8 +17,9 @@ import { BountyListItem } from './BountyListItem/BountyListItem'
 
 export const BountiesList = () => {
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
+  const { onSort, isDescending } = getSortProps('createdAt')
   const { isLoading, bounties, pagination } = useBounties({ order })
-
+  
   if (isLoading) {
     return <Loading />
   }
@@ -33,13 +34,12 @@ export const BountiesList = () => {
         Bounties
         <Counter count={bounties.length} />
       </Title>
-      {/* <SimpleSelect 
+      <SimpleSelect 
         title="Sorting"
         options={['Latest', 'Earliest']}
-        // renderOption={(value) => (value ? 'Latest' : 'Earliest')}
-        value={sorting}
-        onChange={(value) => setSorting(value)} 
-      /> */}
+        value={isDescending ? 'Latest' : 'Earliest'}
+        onChange={onSort}
+      />
       {bounties.map((bounty) => {
         return <BountyListItem {...bounty} />
       })}
