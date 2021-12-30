@@ -167,8 +167,8 @@ export type WorkerRewardAccountUpdatedEventFragment = {
 }
 
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
-  worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
-  application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  worker_in?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  application_in?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type GetMemberRoleEventsQuery = {
@@ -394,8 +394,8 @@ export type GetGroupEventsQuery = {
 }
 
 export type GetWorkerEventsQueryVariables = Types.Exact<{
-  workerId?: Types.Maybe<Types.Scalars['ID']>
-  applicationId?: Types.Maybe<Types.Scalars['ID']>
+  workerId?: Types.InputMaybe<Types.Scalars['ID']>
+  applicationId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type GetWorkerEventsQuery = {

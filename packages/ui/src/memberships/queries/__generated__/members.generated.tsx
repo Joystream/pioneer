@@ -97,10 +97,10 @@ export type MemberWithDetailsFieldsFragment = {
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.MembershipWhereInput>
-  orderBy?: Types.Maybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetMembersQuery = {
@@ -133,7 +133,7 @@ export type GetMembersQuery = {
 }
 
 export type GetMembersCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.MembershipWhereInput>
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
 }>
 
 export type GetMembersCountQuery = {
@@ -220,7 +220,7 @@ export type GetMemberQuery = {
 
 export type SearchMembersQueryVariables = Types.Exact<{
   text: Types.Scalars['String']
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type SearchMembersQuery = {
