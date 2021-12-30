@@ -50,7 +50,7 @@ export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' 
 
 export interface EntryMiniature {
   worker: Member
-  winner: boolean
+  winner?: boolean
 }
 
 export interface Bounty {

@@ -19,7 +19,7 @@ export const BountiesList = () => {
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
   const { onSort, isDescending } = getSortProps('createdAt')
   const { isLoading, bounties, pagination } = useBounties({ order })
-  
+
   if (isLoading) {
     return <Loading />
   }
@@ -34,7 +34,7 @@ export const BountiesList = () => {
         Bounties
         <Counter count={bounties.length} />
       </Title>
-      <SimpleSelect 
+      <SimpleSelect
         title="Sorting"
         options={['Latest', 'Earliest']}
         value={isDescending ? 'Latest' : 'Earliest'}
