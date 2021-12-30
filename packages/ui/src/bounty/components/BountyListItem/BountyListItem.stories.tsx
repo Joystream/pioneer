@@ -13,7 +13,7 @@ export default {
   title: 'Bounty/BountyListItem',
   component: BountyListItem,
   argTypes: {
-    result: {
+    stage: {
       options: ['funding', 'working', 'judgement', 'withdrawal', 'expired'],
       control: { type: 'radio' },
     },
