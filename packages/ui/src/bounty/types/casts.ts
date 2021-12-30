@@ -6,7 +6,7 @@ import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyStage, EntryMiniature, FundingType } from './Bounty'
+import { Bounty, BountyStage, ContractType, EntryMiniature, FundingType } from './Bounty'
 
 const asFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
@@ -26,10 +26,19 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
 const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
+      hasSubmitted: entry.workSubmitted,
       createdById: entry.createdById,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
     }
   })
+}
+
+const asContractType = (type: BountyFieldsFragment['contractType']): ContractType => {
+  return type.__typename === 'BountyContractOpen'
+    ? 'ContractOpen'
+    : {
+        whitelist: type.whitelist?.map((member) => member.id) || [],
+      }
 }
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
@@ -47,4 +56,6 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
   entries: asEntries(fields.entries),
+  contractType: asContractType(fields.contractType),
+  contributors: fields.contributions.map((contributor) => contributor.contributorId || ''),
 })
