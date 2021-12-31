@@ -125,9 +125,10 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const { winner, passed } =
     useMemo(() => bounty.entries?.find((entry) => entry.createdById === activeMember?.id), [bounty]) || {}
-  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
-    bounty,
-  ])
+  const isContributor = useMemo(
+    () => bounty.contributors?.some((contributor) => contributor === activeMember?.id),
+    [bounty]
+  )
 
   return (
     <>
@@ -142,9 +143,10 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
 
 const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const isWorker = useMemo(() => bounty.entries?.some((entry) => entry.createdById === activeMember?.id), [bounty])
-  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
-    bounty,
-  ])
+  const isContributor = useMemo(
+    () => bounty.contributors?.some((contributor) => contributor === activeMember?.id),
+    [bounty]
+  )
 
   if (!isWorker && !isContributor) return null
 
