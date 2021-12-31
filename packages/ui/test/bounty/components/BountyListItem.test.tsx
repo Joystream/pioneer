@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react'
-import React from 'react'
 import BN from 'bn.js'
+import React from 'react'
 
 import { BountyListItem } from '@/bounty/components/BountyListItem/BountyListItem'
 import { BountyStage } from '@/bounty/types/Bounty'
 import { seedMembers } from '@/mocks/data'
 
+import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { getMember } from '../../_mocks/members'
 
 describe('UI: BountyListItem', () => {
   const server = setupMockServer()
