@@ -58,11 +58,13 @@ export interface EntryMiniature {
   createdById: string
   winner: boolean
   hasSubmitted: boolean
+  passed: boolean
 }
 
 export interface Bounty {
   id: string
   title: string
+  description: string
   createdAt: string
   cherry: BN
   entrantStake: BN

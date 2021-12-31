@@ -9,6 +9,7 @@ export type BountyFieldsFragment = {
   id: string
   createdAt: any
   title: string
+  description: string
   cherry: any
   entrantStake: any
   workPeriod: number
@@ -109,6 +110,7 @@ export type GetBountiesQuery = {
     id: string
     createdAt: any
     title: string
+    description: string
     cherry: any
     entrantStake: any
     workPeriod: number
@@ -222,6 +224,7 @@ export type GetBountyQuery = {
         id: string
         createdAt: any
         title: string
+        description: string
         cherry: any
         entrantStake: any
         workPeriod: number
@@ -329,6 +332,7 @@ export const BountyFieldsFragmentDoc = gql`
     id
     createdAt
     title
+    description
     cherry
     entrantStake
     creator {

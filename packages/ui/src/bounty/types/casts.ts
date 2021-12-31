@@ -29,6 +29,7 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniatu
       hasSubmitted: entry.workSubmitted,
       createdById: entry.createdById,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
+      passed: entry.status.__typename === 'BountyEntryStatusPassed',
     }
   })
 }
@@ -44,6 +45,7 @@ const asContractType = (type: BountyFieldsFragment['contractType']): ContractTyp
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title,
+  description: fields.description,
   createdAt: fields.createdAt,
   cherry: new BN(fields.cherry),
   entrantStake: new BN(fields.entrantStake),
