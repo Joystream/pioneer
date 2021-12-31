@@ -17,14 +17,14 @@ interface PeriodsLengthsType {
 export interface BountySidebarProps {
   contributors?: Contributor[]
   entrants?: Entrant[]
-  withdrawns?: Withdrawn[]
+  withdrawals?: Withdrawn[]
   entrantResult?: EntrantResult
   stage: BountyPeriod
   periodsLengths: PeriodsLengthsType
 }
 
 export const BountySidebar = memo(
-  ({ contributors, entrants, withdrawns, entrantResult, stage, periodsLengths }: BountySidebarProps) => {
+  ({ contributors, entrants, withdrawals, entrantResult, stage, periodsLengths }: BountySidebarProps) => {
     const { t } = useTranslation('bounty')
 
     return (
@@ -32,7 +32,7 @@ export const BountySidebar = memo(
         {entrants && (
           <BountyActorsList title={t('sidebar.entrants')} elements={entrants} entrantResult={entrantResult} />
         )}
-        {withdrawns && <BountyActorsList title={t('sidebar.withdrawals')} elements={withdrawns} />}
+        {withdrawals && <BountyActorsList title={t('sidebar.withdrawals')} elements={withdrawals} />}
         {contributors && (
           <BountyActorsList title={t('sidebar.contributors')} elements={contributors} open={stage === 'funding'} />
         )}
