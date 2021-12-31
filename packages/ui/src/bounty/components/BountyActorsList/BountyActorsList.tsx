@@ -82,6 +82,7 @@ const Header = styled.div`
 
 const TitleText = styled(TextExtraSmall)`
   margin-right: 8px;
+  text-transform: uppercase;
 `
 
 const ArrowWrapper = styled.span`

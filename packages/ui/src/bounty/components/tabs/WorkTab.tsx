@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BountyWorkListItem } from '@/bounty/components/BountyWorkListItem/BountyWorkListItem'
@@ -13,19 +14,20 @@ import members from '@/mocks/data/raw/members.json'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export const WorkTab = () => {
+  const { t } = useTranslation('bounty')
   const [entrant, setEntrant] = useState<string>('')
 
   return (
     <RowGapBlock gap={4}>
       <FilterContainer>
         <div>
-          <TextExtraSmall>ENTRANT</TextExtraSmall>
+          <TextExtraSmall>{t('workTab.filter.label')}</TextExtraSmall>
           <InputComponent inputSize="xs" tight id="field-entrant">
             <InputText
               id="field-entrant"
               value={entrant}
               onChange={(e) => setEntrant(e.target.value)}
-              placeholder="Filter entrant"
+              placeholder={t('workTab.filter.placeholder')}
             />
           </InputComponent>
         </div>

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Tabs } from '@/common/components/Tabs'
 
@@ -10,15 +11,16 @@ interface Props {
 }
 
 export const ExpiredTabs = ({ setActive, active }: Props) => {
+  const { t } = useTranslation('bounty')
   const tabs = useMemo(
     () => [
       {
-        title: 'Bounty',
+        title: t('tabs.bounty'),
         active: active === 'Bounty',
         onClick: () => setActive('Bounty'),
       },
       {
-        title: 'Works',
+        title: t('tabs.works'),
         active: active === 'Works',
         onClick: () => setActive('Works'),
       },

@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BountyPeriod, Contributor, Entrant, EntrantResult, Withdrawn } from '@/bounty/types/Bounty'
 
@@ -24,11 +25,17 @@ export interface BountySidebarProps {
 
 export const BountySidebar = memo(
   ({ contributors, entrants, withdrawns, entrantResult, stage, periodsLengths }: BountySidebarProps) => {
+    const { t } = useTranslation('bounty')
+
     return (
       <>
-        {entrants && <BountyActorsList title="ENTRANTS" elements={entrants} entrantResult={entrantResult} />}
-        {withdrawns && <BountyActorsList title="WITHDRAWN" elements={withdrawns} />}
-        {contributors && <BountyActorsList title="CONTRIBUTORS" elements={contributors} open={stage === 'funding'} />}
+        {entrants && (
+          <BountyActorsList title={t('sidebar.entrants')} elements={entrants} entrantResult={entrantResult} />
+        )}
+        {withdrawns && <BountyActorsList title={t('sidebar.withdrawals')} elements={withdrawns} />}
+        {contributors && (
+          <BountyActorsList title={t('sidebar.contributors')} elements={contributors} open={stage === 'funding'} />
+        )}
         <Periods stage={stage} {...periodsLengths} />
       </>
     )

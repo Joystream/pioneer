@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ExpiredTabs, ExpiredTabsState } from '@/bounty/components/BountyExpired/ExpiredTabs'
@@ -16,6 +17,7 @@ import { randomBlock } from '@/mocks/helpers/randomBlock'
 const RANDOM_BLOCK = randomBlock()
 
 export const BountyExpired = () => {
+  const { t } = useTranslation('common')
   const [active, setActive] = useState<ExpiredTabsState>('Bounty')
 
   return (
@@ -38,7 +40,9 @@ export const BountyExpired = () => {
         </RowGapBlock>
       </ContentWithSidePanel>
       <BountyInfoWrapper>
-        <TextSmall>Created: {formatDateString(RANDOM_BLOCK.timestamp, 'l')}</TextSmall>
+        <TextSmall>
+          {t('created')}: {formatDateString(RANDOM_BLOCK.timestamp, 'l')}
+        </TextSmall>
         <Separator>{' | '}</Separator>
         <BlockInfo block={RANDOM_BLOCK} />
       </BountyInfoWrapper>

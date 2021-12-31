@@ -1,0 +1,45 @@
+{
+  "tiles": {
+    "stage": {
+      "title": "Stage",
+      "tooltip": "Lorem ipsum dolor sit amet, con"
+    },
+    "periodLength": {
+      "title": "Period Length",
+      "tooltip": "Lorem ipsum d"
+    },
+    "bountyCreator": {
+      "title": "Bounty Creator"
+    },
+    "oracle": {
+      "title": "Oracle"
+    },
+    "funded": {
+      "title": "Funded",
+      "tooltip": "Lorem ipsum d"
+    },
+    "cherry": {
+      "title": "Cherry",
+      "tooltip": "Lorem ipsum d"
+    },
+    "worksSubmitted": {
+      "title": "Works Submitted",
+      "tooltip": "Lorem ipsum d"
+    }
+  },
+  "tabs": {
+    "bounty": "Bounty",
+    "works": "Works"
+  },
+  "workTab": {
+    "filter": {
+      "label": "Entrant",
+      "placeholder": "Filter entrant"
+    }
+  },
+  "sidebar": {
+    "entrants": "Entrants",
+    "withdrawals": "Withdrawals",
+    "contributors": "Contributors"
+  }
+}
