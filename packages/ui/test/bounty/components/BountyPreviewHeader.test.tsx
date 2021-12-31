@@ -87,7 +87,8 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText(/^cherry$/i)).toBeDefined()
+      expect(await screen.queryByText('bountyFields.cherry')).toBeDefined()
+      expect(await screen.queryByText('bountyFields.entrantStake')).toBeDefined()
     })
 
     it('Other', async () => {
@@ -100,7 +101,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton(/^contribute$/i)).toBeDefined()
+      expect(await getButton('common:buttons.contribute')).toBeDefined()
     })
   })
 
@@ -116,7 +117,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText(/notify me about changes$/i)).toBeDefined()
+      expect(await screen.queryByText('common:buttons.notifyAboutChanges')).toBeDefined()
     })
 
     it('Closed and member in whitelist', async () => {
@@ -126,7 +127,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Announce Entry')).toBeDefined()
+      expect(await getButton('buttons.announceEntry')).toBeDefined()
     })
 
     describe('Open', () => {
@@ -146,7 +147,7 @@ describe('UI: BountyPreviewHeader', () => {
 
         renderHeader()
 
-        expect(await getButton('Announce Entry')).toBeDefined()
+        expect(await getButton('buttons.announceEntry')).toBeDefined()
       })
 
       it('Entry, no works', async () => {
@@ -161,7 +162,7 @@ describe('UI: BountyPreviewHeader', () => {
 
         renderHeader()
 
-        expect(await getButton('Submit Work')).toBeDefined()
+        expect(await getButton('buttons.submitWork')).toBeDefined()
       })
 
       it('Entry with works', async () => {
@@ -176,8 +177,8 @@ describe('UI: BountyPreviewHeader', () => {
 
         renderHeader()
 
-        expect(await getButton('Submit Work')).toBeDefined()
-        expect(await getButton('Withdraw')).toBeDefined()
+        expect(await getButton('buttons.submitWork')).toBeDefined()
+        expect(await getButton('common:buttons.withdraw')).toBeDefined()
       })
     })
   })
@@ -194,8 +195,8 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Submit Judgment')).toBeDefined()
-      expect(await screen.queryByText(/^notify me about changes$/i)).toBeDefined()
+      expect(await getButton('buttons.submitJudgement')).toBeDefined()
+      expect(await screen.queryByText('common:buttons.notifyAboutChanges')).toBeDefined()
     })
 
     it('Other', async () => {
@@ -203,8 +204,8 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText('Submit Judgment')).toBeNull()
-      expect(await screen.queryByText(/^notify me about changes$/i)).toBeDefined()
+      expect(await screen.queryByText('buttons.submitJudgement')).toBeNull()
+      expect(await screen.queryByText('common:buttons.notifyAboutChanges')).toBeDefined()
     })
   })
 
@@ -225,7 +226,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Claim Reward')).toBeDefined()
+      expect(await getButton('common:buttons.claimReward')).toBeDefined()
     })
 
     it('Passed', async () => {
@@ -240,7 +241,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Withdraw Stake')).toBeDefined()
+      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
     })
 
     it('Contributor', async () => {
@@ -249,7 +250,17 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Withdraw Stake')).toBeDefined()
+      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
+    })
+
+    it('Other', async () => {
+      bounty.entries = []
+      bounty.contributors = []
+
+      renderHeader()
+
+      expect(await screen.queryByText('common:buttons.withdrawStake')).toBeNull()
+      expect(await screen.queryByText('common:buttons.claimReward')).toBeNull()
     })
   })
 
@@ -270,7 +281,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Withdraw Stake')).toBeDefined()
+      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
     })
 
     it('Contributor', async () => {
@@ -279,7 +290,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Withdraw Stake')).toBeDefined()
+      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
     })
 
     it('Other', async () => {
@@ -288,7 +299,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText('Withdraw Stake')).toBeNull()
+      expect(await screen.queryByText('common:buttons.withdrawStake')).toBeNull()
     })
   })
 
@@ -304,15 +315,15 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('Cancel Bounty')).toBeDefined()
+      expect(await getButton('buttons.cancelBounty')).toBeDefined()
     })
 
-    it('Creator', async () => {
+    it('Other', async () => {
       bounty.creator = undefined
 
       renderHeader()
 
-      expect(await screen.queryByText('Cancel Bounty')).toBeNull()
+      expect(await screen.queryByText('buttons.cancelBounty')).toBeNull()
     })
   })
 

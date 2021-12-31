@@ -1,3 +1,10 @@
 {
-  "test": "a test"
+  "buttons": {
+    "withdraw": "Withdraw",
+    "withdrawStake": "Withdraw Stake",
+    "claim": "Claim",
+    "claimReward": "Claim Reward",
+    "contribute": "Contribute",
+    "notifyAboutChanges": "Notify me about changes"
+  }
 }
