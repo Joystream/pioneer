@@ -28,9 +28,9 @@ export const BountyPreviewHeader = ({ bounty, badgeNames }: Props) => {
       case 'judgment':
         return <JudgingStageButtons activeMember={active} bounty={bounty} />
       case 'successful':
-        return <SuccessfulStageButtons bounty={bounty} />
+        return <SuccessfulStageButtons activeMember={active} bounty={bounty} />
       case 'failed':
-        return <FailedStageButtons bounty={bounty} />
+        return <FailedStageButtons activeMember={active} bounty={bounty} />
       case 'expired':
         return <ExpiredStageButtons activeMember={active} bounty={bounty} />
       default:
@@ -64,8 +64,8 @@ const FundingStageButtons = ({ bounty }: BountyHeaderButtonsProps) => {
     <>
       {shouldDisplayStatistics && (
         <>
-          <div>cherry {bounty.cherry}</div>
-          <div>entrant stake {bounty.entrantStake}</div>
+          <div>cherry {bounty.cherry.toNumber()}</div>
+          <div>entrant stake {bounty.entrantStake.toNumber()}</div>
         </>
       )}
       <ButtonPrimary size="large">Contribute</ButtonPrimary>
@@ -74,10 +74,16 @@ const FundingStageButtons = ({ bounty }: BountyHeaderButtonsProps) => {
 }
 
 const WorkingStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const hasAnnounced = bounty.entries?.some((entry) => entry.createdById === activeMember?.id)
-  const hasSubmitted = bounty.entries?.some((entry) => entry.createdById === activeMember?.id && entry.hasSubmitted)
+  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.createdById === activeMember?.id), [bounty])
+  const hasAnnounced = !!userEntry
+  const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
+  const isOnWhitelist = useMemo(
+    () =>
+      bounty.contractType !== 'ContractOpen' && bounty.contractType?.whitelist.some((id) => activeMember?.id === id),
+    [bounty]
+  )
 
-  if (bounty?.contractType !== 'ContractOpen') {
+  if (bounty?.contractType !== 'ContractOpen' && !isOnWhitelist) {
     return (
       <ButtonGhost size="large">
         <BellIcon /> Notify me about changes
@@ -108,24 +114,27 @@ const JudgingStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps)
 }
 
 const SuccessfulStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const isWinner = bounty.entries?.some((entry) => entry.createdById === activeMember?.id && entry.winner) // check in QN whether worker is a winner ???
-  const isLoser = bounty.entries?.some((entry) => entry.createdById === activeMember?.id) && !isWinner
-  const isContributor = bounty.contributors?.some((contributor) => contributor === activeMember?.id)
-
+  const { winner, passed } =
+    useMemo(() => bounty.entries?.find((entry) => entry.createdById === activeMember?.id), [bounty]) || {}
+  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
+    bounty,
+  ])
   return (
     <>
       <ButtonGhost size="large">
         <BellIcon /> Notify me about changes
       </ButtonGhost>
-      {isWinner && <ButtonGhost size="large">Claim Reward</ButtonGhost>}
-      {(isLoser || isContributor) && <ButtonGhost size="large">Withdraw Stake</ButtonGhost>}
+      {winner && <ButtonGhost size="large">Claim Reward</ButtonGhost>}
+      {(passed || isContributor) && <ButtonGhost size="large">Withdraw Stake</ButtonGhost>}
     </>
   )
 }
 
 const FailedStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
-  const isWorker = bounty.entries?.some((entry) => entry.createdById === activeMember?.id)
-  const isContributor = bounty.contributors?.some((contributor) => contributor === activeMember?.id)
+  const isWorker = useMemo(() => bounty.entries?.some((entry) => entry.createdById === activeMember?.id), [bounty])
+  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
+    bounty,
+  ])
 
   if (!isWorker && !isContributor) return null
 
