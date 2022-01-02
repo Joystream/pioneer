@@ -4,8 +4,9 @@ import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { FundingType, isFundingLimited } from '@/bounty/types/Bounty'
-import { ProgressBarWithRange } from '@/common/components/Progress'
+import { ProgressBar, ProgressBarWithRange } from '@/common/components/Progress'
 import { TextSmall, TokenValue } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
 interface Props {
   fundingType: FundingType
@@ -15,8 +16,21 @@ interface Props {
 
 export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props) => {
   if (!isFundingLimited(fundingType)) {
-    // TODO: add component for ProgressBar without maximum and use fundingLimit.target as minimum
-    return null
+    const { target } = fundingType
+    const currentProgress = totalFunding.div(fundingType.target).toNumber()
+    const color = currentProgress < 1 ? Colors.Orange[300] : Colors.Blue[500]
+    return (
+      <ProgressBarWrapper>
+        <ProgressBar end={currentProgress} size="medium" color={color} />
+        <DetailBox title="Maximal range">
+          <TokenValue value={target} />
+        </DetailBox>
+        <ProgressBarInfoVertical inset="">
+          <TextSmall>Funded</TextSmall>
+          <TokenValue value={totalFunding} size="l" />
+        </ProgressBarInfoVertical>
+      </ProgressBarWrapper>
+    )
   }
 
   const { minAmount, maxAmount } = fundingType
