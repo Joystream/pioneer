@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { memo } from 'react'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { TokenValue } from '@/common/components/typography'
@@ -12,7 +12,7 @@ interface Props {
   entrants?: Member[]
 }
 
-export const WorkingDetails = ({ totalFunding, entrantStake, entrants }: Props) => {
+export const WorkingDetails = memo(({ totalFunding, entrantStake, entrants }: Props) => {
   return (
     <>
       <DetailBox title="Bounty">
@@ -30,4 +30,4 @@ export const WorkingDetails = ({ totalFunding, entrantStake, entrants }: Props) 
       </DetailBox>
     </>
   )
-}
+})

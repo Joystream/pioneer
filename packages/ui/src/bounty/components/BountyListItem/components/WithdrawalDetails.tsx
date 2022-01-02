@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { TextMedium, TokenValue } from '@/common/components/typography'
@@ -10,7 +10,7 @@ interface Props {
   entrants?: Member[]
 }
 
-export const WithdrawalDetails = ({ winners, entrants }: Props) => {
+export const WithdrawalDetails = memo(({ winners, entrants }: Props) => {
   return (
     <>
       <DetailBox title="Winners">
@@ -33,4 +33,4 @@ export const WithdrawalDetails = ({ winners, entrants }: Props) => {
       </DetailBox>
     </>
   )
-}
+})

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
@@ -13,7 +13,7 @@ interface Props {
   cherry: BN
 }
 
-export const FundingDetails = ({ fundingType, totalFunding, cherry }: Props) => {
+export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props) => {
   if (!isFundingLimited(fundingType)) {
     // TODO: add component for ProgressBar without maximum and use fundingLimit.target as minimum
     return null
@@ -47,7 +47,7 @@ export const FundingDetails = ({ fundingType, totalFunding, cherry }: Props) => 
       </DetailBox>
     </>
   )
-}
+})
 
 const ProgressBarWrapper = styled.div`
   position: relative;

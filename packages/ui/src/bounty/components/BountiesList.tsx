@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { BountyOrderByInput } from '@/common/api/queries'
@@ -15,7 +15,7 @@ import { useBounties } from '../hooks/useBounties'
 
 import { BountyListItem } from './BountyListItem/BountyListItem'
 
-export const BountiesList = () => {
+export const BountiesList = memo(() => {
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
   const { onSort, isDescending } = getSortProps('createdAt')
   const { isLoading, bounties, pagination } = useBounties({ order })
@@ -46,7 +46,7 @@ export const BountiesList = () => {
       <Pagination {...pagination} />
     </div>
   )
-}
+})
 
 const Title = styled(TextBig)`
   font-family: ${Fonts.Grotesk};

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -14,7 +14,7 @@ interface Props {
   timeToEnd?: BN
 }
 
-export const BountyInformations = ({ creator, timeToEnd, title }: Props) => {
+export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
@@ -38,7 +38,7 @@ export const BountyInformations = ({ creator, timeToEnd, title }: Props) => {
       </BadgeDurationContainer>
     </Wrapper>
   )
-}
+})
 
 const Wrapper = styled.div`
   flex: 6;

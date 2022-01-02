@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { useMemo, memo } from 'react'
 import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
@@ -21,37 +21,39 @@ interface Props {
   entries?: EntryMiniature[]
 }
 
-export const BountyDetails = ({ type, oracle, cherry, fundingType, totalFunding, entrantStake, entries }: Props) => {
-  const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries])
-  const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [entries])
-  const content = useMemo(() => {
-    switch (type) {
-      case 'funding': {
-        return <FundingDetails cherry={cherry} fundingType={fundingType} totalFunding={totalFunding} />
+export const BountyDetails = memo(
+  ({ type, oracle, cherry, fundingType, totalFunding, entrantStake, entries }: Props) => {
+    const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries])
+    const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [entries])
+    const content = useMemo(() => {
+      switch (type) {
+        case 'funding': {
+          return <FundingDetails cherry={cherry} fundingType={fundingType} totalFunding={totalFunding} />
+        }
+        case 'working': {
+          return <WorkingDetails totalFunding={totalFunding} entrantStake={entrantStake} entrants={entrants} />
+        }
+        case 'judgement': {
+          return <JudgmentDetails entrants={entrants} />
+        }
+        case 'withdrawal' || 'expired': {
+          return <WithdrawalDetails winners={winners} entrants={entrants} />
+        }
+        default:
+          return null
       }
-      case 'working': {
-        return <WorkingDetails totalFunding={totalFunding} entrantStake={entrantStake} entrants={entrants} />
-      }
-      case 'judgement': {
-        return <JudgmentDetails entrants={entrants} />
-      }
-      case 'withdrawal' || 'expired': {
-        return <WithdrawalDetails winners={winners} entrants={entrants} />
-      }
-      default:
-        return null
-    }
-  }, [type])
+    }, [type])
 
-  return (
-    <Wrapper>
-      {content}
-      <DetailBox title="Oracle">
-        {oracle && <MemberInfo avatarSmall={true} size="s" memberSize="s" hideGroup onlyTop member={oracle} />}
-      </DetailBox>
-    </Wrapper>
-  )
-}
+    return (
+      <Wrapper>
+        {content}
+        <DetailBox title="Oracle">
+          {oracle && <MemberInfo avatarSmall={true} size="s" memberSize="s" hideGroup onlyTop member={oracle} />}
+        </DetailBox>
+      </Wrapper>
+    )
+  }
+)
 
 const Wrapper = styled.div`
   flex: 4;

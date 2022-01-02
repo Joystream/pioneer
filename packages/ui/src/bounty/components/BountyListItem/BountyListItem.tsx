@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { useMemo, memo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -13,60 +13,62 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors } from '@/common/constants'
 
-export const BountyListItem = ({
-  id,
-  title,
-  cherry,
-  entrantStake,
-  creator,
-  oracle,
-  fundingType,
-  workPeriod,
-  judgingPeriod,
-  stage,
-  totalFunding,
-  entries,
-}: Bounty) => {
-  const history = useHistory()
+export const BountyListItem = memo(
+  ({
+    id,
+    title,
+    cherry,
+    entrantStake,
+    creator,
+    oracle,
+    fundingType,
+    workPeriod,
+    judgingPeriod,
+    stage,
+    totalFunding,
+    entries,
+  }: Bounty) => {
+    const history = useHistory()
 
-  const period = asPeriod(stage)
+    const period = asPeriod(stage)
 
-  const timeToPeriodEnd = useMemo(() => {
-    if (period === 'funding' && isFundingLimited(fundingType)) {
-      return new BN(fundingType.maxPeriod)
-    }
-    if (period === 'working') {
-      return workPeriod
-    }
-    if (period === 'judgement') {
-      return judgingPeriod
-    }
-  }, [period, fundingType])
+    const timeToPeriodEnd = useMemo(() => {
+      if (period === 'funding' && isFundingLimited(fundingType)) {
+        return new BN(fundingType.maxPeriod)
+      }
+      if (period === 'working') {
+        return workPeriod
+      }
+      if (period === 'judgement') {
+        return judgingPeriod
+      }
+    }, [period, fundingType])
 
-  return (
-    <Wrapper>
-      {/* TODO: add image url to schema */}
-      <BountyImage src="https://picsum.photos/500/300" />
-      <Info>
-        <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
-        <BountyDetails
-          type={period}
-          oracle={oracle}
-          cherry={cherry}
-          fundingType={fundingType}
-          totalFunding={totalFunding}
-          entrantStake={entrantStake}
-          entries={entries}
-        />
-      </Info>
-      <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
-        <Arrow direction="right" />
-      </ArrowWrapper>
+    return (
+      <Wrapper>
+        {/* TODO: add image url to schema */}
+        <BountyImage src="https://picsum.photos/500/300" />
+        <Info>
+          <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
+          <BountyDetails
+            type={period}
+            oracle={oracle}
+            cherry={cherry}
+            fundingType={fundingType}
+            totalFunding={totalFunding}
+            entrantStake={entrantStake}
+            entries={entries}
+          />
+        </Info>
+        <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
+          <Arrow direction="right" />
+        </ArrowWrapper>
 
-      <TypeBadge color={BountyPeriodColorMapper[period]}>{`${period.toUpperCase()} PERIOD`}</TypeBadge>
-    </Wrapper>
-  )
-}
+        <TypeBadge color={BountyPeriodColorMapper[period]}>{`${period.toUpperCase()} PERIOD`}</TypeBadge>
+      </Wrapper>
+    )
+  }
+)
 
 const Info = styled.div`
   flex: 1;
