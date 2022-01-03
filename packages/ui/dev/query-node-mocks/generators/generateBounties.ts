@@ -1,4 +1,4 @@
-import { datatype, lorem, random } from 'faker'
+import faker, { datatype, lorem, random } from 'faker'
 
 import { Reducer } from '@/common/types/helpers'
 import { RawBountyMock, RawBountyContributionMock, RawBountyEntryMock } from '@/mocks/data/seedBounties'
@@ -59,6 +59,7 @@ const generateBounty = (mocks: DependOnMocks): Reducer<BountyData, any> => (data
   // Generate the bounty
   const bounty = {
     id: String(bountyIndex),
+    createdAt: faker.date.recent(20),
     title: lorem.sentence(),
     description: randomMarkdown(),
     cherry: String(randomFromRange(1, 5) * 1000),

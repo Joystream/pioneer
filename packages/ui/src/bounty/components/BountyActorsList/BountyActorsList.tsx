@@ -58,12 +58,15 @@ export const BountyActorsList = memo(({ title, elements, entrantResult, open = t
       {isVisible && (
         <>
           {entrantResult && <Infobox result={entrantResult} />}
-          {elements.map((el) => (
-            <Wrapper key={el.actor.id}>
-              <MemberInfo member={el.actor} />
-              {actorsMapFunction(el)}
-            </Wrapper>
-          ))}
+          {elements.map(
+            (el) =>
+              el?.actor && (
+                <Wrapper key={el?.actor?.id}>
+                  <MemberInfo member={el.actor} />
+                  {actorsMapFunction(el)}
+                </Wrapper>
+              )
+          )}
         </>
       )}
     </>

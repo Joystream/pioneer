@@ -9,6 +9,7 @@ export type BountyFieldsFragment = {
   id: string
   createdAt: any
   title: string
+  description: string
   cherry: any
   entrantStake: any
   workPeriod: number
@@ -74,10 +75,17 @@ export type BountyFieldsFragment = {
   fundingType:
     | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
     | { __typename: 'BountyFundingPerpetual'; target: number }
-  entries?:
-    | Array<{
-        __typename: 'BountyEntry'
-        worker: {
+  contractType:
+    | {
+        __typename: 'BountyContractClosed'
+        whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
+      }
+    | { __typename: 'BountyContractOpen' }
+  contributions: Array<{
+    __typename: 'BountyContribution'
+    amount: any
+    contributor?:
+      | {
           __typename: 'Membership'
           id: string
           rootAccount: string
@@ -102,16 +110,45 @@ export type BountyFieldsFragment = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }
-        status:
-          | { __typename: 'BountyEntryStatusCashedOut' }
-          | { __typename: 'BountyEntryStatusPassed' }
-          | { __typename: 'BountyEntryStatusRejected' }
-          | { __typename: 'BountyEntryStatusWinner'; reward: number }
-          | { __typename: 'BountyEntryStatusWithdrawn' }
-          | { __typename: 'BountyEntryStatusWorking' }
+      | null
+      | undefined
+  }>
+  entries: Array<{
+    __typename: 'BountyEntry'
+    workSubmitted: boolean
+    worker: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
       }>
-    | null
-    | undefined
+    }
+    status:
+      | { __typename: 'BountyEntryStatusCashedOut' }
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+  }>
 }
 
 export type GetBountiesQueryVariables = Types.Exact<{
@@ -128,6 +165,7 @@ export type GetBountiesQuery = {
     id: string
     createdAt: any
     title: string
+    description: string
     cherry: any
     entrantStake: any
     workPeriod: number
@@ -198,10 +236,17 @@ export type GetBountiesQuery = {
           fundingPeriod: number
         }
       | { __typename: 'BountyFundingPerpetual'; target: number }
-    entries?:
-      | Array<{
-          __typename: 'BountyEntry'
-          worker: {
+    contractType:
+      | {
+          __typename: 'BountyContractClosed'
+          whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
+        }
+      | { __typename: 'BountyContractOpen' }
+    contributions: Array<{
+      __typename: 'BountyContribution'
+      amount: any
+      contributor?:
+        | {
             __typename: 'Membership'
             id: string
             rootAccount: string
@@ -230,16 +275,45 @@ export type GetBountiesQuery = {
               group: { __typename: 'WorkingGroup'; name: string }
             }>
           }
-          status:
-            | { __typename: 'BountyEntryStatusCashedOut' }
-            | { __typename: 'BountyEntryStatusPassed' }
-            | { __typename: 'BountyEntryStatusRejected' }
-            | { __typename: 'BountyEntryStatusWinner'; reward: number }
-            | { __typename: 'BountyEntryStatusWithdrawn' }
-            | { __typename: 'BountyEntryStatusWorking' }
+        | null
+        | undefined
+    }>
+    entries: Array<{
+      __typename: 'BountyEntry'
+      workSubmitted: boolean
+      worker: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
         }>
-      | null
-      | undefined
+      }
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+    }>
   }>
 }
 
@@ -264,6 +338,7 @@ export type GetBountyQuery = {
         id: string
         createdAt: any
         title: string
+        description: string
         cherry: any
         entrantStake: any
         workPeriod: number
@@ -342,10 +417,17 @@ export type GetBountyQuery = {
               fundingPeriod: number
             }
           | { __typename: 'BountyFundingPerpetual'; target: number }
-        entries?:
-          | Array<{
-              __typename: 'BountyEntry'
-              worker: {
+        contractType:
+          | {
+              __typename: 'BountyContractClosed'
+              whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
+            }
+          | { __typename: 'BountyContractOpen' }
+        contributions: Array<{
+          __typename: 'BountyContribution'
+          amount: any
+          contributor?:
+            | {
                 __typename: 'Membership'
                 id: string
                 rootAccount: string
@@ -374,16 +456,49 @@ export type GetBountyQuery = {
                   group: { __typename: 'WorkingGroup'; name: string }
                 }>
               }
-              status:
-                | { __typename: 'BountyEntryStatusCashedOut' }
-                | { __typename: 'BountyEntryStatusPassed' }
-                | { __typename: 'BountyEntryStatusRejected' }
-                | { __typename: 'BountyEntryStatusWinner'; reward: number }
-                | { __typename: 'BountyEntryStatusWithdrawn' }
-                | { __typename: 'BountyEntryStatusWorking' }
+            | null
+            | undefined
+        }>
+        entries: Array<{
+          __typename: 'BountyEntry'
+          workSubmitted: boolean
+          worker: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
             }>
-          | null
-          | undefined
+          }
+          status:
+            | { __typename: 'BountyEntryStatusCashedOut' }
+            | { __typename: 'BountyEntryStatusPassed' }
+            | { __typename: 'BountyEntryStatusRejected' }
+            | { __typename: 'BountyEntryStatusWinner'; reward: number }
+            | { __typename: 'BountyEntryStatusWithdrawn' }
+            | { __typename: 'BountyEntryStatusWorking' }
+        }>
       }
     | null
     | undefined
@@ -394,6 +509,7 @@ export const BountyFieldsFragmentDoc = gql`
     id
     createdAt
     title
+    description
     cherry
     entrantStake
     creator {
@@ -412,14 +528,28 @@ export const BountyFieldsFragmentDoc = gql`
         target
       }
     }
+    contractType {
+      ... on BountyContractClosed {
+        whitelist {
+          id
+        }
+      }
+    }
     workPeriod
     judgingPeriod
     stage
     totalFunding
+    contributions {
+      amount
+      contributor {
+        ...MemberFields
+      }
+    }
     entries {
       worker {
         ...MemberFields
       }
+      workSubmitted
       status {
         ... on BountyEntryStatusWinner {
           reward
