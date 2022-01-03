@@ -1,22 +1,36 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
-import { TokenValue } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { MemberStack } from '@/memberships/components/MemberStack'
-import memberMock from '@/mocks/data/raw/members.json'
+import { Member } from '@/memberships/types'
 
-export const WithdrawalDetails = () => {
+interface Props {
+  winners?: Member[]
+  entrants?: Member[]
+}
+
+export const WithdrawalDetails = memo(({ winners, entrants }: Props) => {
   return (
     <>
       <DetailBox title="Winners">
-        <MemberStack members={memberMock} max={5} />
+        {winners?.length ? (
+          <MemberStack members={winners} max={5} />
+        ) : (
+          <TextMedium black bold>
+            None
+          </TextMedium>
+        )}
       </DetailBox>
-      <DetailBox title="Entries">
-        <MemberStack members={memberMock} max={5} />
-      </DetailBox>
+      {entrants?.length && (
+        <DetailBox title="Entries">
+          <MemberStack members={entrants} max={5} />
+        </DetailBox>
+      )}
+      {/* TODO: handle unwithdrawn fund value */}
       <DetailBox title="Unwithdrawn funds">
         <TokenValue value={10000} />
       </DetailBox>
     </>
   )
-}
+})

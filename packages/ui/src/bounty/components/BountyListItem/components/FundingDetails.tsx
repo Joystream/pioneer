@@ -1,33 +1,67 @@
-import React from 'react'
+import BN from 'bn.js'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
-import { ProgressBarWithRange } from '@/common/components/Progress'
+import { FundingType, isFundingLimited } from '@/bounty/types/Bounty'
+import { ProgressBar, ProgressBarWithRange } from '@/common/components/Progress'
 import { TextSmall, TokenValue } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
-export const FundingDetails = () => {
-  return (
-    <>
+interface Props {
+  fundingType: FundingType
+  totalFunding: BN
+  cherry: BN
+}
+
+export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props) => {
+  if (!isFundingLimited(fundingType)) {
+    const { target } = fundingType
+    const currentProgress = totalFunding.div(fundingType.target).toNumber()
+    const color = currentProgress < 1 ? Colors.Orange[300] : Colors.Blue[500]
+    return (
       <ProgressBarWrapper>
-        <ProgressBarWithRange value={20} minRange={50} maxRange={100} size="medium" />
+        <ProgressBar end={currentProgress} size="medium" color={color} />
         <DetailBox title="Maximal range">
-          <TokenValue value={10000} />
+          <TokenValue value={target} />
         </DetailBox>
         <ProgressBarInfoVertical inset="">
           <TextSmall>Funded</TextSmall>
-          <TokenValue value={10000} size="l" />
+          <TokenValue value={totalFunding} size="l" />
+        </ProgressBarInfoVertical>
+      </ProgressBarWrapper>
+    )
+  }
+
+  const { minAmount, maxAmount } = fundingType
+
+  return (
+    <>
+      <ProgressBarWrapper>
+        <ProgressBarWithRange
+          value={totalFunding.toNumber()}
+          minRange={minAmount.toNumber()}
+          maxRange={maxAmount.toNumber()}
+          size="medium"
+        />
+        <DetailBox title="Maximal range">
+          <TokenValue value={maxAmount} />
+        </DetailBox>
+        <ProgressBarInfoVertical inset="">
+          <TextSmall>Funded</TextSmall>
+          <TokenValue value={totalFunding} size="l" />
         </ProgressBarInfoVertical>
         <ProgressBarInfoVertical inset="45px 40% 0">
           <TextSmall>Minimal range</TextSmall>
-          <TokenValue value={10000} />
+          <TokenValue value={minAmount} />
         </ProgressBarInfoVertical>
       </ProgressBarWrapper>
       <DetailBox title="Cherry">
-        <TokenValue value={10000} />
+        <TokenValue value={cherry} />
       </DetailBox>
     </>
   )
-}
+})
 
 const ProgressBarWrapper = styled.div`
   position: relative;

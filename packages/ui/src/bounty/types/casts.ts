@@ -6,7 +6,20 @@ import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyStage, EntryMiniature, FundingType } from './Bounty'
+import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType } from './Bounty'
+
+export const asPeriod = (stage: BountyStage): BountyPeriod => {
+  switch (stage) {
+    case 'successful' || 'failed' || 'terminated':
+      return 'withdrawal'
+    case 'workSubmission':
+      return 'working'
+    case 'judgment':
+      return 'judgement'
+    default:
+      return stage as BountyPeriod
+  }
+}
 
 const asFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
@@ -15,7 +28,7 @@ const asFunding = (field: BountyFundingType): FundingType => {
   return {
     minAmount: new BN(field.minFundingAmount),
     maxAmount: new BN(field.maxFundingAmount),
-    maxPeriod: field.fundingPeriod,
+    maxPeriod: new BN(field.fundingPeriod),
   }
 }
 
@@ -26,7 +39,7 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
 const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
-      createdById: entry.createdById,
+      worker: asMember(entry.worker),
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
     }
   })
