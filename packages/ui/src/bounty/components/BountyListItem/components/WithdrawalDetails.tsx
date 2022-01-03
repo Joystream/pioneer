@@ -14,7 +14,7 @@ export const WithdrawalDetails = memo(({ winners, entrants }: Props) => {
   return (
     <>
       <DetailBox title="Winners">
-        {winners ? (
+        {winners?.length ? (
           <MemberStack members={winners} max={5} />
         ) : (
           <TextMedium black bold>
@@ -22,7 +22,7 @@ export const WithdrawalDetails = memo(({ winners, entrants }: Props) => {
           </TextMedium>
         )}
       </DetailBox>
-      {entrants && (
+      {entrants?.length && (
         <DetailBox title="Entries">
           <MemberStack members={entrants} max={5} />
         </DetailBox>

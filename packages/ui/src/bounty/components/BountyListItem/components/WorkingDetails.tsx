@@ -18,7 +18,7 @@ export const WorkingDetails = memo(({ totalFunding, entrantStake, entrants }: Pr
       <DetailBox title="Bounty">
         <TokenValue size="l" value={totalFunding} />
       </DetailBox>
-      {entrants && (
+      {entrants?.length && (
         <DetailBox title="Entries">
           <MemberStack members={entrants} max={5} />
         </DetailBox>

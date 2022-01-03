@@ -8,7 +8,6 @@ import { Pagination } from '@/common/components/Pagination'
 import { SimpleSelect } from '@/common/components/selects'
 import { TextBig } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { Fonts } from '@/common/constants'
 import { useSort } from '@/common/hooks/useSort'
 
 import { useBounties } from '../hooks/useBounties'
@@ -30,7 +29,7 @@ export const BountiesList = memo(() => {
 
   return (
     <div>
-      <Title bold>
+      <Title bold value>
         Bounties
         <Counter count={bounties.length} />
       </Title>
@@ -49,7 +48,6 @@ export const BountiesList = memo(() => {
 })
 
 const Title = styled(TextBig)`
-  font-family: ${Fonts.Grotesk};
   margin-bottom: 24px;
   display: flex;
   align-items: center;
