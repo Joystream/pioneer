@@ -14,6 +14,8 @@ import { useBounties } from '../hooks/useBounties'
 
 import { BountyListItem } from './BountyListItem/BountyListItem'
 
+const sortingOptions = ['Latest', 'Earliest']
+
 export const BountiesList = memo(() => {
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
   const { onSort, isDescending } = getSortProps('createdAt')
@@ -35,7 +37,7 @@ export const BountiesList = memo(() => {
       </Title>
       <SimpleSelect
         title="Sorting"
-        options={['Latest', 'Earliest']}
+        options={sortingOptions}
         value={isDescending ? 'Latest' : 'Earliest'}
         onChange={onSort}
       />
