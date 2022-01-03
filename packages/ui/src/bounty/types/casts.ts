@@ -60,4 +60,5 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
   entries: asEntries(fields.entries),
+  inBlock: fields.createdInEvent.inBlock,
 })

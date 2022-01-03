@@ -7,44 +7,53 @@ import { ExpiredTiles } from '@/bounty/components/BountyExpired/ExpiredTiles'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
+import { Bounty } from '@/bounty/types/Bounty'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { TextSmall } from '@/common/components/typography'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { formatDateString } from '@/common/model/formatters'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
 
-const RANDOM_BLOCK = randomBlock()
+interface Props {
+  bounty: Bounty
+}
 
-export const BountyExpired = () => {
+export const BountyExpired = ({ bounty }: Props) => {
   const { t } = useTranslation('common')
   const [active, setActive] = useState<ExpiredTabsState>('Bounty')
 
   return (
     <MainPanel>
-      <ExpiredTiles />
+      <ExpiredTiles bounty={bounty} />
       <ExpiredTabs active={active} setActive={setActive} />
       <ContentWithSidePanel>
         {active === 'Bounty' && <BountyTab />}
         {active === 'Works' && <WorkTab />}
         <RowGapBlock gap={4}>
           <BountySidebar
+            // todo add contributors to schema
             contributors={[]}
             stage="expired"
             periodsLengths={{
               fundingPeriodLength: BN_ZERO,
-              judgingPeriodLength: BN_ZERO,
-              workPeriodLength: BN_ZERO,
+              judgingPeriodLength: bounty.judgingPeriod,
+              workPeriodLength: bounty.workPeriod,
             }}
           />
         </RowGapBlock>
       </ContentWithSidePanel>
       <BountyInfoWrapper>
         <TextSmall>
-          {t('created')}: {formatDateString(RANDOM_BLOCK.timestamp, 'l')}
+          {t('created')}: {formatDateString(bounty.createdAt, 'l')}
         </TextSmall>
         <Separator>{' | '}</Separator>
-        <BlockInfo block={RANDOM_BLOCK} />
+        <BlockInfo
+          block={{
+            number: bounty.inBlock,
+            network: 'OLYMPIA',
+            timestamp: bounty.createdAt,
+          }}
+        />
       </BountyInfoWrapper>
     </MainPanel>
   )

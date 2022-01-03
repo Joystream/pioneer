@@ -1,18 +1,21 @@
 import React, { useMemo } from 'react'
 
 import { BountyExpired } from '@/bounty/components/BountyExpired/BountyExpired'
+import { Bounty } from '@/bounty/types/Bounty'
 
 export interface BountyMainProps {
-  bountyStage: 'Expired'
+  bounty: Bounty
 }
 
-export const BountyMain = ({ bountyStage }: BountyMainProps) => {
+export const BountyMain = ({ bounty }: BountyMainProps) => {
   const page = useMemo(() => {
-    switch (bountyStage) {
-      case 'Expired':
+    switch (bounty.stage) {
+      case 'expired':
         return <BountyExpired />
+      default:
+        return null
     }
-  }, [bountyStage])
+  }, [bounty.stage])
 
   return page
 }

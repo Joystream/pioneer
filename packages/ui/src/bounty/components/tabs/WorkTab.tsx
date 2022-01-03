@@ -34,21 +34,21 @@ export const WorkTab = () => {
       </FilterContainer>
       <StyledList as="div">
         <BountyWorkListItem
-          entrant={(members[0] as unknown) as Member}
+          entrant={members[0] as unknown as Member}
           inBlock={randomBlock()}
           title="Title"
           description="Description"
           link="https://www.google.com"
         />
         <BountyWorkListItem
-          entrant={(members[0] as unknown) as Member}
+          entrant={members[0] as unknown as Member}
           inBlock={randomBlock()}
           title="Title"
           description="Description"
           link="https://www.google.com"
         />
         <BountyWorkListItem
-          entrant={(members[0] as unknown) as Member}
+          entrant={members[0] as unknown as Member}
           inBlock={randomBlock()}
           title="Title"
           description="Description"
@@ -56,14 +56,14 @@ export const WorkTab = () => {
           withdrawn
         />
         <BountyWorkListItem
-          entrant={(members[0] as unknown) as Member}
+          entrant={members[0] as unknown as Member}
           inBlock={randomBlock()}
           title="Title"
           description="Description"
           link="https://www.google.com"
         />
         <BountyWorkListItem
-          entrant={(members[0] as unknown) as Member}
+          entrant={members[0] as unknown as Member}
           inBlock={randomBlock()}
           title="Title"
           description="Description"

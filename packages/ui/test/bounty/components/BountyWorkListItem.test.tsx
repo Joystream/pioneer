@@ -11,7 +11,7 @@ const randomizedBlock = randomBlock()
 
 describe('UI: BountyListItem', () => {
   const props: BountyWorkListItemProps = {
-    entrant: (members[0] as unknown) as Member,
+    entrant: members[0] as unknown as Member,
     description: 'Description',
     withdrawn: false,
     title: 'Title',

@@ -30,6 +30,10 @@ export interface Withdrawn {
 
 export type BountyActorItem = Contributor | Entrant | Withdrawn
 
+export const isPerpetual = (type: FundingType): type is FundingPerpetual => {
+  return (type as FundingPerpetual).target !== undefined
+}
+
 export type FundingType = FundingLimited | FundingPerpetual
 
 type FundingLimited = {
@@ -38,7 +42,7 @@ type FundingLimited = {
   maxPeriod: BN
 }
 
-type FundingPerpetual = {
+export type FundingPerpetual = {
   target: BN
 }
 
@@ -67,4 +71,5 @@ export interface Bounty {
   stage: BountyStage
   totalFunding: BN
   entries?: EntryMiniature[]
+  inBlock: number
 }

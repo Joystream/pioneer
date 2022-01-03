@@ -109,6 +109,7 @@ export type BountyFieldsFragment = {
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
   }>
+  createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
 }
 
 export type GetBountiesQueryVariables = Types.Exact<{
@@ -230,6 +231,7 @@ export type GetBountiesQuery = {
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
     }>
+    createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
   }>
 }
 
@@ -371,6 +373,7 @@ export type GetBountyQuery = {
             | { __typename: 'BountyEntryStatusWithdrawn' }
             | { __typename: 'BountyEntryStatusWorking' }
         }>
+        createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
       }
     | null
     | undefined
@@ -412,6 +415,9 @@ export const BountyFieldsFragmentDoc = gql`
           reward
         }
       }
+    }
+    createdInEvent {
+      inBlock
     }
   }
   ${MemberFieldsFragmentDoc}

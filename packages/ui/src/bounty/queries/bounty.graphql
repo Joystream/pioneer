@@ -34,6 +34,9 @@ fragment BountyFields on Bounty {
       }
     }
   }
+  createdInEvent {
+    inBlock
+  }
 }
 
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
