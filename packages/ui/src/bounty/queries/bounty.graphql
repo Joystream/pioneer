@@ -47,3 +47,9 @@ query GetBountiesCount($where: BountyWhereInput) {
     totalCount
   }
 }
+
+query GetBounty($where: BountyWhereUniqueInput!) {
+  bountyByUniqueInput(where: $where) {
+    ...BountyFields
+  }
+}
