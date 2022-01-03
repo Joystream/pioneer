@@ -1,20 +1,39 @@
 import { render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { BountyListItem } from '@/bounty/components/BountyListItem/BountyListItem'
-import { BountyPeriod } from '@/bounty/types/Bounty'
+import { BountyStage } from '@/bounty/types/Bounty'
 import { seedMembers } from '@/mocks/data'
 
+import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 describe('UI: BountyListItem', () => {
   const server = setupMockServer()
   const props = {
+    id: '1',
+    createdAt: '2021-12-31',
     title: 'Title',
-    creator: 'Apetor',
-    date: new Date(),
-    imageUrl: 'test/img',
+    cherry: new BN(1010),
+    entrantStake: new BN(10000),
+    creator: getMember('alice'),
+    oracle: getMember('bob'),
+    fundingType: {
+      minAmount: new BN(10000),
+      maxAmount: new BN(12000),
+      maxPeriod: new BN(2000),
+    },
+    workPeriod: new BN(1000),
+    judgingPeriod: new BN(1000),
+    totalFunding: new BN(2000),
+    entries: [
+      { worker: getMember('alice') },
+      { worker: getMember('bob') },
+      { worker: getMember('alice') },
+      { worker: getMember('bob'), winner: true },
+    ],
   }
 
   beforeAll(() => {
@@ -24,8 +43,7 @@ describe('UI: BountyListItem', () => {
   it('Renders props', () => {
     renderItem('funding')
 
-    checkTypeLayout([props.title, props.creator])
-    expect(screen.getByRole('img')).toHaveAttribute('src', props.imageUrl)
+    checkTypeLayout([props.title, props.creator.handle])
   })
 
   it('Period: Funding', async () => {
@@ -35,19 +53,25 @@ describe('UI: BountyListItem', () => {
   })
 
   it('Period: Working', async () => {
-    renderItem('working')
+    renderItem('workSubmission')
 
     checkTypeLayout(['WORKING PERIOD', 'Bounty', 'Entries', 'Submitted work', 'Stake'])
   })
 
   it('Period: Judgment', async () => {
-    renderItem('judgement')
+    renderItem('judgment')
 
     checkTypeLayout(['JUDGEMENT PERIOD', 'Entries', 'Submitted work', 'Withdrawn work'])
   })
 
-  it('Period: Withdrawal', async () => {
-    renderItem('withdrawal')
+  it('Period: Withdrawal after success', async () => {
+    renderItem('successful')
+
+    checkTypeLayout(['WITHDRAWAL PERIOD', 'Entries', 'Unwithdrawn funds'])
+  })
+
+  it('Period: Withdrawal after failure', async () => {
+    renderItem('failed')
 
     checkTypeLayout(['WITHDRAWAL PERIOD', 'Entries', 'Unwithdrawn funds'])
   })
@@ -65,10 +89,10 @@ describe('UI: BountyListItem', () => {
     }
   }
 
-  const renderItem = (type: BountyPeriod) =>
+  const renderItem = (type: BountyStage) =>
     render(
       <MockApolloProvider>
-        <BountyListItem period={type} {...props} />
+        <BountyListItem stage={type} {...props} />
       </MockApolloProvider>
     )
 })

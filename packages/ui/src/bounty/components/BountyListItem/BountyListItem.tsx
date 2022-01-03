@@ -1,38 +1,74 @@
-import React from 'react'
+import BN from 'bn.js'
+import React, { useMemo, memo } from 'react'
+import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
 import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
+import { BountyRoutes } from '@/bounty/constants'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
-import { BountyPeriod } from '@/bounty/types/Bounty'
+import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors } from '@/common/constants'
 
-interface Props {
-  period: BountyPeriod
-  title: string
-  creator: string
-  date?: Date
-  imageUrl: string
-}
+export const BountyListItem = memo(
+  ({
+    id,
+    title,
+    cherry,
+    entrantStake,
+    creator,
+    oracle,
+    fundingType,
+    workPeriod,
+    judgingPeriod,
+    stage,
+    totalFunding,
+    entries,
+  }: Bounty) => {
+    const history = useHistory()
 
-export const BountyListItem = ({ period, date, creator, title, imageUrl }: Props) => {
-  return (
-    <Wrapper>
-      <BountyImage src={imageUrl} />
-      <Info>
-        <BountyInformations period={period} date={date} creator={creator} title={title} />
-        <BountyDetails type={period} />
-      </Info>
-      <ArrowWrapper>
-        <Arrow direction="right" />
-      </ArrowWrapper>
+    const period = asPeriod(stage)
 
-      <TypeBadge color={BountyPeriodColorMapper[period]}>{period} PERIOD</TypeBadge>
-    </Wrapper>
-  )
-}
+    const timeToPeriodEnd = useMemo(() => {
+      if (period === 'funding' && isFundingLimited(fundingType)) {
+        return new BN(fundingType.maxPeriod)
+      }
+      if (period === 'working') {
+        return workPeriod
+      }
+      if (period === 'judgement') {
+        return judgingPeriod
+      }
+    }, [period, fundingType])
+
+    return (
+      <Wrapper>
+        {/* TODO: add image url to schema */}
+        <BountyImage src="https://picsum.photos/500/300" />
+        <Info>
+          <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
+          <BountyDetails
+            type={period}
+            oracle={oracle}
+            cherry={cherry}
+            fundingType={fundingType}
+            totalFunding={totalFunding}
+            entrantStake={entrantStake}
+            entries={entries}
+          />
+        </Info>
+        <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
+          <Arrow direction="right" />
+        </ArrowWrapper>
+
+        <TypeBadge color={BountyPeriodColorMapper[period]}>{`${period.toUpperCase()} PERIOD`}</TypeBadge>
+      </Wrapper>
+    )
+  }
+)
 
 const Info = styled.div`
   flex: 1;

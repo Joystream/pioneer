@@ -1,12 +1,15 @@
-import { useGetBountyQuery } from '@/bounty/queries/__generated__/bounty.generated'
-import { asBounty } from '@/bounty/types/casts'
+import { useGetBountyQuery } from '@/bounty/queries'
+import { Bounty } from '@/bounty/types/Bounty'
 
-export const useBounty = (id: string) => {
-  const { data, loading } = useGetBountyQuery({
-    variables: {
-      id,
-    },
-  })
+import { asBounty } from '../types/casts'
+
+interface UseBounty {
+  isLoading: boolean
+  bounty: Bounty | undefined
+}
+
+export const useBounty = (id: string): UseBounty => {
+  const { data, loading } = useGetBountyQuery({ variables: { where: { id } } })
 
   const bounty = data?.bountyByUniqueInput ? asBounty(data.bountyByUniqueInput) : undefined
 

@@ -36,7 +36,9 @@ fragment BountyFields on Bounty {
     contributorId
   }
   entries {
-    createdById
+    worker {
+      ...MemberFields
+    }
     workSubmitted
     status {
       ... on BountyEntryStatusWinner {
@@ -58,8 +60,8 @@ query GetBountiesCount($where: BountyWhereInput) {
   }
 }
 
-query GetBounty($id: ID!) {
-  bountyByUniqueInput(where: { id: $id }) {
+query GetBounty($where: BountyWhereUniqueInput!) {
+  bountyByUniqueInput(where: $where) {
     ...BountyFields
   }
 }
