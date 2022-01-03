@@ -74,41 +74,44 @@ export type BountyFieldsFragment = {
   fundingType:
     | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
     | { __typename: 'BountyFundingPerpetual'; target: number }
-  entries: Array<{
-    __typename: 'BountyEntry'
-    worker: {
-      __typename: 'Membership'
-      id: string
-      rootAccount: string
-      controllerAccount: string
-      boundAccounts: Array<string>
-      handle: string
-      isVerified: boolean
-      isFoundingMember: boolean
-      inviteCount: number
-      createdAt: any
-      metadata: {
-        __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-      }
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        isLead: boolean
-        group: { __typename: 'WorkingGroup'; name: string }
+  entries?:
+    | Array<{
+        __typename: 'BountyEntry'
+        worker: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        status:
+          | { __typename: 'BountyEntryStatusCashedOut' }
+          | { __typename: 'BountyEntryStatusPassed' }
+          | { __typename: 'BountyEntryStatusRejected' }
+          | { __typename: 'BountyEntryStatusWinner'; reward: number }
+          | { __typename: 'BountyEntryStatusWithdrawn' }
+          | { __typename: 'BountyEntryStatusWorking' }
       }>
-    }
-    status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
-      | { __typename: 'BountyEntryStatusPassed' }
-      | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
-      | { __typename: 'BountyEntryStatusWithdrawn' }
-      | { __typename: 'BountyEntryStatusWorking' }
-  }>
+    | null
+    | undefined
 }
 
 export type GetBountiesQueryVariables = Types.Exact<{
@@ -195,41 +198,48 @@ export type GetBountiesQuery = {
           fundingPeriod: number
         }
       | { __typename: 'BountyFundingPerpetual'; target: number }
-    entries: Array<{
-      __typename: 'BountyEntry'
-      worker: {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-        }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
+    entries?:
+      | Array<{
+          __typename: 'BountyEntry'
+          worker: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
+          status:
+            | { __typename: 'BountyEntryStatusCashedOut' }
+            | { __typename: 'BountyEntryStatusPassed' }
+            | { __typename: 'BountyEntryStatusRejected' }
+            | { __typename: 'BountyEntryStatusWinner'; reward: number }
+            | { __typename: 'BountyEntryStatusWithdrawn' }
+            | { __typename: 'BountyEntryStatusWorking' }
         }>
-      }
-      status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
-        | { __typename: 'BountyEntryStatusPassed' }
-        | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
-        | { __typename: 'BountyEntryStatusWithdrawn' }
-        | { __typename: 'BountyEntryStatusWorking' }
-    }>
+      | null
+      | undefined
   }>
 }
 
@@ -332,45 +342,48 @@ export type GetBountyQuery = {
               fundingPeriod: number
             }
           | { __typename: 'BountyFundingPerpetual'; target: number }
-        entries: Array<{
-          __typename: 'BountyEntry'
-          worker: {
-            __typename: 'Membership'
-            id: string
-            rootAccount: string
-            controllerAccount: string
-            boundAccounts: Array<string>
-            handle: string
-            isVerified: boolean
-            isFoundingMember: boolean
-            inviteCount: number
-            createdAt: any
-            metadata: {
-              __typename: 'MemberMetadata'
-              name?: string | null | undefined
-              about?: string | null | undefined
-              avatar?:
-                | { __typename: 'AvatarObject' }
-                | { __typename: 'AvatarUri'; avatarUri: string }
-                | null
-                | undefined
-            }
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              isLead: boolean
-              group: { __typename: 'WorkingGroup'; name: string }
+        entries?:
+          | Array<{
+              __typename: 'BountyEntry'
+              worker: {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
+              status:
+                | { __typename: 'BountyEntryStatusCashedOut' }
+                | { __typename: 'BountyEntryStatusPassed' }
+                | { __typename: 'BountyEntryStatusRejected' }
+                | { __typename: 'BountyEntryStatusWinner'; reward: number }
+                | { __typename: 'BountyEntryStatusWithdrawn' }
+                | { __typename: 'BountyEntryStatusWorking' }
             }>
-          }
-          status:
-            | { __typename: 'BountyEntryStatusCashedOut' }
-            | { __typename: 'BountyEntryStatusPassed' }
-            | { __typename: 'BountyEntryStatusRejected' }
-            | { __typename: 'BountyEntryStatusWinner'; reward: number }
-            | { __typename: 'BountyEntryStatusWithdrawn' }
-            | { __typename: 'BountyEntryStatusWorking' }
-        }>
+          | null
+          | undefined
       }
     | null
     | undefined
