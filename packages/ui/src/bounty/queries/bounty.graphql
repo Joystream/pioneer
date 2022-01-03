@@ -33,7 +33,10 @@ fragment BountyFields on Bounty {
   stage
   totalFunding
   contributions {
-    contributorId
+    amount
+    contributor {
+      ...MemberFields
+    }
   }
   entries {
     worker {

@@ -7,7 +7,7 @@ export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
 export interface Contributor {
-  actor: Member
+  actor: Member | undefined
   amount: BN
 }
 
@@ -81,5 +81,5 @@ export interface Bounty {
   totalFunding: BN
   entries?: EntryMiniature[]
   contractType: ContractType
-  contributors: string[]
+  contributors: Contributor[]
 }

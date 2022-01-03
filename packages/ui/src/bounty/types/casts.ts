@@ -6,7 +6,7 @@ import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType, ContractType } from './Bounty'
+import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType, ContractType, Contributor } from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
   switch (stage) {
@@ -55,6 +55,13 @@ const asContractType = (type: BountyFieldsFragment['contractType']): ContractTyp
       }
 }
 
+export const asContributors = (contributors: BountyFieldsFragment['contributions']): Contributor[] => {
+  return contributors.map(({ amount, contributor }) => ({
+    amount,
+    actor: contributor ? asMember(contributor) : undefined,
+  }))
+}
+
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title,
@@ -72,5 +79,5 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   totalFunding: new BN(fields.totalFunding),
   entries: asEntries(fields.entries),
   contractType: asContractType(fields.contractType),
-  contributors: fields.contributions.map((contributor) => contributor.contributorId || ''),
+  contributors: asContributors(fields.contributions),
 })

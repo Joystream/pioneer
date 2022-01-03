@@ -85,7 +85,7 @@ const FundingStageButtons = ({ bounty, t }: BountyHeaderButtonsProps) => {
 }
 
 const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
-  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.createdById === activeMember?.id), [bounty])
+  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
   const isOnWhitelist = useMemo(
@@ -126,10 +126,11 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 
 const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const { winner, passed } =
-    useMemo(() => bounty.entries?.find((entry) => entry.createdById === activeMember?.id), [bounty]) || {}
-  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
-    bounty,
-  ])
+    useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty]) || {}
+  const isContributor = useMemo(
+    () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
+    [bounty]
+  )
 
   return (
     <>
@@ -143,10 +144,11 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
 }
 
 const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
-  const isWorker = useMemo(() => bounty.entries?.some((entry) => entry.createdById === activeMember?.id), [bounty])
-  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
-    bounty,
-  ])
+  const isWorker = useMemo(() => bounty.entries?.some((entry) => entry.worker.id === activeMember?.id), [bounty])
+  const isContributor = useMemo(
+    () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
+    [bounty]
+  )
 
   if (!isWorker && !isContributor) {
     return null
