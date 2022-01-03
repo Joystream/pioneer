@@ -20,7 +20,9 @@ export const BountyPreviewHeader = ({ bounty, badgeNames }: Props) => {
   const { active: activeMember } = useMyMemberships()
 
   const compiledButtons = useMemo(() => {
-    if (!bounty) return null
+    if (!bounty) {
+      return null
+    }
 
     const buttonsProps: BountyHeaderButtonsProps = { t, bounty, activeMember }
 
@@ -125,10 +127,9 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const { winner, passed } =
     useMemo(() => bounty.entries?.find((entry) => entry.createdById === activeMember?.id), [bounty]) || {}
-  const isContributor = useMemo(
-    () => bounty.contributors?.some((contributor) => contributor === activeMember?.id),
-    [bounty]
-  )
+  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
+    bounty,
+  ])
 
   return (
     <>
@@ -143,12 +144,13 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
 
 const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const isWorker = useMemo(() => bounty.entries?.some((entry) => entry.createdById === activeMember?.id), [bounty])
-  const isContributor = useMemo(
-    () => bounty.contributors?.some((contributor) => contributor === activeMember?.id),
-    [bounty]
-  )
+  const isContributor = useMemo(() => bounty.contributors?.some((contributor) => contributor === activeMember?.id), [
+    bounty,
+  ])
 
-  if (!isWorker && !isContributor) return null
+  if (!isWorker && !isContributor) {
+    return null
+  }
 
   return (
     <>
@@ -163,7 +165,9 @@ const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProp
 const ExpiredStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const isCreator = bounty.creator?.id === activeMember?.id
 
-  if (!isCreator) return null
+  if (!isCreator) {
+    return null
+  }
 
   return <ButtonPrimary size="large">{t('buttons.cancelBounty')}</ButtonPrimary>
 }
