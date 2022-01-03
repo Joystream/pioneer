@@ -759,11 +759,13 @@ export type BaseWhereInput = {
 
 export type Bounty = BaseGraphQlObject & {
   __typename: 'Bounty'
+  /** Bounty image uri */
+  bannerImageUri?: Maybe<Scalars['String']>
   /** Amount of funding provided by the creator */
   cherry: Scalars['BigInt']
   /** Bounty assurance contract type */
   contractType: BountyContractType
-  contributions: Array<BountyContribution>
+  contributions?: Maybe<Array<BountyContribution>>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   createdInEvent: BountyCreatedEvent
@@ -778,7 +780,7 @@ export type Bounty = BaseGraphQlObject & {
   discussionThreadId: Scalars['String']
   /** Stake minimum amount required to submit work entry to the bounty */
   entrantStake: Scalars['BigInt']
-  entries: Array<BountyEntry>
+  entries?: Maybe<Array<BountyEntry>>
   /** Bounty funding type */
   fundingType: BountyFundingType
   id: Scalars['ID']
@@ -792,7 +794,7 @@ export type Bounty = BaseGraphQlObject & {
   stage: BountyStage
   /** Bounty title */
   title: Scalars['String']
-  /** Total amount available for the reward */
+  /** Total amount currently available for the reward */
   totalFunding: Scalars['BigInt']
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['String']>
@@ -824,7 +826,8 @@ export type BountyContribution = BaseGraphQlObject & {
   __typename: 'BountyContribution'
   /** Amount of the contribution */
   amount: Scalars['BigInt']
-  bounty: Array<Bounty>
+  bounty: Bounty
+  bountyId: Scalars['String']
   contributor?: Maybe<Membership>
   contributorId?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
@@ -846,6 +849,7 @@ export type BountyContributionConnection = {
 
 export type BountyContributionCreateInput = {
   amount: Scalars['String']
+  bounty: Scalars['ID']
   contributor?: InputMaybe<Scalars['ID']>
 }
 
@@ -858,6 +862,8 @@ export type BountyContributionEdge = {
 export enum BountyContributionOrderByInput {
   AmountAsc = 'amount_ASC',
   AmountDesc = 'amount_DESC',
+  BountyAsc = 'bounty_ASC',
+  BountyDesc = 'bounty_DESC',
   ContributorAsc = 'contributor_ASC',
   ContributorDesc = 'contributor_DESC',
   CreatedAtAsc = 'createdAt_ASC',
@@ -870,6 +876,7 @@ export enum BountyContributionOrderByInput {
 
 export type BountyContributionUpdateInput = {
   amount?: InputMaybe<Scalars['String']>
+  bounty?: InputMaybe<Scalars['ID']>
   contributor?: InputMaybe<Scalars['ID']>
 }
 
@@ -882,9 +889,7 @@ export type BountyContributionWhereInput = {
   amount_in?: InputMaybe<Array<Scalars['BigInt']>>
   amount_lt?: InputMaybe<Scalars['BigInt']>
   amount_lte?: InputMaybe<Scalars['BigInt']>
-  bounty_every?: InputMaybe<BountyWhereInput>
-  bounty_none?: InputMaybe<BountyWhereInput>
-  bounty_some?: InputMaybe<BountyWhereInput>
+  bounty?: InputMaybe<BountyWhereInput>
   contributor?: InputMaybe<MembershipWhereInput>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -917,6 +922,7 @@ export type BountyContributionWhereUniqueInput = {
 }
 
 export type BountyCreateInput = {
+  bannerImageUri?: InputMaybe<Scalars['String']>
   cherry: Scalars['String']
   contractType: Scalars['JSONObject']
   createdInEvent: Scalars['ID']
@@ -1067,7 +1073,8 @@ export type BountyEntry = BaseGraphQlObject & {
   __typename: 'BountyEntry'
   announcedInEvent: WorkEntryAnnouncedEvent
   announcedInEventId: Scalars['String']
-  bounty: Array<Bounty>
+  bounty: Bounty
+  bountyId: Scalars['String']
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   deletedAt?: Maybe<Scalars['DateTime']>
@@ -1086,7 +1093,7 @@ export type BountyEntry = BaseGraphQlObject & {
   workSubmitted: Scalars['Boolean']
   worker: Membership
   workerId: Scalars['String']
-  works: Array<BountyWorkData>
+  works?: Maybe<Array<BountyWorkData>>
 }
 
 export type BountyEntryConnection = {
@@ -1098,6 +1105,7 @@ export type BountyEntryConnection = {
 
 export type BountyEntryCreateInput = {
   announcedInEvent: Scalars['ID']
+  bounty: Scalars['ID']
   stake: Scalars['String']
   stakingAccount?: InputMaybe<Scalars['String']>
   status: Scalars['JSONObject']
@@ -1114,6 +1122,8 @@ export type BountyEntryEdge = {
 export enum BountyEntryOrderByInput {
   AnnouncedInEventAsc = 'announcedInEvent_ASC',
   AnnouncedInEventDesc = 'announcedInEvent_DESC',
+  BountyAsc = 'bounty_ASC',
+  BountyDesc = 'bounty_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
@@ -1170,6 +1180,7 @@ export type BountyEntryStatusWorking = {
 
 export type BountyEntryUpdateInput = {
   announcedInEvent?: InputMaybe<Scalars['ID']>
+  bounty?: InputMaybe<Scalars['ID']>
   stake?: InputMaybe<Scalars['String']>
   stakingAccount?: InputMaybe<Scalars['String']>
   status?: InputMaybe<Scalars['JSONObject']>
@@ -1181,9 +1192,7 @@ export type BountyEntryWhereInput = {
   AND?: InputMaybe<Array<BountyEntryWhereInput>>
   OR?: InputMaybe<Array<BountyEntryWhereInput>>
   announcedInEvent?: InputMaybe<WorkEntryAnnouncedEventWhereInput>
-  bounty_every?: InputMaybe<BountyWhereInput>
-  bounty_none?: InputMaybe<BountyWhereInput>
-  bounty_some?: InputMaybe<BountyWhereInput>
+  bounty?: InputMaybe<BountyWhereInput>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -1374,6 +1383,8 @@ export type BountyMaxFundingReachedEventWhereUniqueInput = {
 }
 
 export enum BountyOrderByInput {
+  BannerImageUriAsc = 'bannerImageUri_ASC',
+  BannerImageUriDesc = 'bannerImageUri_DESC',
   CherryAsc = 'cherry_ASC',
   CherryDesc = 'cherry_DESC',
   CreatedAtAsc = 'createdAt_ASC',
@@ -1419,6 +1430,7 @@ export enum BountyStage {
 }
 
 export type BountyUpdateInput = {
+  bannerImageUri?: InputMaybe<Scalars['String']>
   cherry?: InputMaybe<Scalars['String']>
   contractType?: InputMaybe<Scalars['JSONObject']>
   createdInEvent?: InputMaybe<Scalars['ID']>
@@ -1439,6 +1451,11 @@ export type BountyUpdateInput = {
 export type BountyWhereInput = {
   AND?: InputMaybe<Array<BountyWhereInput>>
   OR?: InputMaybe<Array<BountyWhereInput>>
+  bannerImageUri_contains?: InputMaybe<Scalars['String']>
+  bannerImageUri_endsWith?: InputMaybe<Scalars['String']>
+  bannerImageUri_eq?: InputMaybe<Scalars['String']>
+  bannerImageUri_in?: InputMaybe<Array<Scalars['String']>>
+  bannerImageUri_startsWith?: InputMaybe<Scalars['String']>
   cherry_eq?: InputMaybe<Scalars['BigInt']>
   cherry_gt?: InputMaybe<Scalars['BigInt']>
   cherry_gte?: InputMaybe<Scalars['BigInt']>
@@ -1533,7 +1550,8 @@ export type BountyWorkData = BaseGraphQlObject & {
   deletedById?: Maybe<Scalars['String']>
   /** Description which contains the work itself as a URL, a BLOB, or just text */
   description: Scalars['String']
-  entry: Array<BountyEntry>
+  entry: BountyEntry
+  entryId: Scalars['String']
   id: Scalars['ID']
   /** Title of the work */
   title: Scalars['String']
@@ -1551,6 +1569,7 @@ export type BountyWorkDataConnection = {
 
 export type BountyWorkDataCreateInput = {
   description: Scalars['String']
+  entry: Scalars['ID']
   title: Scalars['String']
 }
 
@@ -1567,6 +1586,8 @@ export enum BountyWorkDataOrderByInput {
   DeletedAtDesc = 'deletedAt_DESC',
   DescriptionAsc = 'description_ASC',
   DescriptionDesc = 'description_DESC',
+  EntryAsc = 'entry_ASC',
+  EntryDesc = 'entry_DESC',
   TitleAsc = 'title_ASC',
   TitleDesc = 'title_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -1575,6 +1596,7 @@ export enum BountyWorkDataOrderByInput {
 
 export type BountyWorkDataUpdateInput = {
   description?: InputMaybe<Scalars['String']>
+  entry?: InputMaybe<Scalars['ID']>
   title?: InputMaybe<Scalars['String']>
 }
 
@@ -1601,9 +1623,7 @@ export type BountyWorkDataWhereInput = {
   description_eq?: InputMaybe<Scalars['String']>
   description_in?: InputMaybe<Array<Scalars['String']>>
   description_startsWith?: InputMaybe<Scalars['String']>
-  entry_every?: InputMaybe<BountyEntryWhereInput>
-  entry_none?: InputMaybe<BountyEntryWhereInput>
-  entry_some?: InputMaybe<BountyEntryWhereInput>
+  entry?: InputMaybe<BountyEntryWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   title_contains?: InputMaybe<Scalars['String']>
