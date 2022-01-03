@@ -334,7 +334,35 @@ export type GetBountyQuery = {
           | { __typename: 'BountyFundingPerpetual'; target: number }
         entries: Array<{
           __typename: 'BountyEntry'
-          createdById: string
+          worker: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null | undefined
+              about?: string | null | undefined
+              avatar?:
+                | { __typename: 'AvatarObject' }
+                | { __typename: 'AvatarUri'; avatarUri: string }
+                | null
+                | undefined
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+          }
           status:
             | { __typename: 'BountyEntryStatusCashedOut' }
             | { __typename: 'BountyEntryStatusPassed' }
