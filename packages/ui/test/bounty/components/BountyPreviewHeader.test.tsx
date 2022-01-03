@@ -14,6 +14,8 @@ import rawMembers from '@/mocks/data/raw/members.json'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 
+const activeMember = ({ ...rawMembers[0], id: '0' } as unknown) as Member
+
 describe('UI: BountyPreviewHeader', () => {
   const bounty: Bounty = {
     id: '6',
@@ -23,12 +25,12 @@ describe('UI: BountyPreviewHeader', () => {
       '# alias sunt\n\nAdipisci molestiae quibusdam voluptatum mollitia. Ullam sit nostrum saepe nemo earum recusandae sed ut. Eveniet nihil soluta aut maiores maxime. Cupiditate nostrum quia illum nesciunt assumenda nulla. Qui repellat sit animi veritatis nisi esse. Voluptate laborum sit qui.\n\n## consequatur illum\n\nSed ut autem nam. Aliquam at et eligendi. Eius quia sed delectus.\n \rProvident consequatur earum adipisci. Quo qui eum qui. Earum aliquam id.',
     cherry: new BN(10),
     entrantStake: new BN(10),
-    creator: {
+    creator: ({
       id: '0',
-    } as unknown as Member,
-    oracle: {
+    } as unknown) as Member,
+    oracle: ({
       id: '1',
-    } as unknown as Member,
+    } as unknown) as Member,
     fundingType: {
       minAmount: new BN(10),
       maxAmount: new BN(10),
@@ -38,7 +40,7 @@ describe('UI: BountyPreviewHeader', () => {
       whitelist: ['16'],
     },
     entries: [],
-    contributors: ['1'],
+    contributors: [],
     workPeriod: new BN(10),
     judgingPeriod: new BN(10),
     stage: 'expired',
@@ -58,7 +60,7 @@ describe('UI: BountyPreviewHeader', () => {
   let useAccounts: UseAccounts
 
   beforeAll(() => {
-    useMyMemberships.active = { ...rawMembers[0], id: '0' } as unknown as Member
+    useMyMemberships.active = activeMember
     useAccounts = {
       isLoading: false,
       hasAccounts: true,
@@ -140,7 +142,7 @@ describe('UI: BountyPreviewHeader', () => {
           {
             hasSubmitted: false,
             winner: false,
-            createdById: '3',
+            worker: activeMember,
             passed: false,
           },
         ]
@@ -155,7 +157,7 @@ describe('UI: BountyPreviewHeader', () => {
           {
             hasSubmitted: false,
             winner: false,
-            createdById: '0',
+            worker: activeMember,
             passed: false,
           },
         ]
@@ -170,7 +172,7 @@ describe('UI: BountyPreviewHeader', () => {
           {
             hasSubmitted: true,
             winner: false,
-            createdById: '0',
+            worker: activeMember,
             passed: false,
           },
         ]
@@ -189,9 +191,9 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('As oracle', async () => {
-      bounty.oracle = {
+      bounty.oracle = ({
         id: '0',
-      } as unknown as Member
+      } as unknown) as Member
 
       renderHeader()
 
@@ -219,7 +221,7 @@ describe('UI: BountyPreviewHeader', () => {
         {
           hasSubmitted: true,
           winner: true,
-          createdById: '0',
+          worker: activeMember,
           passed: false,
         },
       ]
@@ -234,7 +236,7 @@ describe('UI: BountyPreviewHeader', () => {
         {
           hasSubmitted: true,
           winner: false,
-          createdById: '0',
+          worker: activeMember,
           passed: true,
         },
       ]
@@ -246,7 +248,12 @@ describe('UI: BountyPreviewHeader', () => {
 
     it('Contributor', async () => {
       bounty.entries = []
-      bounty.contributors = ['0']
+      bounty.contributors = [
+        {
+          actor: activeMember,
+          amount: new BN(1222),
+        },
+      ]
 
       renderHeader()
 
@@ -274,7 +281,7 @@ describe('UI: BountyPreviewHeader', () => {
         {
           hasSubmitted: true,
           winner: false,
-          createdById: '0',
+          worker: activeMember,
           passed: false,
         },
       ]
@@ -286,7 +293,12 @@ describe('UI: BountyPreviewHeader', () => {
 
     it('Contributor', async () => {
       bounty.entries = []
-      bounty.contributors = ['0']
+      bounty.contributors = [
+        {
+          actor: activeMember,
+          amount: new BN(1222),
+        },
+      ]
 
       renderHeader()
 
@@ -309,9 +321,9 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('Creator', async () => {
-      bounty.creator = {
+      bounty.creator = ({
         id: '0',
-      } as unknown as Member
+      } as unknown) as Member
 
       renderHeader()
 
