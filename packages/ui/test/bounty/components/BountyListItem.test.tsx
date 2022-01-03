@@ -15,6 +15,7 @@ describe('UI: BountyListItem', () => {
   const props = {
     id: '1',
     createdAt: '2021-12-31',
+    description: 'Description',
     title: 'Title',
     cherry: new BN(1010),
     entrantStake: new BN(10000),
@@ -23,17 +24,14 @@ describe('UI: BountyListItem', () => {
     fundingType: {
       minAmount: new BN(10000),
       maxAmount: new BN(12000),
-      maxPeriod: new BN(2000),
+      maxPeriod: 2000,
     },
     workPeriod: new BN(1000),
     judgingPeriod: new BN(1000),
     totalFunding: new BN(2000),
-    entries: [
-      { worker: getMember('alice') },
-      { worker: getMember('bob') },
-      { worker: getMember('alice') },
-      { worker: getMember('bob'), winner: true },
-    ],
+    contributors: [],
+    contractType: 'ContractOpen' as const,
+    entries: [{ worker: getMember('alice'), winner: true, hasSubmitted: true, passed: false }],
   }
 
   beforeAll(() => {
