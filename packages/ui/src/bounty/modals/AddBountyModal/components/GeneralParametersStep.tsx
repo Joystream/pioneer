@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
+import styled from 'styled-components'
 
 import { GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent, InputText } from '@/common/components/forms'
+import { InputComponent, InputNotificationMessage, InputText } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -42,12 +43,30 @@ export const GeneralParametersStep = ({
       <Row>
         <RowGapBlock gap={20}>
           <SelectedMember disabled member={activeMember} label="Creator" />
-          <InputComponent id="field-title" label="Bounty title" inputSize="m" required>
-            <InputText id="field-title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          </InputComponent>
-          <InputComponent id="field-photo" label="Cover photo" inputSize="m" required>
-            <InputText id="field-photo" value={coverPhotoLink} onChange={(e) => setCoverPhoto(e.target.value)} />
-          </InputComponent>
+          <StyledInputComponent
+            id="field-title"
+            label="Bounty title"
+            inputSize="m"
+            required
+            message={title?.length > 70 ? 'Max length is 70 characters' : 'MAX 70'}
+            validation={title?.length > 70 ? 'invalid' : undefined}
+          >
+            <InputText id="field-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Type" />
+          </StyledInputComponent>
+          <StyledInputComponent
+            id="field-photo"
+            label="Cover photo"
+            inputSize="m"
+            required
+            message="JPG, PNG: 800x450px or aspect ratio: 16:9"
+          >
+            <InputText
+              id="field-photo"
+              value={coverPhotoLink}
+              onChange={(e) => setCoverPhoto(e.target.value)}
+              placeholder="Paste link to bounty’s cover photo"
+            />
+          </StyledInputComponent>
           <InputComponent id="field-description" inputSize="auto" label="Bounty description" required>
             <CKEditor
               id="field-description"
@@ -61,3 +80,9 @@ export const GeneralParametersStep = ({
     </RowGapBlock>
   )
 }
+
+const StyledInputComponent = styled(InputComponent)`
+  ${InputNotificationMessage} {
+    text-align: right;
+  }
+`

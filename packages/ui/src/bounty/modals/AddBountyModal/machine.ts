@@ -140,6 +140,8 @@ export type AddBountyModalMachineState = State<
 export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, AddBountyState>({
   initial: AddBountyStates.requirementsVerification,
   context: {
+    title: '',
+    coverPhotoLink: '',
     description: '',
     fundingPeriodType: 'perpetual',
     workingPeriodType: 'open',

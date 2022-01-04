@@ -65,7 +65,7 @@ export const FundingDetailsStep = ({
       </RowGapBlock>
       <RowGapBlock gap={20}>
         <InlineToggleWrap>
-          <Label>Discussion mode: </Label>
+          <Label>Discussion mode :</Label>
           <ToggleCheckbox
             falseLabel={
               <CheckBoxLabelWrapper>
@@ -77,7 +77,7 @@ export const FundingDetailsStep = ({
             }
             trueLabel={
               <CheckBoxLabelWrapper>
-                Limited
+                <StyledParagraph>Limited</StyledParagraph>
                 <Tooltip tooltipText="Lorem ipsum...">
                   <TooltipDefault />
                 </Tooltip>
@@ -161,4 +161,8 @@ const Subtitle = styled(TextMedium)`
 const CheckBoxLabelWrapper = styled.div`
   display: flex;
   column-gap: 4px;
+`
+
+const StyledParagraph = styled.p`
+  margin-left: 5px;
 `

@@ -476,7 +476,8 @@ const InputNotification = styled.div<InputProps>`
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
-  width: fit-content;
+  width: 100%;
+  grid-template-columns: auto 1fr;
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':
@@ -506,6 +507,6 @@ const InputNotificationIcon = styled.div`
   }
 `
 
-const InputNotificationMessage = styled(TextSmall)`
+export const InputNotificationMessage = styled(TextSmall)`
   color: inherit;
 `
