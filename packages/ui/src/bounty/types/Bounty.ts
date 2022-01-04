@@ -64,6 +64,7 @@ export interface EntryMiniature {
 export interface Bounty {
   id: string
   title: string
+  imageUri: string | null | undefined
   description: string
   createdAt: string
   cherry: BN

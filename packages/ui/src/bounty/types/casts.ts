@@ -56,16 +56,19 @@ const asContractType = (type: BountyFieldsFragment['contractType']): ContractTyp
 }
 
 export const asContributors = (contributors: BountyFieldsFragment['contributions']): Contributor[] => {
-  return contributors.map(({ amount, contributor }) => ({
-    amount,
-    actor: contributor ? asMember(contributor) : undefined,
-  }))
+  return (
+    contributors?.map(({ amount, contributor }) => ({
+      amount,
+      actor: contributor ? asMember(contributor) : undefined,
+    })) || []
+  )
 }
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title,
   description: fields.description,
+  imageUri: fields.bannerImageUri,
   createdAt: fields.createdAt,
   cherry: new BN(fields.cherry),
   entrantStake: new BN(fields.entrantStake),

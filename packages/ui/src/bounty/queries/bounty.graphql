@@ -2,6 +2,7 @@ fragment BountyFields on Bounty {
   id
   createdAt
   title
+  bannerImageUri
   description
   cherry
   entrantStake
