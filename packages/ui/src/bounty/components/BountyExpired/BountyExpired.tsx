@@ -27,7 +27,7 @@ export const BountyExpired = ({ bounty }: Props) => {
       <ExpiredTiles bounty={bounty} />
       <ExpiredTabs active={active} setActive={setActive} />
       <ContentWithSidePanel>
-        {active === 'Bounty' && <BountyTab />}
+        {active === 'Bounty' && <BountyTab bounty={bounty} />}
         {active === 'Works' && <WorkTab />}
         <RowGapBlock gap={4}>
           <BountySidebar
