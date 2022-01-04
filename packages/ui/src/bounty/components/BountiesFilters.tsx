@@ -79,13 +79,11 @@ export const BountyFilters = ({ searchSlot, periods, onApply }: BountyFiltersPro
       onSearch={(value) => {
         dispatch({ type: 'change', field: 'search', value })
       }}
+      searchLabel="Name"
     >
       <Fields>
-        <SearchBox>
-          <Label>Name</Label>
-          <div ref={searchSlot} title="Search" />
-        </SearchBox>
-        
+        <div ref={searchSlot} title="Search" />
+
         <FilterTextSelect
           title="Period"
           options={periods.map(camelCaseToText)}
@@ -123,7 +121,4 @@ const Fields = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 8px;
   align-items: center;
-`
-
-const SearchBox = styled.div`
 `
