@@ -5,17 +5,15 @@ import { CountBadge } from '@/common/components/CountBadge'
 import { TextBig } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 
-
-import { BountyListItem } from './BountyListItem/BountyListItem'
 import { Bounty } from '../types/Bounty'
 
+import { BountyListItem } from './BountyListItem/BountyListItem'
 
 interface Props {
   bounties: Bounty[]
 }
 
 export const BountiesList = memo(({ bounties }: Props) => {
-
   if (!bounties.length) {
     return <NotFoundText>No bounties matching search criteria</NotFoundText>
   }

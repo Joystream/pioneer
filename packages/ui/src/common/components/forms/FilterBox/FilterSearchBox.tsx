@@ -4,10 +4,11 @@ import styled from 'styled-components'
 
 import { InputComponent, InputText } from '@/common/components/forms'
 import { SearchIcon } from '@/common/components/icons'
+import { Colors } from '@/common/constants'
 
 import { ControlProps } from '../types'
+
 import { FilterLabel } from './FilterLabel'
-import { Colors } from '@/common/constants'
 
 interface FilterSearchBoxProps extends SearchBoxProps {
   slot: React.RefObject<HTMLDivElement>
@@ -20,7 +21,10 @@ export const FilterSearchBox = React.memo(({ value, slot, onApply, onChange, lab
     !rendered && setRendered(true)
   }, [])
 
-  return slot.current && createPortal(<SearchBox value={value} onApply={onApply} onChange={onChange} label={label} />, slot.current)
+  return (
+    slot.current &&
+    createPortal(<SearchBox value={value} onApply={onApply} onChange={onChange} label={label} />, slot.current)
+  )
 })
 
 interface SearchBoxProps extends ControlProps<string> {
@@ -33,7 +37,7 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label }: Search
   return (
     <SearchBoxWrapper>
       <FilterLabel>{label}</FilterLabel>
-      <SearchInput inputSize={!!label ? 'xs' : 's'}>
+      <SearchInput inputSize={label ? 'xs' : 's'}>
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
       </SearchInput>
     </SearchBoxWrapper>
@@ -56,4 +60,5 @@ const SearchInput = styled(InputComponent).attrs({
   tight: true,
   inputWidth: 'xs',
 })`
+  width: 100%;
 `

@@ -2,14 +2,14 @@ import React, { useMemo, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { FilterBox } from '@/common/components/forms/FilterBox'
+import { FilterTextSelect } from '@/common/components/selects'
 import { camelCaseToText } from '@/common/helpers'
 import { objectEquals } from '@/common/utils'
 import { SmallMemberSelect } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
-
-import { FilterTextSelect } from '@/common/components/selects'
 import { toCamelCase } from '@/proposals/components/ProposalFilters/helpers'
-import { Label } from '@/common/components/typography'
+
+import { bountyPeriods } from '../helpers'
 
 export interface BountyFiltersState {
   search: string
@@ -50,11 +50,10 @@ const isFilterEmpty = objectEquals(BountyEmptyFilter)
 
 export interface BountyFiltersProps {
   searchSlot: React.RefObject<HTMLDivElement>
-  periods: string[]
   onApply: (value: BountyFiltersState) => void
 }
 
-export const BountyFilters = ({ searchSlot, periods, onApply }: BountyFiltersProps) => {
+export const BountyFilters = ({ searchSlot, onApply }: BountyFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, BountyEmptyFilter)
   const { search, period, creator, oracle } = filters
 
@@ -86,7 +85,7 @@ export const BountyFilters = ({ searchSlot, periods, onApply }: BountyFiltersPro
 
         <FilterTextSelect
           title="Period"
-          options={periods.map(camelCaseToText)}
+          options={bountyPeriods.map(camelCaseToText)}
           value={period && camelCaseToText(period)}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'period', value })

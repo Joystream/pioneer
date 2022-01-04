@@ -9,5 +9,5 @@ export interface LayoutProps {
 }
 
 export const BountiesLayout = ({ children }: LayoutProps) => {
-  return <PageLayout header={BountiesHeader} main={children} />
+  return <PageLayout header={<BountiesHeader />} main={children} />
 }
