@@ -28,7 +28,7 @@ export const BountyExpired = ({ bounty }: Props) => {
       <ExpiredTabs active={active} setActive={setActive} />
       <ContentWithSidePanel>
         {active === 'Bounty' && <BountyTab bounty={bounty} />}
-        {active === 'Works' && <WorkTab />}
+        {active === 'Works' && <WorkTab bountyId={bounty.id} />}
         <RowGapBlock gap={4}>
           <BountySidebar
             // todo add contributors to schema

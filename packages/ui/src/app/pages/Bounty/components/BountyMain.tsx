@@ -11,7 +11,7 @@ export const BountyMain = ({ bounty }: BountyMainProps) => {
   const page = useMemo(() => {
     switch (bounty.stage) {
       case 'expired':
-        return <BountyExpired />
+        return <BountyExpired bounty={bounty} />
       default:
         return null
     }

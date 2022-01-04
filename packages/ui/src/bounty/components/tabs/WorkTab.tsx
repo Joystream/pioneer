@@ -1,21 +1,45 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BountyWorkListItem } from '@/bounty/components/BountyWorkListItem/BountyWorkListItem'
+import { useBountyWorks } from '@/bounty/hooks/useBountyWorks'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { List } from '@/common/components/List'
+import { Loading } from '@/common/components/Loading'
+import { NoData } from '@/common/components/NoData'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { TextExtraSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { Member } from '@/memberships/types'
-import members from '@/mocks/data/raw/members.json'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
-export const WorkTab = () => {
+interface Props {
+  bountyId: string
+}
+
+const randomizedBlock = randomBlock()
+
+export const WorkTab = ({ bountyId }: Props) => {
   const { t } = useTranslation('bounty')
   const [entrant, setEntrant] = useState<string>('')
+  const { works, isLoading } = useBountyWorks({ bountyId, workerHandleStartsWith: entrant })
+
+  const worksComponents = useMemo(() => {
+    if (works.length) {
+      return works.map((work) => (
+        <BountyWorkListItem
+          entrant={work.worker}
+          inBlock={randomizedBlock}
+          title={work.title}
+          description={work.description}
+          link=""
+        />
+      ))
+    }
+
+    return <NoData>No works</NoData>
+  }, [])
 
   return (
     <RowGapBlock gap={4}>
@@ -32,44 +56,7 @@ export const WorkTab = () => {
           </InputComponent>
         </div>
       </FilterContainer>
-      <StyledList as="div">
-        <BountyWorkListItem
-          entrant={members[0] as unknown as Member}
-          inBlock={randomBlock()}
-          title="Title"
-          description="Description"
-          link="https://www.google.com"
-        />
-        <BountyWorkListItem
-          entrant={members[0] as unknown as Member}
-          inBlock={randomBlock()}
-          title="Title"
-          description="Description"
-          link="https://www.google.com"
-        />
-        <BountyWorkListItem
-          entrant={members[0] as unknown as Member}
-          inBlock={randomBlock()}
-          title="Title"
-          description="Description"
-          link="https://www.google.com"
-          withdrawn
-        />
-        <BountyWorkListItem
-          entrant={members[0] as unknown as Member}
-          inBlock={randomBlock()}
-          title="Title"
-          description="Description"
-          link="https://www.google.com"
-        />
-        <BountyWorkListItem
-          entrant={members[0] as unknown as Member}
-          inBlock={randomBlock()}
-          title="Title"
-          description="Description"
-          link="https://www.google.com"
-        />
-      </StyledList>
+      <StyledList as="div">{isLoading ? <Loading /> : worksComponents}</StyledList>
       <Pagination handlePageChange={() => undefined} page={1} pageCount={3} />
     </RowGapBlock>
   )

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
-import { Bounty, isPerpetual } from '@/bounty/types/Bounty'
+import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 
@@ -28,7 +28,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         title: t('tiles.periodLength.title'),
         content: (
           <TextHuge value bold>
-            {isPerpetual(bounty.fundingType) ? 'Perpetual' : 'Limited'}
+            {isFundingLimited(bounty.fundingType) ? 'Limited' : 'Perpetual'}
           </TextHuge>
         ),
         tooltipText: t('tiles.periodLength.tooltip'),
