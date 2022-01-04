@@ -55,6 +55,24 @@ fragment BountyFields on Bounty {
   }
 }
 
+fragment BountyWorkFields on BountyWorkData {
+  id
+  description
+  title
+
+  entry {
+    worker {
+      ...MemberFields
+    }
+    status {
+      __typename
+      ... on BountyEntryStatusWinner {
+        reward
+      }
+    }
+  }
+}
+
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
   bounties(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...BountyFields
@@ -70,5 +88,11 @@ query GetBountiesCount($where: BountyWhereInput) {
 query GetBounty($where: BountyWhereUniqueInput!) {
   bountyByUniqueInput(where: $where) {
     ...BountyFields
+  }
+}
+
+query GetBountyWorks($where: BountyWorkDataWhereInput) {
+  bountyWorkData(where: $where) {
+    ...BountyWorkFields
   }
 }

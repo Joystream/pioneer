@@ -6,6 +6,22 @@ export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
+export type BountyEntryStatus =
+  | 'BountyEntryStatusWorking'
+  | 'BountyEntryStatusWithdrawn'
+  | BountyEntryStatusWinner
+  | 'BountyEntryStatusPassed'
+  | 'BountyEntryStatusRejected'
+  | 'BountyEntryStatusCashedOut'
+
+export const isBountyEntryStatusWinner = (status: BountyEntryStatus): status is BountyEntryStatusWinner => {
+  return (status as BountyEntryStatusWinner)?.reward !== undefined
+}
+
+export type BountyEntryStatusWinner = {
+  reward: number
+}
+
 export interface Contributor {
   actor: Member | undefined
   amount: BN
@@ -59,6 +75,14 @@ export interface EntryMiniature {
   hasSubmitted: boolean
   passed: boolean
   worker: Member
+}
+
+export interface BountyWork {
+  id: string
+  worker: Member
+  title: string
+  description: string
+  status: BountyEntryStatus
 }
 
 export interface Bounty {

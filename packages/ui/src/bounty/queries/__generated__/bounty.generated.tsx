@@ -163,6 +163,48 @@ export type BountyFieldsFragment = {
   createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
 }
 
+export type BountyWorkFieldsFragment = {
+  __typename: 'BountyWorkData'
+  id: string
+  description: string
+  title: string
+  entry: {
+    __typename: 'BountyEntry'
+    worker: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null | undefined
+        about?: string | null | undefined
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    status:
+      | { __typename: 'BountyEntryStatusCashedOut' }
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+  }
+}
+
 export type GetBountiesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.BountyWhereInput>
   orderBy?: Types.InputMaybe<Array<Types.BountyOrderByInput> | Types.BountyOrderByInput>
@@ -536,6 +578,55 @@ export type GetBountyQuery = {
     | undefined
 }
 
+export type GetBountyWorksQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.BountyWorkDataWhereInput>
+}>
+
+export type GetBountyWorksQuery = {
+  __typename: 'Query'
+  bountyWorkData: Array<{
+    __typename: 'BountyWorkData'
+    id: string
+    description: string
+    title: string
+    entry: {
+      __typename: 'BountyEntry'
+      worker: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+    }
+  }>
+}
+
 export const BountyFieldsFragmentDoc = gql`
   fragment BountyFields on Bounty {
     id
@@ -591,6 +682,25 @@ export const BountyFieldsFragmentDoc = gql`
     }
     createdInEvent {
       inBlock
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const BountyWorkFieldsFragmentDoc = gql`
+  fragment BountyWorkFields on BountyWorkData {
+    id
+    description
+    title
+    entry {
+      worker {
+        ...MemberFields
+      }
+      status {
+        __typename
+        ... on BountyEntryStatusWinner {
+          reward
+        }
+      }
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -715,3 +825,43 @@ export function useGetBountyLazyQuery(
 export type GetBountyQueryHookResult = ReturnType<typeof useGetBountyQuery>
 export type GetBountyLazyQueryHookResult = ReturnType<typeof useGetBountyLazyQuery>
 export type GetBountyQueryResult = Apollo.QueryResult<GetBountyQuery, GetBountyQueryVariables>
+export const GetBountyWorksDocument = gql`
+  query GetBountyWorks($where: BountyWorkDataWhereInput) {
+    bountyWorkData(where: $where) {
+      ...BountyWorkFields
+    }
+  }
+  ${BountyWorkFieldsFragmentDoc}
+`
+
+/**
+ * __useGetBountyWorksQuery__
+ *
+ * To run a query within a React component, call `useGetBountyWorksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBountyWorksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBountyWorksQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetBountyWorksQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBountyWorksQuery, GetBountyWorksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBountyWorksQuery, GetBountyWorksQueryVariables>(GetBountyWorksDocument, options)
+}
+export function useGetBountyWorksLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBountyWorksQuery, GetBountyWorksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBountyWorksQuery, GetBountyWorksQueryVariables>(GetBountyWorksDocument, options)
+}
+export type GetBountyWorksQueryHookResult = ReturnType<typeof useGetBountyWorksQuery>
+export type GetBountyWorksLazyQueryHookResult = ReturnType<typeof useGetBountyWorksLazyQuery>
+export type GetBountyWorksQueryResult = Apollo.QueryResult<GetBountyWorksQuery, GetBountyWorksQueryVariables>

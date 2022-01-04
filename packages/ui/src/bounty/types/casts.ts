@@ -4,9 +4,19 @@ import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/ap
 import { lowerFirstLetter } from '@/common/helpers'
 import { asMember } from '@/memberships/types'
 
-import { BountyFieldsFragment } from '../queries'
+import { BountyFieldsFragment, BountyWorkFieldsFragment } from '../queries'
 
-import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType, ContractType, Contributor } from './Bounty'
+import {
+  Bounty,
+  BountyPeriod,
+  BountyStage,
+  EntryMiniature,
+  FundingType,
+  ContractType,
+  Contributor,
+  BountyWork,
+  BountyEntryStatus,
+} from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
   switch (stage) {
@@ -63,6 +73,24 @@ export const asContributors = (contributors: BountyFieldsFragment['contributions
     })) || []
   )
 }
+
+const asBountyEntryStatus = (field: BountyWorkFieldsFragment['entry']['status']): BountyEntryStatus => {
+  if (field.__typename === 'BountyEntryStatusWinner') {
+    return {
+      reward: field.reward,
+    }
+  }
+
+  return field.__typename
+}
+
+export const asBountyWork = (fields: BountyWorkFieldsFragment): BountyWork => ({
+  id: fields.id,
+  title: fields.title,
+  description: fields.description,
+  worker: asMember(fields.entry.worker),
+  status: asBountyEntryStatus(fields.entry.status),
+})
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
