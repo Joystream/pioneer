@@ -29,6 +29,7 @@ export const WorkTab = ({ bountyId }: Props) => {
     if (works.length) {
       return works.map((work) => (
         <BountyWorkListItem
+          key={work.id}
           entrant={work.worker}
           inBlock={randomizedBlock}
           title={work.title}

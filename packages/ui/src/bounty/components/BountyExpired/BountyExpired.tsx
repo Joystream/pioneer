@@ -31,8 +31,7 @@ export const BountyExpired = ({ bounty }: Props) => {
         {active === 'Works' && <WorkTab bountyId={bounty.id} />}
         <RowGapBlock gap={4}>
           <BountySidebar
-            // todo add contributors to schema
-            contributors={[]}
+            contributors={bounty.contributors}
             stage="expired"
             periodsLengths={{
               fundingPeriodLength: BN_ZERO,
