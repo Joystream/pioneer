@@ -802,6 +802,11 @@ type Bounty implements BaseGraphQLObject {
   description: String!
 
   """
+  Bounty image uri
+  """
+  bannerImageUri: String
+
+  """
   Amount of funding provided by the creator
   """
   cherry: BigInt!
@@ -841,13 +846,13 @@ type Bounty implements BaseGraphQLObject {
   stage: BountyStage!
 
   """
-  Total amount available for the reward
+  Total amount currently available for the reward
   """
   totalFunding: BigInt!
   discussionThread: ForumThread!
   discussionThreadId: String!
-  contributions: [BountyContribution!]!
-  entries: [BountyEntry!]!
+  contributions: [BountyContribution!]
+  entries: [BountyEntry!]
   createdInEvent: BountyCreatedEvent!
   createdInEventId: String!
   maxFundingReachedEvent: BountyMaxFundingReachedEvent
@@ -879,7 +884,8 @@ type BountyContribution implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  bounty: [Bounty!]!
+  bounty: Bounty!
+  bountyId: String!
   contributor: Membership
   contributorId: String
 
@@ -896,6 +902,7 @@ type BountyContributionConnection {
 }
 
 input BountyContributionCreateInput {
+  bounty: ID!
   contributor: ID
   amount: String!
 }
@@ -912,6 +919,8 @@ enum BountyContributionOrderByInput {
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
+  bounty_ASC
+  bounty_DESC
   contributor_ASC
   contributor_DESC
   amount_ASC
@@ -919,6 +928,7 @@ enum BountyContributionOrderByInput {
 }
 
 input BountyContributionUpdateInput {
+  bounty: ID
   contributor: ID
   amount: String
 }
@@ -954,9 +964,7 @@ input BountyContributionWhereInput {
   amount_lt: BigInt
   amount_lte: BigInt
   amount_in: [BigInt!]
-  bounty_none: BountyWhereInput
-  bounty_some: BountyWhereInput
-  bounty_every: BountyWhereInput
+  bounty: BountyWhereInput
   contributor: MembershipWhereInput
   AND: [BountyContributionWhereInput!]
   OR: [BountyContributionWhereInput!]
@@ -1102,6 +1110,7 @@ input BountyCreatedEventWhereUniqueInput {
 input BountyCreateInput {
   title: String!
   description: String!
+  bannerImageUri: String
   cherry: String!
   entrantStake: String!
   creator: ID
@@ -1131,7 +1140,8 @@ type BountyEntry implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  bounty: [Bounty!]!
+  bounty: Bounty!
+  bountyId: String!
   worker: Membership!
   workerId: String!
 
@@ -1149,7 +1159,7 @@ type BountyEntry implements BaseGraphQLObject {
   Whether at least one work has been submitted
   """
   workSubmitted: Boolean!
-  works: [BountyWorkData!]!
+  works: [BountyWorkData!]
 
   """
   Work entry status
@@ -1166,6 +1176,7 @@ type BountyEntryConnection {
 }
 
 input BountyEntryCreateInput {
+  bounty: ID!
   worker: ID!
   stake: String!
   stakingAccount: String
@@ -1186,6 +1197,8 @@ enum BountyEntryOrderByInput {
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
+  bounty_ASC
+  bounty_DESC
   worker_ASC
   worker_DESC
   stake_ASC
@@ -1231,6 +1244,7 @@ type BountyEntryStatusWorking {
 }
 
 input BountyEntryUpdateInput {
+  bounty: ID
   worker: ID
   stake: String
   stakingAccount: String
@@ -1278,9 +1292,7 @@ input BountyEntryWhereInput {
   workSubmitted_eq: Boolean
   workSubmitted_in: [Boolean!]
   status_json: JSONObject
-  bounty_none: BountyWhereInput
-  bounty_some: BountyWhereInput
-  bounty_every: BountyWhereInput
+  bounty: BountyWhereInput
   worker: MembershipWhereInput
   works_none: BountyWorkDataWhereInput
   works_some: BountyWorkDataWhereInput
@@ -1464,6 +1476,8 @@ enum BountyOrderByInput {
   title_DESC
   description_ASC
   description_DESC
+  bannerImageUri_ASC
+  bannerImageUri_DESC
   cherry_ASC
   cherry_DESC
   entrantStake_ASC
@@ -1501,6 +1515,7 @@ enum BountyStage {
 input BountyUpdateInput {
   title: String
   description: String
+  bannerImageUri: String
   cherry: String
   entrantStake: String
   creator: ID
@@ -1551,6 +1566,11 @@ input BountyWhereInput {
   description_startsWith: String
   description_endsWith: String
   description_in: [String!]
+  bannerImageUri_eq: String
+  bannerImageUri_contains: String
+  bannerImageUri_startsWith: String
+  bannerImageUri_endsWith: String
+  bannerImageUri_in: [String!]
   cherry_eq: BigInt
   cherry_gt: BigInt
   cherry_gte: BigInt
@@ -1616,7 +1636,8 @@ type BountyWorkData implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  entry: [BountyEntry!]!
+  entry: BountyEntry!
+  entryId: String!
 
   """
   Title of the work
@@ -1636,6 +1657,7 @@ type BountyWorkDataConnection {
 }
 
 input BountyWorkDataCreateInput {
+  entry: ID!
   title: String!
   description: String!
 }
@@ -1652,6 +1674,8 @@ enum BountyWorkDataOrderByInput {
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
+  entry_ASC
+  entry_DESC
   title_ASC
   title_DESC
   description_ASC
@@ -1659,6 +1683,7 @@ enum BountyWorkDataOrderByInput {
 }
 
 input BountyWorkDataUpdateInput {
+  entry: ID
   title: String
   description: String
 }
@@ -1698,9 +1723,7 @@ input BountyWorkDataWhereInput {
   description_startsWith: String
   description_endsWith: String
   description_in: [String!]
-  entry_none: BountyEntryWhereInput
-  entry_some: BountyEntryWhereInput
-  entry_every: BountyEntryWhereInput
+  entry: BountyEntryWhereInput
   AND: [BountyWorkDataWhereInput!]
   OR: [BountyWorkDataWhereInput!]
 }

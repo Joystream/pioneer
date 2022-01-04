@@ -42,16 +42,11 @@ Default.args = {
   fundingType: {
     minAmount: new BN(10000),
     maxAmount: new BN(12000),
-    maxPeriod: new BN(2000),
+    maxPeriod: 2000,
   },
   workPeriod: new BN(1000),
   judgingPeriod: new BN(1000),
   stage: 'funding',
   totalFunding: new BN(2000),
-  entries: [
-    { worker: getMember('alice') },
-    { worker: getMember('bob') },
-    { worker: getMember('alice') },
-    { worker: getMember('bob'), winner: true },
-  ],
+  entries: [{ worker: getMember('alice'), winner: true, hasSubmitted: true, passed: false }],
 }

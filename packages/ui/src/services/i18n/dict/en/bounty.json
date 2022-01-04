@@ -41,5 +41,15 @@
     "entrants": "Entrants",
     "withdrawals": "Withdrawals",
     "contributors": "Contributors"
+  },
+  "bountyFields": {
+    "cherry": "Cherry",
+    "entrantStake": "Entrant Stake"
+  },
+  "buttons": {
+    "announceEntry": "Announce Entry",
+    "submitWork": "Submit Work",
+    "submitJudgement": "Submit Judgement",
+    "cancelBounty": "Cancel Bounty"
   }
 }

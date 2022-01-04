@@ -6,7 +6,7 @@ import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType } from './Bounty'
+import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType, ContractType, Contributor } from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
   switch (stage) {
@@ -28,7 +28,7 @@ const asFunding = (field: BountyFundingType): FundingType => {
   return {
     minAmount: new BN(field.minFundingAmount),
     maxAmount: new BN(field.maxFundingAmount),
-    maxPeriod: new BN(field.fundingPeriod),
+    maxPeriod: field.fundingPeriod,
   }
 }
 
@@ -40,14 +40,32 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniatu
   return entriesFields?.map((entry) => {
     return {
       worker: asMember(entry.worker),
+      hasSubmitted: entry.workSubmitted,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
+      passed: entry.status.__typename === 'BountyEntryStatusPassed',
     }
   })
+}
+
+const asContractType = (type: BountyFieldsFragment['contractType']): ContractType => {
+  return type.__typename === 'BountyContractOpen'
+    ? 'ContractOpen'
+    : {
+        whitelist: type.whitelist?.map((member) => member.id) || [],
+      }
+}
+
+export const asContributors = (contributors: BountyFieldsFragment['contributions']): Contributor[] => {
+  return contributors.map(({ amount, contributor }) => ({
+    amount,
+    actor: contributor ? asMember(contributor) : undefined,
+  }))
 }
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title,
+  description: fields.description,
   createdAt: fields.createdAt,
   cherry: new BN(fields.cherry),
   entrantStake: new BN(fields.entrantStake),
@@ -60,5 +78,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
   entries: asEntries(fields.entries),
+  contractType: asContractType(fields.contractType),
+  contributors: asContributors(fields.contributions),
   inBlock: fields.createdInEvent.inBlock,
 })
