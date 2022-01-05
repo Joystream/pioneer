@@ -1,7 +1,9 @@
 import { asBaseActivity, asMemberDisplayFields } from '@/common/types'
+import { NarrowQueryResult } from '@/common/utils/casting'
 import {
   CategoryCreatedEventFieldsFragment,
   CategoryDeletedEventFieldsFragment,
+  GetForumEventsQuery,
   PostAddedEventFieldsFragment,
   PostDeletedEventFieldsFragment,
   PostModeratedEventFieldsFragment,
@@ -9,10 +11,11 @@ import {
   ThreadCreatedEventFieldsFragment,
   ThreadDeletedEventFieldsFragment,
   ThreadModeratedEventFieldsFragment,
-} from '@/forum/queries/__generated__/forumEvents.generated'
+} from '@/forum/queries'
 
 import {
   CategoryDeletedActivity,
+  ForumActivity,
   PostDeletedActivity,
   PostModeratedActivity,
   ThreadDeletedActivity,
@@ -115,3 +118,33 @@ export function asCategoryDeletedActivity(fields: CategoryDeletedEventFieldsFrag
     parentCategory: fields.category.parent ? fields.category.parent : undefined,
   }
 }
+
+type EventsQueryResult = GetForumEventsQuery['events'][number]
+type ForumEventsQueryResultTypes =
+  | 'PostAddedEvent'
+  | 'PostTextUpdatedEvent'
+  | 'PostModeratedEvent'
+  | 'PostDeletedEvent'
+  | 'ThreadCreatedEvent'
+  | 'ThreadDeletedEvent'
+  | 'ThreadModeratedEvent'
+  | 'CategoryCreatedEvent'
+  | 'CategoryDeletedEvent'
+type ForumEventsQueryResult = NarrowQueryResult<EventsQueryResult, ForumEventsQueryResultTypes>
+
+const activityCastByType: Record<ForumEventsQueryResultTypes, (fields: any) => ForumActivity> = {
+  PostAddedEvent: asPostActivity,
+  PostTextUpdatedEvent: asPostActivity,
+  PostModeratedEvent: asPostModeratedActivity,
+  PostDeletedEvent: asPostDeletedActivity,
+  ThreadCreatedEvent: asThreadCreatedActivity,
+  ThreadDeletedEvent: asThreadDeletedActivity,
+  ThreadModeratedEvent: asThreadModeratedActivity,
+  CategoryCreatedEvent: asCategoryCreatedActivity,
+  CategoryDeletedEvent: asCategoryDeletedActivity,
+}
+
+export const asForumActivities = (events: EventsQueryResult[]) =>
+  events
+    .filter((fields): fields is ForumEventsQueryResult => fields.__typename in activityCastByType)
+    .map((eventFields) => activityCastByType[eventFields.__typename](eventFields))

@@ -54,16 +54,7 @@ export const PastCouncil = () => {
             <BadgeStatus inverted size="l">
               Past Council
             </BadgeStatus>
-            <BlockTime
-              block={{
-                network: 'OLYMPIA',
-                timestamp: new Date().toString(),
-                number: council.endedAtBlock,
-              }}
-              lessInfo
-              dateLabel="Term ended at"
-              layout="row"
-            />
+            <BlockTime block={council.endedAt} lessInfo dateLabel="Term ended at" layout="row" />
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>

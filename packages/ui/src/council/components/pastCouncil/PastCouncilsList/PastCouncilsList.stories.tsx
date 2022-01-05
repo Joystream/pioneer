@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router'
 
 import { PastCouncilsList } from '@/council/components/pastCouncil/PastCouncilsList/PastCouncilsList'
 import { PastCouncil } from '@/council/types/PastCouncil'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export default {
   title: 'Council/PastCouncils',
@@ -28,9 +29,9 @@ export const Default = Template.bind({})
 
 Default.args = {
   councils: [
-    { id: '0', endedAtBlock: 112145 },
-    { id: '1', endedAtBlock: 222346 },
-    { id: '1', endedAtBlock: 45233 },
+    { id: '0', endedAt: randomBlock() },
+    { id: '1', endedAt: randomBlock() },
+    { id: '1', endedAt: randomBlock() },
   ],
   isLoading: false,
 }

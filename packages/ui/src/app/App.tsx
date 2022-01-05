@@ -1,6 +1,8 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import '@/services/i18n'
+
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'

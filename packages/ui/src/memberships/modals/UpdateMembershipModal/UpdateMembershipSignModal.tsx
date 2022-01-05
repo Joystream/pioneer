@@ -50,6 +50,7 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
       metadataToBytes(MembershipMetadata, {
         about: transactionParams.about ?? null,
         name: transactionParams.name ?? null,
+        avatarUri: transactionParams.avatarUri ?? '',
       })
     )
     transactions.push(updateProfile)

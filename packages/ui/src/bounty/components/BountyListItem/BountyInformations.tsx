@@ -1,41 +1,44 @@
-import React from 'react'
+import BN from 'bn.js'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
-import { BountyPeriod } from '@/bounty/types/Bounty'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
-import { DurationStatistics } from '@/common/components/statistics'
+import { BlockDurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
-import { MemberAvatar } from '@/memberships/components/Avatar'
+import { MemberInfoAvatar } from '@/memberships/components/Avatar'
+import { Member } from '@/memberships/types'
 
 interface Props {
-  period: BountyPeriod
   title: string
-  creator: string
-  date?: Date
+  creator?: Member
+  timeToEnd?: BN
 }
 
-export const BountyInformations = ({ period, creator, date, title }: Props) => {
+export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
-        <TextMedium bold>
-          {creator}
-          <AvatarWrapper>
-            <MemberAvatar isLead avatarUri={null} />
-          </AvatarWrapper>
-        </TextMedium>
+        {creator && (
+          <TextMedium bold>
+            {creator.handle}
+            <AvatarWrapper>
+              <MemberInfoAvatar member={creator} />
+            </AvatarWrapper>
+          </TextMedium>
+        )}
         <TextHuge bold>{title}</TextHuge>
       </TitleContainer>
       <BadgeDurationContainer>
         <BadgesRow space={8}>
+          {/* TODO: add tags to schema */}
           <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
           <BadgeStatus inverted>ELECTION #6</BadgeStatus>
         </BadgesRow>
-        {period !== 'expired' && date && <DurationStatistics size="s" value={date.toISOString()} title="Time" />}
+        {timeToEnd && <BlockDurationStatistics size="s" value={timeToEnd} title="Time left" hideBlockNumber />}
       </BadgeDurationContainer>
     </Wrapper>
   )
-}
+})
 
 const Wrapper = styled.div`
   flex: 6;

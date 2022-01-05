@@ -50,7 +50,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     name: member.name || '',
     handle: member.handle || '',
     about: '',
-    avatarUri: member.avatar || '',
+    avatarUri: typeof member.avatar === 'string' ? member.avatar : '',
     rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
     controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
   }

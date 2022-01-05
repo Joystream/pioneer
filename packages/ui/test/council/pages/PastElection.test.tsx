@@ -15,7 +15,6 @@ import {
   RawCouncilCandidateMock,
   seedCouncilCandidate,
   seedCouncilElection,
-  seedCouncilReferendumResult,
   seedCouncilVote,
   seedElectedCouncil,
   seedMembers,
@@ -109,9 +108,17 @@ describe('UI: Past Election page', () => {
       },
       mockServer.server
     )
-    seedCouncilElection({ id: '1', cycleId: 1, isFinished: true, electedCouncilId: '1' }, mockServer.server)
-    seedCouncilReferendumResult(
-      { id: '1', electionRoundId: '1', referendumFinishedEvent: randomRawBlock() },
+    const endedAtBlock = randomRawBlock()
+    seedCouncilElection(
+      {
+        id: '1',
+        cycleId: 1,
+        isFinished: true,
+        endedAtBlock: endedAtBlock.inBlock,
+        endedAtTime: endedAtBlock.createdAt,
+        endedAtNetwork: endedAtBlock.network,
+        electedCouncilId: '1',
+      },
       mockServer.server
     )
     TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))

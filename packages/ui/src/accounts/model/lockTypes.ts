@@ -91,6 +91,14 @@ export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]
   return existingLocks.some(({ type }) => !COMPATIBLE_LOCKS[lock].has(type))
 }
 
+const isLockType = (item: LockType | undefined): item is LockType => {
+  return !!item
+}
+
+export const conflictingLocks = (lock: LockType, existingLocks: BalanceLock[]) => {
+  return existingLocks.map(({ type }) => (!COMPATIBLE_LOCKS[lock].has(type) ? type : undefined)).filter(isLockType)
+}
+
 export const lockLookup = (id: LockIdentifier): LockType => {
   return lockTypes[id.toHex()]
 }

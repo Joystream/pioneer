@@ -1,5 +1,7 @@
 import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 
+import { seedOverridableEntities } from '../helpers/seedEntities'
+
 import rawApplications from './raw/applications.json'
 
 export interface RawApplication {
@@ -43,8 +45,7 @@ export const seedApplication = (rawApplication: RawApplication, server: any) => 
   seedAnswers(application, answers, server)
 }
 
-export const seedApplications = (server: any) =>
-  mockApplications.forEach((application) => seedApplication(application, server))
+export const seedApplications = seedOverridableEntities(mockApplications, seedApplication)
 
 function seedStatus(status: string | undefined, server: any) {
   switch (status) {
