@@ -51,9 +51,10 @@ const isFilterEmpty = objectEquals(BountyEmptyFilter)
 export interface BountyFiltersProps {
   searchSlot: React.RefObject<HTMLDivElement>
   onApply: (value: BountyFiltersState) => void
+  periodFilter?: boolean
 }
 
-export const BountyFilters = ({ searchSlot, onApply }: BountyFiltersProps) => {
+export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, BountyEmptyFilter)
   const { search, period, creator, oracle } = filters
 
@@ -80,18 +81,20 @@ export const BountyFilters = ({ searchSlot, onApply }: BountyFiltersProps) => {
       }}
       searchLabel="Name"
     >
-      <Fields>
+      <Fields columns={periodFilter ? 4 : 3}>
         <div ref={searchSlot} title="Search" />
 
-        <FilterTextSelect
-          title="Period"
-          options={bountyPeriods.map(camelCaseToText)}
-          value={period && camelCaseToText(period)}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'period', value })
-            onApply({ ...filters, period: toCamelCase(value) })
-          }}
-        />
+        {periodFilter && (
+          <FilterTextSelect
+            title="Period"
+            options={bountyPeriods.map(camelCaseToText)}
+            value={period && camelCaseToText(period)}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'period', value })
+              onApply({ ...filters, period: toCamelCase(value) })
+            }}
+          />
+        )}
 
         <SmallMemberSelect
           title="Proposer"
@@ -115,9 +118,9 @@ export const BountyFilters = ({ searchSlot, onApply }: BountyFiltersProps) => {
   )
 }
 
-const Fields = styled.div`
+const Fields = styled.div<{ columns: number }>`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: ${({ columns }) => 'repeat(' + columns + ', 1fr)'};
   grid-column-gap: 8px;
   align-items: center;
 `

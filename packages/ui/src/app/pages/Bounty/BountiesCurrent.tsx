@@ -20,12 +20,12 @@ export const BountiesCurrent = () => {
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
   const { onSort, isDescending } = getSortProps('createdAt')
 
-  const { isLoading, bounties, pagination } = useBounties({ order, filters })
+  const { isLoading, bounties, pagination } = useBounties({ order, filters, status: 'active' })
 
   return (
     <BountiesLayout>
       <BountiesMain />
-      <BountyFilters searchSlot={searchSlot} onApply={setFilters} />
+      <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
       {isLoading ? (
         <>
           <SimpleSelect
