@@ -8,13 +8,16 @@ import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { BountyFiltersState } from '../components/BountiesFilters'
 import { asBounty } from '../types/casts'
 
+type BountyStatus = 'active' | 'past'
+
 interface UseBountiesProps {
   order: SortOrder<BountyOrderByInput>
   perPage?: number
   filters?: BountyFiltersState
+  status: BountyStatus
 }
 
-export const useBounties = ({ order, perPage = 10, filters }: UseBountiesProps) => {
+export const useBounties = ({ order, perPage = 10, filters, status }: UseBountiesProps) => {
   const orderBy = toQueryOrderByInput<BountyOrderByInput>(order)
   const { data: dataCount } = useGetBountiesCountQuery()
   const totalCountPerPage = dataCount?.bountiesConnection.totalCount
@@ -27,22 +30,26 @@ export const useBounties = ({ order, perPage = 10, filters }: UseBountiesProps) 
       where.title_contains = filters.search
     }
 
+    if (status === 'past') {
+      where.stage_eq = BountyStage['Terminated']
+    }
+
     if (filters?.period) {
-      switch (filters.period) {
-        case 'funding':
+      switch (filters?.period) {
+        case 'Funding':
           where.stage_eq = BountyStage['Funding']
           break
-        case 'working':
+        case 'Working':
           where.stage_eq = BountyStage['WorkSubmission']
           break
-        case 'judgement':
+        case 'Judgement':
           where.stage_eq = BountyStage['Judgment']
           break
-        case 'expired':
+        case 'Expired':
           where.stage_eq = BountyStage['Expired']
           break
-        case 'withdrawal':
-          where.OR = [{ stage_eq: BountyStage['Successful'] }, { stage_eq: BountyStage['Failed'] }]
+        case 'Withdrawal':
+          where.stage_in = [BountyStage['Successful'], BountyStage['Failed']]
           break
       }
     }
@@ -56,7 +63,7 @@ export const useBounties = ({ order, perPage = 10, filters }: UseBountiesProps) 
     }
 
     return { where, orderBy, limit: perPage, offset }
-  }, [JSON.stringify(filters)])
+  }, [status, JSON.stringify(filters)])
 
   const { loading, data } = useGetBountiesQuery({ variables })
 
