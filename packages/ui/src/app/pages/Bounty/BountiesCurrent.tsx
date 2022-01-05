@@ -20,7 +20,7 @@ export const BountiesCurrent = () => {
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
   const { onSort, isDescending } = getSortProps('createdAt')
 
-  const { isLoading, bounties, pagination } = useBounties({ order })
+  const { isLoading, bounties, pagination } = useBounties({ order, filters })
 
   return (
     <BountiesLayout>
