@@ -1,14 +1,14 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { EmptyObject } from '@/common/types'
-
 import {
   isTransactionCanceled,
   isTransactionError,
   isTransactionSuccess,
   transactionMachine,
-} from '../../../common/model/machines'
+} from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
+
 
 interface Context {
   transactionEvents?: EventRecord[]

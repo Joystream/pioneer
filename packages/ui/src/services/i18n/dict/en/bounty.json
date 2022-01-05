@@ -8,5 +8,22 @@
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty"
+  },
+  "modals": {
+    "contribute": {
+      "title": "Contribute",
+      "nextButton": "Contribute",
+      "halfButton": "Use half",
+      "maxButton": "Use max",
+      "bountyId": "Bounty ID",
+      "stakingAccount": "Staking account",
+      "selectAmount": "Select amount for contributing",
+      "selectAmountSubtitle": "You must contribute at least {{value}} JOY.",
+      "contributeAmount": "Contribute amount",
+      "transactionFee": "Transaction fee",
+      "rangeTitle": "Funded",
+      "maxRangeTitle": "Maximal range",
+      "minRangeTitle": "Minimal range"
+    }
   }
 }
