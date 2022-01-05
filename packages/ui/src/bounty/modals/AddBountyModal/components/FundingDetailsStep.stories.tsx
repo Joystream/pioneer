@@ -27,6 +27,8 @@ const FundingDetailsTemplate: Story = () => {
         fundingMinimalRange={fundingMinimalRange}
         cherry={cherry}
         setCherry={setCherry}
+        maxCherryLimit={1000}
+        minCherryLimit={10}
         setFundingPeriodLength={setFundingPeriodLength}
         fundingPeriodLength={fundingPeriodLength}
         setFundingPeriodType={setFundingPeriodType}

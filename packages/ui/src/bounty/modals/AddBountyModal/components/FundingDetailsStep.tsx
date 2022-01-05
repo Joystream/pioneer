@@ -18,6 +18,8 @@ export interface FundingDetailsStepProps extends Omit<FundingPeriodDetailsContex
   setFundingPeriodLength: (fundingPeriodLength: BN) => void
   setFundingPeriodType: (fundingPeriodType: string) => void
   account?: Address
+  maxCherryLimit: number
+  minCherryLimit: number
 }
 
 export const FundingDetailsStep = ({
@@ -31,6 +33,8 @@ export const FundingDetailsStep = ({
   setFundingPeriodLength,
   setFundingMinimalRange,
   setFundingMaximalRange,
+  maxCherryLimit,
+  minCherryLimit,
 }: FundingDetailsStepProps) => {
   const switchCheckbox = (isSet: boolean) => {
     if (isSet) {
@@ -39,6 +43,12 @@ export const FundingDetailsStep = ({
     setFundingPeriodType('perpetual')
     setFundingMinimalRange(BN_ZERO)
   }
+  const cherryValidation =
+    cherry?.toNumber() > maxCherryLimit
+      ? 'Cherry is higher than available amount'
+      : cherry?.toNumber() < minCherryLimit
+      ? 'Cherry is to low'
+      : ''
 
   return (
     <RowGapBlock gap={24}>
@@ -53,6 +63,7 @@ export const FundingDetailsStep = ({
           units="JOY"
           required
           tooltipText="Funding period tooltip"
+          message={cherryValidation}
         >
           <InputNumber
             id="field-cherry"

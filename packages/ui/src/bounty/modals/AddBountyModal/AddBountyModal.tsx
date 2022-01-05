@@ -34,7 +34,7 @@ export const AddBountyModal = () => {
   const [state, send, service] = useMachine(addBountyMachine)
   const [isValidNext, setValidNext] = useState(false)
   const { api } = useApi()
-  const { transferable } = useBalance(activeMember?.controllerAccount) || {}
+  const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
 
   if (!service.initialized) {
@@ -54,7 +54,7 @@ export const AddBountyModal = () => {
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
         minCherryLimit: bountyApi?.minCherryLimit,
-        maxCherryLimit: transferable,
+        maxCherryLimit: balance?.transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
         maxWhitelistSize: bountyApi?.closedContractSizeLimit,
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
@@ -120,6 +120,8 @@ export const AddBountyModal = () => {
               <FundingDetailsStep
                 cherry={state.context.cherry}
                 setCherry={(cherry) => send('SET_CHERRY', { cherry })}
+                maxCherryLimit={balance?.transferable.toNumber() || 0}
+                minCherryLimit={bountyApi?.minCherryLimit.toNumber() || 0}
                 fundingMaximalRange={state.context.fundingMaximalRange}
                 setFundingMaximalRange={(fundingMaximalRange) =>
                   send('SET_FUNDING_MAXIMAL_RANGE', { fundingMaximalRange })
