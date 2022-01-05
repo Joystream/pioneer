@@ -580,6 +580,9 @@ export type GetBountyQuery = {
 
 export type GetBountyWorksQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.BountyWorkDataWhereInput>
+  order?: Types.InputMaybe<Array<Types.BountyWorkDataOrderByInput> | Types.BountyWorkDataOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetBountyWorksQuery = {
@@ -625,6 +628,15 @@ export type GetBountyWorksQuery = {
         | { __typename: 'BountyEntryStatusWorking' }
     }
   }>
+}
+
+export type GetBountyWorksCountQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.BountyWorkDataWhereInput>
+}>
+
+export type GetBountyWorksCountQuery = {
+  __typename: 'Query'
+  bountyWorkDataConnection: { __typename: 'BountyWorkDataConnection'; totalCount: number }
 }
 
 export const BountyFieldsFragmentDoc = gql`
@@ -826,8 +838,13 @@ export type GetBountyQueryHookResult = ReturnType<typeof useGetBountyQuery>
 export type GetBountyLazyQueryHookResult = ReturnType<typeof useGetBountyLazyQuery>
 export type GetBountyQueryResult = Apollo.QueryResult<GetBountyQuery, GetBountyQueryVariables>
 export const GetBountyWorksDocument = gql`
-  query GetBountyWorks($where: BountyWorkDataWhereInput) {
-    bountyWorkData(where: $where) {
+  query GetBountyWorks(
+    $where: BountyWorkDataWhereInput
+    $order: [BountyWorkDataOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    bountyWorkData(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
       ...BountyWorkFields
     }
   }
@@ -847,6 +864,9 @@ export const GetBountyWorksDocument = gql`
  * const { data, loading, error } = useGetBountyWorksQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -865,3 +885,51 @@ export function useGetBountyWorksLazyQuery(
 export type GetBountyWorksQueryHookResult = ReturnType<typeof useGetBountyWorksQuery>
 export type GetBountyWorksLazyQueryHookResult = ReturnType<typeof useGetBountyWorksLazyQuery>
 export type GetBountyWorksQueryResult = Apollo.QueryResult<GetBountyWorksQuery, GetBountyWorksQueryVariables>
+export const GetBountyWorksCountDocument = gql`
+  query GetBountyWorksCount($where: BountyWorkDataWhereInput) {
+    bountyWorkDataConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetBountyWorksCountQuery__
+ *
+ * To run a query within a React component, call `useGetBountyWorksCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBountyWorksCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBountyWorksCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetBountyWorksCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>(
+    GetBountyWorksCountDocument,
+    options
+  )
+}
+export function useGetBountyWorksCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>(
+    GetBountyWorksCountDocument,
+    options
+  )
+}
+export type GetBountyWorksCountQueryHookResult = ReturnType<typeof useGetBountyWorksCountQuery>
+export type GetBountyWorksCountLazyQueryHookResult = ReturnType<typeof useGetBountyWorksCountLazyQuery>
+export type GetBountyWorksCountQueryResult = Apollo.QueryResult<
+  GetBountyWorksCountQuery,
+  GetBountyWorksCountQueryVariables
+>

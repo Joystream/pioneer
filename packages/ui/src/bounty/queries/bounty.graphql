@@ -91,8 +91,19 @@ query GetBounty($where: BountyWhereUniqueInput!) {
   }
 }
 
-query GetBountyWorks($where: BountyWorkDataWhereInput) {
-  bountyWorkData(where: $where) {
+query GetBountyWorks(
+  $where: BountyWorkDataWhereInput
+  $order: [BountyWorkDataOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  bountyWorkData(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
     ...BountyWorkFields
+  }
+}
+
+query GetBountyWorksCount($where: BountyWorkDataWhereInput) {
+  bountyWorkDataConnection(where: $where) {
+    totalCount
   }
 }

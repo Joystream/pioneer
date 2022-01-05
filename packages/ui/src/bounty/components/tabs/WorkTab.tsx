@@ -7,10 +7,10 @@ import { useBountyWorks } from '@/bounty/hooks/useBountyWorks'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { List } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
-import { NoData } from '@/common/components/NoData'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { TextExtraSmall } from '@/common/components/typography'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Colors } from '@/common/constants'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
@@ -23,24 +23,31 @@ const randomizedBlock = randomBlock()
 export const WorkTab = ({ bountyId }: Props) => {
   const { t } = useTranslation('bounty')
   const [entrant, setEntrant] = useState<string>('')
-  const { works, isLoading } = useBountyWorks({ bountyId, workerHandleStartsWith: entrant })
+  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 2 })
 
   const worksComponents = useMemo(() => {
     if (works.length) {
-      return works.map((work) => (
-        <BountyWorkListItem
-          key={work.id}
-          entrant={work.worker}
-          inBlock={randomizedBlock}
-          title={work.title}
-          description={work.description}
-          link=""
-        />
-      ))
+      return (
+        <>
+          <StyledList as="div">
+            {works.map((work) => (
+              <BountyWorkListItem
+                key={work.id}
+                entrant={work.worker}
+                inBlock={randomizedBlock}
+                title={work.title}
+                description={work.description}
+                link=""
+              />
+            ))}
+          </StyledList>
+          <Pagination {...pagination} />
+        </>
+      )
     }
 
-    return <NoData>No works</NoData>
-  }, [])
+    return <NotFoundText>No works</NotFoundText>
+  }, [works])
 
   return (
     <RowGapBlock gap={4}>
@@ -57,8 +64,7 @@ export const WorkTab = ({ bountyId }: Props) => {
           </InputComponent>
         </div>
       </FilterContainer>
-      <StyledList as="div">{isLoading ? <Loading /> : worksComponents}</StyledList>
-      <Pagination handlePageChange={() => undefined} page={1} pageCount={3} />
+      {isLoading ? <Loading /> : worksComponents}
     </RowGapBlock>
   )
 }
