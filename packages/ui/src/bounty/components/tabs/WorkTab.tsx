@@ -22,8 +22,8 @@ const randomizedBlock = randomBlock()
 
 export const WorkTab = ({ bountyId }: Props) => {
   const { t } = useTranslation('bounty')
-  const [entrant, setEntrant] = useState<string>('')
-  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 2 })
+  const [entrantSearch, setEntrantSearch] = useState<string>('')
+  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 2, workerHandle: entrantSearch })
 
   const worksComponents = useMemo(() => {
     if (works.length) {
@@ -57,8 +57,8 @@ export const WorkTab = ({ bountyId }: Props) => {
           <InputComponent inputSize="xs" tight id="field-entrant">
             <InputText
               id="field-entrant"
-              value={entrant}
-              onChange={(e) => setEntrant(e.target.value)}
+              value={entrantSearch}
+              onChange={(e) => setEntrantSearch(e.target.value)}
               placeholder={t('workTab.filter.placeholder')}
             />
           </InputComponent>

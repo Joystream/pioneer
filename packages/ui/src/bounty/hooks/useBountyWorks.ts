@@ -6,9 +6,10 @@ import { usePagination } from '@/common/hooks/usePagination'
 interface Props {
   bountyId: string
   perPage?: number
+  workerHandle: string
 }
 
-export const useBountyWorks = ({ bountyId, perPage = 4 }: Props) => {
+export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) => {
   const { data: dataCount } = useGetBountyWorksCountQuery({
     variables: {
       where: {
@@ -32,6 +33,9 @@ export const useBountyWorks = ({ bountyId, perPage = 4 }: Props) => {
         entry: {
           bounty: {
             id_eq: bountyId,
+          },
+          worker: {
+            handle_startsWith: workerHandle,
           },
         },
       },
