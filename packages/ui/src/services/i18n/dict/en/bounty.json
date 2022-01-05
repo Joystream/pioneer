@@ -44,7 +44,8 @@
   },
   "bountyFields": {
     "cherry": "Cherry",
-    "entrantStake": "Entrant Stake"
+    "entrantStake": "Entrant Stake",
+    "expired": "Expired"
   },
   "buttons": {
     "announceEntry": "Announce Entry",

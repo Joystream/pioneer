@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
+import { useGetBountyWorksCountQuery } from '@/bounty/queries'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
@@ -12,6 +13,17 @@ interface Props {
 
 export const ExpiredTiles = ({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
+  const { data } = useGetBountyWorksCountQuery({
+    variables: {
+      where: {
+        entry: {
+          bounty: {
+            id_eq: bounty.id,
+          },
+        },
+      },
+    },
+  })
 
   const firstRow = useMemo(
     () => [
@@ -19,7 +31,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         title: t('tiles.stage.title'),
         content: (
           <TextHuge value bold>
-            Expired
+            {t('bountyFields.expired')}
           </TextHuge>
         ),
         tooltipText: t('tiles.stage.tooltip'),
@@ -35,7 +47,13 @@ export const ExpiredTiles = ({ bounty }: Props) => {
       },
       {
         title: t('tiles.bountyCreator.title'),
-        content: bounty.creator ? <MemberInfo member={bounty.creator} size="m" memberSize="m" hideGroup /> : 'Council',
+        content: bounty.creator ? (
+          <MemberInfo member={bounty.creator} size="m" memberSize="m" hideGroup />
+        ) : (
+          <TextHuge value bold>
+            {t('common:council')}
+          </TextHuge>
+        ),
       },
       {
         title: t('tiles.oracle.title'),
@@ -59,16 +77,15 @@ export const ExpiredTiles = ({ bounty }: Props) => {
       },
       {
         title: t('tiles.worksSubmitted.title'),
-        // todo add fetching works for given bounty
         content: (
           <TextHuge value bold>
-            10
+            {data?.bountyWorkDataConnection.totalCount}
           </TextHuge>
         ),
         tooltipText: t('tiles.worksSubmitted.tooltip'),
       },
     ],
-    []
+    [data]
   )
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />

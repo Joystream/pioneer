@@ -14,7 +14,7 @@ interface Props {
 export const BountyTab = ({ bounty }: Props) => {
   return (
     <RowGapBlock gap={4}>
-      <Description imageUrl={bounty.imageUri} title={bounty.title} description={bounty.title} />
+      <Description imageUrl={bounty.imageUri} title={bounty.title} description={bounty.description} />
       <ForumThreadWrapper>
         <TextMedium bold>Bounty discussion thread</TextMedium>
       </ForumThreadWrapper>
