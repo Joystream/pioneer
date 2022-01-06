@@ -27,21 +27,21 @@ export const BountiesCurrent = () => {
       <BountiesMain />
       <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
       {isLoading ? (
-        <>
-          <SimpleSelect
-            title="Sorting"
-            options={sortingOptions}
-            value={isDescending ? 'Latest' : 'Earliest'}
-            onChange={onSort}
-          />
-          <SearchProcess
-            title="Searching"
-            description="We are searching through all bounties to find what your are looking for. "
-          />
-        </>
+        <SearchProcess
+          title="Searching"
+          description="We are searching through all bounties to find what your are looking for. "
+        />
       ) : (
         <BountiesList bounties={bounties} />
       )}
+      {bounties?.length ? (
+        <SimpleSelect
+          title="Sorting"
+          options={sortingOptions}
+          value={isDescending ? 'Latest' : 'Earliest'}
+          onChange={onSort}
+        />
+      ): null}
       <Pagination {...pagination} />
     </BountiesLayout>
   )
