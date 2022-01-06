@@ -80,6 +80,7 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
         dispatch({ type: 'change', field: 'search', value })
       }}
       searchLabel="Name"
+      displaySearchReset
     >
       <Fields columns={periodFilter ? 4 : 3}>
         <div ref={searchSlot} title="Search" />

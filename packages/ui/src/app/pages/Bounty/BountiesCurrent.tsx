@@ -41,7 +41,7 @@ export const BountiesCurrent = () => {
           value={isDescending ? 'Latest' : 'Earliest'}
           onChange={onSort}
         />
-      ): null}
+      ) : null}
       <Pagination {...pagination} />
     </BountiesLayout>
   )

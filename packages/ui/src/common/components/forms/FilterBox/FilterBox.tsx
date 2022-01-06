@@ -16,6 +16,7 @@ interface FilterBoxProps {
   onApply?: () => void
   onClear?: () => void
   onSearch?: (value: string) => void
+  displaySearchReset?: boolean
   children: React.ReactNode
   searchLabel?: string
   className?: string
@@ -27,6 +28,7 @@ export const FilterBox = ({
   onApply,
   onClear,
   onSearch,
+  displaySearchReset,
   children,
   searchLabel,
   className,
@@ -40,7 +42,14 @@ export const FilterBox = ({
     )}
     <Fields>
       {searchSlot && onSearch && (
-        <FilterSearchBox value={search} slot={searchSlot} onApply={onApply} onChange={onSearch} label={searchLabel} />
+        <FilterSearchBox
+          value={search}
+          slot={searchSlot}
+          onApply={onApply}
+          onChange={onSearch}
+          label={searchLabel}
+          displayReset={displaySearchReset}
+        />
       )}
       {children}
     </Fields>
