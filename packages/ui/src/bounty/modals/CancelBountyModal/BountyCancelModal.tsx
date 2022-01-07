@@ -1,5 +1,6 @@
 import { useMachine } from '@xstate/react'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AuthorizationModal } from '@/bounty/modals/CancelBountyModal/AuthorizationModal'
@@ -17,6 +18,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 
 export const BountyCancelModal = () => {
+  const { t } = useTranslation('bounty')
   const [state, send, service] = useMachine(bountyCancelMachine)
   const { hideModal, modalData } = useModal<BountyCancelModalCall>()
 
@@ -33,33 +35,47 @@ export const BountyCancelModal = () => {
 
   return (
     <Modal onClose={hideModal} modalSize="l">
-      <ModalHeader title="Cancel Bounty" onClick={hideModal} />
+      <ModalHeader title={t('modals.bountyCancel.title')} onClick={hideModal} />
       <ModalBody>
         <BodyContainer gap={30}>
           <WarningWrapper>
             <ColumnGapBlock gap={4}>
               <TextMedium bold value>
-                <FileIcon /> Are you sure
+                <FileIcon /> {t('modals.bountyCancel.warningBox.question1')}
               </TextMedium>
             </ColumnGapBlock>
             <TextMedium inter light>
-              Do you really want to cancel bounty?
+              {t('modals.bountyCancel.warningBox.question2')}
             </TextMedium>
           </WarningWrapper>
-          <Container disabled label="Bounty ID" tooltipText="Lorem ipsum..." inputSize="l">
+          <Container
+            disabled
+            label={t('modals.bountyCancel.bountyInput.label')}
+            tooltipText={t('modals.bountyCancel.bountyInput.tooltipText')}
+            inputSize="l"
+          >
             <TextBig value bold>
               {modalData.bounty.title}
             </TextBig>
           </Container>
-          <SelectedMember disabled label="Member ID" tooltipText="Lorem ipsum..." member={modalData.creator} />
+          <SelectedMember
+            disabled
+            label={t('modals.bountyCancel.memberInput.label')}
+            tooltipText={t('modals.bountyCancel.memberInput.tooltipText')}
+            member={modalData.creator}
+          />
         </BodyContainer>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title="Transaction fee:" value={BN_ZERO} tooltipText="Lorem ipsum..." />
+          <TransactionInfo
+            title={t('common:modals.transactionFee.label')}
+            value={BN_ZERO}
+            tooltipText={t('common:modals.transactionFee.tooltipText')}
+          />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={() => send('NEXT')}>
-          Cancel Bounty
+          {t('common:authorizeTransaction')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

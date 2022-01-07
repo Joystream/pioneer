@@ -1,3 +1,10 @@
 {
-  "test": "a test"
+  "test": "a test",
+  "modals": {
+    "transactionFee": {
+      "label": "Transaction fee:",
+      "tooltipText": "Lorem ipsum"
+    }
+  },
+  "authorizeTransaction": "Authorize Transaction"
 }

@@ -1,1 +1,31 @@
-{}
+{
+  "modals": {
+    "bountyCancel": {
+      "title": "Cancel Bounty",
+      "warningBox": {
+        "question1": "Are you sure?",
+        "question2": "Do you really want to cancel bounty?"
+      },
+      "bountyInput": {
+        "label": "Bounty ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "memberInput": {
+        "label": "Member ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "authorization": {
+        "title": "Authorize transaction",
+        "informationBox": {
+          "info1": "You are canceling your bounty",
+          "info2": "Fees of {fee} JOY will be applied to the transaction."
+        },
+        "accountInput": {
+          "label": "Fee sending from account",
+          "tooltipText": "Lorem ipsum"
+        },
+        "button": "Cancel Bounty"
+      }
+    }
+  }
+}

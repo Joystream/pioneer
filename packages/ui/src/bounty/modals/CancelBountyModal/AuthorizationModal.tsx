@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Props) => {
+  const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
   const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(
     allAccounts.find((acc) => acc.address === creator.controllerAccount)
@@ -46,7 +48,7 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
       Object.entries(balances).map(([address, balance]) => {
         if (balance.transferable.gte(paymentInfo?.partialFee || BN_ZERO)) {
           return address
-        } // fee instead of 2k
+        }
       }),
     [balances, paymentInfo?.partialFee]
   )
@@ -57,20 +59,20 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
 
   return (
     <Modal onClose={onClose} modalSize="l">
-      <ModalHeader title="Authorize Transaction" onClick={onClose} />
+      <ModalHeader title={t('modals.bounty.cancel.authorization.title')} onClick={onClose} />
       <ModalBody>
         <RowGapBlock gap={20}>
           <div>
-            <TextMedium light>You are canceling your bounty</TextMedium>
+            <TextMedium light>{t('modals.bounty.cancel.authorization.informationBox.info1')}</TextMedium>
             <TextMedium light>
-              Fees of {paymentInfo?.partialFee || '-'} JOY will be applied to the transaction.
+              {t('modals.bounty.cancel.authorization.informationBox.info1', { fee: paymentInfo?.partialFee || '-' })}
             </TextMedium>
           </div>
           <InputComponent
-            label="Fee sending from account"
+            label={t('modals.bounty.cancel.authorization.accountInput.label')}
             required
             inputSize="l"
-            tooltipText="Something about root accounts"
+            tooltipText={t('modals.bounty.cancel.authorization.accountInput.tooltipText')}
           >
             <SelectAccount
               filter={accountsFilter}
@@ -82,10 +84,14 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title="Transaction fee" value={paymentInfo?.partialFee} tooltipText="Lorem ipsum..." />
+          <TransactionInfo
+            title={t('common:modals.transactionFee.label')}
+            value={paymentInfo?.partialFee}
+            tooltipText={t('common:modals.transactionFee.tooltipText')}
+          />
         </TransactionInfoContainer>
         <ButtonPrimary disabled={!selectedAccount || !isReady} onClick={sign} size="medium">
-          Cancel Bounty
+          {t('modals.bountyCancel.authorization.button')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>
