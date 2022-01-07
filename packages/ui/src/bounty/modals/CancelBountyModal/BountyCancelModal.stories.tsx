@@ -7,14 +7,14 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
-import { CancelBountyModal } from '@/bounty/modals/CancelBountyModal/CancelBountyModal'
+import { BountyCancelModal } from '@/bounty/modals/CancelBountyModal/BountyCancelModal'
 import { ModalContext } from '@/common/providers/modal/context'
 import bounties from '@/mocks/data/raw/bounties.json'
 import members from '@/mocks/data/raw/members.json'
 
 export default {
-  title: 'Bounty/CancelBounty',
-  component: CancelBountyModal,
+  title: 'Bounty/BountyCancelModal',
+  component: BountyCancelModal,
 } as Meta
 
 const modalData = {
@@ -62,7 +62,7 @@ const Template: Story = () => {
       >
         <AccountsContext.Provider value={useMyAccounts}>
           <BalancesContext.Provider value={useMyBalances}>
-            <CancelBountyModal />
+            <BountyCancelModal />
           </BalancesContext.Provider>
         </AccountsContext.Provider>
       </ModalContext.Provider>

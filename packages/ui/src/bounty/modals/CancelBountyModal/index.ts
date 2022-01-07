@@ -1,2 +1,2 @@
-export * from './CancelBountyModal'
+export * from './BountyCancelModal'
 export * from './types'

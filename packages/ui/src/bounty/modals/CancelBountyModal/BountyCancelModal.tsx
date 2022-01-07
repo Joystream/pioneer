@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { AuthorizationModal } from '@/bounty/modals/CancelBountyModal/AuthorizationModal'
 import { bountyCancelMachine, BountyCancelStates } from '@/bounty/modals/CancelBountyModal/machine'
-import { CancelBountyModalCall } from '@/bounty/modals/CancelBountyModal/types'
+import { BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
@@ -16,9 +16,9 @@ import { BN_ZERO, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 
-export const CancelBountyModal = () => {
+export const BountyCancelModal = () => {
   const [state, send, service] = useMachine(bountyCancelMachine)
-  const { hideModal, modalData } = useModal<CancelBountyModalCall>()
+  const { hideModal, modalData } = useModal<BountyCancelModalCall>()
 
   if (state.matches(BountyCancelStates.AUTHORIZATION)) {
     return (
