@@ -16,7 +16,7 @@ import { getMember } from '@/mocks/helpers'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction } from '../../_mocks/transactions'
+import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
 
 const bounty = bounties[0]
 const creator = getMember('alice')
@@ -108,10 +108,39 @@ describe('UI: BountyCancelModal', () => {
     })
   })
 
+  describe('Transaction result', () => {
+    beforeAll(() => {
+      transaction = stubTransaction(api, 'api.tx.bounty.cancelBounty', 20)
+    })
+
+    it('Success', async () => {
+      stubTransactionSuccess(transaction, 'bounty', 'BountyCanceled')
+
+      await renderModalAndProceedToTransaction()
+
+      expect(screen.queryByText('common:success')).toBeDefined()
+    })
+
+    it('Error', async () => {
+      stubTransactionFailure(transaction)
+
+      await renderModalAndProceedToTransaction()
+
+      expect(screen.queryByText('modals.bountyCancel.error')).toBeDefined()
+    })
+  })
+
   const renderModalAndProceedToAuthorization = async () => {
     renderModal()
 
     const button = await getButton('modals.bountyCancel.authorization.button')
+    fireEvent.click(button)
+  }
+
+  const renderModalAndProceedToTransaction = async () => {
+    await renderModalAndProceedToAuthorization()
+
+    const button = await getButton('common:authorizeTransaction')
     fireEvent.click(button)
   }
 

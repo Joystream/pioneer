@@ -4,7 +4,9 @@
     "transactionFee": {
       "label": "Transaction fee:",
       "tooltipText": "Lorem ipsum"
-    }
+    },
+    "transactionCanceled": "Transaction has been cancelled."
   },
-  "authorizeTransaction": "Authorize Transaction"
+  "authorizeTransaction": "Authorize Transaction",
+  "success": "Success"
 }

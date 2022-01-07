@@ -25,7 +25,12 @@
           "tooltipText": "Lorem ipsum"
         },
         "button": "Cancel Bounty"
-      }
+      },
+      "success": {
+        "message": "You have just successfully canceled bounty!",
+        "button": "Go to Current Bounties"
+      },
+      "error": "There was a problem canceling bounty."
     }
   }
 }

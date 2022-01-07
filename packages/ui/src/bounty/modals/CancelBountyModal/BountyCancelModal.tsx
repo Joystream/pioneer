@@ -3,10 +3,12 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { AuthorizationModal } from '@/bounty/modals/CancelBountyModal/AuthorizationModal'
+import { AuthorizationModal } from '@/bounty/modals/CancelBountyModal/components/AuthorizationModal'
+import { SuccessModal } from '@/bounty/modals/CancelBountyModal/components/SuccessModal'
 import { bountyCancelMachine, BountyCancelStates } from '@/bounty/modals/CancelBountyModal/machine'
 import { BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal/types'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -30,6 +32,22 @@ export const BountyCancelModal = () => {
         bountyId={modalData.bounty.id}
       />
     )
+  }
+
+  if (state.matches(BountyCancelStates.SUCCESS)) {
+    return <SuccessModal onClose={hideModal} />
+  }
+
+  if (state.matches(BountyCancelStates.ERROR)) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        {t('modals.bountyCancel.error')}
+      </FailureModal>
+    )
+  }
+
+  if (state.matches(BountyCancelStates.CANCEL)) {
+    return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
   return (
