@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
+import { CancelBountyModal, CancelBountyModalCall } from '@/bounty/modals/CancelBountyModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -68,6 +69,7 @@ export type ModalNames =
   | ModalName<IncreaseWorkerStakeModalCall>
   | ModalName<OnBoardingModalCall>
   | ModalName<RestoreVotesModalCall>
+  | ModalName<CancelBountyModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -99,6 +101,7 @@ const modals: Record<ModalNames, ReactElement> = {
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
+  CancelBounty: <CancelBountyModal />,
 }
 
 export const GlobalModals = () => {
