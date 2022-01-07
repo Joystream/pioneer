@@ -96,13 +96,12 @@ describe('UI: BountyCancelModal', () => {
 
     it('Enable button on sufficient balance', async () => {
       await renderModalAndProceedToAuthorization()
-      const valueContainer = screen.getByText('common:modals.transactionFee.label')?.nextSibling
-      console.log(valueContainer?.textContent, ' FEE!')
+
       expect(await getButton('common:authorizeTransaction')).not.toBeDisabled()
     })
 
-    it('Disable button on sufficient balance', async () => {
-      transaction = stubTransaction(api, 'api.tx.bounty.cancelBounty', 99999)
+    it('Disable button on insufficient balance', async () => {
+      stubTransaction(api, 'api.tx.bounty.cancelBounty', 99999)
       await renderModalAndProceedToAuthorization()
 
       expect(await getButton('common:authorizeTransaction')).toBeDisabled()

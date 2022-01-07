@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
@@ -27,6 +27,7 @@ interface Props {
 export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Props) => {
   const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
+  const [hasFunds, setHasFunds] = useState<boolean>(false)
   const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(
     allAccounts.find((acc) => acc.address === creator.controllerAccount)
   )
@@ -56,6 +57,12 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
   const accountsFilter = useCallback((acc: Account) => accountsWithValidAmount.includes(acc.address), [
     accountsWithValidAmount.length,
   ])
+
+  useEffect(() => {
+    if (selectedAccount && paymentInfo?.partialFee) {
+      setHasFunds(balances[selectedAccount.address].transferable.gte(paymentInfo.partialFee))
+    }
+  }, [selectedAccount, paymentInfo?.partialFee])
 
   return (
     <Modal onClose={onClose} modalSize="l">
@@ -90,7 +97,7 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
             tooltipText={t('common:modals.transactionFee.tooltipText')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary disabled={!selectedAccount || !isReady} onClick={sign} size="medium">
+        <ButtonPrimary disabled={!hasFunds || !isReady} onClick={sign} size="medium">
           {t('common:authorizeTransaction')}
         </ButtonPrimary>
       </ModalFooter>

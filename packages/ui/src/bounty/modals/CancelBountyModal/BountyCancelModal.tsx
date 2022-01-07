@@ -18,13 +18,13 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 
 export const BountyCancelModal = () => {
   const { t } = useTranslation('bounty')
-  const [state, send, service] = useMachine(bountyCancelMachine)
+  const [state, send] = useMachine(bountyCancelMachine)
   const { hideModal, modalData } = useModal<BountyCancelModalCall>()
 
-  if (state.matches(BountyCancelStates.AUTHORIZATION)) {
+  if (state.matches(BountyCancelStates.TRANSACTION)) {
     return (
       <AuthorizationModal
-        service={service}
+        service={state.children['transaction']}
         onClose={hideModal}
         creator={modalData.creator}
         bountyId={modalData.bounty.id}

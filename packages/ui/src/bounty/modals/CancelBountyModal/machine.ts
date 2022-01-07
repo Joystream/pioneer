@@ -16,7 +16,6 @@ interface BountyCancelContext {
 
 export enum BountyCancelStates {
   INFO = 'info',
-  AUTHORIZATION = 'authorization',
   TRANSACTION = 'transaction',
   SUCCESS = 'success',
   ERROR = 'error',
@@ -25,7 +24,6 @@ export enum BountyCancelStates {
 
 type BountyCancelState =
   | { value: BountyCancelStates.INFO; context: EmptyObject }
-  | { value: BountyCancelStates.AUTHORIZATION; context: EmptyObject }
   | { value: BountyCancelStates.TRANSACTION; context: EmptyObject }
   | { value: BountyCancelStates.SUCCESS; context: Required<BountyCancelContext> }
   | { value: BountyCancelStates.ERROR; context: Required<BountyCancelContext> }
@@ -50,17 +48,12 @@ export const bountyCancelMachine = createMachine<BountyCancelContext, BountyCanc
   states: {
     [BountyCancelStates.INFO]: {
       on: {
-        NEXT: BountyCancelStates.AUTHORIZATION,
-      },
-    },
-    [BountyCancelStates.AUTHORIZATION]: {
-      on: {
         NEXT: BountyCancelStates.TRANSACTION,
       },
     },
-    transaction: {
+    [BountyCancelStates.TRANSACTION]: {
       invoke: {
-        id: 'transaction',
+        id: BountyCancelStates.TRANSACTION,
         src: transactionMachine,
         onDone: [
           {
