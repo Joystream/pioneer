@@ -91,7 +91,7 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
           />
         </TransactionInfoContainer>
         <ButtonPrimary disabled={!selectedAccount || !isReady} onClick={sign} size="medium">
-          {t('modals.bountyCancel.authorization.button')}
+          {t('common:authorizeTransaction')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

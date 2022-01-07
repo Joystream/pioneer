@@ -9,11 +9,10 @@ import { BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader, TransactionInfoContainer } from '@/common/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextBig, TextMedium } from '@/common/components/typography'
-import { BN_ZERO, Colors } from '@/common/constants'
+import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 
@@ -67,15 +66,8 @@ export const BountyCancelModal = () => {
         </BodyContainer>
       </ModalBody>
       <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title={t('common:modals.transactionFee.label')}
-            value={BN_ZERO}
-            tooltipText={t('common:modals.transactionFee.tooltipText')}
-          />
-        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={() => send('NEXT')}>
-          {t('common:authorizeTransaction')}
+          {t('modals.bountyCancel.authorization.button')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>
