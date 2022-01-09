@@ -10,7 +10,7 @@ import { asBounty } from '../types/casts'
 
 type BountyStatus = 'active' | 'past'
 
-interface UseBountiesProps {
+export interface UseBountiesProps {
   order: SortOrder<BountyOrderByInput>
   perPage?: number
   filters?: BountyFiltersState
