@@ -17,7 +17,7 @@ import { randomBlock } from '@/mocks/helpers/randomBlock'
 interface Props {
   bountyId: string
 }
-
+// todo remove when works in schema will have block info
 const randomizedBlock = randomBlock()
 
 export const WorkTab = ({ bountyId }: Props) => {
