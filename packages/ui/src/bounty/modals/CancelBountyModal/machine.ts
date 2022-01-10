@@ -15,19 +15,19 @@ interface BountyCancelContext {
 }
 
 export enum BountyCancelStates {
-  INFO = 'info',
-  TRANSACTION = 'transaction',
-  SUCCESS = 'success',
-  ERROR = 'error',
-  CANCEL = 'cancel',
+  info = 'info',
+  transaction = 'transaction',
+  success = 'success',
+  error = 'error',
+  cancel = 'cancel',
 }
 
 type BountyCancelState =
-  | { value: BountyCancelStates.INFO; context: EmptyObject }
-  | { value: BountyCancelStates.TRANSACTION; context: EmptyObject }
-  | { value: BountyCancelStates.SUCCESS; context: Required<BountyCancelContext> }
-  | { value: BountyCancelStates.ERROR; context: Required<BountyCancelContext> }
-  | { value: BountyCancelStates.CANCEL; context: EmptyObject }
+  | { value: BountyCancelStates.info; context: EmptyObject }
+  | { value: BountyCancelStates.transaction; context: EmptyObject }
+  | { value: BountyCancelStates.success; context: Required<BountyCancelContext> }
+  | { value: BountyCancelStates.error; context: Required<BountyCancelContext> }
+  | { value: BountyCancelStates.cancel; context: EmptyObject }
 
 type SuccessEvent = {
   type: 'SUCCESS'
@@ -44,37 +44,37 @@ type ErrorEvent = {
 export type BountyCancelEvents = { type: 'NEXT' } | SuccessEvent | ErrorEvent
 
 export const bountyCancelMachine = createMachine<BountyCancelContext, BountyCancelEvents, BountyCancelState>({
-  initial: BountyCancelStates.INFO,
+  initial: BountyCancelStates.info,
   states: {
-    [BountyCancelStates.INFO]: {
+    [BountyCancelStates.info]: {
       on: {
-        NEXT: BountyCancelStates.TRANSACTION,
+        NEXT: BountyCancelStates.transaction,
       },
     },
-    [BountyCancelStates.TRANSACTION]: {
+    [BountyCancelStates.transaction]: {
       invoke: {
-        id: BountyCancelStates.TRANSACTION,
+        id: BountyCancelStates.transaction,
         src: transactionMachine,
         onDone: [
           {
-            target: BountyCancelStates.SUCCESS,
+            target: BountyCancelStates.success,
             cond: isTransactionSuccess,
             actions: assign({ transactionEvents: (_, event) => event.data.events }),
           },
           {
-            target: BountyCancelStates.ERROR,
+            target: BountyCancelStates.error,
             cond: isTransactionError,
             actions: assign({ transactionEvents: (_, event) => event.data.events }),
           },
           {
-            target: BountyCancelStates.CANCEL,
+            target: BountyCancelStates.cancel,
             cond: isTransactionCanceled,
           },
         ],
       },
     },
-    [BountyCancelStates.SUCCESS]: { type: 'final' },
-    [BountyCancelStates.ERROR]: { type: 'final' },
-    [BountyCancelStates.CANCEL]: { type: 'final' },
+    [BountyCancelStates.success]: { type: 'final' },
+    [BountyCancelStates.error]: { type: 'final' },
+    [BountyCancelStates.cancel]: { type: 'final' },
   },
 })

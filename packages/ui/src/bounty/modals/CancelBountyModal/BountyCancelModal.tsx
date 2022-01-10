@@ -23,7 +23,7 @@ export const BountyCancelModal = () => {
   const [state, send] = useMachine(bountyCancelMachine)
   const { hideModal, modalData } = useModal<BountyCancelModalCall>()
 
-  if (state.matches(BountyCancelStates.TRANSACTION)) {
+  if (state.matches(BountyCancelStates.transaction)) {
     return (
       <AuthorizationModal
         service={state.children['transaction']}
@@ -34,11 +34,11 @@ export const BountyCancelModal = () => {
     )
   }
 
-  if (state.matches(BountyCancelStates.SUCCESS)) {
+  if (state.matches(BountyCancelStates.success)) {
     return <SuccessModal onClose={hideModal} />
   }
 
-  if (state.matches(BountyCancelStates.ERROR)) {
+  if (state.matches(BountyCancelStates.error)) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
         {t('modals.bountyCancel.error')}
@@ -46,7 +46,7 @@ export const BountyCancelModal = () => {
     )
   }
 
-  if (state.matches(BountyCancelStates.CANCEL)) {
+  if (state.matches(BountyCancelStates.cancel)) {
     return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
