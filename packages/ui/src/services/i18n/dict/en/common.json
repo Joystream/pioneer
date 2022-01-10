@@ -1,5 +1,4 @@
 {
-  "test": "a test",
   "modals": {
     "transactionFee": {
       "label": "Transaction fee:",
@@ -8,5 +7,13 @@
     "transactionCanceled": "Transaction has been cancelled."
   },
   "authorizeTransaction": "Authorize Transaction",
-  "success": "Success"
+  "success": "Success",
+  "buttons": {
+    "withdraw": "Withdraw",
+    "withdrawStake": "Withdraw Stake",
+    "claim": "Claim",
+    "claimReward": "Claim Reward",
+    "contribute": "Contribute",
+    "notifyAboutChanges": "Notify me about changes"
+  }
 }

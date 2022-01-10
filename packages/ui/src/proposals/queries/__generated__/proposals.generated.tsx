@@ -753,7 +753,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
 export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
 
 export type GetProposalsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ProposalWhereInput>
+  where?: Types.InputMaybe<Types.ProposalWhereInput>
 }>
 
 export type GetProposalsQuery = {
@@ -1377,8 +1377,8 @@ export type GetProposalPostParentQuery = {
 }
 
 export type GetProposalVotesQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ProposalVotedEventWhereInput>
-  orderBy?: Types.Maybe<Array<Types.ProposalVotedEventOrderByInput> | Types.ProposalVotedEventOrderByInput>
+  where?: Types.InputMaybe<Types.ProposalVotedEventWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.ProposalVotedEventOrderByInput> | Types.ProposalVotedEventOrderByInput>
 }>
 
 export type GetProposalVotesQuery = {

@@ -2,6 +2,7 @@ fragment BountyFields on Bounty {
   id
   createdAt
   title
+  description
   cherry
   entrantStake
   creator {
@@ -20,12 +21,28 @@ fragment BountyFields on Bounty {
       target
     }
   }
+  contractType {
+    ... on BountyContractClosed {
+      whitelist {
+        id
+      }
+    }
+  }
   workPeriod
   judgingPeriod
   stage
   totalFunding
+  contributions {
+    amount
+    contributor {
+      ...MemberFields
+    }
+  }
   entries {
-    createdById
+    worker {
+      ...MemberFields
+    }
+    workSubmitted
     status {
       ... on BountyEntryStatusWinner {
         reward
@@ -43,5 +60,11 @@ query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $of
 query GetBountiesCount($where: BountyWhereInput) {
   bountiesConnection(where: $where) {
     totalCount
+  }
+}
+
+query GetBounty($where: BountyWhereUniqueInput!) {
+  bountyByUniqueInput(where: $where) {
+    ...BountyFields
   }
 }

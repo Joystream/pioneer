@@ -205,7 +205,7 @@ export type BudgetSpendingEventFieldsFragment = {
 }
 
 export type GetBudgetSpendingQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.BudgetSpendingEventWhereInput>
+  where?: Types.InputMaybe<Types.BudgetSpendingEventWhereInput>
 }>
 
 export type GetBudgetSpendingQuery = {
@@ -253,9 +253,9 @@ export type GetWorkingGroupsQuery = {
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkersQuery = {
@@ -304,10 +304,10 @@ export type GetWorkersQuery = {
 }
 
 export type GetPastWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  orderBy?: Types.Maybe<Array<Types.WorkerOrderByInput> | Types.WorkerOrderByInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  orderBy?: Types.InputMaybe<Array<Types.WorkerOrderByInput> | Types.WorkerOrderByInput>
 }>
 
 export type GetPastWorkersQuery = {
@@ -365,7 +365,7 @@ export type GetPastWorkersQuery = {
 }
 
 export type GetWorkersCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
 }>
 
 export type GetWorkersCountQuery = {
@@ -374,7 +374,7 @@ export type GetWorkersCountQuery = {
 }
 
 export type GetDetailedWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
 }>
 
 export type GetDetailedWorkersQuery = {
@@ -504,7 +504,7 @@ export type GetGroupDebtQuery = {
 }
 
 export type GetRewardsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.RewardPaidEventWhereInput>
+  where?: Types.InputMaybe<Types.RewardPaidEventWhereInput>
 }>
 
 export type GetRewardsQuery = {
@@ -622,7 +622,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
 }
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
+  where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
 }>
 
 export type CountWorkingGroupOpeningsQuery = {
@@ -631,8 +631,8 @@ export type CountWorkingGroupOpeningsQuery = {
 }
 
 export type CountWorkingGroupWorkersQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
-  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
+  groupId_eq?: Types.InputMaybe<Types.Scalars['ID']>
+  status_json?: Types.InputMaybe<Types.Scalars['JSONObject']>
 }>
 
 export type CountWorkingGroupWorkersQuery = {
@@ -641,9 +641,9 @@ export type CountWorkingGroupWorkersQuery = {
 }
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkingGroupOpeningsQuery = {
@@ -866,7 +866,7 @@ export type WorkingGroupApplicationFieldsFragment = {
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>
+  where?: Types.InputMaybe<Types.WorkingGroupApplicationWhereInput>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
@@ -919,7 +919,7 @@ export type GetWorkingGroupApplicationsQuery = {
 }
 
 export type GetWorkingGroupApplicationIdsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>
+  where?: Types.InputMaybe<Types.WorkingGroupApplicationWhereInput>
 }>
 
 export type GetWorkingGroupApplicationIdsQuery = {
@@ -995,7 +995,7 @@ export type ApplicationFormQuestionAnswerFieldsFragment = {
 }
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
-  applicationId_eq?: Types.Maybe<Types.Scalars['ID']>
+  applicationId_eq?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type GetApplicationFormQuestionAnswerQuery = {
@@ -1066,9 +1066,9 @@ export type GetUpcomingWorkingGroupOpeningQuery = {
 }
 
 export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.UpcomingWorkingGroupOpeningWhereInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
+  where?: Types.InputMaybe<Types.UpcomingWorkingGroupOpeningWhereInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetUpcomingWorkingGroupOpeningsQuery = {
@@ -1094,7 +1094,7 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
 }>
 
 export type GetWorkerIdsQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker'; id: string }> }

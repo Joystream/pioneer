@@ -6,7 +6,20 @@ import { asMember } from '@/memberships/types'
 
 import { BountyFieldsFragment } from '../queries'
 
-import { Bounty, BountyStage, EntryMiniature, FundingType } from './Bounty'
+import { Bounty, BountyPeriod, BountyStage, EntryMiniature, FundingType, ContractType, Contributor } from './Bounty'
+
+export const asPeriod = (stage: BountyStage): BountyPeriod => {
+  switch (stage) {
+    case 'successful' || 'failed' || 'terminated':
+      return 'withdrawal'
+    case 'workSubmission':
+      return 'working'
+    case 'judgment':
+      return 'judgement'
+    default:
+      return stage as BountyPeriod
+  }
+}
 
 const asFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
@@ -26,15 +39,33 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
 const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
-      createdById: entry.createdById,
+      worker: asMember(entry.worker),
+      hasSubmitted: entry.workSubmitted,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
+      passed: entry.status.__typename === 'BountyEntryStatusPassed',
     }
   })
+}
+
+const asContractType = (type: BountyFieldsFragment['contractType']): ContractType => {
+  return type.__typename === 'BountyContractOpen'
+    ? 'ContractOpen'
+    : {
+        whitelist: type.whitelist?.map((member) => member.id) || [],
+      }
+}
+
+export const asContributors = (contributors: BountyFieldsFragment['contributions']): Contributor[] => {
+  return contributors.map(({ amount, contributor }) => ({
+    amount,
+    actor: contributor ? asMember(contributor) : undefined,
+  }))
 }
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title,
+  description: fields.description,
   createdAt: fields.createdAt,
   cherry: new BN(fields.cherry),
   entrantStake: new BN(fields.entrantStake),
@@ -47,4 +78,6 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
   entries: asEntries(fields.entries),
+  contractType: asContractType(fields.contractType),
+  contributors: asContributors(fields.contributions),
 })

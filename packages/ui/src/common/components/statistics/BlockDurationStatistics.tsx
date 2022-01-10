@@ -31,6 +31,7 @@ export const formatDuration = (duration: number): [string | number, string][] =>
 
 interface BlockDurationStatisticsProps extends StatisticItemProps {
   value?: number | BN
+  hideBlockNumber?: boolean
 }
 
 export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => {
@@ -50,14 +51,16 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
         <DurationValue value={formatDuration(duration)} />
       </ItemRow>
 
-      <ItemRow>
-        <BlocksInfo gap={8}>
-          <BlockIcon />
-          <NumberOfBlocks lighter>
-            {formatTokenValue(duration)} block{plural(props.value)}
-          </NumberOfBlocks>
-        </BlocksInfo>
-      </ItemRow>
+      {!props.hideBlockNumber && (
+        <ItemRow>
+          <BlocksInfo gap={8}>
+            <BlockIcon />
+            <NumberOfBlocks lighter>
+              {formatTokenValue(duration)} block{plural(props.value)}
+            </NumberOfBlocks>
+          </BlocksInfo>
+        </ItemRow>
+      )}
     </MultiStatisticItem>
   )
 }

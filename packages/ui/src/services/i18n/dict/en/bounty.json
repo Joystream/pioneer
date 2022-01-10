@@ -32,5 +32,15 @@
       },
       "error": "There was a problem canceling bounty."
     }
+  },
+  "bountyFields": {
+    "cherry": "Cherry",
+    "entrantStake": "Entrant Stake"
+  },
+  "buttons": {
+    "announceEntry": "Announce Entry",
+    "submitWork": "Submit Work",
+    "submitJudgement": "Submit Judgement",
+    "cancelBounty": "Cancel Bounty"
   }
 }
