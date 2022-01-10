@@ -17,14 +17,18 @@ export const TileSection = React.memo(({ fundedDetails, secondRow, firstRow }: T
   return (
     <>
       <Statistics>
-        {firstRow.map(({ content, ...statisticItemProps }) => (
-          <StatisticItem {...statisticItemProps}>{content}</StatisticItem>
+        {firstRow.map(({ content, ...statisticItemProps }, index) => (
+          <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
+            {content}
+          </StatisticItem>
         ))}
       </Statistics>
       <Statistics>
         {fundedDetails && <FundedRange maxRangeValue={15000} minRangeValue={13000} rangeValue={5000} />}
-        {secondRow.map(({ content, ...statisticItemProps }) => (
-          <StatisticItem {...statisticItemProps}>{content}</StatisticItem>
+        {secondRow.map(({ content, ...statisticItemProps }, index) => (
+          <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
+            {content}
+          </StatisticItem>
         ))}
       </Statistics>
     </>
