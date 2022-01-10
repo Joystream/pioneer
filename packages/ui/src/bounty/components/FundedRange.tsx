@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ProgressBarWithRange } from '@/common/components/Progress'
@@ -13,20 +14,21 @@ export interface FundedRangeProps {
 }
 
 export const FundedRange = React.memo(({ rangeValue, maxRangeValue, minRangeValue }: FundedRangeProps) => {
+  const { t } = useTranslation('bounty')
   return (
     <FundedRangeWrapper>
       <FundedTitle>
-        <TextSmall>Funded</TextSmall>
+        <TextSmall>{t('tiles.progressBar.funded')}</TextSmall>
         <TokenValue value={rangeValue} size="l" />
       </FundedTitle>
       <ProgressBarWrapper>
         <ProgressBarWithRange value={20} minRange={50} maxRange={100} />
         <MaxRangeWrapper>
-          <MaxRangeTitle>Maximal Range</MaxRangeTitle>
+          <MaxRangeTitle>{t('tiles.progressBar.maxRange')}</MaxRangeTitle>
           <TokenValue value={maxRangeValue} size="l" />
         </MaxRangeWrapper>
         <ProgressBarInfoVertical inset="45px 40% 0">
-          <TextSmall>Minimal range</TextSmall>
+          <TextSmall>{t('tiles.progressBar.minRange')}</TextSmall>
           <TokenValue value={minRangeValue} />
         </ProgressBarInfoVertical>
       </ProgressBarWrapper>
