@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
@@ -14,14 +15,16 @@ interface Props {
 }
 
 export const BountiesList = memo(({ bounties }: Props) => {
+  const { t } = useTranslation('bounty')
+
   if (!bounties.length) {
-    return <NotFoundText>No bounties matching search criteria</NotFoundText>
+    return <NotFoundText>{t('list.noResults')}</NotFoundText>
   }
 
   return (
     <div>
       <Title bold value>
-        Bounties
+        {t('bounties')}
         <Counter count={bounties.length} />
       </Title>
       {bounties.map((bounty) => {

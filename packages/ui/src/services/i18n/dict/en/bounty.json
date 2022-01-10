@@ -1,4 +1,5 @@
 {
+  "bounties": "Bounties",
   "bountyFields": {
     "cherry": "Cherry",
     "entrantStake": "Entrant Stake"
@@ -8,5 +9,11 @@
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty"
+  },
+  "list": {
+    "noResults": "No bounties matching search criteria",
+    "searching": "Searching",
+    "searchingText": "We are searching through all bounties to find what your are looking for. ",
+    "sorting": "sorting"
   }
 }

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BountiesLayout } from '@/app/pages/Bounty/components/BountiesLayout'
 import { BountiesMain } from '@/app/pages/Bounty/components/BountiesMain'
@@ -16,6 +17,7 @@ const sortingOptions = ['Latest', 'Earliest']
 export const BountiesCurrent = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
 
+  const { t } = useTranslation('bounty')
   const [filters, setFilters] = useState(BountyEmptyFilter)
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
   const { onSort, isDescending } = getSortProps('createdAt')
@@ -27,16 +29,13 @@ export const BountiesCurrent = () => {
       <BountiesMain />
       <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
       {isLoading ? (
-        <SearchProcess
-          title="Searching"
-          description="We are searching through all bounties to find what your are looking for. "
-        />
+        <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
       ) : (
         <BountiesList bounties={bounties} />
       )}
       {bounties?.length ? (
         <SimpleSelect
-          title="Sorting"
+          title={t('list.sorting')}
           options={sortingOptions}
           value={isDescending ? 'Latest' : 'Earliest'}
           onChange={onSort}
