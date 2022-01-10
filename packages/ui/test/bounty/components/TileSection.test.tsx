@@ -30,11 +30,11 @@ describe('TileSection', () => {
     },
     {
       title: 'Creator',
-      content: <MemberInfo member={(alice as unknown) as Member} size="m" memberSize="m" hideGroup />,
+      content: <MemberInfo member={alice as unknown as Member} size="m" memberSize="m" hideGroup />,
     },
     {
       title: 'Oracle',
-      content: <MemberInfo member={(alice as unknown) as Member} size="m" memberSize="m" hideGroup />,
+      content: <MemberInfo member={alice as unknown as Member} size="m" memberSize="m" hideGroup />,
     },
   ]
 
