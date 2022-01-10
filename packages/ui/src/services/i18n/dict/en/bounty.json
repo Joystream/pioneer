@@ -10,6 +10,14 @@
     "cancelBounty": "Cancel Bounty"
   },
   "modals": {
+    "common": {
+      "transactionFee": "Transaction fee:",
+      "contributeAmount": "Contribute amount:"
+    },
+    "authorizeTransaction": {
+      "feeAccount": "Fee sending from account",
+      "feeInfo": "Fees of {{value}} JOY will be applied to the transaction"
+    },
     "contribute": {
       "title": "Contribute",
       "nextButton": "Contribute",
@@ -19,11 +27,10 @@
       "stakingAccount": "Staking account",
       "selectAmount": "Select amount for contributing",
       "selectAmountSubtitle": "You must contribute at least {{value}} JOY.",
-      "contributeAmount": "Contribute amount",
-      "transactionFee": "Transaction fee",
       "rangeTitle": "Funded",
       "maxRangeTitle": "Maximal range",
-      "minRangeTitle": "Minimal range"
+      "minRangeTitle": "Minimal range",
+      "authorizeDescription": "You contribute {{value}} JOY"
     }
   }
 }

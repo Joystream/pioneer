@@ -10,6 +10,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context';
 import { getMember } from '../../../../test/_mocks/members';
 
 import { ContributeFundsModal } from './ContributeFundsModal'
+import {AccountsContext} from '@/accounts/providers/accounts/context';
 
 export default {
   title: 'Bounty/Modals/ContributeFundsModal',
@@ -25,6 +26,15 @@ const bounty: Bounty = {
   },
   totalFunding: new BN(10000),
 } as Bounty;
+
+const accounts = {
+  isLoading: false,
+  allAccounts: [
+    { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
+    { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
+  ],
+  hasAccounts: true,
+}
 
 const Template: Story = (args) => {
   return (
@@ -42,18 +52,20 @@ const Template: Story = (args) => {
             },
           }}
         >
-          <ModalContext.Provider
-            value={{
-              modalData: {
-                bounty,
-              },
-              modal: 'Foo',
-              hideModal: () => undefined,
-              showModal: () => undefined,
-            }}
-          >
-            <ContributeFundsModal {...args} />
-          </ModalContext.Provider>
+          <AccountsContext.Provider value={accounts}>
+            <ModalContext.Provider
+              value={{
+                modalData: {
+                  bounty,
+                },
+                modal: null,
+                hideModal: () => undefined,
+                showModal: () => undefined,
+              }}
+            >
+              <ContributeFundsModal {...args} />
+            </ModalContext.Provider>
+          </AccountsContext.Provider>
         </MembershipContext.Provider>
       </HashRouter>
     </>

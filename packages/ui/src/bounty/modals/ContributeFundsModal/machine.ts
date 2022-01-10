@@ -16,17 +16,12 @@ interface ContributeContext {
   amount?: number;
 }
 
-interface AuthorizeContext {
-  feeAccount?: Account
-}
-
 interface TransactionContext {
   transactionEvents?: EventRecord[]
 }
 
 export type ContributeFundContext =
   | ContributeContext
-  | AuthorizeContext
   | TransactionContext;
 
 
@@ -37,7 +32,6 @@ export type ContributeFundEvents = NextEvent;
 export type ContributeFundsState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'contribute'; context: Required<ContributeContext> }
-  | { value: 'authorize', context: Required<AuthorizeContext> }
   | { value: 'transaction', context: EmptyObject }
   | { value: 'success'; context: EmptyObject }
   | { value: 'error'; context: Required<TransactionContext> }
@@ -52,12 +46,6 @@ export const contributeFundsMachine = createMachine<ContributeFundContext, Contr
     },
     contribute: {
       id: 'contribute',
-      on: {
-        NEXT: 'authorize',
-      }
-    },
-    authorize: {
-      id: 'authorize',
       on: {
         NEXT: 'transaction',
       }
