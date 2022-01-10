@@ -2,7 +2,16 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 
 export const selectFromDropdown = async (label: string, name: string) => {
   const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
-  const parentElement = labelElement.parentElement
+  await selectFromDropdownElement(labelElement, name)
+}
+
+export const selectFromDropdownWithId = async (id: string, name: string) => {
+  const labelElement = await screen.findByTestId(id)
+  await selectFromDropdownElement(labelElement, name)
+}
+
+const selectFromDropdownElement = async (element: HTMLElement, name: string) => {
+  const parentElement = element.parentElement
 
   if (!parentElement) {
     return

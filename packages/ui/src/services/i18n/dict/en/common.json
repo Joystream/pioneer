@@ -1,5 +1,14 @@
 {
   "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "modals": {
+    "transactionFee": {
+      "label": "Transaction fee:",
+      "tooltipText": "Lorem ipsum"
+    },
+    "transactionCanceled": "Transaction has been cancelled."
+  },
+  "authorizeTransaction": "Authorize Transaction",
+  "success": "Success",
   "buttons": {
     "withdraw": "Withdraw",
     "withdrawStake": "Withdraw Stake",

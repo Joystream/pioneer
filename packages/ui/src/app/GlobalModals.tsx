@@ -3,6 +3,8 @@ import React, { ReactElement } from 'react'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
+import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyModal'
+import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
 import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal';
 import {
   BountyWithdrawContributionModalCall,
@@ -73,8 +75,10 @@ export type ModalNames =
   | ModalName<IncreaseWorkerStakeModalCall>
   | ModalName<OnBoardingModalCall>
   | ModalName<RestoreVotesModalCall>
+  | ModalName<AddBountyModalCall>
   | ModalName<BountyWithdrawContributionModalCall>
   | ModalName<BountyContributeFundsModalCall>
+  | ModalName<BountyCancelModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -106,7 +110,9 @@ const modals: Record<ModalNames, ReactElement> = {
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
+  AddBounty: <AddBountyModal />,
   BountyWithdrawContributionModal: <WithdrawContributionModal />,
+  BountyCancel: <BountyCancelModal />,
   BountyContributeFundsModal: <ContributeFundsModal />,
 }
 
