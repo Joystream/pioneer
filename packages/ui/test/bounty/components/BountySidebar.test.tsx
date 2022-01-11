@@ -14,15 +14,15 @@ describe('UI: Bounty Sidebar', () => {
   }
   const contributors: Contributor[] = [
     // Alice
-    { actor: (memberMock[0] as unknown) as Member, amount: new BN(1000) },
+    { actor: memberMock[0] as unknown as Member, amount: new BN(1000) },
   ]
   const entrants: Entrant[] = [
     // Bob
-    { actor: (memberMock[1] as unknown) as Member, count: 2 },
+    { actor: memberMock[1] as unknown as Member, count: 2 },
   ]
   const withdrawns: Withdrawn[] = [
     // Charlie
-    { actor: (memberMock[2] as unknown) as Member },
+    { actor: memberMock[2] as unknown as Member },
   ]
   const fundingProps = { contributors, periodsLengths }
   const props = { ...fundingProps, entrants, withdrawns }
