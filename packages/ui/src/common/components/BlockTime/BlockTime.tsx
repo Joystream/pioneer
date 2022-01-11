@@ -37,6 +37,7 @@ const Separator = styled.span`
 
 const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
+  width: max-content;
 `
 
 export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`

@@ -111,7 +111,10 @@ const generateEntry = (mocks: DependOnMocks, bounty: RawBountyMock) => (entryInd
     [1, { type: 'CashedOut' }]
   )
   const worker = randomMember(mocks.members)
-  const works = repeat(() => ({ title: lorem.sentence(), description: randomMessage() }), randomFromRange(0, 5))
+  const works = repeat(
+    () => ({ ...randomRawBlock(), title: lorem.sentence(), description: randomMessage() }),
+    randomFromRange(0, 5)
+  )
 
   return {
     id: `${bounty.id}:${entryIndex}`,
@@ -120,7 +123,7 @@ const generateEntry = (mocks: DependOnMocks, bounty: RawBountyMock) => (entryInd
     stake: bounty.entrantStake,
     stakingAccount: worker.controllerAccount,
     workSubmitted: works.length > 0,
-    works,
+    works: works[0] && works,
     status: randomStatus(),
     announcedInEvent: randomRawBlock(),
   }

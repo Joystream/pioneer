@@ -9,6 +9,7 @@ export type BountyFieldsFragment = {
   id: string
   createdAt: any
   title: string
+  bannerImageUri?: string | null | undefined
   description: string
   cherry: any
   entrantStake: any
@@ -81,11 +82,50 @@ export type BountyFieldsFragment = {
         whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
       }
     | { __typename: 'BountyContractOpen' }
-  contributions: Array<{
-    __typename: 'BountyContribution'
-    amount: any
-    contributor?:
-      | {
+  contributions?:
+    | Array<{
+        __typename: 'BountyContribution'
+        amount: any
+        contributor?:
+          | {
+              __typename: 'Membership'
+              id: string
+              rootAccount: string
+              controllerAccount: string
+              boundAccounts: Array<string>
+              handle: string
+              isVerified: boolean
+              isFoundingMember: boolean
+              inviteCount: number
+              createdAt: any
+              metadata: {
+                __typename: 'MemberMetadata'
+                name?: string | null | undefined
+                about?: string | null | undefined
+                avatar?:
+                  | { __typename: 'AvatarObject' }
+                  | { __typename: 'AvatarUri'; avatarUri: string }
+                  | null
+                  | undefined
+              }
+              roles: Array<{
+                __typename: 'Worker'
+                id: string
+                createdAt: any
+                isLead: boolean
+                group: { __typename: 'WorkingGroup'; name: string }
+              }>
+            }
+          | null
+          | undefined
+      }>
+    | null
+    | undefined
+  entries?:
+    | Array<{
+        __typename: 'BountyEntry'
+        workSubmitted: boolean
+        worker: {
           __typename: 'Membership'
           id: string
           rootAccount: string
@@ -110,12 +150,26 @@ export type BountyFieldsFragment = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }
-      | null
-      | undefined
-  }>
-  entries: Array<{
+        status:
+          | { __typename: 'BountyEntryStatusCashedOut' }
+          | { __typename: 'BountyEntryStatusPassed' }
+          | { __typename: 'BountyEntryStatusRejected' }
+          | { __typename: 'BountyEntryStatusWinner'; reward: number }
+          | { __typename: 'BountyEntryStatusWithdrawn' }
+          | { __typename: 'BountyEntryStatusWorking' }
+      }>
+    | null
+    | undefined
+  createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+}
+
+export type BountyWorkFieldsFragment = {
+  __typename: 'WorkSubmittedEvent'
+  id: string
+  description: string
+  title: string
+  entry: {
     __typename: 'BountyEntry'
-    workSubmitted: boolean
     worker: {
       __typename: 'Membership'
       id: string
@@ -148,7 +202,7 @@ export type BountyFieldsFragment = {
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
-  }>
+  }
 }
 
 export type GetBountiesQueryVariables = Types.Exact<{
@@ -165,6 +219,7 @@ export type GetBountiesQuery = {
     id: string
     createdAt: any
     title: string
+    bannerImageUri?: string | null | undefined
     description: string
     cherry: any
     entrantStake: any
@@ -242,11 +297,50 @@ export type GetBountiesQuery = {
           whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
         }
       | { __typename: 'BountyContractOpen' }
-    contributions: Array<{
-      __typename: 'BountyContribution'
-      amount: any
-      contributor?:
-        | {
+    contributions?:
+      | Array<{
+          __typename: 'BountyContribution'
+          amount: any
+          contributor?:
+            | {
+                __typename: 'Membership'
+                id: string
+                rootAccount: string
+                controllerAccount: string
+                boundAccounts: Array<string>
+                handle: string
+                isVerified: boolean
+                isFoundingMember: boolean
+                inviteCount: number
+                createdAt: any
+                metadata: {
+                  __typename: 'MemberMetadata'
+                  name?: string | null | undefined
+                  about?: string | null | undefined
+                  avatar?:
+                    | { __typename: 'AvatarObject' }
+                    | { __typename: 'AvatarUri'; avatarUri: string }
+                    | null
+                    | undefined
+                }
+                roles: Array<{
+                  __typename: 'Worker'
+                  id: string
+                  createdAt: any
+                  isLead: boolean
+                  group: { __typename: 'WorkingGroup'; name: string }
+                }>
+              }
+            | null
+            | undefined
+        }>
+      | null
+      | undefined
+    entries?:
+      | Array<{
+          __typename: 'BountyEntry'
+          workSubmitted: boolean
+          worker: {
             __typename: 'Membership'
             id: string
             rootAccount: string
@@ -275,45 +369,17 @@ export type GetBountiesQuery = {
               group: { __typename: 'WorkingGroup'; name: string }
             }>
           }
-        | null
-        | undefined
-    }>
-    entries: Array<{
-      __typename: 'BountyEntry'
-      workSubmitted: boolean
-      worker: {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-        }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
+          status:
+            | { __typename: 'BountyEntryStatusCashedOut' }
+            | { __typename: 'BountyEntryStatusPassed' }
+            | { __typename: 'BountyEntryStatusRejected' }
+            | { __typename: 'BountyEntryStatusWinner'; reward: number }
+            | { __typename: 'BountyEntryStatusWithdrawn' }
+            | { __typename: 'BountyEntryStatusWorking' }
         }>
-      }
-      status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
-        | { __typename: 'BountyEntryStatusPassed' }
-        | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
-        | { __typename: 'BountyEntryStatusWithdrawn' }
-        | { __typename: 'BountyEntryStatusWorking' }
-    }>
+      | null
+      | undefined
+    createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
   }>
 }
 
@@ -338,6 +404,7 @@ export type GetBountyQuery = {
         id: string
         createdAt: any
         title: string
+        bannerImageUri?: string | null | undefined
         description: string
         cherry: any
         entrantStake: any
@@ -423,11 +490,50 @@ export type GetBountyQuery = {
               whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
             }
           | { __typename: 'BountyContractOpen' }
-        contributions: Array<{
-          __typename: 'BountyContribution'
-          amount: any
-          contributor?:
-            | {
+        contributions?:
+          | Array<{
+              __typename: 'BountyContribution'
+              amount: any
+              contributor?:
+                | {
+                    __typename: 'Membership'
+                    id: string
+                    rootAccount: string
+                    controllerAccount: string
+                    boundAccounts: Array<string>
+                    handle: string
+                    isVerified: boolean
+                    isFoundingMember: boolean
+                    inviteCount: number
+                    createdAt: any
+                    metadata: {
+                      __typename: 'MemberMetadata'
+                      name?: string | null | undefined
+                      about?: string | null | undefined
+                      avatar?:
+                        | { __typename: 'AvatarObject' }
+                        | { __typename: 'AvatarUri'; avatarUri: string }
+                        | null
+                        | undefined
+                    }
+                    roles: Array<{
+                      __typename: 'Worker'
+                      id: string
+                      createdAt: any
+                      isLead: boolean
+                      group: { __typename: 'WorkingGroup'; name: string }
+                    }>
+                  }
+                | null
+                | undefined
+            }>
+          | null
+          | undefined
+        entries?:
+          | Array<{
+              __typename: 'BountyEntry'
+              workSubmitted: boolean
+              worker: {
                 __typename: 'Membership'
                 id: string
                 rootAccount: string
@@ -456,52 +562,81 @@ export type GetBountyQuery = {
                   group: { __typename: 'WorkingGroup'; name: string }
                 }>
               }
-            | null
-            | undefined
-        }>
-        entries: Array<{
-          __typename: 'BountyEntry'
-          workSubmitted: boolean
-          worker: {
-            __typename: 'Membership'
-            id: string
-            rootAccount: string
-            controllerAccount: string
-            boundAccounts: Array<string>
-            handle: string
-            isVerified: boolean
-            isFoundingMember: boolean
-            inviteCount: number
-            createdAt: any
-            metadata: {
-              __typename: 'MemberMetadata'
-              name?: string | null | undefined
-              about?: string | null | undefined
-              avatar?:
-                | { __typename: 'AvatarObject' }
-                | { __typename: 'AvatarUri'; avatarUri: string }
-                | null
-                | undefined
-            }
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              isLead: boolean
-              group: { __typename: 'WorkingGroup'; name: string }
+              status:
+                | { __typename: 'BountyEntryStatusCashedOut' }
+                | { __typename: 'BountyEntryStatusPassed' }
+                | { __typename: 'BountyEntryStatusRejected' }
+                | { __typename: 'BountyEntryStatusWinner'; reward: number }
+                | { __typename: 'BountyEntryStatusWithdrawn' }
+                | { __typename: 'BountyEntryStatusWorking' }
             }>
-          }
-          status:
-            | { __typename: 'BountyEntryStatusCashedOut' }
-            | { __typename: 'BountyEntryStatusPassed' }
-            | { __typename: 'BountyEntryStatusRejected' }
-            | { __typename: 'BountyEntryStatusWinner'; reward: number }
-            | { __typename: 'BountyEntryStatusWithdrawn' }
-            | { __typename: 'BountyEntryStatusWorking' }
-        }>
+          | null
+          | undefined
+        createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
       }
     | null
     | undefined
+}
+
+export type GetBountyWorksQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.WorkSubmittedEventWhereInput>
+  order?: Types.InputMaybe<Array<Types.WorkSubmittedEventOrderByInput> | Types.WorkSubmittedEventOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetBountyWorksQuery = {
+  __typename: 'Query'
+  workSubmittedEvents: Array<{
+    __typename: 'WorkSubmittedEvent'
+    id: string
+    description: string
+    title: string
+    entry: {
+      __typename: 'BountyEntry'
+      worker: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+    }
+  }>
+}
+
+export type GetBountyWorksCountQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.WorkSubmittedEventWhereInput>
+}>
+
+export type GetBountyWorksCountQuery = {
+  __typename: 'Query'
+  workSubmittedEventsConnection: { __typename: 'WorkSubmittedEventConnection'; totalCount: number }
 }
 
 export const BountyFieldsFragmentDoc = gql`
@@ -509,6 +644,7 @@ export const BountyFieldsFragmentDoc = gql`
     id
     createdAt
     title
+    bannerImageUri
     description
     cherry
     entrantStake
@@ -551,6 +687,28 @@ export const BountyFieldsFragmentDoc = gql`
       }
       workSubmitted
       status {
+        ... on BountyEntryStatusWinner {
+          reward
+        }
+      }
+    }
+    createdInEvent {
+      inBlock
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const BountyWorkFieldsFragmentDoc = gql`
+  fragment BountyWorkFields on WorkSubmittedEvent {
+    id
+    description
+    title
+    entry {
+      worker {
+        ...MemberFields
+      }
+      status {
+        __typename
         ... on BountyEntryStatusWinner {
           reward
         }
@@ -679,3 +837,99 @@ export function useGetBountyLazyQuery(
 export type GetBountyQueryHookResult = ReturnType<typeof useGetBountyQuery>
 export type GetBountyLazyQueryHookResult = ReturnType<typeof useGetBountyLazyQuery>
 export type GetBountyQueryResult = Apollo.QueryResult<GetBountyQuery, GetBountyQueryVariables>
+export const GetBountyWorksDocument = gql`
+  query GetBountyWorks(
+    $where: WorkSubmittedEventWhereInput
+    $order: [WorkSubmittedEventOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+      ...BountyWorkFields
+    }
+  }
+  ${BountyWorkFieldsFragmentDoc}
+`
+
+/**
+ * __useGetBountyWorksQuery__
+ *
+ * To run a query within a React component, call `useGetBountyWorksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBountyWorksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBountyWorksQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetBountyWorksQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBountyWorksQuery, GetBountyWorksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBountyWorksQuery, GetBountyWorksQueryVariables>(GetBountyWorksDocument, options)
+}
+export function useGetBountyWorksLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBountyWorksQuery, GetBountyWorksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBountyWorksQuery, GetBountyWorksQueryVariables>(GetBountyWorksDocument, options)
+}
+export type GetBountyWorksQueryHookResult = ReturnType<typeof useGetBountyWorksQuery>
+export type GetBountyWorksLazyQueryHookResult = ReturnType<typeof useGetBountyWorksLazyQuery>
+export type GetBountyWorksQueryResult = Apollo.QueryResult<GetBountyWorksQuery, GetBountyWorksQueryVariables>
+export const GetBountyWorksCountDocument = gql`
+  query GetBountyWorksCount($where: WorkSubmittedEventWhereInput) {
+    workSubmittedEventsConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetBountyWorksCountQuery__
+ *
+ * To run a query within a React component, call `useGetBountyWorksCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBountyWorksCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBountyWorksCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetBountyWorksCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>(
+    GetBountyWorksCountDocument,
+    options
+  )
+}
+export function useGetBountyWorksCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBountyWorksCountQuery, GetBountyWorksCountQueryVariables>(
+    GetBountyWorksCountDocument,
+    options
+  )
+}
+export type GetBountyWorksCountQueryHookResult = ReturnType<typeof useGetBountyWorksCountQuery>
+export type GetBountyWorksCountLazyQueryHookResult = ReturnType<typeof useGetBountyWorksCountLazyQuery>
+export type GetBountyWorksCountQueryResult = Apollo.QueryResult<
+  GetBountyWorksCountQuery,
+  GetBountyWorksCountQueryVariables
+>

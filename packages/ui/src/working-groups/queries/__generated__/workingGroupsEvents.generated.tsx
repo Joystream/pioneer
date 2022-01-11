@@ -671,6 +671,7 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
     | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | {
         __typename: 'WorkerExitedEvent'
         id: string

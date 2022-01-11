@@ -40,12 +40,12 @@ export interface RawBountyEntryMock {
   stake: string
   stakingAccount: string
   workSubmitted: boolean
-  works: RawBountyWorkDataMock[]
+  works?: RawWorkSubmittedEventMock[]
   status: { type: string; reward?: string }
   announcedInEvent: BlockFieldsMock
 }
 
-export interface RawBountyWorkDataMock {
+export interface RawWorkSubmittedEventMock extends BlockFieldsMock {
   title: string
   description: string
 }
@@ -86,7 +86,7 @@ const seedEntryStatus = ({ type, ...data }: RawBountyEntryMock['status'], server
 export const seedBountyEntry = ({ works, status, announcedInEvent, ...data }: RawBountyEntryMock, server: any) =>
   server.schema.create('BountyEntry', {
     ...data,
-    works: works.map((work) => server.schema.create('BountyWorkData', work)),
+    works: works?.map((work) => server.schema.create('WorkSubmittedEvent', work)),
     status: seedEntryStatus(status, server),
     announcedInEvent: server.schema.create('WorkEntryAnnouncedEvent', announcedInEvent),
   })

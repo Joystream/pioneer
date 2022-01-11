@@ -38,7 +38,7 @@ describe('UI: Bounty Sidebar', () => {
   describe('in Working period', () => {
     const stage = 'working'
     beforeEach(() => {
-      render(<BountySidebar {...props} entrants={entrants} withdrawns={withdrawns} stage={stage} />)
+      render(<BountySidebar {...props} entrants={entrants} withdrawals={withdrawns} stage={stage} />)
     })
 
     it('displays Entrants list', () => {
@@ -51,7 +51,7 @@ describe('UI: Bounty Sidebar', () => {
 
     it('displays Contributors list only after expanding', async () => {
       expect(screen.queryByText('alice')).toBeNull()
-      fireEvent.click(await screen.getByTestId('CONTRIBUTORS-EXPAND'))
+      fireEvent.click(await screen.getByTestId('sidebar.contributors-EXPAND'))
       expect(screen.queryByText('alice')).not.toBeNull()
     })
   })
@@ -59,7 +59,7 @@ describe('UI: Bounty Sidebar', () => {
   describe('in Judgement period', () => {
     const stage = 'judgement'
     beforeEach(() => {
-      render(<BountySidebar {...props} entrants={entrants} withdrawns={withdrawns} stage={stage} />)
+      render(<BountySidebar {...props} entrants={entrants} withdrawals={withdrawns} stage={stage} />)
     })
 
     it('displays Entrants list', () => {
@@ -72,7 +72,7 @@ describe('UI: Bounty Sidebar', () => {
 
     it('displays Contributors list only after expanding', async () => {
       expect(screen.queryByText('alice')).toBeNull()
-      fireEvent.click(await screen.getByTestId('CONTRIBUTORS-EXPAND'))
+      fireEvent.click(await screen.getByTestId('sidebar.contributors-EXPAND'))
       expect(screen.queryByText('alice')).not.toBeNull()
     })
   })

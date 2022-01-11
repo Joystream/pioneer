@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { ProgressBarWithRange } from '@/common/components/Progress'
@@ -7,11 +8,8 @@ import { TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 export interface FundedRangeProps {
-  rangeTitle: string
   rangeValue: number
-  maxRangeTitle: string
   maxRangeValue: number
-  minRangeTitle: string
   minRangeValue: number
 }
 
@@ -21,31 +19,30 @@ interface FlatProps {
 
 type Props = FundedRangeProps & FlatProps
 
-export const FundedRange = React.memo(
-  ({ rangeTitle, rangeValue, maxRangeTitle, maxRangeValue, minRangeTitle, minRangeValue, flat }: Props) => {
-    return (
-      <FundedRangeWrapper flat={flat}>
-        <TopWrapper>
-          <ProgressBarWrapper>
-            <FundedTitle>
-              <TextSmall>{rangeTitle}</TextSmall>
-              <TokenValue value={rangeValue} size="s" />
-            </FundedTitle>
-            <ProgressBarWithRange value={rangeValue} minRange={minRangeValue} maxRange={maxRangeValue} size="big" />
-          </ProgressBarWrapper>
-          <MaxRangeWrapper flat={flat}>
-            <MaxRangeTitle>{maxRangeTitle}</MaxRangeTitle>
-            <TokenValue value={maxRangeValue} size="s" />
-          </MaxRangeWrapper>
-        </TopWrapper>
-        <ProgressBarInfoVertical inset="45px 40% 0">
-          <TextSmall>{minRangeTitle}</TextSmall>
-          <TokenValue value={minRangeValue} size="s" />
-        </ProgressBarInfoVertical>
-      </FundedRangeWrapper>
-    )
-  }
-)
+export const FundedRange = React.memo(({ rangeValue, maxRangeValue, minRangeValue, flat }: Props) => {
+  const { t } = useTranslation('bounty')
+  return (
+    <FundedRangeWrapper flat={flat}>
+      <TopWrapper>
+        <ProgressBarWrapper>
+          <FundedTitle>
+            <TextSmall>{t('tiles.progressBar.funded')}</TextSmall>
+            <TokenValue value={rangeValue} size="s" />
+          </FundedTitle>
+          <ProgressBarWithRange value={rangeValue} minRange={minRangeValue} maxRange={maxRangeValue} size="big" />
+        </ProgressBarWrapper>
+        <MaxRangeWrapper flat={flat}>
+          <MaxRangeTitle>{t('tiles.progressBar.maxRange')}</MaxRangeTitle>
+          <TokenValue value={maxRangeValue} size="s" />
+        </MaxRangeWrapper>
+      </TopWrapper>
+      <ProgressBarInfoVertical inset="45px 40% 0">
+        <TextSmall>{t('tiles.progressBar.minRange')}</TextSmall>
+        <TokenValue value={minRangeValue} size="s" />
+      </ProgressBarInfoVertical>
+    </FundedRangeWrapper>
+  )
+})
 
 const flatWrapper = css`
   flex: 0;
