@@ -70,6 +70,12 @@ const getFilter = (where: Record<string, any>) => {
       )
     }
 
+    if (type === 'startsWith') {
+      filters.push((model: Record<string, any>) =>
+        String(model[getFieldName(model, field)]).startsWith(String(checkValue))
+      )
+    }
+
     if (type === 'in') {
       if (field === 'isTypeOf') {
         filters.push((model: Record<string, any>) =>

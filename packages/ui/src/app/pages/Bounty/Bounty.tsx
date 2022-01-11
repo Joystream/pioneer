@@ -12,9 +12,9 @@ export const Bounty = () => {
   const { id } = useParams<BountyRouteParams>()
   const { isLoading, bounty } = useBounty(id)
 
-  if (isLoading) {
+  if (isLoading || !bounty) {
     return <Loading />
   }
 
-  return <PageLayout main={<BountyMain id={id} />} header={<BountyPreviewHeader bounty={bounty} />} />
+  return <PageLayout main={<BountyMain bounty={bounty} />} header={<BountyPreviewHeader bounty={bounty} />} />
 }

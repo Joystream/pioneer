@@ -41,7 +41,7 @@ Default.args = {
     { actor: getMember('alice'), count: 2 },
     { actor: getMember('bob'), count: 1 },
   ],
-  withdrawns: [{ actor: getMember('alice') }, { actor: getMember('bob') }],
+  withdrawals: [{ actor: getMember('alice') }, { actor: getMember('bob') }],
   entrantResult: 'winner',
   stage: 'funding',
   periodsLengths: {
