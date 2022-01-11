@@ -79,7 +79,7 @@ export const ContributeFundsModal = () => {
 
   useEffect(() => {
     balance && setAmount(balance.transferable.gten(minFundingLimit) ? String(minFundingLimit) : balance.transferable.toString())
-  }, [balance])
+  }, [balance?.transferable.toString(), account?.address])
 
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
