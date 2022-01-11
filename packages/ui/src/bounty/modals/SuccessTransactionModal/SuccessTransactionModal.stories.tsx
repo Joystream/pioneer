@@ -1,4 +1,4 @@
-import {action} from '@storybook/addon-actions';
+import { action } from '@storybook/addon-actions'
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
@@ -18,5 +18,5 @@ Default.args = {
   onClose: action('onClose'),
   onButtonClick: action('onButtonClick'),
   buttonLabel: 'Confirm',
-  message: 'Lorem ipsum'
+  message: 'Lorem ipsum',
 }

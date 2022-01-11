@@ -1,17 +1,17 @@
-import {fireEvent, render, RenderResult, screen} from '@testing-library/react'
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
-import {FundingLimited} from '@/bounty/types/Bounty';
+import { FundingLimited } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
 import { ApiContext } from '@/common/providers/api/context'
-import {UseApi} from '@/common/providers/api/provider';
+import { UseApi } from '@/common/providers/api/provider'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
-import {MembershipContext} from '@/memberships/providers/membership/context';
+import { MembershipContext } from '@/memberships/providers/membership/context'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
 
@@ -20,7 +20,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
 
-const [baseBounty] = bounties;
+const [baseBounty] = bounties
 const bounty = {
   ...baseBounty,
   totalFunding: new BN(baseBounty.totalFunding),
@@ -28,7 +28,7 @@ const bounty = {
     ...baseBounty.fundingType,
     maxAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).maxAmount ?? 0),
     minAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).minAmount ?? 0),
-  }
+  },
 }
 
 const defaultBalance = {
@@ -40,9 +40,9 @@ const defaultBalance = {
 }
 
 describe('UI: ContributeFundsModal', () => {
-  let renderResult: RenderResult;
+  let renderResult: RenderResult
   const baseApi = stubApi()
-  const fee = 888;
+  const fee = 888
   const transaction = stubTransaction(baseApi, 'api.tx.bounty.fundBounty', fee)
   const api = {
     ...baseApi,
@@ -91,7 +91,7 @@ describe('UI: ContributeFundsModal', () => {
   }
 
   beforeEach(() => {
-    renderResult = render(<Modal />);
+    renderResult = render(<Modal />)
   })
 
   it('Renders', () => {
@@ -103,21 +103,21 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Displays correct transaction fee', () => {
-    const expected = String(fee);
+    const expected = String(fee)
     const valueContainer = screen.getByText('modals.common.transactionFee')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected);
+    expect(valueContainer?.textContent).toBe(expected)
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555;
-    const expected = String(value);
-    const input = screen.getByLabelText('modals.contribute.selectAmount');
-    fireEvent.input(input, {target: {value}})
+    const value = 555
+    const expected = String(value)
+    const input = screen.getByLabelText('modals.contribute.selectAmount')
+    fireEvent.input(input, { target: { value } })
 
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected);
+    expect(valueContainer?.textContent).toBe(expected)
   })
 
   describe('Transaction result', () => {

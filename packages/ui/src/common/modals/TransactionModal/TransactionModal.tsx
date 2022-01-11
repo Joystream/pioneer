@@ -1,5 +1,6 @@
 import { useActor } from '@xstate/react'
 import React, { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { MultiTransactionModalHeader } from '@/common/modals/TransactionModal/MultiTransactionModalHeader'
@@ -7,7 +8,6 @@ import { MultiTransactionModalHeader } from '@/common/modals/TransactionModal/Mu
 import { Modal, ModalHeader } from '../../components/Modal'
 
 import { MultiTransactionConfig } from './types'
-import {useTranslation} from 'react-i18next';
 
 export interface TransactionModalProps {
   children: ReactNode
@@ -18,7 +18,7 @@ export interface TransactionModalProps {
 }
 
 export const TransactionModal = ({ onClose, children, service, title, useMultiTransaction }: TransactionModalProps) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   const [state] = useActor(service)
 
   if (state.matches('prepare')) {

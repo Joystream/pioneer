@@ -1,17 +1,20 @@
-import {render, screen} from '@testing-library/react'
-import BN from 'bn.js';
+import { render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
-import {ActorRef} from 'xstate';
+import { ActorRef } from 'xstate'
 
-import {AuthorizeTransactionModal, Props as AuthorizeTransactionModalProps} from '@/bounty/modals/AuthorizeTransactionModal';
+import {
+  AuthorizeTransactionModal,
+  Props as AuthorizeTransactionModalProps,
+} from '@/bounty/modals/AuthorizeTransactionModal'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
-import {UseModal} from '@/common/providers/modal/types';
+import { UseModal } from '@/common/providers/modal/types'
 import bounties from '@/mocks/data/raw/bounties.json'
 
 import { alice } from '../../_mocks/keyring'
-import {MockKeyringProvider} from '../../_mocks/providers';
-import {stubApi, stubTransaction} from '../../_mocks/transactions';
+import { MockKeyringProvider } from '../../_mocks/providers'
+import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@xstate/react', () => ({
   ...jest.requireActual('@xstate/react'),
@@ -21,13 +24,13 @@ jest.mock('@xstate/react', () => ({
       matches: (state: string) => state === 'prepare',
     },
     jest.fn(),
-  ]
+  ],
 }))
 
 const bounty = bounties[0]
 
 describe('UI: AuthorizeTransactionModal', () => {
-  const api = stubApi();
+  const api = stubApi()
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
@@ -37,14 +40,14 @@ describe('UI: AuthorizeTransactionModal', () => {
     },
   }
 
-  const fee = 888;
-  const transaction = stubTransaction(api, '', fee) as any;
-  const service = {} as ActorRef<any>;
-  const controllerAccount = alice;
-  const onClose = jest.fn();
-  const description = 'description';
-  const buttonLabel = 'button-label';
-  const contributeAmount = new BN(222);
+  const fee = 888
+  const transaction = stubTransaction(api, '', fee) as any
+  const service = {} as ActorRef<any>
+  const controllerAccount = alice
+  const onClose = jest.fn()
+  const description = 'description'
+  const buttonLabel = 'button-label'
+  const contributeAmount = new BN(222)
   const props: AuthorizeTransactionModalProps = {
     onClose,
     transaction,
@@ -56,7 +59,7 @@ describe('UI: AuthorizeTransactionModal', () => {
   }
 
   beforeEach(() => {
-    renderModal();
+    renderModal()
   })
 
   it('Renders', async () => {
@@ -72,17 +75,17 @@ describe('UI: AuthorizeTransactionModal', () => {
   })
 
   it('Displays correct fee', () => {
-    const expected = String(fee);
+    const expected = String(fee)
     const valueContainer = screen.getByText('modals.common.transactionFee')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected);
+    expect(valueContainer?.textContent).toBe(expected)
   })
 
   it('Displays correct contribute amount', () => {
-    const expected = contributeAmount.toString();
+    const expected = contributeAmount.toString()
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected);
+    expect(valueContainer?.textContent).toBe(expected)
   })
 
   const renderModal = () =>
@@ -95,5 +98,4 @@ describe('UI: AuthorizeTransactionModal', () => {
         </MockKeyringProvider>
       </ModalContext.Provider>
     )
-
 })
