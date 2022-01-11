@@ -58,8 +58,19 @@ const balance: AddressToBalanceMap = {
   },
 }
 
+const membership = {
+  isLoading: false,
+  active: getMember('alice'),
+  hasMembers: true,
+  setActive: () => null,
+  members: [],
+  helpers: {
+    getMemberIdByBoundAccountAddress: () => undefined,
+  },
+}
+
 const baseApi = stubApi()
-const transaction = stubTransaction(baseApi, '', 888)
+const transaction = stubTransaction(baseApi, 'api.tx.bounty.fundBounty', 888)
 const api = {
   ...baseApi,
   api: {
@@ -79,18 +90,7 @@ const Template: Story = (args) => {
   return (
     <MemoryRouter>
       <ApiContext.Provider value={api}>
-        <MembershipContext.Provider
-          value={{
-            isLoading: false,
-            active: getMember('alice'),
-            hasMembers: true,
-            setActive: () => null,
-            members: [],
-            helpers: {
-              getMemberIdByBoundAccountAddress: () => undefined,
-            },
-          }}
-        >
+        <MembershipContext.Provider value={membership}>
           <AccountsContext.Provider value={accounts}>
             <BalancesContext.Provider value={balance}>
               <ModalContext.Provider

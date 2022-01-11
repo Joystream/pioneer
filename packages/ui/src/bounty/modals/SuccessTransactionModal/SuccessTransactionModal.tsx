@@ -7,19 +7,19 @@ import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 
-interface Props {
+export interface Props {
   onClose: () => void
   onButtonClick: () => void
   buttonLabel: string
   message: string
 }
 
-export const SuccessModal = ({ onClose, onButtonClick, message, buttonLabel }: Props) => {
-  const { t } = useTranslation('bounty')
+export const SuccessTransactionModal = ({ onClose, onButtonClick, message, buttonLabel }: Props) => {
+  const { t } = useTranslation()
 
   return (
     <Modal modalSize="s" modalHeight="s" onClose={onClose}>
-      <ModalHeader title={t('common:success')} onClick={onClose} icon={<SuccessSymbol />} />
+      <ModalHeader title={t('success')} onClick={onClose} icon={<SuccessSymbol />} />
       <ModalBody>
         <Info>
           <TextMedium>{message}</TextMedium>
