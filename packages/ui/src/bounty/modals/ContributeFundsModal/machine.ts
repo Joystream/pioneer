@@ -1,19 +1,19 @@
-import { EventRecord } from '@polkadot/types/interfaces/system';
-import { assign, createMachine } from 'xstate';
+import { EventRecord } from '@polkadot/types/interfaces/system'
+import { assign, createMachine } from 'xstate'
 
-import { Account } from '@/accounts/types';
+import { Account } from '@/accounts/types'
 import {
   isTransactionCanceled,
   isTransactionError,
   isTransactionSuccess,
-  transactionMachine
-} from '@/common/model/machines';
-import { EmptyObject } from '@/common/types';
+  transactionMachine,
+} from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 
 interface ContributeContext {
-  bountyId?: string;
-  stakingAccount?: Account;
-  amount?: number;
+  bountyId?: string
+  stakingAccount?: Account
+  amount?: number
 }
 
 interface TransactionContext {
@@ -29,18 +29,16 @@ export enum ContributeFundStates {
   cancel = 'cancel',
 }
 
-export type ContributeFundContext =
-  | ContributeContext
-  | TransactionContext;
+export type ContributeFundContext = ContributeContext | TransactionContext
 
 type NextEvent = { type: 'NEXT' }
 
-export type ContributeFundEvents = NextEvent;
+export type ContributeFundEvents = NextEvent
 
 export type ContributeFundsState =
   | { value: ContributeFundStates.requirementsVerification; context: EmptyObject }
   | { value: ContributeFundStates.contribute; context: Required<ContributeContext> }
-  | { value: ContributeFundStates.transaction, context: EmptyObject }
+  | { value: ContributeFundStates.transaction; context: EmptyObject }
   | { value: ContributeFundStates.success; context: EmptyObject }
   | { value: ContributeFundStates.cancel; context: EmptyObject }
   | { value: ContributeFundStates.error; context: Required<TransactionContext> }
@@ -57,7 +55,7 @@ export const contributeFundsMachine = createMachine<ContributeFundContext, Contr
       id: ContributeFundStates.contribute,
       on: {
         NEXT: ContributeFundStates.transaction,
-      }
+      },
     },
     [ContributeFundStates.transaction]: {
       invoke: {
@@ -83,5 +81,5 @@ export const contributeFundsMachine = createMachine<ContributeFundContext, Contr
     [ContributeFundStates.success]: { type: 'final' },
     [ContributeFundStates.error]: { type: 'final' },
     [ContributeFundStates.cancel]: { type: 'final' },
-  }
+  },
 })

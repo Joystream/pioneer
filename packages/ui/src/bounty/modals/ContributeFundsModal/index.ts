@@ -1,12 +1,9 @@
-import { Bounty } from '@/bounty/types/Bounty';
+import { Bounty } from '@/bounty/types/Bounty'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 
 interface ModalData {
-  bounty: Bounty;
+  bounty: Bounty
 }
 
 export * from './ContributeFundsModal'
-export type BountyContributeFundsModalCall = ModalWithDataCall<
-  'BountyContributeFundsModal',
-  ModalData
-  >
+export type BountyContributeFundsModalCall = ModalWithDataCall<'BountyContributeFundsModal', ModalData>

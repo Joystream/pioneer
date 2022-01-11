@@ -1,1 +1,1 @@
-export * from './AuthorizeTransactionModal';
+export * from './AuthorizeTransactionModal'

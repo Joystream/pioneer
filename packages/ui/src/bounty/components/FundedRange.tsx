@@ -16,10 +16,10 @@ export interface FundedRangeProps {
 }
 
 interface FlatProps {
-  flat?: boolean;
+  flat?: boolean
 }
 
-type Props = FundedRangeProps & FlatProps;
+type Props = FundedRangeProps & FlatProps
 
 export const FundedRange = React.memo(
   ({ rangeTitle, rangeValue, maxRangeTitle, maxRangeValue, minRangeTitle, minRangeValue, flat }: Props) => {
@@ -51,7 +51,7 @@ const flatWrapper = css`
   flex: 0;
   box-shadow: none;
   border: 1px solid ${Colors.Black[300]};
-`;
+`
 
 const centerTitle = css`
   > p {
@@ -62,10 +62,10 @@ const centerTitle = css`
 
 const TopWrapper = styled.div`
   display: flex;
-`;
+`
 
 const MaxRangeWrapper = styled.div<FlatProps>`
-  margin-left: ${({flat}) => flat && '20px'};
+  margin-left: ${({ flat }) => flat && '20px'};
   width: fit-content;
   margin-top: 7px;
 `
@@ -78,7 +78,7 @@ const MaxRangeTitle = styled(TextSmall)`
 const FundedRangeWrapper = styled(StatisticItem)<FlatProps>`
   min-width: 55%;
   display: inline;
-  ${({flat}) => flat && flatWrapper}
+  ${({ flat }) => flat && flatWrapper}
 `
 
 const FundedTitle = styled.div`
@@ -92,7 +92,7 @@ const ProgressBarWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  padding: 0 10px 7px 0
+  padding: 0 10px 7px 0;
 `
 
 const ProgressBarInfoVertical = styled.div<{ inset: string }>`

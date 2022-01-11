@@ -17,8 +17,8 @@ export type InputComponentProps = InputProps &
   DisabledInputProps & {
     id?: string
     label?: string
-    sublabel?: string;
-    inputDisabled?: boolean;
+    sublabel?: string
+    inputDisabled?: boolean
     required?: boolean
     value?: string
     icon?: React.ReactElement
@@ -40,7 +40,7 @@ interface InputProps<Element extends HTMLElement = HTMLInputElement> extends Rea
   required?: boolean
   value?: string
   placeholder?: string
-  disabled?: boolean,
+  disabled?: boolean
 }
 
 export interface InputElementProps {
@@ -104,11 +104,7 @@ export const InputComponent = React.memo(
             )}
           </InputLabel>
         )}
-        {sublabel && (
-          <InputSublabel>
-            {sublabel}
-          </InputSublabel>
-        )}
+        {sublabel && <InputSublabel>{sublabel}</InputSublabel>}
         <InputContainer
           copy={copy}
           units={units}
@@ -305,8 +301,8 @@ const InputSublabel = styled(Label)`
   font-weight: 400;
   font-family: ${Fonts.Inter};
   margin-bottom: 16px;
-  color: ${Colors.Black[700]}
-`;
+  color: ${Colors.Black[700]};
+`
 
 export const InputIcon = styled.div<DisabledInputProps>`
   display: flex;

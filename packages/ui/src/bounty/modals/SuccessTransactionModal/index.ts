@@ -1,1 +1,1 @@
-export * from "./SuccessTransactionModal";
+export * from './SuccessTransactionModal'

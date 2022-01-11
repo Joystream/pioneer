@@ -1,23 +1,23 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import BN from 'bn.js';
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import { useTranslation } from 'react-i18next';
+import BN from 'bn.js'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import {useMyBalances} from '@/accounts/hooks/useMyBalances';
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants';
+import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-import { formatTokenValue } from '@/common/model/formatters';
+import { formatTokenValue } from '@/common/model/formatters'
 
 export interface Props {
   onClose: () => void
@@ -25,12 +25,20 @@ export interface Props {
   service: ActorRef<any>
   controllerAccount: Account
   description: string
-  buttonLabel: string;
-  contributeAmount?: BN;
+  buttonLabel: string
+  contributeAmount?: BN
 }
 
-export const AuthorizeTransactionModal = ({ onClose, transaction, service, controllerAccount, description, buttonLabel, contributeAmount }: Props) => {
-  const { t } = useTranslation('bounty');
+export const AuthorizeTransactionModal = ({
+  onClose,
+  transaction,
+  service,
+  controllerAccount,
+  description,
+  buttonLabel,
+  contributeAmount,
+}: Props) => {
+  const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
   const [hasFunds, setHasFunds] = useState<boolean>(false)
   const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(
@@ -65,15 +73,19 @@ export const AuthorizeTransactionModal = ({ onClose, transaction, service, contr
     }
   }, [selectedAccount, paymentInfo?.partialFee])
 
-
   return (
     <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
         <TextMedium light>{description}</TextMedium>
         <TextMedium light>
-          {t('modals.authorizeTransaction.feeInfo', {value: paymentInfo?.partialFee.toString() ?? '-'})}
+          {t('modals.authorizeTransaction.feeInfo', { value: paymentInfo?.partialFee.toString() ?? '-' })}
         </TextMedium>
-        <InputComponent label={t('modals.authorizeTransaction.feeAccount')} inputSize="l" required tooltipText={t('common:lorem')}>
+        <InputComponent
+          label={t('modals.authorizeTransaction.feeAccount')}
+          inputSize="l"
+          required
+          tooltipText={t('common:lorem')}
+        >
           <SelectAccount
             filter={accountsFilter}
             onChange={(account) => setSelectedAccount(account)}
@@ -83,10 +95,12 @@ export const AuthorizeTransactionModal = ({ onClose, transaction, service, contr
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          {contributeAmount && <TransactionInfo
-            title={t('modals.common.contributeAmount', {value: formatTokenValue(contributeAmount)})}
-            value={contributeAmount}
-          />}
+          {contributeAmount && (
+            <TransactionInfo
+              title={t('modals.common.contributeAmount', { value: formatTokenValue(contributeAmount) })}
+              value={contributeAmount}
+            />
+          )}
           <TransactionInfo
             title={t('modals.common.transactionFee')}
             value={paymentInfo?.partialFee}

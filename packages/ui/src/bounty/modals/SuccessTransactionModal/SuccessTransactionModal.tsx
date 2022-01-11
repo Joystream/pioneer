@@ -8,10 +8,10 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/
 import { TextMedium } from '@/common/components/typography'
 
 interface Props {
-  onClose: () => void,
-  onButtonClick: () => void,
-  buttonLabel: string;
-  message: string;
+  onClose: () => void
+  onButtonClick: () => void
+  buttonLabel: string
+  message: string
 }
 
 export const SuccessModal = ({ onClose, onButtonClick, message, buttonLabel }: Props) => {

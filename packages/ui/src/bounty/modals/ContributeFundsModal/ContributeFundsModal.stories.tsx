@@ -1,22 +1,21 @@
 import { Meta, Story } from '@storybook/react'
-import BN from 'bn.js';
+import BN from 'bn.js'
 import React from 'react'
-import {MemoryRouter} from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 
-import {AccountsContext} from '@/accounts/providers/accounts/context';
-import {BalancesContextProvider} from '@/accounts/providers/balances/provider';
-import {AddressToBalanceMap} from '@/accounts/types';
-import { Bounty } from '@/bounty/types/Bounty';
-import {ApiContext} from '@/common/providers/api/context';
-import {UseApi} from '@/common/providers/api/provider';
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { BalancesContext } from '@/accounts/providers/balances/context'
+import { AddressToBalanceMap } from '@/accounts/types'
+import { Bounty } from '@/bounty/types/Bounty'
+import { ApiContext } from '@/common/providers/api/context'
+import { UseApi } from '@/common/providers/api/provider'
 import { ModalContext } from '@/common/providers/modal/context'
-import { MembershipContext } from '@/memberships/providers/membership/context';
+import { MembershipContext } from '@/memberships/providers/membership/context'
 
-import { getMember } from '../../../../test/_mocks/members';
-import {stubApi, stubTransaction} from '../../../../test/_mocks/transactions';
+import { getMember } from '../../../../test/_mocks/members'
+import { stubApi, stubTransaction } from '../../../../test/_mocks/transactions'
 
 import { ContributeFundsModal } from './ContributeFundsModal'
-import {BalancesContext} from '@/accounts/providers/balances/context';
 
 export default {
   title: 'Bounty/ContributeFundsModal',
@@ -31,7 +30,7 @@ const bounty: Bounty = {
     maxPeriod: 1000,
   },
   totalFunding: new BN(10000),
-} as Bounty;
+} as Bounty
 
 const accounts = {
   isLoading: false,
@@ -59,8 +58,8 @@ const balance: AddressToBalanceMap = {
   },
 }
 
-const baseApi = stubApi();
-const transaction = stubTransaction(baseApi, '', 888);
+const baseApi = stubApi()
+const transaction = stubTransaction(baseApi, '', 888)
 const api = {
   ...baseApi,
   api: {
@@ -68,49 +67,49 @@ const api = {
     tx: {
       bounty: {
         fundBounty: () => transaction,
-      }
+      },
     },
     consts: {
-      bounty: {minFundingLimit: new BN(10)}
-    }
-  }
+      bounty: { minFundingLimit: new BN(10) },
+    },
+  },
 } as unknown as UseApi
 
 const Template: Story = (args) => {
   return (
-      <MemoryRouter>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider
-            value={{
-              isLoading: false,
-              active: getMember('alice'),
-              hasMembers: true,
-              setActive: () => null,
-              members: [],
-              helpers: {
-                getMemberIdByBoundAccountAddress: () => undefined,
-              },
-            }}
-          >
-            <AccountsContext.Provider value={accounts}>
-              <BalancesContext.Provider value={balance}>
-                <ModalContext.Provider
-                  value={{
-                    modalData: {
-                      bounty,
-                    },
-                    modal: 'foo',
-                    hideModal: () => undefined,
-                    showModal: () => undefined,
-                  }}
-                >
-                  <ContributeFundsModal {...args} />
-                </ModalContext.Provider>
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MemoryRouter>
+    <MemoryRouter>
+      <ApiContext.Provider value={api}>
+        <MembershipContext.Provider
+          value={{
+            isLoading: false,
+            active: getMember('alice'),
+            hasMembers: true,
+            setActive: () => null,
+            members: [],
+            helpers: {
+              getMemberIdByBoundAccountAddress: () => undefined,
+            },
+          }}
+        >
+          <AccountsContext.Provider value={accounts}>
+            <BalancesContext.Provider value={balance}>
+              <ModalContext.Provider
+                value={{
+                  modalData: {
+                    bounty,
+                  },
+                  modal: 'foo',
+                  hideModal: () => undefined,
+                  showModal: () => undefined,
+                }}
+              >
+                <ContributeFundsModal {...args} />
+              </ModalContext.Provider>
+            </BalancesContext.Provider>
+          </AccountsContext.Provider>
+        </MembershipContext.Provider>
+      </ApiContext.Provider>
+    </MemoryRouter>
   )
 }
 

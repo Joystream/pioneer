@@ -5,7 +5,7 @@ import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
-import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal';
+import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
 import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,

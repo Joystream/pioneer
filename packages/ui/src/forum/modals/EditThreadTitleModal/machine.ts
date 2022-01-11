@@ -9,7 +9,6 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-
 interface Context {
   transactionEvents?: EventRecord[]
 }

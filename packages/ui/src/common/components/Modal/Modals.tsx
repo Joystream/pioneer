@@ -46,7 +46,7 @@ export const TransactionAmount = styled.div<TransactionAmountProps>`
   grid-template-columns: 320px auto;
   grid-template-rows: 1fr;
   grid-column-gap: 12px;
-  align-items: ${({alignItemsToEnd}) => alignItemsToEnd ? 'flex-end' : 'center'};
+  align-items: ${({ alignItemsToEnd }) => (alignItemsToEnd ? 'flex-end' : 'center')};
 `
 
 export const TransactionInfoContainer = styled.div`
