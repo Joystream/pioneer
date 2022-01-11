@@ -22,7 +22,7 @@ export const seedSafeBounties = (server: any, overrides: Partial<RawBountyMock>[
 
   const bounties = overrides.map((override, index) => {
     const safeBounty = safeBounties[index % safeBounties.length]
-    return { ...safeBounty, override }
+    return { ...safeBounty, ...override }
   })
 
   seedBounties(server, bounties)
