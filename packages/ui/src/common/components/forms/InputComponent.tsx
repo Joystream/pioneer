@@ -1,6 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { cleanInputValue } from '@/common/hooks/useNumberInput'
+import { formatTokenValue } from '@/common/model/formatters'
+
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
 import { AlertSymbol, SuccessSymbol } from '../icons/symbols'
@@ -145,19 +148,40 @@ export const InputText = React.memo((props: InputProps) => {
   return <Input name={props.id} type="text" autoComplete="off" {...props} />
 })
 
+interface NumberInputProps extends Omit<InputProps, 'onChange'> {
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
+  isTokenValue?: boolean
+}
+
 export const InputNumber = React.memo(
-  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+  ({
+    id,
+    required,
+    validation,
+    placeholder,
+    disabled,
+    onChange,
+    isTokenValue = false,
+    value = '',
+  }: NumberInputProps) => {
+    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const eventValue = +cleanInputValue(event.target.value)
+      if (isNaN(eventValue)) return
+
+      onChange?.(event, eventValue)
+    }
+
     return (
       <StyledNumberInput
         id={id}
         name={id}
         type="string"
-        value={value ?? ''}
+        value={isTokenValue ? formatTokenValue(value) : value}
         required={required}
         validation={validation}
         placeholder={placeholder}
         disabled={disabled}
-        onChange={onChange}
+        onChange={onInputChange}
         autoComplete="off"
       />
     )
@@ -452,7 +476,8 @@ const InputNotification = styled.div<InputProps>`
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
-  width: fit-content;
+  width: 100%;
+  grid-template-columns: auto 1fr;
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':
@@ -482,6 +507,6 @@ const InputNotificationIcon = styled.div`
   }
 `
 
-const InputNotificationMessage = styled(TextSmall)`
+export const InputNotificationMessage = styled(TextSmall)`
   color: inherit;
 `

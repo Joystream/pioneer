@@ -16,6 +16,8 @@ describe('UI: BountyListItem', () => {
     id: '1',
     createdAt: '2021-12-31',
     description: 'Description',
+    imageUri: '',
+    inBlock: 12,
     title: 'Title',
     cherry: new BN(1010),
     entrantStake: new BN(10000),

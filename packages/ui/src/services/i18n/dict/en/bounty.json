@@ -1,8 +1,90 @@
 {
-  "bounties": "Bounties",
+  "modals": {
+    "bountyCancel": {
+      "title": "Cancel Bounty",
+      "warningBox": {
+        "question1": "Are you sure?",
+        "question2": "Do you really want to cancel bounty?"
+      },
+      "bountyInput": {
+        "label": "Bounty ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "memberInput": {
+        "label": "Member ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "authorization": {
+        "title": "Authorize transaction",
+        "informationBox": {
+          "info1": "You are canceling your bounty",
+          "info2": "Fees of {fee} JOY will be applied to the transaction."
+        },
+        "accountInput": {
+          "label": "Fee sending from account",
+          "tooltipText": "Lorem ipsum"
+        },
+        "button": "Cancel Bounty"
+      },
+      "success": {
+        "message": "You have just successfully canceled bounty!",
+        "button": "Go to Current Bounties"
+      },
+      "error": "There was a problem canceling bounty."
+    }
+  },
+  "tiles": {
+    "progressBar": {
+      "funded": "Funded",
+      "maxRange": "Maximal Range",
+      "minRange": "Minimal Range"
+    },
+    "stage": {
+      "title": "Stage",
+      "tooltip": "Lorem ipsum dolor sit amet, con"
+    },
+    "periodLength": {
+      "title": "Period Length",
+      "tooltip": "Lorem ipsum d"
+    },
+    "bountyCreator": {
+      "title": "Bounty Creator"
+    },
+    "oracle": {
+      "title": "Oracle"
+    },
+    "funded": {
+      "title": "Funded",
+      "tooltip": "Lorem ipsum d"
+    },
+    "cherry": {
+      "title": "Cherry",
+      "tooltip": "Lorem ipsum d"
+    },
+    "worksSubmitted": {
+      "title": "Works Submitted",
+      "tooltip": "Lorem ipsum d"
+    }
+  },
+  "tabs": {
+    "bounty": "Bounty",
+    "works": "Works"
+  },
+  "workTab": {
+    "filter": {
+      "label": "Entrant",
+      "placeholder": "Filter entrant"
+    }
+  },
+  "sidebar": {
+    "entrants": "Entrants",
+    "withdrawals": "Withdrawals",
+    "contributors": "Contributors"
+  },
   "bountyFields": {
     "cherry": "Cherry",
-    "entrantStake": "Entrant Stake"
+    "entrantStake": "Entrant Stake",
+    "expired": "Expired"
   },
   "buttons": {
     "announceEntry": "Announce Entry",

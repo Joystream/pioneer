@@ -1,4 +1,13 @@
 {
+  "modals": {
+    "transactionFee": {
+      "label": "Transaction fee:",
+      "tooltipText": "Lorem ipsum"
+    },
+    "transactionCanceled": "Transaction has been cancelled."
+  },
+  "authorizeTransaction": "Authorize Transaction",
+  "success": "Success",
   "buttons": {
     "withdraw": "Withdraw",
     "withdrawStake": "Withdraw Stake",
@@ -6,5 +15,7 @@
     "claimReward": "Claim Reward",
     "contribute": "Contribute",
     "notifyAboutChanges": "Notify me about changes"
-  }
+  },
+  "created": "Created",
+  "council": "Council"
 }

@@ -1,0 +1,31 @@
+import { Meta, Story } from '@storybook/react'
+import React from 'react'
+import { MemoryRouter } from 'react-router'
+
+import { BountyWorkListItem, BountyWorkListItemProps } from '@/bounty/components/BountyWorkListItem/BountyWorkListItem'
+import { Member } from '@/memberships/types'
+import members from '@/mocks/data/raw/members.json'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
+
+export default {
+  title: 'Bounty/BountyWorkListItem',
+  component: BountyWorkListItem,
+} as Meta
+
+const Template: Story<BountyWorkListItemProps> = (args) => {
+  return (
+    <MemoryRouter>
+      <BountyWorkListItem {...args} />
+    </MemoryRouter>
+  )
+}
+
+export const Default = Template.bind({})
+Default.args = {
+  entrant: members[0] as unknown as Member,
+  inBlock: randomBlock(),
+  title: 'Random title',
+  withdrawn: false,
+  description:
+    'Lorem ipsum dolor sit amet, consectetur adip Lorem ipsum dolor sit amet, consectetur adip Lorem ipsum dolor sit amet, consectetur adip Lorem ipsum dolor sit amet, consectetur adip',
+}

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
-import { Bounty, isPerpetual } from '@/bounty/types/Bounty'
+import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
@@ -65,7 +65,7 @@ interface BountyHeaderButtonsProps {
 }
 
 const FundingStageButtons = ({ bounty, t }: BountyHeaderButtonsProps) => {
-  const shouldDisplayStatistics = isPerpetual(bounty.fundingType) && bounty?.contractType !== 'ContractOpen'
+  const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && bounty?.contractType !== 'ContractOpen'
 
   return (
     <>

@@ -19,6 +19,8 @@ const activeMember = { ...rawMembers[0], id: '0' } as unknown as Member
 describe('UI: BountyPreviewHeader', () => {
   const bounty: Bounty = {
     id: '6',
+    inBlock: 111,
+    imageUri: '',
     createdAt: '2021-12-13T18:42:39.738Z',
     title: 'Est tenetur vel nihil ut et.',
     description:
