@@ -6,6 +6,22 @@ export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
+export type BountyEntryStatus =
+  | 'BountyEntryStatusWorking'
+  | 'BountyEntryStatusWithdrawn'
+  | BountyEntryStatusWinner
+  | 'BountyEntryStatusPassed'
+  | 'BountyEntryStatusRejected'
+  | 'BountyEntryStatusCashedOut'
+
+export const isBountyEntryStatusWinner = (status: BountyEntryStatus): status is BountyEntryStatusWinner => {
+  return (status as BountyEntryStatusWinner)?.reward !== undefined
+}
+
+export type BountyEntryStatusWinner = {
+  reward: number
+}
+
 export interface Contributor {
   actor: Member | undefined
   amount: BN
@@ -32,11 +48,7 @@ export type BountyActorItem = Contributor | Entrant | Withdrawn
 
 export type FundingType = FundingLimited | FundingPerpetual
 
-export const isPerpetual = (type: FundingType): type is FundingPerpetual => {
-  return (type as FundingPerpetual).target !== undefined
-}
-
-export type FundingLimited = {
+type FundingLimited = {
   minAmount: BN
   maxAmount: BN
   maxPeriod: number
@@ -65,9 +77,18 @@ export interface EntryMiniature {
   worker: Member
 }
 
+export interface BountyWork {
+  id: string
+  worker: Member
+  title: string
+  description: string
+  status: BountyEntryStatus
+}
+
 export interface Bounty {
   id: string
   title: string
+  imageUri: string | null | undefined
   description: string
   createdAt: string
   cherry: BN
@@ -80,6 +101,7 @@ export interface Bounty {
   stage: BountyStage
   totalFunding: BN
   entries?: EntryMiniature[]
+  inBlock: number
   contractType: ContractType
   contributors: Contributor[]
 }

@@ -2,6 +2,7 @@ fragment BountyFields on Bounty {
   id
   createdAt
   title
+  bannerImageUri
   description
   cherry
   entrantStake
@@ -49,6 +50,27 @@ fragment BountyFields on Bounty {
       }
     }
   }
+  createdInEvent {
+    inBlock
+  }
+}
+
+fragment BountyWorkFields on BountyWorkData {
+  id
+  description
+  title
+
+  entry {
+    worker {
+      ...MemberFields
+    }
+    status {
+      __typename
+      ... on BountyEntryStatusWinner {
+        reward
+      }
+    }
+  }
 }
 
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
@@ -66,5 +88,22 @@ query GetBountiesCount($where: BountyWhereInput) {
 query GetBounty($where: BountyWhereUniqueInput!) {
   bountyByUniqueInput(where: $where) {
     ...BountyFields
+  }
+}
+
+query GetBountyWorks(
+  $where: BountyWorkDataWhereInput
+  $order: [BountyWorkDataOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  bountyWorkData(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+    ...BountyWorkFields
+  }
+}
+
+query GetBountyWorksCount($where: BountyWorkDataWhereInput) {
+  bountyWorkDataConnection(where: $where) {
+    totalCount
   }
 }

@@ -24,7 +24,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
     return (
       <ValueText lighter>
         Contributed
-        <Amount value={el.amount.toNumber()} />
+        <Amount value={el.amount?.toNumber?.() ?? Number(el.amount)} />
       </ValueText>
     )
   }
@@ -85,6 +85,7 @@ const Header = styled.div`
 
 const TitleText = styled(TextExtraSmall)`
   margin-right: 8px;
+  text-transform: uppercase;
 `
 
 const ArrowWrapper = styled.span`
