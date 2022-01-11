@@ -24,7 +24,7 @@ export interface Props {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
-  description: string
+  description: React.ReactNode
   buttonLabel: string
   contributeAmount?: BN
 }
