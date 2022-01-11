@@ -164,7 +164,7 @@ export type BountyFieldsFragment = {
 }
 
 export type BountyWorkFieldsFragment = {
-  __typename: 'BountyWorkData'
+  __typename: 'WorkSubmittedEvent'
   id: string
   description: string
   title: string
@@ -579,16 +579,16 @@ export type GetBountyQuery = {
 }
 
 export type GetBountyWorksQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.BountyWorkDataWhereInput>
-  order?: Types.InputMaybe<Array<Types.BountyWorkDataOrderByInput> | Types.BountyWorkDataOrderByInput>
+  where?: Types.InputMaybe<Types.WorkSubmittedEventWhereInput>
+  order?: Types.InputMaybe<Array<Types.WorkSubmittedEventOrderByInput> | Types.WorkSubmittedEventOrderByInput>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
   limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetBountyWorksQuery = {
   __typename: 'Query'
-  bountyWorkData: Array<{
-    __typename: 'BountyWorkData'
+  workSubmittedEvents: Array<{
+    __typename: 'WorkSubmittedEvent'
     id: string
     description: string
     title: string
@@ -631,12 +631,12 @@ export type GetBountyWorksQuery = {
 }
 
 export type GetBountyWorksCountQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.BountyWorkDataWhereInput>
+  where?: Types.InputMaybe<Types.WorkSubmittedEventWhereInput>
 }>
 
 export type GetBountyWorksCountQuery = {
   __typename: 'Query'
-  bountyWorkDataConnection: { __typename: 'BountyWorkDataConnection'; totalCount: number }
+  workSubmittedEventsConnection: { __typename: 'WorkSubmittedEventConnection'; totalCount: number }
 }
 
 export const BountyFieldsFragmentDoc = gql`
@@ -699,7 +699,7 @@ export const BountyFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
 `
 export const BountyWorkFieldsFragmentDoc = gql`
-  fragment BountyWorkFields on BountyWorkData {
+  fragment BountyWorkFields on WorkSubmittedEvent {
     id
     description
     title
@@ -839,12 +839,12 @@ export type GetBountyLazyQueryHookResult = ReturnType<typeof useGetBountyLazyQue
 export type GetBountyQueryResult = Apollo.QueryResult<GetBountyQuery, GetBountyQueryVariables>
 export const GetBountyWorksDocument = gql`
   query GetBountyWorks(
-    $where: BountyWorkDataWhereInput
-    $order: [BountyWorkDataOrderByInput!]
+    $where: WorkSubmittedEventWhereInput
+    $order: [WorkSubmittedEventOrderByInput!]
     $offset: Int
     $limit: Int
   ) {
-    bountyWorkData(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+    workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
       ...BountyWorkFields
     }
   }
@@ -886,8 +886,8 @@ export type GetBountyWorksQueryHookResult = ReturnType<typeof useGetBountyWorksQ
 export type GetBountyWorksLazyQueryHookResult = ReturnType<typeof useGetBountyWorksLazyQuery>
 export type GetBountyWorksQueryResult = Apollo.QueryResult<GetBountyWorksQuery, GetBountyWorksQueryVariables>
 export const GetBountyWorksCountDocument = gql`
-  query GetBountyWorksCount($where: BountyWorkDataWhereInput) {
-    bountyWorkDataConnection(where: $where) {
+  query GetBountyWorksCount($where: WorkSubmittedEventWhereInput) {
+    workSubmittedEventsConnection(where: $where) {
       totalCount
     }
   }
