@@ -1,23 +1,23 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js';
-import React from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import { useTranslation } from 'react-i18next';
 import { ActorRef } from 'xstate'
 
-import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import {useMyBalances} from '@/accounts/hooks/useMyBalances';
 import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants';
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-import {formatTokenValue} from '@/common/model/formatters';
+import { formatTokenValue } from '@/common/model/formatters';
 
 export interface Props {
   onClose: () => void
@@ -32,12 +32,39 @@ export interface Props {
 export const AuthorizeTransactionModal = ({ onClose, transaction, service, controllerAccount, description, buttonLabel, contributeAmount }: Props) => {
   const { t } = useTranslation('bounty');
   const { allAccounts } = useMyAccounts()
+  const [hasFunds, setHasFunds] = useState<boolean>(false)
+  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(
+    allAccounts.find((acc) => acc.address === controllerAccount.address)
+  )
+  const balances = useMyBalances()
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
     service,
     transaction,
-    signer: controllerAccount.address,
+    signer: selectedAccount?.address || controllerAccount.address,
   })
+
+  const accountsWithValidAmount = useMemo(
+    () =>
+      Object.entries(balances).map(([address, balance]) => {
+        if (balance.transferable.gte(paymentInfo?.partialFee || BN_ZERO)) {
+          return address
+        }
+      }),
+    [balances, paymentInfo?.partialFee]
+  )
+
+  const accountsFilter = useCallback(
+    (acc: Account) => accountsWithValidAmount.includes(acc.address),
+    [accountsWithValidAmount.length]
+  )
+
+  useEffect(() => {
+    if (selectedAccount && paymentInfo?.partialFee) {
+      setHasFunds(balances[selectedAccount.address].transferable.gte(paymentInfo.partialFee))
+    }
+  }, [selectedAccount, paymentInfo?.partialFee])
+
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -46,8 +73,12 @@ export const AuthorizeTransactionModal = ({ onClose, transaction, service, contr
         <TextMedium light>
           {t('modals.authorizeTransaction.feeInfo', {value: paymentInfo?.partialFee.toString() ?? '-'})}
         </TextMedium>
-        <InputComponent label={t('modals.authorizeTransaction.feeAccount')} inputSize="l">
-          <SelectedAccount account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')} />
+        <InputComponent label={t('modals.authorizeTransaction.feeAccount')} inputSize="l" required tooltipText={t('common:lorem')}>
+          <SelectAccount
+            filter={accountsFilter}
+            onChange={(account) => setSelectedAccount(account)}
+            selected={selectedAccount}
+          />
         </InputComponent>
       </ModalBody>
       <ModalFooter>
@@ -58,13 +89,12 @@ export const AuthorizeTransactionModal = ({ onClose, transaction, service, contr
           />}
           <TransactionInfo
             title={t('modals.common.transactionFee')}
-            value={paymentInfo?.partialFee.toBn()}
+            value={paymentInfo?.partialFee}
             tooltipText={t('common:lorem')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
+        <ButtonPrimary size="medium" disabled={!hasFunds || !isReady} onClick={sign}>
           {buttonLabel}
-          <Arrow direction="right" />
         </ButtonPrimary>
       </ModalFooter>
     </TransactionModal>

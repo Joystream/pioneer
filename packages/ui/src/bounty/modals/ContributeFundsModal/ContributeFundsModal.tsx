@@ -1,37 +1,44 @@
-import { useMachine } from '@xstate/react';
+import {useMachine} from '@xstate/react';
 import BN from 'bn.js';
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, {ChangeEvent, useCallback, useEffect, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import styled from 'styled-components';
 
-import { SelectAccount } from '@/accounts/components/SelectAccount';
-import { useBalance } from '@/accounts/hooks/useBalance';
+import {SelectAccount} from '@/accounts/components/SelectAccount';
+import {useBalance} from '@/accounts/hooks/useBalance';
 import {useMyAccounts} from '@/accounts/hooks/useMyAccounts';
+import {useTransactionFee} from '@/accounts/hooks/useTransactionFee';
 import {accountOrNamed} from '@/accounts/model/accountOrNamed';
-import { Account } from '@/accounts/types';
-import { FundedRange } from '@/bounty/components/FundedRange';
+import {Account} from '@/accounts/types';
+import {FundedRange} from '@/bounty/components/FundedRange';
 import {AuthorizeTransactionModal} from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal';
-import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index';
-import { contributeFundsMachine } from '@/bounty/modals/ContributeFundsModal/machine';
-import { FundingLimited, isPerpetual } from '@/bounty/types/Bounty';
-import { ButtonPrimary } from '@/common/components/buttons';
-import { Input, InputComponent, InputNumber } from '@/common/components/forms';
+import {SuccessModal} from '@/bounty/modals/CancelBountyModal/components/SuccessModal';
+import {BountyContributeFundsModalCall} from '@/bounty/modals/ContributeFundsModal/index';
+import {contributeFundsMachine, ContributeFundStates} from '@/bounty/modals/ContributeFundsModal/machine';
+import {FundingLimited, isPerpetual} from '@/bounty/types/Bounty';
+import {ButtonPrimary} from '@/common/components/buttons';
+import {FailureModal} from '@/common/components/FailureModal';
+import {Input, InputComponent, InputNumber} from '@/common/components/forms';
 import {
+  AmountButton,
+  AmountButtons,
   Modal,
   ModalFooter,
   ModalHeader,
+  Row,
   ScrolledModalBody,
   ScrolledModalContainer,
-  Row, AmountButtons, AmountButton, TransactionAmount, TransactionInfoContainer
+  TransactionAmount,
+  TransactionInfoContainer
 } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo';
-import { Fonts } from '@/common/constants';
-import { useApi } from '@/common/hooks/useApi';
-import { useModal } from '@/common/hooks/useModal';
-import { useNumberInput } from '@/common/hooks/useNumberInput';
-import { formatTokenValue } from '@/common/model/formatters';
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships';
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal';
+import {TransactionInfo} from '@/common/components/TransactionInfo';
+import {Fonts} from '@/common/constants';
+import {useApi} from '@/common/hooks/useApi';
+import {useModal} from '@/common/hooks/useModal';
+import {useNumberInput} from '@/common/hooks/useNumberInput';
+import {formatTokenValue} from '@/common/model/formatters';
+import {useMyMemberships} from '@/memberships/hooks/useMyMemberships';
+import {SwitchMemberModalCall} from '@/memberships/modals/SwitchMemberModal';
 
 export const ContributeFundsModal = () => {
   const {t} = useTranslation('bounty');
@@ -56,17 +63,15 @@ export const ContributeFundsModal = () => {
   const setHalfAmount = useCallback(() => {
     balance && setAmount(balance.transferable.divn(2).toString())
   }, [balance])
-
-  const transactionInfo = useMemo(() => ({
-    contribution: new BN(amount),
-    fee: new BN(999),
-  }), [amount])
-
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, amount)
     }
   }, [JSON.stringify(activeMember), isConnected])
+
+  const fee = useTransactionFee(activeMember?.controllerAccount, transaction);
+
+  const contribution = useMemo(() => new BN(amount), [amount]);
 
   const nextStep = useCallback(() => {
     send('NEXT');
@@ -77,7 +82,7 @@ export const ContributeFundsModal = () => {
   }, [balance])
 
   useEffect(() => {
-    if (state.matches('requirementsVerification')) {
+    if (state.matches(ContributeFundStates.requirementsVerification)) {
       if (!activeMember) {
         showModal<SwitchMemberModalCall>({modal: 'SwitchMember'})
       } else {
@@ -86,11 +91,27 @@ export const ContributeFundsModal = () => {
     }
   }, [state, activeMember?.id])
 
-  if (!activeMember || !transaction || state.matches('requirementsVerification')) {
+  if (!activeMember || !transaction || state.matches(ContributeFundStates.requirementsVerification)) {
     return null;
   }
 
-  if(state.matches('transaction')) {
+  if (state.matches(ContributeFundStates.success)) {
+    return <SuccessModal onClose={hideModal} />
+  }
+
+  if (state.matches(ContributeFundStates.error)) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        {t('modals.contribute.error')}
+      </FailureModal>
+    )
+  }
+
+  if (state.matches(ContributeFundStates.cancel)) {
+    return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
+  }
+
+  if(state.matches(ContributeFundStates.transaction)) {
     const service = state.children.transaction;
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
@@ -102,7 +123,7 @@ export const ContributeFundsModal = () => {
         controllerAccount={controllerAccount}
         description={t('modals.contribute.authorizeDescription', {value: formatTokenValue(amount)})}
         buttonLabel={t('modals.contribute.nextButton')}
-        contributeAmount={transactionInfo.contribution}
+        contributeAmount={contribution}
       />
     )
   }
@@ -164,8 +185,8 @@ export const ContributeFundsModal = () => {
       </ScrolledModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={transactionInfo.contribution} />
-          <TransactionInfo title={t('modals.common.transactionFee')} value={transactionInfo.fee} tooltipText={t('common:lorem')}/>
+          <TransactionInfo title={t('modals.common.contributeAmount')} value={contribution} />
+          <TransactionInfo title={t('modals.common.transactionFee')} value={fee?.transactionFee} tooltipText={t('common:lorem')}/>
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!valid} onClick={nextStep}>{t('modals.contribute.nextButton')}</ButtonPrimary>
       </ModalFooter>

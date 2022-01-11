@@ -20,59 +20,68 @@ interface TransactionContext {
   transactionEvents?: EventRecord[]
 }
 
+export enum ContributeFundStates {
+  requirementsVerification = 'requirementsVerification',
+  contribute = 'contribute',
+  transaction = 'transaction',
+  success = 'success',
+  error = 'error',
+  cancel = 'cancel',
+}
+
 export type ContributeFundContext =
   | ContributeContext
   | TransactionContext;
-
 
 type NextEvent = { type: 'NEXT' }
 
 export type ContributeFundEvents = NextEvent;
 
 export type ContributeFundsState =
-  | { value: 'requirementsVerification'; context: EmptyObject }
-  | { value: 'contribute'; context: Required<ContributeContext> }
-  | { value: 'transaction', context: EmptyObject }
-  | { value: 'success'; context: EmptyObject }
-  | { value: 'error'; context: Required<TransactionContext> }
+  | { value: ContributeFundStates.requirementsVerification; context: EmptyObject }
+  | { value: ContributeFundStates.contribute; context: Required<ContributeContext> }
+  | { value: ContributeFundStates.transaction, context: EmptyObject }
+  | { value: ContributeFundStates.success; context: EmptyObject }
+  | { value: ContributeFundStates.cancel; context: EmptyObject }
+  | { value: ContributeFundStates.error; context: Required<TransactionContext> }
 
 export const contributeFundsMachine = createMachine<ContributeFundContext, ContributeFundEvents, ContributeFundsState>({
   initial: 'requirementsVerification',
   states: {
-    requirementsVerification: {
+    [ContributeFundStates.requirementsVerification]: {
       on: {
-        NEXT: 'contribute',
+        NEXT: ContributeFundStates.contribute,
       },
     },
-    contribute: {
-      id: 'contribute',
+    [ContributeFundStates.contribute]: {
+      id: ContributeFundStates.contribute,
       on: {
-        NEXT: 'transaction',
+        NEXT: ContributeFundStates.transaction,
       }
     },
-    transaction: {
+    [ContributeFundStates.transaction]: {
       invoke: {
-        id: 'transaction',
+        id: ContributeFundStates.transaction,
         src: transactionMachine,
         onDone: [
           {
-            target: 'success',
+            target: ContributeFundStates.success,
             cond: isTransactionSuccess,
           },
           {
-            target: 'error',
+            target: ContributeFundStates.error,
             cond: isTransactionError,
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
           {
-            target: 'canceled',
+            target: ContributeFundStates.cancel,
             cond: isTransactionCanceled,
           },
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    [ContributeFundStates.success]: { type: 'final' },
+    [ContributeFundStates.error]: { type: 'final' },
+    [ContributeFundStates.cancel]: { type: 'final' },
   }
 })
