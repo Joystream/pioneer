@@ -81,10 +81,10 @@ export const AuthorizeTransactionModal = ({
           {t('modals.authorizeTransaction.feeInfo', { value: paymentInfo?.partialFee.toString() ?? '-' })}
         </TextMedium>
         <InputComponent
-          label={t('modals.authorizeTransaction.feeAccount')}
+          label={t('modals.authorizeTransaction.feeAccount.label')}
           inputSize="l"
           required
-          tooltipText={t('common:lorem')}
+          tooltipText={t('modals.authorizeTransaction.feeAccount.tooltip')}
         >
           <SelectAccount
             filter={accountsFilter}
@@ -102,9 +102,9 @@ export const AuthorizeTransactionModal = ({
             />
           )}
           <TransactionInfo
-            title={t('modals.common.transactionFee')}
+            title={t('modals.common.transactionFee.title')}
             value={paymentInfo?.partialFee}
-            tooltipText={t('common:lorem')}
+            tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!hasFunds || !isReady} onClick={sign}>

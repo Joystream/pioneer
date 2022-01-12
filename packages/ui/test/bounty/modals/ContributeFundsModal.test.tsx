@@ -8,7 +8,6 @@ import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { FundingLimited } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
 import { ApiContext } from '@/common/providers/api/context'
-import { UseApi } from '@/common/providers/api/provider'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -18,7 +17,13 @@ import { getMember } from '@/mocks/helpers'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubBountyConstants,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 const [baseBounty] = bounties
 const bounty = {
@@ -41,23 +46,10 @@ const defaultBalance = {
 
 describe('UI: ContributeFundsModal', () => {
   let renderResult: RenderResult
-  const baseApi = stubApi()
+  const api = stubApi()
+  stubBountyConstants(api)
   const fee = 888
-  const transaction = stubTransaction(baseApi, 'api.tx.bounty.fundBounty', fee)
-  const api = {
-    ...baseApi,
-    api: {
-      ...baseApi.api,
-      tx: {
-        bounty: {
-          fundBounty: () => transaction,
-        },
-      },
-      consts: {
-        bounty: { minFundingLimit: new BN(10) },
-      },
-    },
-  } as unknown as UseApi
+  const transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -104,7 +96,7 @@ describe('UI: ContributeFundsModal', () => {
 
   it('Displays correct transaction fee', () => {
     const expected = String(fee)
-    const valueContainer = screen.getByText('modals.common.transactionFee')?.nextSibling
+    const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })

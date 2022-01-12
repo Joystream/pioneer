@@ -8,12 +8,11 @@ import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ApiContext } from '@/common/providers/api/context'
-import { UseApi } from '@/common/providers/api/provider'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 
 import { getMember } from '../../../../test/_mocks/members'
-import { stubApi, stubTransaction } from '../../../../test/_mocks/transactions'
+import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
 
 import { ContributeFundsModal } from './ContributeFundsModal'
 
@@ -69,22 +68,9 @@ const membership = {
   },
 }
 
-const baseApi = stubApi()
-const transaction = stubTransaction(baseApi, 'api.tx.bounty.fundBounty', 888)
-const api = {
-  ...baseApi,
-  api: {
-    ...baseApi.api,
-    tx: {
-      bounty: {
-        fundBounty: () => transaction,
-      },
-    },
-    consts: {
-      bounty: { minFundingLimit: new BN(10) },
-    },
-  },
-} as unknown as UseApi
+const api = stubApi()
+stubBountyConstants(api)
+stubTransaction(api, 'api.tx.bounty.fundBounty', 888)
 
 const Template: Story = (args) => {
   return (

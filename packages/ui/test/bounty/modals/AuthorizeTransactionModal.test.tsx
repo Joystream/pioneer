@@ -76,7 +76,7 @@ describe('UI: AuthorizeTransactionModal', () => {
 
   it('Displays correct fee', () => {
     const expected = String(fee)
-    const valueContainer = screen.getByText('modals.common.transactionFee')?.nextSibling
+    const valueContainer = screen.getByText('modals.common.transactionFee.title')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })

@@ -1,6 +1,6 @@
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -35,7 +35,6 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -51,12 +50,12 @@ export const ContributeFundsModal = () => {
   const minFundingLimit = api?.consts.bounty.minFundingLimit.toNumber() ?? 0
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const [amount, setAmount] = useNumberInput(6, minFundingLimit)
+  const [amount, setAmount] = useState<string>(String(minFundingLimit))
   const [state, send] = useMachine(contributeFundsMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
 
-  const setStakingAmount = useCallback((e: ChangeEvent<HTMLInputElement>) => setAmount(e.target.value), [])
+  const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
   const valid = useMemo(() => new BN(amount).gten(minFundingLimit) && !!account, [amount, account])
 
@@ -141,8 +140,8 @@ export const ContributeFundsModal = () => {
           <Row>
             <InputComponent
               inputSize="l"
-              label={t('modals.contribute.bountyId')}
-              tooltipText={t('common:lorem')}
+              label={t('modals.contribute.bountyId.label')}
+              tooltipText={t('modals.contribute.bountyId.tooltip')}
               required
               inputDisabled
             >
@@ -152,8 +151,8 @@ export const ContributeFundsModal = () => {
           <Row>
             <InputComponent
               inputSize="l"
-              label={t('modals.contribute.stakingAccount')}
-              tooltipText={t('common:lorem')}
+              label={t('modals.contribute.stakingAccount.label')}
+              tooltipText={t('modals.contribute.stakingAccount.tooltip')}
               required
             >
               <SelectAccount onChange={setAccount} selected={account} />
@@ -171,9 +170,10 @@ export const ContributeFundsModal = () => {
               >
                 <InputNumber
                   id="amount-input"
-                  value={formatTokenValue(amount)}
+                  value={amount}
                   onChange={setStakingAmount}
                   placeholder="0"
+                  isTokenValue
                 />
               </InputComponent>
               <AmountButtons>
@@ -202,9 +202,9 @@ export const ContributeFundsModal = () => {
         <TransactionInfoContainer>
           <TransactionInfo title={t('modals.common.contributeAmount')} value={contribution} />
           <TransactionInfo
-            title={t('modals.common.transactionFee')}
+            title={t('modals.common.transactionFee.label')}
             value={fee?.transactionFee}
-            tooltipText={t('common:lorem')}
+            tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!valid} onClick={nextStep}>
