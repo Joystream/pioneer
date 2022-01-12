@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BountiesLayout } from '@/app/pages/Bounty/components/BountiesLayout'
@@ -14,7 +14,7 @@ import { useSort } from '@/common/hooks/useSort'
 
 const sortingOptions = ['Latest', 'Earliest']
 
-export const BountiesPast = () => {
+export const BountiesPast = memo(() => {
   const searchSlot = useRef<HTMLDivElement>(null)
 
   const { t } = useTranslation('bounty')
@@ -26,7 +26,6 @@ export const BountiesPast = () => {
 
   return (
     <BountiesLayout>
-      <BountiesMain />
       <BountyFilters searchSlot={searchSlot} onApply={setFilters} />
       {isLoading ? (
         <>
@@ -44,4 +43,4 @@ export const BountiesPast = () => {
       <Pagination {...pagination} />
     </BountiesLayout>
   )
-}
+})
