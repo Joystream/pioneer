@@ -83,6 +83,7 @@ export const Colors = {
 
   Negative: {
     50: '#FEEAF1',
+    500: '#F42E55',
   },
 }
 
