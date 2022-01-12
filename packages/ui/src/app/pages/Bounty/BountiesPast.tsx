@@ -2,7 +2,6 @@ import React, { useRef, useState, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BountiesLayout } from '@/app/pages/Bounty/components/BountiesLayout'
-import { BountiesMain } from '@/app/pages/Bounty/components/BountiesMain'
 import { BountyEmptyFilter, BountyFilters } from '@/bounty/components/BountiesFilters'
 import { BountiesList } from '@/bounty/components/BountiesList'
 import { useBounties } from '@/bounty/hooks/useBounties'
@@ -30,9 +29,9 @@ export const BountiesPast = memo(() => {
       {isLoading ? (
         <>
           <SimpleSelect
-            title="Sorting"
+            title={t('list.sorting')}
             options={sortingOptions}
-            value={isDescending ? 'Latest' : 'Earliest'}
+            value={isDescending ? sortingOptions[0] : sortingOptions[1]}
             onChange={onSort}
           />
           <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />

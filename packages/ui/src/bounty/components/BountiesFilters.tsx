@@ -1,4 +1,5 @@
 import React, { useMemo, useReducer } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { FilterBox } from '@/common/components/forms/FilterBox'
@@ -55,6 +56,8 @@ export interface BountyFiltersProps {
 }
 
 export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFiltersProps) => {
+  const { t } = useTranslation('bounty')
+
   const [filters, dispatch] = useReducer(filterReducer, BountyEmptyFilter)
   const { search, period, creator, oracle } = filters
 
@@ -79,15 +82,15 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
       onSearch={(value) => {
         dispatch({ type: 'change', field: 'search', value })
       }}
-      searchLabel="Name"
+      searchLabel={t('filters.name')}
       displaySearchReset
     >
       <Fields columns={periodFilter ? 4 : 3}>
-        <div ref={searchSlot} title="Search" />
+        <div ref={searchSlot} />
 
         {periodFilter && (
           <FilterTextSelect
-            title="Period"
+            title={t('filters.period')}
             options={bountyPeriods.map(camelCaseToText)}
             value={period && camelCaseToText(period)}
             onChange={(value) => {
@@ -98,7 +101,7 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
         )}
 
         <SmallMemberSelect
-          title="Creator"
+          title={t('filters.creator')}
           value={creator}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'creator', value })
@@ -107,7 +110,7 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
         />
 
         <SmallMemberSelect
-          title="Oracle"
+          title={t('filters.oracle')}
           value={oracle}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'oracle', value })

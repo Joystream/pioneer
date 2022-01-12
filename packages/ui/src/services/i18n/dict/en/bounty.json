@@ -98,5 +98,11 @@
     "searching": "Searching",
     "searchingText": "We are searching through all bounties to find what your are looking for. ",
     "sorting": "sorting"
+  },
+  "filters": {
+    "name": "Name",
+    "period": "Period",
+    "creator": "Creator",
+    "oracle": "Oracle"
   }
 }
