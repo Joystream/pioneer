@@ -31,6 +31,13 @@ export const BountyExpired = ({ bounty }: Props) => {
         {active === 'Works' && <WorkTab bountyId={bounty.id} />}
         <RowGapBlock gap={4}>
           <BountySidebar
+            isSlashed
+            entrants={
+              bounty?.entries?.map((entry) => ({
+                actor: entry.worker,
+                count: 1,
+              })) ?? []
+            }
             contributors={bounty.contributors}
             stage="expired"
             periodsLengths={{
