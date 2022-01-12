@@ -5,6 +5,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
+import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
 
 import { BountyCreationParameters } from '../../../../../types/augment'
@@ -100,6 +101,18 @@ export const createBountyMetadataFactory = (state: AddBountyModalMachineState) =
       title: state.context.title,
       description: state.context.description,
       photo_url: state.context.coverPhotoLink,
+    })
+  )
+  return createType('Bytes', '0x' + buffer)
+}
+
+export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState) => {
+  const buffer = Buffer.from(
+    JSON.stringify({
+      bountyId: state.context.bountyId,
+      memberId: state.context.memberId,
+      workTitle: state.context.workTitle,
+      workDescription: state.context.workDescription,
     })
   )
   return createType('Bytes', '0x' + buffer)

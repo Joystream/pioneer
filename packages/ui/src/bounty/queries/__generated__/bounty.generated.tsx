@@ -124,6 +124,7 @@ export type BountyFieldsFragment = {
   entries?:
     | Array<{
         __typename: 'BountyEntry'
+        id: string
         workSubmitted: boolean
         worker: {
           __typename: 'Membership'
@@ -339,6 +340,7 @@ export type GetBountiesQuery = {
     entries?:
       | Array<{
           __typename: 'BountyEntry'
+          id: string
           workSubmitted: boolean
           worker: {
             __typename: 'Membership'
@@ -532,6 +534,7 @@ export type GetBountyQuery = {
         entries?:
           | Array<{
               __typename: 'BountyEntry'
+              id: string
               workSubmitted: boolean
               worker: {
                 __typename: 'Membership'
@@ -682,6 +685,7 @@ export const BountyFieldsFragmentDoc = gql`
       }
     }
     entries {
+      id
       worker {
         ...MemberFields
       }
