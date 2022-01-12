@@ -35,7 +35,7 @@ export const BountyExpired = ({ bounty }: Props) => {
             entrants={
               bounty?.entries?.map((entry) => ({
                 actor: entry.worker,
-                count: 1,
+                count: entry.worksIds.length,
               })) ?? []
             }
             contributors={bounty.contributors}

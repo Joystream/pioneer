@@ -79,6 +79,7 @@ export interface EntryMiniature {
   hasSubmitted: boolean
   passed: boolean
   worker: Member
+  worksIds: string[]
 }
 
 export interface BountyWork {
