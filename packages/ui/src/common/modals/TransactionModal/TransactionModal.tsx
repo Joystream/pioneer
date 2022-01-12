@@ -1,5 +1,6 @@
 import { useActor } from '@xstate/react'
 import React, { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { MultiTransactionModalHeader } from '@/common/modals/TransactionModal/MultiTransactionModalHeader'
@@ -17,6 +18,7 @@ export interface TransactionModalProps {
 }
 
 export const TransactionModal = ({ onClose, children, service, title, useMultiTransaction }: TransactionModalProps) => {
+  const { t } = useTranslation()
   const [state] = useActor(service)
 
   if (state.matches('prepare')) {
@@ -29,7 +31,7 @@ export const TransactionModal = ({ onClose, children, service, title, useMultiTr
             transactionSteps={useMultiTransaction.steps}
           />
         ) : (
-          <ModalHeader onClick={onClose} title={title ?? 'Authorize transaction'} />
+          <ModalHeader onClick={onClose} title={title ?? t('modals.authorizeTransaction.title')} />
         )}
         {children}
       </Modal>

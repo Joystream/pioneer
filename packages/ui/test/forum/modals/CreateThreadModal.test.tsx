@@ -111,7 +111,7 @@ describe('CreateThreadModal', () => {
   describe('Sign modal', () => {
     it('Displays after filling in details', async () => {
       await fillAndProceed()
-      expect(await screen.findByText(/authorize transaction/i)).toBeDefined()
+      expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
     })
 
     it("Displays the member's controller account", async () => {

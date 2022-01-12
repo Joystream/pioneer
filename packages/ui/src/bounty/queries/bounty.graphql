@@ -56,7 +56,7 @@ fragment BountyFields on Bounty {
   }
 }
 
-fragment BountyWorkFields on BountyWorkData {
+fragment BountyWorkFields on WorkSubmittedEvent {
   id
   description
   title
@@ -93,18 +93,18 @@ query GetBounty($where: BountyWhereUniqueInput!) {
 }
 
 query GetBountyWorks(
-  $where: BountyWorkDataWhereInput
-  $order: [BountyWorkDataOrderByInput!]
+  $where: WorkSubmittedEventWhereInput
+  $order: [WorkSubmittedEventOrderByInput!]
   $offset: Int
   $limit: Int
 ) {
-  bountyWorkData(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+  workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
     ...BountyWorkFields
   }
 }
 
-query GetBountyWorksCount($where: BountyWorkDataWhereInput) {
-  bountyWorkDataConnection(where: $where) {
+query GetBountyWorksCount($where: WorkSubmittedEventWhereInput) {
+  workSubmittedEventsConnection(where: $where) {
     totalCount
   }
 }

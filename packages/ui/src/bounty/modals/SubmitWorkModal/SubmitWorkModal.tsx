@@ -1,28 +1,27 @@
 import { createType } from '@joystream/types'
-import { Bytes } from '@polkadot/types'
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { generatePath } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { Account } from '@/accounts/types'
-import { SuccessModal } from '@/bounty/modals/AddBountyModal/components/SuccessModal'
-import { createBountyMetadataFactory, submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
-import { AddBountyModalMachineState } from '@/bounty/modals/AddBountyModal/machine'
-import { SignTransactionModal } from '@/bounty/modals/SubmitWorkModal/components/SignTransactionModal'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { BountyRoutes } from '@/bounty/constants'
+import { submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
+import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import {
   submitWorkMachine,
   SubmitWorkModalMachineState,
   SubmitWorkStates,
 } from '@/bounty/modals/SubmitWorkModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal/types'
-import { Bounty } from '@/bounty/types/Bounty'
+import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
-import { InputComponent, InputContainer, InputNotificationMessage, InputText } from '@/common/components/forms'
+import { InputComponent, InputContainer, InputText } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
@@ -41,10 +40,10 @@ export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
   const { active: activeMember } = useMyMemberships()
   const { t } = useTranslation('bounty')
   const [state, send, service] = useMachine(submitWorkMachine)
+  const history = useHistory()
   const [isValidNext, setValidNext] = useState(false)
-  const { api } = useApi()
-  // const balance = useBalance(activeMember?.controllerAccount)
-  // const bountyApi = api?.consts.bounty
+  const { allAccounts } = useMyAccounts()
+  const { api, isConnected } = useApi()
 
   if (!service.initialized) {
     service.start()
@@ -52,27 +51,48 @@ export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
 
   const transaction = useMemo(() => {
     const entryId = modalData.bounty.entries?.find((entryId) => entryId.id === 'id')
-    return api?.tx.bounty.submitWork(
-      createType('u64', Number(activeMember?.id || 0)),
-      createType('u32', Number(modalData.bounty.id || 0)),
-      createType('u32', Number(entryId || 0)),
-      submitWorkMetadataFactory(state as SubmitWorkModalMachineState)
-    )
+    if (api && isConnected && activeMember) {
+      return api.tx.bounty.submitWork(
+        createType('u64', Number(activeMember?.id || 0)),
+        createType('u32', Number(modalData.bounty.id || 0)),
+        createType('u32', Number(entryId || 0)),
+        submitWorkMetadataFactory(state as SubmitWorkModalMachineState)
+      )
+    }
+  }, [JSON.stringify(activeMember), isConnected])
+
+  const goToCurrentBounties = useCallback(() => {
+    history.push(generatePath(BountyRoutes.currentBounties))
   }, [])
 
+  if (!activeMember || !transaction) {
+    return null
+  }
   if (state.matches(SubmitWorkStates.transaction)) {
+    const service = state.children.transaction
+    const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
+
     return (
-      <SignTransactionModal
+      <AuthorizeTransactionModal
         onClose={hideModal}
         transaction={transaction}
-        service={state.children['transaction']}
-        signer={activeMember}
+        service={service}
+        controllerAccount={controllerAccount}
+        description={t('modals.contribute.authorizeDescription')}
+        buttonLabel={t('modals.contribute.nextButton')}
       />
     )
   }
 
   if (state.matches(SubmitWorkStates.success)) {
-    return <SuccessModal onClose={hideModal} />
+    return (
+      <SuccessTransactionModal
+        buttonLabel={t('modals.bountyCancel.success.button')}
+        message={t('modals.bountyCancel.success.message')}
+        onButtonClick={goToCurrentBounties}
+        onClose={hideModal}
+      />
+    )
   }
 
   if (state.matches(SubmitWorkStates.error)) {

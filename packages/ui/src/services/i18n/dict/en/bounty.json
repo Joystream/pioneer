@@ -1,5 +1,37 @@
 {
   "modals": {
+    "common": {
+      "transactionFee": {
+        "title": "Transaction fee:",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "contributeAmount": "Contribute amount:"
+    },
+    "authorizeTransaction": {
+      "feeAccount": {
+        "label": "Fee sending from account",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "feeInfo": "Fees of {{value}} JOY will be applied to the transaction"
+    },
+    "contribute": {
+      "title": "Contribute",
+      "nextButton": "Contribute",
+      "halfButton": "Use half",
+      "maxButton": "Use max",
+      "bountyId": {
+        "label": "Bounty ID",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "stakingAccount": {
+        "label": "Staking account",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "selectAmount": "Select amount for contributing",
+      "selectAmountSubtitle": "You must contribute at least {{value}} JOY.",
+      "authorizeDescription": "You contribute {{value}} JOY",
+      "error": "Something went wrong"
+    },
     "bountyCancel": {
       "title": "Cancel Bounty",
       "warningBox": {
