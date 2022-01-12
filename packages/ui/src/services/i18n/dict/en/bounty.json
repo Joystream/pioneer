@@ -74,7 +74,8 @@
     "filter": {
       "label": "Entrant",
       "placeholder": "Filter entrant"
-    }
+    },
+    "noWorks": "No works submitted yet"
   },
   "sidebar": {
     "entrants": "Entrants",

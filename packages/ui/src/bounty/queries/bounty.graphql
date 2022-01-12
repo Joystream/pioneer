@@ -59,7 +59,9 @@ fragment BountyWorkFields on WorkSubmittedEvent {
   id
   description
   title
-
+  inBlock
+  createdAt
+  network
   entry {
     worker {
       ...MemberFields

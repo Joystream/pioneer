@@ -168,6 +168,9 @@ export type BountyWorkFieldsFragment = {
   id: string
   description: string
   title: string
+  inBlock: number
+  createdAt: any
+  network: Types.Network
   entry: {
     __typename: 'BountyEntry'
     worker: {
@@ -592,6 +595,9 @@ export type GetBountyWorksQuery = {
     id: string
     description: string
     title: string
+    inBlock: number
+    createdAt: any
+    network: Types.Network
     entry: {
       __typename: 'BountyEntry'
       worker: {
@@ -703,6 +709,9 @@ export const BountyWorkFieldsFragmentDoc = gql`
     id
     description
     title
+    inBlock
+    createdAt
+    network
     entry {
       worker {
         ...MemberFields

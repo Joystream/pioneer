@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
@@ -83,6 +84,7 @@ export interface BountyWork {
   title: string
   description: string
   status: BountyEntryStatus
+  inBlock: Block
 }
 
 export interface Bounty {

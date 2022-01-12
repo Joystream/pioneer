@@ -86,7 +86,7 @@ const seedEntryStatus = ({ type, ...data }: RawBountyEntryMock['status'], server
 export const seedBountyEntry = ({ works, status, announcedInEvent, ...data }: RawBountyEntryMock, server: any) =>
   server.schema.create('BountyEntry', {
     ...data,
-    works: works?.map((work) => server.schema.create('WorkSubmittedEvent', work)),
+    works: works?.map((work) => server.schema.create('WorkSubmittedEvent', work)) ?? [],
     status: seedEntryStatus(status, server),
     announcedInEvent: server.schema.create('WorkEntryAnnouncedEvent', announcedInEvent),
   })

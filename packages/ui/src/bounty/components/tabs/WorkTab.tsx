@@ -12,13 +12,10 @@ import { Pagination } from '@/common/components/Pagination'
 import { TextExtraSmall } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Colors } from '@/common/constants'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 interface Props {
   bountyId: string
 }
-// todo remove when works in schema will have block info
-const randomizedBlock = randomBlock()
 
 export const WorkTab = ({ bountyId }: Props) => {
   const { t } = useTranslation('bounty')
@@ -34,7 +31,7 @@ export const WorkTab = ({ bountyId }: Props) => {
               <BountyWorkListItem
                 key={work.id}
                 entrant={work.worker}
-                inBlock={randomizedBlock}
+                inBlock={work.inBlock}
                 title={work.title}
                 description={work.description}
                 link=""
@@ -46,24 +43,26 @@ export const WorkTab = ({ bountyId }: Props) => {
       )
     }
 
-    return <NotFoundText>No works</NotFoundText>
-  }, [works])
+    return <NotFoundText>{t('workTab.noWorks')}</NotFoundText>
+  }, [works, t])
 
   return (
     <RowGapBlock gap={4}>
-      <FilterContainer>
-        <div>
-          <TextExtraSmall>{t('workTab.filter.label')}</TextExtraSmall>
-          <InputComponent inputSize="xs" tight id="field-entrant">
-            <InputText
-              id="field-entrant"
-              value={entrantSearch}
-              onChange={(e) => setEntrantSearch(e.target.value)}
-              placeholder={t('workTab.filter.placeholder')}
-            />
-          </InputComponent>
-        </div>
-      </FilterContainer>
+      {!!works?.length && (
+        <FilterContainer>
+          <div>
+            <TextExtraSmall bold>{t('workTab.filter.label')}</TextExtraSmall>
+            <InputComponent inputSize="xs" tight id="field-entrant">
+              <InputText
+                id="field-entrant"
+                value={entrantSearch}
+                onChange={(e) => setEntrantSearch(e.target.value)}
+                placeholder={t('workTab.filter.placeholder')}
+              />
+            </InputComponent>
+          </div>
+        </FilterContainer>
+      )}
       {isLoading ? <Loading /> : worksComponents}
     </RowGapBlock>
   )
@@ -78,6 +77,8 @@ const FilterContainer = styled.div`
   height: 68px;
   ${TextExtraSmall} {
     color: ${Colors.Black[400]};
+    text-transform: uppercase;
+    padding-bottom: 5px;
   }
 `
 
