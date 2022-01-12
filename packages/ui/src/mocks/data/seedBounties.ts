@@ -21,7 +21,7 @@ export interface RawBountyMock {
   judgingPeriod: number
   stage: string
   totalFunding: string
-  // discussionThreadId: string
+  discussionThreadId: string
   createdInEvent: BlockFieldsMock
   maxFundingReachedEvent?: BlockFieldsMock
 }

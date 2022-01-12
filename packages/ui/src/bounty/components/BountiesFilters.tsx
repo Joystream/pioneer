@@ -98,7 +98,7 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
         )}
 
         <SmallMemberSelect
-          title="Proposer"
+          title="Creator"
           value={creator}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'creator', value })

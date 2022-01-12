@@ -1,4 +1,5 @@
 {
+  "bounties": "bounties",
   "modals": {
     "bountyCancel": {
       "title": "Cancel Bounty",
