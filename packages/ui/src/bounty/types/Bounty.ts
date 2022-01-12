@@ -48,7 +48,11 @@ export type BountyActorItem = Contributor | Entrant | Withdrawn
 
 export type FundingType = FundingLimited | FundingPerpetual
 
-type FundingLimited = {
+export const isPerpetual = (type: FundingType): type is FundingPerpetual => {
+  return (type as FundingPerpetual).target !== undefined
+}
+
+export type FundingLimited = {
   minAmount: BN
   maxAmount: BN
   maxPeriod: number

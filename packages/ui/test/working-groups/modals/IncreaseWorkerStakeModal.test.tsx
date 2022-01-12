@@ -107,7 +107,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
     it('Goes to sign modal', async () => {
       await renderModalAndProceedToSign()
 
-      expect(screen.queryByText('Authorize transaction')).toBeDefined()
+      expect(screen.queryByText('modals.authorizeTransaction.title')).toBeDefined()
     })
 
     it('Transaction exceed balance', async () => {

@@ -52,6 +52,14 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
 
   ${({ size }) => {
     switch (size) {
+      case 's': {
+        return css`
+          font-size: 16px;
+          :after {
+            font-size: 14px;
+          }
+        `
+      }
       case 'm': {
         return css`
           font-size: 18px;
