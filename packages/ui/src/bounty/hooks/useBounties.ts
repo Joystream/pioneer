@@ -32,6 +32,15 @@ export const useBounties = ({ order, perPage = 10, filters, status }: UseBountie
 
     if (status === 'past') {
       where.stage_eq = BountyStage['Terminated']
+    } else {
+      where.stage_in = [
+        BountyStage['Funding'],
+        BountyStage['WorkSubmission'],
+        BountyStage['Judgment'],
+        BountyStage['Expired'],
+        BountyStage['Successful'],
+        BountyStage['Failed'],
+      ]
     }
 
     if (filters?.period) {
