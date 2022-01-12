@@ -9,11 +9,8 @@ import {
   isTransactionSuccess,
   transactionMachine,
 } from '@/common/model/machines'
-import { EmptyObject } from '@/common/types'
 
 export interface GeneralParametersContext {
-  bountyId: string
-  memberId?: string
   workTitle: string
   workDescription: string
 }
@@ -22,7 +19,7 @@ interface TransactionContext {
   transactionEvents?: EventRecord[]
 }
 
-export type SubmitWorkContext = Partial<GeneralParametersContext & TransactionContext>
+export type SubmitWorkContext = GeneralParametersContext & TransactionContext
 
 export enum SubmitWorkStates {
   generalParameters = 'generalParameters',
@@ -34,10 +31,10 @@ export enum SubmitWorkStates {
 
 type SubmitWorkState =
   | { value: SubmitWorkStates.generalParameters; context: GeneralParametersContext }
-  | { value: SubmitWorkStates.transaction; context: EmptyObject }
+  | { value: SubmitWorkStates.transaction; context: SubmitWorkContext }
   | { value: SubmitWorkStates.success; context: Required<SubmitWorkContext> }
   | { value: SubmitWorkStates.error; context: Required<SubmitWorkContext> }
-  | { value: SubmitWorkStates.cancel; context: EmptyObject }
+  | { value: SubmitWorkStates.cancel; context: SubmitWorkContext }
 
 type SuccessEvent = {
   type: 'SUCCESS'
@@ -51,14 +48,10 @@ type ErrorEvent = {
   fee: BN
 }
 
-type SetBountyIdEvent = { type: 'SET_BOUNTY_ID'; bountyId: string }
-type SetMemberIdEvent = { type: 'SET_MEMBER_ID'; MemberId: string }
 type SetWorkTitleEvent = { type: 'SET_WORK_TITLE'; workTitle: string }
 type SetEntryDescriptionEvent = { type: 'SET_WORK_DESCRIPTION'; workDescription: string }
 
 export type SubmitWorkEvent =
-  | SetBountyIdEvent
-  | SetMemberIdEvent
   | SetWorkTitleEvent
   | SetEntryDescriptionEvent
   | SuccessEvent
@@ -75,10 +68,24 @@ export type SubmitWorkModalMachineState = State<
 
 export const submitWorkMachine = createMachine<SubmitWorkContext, SubmitWorkEvent, SubmitWorkState>({
   initial: SubmitWorkStates.generalParameters,
+  context: {
+    workTitle: '',
+    workDescription: '',
+  },
   states: {
     [SubmitWorkStates.generalParameters]: {
       on: {
         NEXT: SubmitWorkStates.transaction,
+        SET_WORK_TITLE: {
+          actions: assign({
+            workTitle: (context, event) => (event as SetWorkTitleEvent).workTitle,
+          }),
+        },
+        SET_WORK_DESCRIPTION: {
+          actions: assign({
+            workDescription: (context, event) => (event as SetEntryDescriptionEvent).workDescription,
+          }),
+        },
       },
     },
     [SubmitWorkStates.transaction]: {

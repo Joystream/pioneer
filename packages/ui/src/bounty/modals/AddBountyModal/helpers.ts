@@ -109,8 +109,6 @@ export const createBountyMetadataFactory = (state: AddBountyModalMachineState) =
 export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState) => {
   const buffer = Buffer.from(
     JSON.stringify({
-      bountyId: state.context.bountyId,
-      memberId: state.context.memberId,
       workTitle: state.context.workTitle,
       workDescription: state.context.workDescription,
     })

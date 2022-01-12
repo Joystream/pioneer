@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { generatePath } from 'react-router'
 import { useHistory } from 'react-router-dom'
@@ -30,12 +30,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface Props {
-  workDescription?: string
-  workTitle?: string
-}
-
-export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
+export const SubmitWorkModal = () => {
   const { hideModal, modalData } = useModal<SubmitWorkModalCall>()
   const { active: activeMember } = useMyMemberships()
   const { t } = useTranslation('bounty')
@@ -48,7 +43,13 @@ export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
   if (!service.initialized) {
     service.start()
   }
-
+  useEffect(() => {
+    if (state.context.workTitle && state.context.workDescription !== '') {
+      setValidNext(true)
+    } else {
+      setValidNext(false)
+    }
+  })
   const transaction = useMemo(() => {
     const entryId = modalData.bounty.entries?.find((entryId) => entryId.id === 'id')
     if (api && isConnected && activeMember) {
@@ -78,8 +79,8 @@ export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        description={t('modals.contribute.authorizeDescription')}
-        buttonLabel={t('modals.contribute.nextButton')}
+        description={t('modals.submitWork.authorizeDescription')}
+        buttonLabel={t('modals.submitWork.button.submitWork')}
       />
     )
   }
@@ -109,36 +110,61 @@ export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
-      <ModalHeader title="Submit work" onClick={hideModal} />
+      <ModalHeader title={t('modals.submitWork.title')} onClick={hideModal} />
       <ModalBody>
         {state.matches(SubmitWorkStates.generalParameters) && (
           <RowGapBlock gap={24}>
             <Row>
               <RowGapBlock gap={8}>
-                <h4>Submit work</h4>
+                <h4>{t('modals.submitWork.title')}</h4>
               </RowGapBlock>
             </Row>
-            <Container disabled label="Bounty ID" tooltipText="test" inputSize="l">
+            <Container
+              disabled
+              label="Bounty ID"
+              tooltipText={t('modals.submitWork.submitWorkInput.bountyId')}
+              inputSize="l"
+            >
               <TextBig value bold>
                 {modalData.bounty.id}
               </TextBig>
             </Container>
             <Row>
               <RowGapBlock gap={20}>
-                <SelectedMember disabled member={activeMember} label="Member Id" />
-                <InputComponent id="field-description" required inputSize="m" label="Work Title">
+                <SelectedMember
+                  disabled
+                  member={activeMember}
+                  label={t('modals.submitWork.submitWorkInput.memberId')}
+                />
+                <InputComponent
+                  id="field-description"
+                  required
+                  inputSize="m"
+                  label={t('modals.submitWork.submitWorkInput.workTitle')}
+                  message={
+                    state.context.workTitle.length > 70
+                      ? t('modals.submitWork.validation.maxLengthMessage')
+                      : t('modals.submitWork.validation.max70')
+                  }
+                  validation={state.context.workTitle.length > 70 ? 'invalid' : undefined}
+                >
                   <InputText
                     id="field-title"
+                    value={state.context.workTitle}
                     onChange={(e) => send('SET_WORK_TITLE', { workTitle: e.target.value })}
-                    placeholder="Type"
+                    placeholder={t('modals.submitWork.submitWorkInput.workTitlePlaceholder')}
                   />
                 </InputComponent>
-                <InputComponent id="field-description" inputSize="auto" label="Bounty description" required>
+                <InputComponent
+                  id="field-description"
+                  label={t('modals.submitWork.submitWorkInput.entryDescription')}
+                  required
+                >
                   <CKEditor
                     id="field-description"
                     minRows={3}
                     onChange={(event, editor) => send('SET_WORK_DESCRIPTION', { workDescription: editor.getData() })}
-                    onReady={(editor) => editor.setData(workDescription || '')}
+                    onReady={(editor) => editor.setData(state.context.workDescription || '')}
                   />
                 </InputComponent>
               </RowGapBlock>
@@ -148,11 +174,8 @@ export const SubmitWorkModal = ({ workDescription, workTitle }: Props) => {
       </ModalBody>
       <ModalFooter>
         <ButtonsGroup align="right">
-          {/*<ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">*/}
-          {/*  Submit Work*/}
-          {/*</ButtonPrimary>*/}
-          <ButtonPrimary onClick={() => send('NEXT')} size="medium">
-            Submit Work
+          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+            {t('modals.submitWork.button.submitWork')}
           </ButtonPrimary>
         </ButtonsGroup>
       </ModalFooter>

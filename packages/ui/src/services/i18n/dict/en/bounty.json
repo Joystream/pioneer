@@ -63,6 +63,24 @@
         "button": "Go to Current Bounties"
       },
       "error": "There was a problem canceling bounty."
+    },
+    "submitWork": {
+      "title": "Submit work",
+      "submitWorkInput": {
+        "bountyId": "Bounty ID",
+        "memberId": "Member ID",
+        "workTitle": "Work Title",
+        "workTitlePlaceholder": "Type",
+        "entryDescription": "Entry description"
+      },
+      "button": {
+        "submitWork": "Submit Work"
+      },
+      "authorizeDescription": "You submitting your work",
+      "validation": {
+        "maxLengthMessage": "Max length is 70 characters",
+        "max70": "MAX 70"
+      }
     }
   },
   "tiles": {
