@@ -49,6 +49,9 @@ fragment BountyFields on Bounty {
         reward
       }
     }
+    works {
+      id
+    }
   }
   createdInEvent {
     inBlock

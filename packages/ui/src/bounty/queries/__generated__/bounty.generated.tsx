@@ -157,6 +157,7 @@ export type BountyFieldsFragment = {
           | { __typename: 'BountyEntryStatusWinner'; reward: number }
           | { __typename: 'BountyEntryStatusWithdrawn' }
           | { __typename: 'BountyEntryStatusWorking' }
+        works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string }> | null | undefined
       }>
     | null
     | undefined
@@ -376,6 +377,7 @@ export type GetBountiesQuery = {
             | { __typename: 'BountyEntryStatusWinner'; reward: number }
             | { __typename: 'BountyEntryStatusWithdrawn' }
             | { __typename: 'BountyEntryStatusWorking' }
+          works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string }> | null | undefined
         }>
       | null
       | undefined
@@ -569,6 +571,7 @@ export type GetBountyQuery = {
                 | { __typename: 'BountyEntryStatusWinner'; reward: number }
                 | { __typename: 'BountyEntryStatusWithdrawn' }
                 | { __typename: 'BountyEntryStatusWorking' }
+              works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string }> | null | undefined
             }>
           | null
           | undefined
@@ -690,6 +693,9 @@ export const BountyFieldsFragmentDoc = gql`
         ... on BountyEntryStatusWinner {
           reward
         }
+      }
+      works {
+        id
       }
     }
     createdInEvent {
