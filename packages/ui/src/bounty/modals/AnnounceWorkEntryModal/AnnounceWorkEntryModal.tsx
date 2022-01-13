@@ -1,3 +1,4 @@
+import { Editor } from '@joystream/markdown-editor/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -10,13 +11,12 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
-import { FundedRange } from '@/bounty/components/FundedRange'
+import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
-import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index'
 import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { FundingLimited, isPerpetual } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
 import {
@@ -32,32 +32,38 @@ import {
   TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TextMedium } from '@/common/components/typography'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
+import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
-export const ContributeFundsModal = () => {
+export const AnnounceWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
   const {
     modalData: { bounty },
     hideModal,
     showModal,
-  } = useModal<BountyContributeFundsModalCall>()
+  } = useModal<BountyAnnounceWorkEntryModalCall>()
   const { api, isConnected } = useApi()
-  const minFundingLimit = api?.consts.bounty.minFundingLimit.toNumber() ?? 0
+  const minWorkEntrantStake = api?.consts.bounty.minWorkEntrantStake.toNumber() ?? 0
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const [amount, setAmount] = useState<string>(String(minFundingLimit))
+  const [amount, setAmount] = useState<string>(String(minWorkEntrantStake))
+  const [description, setDescription] = useState<string>()
   const [state, send] = useMachine(contributeFundsMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
 
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
-  const valid = useMemo(() => new BN(amount).gten(minFundingLimit) && !!account, [amount, account])
+  const valid = useMemo(
+    () => new BN(amount).gten(minWorkEntrantStake) && !!account && !!description,
+    [amount, account, description]
+  )
 
   const setMaxAmount = useCallback(() => {
     balance && setAmount(balance.transferable.toString())
@@ -66,6 +72,10 @@ export const ContributeFundsModal = () => {
   const setHalfAmount = useCallback(() => {
     balance && setAmount(balance.transferable.divn(2).toString())
   }, [balance])
+
+  const handleDescription = useCallback((_, editor: Editor) => {
+    setDescription(editor.getData())
+  }, [])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
@@ -83,7 +93,9 @@ export const ContributeFundsModal = () => {
 
   useEffect(() => {
     balance &&
-      setAmount(balance.transferable.gten(minFundingLimit) ? String(minFundingLimit) : balance.transferable.toString())
+      setAmount(
+        balance.transferable.gten(minWorkEntrantStake) ? String(minWorkEntrantStake) : balance.transferable.toString()
+      )
   }, [balance?.transferable.toString(), account?.address])
 
   useEffect(() => {
@@ -103,14 +115,13 @@ export const ContributeFundsModal = () => {
   if (state.matches(ContributeFundStates.success)) {
     return (
       <SuccessTransactionModal
-        buttonLabel={t('modals.contribute.successButton')}
+        buttonLabel={t('modals.announceWorkEntry.successButton')}
         onClose={hideModal}
         onButtonClick={hideModal}
-        message={t('modals.contribute.success', { bounty: bounty.title })}
+        message={t('modals.announceWorkEntry.success', { bounty: bounty.title })}
       />
     )
   }
-
   if (state.matches(ContributeFundStates.error)) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
@@ -133,8 +144,8 @@ export const ContributeFundsModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        description={t('modals.contribute.authorizeDescription', { value: formatTokenValue(amount) })}
-        buttonLabel={t('modals.contribute.nextButton')}
+        description={t('modals.announceWorkEntry.authorizeDescription', { value: formatTokenValue(amount) })}
+        buttonLabel={t('modals.announceWorkEntry.nextButton')}
         contributeAmount={contribution}
       />
     )
@@ -142,14 +153,14 @@ export const ContributeFundsModal = () => {
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
-      <ModalHeader title={t('modals.contribute.title')} onClick={hideModal} />
+      <ModalHeader title={t('modals.announceWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <Row>
             <InputComponent
               inputSize="l"
-              label={t('modals.contribute.bountyId.label')}
-              tooltipText={t('modals.contribute.bountyId.tooltip')}
+              label={t('modals.announceWorkEntry.bountyId.label')}
+              tooltipText={t('modals.announceWorkEntry.bountyId.tooltip')}
               required
               inputDisabled
             >
@@ -159,8 +170,22 @@ export const ContributeFundsModal = () => {
           <Row>
             <InputComponent
               inputSize="l"
-              label={t('modals.contribute.stakingAccount.label')}
-              tooltipText={t('modals.contribute.stakingAccount.tooltip')}
+              label={t('modals.announceWorkEntry.memberId.label')}
+              tooltipText={t('modals.announceWorkEntry.memberId.tooltip')}
+              required
+              inputDisabled
+            >
+              <MemberInfoWithMargin member={activeMember} skipModal />
+            </InputComponent>
+          </Row>
+          <Row>
+            <TextMedium dark>{t('modals.announceWorkEntry.fillDetails')}</TextMedium>
+          </Row>
+          <Row>
+            <InputComponent
+              inputSize="l"
+              label={t('modals.announceWorkEntry.stakingAccount.label')}
+              tooltipText={t('modals.announceWorkEntry.stakingAccount.tooltip')}
               required
             >
               <SelectAccount onChange={setAccount} selected={account} />
@@ -169,8 +194,10 @@ export const ContributeFundsModal = () => {
           <Row>
             <TransactionAmount alignItemsToEnd>
               <InputComponent
-                label={t('modals.contribute.selectAmount')}
-                sublabel={t('modals.contribute.selectAmountSubtitle', { value: formatTokenValue(minFundingLimit) })}
+                label={t('modals.announceWorkEntry.selectAmount')}
+                sublabel={t('modals.announceWorkEntry.selectAmountSubtitle', {
+                  value: formatTokenValue(minWorkEntrantStake),
+                })}
                 id="amount-input"
                 required
                 inputWidth="s"
@@ -186,24 +213,19 @@ export const ContributeFundsModal = () => {
               </InputComponent>
               <AmountButtons>
                 <AmountButton size="small" onClick={setHalfAmount}>
-                  {t('modals.contribute.halfButton')}
+                  {t('modals.announceWorkEntry.halfButton')}
                 </AmountButton>
                 <AmountButton size="small" onClick={setMaxAmount}>
-                  {t('modals.contribute.maxButton')}
+                  {t('modals.announceWorkEntry.maxButton')}
                 </AmountButton>
               </AmountButtons>
             </TransactionAmount>
           </Row>
-          {!isPerpetual(bounty.fundingType) && (
-            <Row>
-              <FundedRange
-                rangeValue={bounty.totalFunding.toNumber()}
-                maxRangeValue={(bounty.fundingType as FundingLimited).maxAmount.toNumber()}
-                minRangeValue={(bounty.fundingType as FundingLimited).minAmount.toNumber()}
-                flat
-              />
-            </Row>
-          )}
+          <Row>
+            <InputComponent inputSize="auto" label={t('modals.announceWorkEntry.description.label')} required>
+              <CKEditor onChange={handleDescription} />
+            </InputComponent>
+          </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
@@ -216,7 +238,7 @@ export const ContributeFundsModal = () => {
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!valid} onClick={nextStep}>
-          {t('modals.contribute.nextButton')}
+          {t('modals.announceWorkEntry.nextButton')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>
@@ -228,4 +250,8 @@ const ReadOnlyInput = styled(Input)`
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;
+`
+
+const MemberInfoWithMargin = styled(MemberInfo)`
+  margin: 0 16px;
 `
