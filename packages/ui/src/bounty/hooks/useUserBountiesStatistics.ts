@@ -22,6 +22,7 @@ export const useUserBountiesStatistics = (memberId: string) => {
     return {
       amountContributed,
       amountEarned,
+      entriesSubmitted: data?.bountyEntries.length || 0,
     }
   }, [data])
 

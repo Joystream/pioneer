@@ -1,59 +1,51 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { TileSection } from '@/bounty/components/TileSection'
-import { Bounty } from '@/bounty/types/Bounty'
-import { TextHuge } from '@/common/components/typography'
+import { useUserBountiesStatistics } from '@/bounty/hooks/useUserBountiesStatistics'
+import { TextHuge, TokenValue } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-const isContributor = true
-
-interface Props {
-  bounty: Bounty
-}
-
-export const MyEntriesTiles = ({ bounty }: Props) => {
+export const MyEntriesTiles = () => {
   const { t } = useTranslation('bounty')
   const { active } = useMyMemberships()
+  const { statistics } = useUserBountiesStatistics(active?.id || '')
 
   const firstRow = useMemo(() => {
-    const activeMemberEntries = bounty.entries?.filter((entry) => entry.worker.id === active?.id)
-
     const row = [
       {
         title: t('tiles.myEntries.title'),
         content: (
           <TextHuge value bold>
-            {activeMemberEntries?.length || 0}
+            {statistics.entriesSubmitted}
           </TextHuge>
         ),
         tooltipText: t('tiles.myEntries.tooltip'),
       },
       {
         title: t('tiles.earned.title'),
-        content: (
-          <TextHuge value bold>
-            content
-          </TextHuge>
-        ),
+        content: <TokenValue value={statistics.amountEarned} size="l" />,
         tooltipText: t('tiles.earned.tooltip'),
       },
     ]
 
-    if (isContributor) {
+    if (statistics.amountContributed) {
       row.push({
         title: t('tiles.contributed.title'),
-        content: (
-          <TextHuge value bold>
-            content
-          </TextHuge>
-        ),
+        content: <TokenValue value={statistics.amountContributed} size="l" />,
         tooltipText: t('tiles.contributed.tooltip'),
       })
     }
 
     return row
-  }, [])
+  }, [statistics])
 
-  return <TileSection firstRow={firstRow} />
+  return <StyledTileSection firstRow={firstRow} />
 }
+
+const StyledTileSection = styled(TileSection)`
+  > div {
+    max-width: max(25%, 125px);
+  }
+`

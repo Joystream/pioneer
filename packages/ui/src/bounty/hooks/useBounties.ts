@@ -1,3 +1,4 @@
+import { set } from 'lodash'
 import { useMemo } from 'react'
 
 import { useGetBountiesCountQuery, useGetBountiesQuery } from '@/bounty/queries'
@@ -10,14 +11,20 @@ import { asBounty } from '../types/casts'
 
 type BountyStatus = 'active' | 'past'
 
+export interface QueryExtraFilter<T> {
+  path: string
+  value: T
+}
+
 export interface UseBountiesProps {
   order: SortOrder<BountyOrderByInput>
   perPage?: number
   filters?: BountyFiltersState
   status: BountyStatus
+  extraFilter?: QueryExtraFilter<unknown>
 }
 
-export const useBounties = ({ order, perPage = 10, filters, status }: UseBountiesProps) => {
+export const useBounties = ({ order, perPage = 10, filters, status, extraFilter }: UseBountiesProps) => {
   const orderBy = toQueryOrderByInput<BountyOrderByInput>(order)
   const { data: dataCount } = useGetBountiesCountQuery()
   const totalCountPerPage = dataCount?.bountiesConnection.totalCount
@@ -69,6 +76,10 @@ export const useBounties = ({ order, perPage = 10, filters, status }: UseBountie
 
     if (filters?.oracle) {
       where.oracle = { id_eq: filters.oracle.id }
+    }
+
+    if (extraFilter) {
+      set(where, extraFilter.path, extraFilter.value)
     }
 
     return { where, orderBy, limit: perPage, offset }
