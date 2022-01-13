@@ -10,8 +10,13 @@ import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { Pagination } from '@/common/components/Pagination'
 import { SimpleSelect } from '@/common/components/selects'
 import { useSort } from '@/common/hooks/useSort'
+import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
+import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
+import faker from 'faker'
+import { Loading } from '@/common/components/Loading'
 
 const sortingOptions = ['Latest', 'Earliest']
+const WEEK_AGO = faker.date.recent(7)
 
 export const BountiesCurrent = memo(() => {
   const searchSlot = useRef<HTMLDivElement>(null)
@@ -22,9 +27,11 @@ export const BountiesCurrent = memo(() => {
   const { onSort, isDescending } = getSortProps('createdAt')
 
   const { isLoading, bounties, pagination } = useBounties({ order, filters, status: 'active' })
+  const { isLoading: isContributionsLoading, contributions } = useBountyContributions({ createdAfter: WEEK_AGO })
 
   return (
     <BountiesLayout>
+      {isContributionsLoading ? <Loading /> : <TopContributors contributions={contributions} />}
       <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
       {bounties?.length ? (
         <SimpleSelect
