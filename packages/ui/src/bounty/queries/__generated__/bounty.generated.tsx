@@ -639,6 +639,25 @@ export type GetBountyWorksCountQuery = {
   workSubmittedEventsConnection: { __typename: 'WorkSubmittedEventConnection'; totalCount: number }
 }
 
+export type GetUserBountyStatisticsQueryVariables = Types.Exact<{
+  memberId: Types.Scalars['ID']
+}>
+
+export type GetUserBountyStatisticsQuery = {
+  __typename: 'Query'
+  bountyEntries: Array<{
+    __typename: 'BountyEntry'
+    status:
+      | { __typename: 'BountyEntryStatusCashedOut' }
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+  }>
+  bountyContributions: Array<{ __typename: 'BountyContribution'; amount: any }>
+}
+
 export const BountyFieldsFragmentDoc = gql`
   fragment BountyFields on Bounty {
     id
@@ -932,4 +951,59 @@ export type GetBountyWorksCountLazyQueryHookResult = ReturnType<typeof useGetBou
 export type GetBountyWorksCountQueryResult = Apollo.QueryResult<
   GetBountyWorksCountQuery,
   GetBountyWorksCountQueryVariables
+>
+export const GetUserBountyStatisticsDocument = gql`
+  query GetUserBountyStatistics($memberId: ID!) {
+    bountyEntries(where: { worker: { id_eq: $memberId } }) {
+      status {
+        ... on BountyEntryStatusWinner {
+          reward
+        }
+      }
+    }
+    bountyContributions(where: { contributor: { id_eq: $memberId } }) {
+      amount
+    }
+  }
+`
+
+/**
+ * __useGetUserBountyStatisticsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBountyStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBountyStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBountyStatisticsQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetUserBountyStatisticsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>(
+    GetUserBountyStatisticsDocument,
+    options
+  )
+}
+export function useGetUserBountyStatisticsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>(
+    GetUserBountyStatisticsDocument,
+    options
+  )
+}
+export type GetUserBountyStatisticsQueryHookResult = ReturnType<typeof useGetUserBountyStatisticsQuery>
+export type GetUserBountyStatisticsLazyQueryHookResult = ReturnType<typeof useGetUserBountyStatisticsLazyQuery>
+export type GetUserBountyStatisticsQueryResult = Apollo.QueryResult<
+  GetUserBountyStatisticsQuery,
+  GetUserBountyStatisticsQueryVariables
 >

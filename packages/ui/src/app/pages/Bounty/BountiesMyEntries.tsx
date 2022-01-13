@@ -26,7 +26,7 @@ export const BountiesMyEntries = () => {
   return (
     <BountiesLayout>
       <MainPanel>
-        <MyEntriesTiles bounty={(bountiesMock[0] as unknown) as Bounty} />
+        <MyEntriesTiles bounty={bountiesMock[0] as unknown as Bounty} />
         <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
         {isLoading ? (
           <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
