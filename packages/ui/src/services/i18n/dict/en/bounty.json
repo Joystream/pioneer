@@ -66,6 +66,7 @@
     },
     "submitWork": {
       "title": "Submit work",
+      "subtitle": "Submit work",
       "submitWorkInput": {
         "bountyId": "Bounty ID",
         "memberId": "Member ID",

@@ -116,7 +116,7 @@ export const SubmitWorkModal = () => {
           <RowGapBlock gap={24}>
             <Row>
               <RowGapBlock gap={8}>
-                <h4>{t('modals.submitWork.title')}</h4>
+                <h4>{t('modals.submitWork.subtitle')}</h4>
               </RowGapBlock>
             </Row>
             <Container
@@ -137,7 +137,7 @@ export const SubmitWorkModal = () => {
                   label={t('modals.submitWork.submitWorkInput.memberId')}
                 />
                 <InputComponent
-                  id="field-description"
+                  id="field-work-title"
                   required
                   inputSize="m"
                   label={t('modals.submitWork.submitWorkInput.workTitle')}
@@ -149,7 +149,7 @@ export const SubmitWorkModal = () => {
                   validation={state.context.workTitle.length > 70 ? 'invalid' : undefined}
                 >
                   <InputText
-                    id="field-title"
+                    id="field-work-title"
                     value={state.context.workTitle}
                     onChange={(e) => send('SET_WORK_TITLE', { workTitle: e.target.value })}
                     placeholder={t('modals.submitWork.submitWorkInput.workTitlePlaceholder')}
