@@ -4,7 +4,7 @@ import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/ap
 import { lowerFirstLetter } from '@/common/helpers'
 import { asMember } from '@/memberships/types'
 
-import { BountyFieldsFragment, BountyWorkFieldsFragment } from '../queries'
+import { BountyContributionFieldsFragment, BountyFieldsFragment, BountyWorkFieldsFragment } from '../queries'
 
 import {
   Bounty,
@@ -112,4 +112,9 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   contractType: asContractType(fields.contractType),
   contributors: asContributors(fields.contributions),
   inBlock: fields.createdInEvent.inBlock,
+})
+
+export const asContribution = (fields: BountyContributionFieldsFragment) => ({
+  amount: new BN(fields.amount),
+  contributor: fields.contributor ? asMember(fields.contributor) : undefined,
 })
