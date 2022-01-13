@@ -9,7 +9,7 @@ interface TileProps extends StatisticItemProps {
 
 export interface TileSectionProps {
   firstRow: TileProps[]
-  secondRow: TileProps[]
+  secondRow?: TileProps[]
   fundedDetails?: FundedRangeProps
 }
 
@@ -25,11 +25,11 @@ export const TileSection = React.memo(({ fundedDetails, secondRow, firstRow }: T
       </Statistics>
       <Statistics>
         {fundedDetails && <FundedRange maxRangeValue={15000} minRangeValue={13000} rangeValue={5000} />}
-        {secondRow.map(({ content, ...statisticItemProps }, index) => (
+        {secondRow?.map(({ content, ...statisticItemProps }, index) => (
           <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
             {content}
           </StatisticItem>
-        ))}
+        )) ?? null}
       </Statistics>
     </>
   )

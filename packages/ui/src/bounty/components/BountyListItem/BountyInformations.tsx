@@ -26,7 +26,7 @@ export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) =>
             </AvatarWrapper>
           </TextMedium>
         )}
-        <TextHuge bold>{title}</TextHuge>
+        <Title bold>{title}</Title>
       </TitleContainer>
       <BadgeDurationContainer>
         <BadgesRow space={8}>
@@ -79,4 +79,12 @@ const AvatarWrapper = styled.div`
   position: absolute;
   top: -10px;
   left: -45px;
+`
+
+const Title = styled(TextHuge)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 90%;
+  width: min-content;
 `
