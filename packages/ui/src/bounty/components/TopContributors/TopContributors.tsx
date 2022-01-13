@@ -1,25 +1,21 @@
-import faker from 'faker'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
 import { CommunityTile } from '@/common/components/icons/CommunityTile'
-import { Loading } from '@/common/components/Loading'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
+import { BountyContribution } from '@/bounty/types/Bounty'
 
-const WEEK_AGO = faker.date.recent(7)
+interface TopContributorsProps {
+  contributions: BountyContribution[]
+}
 
-export const TopContributors = () => {
-  const { isLoading, contributions } = useBountyContributions({ createdAfter: WEEK_AGO })
-
+export const TopContributors = ({ contributions }: TopContributorsProps) => {
   const tiles = useMemo(() => {
-    if (isLoading) {
-      <Loading />
-    } else if (contributions.length) {
+    if (contributions.length) {
       return contributions.map((el, index) => (
         <StyledTile>
           {el.contributor && <MemberInfo member={el.contributor} size="s" hideGroup onlyTop />}
