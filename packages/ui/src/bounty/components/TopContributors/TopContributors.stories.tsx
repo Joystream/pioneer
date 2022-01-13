@@ -1,9 +1,9 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
 import members from '@/mocks/data/raw/members.json'
-import BN from 'bn.js'
 
 export default {
   title: 'Bounty/TopContributors',

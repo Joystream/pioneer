@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { BountyContribution } from '@/bounty/types/Bounty'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
 import { CommunityTile } from '@/common/components/icons/CommunityTile'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
-import { BountyContribution } from '@/bounty/types/Bounty'
 
 interface TopContributorsProps {
   contributions: BountyContribution[]

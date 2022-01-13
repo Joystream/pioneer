@@ -1,19 +1,19 @@
+import faker from 'faker'
 import React, { useRef, useState, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BountiesLayout } from '@/app/pages/Bounty/components/BountiesLayout'
 import { BountyEmptyFilter, BountyFilters } from '@/bounty/components/BountiesFilters'
 import { BountiesList } from '@/bounty/components/BountiesList'
+import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
 import { useBounties } from '@/bounty/hooks/useBounties'
+import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
 import { BountyOrderByInput } from '@/common/api/queries'
+import { Loading } from '@/common/components/Loading'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { Pagination } from '@/common/components/Pagination'
 import { SimpleSelect } from '@/common/components/selects'
 import { useSort } from '@/common/hooks/useSort'
-import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
-import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
-import faker from 'faker'
-import { Loading } from '@/common/components/Loading'
 
 const sortingOptions = ['Latest', 'Earliest']
 const WEEK_AGO = faker.date.recent(7)
