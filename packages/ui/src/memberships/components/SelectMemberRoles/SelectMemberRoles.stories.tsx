@@ -24,7 +24,7 @@ export const Default: Story = ({ onApply }) => {
   return (
     <MockApolloProvider workingGroups>
       <ModalBlock>
-        <SelectMemberRoles value={value} onChange={setValue} onApply={apply} onClear={clear}/>
+        <SelectMemberRoles value={value} onChange={setValue} onApply={apply} onClear={clear} />
       </ModalBlock>
     </MockApolloProvider>
   )
