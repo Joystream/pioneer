@@ -1,42 +1,47 @@
+import faker from 'faker'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
 import { CommunityTile } from '@/common/components/icons/CommunityTile'
+import { Loading } from '@/common/components/Loading'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
-import { Member } from '@/memberships/types'
 
-interface Props {
-  contributors: Member[] | undefined
-}
+const WEEK_AGO = faker.date.recent(7)
 
-export const TopContributors = ({ contributors }: Props) => {
+export const TopContributors = () => {
+  const { isLoading, contributions } = useBountyContributions({ createdAfter: WEEK_AGO })
+
   const tiles = useMemo(() => {
-    if (contributors) {
-      return contributors.map((member, index) => (
+    if (isLoading) {
+      <Loading />
+    } else if (contributions.length) {
+      return contributions.map((el, index) => (
         <StyledTile>
-          <MemberInfo member={member} size="s" hideGroup onlyTop />
+          {el.contributor && <MemberInfo member={el.contributor} size="s" hideGroup onlyTop />}
           <ValueWrapper>
             <TextSmall>Contributed</TextSmall>
-            <TokenValue size="l" value={10000} />
+            <TokenValue size="l" value={el.amount} />
           </ValueWrapper>
           <TileNumber>{index + 1}</TileNumber>
         </StyledTile>
       ))
+    } else {
+      return (
+        <EmptyStateWrapper>
+          <CommunityTile />
+          <div>
+            <TextExtraHuge bold>No contributors</TextExtraHuge>
+            <TextBig>Lorem ipsum dolor sit amet enim</TextBig>
+          </div>
+        </EmptyStateWrapper>
+      )
     }
-    return (
-      <EmptyStateWrapper>
-        <CommunityTile />
-        <div>
-          <TextExtraHuge bold>No contributors</TextExtraHuge>
-          <TextBig>Lorem ipsum dolor sit amet enim</TextBig>
-        </div>
-      </EmptyStateWrapper>
-    )
-  }, [contributors])
+  }, [contributions])
 
   return <HorizontalScroller items={tiles} title="Top contributors past week" />
 }
