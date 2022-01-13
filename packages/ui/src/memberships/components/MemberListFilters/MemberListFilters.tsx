@@ -13,7 +13,7 @@ import { SelectMemberRoles } from '../SelectMemberRoles'
 
 export interface MemberListFilter {
   search: string
-  roles: MemberRole[]
+  role: MemberRole | null
   council: boolean | null
   onlyVerified: boolean
   onlyFounder: boolean
@@ -40,7 +40,7 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
 
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
-  roles: [],
+  role: null,
   council: null,
   onlyVerified: false,
   onlyFounder: false,
@@ -56,7 +56,7 @@ export interface MemberListFiltersProps {
 
 export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
-  const { search, roles, council, onlyVerified, onlyFounder } = filters
+  const { search, role, council, onlyVerified, onlyFounder } = filters
 
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
@@ -83,12 +83,16 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
       </FieldsHeader>
 
       <SelectMemberRoles
-        value={roles}
-        onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
+        value={role}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'role', value })
+          console.log(value)
+          onApply({...filters, role: value})
+        }}
         onApply={applyFilters}
         onClear={() => {
-          dispatch({ type: 'change', field: 'roles', value: [] })
-          onApply({ ...filters, roles: [] })
+          dispatch({ type: 'change', field: 'role', value: null })
+          onApply({ ...filters, role: null })
         }}
       />
 

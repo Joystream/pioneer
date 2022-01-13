@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
 import { ControlProps } from '@/common/components/forms'
-import { MultiSelect, Selected } from '@/common/components/selects'
+import { MultiSelect, Selected, SimpleSelect } from '@/common/components/selects'
 import { TextMedium } from '@/common/components/typography'
 import { MemberRoles } from '@/memberships/components/MemberRoles'
 import { memberRoleTitle } from '@/memberships/helpers'
 import { useAllMemberRoles } from '@/memberships/hooks/useAllMemberRoles'
 import { MemberRole } from '@/memberships/types'
 
-interface Props extends ControlProps<MemberRole[]> {
+interface Props extends ControlProps<MemberRole | null> {
   onApply: () => void
   onClear?: () => void
 }
@@ -21,14 +21,14 @@ export const SelectMemberRoles = ({ value, ...props }: Props) => {
     roles.length > 0 && setOptions(roles)
   }, [JSON.stringify(roles)])
 
-  const renderSelected = (roles: MemberRole[]) => (
+  const renderSelected = (role: MemberRole | null) => (
     <Selected>
-      {roles.length ? <MemberRoles roles={roles} size="l" max={3} /> : <TextMedium lighter>Select</TextMedium>}
+      {role ? <MemberRoles roles={[role]} size="l" max={1} /> : <TextMedium lighter>Select</TextMedium>}
     </Selected>
   )
   return (
-    <MultiSelect
-      title="Roles"
+    <SimpleSelect
+      title="Role"
       options={options}
       value={value}
       renderSelected={renderSelected}

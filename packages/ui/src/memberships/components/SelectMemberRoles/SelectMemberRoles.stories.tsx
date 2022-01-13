@@ -16,15 +16,15 @@ export default {
 } as Meta
 
 export const Default: Story = ({ onApply }) => {
-  const [value, setValue] = useState<MemberRole[]>([])
+  const [value, setValue] = useState<MemberRole | null>(null)
 
   const apply = () => onApply(value)
-  const clear = () => setValue([])
+  const clear = () => setValue(null)
 
   return (
     <MockApolloProvider workingGroups>
       <ModalBlock>
-        <SelectMemberRoles value={value} onChange={setValue} onApply={apply} onClear={clear} />
+        <SelectMemberRoles value={value} onChange={setValue} onApply={apply} onClear={clear}/>
       </ModalBlock>
     </MockApolloProvider>
   )
