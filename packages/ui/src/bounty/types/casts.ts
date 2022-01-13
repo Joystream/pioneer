@@ -16,6 +16,7 @@ import {
   Contributor,
   BountyWork,
   BountyEntryStatus,
+  BountyContribution,
 } from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
@@ -114,7 +115,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   inBlock: fields.createdInEvent.inBlock,
 })
 
-export const asContribution = (fields: BountyContributionFieldsFragment) => ({
+export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({
   amount: new BN(fields.amount),
   contributor: fields.contributor ? asMember(fields.contributor) : undefined,
 })
