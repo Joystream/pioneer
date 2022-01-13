@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const BountyFooter = ({ bounty }: Props) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation()
 
   return (
     <BountyInfoWrapper>
