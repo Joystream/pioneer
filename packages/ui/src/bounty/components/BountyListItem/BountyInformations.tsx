@@ -47,7 +47,8 @@ const Wrapper = styled.div`
 `
 
 const TitleContainer = styled.div`
-  flex: 1;
+  flex: 4;
+  min-width: 0;
   row-gap: 14px;
   display: flex;
   flex-direction: column;
@@ -60,7 +61,7 @@ const TitleContainer = styled.div`
 `
 
 const BadgeDurationContainer = styled.div`
-  flex: 1;
+  flex: 2;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;

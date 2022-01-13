@@ -6,6 +6,7 @@ import { BountyEmptyFilter, BountyFilters } from '@/bounty/components/BountiesFi
 import { BountiesList } from '@/bounty/components/BountiesList'
 import { useBounties } from '@/bounty/hooks/useBounties'
 import { BountyOrderByInput } from '@/common/api/queries'
+import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { Pagination } from '@/common/components/Pagination'
 import { useSort } from '@/common/hooks/useSort'
@@ -21,13 +22,15 @@ export const BountiesCurrent = memo(() => {
 
   return (
     <BountiesLayout>
-      <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
-      {isLoading ? (
-        <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
-      ) : (
-        <BountiesList getSortProps={getSortProps} bounties={bounties} />
-      )}
-      <Pagination {...pagination} />
+      <MainPanel>
+        <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
+        {isLoading ? (
+          <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
+        ) : (
+          <BountiesList getSortProps={getSortProps} bounties={bounties} />
+        )}
+        <Pagination {...pagination} />
+      </MainPanel>
     </BountiesLayout>
   )
 })
