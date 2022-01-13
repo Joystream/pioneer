@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BountyContribution } from '@/bounty/types/Bounty'
@@ -14,13 +15,15 @@ interface TopContributorsProps {
 }
 
 export const TopContributors = ({ contributions }: TopContributorsProps) => {
+  const { t } = useTranslation('bounty')
+
   const tiles = useMemo(() => {
     if (contributions.length) {
       return contributions.map((el, index) => (
         <StyledTile>
           {el.contributor && <MemberInfo member={el.contributor} size="s" hideGroup onlyTop />}
           <ValueWrapper>
-            <TextSmall>Contributed</TextSmall>
+            <TextSmall>{t('topContributors.amountTitle')}</TextSmall>
             <TokenValue size="l" value={el.amount} />
           </ValueWrapper>
           <TileNumber>{index + 1}</TileNumber>
@@ -31,15 +34,15 @@ export const TopContributors = ({ contributions }: TopContributorsProps) => {
         <EmptyStateWrapper>
           <CommunityTile />
           <div>
-            <TextExtraHuge bold>No contributors</TextExtraHuge>
-            <TextBig>Lorem ipsum dolor sit amet enim</TextBig>
+            <TextExtraHuge bold>{t('topContributors.notFound')}</TextExtraHuge>
+            <TextBig>{t('topContributors.notFoundText')}</TextBig>
           </div>
         </EmptyStateWrapper>
       )
     }
   }, [contributions])
 
-  return <HorizontalScroller items={tiles} title="Top contributors past week" />
+  return <HorizontalScroller items={tiles} title={t('topContributors.title')} />
 }
 
 const EmptyStateWrapper = styled.div`
