@@ -34,7 +34,7 @@ export type AnnounceWorkEntryState =
   | { value: AnnounceWorkEntryStates.cancel; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.error; context: Required<TransactionContext> }
 
-export const contributeFundsMachine = createMachine<
+export const announceWorkEntryMachine = createMachine<
   TransactionContext,
   AnnounceWorkEntryEvents,
   AnnounceWorkEntryState

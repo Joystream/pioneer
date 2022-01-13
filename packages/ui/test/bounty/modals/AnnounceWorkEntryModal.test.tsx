@@ -4,8 +4,7 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
-import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
-import { FundingLimited } from '@/bounty/types/Bounty'
+import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { BN_ZERO } from '@/common/constants'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -16,7 +15,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubBountyConstants,
@@ -25,16 +24,7 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const [baseBounty] = bounties
-const bounty = {
-  ...baseBounty,
-  totalFunding: new BN(baseBounty.totalFunding),
-  fundingType: {
-    ...baseBounty.fundingType,
-    maxAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).maxAmount ?? 0),
-    minAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).minAmount ?? 0),
-  },
-}
+const [bounty] = bounties
 
 const defaultBalance = {
   total: BN_ZERO,
@@ -49,7 +39,7 @@ describe('UI: ContributeFundsModal', () => {
   const api = stubApi()
   stubBountyConstants(api)
   const fee = 888
-  const transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
+  const transaction = stubTransaction(api, 'api.tx.bounty.announceWorkEntry', fee)
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -87,11 +77,15 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Renders', () => {
-    expect(screen.getByText('modals.contribute.title')).toBeInTheDocument()
+    expect(screen.getByText('modals.announceWorkEntry.title')).toBeInTheDocument()
   })
 
   it('Displays correct bounty id', () => {
     expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
+  })
+
+  it('Displays correct member', () => {
+    expect(screen.getByText(useMembership.active.handle)).toBeInTheDocument()
   })
 
   it('Displays correct transaction fee', () => {
@@ -104,7 +98,7 @@ describe('UI: ContributeFundsModal', () => {
   it('Displays correct contribute amount', () => {
     const value = 555
     const expected = String(value)
-    const input = screen.getByLabelText('modals.contribute.selectAmount')
+    const input = screen.getByLabelText('modals.announceWorkEntry.selectAmount')
     fireEvent.input(input, { target: { value } })
 
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
@@ -126,12 +120,12 @@ describe('UI: ContributeFundsModal', () => {
 
       await proceedToTransaction()
 
-      expect(screen.queryByText('modals.contribute.error')).toBeDefined()
+      expect(screen.queryByText('modals.announceWorkEntry.error')).toBeDefined()
     })
   })
 
   const proceedToAuthorization = async () => {
-    const button = await getButton('modals.contribute.nextButton')
+    const button = await getButton('modals.announceWorkEntry.nextButton')
     fireEvent.click(button)
 
     renderResult.rerender(<Modal />)
@@ -140,23 +134,25 @@ describe('UI: ContributeFundsModal', () => {
   const proceedToTransaction = async () => {
     await proceedToAuthorization()
 
-    const button = await getButton('modals.contribute.nextButton')
+    const button = await getButton('modals.announceWorkEntry.nextButton')
     fireEvent.click(button)
   }
 
   const Modal = () => (
     <ModalContext.Provider value={useModal}>
-      <MockKeyringProvider>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider value={useMembership}>
-            <AccountsContext.Provider value={useAccounts}>
-              <BalancesContext.Provider value={useBalances}>
-                <ContributeFundsModal />
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MockKeyringProvider>
+      <MockApolloProvider>
+        <MockKeyringProvider>
+          <ApiContext.Provider value={api}>
+            <MembershipContext.Provider value={useMembership}>
+              <AccountsContext.Provider value={useAccounts}>
+                <BalancesContext.Provider value={useBalances}>
+                  <AnnounceWorkEntryModal />
+                </BalancesContext.Provider>
+              </AccountsContext.Provider>
+            </MembershipContext.Provider>
+          </ApiContext.Provider>
+        </MockKeyringProvider>
+      </MockApolloProvider>
     </ModalContext.Provider>
   )
 })

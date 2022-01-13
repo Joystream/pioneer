@@ -71,7 +71,7 @@ const membership = {
 
 const api = stubApi()
 stubBountyConstants(api)
-stubTransaction(api, 'api.tx.bounty.fundBounty', 888)
+stubTransaction(api, 'api.tx.bounty.announceWorkEntry', 888)
 
 const Template: Story = (args) => {
   return (

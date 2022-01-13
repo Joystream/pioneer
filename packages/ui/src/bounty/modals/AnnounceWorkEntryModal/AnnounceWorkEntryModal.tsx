@@ -12,8 +12,8 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
+import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
-import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
@@ -54,7 +54,7 @@ export const AnnounceWorkEntryModal = () => {
   const { allAccounts } = useMyAccounts()
   const [amount, setAmount] = useState<string>(String(minWorkEntrantStake))
   const [description, setDescription] = useState<string>()
-  const [state, send] = useMachine(contributeFundsMachine)
+  const [state, send] = useMachine(announceWorkEntryMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
 
@@ -79,9 +79,9 @@ export const AnnounceWorkEntryModal = () => {
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
-      return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, amount)
+      return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, account?.address ?? '')
     }
-  }, [JSON.stringify(activeMember), isConnected])
+  }, [activeMember?.id, account?.address, isConnected])
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -99,7 +99,7 @@ export const AnnounceWorkEntryModal = () => {
   }, [balance?.transferable.toString(), account?.address])
 
   useEffect(() => {
-    if (state.matches(ContributeFundStates.requirementsVerification)) {
+    if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
       if (!activeMember) {
         showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
       } else {
@@ -108,11 +108,11 @@ export const AnnounceWorkEntryModal = () => {
     }
   }, [state, activeMember?.id])
 
-  if (!activeMember || !transaction || state.matches(ContributeFundStates.requirementsVerification)) {
+  if (!activeMember || !transaction || state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
     return null
   }
 
-  if (state.matches(ContributeFundStates.success)) {
+  if (state.matches(AnnounceWorkEntryStates.success)) {
     return (
       <SuccessTransactionModal
         buttonLabel={t('modals.announceWorkEntry.successButton')}
@@ -122,7 +122,7 @@ export const AnnounceWorkEntryModal = () => {
       />
     )
   }
-  if (state.matches(ContributeFundStates.error)) {
+  if (state.matches(AnnounceWorkEntryStates.error)) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
         {t('modals.contribute.error')}
@@ -130,11 +130,11 @@ export const AnnounceWorkEntryModal = () => {
     )
   }
 
-  if (state.matches(ContributeFundStates.cancel)) {
+  if (state.matches(AnnounceWorkEntryStates.cancel)) {
     return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
-  if (state.matches(ContributeFundStates.transaction)) {
+  if (state.matches(AnnounceWorkEntryStates.transaction)) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 

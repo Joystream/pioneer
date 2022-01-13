@@ -71,7 +71,7 @@ export const ContributeFundsModal = () => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, amount)
     }
-  }, [JSON.stringify(activeMember), isConnected])
+  }, [activeMember?.id, amount, isConnected])
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
