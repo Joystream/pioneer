@@ -62,6 +62,7 @@ export const PageHeaderRow = styled.div<{ showOverflow?: boolean }>`
 const PageMain = styled.main`
   width: 100%;
   grid-area: main;
+  height: 100%;
 `
 
 const PageSidebar = styled.aside<Pick<PageLayoutProps, 'sidebarScrollable'>>`
