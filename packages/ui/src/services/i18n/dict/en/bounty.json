@@ -1,5 +1,5 @@
 {
-  "bounties": "bounties",
+  "bounties": "Bounties",
   "modals": {
     "common": {
       "transactionFee": {
@@ -96,6 +96,18 @@
     },
     "worksSubmitted": {
       "title": "Works Submitted",
+      "tooltip": "Lorem ipsum d"
+    },
+    "myEntries": {
+      "title": "My Entries Submitted",
+      "tooltip": "Lorem ipsum d"
+    },
+    "earned": {
+      "title": "Earned",
+      "tooltip": "Lorem ipsum d"
+    },
+    "contributed": {
+      "title": "Contributed",
       "tooltip": "Lorem ipsum d"
     }
   },
