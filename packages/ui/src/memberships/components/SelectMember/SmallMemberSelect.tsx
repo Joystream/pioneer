@@ -13,8 +13,11 @@ const memberEquals = ({ id: idA }: Member) => {
 
 interface SmallMemberSelectProps extends ControlProps<Member | null> {
   title?: string
+  onApply?: () => void
+  onClear?: () => void
 }
-export const SmallMemberSelect = ({ value, onChange, title = 'Member' }: SmallMemberSelectProps) => {
+
+export const SmallMemberSelect = ({ value, onChange, title = 'Member', onApply, onClear }: SmallMemberSelectProps) => {
   const [search, setSearch] = useState('')
   const searchDebounced = useDebounce(search, 400)
 
@@ -49,6 +52,8 @@ export const SmallMemberSelect = ({ value, onChange, title = 'Member' }: SmallMe
       value={value}
       onChange={onChange}
       onSearch={setSearch}
+      onApply={onApply}
+      onClear={onClear}
     />
   )
 }

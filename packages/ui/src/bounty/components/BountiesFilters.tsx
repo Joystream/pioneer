@@ -107,6 +107,11 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
             dispatch({ type: 'change', field: 'creator', value })
             onApply({ ...filters, creator: value })
           }}
+          onApply={apply}
+          onClear={() => {
+            dispatch({ type: 'change', field: 'creator', value: null })
+            onApply({ ...filters, creator: null })
+          }}
         />
 
         <SmallMemberSelect
@@ -115,6 +120,11 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
           onChange={(value) => {
             dispatch({ type: 'change', field: 'oracle', value })
             onApply({ ...filters, oracle: value })
+          }}
+          onApply={apply}
+          onClear={() => {
+            dispatch({ type: 'change', field: 'oracle', value: null })
+            onApply({ ...filters, oracle: null })
           }}
         />
       </Fields>
