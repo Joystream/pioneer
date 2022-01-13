@@ -17,5 +17,6 @@
     "notifyAboutChanges": "Notify me about changes"
   },
   "created": "Created",
-  "council": "Council"
+  "council": "Council",
+  "none": "None"
 }

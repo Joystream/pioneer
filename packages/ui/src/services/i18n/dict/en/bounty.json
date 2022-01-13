@@ -64,11 +64,20 @@
     "worksSubmitted": {
       "title": "Works Submitted",
       "tooltip": "Lorem ipsum d"
+    },
+    "winners": {
+      "title": "Winners",
+      "tooltip": "Lorem ipsum d"
+    },
+    "unwithdrawnFunds": {
+      "title": "Unwithdrawn Funds",
+      "tooltip": "Lorem ipsum d"
     }
   },
   "tabs": {
     "bounty": "Bounty",
-    "works": "Works"
+    "works": "Works",
+    "winners": "Winners"
   },
   "workTab": {
     "filter": {
@@ -84,12 +93,21 @@
   "bountyFields": {
     "cherry": "Cherry",
     "entrantStake": "Entrant Stake",
-    "expired": "Expired"
+    "expired": "Expired",
+    "perpetual": "Perpetual",
+    "limited": "Limited",
+    "withdrawalPeriod": "Withdrawal Period"
   },
   "buttons": {
     "announceEntry": "Announce Entry",
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty"
+  },
+  "information": {
+    "bountyFailed": {
+      "title": "Bounty Failed",
+      "description": "The oracle did not choose a winner. If you are a worker or contributor you can withdraw your stake now."
+    }
   }
 }
