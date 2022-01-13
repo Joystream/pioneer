@@ -102,7 +102,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   entrantStake: new BN(fields.entrantStake),
   // undefined creator/oracle means that it's council, not member
   creator: fields.creator ? asMember(fields.creator) : undefined,
-  oracle: fields.creator ? asMember(fields.creator) : undefined,
+  oracle: fields.oracle ? asMember(fields.oracle) : undefined,
   fundingType: asFunding(fields.fundingType),
   workPeriod: new BN(fields.workPeriod),
   judgingPeriod: new BN(fields.judgingPeriod),

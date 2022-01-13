@@ -103,6 +103,7 @@ export const makeServer = (environment = 'development', network: NetworkType = '
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
               applicationWithdrawnEvents: getWhereResolver('ApplicationWithdrawnEvent'),
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
+              bounties: getWhereResolver('Bounty'),
               bountyByUniqueInput: getUniqueResolver('Bounty'),
               workSubmittedEvents: getWhereResolver('WorkSubmittedEvent'),
               workSubmittedEventsConnection: getConnectionResolver('WorkSubmittedEventConnection'),

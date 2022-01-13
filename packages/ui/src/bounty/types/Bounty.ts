@@ -72,7 +72,7 @@ export type ContractClosed = {
   whitelist: string[]
 }
 
-export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
 
 export interface EntryMiniature {
   winner: boolean
