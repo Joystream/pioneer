@@ -1,32 +1,36 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
 import { CommunityTile } from '@/common/components/icons/CommunityTile'
+import { Loading } from '@/common/components/Loading'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
-import { Member } from '@/memberships/types'
 
-interface Props {
-  contributors: Member[] | undefined
-}
+export const TopContributors = () => {
+  const { contributions, isLoading } = useBountyContributions({ order: { orderKey: 'amount', isDescending: true } })
 
-export const TopContributors = ({ contributors }: Props) => {
   const tiles = useMemo(() => {
-    if (contributors) {
-      return contributors.map((member, index) => (
+    if (contributions.length) {
+      return contributions.map((contribution, index) => (
         <StyledTile>
-          <MemberInfo member={member} size="s" hideGroup onlyTop />
+          {contribution.actor && <MemberInfo member={contribution.actor} size="s" hideGroup onlyTop />}
           <ValueWrapper>
             <TextSmall>Contributed</TextSmall>
-            <TokenValue size="l" value={10000} />
+            <TokenValue size="l" value={contribution.amount} />
           </ValueWrapper>
           <TileNumber>{index + 1}</TileNumber>
         </StyledTile>
       ))
     }
+
+    if (!contributions.length && isLoading) {
+      return <Loading />
+    }
+
     return (
       <EmptyStateWrapper>
         <CommunityTile />
@@ -36,7 +40,7 @@ export const TopContributors = ({ contributors }: Props) => {
         </div>
       </EmptyStateWrapper>
     )
-  }, [contributors])
+  }, [contributions])
 
   return <HorizontalScroller items={tiles} title="Top contributors past week" />
 }
