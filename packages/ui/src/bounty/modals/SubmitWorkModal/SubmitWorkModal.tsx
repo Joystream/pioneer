@@ -108,6 +108,11 @@ export const SubmitWorkModal = () => {
     return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
+  const workTitleValidation =
+    state.context.workTitle.length > 70
+      ? t('modals.submitWork.validation.maxLengthMessage')
+      : t('modals.submitWork.validation.max70')
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title={t('modals.submitWork.title')} onClick={hideModal} />
@@ -141,11 +146,7 @@ export const SubmitWorkModal = () => {
                   required
                   inputSize="m"
                   label={t('modals.submitWork.submitWorkInput.workTitle')}
-                  message={
-                    state.context.workTitle.length > 70
-                      ? t('modals.submitWork.validation.maxLengthMessage')
-                      : t('modals.submitWork.validation.max70')
-                  }
+                  message={workTitleValidation}
                   validation={state.context.workTitle.length > 70 ? 'invalid' : undefined}
                 >
                   <InputText
