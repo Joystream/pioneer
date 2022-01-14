@@ -21,9 +21,10 @@ interface Props {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
+  reward: number
 }
 
-export const ClaimRewardSignModal = ({ onClose, transaction, service, controllerAccount }: Props) => {
+export const ClaimRewardSignModal = ({ onClose, transaction, service, controllerAccount, reward }: Props) => {
   const { allAccounts } = useMyAccounts()
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
@@ -35,7 +36,7 @@ export const ClaimRewardSignModal = ({ onClose, transaction, service, controller
   return (
     <TransactionModal onClose={onClose} service={service} title="Claim Reward">
       <ModalBody>
-        <TextMedium light>You intend to claim reward ...</TextMedium>
+        <TextMedium light>You intend to claim reward <TokenValue value={reward} /></TextMedium>
         <TextMedium light>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>

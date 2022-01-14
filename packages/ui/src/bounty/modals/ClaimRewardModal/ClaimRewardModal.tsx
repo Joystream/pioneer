@@ -19,7 +19,7 @@ import { ClaimRewardModalCall } from './types'
 export const ClaimRewardModal = () => {
   const { api, connectionState } = useApi()
   const {
-    modalData: { bountyId },
+    modalData: { bountyId, reward },
     hideModal,
   } = useModal<ClaimRewardModalCall>()
 
@@ -63,6 +63,7 @@ export const ClaimRewardModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
+        reward={reward}
       />
     )
   }
