@@ -154,6 +154,7 @@ describe('UI: BountyPreviewHeader', () => {
             winner: false,
             worker: activeMember,
             passed: false,
+            id: '1',
           },
         ]
 
@@ -169,6 +170,7 @@ describe('UI: BountyPreviewHeader', () => {
             winner: false,
             worker: activeMember,
             passed: false,
+            id: '1',
           },
         ]
 
@@ -218,6 +220,7 @@ describe('UI: BountyPreviewHeader', () => {
           winner: true,
           worker: activeMember,
           passed: false,
+          id: '1',
         },
       ]
 
@@ -233,6 +236,7 @@ describe('UI: BountyPreviewHeader', () => {
           winner: false,
           worker: activeMember,
           passed: true,
+          id: '1',
         },
       ]
 
@@ -278,6 +282,7 @@ describe('UI: BountyPreviewHeader', () => {
           winner: false,
           worker: activeMember,
           passed: false,
+          id: '1',
         },
       ]
 
