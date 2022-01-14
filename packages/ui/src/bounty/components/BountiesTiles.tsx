@@ -2,35 +2,42 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { TileSection } from '@/bounty/components/TileSection'
+import { TileProps, TileSection } from '@/bounty/components/TileSection'
 import { useUserBountiesStatistics } from '@/bounty/hooks/useUserBountiesStatistics'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-export const MyEntriesTiles = () => {
+interface Props {
+  onlyContributed?: boolean
+}
+
+export const BountiesTiles = ({ onlyContributed = false }: Props) => {
   const { t } = useTranslation('bounty')
   const { active } = useMyMemberships()
   const { statistics } = useUserBountiesStatistics(active?.id || '')
 
   const firstRow = useMemo(() => {
-    const row = [
-      {
-        title: t('tiles.myEntries.title'),
-        content: (
-          <TextHuge value bold>
-            {statistics.entriesSubmitted}
-          </TextHuge>
-        ),
-        tooltipText: t('tiles.myEntries.tooltip'),
-      },
-      {
-        title: t('tiles.earned.title'),
-        content: <TokenValue value={statistics.amountEarned} size="l" />,
-        tooltipText: t('tiles.earned.tooltip'),
-      },
-    ]
+    const row: TileProps[] = []
+    if (!onlyContributed) {
+      row.push(
+        {
+          title: t('tiles.myEntries.title'),
+          content: (
+            <TextHuge value bold>
+              {statistics.entriesSubmitted}
+            </TextHuge>
+          ),
+          tooltipText: t('tiles.myEntries.tooltip'),
+        },
+        {
+          title: t('tiles.earned.title'),
+          content: <TokenValue value={statistics.amountEarned} size="l" />,
+          tooltipText: t('tiles.earned.tooltip'),
+        }
+      )
+    }
 
-    if (statistics.amountContributed) {
+    if (statistics.amountContributed || onlyContributed) {
       row.push({
         title: t('tiles.contributed.title'),
         content: <TokenValue value={statistics.amountContributed} size="l" />,
@@ -39,7 +46,7 @@ export const MyEntriesTiles = () => {
     }
 
     return row
-  }, [statistics])
+  }, [statistics, onlyContributed])
 
   return <StyledTileSection firstRow={firstRow} />
 }

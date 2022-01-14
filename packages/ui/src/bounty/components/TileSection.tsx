@@ -3,7 +3,7 @@ import React from 'react'
 import { FundedRange, FundedRangeProps } from '@/bounty/components/FundedRange'
 import { StatisticItem, StatisticItemProps, Statistics } from '@/common/components/statistics'
 
-interface TileProps extends StatisticItemProps {
+export interface TileProps extends StatisticItemProps {
   content: React.ReactNode
 }
 
