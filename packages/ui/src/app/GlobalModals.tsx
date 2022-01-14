@@ -6,6 +6,7 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
 import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
+import { WithdrawalStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
 import { WithdrawalStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
 import {
   BountyWithdrawContributionModalCall,
@@ -116,7 +117,7 @@ const modals: Record<ModalNames, ReactElement> = {
   BountyWithdrawContributionModal: <WithdrawContributionModal />,
   BountyCancel: <BountyCancelModal />,
   BountyContributeFundsModal: <ContributeFundsModal />,
-  // WithdrawalStakeModal: <WithdrawalStakeModal />,
+  WithdrawalStakeModal: <WithdrawalStakeModal />,
 }
 
 export const GlobalModals = () => {

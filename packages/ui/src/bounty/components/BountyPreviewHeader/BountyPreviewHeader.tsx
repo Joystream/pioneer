@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
+import { WithdrawalStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
@@ -107,7 +108,8 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
     <>
       {!hasAnnounced && <ButtonPrimary size="large">{t('buttons.announceEntry')}</ButtonPrimary>}
       {hasAnnounced && <ButtonPrimary size="large">{t('buttons.submitWork')}</ButtonPrimary>}
-      {hasSubmitted && <ButtonGhost size="large">{t('common:buttons.withdraw')}</ButtonGhost>}
+      {/*{hasSubmitted && <WithdrawalStakeModal>{t('common:buttons.withdraw')}</WithdrawalStakeModal>}*/}
+      <WithdrawalStakeModal />
     </>
   )
 }
