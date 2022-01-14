@@ -89,6 +89,11 @@ export interface BountyWork {
   status: BountyEntryStatus
 }
 
+export interface BountyContribution {
+  contributor?: Member
+  amount: BN
+}
+
 export interface Bounty {
   id: string
   title: string
