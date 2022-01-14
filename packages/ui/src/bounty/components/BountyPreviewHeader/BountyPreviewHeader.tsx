@@ -88,6 +88,7 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
+  const hasLost = hasSubmitted && !userEntry.winner //
   const isOnWhitelist = useMemo(
     () =>
       bounty.contractType !== 'ContractOpen' && bounty.contractType?.whitelist.some((id) => activeMember?.id === id),
