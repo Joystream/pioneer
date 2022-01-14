@@ -2,6 +2,11 @@ import BN from 'bn.js'
 
 import { Member } from '@/memberships/types'
 
+export interface BountyContributionsFiltersState {
+  contributorId?: string
+  bountyId?: string
+}
+
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
