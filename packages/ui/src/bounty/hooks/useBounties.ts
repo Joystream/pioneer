@@ -9,7 +9,7 @@ import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { BountyFiltersState } from '../components/BountiesFilters'
 import { asBounty } from '../types/casts'
 
-type BountyStatus = 'active' | 'past'
+export type BountyStatus = 'active' | 'past'
 
 export interface QueryExtraFilter<T> {
   path: string
