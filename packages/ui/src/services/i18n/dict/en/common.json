@@ -6,7 +6,8 @@
     },
     "transactionFee": {
       "label": "Transaction fee:",
-      "tooltipText": "Lorem ipsum"
+      "tooltipText": "Lorem ipsum",
+      "feeSending": "Fee sending from account"
     },
     "transactionCanceled": "Transaction has been cancelled.",
     "wait": {

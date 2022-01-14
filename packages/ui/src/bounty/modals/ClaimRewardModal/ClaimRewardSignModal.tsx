@@ -1,6 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export const ClaimRewardSignModal = ({ onClose, transaction, service, controllerAccount, reward }: Props) => {
+  const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
@@ -34,27 +36,29 @@ export const ClaimRewardSignModal = ({ onClose, transaction, service, controller
   })
 
   return (
-    <TransactionModal onClose={onClose} service={service} title="Claim Reward">
+    <TransactionModal onClose={onClose} service={service} title={t('modals.claimReward.title')}>
       <ModalBody>
-        <TextMedium light>You intend to claim reward <TokenValue value={reward} /></TextMedium>
+        <TextMedium light> <TokenValue value={reward} /></TextMedium>
         <TextMedium light>
-          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
+          {t('modals.claimReward.feeInfo1')}
+          <TokenValue value={paymentInfo?.partialFee.toBn()} />
+          {t('modals.claimReward.feeInfo2')}
         </TextMedium>
 
-        <InputComponent label="Fee sending from account" inputSize="l">
+        <InputComponent label={t('common:modals.transactionFee.feeSending')} inputSize="l">
           <SelectedAccount account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')} />
         </InputComponent>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
           <TransactionInfo
-            title="Transaction fee:"
+            title={t('common:modals.transactionFee.label')}
             value={paymentInfo?.partialFee.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+            tooltipText={t('common:modals.transactionFee.tooltipText')}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-          Claim Reward
+        {t('modals.claimReward.title')}
           <Arrow direction="right" />
         </ButtonPrimary>
       </ModalFooter>

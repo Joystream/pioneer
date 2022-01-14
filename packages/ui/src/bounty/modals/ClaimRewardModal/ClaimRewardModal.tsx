@@ -1,5 +1,6 @@
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -17,6 +18,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ClaimRewardModalCall } from './types'
 
 export const ClaimRewardModal = () => {
+  const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
     modalData: { bountyId, reward },
@@ -46,7 +48,7 @@ export const ClaimRewardModal = () => {
   }, [state.value, transaction, feeInfo?.canAfford])
 
   if (state.matches('requirementsVerification')) {
-    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
+    return <WaitModal onClose={hideModal} requirementsCheck />
   }
 
   if (!api || !activeMember || !transaction || !feeInfo) {
@@ -69,13 +71,13 @@ export const ClaimRewardModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} text="You have successfully claimed your reward." />
+    return <SuccessModal onClose={hideModal} text={t('modals.claimReward.success')} />
   }
 
   if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while claiming your reward.
+        {t('modals.claimReward.error')}
       </FailureModal>
     )
   }

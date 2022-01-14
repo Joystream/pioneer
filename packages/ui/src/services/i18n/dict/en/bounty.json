@@ -83,6 +83,14 @@
         "maxLengthMessage": "Max length is 70 characters",
         "max70": "MAX 70"
       }
+    },
+    "claimReward": {
+      "title": "Claim Reward",
+      "success": "You have successfully claimed your reward.",
+      "error": "There was a problem while claiming your reward.",
+      "description": "You intend to claim reward",
+      "feeInfo1": "Fees of ",
+      "feeInfo2": " fee will be applied to the transaction."
     }
   },
   "tiles": {
