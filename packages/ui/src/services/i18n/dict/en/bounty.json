@@ -1,4 +1,5 @@
 {
+  "bounties": "bounties",
   "modals": {
     "common": {
       "transactionFee": {
@@ -88,6 +89,25 @@
         "button": "Go to Current Bounties"
       },
       "error": "There was a problem canceling bounty."
+    },
+    "submitWork": {
+      "title": "Submit work",
+      "subtitle": "Submit work",
+      "submitWorkInput": {
+        "bountyId": "Bounty ID",
+        "memberId": "Member ID",
+        "workTitle": "Work Title",
+        "workTitlePlaceholder": "Type",
+        "entryDescription": "Entry description"
+      },
+      "button": {
+        "submitWork": "Submit Work"
+      },
+      "authorizeDescription": "You submitting your work",
+      "validation": {
+        "maxLengthMessage": "Max length is 70 characters",
+        "max70": "MAX 70"
+      }
     }
   },
   "tiles": {
@@ -148,5 +168,23 @@
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty"
+  },
+  "list": {
+    "noResults": "No bounties matching search criteria",
+    "searching": "Searching",
+    "searchingText": "We are searching through all bounties to find what your are looking for. ",
+    "sorting": "sorting"
+  },
+  "filters": {
+    "name": "Name",
+    "period": "Period",
+    "creator": "Creator",
+    "oracle": "Oracle"
+  },
+  "topContributors": {
+    "title": "Top contributors past week",
+    "amountTitle": "Contributed",
+    "notFound": "No contributors",
+    "noFoundText": "Lorem ipsum dolor sit amet enim"
   }
 }

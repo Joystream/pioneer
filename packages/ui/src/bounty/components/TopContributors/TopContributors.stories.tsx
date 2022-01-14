@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
@@ -9,11 +10,11 @@ export default {
   component: TopContributors,
 } as Meta
 
-const Template: Story = (args) => <TopContributors contributors={[]} {...args} />
+const Template: Story = (args) => <TopContributors contributions={args.contributors} />
 
 export const Default = Template.bind({})
 Default.args = {
-  contributors: members.slice(0, 20),
+  contributors: members.slice(0, 20).map((member) => ({ contributor: member, amount: new BN(10000) })),
 }
 
 export const NoContributors = Template.bind({})

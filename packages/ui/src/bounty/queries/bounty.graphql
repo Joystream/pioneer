@@ -40,6 +40,7 @@ fragment BountyFields on Bounty {
     }
   }
   entries {
+    id
     worker {
       ...MemberFields
     }
@@ -71,6 +72,13 @@ fragment BountyWorkFields on WorkSubmittedEvent {
       }
     }
   }
+}
+
+fragment BountyContributionFields on BountyContribution {
+  contributor {
+    ...MemberFields
+  }
+  amount
 }
 
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
@@ -105,5 +113,11 @@ query GetBountyWorks(
 query GetBountyWorksCount($where: WorkSubmittedEventWhereInput) {
   workSubmittedEventsConnection(where: $where) {
     totalCount
+  }
+}
+
+query GetContributions($where: BountyContributionWhereInput, $limit: Int) {
+  bountyContributions(where: $where, orderBy: [amount_DESC], limit: $limit) {
+    ...BountyContributionFields
   }
 }

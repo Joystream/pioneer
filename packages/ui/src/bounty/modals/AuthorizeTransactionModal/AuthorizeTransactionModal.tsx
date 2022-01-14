@@ -51,7 +51,6 @@ export const AuthorizeTransactionModal = ({
     transaction,
     signer: selectedAccount?.address || controllerAccount.address,
   })
-
   const accountsWithValidAmount = useMemo(
     () =>
       Object.entries(balances).map(([address, balance]) => {

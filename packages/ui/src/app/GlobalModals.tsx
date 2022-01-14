@@ -7,6 +7,7 @@ import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyMod
 import { AnnounceWorkEntryModal, BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
 import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
+import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,
@@ -80,6 +81,7 @@ export type ModalNames =
   | ModalName<BountyWithdrawContributionModalCall>
   | ModalName<BountyContributeFundsModalCall>
   | ModalName<BountyCancelModalCall>
+  | ModalName<SubmitWorkModalCall>
   | ModalName<BountyAnnounceWorkEntryModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
@@ -115,6 +117,7 @@ const modals: Record<ModalNames, ReactElement> = {
   AddBounty: <AddBountyModal />,
   BountyWithdrawContributionModal: <WithdrawContributionModal />,
   BountyCancel: <BountyCancelModal />,
+  SubmitWork: <SubmitWorkModal />,
   BountyContributeFundsModal: <ContributeFundsModal />,
   BountyAnnounceWorkEntryModal: <AnnounceWorkEntryModal />,
 }
