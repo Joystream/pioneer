@@ -11,6 +11,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 
+import { alice, bob } from '../../../../test/_mocks/keyring'
 import { getMember } from '../../../../test/_mocks/members'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
 
@@ -23,10 +24,7 @@ export default {
 
 const accounts = {
   isLoading: false,
-  allAccounts: [
-    { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
-    { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
-  ],
+  allAccounts: [alice, bob],
   hasAccounts: true,
 }
 
