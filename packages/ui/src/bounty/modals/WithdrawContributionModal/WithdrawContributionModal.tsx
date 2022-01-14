@@ -46,7 +46,7 @@ export const WithdrawContributionModal = () => {
   }, [state.value, transaction, feeInfo?.canAfford])
 
   if (state.matches('requirementsVerification')) {
-    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
+    return <WaitModal onClose={hideModal} requirementsCheck />
   }
 
   if (!api || !activeMember || !transaction || !feeInfo) {

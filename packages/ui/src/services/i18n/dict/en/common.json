@@ -8,7 +8,11 @@
       "label": "Transaction fee:",
       "tooltipText": "Lorem ipsum"
     },
-    "transactionCanceled": "Transaction has been cancelled."
+    "transactionCanceled": "Transaction has been cancelled.",
+    "wait": {
+      "requirementsTitle": "Please wait...",
+      "requirementsDescription": "Checking requirements"
+    }
   },
   "authorizeTransaction": "Authorize Transaction",
   "success": "Success",
