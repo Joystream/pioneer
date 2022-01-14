@@ -1,4 +1,3 @@
-import { Editor } from '@joystream/markdown-editor/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -16,12 +15,9 @@ import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/moda
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { ButtonPrimary } from '@/common/components/buttons'
-import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
 import {
-  AmountButton,
-  AmountButtons,
   Modal,
   ModalFooter,
   ModalHeader,
@@ -53,29 +49,13 @@ export const AnnounceWorkEntryModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const [amount, setAmount] = useState<string>(String(minWorkEntrantStake))
-  const [description, setDescription] = useState<string>()
   const [state, send] = useMachine(announceWorkEntryMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
 
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
-  const valid = useMemo(
-    () => new BN(amount).gten(minWorkEntrantStake) && !!account && !!description,
-    [amount, account, description]
-  )
-
-  const setMaxAmount = useCallback(() => {
-    balance && setAmount(balance.transferable.toString())
-  }, [balance])
-
-  const setHalfAmount = useCallback(() => {
-    balance && setAmount(balance.transferable.divn(2).toString())
-  }, [balance])
-
-  const handleDescription = useCallback((_, editor: Editor) => {
-    setDescription(editor.getData())
-  }, [])
+  const valid = useMemo(() => new BN(amount).gten(minWorkEntrantStake) && !!account, [amount, account])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
@@ -202,6 +182,7 @@ export const AnnounceWorkEntryModal = () => {
                 required
                 inputWidth="s"
                 units="JOY"
+                disabled
               >
                 <InputNumber
                   id="amount-input"
@@ -209,22 +190,10 @@ export const AnnounceWorkEntryModal = () => {
                   onChange={setStakingAmount}
                   placeholder="0"
                   isTokenValue
+                  disabled
                 />
               </InputComponent>
-              <AmountButtons>
-                <AmountButton size="small" onClick={setHalfAmount}>
-                  {t('modals.announceWorkEntry.halfButton')}
-                </AmountButton>
-                <AmountButton size="small" onClick={setMaxAmount}>
-                  {t('modals.announceWorkEntry.maxButton')}
-                </AmountButton>
-              </AmountButtons>
             </TransactionAmount>
-          </Row>
-          <Row>
-            <InputComponent inputSize="auto" label={t('modals.announceWorkEntry.description.label')} required>
-              <CKEditor onChange={handleDescription} />
-            </InputComponent>
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>

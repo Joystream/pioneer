@@ -37,8 +37,6 @@
     "announceWorkEntry": {
       "title": "Announce Work Entry",
       "nextButton": "Announce work Entry",
-      "halfButton": "Use half",
-      "maxButton": "Use max",
       "bountyId": {
         "label": "Bounty ID",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
@@ -52,11 +50,8 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "fillDetails": "Please fill in all the details below.",
-      "selectAmount": "Select amount for contributing",
-      "selectAmountSubtitle": "You must contribute at least {{value}} JOY. This stake will be returned to you when the bounty is complete",
-      "description": {
-        "label": "Entry description"
-      },
+      "selectAmount": "Contribution stake",
+      "selectAmountSubtitle": "This stake will be returned to you when the bounty is complete",
       "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY." ,
       "error": "Something went wrong",
       "success": "You have just successfully announce work entry for {{bounty}}”.",
