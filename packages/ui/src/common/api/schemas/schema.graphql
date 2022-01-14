@@ -20668,6 +20668,10 @@ type Worker implements BaseGraphQLObject {
   """
   runtimeId: Int!
   group: WorkingGroup!
+
+  """
+  The id the group that the worker belongs to
+  """
   groupId: String!
   membership: Membership!
   membershipId: String!
@@ -20756,6 +20760,7 @@ type WorkerConnection {
 input WorkerCreateInput {
   runtimeId: Float!
   group: ID!
+  groupId: String!
   membership: ID!
   roleAccount: String!
   rewardAccount: String!
@@ -20929,6 +20934,8 @@ enum WorkerOrderByInput {
   runtimeId_DESC
   group_ASC
   group_DESC
+  groupId_ASC
+  groupId_DESC
   membership_ASC
   membership_DESC
   roleAccount_ASC
@@ -21617,6 +21624,7 @@ type WorkerStatusTerminated {
 input WorkerUpdateInput {
   runtimeId: Float
   group: ID
+  groupId: String
   membership: ID
   roleAccount: String
   rewardAccount: String
@@ -21662,6 +21670,11 @@ input WorkerWhereInput {
   runtimeId_lt: Int
   runtimeId_lte: Int
   runtimeId_in: [Int!]
+  groupId_eq: String
+  groupId_contains: String
+  groupId_startsWith: String
+  groupId_endsWith: String
+  groupId_in: [String!]
   roleAccount_eq: String
   roleAccount_contains: String
   roleAccount_startsWith: String

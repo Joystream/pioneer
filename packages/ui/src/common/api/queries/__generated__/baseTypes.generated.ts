@@ -20290,6 +20290,7 @@ export type Worker = BaseGraphQlObject & {
   entry: OpeningFilledEvent
   entryId: Scalars['String']
   group: WorkingGroup
+  /** The id the group that the worker belongs to */
   groupId: Scalars['String']
   id: Scalars['ID']
   /** Whether the worker is also the working group lead */
@@ -20350,6 +20351,7 @@ export type WorkerCreateInput = {
   application: Scalars['ID']
   entry: Scalars['ID']
   group: Scalars['ID']
+  groupId: Scalars['String']
   isLead: Scalars['Boolean']
   membership: Scalars['ID']
   missingRewardAmount?: InputMaybe<Scalars['String']>
@@ -20511,6 +20513,8 @@ export enum WorkerOrderByInput {
   DeletedAtDesc = 'deletedAt_DESC',
   EntryAsc = 'entry_ASC',
   EntryDesc = 'entry_DESC',
+  GroupIdAsc = 'groupId_ASC',
+  GroupIdDesc = 'groupId_DESC',
   GroupAsc = 'group_ASC',
   GroupDesc = 'group_DESC',
   IsLeadAsc = 'isLead_ASC',
@@ -21145,6 +21149,7 @@ export type WorkerUpdateInput = {
   application?: InputMaybe<Scalars['ID']>
   entry?: InputMaybe<Scalars['ID']>
   group?: InputMaybe<Scalars['ID']>
+  groupId?: InputMaybe<Scalars['String']>
   isLead?: InputMaybe<Scalars['Boolean']>
   membership?: InputMaybe<Scalars['ID']>
   missingRewardAmount?: InputMaybe<Scalars['String']>
@@ -21194,6 +21199,11 @@ export type WorkerWhereInput = {
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
   entry?: InputMaybe<OpeningFilledEventWhereInput>
   group?: InputMaybe<WorkingGroupWhereInput>
+  groupId_contains?: InputMaybe<Scalars['String']>
+  groupId_endsWith?: InputMaybe<Scalars['String']>
+  groupId_eq?: InputMaybe<Scalars['String']>
+  groupId_in?: InputMaybe<Array<Scalars['String']>>
+  groupId_startsWith?: InputMaybe<Scalars['String']>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   isLead_eq?: InputMaybe<Scalars['Boolean']>
