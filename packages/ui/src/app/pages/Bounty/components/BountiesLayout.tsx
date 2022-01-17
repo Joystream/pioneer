@@ -6,6 +6,7 @@ import { BountyEmptyFilter, BountyFilters } from '@/bounty/components/BountiesFi
 import { BountiesList } from '@/bounty/components/BountiesList'
 import { BountyStatus, QueryExtraFilter, useBounties } from '@/bounty/hooks/useBounties'
 import { BountyOrderByInput } from '@/common/api/queries'
+import { EmptyTab } from '@/common/components/EmptyTab'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { Pagination } from '@/common/components/Pagination'
@@ -17,9 +18,15 @@ export interface LayoutProps {
   tilesComponent?: React.ReactNode
   extraFilter?: QueryExtraFilter<unknown>
   bountyStatus?: BountyStatus
+  noMember?: boolean
 }
 
-export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'active' }: LayoutProps) => {
+export const BountiesLayout = ({
+  tilesComponent,
+  extraFilter,
+  bountyStatus = 'active',
+  noMember = false,
+}: LayoutProps) => {
   const searchSlot = useRef<HTMLDivElement>(null)
 
   const { t } = useTranslation('bounty')
@@ -32,16 +39,20 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
     <PageLayout
       header={<BountiesHeader />}
       main={
-        <MainPanel>
-          {tilesComponent || null}
-          <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
-          {isLoading ? (
-            <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
-          ) : (
-            <BountiesList getSortProps={getSortProps} bounties={bounties} />
-          )}
-          <Pagination {...pagination} />
-        </MainPanel>
+        noMember ? (
+          <EmptyTab />
+        ) : (
+          <MainPanel>
+            {tilesComponent || null}
+            <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
+            {isLoading ? (
+              <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
+            ) : (
+              <BountiesList getSortProps={getSortProps} bounties={bounties} />
+            )}
+            <Pagination {...pagination} />
+          </MainPanel>
+        )
       }
     />
   )

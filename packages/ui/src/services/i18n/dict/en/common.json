@@ -21,5 +21,6 @@
     "notifyAboutChanges": "Notify me about changes"
   },
   "created": "Created",
-  "council": "Council"
+  "council": "Council",
+  "signInInfo": "Sign in with your Polkadot wallet to view your account-specific information."
 }

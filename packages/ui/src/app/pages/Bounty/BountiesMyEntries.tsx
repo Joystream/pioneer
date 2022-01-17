@@ -13,5 +13,5 @@ export const BountiesMyEntries = () => {
     value: active?.id || '',
   }
 
-  return <BountiesLayout extraFilter={extraFilter} tilesComponent={<BountiesTiles />} />
+  return <BountiesLayout extraFilter={extraFilter} tilesComponent={<BountiesTiles />} noMember={!active} />
 }
