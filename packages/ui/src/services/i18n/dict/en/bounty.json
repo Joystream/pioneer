@@ -64,6 +64,25 @@
         "button": "Go to Current Bounties"
       },
       "error": "There was a problem canceling bounty."
+    },
+    "submitWork": {
+      "title": "Submit work",
+      "subtitle": "Submit work",
+      "submitWorkInput": {
+        "bountyId": "Bounty ID",
+        "memberId": "Member ID",
+        "workTitle": "Work Title",
+        "workTitlePlaceholder": "Type",
+        "entryDescription": "Entry description"
+      },
+      "button": {
+        "submitWork": "Submit Work"
+      },
+      "authorizeDescription": "You submitting your work",
+      "validation": {
+        "maxLengthMessage": "Max length is 70 characters",
+        "max70": "MAX 70"
+      }
     }
   },
   "tiles": {
@@ -136,5 +155,11 @@
     "period": "Period",
     "creator": "Creator",
     "oracle": "Oracle"
+  },
+  "topContributors": {
+    "title": "Top contributors past week",
+    "amountTitle": "Contributed",
+    "notFound": "No contributors",
+    "noFoundText": "Lorem ipsum dolor sit amet enim"
   }
 }

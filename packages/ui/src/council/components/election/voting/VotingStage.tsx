@@ -6,6 +6,7 @@ import { CandidateCardList } from '@/council/components/election/CandidateCard/C
 import { CurrentElectionTabs, VotingStageTab } from '@/council/components/election/CurrentElectionTabs'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
+import { CandidacyStatus } from '@/council/types'
 import { Election } from '@/council/types/Election'
 
 interface VotingStageProps {
@@ -23,10 +24,12 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
 
   const [allCandidates, votedForCandidates] = useMemo(() => {
-    const allCandidates = election?.candidates?.map((candidate) => ({
-      ...candidate,
-      voted: optionIds?.has(candidate.member.id),
-    }))
+    const allCandidates = election?.candidates
+      .filter((candidate) => candidate.status === CandidacyStatus.Active)
+      .map((candidate) => ({
+        ...candidate,
+        voted: optionIds?.has(candidate.member.id),
+      }))
     const votedForCandidates = allCandidates?.filter(({ voted }) => voted)
 
     return [allCandidates, votedForCandidates]

@@ -79,6 +79,7 @@ export interface EntryMiniature {
   hasSubmitted: boolean
   passed: boolean
   worker: Member
+  id: string
 }
 
 export interface BountyWork {
@@ -87,6 +88,11 @@ export interface BountyWork {
   title: string
   description: string
   status: BountyEntryStatus
+}
+
+export interface BountyContribution {
+  contributor?: Member
+  amount: BN
 }
 
 export interface Bounty {

@@ -4,7 +4,7 @@ import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/ap
 import { lowerFirstLetter } from '@/common/helpers'
 import { asMember } from '@/memberships/types'
 
-import { BountyFieldsFragment, BountyWorkFieldsFragment } from '../queries'
+import { BountyContributionFieldsFragment, BountyFieldsFragment, BountyWorkFieldsFragment } from '../queries'
 
 import {
   Bounty,
@@ -16,6 +16,7 @@ import {
   Contributor,
   BountyWork,
   BountyEntryStatus,
+  BountyContribution,
 } from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
@@ -49,6 +50,7 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
 const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
+      id: entry.id,
       worker: asMember(entry.worker),
       hasSubmitted: entry.workSubmitted,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
@@ -112,4 +114,9 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   contractType: asContractType(fields.contractType),
   contributors: asContributors(fields.contributions),
   inBlock: fields.createdInEvent.inBlock,
+})
+
+export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({
+  amount: new BN(fields.amount),
+  contributor: fields.contributor ? asMember(fields.contributor) : undefined,
 })

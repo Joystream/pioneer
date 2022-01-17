@@ -78,7 +78,6 @@ export const useProcessTransaction = ({
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
-
   useEffect(() => {
     setService(service)
   }, [])
