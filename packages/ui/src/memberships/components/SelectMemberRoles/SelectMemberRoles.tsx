@@ -8,7 +8,7 @@ import { memberRoleTitle } from '@/memberships/helpers'
 import { useAllMemberRoles } from '@/memberships/hooks/useAllMemberRoles'
 import { MemberRole } from '@/memberships/types'
 
-interface Props extends ControlProps<MemberRole | null> {
+interface Props extends ControlProps<MemberRole[]> {
   onApply: () => void
   onClear?: () => void
 }
@@ -21,14 +21,14 @@ export const SelectMemberRoles = ({ value, ...props }: Props) => {
     roles.length > 0 && setOptions(roles)
   }, [JSON.stringify(roles)])
 
-  const renderSelected = (role: MemberRole | null) => (
+  const renderSelected = (roles: MemberRole[]) => (
     <Selected>
-      {role ? <MemberRoles roles={[role]} size="l" max={1} /> : <TextMedium lighter>Select</TextMedium>}
+      {roles.length ? <MemberRoles roles={roles} size="l" max={3} /> : <TextMedium lighter>Select</TextMedium>}
     </Selected>
   )
   return (
-    <SimpleSelect
-      title="Role"
+    <MultiSelect
+      title="Roles"
       options={options}
       value={value}
       renderSelected={renderSelected}
