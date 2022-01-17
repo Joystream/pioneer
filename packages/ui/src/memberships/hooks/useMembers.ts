@@ -17,6 +17,7 @@ interface UseMemberProps {
 
 export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
   const where = filterToGqlInput(filter)
+  console.log(where)
   const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })
   const totalCount = connectionData?.membershipsConnection.totalCount
   const { offset, pagination } = usePagination(MEMBERS_PER_PAGE, totalCount ?? 0, [order, filter])
@@ -47,7 +48,7 @@ type FilterGqlInput = Pick<
 
 const filterToGqlInput = ({ search, roles, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
   ...(search ? { handle_contains: search } : {}),
-  ...(roles ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
+  ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
   ...(council === null ? {} : { isCouncilMember_eq: council }),
   ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
