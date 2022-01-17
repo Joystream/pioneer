@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -29,11 +30,14 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: ClaimRewardModal', () => {
   const modalData: ModalCallData<ClaimRewardModalCall> = {
     bountyId: '1',
-    reward: 100000,
+    entry: {
+      entryId: '0',
+      reward: new BN(100000),
+    },
   }
 
   const api = stubApi()
-  const txPath = 'api.tx.bounty.withdrawFunding'
+  const txPath = 'api.tx.bounty.withdrawWorkEntrantFunds'
   let tx = stubTransaction(api, txPath)
 
   const useModal: UseModal<any> = {
@@ -71,8 +75,8 @@ describe('UI: ClaimRewardModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(screen.queryByText('modals.claimReward.description')).not.toBeNull()
-    expect(await getButton('modals.claimReward.title')).toBeDefined()
+    expect(screen.queryByText('modals.withdraw.reward.description')).not.toBeNull()
+    expect(await getButton('modals.withdraw.reward.button')).toBeDefined()
   })
 
   it('Requirements failed', async () => {
@@ -87,9 +91,9 @@ describe('UI: ClaimRewardModal', () => {
     renderModal()
 
     await act(async () => {
-      fireEvent.click(await getButton('modals.claimReward.title'))
+      fireEvent.click(await getButton('modals.withdraw.reward.button'))
     })
-    expect(await screen.findByText('modals.claimReward.error')).toBeDefined()
+    expect(await screen.findByText('modals.withdraw.reward.error')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -97,9 +101,9 @@ describe('UI: ClaimRewardModal', () => {
     renderModal()
 
     await act(async () => {
-      fireEvent.click(await getButton('modals.claimReward.title'))
+      fireEvent.click(await getButton('modals.withdraw.reward.button'))
     })
-    expect(await screen.findByText('modals.claimReward.success')).toBeDefined()
+    expect(await screen.findByText('modals.withdraw.reward.success')).toBeDefined()
   })
 
   const renderModal = () =>

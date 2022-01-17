@@ -6,9 +6,9 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ClaimRewardSignModal } from '@/bounty/modals/ClaimRewardModal/ClaimRewardSignModal'
+import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
+import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
-import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -21,7 +21,10 @@ export const ClaimRewardModal = () => {
   const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
-    modalData: { bountyId, reward },
+    modalData: {
+      bountyId,
+      entry: { entryId, reward },
+    },
     hideModal,
   } = useModal<ClaimRewardModalCall>()
 
@@ -32,7 +35,7 @@ export const ClaimRewardModal = () => {
 
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, bountyId)
+      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bountyId, entryId)
     }
   }, [JSON.stringify(activeMember), connectionState])
 
@@ -51,7 +54,7 @@ export const ClaimRewardModal = () => {
     return <WaitModal onClose={hideModal} requirementsCheck />
   }
 
-  if (!api || !activeMember || !transaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo || !reward) {
     return null
   }
 
@@ -60,24 +63,32 @@ export const ClaimRewardModal = () => {
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
     return (
-      <ClaimRewardSignModal
+      <WithdrawSignModal
+        type="reward"
         onClose={hideModal}
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        reward={reward}
+        amount={reward}
       />
     )
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} text={t('modals.claimReward.success')} />
+    return (
+      <SuccessTransactionModal
+        onClose={hideModal}
+        onButtonClick={hideModal}
+        message={t('modals.withdraw.reward.success')}
+        buttonLabel={t('modals.withdrawContribution.successButton')}
+      />
+    )
   }
 
   if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.claimReward.error')}
+        {t('modals.withdraw.reward.error')}
       </FailureModal>
     )
   }

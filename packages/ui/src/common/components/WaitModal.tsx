@@ -19,8 +19,8 @@ export const WaitModal = ({
   requirementsCheck,
 }: WaitModalProps) => {
   const { t } = useTranslation()
-  const title = requirementsCheck ? t('modals.wait.requirementsTitle') : baseTitle
-  const description = requirementsCheck ? t('modals.wait.requirementsDescription') : baseDescription
+  const title = requirementsCheck ? t('modals.wait.title') : baseTitle
+  const description = requirementsCheck ? t('modals.wait.description') : baseDescription
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
       <ModalHeader icon={<Loader />} title="" onClick={onClose} modalHeaderSize="s" />
