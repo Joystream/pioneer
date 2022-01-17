@@ -9,11 +9,11 @@
       "tooltipText": "Lorem ipsum",
       "feeSending": "Fee sending from account"
     },
-    "transactionCanceled": "Transaction has been cancelled.",
     "wait": {
-      "requirementsTitle": "Please wait...",
-      "requirementsDescription": "Checking requirements"
-    }
+      "title": "Please wait...",
+      "description": "Checking requirements"
+    },
+    "transactionCanceled": "Transaction has been cancelled."
   },
   "authorizeTransaction": "Authorize Transaction",
   "success": "Success",
@@ -26,5 +26,7 @@
     "notifyAboutChanges": "Notify me about changes"
   },
   "created": "Created",
-  "council": "Council"
+  "council": "Council",
+  "withdrawing": "Withdrawing",
+  "none": "None"
 }
