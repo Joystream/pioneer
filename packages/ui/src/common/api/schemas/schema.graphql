@@ -854,9 +854,7 @@ type Bounty implements BaseGraphQLObject {
   contributions: [BountyContribution!]
   entries: [BountyEntry!]
   createdInEvent: BountyCreatedEvent!
-  createdInEventId: String!
   maxFundingReachedEvent: BountyMaxFundingReachedEvent
-  maxFundingReachedEventId: String
 }
 
 type BountyConnection {
@@ -1007,7 +1005,8 @@ type BountyCreatedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  bountycreatedInEvent: [Bounty!]
+  bounty: Bounty!
+  bountyId: String!
 }
 
 type BountyCreatedEventConnection {
@@ -1021,6 +1020,7 @@ input BountyCreatedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
+  bounty: ID!
 }
 
 type BountyCreatedEventEdge {
@@ -1043,6 +1043,8 @@ enum BountyCreatedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
 }
 
 input BountyCreatedEventUpdateInput {
@@ -1050,6 +1052,7 @@ input BountyCreatedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
+  bounty: ID
 }
 
 input BountyCreatedEventWhereInput {
@@ -1096,9 +1099,7 @@ input BountyCreatedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  bountycreatedInEvent_none: BountyWhereInput
-  bountycreatedInEvent_some: BountyWhereInput
-  bountycreatedInEvent_every: BountyWhereInput
+  bounty: BountyWhereInput
   AND: [BountyCreatedEventWhereInput!]
   OR: [BountyCreatedEventWhereInput!]
 }
@@ -1122,8 +1123,6 @@ input BountyCreateInput {
   stage: BountyStage!
   totalFunding: String!
   discussionThread: ID!
-  createdInEvent: ID!
-  maxFundingReachedEvent: ID
 }
 
 type BountyEdge {
@@ -1159,14 +1158,13 @@ type BountyEntry implements BaseGraphQLObject {
   Whether at least one work has been submitted
   """
   workSubmitted: Boolean!
-  works: [BountyWorkData!]
 
   """
   Work entry status
   """
   status: BountyEntryStatus!
   announcedInEvent: WorkEntryAnnouncedEvent!
-  announcedInEventId: String!
+  works: [WorkSubmittedEvent!]
 }
 
 type BountyEntryConnection {
@@ -1182,7 +1180,6 @@ input BountyEntryCreateInput {
   stakingAccount: String
   workSubmitted: Boolean!
   status: JSONObject!
-  announcedInEvent: ID!
 }
 
 type BountyEntryEdge {
@@ -1207,8 +1204,6 @@ enum BountyEntryOrderByInput {
   stakingAccount_DESC
   workSubmitted_ASC
   workSubmitted_DESC
-  announcedInEvent_ASC
-  announcedInEvent_DESC
 }
 
 union BountyEntryStatus =
@@ -1250,7 +1245,6 @@ input BountyEntryUpdateInput {
   stakingAccount: String
   workSubmitted: Boolean
   status: JSONObject
-  announcedInEvent: ID
 }
 
 input BountyEntryWhereInput {
@@ -1294,10 +1288,10 @@ input BountyEntryWhereInput {
   status_json: JSONObject
   bounty: BountyWhereInput
   worker: MembershipWhereInput
-  works_none: BountyWorkDataWhereInput
-  works_some: BountyWorkDataWhereInput
-  works_every: BountyWorkDataWhereInput
   announcedInEvent: WorkEntryAnnouncedEventWhereInput
+  works_none: WorkSubmittedEventWhereInput
+  works_some: WorkSubmittedEventWhereInput
+  works_every: WorkSubmittedEventWhereInput
   AND: [BountyEntryWhereInput!]
   OR: [BountyEntryWhereInput!]
 }
@@ -1365,7 +1359,8 @@ type BountyMaxFundingReachedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  bountymaxFundingReachedEvent: [Bounty!]
+  bounty: Bounty!
+  bountyId: String!
 }
 
 type BountyMaxFundingReachedEventConnection {
@@ -1379,6 +1374,7 @@ input BountyMaxFundingReachedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
+  bounty: ID!
 }
 
 type BountyMaxFundingReachedEventEdge {
@@ -1401,6 +1397,8 @@ enum BountyMaxFundingReachedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
 }
 
 input BountyMaxFundingReachedEventUpdateInput {
@@ -1408,6 +1406,7 @@ input BountyMaxFundingReachedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
+  bounty: ID
 }
 
 input BountyMaxFundingReachedEventWhereInput {
@@ -1454,9 +1453,7 @@ input BountyMaxFundingReachedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  bountymaxFundingReachedEvent_none: BountyWhereInput
-  bountymaxFundingReachedEvent_some: BountyWhereInput
-  bountymaxFundingReachedEvent_every: BountyWhereInput
+  bounty: BountyWhereInput
   AND: [BountyMaxFundingReachedEventWhereInput!]
   OR: [BountyMaxFundingReachedEventWhereInput!]
 }
@@ -1496,10 +1493,6 @@ enum BountyOrderByInput {
   totalFunding_DESC
   discussionThread_ASC
   discussionThread_DESC
-  createdInEvent_ASC
-  createdInEvent_DESC
-  maxFundingReachedEvent_ASC
-  maxFundingReachedEvent_DESC
 }
 
 enum BountyStage {
@@ -1527,8 +1520,6 @@ input BountyUpdateInput {
   stage: BountyStage
   totalFunding: String
   discussionThread: ID
-  createdInEvent: ID
-  maxFundingReachedEvent: ID
 }
 
 input BountyWhereInput {
@@ -1621,114 +1612,6 @@ input BountyWhereInput {
 }
 
 input BountyWhereUniqueInput {
-  id: ID!
-}
-
-"""
-Work data submitted into an entry
-"""
-type BountyWorkData implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-  entry: BountyEntry!
-  entryId: String!
-
-  """
-  Title of the work
-  """
-  title: String!
-
-  """
-  Description which contains the work itself as a URL, a BLOB, or just text
-  """
-  description: String!
-}
-
-type BountyWorkDataConnection {
-  totalCount: Int!
-  edges: [BountyWorkDataEdge!]!
-  pageInfo: PageInfo!
-}
-
-input BountyWorkDataCreateInput {
-  entry: ID!
-  title: String!
-  description: String!
-}
-
-type BountyWorkDataEdge {
-  node: BountyWorkData!
-  cursor: String!
-}
-
-enum BountyWorkDataOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  entry_ASC
-  entry_DESC
-  title_ASC
-  title_DESC
-  description_ASC
-  description_DESC
-}
-
-input BountyWorkDataUpdateInput {
-  entry: ID
-  title: String
-  description: String
-}
-
-input BountyWorkDataWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  title_eq: String
-  title_contains: String
-  title_startsWith: String
-  title_endsWith: String
-  title_in: [String!]
-  description_eq: String
-  description_contains: String
-  description_startsWith: String
-  description_endsWith: String
-  description_in: [String!]
-  entry: BountyEntryWhereInput
-  AND: [BountyWorkDataWhereInput!]
-  OR: [BountyWorkDataWhereInput!]
-}
-
-input BountyWorkDataWhereUniqueInput {
   id: ID!
 }
 
@@ -5971,6 +5854,7 @@ enum EventTypeOptions {
   VoteRevealedEvent
   VotingPeriodStartedEvent
   WorkEntryAnnouncedEvent
+  WorkSubmittedEvent
   WorkerExitedEvent
   WorkerRewardAccountUpdatedEvent
   WorkerRewardAmountUpdatedEvent
@@ -14377,21 +14261,6 @@ type Query {
     where: BountyMaxFundingReachedEventWhereInput
     orderBy: [BountyMaxFundingReachedEventOrderByInput!]
   ): BountyMaxFundingReachedEventConnection!
-  bountyWorkData(
-    offset: Int
-    limit: Int = 50
-    where: BountyWorkDataWhereInput
-    orderBy: [BountyWorkDataOrderByInput!]
-  ): [BountyWorkData!]!
-  bountyWorkDataByUniqueInput(where: BountyWorkDataWhereUniqueInput!): BountyWorkData
-  bountyWorkDataConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: BountyWorkDataWhereInput
-    orderBy: [BountyWorkDataOrderByInput!]
-  ): BountyWorkDataConnection!
   bounties(offset: Int, limit: Int = 50, where: BountyWhereInput, orderBy: [BountyOrderByInput!]): [Bounty!]!
   bountyByUniqueInput(where: BountyWhereUniqueInput!): Bounty
   bountiesConnection(
@@ -16184,6 +16053,21 @@ type Query {
     where: WorkEntryAnnouncedEventWhereInput
     orderBy: [WorkEntryAnnouncedEventOrderByInput!]
   ): WorkEntryAnnouncedEventConnection!
+  workSubmittedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkSubmittedEventWhereInput
+    orderBy: [WorkSubmittedEventOrderByInput!]
+  ): [WorkSubmittedEvent!]!
+  workSubmittedEventByUniqueInput(where: WorkSubmittedEventWhereUniqueInput!): WorkSubmittedEvent
+  workSubmittedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkSubmittedEventWhereInput
+    orderBy: [WorkSubmittedEventOrderByInput!]
+  ): WorkSubmittedEventConnection!
   workerExitedEvents(
     offset: Int
     limit: Int = 50
@@ -21762,7 +21646,8 @@ type WorkEntryAnnouncedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  bountyentryannouncedInEvent: [BountyEntry!]
+  entry: BountyEntry!
+  entryId: String!
 }
 
 type WorkEntryAnnouncedEventConnection {
@@ -21776,6 +21661,7 @@ input WorkEntryAnnouncedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
+  entry: ID!
 }
 
 type WorkEntryAnnouncedEventEdge {
@@ -21798,6 +21684,8 @@ enum WorkEntryAnnouncedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
+  entry_ASC
+  entry_DESC
 }
 
 input WorkEntryAnnouncedEventUpdateInput {
@@ -21805,6 +21693,7 @@ input WorkEntryAnnouncedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
+  entry: ID
 }
 
 input WorkEntryAnnouncedEventWhereInput {
@@ -21851,9 +21740,7 @@ input WorkEntryAnnouncedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
-  bountyentryannouncedInEvent_none: BountyEntryWhereInput
-  bountyentryannouncedInEvent_some: BountyEntryWhereInput
-  bountyentryannouncedInEvent_every: BountyEntryWhereInput
+  entry: BountyEntryWhereInput
   AND: [WorkEntryAnnouncedEventWhereInput!]
   OR: [WorkEntryAnnouncedEventWhereInput!]
 }
@@ -23915,4 +23802,168 @@ input WorkingGroupWhereInput {
 input WorkingGroupWhereUniqueInput {
   id: ID
   name: String
+}
+
+type WorkSubmittedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  entry: BountyEntry!
+  entryId: String!
+
+  """
+  Title of the work
+  """
+  title: String!
+
+  """
+  Description which contains the work itself as a URL, a BLOB, or just text
+  """
+  description: String!
+}
+
+type WorkSubmittedEventConnection {
+  totalCount: Int!
+  edges: [WorkSubmittedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkSubmittedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  entry: ID!
+  title: String!
+  description: String!
+}
+
+type WorkSubmittedEventEdge {
+  node: WorkSubmittedEvent!
+  cursor: String!
+}
+
+enum WorkSubmittedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  entry_ASC
+  entry_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+}
+
+input WorkSubmittedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  entry: ID
+  title: String
+  description: String
+}
+
+input WorkSubmittedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  title_eq: String
+  title_contains: String
+  title_startsWith: String
+  title_endsWith: String
+  title_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  entry: BountyEntryWhereInput
+  AND: [WorkSubmittedEventWhereInput!]
+  OR: [WorkSubmittedEventWhereInput!]
+}
+
+input WorkSubmittedEventWhereUniqueInput {
+  id: ID!
 }

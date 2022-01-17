@@ -265,6 +265,7 @@ export type GetForumEventsQuery = {
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
     | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }

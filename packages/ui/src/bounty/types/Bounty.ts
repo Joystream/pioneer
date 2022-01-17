@@ -48,7 +48,11 @@ export type BountyActorItem = Contributor | Entrant | Withdrawn
 
 export type FundingType = FundingLimited | FundingPerpetual
 
-type FundingLimited = {
+export const isPerpetual = (type: FundingType): type is FundingPerpetual => {
+  return (type as FundingPerpetual).target !== undefined
+}
+
+export type FundingLimited = {
   minAmount: BN
   maxAmount: BN
   maxPeriod: number
@@ -68,13 +72,14 @@ export type ContractClosed = {
   whitelist: string[]
 }
 
-export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
 
 export interface EntryMiniature {
   winner: boolean
   hasSubmitted: boolean
   passed: boolean
   worker: Member
+  id: string
 }
 
 export interface BountyWork {
@@ -83,6 +88,11 @@ export interface BountyWork {
   title: string
   description: string
   status: BountyEntryStatus
+}
+
+export interface BountyContribution {
+  contributor?: Member
+  amount: BN
 }
 
 export interface Bounty {

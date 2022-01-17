@@ -17,6 +17,8 @@ export type InputComponentProps = InputProps &
   DisabledInputProps & {
     id?: string
     label?: string
+    sublabel?: string
+    inputDisabled?: boolean
     required?: boolean
     value?: string
     icon?: React.ReactElement
@@ -62,9 +64,11 @@ export const InputComponent = React.memo(
   ({
     id,
     label,
+    sublabel,
     required,
     validation,
     disabled,
+    inputDisabled,
     value,
     inputSize,
     inputWidth,
@@ -100,13 +104,14 @@ export const InputComponent = React.memo(
             )}
           </InputLabel>
         )}
+        {sublabel && <InputSublabel>{sublabel}</InputSublabel>}
         <InputContainer
           copy={copy}
           units={units}
           icon={icon}
           iconRight={iconRight}
           validation={validation}
-          disabled={disabled}
+          disabled={disabled || inputDisabled}
           inputSize={inputSize}
           borderless={borderless}
         >
@@ -290,6 +295,13 @@ export const InputElement = styled.div<InputElementProps>`
 const InputLabel = styled(Label)<DisabledInputProps>`
   margin-bottom: 0;
   color: ${({ disabled }) => (disabled ? Colors.Black[500] : Colors.Black[900])};
+`
+
+const InputSublabel = styled(Label)`
+  font-weight: 400;
+  font-family: ${Fonts.Inter};
+  margin-bottom: 16px;
+  color: ${Colors.Black[700]};
 `
 
 export const InputIcon = styled.div<DisabledInputProps>`

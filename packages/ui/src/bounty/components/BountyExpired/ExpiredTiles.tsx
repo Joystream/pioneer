@@ -79,7 +79,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         title: t('tiles.worksSubmitted.title'),
         content: (
           <TextHuge value bold>
-            {data?.bountyWorkDataConnection.totalCount}
+            {data?.workSubmittedEventsConnection.totalCount}
           </TextHuge>
         ),
         tooltipText: t('tiles.worksSubmitted.tooltip'),

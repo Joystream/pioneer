@@ -1,4 +1,4 @@
-import { debounce, equals, intersperse, objectEquals, repeat } from '@/common/utils'
+import { debounce, definedValues, equals, intersperse, objectEquals, repeat } from '@/common/utils'
 
 describe('utils', () => {
   describe('equality functions', () => {
@@ -54,6 +54,10 @@ describe('utils', () => {
         expect(isEqual({ ...reference, extraProp: 'foo' })).toBe(false)
       })
     })
+  })
+
+  it('definedValues', () => {
+    expect(definedValues({ a: 0, b: undefined, c: 'bar' })).toEqual({ a: 0, c: 'bar' })
   })
 
   describe('intersperse', () => {

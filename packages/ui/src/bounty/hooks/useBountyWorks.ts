@@ -1,6 +1,6 @@
 import { useGetBountyWorksCountQuery, useGetBountyWorksQuery } from '@/bounty/queries'
 import { asBountyWork } from '@/bounty/types/casts'
-import { BountyWorkDataOrderByInput } from '@/common/api/queries'
+import { WorkSubmittedEventOrderByInput } from '@/common/api/queries'
 import { usePagination } from '@/common/hooks/usePagination'
 
 interface Props {
@@ -22,13 +22,15 @@ export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) =
     },
   })
 
-  const { offset, pagination } = usePagination(perPage, dataCount?.bountyWorkDataConnection.totalCount ?? 0, [perPage])
+  const { offset, pagination } = usePagination(perPage, dataCount?.workSubmittedEventsConnection.totalCount ?? 0, [
+    perPage,
+  ])
 
   const { data, loading } = useGetBountyWorksQuery({
     variables: {
       offset,
       limit: perPage,
-      order: BountyWorkDataOrderByInput.CreatedAtDesc,
+      order: WorkSubmittedEventOrderByInput.CreatedAtDesc,
       where: {
         entry: {
           bounty: {
@@ -44,7 +46,7 @@ export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) =
 
   return {
     isLoading: loading,
-    works: data?.bountyWorkData ? data.bountyWorkData.map(asBountyWork) : [],
+    works: data?.workSubmittedEvents.map(asBountyWork) ?? [],
     pagination,
   }
 }
