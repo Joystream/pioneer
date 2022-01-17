@@ -41,12 +41,12 @@ export const ClaimRewardModal = () => {
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
+  const requirementsVerified = transaction && feeInfo && activeMember
+
   useEffect(() => {
-    if (state.matches('requirementsVerification')) {
-      if (transaction && feeInfo && activeMember) {
-        feeInfo.canAfford && send('PASS')
-        !feeInfo.canAfford && send('FAIL')
-      }
+    if (state.matches('requirementsVerification') && requirementsVerified) {
+      feeInfo.canAfford && send('PASS')
+      !feeInfo.canAfford && send('FAIL')
     }
   }, [state.value, transaction, feeInfo?.canAfford])
 
