@@ -12,9 +12,14 @@ export interface WaitModalProps {
   requirementsCheck?: boolean
 }
 
-export const WaitModal = ({ onClose, title: baseTitle, description: baseDescription, requirementsCheck }: WaitModalProps) => {
+export const WaitModal = ({
+  onClose,
+  title: baseTitle,
+  description: baseDescription,
+  requirementsCheck,
+}: WaitModalProps) => {
   const { t } = useTranslation()
-  const title = requirementsCheck ? t('modals.wait.requirementsTitle'): baseTitle
+  const title = requirementsCheck ? t('modals.wait.requirementsTitle') : baseTitle
   const description = requirementsCheck ? t('modals.wait.requirementsDescription') : baseDescription
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
