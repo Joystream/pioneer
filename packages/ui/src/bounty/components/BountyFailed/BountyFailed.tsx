@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
-import { ExpiredTabs, ExpiredTabsState } from '@/bounty/components/BountyExpired/ExpiredTabs'
-import { ExpiredTiles } from '@/bounty/components/BountyExpired/ExpiredTiles'
+import { FailedTabs, FailedTabsState } from '@/bounty/components/BountyFailed/FailedTabs'
+import { FailedTiles } from '@/bounty/components/BountyFailed/FailedTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
+import { WinnersTab } from '@/bounty/components/tabs/WinnersTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -14,21 +15,23 @@ interface Props {
   bounty: Bounty
 }
 
-export const BountyExpired = ({ bounty }: Props) => {
-  const [active, setActive] = useState<ExpiredTabsState>('Bounty')
+export const BountyFailed = ({ bounty }: Props) => {
+  const [active, setActive] = useState<FailedTabsState>('Bounty')
 
   return (
     <>
       <MainPanel>
-        <ExpiredTiles bounty={bounty} />
-        <ExpiredTabs active={active} setActive={setActive} />
+        <FailedTiles bounty={bounty} />
+        <FailedTabs setActive={setActive} active={active} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
           {active === 'Works' && <WorkTab bountyId={bounty.id} />}
+          {active === 'Winners' && <WinnersTab bounty={bounty} />}
           <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}
-              stage="expired"
+              hidePeriods
+              stage="withdrawal"
               periodsLengths={{
                 fundingPeriodLength: BN_ZERO,
                 judgingPeriodLength: bounty.judgingPeriod,
