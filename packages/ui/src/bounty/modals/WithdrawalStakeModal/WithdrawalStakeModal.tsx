@@ -1,12 +1,14 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { withdrawalStakeMachine, WithdrawalStakeStates } from '@/bounty/modals/WithdrawalStakeModal/machine'
-import { WithdrawContributionSignModal } from '@/bounty/modals/WithdrawContributionModal/WithdrawContributionSignModal'
+import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -18,10 +20,8 @@ import { WithdrawalStakeModalCall } from '.'
 
 export const WithdrawalStakeModal = () => {
   const { api, connectionState } = useApi()
-  const {
-    modalData: { bountyId },
-    hideModal,
-  } = useModal<WithdrawalStakeModalCall>()
+  const { t } = useTranslation('bounty')
+  const { hideModal, modalData } = useModal<WithdrawalStakeModalCall>()
 
   const [state, send] = useMachine(withdrawalStakeMachine)
 
@@ -30,9 +30,13 @@ export const WithdrawalStakeModal = () => {
 
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, bountyId)
+      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, modalData.bounty.id)
     }
   }, [JSON.stringify(activeMember), connectionState])
+
+  const entry = useMemo(() => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    activeMember?.id,
+  ])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -46,35 +50,36 @@ export const WithdrawalStakeModal = () => {
   }, [state.value, transaction, feeInfo?.canAfford])
 
   if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
-    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
+    return <WaitModal title="Please wait..." description={t('common:modals.wait.description')} onClose={hideModal} />
   }
 
-  if (!api || !activeMember || !transaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo || !entry) {
     return null
   }
 
   if (state.matches(WithdrawalStakeStates.transaction)) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
-
     return (
-      <WithdrawContributionSignModal
-        onClose={hideModal}
-        transaction={transaction}
-        service={service}
+      <WithdrawSignModal
+        amount={new BN(entry?.stake || 0)}
         controllerAccount={controllerAccount}
+        onClose={hideModal}
+        service={service}
+        transaction={transaction}
+        type="stake"
       />
     )
   }
 
   if (state.matches(WithdrawalStakeStates.success)) {
-    return <SuccessModal onClose={hideModal} text="Your contribution has been successfully withdrawn." />
+    return <SuccessModal onClose={hideModal} text={t('modals.withdrawContribution.success')} />
   }
 
   if (state.matches(WithdrawalStakeStates.error)) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while withdrawing your contribution.
+        {t('common:modals.failed.description')}
       </FailureModal>
     )
   }

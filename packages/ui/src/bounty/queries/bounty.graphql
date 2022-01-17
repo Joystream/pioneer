@@ -40,6 +40,7 @@ fragment BountyFields on Bounty {
     }
   }
   entries {
+    id
     worker {
       ...MemberFields
     }
@@ -49,6 +50,7 @@ fragment BountyFields on Bounty {
         reward
       }
     }
+    stake
   }
   createdInEvent {
     inBlock

@@ -6,6 +6,7 @@
         "title": "Transaction fee:",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
+      "amount": "Amount",
       "contributeAmount": "Contribute amount:"
     },
     "authorizeTransaction": {
@@ -64,6 +65,53 @@
         "button": "Go to Current Bounties"
       },
       "error": "There was a problem canceling bounty."
+    },
+    "submitWork": {
+      "title": "Submit work",
+      "subtitle": "Submit work",
+      "submitWorkInput": {
+        "bountyId": "Bounty ID",
+        "memberId": "Member ID",
+        "workTitle": "Work Title",
+        "workTitlePlaceholder": "Type",
+        "entryDescription": "Entry description"
+      },
+      "button": {
+        "submitWork": "Submit Work"
+      },
+      "authorizeDescription": "You submitting your work",
+      "validation": {
+        "maxLengthMessage": "Max length is 70 characters",
+        "max70": "MAX 70"
+      }
+    },
+    "withdraw": {
+      "contribution": {
+        "title": "Withdraw Contribution",
+        "description": "You intend to withdraw {{value}} JOY contribution locks from accounts.",
+        "button": "Withdraw Contribution",
+        "stakingFrom": "Staking from bounty",
+        "amountTitle": "Contribution amount"
+      },
+      "stake": {
+        "title": "Withdraw Stake",
+        "description": "You intend to withdraw {{value}} stake locks from accounts.",
+        "button": "Withdraw Stake",
+        "stakingFrom": "Staking from bounty",
+        "amountTitle": "Stake  amount"
+      },
+      "reward": {
+        "title": "Claim Reward",
+        "description": "You intend to claim reward {{value}} JOY",
+        "button": "Claim Reward",
+        "stakingFrom": "Reward from bounty",
+        "amountTitle": "Reward amount"
+      }
+    },
+    "withdrawContribution": {
+      "success": "Your contribution has been successfully withdrawn.",
+      "successButton": "Back to bounty",
+      "error": "There was a problem while withdrawing your contribution."
     }
   },
   "tiles": {
@@ -123,7 +171,9 @@
     "announceEntry": "Announce Entry",
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
-    "cancelBounty": "Cancel Bounty"
+    "cancelBounty": "Cancel Bounty",
+    "loserWithdrawStake": "Withdraw Stake",
+    "entrantWithdrawStake": "Withdraw Contribution"
   },
   "list": {
     "noResults": "No bounties matching search criteria",
