@@ -47,7 +47,7 @@ type FilterGqlInput = Pick<
 
 const filterToGqlInput = ({ search, roles, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
   ...(search ? { handle_contains: search } : {}),
-  ...(roles ? { roles_some: { group: { id_in: roles.map(toString) } } } : {}),
+  ...(roles ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
   ...(council === null ? {} : { isCouncilMember_eq: council }),
   ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
