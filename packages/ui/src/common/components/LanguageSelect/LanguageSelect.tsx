@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SimpleSelect } from '@/common/components/selects'
@@ -6,15 +6,18 @@ import { Locale } from '@/services/i18n'
 
 const locales: Locale[] = ['en', 'ru']
 
-export const LanguageSelect = () => {
+export const LanguageSelect = React.memo(() => {
   const { t, i18n } = useTranslation()
   const [currentLng, setCurrentLng] = useState<Locale>(i18n.resolvedLanguage as Locale)
 
-  const onLangChange = useCallback((lng: Locale | null) => {
-    lng && i18n.changeLanguage(lng, (err) => !err && setCurrentLng(lng))
-  }, [])
+  const onLangChange = useCallback(
+    (lng: Locale | null) => {
+      lng && i18n.changeLanguage(lng, (err) => !err && setCurrentLng(lng))
+    },
+    [i18n]
+  )
 
-  const renderItem = (selected: Locale) => t(`languages.${selected}`)
+  const renderItem = useCallback((selected: Locale) => t(`languages.${selected}`), [t])
 
   return (
     <SimpleSelect
@@ -27,4 +30,4 @@ export const LanguageSelect = () => {
       selectSize="l"
     />
   )
-}
+})
