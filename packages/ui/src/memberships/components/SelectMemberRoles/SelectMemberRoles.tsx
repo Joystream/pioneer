@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { ControlProps } from '@/common/components/forms'
-import { MultiSelect, Selected, SimpleSelect } from '@/common/components/selects'
+import { MultiSelect, Selected } from '@/common/components/selects'
 import { TextMedium } from '@/common/components/typography'
 import { MemberRoles } from '@/memberships/components/MemberRoles'
 import { memberRoleTitle } from '@/memberships/helpers'
