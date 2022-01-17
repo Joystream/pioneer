@@ -124,8 +124,23 @@ query GetUserBountyStatistics($memberId: ID!) {
       }
     }
   }
+
   bountyContributions(where: { contributor: { id_eq: $memberId } }) {
     amount
+  }
+}
+
+query GetUserBountyTabsInformations($memberId: ID!) {
+  bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+    totalCount
+  }
+
+  bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+    totalCount
+  }
+
+  bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+    totalCount
   }
 }
 

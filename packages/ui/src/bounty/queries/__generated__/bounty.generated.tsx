@@ -692,6 +692,17 @@ export type GetUserBountyStatisticsQuery = {
   bountyContributions: Array<{ __typename: 'BountyContribution'; amount: any }>
 }
 
+export type GetUserBountyTabsInformationsQueryVariables = Types.Exact<{
+  memberId: Types.Scalars['ID']
+}>
+
+export type GetUserBountyTabsInformationsQuery = {
+  __typename: 'Query'
+  bountiesConnection: { __typename: 'BountyConnection'; totalCount: number }
+  bountyContributionsConnection: { __typename: 'BountyContributionConnection'; totalCount: number }
+  bountyEntriesConnection: { __typename: 'BountyEntryConnection'; totalCount: number }
+}
+
 export type GetBountyContributorsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.BountyContributionWhereInput>
   order?: Types.InputMaybe<Array<Types.BountyContributionOrderByInput> | Types.BountyContributionOrderByInput>
@@ -1094,6 +1105,65 @@ export type GetUserBountyStatisticsLazyQueryHookResult = ReturnType<typeof useGe
 export type GetUserBountyStatisticsQueryResult = Apollo.QueryResult<
   GetUserBountyStatisticsQuery,
   GetUserBountyStatisticsQueryVariables
+>
+export const GetUserBountyTabsInformationsDocument = gql`
+  query GetUserBountyTabsInformations($memberId: ID!) {
+    bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+      totalCount
+    }
+    bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+      totalCount
+    }
+    bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetUserBountyTabsInformationsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBountyTabsInformationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBountyTabsInformationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBountyTabsInformationsQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetUserBountyTabsInformationsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(
+    GetUserBountyTabsInformationsDocument,
+    options
+  )
+}
+export function useGetUserBountyTabsInformationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserBountyTabsInformationsQuery,
+    GetUserBountyTabsInformationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(
+    GetUserBountyTabsInformationsDocument,
+    options
+  )
+}
+export type GetUserBountyTabsInformationsQueryHookResult = ReturnType<typeof useGetUserBountyTabsInformationsQuery>
+export type GetUserBountyTabsInformationsLazyQueryHookResult = ReturnType<
+  typeof useGetUserBountyTabsInformationsLazyQuery
+>
+export type GetUserBountyTabsInformationsQueryResult = Apollo.QueryResult<
+  GetUserBountyTabsInformationsQuery,
+  GetUserBountyTabsInformationsQueryVariables
 >
 export const GetBountyContributorsDocument = gql`
   query GetBountyContributors(
