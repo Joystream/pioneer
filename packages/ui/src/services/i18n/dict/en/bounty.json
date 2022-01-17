@@ -88,7 +88,7 @@
       "title": "Claim Reward",
       "success": "You have successfully claimed your reward.",
       "error": "There was a problem while claiming your reward.",
-      "description": "You intend to claim reward",
+      "description": "You intend to claim reward ",
       "feeInfo1": "Fees of ",
       "feeInfo2": " fee will be applied to the transaction."
     }

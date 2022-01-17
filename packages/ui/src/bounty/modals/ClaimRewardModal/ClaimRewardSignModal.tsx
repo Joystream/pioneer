@@ -38,7 +38,10 @@ export const ClaimRewardSignModal = ({ onClose, transaction, service, controller
   return (
     <TransactionModal onClose={onClose} service={service} title={t('modals.claimReward.title')}>
       <ModalBody>
-        <TextMedium light> <TokenValue value={reward} /></TextMedium>
+        <TextMedium light>
+          {t('modals.claimReward.description')}
+          <TokenValue value={reward} />
+        </TextMedium>
         <TextMedium light>
           {t('modals.claimReward.feeInfo1')}
           <TokenValue value={paymentInfo?.partialFee.toBn()} />
@@ -58,7 +61,7 @@ export const ClaimRewardSignModal = ({ onClose, transaction, service, controller
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-        {t('modals.claimReward.title')}
+          {t('modals.claimReward.title')}
           <Arrow direction="right" />
         </ButtonPrimary>
       </ModalFooter>
