@@ -17,7 +17,6 @@ interface UseMemberProps {
 
 export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
   const where = filterToGqlInput(filter)
-  console.log(where)
   const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })
   const totalCount = connectionData?.membershipsConnection.totalCount
   const { offset, pagination } = usePagination(MEMBERS_PER_PAGE, totalCount ?? 0, [order, filter])
