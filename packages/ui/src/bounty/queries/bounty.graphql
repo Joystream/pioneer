@@ -33,6 +33,7 @@ fragment BountyFields on Bounty {
   judgingPeriod
   stage
   totalFunding
+  discussionThreadId
   contributions {
     amount
     contributor {

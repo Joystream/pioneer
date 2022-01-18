@@ -47,6 +47,7 @@ describe('UI: BountyPreviewHeader', () => {
     judgingPeriod: new BN(10),
     stage: 'expired',
     totalFunding: new BN(10),
+    discussionThreadId: '1',
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,

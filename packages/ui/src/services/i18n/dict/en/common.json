@@ -8,6 +8,10 @@
       "label": "Transaction fee:",
       "tooltipText": "Lorem ipsum"
     },
+    "wait": {
+      "title": "Please wait...",
+      "description": "Checking requirements"
+    },
     "transactionCanceled": "Transaction has been cancelled."
   },
   "authorizeTransaction": "Authorize Transaction",
@@ -22,6 +26,7 @@
   },
   "created": "Created",
   "council": "Council",
+  "withdrawing": "Withdrawing",
   "none": "None",
   "languages": {
     "title": "Select language",

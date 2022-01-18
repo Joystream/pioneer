@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -7,6 +8,7 @@ import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,
 } from '@/bounty/modals/WithdrawContributionModal'
+import { Bounty, Contributor } from '@/bounty/types/Bounty'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -30,8 +32,17 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 }))
 
 describe('UI: WithdrawContributionModal', () => {
+  const contributor: Contributor = {
+    actor: getMember('alice'),
+    amount: new BN('10000'),
+  }
+
+  const bounty: Bounty = {
+    id: 'bounty 1',
+    contributors: [contributor],
+  } as Bounty
   const modalData: ModalCallData<BountyWithdrawContributionModalCall> = {
-    bountyId: '1',
+    bounty,
   }
 
   const api = stubApi()
@@ -72,8 +83,8 @@ describe('UI: WithdrawContributionModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(screen.queryByText(/You intend to withdraw your contribution for this bounty/i)).not.toBeNull()
-    expect(screen.queryByText(/Sign and withdraw/i)).not.toBeNull()
+    expect(screen.queryByText('modals.withdraw.contribution.description')).not.toBeNull()
+    expect(screen.queryByText('modals.withdraw.contribution.button')).not.toBeNull()
   })
 
   it('Requirements failed', async () => {
@@ -88,9 +99,9 @@ describe('UI: WithdrawContributionModal', () => {
     renderModal()
 
     await act(async () => {
-      fireEvent.click(await getButton(/Sign and withdraw/i))
+      fireEvent.click(await getButton('modals.withdraw.contribution.button'))
     })
-    expect(await screen.findByText('There was a problem while withdrawing your contribution.')).toBeDefined()
+    expect(await screen.findByText('modals.withdrawContribution.error')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -98,9 +109,9 @@ describe('UI: WithdrawContributionModal', () => {
     renderModal()
 
     await act(async () => {
-      fireEvent.click(await getButton(/Sign and withdraw/i))
+      fireEvent.click(await getButton('modals.withdraw.contribution.button'))
     })
-    expect(await screen.findByText('Your contribution has been successfully withdrawn.')).toBeDefined()
+    expect(await screen.findByText('modals.withdrawContribution.success')).toBeDefined()
   })
 
   const renderModal = () =>
