@@ -84,7 +84,10 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 
       <SelectMemberRoles
         value={roles}
-        onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'roles', value })
+          onApply({ ...filters, roles: value })
+        }}
         onApply={applyFilters}
         onClear={() => {
           dispatch({ type: 'change', field: 'roles', value: [] })
