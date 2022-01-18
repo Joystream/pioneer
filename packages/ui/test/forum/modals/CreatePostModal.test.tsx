@@ -94,14 +94,14 @@ describe('UI: CreatePostModal', () => {
       tx = stubTransaction(api, txPath, 10000)
       modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
       renderModal()
-      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
 
     it('Cannot afford post deposit', async () => {
       stubConst(api, 'forum.postDeposit', createBalanceOf(10000))
       modalData.isEditable = true
       renderModal()
-      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 

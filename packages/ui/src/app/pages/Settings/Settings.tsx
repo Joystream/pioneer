@@ -2,6 +2,7 @@ import React from 'react'
 
 import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { NetworkType } from '@/app/config'
+import { LanguageSelect } from '@/common/components/LanguageSelect'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SimpleSelect } from '@/common/components/selects'
@@ -27,6 +28,7 @@ export const Settings = () => {
       }
       main={
         <MainPanel>
+          <LanguageSelect />
           <SimpleSelect
             title="Select network"
             options={options}

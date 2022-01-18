@@ -82,6 +82,11 @@ export interface EntryMiniature {
   id: string
 }
 
+export interface WinnerEntry {
+  entryId: string
+  reward: BN
+}
+
 export interface BountyWork {
   id: string
   worker: Member
@@ -114,4 +119,5 @@ export interface Bounty {
   inBlock: number
   contractType: ContractType
   contributors: Contributor[]
+  discussionThreadId: string
 }

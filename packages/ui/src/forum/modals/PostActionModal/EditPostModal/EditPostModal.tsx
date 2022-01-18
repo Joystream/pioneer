@@ -50,7 +50,7 @@ export const EditPostModal = () => {
   }, [state.value, JSON.stringify(feeInfo)])
 
   if (state.matches('requirementsVerification')) {
-    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModalWithAction} />
+    return <WaitModal onClose={hideModalWithAction} requirementsCheck />
   }
 
   if (state.matches('transaction') && transaction) {

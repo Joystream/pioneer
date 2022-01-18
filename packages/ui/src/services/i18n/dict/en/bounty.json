@@ -6,6 +6,7 @@
         "label": "Transaction fee:",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
+      "amount": "Amount",
       "contributeAmount": "Contribute amount:"
     },
     "authorizeTransaction": {
@@ -108,6 +109,36 @@
         "maxLengthMessage": "Max length is 70 characters",
         "max70": "MAX 70"
       }
+    },
+    "withdraw": {
+      "contribution": {
+        "title": "Withdraw Contribution",
+        "description": "You intend to withdraw {{value}} JOY contribution locks from accounts.",
+        "button": "Withdraw Contribution",
+        "stakingFrom": "Staking from bounty",
+        "amountTitle": "Contribution amount"
+      },
+      "stake": {
+        "title": "Withdraw Stake",
+        "description": "You intend to withdraw {{value}} stake locks from accounts.",
+        "button": "Withdraw Stake",
+        "stakingFrom": "Staking from bounty",
+        "amountTitle": "Stake  amount"
+      },
+      "reward": {
+        "title": "Claim Reward",
+        "description": "You intend to claim reward",
+        "button": "Claim Reward",
+        "stakingFrom": "Reward from bounty",
+        "amountTitle": "Reward amount",
+        "success": "You have successfully claimed your reward.",
+        "error": "There was a problem while claiming your reward."
+      }
+    },
+    "withdrawContribution": {
+      "success": "Your contribution has been successfully withdrawn.",
+      "successButton": "Back to bounty",
+      "error": "There was a problem while withdrawing your contribution."
     }
   },
   "tiles": {
@@ -141,11 +172,20 @@
     "worksSubmitted": {
       "title": "Works Submitted",
       "tooltip": "Lorem ipsum d"
+    },
+    "winners": {
+      "title": "Winners",
+      "tooltip": "Lorem ipsum d"
+    },
+    "unwithdrawnFunds": {
+      "title": "Unwithdrawn Funds",
+      "tooltip": "Lorem ipsum d"
     }
   },
   "tabs": {
     "bounty": "Bounty",
-    "works": "Works"
+    "works": "Works",
+    "winners": "Winners"
   },
   "workTab": {
     "filter": {
@@ -161,13 +201,22 @@
   "bountyFields": {
     "cherry": "Cherry",
     "entrantStake": "Entrant Stake",
-    "expired": "Expired"
+    "expired": "Expired",
+    "perpetual": "Perpetual",
+    "limited": "Limited",
+    "withdrawalPeriod": "Withdrawal Period"
   },
   "buttons": {
     "announceEntry": "Announce Entry",
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty"
+  },
+  "information": {
+    "bountyFailed": {
+      "title": "Bounty Failed",
+      "description": "The oracle did not choose a winner. If you are a worker or contributor you can withdraw your stake now."
+    }
   },
   "list": {
     "noResults": "No bounties matching search criteria",
@@ -186,5 +235,8 @@
     "amountTitle": "Contributed",
     "notFound": "No contributors",
     "noFoundText": "Lorem ipsum dolor sit amet enim"
+  },
+  "discussionThread": {
+    "title": "Bounty discussion thread"
   }
 }

@@ -137,7 +137,7 @@ describe('UI: Vote for Council Modal', () => {
 
       renderModal()
 
-      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 
