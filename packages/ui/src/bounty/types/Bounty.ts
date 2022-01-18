@@ -114,4 +114,5 @@ export interface Bounty {
   inBlock: number
   contractType: ContractType
   contributors: Contributor[]
+  discussionThreadId: string
 }

@@ -17,6 +17,7 @@ export type BountyFieldsFragment = {
   judgingPeriod: number
   stage: Types.BountyStage
   totalFunding: any
+  discussionThreadId: string
   creator?:
     | {
         __typename: 'Membership'
@@ -261,6 +262,7 @@ export type GetBountiesQuery = {
     judgingPeriod: number
     stage: Types.BountyStage
     totalFunding: any
+    discussionThreadId: string
     creator?:
       | {
           __typename: 'Membership'
@@ -447,6 +449,7 @@ export type GetBountyQuery = {
         judgingPeriod: number
         stage: Types.BountyStage
         totalFunding: any
+        discussionThreadId: string
         creator?:
           | {
               __typename: 'Membership'
@@ -752,6 +755,7 @@ export const BountyFieldsFragmentDoc = gql`
     judgingPeriod
     stage
     totalFunding
+    discussionThreadId
     contributions {
       amount
       contributor {

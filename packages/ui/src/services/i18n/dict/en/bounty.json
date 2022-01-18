@@ -208,5 +208,8 @@
     "amountTitle": "Contributed",
     "notFound": "No contributors",
     "noFoundText": "Lorem ipsum dolor sit amet enim"
+  },
+  "discussionThread": {
+    "title": "Bounty discussion thread"
   }
 }
