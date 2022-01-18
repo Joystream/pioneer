@@ -104,7 +104,11 @@ export const InputComponent = React.memo(
             )}
           </InputLabel>
         )}
-        {sublabel && <InputSublabel>{sublabel}</InputSublabel>}
+        {sublabel && (
+          <InputSublabelWrapper>
+            <InputSublabel>{sublabel}</InputSublabel>
+          </InputSublabelWrapper>
+        )}
         <InputContainer
           copy={copy}
           units={units}
@@ -297,11 +301,18 @@ const InputLabel = styled(Label)<DisabledInputProps>`
   color: ${({ disabled }) => (disabled ? Colors.Black[500] : Colors.Black[900])};
 `
 
+const InputSublabelWrapper = styled.div`
+  position: relative;
+  height: 20px;
+  margin-bottom: 16px;
+`
+
 const InputSublabel = styled(Label)`
   font-weight: 400;
   font-family: ${Fonts.Inter};
-  margin-bottom: 16px;
   color: ${Colors.Black[700]};
+  position: absolute;
+  white-space: nowrap;
 `
 
 export const InputIcon = styled.div<DisabledInputProps>`

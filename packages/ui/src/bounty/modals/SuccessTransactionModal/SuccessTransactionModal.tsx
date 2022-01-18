@@ -26,7 +26,7 @@ export const SuccessTransactionModal = ({ onClose, onButtonClick, message, butto
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost disabled onClick={onButtonClick} size="medium">
+        <ButtonGhost onClick={onButtonClick} size="medium">
           {buttonLabel}
         </ButtonGhost>
       </ModalFooter>
