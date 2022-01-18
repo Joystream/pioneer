@@ -28,5 +28,13 @@
   "created": "Created",
   "council": "Council",
   "withdrawing": "Withdrawing",
-  "none": "None"
+  "none": "None",
+  "languages": {
+    "title": "Select language",
+    "en": "English",
+    "en-US": "English",
+    "en-UK": "English",
+    "ru": "Russian",
+    "ru-RU": "Russian"
+  }
 }
