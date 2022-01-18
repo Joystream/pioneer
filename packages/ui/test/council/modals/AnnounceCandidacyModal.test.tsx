@@ -124,7 +124,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
       const { queryByText } = renderModal()
 
-      expect(queryByText('Insufficient Funds')).not.toBeNull()
+      expect(queryByText('modals.insufficientFunds.title')).not.toBeNull()
     })
 
     it('Required stake', async () => {

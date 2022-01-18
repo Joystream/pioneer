@@ -182,7 +182,7 @@ describe('UI: AddNewProposalModal', () => {
 
       const { findByText } = renderModal()
 
-      expect(await findByText('Insufficient Funds')).toBeDefined()
+      expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 

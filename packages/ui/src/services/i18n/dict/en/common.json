@@ -6,7 +6,8 @@
     },
     "transactionFee": {
       "label": "Transaction fee:",
-      "tooltipText": "Lorem ipsum"
+      "tooltipText": "Lorem ipsum",
+      "feeSending": "Fee sending from account"
     },
     "wait": {
       "title": "Please wait...",

@@ -102,10 +102,12 @@
       },
       "reward": {
         "title": "Claim Reward",
-        "description": "You intend to claim reward {{value}} JOY",
+        "description": "You intend to claim reward",
         "button": "Claim Reward",
         "stakingFrom": "Reward from bounty",
-        "amountTitle": "Reward amount"
+        "amountTitle": "Reward amount",
+        "success": "You have successfully claimed your reward.",
+        "error": "There was a problem while claiming your reward."
       }
     },
     "withdrawContribution": {

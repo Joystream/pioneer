@@ -91,7 +91,7 @@ describe('UI: WithdrawContributionModal', () => {
     tx = stubTransaction(api, txPath, 10000)
     renderModal()
 
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Transaction failed', async () => {

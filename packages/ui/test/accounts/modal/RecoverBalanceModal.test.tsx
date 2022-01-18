@@ -80,7 +80,7 @@ describe('UI: RecoverBalanceModal', () => {
 
     renderModal()
 
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Transaction summary', async () => {
