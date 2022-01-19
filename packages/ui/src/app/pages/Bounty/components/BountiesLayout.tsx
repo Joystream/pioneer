@@ -43,7 +43,7 @@ export const BountiesLayout = ({
           <EmptyTab />
         ) : (
           <MainPanel>
-            {tilesComponent || null}
+            {tilesComponent}
             <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
             {isLoading ? (
               <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
