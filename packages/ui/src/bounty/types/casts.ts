@@ -118,6 +118,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({
+  id: fields.id,
   amount: new BN(fields.amount),
   contributor: fields.contributor ? asMember(fields.contributor) : undefined,
 })

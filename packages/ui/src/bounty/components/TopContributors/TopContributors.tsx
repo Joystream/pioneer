@@ -1,3 +1,4 @@
+import faker from 'faker'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -11,15 +12,20 @@ import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/componen
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 
+const WEEK_AGO = faker.date.recent(7)
+
 export const TopContributors = () => {
-  const { contributions, isLoading } = useBountyContributions({ order: { orderKey: 'amount', isDescending: true } })
+  const { contributions, isLoading } = useBountyContributions({
+    order: { orderKey: 'amount', isDescending: true },
+    filters: { createdAfter: WEEK_AGO },
+  })
   const { t } = useTranslation('bounty')
 
   const tiles = useMemo(() => {
     if (contributions.length) {
       return contributions.map((contribution, index) => (
         <StyledTile>
-          {contribution.actor && <MemberInfo member={contribution.actor} size="s" hideGroup onlyTop />}
+          {contribution.contributor && <MemberInfo member={contribution.contributor} size="s" hideGroup onlyTop />}
           <ValueWrapper>
             <TextSmall>Contributed</TextSmall>
             <TokenValue size="l" value={contribution.amount} />
@@ -33,16 +39,15 @@ export const TopContributors = () => {
       return <Loading />
     }
 
-      return (
-        <EmptyStateWrapper>
-          <CommunityTile />
-          <div>
-            <TextExtraHuge bold>{t('topContributors.notFound')}</TextExtraHuge>
-            <TextBig>{t('topContributors.notFoundText')}</TextBig>
-          </div>
-        </EmptyStateWrapper>
-      )
-
+    return (
+      <EmptyStateWrapper>
+        <CommunityTile />
+        <div>
+          <TextExtraHuge bold>{t('topContributors.notFound')}</TextExtraHuge>
+          <TextBig>{t('topContributors.notFoundText')}</TextBig>
+        </div>
+      </EmptyStateWrapper>
+    )
   }, [contributions])
 
   return <HorizontalScroller items={tiles} title={t('topContributors.title')} />

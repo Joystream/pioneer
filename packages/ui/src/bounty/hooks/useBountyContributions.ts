@@ -1,6 +1,6 @@
 import { useGetBountyContributorsQuery } from '@/bounty/queries'
 import { BountyContributionsFiltersState } from '@/bounty/types/Bounty'
-import { asContributors } from '@/bounty/types/casts'
+import { asContribution } from '@/bounty/types/casts'
 import { BountyContributionOrderByInput } from '@/common/api/queries'
 import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 
@@ -16,6 +16,7 @@ export const useBountyContributions = ({ order, limit, filters }: Props) => {
   const { data, loading } = useGetBountyContributorsQuery({
     variables: {
       where: {
+        createdAt_gt: filters?.createdAfter?.toISOString(),
         contributor: {
           id_eq: filters?.contributorId,
         },
@@ -30,6 +31,6 @@ export const useBountyContributions = ({ order, limit, filters }: Props) => {
 
   return {
     isLoading: loading,
-    contributions: data?.bountyContributions ? asContributors(data.bountyContributions) : [],
+    contributions: data?.bountyContributions.map(asContribution) ?? [],
   }
 }
