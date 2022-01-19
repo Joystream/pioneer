@@ -105,7 +105,7 @@ export const AuthorizeTransactionModal = ({
             />
           )}
           <TransactionInfo
-            title={t('modals.common.transactionFee.title')}
+            title={t('modals.common.transactionFee.label')}
             value={paymentInfo?.partialFee}
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />

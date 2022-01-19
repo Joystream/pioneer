@@ -131,7 +131,7 @@ export const WithdrawWorkEntryModal = () => {
       <ModalFooter>
         <TransactionInfoContainer>
           <TransactionInfo
-            title={t('modals.common.transactionFee.title')}
+            title={t('modals.common.transactionFee.label')}
             value={feeInfo.transactionFee}
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
