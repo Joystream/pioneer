@@ -1,45 +1,53 @@
+import faker from 'faker'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BountyContribution } from '@/bounty/types/Bounty'
+import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
 import { CommunityTile } from '@/common/components/icons/CommunityTile'
+import { Loading } from '@/common/components/Loading'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 
-interface TopContributorsProps {
-  contributions: BountyContribution[]
-}
+const WEEK_AGO = faker.date.recent(7)
 
-export const TopContributors = ({ contributions }: TopContributorsProps) => {
+export const TopContributors = () => {
+  const { contributions, isLoading } = useBountyContributions({
+    order: { orderKey: 'amount', isDescending: true },
+    filters: { createdAfter: WEEK_AGO },
+  })
   const { t } = useTranslation('bounty')
 
   const tiles = useMemo(() => {
     if (contributions.length) {
-      return contributions.map((el, index) => (
+      return contributions.map((contribution, index) => (
         <StyledTile>
-          {el.contributor && <MemberInfo member={el.contributor} size="s" hideGroup onlyTop />}
+          {contribution.contributor && <MemberInfo member={contribution.contributor} size="s" hideGroup onlyTop />}
           <ValueWrapper>
-            <TextSmall>{t('topContributors.amountTitle')}</TextSmall>
-            <TokenValue size="l" value={el.amount} />
+            <TextSmall>Contributed</TextSmall>
+            <TokenValue size="l" value={contribution.amount} />
           </ValueWrapper>
           <TileNumber>{index + 1}</TileNumber>
         </StyledTile>
       ))
-    } else {
-      return (
-        <EmptyStateWrapper>
-          <CommunityTile />
-          <div>
-            <TextExtraHuge bold>{t('topContributors.notFound')}</TextExtraHuge>
-            <TextBig>{t('topContributors.notFoundText')}</TextBig>
-          </div>
-        </EmptyStateWrapper>
-      )
     }
+
+    if (!contributions && isLoading) {
+      return <Loading />
+    }
+
+    return (
+      <EmptyStateWrapper>
+        <CommunityTile />
+        <div>
+          <TextExtraHuge bold>{t('topContributors.notFound')}</TextExtraHuge>
+          <TextBig>{t('topContributors.notFoundText')}</TextBig>
+        </div>
+      </EmptyStateWrapper>
+    )
   }, [contributions])
 
   return <HorizontalScroller items={tiles} title={t('topContributors.title')} />
