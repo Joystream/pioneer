@@ -7,21 +7,21 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { withdrawalStakeMachine, WithdrawalStakeStates } from '@/bounty/modals/WithdrawalStakeModal/machine'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
-import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { WithdrawalStakeModalCall } from '.'
+import { WithdrawStakeModalCall } from '.'
 
-export const WithdrawalStakeModal = () => {
+export const WithdrawStakeModal = () => {
   const { api, connectionState } = useApi()
   const { t } = useTranslation('bounty')
-  const { hideModal, modalData } = useModal<WithdrawalStakeModalCall>()
+  const { hideModal, modalData } = useModal<WithdrawStakeModalCall>()
 
   const [state, send] = useMachine(withdrawalStakeMachine)
 
@@ -48,7 +48,7 @@ export const WithdrawalStakeModal = () => {
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford])
-
+  console.debug('f', feeInfo?.canAfford)
   if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
     return <WaitModal title="Please wait..." description={t('common:modals.wait.description')} onClose={hideModal} />
   }
@@ -71,9 +71,15 @@ export const WithdrawalStakeModal = () => {
       />
     )
   }
-
   if (state.matches(WithdrawalStakeStates.success)) {
-    return <SuccessModal onClose={hideModal} text={t('modals.withdrawContribution.success')} />
+    return (
+      <SuccessTransactionModal
+        onClose={hideModal}
+        onButtonClick={hideModal}
+        message={t('modals.withdrawContribution.success')}
+        buttonLabel={t('modals.withdrawContribution.successButton')}
+      />
+    )
   }
 
   if (state.matches(WithdrawalStakeStates.error)) {
@@ -83,8 +89,8 @@ export const WithdrawalStakeModal = () => {
       </FailureModal>
     )
   }
-
-  if (state.matches(WithdrawalStakeStates.error)) {
+  if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
+    console.debug('dd')
     return (
       <InsufficientFundsModal
         onClose={hideModal}
@@ -93,6 +99,5 @@ export const WithdrawalStakeModal = () => {
       />
     )
   }
-
   return null
 }

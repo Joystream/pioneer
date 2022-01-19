@@ -7,8 +7,8 @@ import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyMod
 import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
 import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
 import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
-import { WithdrawalStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
-import { WithdrawalStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
+import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
+import { WithdrawStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
 import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,
@@ -82,7 +82,7 @@ export type ModalNames =
   | ModalName<BountyWithdrawContributionModalCall>
   | ModalName<BountyContributeFundsModalCall>
   | ModalName<BountyCancelModalCall>
-  | ModalName<WithdrawalStakeModalCall>
+  | ModalName<WithdrawStakeModalCall>
   | ModalName<SubmitWorkModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
@@ -120,7 +120,7 @@ const modals: Record<ModalNames, ReactElement> = {
   BountyCancel: <BountyCancelModal />,
   SubmitWork: <SubmitWorkModal />,
   BountyContributeFundsModal: <ContributeFundsModal />,
-  WithdrawalStakeModal: <WithdrawalStakeModal />,
+  WithdrawStakeModal: <WithdrawStakeModal />,
 }
 
 export const GlobalModals = () => {

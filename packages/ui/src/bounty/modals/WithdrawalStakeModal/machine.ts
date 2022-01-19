@@ -16,6 +16,7 @@ interface WithdrawalStakeContext {
 
 export enum WithdrawalStakeStates {
   requirementsVerification = 'requirementsVerification',
+  requirementsFailed = 'requirementsFailed',
   transaction = 'transaction',
   success = 'success',
   error = 'error',
@@ -24,6 +25,7 @@ export enum WithdrawalStakeStates {
 
 type WithdrawalStakeState =
   | { value: WithdrawalStakeStates.requirementsVerification; context: EmptyObject }
+  | { value: WithdrawalStakeStates.requirementsFailed; context: EmptyObject }
   | { value: WithdrawalStakeStates.transaction; context: EmptyObject }
   | { value: WithdrawalStakeStates.success; context: Required<WithdrawalStakeContext> }
   | { value: WithdrawalStakeStates.error; context: Required<WithdrawalStakeContext> }
@@ -48,12 +50,12 @@ export const withdrawalStakeMachine = createMachine<
   WithdrawalStakeEvents,
   WithdrawalStakeState
 >({
-  initial: 'requirementsVerification',
+  initial: WithdrawalStakeStates.requirementsVerification,
   states: {
     [WithdrawalStakeStates.requirementsVerification]: {
       on: {
         NEXT: WithdrawalStakeStates.transaction,
-        ERROR: WithdrawalStakeStates.error,
+        ERROR: WithdrawalStakeStates.requirementsVerification,
       },
     },
     [WithdrawalStakeStates.transaction]: {
@@ -78,6 +80,7 @@ export const withdrawalStakeMachine = createMachine<
         ],
       },
     },
+    [WithdrawalStakeStates.requirementsFailed]: { type: 'final' },
     [WithdrawalStakeStates.success]: { type: 'final' },
     [WithdrawalStakeStates.error]: { type: 'final' },
     [WithdrawalStakeStates.cancel]: { type: 'final' },

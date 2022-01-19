@@ -1,2 +1,2 @@
-export * from './WithdrawalStakeModal'
+export * from './WithdrawStakeModal'
 export * from './types'

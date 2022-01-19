@@ -15,11 +15,11 @@ import { alice, bob } from '../../../../test/_mocks/keyring'
 import { getMember } from '../../../../test/_mocks/members'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
 
-import { WithdrawalStakeModal } from '.'
+import { WithdrawStakeModal } from '.'
 
 export default {
-  title: 'Bounty/WithdrawalStakeModal',
-  component: WithdrawalStakeModal,
+  title: 'Bounty/WithdrawStakeModal',
+  component: WithdrawStakeModal,
 } as Meta
 
 const accounts = {
@@ -93,7 +93,7 @@ const Template: Story = (args) => {
                   showModal: () => undefined,
                 }}
               >
-                <WithdrawalStakeModal {...args} />
+                <WithdrawStakeModal {...args} />
               </ModalContext.Provider>
             </BalancesContext.Provider>
           </AccountsContext.Provider>
