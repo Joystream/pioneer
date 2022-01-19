@@ -113,7 +113,7 @@ export const WithdrawWorkEntryModal = () => {
             disabled
             label={t('modals.withdrawWorkEntry.memberInput.label')}
             tooltipText={t('modals.withdrawWorkEntry.memberInput.tooltipText')}
-            member={entry.creator}
+            member={entry.worker}
           />
         </BodyContainer>
       </ModalBody>
