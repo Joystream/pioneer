@@ -62,6 +62,14 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
     cursor: pointer;
   }
 
+  .ck.ck-list__item .ck-button .custom-item-type {
+    font-size: 8px;
+    margin-left: 8px;
+    background: ${Colors.Blue[200]};
+    border-radius: ${BorderRad.m};
+    padding: 2px 4px;
+  }
+
   .ck.ck-list__item .ck-button.ck-on {
     background: ${Colors.Blue[100]};
     color: ${Colors.Blue[500]};

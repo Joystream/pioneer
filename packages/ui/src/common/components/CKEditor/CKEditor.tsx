@@ -4,6 +4,7 @@ import React, { Ref, RefObject, useCallback, useEffect, useRef } from 'react'
 
 import { debounce } from '@/common/utils'
 import { SearchMembersDocument, SearchMembersQuery, SearchMembersQueryVariables } from '@/memberships/queries'
+import { GetProposalsDocument, GetProposalsQuery, GetProposalsQueryVariables } from '@/proposals/queries'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 
@@ -19,6 +20,16 @@ export interface CKEditorProps {
   inline?: boolean
 }
 
+const MentionTypes = ['general', 'proposal', 'member'] as const
+type MentionType = typeof MentionTypes[number]
+
+interface MentionItem {
+  id: string
+  itemId: string
+  name: string
+  type: MentionType
+}
+
 export const CKEditor = React.forwardRef(
   (
     { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
@@ -27,6 +38,41 @@ export const CKEditor = React.forwardRef(
     const localRef = useRef<HTMLDivElement>(null)
     const elementRef: RefObject<HTMLDivElement> = (ref ?? localRef) as RefObject<HTMLDivElement>
     const editorRef = useRef<Editor | null>(null)
+
+    const fetchMembers = useCallback(async (text: string) => {
+      const { data } = await client.query<SearchMembersQuery, SearchMembersQueryVariables>({
+        query: SearchMembersDocument,
+        variables: { text, limit: 10 },
+        fetchPolicy: 'cache-first',
+      })
+      return data.memberships.map<MentionItem>(({ id, handle }) => ({
+        id: `@${handle}`,
+        itemId: id,
+        type: 'member',
+        name: handle,
+      }))
+    }, [])
+
+    const fetchProposals = useCallback(async (text: string) => {
+      const { data } = await client.query<GetProposalsQuery, GetProposalsQueryVariables>({
+        query: GetProposalsDocument,
+        variables: {
+          where: { title_contains: text },
+        },
+        fetchPolicy: 'cache-first',
+      })
+      return data.proposals.map<MentionItem>(({ id, title }) => ({
+        id: `@${title}`,
+        itemId: id,
+        type: 'proposal',
+        name: title,
+      }))
+    }, [])
+
+    const fetchAll = useCallback(async (text: string) => {
+      const data = await Promise.all([fetchMembers(text), fetchProposals(text)])
+      return data.flat().sort(sortMentions)
+    }, [])
 
     useEffect(() => {
       if (!editorRef.current) {
@@ -39,11 +85,18 @@ export const CKEditor = React.forwardRef(
     const client = useApolloClient()
     const mentionFeed = useCallback(
       debounce(async (text: string) => {
-        const { data } = await client.query<SearchMembersQuery, SearchMembersQueryVariables>({
-          query: SearchMembersDocument,
-          variables: { text, limit: 10 },
-        })
-        return data.memberships.map(({ id, handle }) => ({ id: `@${handle}`, memberId: id }))
+        const proposal = text.match(/proposal:(.+)$/)
+        if (proposal) {
+          return await fetchProposals(proposal[1])
+        }
+        const member = text.match(/member:(.+)$/)
+        if (member) {
+          return await fetchMembers(member[1])
+        }
+        if (text.length > 0) {
+          return await fetchAll(text)
+        }
+        return generalItems
       }),
       [client]
     )
@@ -71,7 +124,7 @@ export const CKEditor = React.forwardRef(
             ],
           },
           mention: {
-            feeds: [{ marker: '@', feed: mentionFeed, minimumCharacters: 1 }],
+            feeds: [{ marker: '@', feed: mentionFeed, itemRenderer: mentionItemRenderer, dropdownLimit: 10 }],
           },
           image: {
             toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
@@ -124,3 +177,37 @@ export const CKEditor = React.forwardRef(
     )
   }
 )
+
+const generalItems: MentionItem[] = [
+  { id: '@member:', type: 'general', itemId: 'member', name: 'member' },
+  { id: '@proposal:', type: 'general', itemId: 'proposal', name: 'proposal' },
+]
+
+const mentionItemRenderer = ({ id, itemId, type }: MentionItem) => {
+  const itemElement = document.createElement('div')
+
+  itemElement.classList.add('custom-item')
+  itemElement.id = `mention-list-item-id-${itemId}`
+  itemElement.textContent = `${id}${type === 'general' ? '<name>' : ''}`
+
+  if (type !== 'general') {
+    const typeElement = document.createElement('span')
+
+    typeElement.classList.add('custom-item-type')
+    typeElement.textContent = type
+
+    itemElement.appendChild(typeElement)
+  }
+
+  return itemElement
+}
+
+const sortMentions = (a: MentionItem, b: MentionItem) => {
+  if (a.name > b.name) {
+    return 1
+  }
+  if (b.name > a.name) {
+    return -1
+  }
+  return 0
+}
