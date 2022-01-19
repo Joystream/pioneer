@@ -33,6 +33,7 @@ fragment BountyFields on Bounty {
   judgingPeriod
   stage
   totalFunding
+  discussionThreadId
   contributions {
     amount
     contributor {
@@ -40,6 +41,7 @@ fragment BountyFields on Bounty {
     }
   }
   entries {
+    id
     worker {
       ...MemberFields
     }

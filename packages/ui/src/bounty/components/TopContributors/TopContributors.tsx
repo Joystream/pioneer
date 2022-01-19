@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
@@ -12,6 +13,7 @@ import { MemberInfo } from '@/memberships/components'
 
 export const TopContributors = () => {
   const { contributions, isLoading } = useBountyContributions({ order: { orderKey: 'amount', isDescending: true } })
+  const { t } = useTranslation('bounty')
 
   const tiles = useMemo(() => {
     if (contributions.length) {
@@ -27,22 +29,23 @@ export const TopContributors = () => {
       ))
     }
 
-    if (!contributions.length && isLoading) {
+    if (!contributions && isLoading) {
       return <Loading />
     }
 
-    return (
-      <EmptyStateWrapper>
-        <CommunityTile />
-        <div>
-          <TextExtraHuge bold>No contributors</TextExtraHuge>
-          <TextBig>Lorem ipsum dolor sit amet enim</TextBig>
-        </div>
-      </EmptyStateWrapper>
-    )
+      return (
+        <EmptyStateWrapper>
+          <CommunityTile />
+          <div>
+            <TextExtraHuge bold>{t('topContributors.notFound')}</TextExtraHuge>
+            <TextBig>{t('topContributors.notFoundText')}</TextBig>
+          </div>
+        </EmptyStateWrapper>
+      )
+
   }, [contributions])
 
-  return <HorizontalScroller items={tiles} title="Top contributors past week" />
+  return <HorizontalScroller items={tiles} title={t('topContributors.title')} />
 }
 
 const EmptyStateWrapper = styled.div`

@@ -51,7 +51,6 @@ export const AuthorizeTransactionModal = ({
     transaction,
     signer: selectedAccount?.address || controllerAccount.address,
   })
-
   const accountsWithValidAmount = useMemo(
     () =>
       Object.entries(balances).map(([address, balance]) => {
@@ -76,10 +75,14 @@ export const AuthorizeTransactionModal = ({
   return (
     <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
-        <TextMedium light>{description}</TextMedium>
-        <TextMedium light>
-          {t('modals.authorizeTransaction.feeInfo', { value: paymentInfo?.partialFee.toString() ?? '-' })}
-        </TextMedium>
+        <div>
+          <TextMedium light margin="xs">
+            {description}
+          </TextMedium>
+          <TextMedium light>
+            {t('modals.authorizeTransaction.feeInfo', { value: paymentInfo?.partialFee.toString() ?? '-' })}
+          </TextMedium>
+        </div>
         <InputComponent
           label={t('modals.authorizeTransaction.feeAccount.label')}
           inputSize="l"

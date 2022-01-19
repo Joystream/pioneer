@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { BountyListItem } from '@/bounty/components/BountyListItem/BountyListItem'
-import { BountyStage } from '@/bounty/types/Bounty'
+import { Bounty, BountyStage } from '@/bounty/types/Bounty'
 import { seedMembers } from '@/mocks/data'
 
 import { getMember } from '../../_mocks/members'
@@ -12,7 +12,7 @@ import { setupMockServer } from '../../_mocks/server'
 
 describe('UI: BountyListItem', () => {
   const server = setupMockServer()
-  const props = {
+  const props: Omit<Bounty, 'stage'> = {
     id: '1',
     createdAt: '2021-12-31',
     description: 'Description',
@@ -33,7 +33,8 @@ describe('UI: BountyListItem', () => {
     totalFunding: new BN(2000),
     contributors: [],
     contractType: 'ContractOpen' as const,
-    entries: [{ worker: getMember('alice'), winner: true, hasSubmitted: true, passed: false }],
+    entries: [{ worker: getMember('alice'), winner: true, hasSubmitted: true, passed: false, id: '1' }],
+    discussionThreadId: '1',
   }
 
   beforeAll(() => {
@@ -43,7 +44,7 @@ describe('UI: BountyListItem', () => {
   it('Renders props', () => {
     renderItem('funding')
 
-    checkTypeLayout([props.title, props.creator.handle])
+    checkTypeLayout([props.title, props.creator?.handle as string])
   })
 
   it('Period: Funding', async () => {
@@ -92,7 +93,7 @@ describe('UI: BountyListItem', () => {
   const renderItem = (type: BountyStage) =>
     render(
       <MockApolloProvider>
-        <BountyListItem stage={type} {...props} />
+        <BountyListItem {...props} stage={type} />
       </MockApolloProvider>
     )
 })

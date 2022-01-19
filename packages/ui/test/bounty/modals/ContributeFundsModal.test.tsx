@@ -126,7 +126,7 @@ describe('UI: ContributeFundsModal', () => {
 
       await proceedToTransaction()
 
-      expect(screen.queryByText('modals.bountyCancel.error')).toBeDefined()
+      expect(screen.queryByText('modals.contribute.error')).toBeDefined()
     })
   })
 

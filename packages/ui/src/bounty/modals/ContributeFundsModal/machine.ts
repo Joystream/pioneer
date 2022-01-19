@@ -1,7 +1,6 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { Account } from '@/accounts/types'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -9,12 +8,6 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-
-interface ContributeContext {
-  bountyId?: string
-  stakingAccount?: Account
-  amount?: number
-}
 
 interface TransactionContext {
   transactionEvents?: EventRecord[]
@@ -29,21 +22,19 @@ export enum ContributeFundStates {
   cancel = 'cancel',
 }
 
-export type ContributeFundContext = ContributeContext | TransactionContext
-
 type NextEvent = { type: 'NEXT' }
 
 export type ContributeFundEvents = NextEvent
 
 export type ContributeFundsState =
   | { value: ContributeFundStates.requirementsVerification; context: EmptyObject }
-  | { value: ContributeFundStates.contribute; context: Required<ContributeContext> }
+  | { value: ContributeFundStates.contribute; context: EmptyObject }
   | { value: ContributeFundStates.transaction; context: EmptyObject }
   | { value: ContributeFundStates.success; context: EmptyObject }
   | { value: ContributeFundStates.cancel; context: EmptyObject }
   | { value: ContributeFundStates.error; context: Required<TransactionContext> }
 
-export const contributeFundsMachine = createMachine<ContributeFundContext, ContributeFundEvents, ContributeFundsState>({
+export const contributeFundsMachine = createMachine<TransactionContext, ContributeFundEvents, ContributeFundsState>({
   initial: 'requirementsVerification',
   states: {
     [ContributeFundStates.requirementsVerification]: {

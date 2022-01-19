@@ -6,7 +6,12 @@
     },
     "transactionFee": {
       "label": "Transaction fee:",
-      "tooltipText": "Lorem ipsum"
+      "tooltipText": "Lorem ipsum",
+      "feeSending": "Fee sending from account"
+    },
+    "wait": {
+      "title": "Please wait...",
+      "description": "Checking requirements"
     },
     "transactionCanceled": "Transaction has been cancelled."
   },
@@ -22,5 +27,15 @@
   },
   "created": "Created",
   "council": "Council",
-  "signInInfo": "Sign in with your Polkadot wallet to view your account-specific information."
+  "signInInfo": "Sign in with your Polkadot wallet to view your account-specific information.",
+  "withdrawing": "Withdrawing",
+  "none": "None",
+  "languages": {
+    "title": "Select language",
+    "en": "English",
+    "en-US": "English",
+    "en-UK": "English",
+    "ru": "Russian",
+    "ru-RU": "Russian"
+  }
 }
