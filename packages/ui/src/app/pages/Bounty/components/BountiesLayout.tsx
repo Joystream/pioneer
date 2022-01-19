@@ -25,7 +25,7 @@ export const BountiesLayout = ({
   tilesComponent,
   extraFilter,
   bountyStatus = 'active',
-  noMember = false,
+  noMember,
 }: LayoutProps) => {
   const searchSlot = useRef<HTMLDivElement>(null)
 
