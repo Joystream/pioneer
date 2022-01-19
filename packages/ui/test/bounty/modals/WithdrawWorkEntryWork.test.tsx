@@ -3,7 +3,6 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { BN_ZERO } from '@/common/constants'
@@ -16,8 +15,18 @@ import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { formatTokenValue } from '@/common/model/formatters'
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
@@ -32,8 +41,6 @@ const defaultBalance = {
 }
 
 describe('UI: WithdrawWorkEntryModal', () => {
-  const api = stubApi()
-
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
@@ -44,63 +51,82 @@ describe('UI: WithdrawWorkEntryModal', () => {
     },
   }
 
+  const api = stubApi()
+  const txPath = 'api.tx.bounty.withdrawWorkEntry'
+  let tx = stubTransaction(api, txPath)
+
+  const useMyMemberships: MyMemberships = {
+    active: getMember('alice'),
+    members: [getMember('alice'), getMember('bob')],
+    setActive: (member) => (useMyMemberships.active = member),
+
+    isLoading: false,
+    hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
+  }
+
+  const useAccounts = {
+    isLoading: false,
+    hasAccounts: true,
+    allAccounts: [bob, alice],
+  }
+
   const useBalances = {
     [getMember('bob').controllerAccount]: { ...defaultBalance },
     [getMember('alice').controllerAccount]: defaultBalance,
   }
 
-  let transaction: any
-  let useAccounts: UseAccounts
+  beforeAll(async () => {
+    await cryptoWaitReady()
+  })
 
-  beforeAll(() => {
-    transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntry', 100)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [bob, alice],
-    }
+  beforeEach(async () => {
+    stubDefaultBalances(api)
+    tx = stubTransaction(api, txPath)
   })
 
   it('Renders', async () => {
     renderModal()
 
-    expect(screen.queryByText('modals.withdrawWorkEntry.title')).toBeDefined()
-    expect(screen.queryByText('modals.withdrawWorkEntry.submitButton')).toBeDefined()
+    expect(screen.getByText('modals.withdrawWorkEntry.title')).not.toBeNull()
+    expect(await getButton('modals.withdrawWorkEntry.submitButton')).not.toBeNull()
   })
 
   it('Displays correct bounty', () => {
     renderModal()
 
-    expect(screen.queryByText(useModal.modalData.bounty.title)).toBeDefined()
+    expect(screen.queryByText(useModal.modalData.bounty.title)).not.toBeNull()
   })
 
   it('Displays correct member', () => {
     renderModal()
 
-    expect(screen.queryByText(useModal.modalData.entry.worker.handle)).toBeDefined()
+    expect(screen.queryByText(useModal.modalData.entry.worker.handle)).not.toBeNull()
   })
 
   it('Displays correct works', () => {
     renderModal()
 
-    // TODO: better type for work
-    useModal.modalData.entry.works.map((work: any) => expect(screen.queryByText(work.title)).toBeDefined())
+    useModal.modalData.entry.works.map((work: { title: string }) =>
+      expect(screen.queryByText(work.title)).not.toBeNull()
+    )
   })
 
   it('Displays correct stake amount', () => {
     renderModal()
 
-    expect(screen.queryByText(useModal.modalData.entry.stake)).toBeDefined()
+    expect(screen.queryByText(formatTokenValue(useModal.modalData.entry.stake))).not.toBeNull()
   })
 
   describe('Transaction result', () => {
     beforeAll(() => {
-      transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntry', 20)
+      tx = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntry', 20)
     })
 
-    it.only('Success', async () => {
-      stubTransactionSuccess(transaction, 'bounty', 'WorkEntryWithdrawn')
+    it('Success', async () => {
+      stubTransactionSuccess(tx, 'bounty', 'WorkEntryWithdrawn')
 
       await renderModalAndProceedToTransaction()
 
@@ -108,7 +134,7 @@ describe('UI: WithdrawWorkEntryModal', () => {
     })
 
     it('Error', async () => {
-      stubTransactionFailure(transaction)
+      stubTransactionFailure(tx)
 
       await renderModalAndProceedToTransaction()
 
@@ -119,29 +145,33 @@ describe('UI: WithdrawWorkEntryModal', () => {
   const renderModalAndProceedToAuthorization = async () => {
     renderModal()
 
-    const button = await getButton('Withdraw')
+    const button = await getButton('modals.withdrawWorkEntry.submitButton')
     fireEvent.click(button)
   }
 
   const renderModalAndProceedToTransaction = async () => {
     await renderModalAndProceedToAuthorization()
 
-    const button = await getButton('common:authorizeTransaction')
+    const button = await getButton('modals.withdrawWorkEntry.submitButton')
     fireEvent.click(button)
   }
 
   const renderModal = () => {
     render(
       <ModalContext.Provider value={useModal}>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
             <AccountsContext.Provider value={useAccounts}>
-              <BalancesContext.Provider value={useBalances}>
-                <WithdrawWorkEntryModal />
-              </BalancesContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <ApiContext.Provider value={api}>
+                  <BalancesContext.Provider value={useBalances}>
+                    <WithdrawWorkEntryModal />
+                  </BalancesContext.Provider>
+                </ApiContext.Provider>
+              </MembershipContext.Provider>
             </AccountsContext.Provider>
-          </ApiContext.Provider>
-        </MockKeyringProvider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
       </ModalContext.Provider>
     )
   }
