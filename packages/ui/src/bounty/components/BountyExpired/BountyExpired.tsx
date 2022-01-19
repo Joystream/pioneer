@@ -7,6 +7,7 @@ import { ExpiredTiles } from '@/bounty/components/BountyExpired/ExpiredTiles'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
+import { useBountyPreviewTabViaUrlParameter } from '@/bounty/hooks/useBountyPreviewTabViaUrlParameter'
 import { Bounty } from '@/bounty/types/Bounty'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -21,6 +22,11 @@ interface Props {
 export const BountyExpired = ({ bounty }: Props) => {
   const { t } = useTranslation('common')
   const [active, setActive] = useState<ExpiredTabsState>('Bounty')
+  const [wasSearched, setWasSearched] = useState<boolean>(false)
+
+  useBountyPreviewTabViaUrlParameter((tab) => {
+    setActive(tab)
+  })
 
   return (
     <MainPanel>
@@ -28,7 +34,9 @@ export const BountyExpired = ({ bounty }: Props) => {
       <ExpiredTabs active={active} setActive={setActive} />
       <ContentWithSidePanel>
         {active === 'Bounty' && <BountyTab bounty={bounty} />}
-        {active === 'Works' && <WorkTab bountyId={bounty.id} />}
+        {active === 'Works' && (
+          <WorkTab bountyId={bounty.id} wasSearched={wasSearched} setWasSearched={setWasSearched} />
+        )}
         <RowGapBlock gap={4}>
           <BountySidebar
             contributors={bounty.contributors}
