@@ -154,6 +154,8 @@
         "label": "Member ID",
         "tooltipText": "Lorem ipsum"
       },
+      "workInput": "Work Title {{value}}",
+      "stakeInput": "Amount of stake you will recover",
       "authorizeDescription": "You are going to withdraw your work entry",
       "submitButton": "Withdraw",
       "success": "Your work entry has been successfully withdrawn.",

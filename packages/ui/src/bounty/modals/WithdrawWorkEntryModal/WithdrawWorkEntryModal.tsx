@@ -13,9 +13,10 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, TextBig } from '@/common/components/typography'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TextMedium, TextBig, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -115,9 +116,26 @@ export const WithdrawWorkEntryModal = () => {
             tooltipText={t('modals.withdrawWorkEntry.memberInput.tooltipText')}
             member={entry.worker}
           />
+          {entry.works.map((work, index) => (
+            <Container key={work.id} label={t('modals.withdrawWorkEntry.workInput', { value: index + 1 })} disabled>
+              <TextMedium value bold>
+                {work.title}
+              </TextMedium>
+            </Container>
+          ))}
+          <Container disabled label={t('modals.withdrawWorkEntry.stakeInput')} inputSize="l">
+            <TokenValue value={entry.stake} size="s" />
+          </Container>
         </BodyContainer>
       </ModalBody>
       <ModalFooter>
+        <TransactionInfoContainer>
+          <TransactionInfo
+            title={t('modals.common.transactionFee.title')}
+            value={feeInfo.transactionFee}
+            tooltipText={t('modals.common.transactionFee.tooltip')}
+          />
+        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={() => send('NEXT')}>
           {t('modals.withdrawWorkEntry.submitButton')}
         </ButtonPrimary>
