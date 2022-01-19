@@ -22,7 +22,8 @@ const Template: Story<BountyWorkListItemProps> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  entrant: members[0] as unknown as Member,
+  id: '',
+  entrant: (members[0] as unknown) as Member,
   inBlock: randomBlock(),
   title: 'Random title',
   withdrawn: false,
