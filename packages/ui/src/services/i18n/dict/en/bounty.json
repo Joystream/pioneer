@@ -139,6 +139,26 @@
       "success": "Your contribution has been successfully withdrawn.",
       "successButton": "Back to bounty",
       "error": "There was a problem while withdrawing your contribution."
+    },
+    "withdrawWorkEntry": {
+      "title": "Withdraw work",
+      "warningBox": {
+        "question": "Are you sure?",
+        "text": "All of your submitted works will be withdrawed and you won't be participating in the bounty."
+      },
+      "bountyInput": {
+        "label": "Bounty ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "memberInput": {
+        "label": "Member ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "authorizeDescription": "You are going to withdraw your work",
+      "submitButton": "Withdraw",
+      "success": "Your work entry has been successfully withdrawn.",
+      "successButton": "Back to bounty",
+      "error": "There was a problem while withdrawing your work entry."
     }
   },
   "tiles": {
