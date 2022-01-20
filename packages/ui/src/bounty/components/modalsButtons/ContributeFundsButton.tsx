@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
+import { Bounty } from '@/bounty/types/Bounty'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { useModal } from '@/common/hooks/useModal'
-import { useTranslation } from 'react-i18next'
-import { Bounty } from '@/bounty/types/Bounty'
 
 interface Props {
   bounty: Bounty
