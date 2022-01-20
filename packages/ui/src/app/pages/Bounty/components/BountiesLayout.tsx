@@ -21,12 +21,7 @@ export interface LayoutProps {
   noMember?: boolean
 }
 
-export const BountiesLayout = ({
-  tilesComponent,
-  extraFilter,
-  bountyStatus = 'active',
-  noMember,
-}: LayoutProps) => {
+export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'active', noMember }: LayoutProps) => {
   const searchSlot = useRef<HTMLDivElement>(null)
 
   const { t } = useTranslation('bounty')
