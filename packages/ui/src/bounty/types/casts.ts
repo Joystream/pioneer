@@ -53,6 +53,7 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniatu
       hasSubmitted: entry.workSubmitted,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
+      rejected: entry.status.__typename === 'BountyEntryStatusRejected',
       worksIds: entry.works?.map((work) => work.id) ?? [],
     }
   })
