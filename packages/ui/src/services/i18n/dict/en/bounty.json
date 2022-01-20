@@ -244,6 +244,8 @@
     "announceEntry": "Announce Entry",
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
+    "cancelBounty": "Cancel Bounty",
+    "contributeFunds": "Contribute",
     "createBounty": "Create Bounty"
   },
   "information": {

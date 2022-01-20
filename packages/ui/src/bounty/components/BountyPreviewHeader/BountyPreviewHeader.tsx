@@ -10,6 +10,7 @@ import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
+import { ContributeFundsButton } from '../modalsButtons/ContributeFundsButton'
 
 interface Props {
   bounty?: Bounty
@@ -80,7 +81,7 @@ const FundingStageButtons = ({ bounty, t }: BountyHeaderButtonsProps) => {
           </div>
         </>
       )}
-      <ButtonPrimary size="large">{t('common:buttons.contribute')}</ButtonPrimary>
+      <ContributeFundsButton bounty={bounty} />
     </>
   )
 }
