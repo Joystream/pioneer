@@ -13,8 +13,15 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
-import { Modal, ModalHeader, ModalBody, ModalFooter, TransactionInfoContainer, ScrolledModalBody, ScrolledModalContainer } from '@/common/components/Modal'
-import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
+import {
+  Modal,
+  ModalHeader,
+  ModalFooter,
+  TransactionInfoContainer,
+  ScrolledModalBody,
+  ScrolledModalContainer,
+} from '@/common/components/Modal'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TextBig, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -143,12 +150,6 @@ export const WithdrawWorkEntryModal = () => {
     </Modal>
   )
 }
-
-const BodyContainer = styled(RowGapBlock)`
-  label {
-    color: ${Colors.Black[900]};
-  }
-`
 
 const WarningWrapper = styled.div`
   background-color: ${Colors.Warning[50]};
