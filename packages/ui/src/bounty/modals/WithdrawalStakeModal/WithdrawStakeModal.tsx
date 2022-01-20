@@ -34,23 +34,27 @@ export const WithdrawStakeModal = () => {
     }
   }, [JSON.stringify(activeMember), connectionState])
 
-  const entry = useMemo(
-    () => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id),
-    [activeMember?.id]
-  )
+  const entry = useMemo(() => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    activeMember?.id,
+  ])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
     if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
       if (transaction && feeInfo && activeMember) {
-        feeInfo.canAfford && send('NEXT')
-        !feeInfo.canAfford && send('ERROR')
+        feeInfo.canAfford ? send('NEXT') : send('ERROR')
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford])
   if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
-    return <WaitModal title="Please wait..." description={t('common:modals.wait.description')} onClose={hideModal} />
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+      />
+    )
   }
 
   if (!api || !activeMember || !transaction || !feeInfo || !entry) {
