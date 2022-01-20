@@ -74,8 +74,8 @@ const Template: Story = (args) => {
   return (
     <MemoryRouter>
       <ApiContext.Provider value={api}>
-        <AccountsContext.Provider value={accounts}>
-          <MembershipContext.Provider value={membership}>
+        <MembershipContext.Provider value={membership}>
+          <AccountsContext.Provider value={accounts}>
             <BalancesContext.Provider value={balance}>
               <ModalContext.Provider
                 value={{
@@ -90,8 +90,8 @@ const Template: Story = (args) => {
                 <WithdrawContributionModal {...args} />
               </ModalContext.Provider>
             </BalancesContext.Provider>
-          </MembershipContext.Provider>
-        </AccountsContext.Provider>
+          </AccountsContext.Provider>
+        </MembershipContext.Provider>
       </ApiContext.Provider>
     </MemoryRouter>
   )

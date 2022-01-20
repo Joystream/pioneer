@@ -100,6 +100,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   description: fields.description,
   imageUri: fields.bannerImageUri,
   createdAt: fields.createdAt,
+  discussionThreadId: fields.discussionThreadId,
   cherry: new BN(fields.cherry),
   entrantStake: new BN(fields.entrantStake),
   // undefined creator/oracle means that it's council, not member
@@ -117,6 +118,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({
+  id: fields.id,
   amount: new BN(fields.amount),
   contributor: fields.contributor ? asMember(fields.contributor) : undefined,
 })

@@ -1,18 +1,33 @@
-import { useGetContributionsQuery } from '@/bounty/queries'
-import { BountyContributionWhereInput } from '@/common/api/queries'
+import { useGetBountyContributorsQuery } from '@/bounty/queries'
+import { BountyContributionsFiltersState } from '@/bounty/types/Bounty'
+import { asContribution } from '@/bounty/types/casts'
+import { BountyContributionOrderByInput } from '@/common/api/queries'
+import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 
-import { asContribution } from '../types/casts'
-
-interface useBountyContributionsProps {
-  createdAfter: Date
+interface Props {
+  order: SortOrder<BountyContributionOrderByInput>
   limit?: number
+  filters?: BountyContributionsFiltersState
 }
 
-export const useBountyContributions = ({ createdAfter, limit = 10 }: useBountyContributionsProps) => {
-  const where: BountyContributionWhereInput = { createdAt_gt: createdAfter.toISOString() }
-  const variables = { where, limit }
+export const useBountyContributions = ({ order, limit, filters }: Props) => {
+  const orderBy = toQueryOrderByInput<BountyContributionOrderByInput>(order)
 
-  const { loading, data } = useGetContributionsQuery({ variables })
+  const { data, loading } = useGetBountyContributorsQuery({
+    variables: {
+      where: {
+        createdAt_gt: filters?.createdAfter?.toISOString(),
+        contributor: {
+          id_eq: filters?.contributorId,
+        },
+        bounty: {
+          id_eq: filters?.bountyId,
+        },
+      },
+      order: orderBy,
+      limit,
+    },
+  })
 
   return {
     isLoading: loading,
