@@ -1,11 +1,10 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
+import { CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
+import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { Block } from '@/common/types'
 import { MemberInfo } from '@/memberships/components'
@@ -14,36 +13,20 @@ import { Member } from '@/memberships/types'
 export interface BountySlashedListItemProps {
   entrant: Member
   inBlock: Block
-  rationale: string
   link: string
-  slashAmount: BN
 }
 
-export const BountySlashedListItem = ({
-  link,
-  entrant,
-  inBlock,
-  rationale,
-  slashAmount,
-}: BountySlashedListItemProps) => {
+export const BountySlashedListItem = ({ link, entrant, inBlock }: BountySlashedListItemProps) => {
   return (
     <Wrapper>
       <Header>
         <MemberInfo size="s" member={entrant} />
         <HeaderInfo>
-          <SlashInfo>
-            <TextMedium>Slashed</TextMedium>
-            <TokenValue value={slashAmount} />
-          </SlashInfo>
+          <TextMedium bold>Slashed</TextMedium>
           <BlockTime block={inBlock} layout="column" />
+          <CopyButtonTemplate textToCopy={link} square size="medium" icon={<LinkIcon />} title="Copy link" />
         </HeaderInfo>
       </Header>
-      <Body>
-        <TextSmall inter>{rationale}</TextSmall>
-        <StyledButton to={link} square size="medium">
-          <LinkIcon />
-        </StyledButton>
-      </Body>
     </Wrapper>
   )
 }
@@ -55,6 +38,7 @@ const Wrapper = styled.div`
   max-height: 250px;
   row-gap: 24px;
   margin: 12px 0;
+  padding: 12px 0;
 `
 
 const Header = styled.div`
@@ -66,29 +50,8 @@ const Header = styled.div`
 const HeaderInfo = styled.div`
   display: flex;
   column-gap: 15px;
-`
 
-const SlashInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
-
-  ${TextMedium} {
+  > *:first-child {
     color: ${Colors.Negative[500]};
   }
-`
-
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 16px;
-  margin-bottom: 8px;
-
-  ${TextSmall} {
-    color: ${Colors.Black[600]};
-  }
-`
-
-const StyledButton = styled(LinkButtonGhost)`
-  align-self: flex-end;
 `
