@@ -22,7 +22,7 @@ import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, InputText } from '@/common/components/forms'
-import { Modal, ModalBody, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader, Row, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
@@ -116,63 +116,65 @@ export const SubmitWorkModal = () => {
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title={t('modals.submitWork.title')} onClick={hideModal} />
-      <ModalBody>
-        {state.matches(SubmitWorkStates.generalParameters) && (
-          <RowGapBlock gap={24}>
-            <Row>
-              <RowGapBlock gap={8}>
-                <h4>{t('modals.submitWork.subtitle')}</h4>
-              </RowGapBlock>
-            </Row>
-            <Container
-              disabled
-              label="Bounty ID"
-              tooltipText={t('modals.submitWork.submitWorkInput.bountyId')}
-              inputSize="l"
-            >
-              <TextBig value bold>
-                {modalData.bounty.id}
-              </TextBig>
-            </Container>
-            <Row>
-              <RowGapBlock gap={20}>
-                <SelectedMember
-                  disabled
-                  member={activeMember}
-                  label={t('modals.submitWork.submitWorkInput.memberId')}
-                />
-                <InputComponent
-                  id="field-work-title"
-                  required
-                  inputSize="m"
-                  label={t('modals.submitWork.submitWorkInput.workTitle')}
-                  message={workTitleValidation}
-                  validation={state.context.workTitle.length > 70 ? 'invalid' : undefined}
-                >
-                  <InputText
+      <ScrolledModalBody>
+        <ModalBody>
+          {state.matches(SubmitWorkStates.generalParameters) && (
+            <RowGapBlock gap={24}>
+              <Row>
+                <RowGapBlock gap={8}>
+                  <h4>{t('modals.submitWork.subtitle')}</h4>
+                </RowGapBlock>
+              </Row>
+              <Container
+                disabled
+                label="Bounty ID"
+                tooltipText={t('modals.submitWork.submitWorkInput.bountyId')}
+                inputSize="l"
+              >
+                <TextBig value bold>
+                  {modalData.bounty.id}
+                </TextBig>
+              </Container>
+              <Row>
+                <RowGapBlock gap={20}>
+                  <SelectedMember
+                    disabled
+                    member={activeMember}
+                    label={t('modals.submitWork.submitWorkInput.memberId')}
+                  />
+                  <InputComponent
                     id="field-work-title"
-                    value={state.context.workTitle}
-                    onChange={(e) => send('SET_WORK_TITLE', { workTitle: e.target.value })}
-                    placeholder={t('modals.submitWork.submitWorkInput.workTitlePlaceholder')}
-                  />
-                </InputComponent>
-                <InputComponent
-                  id="field-description"
-                  label={t('modals.submitWork.submitWorkInput.entryDescription')}
-                  required
-                >
-                  <CKEditor
+                    required
+                    inputSize="m"
+                    label={t('modals.submitWork.submitWorkInput.workTitle')}
+                    message={workTitleValidation}
+                    validation={state.context.workTitle.length > 70 ? 'invalid' : undefined}
+                  >
+                    <InputText
+                      id="field-work-title"
+                      value={state.context.workTitle}
+                      onChange={(e) => send('SET_WORK_TITLE', { workTitle: e.target.value })}
+                      placeholder={t('modals.submitWork.submitWorkInput.workTitlePlaceholder')}
+                    />
+                  </InputComponent>
+                  <InputComponent
                     id="field-description"
-                    minRows={3}
-                    onChange={(event, editor) => send('SET_WORK_DESCRIPTION', { workDescription: editor.getData() })}
-                    onReady={(editor) => editor.setData(state.context.workDescription || '')}
-                  />
-                </InputComponent>
-              </RowGapBlock>
-            </Row>
-          </RowGapBlock>
-        )}
-      </ModalBody>
+                    label={t('modals.submitWork.submitWorkInput.entryDescription')}
+                    required
+                  >
+                    <CKEditor
+                      id="field-description"
+                      minRows={3}
+                      onChange={(event, editor) => send('SET_WORK_DESCRIPTION', { workDescription: editor.getData() })}
+                      onReady={(editor) => editor.setData(state.context.workDescription || '')}
+                    />
+                  </InputComponent>
+                </RowGapBlock>
+              </Row>
+            </RowGapBlock>
+          )}
+        </ModalBody>
+      </ScrolledModalBody>
       <ModalFooter>
         <ButtonsGroup align="right">
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
