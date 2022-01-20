@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useMemo, memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
@@ -23,8 +24,12 @@ interface Props {
 
 export const BountyDetails = memo(
   ({ type, oracle, cherry, fundingType, totalFunding, entrantStake, entries }: Props) => {
+    const { t } = useTranslation('bounty')
+
     const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries])
+
     const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [entries])
+
     const content = useMemo(() => {
       switch (type) {
         case 'funding': {
@@ -36,8 +41,9 @@ export const BountyDetails = memo(
         case 'judgement': {
           return <JudgmentDetails entrants={entrants} />
         }
-        case 'withdrawal' || 'expired': {
-          return <WithdrawalDetails winners={winners} entrants={entrants} />
+        case 'withdrawal':
+        case 'expired': {
+          return <WithdrawalDetails unwithdrawnFunds={totalFunding} winners={winners} entrants={entrants} />
         }
         default:
           return null
@@ -47,8 +53,12 @@ export const BountyDetails = memo(
     return (
       <Wrapper>
         {content}
-        <DetailBox title="Oracle">
-          {oracle && <MemberInfo avatarSmall={true} size="s" memberSize="s" hideGroup onlyTop member={oracle} />}
+        <DetailBox title={t('tiles.oracle.title')}>
+          {oracle ? (
+            <MemberInfo avatarSmall={true} size="s" memberSize="s" hideGroup onlyTop member={oracle} />
+          ) : (
+            t('council')
+          )}
         </DetailBox>
       </Wrapper>
     )
