@@ -86,7 +86,7 @@ describe('UI: WithdrawStakeModal', () => {
       stubTransaction(api, 'api.tx.bounty.withdrawFunding', 99999)
       renderModal()
 
-      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 
