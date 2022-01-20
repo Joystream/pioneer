@@ -17,5 +17,9 @@
     "notifyAboutChanges": "Notify me about changes"
   },
   "created": "Created",
-  "council": "Council"
+  "council": "Council",
+  "forms": {
+    "clearAllFilters": "Clear all filters",
+    "noResults": "No results found"
+  }
 }

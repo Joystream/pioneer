@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
@@ -45,17 +45,6 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
     }
   }, [workId, works.length])
 
-  const workOnClick = useCallback(
-    (workId: string) => {
-      navigator.clipboard.writeText(
-        `${window.location.origin}/#${generatePath(BountyRoutes.bounty, {
-          id: bountyId,
-        })}?tab=Works&work=work${workId}`
-      )
-    },
-    [bountyId]
-  )
-
   const worksComponents = useMemo(() => {
     if (works.length) {
       return (
@@ -70,7 +59,9 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
                 inBlock={work.inBlock}
                 title={work.title}
                 description={work.description}
-                onClick={() => workOnClick(work.id)}
+                link={`${window.location.origin}/#${generatePath(BountyRoutes.bounty, {
+                  id: bountyId,
+                })}?tab=Works&work=work${work.id}`}
               />
             ))}
           </StyledList>
@@ -79,7 +70,7 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
       )
     }
 
-    return <NotFoundText>{entrantSearch ? 'Nothing found' : t('workTab.noWorks')}</NotFoundText>
+    return <NotFoundText>{entrantSearch ? t('common:forms.noResults') : t('workTab.noWorks')}</NotFoundText>
   }, [works, t])
 
   return (
@@ -89,7 +80,7 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
           {entrantSearch && (
             <ResetFilter light onClick={() => setEntrantSearch('')}>
               <CrossIcon />
-              Clear all filters
+              {t('common:forms.clearAllFilters')}
             </ResetFilter>
           )}
           <div>

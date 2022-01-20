@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const BountyExpired = ({ bounty }: Props) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation()
   const [active, setActive] = useState<ExpiredTabsState>('Bounty')
   const [wasSearched, setWasSearched] = useState<boolean>(false)
 

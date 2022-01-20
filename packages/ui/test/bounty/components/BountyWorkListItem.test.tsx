@@ -9,14 +9,15 @@ import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 const randomizedBlock = randomBlock()
 
-describe('UI: BountyListItem', () => {
+describe('UI: BountyWorkListItem', () => {
   const props: BountyWorkListItemProps = {
     id: 'asd',
-    entrant: (members[0] as unknown) as Member,
+    entrant: members[0] as unknown as Member,
     description: 'Description',
     withdrawn: false,
     title: 'Title',
     inBlock: randomizedBlock,
+    link: 'url',
   }
 
   it('Renders props', async () => {

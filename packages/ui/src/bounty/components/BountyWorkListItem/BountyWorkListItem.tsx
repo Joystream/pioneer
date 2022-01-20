@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost } from '@/common/components/buttons'
+import { CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
 import { TextBig, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -17,13 +17,13 @@ export interface BountyWorkListItemProps {
   inBlock: Block
   title: string
   description: string
-  onClick?: () => void
+  link: string
   withdrawn?: boolean
   searched?: boolean
 }
 
 export const BountyWorkListItem = ({
-  onClick,
+  link,
   entrant,
   inBlock,
   title,
@@ -46,11 +46,7 @@ export const BountyWorkListItem = ({
           <DescriptionContainer>
             <TextSmall inter>{description}</TextSmall>
           </DescriptionContainer>
-          {onClick && (
-            <StyledButton onClick={onClick} square size="medium">
-              <LinkIcon />
-            </StyledButton>
-          )}
+          <CopyButtonTemplate textToCopy={link} square size="medium" icon={<LinkIcon />} title="Copy link" />
         </Body>
       )}
     </Wrapper>
@@ -95,18 +91,17 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 16px;
-  margin-bottom: 8px;
 
   ${TextSmall} {
     color: ${Colors.Black[600]};
+  }
+
+  > button {
+    align-self: end;
   }
 `
 
 const DescriptionContainer = styled.div`
   overflow-y: auto;
   max-height: 82px;
-`
-
-const StyledButton = styled(ButtonGhost)`
-  align-self: flex-end;
 `
