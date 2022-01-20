@@ -14,7 +14,7 @@ import rawMembers from '@/mocks/data/raw/members.json'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 
-const activeMember = { ...rawMembers[0], id: '0' } as unknown as Member
+const activeMember = ({ ...rawMembers[0], id: '0' } as unknown) as Member
 
 describe('UI: BountyPreviewHeader', () => {
   const bounty: Bounty = {
@@ -27,12 +27,12 @@ describe('UI: BountyPreviewHeader', () => {
       '# alias sunt\n\nAdipisci molestiae quibusdam voluptatum mollitia. Ullam sit nostrum saepe nemo earum recusandae sed ut. Eveniet nihil soluta aut maiores maxime. Cupiditate nostrum quia illum nesciunt assumenda nulla. Qui repellat sit animi veritatis nisi esse. Voluptate laborum sit qui.\n\n## consequatur illum\n\nSed ut autem nam. Aliquam at et eligendi. Eius quia sed delectus.\n \rProvident consequatur earum adipisci. Quo qui eum qui. Earum aliquam id.',
     cherry: new BN(10),
     entrantStake: new BN(10),
-    creator: {
+    creator: ({
       id: '0',
-    } as unknown as Member,
-    oracle: {
+    } as unknown) as Member,
+    oracle: ({
       id: '1',
-    } as unknown as Member,
+    } as unknown) as Member,
     fundingType: {
       minAmount: new BN(10),
       maxAmount: new BN(10),
@@ -180,7 +180,7 @@ describe('UI: BountyPreviewHeader', () => {
         renderHeader()
 
         expect(await getButton('buttons.submitWork')).toBeDefined()
-        expect(await getButton('common:buttons.withdraw')).toBeDefined()
+        expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
       })
     })
   })
@@ -191,9 +191,9 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('As oracle', async () => {
-      bounty.oracle = {
+      bounty.oracle = ({
         id: '0',
-      } as unknown as Member
+      } as unknown) as Member
 
       renderHeader()
 
@@ -327,9 +327,9 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('Creator', async () => {
-      bounty.creator = {
+      bounty.creator = ({
         id: '0',
-      } as unknown as Member
+      } as unknown) as Member
 
       renderHeader()
 
