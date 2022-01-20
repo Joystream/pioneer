@@ -7,7 +7,7 @@ import { FundingDetails } from '@/bounty/components/BountyListItem/components/Fu
 import { JudgmentDetails } from '@/bounty/components/BountyListItem/components/JudgmentDetails'
 import { WithdrawalDetails } from '@/bounty/components/BountyListItem/components/WithdrawalDetails'
 import { WorkingDetails } from '@/bounty/components/BountyListItem/components/WorkingDetails'
-import { BountyPeriod, EntryMiniature, FundingType } from '@/bounty/types/Bounty'
+import { BountyPeriod, WorkEntry, FundingType } from '@/bounty/types/Bounty'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -18,7 +18,7 @@ interface Props {
   fundingType: FundingType
   totalFunding: BN
   entrantStake: BN
-  entries?: EntryMiniature[]
+  entries?: WorkEntry[]
 }
 
 export const BountyDetails = memo(

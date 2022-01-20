@@ -84,17 +84,18 @@ export interface WorkEntry {
   id: string
   bountyId: string
   worker: Member
+  hasSubmitted: boolean
+  winner: boolean
   status: BountyEntryStatus
-  works: BountyWork[]
+  works?: WorkInfo[]
   stake: BN
+  passed: boolean
 }
 
-export interface EntryMiniature {
-  winner: boolean
-  hasSubmitted: boolean
-  passed: boolean
-  worker: Member
+export interface WorkInfo {
   id: string
+  title: string
+  description: string
 }
 
 export interface WinnerEntry {
@@ -131,7 +132,7 @@ export interface Bounty {
   judgingPeriod: BN
   stage: BountyStage
   totalFunding: BN
-  entries?: EntryMiniature[]
+  entries?: WorkEntry[]
   inBlock: number
   contractType: ContractType
   contributors: Contributor[]

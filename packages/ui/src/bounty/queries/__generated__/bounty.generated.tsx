@@ -126,7 +126,9 @@ export type BountyFieldsFragment = {
     | Array<{
         __typename: 'BountyEntry'
         id: string
+        bountyId: string
         workSubmitted: boolean
+        stake: any
         worker: {
           __typename: 'Membership'
           id: string
@@ -159,6 +161,10 @@ export type BountyFieldsFragment = {
           | { __typename: 'BountyEntryStatusWinner'; reward: number }
           | { __typename: 'BountyEntryStatusWithdrawn' }
           | { __typename: 'BountyEntryStatusWorking' }
+        works?:
+          | Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }>
+          | null
+          | undefined
       }>
     | null
     | undefined
@@ -377,7 +383,9 @@ export type GetBountiesQuery = {
       | Array<{
           __typename: 'BountyEntry'
           id: string
+          bountyId: string
           workSubmitted: boolean
+          stake: any
           worker: {
             __typename: 'Membership'
             id: string
@@ -414,6 +422,10 @@ export type GetBountiesQuery = {
             | { __typename: 'BountyEntryStatusWinner'; reward: number }
             | { __typename: 'BountyEntryStatusWithdrawn' }
             | { __typename: 'BountyEntryStatusWorking' }
+          works?:
+            | Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }>
+            | null
+            | undefined
         }>
       | null
       | undefined
@@ -572,7 +584,9 @@ export type GetBountyQuery = {
           | Array<{
               __typename: 'BountyEntry'
               id: string
+              bountyId: string
               workSubmitted: boolean
+              stake: any
               worker: {
                 __typename: 'Membership'
                 id: string
@@ -609,6 +623,10 @@ export type GetBountyQuery = {
                 | { __typename: 'BountyEntryStatusWinner'; reward: number }
                 | { __typename: 'BountyEntryStatusWithdrawn' }
                 | { __typename: 'BountyEntryStatusWorking' }
+              works?:
+                | Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }>
+                | null
+                | undefined
             }>
           | null
           | undefined
@@ -798,6 +816,7 @@ export const BountyFieldsFragmentDoc = gql`
     }
     entries {
       id
+      bountyId
       worker {
         ...MemberFields
       }
@@ -807,6 +826,12 @@ export const BountyFieldsFragmentDoc = gql`
           reward
         }
       }
+      works {
+        id
+        title
+        description
+      }
+      stake
     }
     createdInEvent {
       inBlock

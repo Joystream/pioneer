@@ -10,7 +10,7 @@ import {
   Bounty,
   BountyPeriod,
   BountyStage,
-  EntryMiniature,
+  WorkEntry,
   FundingType,
   ContractType,
   Contributor,
@@ -47,13 +47,17 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
   return lowerFirstLetter(`${stageField}`) as BountyStage
 }
 
-const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
+const asEntries = (entriesFields: BountyFieldsFragment['entries']): WorkEntry[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
       id: entry.id,
+      bountyId: entry.bountyId,
       worker: asMember(entry.worker),
       hasSubmitted: entry.workSubmitted,
+      status: asBountyEntryStatus(entry.status),
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
+      works: entry.works?.map((work) => ({ id: work.id, title: work.title, description: work.description})),
+      stake: entry.stake,
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
     }
   })
