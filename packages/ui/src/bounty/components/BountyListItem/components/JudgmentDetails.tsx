@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { MemberStack } from '@/memberships/components/MemberStack'
@@ -10,16 +11,18 @@ interface Props {
 }
 
 export const JudgmentDetails = memo(({ entrants }: Props) => {
+  const { t } = useTranslation('bounty')
+
   return (
     <>
       {entrants?.length && (
-        <DetailBox title="Entries">
+        <DetailBox title={t('entries')}>
           <MemberStack members={membersMock} max={5} />
         </DetailBox>
       )}
       {/* TODO: handle works counting */}
-      <DetailBox title="Submitted work">2</DetailBox>
-      <DetailBox title="Withdrawn work">0</DetailBox>
+      <DetailBox title={t('submittedWorks')}>2</DetailBox>
+      <DetailBox title={t('withdrawals')}>0</DetailBox>
     </>
   )
 })
