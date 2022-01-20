@@ -55,7 +55,7 @@ export const withdrawalStakeMachine = createMachine<
     [WithdrawalStakeStates.requirementsVerification]: {
       on: {
         NEXT: WithdrawalStakeStates.transaction,
-        ERROR: WithdrawalStakeStates.requirementsVerification,
+        ERROR: WithdrawalStakeStates.requirementsFailed,
       },
     },
     [WithdrawalStakeStates.transaction]: {

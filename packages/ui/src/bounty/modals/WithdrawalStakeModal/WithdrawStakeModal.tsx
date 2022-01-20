@@ -48,7 +48,6 @@ export const WithdrawStakeModal = () => {
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford])
-  console.debug('f', feeInfo?.canAfford)
   if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
     return <WaitModal title="Please wait..." description={t('common:modals.wait.description')} onClose={hideModal} />
   }
@@ -89,8 +88,7 @@ export const WithdrawStakeModal = () => {
       </FailureModal>
     )
   }
-  if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
-    console.debug('dd')
+  if (state.matches(WithdrawalStakeStates.requirementsFailed)) {
     return (
       <InsufficientFundsModal
         onClose={hideModal}
