@@ -49,10 +49,24 @@ function MentionToLink(editor) {
       modelAttributeValue &&
       writer.createAttributeElement('a', {
         class: 'mention',
-        href: `#mention?member-id=${modelAttributeValue.memberId}`,
+        href: prepareLink(modelAttributeValue),
       }),
     converterPriority: 'high',
   })
+}
+
+function prepareLink({type, itemId}) {
+  switch (type) {
+    case 'member': {
+      return `#mention?member-id=${itemId}`
+    }
+    case 'proposal': {
+      return `#mention?proposal-id=${itemId}`
+    }
+    default: {
+      return ''
+    }
+  }
 }
 
 export default {

@@ -1,7 +1,7 @@
+import {action} from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { info } from '@/common/logger'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { InputComponent } from '../forms'
@@ -36,7 +36,7 @@ export const InlineEditor = Template.bind({})
 ClassicEditor.args = {
   minRows: 8,
   maxRows: 20,
-  onChange: (event, editor) => info(editor.getData()),
+  onChange: action('onChange'),
 }
 
 InlineEditor.args = {
