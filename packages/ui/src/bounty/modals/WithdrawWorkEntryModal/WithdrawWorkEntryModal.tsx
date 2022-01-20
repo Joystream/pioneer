@@ -13,7 +13,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
-import { Modal, ModalHeader, ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalBody, ModalFooter, TransactionInfoContainer, ScrolledModalBody, ScrolledModalContainer } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TextBig, TokenValue } from '@/common/components/typography'
@@ -86,10 +86,10 @@ export const WithdrawWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title={t('modals.withdrawWorkEntry.title')} onClick={hideModal} />
-      <ModalBody>
-        <BodyContainer gap={30}>
+      <ScrolledModalBody>
+        <ScrolledModalContainer>
           <WarningWrapper>
             <ColumnGapBlock gap={4}>
               <TextMedium bold value>
@@ -126,8 +126,8 @@ export const WithdrawWorkEntryModal = () => {
           <Container disabled label={t('modals.withdrawWorkEntry.stakeInput')} inputSize="l">
             <TokenValue value={entry.stake} size="s" />
           </Container>
-        </BodyContainer>
-      </ModalBody>
+        </ScrolledModalContainer>
+      </ScrolledModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
           <TransactionInfo
