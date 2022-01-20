@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
-import { AnnounceWorkEntryButton, ContributeFundsButton, SubmitWorkButton } from '@/bounty/components/modalsButtons'
-import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { AnnounceWorkEntryButton, ClaimRewardButton, ContributeFundsButton, SubmitWorkButton, WithdrawWorkEntryButton } from '@/bounty/components/modalsButtons'
+import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
@@ -11,7 +11,6 @@ import { BellIcon } from '@/common/components/icons/BellIcon'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
-import { WithdrawWorkEntryButton } from '../modalsButtons/WithdrawWorkEntryButton'
 
 interface Props {
   bounty?: Bounty
@@ -119,17 +118,28 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 
   return (
     <>
+      {/* TODO: https://github.com/Joystream/pioneer/issues/1937 */}
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
+      {/* TODO: https://github.com/Joystream/pioneer/issues/1938 */}
       {isOracle && <ButtonPrimary size="large">{t('buttons.submitJudgement')}</ButtonPrimary>}
     </>
   )
 }
 
+const getReward = (entry: WorkEntry) => {
+  isBountyEntryStatusWinner(entry.status) ? entry.status.reward : undefined
+}
+
+
 const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
+  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
+  const entryId = userEntry?.id
+  const reward = userEntry ? getReward(userEntry) : undefined
   const { winner, passed } =
     useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty]) || {}
+  const winnerConditions = winner && entryId && reward
   const isContributor = useMemo(
     () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
     [bounty]
@@ -140,7 +150,7 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {winner && <ButtonGhost size="large">{t('common:buttons.claimReward')}</ButtonGhost>}
+      {(winnerConditions) && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
       {(passed || isContributor) && <ButtonGhost size="large">{t('common:buttons.withdrawStake')}</ButtonGhost>}
     </>
   )

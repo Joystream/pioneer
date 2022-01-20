@@ -23,7 +23,8 @@ export const ClaimRewardModal = () => {
   const {
     modalData: {
       bountyId,
-      entry: { entryId, reward },
+      entryId,
+      reward,
     },
     hideModal,
   } = useModal<ClaimRewardModalCall>()
