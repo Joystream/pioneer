@@ -34,3 +34,5 @@ export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
 }
 
 export const bountyPeriods: BountyPeriod[] = ['funding', 'working', 'judgement', 'withdrawal', 'expired']
+
+export const sortingOptions = ['Latest', 'Earliest']
