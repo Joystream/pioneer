@@ -1,14 +1,15 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { BountyExpired } from '@/bounty/components/BountyExpired/BountyExpired'
-import { BountyFailed } from '@/bounty/components/BountyFailed/BountyFailed'
 import { Bounty } from '@/bounty/types/Bounty'
-import { BountyFunding } from '@/bounty/components/BountyFunding'
-import { BountyWorking } from '@/bounty/components/BountyWorking'
-import { BountyJudgement } from '@/bounty/components/BountyJudgement'
-import { BountySuccessful } from '@/bounty/components/BountySuccessful'
-
+import { 
+  BountyExpired,
+  BountyFailed,
+  BountyFunding,
+  BountyWorking,
+  BountyJudgement,
+  BountySuccessful,
+} from '@/bounty/components/BountyMainComponents'
 export interface BountyMainProps {
   bounty: Bounty
 }
