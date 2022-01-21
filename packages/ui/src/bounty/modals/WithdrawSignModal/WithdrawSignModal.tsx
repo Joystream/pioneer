@@ -1,29 +1,33 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
+import BN from 'bn.js'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
-import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
+import { WithdrawInfo } from '@/bounty/components/WithdrawInfo/WithdrawInfo'
 import { ButtonPrimary } from '@/common/components/buttons'
-import { InputComponent } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium, TokenValue } from '@/common/components/typography'
+import { TextMedium } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { formatTokenValue } from '@/common/model/formatters'
 
-interface Props {
+export interface Props {
   onClose: () => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
+  type: 'stake' | 'contribution' | 'reward'
+  amount: BN
 }
 
-export const WithdrawContributionSignModal = ({ onClose, transaction, service, controllerAccount }: Props) => {
+export const WithdrawSignModal = ({ onClose, transaction, service, controllerAccount, type, amount }: Props) => {
+  const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
@@ -33,28 +37,27 @@ export const WithdrawContributionSignModal = ({ onClose, transaction, service, c
   })
 
   return (
-    <TransactionModal onClose={onClose} service={service}>
+    <TransactionModal onClose={onClose} service={service} title={t(`modals.withdraw.${type}.title`)}>
       <ModalBody>
-        <TextMedium light>You intend to withdraw your contribution for this bounty.</TextMedium>
-        <TextMedium light>
-          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
-        </TextMedium>
-
-        <InputComponent label="Fee sending from account" inputSize="l">
-          <SelectedAccount account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')} />
-        </InputComponent>
+        <TextMedium light>{t(`modals.withdraw.${type}.description`, { value: formatTokenValue(amount) })}</TextMedium>
+        <WithdrawInfo
+          account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')}
+          stakingFromTitle={t(`modals.withdraw.${type}.stakingFrom`)}
+          amountTitle={t(`modals.withdraw.${type}.amountTitle`)}
+          amount={amount}
+        />
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
+          <TransactionInfo title={t('modals.common.amount')} value={amount} />
           <TransactionInfo
-            title="Transaction fee:"
+            title={t('modals.common.transactionFee.title')}
             value={paymentInfo?.partialFee.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+            tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-          Sign and withdraw
-          <Arrow direction="right" />
+          {t(`modals.withdraw.${type}.button`)}
         </ButtonPrimary>
       </ModalFooter>
     </TransactionModal>

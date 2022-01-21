@@ -1,12 +1,17 @@
 import React from 'react'
 
 import { BountiesLayout } from '@/app/pages/Bounty/components/BountiesLayout'
-import { BountiesMain } from '@/app/pages/Bounty/components/BountiesMain'
+import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
+import { QueryExtraFilter } from '@/bounty/hooks/useBounties'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export const BountiesMyBounties = () => {
-  return (
-    <BountiesLayout>
-      <BountiesMain />
-    </BountiesLayout>
-  )
+  const { active } = useMyMemberships()
+
+  const extraFilter: QueryExtraFilter<string> = {
+    path: 'creator.id_eq',
+    value: active?.id || '',
+  }
+
+  return <BountiesLayout tilesComponent={<TopContributors />} extraFilter={extraFilter} noMember={!active} />
 }

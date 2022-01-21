@@ -32,3 +32,7 @@ export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
     text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
   },
 }
+
+export const bountyPeriods: BountyPeriod[] = ['funding', 'working', 'judgement', 'withdrawal', 'expired']
+
+export const sortingOptions = ['Latest', 'Earliest']

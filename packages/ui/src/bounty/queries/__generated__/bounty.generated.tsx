@@ -17,6 +17,7 @@ export type BountyFieldsFragment = {
   judgingPeriod: number
   stage: Types.BountyStage
   totalFunding: any
+  discussionThreadId: string
   creator?:
     | {
         __typename: 'Membership'
@@ -124,6 +125,7 @@ export type BountyFieldsFragment = {
   entries?:
     | Array<{
         __typename: 'BountyEntry'
+        id: string
         workSubmitted: boolean
         worker: {
           __typename: 'Membership'
@@ -208,6 +210,40 @@ export type BountyWorkFieldsFragment = {
   }
 }
 
+export type BountyContributionFieldsFragment = {
+  __typename: 'BountyContribution'
+  id: string
+  amount: any
+  contributor?:
+    | {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+    | null
+    | undefined
+}
+
 export type GetBountiesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.BountyWhereInput>
   orderBy?: Types.InputMaybe<Array<Types.BountyOrderByInput> | Types.BountyOrderByInput>
@@ -230,6 +266,7 @@ export type GetBountiesQuery = {
     judgingPeriod: number
     stage: Types.BountyStage
     totalFunding: any
+    discussionThreadId: string
     creator?:
       | {
           __typename: 'Membership'
@@ -342,6 +379,7 @@ export type GetBountiesQuery = {
     entries?:
       | Array<{
           __typename: 'BountyEntry'
+          id: string
           workSubmitted: boolean
           worker: {
             __typename: 'Membership'
@@ -415,6 +453,7 @@ export type GetBountyQuery = {
         judgingPeriod: number
         stage: Types.BountyStage
         totalFunding: any
+        discussionThreadId: string
         creator?:
           | {
               __typename: 'Membership'
@@ -535,6 +574,7 @@ export type GetBountyQuery = {
         entries?:
           | Array<{
               __typename: 'BountyEntry'
+              id: string
               workSubmitted: boolean
               worker: {
                 __typename: 'Membership'
@@ -645,6 +685,80 @@ export type GetBountyWorksCountQuery = {
   workSubmittedEventsConnection: { __typename: 'WorkSubmittedEventConnection'; totalCount: number }
 }
 
+export type GetUserBountyStatisticsQueryVariables = Types.Exact<{
+  memberId: Types.Scalars['ID']
+}>
+
+export type GetUserBountyStatisticsQuery = {
+  __typename: 'Query'
+  bountyEntries: Array<{
+    __typename: 'BountyEntry'
+    status:
+      | { __typename: 'BountyEntryStatusCashedOut' }
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+  }>
+  bountyContributions: Array<{ __typename: 'BountyContribution'; amount: any }>
+}
+
+export type GetUserBountyTabsInformationsQueryVariables = Types.Exact<{
+  memberId: Types.Scalars['ID']
+}>
+
+export type GetUserBountyTabsInformationsQuery = {
+  __typename: 'Query'
+  bountiesConnection: { __typename: 'BountyConnection'; totalCount: number }
+  bountyContributionsConnection: { __typename: 'BountyContributionConnection'; totalCount: number }
+  bountyEntriesConnection: { __typename: 'BountyEntryConnection'; totalCount: number }
+}
+
+export type GetBountyContributorsQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.BountyContributionWhereInput>
+  order?: Types.InputMaybe<Array<Types.BountyContributionOrderByInput> | Types.BountyContributionOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetBountyContributorsQuery = {
+  __typename: 'Query'
+  bountyContributions: Array<{
+    __typename: 'BountyContribution'
+    id: string
+    amount: any
+    contributor?:
+      | {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+      | null
+      | undefined
+  }>
+}
+
 export const BountyFieldsFragmentDoc = gql`
   fragment BountyFields on Bounty {
     id
@@ -681,6 +795,7 @@ export const BountyFieldsFragmentDoc = gql`
     judgingPeriod
     stage
     totalFunding
+    discussionThreadId
     contributions {
       amount
       contributor {
@@ -688,6 +803,7 @@ export const BountyFieldsFragmentDoc = gql`
       }
     }
     entries {
+      id
       worker {
         ...MemberFields
       }
@@ -722,6 +838,16 @@ export const BountyWorkFieldsFragmentDoc = gql`
           reward
         }
       }
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const BountyContributionFieldsFragmentDoc = gql`
+  fragment BountyContributionFields on BountyContribution {
+    id
+    amount
+    contributor {
+      ...MemberFields
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -941,4 +1067,175 @@ export type GetBountyWorksCountLazyQueryHookResult = ReturnType<typeof useGetBou
 export type GetBountyWorksCountQueryResult = Apollo.QueryResult<
   GetBountyWorksCountQuery,
   GetBountyWorksCountQueryVariables
+>
+export const GetUserBountyStatisticsDocument = gql`
+  query GetUserBountyStatistics($memberId: ID!) {
+    bountyEntries(where: { worker: { id_eq: $memberId } }) {
+      status {
+        ... on BountyEntryStatusWinner {
+          reward
+        }
+      }
+    }
+    bountyContributions(where: { contributor: { id_eq: $memberId } }) {
+      amount
+    }
+  }
+`
+
+/**
+ * __useGetUserBountyStatisticsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBountyStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBountyStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBountyStatisticsQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetUserBountyStatisticsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>(
+    GetUserBountyStatisticsDocument,
+    options
+  )
+}
+export function useGetUserBountyStatisticsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserBountyStatisticsQuery, GetUserBountyStatisticsQueryVariables>(
+    GetUserBountyStatisticsDocument,
+    options
+  )
+}
+export type GetUserBountyStatisticsQueryHookResult = ReturnType<typeof useGetUserBountyStatisticsQuery>
+export type GetUserBountyStatisticsLazyQueryHookResult = ReturnType<typeof useGetUserBountyStatisticsLazyQuery>
+export type GetUserBountyStatisticsQueryResult = Apollo.QueryResult<
+  GetUserBountyStatisticsQuery,
+  GetUserBountyStatisticsQueryVariables
+>
+export const GetUserBountyTabsInformationsDocument = gql`
+  query GetUserBountyTabsInformations($memberId: ID!) {
+    bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+      totalCount
+    }
+    bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+      totalCount
+    }
+    bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetUserBountyTabsInformationsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBountyTabsInformationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBountyTabsInformationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBountyTabsInformationsQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetUserBountyTabsInformationsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(
+    GetUserBountyTabsInformationsDocument,
+    options
+  )
+}
+export function useGetUserBountyTabsInformationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserBountyTabsInformationsQuery,
+    GetUserBountyTabsInformationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(
+    GetUserBountyTabsInformationsDocument,
+    options
+  )
+}
+export type GetUserBountyTabsInformationsQueryHookResult = ReturnType<typeof useGetUserBountyTabsInformationsQuery>
+export type GetUserBountyTabsInformationsLazyQueryHookResult = ReturnType<
+  typeof useGetUserBountyTabsInformationsLazyQuery
+>
+export type GetUserBountyTabsInformationsQueryResult = Apollo.QueryResult<
+  GetUserBountyTabsInformationsQuery,
+  GetUserBountyTabsInformationsQueryVariables
+>
+export const GetBountyContributorsDocument = gql`
+  query GetBountyContributors(
+    $where: BountyContributionWhereInput
+    $order: [BountyContributionOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    bountyContributions(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+      ...BountyContributionFields
+    }
+  }
+  ${BountyContributionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetBountyContributorsQuery__
+ *
+ * To run a query within a React component, call `useGetBountyContributorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBountyContributorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBountyContributorsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetBountyContributorsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBountyContributorsQuery, GetBountyContributorsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBountyContributorsQuery, GetBountyContributorsQueryVariables>(
+    GetBountyContributorsDocument,
+    options
+  )
+}
+export function useGetBountyContributorsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBountyContributorsQuery, GetBountyContributorsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBountyContributorsQuery, GetBountyContributorsQueryVariables>(
+    GetBountyContributorsDocument,
+    options
+  )
+}
+export type GetBountyContributorsQueryHookResult = ReturnType<typeof useGetBountyContributorsQuery>
+export type GetBountyContributorsLazyQueryHookResult = ReturnType<typeof useGetBountyContributorsLazyQuery>
+export type GetBountyContributorsQueryResult = Apollo.QueryResult<
+  GetBountyContributorsQuery,
+  GetBountyContributorsQueryVariables
 >

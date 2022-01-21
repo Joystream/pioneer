@@ -3,6 +3,12 @@ import BN from 'bn.js'
 import { Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 
+export interface BountyContributionsFiltersState {
+  contributorId?: string
+  bountyId?: string
+  createdAfter?: Date
+}
+
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
@@ -49,7 +55,11 @@ export type BountyActorItem = Contributor | Entrant | Withdrawn
 
 export type FundingType = FundingLimited | FundingPerpetual
 
-type FundingLimited = {
+export const isPerpetual = (type: FundingType): type is FundingPerpetual => {
+  return (type as FundingPerpetual).target !== undefined
+}
+
+export type FundingLimited = {
   minAmount: BN
   maxAmount: BN
   maxPeriod: number
@@ -69,13 +79,28 @@ export type ContractClosed = {
   whitelist: string[]
 }
 
-export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
+
+export interface WorkEntry {
+  id: string
+  bountyId: string
+  worker: Member
+  status: BountyEntryStatus
+  works: BountyWork[]
+  stake: BN
+}
 
 export interface EntryMiniature {
   winner: boolean
   hasSubmitted: boolean
   passed: boolean
   worker: Member
+  id: string
+}
+
+export interface WinnerEntry {
+  entryId: string
+  reward: BN
 }
 
 export interface BountyWork {
@@ -85,6 +110,12 @@ export interface BountyWork {
   description: string
   status: BountyEntryStatus
   inBlock: Block
+}
+
+export interface BountyContribution {
+  id: string
+  contributor?: Member
+  amount: BN
 }
 
 export interface Bounty {
@@ -106,4 +137,5 @@ export interface Bounty {
   inBlock: number
   contractType: ContractType
   contributors: Contributor[]
+  discussionThreadId: string
 }

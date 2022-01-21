@@ -33,6 +33,7 @@ fragment BountyFields on Bounty {
   judgingPeriod
   stage
   totalFunding
+  discussionThreadId
   contributions {
     amount
     contributor {
@@ -40,6 +41,7 @@ fragment BountyFields on Bounty {
     }
   }
   entries {
+    id
     worker {
       ...MemberFields
     }
@@ -75,6 +77,14 @@ fragment BountyWorkFields on WorkSubmittedEvent {
   }
 }
 
+fragment BountyContributionFields on BountyContribution {
+  id
+  amount
+  contributor {
+    ...MemberFields
+  }
+}
+
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
   bounties(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...BountyFields
@@ -107,5 +117,44 @@ query GetBountyWorks(
 query GetBountyWorksCount($where: WorkSubmittedEventWhereInput) {
   workSubmittedEventsConnection(where: $where) {
     totalCount
+  }
+}
+
+query GetUserBountyStatistics($memberId: ID!) {
+  bountyEntries(where: { worker: { id_eq: $memberId } }) {
+    status {
+      ... on BountyEntryStatusWinner {
+        reward
+      }
+    }
+  }
+
+  bountyContributions(where: { contributor: { id_eq: $memberId } }) {
+    amount
+  }
+}
+
+query GetUserBountyTabsInformations($memberId: ID!) {
+  bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+    totalCount
+  }
+
+  bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+    totalCount
+  }
+
+  bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+    totalCount
+  }
+}
+
+query GetBountyContributors(
+  $where: BountyContributionWhereInput
+  $order: [BountyContributionOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  bountyContributions(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+    ...BountyContributionFields
   }
 }

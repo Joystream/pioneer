@@ -97,7 +97,7 @@ describe('UI: EditPostModal', () => {
     tx = stubTransaction(api, txPath, 10000)
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
     renderModal()
-    expect(screen.queryByText('Insufficient Funds')).not.toBeNull()
+    expect(screen.queryByText('modals.insufficientFunds.title')).not.toBeNull()
   })
 
   it('Transaction failed', async () => {

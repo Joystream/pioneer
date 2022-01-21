@@ -75,13 +75,7 @@
       "fundingPeriod": 17
     },
     "contractType": {
-      "type": "Closed",
-      "whitelistIds": [
-        "39",
-        "41",
-        "13",
-        "19"
-      ]
+      "type": "Open"
     },
     "workPeriod": 8,
     "judgingPeriod": 17,

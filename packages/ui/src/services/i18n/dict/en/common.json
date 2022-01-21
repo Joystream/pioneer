@@ -1,8 +1,17 @@
 {
+  "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "modals": {
+    "authorizeTransaction": {
+      "title": "Authorize transaction"
+    },
     "transactionFee": {
       "label": "Transaction fee:",
-      "tooltipText": "Lorem ipsum"
+      "tooltipText": "Lorem ipsum",
+      "feeSending": "Fee sending from account"
+    },
+    "wait": {
+      "title": "Please wait...",
+      "description": "Checking requirements"
     },
     "transactionCanceled": "Transaction has been cancelled."
   },
@@ -21,5 +30,16 @@
   "forms": {
     "clearAllFilters": "Clear all filters",
     "noResults": "No results found"
+  },
+  "signInInfo": "Sign in with your Polkadot wallet to view your account-specific information.",
+  "withdrawing": "Withdrawing",
+  "none": "None",
+  "languages": {
+    "title": "Select language",
+    "en": "English",
+    "en-US": "English",
+    "en-UK": "English",
+    "ru": "Russian",
+    "ru-RU": "Russian"
   }
 }

@@ -47,6 +47,7 @@ describe('UI: BountyPreviewHeader', () => {
     judgingPeriod: new BN(10),
     stage: 'expired',
     totalFunding: new BN(10),
+    discussionThreadId: '1',
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -154,6 +155,7 @@ describe('UI: BountyPreviewHeader', () => {
             winner: false,
             worker: activeMember,
             passed: false,
+            id: '1',
           },
         ]
 
@@ -169,6 +171,7 @@ describe('UI: BountyPreviewHeader', () => {
             winner: false,
             worker: activeMember,
             passed: false,
+            id: '1',
           },
         ]
 
@@ -218,6 +221,7 @@ describe('UI: BountyPreviewHeader', () => {
           winner: true,
           worker: activeMember,
           passed: false,
+          id: '1',
         },
       ]
 
@@ -233,6 +237,7 @@ describe('UI: BountyPreviewHeader', () => {
           winner: false,
           worker: activeMember,
           passed: true,
+          id: '1',
         },
       ]
 
@@ -278,6 +283,7 @@ describe('UI: BountyPreviewHeader', () => {
           winner: false,
           worker: activeMember,
           passed: false,
+          id: '1',
         },
       ]
 

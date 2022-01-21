@@ -196,7 +196,7 @@
   {
     "id": "2:0",
     "bountyId": "2",
-    "workerId": "32",
+    "workerId": "0",
     "stake": "3000",
     "stakingAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "workSubmitted": false,
@@ -369,7 +369,7 @@
   {
     "id": "4:0",
     "bountyId": "4",
-    "workerId": "11",
+    "workerId": "7",
     "stake": "5000",
     "stakingAccount": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "workSubmitted": true,
