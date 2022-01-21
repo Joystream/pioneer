@@ -9,6 +9,8 @@ import { WorkTab } from '@/bounty/components/tabs/WorkTab'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { getFundingPeriodLength } from '@/bounty/helpers'
+import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
+import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
 
 interface Props {
   bounty: Bounty
@@ -16,6 +18,8 @@ interface Props {
 
 export const BountyWorking = ({ bounty }: Props) => {
   const [active, setActive] = useState<CommonTabsState>('Bounty')
+  const entrants = useBountyEntrants(bounty)
+  const withdrawns = useBountyWithdrawns(bounty)
 
   return (
     <>
@@ -28,6 +32,8 @@ export const BountyWorking = ({ bounty }: Props) => {
           <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}
+              entrants={entrants}
+              withdrawals={withdrawns}
               stage="working"
               periodsLengths={{
                 fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),

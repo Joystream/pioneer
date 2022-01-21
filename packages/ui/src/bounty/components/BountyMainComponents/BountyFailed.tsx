@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { ResultsTabs, ResultsTabsState } from '@/bounty/components/tabsSets/ResultsTabs'
 import { ResultsTiles } from '@/bounty/components/BountyTiles/ResultsTiles'
@@ -9,7 +9,10 @@ import { WinnersTab } from '@/bounty/components/tabs/WinnersTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { getFundingPeriodLength } from '@/bounty/helpers'
+import { getFundingPeriodLength, statusToEntrantResult } from '@/bounty/helpers'
+import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
+import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface Props {
   bounty: Bounty
@@ -17,6 +20,11 @@ interface Props {
 
 export const BountyFailed = ({ bounty }: Props) => {
   const [active, setActive] = useState<ResultsTabsState>('Bounty')
+  const entrants = useBountyEntrants(bounty)
+  const withdrawns = useBountyWithdrawns(bounty)
+  const { active: activeMember } = useMyMemberships()
+  const { status } = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty]) || {}
+  const entrantResult = status ? statusToEntrantResult(status) : undefined
 
   return (
     <>
@@ -30,13 +38,16 @@ export const BountyFailed = ({ bounty }: Props) => {
           <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}
-              hidePeriods
+              entrants={entrants}
+              withdrawals={withdrawns}
+              entrantResult={entrantResult}
               stage="withdrawal"
               periodsLengths={{
                 fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
                 judgingPeriodLength: bounty.judgingPeriod,
                 workPeriodLength: bounty.workPeriod,
               }}
+              hidePeriods
             />
           </RowGapBlock>
         </ContentWithSidePanel>

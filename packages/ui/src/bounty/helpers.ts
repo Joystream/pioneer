@@ -1,4 +1,4 @@
-import { BountyPeriod, EntrantResult, FundingType, isFundingLimited } from '@/bounty/types/Bounty'
+import { BountyEntryStatus, BountyPeriod, EntrantResult, FundingType, isBountyEntryStatusWinner, isFundingLimited } from '@/bounty/types/Bounty'
 import { Colors } from '@/common/constants'
 
 export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
@@ -41,4 +41,14 @@ export const getFundingPeriodLength = (funding: FundingType) => {
   if (isFundingLimited(funding)) {
     return funding.maxPeriod
   }
+}
+
+export const statusToEntrantResult = (status: BountyEntryStatus): EntrantResult => {
+  if (isBountyEntryStatusWinner(status)) {
+    return 'winner'
+  }
+  if (status === 'BountyEntryStatusRejected') {
+    return 'slashed'
+  }
+  return 'loser'
 }
