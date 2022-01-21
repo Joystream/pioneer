@@ -25,7 +25,6 @@ export const ContributeFundsButton = ({ bounty }: Props) => {
 
   return (
     <TransactionButton style="primary" size="large" onClick={contributeFundsModal}>
-      <PlusIcon />
       {t('buttons.contributeFunds')}
     </TransactionButton>
   )

@@ -26,7 +26,7 @@ export const WithdrawWorkEntryButton = ({ bounty, entry }: Props) => {
   }, [])
 
   return (
-    <TransactionButton style="ghost" size="large" onClick={withdrawWorkEntryModal}>
+    <TransactionButton style="secondary" size="large" onClick={withdrawWorkEntryModal}>
       <PlusIcon />
       {t('buttons.withdrawWorkEntry')}
     </TransactionButton>

@@ -25,7 +25,6 @@ export const AnnounceWorkEntryButton = ({ bounty }: Props) => {
 
   return (
     <TransactionButton style="primary" size="large" onClick={announceWorkEntryModal}>
-      <PlusIcon />
       {t('buttons.announceEntry')}
     </TransactionButton>
   )

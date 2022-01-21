@@ -25,7 +25,6 @@ export const SubmitWorkButton = ({ bounty }: Props) => {
 
   return (
     <TransactionButton style="primary" size="large" onClick={submitWorkModal}>
-      <PlusIcon />
       {t('buttons.submitWork')}
     </TransactionButton>
   )
