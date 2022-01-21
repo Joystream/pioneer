@@ -22,7 +22,14 @@ import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, InputText } from '@/common/components/forms'
-import { Modal, ModalBody, ModalFooter, ModalHeader, Row, ScrolledModalBody } from '@/common/components/Modal'
+import {
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  ScrolledModalBody,
+  ScrolledModalContainer,
+} from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
@@ -117,7 +124,7 @@ export const SubmitWorkModal = () => {
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title={t('modals.submitWork.title')} onClick={hideModal} />
       <ScrolledModalBody>
-        <ModalBody>
+        <ScrolledModalContainer>
           {state.matches(SubmitWorkStates.generalParameters) && (
             <RowGapBlock gap={24}>
               <Row>
@@ -173,7 +180,7 @@ export const SubmitWorkModal = () => {
               </Row>
             </RowGapBlock>
           )}
-        </ModalBody>
+        </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
         <ButtonsGroup align="right">
