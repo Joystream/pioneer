@@ -45,7 +45,7 @@ Default.args = {
   entrantResult: 'winner',
   stage: 'funding',
   periodsLengths: {
-    workPeriodLength: new BN(200),
-    judgingPeriodLength: new BN(125),
+    workPeriodLength: 200,
+    judgingPeriodLength: 125,
   },
 }

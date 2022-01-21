@@ -128,8 +128,8 @@ export interface Bounty {
   creator?: Member
   oracle?: Member
   fundingType: FundingType
-  workPeriod: BN
-  judgingPeriod: BN
+  workPeriod: number
+  judgingPeriod: number
   stage: BountyStage
   totalFunding: BN
   entries?: WorkEntry[]

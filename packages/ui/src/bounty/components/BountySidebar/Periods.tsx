@@ -17,18 +17,19 @@ interface PeriodStep {
 
 export interface PeriodsProps {
   stage: BountyPeriod
-  fundingPeriodLength?: BN
-  workPeriodLength: BN
-  judgingPeriodLength: BN
+  fundingPeriodLength?: number
+  workPeriodLength: number
+  judgingPeriodLength: number
 }
 
-const formatPeriodLength = (value?: BN) => {
+const formatPeriodLength = (value?: BN | number) => {
   if (!value) {
     return <LengthText>Perpetual</LengthText>
   }
+  const valueAsNumber = typeof value === 'number' ? value : value.toNumber()
   return (
     <LengthText>
-      Length: <DurationValue value={formatDuration(value.toNumber())} tiny />
+      Length: <DurationValue value={formatDuration(valueAsNumber)} tiny />
     </LengthText>
   )
 }

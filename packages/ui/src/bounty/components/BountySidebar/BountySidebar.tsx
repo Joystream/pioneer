@@ -9,9 +9,9 @@ import { BountyActorsList } from '../BountyActorsList/BountyActorsList'
 import { Periods } from './Periods'
 
 interface PeriodsLengthsType {
-  fundingPeriodLength?: BN
-  workPeriodLength: BN
-  judgingPeriodLength: BN
+  fundingPeriodLength?: number
+  workPeriodLength: number
+  judgingPeriodLength: number
 }
 
 export interface BountySidebarProps {

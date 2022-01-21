@@ -6,11 +6,12 @@ import { ProgressBarWithRange } from '@/common/components/Progress'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import BN from 'bn.js'
 
 export interface FundedRangeProps {
-  rangeValue: number
-  maxRangeValue: number
-  minRangeValue: number
+  rangeValue: BN
+  maxRangeValue: BN
+  minRangeValue?: BN
 }
 
 interface FlatProps {
@@ -29,7 +30,7 @@ export const FundedRange = React.memo(({ rangeValue, maxRangeValue, minRangeValu
             <TextSmall>{t('tiles.progressBar.funded')}</TextSmall>
             <TokenValue value={rangeValue} size="s" />
           </FundedTitle>
-          <ProgressBarWithRange value={rangeValue} minRange={minRangeValue} maxRange={maxRangeValue} size="big" />
+          <ProgressBarWithRange value={rangeValue.toNumber()} minRange={minRangeValue?.toNumber()} maxRange={maxRangeValue.toNumber()} size="big" />
         </ProgressBarWrapper>
         <MaxRangeWrapper flat={flat}>
           <MaxRangeTitle>{t('tiles.progressBar.maxRange')}</MaxRangeTitle>

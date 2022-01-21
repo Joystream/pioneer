@@ -5,8 +5,8 @@ import React from 'react'
 import { Periods } from '@/bounty/components/BountySidebar/Periods'
 
 describe('Periods', () => {
-  const fundingPeriodLength = new BN(1000)
-  const workPeriodLength = new BN(2000)
+  const fundingPeriodLength = 1000
+  const workPeriodLength = 2000
   const judgingPeriodLength = new BN(13000)
   const props = {
     fundingPeriodLength,
