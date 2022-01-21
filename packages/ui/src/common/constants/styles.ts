@@ -80,6 +80,11 @@ export const Colors = {
   Warning: {
     50: '#FFFAF0',
   },
+
+  Negative: {
+    50: '#FEEAF1',
+    500: '#F42E55',
+  },
 }
 
 export const ZIndex = {

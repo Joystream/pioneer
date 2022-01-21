@@ -9,6 +9,7 @@ import { CommonTabs, CommonTabsState } from '@/bounty/components/tabsSets/Common
 import { getFundingPeriodLength } from '@/bounty/helpers'
 import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
 import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
+import { useBountyPreviewTabViaUrlParameter } from '@/bounty/hooks/useBountyPreviewTabViaUrlParameter'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 
@@ -20,6 +21,11 @@ export const BountyExpired = ({ bounty }: Props) => {
   const [active, setActive] = useState<CommonTabsState>('Bounty')
   const entrants = useBountyEntrants(bounty)
   const withdrawns = useBountyWithdrawns(bounty)
+  const [wasSearched, setWasSearched] = useState<boolean>(false)
+
+  useBountyPreviewTabViaUrlParameter((tab) => {
+    setActive(tab)
+  })
 
   return (
     <>
@@ -28,11 +34,13 @@ export const BountyExpired = ({ bounty }: Props) => {
         <CommonTabs active={active} setActive={setActive} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
-          {active === 'Works' && <WorkTab bountyId={bounty.id} />}
+          {active === 'Works' && (
+            <WorkTab bountyId={bounty.id} wasSearched={wasSearched} setWasSearched={setWasSearched} />
+          )}{' '}
           <RowGapBlock gap={4}>
             <BountySidebar
-              contributors={bounty.contributors}
               entrants={entrants}
+              contributors={bounty.contributors}
               withdrawals={withdrawns}
               stage="expired"
               periodsLengths={{

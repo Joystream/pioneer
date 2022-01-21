@@ -5,7 +5,7 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
-import { Bounty } from '@/bounty/types/Bounty'
+import { Bounty, EntryMiniature } from '@/bounty/types/Bounty'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { Member } from '@/memberships/types'
@@ -15,6 +15,17 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 
 const activeMember = { ...rawMembers[0], id: '0' } as unknown as Member
+
+const defaultEntry: EntryMiniature = {
+  hasSubmitted: false,
+  winner: false,
+  worker: activeMember,
+  passed: false,
+  worksIds: [],
+  rejected: false,
+  id: '1',
+  stake: 10,
+}
 
 describe('UI: BountyPreviewHeader', () => {
   const bounty: Bounty = {
@@ -151,12 +162,7 @@ describe('UI: BountyPreviewHeader', () => {
       it('Entry, no works', async () => {
         bounty.entries = [
           {
-            hasSubmitted: false,
-            winner: false,
-            worker: activeMember,
-            passed: false,
-            id: '1',
-            stake: 10,
+            ...defaultEntry,
           },
         ]
 
@@ -168,12 +174,8 @@ describe('UI: BountyPreviewHeader', () => {
       it('Entry with works', async () => {
         bounty.entries = [
           {
+            ...defaultEntry,
             hasSubmitted: true,
-            winner: false,
-            worker: activeMember,
-            passed: false,
-            id: '1',
-            stake: 10,
           },
         ]
 
@@ -219,12 +221,9 @@ describe('UI: BountyPreviewHeader', () => {
     it('Winner', async () => {
       bounty.entries = [
         {
+          ...defaultEntry,
           hasSubmitted: true,
           winner: true,
-          worker: activeMember,
-          passed: false,
-          id: '1',
-          stake: 10,
         },
       ]
 
@@ -236,9 +235,8 @@ describe('UI: BountyPreviewHeader', () => {
     it('Passed', async () => {
       bounty.entries = [
         {
+          ...defaultEntry,
           hasSubmitted: true,
-          winner: false,
-          worker: activeMember,
           passed: true,
           id: '1',
           stake: 10,
@@ -283,12 +281,8 @@ describe('UI: BountyPreviewHeader', () => {
     it('Worker', async () => {
       bounty.entries = [
         {
+          ...defaultEntry,
           hasSubmitted: true,
-          winner: false,
-          worker: activeMember,
-          passed: false,
-          id: '1',
-          stake: 10,
         },
       ]
 

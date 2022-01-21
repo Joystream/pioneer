@@ -28,7 +28,7 @@ export const BlockInfoContainer = styled.span<Omit<BlockInfoProp, 'block'>>`
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
-  width: fit-content;
+  width: max-content;
   height: fit-content;
   color: ${Colors.Black[400]};
   ${({ lessInfo }) =>

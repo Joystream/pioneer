@@ -21,12 +21,15 @@ import {
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
   switch (stage) {
-    case 'successful' || 'failed' || 'terminated':
+    case 'successful':
+    case 'failed':
       return 'withdrawal'
     case 'workSubmission':
       return 'working'
     case 'judgment':
       return 'judgement'
+    case 'terminated':
+      return 'terminated'
     default:
       return stage as BountyPeriod
   }
@@ -57,8 +60,9 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): WorkEntry[] 
       status: asBountyEntryStatus(entry.status),
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
       works: entry.works?.map((work) => ({ id: work.id, title: work.title, description: work.description })),
-      stake: entry.stake,
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
+      rejected: entry.status.__typename === 'BountyEntryStatusRejected',
+      stake: entry.stake,
     }
   })
 }
@@ -96,6 +100,11 @@ export const asBountyWork = (fields: BountyWorkFieldsFragment): BountyWork => ({
   description: fields.description,
   worker: asMember(fields.entry.worker),
   status: asBountyEntryStatus(fields.entry.status),
+  inBlock: {
+    number: fields.inBlock,
+    network: fields.network,
+    timestamp: fields.createdAt,
+  },
 })
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({

@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 export interface BountyContributionsFiltersState {
@@ -8,7 +9,7 @@ export interface BountyContributionsFiltersState {
   createdAfter?: Date
 }
 
-export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
+export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired' | 'terminated'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
@@ -109,6 +110,7 @@ export interface BountyWork {
   title: string
   description: string
   status: BountyEntryStatus
+  inBlock: Block
 }
 
 export interface BountyContribution {

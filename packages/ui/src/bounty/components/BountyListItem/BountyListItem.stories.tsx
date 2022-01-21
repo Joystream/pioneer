@@ -48,5 +48,16 @@ Default.args = {
   judgingPeriod: 1000,
   stage: 'funding',
   totalFunding: new BN(2000),
-  entries: [{ worker: getMember('alice'), winner: true, hasSubmitted: true, passed: false, id: '1', stake: 10 }],
+  entries: [
+    {
+      worker: getMember('alice'),
+      winner: true,
+      hasSubmitted: true,
+      passed: false,
+      id: '1',
+      stake: 10,
+      rejected: false,
+      worksIds: [],
+    },
+  ],
 }

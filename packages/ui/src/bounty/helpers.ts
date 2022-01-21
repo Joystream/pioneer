@@ -14,6 +14,7 @@ export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
   judgement: Colors.Purple[200],
   withdrawal: Colors.Green[500],
   expired: Colors.Red[300],
+  terminated: Colors.Red[500],
 }
 
 interface InfoboxFields {

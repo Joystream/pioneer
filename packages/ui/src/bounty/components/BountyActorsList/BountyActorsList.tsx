@@ -1,11 +1,12 @@
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BountyActorItem, EntrantResult, isContributor, isEntrant } from '@/bounty/types/Bounty'
 import { CountBadge } from '@/common/components/CountBadge'
-import { ArrowUpExpandedIcon } from '@/common/components/icons'
+import { ArrowUpExpandedIcon, CrossIcon } from '@/common/components/icons'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
-import { TokenValue, TextSmall, TextExtraSmall, TextBig } from '@/common/components/typography'
+import { TokenValue, TextSmall, TextExtraSmall, TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Fonts } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 import { MemberInfo } from '@/memberships/components'
@@ -17,6 +18,7 @@ export interface BountyActorsListProps {
   elements: BountyActorItem[]
   entrantResult?: EntrantResult
   open?: boolean
+  isSlashed?: boolean
 }
 
 const actorsMapFunction = (el: BountyActorItem) => {
@@ -41,37 +43,72 @@ const actorsMapFunction = (el: BountyActorItem) => {
   return <ValueText lighter>Work withdrawn</ValueText>
 }
 
-export const BountyActorsList = memo(({ title, elements, entrantResult, open = true }: BountyActorsListProps) => {
-  const [isVisible, toggleVisibility] = useToggle(open)
+export const BountyActorsList = memo(
+  ({ title, elements, entrantResult, open = true, isSlashed = false }: BountyActorsListProps) => {
+    const { t } = useTranslation('bounty')
+    const [isSlashedVisible, toggleSlashedVisible] = useToggle(isSlashed)
+    const [isVisible, toggleVisibility] = useToggle(open)
 
-  return (
-    <>
-      <Header>
-        <TitleText lighter bold>
-          {title}{' '}
-        </TitleText>
-        <CountBadge count={elements.length} />
-        <ArrowWrapper data-testid={`${title}-EXPAND`} onClick={toggleVisibility}>
-          {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
-        </ArrowWrapper>
-      </Header>
-      {isVisible && (
-        <>
-          {entrantResult && <Infobox result={entrantResult} />}
-          {elements.map(
-            (el) =>
-              el?.actor && (
-                <Wrapper key={el?.actor?.id}>
-                  <MemberInfo member={el.actor} />
-                  {actorsMapFunction(el)}
-                </Wrapper>
-              )
-          )}
-        </>
-      )}
-    </>
-  )
-})
+    return (
+      <>
+        <Header>
+          <TitleText lighter bold>
+            {title}{' '}
+          </TitleText>
+          <CountBadge count={elements.length} />
+          <ArrowWrapper data-testid={`${title}-EXPAND`} onClick={toggleVisibility}>
+            {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
+          </ArrowWrapper>
+        </Header>
+
+        {isVisible && (
+          <>
+            {isSlashedVisible && (
+              <SlashedBox>
+                <StyledCloseIcon onClick={toggleSlashedVisible} />
+                <TextBig value bold>
+                  {t('slashed.title')}
+                </TextBig>
+                <TextMedium inter>{t('slashed.description')}</TextMedium>
+              </SlashedBox>
+            )}
+            {entrantResult && <Infobox result={entrantResult} />}
+            {elements.map(
+              (el) =>
+                el?.actor && (
+                  <Wrapper key={el?.actor?.id}>
+                    <MemberInfo member={el.actor} />
+                    {actorsMapFunction(el)}
+                  </Wrapper>
+                )
+            )}
+          </>
+        )}
+      </>
+    )
+  }
+)
+
+const SlashedBox = styled.div`
+  width: 100%;
+  height: min-content;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  padding: 16px;
+  background-color: ${Colors.Negative[50]};
+  margin-bottom: 10px;
+  position: relative;
+`
+
+const StyledCloseIcon = styled(CrossIcon)`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+`
 
 const Wrapper = styled.div`
   margin-bottom: 18px;

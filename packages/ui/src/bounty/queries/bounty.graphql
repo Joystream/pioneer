@@ -58,6 +58,9 @@ fragment BountyFields on Bounty {
       description
     }
     stake
+    works {
+      id
+    }
   }
   createdInEvent {
     inBlock
@@ -68,7 +71,9 @@ fragment BountyWorkFields on WorkSubmittedEvent {
   id
   description
   title
-
+  inBlock
+  createdAt
+  network
   entry {
     worker {
       ...MemberFields
