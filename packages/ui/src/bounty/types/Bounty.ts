@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 export interface BountyContributionsFiltersState {
@@ -111,6 +112,7 @@ export interface BountyWork {
   title: string
   description: string
   status: BountyEntryStatus
+  inBlock: Block
 }
 
 export interface BountyContribution {
