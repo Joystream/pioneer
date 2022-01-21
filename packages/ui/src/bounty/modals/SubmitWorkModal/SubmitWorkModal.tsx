@@ -167,6 +167,7 @@ export const SubmitWorkModal = () => {
                   <InputComponent
                     id="field-description"
                     label={t('modals.submitWork.submitWorkInput.entryDescription')}
+                    inputSize="auto"
                     required
                   >
                     <CKEditor
