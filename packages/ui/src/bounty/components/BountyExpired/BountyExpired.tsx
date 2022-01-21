@@ -32,7 +32,8 @@ export const BountyExpired = ({ bounty }: Props) => {
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
           {active === 'Works' && (
             <WorkTab bountyId={bounty.id} wasSearched={wasSearched} setWasSearched={setWasSearched} />
-          )}          <RowGapBlock gap={4}>
+          )}{' '}
+          <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}
               stage="expired"
