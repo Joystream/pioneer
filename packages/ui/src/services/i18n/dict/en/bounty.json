@@ -239,7 +239,9 @@
   "bountyFields": {
     "cherry": "Cherry",
     "entrantStake": "Entrant Stake",
-    "expired": "Expired",
+    "working": "Working period",
+    "expired": "Expired period",
+    "judgement": "Judgement period",
     "perpetual": "Perpetual",
     "limited": "Limited",
     "withdrawalPeriod": "Withdrawal period",
