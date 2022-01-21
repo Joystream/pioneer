@@ -36,7 +36,7 @@ export const InlineEditor = Template.bind({})
 ClassicEditor.args = {
   minRows: 8,
   maxRows: 20,
-  onChange: action('onChange'),
+  onChange: (_, editor) => action('onChange')(editor.getData()),
 }
 
 InlineEditor.args = {
