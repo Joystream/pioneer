@@ -273,7 +273,7 @@
     "noFoundText": "Lorem ipsum dolor sit amet enim"
   },
   "discussionThread": {
-    "title": "Bounty discussion thread"
+    "title": "Bounty discussion thread",
     "cancelBounty": "Cancel Bounty"
   },
   "slashed": {
