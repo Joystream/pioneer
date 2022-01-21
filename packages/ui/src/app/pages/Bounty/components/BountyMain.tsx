@@ -7,6 +7,7 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { BountyFunding } from '@/bounty/components/BountyFunding'
 import { BountyWorking } from '@/bounty/components/BountyWorking'
 import { BountyJudgement } from '@/bounty/components/BountyJudgement'
+import { BountySuccessful } from '@/bounty/components/BountySuccessful'
 
 export interface BountyMainProps {
   bounty: Bounty
@@ -23,6 +24,8 @@ export const BountyMain = ({ bounty }: BountyMainProps) => {
         return <BountyJudgement bounty={bounty} />
       case 'expired':
         return <BountyExpired bounty={bounty} />
+      case 'successful':
+        return <BountySuccessful bounty={bounty} />
       case 'failed':
         return <BountyFailed bounty={bounty} />
       default:
