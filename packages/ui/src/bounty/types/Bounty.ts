@@ -80,12 +80,22 @@ export type ContractClosed = {
 
 export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
 
+export interface WorkEntry {
+  id: string
+  bountyId: string
+  worker: Member
+  status: BountyEntryStatus
+  works: BountyWork[]
+  stake: BN
+}
+
 export interface EntryMiniature {
   winner: boolean
   hasSubmitted: boolean
   passed: boolean
   worker: Member
   id: string
+  stake: number
 }
 
 export interface WinnerEntry {

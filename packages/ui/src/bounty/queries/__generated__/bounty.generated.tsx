@@ -127,6 +127,7 @@ export type BountyFieldsFragment = {
         __typename: 'BountyEntry'
         id: string
         workSubmitted: boolean
+        stake: any
         worker: {
           __typename: 'Membership'
           id: string
@@ -378,6 +379,7 @@ export type GetBountiesQuery = {
           __typename: 'BountyEntry'
           id: string
           workSubmitted: boolean
+          stake: any
           worker: {
             __typename: 'Membership'
             id: string
@@ -573,6 +575,7 @@ export type GetBountyQuery = {
               __typename: 'BountyEntry'
               id: string
               workSubmitted: boolean
+              stake: any
               worker: {
                 __typename: 'Membership'
                 id: string
@@ -807,6 +810,7 @@ export const BountyFieldsFragmentDoc = gql`
           reward
         }
       }
+      stake
     }
     createdInEvent {
       inBlock
