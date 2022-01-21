@@ -4,6 +4,7 @@ import { TFunction, useTranslation } from 'react-i18next'
 import { PageHeader } from '@/app/components/PageHeader'
 import { 
   AnnounceWorkEntryButton,
+  CancelBountyButton,
   ClaimRewardButton,
   ContributeFundsButton,
   SubmitWorkButton,
@@ -189,11 +190,12 @@ const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProp
 }
 
 const ExpiredStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
-  const isCreator = bounty.creator?.id === activeMember?.id
+  const bountyCreator = bounty.creator
+  const isCreator = bountyCreator?.id === activeMember?.id
 
-  if (!isCreator) {
+  if (!isCreator || !bountyCreator) {
     return null
   }
 
-  return <ButtonPrimary size="large">{t('buttons.cancelBounty')}</ButtonPrimary>
+  return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
 }
