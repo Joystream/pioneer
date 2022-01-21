@@ -6,7 +6,7 @@ import { Colors } from '@/common/constants'
 
 export interface ProgressBarWithRangeProps {
   value: number
-  minRange: number
+  minRange?: number
   maxRange: number
   size?: 'small' | 'big' | 'medium'
 }
@@ -16,7 +16,8 @@ export interface ThresholdBarProps {
   threshold: number
 }
 
-export const ProgressBarWithRange = ({ size, value, minRange, maxRange }: ProgressBarWithRangeProps) => {
+export const ProgressBarWithRange = ({ size, value, minRange: minimum, maxRange }: ProgressBarWithRangeProps) => {
+  const minRange = minimum ?? maxRange
   const color = value < minRange ? Colors.Orange[300] : Colors.Blue[500]
   // convert data to fractions:
   const current = value / maxRange

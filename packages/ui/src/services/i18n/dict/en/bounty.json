@@ -191,6 +191,10 @@
       "title": "Cherry",
       "tooltip": "Lorem ipsum d"
     },
+    "entrantStake": {
+      "title": "Entrant stake",
+      "tooltip": "Lorem ipsum d"
+    },
     "worksSubmitted": {
       "title": "Works Submitted",
       "tooltip": "Lorem ipsum d"
@@ -238,7 +242,8 @@
     "expired": "Expired",
     "perpetual": "Perpetual",
     "limited": "Limited",
-    "withdrawalPeriod": "Withdrawal Period"
+    "withdrawalPeriod": "Withdrawal period",
+    "fundingPeriod": "Funding Period"
   },
   "buttons": {
     "announceEntry": "Announce Entry",

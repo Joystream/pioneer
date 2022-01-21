@@ -1,4 +1,4 @@
-import { BountyPeriod, EntrantResult } from '@/bounty/types/Bounty'
+import { BountyPeriod, EntrantResult, FundingType, isFundingLimited } from '@/bounty/types/Bounty'
 import { Colors } from '@/common/constants'
 
 export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
@@ -36,3 +36,9 @@ export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
 export const bountyPeriods: BountyPeriod[] = ['funding', 'working', 'judgement', 'withdrawal', 'expired']
 
 export const sortingOptions = ['Latest', 'Earliest']
+
+export const getFundingPeriodLength = (funding: FundingType) => {
+  if (isFundingLimited(funding)) {
+    return funding.maxPeriod
+  }
+}

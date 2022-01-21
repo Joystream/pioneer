@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { BountyExpired } from '@/bounty/components/BountyExpired/BountyExpired'
 import { BountyFailed } from '@/bounty/components/BountyFailed/BountyFailed'
 import { Bounty } from '@/bounty/types/Bounty'
+import { BountyFunding } from '@/bounty/components/BountyFunding'
 
 export interface BountyMainProps {
   bounty: Bounty
@@ -12,6 +13,8 @@ export interface BountyMainProps {
 export const BountyMain = ({ bounty }: BountyMainProps) => {
   const page = useMemo(() => {
     switch (bounty.stage) {
+      case 'funding': 
+        return <BountyFunding bounty={bounty} /> 
       case 'expired':
         return <BountyExpired bounty={bounty} />
       case 'failed':
