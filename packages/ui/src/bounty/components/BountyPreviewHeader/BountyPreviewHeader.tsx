@@ -2,8 +2,14 @@ import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
-import { AnnounceWorkEntryButton, ClaimRewardButton, ContributeFundsButton, SubmitWorkButton, WithdrawWorkEntryButton } from '@/bounty/components/modalsButtons'
-import { WithdrawStakeButtonButton } from '@/bounty/components/WithdrawStakeButton/WithdrawStakeButton'
+import { 
+  AnnounceWorkEntryButton,
+  ClaimRewardButton,
+  ContributeFundsButton,
+  SubmitWorkButton,
+  WithdrawStakeButton,
+  WithdrawWorkEntryButton
+} from '@/bounty/components/modalsButtons'
 import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
@@ -91,7 +97,6 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const hasLost = hasSubmitted && !userEntry.winner
   const isOnWhitelist = useMemo(
     () =>
       bounty.contractType !== 'ContractOpen' && bounty.contractType?.whitelist.some((id) => activeMember?.id === id),
@@ -153,7 +158,7 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
       {(winnerConditions) && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
-      {(passed || isContributor) && <ButtonGhost size="large">{t('common:buttons.withdrawStake')}</ButtonGhost>}
+      {(passed || isContributor) && <WithdrawStakeButton bounty={bounty} lost />}
     </>
   )
 }
@@ -178,7 +183,7 @@ const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProp
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {hasSubmitted && <WithdrawStakeButtonButton statusLost={hasLost} bounty={bounty} />}
+      {hasSubmitted && <WithdrawStakeButton bounty={bounty} lost={hasLost} />}
     </>
   )
 }

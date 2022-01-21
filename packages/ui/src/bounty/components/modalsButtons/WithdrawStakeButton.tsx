@@ -7,14 +7,14 @@ import { TransactionButton } from '@/common/components/buttons/TransactionButton
 import { useModal } from '@/common/hooks/useModal'
 
 interface Props {
-  statusLost: boolean
   bounty: Bounty
+  lost?: boolean
 }
 
-export const WithdrawStakeButtonButton = ({ statusLost, bounty }: Props) => {
+export const WithdrawStakeButton = ({ bounty, lost }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
-  const submitWorkModal = useCallback(() => {
+  const withdrawStakeModal = useCallback(() => {
     showModal<WithdrawStakeModalCall>({
       modal: 'WithdrawStakeModal',
       data: {
@@ -24,8 +24,8 @@ export const WithdrawStakeButtonButton = ({ statusLost, bounty }: Props) => {
   }, [])
 
   return (
-    <TransactionButton style="primary" size="large" onClick={submitWorkModal}>
-      {statusLost ? t('buttons.loserWithdrawStake') : t('buttons.entrantWithdrawStake')}
+    <TransactionButton style="primary" size="large" onClick={withdrawStakeModal}>
+      {lost ? t('buttons.loserWithdrawStake') : t('buttons.contributorWithdrawStake')}
     </TransactionButton>
   )
 }
