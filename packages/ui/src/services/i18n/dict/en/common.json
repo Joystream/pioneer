@@ -13,6 +13,9 @@
       "title": "Please wait...",
       "description": "Checking requirements"
     },
+    "failed": {
+      "desxcription": "There was a problem while withdrawing your contribution."
+    },
     "transactionCanceled": "Transaction has been cancelled."
   },
   "authorizeTransaction": "Authorize Transaction",

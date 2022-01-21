@@ -51,6 +51,7 @@ fragment BountyFields on Bounty {
         reward
       }
     }
+    stake
   }
   createdInEvent {
     inBlock

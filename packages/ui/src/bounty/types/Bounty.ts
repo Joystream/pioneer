@@ -96,6 +96,7 @@ export interface EntryMiniature {
   passed: boolean
   worker: Member
   id: string
+  stake: number
 }
 
 export interface WinnerEntry {
