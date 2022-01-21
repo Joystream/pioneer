@@ -26,9 +26,17 @@ export const BountyDetails = memo(
   ({ type, oracle, cherry, fundingType, totalFunding, entrantStake, entries }: Props) => {
     const { t } = useTranslation('bounty')
 
-    const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries])
+    const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries?.length])
 
-    const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [entries])
+    const worksSubmitted = useMemo(() => entries?.reduce((prev, current) => prev + current.worksIds.length, 0), [
+      entries?.length,
+    ])
+
+    const worksWithdrawn = useMemo(() => entries?.filter((entry) => entry.withdrawn).length, [entries?.length])
+
+    const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [
+      entries?.length,
+    ])
 
     const content = useMemo(() => {
       switch (type) {
@@ -36,10 +44,17 @@ export const BountyDetails = memo(
           return <FundingDetails cherry={cherry} fundingType={fundingType} totalFunding={totalFunding} />
         }
         case 'working': {
-          return <WorkingDetails totalFunding={totalFunding} entrantStake={entrantStake} entrants={entrants} />
+          return (
+            <WorkingDetails
+              totalFunding={totalFunding}
+              worksSubmitted={worksSubmitted}
+              entrantStake={entrantStake}
+              entrants={entrants}
+            />
+          )
         }
         case 'judgement': {
-          return <JudgmentDetails entrants={entrants} />
+          return <JudgmentDetails withdrawals={worksWithdrawn} worksSubmitted={worksSubmitted} entrants={entrants} />
         }
         case 'withdrawal':
         case 'expired': {

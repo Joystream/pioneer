@@ -58,6 +58,7 @@ Default.args = {
       stake: 10,
       rejected: false,
       worksIds: [],
+      withdrawn: false,
     },
   ],
 }

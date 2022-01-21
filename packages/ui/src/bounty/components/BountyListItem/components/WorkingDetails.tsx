@@ -27,7 +27,6 @@ export const WorkingDetails = memo(({ totalFunding, entrantStake, entrants, work
           <MemberStack members={entrants} max={5} />
         </DetailBox>
       )}
-      {/* TODO: handle works counting */}
       <DetailBox title={t('submittedWorks')}>{worksSubmitted}</DetailBox>
       <DetailBox title={t('stake')}>
         <TokenValue value={entrantStake} />

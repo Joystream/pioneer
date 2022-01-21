@@ -56,6 +56,7 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniatu
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
       rejected: entry.status.__typename === 'BountyEntryStatusRejected',
+      withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
       worksIds: entry.works?.map((work) => work.id) ?? [],
       stake: entry.stake,
     }

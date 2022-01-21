@@ -8,9 +8,11 @@ import membersMock from '@/mocks/data/raw/members.json'
 
 interface Props {
   entrants?: Member[]
+  worksSubmitted?: number
+  withdrawals?: number
 }
 
-export const JudgmentDetails = memo(({ entrants }: Props) => {
+export const JudgmentDetails = memo(({ entrants, worksSubmitted, withdrawals }: Props) => {
   const { t } = useTranslation('bounty')
 
   return (
@@ -20,9 +22,8 @@ export const JudgmentDetails = memo(({ entrants }: Props) => {
           <MemberStack members={membersMock} max={5} />
         </DetailBox>
       )}
-      {/* TODO: handle works counting */}
-      <DetailBox title={t('submittedWorks')}>2</DetailBox>
-      <DetailBox title={t('withdrawals')}>0</DetailBox>
+      <DetailBox title={t('submittedWorks')}>{worksSubmitted}</DetailBox>
+      <DetailBox title={t('withdrawals')}>{withdrawals}</DetailBox>
     </>
   )
 })
