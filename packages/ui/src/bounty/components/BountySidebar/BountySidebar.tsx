@@ -26,7 +26,16 @@ export interface BountySidebarProps {
 }
 
 export const BountySidebar = memo(
-  ({ contributors, entrants, withdrawals, entrantResult, stage, periodsLengths, isSlashed, hidePeriods }: BountySidebarProps) => {
+  ({
+    contributors,
+    entrants,
+    withdrawals,
+    entrantResult,
+    stage,
+    periodsLengths,
+    isSlashed,
+    hidePeriods,
+  }: BountySidebarProps) => {
     const { t } = useTranslation('bounty')
 
     return (

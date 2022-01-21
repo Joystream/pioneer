@@ -33,7 +33,17 @@ describe('UI: BountyListItem', () => {
     totalFunding: new BN(2000),
     contributors: [],
     contractType: 'ContractOpen' as const,
-    entries: [{ worker: getMember('alice'), winner: true, hasSubmitted: true, passed: false, id: '1', stake: 10, rejected: false }],
+    entries: [
+      {
+        worker: getMember('alice'),
+        winner: true,
+        hasSubmitted: true,
+        passed: false,
+        id: '1',
+        stake: 10,
+        rejected: false,
+      },
+    ],
     discussionThreadId: '1',
   }
 
