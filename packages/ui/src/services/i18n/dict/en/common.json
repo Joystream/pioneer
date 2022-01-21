@@ -29,6 +29,11 @@
     "notifyAboutChanges": "Notify me about changes"
   },
   "created": "Created",
+  "council": "Council",
+  "forms": {
+    "clearAllFilters": "Clear all filters",
+    "noResults": "No results found"
+  },
   "signInInfo": "Sign in with your Polkadot wallet to view your account-specific information.",
   "withdrawing": "Withdrawing",
   "none": "None",
