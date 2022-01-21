@@ -21,7 +21,6 @@ export const BountyFunding = ({ bounty }: Props) => {
         <FundingTiles bounty={bounty} />
         <ContentWithSidePanel>
           <BountyTab bounty={bounty} />
-          <BountyDiscussion discussionThreadId={bounty.discussionThreadId} />
           <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}

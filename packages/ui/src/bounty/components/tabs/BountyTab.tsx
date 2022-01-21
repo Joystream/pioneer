@@ -4,9 +4,8 @@ import styled from 'styled-components'
 import { Description } from '@/bounty/components/Descriptions'
 import { Bounty } from '@/bounty/types/Bounty'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { BountyDiscussion } from '../BountyDiscussion/BountyDiscussion'
 
-// todo add forum thread
 interface Props {
   bounty: Bounty
 }
@@ -16,7 +15,7 @@ export const BountyTab = ({ bounty }: Props) => {
     <RowGapBlock gap={4}>
       <Description imageUrl={bounty.imageUri} title={bounty.title} description={bounty.description} />
       <ForumThreadWrapper>
-        <TextMedium bold>Bounty discussion thread</TextMedium>
+        <BountyDiscussion discussionThreadId={bounty.discussionThreadId} />
       </ForumThreadWrapper>
     </RowGapBlock>
   )
