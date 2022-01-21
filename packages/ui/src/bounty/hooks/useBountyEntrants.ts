@@ -10,5 +10,5 @@ export const useBountyEntrants = (bounty: Bounty): Entrant[] | undefined => {
     ).map((entry) => (
       { actor: entry.worker, count: entry.works?.length ?? 0 }
     ))
-  ), [bounty])
+  ), [bounty.entries])
 }
