@@ -58,7 +58,7 @@ describe('UI: RevealVoteModal', () => {
   it('Requirements check failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
     renderModal()
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Transaction step', async () => {

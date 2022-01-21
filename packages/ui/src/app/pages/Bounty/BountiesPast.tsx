@@ -1,12 +1,8 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { BountiesLayout } from '@/app/pages/Bounty/components/BountiesLayout'
-import { BountiesMain } from '@/app/pages/Bounty/components/BountiesMain'
+import { TopContributors } from '@/bounty/components/TopContributors/TopContributors'
 
-export const BountiesPast = () => {
-  return (
-    <BountiesLayout>
-      <BountiesMain />
-    </BountiesLayout>
-  )
-}
+export const BountiesPast = memo(() => {
+  return <BountiesLayout tilesComponent={<TopContributors />} bountyStatus="past" />
+})

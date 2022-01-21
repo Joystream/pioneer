@@ -2,6 +2,8 @@ import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
+import { SubmitWorkButton } from '@/bounty/components/SubmitWorkButton/SubmitWorkButton'
+import { WithdrawStakeButtonButton } from '@/bounty/components/WithdrawStakeButton/WithdrawStakeButton'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
@@ -88,6 +90,7 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
+  const hasLost = hasSubmitted && !userEntry.winner //
   const isOnWhitelist = useMemo(
     () =>
       bounty.contractType !== 'ContractOpen' && bounty.contractType?.whitelist.some((id) => activeMember?.id === id),
@@ -105,8 +108,8 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
   return (
     <>
       {!hasAnnounced && <ButtonPrimary size="large">{t('buttons.announceEntry')}</ButtonPrimary>}
-      {hasAnnounced && <ButtonPrimary size="large">{t('buttons.submitWork')}</ButtonPrimary>}
-      {hasSubmitted && <ButtonGhost size="large">{t('common:buttons.withdraw')}</ButtonGhost>}
+      {hasAnnounced && <SubmitWorkButton bounty={bounty} />}
+      {hasSubmitted && <WithdrawStakeButtonButton statusLost={hasLost} bounty={bounty} />}
     </>
   )
 }

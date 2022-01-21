@@ -12,9 +12,9 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { FundedRange } from '@/bounty/components/FundedRange'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
-import { SuccessModal } from '@/bounty/modals/CancelBountyModal/components/SuccessModal'
 import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index'
 import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
+import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { FundingLimited, isPerpetual } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
@@ -66,11 +66,12 @@ export const ContributeFundsModal = () => {
   const setHalfAmount = useCallback(() => {
     balance && setAmount(balance.transferable.divn(2).toString())
   }, [balance])
+
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, amount)
     }
-  }, [JSON.stringify(activeMember), isConnected])
+  }, [activeMember?.id, amount, isConnected])
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -100,7 +101,14 @@ export const ContributeFundsModal = () => {
   }
 
   if (state.matches(ContributeFundStates.success)) {
-    return <SuccessModal onClose={hideModal} />
+    return (
+      <SuccessTransactionModal
+        buttonLabel={t('modals.contribute.successButton')}
+        onClose={hideModal}
+        onButtonClick={hideModal}
+        message={t('modals.contribute.success', { bounty: bounty.title })}
+      />
+    )
   }
 
   if (state.matches(ContributeFundStates.error)) {

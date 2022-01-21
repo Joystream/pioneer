@@ -2,6 +2,12 @@ import BN from 'bn.js'
 
 import { Member } from '@/memberships/types'
 
+export interface BountyContributionsFiltersState {
+  contributorId?: string
+  bountyId?: string
+  createdAfter?: Date
+}
+
 export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
@@ -72,7 +78,16 @@ export type ContractClosed = {
   whitelist: string[]
 }
 
-export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminate'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
+
+export interface WorkEntry {
+  id: string
+  bountyId: string
+  worker: Member
+  status: BountyEntryStatus
+  works: BountyWork[]
+  stake: BN
+}
 
 export interface EntryMiniature {
   winner: boolean
@@ -81,6 +96,13 @@ export interface EntryMiniature {
   rejected: boolean
   worker: Member
   worksIds: string[]
+  id: string
+  stake: number
+}
+
+export interface WinnerEntry {
+  entryId: string
+  reward: BN
 }
 
 export interface BountyWork {
@@ -89,6 +111,12 @@ export interface BountyWork {
   title: string
   description: string
   status: BountyEntryStatus
+}
+
+export interface BountyContribution {
+  id: string
+  contributor?: Member
+  amount: BN
 }
 
 export interface Bounty {
@@ -110,4 +138,5 @@ export interface Bounty {
   inBlock: number
   contractType: ContractType
   contributors: Contributor[]
+  discussionThreadId: string
 }

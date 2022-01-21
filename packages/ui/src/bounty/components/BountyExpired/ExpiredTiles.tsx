@@ -40,7 +40,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         title: t('tiles.periodLength.title'),
         content: (
           <TextHuge value bold>
-            {isFundingLimited(bounty.fundingType) ? 'Limited' : 'Perpetual'}
+            {isFundingLimited(bounty.fundingType) ? t('bountyFields.limited') : t('bountyFields.perpetual')}
           </TextHuge>
         ),
         tooltipText: t('tiles.periodLength.tooltip'),
@@ -60,7 +60,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         content: bounty.oracle && <MemberInfo member={bounty.oracle} size="m" memberSize="m" hideGroup />,
       },
     ],
-    []
+    [t, bounty]
   )
 
   const secondRow = useMemo(
@@ -85,7 +85,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         tooltipText: t('tiles.worksSubmitted.tooltip'),
       },
     ],
-    [data]
+    [data, t, bounty]
   )
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />

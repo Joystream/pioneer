@@ -23,6 +23,8 @@ const defaultEntry: EntryMiniature = {
   passed: false,
   worksIds: [],
   rejected: false,
+  id: '1',
+  stake: 10,
 }
 
 describe('UI: BountyPreviewHeader', () => {
@@ -56,6 +58,7 @@ describe('UI: BountyPreviewHeader', () => {
     judgingPeriod: new BN(10),
     stage: 'expired',
     totalFunding: new BN(10),
+    discussionThreadId: '1',
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -179,7 +182,7 @@ describe('UI: BountyPreviewHeader', () => {
         renderHeader()
 
         expect(await getButton('buttons.submitWork')).toBeDefined()
-        expect(await getButton('common:buttons.withdraw')).toBeDefined()
+        expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
       })
     })
   })
@@ -235,6 +238,8 @@ describe('UI: BountyPreviewHeader', () => {
           ...defaultEntry,
           hasSubmitted: true,
           passed: true,
+          id: '1',
+          stake: 10,
         },
       ]
 

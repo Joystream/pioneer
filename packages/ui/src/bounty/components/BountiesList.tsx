@@ -1,61 +1,85 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { sortingOptions } from '@/bounty/helpers'
 import { BountyOrderByInput } from '@/common/api/queries'
 import { CountBadge } from '@/common/components/CountBadge'
-import { Loading } from '@/common/components/Loading'
-import { Pagination } from '@/common/components/Pagination'
+import { List } from '@/common/components/List'
 import { SimpleSelect } from '@/common/components/selects'
 import { TextBig } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { useSort } from '@/common/hooks/useSort'
+import { GetSortProps } from '@/common/hooks/useSort'
 
-import { useBounties } from '../hooks/useBounties'
+import { Bounty } from '../types/Bounty'
 
 import { BountyListItem } from './BountyListItem/BountyListItem'
 
-const sortingOptions = ['Latest', 'Earliest']
+interface Props {
+  bounties: Bounty[]
+  getSortProps?: GetSortProps<BountyOrderByInput>
+}
 
-export const BountiesList = memo(() => {
-  const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
-  const { onSort, isDescending } = getSortProps('createdAt')
-  const { isLoading, bounties, pagination } = useBounties({ order })
+export const BountiesList = memo(({ bounties, getSortProps }: Props) => {
+  const { t } = useTranslation('bounty')
+  const { onSort, isDescending } = getSortProps?.('createdAt') || {}
 
-  if (isLoading) {
-    return <Loading />
-  }
+  const bountiesComponents = useMemo(() => {
+    return bounties?.length ? (
+      <StyledList as="div">
+        {bounties.map((bounty) => {
+          return <BountyListItem {...bounty} />
+        })}
+      </StyledList>
+    ) : null
+  }, [bounties.length])
 
-  if (!bounties?.length) {
-    return <NotFoundText>No Bounties</NotFoundText>
+  if (!bounties.length) {
+    return <NotFoundText>{t('list.noResults')}</NotFoundText>
   }
 
   return (
     <div>
-      <Title bold value>
-        Bounties
-        <Counter count={bounties.length} />
-      </Title>
-      <SimpleSelect
-        title="Sorting"
-        options={sortingOptions}
-        value={isDescending ? 'Latest' : 'Earliest'}
-        onChange={onSort}
-      />
-      {bounties.map((bounty) => {
-        return <BountyListItem {...bounty} />
-      })}
-      <Pagination {...pagination} />
+      <Header>
+        <Title bold value>
+          {t('bounties')}
+          <Counter count={bounties.length} />
+        </Title>
+        {getSortProps && onSort ? (
+          <SelectWrapper>
+            <SimpleSelect
+              options={sortingOptions}
+              value={isDescending ? sortingOptions[0] : sortingOptions[1]}
+              onChange={onSort}
+            />
+          </SelectWrapper>
+        ) : null}
+      </Header>
+      {bountiesComponents}
     </div>
   )
 })
 
 const Title = styled(TextBig)`
-  margin-bottom: 24px;
   display: flex;
   align-items: center;
   width: fit-content;
 `
 
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`
+
+const SelectWrapper = styled.div`
+  max-width: 150px;
+`
+
 const Counter = styled(CountBadge)`
   margin-left: 12px;
+`
+
+const StyledList = styled(List)`
+  row-gap: 16px;
 `
