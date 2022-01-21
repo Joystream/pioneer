@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 
 import { ExpiredTabs, ExpiredTabsState } from '@/bounty/components/BountyExpired/ExpiredTabs'
 import { ExpiredTiles } from '@/bounty/components/BountyExpired/ExpiredTiles'
@@ -23,6 +23,15 @@ export const BountyExpired = ({ bounty }: Props) => {
     setActive(tab)
   })
 
+  const entrants = useMemo(
+    () =>
+      bounty?.entries?.map((entry) => ({
+        actor: entry.worker,
+        count: entry.worksIds.length,
+      })) ?? [],
+    [bounty.entries?.length]
+  )
+
   return (
     <>
       <MainPanel>
@@ -35,6 +44,7 @@ export const BountyExpired = ({ bounty }: Props) => {
           )}{' '}
           <RowGapBlock gap={4}>
             <BountySidebar
+              entrants={entrants}
               contributors={bounty.contributors}
               stage="expired"
               periodsLengths={{

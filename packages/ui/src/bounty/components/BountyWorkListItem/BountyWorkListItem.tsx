@@ -56,7 +56,7 @@ export const BountyWorkListItem = ({
 const Wrapper = styled.div<{ withdrawn: boolean; searched?: boolean }>`
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid ${Colors.Black[400]};
+  border-bottom: 1px solid ${Colors.Black[200]};
   max-height: min-content;
   row-gap: 24px;
   margin: 12px 0;

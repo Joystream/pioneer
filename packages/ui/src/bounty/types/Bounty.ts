@@ -94,7 +94,9 @@ export interface EntryMiniature {
   winner: boolean
   hasSubmitted: boolean
   passed: boolean
+  rejected: boolean
   worker: Member
+  worksIds: string[]
   id: string
   stake: number
 }

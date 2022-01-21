@@ -21,6 +21,7 @@ export interface BountySidebarProps {
   entrantResult?: EntrantResult
   stage: BountyPeriod
   periodsLengths: PeriodsLengthsType
+  isSlashed?: boolean
   hidePeriods?: boolean
 }
 
@@ -32,14 +33,20 @@ export const BountySidebar = memo(
     entrantResult,
     stage,
     periodsLengths,
-    hidePeriods = false,
+    isSlashed,
+    hidePeriods,
   }: BountySidebarProps) => {
     const { t } = useTranslation('bounty')
 
     return (
       <>
         {entrants && (
-          <BountyActorsList title={t('sidebar.entrants')} elements={entrants} entrantResult={entrantResult} />
+          <BountyActorsList
+            isSlashed={isSlashed}
+            title={t('sidebar.entrants')}
+            elements={entrants}
+            entrantResult={entrantResult}
+          />
         )}
         {withdrawals && <BountyActorsList title={t('sidebar.withdrawals')} elements={withdrawals} />}
         {contributors && (

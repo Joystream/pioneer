@@ -52,6 +52,9 @@ fragment BountyFields on Bounty {
       }
     }
     stake
+    works {
+      id
+    }
   }
   createdInEvent {
     inBlock
