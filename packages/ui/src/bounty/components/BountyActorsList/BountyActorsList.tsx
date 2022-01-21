@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BountyActorItem, EntrantResult, isContributor, isEntrant } from '@/bounty/types/Bounty'
@@ -44,6 +45,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
 
 export const BountyActorsList = memo(
   ({ title, elements, entrantResult, open = true, isSlashed = false }: BountyActorsListProps) => {
+    const { t } = useTranslation('bounty')
     const [isSlashedVisible, toggleSlashedVisible] = useToggle(isSlashed)
     const [isVisible, toggleVisibility] = useToggle(open)
 
@@ -65,12 +67,9 @@ export const BountyActorsList = memo(
               <SlashedBox>
                 <StyledCloseIcon onClick={toggleSlashedVisible} />
                 <TextBig value bold>
-                  You are slashed
+                  {t('slashed.title')}
                 </TextBig>
-                <TextMedium inter>
-                  Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis
-                  enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
-                </TextMedium>
+                <TextMedium inter>{t('slashed.description')}</TextMedium>
               </SlashedBox>
             )}
             {entrantResult && <Infobox result={entrantResult} />}

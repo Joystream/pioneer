@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -22,6 +22,15 @@ export const BountyExpired = ({ bounty }: Props) => {
   const { t } = useTranslation('common')
   const [active, setActive] = useState<ExpiredTabsState>('Bounty')
 
+  const entrants = useMemo(
+    () =>
+      bounty?.entries?.map((entry) => ({
+        actor: entry.worker,
+        count: entry.worksIds.length,
+      })) ?? [],
+    [bounty.entries?.length]
+  )
+
   return (
     <MainPanel>
       <ExpiredTiles bounty={bounty} />
@@ -31,12 +40,7 @@ export const BountyExpired = ({ bounty }: Props) => {
         {active === 'Works' && <WorkTab bountyId={bounty.id} />}
         <RowGapBlock gap={4}>
           <BountySidebar
-            entrants={
-              bounty?.entries?.map((entry) => ({
-                actor: entry.worker,
-                count: entry.worksIds.length,
-              })) ?? []
-            }
+            entrants={entrants}
             contributors={bounty.contributors}
             stage="expired"
             periodsLengths={{

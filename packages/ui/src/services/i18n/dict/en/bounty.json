@@ -123,5 +123,9 @@
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty"
+  },
+  "slashed": {
+    "title": "You are slashed",
+    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis\n                  enim velit mollit. Exercitation veniam consequat sunt nostrud amet."
   }
 }
