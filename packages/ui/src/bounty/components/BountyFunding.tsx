@@ -7,7 +7,6 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { getFundingPeriodLength } from '../helpers'
 import { FundingTiles } from './BountyTiles/FundingTiles'
-import { BountyDiscussion } from './BountyDiscussion/BountyDiscussion'
 
 interface Props {
   bounty: Bounty
@@ -24,7 +23,7 @@ export const BountyFunding = ({ bounty }: Props) => {
           <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}
-              stage="expired"
+              stage="funding"
               periodsLengths={{
                 fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
                 judgingPeriodLength: bounty.judgingPeriod,

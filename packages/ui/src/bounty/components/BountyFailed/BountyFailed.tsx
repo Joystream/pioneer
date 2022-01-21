@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { FailedTabs, FailedTabsState } from '@/bounty/components/BountyFailed/FailedTabs'
-import { FailedTiles } from '@/bounty/components/BountyTiles/FailedTiles'
+import { ResultsTabs, ResultsTabsState } from '@/bounty/components/tabsSets/ResultsTabs'
+import { ResultsTiles } from '@/bounty/components/BountyTiles/ResultsTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
@@ -16,13 +16,13 @@ interface Props {
 }
 
 export const BountyFailed = ({ bounty }: Props) => {
-  const [active, setActive] = useState<FailedTabsState>('Bounty')
+  const [active, setActive] = useState<ResultsTabsState>('Bounty')
 
   return (
     <>
       <MainPanel>
-        <FailedTiles bounty={bounty} />
-        <FailedTabs setActive={setActive} active={active} />
+        <ResultsTiles bounty={bounty} />
+        <ResultsTabs setActive={setActive} active={active} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
           {active === 'Works' && <WorkTab bountyId={bounty.id} />}

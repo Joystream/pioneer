@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { ExpiredTabs, ExpiredTabsState } from '@/bounty/components/BountyExpired/ExpiredTabs'
-import { ExpiredTiles } from '@/bounty/components/BountyTiles/ExpiredTiles'
+import { CommonTabs, CommonTabsState } from '@/bounty/components/tabsSets/CommonTabs'
+import { CommonTiles } from '@/bounty/components/BountyTiles/CommonTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
@@ -15,13 +15,13 @@ interface Props {
 }
 
 export const BountyExpired = ({ bounty }: Props) => {
-  const [active, setActive] = useState<ExpiredTabsState>('Bounty')
+  const [active, setActive] = useState<CommonTabsState>('Bounty')
 
   return (
     <>
       <MainPanel>
-        <ExpiredTiles bounty={bounty} />
-        <ExpiredTabs active={active} setActive={setActive} />
+        <CommonTiles bounty={bounty} period="expired" />
+        <CommonTabs active={active} setActive={setActive} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
           {active === 'Works' && <WorkTab bountyId={bounty.id} />}

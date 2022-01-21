@@ -29,6 +29,7 @@ export const BountyMain = ({ bounty }: BountyMainProps) => {
       case 'failed':
         return <BountyFailed bounty={bounty} />
       default:
+        // TODO: handle Terminated
         return null
     }
   }, [bounty.stage])
