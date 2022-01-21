@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { FailedTabs, FailedTabsState } from '@/bounty/components/BountyFailed/FailedTabs'
-import { FailedTiles } from '@/bounty/components/BountyFailed/FailedTiles'
+import { FailedTiles } from '@/bounty/components/BountyTiles/FailedTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
@@ -9,7 +9,7 @@ import { WinnersTab } from '@/bounty/components/tabs/WinnersTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { BN_ZERO } from '@/common/constants'
+import { getFundingPeriodLength } from '@/bounty/helpers'
 
 interface Props {
   bounty: Bounty
@@ -33,7 +33,7 @@ export const BountyFailed = ({ bounty }: Props) => {
               hidePeriods
               stage="withdrawal"
               periodsLengths={{
-                fundingPeriodLength: BN_ZERO,
+                fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
                 judgingPeriodLength: bounty.judgingPeriod,
                 workPeriodLength: bounty.workPeriod,
               }}
