@@ -127,6 +127,7 @@ export type BountyFieldsFragment = {
         __typename: 'BountyEntry'
         id: string
         workSubmitted: boolean
+        stake: any
         worker: {
           __typename: 'Membership'
           id: string
@@ -159,6 +160,7 @@ export type BountyFieldsFragment = {
           | { __typename: 'BountyEntryStatusWinner'; reward: number }
           | { __typename: 'BountyEntryStatusWithdrawn' }
           | { __typename: 'BountyEntryStatusWorking' }
+        works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string }> | null | undefined
       }>
     | null
     | undefined
@@ -170,6 +172,9 @@ export type BountyWorkFieldsFragment = {
   id: string
   description: string
   title: string
+  inBlock: number
+  createdAt: any
+  network: Types.Network
   entry: {
     __typename: 'BountyEntry'
     worker: {
@@ -378,6 +383,7 @@ export type GetBountiesQuery = {
           __typename: 'BountyEntry'
           id: string
           workSubmitted: boolean
+          stake: any
           worker: {
             __typename: 'Membership'
             id: string
@@ -414,6 +420,7 @@ export type GetBountiesQuery = {
             | { __typename: 'BountyEntryStatusWinner'; reward: number }
             | { __typename: 'BountyEntryStatusWithdrawn' }
             | { __typename: 'BountyEntryStatusWorking' }
+          works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string }> | null | undefined
         }>
       | null
       | undefined
@@ -573,6 +580,7 @@ export type GetBountyQuery = {
               __typename: 'BountyEntry'
               id: string
               workSubmitted: boolean
+              stake: any
               worker: {
                 __typename: 'Membership'
                 id: string
@@ -609,6 +617,7 @@ export type GetBountyQuery = {
                 | { __typename: 'BountyEntryStatusWinner'; reward: number }
                 | { __typename: 'BountyEntryStatusWithdrawn' }
                 | { __typename: 'BountyEntryStatusWorking' }
+              works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string }> | null | undefined
             }>
           | null
           | undefined
@@ -632,6 +641,9 @@ export type GetBountyWorksQuery = {
     id: string
     description: string
     title: string
+    inBlock: number
+    createdAt: any
+    network: Types.Network
     entry: {
       __typename: 'BountyEntry'
       worker: {
@@ -807,6 +819,10 @@ export const BountyFieldsFragmentDoc = gql`
           reward
         }
       }
+      works {
+        id
+      }
+      stake
     }
     createdInEvent {
       inBlock
@@ -819,6 +835,9 @@ export const BountyWorkFieldsFragmentDoc = gql`
     id
     description
     title
+    inBlock
+    createdAt
+    network
     entry {
       worker {
         ...MemberFields

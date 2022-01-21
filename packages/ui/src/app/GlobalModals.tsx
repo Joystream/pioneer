@@ -9,6 +9,8 @@ import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/Cancel
 import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
 import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
 import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
+import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
+import { WithdrawStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
 import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,
@@ -82,6 +84,7 @@ export type ModalNames =
   | ModalName<BountyWithdrawContributionModalCall>
   | ModalName<BountyContributeFundsModalCall>
   | ModalName<BountyCancelModalCall>
+  | ModalName<WithdrawStakeModalCall>
   | ModalName<SubmitWorkModalCall>
   | ModalName<BountyAnnounceWorkEntryModalCall>
   | ModalName<ClaimRewardModalCall>
@@ -123,6 +126,7 @@ const modals: Record<ModalNames, ReactElement> = {
   BountyContributeFundsModal: <ContributeFundsModal />,
   ClaimReward: <ClaimRewardModal />,
   BountyAnnounceWorkEntryModal: <AnnounceWorkEntryModal />,
+  WithdrawStakeModal: <WithdrawStakeModal />,
 }
 
 export const GlobalModals = () => {

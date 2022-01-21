@@ -9,14 +9,15 @@ import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 const randomizedBlock = randomBlock()
 
-describe('UI: BountyListItem', () => {
+describe('UI: BountyWorkListItem', () => {
   const props: BountyWorkListItemProps = {
+    id: 'asd',
     entrant: members[0] as unknown as Member,
     description: 'Description',
     withdrawn: false,
     title: 'Title',
     inBlock: randomizedBlock,
-    link: 'Link',
+    link: 'url',
   }
 
   it('Renders props', async () => {
@@ -27,7 +28,6 @@ describe('UI: BountyListItem', () => {
     expect(await screen.queryByText(props.entrant.handle)).toBeDefined()
     expect(await screen.queryByText(props.inBlock.network)).toBeDefined()
     expect(await screen.queryByText(props.inBlock.number)).toBeDefined()
-    expect(await screen.getByRole('link')).toHaveAttribute('href', `/${props.link}`)
   })
 
   it('Renders withdrawn', async () => {
@@ -40,7 +40,6 @@ describe('UI: BountyListItem', () => {
     expect(await screen.queryByText(props.inBlock.number)).toBeDefined()
     expect(await screen.queryByText(props.title)).toBeNull()
     expect(await screen.queryByText(props.description)).toBeNull()
-    expect(await screen.queryByRole('link')).toBeNull()
   })
 
   const renderItem = () => {

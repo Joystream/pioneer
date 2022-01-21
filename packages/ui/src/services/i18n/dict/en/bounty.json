@@ -230,7 +230,8 @@
     "filter": {
       "label": "Entrant",
       "placeholder": "Filter entrant"
-    }
+    },
+    "noWorks": "No works submitted yet"
   },
   "sidebar": {
     "entrants": "Entrants",
@@ -249,7 +250,9 @@
     "announceEntry": "Announce Entry",
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
-    "cancelBounty": "Cancel Bounty"
+    "cancelBounty": "Cancel Bounty",
+    "loserWithdrawStake": "Withdraw Stake",
+    "entrantWithdrawStake": "Withdraw Contribution"
   },
   "information": {
     "bountyFailed": {
@@ -276,6 +279,11 @@
     "noFoundText": "Lorem ipsum dolor sit amet enim"
   },
   "discussionThread": {
-    "title": "Bounty discussion thread"
+    "title": "Bounty discussion thread",
+    "cancelBounty": "Cancel Bounty"
+  },
+  "slashed": {
+    "title": "You are slashed",
+    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis\n                  enim velit mollit. Exercitation veniam consequat sunt nostrud amet."
   }
 }

@@ -55,6 +55,9 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniatu
       hasSubmitted: entry.workSubmitted,
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
+      rejected: entry.status.__typename === 'BountyEntryStatusRejected',
+      worksIds: entry.works?.map((work) => work.id) ?? [],
+      stake: entry.stake,
     }
   })
 }
@@ -92,6 +95,11 @@ export const asBountyWork = (fields: BountyWorkFieldsFragment): BountyWork => ({
   description: fields.description,
   worker: asMember(fields.entry.worker),
   status: asBountyEntryStatus(fields.entry.status),
+  inBlock: {
+    number: fields.inBlock,
+    network: fields.network,
+    timestamp: fields.createdAt,
+  },
 })
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
