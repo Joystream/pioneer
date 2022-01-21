@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 
-import { CommonTabs, CommonTabsState } from '@/bounty/components/tabsSets/CommonTabs'
-import { CommonTiles } from '@/bounty/components/BountyTiles/CommonTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
+import { CommonTiles } from '@/bounty/components/BountyTiles/CommonTiles'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
-import { Bounty } from '@/bounty/types/Bounty'
-import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { CommonTabs, CommonTabsState } from '@/bounty/components/tabsSets/CommonTabs'
 import { getFundingPeriodLength } from '@/bounty/helpers'
 import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
 import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
+import { Bounty } from '@/bounty/types/Bounty'
+import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 
 interface Props {
   bounty: Bounty

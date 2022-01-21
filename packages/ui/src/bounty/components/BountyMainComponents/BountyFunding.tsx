@@ -5,6 +5,7 @@ import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+
 import { getFundingPeriodLength } from '../../helpers'
 import { FundingTiles } from '../BountyTiles/FundingTiles'
 
@@ -13,7 +14,6 @@ interface Props {
 }
 
 export const BountyFunding = ({ bounty }: Props) => {
-
   return (
     <>
       <MainPanel>

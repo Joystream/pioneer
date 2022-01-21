@@ -1,4 +1,11 @@
-import { BountyEntryStatus, BountyPeriod, EntrantResult, FundingType, isBountyEntryStatusWinner, isFundingLimited } from '@/bounty/types/Bounty'
+import {
+  BountyEntryStatus,
+  BountyPeriod,
+  EntrantResult,
+  FundingType,
+  isBountyEntryStatusWinner,
+  isFundingLimited,
+} from '@/bounty/types/Bounty'
 import { Colors } from '@/common/constants'
 
 export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {

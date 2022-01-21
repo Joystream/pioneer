@@ -104,7 +104,9 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
   )
 
   if (bounty?.contractType !== 'ContractOpen' && !isOnWhitelist) {
-    {/* TODO: https://github.com/Joystream/pioneer/issues/1937 */}
+    {
+      /* TODO: https://github.com/Joystream/pioneer/issues/1937 */
+    }
     return (
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}

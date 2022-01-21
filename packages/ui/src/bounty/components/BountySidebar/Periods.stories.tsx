@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react'
-import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 

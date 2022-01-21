@@ -1,17 +1,17 @@
 import React, { useMemo, useState } from 'react'
 
-import { ResultsTabs, ResultsTabsState } from '@/bounty/components/tabsSets/ResultsTabs'
-import { ResultsTiles } from '@/bounty/components/BountyTiles/ResultsTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
+import { ResultsTiles } from '@/bounty/components/BountyTiles/ResultsTiles'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
 import { WinnersTab } from '@/bounty/components/tabs/WinnersTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
-import { Bounty } from '@/bounty/types/Bounty'
-import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { ResultsTabs, ResultsTabsState } from '@/bounty/components/tabsSets/ResultsTabs'
 import { getFundingPeriodLength, statusToEntrantResult } from '@/bounty/helpers'
 import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
 import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
+import { Bounty } from '@/bounty/types/Bounty'
+import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface Props {
@@ -23,7 +23,8 @@ export const BountySuccessful = ({ bounty }: Props) => {
   const entrants = useBountyEntrants(bounty)
   const withdrawns = useBountyWithdrawns(bounty)
   const { active: activeMember } = useMyMemberships()
-  const { status } = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty]) || {}
+  const { status } =
+    useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty]) || {}
   const entrantResult = status ? statusToEntrantResult(status) : undefined
 
   return (

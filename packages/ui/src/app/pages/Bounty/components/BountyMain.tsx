@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Bounty } from '@/bounty/types/Bounty'
-import { 
+import {
   BountyExpired,
   BountyFailed,
   BountyFunding,
@@ -10,6 +9,7 @@ import {
   BountyJudgement,
   BountySuccessful,
 } from '@/bounty/components/BountyMainComponents'
+import { Bounty } from '@/bounty/types/Bounty'
 export interface BountyMainProps {
   bounty: Bounty
 }
@@ -17,7 +17,7 @@ export interface BountyMainProps {
 export const BountyMain = ({ bounty }: BountyMainProps) => {
   const page = useMemo(() => {
     switch (bounty.stage) {
-      case 'funding': 
+      case 'funding':
         return <BountyFunding bounty={bounty} />
       case 'workSubmission':
         return <BountyWorking bounty={bounty} />

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Description } from '@/bounty/components/Descriptions'
 import { Bounty } from '@/bounty/types/Bounty'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+
 import { BountyDiscussion } from '../BountyDiscussion/BountyDiscussion'
 
 interface Props {

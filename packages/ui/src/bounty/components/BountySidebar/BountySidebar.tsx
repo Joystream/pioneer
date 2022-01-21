@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
