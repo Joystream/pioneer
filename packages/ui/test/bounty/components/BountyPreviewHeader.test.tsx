@@ -156,6 +156,7 @@ describe('UI: BountyPreviewHeader', () => {
             worker: activeMember,
             passed: false,
             id: '1',
+            stake: 10,
           },
         ]
 
@@ -172,13 +173,14 @@ describe('UI: BountyPreviewHeader', () => {
             worker: activeMember,
             passed: false,
             id: '1',
+            stake: 10,
           },
         ]
 
         renderHeader()
 
         expect(await getButton('buttons.submitWork')).toBeDefined()
-        expect(await getButton('common:buttons.withdraw')).toBeDefined()
+        expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
       })
     })
   })
@@ -222,6 +224,7 @@ describe('UI: BountyPreviewHeader', () => {
           worker: activeMember,
           passed: false,
           id: '1',
+          stake: 10,
         },
       ]
 
@@ -238,6 +241,7 @@ describe('UI: BountyPreviewHeader', () => {
           worker: activeMember,
           passed: true,
           id: '1',
+          stake: 10,
         },
       ]
 
@@ -284,6 +288,7 @@ describe('UI: BountyPreviewHeader', () => {
           worker: activeMember,
           passed: false,
           id: '1',
+          stake: 10,
         },
       ]
 

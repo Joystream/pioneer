@@ -248,7 +248,9 @@
     "contributeFunds": "Contribute",
     "createBounty": "Create Bounty",
     "withdrawWorkEntry": "Withdraw",
-    "claimReward": "Claim Reward"
+    "claimReward": "Claim Reward",
+    "loserWithdrawStake": "Withdraw Stake",
+    "contributorWithdrawStake": "Withdraw Contribution"
   },
   "information": {
     "bountyFailed": {
