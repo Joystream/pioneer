@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { Bounty } from '@/bounty/types/Bounty'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { useModal } from '@/common/hooks/useModal'
 
 interface Props {

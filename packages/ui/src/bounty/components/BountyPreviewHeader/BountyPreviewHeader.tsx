@@ -2,14 +2,14 @@ import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
-import { 
+import {
   AnnounceWorkEntryButton,
   CancelBountyButton,
   ClaimRewardButton,
   ContributeFundsButton,
   SubmitWorkButton,
   WithdrawStakeButton,
-  WithdrawWorkEntryButton
+  WithdrawWorkEntryButton,
 } from '@/bounty/components/modalsButtons'
 import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
@@ -18,7 +18,6 @@ import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
-
 
 interface Props {
   bounty?: Bounty
@@ -105,6 +104,7 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
   )
 
   if (bounty?.contractType !== 'ContractOpen' && !isOnWhitelist) {
+    {/* TODO: https://github.com/Joystream/pioneer/issues/1937 */}
     return (
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
@@ -126,7 +126,6 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 
   return (
     <>
-      {/* TODO: https://github.com/Joystream/pioneer/issues/1937 */}
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
@@ -139,7 +138,6 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 const getReward = (entry: WorkEntry) => {
   isBountyEntryStatusWinner(entry.status) ? entry.status.reward : undefined
 }
-
 
 const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
@@ -158,7 +156,7 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {(winnerConditions) && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
+      {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
       {(passed || isContributor) && <WithdrawStakeButton bounty={bounty} lost />}
     </>
   )
@@ -189,7 +187,7 @@ const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProp
   )
 }
 
-const ExpiredStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
+const ExpiredStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
   const bountyCreator = bounty.creator
   const isCreator = bountyCreator?.id === activeMember?.id
 

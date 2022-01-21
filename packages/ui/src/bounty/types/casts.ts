@@ -56,7 +56,7 @@ const asEntries = (entriesFields: BountyFieldsFragment['entries']): WorkEntry[] 
       hasSubmitted: entry.workSubmitted,
       status: asBountyEntryStatus(entry.status),
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
-      works: entry.works?.map((work) => ({ id: work.id, title: work.title, description: work.description})),
+      works: entry.works?.map((work) => ({ id: work.id, title: work.title, description: work.description })),
       stake: entry.stake,
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
     }

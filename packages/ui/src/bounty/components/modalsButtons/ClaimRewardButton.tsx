@@ -1,10 +1,10 @@
+import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
-import BN from 'bn.js'
 
 interface Props {
   bountyId: string
