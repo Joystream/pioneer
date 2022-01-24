@@ -30,7 +30,7 @@ export const BountyDetails = memo(
     const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries?.length])
 
     const worksSubmitted = useMemo(
-      () => entries?.reduce((prev, current) => prev + current.worksIds.length, 0),
+      () => entries?.reduce((prev, current) => prev + (current.works?.length || 0), 0),
       [entries?.length]
     )
 

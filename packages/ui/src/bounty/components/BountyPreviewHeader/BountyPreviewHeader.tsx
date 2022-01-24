@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 
@@ -138,7 +139,7 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
 }
 
 const getReward = (entry: WorkEntry) => {
-  isBountyEntryStatusWinner(entry.status) ? entry.status.reward : undefined
+  return isBountyEntryStatusWinner(entry.status) ? entry.status.reward : undefined
 }
 
 const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
@@ -158,8 +159,8 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
-      {(passed || isContributor) && <WithdrawStakeButton bounty={bounty} lost />}
+      {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={new BN(reward)} />}
+      {(passed || isContributor) && <WithdrawStakeButton bounty={bounty} lost={!isContributor} />}
     </>
   )
 }
@@ -184,7 +185,7 @@ const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProp
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {hasSubmitted && <WithdrawStakeButton bounty={bounty} lost={hasLost} />}
+      {<WithdrawStakeButton bounty={bounty} lost={hasLost} />}
     </>
   )
 }

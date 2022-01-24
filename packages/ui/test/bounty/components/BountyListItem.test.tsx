@@ -36,13 +36,14 @@ describe('UI: BountyListItem', () => {
     entries: [
       {
         worker: getMember('alice'),
+        status: 'BountyEntryStatusWorking',
         winner: true,
         hasSubmitted: true,
         passed: false,
         id: '1',
-        stake: 10,
+        bountyId: '0',
+        stake: new BN(10),
         rejected: false,
-        worksIds: [],
         withdrawn: false,
       },
     ],

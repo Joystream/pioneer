@@ -107,11 +107,6 @@ export interface WorkInfo {
   description: string
 }
 
-export interface WinnerEntry {
-  entryId: string
-  reward: BN
-}
-
 export interface BountyWork {
   id: string
   worker: Member

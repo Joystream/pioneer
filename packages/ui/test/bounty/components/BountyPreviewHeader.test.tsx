@@ -5,7 +5,7 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
-import { Bounty, EntryMiniature } from '@/bounty/types/Bounty'
+import { Bounty, BountyEntryStatusWinner, WorkEntry } from '@/bounty/types/Bounty'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { Member } from '@/memberships/types'
@@ -16,15 +16,17 @@ import { alice, bob } from '../../_mocks/keyring'
 
 const activeMember = { ...rawMembers[0], id: '0' } as unknown as Member
 
-const defaultEntry: EntryMiniature = {
+const defaultEntry: WorkEntry = {
+  status: 'BountyEntryStatusWorking',
   hasSubmitted: false,
   winner: false,
   worker: activeMember,
   passed: false,
-  worksIds: [],
+  works: [],
   rejected: false,
   id: '1',
-  stake: 10,
+  bountyId: '0',
+  stake: new BN(10),
   withdrawn: false,
 }
 
@@ -118,7 +120,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('common:buttons.contribute')).toBeDefined()
+      expect(await getButton('buttons.contributeFunds')).toBeDefined()
     })
   })
 
@@ -183,7 +185,7 @@ describe('UI: BountyPreviewHeader', () => {
         renderHeader()
 
         expect(await getButton('buttons.submitWork')).toBeDefined()
-        expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
+        expect(await getButton('buttons.withdrawWorkEntry')).toBeDefined()
       })
     })
   })
@@ -224,13 +226,16 @@ describe('UI: BountyPreviewHeader', () => {
         {
           ...defaultEntry,
           hasSubmitted: true,
+          status: {
+            reward: 1000,
+          } as BountyEntryStatusWinner,
           winner: true,
         },
       ]
 
       renderHeader()
 
-      expect(await getButton('common:buttons.claimReward')).toBeDefined()
+      expect(await getButton('buttons.claimReward')).toBeDefined()
     })
 
     it('Passed', async () => {
@@ -240,13 +245,13 @@ describe('UI: BountyPreviewHeader', () => {
           hasSubmitted: true,
           passed: true,
           id: '1',
-          stake: 10,
+          stake: new BN(10),
         },
       ]
 
       renderHeader()
 
-      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
+      expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
     })
 
     it('Contributor', async () => {
@@ -260,7 +265,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
+      expect(await getButton('buttons.contributorWithdrawStake')).toBeDefined()
     })
 
     it('Other', async () => {
@@ -269,8 +274,9 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText('common:buttons.withdrawStake')).toBeNull()
-      expect(await screen.queryByText('common:buttons.claimReward')).toBeNull()
+      expect(await screen.queryByText('buttons.loserWithdrawStake')).toBeNull()
+      expect(await screen.queryByText('buttons.contributorWithdrawStake')).toBeNull()
+      expect(await screen.queryByText('buttons.claimReward')).toBeNull()
     })
   })
 
@@ -289,7 +295,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
+      expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
     })
 
     it('Contributor', async () => {
@@ -303,7 +309,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('common:buttons.withdrawStake')).toBeDefined()
+      expect(await getButton('buttons.contributorWithdrawStake')).toBeDefined()
     })
 
     it('Other', async () => {
@@ -312,7 +318,8 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText('common:buttons.withdrawStake')).toBeNull()
+      expect(await screen.queryByText('buttons.loserWithdrawStake')).toBeNull()
+      expect(await screen.queryByText('buttons.contributorWithdrawStake')).toBeNull()
     })
   })
 
