@@ -9,7 +9,7 @@ import { MemberInfo } from '@/memberships/components'
 
 interface Props {
   bounty: Bounty
-  period: 'working' | 'judgement' | 'expired'
+  period: 'working' | 'judgement' | 'expired' | 'terminated'
 }
 
 export const CommonTiles = ({ bounty, period }: Props) => {

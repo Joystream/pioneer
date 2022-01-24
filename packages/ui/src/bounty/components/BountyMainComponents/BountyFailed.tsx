@@ -8,7 +8,7 @@ import { SlashedTab } from '@/bounty/components/tabs/SlashedTab'
 import { WinnersTab } from '@/bounty/components/tabs/WinnersTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
 import { ResultsTabs, ResultsTabsState } from '@/bounty/components/tabsSets/ResultsTabs'
-import { getFundingPeriodLength, statusToEntrantResult } from '@/bounty/helpers'
+import { statusToEntrantResult } from '@/bounty/helpers'
 import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
 import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
 import { Bounty } from '@/bounty/types/Bounty'
@@ -45,11 +45,6 @@ export const BountyFailed = ({ bounty }: Props) => {
               withdrawals={withdrawns}
               entrantResult={entrantResult}
               stage="withdrawal"
-              periodsLengths={{
-                fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
-                judgingPeriodLength: bounty.judgingPeriod,
-                workPeriodLength: bounty.workPeriod,
-              }}
               hidePeriods
             />
           </RowGapBlock>

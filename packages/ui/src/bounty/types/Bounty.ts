@@ -73,6 +73,12 @@ export const isFundingLimited = (funding: FundingType): funding is FundingLimite
   return (funding as FundingLimited).minAmount !== undefined
 }
 
+export interface PeriodsLengthsType {
+  fundingPeriodLength?: number
+  workPeriodLength: number
+  judgingPeriodLength: number
+}
+
 export type ContractType = 'ContractOpen' | ContractClosed
 
 export type ContractClosed = {

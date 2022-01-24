@@ -1,17 +1,12 @@
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BountyPeriod, Contributor, Entrant, EntrantResult, Withdrawn } from '@/bounty/types/Bounty'
+import { BountyPeriod, Contributor, Entrant, EntrantResult, PeriodsLengthsType, Withdrawn } from '@/bounty/types/Bounty'
 
 import { BountyActorsList } from '../BountyActorsList/BountyActorsList'
 
 import { Periods } from './Periods'
 
-interface PeriodsLengthsType {
-  fundingPeriodLength?: number
-  workPeriodLength: number
-  judgingPeriodLength: number
-}
 
 export interface BountySidebarProps {
   contributors?: Contributor[]
@@ -19,7 +14,7 @@ export interface BountySidebarProps {
   withdrawals?: Withdrawn[]
   entrantResult?: EntrantResult
   stage: BountyPeriod
-  periodsLengths: PeriodsLengthsType
+  periodsLengths?: PeriodsLengthsType
   isSlashed?: boolean
   hidePeriods?: boolean
 }

@@ -8,6 +8,7 @@ import {
   BountyWorking,
   BountyJudgement,
   BountySuccessful,
+  BountyTerminated,
 } from '@/bounty/components/BountyMainComponents'
 import { Bounty } from '@/bounty/types/Bounty'
 export interface BountyMainProps {
@@ -29,8 +30,9 @@ export const BountyMain = ({ bounty }: BountyMainProps) => {
         return <BountySuccessful bounty={bounty} />
       case 'failed':
         return <BountyFailed bounty={bounty} />
+      case 'terminated':
+        return <BountyTerminated bounty={bounty} />
       default:
-        // TODO: handle Terminated
         return null
     }
   }, [bounty.stage])

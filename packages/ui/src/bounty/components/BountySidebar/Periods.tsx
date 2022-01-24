@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { ReactNode, memo, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { BountyPeriod } from '@/bounty/types/Bounty'
+import { BountyPeriod, PeriodsLengthsType } from '@/bounty/types/Bounty'
 import { formatDuration } from '@/common/components/statistics'
 import { Stepper } from '@/common/components/Stepper'
 import { TextSmall } from '@/common/components/typography'
@@ -17,9 +17,7 @@ interface PeriodStep {
 
 export interface PeriodsProps {
   stage: BountyPeriod
-  fundingPeriodLength?: number
-  workPeriodLength: number
-  judgingPeriodLength: number
+  periodsLengths?: PeriodsLengthsType
 }
 
 const formatPeriodLength = (value?: BN | number) => {
@@ -34,7 +32,11 @@ const formatPeriodLength = (value?: BN | number) => {
   )
 }
 
-export const Periods = memo(({ stage, fundingPeriodLength, workPeriodLength, judgingPeriodLength }: PeriodsProps) => {
+export const Periods = memo(({ stage, periodsLengths }: PeriodsProps) => {
+  if (!periodsLengths) {
+    return null
+  }
+  const { fundingPeriodLength, workPeriodLength, judgingPeriodLength } = periodsLengths
   const steps: PeriodStep[] = useMemo(
     () => [
       {

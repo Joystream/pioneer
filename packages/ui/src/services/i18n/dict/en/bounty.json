@@ -246,7 +246,8 @@
     "perpetual": "Perpetual",
     "limited": "Limited",
     "withdrawalPeriod": "Withdrawal period",
-    "fundingPeriod": "Funding Period"
+    "fundingPeriod": "Funding Period",
+    "terminated": "Terminated"
   },
   "buttons": {
     "announceEntry": "Announce Entry",
