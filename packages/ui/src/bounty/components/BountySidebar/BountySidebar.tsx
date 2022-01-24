@@ -28,7 +28,6 @@ export const BountySidebar = memo(
     stage,
     periodsLengths,
     isSlashed,
-    hidePeriods,
   }: BountySidebarProps) => {
     const { t } = useTranslation('bounty')
 
@@ -46,7 +45,7 @@ export const BountySidebar = memo(
         {contributors && (
           <BountyActorsList title={t('sidebar.contributors')} elements={contributors} open={stage === 'funding'} />
         )}
-        {!hidePeriods && <Periods stage={stage} {...periodsLengths} />}
+        {periodsLengths && <Periods stage={stage} periodsLengths={periodsLengths} />}
       </>
     )
   }

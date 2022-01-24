@@ -34,7 +34,6 @@ export const BountyTerminated = ({ bounty }: Props) => {
               entrants={entrants}
               withdrawals={withdrawns}
               stage="terminated"
-              hidePeriods
             />
           </RowGapBlock>
         </ContentWithSidePanel>

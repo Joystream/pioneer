@@ -45,7 +45,6 @@ export const BountyFailed = ({ bounty }: Props) => {
               withdrawals={withdrawns}
               entrantResult={entrantResult}
               stage="withdrawal"
-              hidePeriods
             />
           </RowGapBlock>
         </ContentWithSidePanel>

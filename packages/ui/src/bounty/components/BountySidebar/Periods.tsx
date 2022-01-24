@@ -17,7 +17,7 @@ interface PeriodStep {
 
 export interface PeriodsProps {
   stage: BountyPeriod
-  periodsLengths?: PeriodsLengthsType
+  periodsLengths: PeriodsLengthsType
 }
 
 const formatPeriodLength = (value?: BN | number) => {
@@ -33,9 +33,6 @@ const formatPeriodLength = (value?: BN | number) => {
 }
 
 export const Periods = memo(({ stage, periodsLengths }: PeriodsProps) => {
-  if (!periodsLengths) {
-    return null
-  }
   const { fundingPeriodLength, workPeriodLength, judgingPeriodLength } = periodsLengths
   const steps: PeriodStep[] = useMemo(
     () => [
