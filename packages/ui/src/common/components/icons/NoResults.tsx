@@ -8,13 +8,7 @@ interface Props {
 
 export const NoResultsTile = React.memo(({ className }: Props) => {
   return (
-    <Icon
-      className={className}
-      width="108"
-      height="108"
-      viewBox="0 0 108 108"
-      fill="none"
-    >
+    <Icon className={className} width="108" height="108" viewBox="0 0 108 108" fill="none">
       <rect x="0.5" y="0.5" width="107" height="107" rx="1.5" fill="#F9FAFC" stroke="#E8EDF6" />
       <path
         fill-rule="evenodd"
