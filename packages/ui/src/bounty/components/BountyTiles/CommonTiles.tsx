@@ -14,7 +14,7 @@ interface Props {
   period: 'working' | 'judgement' | 'expired' | 'terminated'
 }
 
-export const CommonTiles = ({ bounty, period }: Props) => {
+export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const { t } = useTranslation('bounty')
   const { data } = useGetBountyWorksCountQuery({
     variables: {
@@ -104,4 +104,4 @@ export const CommonTiles = ({ bounty, period }: Props) => {
   )
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />
-}
+})

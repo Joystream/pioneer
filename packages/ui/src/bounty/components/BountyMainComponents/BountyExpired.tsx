@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
@@ -17,10 +17,15 @@ interface Props {
   bounty: Bounty
 }
 
-export const BountyExpired = ({ bounty }: Props) => {
+export const BountyExpired = React.memo(({ bounty }: Props) => {
   const [active, setActive] = useState<CommonTabsState>('Bounty')
   const entrants = useBountyEntrants(bounty)
   const withdrawns = useBountyWithdrawns(bounty)
+  const periodsLengths = useMemo(() => ({
+    fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
+    judgingPeriodLength: bounty.judgingPeriod,
+    workPeriodLength: bounty.workPeriod,
+  }), [bounty])
   const [wasSearched, setWasSearched] = useState<boolean>(false)
 
   useBountyPreviewTabViaUrlParameter((tab) => {
@@ -43,11 +48,7 @@ export const BountyExpired = ({ bounty }: Props) => {
               contributors={bounty.contributors}
               withdrawals={withdrawns}
               stage="expired"
-              periodsLengths={{
-                fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
-                judgingPeriodLength: bounty.judgingPeriod,
-                workPeriodLength: bounty.workPeriod,
-              }}
+              periodsLengths={periodsLengths}
             />
           </RowGapBlock>
         </ContentWithSidePanel>
@@ -55,4 +56,4 @@ export const BountyExpired = ({ bounty }: Props) => {
       <BountyFooter bounty={bounty} />
     </>
   )
-}
+})

@@ -19,7 +19,7 @@ interface Props {
   bounty: Bounty
 }
 
-export const BountyFailed = ({ bounty }: Props) => {
+export const BountyFailed = React.memo(({ bounty }: Props) => {
   const [active, setActive] = useState<ResultsTabsState>('Bounty')
   const entrants = useBountyEntrants(bounty)
   const withdrawns = useBountyWithdrawns(bounty)
@@ -52,4 +52,4 @@ export const BountyFailed = ({ bounty }: Props) => {
       <BountyFooter bounty={bounty} />
     </>
   )
-}
+})

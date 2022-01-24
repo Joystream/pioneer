@@ -11,7 +11,7 @@ interface Props {
   lost?: boolean
 }
 
-export const WithdrawStakeButton = ({ bounty, lost }: Props) => {
+export const WithdrawStakeButton = React.memo(({ bounty, lost }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const withdrawStakeModal = useCallback(() => {
@@ -28,4 +28,4 @@ export const WithdrawStakeButton = ({ bounty, lost }: Props) => {
       {lost ? t('buttons.loserWithdrawStake') : t('buttons.contributorWithdrawStake')}
     </TransactionButton>
   )
-}
+})

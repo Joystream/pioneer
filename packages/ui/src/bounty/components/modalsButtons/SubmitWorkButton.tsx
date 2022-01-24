@@ -10,7 +10,7 @@ interface Props {
   bounty: Bounty
 }
 
-export const SubmitWorkButton = ({ bounty }: Props) => {
+export const SubmitWorkButton = React.memo(({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const submitWorkModal = useCallback(() => {
@@ -27,4 +27,4 @@ export const SubmitWorkButton = ({ bounty }: Props) => {
       {t('buttons.submitWork')}
     </TransactionButton>
   )
-}
+})

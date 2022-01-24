@@ -11,7 +11,7 @@ interface Props {
   bounty: Bounty
 }
 
-export const BountyTab = ({ bounty }: Props) => {
+export const BountyTab = React.memo(({ bounty }: Props) => {
   return (
     <RowGapBlock gap={4}>
       <Description imageUrl={bounty.imageUri} title={bounty.title} description={bounty.description} />
@@ -20,7 +20,7 @@ export const BountyTab = ({ bounty }: Props) => {
       </ForumThreadWrapper>
     </RowGapBlock>
   )
-}
+})
 
 const ForumThreadWrapper = styled.div`
   margin: 30px 0;

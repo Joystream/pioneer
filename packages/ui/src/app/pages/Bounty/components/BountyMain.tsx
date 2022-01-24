@@ -15,7 +15,7 @@ export interface BountyMainProps {
   bounty: Bounty
 }
 
-export const BountyMain = ({ bounty }: BountyMainProps) => {
+export const BountyMain = React.memo(({ bounty }: BountyMainProps) => {
   const page = useMemo(() => {
     switch (bounty.stage) {
       case 'funding':
@@ -38,7 +38,7 @@ export const BountyMain = ({ bounty }: BountyMainProps) => {
   }, [bounty.stage])
 
   return <Container>{page}</Container>
-}
+})
 
 const Container = styled.div`
   height: 100%;

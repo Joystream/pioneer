@@ -12,7 +12,7 @@ interface Props {
   reward: BN
 }
 
-export const ClaimRewardButton = ({ bountyId, entryId, reward }: Props) => {
+export const ClaimRewardButton = React.memo(({ bountyId, entryId, reward }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const submitWorkModal = useCallback(() => {
@@ -31,4 +31,4 @@ export const ClaimRewardButton = ({ bountyId, entryId, reward }: Props) => {
       {t('buttons.claimReward')}
     </TransactionButton>
   )
-}
+})

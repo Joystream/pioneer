@@ -11,7 +11,7 @@ interface Props {
   bounty: Bounty
 }
 
-export const ResultsTiles = ({ bounty }: Props) => {
+export const ResultsTiles = React.memo(({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
 
   const firstRow = useMemo(
@@ -85,4 +85,4 @@ export const ResultsTiles = ({ bounty }: Props) => {
   }, [t, bounty])
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />
-}
+})

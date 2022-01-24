@@ -25,7 +25,7 @@ interface Props {
   badgeNames?: string[]
 }
 
-export const BountyPreviewHeader = ({ bounty, badgeNames }: Props) => {
+export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) => {
   const { t } = useTranslation('bounty')
   const { active: activeMember } = useMyMemberships()
 
@@ -66,7 +66,7 @@ export const BountyPreviewHeader = ({ bounty, badgeNames }: Props) => {
   )
 
   return <PageHeader title={bounty?.title || ''} buttons={compiledButtons} badges={badges} canGoBack />
-}
+})
 
 interface BountyHeaderButtonsProps {
   bounty: Bounty
@@ -74,7 +74,7 @@ interface BountyHeaderButtonsProps {
   t: TFunction
 }
 
-const FundingStageButtons = ({ bounty, t }: BountyHeaderButtonsProps) => {
+const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps) => {
   const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && bounty?.contractType !== 'ContractOpen'
 
   return (
@@ -92,9 +92,9 @@ const FundingStageButtons = ({ bounty, t }: BountyHeaderButtonsProps) => {
       <ContributeFundsButton bounty={bounty} />
     </>
   )
-}
+})
 
-const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
+const WorkingStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
@@ -122,9 +122,9 @@ const WorkingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
       {hasSubmitted && <WithdrawWorkEntryButton bounty={bounty} entry={userEntry} />}
     </>
   )
-}
+})
 
-const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
+const JudgingStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const isOracle = bounty.oracle?.id === activeMember?.id
 
   return (
@@ -136,13 +136,13 @@ const JudgingStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsPro
       {isOracle && <ButtonPrimary size="large">{t('buttons.submitJudgement')}</ButtonPrimary>}
     </>
   )
-}
+})
 
 const getReward = (entry: WorkEntry) => {
-  return isBountyEntryStatusWinner(entry.status) ? entry.status.reward : undefined
+  return isBountyEntryStatusWinner(entry.status) ? new BN(entry.status.reward) : undefined
 }
 
-const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
+const SuccessfulStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const entryId = userEntry?.id
   const reward = userEntry ? getReward(userEntry) : undefined
@@ -159,13 +159,13 @@ const SuccessfulStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtons
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={new BN(reward)} />}
+      {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
       {(passed || isContributor) && <WithdrawStakeButton bounty={bounty} lost={!isContributor} />}
     </>
   )
-}
+})
 
-const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
+const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const isContributor = useMemo(
     () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
     [bounty]
@@ -185,12 +185,12 @@ const FailedStageButtons = ({ bounty, activeMember, t }: BountyHeaderButtonsProp
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {<WithdrawStakeButton bounty={bounty} lost={hasLost} />}
+      <WithdrawStakeButton bounty={bounty} lost={hasLost} />
     </>
   )
-}
+})
 
-const ExpiredStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps) => {
+const ExpiredStageButtons = React.memo(({ bounty, activeMember }: BountyHeaderButtonsProps) => {
   const bountyCreator = bounty.creator
   const isCreator = bountyCreator?.id === activeMember?.id
 
@@ -199,4 +199,4 @@ const ExpiredStageButtons = ({ bounty, activeMember }: BountyHeaderButtonsProps)
   }
 
   return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
-}
+})

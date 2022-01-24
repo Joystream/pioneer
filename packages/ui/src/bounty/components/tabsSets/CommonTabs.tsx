@@ -10,7 +10,7 @@ interface Props {
   active: CommonTabsState
 }
 
-export const CommonTabs = ({ setActive, active }: Props) => {
+export const CommonTabs = React.memo(({ setActive, active }: Props) => {
   const { t } = useTranslation('bounty')
   const tabs = useMemo(
     () => [
@@ -29,4 +29,4 @@ export const CommonTabs = ({ setActive, active }: Props) => {
   )
 
   return <Tabs tabs={tabs} />
-}
+})

@@ -16,7 +16,7 @@ export interface ThresholdBarProps {
   threshold: number
 }
 
-export const ProgressBarWithRange = ({ size, value, minRange: minimum, maxRange }: ProgressBarWithRangeProps) => {
+export const ProgressBarWithRange = React.memo(({ size, value, minRange: minimum, maxRange }: ProgressBarWithRangeProps) => {
   const minRange = minimum ?? maxRange
   const color = value < minRange ? Colors.Orange[300] : Colors.Blue[500]
   // convert data to fractions:
@@ -28,7 +28,7 @@ export const ProgressBarWithRange = ({ size, value, minRange: minimum, maxRange 
       <ProgressBar size={size} end={current} color={color} backgroundColor={Colors.Black[75]} />
     </ThresholdBar>
   )
-}
+})
 
 const ThresholdBar = styled.div<ThresholdBarProps>`
   position: relative;

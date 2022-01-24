@@ -12,7 +12,7 @@ interface Props {
   entry: WorkEntry
 }
 
-export const WithdrawWorkEntryButton = ({ bounty, entry }: Props) => {
+export const WithdrawWorkEntryButton = React.memo(({ bounty, entry }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const withdrawWorkEntryModal = useCallback(() => {
@@ -31,4 +31,4 @@ export const WithdrawWorkEntryButton = ({ bounty, entry }: Props) => {
       {t('buttons.withdrawWorkEntry')}
     </TransactionButton>
   )
-}
+})

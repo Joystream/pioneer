@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
@@ -16,10 +16,15 @@ interface Props {
   bounty: Bounty
 }
 
-export const BountyWorking = ({ bounty }: Props) => {
+export const BountyWorking = React.memo(({ bounty }: Props) => {
   const [active, setActive] = useState<CommonTabsState>('Bounty')
   const entrants = useBountyEntrants(bounty)
   const withdrawns = useBountyWithdrawns(bounty)
+  const periodsLengths = useMemo(() => ({
+    fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
+    judgingPeriodLength: bounty.judgingPeriod,
+    workPeriodLength: bounty.workPeriod,
+  }), [bounty])
 
   return (
     <>
@@ -35,11 +40,7 @@ export const BountyWorking = ({ bounty }: Props) => {
               entrants={entrants}
               withdrawals={withdrawns}
               stage="working"
-              periodsLengths={{
-                fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
-                judgingPeriodLength: bounty.judgingPeriod,
-                workPeriodLength: bounty.workPeriod,
-              }}
+              periodsLengths={periodsLengths}
             />
           </RowGapBlock>
         </ContentWithSidePanel>
@@ -47,4 +48,4 @@ export const BountyWorking = ({ bounty }: Props) => {
       <BountyFooter bounty={bounty} />
     </>
   )
-}
+})

@@ -12,7 +12,7 @@ interface Props {
   creator: Member
 }
 
-export const CancelBountyButton = ({ bounty, creator }: Props) => {
+export const CancelBountyButton = React.memo(({ bounty, creator }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const bountyCancelModal = useCallback(() => {
@@ -30,4 +30,4 @@ export const CancelBountyButton = ({ bounty, creator }: Props) => {
       {t('buttons.cancelBounty')}
     </TransactionButton>
   )
-}
+})

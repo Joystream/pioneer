@@ -10,7 +10,7 @@ interface Props {
   active: ResultsTabsState
 }
 
-export const ResultsTabs = ({ setActive, active }: Props) => {
+export const ResultsTabs = React.memo(({ setActive, active }: Props) => {
   const { t } = useTranslation('bounty')
   const tabs = useMemo(
     () => [
@@ -39,4 +39,4 @@ export const ResultsTabs = ({ setActive, active }: Props) => {
   )
 
   return <Tabs tabs={tabs} />
-}
+})
