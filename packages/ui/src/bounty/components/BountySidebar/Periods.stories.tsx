@@ -28,6 +28,8 @@ const Template: Story<PeriodsProps> = (args) => (
 export const Default = Template.bind({})
 Default.args = {
   stage: 'judgement',
-  workPeriodLength: 10000,
-  judgingPeriodLength: 1200,
+  periodsLengths: {
+    workPeriodLength: 10000,
+    judgingPeriodLength: 1200,
+  },
 }
