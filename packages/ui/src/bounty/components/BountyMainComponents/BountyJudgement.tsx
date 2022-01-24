@@ -20,11 +20,14 @@ export const BountyJudgement = React.memo(({ bounty }: Props) => {
   const [active, setActive] = useState<CommonTabsState>('Bounty')
   const entrants = useBountyEntrants(bounty)
   const withdrawns = useBountyWithdrawns(bounty)
-  const periodsLengths = useMemo(() => ({
-    fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
-    judgingPeriodLength: bounty.judgingPeriod,
-    workPeriodLength: bounty.workPeriod,
-  }), [bounty])
+  const periodsLengths = useMemo(
+    () => ({
+      fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
+      judgingPeriodLength: bounty.judgingPeriod,
+      workPeriodLength: bounty.workPeriod,
+    }),
+    [bounty]
+  )
 
   return (
     <>

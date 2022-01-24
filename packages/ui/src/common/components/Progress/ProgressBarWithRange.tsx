@@ -16,19 +16,21 @@ export interface ThresholdBarProps {
   threshold: number
 }
 
-export const ProgressBarWithRange = React.memo(({ size, value, minRange: minimum, maxRange }: ProgressBarWithRangeProps) => {
-  const minRange = minimum ?? maxRange
-  const color = value < minRange ? Colors.Orange[300] : Colors.Blue[500]
-  // convert data to fractions:
-  const current = value / maxRange
-  const threshold = minRange / maxRange
+export const ProgressBarWithRange = React.memo(
+  ({ size, value, minRange: minimum, maxRange }: ProgressBarWithRangeProps) => {
+    const minRange = minimum ?? maxRange
+    const color = value < minRange ? Colors.Orange[300] : Colors.Blue[500]
+    // convert data to fractions:
+    const current = value / maxRange
+    const threshold = minRange / maxRange
 
-  return (
-    <ThresholdBar current={current} threshold={threshold}>
-      <ProgressBar size={size} end={current} color={color} backgroundColor={Colors.Black[75]} />
-    </ThresholdBar>
-  )
-})
+    return (
+      <ThresholdBar current={current} threshold={threshold}>
+        <ProgressBar size={size} end={current} color={color} backgroundColor={Colors.Black[75]} />
+      </ThresholdBar>
+    )
+  }
+)
 
 const ThresholdBar = styled.div<ThresholdBarProps>`
   position: relative;

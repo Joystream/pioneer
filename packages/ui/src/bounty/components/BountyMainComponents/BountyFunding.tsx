@@ -14,12 +14,14 @@ interface Props {
 }
 
 export const BountyFunding = React.memo(({ bounty }: Props) => {
-
-  const periodsLengths = useMemo(() => ({
-    fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
-    judgingPeriodLength: bounty.judgingPeriod,
-    workPeriodLength: bounty.workPeriod,
-  }), [bounty])
+  const periodsLengths = useMemo(
+    () => ({
+      fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
+      judgingPeriodLength: bounty.judgingPeriod,
+      workPeriodLength: bounty.workPeriod,
+    }),
+    [bounty]
+  )
 
   return (
     <>
@@ -28,11 +30,7 @@ export const BountyFunding = React.memo(({ bounty }: Props) => {
         <ContentWithSidePanel>
           <BountyTab bounty={bounty} />
           <RowGapBlock gap={4}>
-            <BountySidebar
-              contributors={bounty.contributors}
-              stage="funding"
-              periodsLengths={periodsLengths}
-            />
+            <BountySidebar contributors={bounty.contributors} stage="funding" periodsLengths={periodsLengths} />
           </RowGapBlock>
         </ContentWithSidePanel>
       </MainPanel>
