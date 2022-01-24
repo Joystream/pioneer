@@ -98,6 +98,7 @@ export interface WorkEntry {
   stake: BN
   passed: boolean
   rejected: boolean
+  withdrawn: boolean
 }
 
 export interface WorkInfo {

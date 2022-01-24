@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { TokenValue } from '@/common/components/typography'
@@ -10,22 +11,24 @@ interface Props {
   totalFunding: BN
   entrantStake: BN
   entrants?: Member[]
+  worksSubmitted?: number
 }
 
-export const WorkingDetails = memo(({ totalFunding, entrantStake, entrants }: Props) => {
+export const WorkingDetails = memo(({ totalFunding, entrantStake, entrants, worksSubmitted }: Props) => {
+  const { t } = useTranslation('bounty')
+
   return (
     <>
-      <DetailBox title="Bounty">
+      <DetailBox title={t('tabs.bounty')}>
         <TokenValue size="l" value={totalFunding} />
       </DetailBox>
       {entrants?.length && (
-        <DetailBox title="Entries">
+        <DetailBox title={t('entries')}>
           <MemberStack members={entrants} max={5} />
         </DetailBox>
       )}
-      {/* TODO: handle works counting */}
-      <DetailBox title="Submitted work">1</DetailBox>
-      <DetailBox title="Stake">
+      <DetailBox title={t('submittedWorks')}>{worksSubmitted}</DetailBox>
+      <DetailBox title={t('stake')}>
         <TokenValue value={entrantStake} />
       </DetailBox>
     </>
