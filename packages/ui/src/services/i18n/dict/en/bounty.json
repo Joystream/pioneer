@@ -261,7 +261,8 @@
     }
   },
   "list": {
-    "noResults": "No bounties matching search criteria",
+    "notFound": "No Bounties",
+    "notFoundText": "No bounties matching search criteria",
     "searching": "Searching",
     "searchingText": "We are searching through all bounties to find what your are looking for. ",
     "sorting": "sorting"
@@ -276,7 +277,7 @@
     "title": "Top contributors past week",
     "amountTitle": "Contributed",
     "notFound": "No contributors",
-    "noFoundText": "Lorem ipsum dolor sit amet enim"
+    "notFoundText": "Lorem ipsum dolor sit amet enim"
   },
   "discussionThread": {
     "title": "Bounty discussion thread",
