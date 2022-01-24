@@ -266,3 +266,20 @@ query SearchForumPost($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByI
     }
   }
 }
+
+query SimpleSearchForumPost($text: String!, $limit: Int) {
+  forumPosts(where: { text_contains: $text }, limit: $limit) {
+    id
+    text
+    thread {
+      id
+    }
+  }
+}
+
+query SimpleSearchForumThreads($text: String!, $limit: Int) {
+  forumThreads(where: { title_contains: $text }, limit: $limit) {
+    id
+    title
+  }
+}

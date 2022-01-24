@@ -245,6 +245,15 @@ query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int
   }
 }
 
+query SimpleSearchWorkingGroupOpenings($text: String!, $limit: Int) {
+  workingGroupOpenings(where: { metadata: { shortDescription_contains: $text } }, limit: $limit) {
+    id
+    metadata {
+      shortDescription
+    }
+  }
+}
+
 query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
   workingGroupOpeningByUniqueInput(where: $where) {
     ...WorkingGroupOpeningDetailedFields
@@ -302,6 +311,16 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
 query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {
   workingGroupApplications(where: $where) {
     ...WorkingGroupApplicationFields
+  }
+}
+
+query SimpleSearchWorkingGroupApplications($text: String!, $limit: Int) {
+  workingGroupApplications(where: { applicant: { handle_contains: $text } }, limit: $limit) {
+    id
+    applicant {
+      id
+      handle
+    }
   }
 }
 

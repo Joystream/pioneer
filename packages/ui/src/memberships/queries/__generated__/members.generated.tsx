@@ -252,6 +252,16 @@ export type SearchMembersQuery = {
   }>
 }
 
+export type SimpleSearchMembersQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchMembersQuery = {
+  __typename: 'Query'
+  memberships: Array<{ __typename: 'Membership'; id: string; handle: string }>
+}
+
 export type GetMemberExtraInfoQueryVariables = Types.Exact<{
   membershipId_eq: Types.Scalars['ID']
   workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
@@ -486,6 +496,56 @@ export function useSearchMembersLazyQuery(
 export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQuery>
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
+export const SimpleSearchMembersDocument = gql`
+  query SimpleSearchMembers($text: String!, $limit: Int) {
+    memberships(where: { handle_contains: $text }, limit: $limit) {
+      id
+      handle
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchMembersQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchMembersQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>(
+    SimpleSearchMembersDocument,
+    options
+  )
+}
+export function useSimpleSearchMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>(
+    SimpleSearchMembersDocument,
+    options
+  )
+}
+export type SimpleSearchMembersQueryHookResult = ReturnType<typeof useSimpleSearchMembersQuery>
+export type SimpleSearchMembersLazyQueryHookResult = ReturnType<typeof useSimpleSearchMembersLazyQuery>
+export type SimpleSearchMembersQueryResult = Apollo.QueryResult<
+  SimpleSearchMembersQuery,
+  SimpleSearchMembersQueryVariables
+>
 export const GetMemberExtraInfoDocument = gql`
   query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
     councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {

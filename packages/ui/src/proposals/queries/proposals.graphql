@@ -237,6 +237,21 @@ query getProposal($where: ProposalWhereUniqueInput!) {
   }
 }
 
+query SimpleSearchProposals($text: String!, $limit: Int) {
+  proposals(where: { title_contains: $text }, limit: $limit) {
+    id
+    title
+  }
+}
+
+query SimpleSearchProposalDiscussion($text: String!, $limit: Int) {
+  proposalDiscussionPosts(where: { text_contains: $text }, limit: $limit) {
+    id
+    text
+    discussionThreadId
+  }
+}
+
 query GetVoteWithDetails($id: ID!) {
   proposalVotedEventByUniqueInput(where: { id: $id }) {
     ...VoteWithDetailsFields
