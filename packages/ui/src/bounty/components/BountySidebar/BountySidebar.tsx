@@ -7,7 +7,6 @@ import { BountyActorsList } from '../BountyActorsList/BountyActorsList'
 
 import { Periods } from './Periods'
 
-
 export interface BountySidebarProps {
   contributors?: Contributor[]
   entrants?: Entrant[]
@@ -20,15 +19,7 @@ export interface BountySidebarProps {
 }
 
 export const BountySidebar = memo(
-  ({
-    contributors,
-    entrants,
-    withdrawals,
-    entrantResult,
-    stage,
-    periodsLengths,
-    isSlashed,
-  }: BountySidebarProps) => {
+  ({ contributors, entrants, withdrawals, entrantResult, stage, periodsLengths, isSlashed }: BountySidebarProps) => {
     const { t } = useTranslation('bounty')
 
     return (

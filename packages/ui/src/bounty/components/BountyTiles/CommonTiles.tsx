@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { TileSection } from '@/bounty/components/TileSection'
 import { useGetBountyWorksCountQuery } from '@/bounty/queries'
 import { Bounty } from '@/bounty/types/Bounty'
-import { TextHuge, TokenValue } from '@/common/components/typography'
-import { MemberInfo } from '@/memberships/components'
-import { DurationValue } from '@/common/components/typography/DurationValue'
 import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
-
+import { TextHuge, TokenValue } from '@/common/components/typography'
+import { DurationValue } from '@/common/components/typography/DurationValue'
+import { MemberInfo } from '@/memberships/components'
 
 interface Props {
   bounty: Bounty
@@ -31,9 +30,9 @@ export const CommonTiles = ({ bounty, period }: Props) => {
 
   const periodLength = useMemo(() => {
     switch (period) {
-      case 'working': 
+      case 'working':
         return <DurationValue value={formatDuration(bounty.workPeriod)} />
-      case 'judgement': 
+      case 'judgement':
         return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
       case 'expired':
       case 'terminated':
