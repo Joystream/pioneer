@@ -95,6 +95,7 @@ export interface EntryMiniature {
   hasSubmitted: boolean
   passed: boolean
   rejected: boolean
+  withdrawn: boolean
   worker: Member
   worksIds: string[]
   id: string

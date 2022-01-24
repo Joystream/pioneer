@@ -25,6 +25,7 @@ const defaultEntry: EntryMiniature = {
   rejected: false,
   id: '1',
   stake: 10,
+  withdrawn: false,
 }
 
 describe('UI: BountyPreviewHeader', () => {

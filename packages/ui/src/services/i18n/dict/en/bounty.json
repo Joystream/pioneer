@@ -1,5 +1,10 @@
 {
   "bounties": "Bounties",
+  "council": "Council",
+  "entries": "Entries",
+  "stake": "Stake",
+  "submittedWorks": "Submitted works",
+  "withdrawals": "Withdrawals",
   "modals": {
     "common": {
       "transactionFee": {

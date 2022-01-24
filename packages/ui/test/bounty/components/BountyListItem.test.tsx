@@ -43,6 +43,7 @@ describe('UI: BountyListItem', () => {
         stake: 10,
         rejected: false,
         worksIds: [],
+        withdrawn: false,
       },
     ],
     discussionThreadId: '1',

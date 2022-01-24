@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props) => {
+  const { t } = useTranslation('bounty')
+
   if (!isFundingLimited(fundingType)) {
     const { target } = fundingType
     const currentProgress = totalFunding.div(fundingType.target).toNumber()
@@ -22,11 +25,11 @@ export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props
     return (
       <ProgressBarWrapper>
         <ProgressBar end={currentProgress} size="medium" color={color} />
-        <DetailBox title="Maximal range">
+        <DetailBox title={t('tiles.progressBar.maxRange')}>
           <TokenValue value={target} />
         </DetailBox>
         <ProgressBarInfoVertical inset="">
-          <TextSmall>Funded</TextSmall>
+          <TextSmall>{t('tiles.progressBar.funded')}</TextSmall>
           <TokenValue value={totalFunding} size="l" />
         </ProgressBarInfoVertical>
       </ProgressBarWrapper>
@@ -44,19 +47,19 @@ export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props
           maxRange={maxAmount.toNumber()}
           size="medium"
         />
-        <DetailBox title="Maximal range">
+        <DetailBox title={t('tiles.progressBar.maxRange')}>
           <TokenValue value={maxAmount} />
         </DetailBox>
         <ProgressBarInfoVertical inset="">
-          <TextSmall>Funded</TextSmall>
+          <TextSmall>{t('tiles.progressBar.funded')}</TextSmall>
           <TokenValue value={totalFunding} size="l" />
         </ProgressBarInfoVertical>
         <ProgressBarInfoVertical inset="45px 40% 0">
-          <TextSmall>Minimal range</TextSmall>
+          <TextSmall>{t('tiles.progressBar.minRange')}</TextSmall>
           <TokenValue value={minAmount} />
         </ProgressBarInfoVertical>
       </ProgressBarWrapper>
-      <DetailBox title="Cherry">
+      <DetailBox title={t('tiles.cherry.title')}>
         <TokenValue value={cherry} />
       </DetailBox>
     </>
