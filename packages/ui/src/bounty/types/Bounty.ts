@@ -91,6 +91,7 @@ export interface WorkEntry {
   works?: WorkInfo[]
   stake: BN
   passed: boolean
+  rejected: boolean
 }
 
 export interface WorkInfo {

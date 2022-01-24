@@ -4,6 +4,7 @@ import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
 import { ResultsTiles } from '@/bounty/components/BountyTiles/ResultsTiles'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
+import { SlashedTab } from '@/bounty/components/tabs/SlashedTab'
 import { WinnersTab } from '@/bounty/components/tabs/WinnersTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
 import { ResultsTabs, ResultsTabsState } from '@/bounty/components/tabsSets/ResultsTabs'
@@ -34,8 +35,9 @@ export const BountySuccessful = ({ bounty }: Props) => {
         <ResultsTabs setActive={setActive} active={active} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
-          {active === 'Works' && <WorkTab bountyId={bounty.id} />}
+          {active === 'Slashed' && <SlashedTab bounty={bounty} />}
           {active === 'Winners' && <WinnersTab bounty={bounty} />}
+          {active === 'Works' && <WorkTab bountyId={bounty.id} />}
           <RowGapBlock gap={4}>
             <BountySidebar
               contributors={bounty.contributors}

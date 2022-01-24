@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Tabs } from '@/common/components/Tabs'
 
-export type ResultsTabsState = 'Bounty' | 'Works' | 'Winners'
+export type ResultsTabsState = 'Bounty' | 'Winners' | 'Slashed' | 'Works'
 
 interface Props {
   setActive: (active: ResultsTabsState) => void
@@ -23,6 +23,11 @@ export const ResultsTabs = ({ setActive, active }: Props) => {
         title: t('tabs.winners'),
         active: active === 'Winners',
         onClick: () => setActive('Winners'),
+      },
+      {
+        title: t('tabs.winners'),
+        active: active === 'Slashed',
+        onClick: () => setActive('Slashed'),
       },
       {
         title: t('tabs.works'),
