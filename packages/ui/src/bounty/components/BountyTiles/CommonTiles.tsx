@@ -3,9 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
 import { useGetBountyWorksCountQuery } from '@/bounty/queries'
-import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { Bounty } from '@/bounty/types/Bounty'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
+import { DurationValue } from '@/common/components/typography/DurationValue'
+import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
+
 
 interface Props {
   bounty: Bounty
@@ -26,6 +29,18 @@ export const CommonTiles = ({ bounty, period }: Props) => {
     },
   })
 
+  const periodLength = useMemo(() => {
+    switch (period) {
+      case 'working': 
+        return <DurationValue value={formatDuration(bounty.workPeriod)} />
+      case 'judgement': 
+        return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
+      case 'expired':
+      case 'terminated':
+        return t('tiles.periodLength.closed')
+    }
+  }, [t, bounty, period])
+
   const firstRow = useMemo(
     () => [
       {
@@ -41,7 +56,7 @@ export const CommonTiles = ({ bounty, period }: Props) => {
         title: t('tiles.periodLength.title'),
         content: (
           <TextHuge value bold>
-            {isFundingLimited(bounty.fundingType) ? t('bountyFields.limited') : t('bountyFields.perpetual')}
+            {periodLength}
           </TextHuge>
         ),
         tooltipText: t('tiles.periodLength.tooltip'),

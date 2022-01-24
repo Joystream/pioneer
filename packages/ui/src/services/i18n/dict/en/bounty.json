@@ -175,7 +175,8 @@
     },
     "periodLength": {
       "title": "Period Length",
-      "tooltip": "Lorem ipsum d"
+      "tooltip": "Lorem ipsum d",
+      "closed": "Closed"
     },
     "bountyCreator": {
       "title": "Bounty Creator"
