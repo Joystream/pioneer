@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { DetailBox } from '@/bounty/components/BountyListItem/components/DetailBox'
 import { FundingDetails } from '@/bounty/components/BountyListItem/components/FundingDetails'
 import { JudgmentDetails } from '@/bounty/components/BountyListItem/components/JudgmentDetails'
+import { TerminatedDetails } from '@/bounty/components/BountyListItem/components/TerminatedDetails'
 import { WithdrawalDetails } from '@/bounty/components/BountyListItem/components/WithdrawalDetails'
 import { WorkingDetails } from '@/bounty/components/BountyListItem/components/WorkingDetails'
 import { BountyPeriod, EntryMiniature, FundingType } from '@/bounty/types/Bounty'
@@ -57,6 +58,9 @@ export const BountyDetails = memo(
         }
         case 'judgement': {
           return <JudgmentDetails withdrawals={worksWithdrawn} worksSubmitted={worksSubmitted} entrants={entrants} />
+        }
+        case 'terminated': {
+          return <TerminatedDetails entrants={entrants} />
         }
         case 'withdrawal':
         case 'expired': {
