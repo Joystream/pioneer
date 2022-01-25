@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -27,6 +27,7 @@ export const SubmitJudgementModal = () => {
   } = useModal<SubmitWorkModalCall>()
   // const { active: activeMember } = useMyMemberships()
   const { t } = useTranslation('bounty')
+  const [isValid, setIsValid] = useState<string | null>(null)
   const [state, send] = useMachine(submitJudgementMachine)
 
   const switchCheckbox = useCallback((isSet: boolean) => {
@@ -35,6 +36,10 @@ export const SubmitJudgementModal = () => {
     }
     send('SET_HAS_WINNER', { hasWinner: isSet })
   }, [])
+
+  const amountDistributed = useMemo(() => state.context.winners.reduce((prev, current) => prev + current.reward, 0), [
+    state.context.winners,
+  ])
 
   const selectWorkerFilter = useCallback(
     (member: Member) => {
@@ -50,6 +55,27 @@ export const SubmitJudgementModal = () => {
     },
     [state.context.winners.length, state.context.rejected.length]
   )
+
+  useEffect(() => {
+    const { winners, hasWinner } = state.context
+
+    switch (true) {
+      case !hasWinner:
+        return setIsValid(null)
+
+      case hasWinner && !winners.length:
+        return setIsValid('Pick a winner or mark bounty as failed')
+
+      case winners.some(({ reward }) => reward === 0):
+        return setIsValid('Some winner do not have reward amount')
+
+      case amountDistributed !== bounty.totalFunding.toNumber():
+        return setIsValid('Distributed amount must equal total reward')
+
+      default:
+        return setIsValid(null)
+    }
+  }, [state.context.winners, state.context.hasWinner])
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -81,6 +107,8 @@ export const SubmitJudgementModal = () => {
             />
           </InlineToggleWrap>
           <WinnersSelection
+            amountDistributed={amountDistributed}
+            bountyFunding={bounty.totalFunding}
             filter={selectWorkerFilter}
             noBountyWinners={!state.context.hasWinner}
             winners={state.context.winners}
@@ -104,7 +132,14 @@ export const SubmitJudgementModal = () => {
         </ModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium">Submit Judgment</ButtonPrimary>
+        {isValid && (
+          <TextMedium bold error>
+            {isValid}
+          </TextMedium>
+        )}
+        <ButtonPrimary disabled={!!isValid} size="medium">
+          Submit Judgment
+        </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )

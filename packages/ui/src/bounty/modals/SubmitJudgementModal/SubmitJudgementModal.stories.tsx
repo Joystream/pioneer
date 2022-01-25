@@ -22,10 +22,16 @@ export default {
 const modalData = {
   bounty: {
     ...bounties[0],
+    totalFunding: new BN(15999),
     entries: [
       {
         worker: {
           id: '7',
+        },
+      },
+      {
+        worker: {
+          id: '8',
         },
       },
     ],

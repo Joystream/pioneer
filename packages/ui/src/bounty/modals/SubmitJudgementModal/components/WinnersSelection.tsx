@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +8,8 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import { AmountButton, AmountButtons, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextBig, TextMedium } from '@/common/components/typography'
+import { ProgressBar } from '@/common/components/Progress'
+import { TextBig, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { SelectedMember, SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
@@ -19,6 +21,8 @@ interface Props {
   editWinnerReward: (winner: Member, amount: number) => void
   noBountyWinners: boolean
   filter: (member: Member) => boolean
+  bountyFunding: BN
+  amountDistributed: number
 }
 
 export const WinnersSelection = ({
@@ -28,6 +32,8 @@ export const WinnersSelection = ({
   editWinnerReward,
   noBountyWinners,
   filter,
+  bountyFunding,
+  amountDistributed,
 }: Props) => {
   const [newWinnerReward, setNewWinnerReward] = useState<number>(0)
 
@@ -49,8 +55,35 @@ export const WinnersSelection = ({
     [editWinnerReward]
   )
 
+  const handleEqualDistribution = useCallback(() => {
+    winners.forEach((winner) => {
+      editWinnerReward(winner.winner, Math.floor(bountyFunding.toNumber() / winners.length))
+    })
+  }, [winners.length, bountyFunding.toNumber()])
+
   return (
     <>
+      {!noBountyWinners && (
+        <RowGapBlock gap={5}>
+          <ProgressBarContainer>
+            <DistributedText light>
+              Distributed
+              <TokenValue size="s" value={amountDistributed} />
+            </DistributedText>
+            <ProgressBar size="big" end={!amountDistributed ? 0 : amountDistributed / bountyFunding.toNumber()} />
+            <RowGapBlock gap={5}>
+              <TextSmall light>Total reward</TextSmall>
+              <TokenValue size="s" value={bountyFunding.toNumber()} />
+            </RowGapBlock>
+            <ButtonGhost size="small" onClick={handleEqualDistribution}>
+              Distribute equally
+            </ButtonGhost>
+            {amountDistributed > bountyFunding.toNumber() && (
+              <TextMedium error>Distributed amount exceed total reward! Please decrease it.</TextMedium>
+            )}
+          </ProgressBarContainer>
+        </RowGapBlock>
+      )}
       {winners.map((winner, index) => (
         <RowGapBlock gap={15}>
           <SelectedMember disabled label={`Winner ${index + 1}`} tooltipText="Lorem ipsum" member={winner.winner} />
@@ -59,15 +92,24 @@ export const WinnersSelection = ({
               <InputNumber isTokenValue value={String(winner.reward)} onChange={handleRewardEdit(winner.winner)} />
             </InputComponent>
             <AmountButtons>
-              <AmountButton size="small">Use Half</AmountButton>
-              <AmountButton size="small">Use max</AmountButton>
+              {winners.length > 1 && (
+                <AmountButton
+                  size="small"
+                  onClick={() => editWinnerReward(winner.winner, Math.floor(bountyFunding.toNumber() / 2))}
+                >
+                  Use Half
+                </AmountButton>
+              )}
+              <AmountButton size="small" onClick={() => editWinnerReward(winner.winner, bountyFunding.toNumber())}>
+                Use max
+              </AmountButton>
             </AmountButtons>
           </TransactionAmount>
         </RowGapBlock>
       ))}
       {!noBountyWinners ? (
         <RowGapBlock gap={15}>
-          <InputComponent label="New winner" required tooltipText="Lorem ipsum" inputSize="l">
+          <InputComponent label="Add new winner" required tooltipText="Lorem ipsum" inputSize="l">
             <SelectMember filter={filter} onChange={handleMemberSelection} />
           </InputComponent>
           <TransactionAmount>
@@ -79,8 +121,14 @@ export const WinnersSelection = ({
               />
             </InputComponent>
             <AmountButtons>
-              <AmountButton size="small">Use Half</AmountButton>
-              <AmountButton size="small">Use max</AmountButton>
+              {winners.length > 1 && (
+                <AmountButton size="small" onClick={() => setNewWinnerReward(Math.floor(bountyFunding.toNumber() / 2))}>
+                  Use Half
+                </AmountButton>
+              )}
+              <AmountButton size="small" onClick={() => setNewWinnerReward(bountyFunding.toNumber())}>
+                Use max
+              </AmountButton>
             </AmountButtons>
           </TransactionAmount>
           {!!winners.length && (
@@ -103,6 +151,32 @@ export const WinnersSelection = ({
     </>
   )
 }
+
+const DistributedText = styled(TextSmall)`
+  > *:last-child {
+    margin-left: 5px;
+  }
+`
+
+const ProgressBarContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: end;
+  column-gap: 20px;
+
+  ${TextSmall}:nth-child(1) {
+    grid-row: 1/2;
+  }
+
+  ${RowGapBlock} {
+    grid-row: 1/3;
+    margin-right: 40px;
+  }
+
+  button {
+    grid-row: 1/3;
+  }
+`
 
 const WarningWrapper = styled.div`
   background-color: ${Colors.Warning[50]};

@@ -29,6 +29,7 @@ export const ProgressBar = styled.div<ProgressBarProps>`
   width: 100%;
 
   &::after {
+    transition: right 0.4s ease-in-out;
     background-color: ${({ color = Colors.Blue[500] }) => `${color}`};
     content: '';
     display: block;
