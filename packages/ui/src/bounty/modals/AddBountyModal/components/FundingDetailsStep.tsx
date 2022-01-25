@@ -169,11 +169,11 @@ const Subtitle = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
 
-const CheckBoxLabelWrapper = styled.div`
+export const CheckBoxLabelWrapper = styled.div`
   display: flex;
   column-gap: 4px;
 `
 
-const StyledParagraph = styled.p`
+export const StyledParagraph = styled.p`
   margin-left: 5px;
 `
