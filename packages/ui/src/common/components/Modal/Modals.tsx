@@ -138,3 +138,9 @@ export const ItemWrapper = styled.div`
   max-height: 450px;
   overflow: auto;
 `
+
+export const ModalDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${Colors.Black[200]};
+`
