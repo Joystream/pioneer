@@ -30,10 +30,8 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: ClaimRewardModal', () => {
   const modalData: ModalCallData<ClaimRewardModalCall> = {
     bountyId: '1',
-    entry: {
-      entryId: '0',
-      reward: new BN(100000),
-    },
+    entryId: '0',
+    reward: new BN(100000),
   }
 
   const api = stubApi()

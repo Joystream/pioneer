@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import { Tabs } from '@/common/components/Tabs'
 
-export type FailedTabsState = 'Bounty' | 'Works' | 'Winners'
+export type CommonTabsState = 'Bounty' | 'Works'
 
 interface Props {
-  setActive: (active: FailedTabsState) => void
-  active: FailedTabsState
+  setActive: (active: CommonTabsState) => void
+  active: CommonTabsState
 }
 
-export const FailedTabs = ({ setActive, active }: Props) => {
+export const CommonTabs = React.memo(({ setActive, active }: Props) => {
   const { t } = useTranslation('bounty')
   const tabs = useMemo(
     () => [
@@ -18,11 +18,6 @@ export const FailedTabs = ({ setActive, active }: Props) => {
         title: t('tabs.bounty'),
         active: active === 'Bounty',
         onClick: () => setActive('Bounty'),
-      },
-      {
-        title: t('tabs.winners'),
-        active: active === 'Winners',
-        onClick: () => setActive('Winners'),
       },
       {
         title: t('tabs.works'),
@@ -34,4 +29,4 @@ export const FailedTabs = ({ setActive, active }: Props) => {
   )
 
   return <Tabs tabs={tabs} />
-}
+})

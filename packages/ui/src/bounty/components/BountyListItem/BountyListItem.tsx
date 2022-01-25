@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useMemo, memo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
@@ -34,7 +33,7 @@ export const BountyListItem = memo(
 
     const timeToPeriodEnd = useMemo(() => {
       if (period === 'funding' && isFundingLimited(fundingType)) {
-        return new BN(fundingType.maxPeriod)
+        return fundingType.maxPeriod
       }
       if (period === 'working') {
         return workPeriod

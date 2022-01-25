@@ -9,7 +9,7 @@ import { JudgmentDetails } from '@/bounty/components/BountyListItem/components/J
 import { TerminatedDetails } from '@/bounty/components/BountyListItem/components/TerminatedDetails'
 import { WithdrawalDetails } from '@/bounty/components/BountyListItem/components/WithdrawalDetails'
 import { WorkingDetails } from '@/bounty/components/BountyListItem/components/WorkingDetails'
-import { BountyPeriod, EntryMiniature, FundingType } from '@/bounty/types/Bounty'
+import { BountyPeriod, WorkEntry, FundingType } from '@/bounty/types/Bounty'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -20,7 +20,7 @@ interface Props {
   fundingType: FundingType
   totalFunding: BN
   entrantStake: BN
-  entries?: EntryMiniature[]
+  entries?: WorkEntry[]
 }
 
 export const BountyDetails = memo(
@@ -30,7 +30,7 @@ export const BountyDetails = memo(
     const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries?.length])
 
     const worksSubmitted = useMemo(
-      () => entries?.reduce((prev, current) => prev + current.worksIds.length, 0),
+      () => entries?.reduce((prev, current) => prev + (current.works?.length || 0), 0),
       [entries?.length]
     )
 

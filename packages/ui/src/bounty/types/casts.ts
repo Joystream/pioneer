@@ -10,7 +10,7 @@ import {
   Bounty,
   BountyPeriod,
   BountyStage,
-  EntryMiniature,
+  WorkEntry,
   FundingType,
   ContractType,
   Contributor,
@@ -50,17 +50,19 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
   return lowerFirstLetter(`${stageField}`) as BountyStage
 }
 
-const asEntries = (entriesFields: BountyFieldsFragment['entries']): EntryMiniature[] | undefined => {
+const asEntries = (entriesFields: BountyFieldsFragment['entries']): WorkEntry[] | undefined => {
   return entriesFields?.map((entry) => {
     return {
       id: entry.id,
+      bountyId: entry.bountyId,
       worker: asMember(entry.worker),
       hasSubmitted: entry.workSubmitted,
+      status: asBountyEntryStatus(entry.status),
       winner: entry.status.__typename === 'BountyEntryStatusWinner',
+      works: entry.works?.map((work) => ({ id: work.id, title: work.title, description: work.description })),
       passed: entry.status.__typename === 'BountyEntryStatusPassed',
       rejected: entry.status.__typename === 'BountyEntryStatusRejected',
       withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
-      worksIds: entry.works?.map((work) => work.id) ?? [],
       stake: entry.stake,
     }
   })
@@ -119,8 +121,8 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   creator: fields.creator ? asMember(fields.creator) : undefined,
   oracle: fields.oracle ? asMember(fields.oracle) : undefined,
   fundingType: asFunding(fields.fundingType),
-  workPeriod: new BN(fields.workPeriod),
-  judgingPeriod: new BN(fields.judgingPeriod),
+  workPeriod: fields.workPeriod,
+  judgingPeriod: fields.judgingPeriod,
   stage: asStage(fields.stage),
   totalFunding: new BN(fields.totalFunding),
   entries: asEntries(fields.entries),

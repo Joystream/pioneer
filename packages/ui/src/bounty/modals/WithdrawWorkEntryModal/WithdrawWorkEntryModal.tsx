@@ -123,7 +123,7 @@ export const WithdrawWorkEntryModal = () => {
             tooltipText={t('modals.withdrawWorkEntry.memberInput.tooltipText')}
             member={entry.worker}
           />
-          {entry.works.map((work, index) => (
+          {entry.works?.map((work, index) => (
             <Container key={work.id} label={t('modals.withdrawWorkEntry.workInput', { value: index + 1 })} disabled>
               <TextMedium value bold>
                 {work.title}

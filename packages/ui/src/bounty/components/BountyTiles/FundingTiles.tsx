@@ -1,0 +1,87 @@
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { TileSection } from '@/bounty/components/TileSection'
+import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { TextHuge, TokenValue } from '@/common/components/typography'
+import { MemberInfo } from '@/memberships/components'
+
+interface Props {
+  bounty: Bounty
+}
+
+export const FundingTiles = React.memo(({ bounty }: Props) => {
+  const { t } = useTranslation('bounty')
+
+  const firstRow = useMemo(
+    () => [
+      {
+        title: t('tiles.stage.title'),
+        content: (
+          <TextHuge value bold>
+            {t('bountyFields.fundingPeriod')}
+          </TextHuge>
+        ),
+        tooltipText: t('tiles.stage.tooltip'),
+      },
+      {
+        title: t('tiles.periodLength.title'),
+        content: (
+          <TextHuge value bold>
+            {isFundingLimited(bounty.fundingType) ? t('bountyFields.limited') : t('bountyFields.perpetual')}
+          </TextHuge>
+        ),
+        tooltipText: t('tiles.periodLength.tooltip'),
+      },
+      {
+        title: t('tiles.bountyCreator.title'),
+        content: bounty.creator ? (
+          <MemberInfo member={bounty.creator} size="m" memberSize="m" hideGroup />
+        ) : (
+          <TextHuge value bold>
+            {t('common:council')}
+          </TextHuge>
+        ),
+      },
+      {
+        title: t('tiles.oracle.title'),
+        content: bounty.creator ? (
+          <MemberInfo member={bounty.creator} size="m" memberSize="m" hideGroup />
+        ) : (
+          <TextHuge value bold>
+            {t('common:council')}
+          </TextHuge>
+        ),
+      },
+    ],
+    [t, bounty]
+  )
+  const secondRow = useMemo(() => {
+    return [
+      {
+        title: t('tiles.cherry.title'),
+        content: <TokenValue value={bounty.cherry} size="l" />,
+        tooltipText: t('tiles.cherry.tooltip'),
+      },
+      {
+        title: t('tiles.entrantStake.title'),
+        content: <TokenValue value={bounty.entrantStake} size="l" />,
+        tooltipText: t('tiles.entrantStake.tooltip'),
+      },
+    ]
+  }, [t, bounty])
+
+  const fundedDetails = useMemo(() => {
+    const funding = bounty.fundingType
+    const isLimited = isFundingLimited(funding)
+    const minRangeValue = isLimited ? funding.minAmount : undefined
+    const maxRangeValue = isLimited ? funding.maxAmount : funding.target
+    return {
+      rangeValue: bounty.totalFunding,
+      minRangeValue,
+      maxRangeValue,
+    }
+  }, [bounty])
+
+  return <TileSection firstRow={firstRow} secondRow={secondRow} fundedDetails={fundedDetails} />
+})

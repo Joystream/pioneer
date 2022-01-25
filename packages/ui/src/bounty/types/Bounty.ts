@@ -73,6 +73,12 @@ export const isFundingLimited = (funding: FundingType): funding is FundingLimite
   return (funding as FundingLimited).minAmount !== undefined
 }
 
+export interface PeriodsLengthsType {
+  fundingPeriodLength?: number
+  workPeriodLength: number
+  judgingPeriodLength: number
+}
+
 export type ContractType = 'ContractOpen' | ContractClosed
 
 export type ContractClosed = {
@@ -85,26 +91,20 @@ export interface WorkEntry {
   id: string
   bountyId: string
   worker: Member
-  status: BountyEntryStatus
-  works: BountyWork[]
-  stake: BN
-}
-
-export interface EntryMiniature {
-  winner: boolean
   hasSubmitted: boolean
+  winner: boolean
+  status: BountyEntryStatus
+  works?: WorkInfo[]
+  stake: BN
   passed: boolean
   rejected: boolean
   withdrawn: boolean
-  worker: Member
-  worksIds: string[]
-  id: string
-  stake: number
 }
 
-export interface WinnerEntry {
-  entryId: string
-  reward: BN
+export interface WorkInfo {
+  id: string
+  title: string
+  description: string
 }
 
 export interface BountyWork {
@@ -133,11 +133,11 @@ export interface Bounty {
   creator?: Member
   oracle?: Member
   fundingType: FundingType
-  workPeriod: BN
-  judgingPeriod: BN
+  workPeriod: number
+  judgingPeriod: number
   stage: BountyStage
   totalFunding: BN
-  entries?: EntryMiniature[]
+  entries?: WorkEntry[]
   inBlock: number
   contractType: ContractType
   contributors: Contributor[]
