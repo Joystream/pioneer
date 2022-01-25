@@ -59,7 +59,7 @@
       "fillDetails": "Please fill in all the details below.",
       "selectAmount": "Contribution stake",
       "selectAmountSubtitle": "This stake will be returned to you when the bounty is complete",
-      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY." ,
+      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY.",
       "error": "Something went wrong",
       "success": "You have just successfully announce work entry for {{bounty}}”.",
       "successButton": "Back to bounty"
@@ -298,6 +298,6 @@
   },
   "slashed": {
     "title": "You are slashed",
-    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis\n                  enim velit mollit. Exercitation veniam consequat sunt nostrud amet."
+    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis"
   }
 }
