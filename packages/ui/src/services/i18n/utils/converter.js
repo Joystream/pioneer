@@ -50,7 +50,7 @@ function convertCsvToJson(file, data, outputPath) {
 }
 
 function writFile(file, fileName, outputPath) {
-  return function () {
+  return function() {
     fs.writeFileSync(path.join(outputPath, fileName), file);
   }
 }
