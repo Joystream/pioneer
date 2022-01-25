@@ -23,7 +23,6 @@ import {
   SimpleSearchWorkingGroupOpeningsQuery,
 } from '@/working-groups/queries'
 
-
 enum MentionType {
   General = 'general',
   Proposal = 'proposal',
@@ -195,12 +194,37 @@ export const useMentions = (): UseMentions => {
 }
 
 const generalItems: MentionItem[] = [
-  { id: `#${MentionType.Proposal}:`, type: MentionType.General, itemId: MentionType.Proposal, name: MentionType.Proposal },
-  { id: `#${MentionType.ProposalPost}:`, type: MentionType.General, itemId: MentionType.ProposalPost, name: MentionType.ProposalPost },
-  { id: `#${MentionType.ForumThread}:`, type: MentionType.General, itemId: MentionType.ForumThread, name: MentionType.ForumThread },
-  { id: `#${MentionType.ForumPost}:`, type: MentionType.General, itemId: MentionType.ForumPost, name: MentionType.ForumPost },
+  {
+    id: `#${MentionType.Proposal}:`,
+    type: MentionType.General,
+    itemId: MentionType.Proposal,
+    name: MentionType.Proposal,
+  },
+  {
+    id: `#${MentionType.ProposalPost}:`,
+    type: MentionType.General,
+    itemId: MentionType.ProposalPost,
+    name: MentionType.ProposalPost,
+  },
+  {
+    id: `#${MentionType.ForumThread}:`,
+    type: MentionType.General,
+    itemId: MentionType.ForumThread,
+    name: MentionType.ForumThread,
+  },
+  {
+    id: `#${MentionType.ForumPost}:`,
+    type: MentionType.General,
+    itemId: MentionType.ForumPost,
+    name: MentionType.ForumPost,
+  },
   { id: `#${MentionType.Opening}:`, type: MentionType.General, itemId: MentionType.Opening, name: MentionType.Opening },
-  { id: `#${MentionType.Application}:`, type: MentionType.General, itemId: MentionType.Application, name: MentionType.Application },
+  {
+    id: `#${MentionType.Application}:`,
+    type: MentionType.General,
+    itemId: MentionType.Application,
+    name: MentionType.Application,
+  },
 ]
 
 const itemRenderer = ({ id, itemId, type }: MentionItem) => {
