@@ -93,6 +93,13 @@ query SearchMembers($text: String!, $limit: Int) {
   }
 }
 
+query SimpleSearchMembers($text: String!, $limit: Int) {
+  memberships(where: { handle_contains: $text }, limit: $limit) {
+    id
+    handle
+  }
+}
+
 query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
   councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {
     totalCount

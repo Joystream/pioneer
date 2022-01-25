@@ -1004,6 +1004,31 @@ export type SearchForumPostQuery = {
   }>
 }
 
+export type SimpleSearchForumPostQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchForumPostQuery = {
+  __typename: 'Query'
+  forumPosts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    text: string
+    thread: { __typename: 'ForumThread'; id: string }
+  }>
+}
+
+export type SimpleSearchForumThreadsQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchForumThreadsQuery = {
+  __typename: 'Query'
+  forumThreads: Array<{ __typename: 'ForumThread'; id: string; title: string }>
+}
+
 export const ForumBaseCategoryFieldsFragmentDoc = gql`
   fragment ForumBaseCategoryFields on ForumCategory {
     id
@@ -1924,3 +1949,106 @@ export function useSearchForumPostLazyQuery(
 export type SearchForumPostQueryHookResult = ReturnType<typeof useSearchForumPostQuery>
 export type SearchForumPostLazyQueryHookResult = ReturnType<typeof useSearchForumPostLazyQuery>
 export type SearchForumPostQueryResult = Apollo.QueryResult<SearchForumPostQuery, SearchForumPostQueryVariables>
+export const SimpleSearchForumPostDocument = gql`
+  query SimpleSearchForumPost($text: String!, $limit: Int) {
+    forumPosts(where: { text_contains: $text }, limit: $limit) {
+      id
+      text
+      thread {
+        id
+      }
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchForumPostQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchForumPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchForumPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchForumPostQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchForumPostQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>(
+    SimpleSearchForumPostDocument,
+    options
+  )
+}
+export function useSimpleSearchForumPostLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>(
+    SimpleSearchForumPostDocument,
+    options
+  )
+}
+export type SimpleSearchForumPostQueryHookResult = ReturnType<typeof useSimpleSearchForumPostQuery>
+export type SimpleSearchForumPostLazyQueryHookResult = ReturnType<typeof useSimpleSearchForumPostLazyQuery>
+export type SimpleSearchForumPostQueryResult = Apollo.QueryResult<
+  SimpleSearchForumPostQuery,
+  SimpleSearchForumPostQueryVariables
+>
+export const SimpleSearchForumThreadsDocument = gql`
+  query SimpleSearchForumThreads($text: String!, $limit: Int) {
+    forumThreads(where: { title_contains: $text }, limit: $limit) {
+      id
+      title
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchForumThreadsQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchForumThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchForumThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchForumThreadsQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchForumThreadsQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>(
+    SimpleSearchForumThreadsDocument,
+    options
+  )
+}
+export function useSimpleSearchForumThreadsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>(
+    SimpleSearchForumThreadsDocument,
+    options
+  )
+}
+export type SimpleSearchForumThreadsQueryHookResult = ReturnType<typeof useSimpleSearchForumThreadsQuery>
+export type SimpleSearchForumThreadsLazyQueryHookResult = ReturnType<typeof useSimpleSearchForumThreadsLazyQuery>
+export type SimpleSearchForumThreadsQueryResult = Apollo.QueryResult<
+  SimpleSearchForumThreadsQuery,
+  SimpleSearchForumThreadsQueryVariables
+>

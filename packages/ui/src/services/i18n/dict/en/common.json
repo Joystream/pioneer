@@ -44,5 +44,17 @@
     "en-UK": "English",
     "ru": "Russian",
     "ru-RU": "Russian"
+  },
+  "mentions": {
+    "name": "name",
+    "type": {
+      "member": "member",
+      "proposal": "proposal",
+      "proposal_post": "proposal post",
+      "forum_thread": "forum thread",
+      "forum_post": "forum post",
+      "opening": "opening",
+      "application": "application"
+    }
   }
 }
