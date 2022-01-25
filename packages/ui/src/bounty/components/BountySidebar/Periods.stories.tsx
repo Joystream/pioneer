@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react'
-import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -29,6 +28,8 @@ const Template: Story<PeriodsProps> = (args) => (
 export const Default = Template.bind({})
 Default.args = {
   stage: 'judgement',
-  workPeriodLength: new BN(10000),
-  judgingPeriodLength: new BN(1200),
+  periodsLengths: {
+    workPeriodLength: 10000,
+    judgingPeriodLength: 1200,
+  },
 }

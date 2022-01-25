@@ -19,7 +19,7 @@ export default {
 } as Meta
 
 const Template: Story<CKEditorProps> = (args) => (
-  <MockApolloProvider members>
+  <MockApolloProvider members proposals workers workingGroups forum>
     <TemplateBlock>
       <CKEditor {...args} />
       <InputComponent label="Inside InputComponent" inputSize="auto">

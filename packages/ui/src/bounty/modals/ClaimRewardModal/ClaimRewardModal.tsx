@@ -21,10 +21,7 @@ export const ClaimRewardModal = () => {
   const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
-    modalData: {
-      bountyId,
-      entry: { entryId, reward },
-    },
+    modalData: { bountyId, entryId, reward },
     hideModal,
   } = useModal<ClaimRewardModalCall>()
 

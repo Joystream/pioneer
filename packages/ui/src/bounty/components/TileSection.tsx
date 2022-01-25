@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { FundedRange, FundedRangeProps } from '@/bounty/components/FundedRange'
 import { StatisticItem, StatisticItemProps, Statistics } from '@/common/components/statistics'
@@ -17,15 +18,21 @@ export interface TileSectionProps {
 export const TileSection = React.memo(({ fundedDetails, secondRow, firstRow, className }: TileSectionProps) => {
   return (
     <>
-      <Statistics className={className}>
+      <StyledStatistics className={className}>
         {firstRow.map(({ content, ...statisticItemProps }, index) => (
           <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
             {content}
           </StatisticItem>
         ))}
-      </Statistics>
+      </StyledStatistics>
       <Statistics className={className}>
-        {fundedDetails && <FundedRange maxRangeValue={15000} minRangeValue={13000} rangeValue={5000} />}
+        {fundedDetails && (
+          <FundedRange
+            maxRangeValue={fundedDetails.maxRangeValue}
+            minRangeValue={fundedDetails.minRangeValue}
+            rangeValue={fundedDetails.rangeValue}
+          />
+        )}
         {secondRow?.map(({ content, ...statisticItemProps }, index) => (
           <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
             {content}
@@ -35,3 +42,7 @@ export const TileSection = React.memo(({ fundedDetails, secondRow, firstRow, cla
     </>
   )
 })
+
+const StyledStatistics = styled(Statistics)`
+  margin-bottom: 18px;
+`

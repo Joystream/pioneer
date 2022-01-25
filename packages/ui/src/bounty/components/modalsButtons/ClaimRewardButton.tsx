@@ -1,31 +1,34 @@
+import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { WithdrawStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal'
-import { Bounty } from '@/bounty/types/Bounty'
+import { ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
 
 interface Props {
-  statusLost: boolean
-  bounty: Bounty
+  bountyId: string
+  entryId: string
+  reward: BN
 }
 
-export const WithdrawStakeButtonButton = ({ statusLost, bounty }: Props) => {
+export const ClaimRewardButton = React.memo(({ bountyId, entryId, reward }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const submitWorkModal = useCallback(() => {
-    showModal<WithdrawStakeModalCall>({
-      modal: 'WithdrawStakeModal',
+    showModal<ClaimRewardModalCall>({
+      modal: 'ClaimReward',
       data: {
-        bounty,
+        bountyId,
+        entryId,
+        reward,
       },
     })
   }, [])
 
   return (
     <TransactionButton style="primary" size="large" onClick={submitWorkModal}>
-      {statusLost ? t('buttons.loserWithdrawStake') : t('buttons.entrantWithdrawStake')}
+      {t('buttons.claimReward')}
     </TransactionButton>
   )
-}
+})

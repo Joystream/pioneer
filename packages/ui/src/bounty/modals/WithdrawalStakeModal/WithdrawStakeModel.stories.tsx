@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
-import { Bounty, Contributor } from '@/bounty/types/Bounty'
+import { Bounty, Contributor, WorkEntry } from '@/bounty/types/Bounty'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -38,8 +38,8 @@ const bounty: Bounty = {
   entries: [
     {
       worker: getMember('alice'),
-      stake: 20000,
-    },
+      stake: new BN(20000),
+    } as WorkEntry,
   ],
   contributors: [contributor],
 } as Bounty

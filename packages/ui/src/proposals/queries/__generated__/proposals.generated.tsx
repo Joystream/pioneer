@@ -1308,6 +1308,31 @@ export type GetProposalQuery = {
     | undefined
 }
 
+export type SimpleSearchProposalsQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchProposalsQuery = {
+  __typename: 'Query'
+  proposals: Array<{ __typename: 'Proposal'; id: string; title: string }>
+}
+
+export type SimpleSearchProposalDiscussionQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchProposalDiscussionQuery = {
+  __typename: 'Query'
+  proposalDiscussionPosts: Array<{
+    __typename: 'ProposalDiscussionPost'
+    id: string
+    text: string
+    discussionThreadId: string
+  }>
+}
+
 export type GetVoteWithDetailsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']
 }>
@@ -1740,6 +1765,115 @@ export function useGetProposalLazyQuery(
 export type GetProposalQueryHookResult = ReturnType<typeof useGetProposalQuery>
 export type GetProposalLazyQueryHookResult = ReturnType<typeof useGetProposalLazyQuery>
 export type GetProposalQueryResult = Apollo.QueryResult<GetProposalQuery, GetProposalQueryVariables>
+export const SimpleSearchProposalsDocument = gql`
+  query SimpleSearchProposals($text: String!, $limit: Int) {
+    proposals(where: { title_contains: $text }, limit: $limit) {
+      id
+      title
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchProposalsQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchProposalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchProposalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchProposalsQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchProposalsQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>(
+    SimpleSearchProposalsDocument,
+    options
+  )
+}
+export function useSimpleSearchProposalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>(
+    SimpleSearchProposalsDocument,
+    options
+  )
+}
+export type SimpleSearchProposalsQueryHookResult = ReturnType<typeof useSimpleSearchProposalsQuery>
+export type SimpleSearchProposalsLazyQueryHookResult = ReturnType<typeof useSimpleSearchProposalsLazyQuery>
+export type SimpleSearchProposalsQueryResult = Apollo.QueryResult<
+  SimpleSearchProposalsQuery,
+  SimpleSearchProposalsQueryVariables
+>
+export const SimpleSearchProposalDiscussionDocument = gql`
+  query SimpleSearchProposalDiscussion($text: String!, $limit: Int) {
+    proposalDiscussionPosts(where: { text_contains: $text }, limit: $limit) {
+      id
+      text
+      discussionThreadId
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchProposalDiscussionQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchProposalDiscussionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchProposalDiscussionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchProposalDiscussionQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchProposalDiscussionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SimpleSearchProposalDiscussionQuery,
+    SimpleSearchProposalDiscussionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchProposalDiscussionQuery, SimpleSearchProposalDiscussionQueryVariables>(
+    SimpleSearchProposalDiscussionDocument,
+    options
+  )
+}
+export function useSimpleSearchProposalDiscussionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SimpleSearchProposalDiscussionQuery,
+    SimpleSearchProposalDiscussionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchProposalDiscussionQuery, SimpleSearchProposalDiscussionQueryVariables>(
+    SimpleSearchProposalDiscussionDocument,
+    options
+  )
+}
+export type SimpleSearchProposalDiscussionQueryHookResult = ReturnType<typeof useSimpleSearchProposalDiscussionQuery>
+export type SimpleSearchProposalDiscussionLazyQueryHookResult = ReturnType<
+  typeof useSimpleSearchProposalDiscussionLazyQuery
+>
+export type SimpleSearchProposalDiscussionQueryResult = Apollo.QueryResult<
+  SimpleSearchProposalDiscussionQuery,
+  SimpleSearchProposalDiscussionQueryVariables
+>
 export const GetVoteWithDetailsDocument = gql`
   query GetVoteWithDetails($id: ID!) {
     proposalVotedEventByUniqueInput(where: { id: $id }) {

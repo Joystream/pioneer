@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 
-import { ExpiredTabsState } from '@/bounty/components/BountyExpired/ExpiredTabs'
+import { CommonTabsState } from '@/bounty/components/tabsSets/CommonTabs'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 
-export const useBountyPreviewTabViaUrlParameter = (callback: (tab: ExpiredTabsState) => void) => {
+export const useBountyPreviewTabViaUrlParameter = (callback: (tab: CommonTabsState) => void) => {
   const query = useRouteQuery()
   const tab = query.get('tab')
 
   useEffect(() => {
     if (tab) {
-      callback(tab as ExpiredTabsState)
+      callback(tab as CommonTabsState)
     }
   }, [tab])
 }

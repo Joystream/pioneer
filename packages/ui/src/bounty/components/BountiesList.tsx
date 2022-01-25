@@ -5,10 +5,11 @@ import styled from 'styled-components'
 import { sortingOptions } from '@/bounty/helpers'
 import { BountyOrderByInput } from '@/common/api/queries'
 import { CountBadge } from '@/common/components/CountBadge'
+import { NoResultsTile } from '@/common/components/icons/NoResults'
 import { List } from '@/common/components/List'
 import { SimpleSelect } from '@/common/components/selects'
-import { TextBig } from '@/common/components/typography'
-import { NotFoundText } from '@/common/components/typography/NotFoundText'
+import { TextBig, TextExtraHuge } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { GetSortProps } from '@/common/hooks/useSort'
 
 import { Bounty } from '../types/Bounty'
@@ -35,7 +36,13 @@ export const BountiesList = memo(({ bounties, getSortProps }: Props) => {
   }, [bounties.length])
 
   if (!bounties.length) {
-    return <NotFoundText>{t('list.noResults')}</NotFoundText>
+    return (
+      <EmptyStateWrapper>
+        <NoResultsTile />
+        <NoResultsTitle bold>{t('list.notFound')}</NoResultsTitle>
+        <TextBig>{t('list.notFoundText')}</TextBig>
+      </EmptyStateWrapper>
+    )
   }
 
   return (
@@ -82,4 +89,18 @@ const Counter = styled(CountBadge)`
 
 const StyledList = styled(List)`
   row-gap: 16px;
+`
+
+const EmptyStateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px auto 0;
+  ${TextBig} {
+    color: ${Colors.Black[500]};
+  }
+`
+
+const NoResultsTitle = styled(TextExtraHuge)`
+  margin: 25px 0 16px;
 `
