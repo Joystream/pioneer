@@ -197,9 +197,9 @@ export const ContributeFundsModal = () => {
           {!isPerpetual(bounty.fundingType) && (
             <Row>
               <FundedRange
-                rangeValue={bounty.totalFunding.toNumber()}
-                maxRangeValue={(bounty.fundingType as FundingLimited).maxAmount.toNumber()}
-                minRangeValue={(bounty.fundingType as FundingLimited).minAmount.toNumber()}
+                rangeValue={bounty.totalFunding}
+                maxRangeValue={(bounty.fundingType as FundingLimited).maxAmount}
+                minRangeValue={(bounty.fundingType as FundingLimited).minAmount}
                 flat
               />
             </Row>

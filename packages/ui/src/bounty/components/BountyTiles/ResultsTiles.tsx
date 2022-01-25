@@ -2,28 +2,17 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
-import { useGetBountyWorksCountQuery } from '@/bounty/queries'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
+import { MemberStack } from '@/memberships/components/MemberStack'
 
 interface Props {
   bounty: Bounty
 }
 
-export const ExpiredTiles = ({ bounty }: Props) => {
+export const ResultsTiles = React.memo(({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
-  const { data } = useGetBountyWorksCountQuery({
-    variables: {
-      where: {
-        entry: {
-          bounty: {
-            id_eq: bounty.id,
-          },
-        },
-      },
-    },
-  })
 
   const firstRow = useMemo(
     () => [
@@ -31,7 +20,7 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         title: t('tiles.stage.title'),
         content: (
           <TextHuge value bold>
-            {t('bountyFields.expired')}
+            {t('bountyFields.withdrawalPeriod')}
           </TextHuge>
         ),
         tooltipText: t('tiles.stage.tooltip'),
@@ -57,18 +46,24 @@ export const ExpiredTiles = ({ bounty }: Props) => {
       },
       {
         title: t('tiles.oracle.title'),
-        content: bounty.oracle && <MemberInfo member={bounty.oracle} size="m" memberSize="m" hideGroup />,
+        content: bounty.creator ? (
+          <MemberInfo member={bounty.creator} size="m" memberSize="m" hideGroup />
+        ) : (
+          <TextHuge value bold>
+            {t('common:council')}
+          </TextHuge>
+        ),
       },
     ],
     [t, bounty]
   )
-
-  const secondRow = useMemo(
-    () => [
+  const secondRow = useMemo(() => {
+    const winners = bounty.entries?.filter((entry) => entry.winner === true)
+    return [
       {
-        title: t('tiles.funded.title'),
+        title: t('tiles.unwithdrawnFunds.title'),
         content: <TokenValue value={bounty.totalFunding} size="l" />,
-        tooltipText: t('tiles.funded.tooltip'),
+        tooltipText: t('tiles.unwithdrawnFunds.tooltip'),
       },
       {
         title: t('tiles.cherry.title'),
@@ -76,17 +71,18 @@ export const ExpiredTiles = ({ bounty }: Props) => {
         tooltipText: t('tiles.cherry.tooltip'),
       },
       {
-        title: t('tiles.worksSubmitted.title'),
-        content: (
+        title: t('tiles.winners.title'),
+        content: winners?.length ? (
+          <MemberStack members={winners.map((winner) => winner.worker)} />
+        ) : (
           <TextHuge value bold>
-            {data?.workSubmittedEventsConnection.totalCount}
+            {t('common:none')}
           </TextHuge>
         ),
-        tooltipText: t('tiles.worksSubmitted.tooltip'),
+        tooltipText: t('tiles.winners.tooltip'),
       },
-    ],
-    [data, t, bounty]
-  )
+    ]
+  }, [t, bounty])
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />
-}
+})

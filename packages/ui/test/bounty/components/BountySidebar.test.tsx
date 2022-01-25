@@ -9,8 +9,8 @@ import memberMock from '@/mocks/data/raw/members.json'
 
 describe('UI: Bounty Sidebar', () => {
   const periodsLengths = {
-    workPeriodLength: new BN(200),
-    judgingPeriodLength: new BN(350),
+    workPeriodLength: 200,
+    judgingPeriodLength: 350,
   }
   const contributors: Contributor[] = [
     // Alice

@@ -1,5 +1,10 @@
 {
   "bounties": "Bounties",
+  "council": "Council",
+  "entries": "Entries",
+  "stake": "Stake",
+  "submittedWorks": "Submitted works",
+  "withdrawals": "Withdrawals",
   "modals": {
     "common": {
       "transactionFee": {
@@ -175,7 +180,8 @@
     },
     "periodLength": {
       "title": "Period Length",
-      "tooltip": "Lorem ipsum d"
+      "tooltip": "Lorem ipsum d",
+      "closed": "Closed"
     },
     "bountyCreator": {
       "title": "Bounty Creator"
@@ -189,6 +195,10 @@
     },
     "cherry": {
       "title": "Cherry",
+      "tooltip": "Lorem ipsum d"
+    },
+    "entrantStake": {
+      "title": "Entrant stake",
       "tooltip": "Lorem ipsum d"
     },
     "worksSubmitted": {
@@ -236,18 +246,26 @@
   "bountyFields": {
     "cherry": "Cherry",
     "entrantStake": "Entrant Stake",
-    "expired": "Expired",
+    "working": "Working period",
+    "expired": "Expired period",
+    "judgement": "Judgement period",
     "perpetual": "Perpetual",
     "limited": "Limited",
-    "withdrawalPeriod": "Withdrawal Period"
+    "withdrawalPeriod": "Withdrawal period",
+    "fundingPeriod": "Funding Period",
+    "terminated": "Terminated"
   },
   "buttons": {
     "announceEntry": "Announce Entry",
     "submitWork": "Submit Work",
     "submitJudgement": "Submit Judgement",
     "cancelBounty": "Cancel Bounty",
+    "contributeFunds": "Contribute",
+    "createBounty": "Create Bounty",
+    "withdrawWorkEntry": "Withdraw",
+    "claimReward": "Claim Reward",
     "loserWithdrawStake": "Withdraw Stake",
-    "entrantWithdrawStake": "Withdraw Contribution"
+    "contributorWithdrawStake": "Withdraw Contribution"
   },
   "information": {
     "bountyFailed": {
@@ -256,7 +274,8 @@
     }
   },
   "list": {
-    "noResults": "No bounties matching search criteria",
+    "notFound": "No Bounties",
+    "notFoundText": "No bounties matching search criteria",
     "searching": "Searching",
     "searchingText": "We are searching through all bounties to find what your are looking for. ",
     "sorting": "sorting"
@@ -271,7 +290,7 @@
     "title": "Top contributors past week",
     "amountTitle": "Contributed",
     "notFound": "No contributors",
-    "noFoundText": "Lorem ipsum dolor sit amet enim"
+    "notFoundText": "Lorem ipsum dolor sit amet enim"
   },
   "discussionThread": {
     "title": "Bounty discussion thread",

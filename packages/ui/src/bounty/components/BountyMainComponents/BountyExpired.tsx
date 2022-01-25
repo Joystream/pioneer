@@ -1,42 +1,45 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
-import { ExpiredTabs, ExpiredTabsState } from '@/bounty/components/BountyExpired/ExpiredTabs'
-import { ExpiredTiles } from '@/bounty/components/BountyExpired/ExpiredTiles'
 import { BountyFooter } from '@/bounty/components/BountyFooter'
 import { BountySidebar } from '@/bounty/components/BountySidebar/BountySidebar'
+import { CommonTiles } from '@/bounty/components/BountyTiles/CommonTiles'
 import { BountyTab } from '@/bounty/components/tabs/BountyTab'
 import { WorkTab } from '@/bounty/components/tabs/WorkTab'
+import { CommonTabs, CommonTabsState } from '@/bounty/components/tabsSets/CommonTabs'
+import { getFundingPeriodLength } from '@/bounty/helpers'
+import { useBountyEntrants } from '@/bounty/hooks/useBountyEntrants'
 import { useBountyPreviewTabViaUrlParameter } from '@/bounty/hooks/useBountyPreviewTabViaUrlParameter'
+import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { BN_ZERO } from '@/common/constants'
 
 interface Props {
   bounty: Bounty
 }
 
-export const BountyExpired = ({ bounty }: Props) => {
-  const [active, setActive] = useState<ExpiredTabsState>('Bounty')
+export const BountyExpired = React.memo(({ bounty }: Props) => {
+  const [active, setActive] = useState<CommonTabsState>('Bounty')
+  const entrants = useBountyEntrants(bounty)
+  const withdrawns = useBountyWithdrawns(bounty)
+  const periodsLengths = useMemo(
+    () => ({
+      fundingPeriodLength: getFundingPeriodLength(bounty.fundingType),
+      judgingPeriodLength: bounty.judgingPeriod,
+      workPeriodLength: bounty.workPeriod,
+    }),
+    [bounty]
+  )
   const [wasSearched, setWasSearched] = useState<boolean>(false)
 
   useBountyPreviewTabViaUrlParameter((tab) => {
     setActive(tab)
   })
 
-  const entrants = useMemo(
-    () =>
-      bounty?.entries?.map((entry) => ({
-        actor: entry.worker,
-        count: entry.worksIds.length,
-      })) ?? [],
-    [bounty.entries?.length]
-  )
-
   return (
     <>
       <MainPanel>
-        <ExpiredTiles bounty={bounty} />
-        <ExpiredTabs active={active} setActive={setActive} />
+        <CommonTiles bounty={bounty} period="expired" />
+        <CommonTabs active={active} setActive={setActive} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}
           {active === 'Works' && (
@@ -46,12 +49,9 @@ export const BountyExpired = ({ bounty }: Props) => {
             <BountySidebar
               entrants={entrants}
               contributors={bounty.contributors}
+              withdrawals={withdrawns}
               stage="expired"
-              periodsLengths={{
-                fundingPeriodLength: BN_ZERO,
-                judgingPeriodLength: bounty.judgingPeriod,
-                workPeriodLength: bounty.workPeriod,
-              }}
+              periodsLengths={periodsLengths}
             />
           </RowGapBlock>
         </ContentWithSidePanel>
@@ -59,4 +59,4 @@ export const BountyExpired = ({ bounty }: Props) => {
       <BountyFooter bounty={bounty} />
     </>
   )
-}
+})

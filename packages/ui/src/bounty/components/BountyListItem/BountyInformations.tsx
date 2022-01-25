@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
@@ -11,7 +10,7 @@ import { Member } from '@/memberships/types'
 interface Props {
   title: string
   creator?: Member
-  timeToEnd?: BN
+  timeToEnd?: number
 }
 
 export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) => {

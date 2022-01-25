@@ -42,6 +42,7 @@ fragment BountyFields on Bounty {
   }
   entries {
     id
+    bountyId
     worker {
       ...MemberFields
     }
@@ -50,6 +51,11 @@ fragment BountyFields on Bounty {
       ... on BountyEntryStatusWinner {
         reward
       }
+    }
+    works {
+      id
+      title
+      description
     }
     stake
     works {

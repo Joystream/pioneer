@@ -2,17 +2,43 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
-import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { useGetBountyWorksCountQuery } from '@/bounty/queries'
+import { Bounty } from '@/bounty/types/Bounty'
+import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
 import { TextHuge, TokenValue } from '@/common/components/typography'
+import { DurationValue } from '@/common/components/typography/DurationValue'
 import { MemberInfo } from '@/memberships/components'
-import { MemberStack } from '@/memberships/components/MemberStack'
 
 interface Props {
   bounty: Bounty
+  period: 'working' | 'judgement' | 'expired' | 'terminated'
 }
 
-export const FailedTiles = ({ bounty }: Props) => {
+export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const { t } = useTranslation('bounty')
+  const { data } = useGetBountyWorksCountQuery({
+    variables: {
+      where: {
+        entry: {
+          bounty: {
+            id_eq: bounty.id,
+          },
+        },
+      },
+    },
+  })
+
+  const periodLength = useMemo(() => {
+    switch (period) {
+      case 'working':
+        return <DurationValue value={formatDuration(bounty.workPeriod)} />
+      case 'judgement':
+        return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
+      case 'expired':
+      case 'terminated':
+        return t('tiles.periodLength.closed')
+    }
+  }, [t, bounty, period])
 
   const firstRow = useMemo(
     () => [
@@ -20,7 +46,7 @@ export const FailedTiles = ({ bounty }: Props) => {
         title: t('tiles.stage.title'),
         content: (
           <TextHuge value bold>
-            {t('bountyFields.withdrawalPeriod')}
+            {t(`bountyFields.${period}`)}
           </TextHuge>
         ),
         tooltipText: t('tiles.stage.tooltip'),
@@ -29,7 +55,7 @@ export const FailedTiles = ({ bounty }: Props) => {
         title: t('tiles.periodLength.title'),
         content: (
           <TextHuge value bold>
-            {isFundingLimited(bounty.fundingType) ? t('bountyFields.limited') : t('bountyFields.perpetual')}
+            {periodLength}
           </TextHuge>
         ),
         tooltipText: t('tiles.periodLength.tooltip'),
@@ -46,24 +72,18 @@ export const FailedTiles = ({ bounty }: Props) => {
       },
       {
         title: t('tiles.oracle.title'),
-        content: bounty.creator ? (
-          <MemberInfo member={bounty.creator} size="m" memberSize="m" hideGroup />
-        ) : (
-          <TextHuge value bold>
-            {t('common:council')}
-          </TextHuge>
-        ),
+        content: bounty.oracle && <MemberInfo member={bounty.oracle} size="m" memberSize="m" hideGroup />,
       },
     ],
     [t, bounty]
   )
-  const secondRow = useMemo(() => {
-    const winners = bounty.entries?.filter((entry) => entry.winner === true)
-    return [
+
+  const secondRow = useMemo(
+    () => [
       {
-        title: t('tiles.unwithdrawnFunds.title'),
+        title: t('tiles.funded.title'),
         content: <TokenValue value={bounty.totalFunding} size="l" />,
-        tooltipText: t('tiles.unwithdrawnFunds.tooltip'),
+        tooltipText: t('tiles.funded.tooltip'),
       },
       {
         title: t('tiles.cherry.title'),
@@ -71,18 +91,17 @@ export const FailedTiles = ({ bounty }: Props) => {
         tooltipText: t('tiles.cherry.tooltip'),
       },
       {
-        title: t('tiles.winners.title'),
-        content: winners?.length ? (
-          <MemberStack members={winners.map((winner) => winner.worker)} />
-        ) : (
+        title: t('tiles.worksSubmitted.title'),
+        content: (
           <TextHuge value bold>
-            {t('common:none')}
+            {data?.workSubmittedEventsConnection.totalCount}
           </TextHuge>
         ),
-        tooltipText: t('tiles.winners.tooltip'),
+        tooltipText: t('tiles.worksSubmitted.tooltip'),
       },
-    ]
-  }, [t, bounty])
+    ],
+    [data, t, bounty]
+  )
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />
-}
+})

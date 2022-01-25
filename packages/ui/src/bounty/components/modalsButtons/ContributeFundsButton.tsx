@@ -1,22 +1,21 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
+import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
 import { Bounty } from '@/bounty/types/Bounty'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { useModal } from '@/common/hooks/useModal'
 
 interface Props {
   bounty: Bounty
 }
 
-export const SubmitWorkButton = ({ bounty }: Props) => {
+export const ContributeFundsButton = React.memo(({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
-  const submitWorkModal = useCallback(() => {
-    showModal<SubmitWorkModalCall>({
-      modal: 'SubmitWork',
+  const contributeFundsModal = useCallback(() => {
+    showModal<BountyContributeFundsModalCall>({
+      modal: 'BountyContributeFundsModal',
       data: {
         bounty,
       },
@@ -24,9 +23,8 @@ export const SubmitWorkButton = ({ bounty }: Props) => {
   }, [])
 
   return (
-    <TransactionButton style="primary" size="large" onClick={submitWorkModal}>
-      <PlusIcon />
-      {t('buttons.submitWork')}
+    <TransactionButton style="primary" size="large" onClick={contributeFundsModal}>
+      {t('buttons.contributeFunds')}
     </TransactionButton>
   )
-}
+})

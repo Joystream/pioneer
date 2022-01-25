@@ -1,18 +1,11 @@
-import BN from 'bn.js'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BountyPeriod, Contributor, Entrant, EntrantResult, Withdrawn } from '@/bounty/types/Bounty'
+import { BountyPeriod, Contributor, Entrant, EntrantResult, PeriodsLengthsType, Withdrawn } from '@/bounty/types/Bounty'
 
 import { BountyActorsList } from '../BountyActorsList/BountyActorsList'
 
 import { Periods } from './Periods'
-
-interface PeriodsLengthsType {
-  fundingPeriodLength?: BN
-  workPeriodLength: BN
-  judgingPeriodLength: BN
-}
 
 export interface BountySidebarProps {
   contributors?: Contributor[]
@@ -20,22 +13,13 @@ export interface BountySidebarProps {
   withdrawals?: Withdrawn[]
   entrantResult?: EntrantResult
   stage: BountyPeriod
-  periodsLengths: PeriodsLengthsType
+  periodsLengths?: PeriodsLengthsType
   isSlashed?: boolean
   hidePeriods?: boolean
 }
 
 export const BountySidebar = memo(
-  ({
-    contributors,
-    entrants,
-    withdrawals,
-    entrantResult,
-    stage,
-    periodsLengths,
-    isSlashed,
-    hidePeriods,
-  }: BountySidebarProps) => {
+  ({ contributors, entrants, withdrawals, entrantResult, stage, periodsLengths, isSlashed }: BountySidebarProps) => {
     const { t } = useTranslation('bounty')
 
     return (
@@ -52,7 +36,7 @@ export const BountySidebar = memo(
         {contributors && (
           <BountyActorsList title={t('sidebar.contributors')} elements={contributors} open={stage === 'funding'} />
         )}
-        {!hidePeriods && <Periods stage={stage} {...periodsLengths} />}
+        {periodsLengths && <Periods stage={stage} periodsLengths={periodsLengths} />}
       </>
     )
   }
