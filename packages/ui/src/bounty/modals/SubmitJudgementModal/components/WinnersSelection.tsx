@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BountyWinner } from '@/bounty/modals/SubmitJudgementModal/machine'
@@ -37,6 +38,7 @@ export const WinnersSelection = ({
   amountDistributed,
   validationMessage,
 }: Props) => {
+  const { t } = useTranslation('bounty')
   const handleMemberSelection = useCallback(
     (id: number) => (winner: Member) => {
       editWinner(id, { winner })
@@ -66,28 +68,40 @@ export const WinnersSelection = ({
         <RowGapBlock gap={5}>
           <ProgressBarContainer>
             <DistributedText light>
-              Distributed
+              {t('modals.submitJudgement.progressBar.distributed')}
               <TokenValue size="s" value={amountDistributed} />
             </DistributedText>
             <ProgressBar size="big" end={!amountDistributed ? 0 : amountDistributed / bountyFunding.toNumber()} />
             <RowGapBlock gap={5}>
-              <TextSmall light>Total reward</TextSmall>
+              <TextSmall light>{t('modals.submitJudgement.progressBar.totalReward')}</TextSmall>
               <TokenValue size="s" value={bountyFunding.toNumber()} />
             </RowGapBlock>
             <ButtonGhost size="small" onClick={handleEqualDistribution}>
-              Distribute equally
+              {t('modals.submitJudgement.progressBar.distributeEqually')}
             </ButtonGhost>
           </ProgressBarContainer>
-          {validationMessage && <TextMedium error>{validationMessage}</TextMedium>}
+          {validationMessage && <TextMedium error>{t(validationMessage)}</TextMedium>}
         </RowGapBlock>
       )}
       {winners.map((winner, index) => (
         <RowGapBlock gap={15}>
-          <InputComponent label={`Winner ${index + 1}`} required tooltipText="Lorem ipsum" inputSize="l">
+          <InputComponent
+            label={`${t('modals.submitJudgement.winner.worker.label')} ${index + 1}`}
+            required
+            tooltipText={t('modals.submitJudgement.winner.worker.tooltip')}
+            inputSize="l"
+          >
             <SelectMember selected={winner.winner} filter={filter} onChange={handleMemberSelection(winner.id)} />
           </InputComponent>
           <TransactionAmount>
-            <InputComponent message=" " inputWidth="s" label="Reward" required units="JOY" tight>
+            <InputComponent
+              message=" "
+              inputWidth="s"
+              label={t('modals.submitJudgement.winner.reward')}
+              required
+              units="JOY"
+              tight
+            >
               <InputNumber isTokenValue value={String(winner.reward)} onChange={handleRewardEdit(winner.id)} />
             </InputComponent>
             <AmountButtons>
@@ -96,11 +110,11 @@ export const WinnersSelection = ({
                   size="small"
                   onClick={() => editWinner(winner.id, { reward: Math.floor(bountyFunding.toNumber() / 2) })}
                 >
-                  Use Half
+                  {t('modals.submitJudgement.amountButtons.useHalf')}
                 </AmountButton>
               )}
               <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding.toNumber() })}>
-                Use max
+                {t('modals.submitJudgement.amountButtons.useMax')}
               </AmountButton>
             </AmountButtons>
           </TransactionAmount>
@@ -109,11 +123,11 @@ export const WinnersSelection = ({
       {!noBountyWinners ? (
         <ColumnGapBlock gap={15}>
           <ButtonPrimary size="small" onClick={addWinner}>
-            Add Winner
+            {t('modals.submitJudgement.winner.buttons.addWinner')}
           </ButtonPrimary>
           {winners.length > 1 && (
             <ButtonGhost size="small" onClick={removeLastWinner}>
-              Remove last
+              {t('modals.submitJudgement.winner.buttons.removeWinner')}
             </ButtonGhost>
           )}
         </ColumnGapBlock>
@@ -121,10 +135,10 @@ export const WinnersSelection = ({
         <WarningWrapper>
           <TextBig bold value>
             <FileIcon />
-            Are you sure?
+            {t('modals.submitJudgement.noWinner.title')}
           </TextBig>
           <TextMedium inter light>
-            Bounty will be closed and marked as failed
+            {t('modals.submitJudgement.noWinner.description')}
           </TextMedium>
         </WarningWrapper>
       )}

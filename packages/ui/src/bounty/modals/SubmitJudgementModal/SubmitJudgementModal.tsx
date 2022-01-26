@@ -135,16 +135,16 @@ export const SubmitJudgementModal = () => {
         return setIsValid(null)
 
       case hasWinner && (!winners.length || winners.some((winner) => !winner.winner)):
-        return setIsValid('Pick a winner or mark bounty as failed')
+        return setIsValid('modals.submitJudgement.validation.pickWinner')
 
       case winners.some(({ reward }) => reward === 0):
-        return setIsValid('Some winner do not have reward amount')
+        return setIsValid('modals.submitJudgement.validation.winnerNoReward')
 
       case amountDistributed < bounty.totalFunding.toNumber():
-        return setIsValid('Distributed amount must equal total reward')
+        return setIsValid('modals.submitJudgement.validation.amountTooLow')
 
       case amountDistributed > bounty.totalFunding.toNumber():
-        return setIsValid('Distributed amount exceed total reward! Please decrease it.')
+        return setIsValid('modals.submitJudgement.validation.amountTooHigh')
 
       default:
         return setIsValid(null)
@@ -165,8 +165,8 @@ export const SubmitJudgementModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        description="You announce bounty winners."
-        buttonLabel="Submit Judgement"
+        description={t('modals.submitJudgement.authorizeModal.description')}
+        buttonLabel={t('modals.submitJudgement.authorizeModal.button')}
       />
     )
   }
@@ -176,8 +176,8 @@ export const SubmitJudgementModal = () => {
       <SuccessTransactionModal
         onClose={hideModal}
         onButtonClick={hideModal}
-        message={t('modals.withdrawContribution.success')}
-        buttonLabel={t('modals.withdrawContribution.successButton')}
+        message={t('modals.submitJudgement.successModal.message')}
+        buttonLabel={t('modals.submitJudgement.successModal.button')}
       />
     )
   }
@@ -185,21 +185,21 @@ export const SubmitJudgementModal = () => {
   if (state.matches(SubmitJudgementStates.error)) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There has been error while submitting judgement.
+        {t('modals.submitJudgement.failedModal')}
       </FailureModal>
     )
   }
 
   if (state.matches(SubmitJudgementStates.canceled)) {
-    return <FailureModal onClose={hideModal}>Transaction has been canceled.</FailureModal>
+    return <FailureModal onClose={hideModal}>{t('modals.submitJudgement.canceledModal')}</FailureModal>
   }
 
   return (
     <Modal onClose={hideModal} modalSize="m" modalHeight="xl">
-      <ModalHeader title="Submit Judgement" onClick={hideModal} />
+      <ModalHeader title={t('modals.submitJudgement.submitJudgement')} onClick={hideModal} />
       <ScrolledModalBody>
         <ModalContainer gap={40}>
-          <TextHuge bold>Select Winners</TextHuge>
+          <TextHuge bold>{t('modals.submitJudgement.selectWinners')}</TextHuge>
           <Container
             disabled
             label={t('modals.bountyCancel.bountyInput.label')}
@@ -211,12 +211,12 @@ export const SubmitJudgementModal = () => {
             </TextBig>
           </Container>
           <InlineToggleWrap>
-            <Label>Does Bounty have a winner? </Label>
+            <Label>{t('modals.submitJudgement.checkbox.label')}</Label>
             <ToggleCheckbox
-              falseLabel={<CheckBoxLabelWrapper>No</CheckBoxLabelWrapper>}
+              falseLabel={<CheckBoxLabelWrapper>{t('modals.submitJudgement.checkbox.false')}</CheckBoxLabelWrapper>}
               trueLabel={
                 <CheckBoxLabelWrapper>
-                  <StyledParagraph>Yes</StyledParagraph>
+                  <StyledParagraph>{t('modals.submitJudgement.checkbox.true')}</StyledParagraph>
                 </CheckBoxLabelWrapper>
               }
               checked={state.context.hasWinner}
@@ -237,10 +237,8 @@ export const SubmitJudgementModal = () => {
 
           <ModalDivider />
 
-          <TextHuge bold>Slash workers</TextHuge>
-          <TextMedium inter>
-            You can optionally slash workers. Slash amount can’t be higher that stake value.
-          </TextMedium>
+          <TextHuge bold>{t('modals.submitJudgement.slash.title')}</TextHuge>
+          <TextMedium inter>{t('modals.submitJudgement.slash.description')}</TextMedium>
           <SlashedSelection
             filter={selectWorkerFilter}
             removeLastSlashed={() => send('REMOVE_LAST_SLASHED')}
@@ -252,7 +250,7 @@ export const SubmitJudgementModal = () => {
       </ScrolledModalBody>
       <ModalFooter>
         <ButtonPrimary disabled={!!isValid} size="medium" onClick={() => send('NEXT')}>
-          Authorize Transaction
+          {t('modals.submitJudgement.authorizeTransaction')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BountyRejected } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filter, editSlashed }: Props) => {
+  const { t } = useTranslation('bounty')
   const onSlashedEdit = useCallback(
     (id: number) => (member: Member) => {
       editSlashed(id, member)
@@ -26,17 +28,21 @@ export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filte
   return (
     <>
       {slashed.map((loser) => (
-        <InputComponent label="Member ID" tooltipText="Lorem ipsum" inputSize="l">
+        <InputComponent
+          label={t('modals.submitJudgement.slash.worker.label')}
+          tooltipText={t('modals.submitJudgement.slash.worker.tooltip')}
+          inputSize="l"
+        >
           <SelectMember filter={filter} selected={loser.rejected} onChange={onSlashedEdit(loser.id)} />
         </InputComponent>
       ))}
       <ColumnGapBlock gap={15}>
         <ButtonPrimary size="small" onClick={addSlashed}>
-          Add Slashed
+          {t('modals.submitJudgement.slash.worker.addSlashed')}
         </ButtonPrimary>
         {!!slashed.length && (
           <ButtonGhost size="small" onClick={removeLastSlashed}>
-            Remove last slashed worker
+            {t('modals.submitJudgement.slash.worker.removeSlashed')}
           </ButtonGhost>
         )}
       </ColumnGapBlock>
