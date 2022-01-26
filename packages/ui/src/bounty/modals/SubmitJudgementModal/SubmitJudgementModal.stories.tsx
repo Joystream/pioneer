@@ -64,7 +64,7 @@ const useMyBalances: AddressToBalanceMap = {
     total: new BN(10000),
     locked: new BN(0),
     recoverable: new BN(0),
-    transferable: new BN(0),
+    transferable: new BN(10000),
     locks: [],
   },
 }

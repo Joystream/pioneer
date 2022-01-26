@@ -22,7 +22,9 @@ import {
   SubmitJudgementStates,
 } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
+import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -169,8 +171,31 @@ export const SubmitJudgementModal = () => {
     )
   }
 
+  if (state.matches(SubmitJudgementStates.success)) {
+    return (
+      <SuccessTransactionModal
+        onClose={hideModal}
+        onButtonClick={hideModal}
+        message={t('modals.withdrawContribution.success')}
+        buttonLabel={t('modals.withdrawContribution.successButton')}
+      />
+    )
+  }
+
+  if (state.matches(SubmitJudgementStates.error)) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There has been error while submitting judgement.
+      </FailureModal>
+    )
+  }
+
+  if (state.matches(SubmitJudgementStates.canceled)) {
+    return <FailureModal onClose={hideModal}>Transaction has been canceled.</FailureModal>
+  }
+
   return (
-    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+    <Modal onClose={hideModal} modalSize="m" modalHeight="xl">
       <ModalHeader title="Submit Judgement" onClick={hideModal} />
       <ScrolledModalBody>
         <ModalContainer gap={40}>
