@@ -8,11 +8,14 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal/SubmitJudgementModal'
+import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
+
+import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
 
 export default {
   title: 'Bounty/SubmitJudgementModal',
@@ -66,27 +69,33 @@ const useMyBalances: AddressToBalanceMap = {
   },
 }
 
+const api = stubApi()
+stubBountyConstants(api)
+stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 888)
+
 const Template: Story = () => {
   return (
     <MemoryRouter>
-      <MockApolloProvider members>
-        <ModalContext.Provider
-          value={{
-            hideModal: () => undefined,
-            modal: 'bar',
-            showModal: () => undefined,
-            modalData,
-          }}
-        >
-          <AccountsContext.Provider value={useMyAccounts}>
-            <BalancesContext.Provider value={useMyBalances}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <SubmitJudgementModal />
-              </MembershipContext.Provider>
-            </BalancesContext.Provider>
-          </AccountsContext.Provider>
-        </ModalContext.Provider>
-      </MockApolloProvider>
+      <ApiContext.Provider value={api}>
+        <MockApolloProvider members>
+          <ModalContext.Provider
+            value={{
+              hideModal: () => undefined,
+              modal: 'bar',
+              showModal: () => undefined,
+              modalData,
+            }}
+          >
+            <AccountsContext.Provider value={useMyAccounts}>
+              <BalancesContext.Provider value={useMyBalances}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <SubmitJudgementModal />
+                </MembershipContext.Provider>
+              </BalancesContext.Provider>
+            </AccountsContext.Provider>
+          </ModalContext.Provider>
+        </MockApolloProvider>
+      </ApiContext.Provider>
     </MemoryRouter>
   )
 }

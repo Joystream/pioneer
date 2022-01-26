@@ -11,14 +11,20 @@ import {
 import { Member } from '@/memberships/types'
 
 export interface BountyWinner {
-  reward: number
-  winner: Member
+  id: number
+  reward?: number
+  winner?: Member
+}
+
+export interface BountyRejected {
+  id: number
+  rejected?: Member
 }
 
 export interface GeneralParametersContext {
   hasWinner: boolean
   winners: BountyWinner[]
-  rejected: Member[]
+  rejected: BountyRejected[]
 }
 
 interface TransactionContext extends GeneralParametersContext {
@@ -43,15 +49,17 @@ export type SubmitJudgementState =
   | { value: SubmitJudgementStates.canceled; context: SubmitJudgementContext }
 
 type SetHasWinnerEvent = { type: 'SET_HAS_WINNER'; hasWinner: boolean }
-type AddWinnerEvent = { type: 'ADD_WINNER'; winner: BountyWinner }
-type AddSlashedEvent = { type: 'ADD_SLASHED'; slashed: Member }
-type EditWinnerRewardEvent = { type: 'EDIT_WINNER_REWARD'; payload: { reward: number; winner: Member } }
+type AddWinnerEvent = { type: 'ADD_WINNER' }
+type AddSlashedEvent = { type: 'ADD_SLASHED' }
+type EditWinnerEvent = { type: 'EDIT_WINNER'; payload: { id: number; winner: Partial<BountyWinner> } }
+type EditRejectedEvent = { type: 'EDIT_REJECTED'; payload: { id: number; rejected: Member } }
 
 export type SubmitJudgementEvent =
   | SetHasWinnerEvent
   | AddWinnerEvent
   | AddSlashedEvent
-  | EditWinnerRewardEvent
+  | EditWinnerEvent
+  | EditRejectedEvent
   | { type: 'CLEAN_WINNERS' }
   | { type: 'REMOVE_LAST_SLASHED' }
   | { type: 'REMOVE_LAST_WINNER' }
@@ -70,7 +78,12 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
     initial: SubmitJudgementStates.generalParameters,
     context: {
       hasWinner: true,
-      winners: [],
+      winners: [
+        {
+          id: 0,
+          reward: 0,
+        },
+      ],
       rejected: [],
     },
     states: {
@@ -79,10 +92,8 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           NEXT: SubmitJudgementStates.transaction,
           ADD_WINNER: {
             actions: assign({
-              winners: (context, event) =>
-                context.winners
-                  ? [...context.winners, (event as AddWinnerEvent).winner]
-                  : [(event as AddWinnerEvent).winner],
+              winners: (context) =>
+                context.winners ? [...context.winners, { id: context.winners.length, reward: 0 }] : [{ id: 0 }],
             }),
           },
           CLEAN_WINNERS: {
@@ -92,10 +103,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           },
           ADD_SLASHED: {
             actions: assign({
-              rejected: (context, event) =>
-                context.rejected
-                  ? [...context.rejected, (event as AddSlashedEvent).slashed]
-                  : [(event as AddSlashedEvent).slashed],
+              rejected: (context) => [...context.rejected, { id: context.rejected.length }],
             }),
           },
           REMOVE_LAST_WINNER: {
@@ -121,16 +129,29 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
               hasWinner: (_, event) => (event as SetHasWinnerEvent).hasWinner,
             }),
           },
-          EDIT_WINNER_REWARD: {
+          EDIT_WINNER: {
             actions: assign({
               winners: (context, event) =>
                 context.winners.map((winner) => {
-                  if (winner.winner.id === (event as EditWinnerRewardEvent).payload.winner.id) {
-                    winner.reward = (event as EditWinnerRewardEvent).payload.reward
+                  if (winner.id === (event as EditWinnerEvent).payload.id) {
+                    winner = { ...winner, ...(event as EditWinnerEvent).payload.winner }
                     return winner
                   }
 
                   return winner
+                }),
+            }),
+          },
+          EDIT_REJECTED: {
+            actions: assign({
+              rejected: (context, event) =>
+                context.rejected.map((loser) => {
+                  if (loser.id === (event as EditRejectedEvent).payload.id) {
+                    loser = { ...loser, rejected: (event as EditRejectedEvent).payload.rejected }
+                    return loser
+                  }
+
+                  return loser
                 }),
             }),
           },

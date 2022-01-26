@@ -1,23 +1,35 @@
+import { createType, registry } from '@joystream/types'
+import { BTreeMap } from '@polkadot/types'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import {
   CheckBoxLabelWrapper,
   InlineToggleWrap,
   StyledParagraph,
 } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
+import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { SlashedSelection } from '@/bounty/modals/SubmitJudgementModal/components/SlashedSelection'
 import { WinnersSelection } from '@/bounty/modals/SubmitJudgementModal/components/WinnersSelection'
-import { submitJudgementMachine } from '@/bounty/modals/SubmitJudgementModal/machine'
+import {
+  BountyRejected,
+  BountyWinner,
+  submitJudgementMachine,
+  SubmitJudgementStates,
+} from '@/bounty/modals/SubmitJudgementModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
-import { ModalDivider, Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
+import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
 export const SubmitJudgementModal = () => {
@@ -25,8 +37,10 @@ export const SubmitJudgementModal = () => {
     hideModal,
     modalData: { bounty },
   } = useModal<SubmitWorkModalCall>()
-  // const { active: activeMember } = useMyMemberships()
+  const { active: activeMember } = useMyMemberships()
+  const { allAccounts } = useMyAccounts()
   const { t } = useTranslation('bounty')
+  const { api, isConnected } = useApi()
   const [isValid, setIsValid] = useState<string | null>(null)
   const [state, send] = useMachine(submitJudgementMachine)
 
@@ -35,11 +49,16 @@ export const SubmitJudgementModal = () => {
       send('CLEAN_WINNERS')
     }
     send('SET_HAS_WINNER', { hasWinner: isSet })
+
+    if (isSet) {
+      send('ADD_WINNER')
+    }
   }, [])
 
-  const amountDistributed = useMemo(() => state.context.winners.reduce((prev, current) => prev + current.reward, 0), [
-    state.context.winners,
-  ])
+  const amountDistributed = useMemo(
+    () => state.context.winners.reduce((prev, current) => prev + (current.reward ?? 0), 0),
+    [state.context.winners]
+  )
 
   const selectWorkerFilter = useCallback(
     (member: Member) => {
@@ -48,13 +67,63 @@ export const SubmitJudgementModal = () => {
         return false
       }
 
-      const isWinner = state.context.winners.some((winner) => winner.winner.id === member.id)
-      const isSlashed = state.context.rejected.some((loser) => loser.id === member.id)
+      const isWinner = state.context.winners
+        .filter((winner) => winner.winner && winner.reward)
+        .some((winner) => winner?.winner?.id === member.id)
+      const isSlashed = state.context.rejected
+        .filter((loser) => !!loser.rejected)
+        .some((loser) => loser.rejected?.id === member.id)
 
       return !(isWinner || isSlashed)
     },
     [state.context.winners.length, state.context.rejected.length]
   )
+
+  const transaction = useMemo(() => {
+    if (api && isConnected && activeMember) {
+      const validWinners = state.context.winners.filter(
+        (winner) => winner.winner && winner.reward
+      ) as Required<BountyWinner>[]
+      const winnersApi = validWinners.map(
+        ({ winner, reward }) =>
+          [
+            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0),
+            { Winner: { reward: createType('u128', reward) } },
+          ] as const
+      )
+
+      const validRejections = state.context.rejected.filter(
+        (rejection) => rejection.rejected
+      ) as Required<BountyRejected>[]
+      const rejectedApi = validRejections.map(
+        (loser) =>
+          [
+            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
+            null,
+          ] as const
+      )
+
+      return api?.tx.bounty.submitOracleJudgment(
+        { Member: createType('u64', Number(activeMember?.id || 0)) },
+        createType('u32', Number(bounty.id || 0)),
+        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map([...winnersApi, ...rejectedApi]))
+      )
+    }
+  }, [api, isConnected, bounty])
+
+  useEffect(() => {
+    const rewardMod = bounty.totalFunding.toNumber() % state.context.winners.length
+    const reward = Math.floor(bounty.totalFunding.toNumber() / state.context.winners.length)
+
+    state.context.winners.forEach((winner, index) => {
+      send('EDIT_WINNER', {
+        payload: {
+          id: winner.id,
+          winner: { reward: index === 0 ? reward + rewardMod : reward },
+        },
+      })
+    })
+  }, [state.context.winners.length])
 
   useEffect(() => {
     const { winners, hasWinner } = state.context
@@ -63,19 +132,42 @@ export const SubmitJudgementModal = () => {
       case !hasWinner:
         return setIsValid(null)
 
-      case hasWinner && !winners.length:
+      case hasWinner && (!winners.length || winners.some((winner) => !winner.winner)):
         return setIsValid('Pick a winner or mark bounty as failed')
 
       case winners.some(({ reward }) => reward === 0):
         return setIsValid('Some winner do not have reward amount')
 
-      case amountDistributed !== bounty.totalFunding.toNumber():
+      case amountDistributed < bounty.totalFunding.toNumber():
         return setIsValid('Distributed amount must equal total reward')
+
+      case amountDistributed > bounty.totalFunding.toNumber():
+        return setIsValid('Distributed amount exceed total reward! Please decrease it.')
 
       default:
         return setIsValid(null)
     }
   }, [state.context.winners, state.context.hasWinner])
+
+  if (!activeMember || !transaction) {
+    return null
+  }
+
+  if (state.matches(SubmitJudgementStates.transaction)) {
+    const service = state.children.transaction
+    const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
+
+    return (
+      <AuthorizeTransactionModal
+        onClose={hideModal}
+        transaction={transaction}
+        service={service}
+        controllerAccount={controllerAccount}
+        description="You announce bounty winners."
+        buttonLabel="Submit Judgement"
+      />
+    )
+  }
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -107,14 +199,15 @@ export const SubmitJudgementModal = () => {
             />
           </InlineToggleWrap>
           <WinnersSelection
+            validationMessage={isValid}
             amountDistributed={amountDistributed}
             bountyFunding={bounty.totalFunding}
             filter={selectWorkerFilter}
             noBountyWinners={!state.context.hasWinner}
             winners={state.context.winners}
-            addWinner={(winner) => send('ADD_WINNER', { winner })}
+            addWinner={() => send('ADD_WINNER')}
             removeLastWinner={() => send('REMOVE_LAST_WINNER')}
-            editWinnerReward={(winner, reward) => send('EDIT_WINNER_REWARD', { payload: { winner, reward } })}
+            editWinner={(id, winner) => send('EDIT_WINNER', { payload: { winner, id } })}
           />
 
           <ModalDivider />
@@ -126,19 +219,15 @@ export const SubmitJudgementModal = () => {
           <SlashedSelection
             filter={selectWorkerFilter}
             removeLastSlashed={() => send('REMOVE_LAST_SLASHED')}
-            addSlashed={(slashed) => send('ADD_SLASHED', { slashed })}
+            addSlashed={() => send('ADD_SLASHED')}
+            editSlashed={(id, rejected) => send('EDIT_REJECTED', { payload: { id, rejected } })}
             slashed={state.context.rejected}
           />
         </ModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        {isValid && (
-          <TextMedium bold error>
-            {isValid}
-          </TextMedium>
-        )}
-        <ButtonPrimary disabled={!!isValid} size="medium">
-          Submit Judgment
+        <ButtonPrimary disabled={!!isValid} size="medium" onClick={() => send('NEXT')}>
+          Authorize Transaction
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

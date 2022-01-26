@@ -1,34 +1,45 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
-import { ButtonGhost } from '@/common/components/buttons'
+import { BountyRejected } from '@/bounty/modals/SubmitJudgementModal/machine'
+import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { SelectedMember, SelectMember } from '@/memberships/components/SelectMember'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 interface Props {
-  addSlashed: (worker: Member) => void
+  addSlashed: () => void
   removeLastSlashed: () => void
   filter: (member: Member) => boolean
-  slashed: Member[]
+  slashed: BountyRejected[]
+  editSlashed: (id: number, rejected: Member) => void
 }
 
-export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filter }: Props) => {
+export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filter, editSlashed }: Props) => {
+  const onSlashedEdit = useCallback(
+    (id: number) => (member: Member) => {
+      editSlashed(id, member)
+    },
+    [editSlashed]
+  )
+
   return (
     <>
       {slashed.map((loser) => (
-        <SelectedMember member={loser} label="Member ID" disabled tooltipText="Lorem ipsum" />
-      ))}
-      <RowGapBlock gap={15}>
-        <InputComponent label="New worker to slash" tooltipText="Lorem ipsum" inputSize="l">
-          <SelectMember filter={filter} onChange={addSlashed} />
+        <InputComponent label="Member ID" tooltipText="Lorem ipsum" inputSize="l">
+          <SelectMember filter={filter} selected={loser.rejected} onChange={onSlashedEdit(loser.id)} />
         </InputComponent>
+      ))}
+      <ColumnGapBlock gap={15}>
+        <ButtonPrimary size="small" onClick={addSlashed}>
+          Add Slashed
+        </ButtonPrimary>
         {!!slashed.length && (
           <ButtonGhost size="small" onClick={removeLastSlashed}>
             Remove last slashed worker
           </ButtonGhost>
         )}
-      </RowGapBlock>
+      </ColumnGapBlock>
     </>
   )
 }
