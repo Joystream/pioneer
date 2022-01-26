@@ -55,6 +55,11 @@
       "forum_post": "forum post",
       "opening": "opening",
       "application": "application"
+    },
+    "tooltips": {
+      "proposal": {
+        "timeLeft": "Time Left: {{time}}",
+      }
     }
   }
 }
