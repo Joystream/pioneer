@@ -832,11 +832,14 @@ export const BountyFieldsFragmentDoc = gql`
           reward
         }
       }
-      stake
       works {
         id
         title
         description
+      }
+      stake
+      works {
+        id
       }
     }
     createdInEvent {
