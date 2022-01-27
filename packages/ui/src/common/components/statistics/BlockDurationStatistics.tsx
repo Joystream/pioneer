@@ -22,6 +22,13 @@ const format = splitDuration([
   [A_MINUTE / MILLISECONDS_PER_BLOCK, 'min'],
 ])
 
+export const formatDuration = (duration: number): [string | number, string][] => {
+  if (duration < A_MINUTE / MILLISECONDS_PER_BLOCK) {
+    return [['< 1', 'min']]
+  }
+  return format(duration)
+}
+
 interface BlockDurationStatisticsProps extends StatisticItemProps {
   value?: number | BN
 }
@@ -40,7 +47,7 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   return (
     <MultiStatisticItem {...props}>
       <ItemRow>
-        <DurationValue value={duration > A_MINUTE / MILLISECONDS_PER_BLOCK ? format(duration) : [['< 1', 'min']]} />
+        <DurationValue value={formatDuration(duration)} />
       </ItemRow>
 
       <ItemRow>
