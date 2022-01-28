@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 export const CouncilNormalTiles = () => {
   const { t } = useTranslation('overview')
   const { isLoading, council } = useElectedCouncil()
+  console.log({council})
   const councilors = council?.councilors
   const councilTiles = useMemo(
     () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMembers')} />) ?? [],

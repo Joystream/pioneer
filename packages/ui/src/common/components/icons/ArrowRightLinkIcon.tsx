@@ -17,10 +17,10 @@ export const ArrowRightLinkIcon = React.memo(({ onClick, className }: Props) => 
     onClick={onClick}
     className={className}
   >
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.66683 8.65527H3.3335V7.34166H8.66683V8.65527Z" fill="#757575" />
+    <path fillRule="evenodd" clipRule="evenodd" d="M8.66683 8.65527H3.3335V7.34166H8.66683V8.65527Z" fill="#757575" />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M11.7241 7.99845L7.52881 12.1317L8.47162 13.0605L13.6097 7.99845L8.47162 2.93636L7.52881 3.86523L11.7241 7.99845Z"
       fill="#757575"
     />
