@@ -3,7 +3,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { Council } from '@/app/pages/Council/Council'
-import { seedElectedCouncil, seedCouncilMember, seedMember } from '@/mocks/data'
+import { seedCouncilMember, seedMember, seedElectedCouncils } from '@/mocks/data'
 
 import { mockMembers, mockCouncils, mockCouncilors } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -14,7 +14,7 @@ describe('Council page', () => {
 
   beforeAll(async () => {
     mockMembers.forEach((mockMember) => seedMember(mockMember, server.server))
-    mockCouncils.forEach((mockCouncil) => seedElectedCouncil(mockCouncil, server.server))
+    seedElectedCouncils(server.server, mockCouncils)
   })
 
   it('Empty state', async () => {
