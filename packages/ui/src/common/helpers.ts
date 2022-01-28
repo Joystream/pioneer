@@ -7,3 +7,5 @@ export const camelCaseToText = (str: string): string => {
 }
 
 export const plural = (quantity?: unknown, suffix = 's') => (quantity === 1 ? '' : suffix)
+
+export const cutText = (text: string, length = 100) => text.slice(0, length) + '...'

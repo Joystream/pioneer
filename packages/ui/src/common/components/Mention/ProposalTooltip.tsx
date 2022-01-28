@@ -1,57 +1,74 @@
-import {formatDistanceToNowStrict, isPast} from 'date-fns';
-import React, {useEffect, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
-import styled from 'styled-components';
+import { addSeconds, formatDistanceToNowStrict, isPast } from 'date-fns'
+import React, { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import {Loading} from '@/common/components/Loading';
-import {TextMedium, TextSmall} from '@/common/components/typography';
-import {Colors} from '@/common/constants';
-import {Proposal} from '@/proposals/types';
+import { Loading } from '@/common/components/Loading'
+import { TextMedium, TextSmall } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
+import { cutText } from '@/common/helpers'
+import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
+import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
+import { ProposalMention } from '@/proposals/types'
 
-import {BadgeStatus} from '../BadgeStatus';
+import { BadgeStatus } from '../BadgeStatus'
 
 export interface ProposalTooltipProps {
-  onMount?(): void;
-
-  proposal?: Proposal;
-  details?: string;
+  onMount(): void
+  mention?: ProposalMention
 }
 
-export const ProposalTooltip = React.memo(({proposal, details, onMount}: ProposalTooltipProps) => {
-  const {t} = useTranslation();
+export const ProposalTooltip = React.memo(({ mention, onMount }: ProposalTooltipProps) => {
+  const { t } = useTranslation()
+  const constants = useProposalConstants(mention?.type)
+  const blocksUntil = useBlocksToProposalExecution(mention, constants)
 
   const distance = useMemo(() => {
-    const date = proposal?.endedAt && new Date(proposal.endedAt);
-    if (date && !isPast(date)) {
-      return formatDistanceToNowStrict(date)
+    if (blocksUntil) {
+      const date = addSeconds(new Date(), blocksUntil * 6)
+      if (!isPast(date)) {
+        return formatDistanceToNowStrict(date)
+      }
     }
-  }, [proposal])
+  }, [blocksUntil])
+
+  const title = useMemo(() => mention?.title && cutText(mention.title, 20), [mention])
+
+  const description = useMemo(() => mention?.description && cutText(mention.description), [mention])
 
   useEffect(() => {
-    !proposal && onMount?.();
+    !mention && onMount()
   }, [])
 
   return (
     <Container>
-      {proposal ? <>
-        {distance && <TextSmall lighter>{t('mentions.tooltips.proposal.timeLeft', {time: distance})}</TextSmall>}
-        <Row>
-          <TextMedium bold>{proposal.title}</TextMedium>
-          <BadgeStatus inverted size="l">{proposal.status}</BadgeStatus>
-        </Row>
-        <TextMedium lighter>
-          {details}
-        </TextMedium>
-      </> : <Loading/>}
+      {mention ? (
+        <>
+          <TextSmall lighter>
+            {distance
+              ? t('mentions.tooltips.proposal.timeLeft', { time: distance })
+              : t('mentions.tooltips.proposal.past')}
+          </TextSmall>
+          <Row>
+            <TextMedium bold>{title}</TextMedium>
+            <BadgeStatus inverted size="l">
+              {mention.status}
+            </BadgeStatus>
+          </Row>
+          {description && <TextMedium lighter>{description}</TextMedium>}
+        </>
+      ) : (
+        <Loading />
+      )}
     </Container>
-  );
+  )
 })
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 14px;
-`;
+`
 
 const Row = styled.div`
   display: inline-flex;
@@ -60,4 +77,4 @@ const Row = styled.div`
   ${TextMedium} {
     color: ${Colors.White};
   }
-`;
+`

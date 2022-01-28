@@ -262,6 +262,42 @@ export type SimpleSearchMembersQuery = {
   memberships: Array<{ __typename: 'Membership'; id: string; handle: string }>
 }
 
+export type GetMemberMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetMemberMentionQuery = {
+  __typename: 'Query'
+  membership?:
+    | {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null | undefined
+          about?: string | null | undefined
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+    | null
+    | undefined
+}
+
 export type GetMemberExtraInfoQueryVariables = Types.Exact<{
   membershipId_eq: Types.Scalars['ID']
   workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
@@ -546,6 +582,46 @@ export type SimpleSearchMembersQueryResult = Apollo.QueryResult<
   SimpleSearchMembersQuery,
   SimpleSearchMembersQueryVariables
 >
+export const GetMemberMentionDocument = gql`
+  query GetMemberMention($id: ID!) {
+    membership: membershipByUniqueInput(where: { id: $id }) {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+
+/**
+ * __useGetMemberMentionQuery__
+ *
+ * To run a query within a React component, call `useGetMemberMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetMemberMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberMentionQuery, GetMemberMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberMentionQuery, GetMemberMentionQueryVariables>(GetMemberMentionDocument, options)
+}
+export function useGetMemberMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberMentionQuery, GetMemberMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberMentionQuery, GetMemberMentionQueryVariables>(GetMemberMentionDocument, options)
+}
+export type GetMemberMentionQueryHookResult = ReturnType<typeof useGetMemberMentionQuery>
+export type GetMemberMentionLazyQueryHookResult = ReturnType<typeof useGetMemberMentionLazyQuery>
+export type GetMemberMentionQueryResult = Apollo.QueryResult<GetMemberMentionQuery, GetMemberMentionQueryVariables>
 export const GetMemberExtraInfoDocument = gql`
   query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
     councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {

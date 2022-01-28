@@ -20,28 +20,40 @@ export const Proposal = Template.bind({})
 Proposal.args = {
   type: 'proposal',
   itemId: '1',
-};
+}
 
-export const Forum = Template.bind({})
-Forum.args = {
-  type: 'forum',
+export const ProposalDiscussionEntry = Template.bind({})
+ProposalDiscussionEntry.args = {
+  type: 'proposalDiscussionEntry',
   itemId: '1',
-};
+}
 
-export const Profile = Template.bind({})
-Profile.args = {
-  type: 'profile',
+export const ForumThread = Template.bind({})
+ForumThread.args = {
+  type: 'forumThread',
   itemId: '1',
-};
+}
+
+export const ForumPost = Template.bind({})
+ForumPost.args = {
+  type: 'forumPost',
+  itemId: '1',
+}
+
+export const Member = Template.bind({})
+Member.args = {
+  type: 'member',
+  itemId: '1',
+}
 
 export const Opening = Template.bind({})
 Opening.args = {
   type: 'opening',
-  itemId: '1',
-};
+  itemId: 'forumWorkingGroup-0',
+}
 
 export const Application = Template.bind({})
 Application.args = {
   type: 'application',
-  itemId: '1',
-};
+  itemId: 'forumWorkingGroup-0',
+}
