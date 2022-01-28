@@ -29,6 +29,19 @@ export const CouncilOverview = () => {
 
   const nextElectionIn = useMemo(() => <DurationValue value={formatDuration(periodLength ?? 0)} />, [periodLength])
 
+  const stageLabel = useMemo(() => {
+    switch (stage) {
+      case 'inactive':
+      default:
+        return t('council.stage.normal')
+      case 'announcing':
+      case 'voting':
+        return t('council.stage.announcing')
+      case 'revealing':
+        return t('council.stage.revealing')
+    }
+  }, [stage])
+
   const scroller = useMemo(() => {
     switch (stage) {
       case 'inactive':
@@ -51,9 +64,9 @@ export const CouncilOverview = () => {
         <ArrowRight onClick={() => history.push(CouncilRoutes.council)} />
         <InfoElementsWrapper>
           <OverviewInfoElement value={councilSize} label="Council members" />
-          <OverviewInfoElement value={stage} label="Stage" />
-          {round && <OverviewInfoElement value={`#${round}`} label="Round" />}
-          <OverviewInfoElement value={nextElectionIn} label="Next stage in" />
+          <OverviewInfoElement value={stageLabel} label={t('council.stage.label')} />
+          {round && <OverviewInfoElement value={`#${round}`} label={t('council.round')} />}
+          <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} />
         </InfoElementsWrapper>
       </Upper>
       {scroller}

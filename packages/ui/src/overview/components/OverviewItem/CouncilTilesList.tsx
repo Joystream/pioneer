@@ -8,16 +8,19 @@ import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { Election } from '@/council/types/Election'
 
 import { CouncilTile } from './CouncilTile'
+import { Loading } from '@/common/components/Loading'
+import { useTranslation } from 'react-i18next'
 
 export const CouncilNormalTiles = () => {
-  const council = useElectedCouncil()
-  const councilors = council?.council?.councilors
+  const { t } = useTranslation('overview')
+  const { isLoading, council } = useElectedCouncil()
+  const councilors = council?.councilors
   const councilTiles = useMemo(
-    () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label="Council member" />),
+    () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMembers')} />) ?? [],
     [councilors]
   )
 
-  return <Scroller items={councilTiles} />
+  return (isLoading ? <Loading /> : <Scroller items={councilTiles} />)
 }
 
 interface Props {
