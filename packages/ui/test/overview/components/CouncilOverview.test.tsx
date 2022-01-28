@@ -3,7 +3,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/common/providers/api/context'
-import { seedElectedCouncil, seedCouncilMember, seedMember, seedCouncilElections, seedElectedCouncils, RawCouncilCandidateMock, seedCouncilCandidate } from '@/mocks/data'
+import { seedCouncilMember, seedMember, seedCouncilElections, seedElectedCouncils } from '@/mocks/data'
 
 import { mockMembers, mockCouncils, mockCouncilors } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -19,7 +19,7 @@ describe('UI: Council overview', () => {
 
   beforeEach(async () => {
     mockMembers.forEach((mockMember) => seedMember(mockMember, server.server))
-    mockCouncils.forEach((mockCouncil) => seedElectedCouncil(mockCouncil, server.server))
+    seedElectedCouncils(server.server, mockCouncils)
     mockCouncilors.forEach((mockCouncilor) => seedCouncilMember(mockCouncilor, server.server))
     stubCouncilConstants(api)
   })
@@ -27,7 +27,6 @@ describe('UI: Council overview', () => {
   describe('Stage: Normal', () => {
     beforeEach(() => {
       stubCouncilAndReferendum(api, 'Idle', 'Inactive')
-      seedElectedCouncils(server.server, [{}, { endedAtBlock: null }])
       renderComponent()
     })
 

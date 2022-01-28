@@ -15,7 +15,7 @@ import { saveFile } from '../helpers/saveFile'
 import { MemberMock } from './generateMembers'
 import { ProposalMock } from './generateProposals'
 import { WorkerMock } from './generateWorkers'
-import { memberAt, randomBlock, randomFromRange, randomMember, repeat } from './utils'
+import { memberAt, randomBlock, randomFromRange, randomInlineBlockData, randomMember, repeat } from './utils'
 
 const COUNCILS = 5
 
@@ -61,11 +61,10 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
   const isFinished = councilIndex !== COUNCILS - 1
   const hasEnded = councilIndex < COUNCILS - 2
 
-  const electedAtBlock = randomFromRange(0, 10000)
   const council = {
     id: String(councilIndex),
-    electedAtBlock,
-    endedAtBlock: hasEnded ? randomFromRange(electedAtBlock, 100000) : null,
+    ...randomInlineBlockData('electedAt'),
+    ...(hasEnded ? randomInlineBlockData('endedAt') : {}),
   }
 
   const councilors: RawCouncilorMock[] = repeat(
@@ -137,18 +136,11 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     )
   }
 
-  const endedAtBlock = randomBlock()
   const electionRound: RawCouncilElectionMock = {
     id: council.id,
     cycleId: Number(council.id),
     isFinished,
-    ...(isFinished
-      ? {
-          endedAtBlock: endedAtBlock.inBlock,
-          endedAtTime: endedAtBlock.createdAt,
-          endedAtNetwork: endedAtBlock.network,
-        }
-      : {}),
+    ...(isFinished ? randomInlineBlockData('endedAt') : {}),
     electedCouncilId: council.id,
   }
 
