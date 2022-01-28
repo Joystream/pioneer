@@ -1,4 +1,3 @@
-import { BN_ZERO } from '@polkadot/util'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -17,7 +16,7 @@ export const CouncilNormalTiles = () => {
   console.log({council})
   const councilors = council?.councilors
   const councilTiles = useMemo(
-    () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMembers')} />) ?? [],
+    () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMember')} />) ?? [],
     [councilors]
   )
 
@@ -44,7 +43,7 @@ export const CouncilRevealingTiles = ({ election }: Props) => {
   const councilTiles = useMemo(
     () =>
       candidates?.map((candidate) => {
-        const stakePercent = totalStake ? candidate.stake.div(totalStake) : BN_ZERO
+        const stakePercent = totalStake ? candidate.stake.div(totalStake).toNumber() : 0
         return <CouncilTile member={candidate.member} stakePercent={stakePercent} />
       }),
     [candidates]

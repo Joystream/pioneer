@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ProgressBar } from '@/common/components/Progress'
-import { TextBig } from '@/common/components/typography'
+import { TextBig, TextSmall } from '@/common/components/typography'
 import { BorderRad, Shadows } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
@@ -11,10 +11,11 @@ import { Member } from '@/memberships/types'
 interface Props {
   member: Member
   label?: string
-  stakePercent?: BN
+  stakePercent?: number
 }
 
 export const CouncilTile = ({ member, label, stakePercent }: Props) => {
+  console.log(stakePercent)
   return (
     <Wrapper>
       <MemberInfo member={member} />
@@ -23,13 +24,19 @@ export const CouncilTile = ({ member, label, stakePercent }: Props) => {
           {label}
         </Label>
       )}
-      {stakePercent && <ProgressBar end={stakePercent.toNumber()} size="big" />}
+      {stakePercent && (
+        <ProgressWrapper>
+        <ProgressBar end={stakePercent} size="big" />
+        <TextSmall bold>{`${stakePercent*100}%`}</TextSmall>
+        </ProgressWrapper>
+      )}
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  padding: 16px 60px 16px 16px;
+  height: 145px;
+  padding: 16px;
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.light};
 `
@@ -37,4 +44,11 @@ const Wrapper = styled.div`
 const Label = styled(TextBig)`
   margin-top: 20px;
   white-space: nowrap;
+`
+
+const ProgressWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  margin-top: 36px;
+  column-gap: 6px;
 `
