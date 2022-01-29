@@ -9,6 +9,7 @@ import {
   WithdrawContributionModal,
 } from '@/bounty/modals/WithdrawContributionModal'
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
+import {formatTokenValue} from '@/common/model/formatters';
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -83,7 +84,7 @@ describe('UI: WithdrawContributionModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(screen.queryByText('modals.withdraw.contribution.description')).not.toBeNull()
+    expect(screen.queryByText(`modals.withdraw.contribution.description ${formatTokenValue(contributor.amount)}`)).not.toBeNull()
     expect(screen.queryByText('modals.withdraw.contribution.button')).not.toBeNull()
   })
 

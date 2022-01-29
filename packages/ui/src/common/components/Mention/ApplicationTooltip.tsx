@@ -34,7 +34,7 @@ export const ApplicationTooltip = React.memo(({ mention, onMount }: ApplicationT
   }, [])
 
   return (
-    <Container>
+    <Container data-testid="application-tooltip">
       {mention ? (
         <>
           <TextSmall lighter>{t('mentions.tooltips.application.appliedOn', { date })}</TextSmall>

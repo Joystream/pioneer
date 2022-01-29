@@ -14,6 +14,7 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import {formatTokenValue} from '@/common/model/formatters';
 
 const bounty = bounties[0]
 
@@ -58,7 +59,7 @@ describe('UI: WithdrawStakeModal', () => {
 
   it('Requirements passed', async () => {
     renderModal()
-    expect(await screen.queryByText('modals.withdraw.stake.description')).toBeInTheDocument()
+    expect(await screen.queryByText(`modals.withdraw.stake.description ${formatTokenValue(100)}`)).toBeInTheDocument()
     expect(await screen.queryByText('modals.withdraw.stake.button')).toBeInTheDocument()
   })
 

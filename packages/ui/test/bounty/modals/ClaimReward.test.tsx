@@ -5,6 +5,7 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ClaimRewardModalCall, ClaimRewardModal } from '@/bounty/modals/ClaimRewardModal'
+import {formatTokenValue} from '@/common/model/formatters';
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -73,7 +74,7 @@ describe('UI: ClaimRewardModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(screen.queryByText('modals.withdraw.reward.description')).not.toBeNull()
+    expect(screen.queryByText(`modals.withdraw.reward.description ${formatTokenValue(modalData.reward)}`)).not.toBeNull()
     expect(await getButton('modals.withdraw.reward.button')).toBeDefined()
   })
 

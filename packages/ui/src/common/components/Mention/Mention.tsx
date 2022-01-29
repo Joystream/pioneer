@@ -203,7 +203,7 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
   }, [type, onMount, data])
 
   return (
-    <Container>
+    <Container data-testid="mention-container">
       {Icon}
       <Tooltip popupContent={Content} forBig>
         <TextMedium as="span" black bold underline>

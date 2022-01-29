@@ -26,7 +26,7 @@ export const ForumThreadTooltip = ({ onMount, mention }: ForumThreadTooltipProps
   }, [])
 
   return (
-    <Container>
+    <Container data-testid="forum-thread-tooltip">
       {mention ? (
         <>
           <TextMedium bold>{mention.title}</TextMedium>

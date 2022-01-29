@@ -37,7 +37,7 @@ export const OpeningTooltip = ({ onMount, mention }: OpeningTooltipProps) => {
   }, [])
 
   return (
-    <Container>
+    <Container data-testid="opening-tooltip">
       {mention ? (
         <>
           <TextSmall lighter>
