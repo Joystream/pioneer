@@ -206,7 +206,7 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
     <Container>
       {Icon}
       <Tooltip popupContent={Content} forBig>
-        <TextMedium bold underline>
+        <TextMedium as="span" black bold underline>
           {children}
         </TextMedium>
       </Tooltip>
@@ -215,6 +215,7 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
 }
 
 const Container = styled.div`
+  vertical-align: bottom;
   display: inline-flex;
   column-gap: 5.33px;
 

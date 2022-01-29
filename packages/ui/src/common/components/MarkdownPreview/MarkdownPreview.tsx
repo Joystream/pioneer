@@ -3,9 +3,8 @@ import ReactMarkdown, { Components } from 'react-markdown'
 import { Position } from 'react-markdown/lib/ast-to-react'
 import { PluggableList } from 'react-markdown/lib/react-markdown'
 import { Root } from 'react-markdown/lib/rehype-filter'
-import styled from 'styled-components'
 
-import { TextInlineMedium } from '@/common/components/typography'
+import {Mention, MentionType} from '@/common/components/Mention';
 
 import { MarkdownPreviewStyles, MarkdownPreviewStylesProps } from './MarkdownPreviewStyles'
 
@@ -48,8 +47,9 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
 
       a: ({ children, ...props }) => {
         const href = props.href as string | undefined
-        const [memberId] = href?.match(/#mention\?member-id=(.+)$/) ?? []
-        return memberId ? <Mention data-member-id={memberId}>{children}</Mention> : <a href={href}>{children}</a>
+        const [_, query, itemId] = href?.match(/#mention\?(.+)=(.+)$/) ?? []
+        const type = mentionTypesMap[query];
+        return type && itemId ? <Mention itemId={itemId} type={type}>{children}</Mention> : <a href={href}>{children}</a>
       },
 
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
@@ -67,6 +67,12 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
   )
 }
 
-const Mention = styled(TextInlineMedium).attrs({ bold: true })`
-  text-transform: capitalize;
-`
+const mentionTypesMap: Record<string, MentionType> = {
+  'member-id': 'member',
+  'proposal-id': 'proposal',
+  'proposal-post-id': 'proposalDiscussionEntry',
+  'forum-thread-id': 'forumThread',
+  'forum-post-id': 'forumPost',
+  'application-id': 'application',
+  'opening-id': 'opening'
+}
