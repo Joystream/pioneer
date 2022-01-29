@@ -4,7 +4,7 @@ import { Position } from 'react-markdown/lib/ast-to-react'
 import { PluggableList } from 'react-markdown/lib/react-markdown'
 import { Root } from 'react-markdown/lib/rehype-filter'
 
-import {Mention, MentionType} from '@/common/components/Mention';
+import { Mention, MentionType } from '@/common/components/Mention'
 
 import { MarkdownPreviewStyles, MarkdownPreviewStylesProps } from './MarkdownPreviewStyles'
 
@@ -47,9 +47,15 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
 
       a: ({ children, ...props }) => {
         const href = props.href as string | undefined
-        const [_, query, itemId] = href?.match(/#mention\?(.+)=(.+)$/) ?? []
-        const type = mentionTypesMap[query];
-        return type && itemId ? <Mention itemId={itemId} type={type}>{children}</Mention> : <a href={href}>{children}</a>
+        const match = href?.match(/#mention\?(.+)=(.+)$/) ?? []
+        const type = mentionTypesMap[match[1]]
+        return type && match[2] ? (
+          <Mention itemId={match[2]} type={type}>
+            {children}
+          </Mention>
+        ) : (
+          <a href={href}>{children}</a>
+        )
       },
 
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
@@ -74,5 +80,5 @@ const mentionTypesMap: Record<string, MentionType> = {
   'forum-thread-id': 'forumThread',
   'forum-post-id': 'forumPost',
   'application-id': 'application',
-  'opening-id': 'opening'
+  'opening-id': 'opening',
 }
