@@ -3,6 +3,7 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
+import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -14,7 +15,6 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
-import {formatTokenValue} from '@/common/model/formatters';
 
 const bounty = bounties[0]
 

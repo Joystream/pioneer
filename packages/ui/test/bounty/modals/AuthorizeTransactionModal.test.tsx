@@ -7,7 +7,7 @@ import {
   AuthorizeTransactionModal,
   Props as AuthorizeTransactionModalProps,
 } from '@/bounty/modals/AuthorizeTransactionModal'
-import {formatTokenValue} from '@/common/model/formatters';
+import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -84,7 +84,9 @@ describe('UI: AuthorizeTransactionModal', () => {
 
   it('Displays correct contribute amount', () => {
     const expected = contributeAmount.toString()
-    const valueContainer = screen.getByText(`modals.common.contributeAmount ${formatTokenValue(contributeAmount)}`)?.nextSibling
+    const valueContainer = screen.getByText(
+      `modals.common.contributeAmount ${formatTokenValue(contributeAmount)}`
+    )?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })
