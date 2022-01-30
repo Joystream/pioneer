@@ -35,6 +35,7 @@ export const CouncilTile = ({ member, label, stakePercent }: Props) => {
 }
 
 const Wrapper = styled.div`
+  width: 215px;
   height: 145px;
   padding: 16px;
   border-radius: ${BorderRad.m};

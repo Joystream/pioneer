@@ -10,8 +10,6 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { CouncilOverview } from '@/overview/components/OverviewItem/CouncilOverview'
 import { stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
-import { getMember } from '@/mocks/helpers'
-
 
 describe('UI: Council overview', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
