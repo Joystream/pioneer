@@ -1,19 +1,18 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { Loading } from '@/common/components/Loading'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { Election } from '@/council/types/Election'
 
 import { CouncilTile } from './CouncilTile'
-import { Loading } from '@/common/components/Loading'
-import { useTranslation } from 'react-i18next'
 
 export const CouncilNormalTiles = () => {
   const { t } = useTranslation('overview')
   const { isLoading, council } = useElectedCouncil()
-  console.log({council})
   const councilors = council?.councilors
   const councilTiles = useMemo(
     () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMember')} />) ?? [],

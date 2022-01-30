@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -15,7 +14,6 @@ interface Props {
 }
 
 export const CouncilTile = ({ member, label, stakePercent }: Props) => {
-  console.log(stakePercent)
   return (
     <Wrapper>
       <MemberInfo member={member} />
