@@ -24,8 +24,8 @@ export const CouncilTile = ({ member, label, stakePercent }: Props) => {
       )}
       {stakePercent && (
         <ProgressWrapper>
-        <ProgressBar end={stakePercent} size="big" />
-        <TextSmall bold>{`${stakePercent*100}%`}</TextSmall>
+          <ProgressBar end={stakePercent} size="big" />
+          <TextSmall bold>{`${Math.floor(stakePercent * 100)}%`}</TextSmall>
         </ProgressWrapper>
       )}
     </Wrapper>

@@ -53,7 +53,7 @@ export const CouncilOverview = () => {
       case 'revealing':
         return election ? <CouncilRevealingTiles election={election} /> : null
     }
-  }, [stage])
+  }, [stage, election])
 
   return (
     <Wrapper>
@@ -65,7 +65,7 @@ export const CouncilOverview = () => {
         <InfoElementsWrapper>
           <OverviewInfoElement value={councilSize} label="Council members" />
           <OverviewInfoElement value={stageLabel} label={t('council.stage.label')} />
-          {round && <OverviewInfoElement value={`#${round}`} label={t('council.round')} />}
+          {typeof round !== 'undefined' && <OverviewInfoElement value={`#${round}`} label={t('council.round')} />}
           <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} />
         </InfoElementsWrapper>
       </Upper>

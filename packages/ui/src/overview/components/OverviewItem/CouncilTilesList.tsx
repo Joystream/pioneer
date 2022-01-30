@@ -15,11 +15,13 @@ export const CouncilNormalTiles = () => {
   const { isLoading, council } = useElectedCouncil()
   const councilors = council?.councilors
   const councilTiles = useMemo(
-    () => councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMember')} />) ?? [],
+    () =>
+      councilors?.map((councilor) => <CouncilTile member={councilor.member} label={t('council.councilMember')} />) ??
+      [],
     [councilors]
   )
 
-  return (isLoading ? <Loading /> : <Scroller items={councilTiles} />)
+  return isLoading ? <Loading /> : <Scroller items={councilTiles} />
 }
 
 interface Props {
@@ -41,11 +43,13 @@ export const CouncilRevealingTiles = ({ election }: Props) => {
   const candidates = election?.candidates
   const councilTiles = useMemo(
     () =>
-      candidates?.sort((a, b) => b.stake.toNumber() - a.stake.toNumber()).map((candidate) => {
-        const stakePercent = totalStake ? candidate.stake.div(totalStake).toNumber() : 0
-        return <CouncilTile member={candidate.member} stakePercent={stakePercent} />
-      }),
-    [candidates]
+      candidates
+        ?.sort((a, b) => b.stake.toNumber() - a.stake.toNumber())
+        .map((candidate) => {
+          const stakePercent = totalStake ? candidate.stake.toNumber() / totalStake.toNumber() : 0
+          return <CouncilTile member={candidate.member} stakePercent={stakePercent} />
+        }),
+    [candidates, totalStake]
   )
 
   return <Scroller items={councilTiles} />

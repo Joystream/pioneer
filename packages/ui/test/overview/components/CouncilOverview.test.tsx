@@ -1,14 +1,22 @@
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/common/providers/api/context'
-import { seedCouncilMember, seedMember, seedCouncilElections, seedElectedCouncils } from '@/mocks/data'
+import {
+  seedCouncilMember,
+  seedMember,
+  seedElectedCouncils,
+  seedCouncilElection,
+  RawCouncilElectionMock,
+  seedCouncilCandidate,
+  seedCouncilVote,
+} from '@/mocks/data'
+import { CouncilOverview } from '@/overview/components/OverviewItem/CouncilOverview'
 
-import { mockMembers, mockCouncils, mockCouncilors } from '../../_mocks/council'
+import { mockMembers, mockCouncils, mockCouncilors, CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { CouncilOverview } from '@/overview/components/OverviewItem/CouncilOverview'
 import { stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
 
 describe('UI: Council overview', () => {
@@ -50,7 +58,15 @@ describe('UI: Council overview', () => {
   describe('Stage: Election Announcing Period', () => {
     beforeEach(() => {
       stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
-      seedCouncilElections(server.server, [{}, { isFinished: false }])
+      seedCouncilElection(
+        {
+          id: '0',
+          isFinished: false,
+          cycleId: 0,
+        } as RawCouncilElectionMock,
+        server.server
+      )
+      seedCouncilCandidate(CANDIDATE_DATA, server.server)
       renderComponent()
     })
 
@@ -69,18 +85,30 @@ describe('UI: Council overview', () => {
     })
 
     it('Displays election round', async () => {
-      expect(await screen.findByText('#1')).toBeDefined()
+      expect(await screen.findByText('#0')).toBeDefined()
     })
 
-    it('Displays candidates', async () => {
+    it('Displays candidates names', async () => {
       expect(await screen.findByText('Council member A')).toBeDefined()
+    })
+
+    it('Displays candidates titles', async () => {
+      expect(await screen.findByText('Default title')).toBeDefined()
     })
   })
 
   describe('Stage: Election Revealing Period', () => {
     beforeEach(() => {
       stubCouncilAndReferendum(api, 'Election', 'Revealing')
-      seedCouncilElections(server.server, [{}, { isFinished: false }])
+      seedCouncilElection(
+        {
+          id: '0',
+          isFinished: false,
+          cycleId: 0,
+        } as RawCouncilElectionMock,
+        server.server
+      )
+      seedCouncilCandidate(CANDIDATE_DATA, server.server)
       renderComponent()
     })
 
@@ -99,11 +127,16 @@ describe('UI: Council overview', () => {
     })
 
     it('Displays election round', async () => {
-      expect(await screen.findByText('#1')).toBeDefined()
+      expect(await screen.findByText('#0')).toBeDefined()
     })
 
-    it('Displays candidates', async () => {
+    it('Displays candidates names', async () => {
       expect(await screen.findByText('Council member A')).toBeDefined()
+    })
+
+    it('Displays candidates votes result as percent', async () => {
+      seedCouncilVote({ ...VOTE_DATA, voteForId: '0' }, server.server)
+      expect(await screen.findByText('83%')).toBeDefined()
     })
   })
 
