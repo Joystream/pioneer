@@ -82,6 +82,8 @@ describe('useMyPastVotesStats', () => {
           id: '0',
           electedAtBlock: 1,
           endedAtBlock: 2,
+          electedAtTime: '2022-01-01',
+          electedAtNetwork: 'OLYMPIA',
         },
         server.server
       )
@@ -155,6 +157,8 @@ describe('useMyPastVotesStats', () => {
           id: '1',
           electedAtBlock: 1,
           endedAtBlock: 2,
+          electedAtTime: '2022-01-01',
+          electedAtNetwork: 'OLYMPIA',
         },
         server.server
       )

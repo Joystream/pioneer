@@ -104,7 +104,8 @@ describe('UI: Past Election page', () => {
       {
         id: '1',
         electedAtBlock: 0,
-        endedAtBlock: null,
+        electedAtTime: '2022-01-01',
+        electedAtNetwork: 'OLYMPIA',
       },
       mockServer.server
     )

@@ -29,10 +29,13 @@ export const mockMembers: MockMember[] = [
   getMember({ id: '6', handle: 'Council member G' }),
 ]
 
-export const mockCouncils: Partial<RawCouncilMock>[] = [
-  { id: '0', endedAtBlock: 1000 },
-  { id: '1', endedAtBlock: 1000 },
-  { id: '2', endedAtBlock: undefined },
+export const mockCouncils: RawCouncilMock[] = [
+  { id: '0', electedAtBlock: 1, endedAtBlock: 1000, electedAtTime: '2022-01-01',
+  electedAtNetwork: 'OLYMPIA', },
+  { id: '1', electedAtBlock: 1, endedAtBlock: 1000, electedAtTime: '2022-01-02',
+  electedAtNetwork: 'OLYMPIA', },
+  { id: '2', electedAtBlock: 1, endedAtBlock: undefined, electedAtTime: '2022-01-03',
+  electedAtNetwork: 'OLYMPIA', },
 ]
 
 export const mockCouncilors: RawCouncilorMock[] = [
