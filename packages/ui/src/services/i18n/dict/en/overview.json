@@ -11,6 +11,10 @@
     "nextElectionIn": "Next election in",
     "councilMember": "Council member"
   },
+  "forum": {
+    "title": "Forum",
+    "newThreads": "New threads this week"
+  },
   "welcome": "Hi, ",
   "guest": "Stranger"
 }
