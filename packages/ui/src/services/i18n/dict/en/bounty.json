@@ -201,7 +201,7 @@
           "removeWinner": "Substract last Winner"
         },
         "worker": {
-          "label": "Winner",
+          "label": "Winner {{number}}",
           "tooltip": "Lorem ipsum"
         },
         "reward": "Reward"
@@ -218,7 +218,7 @@
         "title": "Slash workers",
         "description": "You can optionally slash workers. Worker will be slash for whole stake.",
         "worker": {
-          "label": "Member ID",
+          "label": "Rejected {{number}}",
           "tooltip": "Lorem ipsum",
           "addSlashed": "Add Slashed",
           "removeSlashed": "Substract last slashed worker"

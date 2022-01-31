@@ -15,6 +15,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
 
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../../../test/_mocks/providers'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
 
 export default {
@@ -76,26 +77,30 @@ stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 888)
 const Template: Story = () => {
   return (
     <MemoryRouter>
-      <ApiContext.Provider value={api}>
-        <MockApolloProvider members>
-          <ModalContext.Provider
-            value={{
-              hideModal: () => undefined,
-              modal: 'bar',
-              showModal: () => undefined,
-              modalData,
-            }}
-          >
-            <AccountsContext.Provider value={useMyAccounts}>
-              <BalancesContext.Provider value={useMyBalances}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <SubmitJudgementModal />
-                </MembershipContext.Provider>
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </ModalContext.Provider>
-        </MockApolloProvider>
-      </ApiContext.Provider>
+      <MockQueryNodeProviders>
+        <MockKeyringProvider>
+          <ApiContext.Provider value={api}>
+            <MockApolloProvider members>
+              <ModalContext.Provider
+                value={{
+                  hideModal: () => undefined,
+                  modal: 'bar',
+                  showModal: () => undefined,
+                  modalData,
+                }}
+              >
+                <AccountsContext.Provider value={useMyAccounts}>
+                  <BalancesContext.Provider value={useMyBalances}>
+                    <MembershipContext.Provider value={useMyMemberships}>
+                      <SubmitJudgementModal />
+                    </MembershipContext.Provider>
+                  </BalancesContext.Provider>
+                </AccountsContext.Provider>
+              </ModalContext.Provider>
+            </MockApolloProvider>
+          </ApiContext.Provider>
+        </MockKeyringProvider>
+      </MockQueryNodeProviders>
     </MemoryRouter>
   )
 }

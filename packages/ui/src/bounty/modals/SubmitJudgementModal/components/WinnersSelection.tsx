@@ -84,14 +84,20 @@ export const WinnersSelection = ({
         </RowGapBlock>
       )}
       {winners.map((winner, index) => (
-        <RowGapBlock gap={15}>
+        <RowGapBlock gap={15} key={`winner${index}`}>
           <InputComponent
-            label={`${t('modals.submitJudgement.winner.worker.label')} ${index + 1}`}
+            id={`winnerInput${index + 1}`}
+            label={t('modals.submitJudgement.winner.worker.label', { number: index + 1 })}
             required
             tooltipText={t('modals.submitJudgement.winner.worker.tooltip')}
             inputSize="l"
           >
-            <SelectMember selected={winner.winner} filter={filter} onChange={handleMemberSelection(winner.id)} />
+            <SelectMember
+              id={`winnerInput${index + 1}`}
+              selected={winner.winner}
+              filter={filter}
+              onChange={handleMemberSelection(winner.id)}
+            />
           </InputComponent>
           <TransactionAmount>
             <InputComponent
@@ -102,7 +108,12 @@ export const WinnersSelection = ({
               units="JOY"
               tight
             >
-              <InputNumber isTokenValue value={String(winner.reward)} onChange={handleRewardEdit(winner.id)} />
+              <InputNumber
+                id={`winnerRewardInput${index + 1}`}
+                isTokenValue
+                value={String(winner.reward)}
+                onChange={handleRewardEdit(winner.id)}
+              />
             </InputComponent>
             <AmountButtons>
               {winners.length > 1 && (
@@ -185,27 +196,3 @@ const WarningWrapper = styled.div`
     padding: 5px 0;
   }
 `
-
-//   <RowGapBlock gap={15}>
-//   <InputComponent label="Add new winner" required tooltipText="Lorem ipsum" inputSize="l">
-//   <SelectMember filter={filter} onChange={handleMemberSelection} />
-// </InputComponent>
-// <TransactionAmount>
-//   <InputComponent message=" " inputWidth="s" label="Reward" required units="JOY" tight>
-//     <InputNumber
-//       isTokenValue
-//       value={String(newWinnerReward)}
-//       onChange={(_, value) => setNewWinnerReward(value)}
-//     />
-//   </InputComponent>
-//   <AmountButtons>
-//     {winners.length > 1 && (
-//       <AmountButton size="small" onClick={() => setNewWinnerReward(Math.floor(bountyFunding.toNumber() / 2))}>
-//         Use Half
-//       </AmountButton>
-//     )}
-//     <AmountButton size="small" onClick={() => setNewWinnerReward(bountyFunding.toNumber())}>
-//       Use max
-//     </AmountButton>
-//   </AmountButtons>
-// </TransactionAmount>

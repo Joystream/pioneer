@@ -27,13 +27,20 @@ export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filte
 
   return (
     <>
-      {slashed.map((loser) => (
+      {slashed.map((loser, index) => (
         <InputComponent
-          label={t('modals.submitJudgement.slash.worker.label')}
+          key={`slashed${index}`}
+          id={`slashedInput${index + 1}`}
+          label={t('modals.submitJudgement.slash.worker.label', { number: index + 1 })}
           tooltipText={t('modals.submitJudgement.slash.worker.tooltip')}
           inputSize="l"
         >
-          <SelectMember filter={filter} selected={loser.rejected} onChange={onSlashedEdit(loser.id)} />
+          <SelectMember
+            id={`slashedInput${index + 1}`}
+            filter={filter}
+            selected={loser.rejected}
+            onChange={onSlashedEdit(loser.id)}
+          />
         </InputComponent>
       ))}
       <ColumnGapBlock gap={15}>

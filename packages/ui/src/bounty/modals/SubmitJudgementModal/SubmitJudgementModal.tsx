@@ -16,7 +16,6 @@ import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionM
 import { SlashedSelection } from '@/bounty/modals/SubmitJudgementModal/components/SlashedSelection'
 import { WinnersSelection } from '@/bounty/modals/SubmitJudgementModal/components/WinnersSelection'
 import {
-  BountyRejected,
   BountyWinner,
   submitJudgementMachine,
   SubmitJudgementStates,
@@ -39,12 +38,17 @@ export const SubmitJudgementModal = () => {
     hideModal,
     modalData: { bounty },
   } = useModal<SubmitWorkModalCall>()
+  const [state, send, service] = useMachine(submitJudgementMachine)
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const { t } = useTranslation('bounty')
   const { api, isConnected } = useApi()
+
   const [isValid, setIsValid] = useState<string | null>(null)
-  const [state, send] = useMachine(submitJudgementMachine)
+
+  if (!service.initialized) {
+    service.start()
+  }
 
   const switchCheckbox = useCallback((isSet: boolean) => {
     if (!isSet) {
@@ -52,7 +56,7 @@ export const SubmitJudgementModal = () => {
     }
     send('SET_HAS_WINNER', { hasWinner: isSet })
 
-    if (isSet) {
+    if (isSet && !state.context.hasWinner) {
       send('ADD_WINNER')
     }
   }, [])
@@ -94,24 +98,25 @@ export const SubmitJudgementModal = () => {
           ] as const
       )
 
-      const validRejections = state.context.rejected.filter(
-        (rejection) => rejection.rejected
-      ) as Required<BountyRejected>[]
-      const rejectedApi = validRejections.map(
-        (loser) =>
-          [
-            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
-            null,
-          ] as const
-      )
+      // todo handle rejected when submitOracleJudgement is ready
+      // const validRejections = state.context.rejected.filter(
+      //   (rejection) => rejection.rejected
+      // ) as Required<BountyRejected>[]
+      // const rejectedApi = validRejections.map(
+      //   (loser) =>
+      //     [
+      //       createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
+      //       null,
+      //     ] as const
+      // )
 
       return api?.tx.bounty.submitOracleJudgment(
         { Member: createType('u64', Number(activeMember?.id || 0)) },
         createType('u32', Number(bounty.id || 0)),
-        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map([...winnersApi, ...rejectedApi]))
+        new BTreeMap(registry, 'EntryId', 'OracleJudgment', new Map([...winnersApi]))
       )
     }
-  }, [api, isConnected, bounty])
+  }, [api, isConnected, bounty, state.context])
 
   useEffect(() => {
     const rewardMod = bounty.totalFunding.toNumber() % state.context.winners.length
