@@ -100,6 +100,12 @@ query SimpleSearchMembers($text: String!, $limit: Int) {
   }
 }
 
+query GetMemberMention($id: ID!) {
+  membership: membershipByUniqueInput(where: { id: $id }) {
+    ...MemberFields
+  }
+}
+
 query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
   councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {
     totalCount

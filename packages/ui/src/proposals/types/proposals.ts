@@ -2,7 +2,12 @@ import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
 import { isProposalActive, typenameToProposalStatus } from '@/proposals/model/proposalStatus'
-import { ProposalFieldsFragment, VoteWithDetailsFieldsFragment } from '@/proposals/queries'
+import {
+  ProposalDiscussionPostMentionFieldsFragment,
+  ProposalFieldsFragment,
+  ProposalMentionFieldsFragment,
+  VoteWithDetailsFieldsFragment,
+} from '@/proposals/queries'
 import { asProposalVote, ProposalVote } from '@/proposals/types/ProposalWithDetails'
 
 export type ProposalStatus =
@@ -89,4 +94,46 @@ export const asVoteWithDetails = (voteFields: VoteWithDetailsFieldsFragment): Pr
     network: voteFields.network,
   }),
   proposalId: voteFields.proposalId,
+})
+
+export type ProposalMention = Pick<Proposal, 'id' | 'title' | 'status' | 'type'> & {
+  description: string
+  exactExecutionBlock: Block | undefined
+  statusSetAtBlock: Block
+}
+
+export const asProposalMention = (fields: ProposalMentionFieldsFragment): ProposalMention => ({
+  id: fields.id,
+  title: fields.title,
+  status: typenameToProposalStatus(fields.status.__typename),
+  type: typenameToProposalDetails(fields.details.__typename),
+  description: fields.description,
+  statusSetAtBlock: asBlock({
+    inBlock: fields.statusSetAtBlock,
+    createdAt: fields.statusSetAtTime,
+    network: fields.createdInEvent.network,
+  }),
+  exactExecutionBlock: fields.exactExecutionBlock
+    ? asBlock({
+        inBlock: fields.exactExecutionBlock,
+        network: fields.createdInEvent.network,
+        createdAt: fields.createdAt,
+      })
+    : undefined,
+})
+
+export interface ProposalDiscussionPostMention {
+  id: string
+  text: string
+  author: Member
+  createdAt: string
+}
+
+export const asProposalDiscussionPostMention = (
+  fields: ProposalDiscussionPostMentionFieldsFragment
+): ProposalDiscussionPostMention => ({
+  id: fields.id,
+  text: fields.text,
+  author: asMember(fields.author),
+  createdAt: fields.createdAt,
 })

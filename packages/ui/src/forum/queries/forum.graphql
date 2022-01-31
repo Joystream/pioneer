@@ -155,6 +155,27 @@ fragment ForumPostParents on ForumPost {
   }
 }
 
+fragment ForumThreadMentionFields on ForumThread {
+  id
+  title
+  visiblePostsCount
+  author {
+    ...MemberFields
+  }
+  initialPost {
+    text
+  }
+}
+
+fragment ForumPostMentionFields on ForumPost {
+  id
+  text
+  createdAt
+  author {
+    ...MemberFields
+  }
+}
+
 query GetForumCategories($where: ForumCategoryWhereInput) {
   forumCategories(where: $where) {
     ...ForumCategoryFields
@@ -281,5 +302,17 @@ query SimpleSearchForumThreads($text: String!, $limit: Int) {
   forumThreads(where: { title_contains: $text }, limit: $limit) {
     id
     title
+  }
+}
+
+query GetForumPostMention($id: ID!) {
+  forumPost: forumPostByUniqueInput(where: { id: $id }) {
+    ...ForumPostMentionFields
+  }
+}
+
+query GetForumThreadMention($id: ID!) {
+  forumThread: forumThreadByUniqueInput(where: { id: $id }) {
+    ...ForumThreadMentionFields
   }
 }

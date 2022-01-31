@@ -452,6 +452,71 @@ export type ForumPostParentsFragment = {
   thread: { __typename: 'ForumThread'; id: string; category: { __typename: 'ForumCategory'; id: string } }
 }
 
+export type ForumThreadMentionFieldsFragment = {
+  __typename: 'ForumThread'
+  id: string
+  title: string
+  visiblePostsCount: number
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+  initialPost?: { __typename: 'ForumPost'; text: string } | null | undefined
+}
+
+export type ForumPostMentionFieldsFragment = {
+  __typename: 'ForumPost'
+  id: string
+  text: string
+  createdAt: any
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null | undefined
+      about?: string | null | undefined
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+}
+
 export type GetForumCategoriesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
 }>
@@ -1029,6 +1094,91 @@ export type SimpleSearchForumThreadsQuery = {
   forumThreads: Array<{ __typename: 'ForumThread'; id: string; title: string }>
 }
 
+export type GetForumPostMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetForumPostMentionQuery = {
+  __typename: 'Query'
+  forumPost?:
+    | {
+        __typename: 'ForumPost'
+        id: string
+        text: string
+        createdAt: any
+        author: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+      }
+    | null
+    | undefined
+}
+
+export type GetForumThreadMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetForumThreadMentionQuery = {
+  __typename: 'Query'
+  forumThread?:
+    | {
+        __typename: 'ForumThread'
+        id: string
+        title: string
+        visiblePostsCount: number
+        author: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null | undefined
+            about?: string | null | undefined
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+        }
+        initialPost?: { __typename: 'ForumPost'; text: string } | null | undefined
+      }
+    | null
+    | undefined
+}
+
 export const ForumBaseCategoryFieldsFragmentDoc = gql`
   fragment ForumBaseCategoryFields on ForumCategory {
     id
@@ -1208,6 +1358,31 @@ export const ForumPostParentsFragmentDoc = gql`
       }
     }
   }
+`
+export const ForumThreadMentionFieldsFragmentDoc = gql`
+  fragment ForumThreadMentionFields on ForumThread {
+    id
+    title
+    visiblePostsCount
+    author {
+      ...MemberFields
+    }
+    initialPost {
+      text
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const ForumPostMentionFieldsFragmentDoc = gql`
+  fragment ForumPostMentionFields on ForumPost {
+    id
+    text
+    createdAt
+    author {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
 `
 export const GetForumCategoriesDocument = gql`
   query GetForumCategories($where: ForumCategoryWhereInput) {
@@ -2051,4 +2226,102 @@ export type SimpleSearchForumThreadsLazyQueryHookResult = ReturnType<typeof useS
 export type SimpleSearchForumThreadsQueryResult = Apollo.QueryResult<
   SimpleSearchForumThreadsQuery,
   SimpleSearchForumThreadsQueryVariables
+>
+export const GetForumPostMentionDocument = gql`
+  query GetForumPostMention($id: ID!) {
+    forumPost: forumPostByUniqueInput(where: { id: $id }) {
+      ...ForumPostMentionFields
+    }
+  }
+  ${ForumPostMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumPostMentionQuery__
+ *
+ * To run a query within a React component, call `useGetForumPostMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumPostMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumPostMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetForumPostMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>(
+    GetForumPostMentionDocument,
+    options
+  )
+}
+export function useGetForumPostMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>(
+    GetForumPostMentionDocument,
+    options
+  )
+}
+export type GetForumPostMentionQueryHookResult = ReturnType<typeof useGetForumPostMentionQuery>
+export type GetForumPostMentionLazyQueryHookResult = ReturnType<typeof useGetForumPostMentionLazyQuery>
+export type GetForumPostMentionQueryResult = Apollo.QueryResult<
+  GetForumPostMentionQuery,
+  GetForumPostMentionQueryVariables
+>
+export const GetForumThreadMentionDocument = gql`
+  query GetForumThreadMention($id: ID!) {
+    forumThread: forumThreadByUniqueInput(where: { id: $id }) {
+      ...ForumThreadMentionFields
+    }
+  }
+  ${ForumThreadMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumThreadMentionQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetForumThreadMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>(
+    GetForumThreadMentionDocument,
+    options
+  )
+}
+export function useGetForumThreadMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>(
+    GetForumThreadMentionDocument,
+    options
+  )
+}
+export type GetForumThreadMentionQueryHookResult = ReturnType<typeof useGetForumThreadMentionQuery>
+export type GetForumThreadMentionLazyQueryHookResult = ReturnType<typeof useGetForumThreadMentionLazyQuery>
+export type GetForumThreadMentionQueryResult = Apollo.QueryResult<
+  GetForumThreadMentionQuery,
+  GetForumThreadMentionQueryVariables
 >

@@ -260,6 +260,58 @@ query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
   }
 }
 
+fragment WorkingGroupOpeningMentionFields on WorkingGroupOpening {
+  id
+  type
+  rewardPerBlock
+  metadata {
+    shortDescription
+    description
+    hiringLimit
+    expectedEnding
+  }
+  applications {
+    applicantId
+  }
+  openingfilledeventopening {
+    id
+    workersHired {
+      id
+    }
+  }
+}
+
+query GetWorkingGroupOpeningMention($id: ID!) {
+  opening: workingGroupOpeningByUniqueInput(where: { id: $id }) {
+    ...WorkingGroupOpeningMentionFields
+  }
+}
+
+fragment WorkingGroupApplicationMentionFields on WorkingGroupApplication {
+  id
+  createdInEvent {
+    createdAt
+    inBlock
+    network
+  }
+  applicant {
+    ...MemberFields
+  }
+  opening {
+    type
+    metadata {
+      shortDescription
+      description
+    }
+  }
+}
+
+query GetWorkingGroupApplicationMention($id: ID!) {
+  application: workingGroupApplicationByUniqueInput(where: { id: $id }) {
+    ...WorkingGroupApplicationMentionFields
+  }
+}
+
 fragment ApplicationQuestionFields on ApplicationFormQuestion {
   index
   type
