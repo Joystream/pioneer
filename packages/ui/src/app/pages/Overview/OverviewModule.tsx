@@ -8,7 +8,7 @@ export const OverviewModule = () => {
   return (
     <Switch>
       <Route exact path={OverviewRoutes.overview} component={Overview} />
-      <Redirect from="*" to={OverviewRoutes.overview} />
+      <Redirect from="/overview/*" to={OverviewRoutes.overview} />
     </Switch>
   )
 }
