@@ -34,6 +34,7 @@ import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
+import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
@@ -56,6 +57,11 @@ export const SideBar = () => {
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
+            <NavigationLinksItem>
+              <NavigationLink to={OverviewRoutes.overview} icon={<OverviewIcon />}>
+                Overview
+              </NavigationLink>
+            </NavigationLinksItem>
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile
@@ -118,11 +124,6 @@ export const SideBar = () => {
                   <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<BountyIcon />} disabled>
                       Bounty
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<OverviewIcon />} disabled>
-                      Overview
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>

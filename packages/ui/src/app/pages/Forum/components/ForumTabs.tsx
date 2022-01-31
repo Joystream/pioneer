@@ -7,7 +7,7 @@ import { ForumRoutes } from '@/forum/constant'
 
 export const ForumTabs = () => {
   const tabs = usePageTabs([
-    ['Overview', ForumRoutes.overview],
+    ['Overview', ForumRoutes.forumOverview],
     ['Forum', ForumRoutes.forum],
     ['Archived', ForumRoutes.archived],
   ])
