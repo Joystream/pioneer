@@ -36,6 +36,7 @@ const contributor: Contributor = {
 const bounty: Bounty = {
   id: 'bounty 1',
   contributors: [contributor],
+  cherry: new BN(1000),
 } as Bounty
 
 const balance: AddressToBalanceMap = {

@@ -12,6 +12,7 @@ import {
   WithdrawStakeButton,
   WithdrawWorkEntryButton,
 } from '@/bounty/components/modalsButtons'
+import { WithdrawContributionButton } from '@/bounty/components/modalsButtons/WithdrawContributionButton'
 import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
@@ -160,7 +161,11 @@ const SuccessfulStageButtons = React.memo(({ bounty, activeMember, t }: BountyHe
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
       {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
-      {(passed || isContributor) && <WithdrawStakeButton bounty={bounty} lost={!isContributor} />}
+      {(passed || isContributor) && isContributor ? (
+        <WithdrawContributionButton bounty={bounty} />
+      ) : (
+        <WithdrawStakeButton bounty={bounty} />
+      )}
     </>
   )
 })
@@ -174,7 +179,7 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const hasLost = hasSubmitted && !userEntry.winner
+  const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected
 
   if (!hasAnnounced && !isContributor) {
     return null
@@ -185,7 +190,7 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      <WithdrawStakeButton bounty={bounty} lost={hasLost} />
+      {hasLost ? <WithdrawStakeButton bounty={bounty} /> : <WithdrawContributionButton bounty={bounty} />}
     </>
   )
 })

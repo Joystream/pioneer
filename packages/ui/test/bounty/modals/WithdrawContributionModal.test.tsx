@@ -9,6 +9,7 @@ import {
   WithdrawContributionModal,
 } from '@/bounty/modals/WithdrawContributionModal'
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
+import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -42,7 +43,10 @@ describe('UI: WithdrawContributionModal', () => {
     contributors: [contributor],
   } as Bounty
   const modalData: ModalCallData<BountyWithdrawContributionModalCall> = {
-    bounty,
+    bounty: {
+      ...bounty,
+      cherry: new BN(1000),
+    },
   }
 
   const api = stubApi()
@@ -85,6 +89,25 @@ describe('UI: WithdrawContributionModal', () => {
 
     expect(screen.queryByText('modals.withdraw.contribution.description')).not.toBeNull()
     expect(screen.queryByText('modals.withdraw.contribution.button')).not.toBeNull()
+  })
+
+  it('Bounty failed details', () => {
+    const {
+      modalData: { bounty },
+    } = useModal
+    const expected = formatTokenValue(
+      bounty.contributors[0].amount.toNumber() + bounty.cherry / bounty.contributors.length
+    )
+
+    bounty.stage = 'failed'
+    renderModal()
+
+    const amountContainer = screen.getByText('modals.common.amount')?.nextSibling
+
+    expect(
+      screen.queryByText('modals.withdraw.contribution.description modals.withdraw.extraDescription')
+    ).toBeInTheDocument()
+    expect(amountContainer?.textContent).toBe(expected)
   })
 
   it('Requirements failed', async () => {
