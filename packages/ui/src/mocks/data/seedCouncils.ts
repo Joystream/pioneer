@@ -20,7 +20,12 @@ export interface RawCouncilorMock {
 export interface RawCouncilMock {
   id: string
   electedAtBlock: number
-  endedAtBlock: number | null
+  electedAtTime: string
+  electedAtNetwork: string
+  endedAtBlock?: number
+  endedAtTime?: string
+  endedAtNetwork?: string
+  isResigned?: boolean
 }
 
 export interface RawCouncilCandidateMock {
@@ -71,7 +76,7 @@ export const seedElectedCouncil = (data: RawCouncilMock, server: any) => {
   return server.schema.create('ElectedCouncil', { ...data, isResigned: !!data.endedAtBlock })
 }
 
-export const seedElectedCouncils = seedOverridableEntities(rawCouncils, seedElectedCouncil)
+export const seedElectedCouncils = seedOverridableEntities<RawCouncilMock>(rawCouncils, seedElectedCouncil)
 
 export const seedCouncilElection = (data: RawCouncilElectionMock, server: any) =>
   server.schema.create('ElectionRound', { ...data, updatedAt: new Date().toISOString() })

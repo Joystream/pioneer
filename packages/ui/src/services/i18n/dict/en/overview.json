@@ -1,0 +1,14 @@
+{
+  "council": {
+    "title": "Council",
+    "stage": {
+      "label": "Stage",
+      "normal": "Normal",
+      "announcing": "Announcing",
+      "revealing": "Revealing"
+    },
+    "round": "Round",
+    "nextElectionIn": "Next election in",
+    "councilMember": "Council member"
+  }
+}

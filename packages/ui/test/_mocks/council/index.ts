@@ -30,9 +30,9 @@ export const mockMembers: MockMember[] = [
 ]
 
 export const mockCouncils: RawCouncilMock[] = [
-  { id: '0', electedAtBlock: 0, endedAtBlock: 1000 },
-  { id: '1', electedAtBlock: 0, endedAtBlock: 1000 },
-  { id: '2', electedAtBlock: 0, endedAtBlock: null },
+  { id: '0', electedAtBlock: 1, endedAtBlock: 1000, electedAtTime: '2022-01-01', electedAtNetwork: 'OLYMPIA' },
+  { id: '1', electedAtBlock: 1, endedAtBlock: 1000, electedAtTime: '2022-01-02', electedAtNetwork: 'OLYMPIA' },
+  { id: '2', electedAtBlock: 1, endedAtBlock: undefined, electedAtTime: '2022-01-03', electedAtNetwork: 'OLYMPIA' },
 ]
 
 export const mockCouncilors: RawCouncilorMock[] = [
@@ -74,7 +74,7 @@ export const CANDIDATE_DATA = {
   stakingAccountId: '',
   rewardAccountId: '',
   noteMetadata: {
-    header: '',
+    header: 'Default title',
     bulletPoints: [],
     bannerImageUri: '',
     description: '',

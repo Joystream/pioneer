@@ -169,7 +169,7 @@ export const stubDefaultBalances = (api: UseApi) => {
 export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number }) => {
   set(api, 'api.consts.council', {
     councilSize: new BN(2),
-    idlePeriodDuration: new BN(1),
+    idlePeriodDuration: new BN(100),
     budgetRefillPeriod: new BN(1),
     announcingPeriodDuration: new BN(1),
     minCandidateStake: new BN(constants?.minStake ?? 10),

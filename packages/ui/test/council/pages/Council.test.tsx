@@ -3,7 +3,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { Council } from '@/app/pages/Council/Council'
-import { seedElectedCouncil, seedCouncilMember, seedMember } from '@/mocks/data'
+import { seedCouncilMember, seedMember, seedElectedCouncils } from '@/mocks/data'
 
 import { mockMembers, mockCouncils, mockCouncilors } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -14,7 +14,7 @@ describe('Council page', () => {
 
   beforeAll(async () => {
     mockMembers.forEach((mockMember) => seedMember(mockMember, server.server))
-    mockCouncils.forEach((mockCouncil) => seedElectedCouncil(mockCouncil, server.server))
+    seedElectedCouncils(server.server, mockCouncils)
   })
 
   it('Empty state', async () => {
@@ -32,13 +32,13 @@ describe('Council page', () => {
 
     await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
-    expect(screen.queryByText('Council member A')).toBeDefined()
+    expect(await screen.findByText('Council member A')).toBeDefined()
     expect(screen.queryByText('Council member B')).toBeNull()
     expect(screen.queryByText('Council member C')).toBeNull()
     expect(screen.queryByText('Council member D')).toBeNull()
     expect(screen.queryByText('Council member E')).toBeNull()
-    expect(screen.queryByText('Council member F')).toBeDefined()
-    expect(screen.queryByText('Council member G')).toBeDefined()
+    expect(await screen.findByText('Council member F')).toBeDefined()
+    expect(await screen.findByText('Council member G')).toBeDefined()
   })
 
   function renderPage() {

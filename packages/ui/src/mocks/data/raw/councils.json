@@ -1,27 +1,46 @@
 [
   {
     "id": "0",
-    "electedAtBlock": 9064,
-    "endedAtBlock": 43631
+    "electedAtBlock": 84787,
+    "electedAtTime": "2021-12-03T08:26:05.473Z",
+    "electedAtNetwork": "OLYMPIA",
+    "endedAtBlock": 6257,
+    "endedAtTime": "2021-08-02T15:11:04.387Z",
+    "endedAtNetwork": "OLYMPIA",
+    "isResigned": false
   },
   {
     "id": "1",
-    "electedAtBlock": 4829,
-    "endedAtBlock": 94094
+    "electedAtBlock": 56292,
+    "electedAtTime": "2021-12-22T23:50:27.090Z",
+    "electedAtNetwork": "OLYMPIA",
+    "endedAtBlock": 73227,
+    "endedAtTime": "2022-01-26T08:50:29.989Z",
+    "endedAtNetwork": "OLYMPIA",
+    "isResigned": false
   },
   {
     "id": "2",
-    "electedAtBlock": 1806,
-    "endedAtBlock": 48859
+    "electedAtBlock": 28197,
+    "electedAtTime": "2022-01-11T08:53:23.857Z",
+    "electedAtNetwork": "OLYMPIA",
+    "endedAtBlock": 42379,
+    "endedAtTime": "2021-11-24T17:03:43.260Z",
+    "endedAtNetwork": "OLYMPIA",
+    "isResigned": false
   },
   {
     "id": "3",
-    "electedAtBlock": 6885,
-    "endedAtBlock": null
+    "electedAtBlock": 99194,
+    "electedAtTime": "2021-09-24T05:47:10.991Z",
+    "electedAtNetwork": "OLYMPIA",
+    "isResigned": false
   },
   {
     "id": "4",
-    "electedAtBlock": 2750,
-    "endedAtBlock": null
+    "electedAtBlock": 28779,
+    "electedAtTime": "2021-08-18T18:06:49.712Z",
+    "electedAtNetwork": "OLYMPIA",
+    "isResigned": false
   }
 ]

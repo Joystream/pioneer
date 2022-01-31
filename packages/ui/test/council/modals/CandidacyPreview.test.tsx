@@ -29,6 +29,8 @@ describe('UI: CandidacyPreview', () => {
         id: '0',
         endedAtBlock: 100,
         electedAtBlock: 90,
+        electedAtTime: '2022-01-01',
+        electedAtNetwork: 'OLYMPIA',
       },
       server.server
     )
