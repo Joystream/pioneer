@@ -6,12 +6,14 @@ import '@/services/i18n'
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
+import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
+import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
@@ -37,6 +39,7 @@ export const App = () => (
       <Screen>
         <OnBoardingOverlay />
         <Switch>
+          <Route path={OverviewRoutes.overview} component={OverviewModule} />
           <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
           <Route path={ProposalsRoutes.home} component={ProposalsModule} />
           <Route path={CouncilRoutes.council} component={CouncilModule} />
