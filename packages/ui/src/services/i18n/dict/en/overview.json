@@ -10,5 +10,7 @@
     "round": "Round",
     "nextElectionIn": "Next election in",
     "councilMember": "Council member"
-  }
+  },
+  "welcome": "Hi, ",
+  "guest": "Stranger"
 }
