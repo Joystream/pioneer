@@ -71,3 +71,7 @@ export const SideBar = styled(TemplateBlock)`
   padding: 24px;
   width: 304px;
 `
+
+export const BannerWrapper = styled.div`
+  max-width: 440px;
+`
