@@ -15,7 +15,8 @@
     "title": "Forum",
     "newThreads": "New threads this week",
     "new": "New",
-    "answers": "Answers"
+    "answers": "Answers",
+    "latestThreads": "Latest Threads"
   },
   "welcome": "Hi, ",
   "guest": "Stranger"

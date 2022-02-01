@@ -39,10 +39,11 @@ interface ListProps {
 }
 
 export const ForumThreadTilesList = React.memo(({ threads }: ListProps) => {
+  const { t } = useTranslation('overview')
   const tiles = threads.map((thread) => (
     <ForumThreadTile title={thread.title} answersCount={thread.visiblePostsCount} />
   ))
-  return !tiles ? <Loading /> : <Scroller items={tiles} />
+  return !tiles ? <Loading /> : <ScrollerWrapper><Scroller title={t('forum.latestThreads')} counter={tiles.length} items={tiles} /></ScrollerWrapper>
 })
 
 const Wrapper = styled.div`
@@ -79,6 +80,10 @@ const StyledAnswerIcon = styled(AnswerIcon)`
 const AnswersLabel = styled(TextExtraSmall)`
   text-transform: uppercase;
   margin: 0 8px;
+`
+
+const ScrollerWrapper = styled.div`
+  margin-top: 25px;
 `
 
 const Scroller = styled(HorizontalScroller)`
