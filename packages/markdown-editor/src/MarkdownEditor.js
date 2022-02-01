@@ -67,7 +67,7 @@ function prepareLink({ type, itemId, addon }) {
       return `#mention?proposal-post-id=${itemId}&thread-id=${addon}`
     }
     case 'forum_thread': {
-      return `#mention?thread-id=${itemId}`
+      return `#mention?forum-thread-id=${itemId}`
     }
     case 'forum_post': {
       return `#mention?forum-post-id=${itemId}&thread-id=${addon}`

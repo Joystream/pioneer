@@ -156,7 +156,7 @@
     },
     "workPeriod": 8,
     "judgingPeriod": 13,
-    "stage": "Funding",
+    "stage": "Failed",
     "totalFunding": "7000",
     "discussionThreadId": "54",
     "createdInEvent": {
@@ -188,7 +188,7 @@
     },
     "workPeriod": 17,
     "judgingPeriod": 9,
-    "stage": "Funding",
+    "stage": "Failed",
     "totalFunding": "6000",
     "discussionThreadId": "58",
     "createdInEvent": {

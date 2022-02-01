@@ -78,6 +78,8 @@ export const WithdrawContributionModal = () => {
         service={service}
         controllerAccount={controllerAccount}
         amount={amount}
+        bounty={bounty}
+        isContributor
       />
     )
   }
