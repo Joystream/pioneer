@@ -3,10 +3,11 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ForumRoutes } from '@/forum/constant'
-import { OverviewInfoElement } from '@/overview/components/OverviewInfoElement'
-import { OverviewWrapper } from '@/overview/components/OverviewWrapper'
 import { useLatestForumThreads } from '@/forum/hooks/useLatestForumThreads'
 import { useThreadsCount } from '@/forum/hooks/useThreadsCount'
+import { OverviewInfoElement } from '@/overview/components/OverviewInfoElement'
+import { OverviewWrapper } from '@/overview/components/OverviewWrapper'
+
 import { ForumThreadTilesList } from './ForumThreadTilesList'
 
 const THREADS_NUMBER = 5
@@ -17,12 +18,13 @@ export const ForumThreadsOverview = () => {
   const { threads } = useLatestForumThreads(THREADS_NUMBER)
   const { threadsCount } = useThreadsCount(WEEK_AGO)
 
-  const infoElements = useMemo(() => (
-    <OverviewInfoElement value={threadsCount} label={t('forum.newThreads')} />
-  ), [t, threadsCount])
+  const infoElements = useMemo(
+    () => <OverviewInfoElement value={threadsCount} label={t('forum.newThreads')} />,
+    [t, threadsCount]
+  )
 
   return (
-    <OverviewWrapper 
+    <OverviewWrapper
       title={t('forum.title')}
       linkPath={ForumRoutes.forum}
       infoElements={infoElements}

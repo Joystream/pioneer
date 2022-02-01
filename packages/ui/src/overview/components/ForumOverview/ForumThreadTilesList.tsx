@@ -43,7 +43,13 @@ export const ForumThreadTilesList = React.memo(({ threads }: ListProps) => {
   const tiles = threads.map((thread) => (
     <ForumThreadTile title={thread.title} answersCount={thread.visiblePostsCount} />
   ))
-  return !tiles ? <Loading /> : <ScrollerWrapper><Scroller title={t('forum.latestThreads')} counter={tiles.length} items={tiles} /></ScrollerWrapper>
+  return !tiles ? (
+    <Loading />
+  ) : (
+    <ScrollerWrapper>
+      <Scroller title={t('forum.latestThreads')} counter={tiles.length} items={tiles} />
+    </ScrollerWrapper>
+  )
 })
 
 const Wrapper = styled.div`
