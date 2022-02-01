@@ -13,7 +13,9 @@
   },
   "forum": {
     "title": "Forum",
-    "newThreads": "New threads this week"
+    "newThreads": "New threads this week",
+    "new": "New",
+    "answers": "Answers"
   },
   "welcome": "Hi, ",
   "guest": "Stranger"
