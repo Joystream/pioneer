@@ -1,5 +1,6 @@
 import { DocumentNode, useApolloClient } from '@apollo/client'
 import React, { useCallback, useMemo, useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ApplicationIcon } from '@/common/components/icons'
@@ -10,10 +11,11 @@ import { MemberTooltip } from '@/common/components/Mention/MemberTooltip'
 import { OpeningTooltip } from '@/common/components/Mention/OpeningTooltip'
 import { ProposalTooltip } from '@/common/components/Mention/ProposalTooltip'
 import { ProposalDiscussionEntryTooltip } from '@/common/components/Mention/PrposalDiscussionEntryTooltip'
-import { ForumIcon, MyProfileIcon, WorkingGroupsIcon, ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons'
+import { ForumIcon, MyProfileIcon, ProposalsIcon, WorkingGroupsIcon } from '@/common/components/page/Sidebar/LinksIcons'
 import { Tooltip } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { ForumRoutes } from '@/forum/constant'
 import {
   GetForumPostMentionDocument,
   GetForumPostMentionQuery,
@@ -23,6 +25,7 @@ import {
 import { asForumPostMention, asForumThreadMention, ForumPostMention, ForumThreadMention } from '@/forum/types'
 import { GetMemberMentionDocument, GetMemberMentionQuery } from '@/memberships/queries'
 import { asMember, Member } from '@/memberships/types'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 import {
   GetProposalDiscussionPostMentionDocument,
   GetProposalDiscussionPostMentionQuery,
@@ -35,6 +38,7 @@ import {
   ProposalDiscussionPostMention,
   ProposalMention,
 } from '@/proposals/types'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 import {
   GetWorkingGroupApplicationMentionDocument,
   GetWorkingGroupApplicationMentionQuery,
@@ -202,13 +206,37 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
     }
   }, [type, onMount, data])
 
+  const UrlAddress = useMemo(() => {
+    switch (type) {
+      case 'proposalDiscussionEntry':
+      case 'proposal': {
+        return `${generatePath(ProposalsRoutes.preview, { id: itemId })}`
+      }
+      case 'forumPost':
+      case 'forumThread': {
+        return `${generatePath(ForumRoutes.thread, { id: itemId })}`
+      }
+      case 'member': {
+        return 'members'
+      }
+      case 'opening': {
+        return `${generatePath(WorkingGroupsRoutes.openingById, { id: itemId })}`
+      }
+      case 'application': {
+        return `${generatePath(WorkingGroupsRoutes.upcomingOpenings, { id: itemId })}`
+      }
+    }
+  }, [type])
+
   return (
     <Container data-testid="mention-container">
       {Icon}
       <Tooltip popupContent={Content} forBig>
-        <TextMedium as="span" black bold underline>
-          {children}
-        </TextMedium>
+        <a href={'#' + UrlAddress}>
+          <TextMedium as="span" black bold underline>
+            {children}
+          </TextMedium>
+        </a>
       </Tooltip>
     </Container>
   )

@@ -55,7 +55,7 @@ function MentionToLink(editor) {
   })
 }
 
-function prepareLink({type, itemId, addon}) {
+function prepareLink({ type, itemId, addon }) {
   switch (type) {
     case 'member': {
       return `#mention?member-id=${itemId}`
@@ -67,7 +67,7 @@ function prepareLink({type, itemId, addon}) {
       return `#mention?proposal-post-id=${itemId}&thread-id=${addon}`
     }
     case 'forum_thread': {
-      return `#mention?forum-thread-id=${itemId}`
+      return `#mention?thread-id=${itemId}`
     }
     case 'forum_post': {
       return `#mention?forum-post-id=${itemId}&thread-id=${addon}`
