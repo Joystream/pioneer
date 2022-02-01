@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { ButtonGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { TextExtraSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
 
 import { CountBadge } from '../CountBadge'
 

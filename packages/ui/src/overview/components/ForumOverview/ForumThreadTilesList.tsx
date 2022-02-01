@@ -41,7 +41,7 @@ interface ListProps {
 export const ForumThreadTilesList = React.memo(({ threads }: ListProps) => {
   const { t } = useTranslation('overview')
   const tiles = threads.map((thread) => (
-    <ForumThreadTile title={thread.title} answersCount={thread.visiblePostsCount} />
+    <ForumThreadTile key={thread.id} title={thread.title} answersCount={thread.visiblePostsCount} />
   ))
   return !tiles ? (
     <Loading />

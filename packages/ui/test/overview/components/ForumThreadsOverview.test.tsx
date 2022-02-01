@@ -2,23 +2,13 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { ApiContext } from '@/common/providers/api/context'
-import {
-  seedCouncilMember,
-  seedMember,
-  seedElectedCouncils,
-  seedWorkingGroups,
-  seedWorkers,
-  seedMembers,
-} from '@/mocks/data'
+import { seedWorkingGroups, seedMembers } from '@/mocks/data'
+import { RawForumThreadMock, seedForumCategory, seedForumThread } from '@/mocks/data/seedForum'
 import { ForumThreadsOverview } from '@/overview/components/ForumOverview/ForumThreadsOverview'
 
+import { mockCategories } from '../../_mocks/forum'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
-import { RawForumThreadMock, seedForumCategories, seedForumCategory, seedForumPosts, seedForumThread, seedForumThreads } from '@/mocks/data/seedForum'
-import { mockCategories } from '../../_mocks/forum'
-
 
 const mockThreads: RawForumThreadMock[] = [
   {
@@ -53,7 +43,7 @@ const mockThreads: RawForumThreadMock[] = [
 
 describe('UI: Forum overview', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
-  
+
   beforeEach(async () => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
