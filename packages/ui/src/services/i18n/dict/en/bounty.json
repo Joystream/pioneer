@@ -116,6 +116,8 @@
       }
     },
     "withdraw": {
+      "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
+      "extraTooltipInformation": "This bounty was created with a cherry, which gets split among all contributors equally in the case when bounty fails",
       "contribution": {
         "title": "Withdraw Contribution",
         "description": "You intend to withdraw {{value}} JOY contribution locks from accounts.",
