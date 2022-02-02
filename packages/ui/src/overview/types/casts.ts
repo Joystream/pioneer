@@ -29,7 +29,7 @@ const asOverviewSidebarThread = (data: GetSidebarInfoQuery['forumThreads'][numbe
 
 export const asOverviewSidebarInformation = (data: GetSidebarInfoQuery): OverviewSidebarInformations => ({
   candidatures: data.candidates.map((candidate) => candidate.electionRound.cycleId),
-  applications: data.workingGroupApplications.map((application) => application.opening.group.name),
+  applications: data.workingGroupApplications.map((application) => asWorkingGroupName(application.opening.group.name)),
   proposals: data.proposals.map(asOverviewSidebarProposal),
   roles: data.workers.map(asOverviewSidebarRole),
   threads: data.forumThreads.map(asOverviewSidebarThread),

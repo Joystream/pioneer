@@ -84,7 +84,7 @@ const ItemsWrapper = styled.div`
   overflow-x: hidden;
   height: min-content;
   width: 100%;
-  padding-top: 10px;
+  padding: 10px 0;
 `
 
 const ButtonWrapper = styled.div`

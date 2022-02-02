@@ -6,6 +6,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Colors } from '@/common/constants'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MyRoleTile } from '@/overview/components/OverviewSidebar/components/MyRoleTile'
+import { MyTitleDateTile } from '@/overview/components/OverviewSidebar/components/MyTitleDateTile'
 import { useOverviewSidebarInformation } from '@/overview/hooks/useOverviewSidebarInformation'
 
 export const OverviewSidebar = () => {
@@ -13,15 +14,25 @@ export const OverviewSidebar = () => {
   const { isLoading, informations } = useOverviewSidebarInformation(active?.id || '0')
 
   return (
-    <Container gap={15}>
+    <Container gap={10}>
       <HorizontalScroller
         items={informations?.roles.map((role) => (
           <MyRoleTile {...role} />
         ))}
         title="My roles"
       />
-      <HorizontalScroller items={<Placeholder />} title="My applications" />
-      <HorizontalScroller items={<Placeholder />} title="My candidacies" />
+      <HorizontalScroller
+        items={informations?.applications.map((application) => (
+          <MyTitleDateTile title={application} />
+        ))}
+        title="My applications"
+      />
+      <HorizontalScroller
+        items={informations?.candidatures.map((cycleId) => (
+          <MyTitleDateTile title={`Candidate in cycle ${cycleId}`} />
+        ))}
+        title="My candidacies"
+      />
       <HorizontalScroller items={<Placeholder />} title="My proposals" />
       <HorizontalScroller items={<Placeholder />} title="My threads" />
     </Container>

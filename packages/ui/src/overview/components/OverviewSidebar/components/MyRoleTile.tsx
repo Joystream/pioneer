@@ -38,6 +38,7 @@ export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
 
 const Tile = styled.div`
   min-width: 216px;
+  width: fit-content;
   padding: 10px;
   height: 180px;
   box-shadow: ${Shadows.light};
