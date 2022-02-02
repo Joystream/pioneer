@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost } from '@/common/components/buttons'
@@ -15,6 +15,7 @@ interface Props {
 
 export const HorizontalScroller = React.memo(({ items, className, title, count }: Props) => {
   const [wrapperWidth, setWrapperWidth] = useState<number>()
+  const [scrollNumber, setScrollNumber] = useState<number>(16)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -29,10 +30,11 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
     return () => window.removeEventListener('resize', calcContentMaxHeight)
   }, [wrapperRef, wrapperWidth])
 
-  const scrollNumber = useMemo(() => {
+  useLayoutEffect(() => {
     const childrenWidth = (wrapperRef.current?.children[0]?.clientWidth ?? 0) + 16
-    return Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth
-  }, [wrapperRef, wrapperWidth])
+
+    setScrollNumber(Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth)
+  }, [wrapperRef, wrapperWidth, items])
 
   const scrollRight = useCallback(() => {
     wrapperRef.current?.scrollBy({ left: scrollNumber, behavior: 'smooth' })
