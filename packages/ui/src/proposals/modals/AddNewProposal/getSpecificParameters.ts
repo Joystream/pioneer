@@ -55,7 +55,9 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'runtimeUpgrade': {
       return createType('ProposalDetailsOf', {
-        RuntimeUpgrade: createType('Bytes', specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array()),
+        RuntimeUpgrade: createType('Bytes', [
+          specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array(),
+        ]),
       })
     }
     case 'createWorkingGroupLeadOpening': {
