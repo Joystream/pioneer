@@ -23,13 +23,13 @@ export const OverviewSidebar = () => {
       />
       <HorizontalScroller
         items={informations?.applications.map((application) => (
-          <MyTitleDateTile title={application} />
+          <MyTitleDateTile title={application.group} type="application" duration={application.expectedEndingDate} />
         ))}
         title="My applications"
       />
       <HorizontalScroller
         items={informations?.candidatures.map((cycleId) => (
-          <MyTitleDateTile title={`Candidate in cycle ${cycleId}`} />
+          <MyTitleDateTile title={`Candidate in cycle ${cycleId}`} type="election" />
         ))}
         title="My candidacies"
       />

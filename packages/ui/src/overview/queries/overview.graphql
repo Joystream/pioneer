@@ -16,10 +16,13 @@ query GetSidebarInfo($memberId: ID!) {
       group {
         name
       }
+      metadata {
+        expectedEnding
+      }
     }
   }
 
-  candidates(where: { member: { id_eq: $memberId } }) {
+  candidates(where: { member: { id_eq: $memberId }, status_eq: ACTIVE }) {
     id
     electionRound {
       cycleId

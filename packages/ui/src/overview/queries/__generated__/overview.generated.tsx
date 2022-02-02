@@ -17,7 +17,11 @@ export type GetSidebarInfoQuery = {
   }>
   workingGroupApplications: Array<{
     __typename: 'WorkingGroupApplication'
-    opening: { __typename: 'WorkingGroupOpening'; group: { __typename: 'WorkingGroup'; name: string } }
+    opening: {
+      __typename: 'WorkingGroupOpening'
+      group: { __typename: 'WorkingGroup'; name: string }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null | undefined }
+    }
   }>
   candidates: Array<{
     __typename: 'Candidate'
@@ -66,9 +70,12 @@ export const GetSidebarInfoDocument = gql`
         group {
           name
         }
+        metadata {
+          expectedEnding
+        }
       }
     }
-    candidates(where: { member: { id_eq: $memberId } }) {
+    candidates(where: { member: { id_eq: $memberId }, status_eq: ACTIVE }) {
       id
       electionRound {
         cycleId

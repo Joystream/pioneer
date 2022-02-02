@@ -18,9 +18,14 @@ export interface OverviewSidebarThread {
   numberOfPosts: number
 }
 
+export interface OverviewSidebarApplication {
+  group: string
+  expectedEndingDate: string
+}
+
 export interface OverviewSidebarInformations {
   roles: OverviewSidebarRole[]
-  applications: string[]
+  applications: OverviewSidebarApplication[]
   candidatures: number[]
   proposals: OverviewSidebarProposal[]
   threads: OverviewSidebarThread[]
