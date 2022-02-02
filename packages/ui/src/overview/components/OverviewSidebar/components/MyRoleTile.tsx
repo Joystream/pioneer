@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { JoystreamLogo } from '@/common/components/icons/JoystreamLogo'
 import { Council, Forum, Storage, Membership, Content } from '@/common/components/icons/workingGroup'
-import { TextBig, TextMedium } from '@/common/components/typography'
+import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
 import { Shadows } from '@/common/constants'
 import { OverviewSidebarRole } from '@/overview/types/Overview'
 
@@ -31,7 +31,9 @@ export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
       {isLead && <StyledBadge>LEAD</StyledBadge>}
       {iconMapper(role)}
       <TextBig bold>{role} Group</TextBig>
-      <TextMedium>Reward: {reward}</TextMedium>
+      <TextMedium>
+        Reward: <TokenValue value={reward} size="l" />
+      </TextMedium>
     </Tile>
   )
 }
