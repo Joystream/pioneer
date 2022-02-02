@@ -4,15 +4,17 @@ import styled from 'styled-components'
 import { ButtonGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { TextExtraSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+
+import { CountBadge } from '../CountBadge'
 
 interface Props {
   items: React.ReactNode[] | React.ReactNode
   title?: string
+  counter?: number
   className?: string
 }
 
-export const HorizontalScroller = React.memo(({ items, className, title }: Props) => {
+export const HorizontalScroller = React.memo(({ items, className, title, counter }: Props) => {
   const [wrapperWidth, setWrapperWidth] = useState<number>()
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -44,7 +46,10 @@ export const HorizontalScroller = React.memo(({ items, className, title }: Props
   return (
     <Wrapper>
       <HeaderWrapper>
-        <Title>{title}</Title>
+        <Title bold lighter>
+          {title}
+          {counter && <CounterBadge count={counter} />}
+        </Title>
         <ButtonWrapper>
           <ButtonGhost size="small" square onClick={scrollLeft}>
             <Arrow direction="left" />
@@ -64,7 +69,6 @@ export const HorizontalScroller = React.memo(({ items, className, title }: Props
 const Wrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  padding: 10px 8px;
 `
 
 const HeaderWrapper = styled.div`
@@ -80,15 +84,20 @@ const ItemsWrapper = styled.div`
   overflow-x: hidden;
   height: min-content;
   width: 100%;
-  padding-top: 10px;
+  padding: 24px 16px;
 `
 
 const ButtonWrapper = styled.div`
   display: flex;
   column-gap: 5px;
+  padding-right: 16px;
 `
 
 const Title = styled(TextExtraSmall)`
   text-transform: uppercase;
-  color: ${Colors.Black[500]};
+  padding-left: 16px;
+`
+
+const CounterBadge = styled(CountBadge)`
+  margin-left: 12px;
 `
