@@ -43,6 +43,8 @@ describe('UI: Past Council page', () => {
         id: '1',
         electedAtBlock: 0,
         endedAtBlock: 10,
+        electedAtTime: '2022-01-01',
+        electedAtNetwork: 'OLYMPIA',
       },
       mockServer.server
     )

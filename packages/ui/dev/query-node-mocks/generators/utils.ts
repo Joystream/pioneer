@@ -79,3 +79,12 @@ export const randomBlock = (date?: Date) => ({
   createdAt: (date ?? faker.date.recent(180)).toJSON(),
   network: 'OLYMPIA',
 })
+
+export const randomInlineBlockData = <T extends string>(prefix: T, date?: Date) => {
+  const block = randomBlock(date)
+  return {
+    [`${prefix}Block`]: block.inBlock,
+    [`${prefix}Time`]: block.createdAt,
+    [`${prefix}Network`]: block.network,
+  } as Record<`${T}Block`, number> & Record<`${T}Time` | `${T}Network`, string>
+}
