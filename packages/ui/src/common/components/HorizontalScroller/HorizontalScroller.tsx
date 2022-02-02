@@ -10,9 +10,10 @@ interface Props {
   items: React.ReactNode[] | React.ReactNode
   title?: string
   className?: string
+  count?: number
 }
 
-export const HorizontalScroller = React.memo(({ items, className, title }: Props) => {
+export const HorizontalScroller = React.memo(({ items, className, title, count }: Props) => {
   const [wrapperWidth, setWrapperWidth] = useState<number>()
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -44,7 +45,10 @@ export const HorizontalScroller = React.memo(({ items, className, title }: Props
   return (
     <Wrapper>
       <HeaderWrapper>
-        <Title>{title}</Title>
+        <Title>
+          {title}
+          {count && <Counter>3</Counter>}
+        </Title>
         <ButtonWrapper>
           <ButtonGhost size="small" square onClick={scrollLeft}>
             <Arrow direction="left" />
@@ -91,4 +95,17 @@ const ButtonWrapper = styled.div`
 const Title = styled(TextExtraSmall)`
   text-transform: uppercase;
   color: ${Colors.Black[500]};
+  display: flex;
+`
+
+const Counter = styled.div`
+  background-color: ${Colors.Blue[50]};
+  border-radius: 50%;
+  color: ${Colors.Blue[500]};
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  margin-left: 5px;
 `
