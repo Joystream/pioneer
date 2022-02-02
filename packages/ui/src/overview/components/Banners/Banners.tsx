@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -12,9 +13,11 @@ export interface BannerProps {
   description: string
   buttonText: string
   buttonIcon?: ReactNode
+  path: string
 }
 
-export const Banner = ({ bannerTitle, title, icon, description, buttonText, buttonIcon }: BannerProps) => {
+export const Banner = ({ bannerTitle, title, icon, description, buttonText, buttonIcon, path }: BannerProps) => {
+  const { push } = useHistory()
   return (
     <>
       <TextExtraSmall lighter>{bannerTitle}</TextExtraSmall>
@@ -28,7 +31,7 @@ export const Banner = ({ bannerTitle, title, icon, description, buttonText, butt
             <TextSmall lighter>{description}</TextSmall>
           </DescriptionWrapper>
           <ButtonWrapper>
-            <ButtonPrimary size="medium">
+            <ButtonPrimary size="medium" onClick={() => push(path)}>
               {buttonText}
               {buttonIcon}
             </ButtonPrimary>
