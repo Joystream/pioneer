@@ -5,15 +5,19 @@ import {
   OverviewSidebarRole,
   OverviewSidebarThread,
 } from '@/overview/types/Overview'
+import { asWorkingGroupName } from '@/working-groups/types'
 
 const asOverviewSidebarProposal = (data: GetSidebarInfoQuery['proposals'][number]): OverviewSidebarProposal => ({
   status: data.status.__typename,
   title: data.title,
-  votes: data.votes.map((vote) => (vote.voteKind === 'APPROVE' ? 'approved' : 'rejected')),
+  votes: {
+    rejected: data.votes.reduce((prev, next) => (next.voteKind === 'REJECT' ? ++prev : prev), 0),
+    approved: data.votes.reduce((prev, next) => (next.voteKind === 'APPROVE' ? ++prev : prev), 0),
+  },
 })
 
 const asOverviewSidebarRole = (data: GetSidebarInfoQuery['workers'][number]): OverviewSidebarRole => ({
-  role: data.group.name,
+  role: asWorkingGroupName(data.group.name),
   reward: data.payouts.reduce((prev, next) => prev + next.amount.toNumber(), 0),
   isLead: data.isLead,
 })

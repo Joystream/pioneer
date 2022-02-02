@@ -4,12 +4,13 @@ export interface OverviewSidebarRole {
   isLead: boolean
 }
 
-type VoteType = 'rejected' | 'approved'
-
 export interface OverviewSidebarProposal {
   title: string
   status: string
-  votes: VoteType[]
+  votes: {
+    rejected: number
+    approved: number
+  }
 }
 
 export interface OverviewSidebarThread {

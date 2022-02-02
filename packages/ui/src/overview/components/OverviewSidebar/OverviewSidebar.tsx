@@ -5,6 +5,7 @@ import { HorizontalScroller } from '@/common/components/HorizontalScroller/Horiz
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Colors } from '@/common/constants'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { MyRoleTile } from '@/overview/components/OverviewSidebar/components/MyRoleTile'
 import { useOverviewSidebarInformation } from '@/overview/hooks/useOverviewSidebarInformation'
 
 export const OverviewSidebar = () => {
@@ -13,7 +14,12 @@ export const OverviewSidebar = () => {
 
   return (
     <Container gap={15}>
-      <HorizontalScroller items={<Placeholder />} title="My roles" />
+      <HorizontalScroller
+        items={informations?.roles.map((role) => (
+          <MyRoleTile {...role} />
+        ))}
+        title="My roles"
+      />
       <HorizontalScroller items={<Placeholder />} title="My applications" />
       <HorizontalScroller items={<Placeholder />} title="My candidacies" />
       <HorizontalScroller items={<Placeholder />} title="My proposals" />
