@@ -40,10 +40,10 @@ export const CouncilOverview = () => {
   const infoElements = useMemo(
     () => (
       <>
-        <OverviewInfoElement value={councilSize} label="Council members" />,
-        <OverviewInfoElement value={stageLabel} label={t('council.stage.label')} />,
-        {typeof round !== 'undefined' && <OverviewInfoElement value={`#${round}`} label={t('council.round')} />},
-        <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} />,
+        <OverviewInfoElement value={councilSize} label="Council members" />
+        <OverviewInfoElement value={stageLabel} label={t('council.stage.label')} />
+        {typeof round !== 'undefined' && <OverviewInfoElement value={`#${round}`} label={t('council.round')} />}
+        <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} />
       </>
     ),
     [councilSize, stageLabel, round, nextElectionIn]

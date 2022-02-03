@@ -48,7 +48,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, counter
       <HeaderWrapper>
         <Title bold lighter>
           {title}
-          {counter && <CounterBadge count={counter} />}
+          {typeof counter !== 'undefined' && <CounterBadge count={counter} />}
         </Title>
         <ButtonWrapper>
           <ButtonGhost size="small" square onClick={scrollLeft}>
