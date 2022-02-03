@@ -18,6 +18,18 @@
     "answers": "Answers",
     "latestThreads": "Latest Threads"
   },
+  "proposals": {
+    "title": "Proposals",
+    "new": "New proposals",
+    "approved": "Proposals approved",
+    "rejected": "Proposals rejected",
+    "timeLeft": "Time left",
+    "approvedVotes": "Approved",
+    "rejectedVotes": "Rejected",
+    "waiting": "Waiting",
+    "vote": "vote",
+    "votes": "votes"
+  },
   "welcome": "Hi, ",
   "guest": "Stranger"
 }
