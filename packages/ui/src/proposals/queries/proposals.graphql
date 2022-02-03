@@ -231,6 +231,12 @@ query getProposals($where: ProposalWhereInput) {
   }
 }
 
+query getProposalsCount($where: ProposalWhereInput) {
+  proposalsConnection(where: $where) {
+    totalCount
+  }
+}
+
 query getProposal($where: ProposalWhereUniqueInput!) {
   proposal: proposalByUniqueInput(where: $where) {
     ...ProposalWithDetailsFields

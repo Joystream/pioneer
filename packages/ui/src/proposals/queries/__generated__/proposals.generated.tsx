@@ -831,6 +831,15 @@ export type GetProposalsQuery = {
   }>
 }
 
+export type GetProposalsCountQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.ProposalWhereInput>
+}>
+
+export type GetProposalsCountQuery = {
+  __typename: 'Query'
+  proposalsConnection: { __typename: 'ProposalConnection'; totalCount: number }
+}
+
 export type GetProposalQueryVariables = Types.Exact<{
   where: Types.ProposalWhereUniqueInput
 }>
@@ -1702,6 +1711,48 @@ export function useGetProposalsLazyQuery(
 export type GetProposalsQueryHookResult = ReturnType<typeof useGetProposalsQuery>
 export type GetProposalsLazyQueryHookResult = ReturnType<typeof useGetProposalsLazyQuery>
 export type GetProposalsQueryResult = Apollo.QueryResult<GetProposalsQuery, GetProposalsQueryVariables>
+export const GetProposalsCountDocument = gql`
+  query getProposalsCount($where: ProposalWhereInput) {
+    proposalsConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetProposalsCountQuery__
+ *
+ * To run a query within a React component, call `useGetProposalsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalsCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetProposalsCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetProposalsCountQuery, GetProposalsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProposalsCountQuery, GetProposalsCountQueryVariables>(GetProposalsCountDocument, options)
+}
+export function useGetProposalsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProposalsCountQuery, GetProposalsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProposalsCountQuery, GetProposalsCountQueryVariables>(
+    GetProposalsCountDocument,
+    options
+  )
+}
+export type GetProposalsCountQueryHookResult = ReturnType<typeof useGetProposalsCountQuery>
+export type GetProposalsCountLazyQueryHookResult = ReturnType<typeof useGetProposalsCountLazyQuery>
+export type GetProposalsCountQueryResult = Apollo.QueryResult<GetProposalsCountQuery, GetProposalsCountQueryVariables>
 export const GetProposalDocument = gql`
   query getProposal($where: ProposalWhereUniqueInput!) {
     proposal: proposalByUniqueInput(where: $where) {
