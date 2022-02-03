@@ -16,6 +16,7 @@ interface Props {
 export const HorizontalScroller = React.memo(({ items, className, title, count }: Props) => {
   const [wrapperWidth, setWrapperWidth] = useState<number>()
   const [scrollNumber, setScrollNumber] = useState<number>(16)
+  const [isTooSmallForScroll, setIsTooSmallForScroll] = useState<boolean>(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -32,8 +33,15 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
 
   useLayoutEffect(() => {
     const childrenWidth = (wrapperRef.current?.children[0]?.clientWidth ?? 0) + 16
+    const scrollNumber = Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth
 
-    setScrollNumber(Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth)
+    if ((wrapperWidth || 1) > childrenWidth * (wrapperRef.current?.children?.length || 1)) {
+      setIsTooSmallForScroll(true)
+    } else {
+      setIsTooSmallForScroll(false)
+    }
+
+    setScrollNumber(scrollNumber)
   }, [wrapperRef, wrapperWidth, items])
 
   const scrollRight = useCallback(() => {
@@ -51,14 +59,16 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
           {title}
           {count && <Counter>3</Counter>}
         </Title>
-        <ButtonWrapper>
-          <ButtonGhost size="small" square onClick={scrollLeft}>
-            <Arrow direction="left" />
-          </ButtonGhost>
-          <ButtonGhost size="small" square onClick={scrollRight}>
-            <Arrow direction="right" />
-          </ButtonGhost>
-        </ButtonWrapper>
+        {!isTooSmallForScroll && (
+          <ButtonWrapper>
+            <ButtonGhost size="small" square onClick={scrollLeft}>
+              <Arrow direction="left" />
+            </ButtonGhost>
+            <ButtonGhost size="small" square onClick={scrollRight}>
+              <Arrow direction="right" />
+            </ButtonGhost>
+          </ButtonWrapper>
+        )}
       </HeaderWrapper>
       <ItemsWrapper ref={wrapperRef} className={className}>
         {items}
