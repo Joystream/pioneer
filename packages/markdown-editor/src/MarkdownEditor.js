@@ -55,7 +55,7 @@ function MentionToLink(editor) {
   })
 }
 
-function prepareLink({type, itemId, addon}) {
+function prepareLink({ type, itemId, addon }) {
   switch (type) {
     case 'member': {
       return `#mention?member-id=${itemId}`

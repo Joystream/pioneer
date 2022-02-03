@@ -274,7 +274,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await screen.queryByText('buttons.loserWithdrawStake')).toBeNull()
+      expect(await screen.queryByText('buttons.loserWithdrawStake')).toBeDefined()
       expect(await screen.queryByText('buttons.contributorWithdrawStake')).toBeNull()
       expect(await screen.queryByText('buttons.claimReward')).toBeNull()
     })
