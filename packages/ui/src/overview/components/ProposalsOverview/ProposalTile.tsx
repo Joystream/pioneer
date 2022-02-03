@@ -179,13 +179,6 @@ const StageNumber = styled(TextInlineSmall)`
   &::first-letter {
     font-weight: 700;
   }
-  &::after {
-    border-right: solid 2px ${Colors.Black[900]};
-    content: '';
-    display: block;
-    position: absolute;
-    height: 14px;
-  }
 `
 
 const ApprovedLabel = styled(TextInlineSmall)`
