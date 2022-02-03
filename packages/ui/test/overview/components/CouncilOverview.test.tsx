@@ -12,7 +12,7 @@ import {
   seedCouncilCandidate,
   seedCouncilVote,
 } from '@/mocks/data'
-import { CouncilOverview } from '@/overview/components/OverviewItem/CouncilOverview'
+import { CouncilOverview } from '@/overview/components/CouncilOverview/CouncilOverview'
 
 import { mockMembers, mockCouncils, mockCouncilors, CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
