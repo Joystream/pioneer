@@ -110,14 +110,16 @@ const Title = styled(TextExtraSmall)`
   display: flex;
 `
 
-const Counter = styled.div`
+export const Counter = styled.div`
   background-color: ${Colors.Blue[50]};
   border-radius: 50%;
   color: ${Colors.Blue[500]};
   width: 16px;
   height: 16px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 700;
+  padding: 10px;
   margin-left: 5px;
 `

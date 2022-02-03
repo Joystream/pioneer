@@ -40,7 +40,7 @@ export const MyTitleDateTile = ({ title, type, duration }: Props) => {
 
   return (
     <Tile>
-      <TextBig value bold>
+      <TextBig value bold truncate>
         {title}
       </TextBig>
       <TimeBox>
@@ -53,6 +53,7 @@ export const MyTitleDateTile = ({ title, type, duration }: Props) => {
 
 const Tile = styled.div`
   min-width: 216px;
+  max-width: 216px;
   width: fit-content;
   padding: 20px;
   height: 114px;

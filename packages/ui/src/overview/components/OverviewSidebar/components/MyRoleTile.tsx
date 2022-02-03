@@ -30,7 +30,9 @@ export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
     <Tile>
       {isLead && <StyledBadge>LEAD</StyledBadge>}
       {iconMapper(role)}
-      <TextBig bold>{role} Group</TextBig>
+      <TextBig truncate bold>
+        {role}
+      </TextBig>
       <TextMedium>
         Reward: <TokenValue value={reward} size="l" />
       </TextMedium>
@@ -40,6 +42,7 @@ export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
 
 const Tile = styled.div`
   min-width: 216px;
+  max-width: 216px;
   width: fit-content;
   padding: 10px;
   height: 180px;
