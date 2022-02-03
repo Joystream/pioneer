@@ -1,6 +1,6 @@
 import { ProposalMock } from '../../../dev/query-node-mocks/generators/generateProposals'
 
-const baseMock = {
+export const baseMock = {
   creatorId: '0',
   statusSetAtBlock: 0,
   createdInEvent: {

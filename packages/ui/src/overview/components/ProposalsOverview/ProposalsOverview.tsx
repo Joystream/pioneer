@@ -12,7 +12,7 @@ import { ProposalsTilesList } from './ProposalsTilesList'
 
 export const ProposalsOverview = () => {
   const { t } = useTranslation('overview')
-  const { proposals } = useProposals({ status: 'active' })
+  const { proposals, isLoading: proposalsLoading } = useProposals({ status: 'active' })
   const { count, loading: countLoading } = useProposalsCount('all')
   const { count: approvedCount, loading: approvedCountLoading } = useProposalsCount('approved')
   const { count: rejectedCount, loading: rejectedCountLoading } = useProposalsCount('rejected')
@@ -36,12 +36,14 @@ export const ProposalsOverview = () => {
     [t, count, approvedCount, rejectedCount]
   )
 
-  return (
+  return proposalsLoading ? (
+    <Loading />
+  ) : (
     <OverviewWrapper
       title={t('proposals.title')}
       linkPath={ProposalsRoutes.current}
       infoElements={infoElements}
-      scroller={<ProposalsTilesList proposals={proposals.slice(0, 5)} />}
+      scroller={<ProposalsTilesList proposals={proposals} />}
     />
   )
 }
