@@ -9,6 +9,7 @@ import { formatDuration } from '@/common/components/statistics/BlockDurationStat
 import { TextBig, TextInlineMedium, TextInlineSmall, TextSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { BorderRad, Colors, Shadows, Transitions } from '@/common/constants'
+import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { ProposalVote } from '@/proposals/types'
@@ -21,8 +22,7 @@ export const ProposalTile = React.memo(({ proposalId }: TileProps) => {
   const { t } = useTranslation('overview')
   const { isLoading, proposal } = useProposal(proposalId)
   const constants = useProposalConstants(proposal?.details.type)
-  // const blocksToEnd = useBlocksToProposalExecution(proposal, constants)
-  const blocksToEnd = 100000
+  const blocksToEnd = useBlocksToProposalExecution(proposal, constants)
 
   const content = useMemo(() => {
     switch (proposal?.status) {
@@ -105,18 +105,6 @@ const DormantContent = () => {
         <WaitingLabel lighter>...{t('proposals.waiting')}</WaitingLabel>
       </div>
     </DormantContentWrapper>
-  )
-}
-
-const GracingContent = () => {
-  const { t } = useTranslation('overview')
-  return (
-    <div>
-      <ApprovedLabel>
-        <CheckboxIcon />
-        {t('proposals.approvedVotes')}
-      </ApprovedLabel>
-    </div>
   )
 }
 
