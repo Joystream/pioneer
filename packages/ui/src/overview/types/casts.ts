@@ -31,5 +31,5 @@ export const asOverviewSidebarInformation = (data: GetSidebarInfoQuery): Overvie
   proposals: data.proposals.map((proposal) => proposal.id),
   roles: data.workers.map(asOverviewSidebarRole),
   threads: data.forumThreads.map(asOverviewSidebarThread),
-  isCouncil: true,
+  isCouncil: !!data.councilMembers.length,
 })
