@@ -78,6 +78,21 @@ export const testProposals: ProposalMock[] = [
   {
     ...baseMock,
     id: '3',
+    title: 'Quite Similar Named Proposal',
+    status: 'vetoed',
+    createdAt: '2021-07-08T10:00:00.000Z',
+    statusSetAtTime: '2021-07-14T10:00:00.000Z',
+    details: {
+      type: 'runtimeUpgrade',
+      data: {
+        bytecode: '0x0061736d',
+      },
+    },
+    creatorId: '1',
+  },
+  {
+    ...baseMock,
+    id: '4',
     title: 'Rejected Proposal',
     status: 'rejected',
     createdAt: '2021-07-08T10:00:00.000Z',
@@ -92,7 +107,7 @@ export const testProposals: ProposalMock[] = [
   },
   {
     ...baseMock,
-    id: '4',
+    id: '5',
     title: 'Slashed Proposal',
     status: 'slashed',
     createdAt: '2021-07-08T10:00:00.000Z',
@@ -108,7 +123,7 @@ export const testProposals: ProposalMock[] = [
   // Active
   {
     ...baseMock,
-    id: '5',
+    id: '6',
     title: 'Gracing Proposal One',
     status: 'gracing',
     createdAt: '2021-07-21T10:00:00.000Z',
