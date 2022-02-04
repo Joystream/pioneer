@@ -19,7 +19,7 @@ const iconMapper = (group: string) => {
     case 'Membership':
       return <Membership />
     case 'Council':
-      return <StyledCouncilIcon />
+      return <Council />
     case 'Content Directory':
       return <Content />
     default:
@@ -80,8 +80,4 @@ const StyledNotificationIcon = styled(NotificationIcon)`
   position: absolute;
   inset: 10px 10px auto auto;
   cursor: pointer;
-`
-
-const StyledCouncilIcon = styled(Council)`
-  margin: 17px 0;
 `
