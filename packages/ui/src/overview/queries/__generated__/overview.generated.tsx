@@ -29,23 +29,7 @@ export type GetSidebarInfoQuery = {
     id: string
     electionRound: { __typename: 'ElectionRound'; cycleId: number }
   }>
-  proposals: Array<{
-    __typename: 'Proposal'
-    title: string
-    status:
-      | { __typename: 'ProposalStatusCanceledByRuntime' }
-      | { __typename: 'ProposalStatusCancelled' }
-      | { __typename: 'ProposalStatusDeciding' }
-      | { __typename: 'ProposalStatusDormant' }
-      | { __typename: 'ProposalStatusExecuted' }
-      | { __typename: 'ProposalStatusExecutionFailed' }
-      | { __typename: 'ProposalStatusExpired' }
-      | { __typename: 'ProposalStatusGracing' }
-      | { __typename: 'ProposalStatusRejected' }
-      | { __typename: 'ProposalStatusSlashed' }
-      | { __typename: 'ProposalStatusVetoed' }
-    votes: Array<{ __typename: 'ProposalVotedEvent'; voteKind: Types.ProposalVoteKind }>
-  }>
+  proposals: Array<{ __typename: 'Proposal'; id: string }>
   forumThreads: Array<{
     __typename: 'ForumThread'
     title: string
@@ -87,13 +71,7 @@ export const GetSidebarInfoDocument = gql`
       }
     }
     proposals(where: { creator: { id_eq: $memberId } }) {
-      title
-      status {
-        __typename
-      }
-      votes {
-        voteKind
-      }
+      id
     }
     forumThreads(where: { author: { id_eq: $memberId } }) {
       title

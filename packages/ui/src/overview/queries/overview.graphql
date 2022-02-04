@@ -35,13 +35,7 @@ query GetSidebarInfo($memberId: ID!) {
   }
 
   proposals(where: { creator: { id_eq: $memberId } }) {
-    title
-    status {
-      __typename
-    }
-    votes {
-      voteKind
-    }
+    id
   }
 
   forumThreads(where: { author: { id_eq: $memberId } }) {

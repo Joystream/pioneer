@@ -2,20 +2,10 @@ import { GetSidebarInfoQuery } from '@/overview/queries/__generated__/overview.g
 import {
   OverviewSidebarApplication,
   OverviewSidebarInformations,
-  OverviewSidebarProposal,
   OverviewSidebarRole,
   OverviewSidebarThread,
 } from '@/overview/types/Overview'
 import { asWorkingGroupName } from '@/working-groups/types'
-
-const asOverviewSidebarProposal = (data: GetSidebarInfoQuery['proposals'][number]): OverviewSidebarProposal => ({
-  status: data.status.__typename,
-  title: data.title,
-  votes: {
-    rejected: data.votes.reduce((prev, next) => (next.voteKind === 'REJECT' ? ++prev : prev), 0),
-    approved: data.votes.reduce((prev, next) => (next.voteKind === 'APPROVE' ? ++prev : prev), 0),
-  },
-})
 
 const asOverviewSidebarRole = (data: GetSidebarInfoQuery['workers'][number]): OverviewSidebarRole => ({
   role: asWorkingGroupName(data.group.name),
@@ -38,7 +28,7 @@ const asOverviewSidebarApplication = (
 export const asOverviewSidebarInformation = (data: GetSidebarInfoQuery): OverviewSidebarInformations => ({
   candidatures: data.candidates.map((candidate) => candidate.electionRound.cycleId),
   applications: data.workingGroupApplications.map(asOverviewSidebarApplication),
-  proposals: data.proposals.map(asOverviewSidebarProposal),
+  proposals: data.proposals.map((proposal) => proposal.id),
   roles: data.workers.map(asOverviewSidebarRole),
   threads: data.forumThreads.map(asOverviewSidebarThread),
   isCouncil: true,

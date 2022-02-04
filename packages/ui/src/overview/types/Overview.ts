@@ -4,15 +4,6 @@ export interface OverviewSidebarRole {
   isLead: boolean
 }
 
-export interface OverviewSidebarProposal {
-  title: string
-  status: string
-  votes: {
-    rejected: number
-    approved: number
-  }
-}
-
 export interface OverviewSidebarThread {
   title: string
   numberOfPosts: number
@@ -27,7 +18,7 @@ export interface OverviewSidebarInformations {
   roles: OverviewSidebarRole[]
   applications: OverviewSidebarApplication[]
   candidatures: number[]
-  proposals: OverviewSidebarProposal[]
+  proposals: string[]
   threads: OverviewSidebarThread[]
   isCouncil: boolean
 }

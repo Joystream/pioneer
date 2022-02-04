@@ -8,12 +8,13 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MyRoleTile } from '@/overview/components/OverviewSidebar/components/MyRoleTile'
 import { MyThreadComponent } from '@/overview/components/OverviewSidebar/components/MyThreadComponent'
 import { MyTitleDateTile } from '@/overview/components/OverviewSidebar/components/MyTitleDateTile'
+import { ProposalTile } from '@/overview/components/ProposalOverview/ProposalTile'
 import { useOverviewSidebarInformation } from '@/overview/hooks/useOverviewSidebarInformation'
 import { useProposals } from '@/proposals/hooks/useProposals'
 
 export const OverviewSidebar = () => {
   const { active } = useMyMemberships()
-  const { informations } = useOverviewSidebarInformation(active?.id || '0')
+  const { informations } = useOverviewSidebarInformation(active?.id || '4')
   const { proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
 
   return (
@@ -50,7 +51,12 @@ export const OverviewSidebar = () => {
         title="My candidacies"
         count={informations?.candidatures.length}
       />
-      {/*<HorizontalScroller items={<Placeholder />} title="My proposals" />*/}
+      <HorizontalScroller
+        items={informations?.proposals.map((proposalId) => (
+          <ProposalTile proposalId={proposalId} />
+        ))}
+        title="My proposals"
+      />
       <HorizontalScroller
         items={informations?.threads.map((thread) => (
           <MyThreadComponent {...thread} />
