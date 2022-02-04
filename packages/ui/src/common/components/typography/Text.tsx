@@ -16,6 +16,7 @@ interface TextProps {
   colorInherit?: boolean
   value?: boolean
   inter?: boolean
+  error?: boolean
 }
 
 const TextValueStyle = css`
@@ -58,6 +59,10 @@ const TextLightStyle = css`
   color: ${Colors.Black[600]};
 `
 
+const TextErrorStyle = css`
+  color: ${Colors.Negative[500]};
+`
+
 const TextMargins = css<TextProps>`
   margin-bottom: ${({ margin }) => {
     switch (margin) {
@@ -89,6 +94,7 @@ const TextAllStyles = css<TextProps>`
   ${({ value }) => value && TextValueStyle};
   ${({ inter }) => inter && TextInterStyle};
   ${({ normalWeight }) => normalWeight && TextNormalWeightStyle};
+  ${({ error }) => error && TextErrorStyle}
   ${TextMargins};
 `
 

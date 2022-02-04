@@ -168,6 +168,66 @@
       "success": "Your work entry has been successfully withdrawn.",
       "successButton": "Back to bounty",
       "error": "There was a problem while withdrawing your work entry."
+    },
+    "submitJudgement": {
+      "validation": {
+        "pickWinner": "Pick a winner or mark bounty as failed",
+        "winnerNoReward": "Some winner do not have reward amount",
+        "amountTooLow": "Distributed amount must equal total reward",
+        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it."
+      },
+      "authorizeModal": {
+        "description": "You are announcing Bounty winners",
+        "button": "Submit Judgement"
+      },
+      "successModal": {
+        "message": "You have successfully submitted your judgement",
+        "button": "Done"
+      },
+      "failedModal": "There has been an error while submitting judgement",
+      "canceledModal": "Transaction has been canceled",
+      "selectWinners": "Select Winners",
+      "checkbox": {
+        "label": "Does Bounty have a winner?",
+        "true": "Yes",
+        "false": "No"
+      },
+      "progressBar": {
+        "distributed": "Distributed",
+        "totalReward": "Total Reward",
+        "distributeEqually": "Distribute equally"
+      },
+      "winner": {
+        "buttons": {
+          "addWinner": "Add winner",
+          "removeWinner": "Substract last Winner"
+        },
+        "worker": {
+          "label": "Winner {{number}}",
+          "tooltip": "Lorem ipsum"
+        },
+        "reward": "Reward"
+      },
+      "noWinner": {
+        "title": "Are you sure?",
+        "description": "Bounty will be closed and marked as failed."
+      },
+      "amountButtons": {
+        "useHalf": "Use Half",
+        "useMax": "Use Max"
+      },
+      "slash": {
+        "title": "Slash workers",
+        "description": "You can optionally slash workers. Worker will be slash for whole stake.",
+        "worker": {
+          "label": "Rejected {{number}}",
+          "tooltip": "Lorem ipsum",
+          "addSlashed": "Add Slashed",
+          "removeSlashed": "Substract last slashed worker"
+        }
+      },
+      "authorizeTransaction": "Authorize Transaction",
+      "submitJudgement": "Submit Judgement"
     }
   },
   "tiles": {

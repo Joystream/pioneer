@@ -11,12 +11,13 @@ import {
   SubmitWorkButton,
   WithdrawStakeButton,
   WithdrawWorkEntryButton,
+  SubmitJudgementButton,
 } from '@/bounty/components/modalsButtons'
 import { WithdrawContributionButton } from '@/bounty/components/modalsButtons/WithdrawContributionButton'
 import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
-import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
+import { ButtonGhost } from '@/common/components/buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
@@ -53,7 +54,7 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
       default:
         return null
     }
-  }, [bounty])
+  }, [bounty, activeMember])
 
   const badges = useMemo(
     () => (
@@ -133,8 +134,7 @@ const JudgingStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeade
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {/* TODO: https://github.com/Joystream/pioneer/issues/1938 */}
-      {isOracle && <ButtonPrimary size="large">{t('buttons.submitJudgement')}</ButtonPrimary>}
+      {isOracle && <SubmitJudgementButton bounty={bounty} />}
     </>
   )
 })
