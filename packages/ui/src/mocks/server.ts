@@ -135,6 +135,7 @@ export const makeServer = (environment = 'development', network: NetworkType = '
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
+              proposalsConnection: getConnectionResolver('ProposalConnection'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposalVotedEvents: getWhereResolver('ProposalVotedEvent'),
               proposals: getWhereResolver('Proposal'),

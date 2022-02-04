@@ -85,30 +85,32 @@ describe('UI: Proposals overview', () => {
   const mockServer = setupMockServer({ noCleanupAfterEach: true })
   const api = stubApi()
 
+  beforeEach(() => {
+    seedMembers(mockServer.server, 2)
+  })
+
   describe('Displays proper number of', () => {
     beforeEach(() => {
-      stubProposalConstants(api)
-      seedMembers(mockServer.server, 2)
       testProposals.map((proposal) => seedProposal(proposal, mockServer.server))
       renderComponent()
     })
-    // All failing, probably something wrong with useProposalsCount hook
-    //
-    // it.only('New proposals', async () => {
-    //   expect(await screen.findByText('1')).toBeDefined()
-    // })
 
-    // it('Proposals approved', async () => {
-    // })
+    it('New proposals', async () => {
+      expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
+    })
 
-    // it('Proposals rejected', async () => {
-    // })
+    it('Proposals approved', async () => {
+      expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
+    })
+
+    it('Proposals rejected', async () => {
+      expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
+    })
   })
 
   describe('Proposal in Deciding stage', () => {
     beforeEach(() => {
       stubProposalConstants(api)
-      seedMembers(mockServer.server, 2)
       seedProposal(decidingProposalMock, mockServer.server)
       renderComponent()
     })
@@ -133,7 +135,6 @@ describe('UI: Proposals overview', () => {
   describe('Proposal in Dormant stage', () => {
     beforeEach(() => {
       stubProposalConstants(api)
-      seedMembers(mockServer.server, 2)
       seedProposal(dormantProposalMock, mockServer.server)
       renderComponent()
     })
