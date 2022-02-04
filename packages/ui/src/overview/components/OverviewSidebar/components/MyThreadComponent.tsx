@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { Counter } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { CountBadge } from '@/common/components/CountBadge'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons'
 import { TextBig, TextSmall } from '@/common/components/typography'
@@ -19,7 +19,7 @@ export const MyThreadComponent = ({ title, numberOfPosts }: OverviewSidebarThrea
         <BadgeStatus>NEW</BadgeStatus>
         <ForumIcon />
         <TextSmall light>ANSWERS</TextSmall>
-        <Counter>{numberOfPosts}</Counter>
+        <CountBadge count={numberOfPosts} />
       </StyledColumnBlock>
     </Tile>
   )

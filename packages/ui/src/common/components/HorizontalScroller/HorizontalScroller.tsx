@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import styled from 'styled-components'
 
 import { ButtonGhost } from '@/common/components/buttons'
+import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { TextExtraSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -57,7 +58,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
       <HeaderWrapper>
         <Title>
           {title}
-          {!!count && <Counter>{count}</Counter>}
+          {!!count && <CountBadge count={count} />}
         </Title>
         {!isTooSmallForScroll && (
           <ButtonWrapper>
@@ -108,18 +109,8 @@ const Title = styled(TextExtraSmall)`
   text-transform: uppercase;
   color: ${Colors.Black[500]};
   display: flex;
-`
 
-export const Counter = styled.div`
-  background-color: ${Colors.Blue[50]};
-  border-radius: 50%;
-  color: ${Colors.Blue[500]};
-  width: 16px;
-  height: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-  padding: 10px;
-  margin-left: 5px;
+  > *:last-child {
+    margin-left: 5px;
+  }
 `
