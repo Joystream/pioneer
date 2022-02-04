@@ -113,7 +113,7 @@ export const SubmitJudgementModal = () => {
       return api?.tx.bounty.submitOracleJudgment(
         { Member: createType('u64', Number(activeMember?.id || 0)) },
         createType('u32', Number(bounty.id || 0)),
-        new BTreeMap(registry, 'EntryId', 'OracleJudgment', new Map([...winnersApi]))
+        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map([...winnersApi]))
       )
     }
   }, [api, isConnected, bounty, state.context])
