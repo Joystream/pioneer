@@ -57,7 +57,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
       <HeaderWrapper>
         <Title>
           {title}
-          {count && <Counter>3</Counter>}
+          {!!count && <Counter>{count}</Counter>}
         </Title>
         {!isTooSmallForScroll && (
           <ButtonWrapper>

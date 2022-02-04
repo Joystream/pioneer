@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { JoystreamLogo } from '@/common/components/icons/JoystreamLogo'
+import { NotificationIcon } from '@/common/components/icons/NotificationIcon'
 import { Council, Forum, Storage, Membership, Content } from '@/common/components/icons/workingGroup'
 import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
 import { Shadows } from '@/common/constants'
@@ -29,6 +30,7 @@ export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
   return (
     <Tile>
       {isLead && <StyledBadge>LEAD</StyledBadge>}
+      <StyledNotificationIcon />
       {iconMapper(role)}
       <TextBig truncate bold>
         {role}
@@ -60,4 +62,9 @@ const Tile = styled.div`
 const StyledBadge = styled(BadgeStatus)`
   position: absolute;
   inset: 10px auto auto 10px;
+`
+
+const StyledNotificationIcon = styled(NotificationIcon)`
+  position: absolute;
+  inset: 10px 10px auto auto;
 `
