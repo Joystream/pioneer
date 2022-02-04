@@ -15,6 +15,7 @@ export type GetSidebarInfoQuery = {
     group: { __typename: 'WorkingGroup'; name: string }
     payouts: Array<{ __typename: 'RewardPaidEvent'; amount: any }>
   }>
+  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; id: string }>
   workingGroupApplications: Array<{
     __typename: 'WorkingGroupApplication'
     opening: {
@@ -62,6 +63,10 @@ export const GetSidebarInfoDocument = gql`
       payouts {
         amount
       }
+    }
+    councilMembers(where: { member: { id_eq: $memberId } }) {
+      accumulatedReward
+      id
     }
     workingGroupApplications(
       where: { applicant: { id_eq: $memberId }, status_json: { isTypeOf_eq: "ApplicationStatusPending" } }

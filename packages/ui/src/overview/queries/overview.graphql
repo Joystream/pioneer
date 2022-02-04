@@ -9,6 +9,11 @@ query GetSidebarInfo($memberId: ID!) {
     }
   }
 
+  councilMembers(where: { member: { id_eq: $memberId } }) {
+    accumulatedReward
+    id
+  }
+
   workingGroupApplications(
     where: { applicant: { id_eq: $memberId }, status_json: { isTypeOf_eq: "ApplicationStatusPending" } }
   ) {

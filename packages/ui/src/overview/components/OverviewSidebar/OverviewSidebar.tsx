@@ -9,17 +9,26 @@ import { MyRoleTile } from '@/overview/components/OverviewSidebar/components/MyR
 import { MyThreadComponent } from '@/overview/components/OverviewSidebar/components/MyThreadComponent'
 import { MyTitleDateTile } from '@/overview/components/OverviewSidebar/components/MyTitleDateTile'
 import { useOverviewSidebarInformation } from '@/overview/hooks/useOverviewSidebarInformation'
+import { useProposals } from '@/proposals/hooks/useProposals'
 
 export const OverviewSidebar = () => {
   const { active } = useMyMemberships()
   const { informations } = useOverviewSidebarInformation(active?.id || '0')
+  const { proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
 
   return (
     <Container gap={10}>
       <HorizontalScroller
-        items={informations?.roles.map((role) => (
-          <MyRoleTile {...role} />
-        ))}
+        items={
+          <>
+            {informations?.isCouncil && (
+              <MyRoleTile role="Council" isLead={false} pendingProposals={proposals.length} />
+            )}
+            {informations?.roles.map((role) => (
+              <MyRoleTile {...role} />
+            ))}
+          </>
+        }
         title="My roles"
         count={informations?.roles.length}
       />

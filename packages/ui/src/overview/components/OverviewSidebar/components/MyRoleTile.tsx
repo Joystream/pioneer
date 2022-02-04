@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { CountBadge } from '@/common/components/CountBadge'
 import { JoystreamLogo } from '@/common/components/icons/JoystreamLogo'
 import { NotificationIcon } from '@/common/components/icons/NotificationIcon'
 import { Council, Forum, Storage, Membership, Content } from '@/common/components/icons/workingGroup'
@@ -18,7 +19,7 @@ const iconMapper = (group: string) => {
     case 'Membership':
       return <Membership />
     case 'Council':
-      return <Council />
+      return <StyledCouncilIcon />
     case 'Content Directory':
       return <Content />
     default:
@@ -26,7 +27,12 @@ const iconMapper = (group: string) => {
   }
 }
 
-export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
+interface Props extends Omit<OverviewSidebarRole, 'reward'> {
+  pendingProposals?: number
+  reward?: number
+}
+
+export const MyRoleTile = ({ role, reward, isLead, pendingProposals }: Props) => {
   return (
     <Tile>
       {isLead && <StyledBadge>LEAD</StyledBadge>}
@@ -35,9 +41,15 @@ export const MyRoleTile = ({ role, reward, isLead }: OverviewSidebarRole) => {
       <TextBig truncate bold>
         {role}
       </TextBig>
-      <TextMedium>
-        Reward: <TokenValue value={reward} size="l" />
-      </TextMedium>
+      {!pendingProposals ? (
+        <TextMedium>
+          Reward: <TokenValue value={reward} size="l" />
+        </TextMedium>
+      ) : (
+        <TextMedium light>
+          Pending proposals <CountBadge count={pendingProposals} />
+        </TextMedium>
+      )}
     </Tile>
   )
 }
@@ -67,4 +79,9 @@ const StyledBadge = styled(BadgeStatus)`
 const StyledNotificationIcon = styled(NotificationIcon)`
   position: absolute;
   inset: 10px 10px auto auto;
+  cursor: pointer;
+`
+
+const StyledCouncilIcon = styled(Council)`
+  margin: 17px 0;
 `

@@ -29,4 +29,5 @@ export interface OverviewSidebarInformations {
   candidatures: number[]
   proposals: OverviewSidebarProposal[]
   threads: OverviewSidebarThread[]
+  isCouncil: boolean
 }

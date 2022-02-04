@@ -2,8 +2,19 @@ import React from 'react'
 
 import { Icon } from '../Icon'
 
-export const Council = () => (
-  <Icon size="70" viewBox="0 0 70 70" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+interface Props {
+  className?: string
+}
+
+export const Council = ({ className }: Props) => (
+  <Icon
+    className={className}
+    size="70"
+    viewBox="0 0 70 70"
+    preserveAspectRatio="xMidYMid meet"
+    fill="none"
+    color="currentColor"
+  >
     <rect x="1" y="1" width="68" height="68" rx="34" fill="#F9FAFC" stroke="#E8EDF6" />
     <path
       d="M39.6583 20.5876C39.6583 22.1479 38.883 23.528 37.6948 24.3676C38.9642 24.862 39.9051 25.6967 40.5675 26.6558C41.5932 28.141 41.9259 29.8766 41.9259 31.0131V31.6914L41.3161 31.9947C40.3921 32.4542 37.9723 33.2689 35 33.2689C32.0277 33.2689 29.6079 32.4542 28.684 31.9947L28.0741 31.6914V31.0131C28.0741 29.8766 28.4068 28.141 29.4325 26.6558C30.095 25.6966 31.0359 24.8619 32.3054 24.3676C31.1172 23.5279 30.342 22.1478 30.342 20.5876C30.342 18.0286 32.4275 15.9541 35.0001 15.9541C37.5728 15.9541 39.6583 18.0286 39.6583 20.5876Z"
