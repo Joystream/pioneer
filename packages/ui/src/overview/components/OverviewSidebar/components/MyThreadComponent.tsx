@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -10,15 +11,16 @@ import { Colors, Shadows } from '@/common/constants'
 import { OverviewSidebarThread } from '@/overview/types/Overview'
 
 export const MyThreadComponent = ({ title, numberOfPosts }: OverviewSidebarThread) => {
+  const { t } = useTranslation('overview')
   return (
     <Tile>
       <TextBig bold value truncate>
         {title}
       </TextBig>
       <StyledColumnBlock gap={5}>
-        <BadgeStatus>NEW</BadgeStatus>
+        <BadgeStatus>{t('sidebar.thread.new')}</BadgeStatus>
         <ForumIcon />
-        <TextSmall light>ANSWERS</TextSmall>
+        <TextSmall light>{t('sidebar.thread.answers')}</TextSmall>
         <CountBadge count={numberOfPosts} />
       </StyledColumnBlock>
     </Tile>

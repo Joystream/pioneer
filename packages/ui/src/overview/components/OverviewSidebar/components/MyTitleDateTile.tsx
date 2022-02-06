@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { formatDuration } from '@/common/components/statistics'
@@ -25,6 +26,7 @@ interface Props {
 export const MyTitleDateTile = ({ title, type, duration }: Props) => {
   const { stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const { t } = useTranslation('overview')
 
   const time = useMemo(() => {
     if (type === 'election') {
@@ -35,8 +37,8 @@ export const MyTitleDateTile = ({ title, type, duration }: Props) => {
       return format(Date.parse(duration) - Date.now())
     }
 
-    return [['Unknown', '']] as [string, string][]
-  }, [type, electionStage, remainingPeriod])
+    return [[t('common:unknown'), '']] as [string, string][]
+  }, [type, electionStage, remainingPeriod, t])
 
   return (
     <Tile>
@@ -44,7 +46,7 @@ export const MyTitleDateTile = ({ title, type, duration }: Props) => {
         {title}
       </TextBig>
       <TimeBox>
-        <TextInlineMedium>Period length</TextInlineMedium>
+        <TextInlineMedium>{t('sidebar.periodLength')}</TextInlineMedium>
         <DurationValue value={time} />
       </TimeBox>
     </Tile>

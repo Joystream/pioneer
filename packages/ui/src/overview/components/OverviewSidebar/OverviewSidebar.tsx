@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
@@ -14,8 +15,9 @@ import { useOverviewSidebarInformation } from '@/overview/hooks/useOverviewSideb
 import { useProposals } from '@/proposals/hooks/useProposals'
 
 export const OverviewSidebar = () => {
+  const { t } = useTranslation('overview')
   const { active } = useMyMemberships()
-  const { informations } = useOverviewSidebarInformation(active?.id || '1')
+  const { informations } = useOverviewSidebarInformation(active?.id || '3')
   const { proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
 
   return (
@@ -25,14 +27,14 @@ export const OverviewSidebar = () => {
           items={
             <>
               {informations?.isCouncil && (
-                <MyRoleTile role="Council" isLead={false} pendingProposals={proposals.length} />
+                <MyRoleTile role={t('sidebar.roles.council')} isLead={false} pendingProposals={proposals.length} />
               )}
               {informations?.roles.map((role) => (
                 <MyRoleTile {...role} />
               ))}
             </>
           }
-          title="My roles"
+          title={t('sidebar.sections.myRoles')}
           count={informations?.roles.length}
         />
       )}
@@ -45,7 +47,7 @@ export const OverviewSidebar = () => {
               duration={application.expectedEndingDate}
             />
           ))}
-          title="My applications"
+          title={t('sidebar.sections.myApplications')}
           count={informations?.applications.length}
         />
       ) : (
@@ -57,7 +59,7 @@ export const OverviewSidebar = () => {
           items={informations.candidatures.map((cycleId) => (
             <MyTitleDateTile title={`Candidate in cycle ${cycleId}`} type="election" />
           ))}
-          title="My candidacies"
+          title={t('sidebar.sections.myCandidacies')}
           count={informations?.candidatures.length}
         />
       ) : (
@@ -69,7 +71,7 @@ export const OverviewSidebar = () => {
           items={informations.proposals.map((proposalId) => (
             <ProposalTile proposalId={proposalId} />
           ))}
-          title="My proposals"
+          title={t('sidebar.sections.myProposals')}
         />
       ) : (
         <EmptyState type="proposals" />
@@ -80,7 +82,7 @@ export const OverviewSidebar = () => {
           items={informations.threads.map((thread) => (
             <MyThreadComponent {...thread} />
           ))}
-          title="My threads"
+          title={t('sidebar.sections.myThreads')}
           count={informations?.threads.length}
         />
       ) : (

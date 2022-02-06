@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -33,9 +34,10 @@ interface Props extends Omit<OverviewSidebarRole, 'reward'> {
 }
 
 export const MyRoleTile = ({ role, reward, isLead, pendingProposals }: Props) => {
+  const { t } = useTranslation('overview')
   return (
     <Tile>
-      {isLead && <StyledBadge>LEAD</StyledBadge>}
+      {isLead && <StyledBadge>{t('sidebar.roles.lead')}</StyledBadge>}
       <StyledNotificationIcon />
       {iconMapper(role)}
       <TextBig truncate bold>
@@ -43,11 +45,11 @@ export const MyRoleTile = ({ role, reward, isLead, pendingProposals }: Props) =>
       </TextBig>
       {!pendingProposals ? (
         <TextMedium>
-          Reward: <TokenValue value={reward} size="l" />
+          {t('sidebar.roles.reward')}: <TokenValue value={reward} size="l" />
         </TextMedium>
       ) : (
         <TextMedium light>
-          Pending proposals <CountBadge count={pendingProposals} />
+          {t('sidebar.roles.pendingProposals')} <CountBadge count={pendingProposals} />
         </TextMedium>
       )}
     </Tile>
@@ -79,5 +81,5 @@ const StyledBadge = styled(BadgeStatus)`
 const StyledNotificationIcon = styled(NotificationIcon)`
   position: absolute;
   inset: 10px 10px auto auto;
-  cursor: pointer;
+  cursor: not-allowed;
 `

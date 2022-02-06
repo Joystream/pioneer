@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { LinkButtonPrimary } from '@/common/components/buttons/LinkButtons'
+import { ArrowRightIcon } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { CouncilIcon, ForumIcon, ProposalsIcon, WorkingGroupsIcon } from '@/common/components/page/Sidebar/LinksIcons'
 import { TextBig, TextExtraSmall, TextSmall } from '@/common/components/typography'
@@ -13,43 +15,16 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 type EmptyStateType = 'application' | 'candidacies' | 'proposals' | 'forum'
 
-const emptyStateIcon = (type: EmptyStateType): [React.ReactElement, string, string, string, string] => {
+const emptyStateIcon = (type: EmptyStateType): [React.ReactElement, string] => {
   switch (type) {
     case 'application':
-      return [
-        <WorkingGroupsIcon />,
-        WorkingGroupsRoutes.openings,
-        'Go to Working Groups',
-        'Working Groups',
-        'Join a working group and become an active member lorem ipsum dolor \n' +
-          'adipiscing elit neque massa, dignissim a finibus a, egestas ',
-      ]
+      return [<WorkingGroupsIcon />, WorkingGroupsRoutes.openings]
     case 'candidacies':
-      return [
-        <CouncilIcon />,
-        ElectionRoutes.currentElection,
-        'Go to Council',
-        'Governance',
-        'Nominate yourself or vote for a candidates lorem ipsum dolor sit amet,\n' +
-          'adipiscing elit neque massa, dignissim a finibus a, egestas ',
-      ]
+      return [<CouncilIcon />, ElectionRoutes.currentElection]
     case 'proposals':
-      return [
-        <ProposalsIcon />,
-        ProposalsRoutes.home,
-        'Go to Proposals',
-        'Share your ideas',
-        'Sumbit or vote a proposals to have an impact on the future of \n' + 'the platform',
-      ]
+      return [<ProposalsIcon />, ProposalsRoutes.home]
     case 'forum':
-      return [
-        <ForumIcon />,
-        ForumRoutes.forum,
-        'Go to Forum',
-        'Be part of our community',
-        'A forum is a place where lorem ipsum dolor sit amet, consectetur \n' +
-          'adipiscing elit neque massa, dignissim a finibus a, egestas',
-      ]
+      return [<ForumIcon />, ForumRoutes.forum]
   }
 }
 
@@ -58,20 +33,21 @@ interface Props {
 }
 
 export const EmptyState = ({ type }: Props) => {
-  const [icon, url, buttonText, title, description] = useMemo(() => emptyStateIcon(type), [type])
+  const { t } = useTranslation('overview')
+  const [icon, url] = useMemo(() => emptyStateIcon(type), [type])
 
   return (
     <>
-      <TypeHeader>{type}</TypeHeader>
+      <TypeHeader>{t(`sidebar.emptyStates.${type}.type`)}</TypeHeader>
       <Wrapper gap={15}>
         <Title value>
-          {icon} {title}
+          {icon} {t(`sidebar.emptyStates.${type}.title`)}
         </Title>
         <TextSmall inter light>
-          {description}
+          {t(`sidebar.emptyStates.${type}.description`)}
         </TextSmall>
         <LinkButtonPrimary to={url} size="small">
-          {buttonText}
+          {t(`sidebar.emptyStates.${type}.buttonLabel`)} <ArrowRightIcon />
         </LinkButtonPrimary>
       </Wrapper>
     </>
