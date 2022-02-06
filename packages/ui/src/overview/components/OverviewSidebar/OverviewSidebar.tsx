@@ -30,7 +30,7 @@ export const OverviewSidebar = () => {
                 <MyRoleTile role={t('sidebar.roles.council')} isLead={false} pendingProposals={proposals.length} />
               )}
               {informations?.roles.map((role) => (
-                <MyRoleTile {...role} />
+                <MyRoleTile key={role.role} {...role} />
               ))}
             </>
           }
@@ -42,6 +42,7 @@ export const OverviewSidebar = () => {
         <HorizontalScroller
           items={informations.applications.map((application) => (
             <MyTitleDateTile
+              key={application.expectedEndingDate}
               title={`${application.group} Working Group`}
               type="application"
               duration={application.expectedEndingDate}
@@ -57,7 +58,7 @@ export const OverviewSidebar = () => {
       {informations?.candidatures.length ? (
         <HorizontalScroller
           items={informations.candidatures.map((cycleId) => (
-            <MyTitleDateTile title={`Candidate in cycle ${cycleId}`} type="election" />
+            <MyTitleDateTile key={cycleId} title={`${t('sidebar.candidateInCycle')} ${cycleId}`} type="election" />
           ))}
           title={t('sidebar.sections.myCandidacies')}
           count={informations?.candidatures.length}
@@ -69,7 +70,7 @@ export const OverviewSidebar = () => {
       {informations?.proposals.length ? (
         <HorizontalScroller
           items={informations.proposals.map((proposalId) => (
-            <ProposalTile proposalId={proposalId} />
+            <ProposalTile key={proposalId} proposalId={proposalId} />
           ))}
           title={t('sidebar.sections.myProposals')}
         />
