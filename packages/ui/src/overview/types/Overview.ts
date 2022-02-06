@@ -14,10 +14,15 @@ export interface OverviewSidebarApplication {
   expectedEndingDate: string
 }
 
+export interface OverviewSidebarCandidacy {
+  id: string
+  title: string
+}
+
 export interface OverviewSidebarInformations {
   roles: OverviewSidebarRole[]
   applications: OverviewSidebarApplication[]
-  candidatures: number[]
+  candidatures: OverviewSidebarCandidacy[]
   proposals: string[]
   threads: OverviewSidebarThread[]
   isCouncil: boolean

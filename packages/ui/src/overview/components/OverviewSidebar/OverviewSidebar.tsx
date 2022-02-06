@@ -57,8 +57,8 @@ export const OverviewSidebar = () => {
 
       {informations?.candidatures.length ? (
         <HorizontalScroller
-          items={informations.candidatures.map((cycleId) => (
-            <MyTitleDateTile key={cycleId} title={`${t('sidebar.candidateInCycle')} ${cycleId}`} type="election" />
+          items={informations.candidatures.map((candidacy) => (
+            <MyTitleDateTile key={candidacy.id} title={candidacy.title} type="election" />
           ))}
           title={t('sidebar.sections.myCandidacies')}
           count={informations?.candidatures.length}

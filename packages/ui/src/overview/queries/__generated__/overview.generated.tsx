@@ -24,11 +24,7 @@ export type GetSidebarInfoQuery = {
       metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null | undefined }
     }
   }>
-  candidates: Array<{
-    __typename: 'Candidate'
-    id: string
-    electionRound: { __typename: 'ElectionRound'; cycleId: number }
-  }>
+  candidacyNoteMetadata: Array<{ __typename: 'CandidacyNoteMetadata'; id: string; header?: string | null | undefined }>
   proposals: Array<{ __typename: 'Proposal'; id: string }>
   forumThreads: Array<{
     __typename: 'ForumThread'
@@ -64,11 +60,13 @@ export const GetSidebarInfoDocument = gql`
         }
       }
     }
-    candidates(where: { member: { id_eq: $memberId }, status_eq: ACTIVE }) {
-      id
-      electionRound {
-        cycleId
+    candidacyNoteMetadata(
+      where: {
+        candidacynoteseteventnoteMetadata_every: { candidate: { status_eq: ACTIVE, member: { id_eq: $memberId } } }
       }
+    ) {
+      id
+      header
     }
     proposals(where: { creator: { id_eq: $memberId } }) {
       id

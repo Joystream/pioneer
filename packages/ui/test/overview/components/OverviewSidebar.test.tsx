@@ -96,13 +96,19 @@ describe('UI: OverviewSidebar', () => {
   })
 
   it('Renders candidacies', () => {
-    const id = 1
-    useOverviewSidebarInformationMock.informations.candidatures = [id]
+    const id = '1'
+    const title = 'Election title'
+    useOverviewSidebarInformationMock.informations.candidatures = [
+      {
+        title,
+        id,
+      },
+    ]
     useOverviewSidebarInformationMock.informations.applications = []
 
     renderComponent()
 
-    expect(screen.queryByText(`sidebar.candidateInCycle ${id}`)).toBeInTheDocument()
+    expect(screen.queryByText(title)).toBeInTheDocument()
     expect(screen.queryByText('sidebar.periodLength')).toBeInTheDocument()
   })
 

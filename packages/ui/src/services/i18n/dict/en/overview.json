@@ -37,7 +37,6 @@
       "answers": "Answers"
     },
     "periodLength": "Period length",
-    "candidateInCycle": "Candidate in cycle",
     "emptyStates": {
       "application": {
         "buttonLabel": "Go to Working Groups",

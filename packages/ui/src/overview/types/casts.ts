@@ -1,6 +1,7 @@
 import { GetSidebarInfoQuery } from '@/overview/queries/__generated__/overview.generated'
 import {
   OverviewSidebarApplication,
+  OverviewSidebarCandidacy,
   OverviewSidebarInformations,
   OverviewSidebarRole,
   OverviewSidebarThread,
@@ -25,8 +26,15 @@ const asOverviewSidebarApplication = (
   expectedEndingDate: data.opening.metadata.expectedEnding,
 })
 
+const asOverviewSidebarCandidacy = (
+  data: GetSidebarInfoQuery['candidacyNoteMetadata'][number]
+): OverviewSidebarCandidacy => ({
+  title: data.header || 'Title',
+  id: data.id,
+})
+
 export const asOverviewSidebarInformation = (data: GetSidebarInfoQuery): OverviewSidebarInformations => ({
-  candidatures: data.candidates.map((candidate) => candidate.electionRound.cycleId),
+  candidatures: data.candidacyNoteMetadata.map(asOverviewSidebarCandidacy),
   applications: data.workingGroupApplications.map(asOverviewSidebarApplication),
   proposals: data.proposals.map((proposal) => proposal.id),
   roles: data.workers.map(asOverviewSidebarRole),
