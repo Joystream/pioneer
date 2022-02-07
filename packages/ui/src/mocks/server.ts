@@ -2,7 +2,13 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { MEMBERSHIP_FAUCET_ENDPOINT, NetworkType, QUERY_NODE_ENDPOINT } from '@/app/config'
+import {
+  MEMBERSHIP_FAUCET_ENDPOINT,
+  NODE_RPC_ENDPOINT,
+  QUERY_NODE_ENDPOINT,
+  QUERY_NODE_ENDPOINT_SUBSCRIPTION,
+} from '@/app/config'
+import { NetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
@@ -88,13 +94,20 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
     membershipModel.class.prototype.associations.bountycreator
 }
 
-export const makeServer = (environment = 'development', network: NetworkType = 'local') => {
+const mockedEndpoints = {
+  queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION.local,
+  queryNodeEndpoint: QUERY_NODE_ENDPOINT.local,
+  membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT.local,
+  nodeRpcEndpoint: NODE_RPC_ENDPOINT.local,
+} as NetworkEndpoints
+
+export const makeServer = (environment = 'development', endpoints = mockedEndpoints) => {
   return createServer({
     environment,
 
     routes() {
       this.post(
-        QUERY_NODE_ENDPOINT[network],
+        endpoints.queryNodeEndpoint,
         createGraphQLHandler(schema, this.schema, {
           context: undefined,
           root: undefined,
@@ -193,7 +206,7 @@ export const makeServer = (environment = 'development', network: NetworkType = '
           },
         })
       )
-      this.passthrough(MEMBERSHIP_FAUCET_ENDPOINT[network])
+      this.passthrough(endpoints.membershipFaucetEndpoint)
     },
 
     ...(environment !== 'development'
