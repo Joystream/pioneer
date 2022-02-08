@@ -2,14 +2,21 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { seedWorkingGroups, seedMembers, seedOpenings, seedWorkers, seedApplications, seedOpening, seedUpcomingOpening, seedOpeningStatuses, seedUpcomingOpenings, seedApplication } from '@/mocks/data'
-import { RawForumThreadMock, seedForumCategory, seedForumThread } from '@/mocks/data/seedForum'
-import { ForumThreadsOverview } from '@/overview/components/ForumOverview/ForumThreadsOverview'
+import {
+  seedWorkingGroups,
+  seedMembers,
+  seedOpenings,
+  seedWorkers,
+  seedApplications,
+  seedOpening,
+  seedUpcomingOpening,
+  seedOpeningStatuses,
+  seedApplication,
+} from '@/mocks/data'
+import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOverview/WorkingGroupsOverview'
 
-import { mockCategories } from '../../_mocks/forum'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOverview/WorkingGroupsOverview'
 import { APPLICATION_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
 
 describe('UI: Working groups overview', () => {
@@ -27,22 +34,23 @@ describe('UI: Working groups overview', () => {
       seedUpcomingOpening(UPCOMING_OPENING, server.server)
       renderComponent()
     })
-  
+
     it('Displays number of working groups', async () => {
-      expect(((await screen.findByText('workingGroups.workingGroups'))).previousSibling?.textContent).toBe('4')
+      expect((await screen.findByText('workingGroups.workingGroups')).previousSibling?.textContent).toBe('4')
     })
-  
+
     it('Displays number of workers', async () => {
       expect((await screen.findByText('workingGroups.workers')).previousSibling?.textContent).toBe('28')
     })
-  
+
     it('Displays total budget', async () => {
-      expect((await screen.findByText('workingGroups.totalBudget')).previousSibling?.firstChild?.textContent).toBe('14,097')
+      expect((await screen.findByText('workingGroups.totalBudget')).previousSibling?.firstChild?.textContent).toBe(
+        '14,097'
+      )
     })
   })
 
   describe('Displays openings tiles', () => {
-
     beforeEach(async () => {
       seedMembers(server.server)
       seedWorkingGroups(server.server)

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Loading } from '@/common/components/Loading'
 import { TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { OverviewInfoElement } from '@/overview/components/OverviewInfoElement'
@@ -11,7 +12,6 @@ import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
 
 import { WorkingGroupsTilesList } from './WorkingGroupsTilesList'
-import { Loading } from '@/common/components/Loading'
 
 export const WorkingGroupsOverview = () => {
   const { t } = useTranslation('overview')
@@ -28,9 +28,21 @@ export const WorkingGroupsOverview = () => {
   const infoElements = useMemo(
     () => (
       <>
-        {groupsLoading ? <Loading /> : <OverviewInfoElement value={groupsCount} label={t('workingGroups.workingGroups')} />}
-        {workersCountLoading ? <Loading /> : <OverviewInfoElement value={workersCount} label={t('workingGroups.workers')} />}
-        {groupsLoading ? <Loading /> : <OverviewInfoElement value={<TokenValue value={totalBudget} />} label={t('workingGroups.totalBudget')} />}
+        {groupsLoading ? (
+          <Loading />
+        ) : (
+          <OverviewInfoElement value={groupsCount} label={t('workingGroups.workingGroups')} />
+        )}
+        {workersCountLoading ? (
+          <Loading />
+        ) : (
+          <OverviewInfoElement value={workersCount} label={t('workingGroups.workers')} />
+        )}
+        {groupsLoading ? (
+          <Loading />
+        ) : (
+          <OverviewInfoElement value={<TokenValue value={totalBudget} />} label={t('workingGroups.totalBudget')} />
+        )}
       </>
     ),
     [t, groupsCount, workersCount, totalBudget]
