@@ -11,14 +11,26 @@ interface Props {
   title: string
   value: ReactNode
   percentage: number
-  isActive: boolean
+  isActive?: boolean
   isPreview?: boolean
-  onClick: () => void
+  onClick?: () => void
+  className?: string
+  haveHover?: boolean
 }
 
-export const DataListItem = ({ value, title, color, percentage, isActive, onClick, isPreview }: Props) => {
+export const DataListItem = ({
+  value,
+  title,
+  color,
+  percentage,
+  isActive,
+  onClick,
+  isPreview,
+  className,
+  haveHover,
+}: Props) => {
   return (
-    <Wrapper isActive={isActive || !!isPreview} onClick={onClick}>
+    <Wrapper isActive={isActive} isPreview={isPreview} haveHover={haveHover} onClick={onClick} className={className}>
       <TextMedium value bold={isActive}>
         <ColorDot color={color} />
         {title}
@@ -34,10 +46,16 @@ export const DataListItem = ({ value, title, color, percentage, isActive, onClic
   )
 }
 
+const HoverCss = css`
+  font-weight: 700;
+  cursor: pointer;
+`
+
 const ActiveCss = css`
   background-color: ${Colors.Black[50]};
   border: 1px solid ${Colors.Black[200]};
   border-right: none;
+  cursor: pointer;
 
   &::after {
     position: absolute;
@@ -49,9 +67,8 @@ const ActiveCss = css`
   }
 `
 
-const Wrapper = styled.div<{ isActive: boolean }>`
+const Wrapper = styled.div<{ isActive?: boolean; haveHover?: boolean; isPreview?: boolean }>`
   display: flex;
-  cursor: pointer;
   justify-content: space-between;
   align-items: center;
   padding: 5px 10px;
@@ -59,15 +76,25 @@ const Wrapper = styled.div<{ isActive: boolean }>`
   border-right: none;
   position: relative;
 
-  ${({ isActive }) => {
+  ${({ isActive, isPreview }) => {
     if (isActive) {
       return ActiveCss
     }
+
+    if (isPreview) {
+      return HoverCss
+    }
   }}
 
-  :hover {
-    ${ActiveCss}
-  }
+  ${({ haveHover }) => {
+    if (haveHover) {
+      return css`
+        :hover {
+          ${HoverCss}
+        }
+      `
+    }
+  }}
 
   > * {
     flex: 1;
