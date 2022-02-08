@@ -9,11 +9,11 @@ import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/ma
 import { GroupIdName } from '@/working-groups/types'
 
 const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
-  contentDirectoryWorkingGroup: 'Content',
+  contentWorkingGroup: 'Content',
   forumWorkingGroup: 'Forum',
   gatewayWorkingGroup: 'Gateway',
   membershipWorkingGroup: 'Membership',
-  operationsWorkingGroup: 'Operations',
+  distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
 }
 
