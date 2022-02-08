@@ -18,6 +18,16 @@
     "answers": "Answers",
     "latestThreads": "Latest Threads"
   },
+  "workingGroups": {
+    "title": "Working Groups",
+    "workingGroups": "Working Groups",
+    "workers": "Workers",
+    "totalBudget": "Total budget",
+    "openings": "Openings",
+    "timeLeft": "Time left",
+    "rewardPerBlock": "Rewards per {{value}} blocks",
+    "applicants": "Applicants"
+  },
   "welcome": "Hi, ",
   "guest": "Stranger"
 }
