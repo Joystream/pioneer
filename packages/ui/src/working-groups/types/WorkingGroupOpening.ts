@@ -8,6 +8,7 @@ import {
   UpcomingWorkingGroupOpeningFieldsFragment,
   WorkingGroupOpeningDetailedFieldsFragment,
   WorkingGroupOpeningFieldsFragment,
+  WorkingGroupOpeningMentionFieldsFragment,
 } from '../queries'
 
 import { asWorkingGroupName, GroupIdName } from './WorkingGroup'
@@ -146,3 +147,33 @@ export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment
     question: opening?.question ?? '',
   }
 }
+
+export interface WorkingGroupOpeningMention {
+  id: string
+  type: string
+  rewardPerBlock: number
+  applicants: number
+  shortDescription?: string | undefined | null
+  description?: string | undefined | null
+  expectedEnding?: string | undefined | null
+  hiring: {
+    current: number
+    limit: number
+  }
+}
+
+export const asWorkingGroupOpeningMention = (
+  fields: WorkingGroupOpeningMentionFieldsFragment
+): WorkingGroupOpeningMention => ({
+  id: fields.id,
+  type: fields.type as WorkingGroupOpeningType,
+  rewardPerBlock: fields.rewardPerBlock,
+  shortDescription: fields.metadata?.shortDescription,
+  description: fields.metadata?.description,
+  expectedEnding: fields.metadata?.expectedEnding,
+  applicants: fields.applications?.length ?? 0,
+  hiring: {
+    current: fields.openingfilledeventopening?.reduce((total, event) => total + event.workersHired.length, 0) ?? 0,
+    limit: fields.metadata?.hiringLimit ?? 0,
+  },
+})

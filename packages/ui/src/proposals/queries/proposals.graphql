@@ -225,6 +225,34 @@ fragment ProposalPostParents on ProposalDiscussionPost {
   discussionThreadId
 }
 
+fragment ProposalMentionFields on Proposal {
+  id
+  title
+  description
+  exactExecutionBlock
+  statusSetAtBlock
+  statusSetAtTime
+  createdAt
+  createdInEvent {
+    network
+  }
+  details {
+    __typename
+  }
+  status {
+    __typename
+  }
+}
+
+fragment ProposalDiscussionPostMentionFields on ProposalDiscussionPost {
+  id
+  text
+  createdAt
+  author {
+    ...MemberFields
+  }
+}
+
 query getProposals($where: ProposalWhereInput) {
   proposals(where: $where) {
     ...ProposalFields
@@ -234,6 +262,21 @@ query getProposals($where: ProposalWhereInput) {
 query getProposal($where: ProposalWhereUniqueInput!) {
   proposal: proposalByUniqueInput(where: $where) {
     ...ProposalWithDetailsFields
+  }
+}
+
+query SimpleSearchProposals($text: String!, $limit: Int) {
+  proposals(where: { title_contains: $text }, limit: $limit) {
+    id
+    title
+  }
+}
+
+query SimpleSearchProposalDiscussion($text: String!, $limit: Int) {
+  proposalDiscussionPosts(where: { text_contains: $text }, limit: $limit) {
+    id
+    text
+    discussionThreadId
   }
 }
 
@@ -259,5 +302,17 @@ query GetProposalPostParent($where: ProposalDiscussionPostWhereUniqueInput!) {
 query GetProposalVotes($where: ProposalVotedEventWhereInput, $orderBy: [ProposalVotedEventOrderByInput!]) {
   proposalVotedEvents(where: $where, orderBy: $orderBy) {
     ...VoteFields
+  }
+}
+
+query GetProposalMention($id: ID!) {
+  proposal: proposalByUniqueInput(where: { id: $id }) {
+    ...ProposalMentionFields
+  }
+}
+
+query GetProposalDiscussionPostMention($id: ID!) {
+  proposalPost: proposalDiscussionPostByUniqueInput(where: { id: $id }) {
+    ...ProposalDiscussionPostMentionFields
   }
 }

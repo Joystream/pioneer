@@ -8,7 +8,7 @@ interface Props {
   text: string
 }
 
-export const PostActionSuccessModal = ({ onClose, text }: Props) => (
+export const SuccessModal = ({ onClose, text }: Props) => (
   <Modal onClose={onClose} modalSize="m">
     <ModalHeader onClick={onClose} title="Success!" />
     <ModalBody>

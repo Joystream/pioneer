@@ -59,6 +59,9 @@ export const propsEquals =
   (a: T, b: T) =>
     keys.every((key) => a[key] === b[key])
 
+export const definedValues = <T extends Record<any, any>>(obj: T): T =>
+  Object.fromEntries(Object.entries(obj).flatMap(([key, value]) => (isDefined(value) ? [[key, value]] : []))) as T
+
 // Lists:
 
 export const dedupeObjects = <T>(list: T[], options?: EqualsOption): T[] =>

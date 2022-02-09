@@ -1,7 +1,7 @@
+import { action } from '@storybook/addon-actions'
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { info } from '@/common/logger'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { InputComponent } from '../forms'
@@ -19,7 +19,7 @@ export default {
 } as Meta
 
 const Template: Story<CKEditorProps> = (args) => (
-  <MockApolloProvider members>
+  <MockApolloProvider members proposals workers workingGroups forum>
     <TemplateBlock>
       <CKEditor {...args} />
       <InputComponent label="Inside InputComponent" inputSize="auto">
@@ -36,7 +36,7 @@ export const InlineEditor = Template.bind({})
 ClassicEditor.args = {
   minRows: 8,
   maxRows: 20,
-  onChange: (event, editor) => info(editor.getData()),
+  onChange: (_, editor) => action('onChange')(editor.getData()),
 }
 
 InlineEditor.args = {

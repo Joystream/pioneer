@@ -88,7 +88,7 @@ describe('UI: Vote for Proposal Modal', () => {
 
     await renderModal(true)
 
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Renders a modal', async () => {

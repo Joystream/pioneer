@@ -1,11 +1,11 @@
-import { css } from 'styled-components'
+import { css, keyframes } from 'styled-components'
 
-import { Transitions } from './styles'
+import { Colors, Transitions } from './styles'
 
 export const Animations = css`
   .DropDown {
     &-enter {
-      max-height: 0px;
+      max-height: 0;
       overflow: hidden;
     }
     &-enter-active {
@@ -17,7 +17,7 @@ export const Animations = css`
       overflow: hidden;
     }
     &-exit-active {
-      max-height: 0px;
+      max-height: 0;
       overflow: hidden;
     }
   }
@@ -103,4 +103,12 @@ export const Animations = css`
       }
     }
   }
+`
+
+export const Glow = keyframes`
+  0% { background-color: transparent; }
+  50% { background-color: ${Colors.LogoPurple}22;
+    box-shadow: 0px -5px 14px 14px ${Colors.LogoPurple}22;
+  }
+  100% { background-color: transparent; }
 `

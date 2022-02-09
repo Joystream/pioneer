@@ -6,6 +6,10 @@ import { BorderRad, Colors, Sizes } from '../../constants'
 import { Icon } from '../icons'
 import { ValueInJoys } from '../typography'
 
+interface TransactionAmountProps {
+  alignItemsToEnd?: boolean
+}
+
 export const Row = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,12 +41,12 @@ export const LockedAccount = styled(AccountRow)`
   border: 1px solid ${Colors.Black[200]};
 `
 
-export const TransactionAmount = styled.div`
+export const TransactionAmount = styled.div<TransactionAmountProps>`
   display: grid;
   grid-template-columns: 320px auto;
   grid-template-rows: 1fr;
   grid-column-gap: 12px;
-  align-items: center;
+  align-items: ${({ alignItemsToEnd }) => (alignItemsToEnd ? 'flex-end' : 'center')};
 `
 
 export const TransactionInfoContainer = styled.div`
@@ -133,4 +137,10 @@ export const AmountButton = styled(ButtonGhost)`
 export const ItemWrapper = styled.div`
   max-height: 450px;
   overflow: auto;
+`
+
+export const ModalDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${Colors.Black[200]};
 `

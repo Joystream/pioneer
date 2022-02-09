@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type PostAddedEventFieldsFragment = {
   __typename: 'PostAddedEvent'
   id: string
@@ -83,7 +83,7 @@ export type CategoryCreatedEventFieldsFragment = {
     __typename: 'ForumCategory'
     id: string
     title: string
-    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
   }
 }
 
@@ -95,7 +95,7 @@ export type CategoryDeletedEventFieldsFragment = {
     __typename: 'ForumCategory'
     id: string
     title: string
-    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
   }
 }
 
@@ -107,6 +107,8 @@ export type GetForumEventsQuery = {
     | { __typename: 'AnnouncingPeriodStartedEvent' }
     | { __typename: 'ApplicationWithdrawnEvent' }
     | { __typename: 'AppliedOnOpeningEvent' }
+    | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyMaxFundingReachedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
@@ -125,7 +127,7 @@ export type GetForumEventsQuery = {
           __typename: 'ForumCategory'
           id: string
           title: string
-          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
         }
       }
     | {
@@ -136,7 +138,7 @@ export type GetForumEventsQuery = {
           __typename: 'ForumCategory'
           id: string
           title: string
-          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
         }
       }
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
@@ -262,6 +264,8 @@ export type GetForumEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }

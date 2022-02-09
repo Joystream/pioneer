@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type AppliedOnOpeningEventFieldsFragment = {
   __typename: 'AppliedOnOpeningEvent'
   id: string
@@ -96,11 +96,8 @@ export type StatusTextChangedEventFieldsFragment = {
   __typename: 'StatusTextChangedEvent'
   id: string
   createdAt: any
-  workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-  upcomingworkinggroupopeningcreatedInEvent?:
-    | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-    | null
-    | undefined
+  workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null
+  upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }> | null
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
@@ -356,11 +353,8 @@ export type GetGroupEventsQuery = {
     __typename: 'StatusTextChangedEvent'
     id: string
     createdAt: any
-    workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-    upcomingworkinggroupopeningcreatedInEvent?:
-      | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-      | null
-      | undefined
+    workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null
+    upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }> | null
     group: { __typename: 'WorkingGroup'; name: string }
   }>
   budgetSetEvents: Array<{
@@ -509,6 +503,8 @@ export type GetOpeningsEventsQuery = {
         opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
         group: { __typename: 'WorkingGroup'; name: string }
       }
+    | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyMaxFundingReachedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
@@ -638,11 +634,11 @@ export type GetOpeningsEventsQuery = {
         __typename: 'StatusTextChangedEvent'
         id: string
         createdAt: any
-        workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-        upcomingworkinggroupopeningcreatedInEvent?:
-          | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-          | null
-          | undefined
+        workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null
+        upcomingworkinggroupopeningcreatedInEvent?: Array<{
+          __typename: 'UpcomingWorkingGroupOpening'
+          id: string
+        }> | null
         group: { __typename: 'WorkingGroup'; name: string }
       }
     | {
@@ -668,6 +664,8 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | {
         __typename: 'WorkerExitedEvent'
         id: string

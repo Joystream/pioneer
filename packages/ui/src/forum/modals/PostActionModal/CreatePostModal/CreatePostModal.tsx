@@ -7,13 +7,12 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
+import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-
-import { postActionMachine } from '../postActionMachine'
-import { PostActionSuccessModal } from '../PostActionSuccessModal'
 
 import { CreatePostModalCall } from '.'
 import { CreatePostSignModal } from './CreatePostSignModal'
@@ -29,7 +28,7 @@ export const CreatePostModal = () => {
     hideModal()
   }, [])
 
-  const [state, send] = useMachine(postActionMachine)
+  const [state, send] = useMachine(defaultTransactionModalMachine)
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -54,7 +53,7 @@ export const CreatePostModal = () => {
   }, [state.value, JSON.stringify(feeInfo), postDeposit, balance])
 
   if (state.matches('requirementsVerification')) {
-    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
+    return <WaitModal onClose={hideModal} requirementsCheck />
   }
 
   if (state.matches('transaction') && transaction && active && postDeposit) {
@@ -83,7 +82,7 @@ export const CreatePostModal = () => {
   }
 
   if (state.matches('success')) {
-    return <PostActionSuccessModal onClose={hideModalAfterSuccess} text="Your post has been submitted." />
+    return <SuccessModal onClose={hideModalAfterSuccess} text="Your post has been submitted." />
   }
 
   if (state.matches('requirementsFailed') && active && feeInfo) {

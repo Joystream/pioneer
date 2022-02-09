@@ -22,8 +22,16 @@ const format = splitDuration([
   [A_MINUTE / MILLISECONDS_PER_BLOCK, 'min'],
 ])
 
+export const formatDuration = (duration: number): [string | number, string][] => {
+  if (duration < A_MINUTE / MILLISECONDS_PER_BLOCK) {
+    return [['< 1', 'min']]
+  }
+  return format(duration)
+}
+
 interface BlockDurationStatisticsProps extends StatisticItemProps {
   value?: number | BN
+  hideBlockNumber?: boolean
 }
 
 export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => {
@@ -40,17 +48,19 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   return (
     <MultiStatisticItem {...props}>
       <ItemRow>
-        <DurationValue value={duration > A_MINUTE / MILLISECONDS_PER_BLOCK ? format(duration) : [['< 1', 'min']]} />
+        <DurationValue value={formatDuration(duration)} />
       </ItemRow>
 
-      <ItemRow>
-        <BlocksInfo gap={8}>
-          <BlockIcon />
-          <NumberOfBlocks lighter>
-            {formatTokenValue(duration)} block{plural(props.value)}
-          </NumberOfBlocks>
-        </BlocksInfo>
-      </ItemRow>
+      {!props.hideBlockNumber && (
+        <ItemRow>
+          <BlocksInfo gap={8}>
+            <BlockIcon />
+            <NumberOfBlocks lighter>
+              {formatTokenValue(duration)} block{plural(props.value)}
+            </NumberOfBlocks>
+          </BlocksInfo>
+        </ItemRow>
+      )}
     </MultiStatisticItem>
   )
 }

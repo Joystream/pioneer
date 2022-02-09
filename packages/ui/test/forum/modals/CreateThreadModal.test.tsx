@@ -79,19 +79,19 @@ describe('CreateThreadModal', () => {
     it('Insufficient funds for minimum fee', async () => {
       tx = stubTransaction(api, txPath, 10_000)
       renderModal()
-      expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
 
     it('Insufficient funds for thread deposit', async () => {
       stubDeposits({ thread: 10_000 })
       renderModal()
-      expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
 
     it('Insufficient funds for post deposit', async () => {
       stubDeposits({ post: 10_000 })
       renderModal()
-      expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 
@@ -111,7 +111,7 @@ describe('CreateThreadModal', () => {
   describe('Sign modal', () => {
     it('Displays after filling in details', async () => {
       await fillAndProceed()
-      expect(await screen.findByText(/authorize transaction/i)).toBeDefined()
+      expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
     })
 
     it("Displays the member's controller account", async () => {

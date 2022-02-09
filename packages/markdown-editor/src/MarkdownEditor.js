@@ -49,10 +49,39 @@ function MentionToLink(editor) {
       modelAttributeValue &&
       writer.createAttributeElement('a', {
         class: 'mention',
-        href: `#mention?member-id=${modelAttributeValue.memberId}`,
+        href: prepareLink(modelAttributeValue),
       }),
     converterPriority: 'high',
   })
+}
+
+function prepareLink({ type, itemId, addon }) {
+  switch (type) {
+    case 'member': {
+      return `#mention?member-id=${itemId}`
+    }
+    case 'proposal': {
+      return `#mention?proposal-id=${itemId}`
+    }
+    case 'proposal_post': {
+      return `#mention?proposal-post-id=${itemId}&thread-id=${addon}`
+    }
+    case 'forum_thread': {
+      return `#mention?forum-thread-id=${itemId}`
+    }
+    case 'forum_post': {
+      return `#mention?forum-post-id=${itemId}&thread-id=${addon}`
+    }
+    case 'opening': {
+      return `#mention?opening-id=${itemId}`
+    }
+    case 'application': {
+      return `#mention?application-id=${itemId}`
+    }
+    default: {
+      return ''
+    }
+  }
 }
 
 export default {
