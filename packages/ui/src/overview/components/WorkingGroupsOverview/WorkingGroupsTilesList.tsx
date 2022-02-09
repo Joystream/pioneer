@@ -47,7 +47,7 @@ export const WorkingGroupsTilesList = React.memo(({ openings }: ListProps) => {
   const tiles = openings.map((opening) => <WorkingGroupTile key={opening.id} opening={opening} />)
   return tiles.length ? (
     <ScrollerWrapper>
-      <Scroller title={t('workingGroups.openings')} counter={tiles.length} items={tiles} />
+      <Scroller title={t('workingGroups.openings')} count={tiles.length} items={tiles} />
     </ScrollerWrapper>
   ) : null
 })
