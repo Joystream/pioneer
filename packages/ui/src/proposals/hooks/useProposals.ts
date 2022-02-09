@@ -11,7 +11,7 @@ type UseProposalsStatus = 'active' | 'past'
 
 export interface UseProposalsProps {
   status: UseProposalsStatus
-  filters?: ProposalFiltersState
+  filters?: Partial<ProposalFiltersState>
 }
 
 interface UseProposals {

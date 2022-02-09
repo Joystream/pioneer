@@ -28,6 +28,7 @@ export interface BaseOpening {
   stake: BN
   budget: number
   rewardPerBlock: BN
+  expectedStart?: string
 }
 
 export interface UpcomingWorkingGroupOpening extends BaseOpening {
