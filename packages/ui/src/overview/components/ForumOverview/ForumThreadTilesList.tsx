@@ -47,7 +47,7 @@ export const ForumThreadTilesList = React.memo(({ threads }: ListProps) => {
     <Loading />
   ) : (
     <ScrollerWrapper>
-      <Scroller title={t('forum.latestThreads')} counter={tiles.length} items={tiles} />
+      <Scroller title={t('forum.latestThreads')} count={tiles.length} items={tiles} />
     </ScrollerWrapper>
   )
 })
