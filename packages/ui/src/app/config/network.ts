@@ -22,8 +22,8 @@ export const QUERY_NODE_ENDPOINT: Record<NetworkType, string> = {
 }
 
 export const MEMBERSHIP_FAUCET_ENDPOINT: Record<NetworkType, string> = {
-  local: 'http://localhost:4004/register',
-  'local-mocks': 'http://localhost:4004/register',
+  local: 'http://localhost:3002/register',
+  'local-mocks': 'http://localhost:3002/register',
   'olympia-testnet': MEMBERSHIP_FAUCET_URL,
 }
 
