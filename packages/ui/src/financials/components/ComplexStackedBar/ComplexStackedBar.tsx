@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Colors } from '@/common/constants'
 import { Data, StackedBar, StackedBarProps } from '@/financials/components/StackedBar/StackedBar'
 
-export interface ComplexStackedBarProps extends Omit<StackedBarProps, 'detailsComponent'> {
+export interface ComplexStackedBarProps extends StackedBarProps {
   details: Record<string, Data>
 }
 
