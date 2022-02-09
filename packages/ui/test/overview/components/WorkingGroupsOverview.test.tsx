@@ -1,7 +1,9 @@
+import { createType } from '@joystream/types'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { ApiContext } from '@/common/providers/api/context'
 import {
   seedWorkingGroups,
   seedMembers,
@@ -18,8 +20,6 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst } from '../../_mocks/transactions'
-import { createType } from '@joystream/types'
-import { ApiContext } from '@/common/providers/api/context'
 
 describe('UI: Working groups overview', () => {
   const server = setupMockServer()
