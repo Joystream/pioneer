@@ -7,32 +7,41 @@ import { ApiContext } from '@/common/providers/api/context'
 import {
   seedWorkingGroups,
   seedMembers,
-  seedOpenings,
-  seedWorkers,
-  seedApplications,
   seedOpening,
   seedOpeningStatuses,
   seedApplication,
+  seedWorker,
 } from '@/mocks/data'
 import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOverview/WorkingGroupsOverview'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { APPLICATION_DATA, OPENING_DATA } from '../../_mocks/server/seeds'
+import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst } from '../../_mocks/transactions'
 
 describe('UI: Working groups overview', () => {
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
   const api = stubApi()
 
   describe('General info', () => {
-    beforeEach(async () => {
+    beforeAll(() => {
       seedMembers(server.server)
       seedWorkingGroups(server.server)
       seedOpeningStatuses(server.server)
-      seedOpenings(server.server)
-      seedApplications(server.server)
-      seedWorkers(server.server)
+      seedOpening(OPENING_DATA, server.server)
+      seedApplication(APPLICATION_DATA, server.server)
+      seedWorker(WORKER_DATA, server.server)
+      seedWorker(
+        {
+          ...WORKER_DATA,
+          id: 'forumWorkingGroup-2',
+        },
+        server.server
+      )
+    })
+
+    beforeEach(async () => {
+      stubConst(api, 'forumWorkingGroup.maxWorkerNumberLimit', createType('u32', 10))
       renderComponent()
     })
 
@@ -41,7 +50,7 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays number of workers', async () => {
-      expect((await screen.findByText('workingGroups.workers')).previousSibling?.textContent).toBe('28')
+      expect((await screen.findByText('workingGroups.workers')).previousSibling?.textContent).toBe('2')
     })
 
     it('Displays total budget', async () => {
@@ -52,12 +61,15 @@ describe('UI: Working groups overview', () => {
   })
 
   describe('Displays openings tiles', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       seedMembers(server.server)
       seedWorkingGroups(server.server)
       seedOpeningStatuses(server.server)
       seedOpening(OPENING_DATA, server.server)
       seedApplication(APPLICATION_DATA, server.server)
+    })
+
+    beforeEach(() => {
       stubConst(api, 'forumWorkingGroup.maxWorkerNumberLimit', createType('u32', 10))
       renderComponent()
     })
