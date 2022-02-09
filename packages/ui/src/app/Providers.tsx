@@ -13,6 +13,7 @@ import { TransactionContextProvider } from '@/common/providers/transaction/provi
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
 import { GlobalStyle } from './providers/GlobalStyle'
+import { RouteActions } from './RouteActions'
 
 interface Props {
   children: ReactNode
@@ -28,12 +29,14 @@ export const Providers = ({ children }: Props) => (
               <QueryNodeProvider>
                 <MembershipContextProvider>
                   <HashRouter>
-                    <ModalContextProvider>
-                      <OnBoardingProvider>
-                        <GlobalStyle />
-                        {children}
-                      </OnBoardingProvider>
-                    </ModalContextProvider>
+                    <RouteActions>
+                      <ModalContextProvider>
+                        <OnBoardingProvider>
+                          <GlobalStyle />
+                          {children}
+                        </OnBoardingProvider>
+                      </ModalContextProvider>
+                    </RouteActions>
                   </HashRouter>
                 </MembershipContextProvider>
               </QueryNodeProvider>
