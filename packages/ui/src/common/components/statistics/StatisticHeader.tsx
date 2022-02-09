@@ -11,6 +11,7 @@ export interface StatisticHeaderProps {
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
   TooltipIcon?: React.ElementType
+  dotElement?: React.ReactNode
 }
 
 export const StatisticHeader = ({
@@ -19,10 +20,12 @@ export const StatisticHeader = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
+  dotElement,
   TooltipIcon = TooltipDefault,
 }: StatisticHeaderProps) => (
   <StatsHeader>
     <StatsInfo>
+      {dotElement}
       {title}
       {tooltipText && (
         <Tooltip

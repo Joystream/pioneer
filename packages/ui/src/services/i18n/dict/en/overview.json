@@ -62,8 +62,25 @@
         "description": "A forum is a place where lorem ipsum dolor sit amet, consectetur adipiscing elit neque massa, dignissim a finibus a, egestas",
         "type": "Forum"
       }
-    }
-
+  },
+  "forum": {
+    "title": "Forum",
+    "newThreads": "New threads this week",
+    "new": "New",
+    "answers": "Answers",
+    "latestThreads": "Latest Threads"
+  },
+  "proposals": {
+    "title": "Proposals",
+    "new": "New proposals",
+    "approved": "Proposals approved",
+    "rejected": "Proposals rejected",
+    "timeLeft": "Time left",
+    "approvedVotes": "Approved",
+    "rejectedVotes": "Rejected",
+    "waiting": "Waiting",
+    "vote": "vote",
+    "votes": "votes"
   },
   "welcome": "Hi, ",
   "guest": "Stranger"
