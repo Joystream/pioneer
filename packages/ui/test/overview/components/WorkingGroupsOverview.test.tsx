@@ -9,7 +9,6 @@ import {
   seedWorkers,
   seedApplications,
   seedOpening,
-  seedUpcomingOpening,
   seedOpeningStatuses,
   seedApplication,
 } from '@/mocks/data'
@@ -17,10 +16,10 @@ import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOvervi
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { APPLICATION_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
+import { APPLICATION_DATA, OPENING_DATA } from '../../_mocks/server/seeds'
 
 describe('UI: Working groups overview', () => {
-  const server = setupMockServer({ noCleanupAfterEach: true })
+  const server = setupMockServer()
 
   describe('General info', () => {
     beforeEach(async () => {
@@ -30,8 +29,6 @@ describe('UI: Working groups overview', () => {
       seedOpenings(server.server)
       seedApplications(server.server)
       seedWorkers(server.server)
-      seedOpening(OPENING_DATA, server.server)
-      seedUpcomingOpening(UPCOMING_OPENING, server.server)
       renderComponent()
     })
 
