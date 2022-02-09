@@ -16,6 +16,7 @@ interface TextProps {
   colorInherit?: boolean
   value?: boolean
   inter?: boolean
+  truncate?: boolean
 }
 
 const TextValueStyle = css`
@@ -58,6 +59,12 @@ const TextLightStyle = css`
   color: ${Colors.Black[600]};
 `
 
+const TextTruncateStyle = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 const TextMargins = css<TextProps>`
   margin-bottom: ${({ margin }) => {
     switch (margin) {
@@ -89,6 +96,7 @@ const TextAllStyles = css<TextProps>`
   ${({ value }) => value && TextValueStyle};
   ${({ inter }) => inter && TextInterStyle};
   ${({ normalWeight }) => normalWeight && TextNormalWeightStyle};
+  ${({ truncate }) => truncate && TextTruncateStyle};
   ${TextMargins};
 `
 
