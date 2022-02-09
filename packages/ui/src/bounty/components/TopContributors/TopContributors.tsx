@@ -35,7 +35,7 @@ export const TopContributors = () => {
       ))
     }
 
-    if (!contributions && isLoading) {
+    if (isLoading) {
       return <Loading />
     }
 
