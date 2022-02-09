@@ -6,14 +6,11 @@ import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { TextExtraSmall } from '@/common/components/typography'
 
-import { CountBadge } from '../CountBadge'
-
 interface Props {
   items: React.ReactNode[] | React.ReactNode
   title?: string
-  counter?: number
-  className?: string
   count?: number
+  className?: string
 }
 
 export const HorizontalScroller = React.memo(({ items, className, title, count }: Props) => {
@@ -58,7 +55,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
   return (
     <Wrapper>
       <HeaderWrapper>
-        <Title>
+        <Title lighter>
           {title}
           {!!count && <CountBadge count={count} />}
         </Title>
@@ -109,7 +106,6 @@ const ButtonWrapper = styled.div`
 
 const Title = styled(TextExtraSmall)`
   text-transform: uppercase;
-  color: ${Colors.Black[500]};
   display: flex;
 
   > *:last-child {

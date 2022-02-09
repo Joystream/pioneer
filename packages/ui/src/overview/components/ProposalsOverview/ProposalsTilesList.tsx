@@ -19,7 +19,7 @@ export const ProposalsTilesList = React.memo(({ proposals }: ListProps) => {
     <Loading />
   ) : (
     <ScrollerWrapper>
-      <Scroller title={t('proposals.title')} counter={tiles.length} items={tiles} />
+      <Scroller title={t('proposals.title')} count={tiles.length} items={tiles} />
     </ScrollerWrapper>
   )
 })
