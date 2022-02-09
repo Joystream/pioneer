@@ -17,9 +17,13 @@ import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOvervi
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA } from '../../_mocks/server/seeds'
+import { stubApi, stubConst } from '../../_mocks/transactions'
+import { createType } from '@joystream/types'
+import { ApiContext } from '@/common/providers/api/context'
 
 describe('UI: Working groups overview', () => {
   const server = setupMockServer()
+  const api = stubApi()
 
   describe('General info', () => {
     beforeEach(async () => {
@@ -54,6 +58,7 @@ describe('UI: Working groups overview', () => {
       seedOpeningStatuses(server.server)
       seedOpening(OPENING_DATA, server.server)
       seedApplication(APPLICATION_DATA, server.server)
+      stubConst(api, 'forumWorkingGroup.maxWorkerNumberLimit', createType('u32', 10))
       renderComponent()
     })
 
@@ -70,7 +75,7 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays applications number and max workers numbers', async () => {
-      expect(await screen.findByText('1/-')).toBeDefined()
+      expect(await screen.findByText('1/10')).toBeDefined()
     })
   })
 
@@ -78,7 +83,9 @@ describe('UI: Working groups overview', () => {
     return render(
       <MemoryRouter>
         <MockQueryNodeProviders>
-          <WorkingGroupsOverview />
+          <ApiContext.Provider value={api}>
+            <WorkingGroupsOverview />
+          </ApiContext.Provider>
         </MockQueryNodeProviders>
       </MemoryRouter>
     )
