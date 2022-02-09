@@ -14,7 +14,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { useNetwork } from '@/common/hooks/useNetwork'
-import { NetworkEndpoints, useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { error } from '@/common/logger'
 import { ServerContextProvider } from '@/common/providers/server/provider'
 import { makeServer } from '@/mocks/server'
@@ -25,13 +25,11 @@ interface Props {
 
 export const QueryNodeProvider = ({ children }: Props) => {
   const [network] = useNetwork()
-  const [endpoints] = useNetworkEndpoints(network)
+  const [endpoints] = useNetworkEndpoints()
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>()
 
   useEffect(() => {
-    if (endpoints.queryNodeEndpointSubscription && endpoints.queryNodeEndpoint) {
-      setApolloClient(getApolloClient(endpoints.queryNodeEndpoint, endpoints.queryNodeEndpointSubscription))
-    }
+    setApolloClient(getApolloClient(endpoints.queryNodeEndpoint, endpoints.queryNodeEndpointSubscription))
   }, [endpoints.queryNodeEndpointSubscription, endpoints.queryNodeEndpoint])
 
   if (!apolloClient) {
@@ -40,7 +38,7 @@ export const QueryNodeProvider = ({ children }: Props) => {
 
   if (network === 'local-mocks') {
     return (
-      <ServerContextProvider value={makeServer('development', endpoints as NetworkEndpoints)}>
+      <ServerContextProvider value={makeServer('development', endpoints)}>
         <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
       </ServerContextProvider>
     )

@@ -13,7 +13,6 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { useNetwork } from '@/common/hooks/useNetwork'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useQueryNodeTransactionStatus } from '@/common/hooks/useQueryNodeTransactionStatus'
@@ -31,8 +30,7 @@ export const OnBoardingModal = () => {
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
-  const [network] = useNetwork()
-  const [endpoints] = useNetworkEndpoints(network)
+  const [endpoints] = useNetworkEndpoints()
 
   const step = useMemo(() => {
     switch (status) {
@@ -64,7 +62,7 @@ export const OnBoardingModal = () => {
           about: form.about,
         }
 
-        const response = await fetch(endpoints.membershipFaucetEndpoint as string, {
+        const response = await fetch(endpoints.membershipFaucetEndpoint, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -85,7 +83,7 @@ export const OnBoardingModal = () => {
       }
     }
 
-    if (endpoints.membershipFaucetEndpoint && state.matches('transaction')) {
+    if (state.matches('transaction')) {
       submitNewMembership(state.context.form)
     }
   }, [endpoints.membershipFaucetEndpoint, JSON.stringify(state)])

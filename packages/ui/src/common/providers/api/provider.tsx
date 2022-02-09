@@ -3,9 +3,8 @@ import '@joystream/types/augment/augment-api'
 import '@joystream/types/augment/augment-types'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import rpc from '@polkadot/types/interfaces/jsonrpc'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 
-import { useNetwork } from '../../hooks/useNetwork'
 import { useNetworkEndpoints } from '../../hooks/useNetworkEndpoints'
 
 import { ApiContext } from './context'
@@ -44,25 +43,21 @@ export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 export const ApiContextProvider = ({ children }: Props) => {
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
-  const [network] = useNetwork()
-  const [endpoints] = useNetworkEndpoints(network)
-  const [api, setApi] = useState<ApiRx>()
+  const [endpoints] = useNetworkEndpoints()
+
+  const api = useMemo(() => {
+    const provider = new WsProvider(endpoints.nodeRpcEndpoint)
+    return new ApiRx({ provider, rpc, types, registry })
+  }, [])
 
   useEffect(() => {
-    if (!endpoints.nodeRpcEndpoint) return
-
-    const provider = new WsProvider(endpoints.nodeRpcEndpoint)
-    const api = new ApiRx({ provider, rpc, types, registry })
-
-    setApi(api)
-
     api.isReady.subscribe(() => {
       setConnectionState('connected')
 
       api.on('connected', () => setConnectionState('connected'))
       api.on('disconnected', () => setConnectionState('disconnected'))
     })
-  }, [endpoints.nodeRpcEndpoint])
+  }, [api])
 
   if (connectionState === 'connecting') {
     return (
@@ -78,7 +73,7 @@ export const ApiContextProvider = ({ children }: Props) => {
     )
   }
 
-  if (api && connectionState === 'connected') {
+  if (connectionState === 'connected') {
     return (
       <ApiContext.Provider
         value={{
@@ -92,7 +87,7 @@ export const ApiContextProvider = ({ children }: Props) => {
     )
   }
 
-  if (api && connectionState === 'disconnected') {
+  if (connectionState === 'disconnected') {
     return (
       <ApiContext.Provider
         value={{

@@ -7,6 +7,7 @@ import { QueryNodeProvider } from '@/app/providers/QueryNodeProvider'
 import { ApiContextProvider } from '@/common/providers/api/provider'
 import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { TransactionContextProvider } from '@/common/providers/transaction/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
@@ -19,25 +20,27 @@ interface Props {
 
 export const Providers = ({ children }: Props) => (
   <KeyringContextProvider>
-    <ApiContextProvider>
-      <AccountsContextProvider>
-        <TransactionContextProvider>
-          <BalancesContextProvider>
-            <QueryNodeProvider>
-              <MembershipContextProvider>
-                <HashRouter>
-                  <ModalContextProvider>
-                    <OnBoardingProvider>
-                      <GlobalStyle />
-                      {children}
-                    </OnBoardingProvider>
-                  </ModalContextProvider>
-                </HashRouter>
-              </MembershipContextProvider>
-            </QueryNodeProvider>
-          </BalancesContextProvider>
-        </TransactionContextProvider>
-      </AccountsContextProvider>
-    </ApiContextProvider>
+    <NetworkEndpointsProvider>
+      <ApiContextProvider>
+        <AccountsContextProvider>
+          <TransactionContextProvider>
+            <BalancesContextProvider>
+              <QueryNodeProvider>
+                <MembershipContextProvider>
+                  <HashRouter>
+                    <ModalContextProvider>
+                      <OnBoardingProvider>
+                        <GlobalStyle />
+                        {children}
+                      </OnBoardingProvider>
+                    </ModalContextProvider>
+                  </HashRouter>
+                </MembershipContextProvider>
+              </QueryNodeProvider>
+            </BalancesContextProvider>
+          </TransactionContextProvider>
+        </AccountsContextProvider>
+      </ApiContextProvider>
+    </NetworkEndpointsProvider>
   </KeyringContextProvider>
 )

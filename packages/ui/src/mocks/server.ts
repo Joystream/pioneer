@@ -2,13 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import {
-  MEMBERSHIP_FAUCET_ENDPOINT,
-  NODE_RPC_ENDPOINT,
-  QUERY_NODE_ENDPOINT,
-  QUERY_NODE_ENDPOINT_SUBSCRIPTION,
-} from '@/app/config'
-import { NetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
+import { localEndpoints } from '@/common/providers/network-endpoints/context'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
@@ -94,14 +88,7 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
     membershipModel.class.prototype.associations.bountycreator
 }
 
-const mockedEndpoints = {
-  queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION.local,
-  queryNodeEndpoint: QUERY_NODE_ENDPOINT.local,
-  membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT.local,
-  nodeRpcEndpoint: NODE_RPC_ENDPOINT.local,
-} as NetworkEndpoints
-
-export const makeServer = (environment = 'development', endpoints = mockedEndpoints) => {
+export const makeServer = (environment = 'development', endpoints = localEndpoints) => {
   return createServer({
     environment,
 
