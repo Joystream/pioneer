@@ -116,7 +116,7 @@ describe('UI: Proposals overview', () => {
     })
 
     it('Displays title', async () => {
-      expect(await screen.findByText('Deciding Test Proposal'))
+      expect(await screen.findByText(decidingProposalMock.title)).toBeDefined()
     })
 
     it('Displays status', async () => {
@@ -140,7 +140,7 @@ describe('UI: Proposals overview', () => {
     })
 
     it('Displays title', async () => {
-      expect(await screen.findByText('Dormant Test Proposal')).toBeDefined()
+      expect(await screen.findByText(dormantProposalMock.title)).toBeDefined()
     })
 
     it('Displays status', async () => {
