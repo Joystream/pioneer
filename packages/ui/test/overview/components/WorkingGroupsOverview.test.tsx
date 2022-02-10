@@ -49,7 +49,10 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays number of working groups', async () => {
-      expect((await screen.findByText('workingGroups.workingGroups')).previousSibling?.textContent).toBe('4')
+      const mocksGroupsCount = mockWorkingGroups.length
+      expect((await screen.findByText('workingGroups.workingGroups')).previousSibling?.textContent).toBe(
+        mocksGroupsCount.toString()
+      )
     })
 
     it('Displays number of workers', async () => {
