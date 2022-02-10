@@ -34,8 +34,11 @@
     "revealingLink": "Reveal your vote",
     "upcomingOpenings": "Upcoming Openings",
     "opening": "Opening",
-    "upcomingOpeningsMessage": "Upcoming openings (start date in the future)",
+    "upcomingOpeningsMessage": "Upcoming openings",
     "openingMessage": "The opening for {{openingName}} by {{workerGroupName}} is going to be active soon, ",
-    "openingLink": " apply"
+    "openingLink": " apply",
+    "startInFuture": "Start in the future",
+    "deadlinesTitle": "Deadlines",
+    "emptyState": "You don't have any deadlines"
   }
 }

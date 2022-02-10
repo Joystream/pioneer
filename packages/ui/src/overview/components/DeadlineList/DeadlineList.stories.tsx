@@ -1,7 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
+import { ScrollBlock, TemplateBlock } from '@/common/components/storybookParts/previewStyles'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { DeadlineList, DeadlineListProps } from '@/overview/components/DeadlineList/DeadlineList'
 
 export default {
@@ -11,9 +12,13 @@ export default {
 
 const Template: Story<DeadlineListProps> = (args) => {
   return (
-    <TemplateBlock>
-      <DeadlineList {...args} />
-    </TemplateBlock>
+    <MockApolloProvider members council proposals workers workingGroups>
+      <ScrollBlock>
+        <TemplateBlock>
+          <DeadlineList {...args} />
+        </TemplateBlock>
+      </ScrollBlock>
+    </MockApolloProvider>
   )
 }
 export const Default = Template.bind({})

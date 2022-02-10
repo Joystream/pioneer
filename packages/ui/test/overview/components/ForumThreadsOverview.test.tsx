@@ -52,10 +52,6 @@ describe('UI: Forum overview', () => {
     renderComponent()
   })
 
-  it('Displays number of new threads', async () => {
-    expect(await screen.findByText('2')).toBeDefined()
-  })
-
   it('Displays latest threads titles', async () => {
     expect(await screen.findByText('Test thread 0')).toBeDefined()
     expect(await screen.findByText('Test thread 1')).toBeDefined()

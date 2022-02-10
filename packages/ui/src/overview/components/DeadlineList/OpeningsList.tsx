@@ -28,7 +28,6 @@ export const OpeningsList = ({ title, type, groupName }: OpeningsListProps) => {
   const closeDeadline = () => {
     setHideElement(true)
   }
-
   return !hideElement ? (
     <ElementWrapper>
       <ListItem>
@@ -37,7 +36,7 @@ export const OpeningsList = ({ title, type, groupName }: OpeningsListProps) => {
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
-            <Subscription>{t('deadline.remainingTime')}</Subscription>
+            <Subscription>{t('deadline.startInFuture')}</Subscription>
             <StyledBadge>{type === 'openings' ? t('deadline.opening') : t('deadline.upcomingOpenings')}</StyledBadge>
           </TimeWrapper>
           {type === 'openings' ? (
