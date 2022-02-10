@@ -37,8 +37,8 @@ export const EmptyState = ({ type }: Props) => {
   const [icon, url] = useMemo(() => emptyStateIcon(type), [type])
 
   return (
-    <>
-      <TypeHeader>{t(`sidebar.emptyStates.${type}.type`)}</TypeHeader>
+    <div>
+      <TypeHeader bold lighter value>{t(`sidebar.emptyStates.${type}.type`)}</TypeHeader>
       <Wrapper gap={15}>
         <Title value>
           {icon} {t(`sidebar.emptyStates.${type}.title`)}
@@ -50,7 +50,7 @@ export const EmptyState = ({ type }: Props) => {
           {t(`sidebar.emptyStates.${type}.buttonLabel`)} <ArrowRightIcon />
         </LinkButtonPrimary>
       </Wrapper>
-    </>
+    </div>
   )
 }
 
@@ -71,6 +71,6 @@ const Title = styled(TextBig)`
   }
 `
 const TypeHeader = styled(TextExtraSmall)`
+  margin-bottom: 16px;
   text-transform: uppercase;
-  color: ${Colors.Black[500]};
 `

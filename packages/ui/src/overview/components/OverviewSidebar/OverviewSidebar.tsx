@@ -21,7 +21,7 @@ export const OverviewSidebar = () => {
   const { proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
 
   return (
-    <Container gap={10}>
+    <Container gap={22}>
       {(informations?.roles.length || informations?.isCouncil) && (
         <HorizontalScroller
           items={
@@ -94,7 +94,9 @@ export const OverviewSidebar = () => {
 }
 
 const Container = styled(RowGapBlock)`
-  padding: 30px 0 30px 15px;
+  align-items: start;
+  height: 100%;
+  padding: 32px 0 30px 15px;
   background-color: ${Colors.Black[50]};
   border: 1px solid ${Colors.Black[200]};
   overflow: auto;
