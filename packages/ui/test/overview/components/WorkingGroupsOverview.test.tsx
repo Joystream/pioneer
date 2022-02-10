@@ -11,6 +11,7 @@ import {
   seedOpeningStatuses,
   seedApplication,
   seedWorker,
+  mockWorkingGroups,
 } from '@/mocks/data'
 import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOverview/WorkingGroupsOverview'
 
@@ -18,6 +19,8 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst } from '../../_mocks/transactions'
+
+const formatAmount = (text?: string | null) => (text ? text?.replace(/,/g, '') : 'No value')
 
 describe('UI: Working groups overview', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -54,9 +57,10 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays total budget', async () => {
-      expect((await screen.findByText('workingGroups.totalBudget')).previousSibling?.firstChild?.textContent).toBe(
-        '14,097'
-      )
+      const mocksTotalBudget = mockWorkingGroups.reduce((prev, current) => prev + current.budget, 0)
+      const totalBudget = (await screen.findByText('workingGroups.totalBudget')).previousSibling?.firstChild
+        ?.textContent
+      expect(formatAmount(totalBudget)).toBe(mocksTotalBudget.toString())
     })
   })
 
@@ -83,7 +87,9 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays reward', async () => {
-      expect((await screen.findByText('workingGroups.rewardPerBlock')).previousSibling?.textContent).toBe('2,536')
+      const mockReward = mockWorkingGroups?.find((group) => group.id === OPENING_DATA.groupId)?.budget
+      const reward = (await screen.findByText('workingGroups.rewardPerBlock')).previousSibling?.textContent
+      expect(formatAmount(reward)).toBe(mockReward?.toString())
     })
 
     it('Displays applications number and max workers numbers', async () => {
