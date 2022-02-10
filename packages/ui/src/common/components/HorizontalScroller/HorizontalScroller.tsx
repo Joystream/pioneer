@@ -80,6 +80,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
 const Wrapper = styled.div`
   width: 100%;
   overflow: hidden;
+  padding: 10px 8px;
 `
 
 const HeaderWrapper = styled.div`

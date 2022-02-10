@@ -13,6 +13,13 @@ const format = splitDuration([
   [A_MINUTE, 'min'],
 ])
 
+export const formatDurationDate = (duration: number): [string | number, string][] => {
+  if (duration < A_MINUTE) {
+    return [['< 1', 'min']]
+  }
+  return format(duration)
+}
+
 interface DurationStatisticsProps extends StatisticItemProps {
   value: string
   from?: string
@@ -22,7 +29,7 @@ export const DurationStatistics = (props: DurationStatisticsProps) => {
   const duration = Date.parse(props.value) - (props.from ? Date.parse(props.from) : Date.now())
   return (
     <StatisticItem {...props}>
-      <DurationValue value={duration > A_MINUTE ? format(duration) : [['< 1', 'min']]} />
+      <DurationValue value={formatDurationDate(duration)} />
     </StatisticItem>
   )
 }
