@@ -10,7 +10,7 @@ import { EmptyState } from '@/overview/components/OverviewSidebar/components/Emp
 import { MyRoleTile } from '@/overview/components/OverviewSidebar/components/MyRoleTile'
 import { MyThreadComponent } from '@/overview/components/OverviewSidebar/components/MyThreadComponent'
 import { MyTitleDateTile } from '@/overview/components/OverviewSidebar/components/MyTitleDateTile'
-import { ProposalTile } from '@/overview/components/ProposalOverview/ProposalTile'
+import { ProposalTile } from '@/overview/components/ProposalsOverview/ProposalTile'
 import { useOverviewSidebarInformation } from '@/overview/hooks/useOverviewSidebarInformation'
 import { useProposals } from '@/proposals/hooks/useProposals'
 

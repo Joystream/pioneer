@@ -7,6 +7,13 @@ export const PageContent = styled.div`
   padding: 40px 24px 8px 0;
 `
 
+export const PageContentFullHeight = styled.div`
+  position: relative;
+  height: 100%;
+  margin-left: 24px;
+  padding-right: 8px;
+`
+
 export const ContentWithSidePanel = styled.div`
   display: grid;
   position: relative;
