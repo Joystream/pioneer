@@ -201,7 +201,7 @@ describe('UI: SubmitJudgementModal', () => {
     })
 
     it('Transaction successful', async () => {
-      stubTransactionSuccess(transaction, 'bounties', 'OracleJudgmentSubmitted')
+      stubTransactionSuccess(transaction, 'bounty', 'OracleJudgmentSubmitted')
 
       renderModal()
       proceedToAuthorizationModal()
