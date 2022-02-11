@@ -1,13 +1,16 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { FundingPeriodDetailsContext, GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, Colors } from '@/common/constants'
+import { useSchema } from '@/common/hooks/useSchema'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { Address } from '@/common/types'
 
@@ -22,6 +25,15 @@ export interface FundingDetailsStepProps extends Omit<FundingPeriodDetailsContex
   minCherryLimit: number
 }
 
+const baseSchema = Yup.object().shape({
+  cherry: Yup.number(),
+  fundingMaximalRange: Yup.number(),
+  fundingMinimalRange: Yup.number().lessThan(
+    Yup.ref('fundingMaximalRange'),
+    'Minimal range cannot be greater than maximal'
+  ),
+})
+// https://www.pl
 export const FundingDetailsStep = ({
   fundingMaximalRange,
   fundingMinimalRange,
@@ -43,12 +55,23 @@ export const FundingDetailsStep = ({
     setFundingPeriodType('perpetual')
     setFundingMinimalRange(BN_ZERO)
   }
-  const cherryValidation =
-    cherry?.toNumber() > maxCherryLimit
-      ? 'Cherry is higher than available amount'
-      : cherry?.toNumber() < minCherryLimit
-      ? 'Cherry is to low'
-      : ''
+
+  const schema = useMemo(() => {
+    baseSchema.fields.cherry = baseSchema.fields.cherry
+      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} JOY')
+      .max(maxCherryLimit, 'Cherry of ${max} JOY exceeds your balance')
+
+    return baseSchema
+  }, [maxCherryLimit, minCherryLimit])
+
+  const { errors } = useSchema(
+    {
+      cherry: cherry?.toNumber(),
+      fundingMinimalRange: fundingMinimalRange?.toNumber(),
+      fundingMaximalRange: fundingMaximalRange?.toNumber(),
+    },
+    schema
+  )
 
   return (
     <RowGapBlock gap={24}>
@@ -63,7 +86,10 @@ export const FundingDetailsStep = ({
           units="JOY"
           required
           tooltipText="Funding period tooltip"
-          message={cherryValidation}
+          message={
+            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} JOY`
+          }
+          validation={hasError('cherry', errors) ? 'invalid' : undefined}
         >
           <InputNumber
             id="field-cherry"
@@ -127,7 +153,16 @@ export const FundingDetailsStep = ({
         </Subtitle>
       </RowGapBlock>
       <ColumnGapBlock gap={20}>
-        <InputComponent id="field-minRange" tight units="JOY" required disabled={fundingPeriodType === 'perpetual'}>
+        <InputComponent
+          id="field-minRange"
+          tight
+          units="JOY"
+          required
+          disabled={fundingPeriodType === 'perpetual'}
+          message={hasError('fundingMinimalRange', errors) ? getErrorMessage('fundingMinimalRange', errors) : ' '}
+          validation={hasError('fundingMinimalRange', errors) ? 'invalid' : undefined}
+          label="Minimal range"
+        >
           <InputNumber
             isTokenValue
             id="field-minRange"
@@ -137,7 +172,7 @@ export const FundingDetailsStep = ({
             onChange={(_, value) => setFundingMinimalRange(new BN(value))}
           />
         </InputComponent>
-        <InputComponent id="field-maxRange" tight units="JOY" required>
+        <InputComponent id="field-maxRange" tight units="JOY" required label="Maximal range">
           <InputNumber
             isTokenValue
             id="field-maxRange"

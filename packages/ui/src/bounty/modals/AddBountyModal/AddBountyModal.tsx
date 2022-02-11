@@ -16,8 +16,9 @@ import {
   isNextStepValid,
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -184,6 +185,14 @@ export const AddBountyModal = () => {
         </AddBountyModalWrapper>
       </StepperModalBody>
       <ModalFooter>
+        <ButtonsGroup align="left">
+          {!state.matches(AddBountyStates.generalParameters) && (
+            <ButtonGhost onClick={() => send('BACK')} size="medium">
+              <Arrow direction="left" />
+              Previous step
+            </ButtonGhost>
+          )}
+        </ButtonsGroup>
         <ButtonsGroup align="right">
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step'}

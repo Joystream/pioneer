@@ -18,31 +18,33 @@ export interface TileSectionProps {
 export const TileSection = React.memo(({ fundedDetails, secondRow, firstRow, className }: TileSectionProps) => {
   return (
     <>
-      <StyledStatistics className={className}>
+      <StyledStatistics isWithSecondRow={!!secondRow} className={className}>
         {firstRow.map(({ content, ...statisticItemProps }, index) => (
           <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
             {content}
           </StatisticItem>
         ))}
       </StyledStatistics>
-      <Statistics className={className}>
-        {fundedDetails && (
-          <FundedRange
-            maxRangeValue={fundedDetails.maxRangeValue}
-            minRangeValue={fundedDetails.minRangeValue}
-            rangeValue={fundedDetails.rangeValue}
-          />
-        )}
-        {secondRow?.map(({ content, ...statisticItemProps }, index) => (
-          <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
-            {content}
-          </StatisticItem>
-        )) ?? null}
-      </Statistics>
+      {(fundedDetails || secondRow) && (
+        <Statistics className={className}>
+          {fundedDetails && (
+            <FundedRange
+              maxRangeValue={fundedDetails.maxRangeValue}
+              minRangeValue={fundedDetails.minRangeValue}
+              rangeValue={fundedDetails.rangeValue}
+            />
+          )}
+          {secondRow?.map(({ content, ...statisticItemProps }, index) => (
+            <StatisticItem key={`${statisticItemProps.title}${index}`} {...statisticItemProps}>
+              {content}
+            </StatisticItem>
+          ))}
+        </Statistics>
+      )}
     </>
   )
 })
 
-const StyledStatistics = styled(Statistics)`
-  margin-bottom: 18px;
+const StyledStatistics = styled(Statistics)<{ isWithSecondRow: boolean }>`
+  margin-bottom: ${({ isWithSecondRow }) => isWithSecondRow && '18px'};
 `
