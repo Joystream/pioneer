@@ -158,9 +158,9 @@ export const AddBountyModal = () => {
             )}
             {state.matches(AddBountyStates.workingPeriodDetails) && (
               <WorkingDetailsStep
+                minEntrantStake={bountyApi?.minWorkEntrantStake}
                 workingPeriodType={state.context.workingPeriodType}
                 workingPeriodLength={state.context.workingPeriodLength}
-                workingPeriodStakeAllowance={state.context.workingPeriodStakeAllowance}
                 workingPeriodStake={state.context.workingPeriodStake}
                 workingPeriodWhitelist={state.context.workingPeriodWhitelist}
                 setWorkingPeriodWhitelist={(members: Member[]) =>
@@ -170,9 +170,6 @@ export const AddBountyModal = () => {
                   send('SET_WORKING_PERIOD_LENGTH', { workingPeriodLength })
                 }
                 setWorkingPeriodStake={(workingPeriodStake) => send('SET_WORKING_PERIOD_STAKE', { workingPeriodStake })}
-                setWorkingPeriodStakeAllowance={(workingPeriodStakeAllowance) =>
-                  send('SET_ALLOW_WORKING_PERIOD_STAKE', { workingPeriodStakeAllowance })
-                }
                 setWorkingPeriodType={(workingPeriodType) => send('SET_WORKING_PERIOD_TYPE', { workingPeriodType })}
                 whitelistLimit={bountyApi?.closedContractSizeLimit}
               />

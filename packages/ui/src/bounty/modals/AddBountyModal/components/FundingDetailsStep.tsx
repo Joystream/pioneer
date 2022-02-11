@@ -33,7 +33,7 @@ const baseSchema = Yup.object().shape({
     'Minimal range cannot be greater than maximal'
   ),
 })
-// https://www.pl
+
 export const FundingDetailsStep = ({
   fundingMaximalRange,
   fundingMinimalRange,

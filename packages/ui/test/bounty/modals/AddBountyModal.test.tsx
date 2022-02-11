@@ -230,14 +230,6 @@ describe('UI: AddNewBountyModal', () => {
 
           expect(await getNextButton()).not.toBeDisabled()
         })
-
-        it('Open without stake', async () => {
-          await fillWorkingPeriod(false)
-          await triggerSwitch(/^no$/i)
-          await triggerSwitch(/^open$/i)
-
-          expect(await getNextButton()).not.toBeDisabled()
-        })
       })
 
       describe('Invalid form', () => {
@@ -383,7 +375,6 @@ describe('UI: AddNewBountyModal', () => {
     await waitFor(async () => expect(await screen.queryByText('Whitelist')))
     await selectFromDropdownWithId('select-whitelist', 'bob')
     await fillField('field-periodLength', 100)
-    await triggerSwitch(/^Yes$/i)
     await fillField('field-periodStake', 100)
 
     if (proceedToNextStep) {
