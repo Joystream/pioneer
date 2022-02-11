@@ -45,11 +45,11 @@ interface ListProps {
 export const WorkingGroupsTilesList = React.memo(({ openings }: ListProps) => {
   const { t } = useTranslation('overview')
   const tiles = openings.map((opening) => <WorkingGroupTile key={opening.id} opening={opening} />)
-  return tiles.length ? (
+  return (
     <ScrollerWrapper>
       <Scroller title={t('workingGroups.openings')} count={tiles.length} items={tiles} />
     </ScrollerWrapper>
-  ) : null
+  )
 })
 
 const Wrapper = styled.div`

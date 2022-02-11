@@ -16,7 +16,7 @@ export const CouncilOverview = () => {
   const { t } = useTranslation('overview')
   const constants = useCouncilConstants()
   const { stage } = useElectionStage()
-  const { election } = useCurrentElection()
+  const { election, isLoading: electionLoading } = useCurrentElection()
 
   const councilSize = constants?.size ?? 0
   const periodLength = constants?.idlePeriod
@@ -43,7 +43,7 @@ export const CouncilOverview = () => {
         <OverviewInfoElement value={councilSize} label="Council members" />
         <OverviewInfoElement value={stageLabel} label={t('council.stage.label')} />
         {typeof round !== 'undefined' && <OverviewInfoElement value={`#${round}`} label={t('council.round')} />}
-        <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} />
+        <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} isLoading={electionLoading} />
       </>
     ),
     [councilSize, stageLabel, round, nextElectionIn]
