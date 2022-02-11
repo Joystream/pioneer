@@ -201,14 +201,15 @@ describe('UI: SubmitJudgementModal', () => {
     })
 
     it('Transaction successful', async () => {
-      stubTransactionSuccess(transaction, 'bounty', 'OracleJudgmentSubmitted')
+      stubTransactionSuccess(transaction, 'bounties', 'OracleJudgmentSubmitted')
 
       renderModal()
       proceedToAuthorizationModal()
 
       const button = screen.getByText('modals.submitJudgement.authorizeModal.button')
-      await waitFor(() => fireEvent.click(button))
-      expect(screen.queryByText('modals.submitJudgement.successModal.message')).toBeInTheDocument()
+      fireEvent.click(button)
+
+      await waitFor(() => expect(screen.queryByText('modals.submitJudgement.successModal.message')).toBeInTheDocument())
     })
 
     it('Transaction failure', async () => {
@@ -218,9 +219,9 @@ describe('UI: SubmitJudgementModal', () => {
       await proceedToAuthorizationModal()
 
       const button = await getButton('modals.submitJudgement.authorizeModal.button')
-      await waitFor(() => fireEvent.click(button))
+      fireEvent.click(button)
 
-      expect(screen.queryByText('modals.submitJudgement.failedModal')).toBeInTheDocument()
+      await waitFor(() => expect(screen.queryByText('modals.submitJudgement.failedModal')).toBeInTheDocument())
     })
 
     it('Disabled when no funds for fee', async () => {
