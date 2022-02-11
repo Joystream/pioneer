@@ -4,7 +4,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of, asapScheduler, scheduled } from 'rxjs'
+import { from, of, asyncScheduler, scheduled } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
@@ -52,7 +52,7 @@ export const stubTransactionResult = (events: any[]) =>
         events: [...events],
       },
     ]),
-    asapScheduler
+    asyncScheduler
   )
 
 const createBatchSuccessEvents = () => [
@@ -131,7 +131,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as ApiRx,
+    api: ({} as unknown) as ApiRx,
     isConnected: true,
     connectionState: 'connected',
   }
