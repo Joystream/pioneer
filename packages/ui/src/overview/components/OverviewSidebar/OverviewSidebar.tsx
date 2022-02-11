@@ -96,8 +96,7 @@ export const OverviewSidebar = () => {
 const Container = styled(RowGapBlock)`
   align-items: start;
   height: 100%;
-  padding: 32px 0 30px 15px;
+  padding: 32px 24px 30px;
   background-color: ${Colors.Black[50]};
   border: 1px solid ${Colors.Black[200]};
-  overflow: auto;
 `

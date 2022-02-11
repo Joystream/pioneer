@@ -38,7 +38,9 @@ export const EmptyState = ({ type }: Props) => {
 
   return (
     <div>
-      <TypeHeader bold lighter value>{t(`sidebar.emptyStates.${type}.type`)}</TypeHeader>
+      <TypeHeader bold lighter value>
+        {t(`sidebar.emptyStates.${type}.type`)}
+      </TypeHeader>
       <Wrapper gap={15}>
         <Title value>
           {icon} {t(`sidebar.emptyStates.${type}.title`)}
@@ -56,8 +58,8 @@ export const EmptyState = ({ type }: Props) => {
 
 const Wrapper = styled(RowGapBlock)`
   min-height: fit-content;
-  width: 99%;
   padding: 20px;
+  background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
   border-radius: 4px;
 `

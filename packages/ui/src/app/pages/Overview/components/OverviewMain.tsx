@@ -1,15 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { MainPanel } from '@/common/components/page/PageContent'
-import { TextExtraHuge } from '@/common/components/typography'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { OverviewSidebar } from '@/overview/components/OverviewSidebar/OverviewSidebar'
-import { CouncilOverview } from '@/overview/components/CouncilOverview/CouncilOverview'
-import { ProposalsOverview } from '@/overview/components/ProposalsOverview/ProposalsOverview'
-import { ForumThreadsOverview } from '@/overview/components/ForumOverview/ForumThreadsOverview'
-import styled from 'styled-components'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { CouncilOverview } from '@/overview/components/CouncilOverview/CouncilOverview'
+import { ForumThreadsOverview } from '@/overview/components/ForumOverview/ForumThreadsOverview'
+import { ProposalsOverview } from '@/overview/components/ProposalsOverview/ProposalsOverview'
+import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOverview/WorkingGroupsOverview'
 
 export const OverviewMain = () => {
   const { active } = useMyMemberships()
@@ -21,6 +20,7 @@ export const OverviewMain = () => {
         {t('welcome')} {active?.handle ?? t('guest')}
       </PageTitle>
       <SectionsWrapper>
+        <WorkingGroupsOverview />
         <CouncilOverview />
         <ProposalsOverview />
         <ForumThreadsOverview />

@@ -43,9 +43,6 @@ export const PageLayoutComponent = styled.div`
   align-items: start;
   width: 100%;
   min-height: 100%;
-  padding-bottom: 16px;
   grid-template-columns: 1fr ${SidebarWidth};
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    'main sidebar';
+  grid-template-areas: 'main sidebar';
 `
