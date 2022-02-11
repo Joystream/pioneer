@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ForumThreadStep } from '@/bounty/modals/AddBountyModal/components/ForumThreadStep'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
 import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/JudgingDetailsStep'
-import { SignTransactionModal } from '@/bounty/modals/AddBountyModal/components/SignTransactionModal'
 import { SuccessModal } from '@/bounty/modals/AddBountyModal/components/SuccessModal'
 import { WorkingDetailsStep } from '@/bounty/modals/AddBountyModal/components/WorkingDetailsStep'
 import {
@@ -16,11 +17,13 @@ import {
   isNextStepValid,
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
+import { ButtonPrimary, ButtonsGroup, ButtonGhost } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
+import { TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
@@ -32,6 +35,7 @@ import { Member } from '@/memberships/types'
 export const AddBountyModal = () => {
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
+  const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
   const [isValidNext, setValidNext] = useState(false)
   const { api } = useApi()
@@ -63,19 +67,31 @@ export const AddBountyModal = () => {
     )
   }, [state])
 
+  if (!activeMember || !api) {
+    return null
+  }
+
   if (state.matches(AddBountyStates.transaction)) {
-    const transaction = api?.tx.bounty.createBounty(
+    const service = state.children.transaction
+    const transaction = api.tx.bounty.createBounty(
       createBountyParametersFactory(state as AddBountyModalMachineState),
       createBountyMetadataFactory(state as AddBountyModalMachineState)
     )
+    const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
+
     // todo check creating bounty on node with worker
     return (
-      <SignTransactionModal
+      <AuthorizeTransactionModal
         onClose={hideModal}
         transaction={transaction}
-        service={state.children['transaction']}
-        cherry={state.context.cherry}
-        signer={state.context.creator}
+        service={service}
+        buttonLabel="Sign transaction and Create"
+        description={
+          <>
+            You intend to create a bounty. You will be charged <TokenValue value={state.context.cherry} /> for cherry.
+          </>
+        }
+        controllerAccount={controllerAccount}
       />
     )
   }
