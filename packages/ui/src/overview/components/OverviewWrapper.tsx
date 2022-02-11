@@ -36,6 +36,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   border: 1px solid ${Colors.Black[200]};
   border-radius: ${BorderRad.s};
+  overflow: hidden;
 `
 
 const Upper = styled.div`

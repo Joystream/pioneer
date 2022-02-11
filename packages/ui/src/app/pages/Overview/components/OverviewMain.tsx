@@ -30,7 +30,7 @@ export const OverviewMain = () => {
 }
 
 const SectionsWrapper = styled.div`
-  margin: 36px 18px 0 0;
+  margin: 36px 18px 16px 0;
   display: grid;
   row-gap: 24px;
 `
