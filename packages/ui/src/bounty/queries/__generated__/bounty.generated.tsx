@@ -3,13 +3,13 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type BountyFieldsFragment = {
   __typename: 'Bounty'
   id: string
   createdAt: any
   title: string
-  bannerImageUri?: string | null | undefined
+  bannerImageUri?: string | null
   description: string
   cherry: any
   entrantStake: any
@@ -18,156 +18,131 @@ export type BountyFieldsFragment = {
   stage: Types.BountyStage
   totalFunding: any
   discussionThreadId: string
-  creator?:
-    | {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-        }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
-      }
-    | null
-    | undefined
-  oracle?:
-    | {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-        }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
-      }
-    | null
-    | undefined
+  creator?: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  } | null
+  oracle?: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  } | null
   fundingType:
     | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
     | { __typename: 'BountyFundingPerpetual'; target: number }
   contractType:
-    | {
-        __typename: 'BountyContractClosed'
-        whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
-      }
+    | { __typename: 'BountyContractClosed'; whitelist?: Array<{ __typename: 'Membership'; id: string }> | null }
     | { __typename: 'BountyContractOpen' }
-  contributions?:
-    | Array<{
-        __typename: 'BountyContribution'
-        amount: any
-        contributor?:
-          | {
-              __typename: 'Membership'
-              id: string
-              rootAccount: string
-              controllerAccount: string
-              boundAccounts: Array<string>
-              handle: string
-              isVerified: boolean
-              isFoundingMember: boolean
-              inviteCount: number
-              createdAt: any
-              metadata: {
-                __typename: 'MemberMetadata'
-                name?: string | null | undefined
-                about?: string | null | undefined
-                avatar?:
-                  | { __typename: 'AvatarObject' }
-                  | { __typename: 'AvatarUri'; avatarUri: string }
-                  | null
-                  | undefined
-              }
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                isLead: boolean
-                group: { __typename: 'WorkingGroup'; name: string }
-              }>
-            }
-          | null
-          | undefined
-      }>
-    | null
-    | undefined
-  entries?:
-    | Array<{
-        __typename: 'BountyEntry'
+  contributions?: Array<{
+    __typename: 'BountyContribution'
+    amount: any
+    contributor?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
         id: string
-        bountyId: string
-        workSubmitted: boolean
-        stake: any
-        worker: {
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }
-        status:
-          | { __typename: 'BountyEntryStatusCashedOut' }
-          | { __typename: 'BountyEntryStatusPassed' }
-          | { __typename: 'BountyEntryStatusRejected' }
-          | { __typename: 'BountyEntryStatusWinner'; reward: number }
-          | { __typename: 'BountyEntryStatusWithdrawn' }
-          | { __typename: 'BountyEntryStatusWorking' }
-        works?:
-          | Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }>
-          | null
-          | undefined
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
       }>
-    | null
-    | undefined
+    } | null
+  }> | null
+  entries?: Array<{
+    __typename: 'BountyEntry'
+    id: string
+    bountyId: string
+    workSubmitted: boolean
+    stake: any
+    worker: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    status:
+      | { __typename: 'BountyEntryStatusCashedOut' }
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+    works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }> | null
+  }> | null
   createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
 }
 
@@ -194,9 +169,9 @@ export type BountyWorkFieldsFragment = {
       createdAt: any
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -220,34 +195,31 @@ export type BountyContributionFieldsFragment = {
   __typename: 'BountyContribution'
   id: string
   amount: any
-  contributor?:
-    | {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-        }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
-      }
-    | null
-    | undefined
+  contributor?: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  } | null
 }
 
 export type GetBountiesQueryVariables = Types.Exact<{
@@ -264,7 +236,7 @@ export type GetBountiesQuery = {
     id: string
     createdAt: any
     title: string
-    bannerImageUri?: string | null | undefined
+    bannerImageUri?: string | null
     description: string
     cherry: any
     entrantStake: any
@@ -273,62 +245,56 @@ export type GetBountiesQuery = {
     stage: Types.BountyStage
     totalFunding: any
     discussionThreadId: string
-    creator?:
-      | {
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }
-      | null
-      | undefined
-    oracle?:
-      | {
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }
-      | null
-      | undefined
+    creator?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    } | null
+    oracle?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    } | null
     fundingType:
       | {
           __typename: 'BountyFundingLimited'
@@ -338,100 +304,77 @@ export type GetBountiesQuery = {
         }
       | { __typename: 'BountyFundingPerpetual'; target: number }
     contractType:
-      | {
-          __typename: 'BountyContractClosed'
-          whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
-        }
+      | { __typename: 'BountyContractClosed'; whitelist?: Array<{ __typename: 'Membership'; id: string }> | null }
       | { __typename: 'BountyContractOpen' }
-    contributions?:
-      | Array<{
-          __typename: 'BountyContribution'
-          amount: any
-          contributor?:
-            | {
-                __typename: 'Membership'
-                id: string
-                rootAccount: string
-                controllerAccount: string
-                boundAccounts: Array<string>
-                handle: string
-                isVerified: boolean
-                isFoundingMember: boolean
-                inviteCount: number
-                createdAt: any
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  name?: string | null | undefined
-                  about?: string | null | undefined
-                  avatar?:
-                    | { __typename: 'AvatarObject' }
-                    | { __typename: 'AvatarUri'; avatarUri: string }
-                    | null
-                    | undefined
-                }
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  isLead: boolean
-                  group: { __typename: 'WorkingGroup'; name: string }
-                }>
-              }
-            | null
-            | undefined
-        }>
-      | null
-      | undefined
-    entries?:
-      | Array<{
-          __typename: 'BountyEntry'
+    contributions?: Array<{
+      __typename: 'BountyContribution'
+      amount: any
+      contributor?: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
           id: string
-          bountyId: string
-          workSubmitted: boolean
-          stake: any
-          worker: {
-            __typename: 'Membership'
-            id: string
-            rootAccount: string
-            controllerAccount: string
-            boundAccounts: Array<string>
-            handle: string
-            isVerified: boolean
-            isFoundingMember: boolean
-            inviteCount: number
-            createdAt: any
-            metadata: {
-              __typename: 'MemberMetadata'
-              name?: string | null | undefined
-              about?: string | null | undefined
-              avatar?:
-                | { __typename: 'AvatarObject' }
-                | { __typename: 'AvatarUri'; avatarUri: string }
-                | null
-                | undefined
-            }
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              isLead: boolean
-              group: { __typename: 'WorkingGroup'; name: string }
-            }>
-          }
-          status:
-            | { __typename: 'BountyEntryStatusCashedOut' }
-            | { __typename: 'BountyEntryStatusPassed' }
-            | { __typename: 'BountyEntryStatusRejected' }
-            | { __typename: 'BountyEntryStatusWinner'; reward: number }
-            | { __typename: 'BountyEntryStatusWithdrawn' }
-            | { __typename: 'BountyEntryStatusWorking' }
-          works?:
-            | Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }>
-            | null
-            | undefined
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
         }>
-      | null
-      | undefined
+      } | null
+    }> | null
+    entries?: Array<{
+      __typename: 'BountyEntry'
+      id: string
+      bountyId: string
+      workSubmitted: boolean
+      stake: any
+      worker: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+      works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }> | null
+    }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
   }>
 }
@@ -451,192 +394,152 @@ export type GetBountyQueryVariables = Types.Exact<{
 
 export type GetBountyQuery = {
   __typename: 'Query'
-  bountyByUniqueInput?:
-    | {
-        __typename: 'Bounty'
+  bountyByUniqueInput?: {
+    __typename: 'Bounty'
+    id: string
+    createdAt: any
+    title: string
+    bannerImageUri?: string | null
+    description: string
+    cherry: any
+    entrantStake: any
+    workPeriod: number
+    judgingPeriod: number
+    stage: Types.BountyStage
+    totalFunding: any
+    discussionThreadId: string
+    creator?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
         id: string
         createdAt: any
-        title: string
-        bannerImageUri?: string | null | undefined
-        description: string
-        cherry: any
-        entrantStake: any
-        workPeriod: number
-        judgingPeriod: number
-        stage: Types.BountyStage
-        totalFunding: any
-        discussionThreadId: string
-        creator?:
-          | {
-              __typename: 'Membership'
-              id: string
-              rootAccount: string
-              controllerAccount: string
-              boundAccounts: Array<string>
-              handle: string
-              isVerified: boolean
-              isFoundingMember: boolean
-              inviteCount: number
-              createdAt: any
-              metadata: {
-                __typename: 'MemberMetadata'
-                name?: string | null | undefined
-                about?: string | null | undefined
-                avatar?:
-                  | { __typename: 'AvatarObject' }
-                  | { __typename: 'AvatarUri'; avatarUri: string }
-                  | null
-                  | undefined
-              }
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                isLead: boolean
-                group: { __typename: 'WorkingGroup'; name: string }
-              }>
-            }
-          | null
-          | undefined
-        oracle?:
-          | {
-              __typename: 'Membership'
-              id: string
-              rootAccount: string
-              controllerAccount: string
-              boundAccounts: Array<string>
-              handle: string
-              isVerified: boolean
-              isFoundingMember: boolean
-              inviteCount: number
-              createdAt: any
-              metadata: {
-                __typename: 'MemberMetadata'
-                name?: string | null | undefined
-                about?: string | null | undefined
-                avatar?:
-                  | { __typename: 'AvatarObject' }
-                  | { __typename: 'AvatarUri'; avatarUri: string }
-                  | null
-                  | undefined
-              }
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                isLead: boolean
-                group: { __typename: 'WorkingGroup'; name: string }
-              }>
-            }
-          | null
-          | undefined
-        fundingType:
-          | {
-              __typename: 'BountyFundingLimited'
-              minFundingAmount: number
-              maxFundingAmount: number
-              fundingPeriod: number
-            }
-          | { __typename: 'BountyFundingPerpetual'; target: number }
-        contractType:
-          | {
-              __typename: 'BountyContractClosed'
-              whitelist?: Array<{ __typename: 'Membership'; id: string }> | null | undefined
-            }
-          | { __typename: 'BountyContractOpen' }
-        contributions?:
-          | Array<{
-              __typename: 'BountyContribution'
-              amount: any
-              contributor?:
-                | {
-                    __typename: 'Membership'
-                    id: string
-                    rootAccount: string
-                    controllerAccount: string
-                    boundAccounts: Array<string>
-                    handle: string
-                    isVerified: boolean
-                    isFoundingMember: boolean
-                    inviteCount: number
-                    createdAt: any
-                    metadata: {
-                      __typename: 'MemberMetadata'
-                      name?: string | null | undefined
-                      about?: string | null | undefined
-                      avatar?:
-                        | { __typename: 'AvatarObject' }
-                        | { __typename: 'AvatarUri'; avatarUri: string }
-                        | null
-                        | undefined
-                    }
-                    roles: Array<{
-                      __typename: 'Worker'
-                      id: string
-                      createdAt: any
-                      isLead: boolean
-                      group: { __typename: 'WorkingGroup'; name: string }
-                    }>
-                  }
-                | null
-                | undefined
-            }>
-          | null
-          | undefined
-        entries?:
-          | Array<{
-              __typename: 'BountyEntry'
-              id: string
-              bountyId: string
-              workSubmitted: boolean
-              stake: any
-              worker: {
-                __typename: 'Membership'
-                id: string
-                rootAccount: string
-                controllerAccount: string
-                boundAccounts: Array<string>
-                handle: string
-                isVerified: boolean
-                isFoundingMember: boolean
-                inviteCount: number
-                createdAt: any
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  name?: string | null | undefined
-                  about?: string | null | undefined
-                  avatar?:
-                    | { __typename: 'AvatarObject' }
-                    | { __typename: 'AvatarUri'; avatarUri: string }
-                    | null
-                    | undefined
-                }
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  isLead: boolean
-                  group: { __typename: 'WorkingGroup'; name: string }
-                }>
-              }
-              status:
-                | { __typename: 'BountyEntryStatusCashedOut' }
-                | { __typename: 'BountyEntryStatusPassed' }
-                | { __typename: 'BountyEntryStatusRejected' }
-                | { __typename: 'BountyEntryStatusWinner'; reward: number }
-                | { __typename: 'BountyEntryStatusWithdrawn' }
-                | { __typename: 'BountyEntryStatusWorking' }
-              works?:
-                | Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }>
-                | null
-                | undefined
-            }>
-          | null
-          | undefined
-        createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    } | null
+    oracle?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
-    | null
-    | undefined
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    } | null
+    fundingType:
+      | {
+          __typename: 'BountyFundingLimited'
+          minFundingAmount: number
+          maxFundingAmount: number
+          fundingPeriod: number
+        }
+      | { __typename: 'BountyFundingPerpetual'; target: number }
+    contractType:
+      | { __typename: 'BountyContractClosed'; whitelist?: Array<{ __typename: 'Membership'; id: string }> | null }
+      | { __typename: 'BountyContractOpen' }
+    contributions?: Array<{
+      __typename: 'BountyContribution'
+      amount: any
+      contributor?: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      } | null
+    }> | null
+    entries?: Array<{
+      __typename: 'BountyEntry'
+      id: string
+      bountyId: string
+      workSubmitted: boolean
+      stake: any
+      worker: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+      status:
+        | { __typename: 'BountyEntryStatusCashedOut' }
+        | { __typename: 'BountyEntryStatusPassed' }
+        | { __typename: 'BountyEntryStatusRejected' }
+        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWithdrawn' }
+        | { __typename: 'BountyEntryStatusWorking' }
+      works?: Array<{ __typename: 'WorkSubmittedEvent'; id: string; title: string; description: string }> | null
+    }> | null
+    createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+  } | null
 }
 
 export type GetBountyWorksQueryVariables = Types.Exact<{
@@ -671,9 +574,9 @@ export type GetBountyWorksQuery = {
         createdAt: any
         metadata: {
           __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
           __typename: 'Worker'
@@ -746,34 +649,31 @@ export type GetBountyContributorsQuery = {
     __typename: 'BountyContribution'
     id: string
     amount: any
-    contributor?:
-      | {
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }
-      | null
-      | undefined
+    contributor?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    } | null
   }>
 }
 

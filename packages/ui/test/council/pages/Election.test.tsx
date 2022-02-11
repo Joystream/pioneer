@@ -118,7 +118,7 @@ describe('UI: Election page', () => {
 
   beforeEach(() => {
     seedMembers(mockServer.server, 2)
-    seedElectedCouncils(mockServer.server, [{}, { endedAtBlock: null }])
+    seedElectedCouncils(mockServer.server, [{}, { endedAtBlock: undefined }])
     seedCouncilElections(mockServer.server, [{}, { isFinished: false }])
 
     const commitment = '0x0000000000000000000000000000000000000000000000000000000000000000'

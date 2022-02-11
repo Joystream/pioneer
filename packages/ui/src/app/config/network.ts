@@ -1,12 +1,13 @@
 export type NetworkType = 'local' | 'local-mocks' | 'olympia-testnet'
 
 const OLYMPIA_TESTNET_NODE_SOCKET =
-  process.env.REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET || 'wss://olympia-dev.joystream.app/rpc'
+  process.env.REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET || 'wss://54.210.109.171.nip.io/ws-rpc'
 const OLYMPIA_TESTNET_QUERY_NODE =
-  process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE || 'https://olympia-dev.joystream.app/query/server/graphql'
+  process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE || 'https://54.210.109.171.nip.io/query-node/server/graphql'
 const OLYMPIA_TESTNET_QUERY_NODE_SOCKET =
-  process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET || 'wss://olympia-dev.joystream.app/query/server/graphql'
-const MEMBERSHIP_FAUCET_URL = process.env.REACT_APP_MEMBERSHIP_FAUCET_URL || 'http://localhost:4000/register'
+  process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET || 'wss://54.210.109.171.nip.io/query-node/server/graphql'
+const MEMBERSHIP_FAUCET_URL =
+  process.env.REACT_APP_MEMBERSHIP_FAUCET_URL || 'https://54.210.109.171.nip.io/member-faucet/register'
 
 export const QUERY_NODE_ENDPOINT_SUBSCRIPTION: Record<NetworkType, string> = {
   local: 'ws://localhost:8081/graphql',
@@ -21,8 +22,8 @@ export const QUERY_NODE_ENDPOINT: Record<NetworkType, string> = {
 }
 
 export const MEMBERSHIP_FAUCET_ENDPOINT: Record<NetworkType, string> = {
-  local: 'http://localhost:4004/register',
-  'local-mocks': 'http://localhost:4004/register',
+  local: 'http://localhost:3002/register',
+  'local-mocks': 'http://localhost:3002/register',
   'olympia-testnet': MEMBERSHIP_FAUCET_URL,
 }
 

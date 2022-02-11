@@ -71,11 +71,14 @@ export const createBountyParametersFactory = (state: AddBountyModalMachineState)
     oracle: createType('BountyActor', {
       Member: createType('u64', Number(state.context.oracle?.id || 0)),
     }),
-    contract_type: createType('AssuranceContractType', {
-      Closed: new Set(
-        state.context.workingPeriodWhitelist?.map((memberId) => createType('u64', Number(memberId))) || []
-      ),
-    }),
+    contract_type: createType(
+      'AssuranceContractType',
+      state.context.workingPeriodType === 'open'
+        ? { Open: null }
+        : {
+            Closed: state.context.workingPeriodWhitelist?.map((memberId) => createType('u64', Number(memberId))) ?? [],
+          }
+    ),
     creator: createType('BountyActor', {
       Member: createType('u64', Number(state.context.creator || 0)),
     }),

@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import { ProposalFieldsFragmentDoc } from '../../../proposals/queries/__generated__/proposals.generated'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type CouncilMemberFieldsFragment = {
   __typename: 'CouncilMember'
   id: string
@@ -24,9 +24,9 @@ export type CouncilMemberFieldsFragment = {
     councilMembers: Array<{ __typename: 'CouncilMember' }>
     metadata: {
       __typename: 'MemberMetadata'
-      name?: string | null | undefined
-      about?: string | null | undefined
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
       __typename: 'Worker'
@@ -100,9 +100,9 @@ export type PastCouncilProposalsFieldsFragment = {
       createdAt: any
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -153,9 +153,9 @@ export type ElectedCouncilFieldsFragment = {
       councilMembers: Array<{ __typename: 'CouncilMember' }>
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -171,17 +171,17 @@ export type ElectedCouncilFieldsFragment = {
 export type PastCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
-  endedAtBlock?: number | null | undefined
-  endedAtNetwork?: Types.Network | null | undefined
-  endedAtTime?: any | null | undefined
+  endedAtBlock?: number | null
+  endedAtNetwork?: Types.Network | null
+  endedAtTime?: any | null
 }
 
 export type PastCouncilDetailedFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
-  endedAtBlock?: number | null | undefined
-  endedAtNetwork?: Types.Network | null | undefined
-  endedAtTime?: any | null | undefined
+  endedAtBlock?: number | null
+  endedAtNetwork?: Types.Network | null
+  endedAtTime?: any | null
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
 }
 
@@ -189,6 +189,7 @@ export type ElectionCandidateFieldsFragment = {
   __typename: 'Candidate'
   id: string
   stake: any
+  status: Types.CandidacyStatus
   member: {
     __typename: 'Membership'
     id: string
@@ -202,9 +203,9 @@ export type ElectionCandidateFieldsFragment = {
     createdAt: any
     metadata: {
       __typename: 'MemberMetadata'
-      name?: string | null | undefined
-      about?: string | null | undefined
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
       __typename: 'Worker'
@@ -216,10 +217,10 @@ export type ElectionCandidateFieldsFragment = {
   }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
-    header?: string | null | undefined
+    header?: string | null
     bulletPoints: Array<string>
-    bannerImageUri?: string | null | undefined
-    description?: string | null | undefined
+    bannerImageUri?: string | null
+    description?: string | null
   }
 }
 
@@ -230,6 +231,7 @@ export type ElectionRoundFieldsFragment = {
     __typename: 'Candidate'
     id: string
     stake: any
+    status: Types.CandidacyStatus
     member: {
       __typename: 'Membership'
       id: string
@@ -243,9 +245,9 @@ export type ElectionRoundFieldsFragment = {
       createdAt: any
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -257,10 +259,10 @@ export type ElectionRoundFieldsFragment = {
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
-      header?: string | null | undefined
+      header?: string | null
       bulletPoints: Array<string>
-      bannerImageUri?: string | null | undefined
-      description?: string | null | undefined
+      bannerImageUri?: string | null
+      description?: string | null
     }
   }>
 }
@@ -269,24 +271,25 @@ export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  endedAtBlock?: number | null | undefined
-  endedAtTime?: any | null | undefined
-  endedAtNetwork?: Types.Network | null | undefined
+  endedAtBlock?: number | null
+  endedAtTime?: any | null
+  endedAtNetwork?: Types.Network | null
   candidates: Array<{ __typename: 'Candidate'; stake: any }>
-  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null }>
 }
 
 export type PastElectionRoundDetailedFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
   cycleId: number
-  endedAtBlock?: number | null | undefined
-  endedAtTime?: any | null | undefined
-  endedAtNetwork?: Types.Network | null | undefined
+  endedAtBlock?: number | null
+  endedAtTime?: any | null
+  endedAtNetwork?: Types.Network | null
   candidates: Array<{
     __typename: 'Candidate'
     stake: any
     id: string
+    status: Types.CandidacyStatus
     member: {
       __typename: 'Membership'
       id: string
@@ -300,9 +303,9 @@ export type PastElectionRoundDetailedFieldsFragment = {
       createdAt: any
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -314,17 +317,17 @@ export type PastElectionRoundDetailedFieldsFragment = {
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
-      header?: string | null | undefined
+      header?: string | null
       bulletPoints: Array<string>
-      bannerImageUri?: string | null | undefined
-      description?: string | null | undefined
+      bannerImageUri?: string | null
+      description?: string | null
     }
   }>
   castVotes: Array<{
     __typename: 'CastVote'
     stake: any
     stakeLocked: boolean
-    voteForId?: string | null | undefined
+    voteForId?: string | null
     castBy: string
   }>
 }
@@ -335,6 +338,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
   rewardAccountId: string
   id: string
   stake: any
+  status: Types.CandidacyStatus
   electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
   member: {
     __typename: 'Membership'
@@ -349,9 +353,9 @@ export type ElectionCandidateDetailedFieldsFragment = {
     createdAt: any
     metadata: {
       __typename: 'MemberMetadata'
-      name?: string | null | undefined
-      about?: string | null | undefined
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
       __typename: 'Worker'
@@ -363,10 +367,10 @@ export type ElectionCandidateDetailedFieldsFragment = {
   }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
-    header?: string | null | undefined
+    header?: string | null
     bulletPoints: Array<string>
-    bannerImageUri?: string | null | undefined
-    description?: string | null | undefined
+    bannerImageUri?: string | null
+    description?: string | null
   }
 }
 
@@ -377,57 +381,52 @@ export type CastVoteFieldsFragment = {
   stakeLocked: boolean
   castBy: string
   commitment: string
-  voteFor?:
-    | {
-        __typename: 'Candidate'
-        id: string
-        stake: any
-        member: {
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }
-        noteMetadata: {
-          __typename: 'CandidacyNoteMetadata'
-          header?: string | null | undefined
-          bulletPoints: Array<string>
-          bannerImageUri?: string | null | undefined
-          description?: string | null | undefined
-        }
+  voteFor?: {
+    __typename: 'Candidate'
+    id: string
+    stake: any
+    status: Types.CandidacyStatus
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
-    | null
-    | undefined
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    noteMetadata: {
+      __typename: 'CandidacyNoteMetadata'
+      header?: string | null
+      bulletPoints: Array<string>
+      bannerImageUri?: string | null
+      description?: string | null
+    }
+  } | null
   electionRound: { __typename: 'ElectionRound'; cycleId: number }
-  castEvent?:
-    | Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }>
-    | null
-    | undefined
+  castEvent?: Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }> | null
 }
 
 export type CouncilSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
   amount: any
-  type?: Types.EventTypeOptions | null | undefined
+  type?: Types.EventTypeOptions | null
 }
 
 export type FundingRequestApprovedFragment = {
@@ -444,13 +443,10 @@ export type FundingRequestApprovedFragment = {
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | {
           __typename: 'FundingRequestProposalDetails'
-          destinationsList?:
-            | {
-                __typename: 'FundingRequestDestinationsList'
-                destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
-              }
-            | null
-            | undefined
+          destinationsList?: {
+            __typename: 'FundingRequestDestinationsList'
+            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+          } | null
         }
       | { __typename: 'LockBlogPostProposalDetails' }
       | { __typename: 'RuntimeUpgradeProposalDetails' }
@@ -501,9 +497,9 @@ export type GetElectedCouncilQuery = {
         councilMembers: Array<{ __typename: 'CouncilMember' }>
         metadata: {
           __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
           __typename: 'Worker'
@@ -528,9 +524,9 @@ export type GetPastCouncilsQuery = {
   electedCouncils: Array<{
     __typename: 'ElectedCouncil'
     id: string
-    endedAtBlock?: number | null | undefined
-    endedAtNetwork?: Types.Network | null | undefined
-    endedAtTime?: any | null | undefined
+    endedAtBlock?: number | null
+    endedAtNetwork?: Types.Network | null
+    endedAtTime?: any | null
   }>
 }
 
@@ -549,22 +545,15 @@ export type GetPastCouncilQueryVariables = Types.Exact<{
 
 export type GetPastCouncilQuery = {
   __typename: 'Query'
-  electedCouncilByUniqueInput?:
-    | {
-        __typename: 'ElectedCouncil'
-        id: string
-        endedAtBlock?: number | null | undefined
-        endedAtNetwork?: Types.Network | null | undefined
-        endedAtTime?: any | null | undefined
-        councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
-      }
-    | null
-    | undefined
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    amount: any
-    type?: Types.EventTypeOptions | null | undefined
-  }>
+  electedCouncilByUniqueInput?: {
+    __typename: 'ElectedCouncil'
+    id: string
+    endedAtBlock?: number | null
+    endedAtNetwork?: Types.Network | null
+    endedAtTime?: any | null
+    councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
+  } | null
+  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent'; amount: any; type?: Types.EventTypeOptions | null }>
   fundingRequestsApproved: Array<{
     __typename: 'ProposalExecutedEvent'
     proposal: {
@@ -579,13 +568,10 @@ export type GetPastCouncilQuery = {
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | {
             __typename: 'FundingRequestProposalDetails'
-            destinationsList?:
-              | {
-                  __typename: 'FundingRequestDestinationsList'
-                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
-                }
-              | null
-              | undefined
+            destinationsList?: {
+              __typename: 'FundingRequestDestinationsList'
+              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+            } | null
           }
         | { __typename: 'LockBlogPostProposalDetails' }
         | { __typename: 'RuntimeUpgradeProposalDetails' }
@@ -631,9 +617,9 @@ export type GetPastCouncilMembersQuery = {
       createdAt: any
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -706,9 +692,9 @@ export type GetPastCouncilMembersQuery = {
         createdAt: any
         metadata: {
           __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
           __typename: 'Worker'
@@ -787,9 +773,9 @@ export type GetPastCouncilProposalsQuery = {
       createdAt: any
       metadata: {
         __typename: 'MemberMetadata'
-        name?: string | null | undefined
-        about?: string | null | undefined
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
         __typename: 'Worker'
@@ -831,6 +817,7 @@ export type GetCurrentElectionQuery = {
       __typename: 'Candidate'
       id: string
       stake: any
+      status: Types.CandidacyStatus
       member: {
         __typename: 'Membership'
         id: string
@@ -844,9 +831,9 @@ export type GetCurrentElectionQuery = {
         createdAt: any
         metadata: {
           __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
           __typename: 'Worker'
@@ -858,10 +845,10 @@ export type GetCurrentElectionQuery = {
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
-        header?: string | null | undefined
+        header?: string | null
         bulletPoints: Array<string>
-        bannerImageUri?: string | null | undefined
-        description?: string | null | undefined
+        bannerImageUri?: string | null
+        description?: string | null
       }
     }>
   }>
@@ -879,11 +866,11 @@ export type GetPastElectionsQuery = {
     __typename: 'ElectionRound'
     id: string
     cycleId: number
-    endedAtBlock?: number | null | undefined
-    endedAtTime?: any | null | undefined
-    endedAtNetwork?: Types.Network | null | undefined
+    endedAtBlock?: number | null
+    endedAtTime?: any | null
+    endedAtNetwork?: Types.Network | null
     candidates: Array<{ __typename: 'Candidate'; stake: any }>
-    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null | undefined }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null }>
   }>
 }
 
@@ -900,65 +887,59 @@ export type GetPastElectionQueryVariables = Types.Exact<{
 
 export type GetPastElectionQuery = {
   __typename: 'Query'
-  electionRoundByUniqueInput?:
-    | {
-        __typename: 'ElectionRound'
+  electionRoundByUniqueInput?: {
+    __typename: 'ElectionRound'
+    id: string
+    cycleId: number
+    endedAtBlock?: number | null
+    endedAtTime?: any | null
+    endedAtNetwork?: Types.Network | null
+    candidates: Array<{
+      __typename: 'Candidate'
+      stake: any
+      id: string
+      status: Types.CandidacyStatus
+      member: {
+        __typename: 'Membership'
         id: string
-        cycleId: number
-        endedAtBlock?: number | null | undefined
-        endedAtTime?: any | null | undefined
-        endedAtNetwork?: Types.Network | null | undefined
-        candidates: Array<{
-          __typename: 'Candidate'
-          stake: any
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
           id: string
-          member: {
-            __typename: 'Membership'
-            id: string
-            rootAccount: string
-            controllerAccount: string
-            boundAccounts: Array<string>
-            handle: string
-            isVerified: boolean
-            isFoundingMember: boolean
-            inviteCount: number
-            createdAt: any
-            metadata: {
-              __typename: 'MemberMetadata'
-              name?: string | null | undefined
-              about?: string | null | undefined
-              avatar?:
-                | { __typename: 'AvatarObject' }
-                | { __typename: 'AvatarUri'; avatarUri: string }
-                | null
-                | undefined
-            }
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              isLead: boolean
-              group: { __typename: 'WorkingGroup'; name: string }
-            }>
-          }
-          noteMetadata: {
-            __typename: 'CandidacyNoteMetadata'
-            header?: string | null | undefined
-            bulletPoints: Array<string>
-            bannerImageUri?: string | null | undefined
-            description?: string | null | undefined
-          }
-        }>
-        castVotes: Array<{
-          __typename: 'CastVote'
-          stake: any
-          stakeLocked: boolean
-          voteForId?: string | null | undefined
-          castBy: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
         }>
       }
-    | null
-    | undefined
+      noteMetadata: {
+        __typename: 'CandidacyNoteMetadata'
+        header?: string | null
+        bulletPoints: Array<string>
+        bannerImageUri?: string | null
+        description?: string | null
+      }
+    }>
+    castVotes: Array<{
+      __typename: 'CastVote'
+      stake: any
+      stakeLocked: boolean
+      voteForId?: string | null
+      castBy: string
+    }>
+  } | null
 }
 
 export type GetCandidateQueryVariables = Types.Exact<{
@@ -967,49 +948,47 @@ export type GetCandidateQueryVariables = Types.Exact<{
 
 export type GetCandidateQuery = {
   __typename: 'Query'
-  candidateByUniqueInput?:
-    | {
-        __typename: 'Candidate'
-        stakingAccountId: string
-        rewardAccountId: string
-        id: string
-        stake: any
-        electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
-        member: {
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }
-        noteMetadata: {
-          __typename: 'CandidacyNoteMetadata'
-          header?: string | null | undefined
-          bulletPoints: Array<string>
-          bannerImageUri?: string | null | undefined
-          description?: string | null | undefined
-        }
+  candidateByUniqueInput?: {
+    __typename: 'Candidate'
+    stakingAccountId: string
+    rewardAccountId: string
+    id: string
+    stake: any
+    status: Types.CandidacyStatus
+    electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
-    | null
-    | undefined
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    noteMetadata: {
+      __typename: 'CandidacyNoteMetadata'
+      header?: string | null
+      bulletPoints: Array<string>
+      bannerImageUri?: string | null
+      description?: string | null
+    }
+  } | null
 }
 
 export type GetElectionCandidatesIdsQueryVariables = Types.Exact<{
@@ -1057,55 +1036,46 @@ export type GetCouncilVotesQuery = {
     stakeLocked: boolean
     castBy: string
     commitment: string
-    voteFor?:
-      | {
-          __typename: 'Candidate'
-          id: string
-          stake: any
-          member: {
-            __typename: 'Membership'
-            id: string
-            rootAccount: string
-            controllerAccount: string
-            boundAccounts: Array<string>
-            handle: string
-            isVerified: boolean
-            isFoundingMember: boolean
-            inviteCount: number
-            createdAt: any
-            metadata: {
-              __typename: 'MemberMetadata'
-              name?: string | null | undefined
-              about?: string | null | undefined
-              avatar?:
-                | { __typename: 'AvatarObject' }
-                | { __typename: 'AvatarUri'; avatarUri: string }
-                | null
-                | undefined
-            }
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              isLead: boolean
-              group: { __typename: 'WorkingGroup'; name: string }
-            }>
-          }
-          noteMetadata: {
-            __typename: 'CandidacyNoteMetadata'
-            header?: string | null | undefined
-            bulletPoints: Array<string>
-            bannerImageUri?: string | null | undefined
-            description?: string | null | undefined
-          }
+    voteFor?: {
+      __typename: 'Candidate'
+      id: string
+      stake: any
+      status: Types.CandidacyStatus
+      member: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
-      | null
-      | undefined
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+      noteMetadata: {
+        __typename: 'CandidacyNoteMetadata'
+        header?: string | null
+        bulletPoints: Array<string>
+        bannerImageUri?: string | null
+        description?: string | null
+      }
+    } | null
     electionRound: { __typename: 'ElectionRound'; cycleId: number }
-    castEvent?:
-      | Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }>
-      | null
-      | undefined
+    castEvent?: Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }> | null
   }>
 }
 
@@ -1144,7 +1114,7 @@ export type GetPastVotesResultsQuery = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    voteFor?: { __typename: 'Candidate'; id: string } | null | undefined
+    voteFor?: { __typename: 'Candidate'; id: string } | null
     electionRound: { __typename: 'ElectionRound'; id: string }
   }>
 }
@@ -1155,10 +1125,11 @@ export type GetCouncilBlockRangeQueryVariables = Types.Exact<{
 
 export type GetCouncilBlockRangeQuery = {
   __typename: 'Query'
-  electedCouncilByUniqueInput?:
-    | { __typename: 'ElectedCouncil'; electedAtBlock: number; endedAtBlock?: number | null | undefined }
-    | null
-    | undefined
+  electedCouncilByUniqueInput?: {
+    __typename: 'ElectedCouncil'
+    electedAtBlock: number
+    endedAtBlock?: number | null
+  } | null
 }
 
 export type GetPastCouncilStatsQueryVariables = Types.Exact<{
@@ -1183,13 +1154,10 @@ export type GetPastCouncilStatsQuery = {
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | {
             __typename: 'FundingRequestProposalDetails'
-            destinationsList?:
-              | {
-                  __typename: 'FundingRequestDestinationsList'
-                  destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
-                }
-              | null
-              | undefined
+            destinationsList?: {
+              __typename: 'FundingRequestDestinationsList'
+              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+            } | null
           }
         | { __typename: 'LockBlogPostProposalDetails' }
         | { __typename: 'RuntimeUpgradeProposalDetails' }
@@ -1212,11 +1180,7 @@ export type GetPastCouncilStatsQuery = {
   }>
   proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
   proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    amount: any
-    type?: Types.EventTypeOptions | null | undefined
-  }>
+  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent'; amount: any; type?: Types.EventTypeOptions | null }>
 }
 
 export const PastCouncilProposalsFieldsFragmentDoc = gql`
@@ -1311,6 +1275,7 @@ export const ElectionCandidateFieldsFragmentDoc = gql`
       bannerImageUri
       description
     }
+    status
   }
   ${MemberFieldsFragmentDoc}
 `

@@ -18,7 +18,7 @@ export const lockTypes: { [key: string]: LockType } = {
   '0x0b0b0b0b0b0b0b0b': 'Staking Candidate',
   '0x0c0c0c0c0c0c0c0c': 'Bounties',
   '0x0d0d0d0d0d0d0d0d': 'Gateway Worker',
-  '0x0e0e0e0e0e0e0e0e': 'Operations Worker',
+  '0x0e0e0e0e0e0e0e0e': 'Distribution Worker',
 }
 
 const ANY_WORKER: LockType[] = [
@@ -27,7 +27,7 @@ const ANY_WORKER: LockType[] = [
   'Content Directory Worker',
   'Gateway Worker',
   'Membership Worker',
-  'Operations Worker',
+  'Distribution Worker',
 ]
 
 const STAKING_INVITATION_VOTING: LockType[] = ['Staking Candidate', 'Invitation', 'Voting']
@@ -77,7 +77,7 @@ const COMPATIBLE_LOCKS: Record<LockType, Set<LockType>> = {
   'Forum Worker': new Set(STAKING_INVITATION_VOTING),
   'Gateway Worker': new Set(STAKING_INVITATION_VOTING),
   'Membership Worker': new Set(STAKING_INVITATION_VOTING),
-  'Operations Worker': new Set(STAKING_INVITATION_VOTING),
+  'Distribution Worker': new Set(STAKING_INVITATION_VOTING),
   'Storage Worker': new Set(STAKING_INVITATION_VOTING),
 }
 

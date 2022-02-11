@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type PostAddedEventFieldsFragment = {
   __typename: 'PostAddedEvent'
   id: string
@@ -83,7 +83,7 @@ export type CategoryCreatedEventFieldsFragment = {
     __typename: 'ForumCategory'
     id: string
     title: string
-    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
   }
 }
 
@@ -95,7 +95,7 @@ export type CategoryDeletedEventFieldsFragment = {
     __typename: 'ForumCategory'
     id: string
     title: string
-    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+    parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
   }
 }
 
@@ -127,7 +127,7 @@ export type GetForumEventsQuery = {
           __typename: 'ForumCategory'
           id: string
           title: string
-          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
         }
       }
     | {
@@ -138,7 +138,7 @@ export type GetForumEventsQuery = {
           __typename: 'ForumCategory'
           id: string
           title: string
-          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null | undefined
+          parent?: { __typename: 'ForumCategory'; id: string; title: string } | null
         }
       }
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }

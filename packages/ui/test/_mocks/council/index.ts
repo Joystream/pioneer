@@ -30,9 +30,9 @@ export const mockMembers: MockMember[] = [
 ]
 
 export const mockCouncils: RawCouncilMock[] = [
-  { id: '0', electedAtBlock: 0, endedAtBlock: 1000 },
-  { id: '1', electedAtBlock: 0, endedAtBlock: 1000 },
-  { id: '2', electedAtBlock: 0, endedAtBlock: null },
+  { id: '0', electedAtBlock: 1, electedAtTime: '2022-01-01', electedAtNetwork: 'OLYMPIA', endedAtBlock: 1000 },
+  { id: '1', electedAtBlock: 1, electedAtTime: '2022-01-02', electedAtNetwork: 'OLYMPIA', endedAtBlock: 1000 },
+  { id: '2', electedAtBlock: 1, electedAtTime: '2022-01-03', electedAtNetwork: 'OLYMPIA', endedAtBlock: undefined },
 ]
 
 export const mockCouncilors: RawCouncilorMock[] = [

@@ -29,7 +29,7 @@ import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/com
 import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/AnnounceCandidacyTransaction'
 import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
 import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
-import { ElectionCandidateWithDetails } from '@/council/types'
+import { CandidacyStatus, ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -53,6 +53,7 @@ const getCandidateForPreview = (
   member,
   cycleId: 0,
   cycleFinished: false,
+  status: CandidacyStatus.Active,
 })
 
 const transactionSteps = [
