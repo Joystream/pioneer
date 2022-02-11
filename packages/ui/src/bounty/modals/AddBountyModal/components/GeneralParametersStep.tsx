@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent, InputNotificationMessage, InputText } from '@/common/components/forms'
+import { InputComponent, InputNotification, InputText } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { useSchema } from '@/common/hooks/useSchema'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
@@ -18,6 +21,11 @@ interface Props extends Omit<GeneralParametersContext, 'creator'> {
   activeMember?: Member
 }
 
+const schema = Yup.object().shape({
+  title: Yup.string().max(70, 'Max length is 70 characters'),
+  coverPhotoLink: Yup.string().url('Invalid URL'),
+})
+
 export const GeneralParametersStep = ({
   setCreator,
   title,
@@ -28,6 +36,7 @@ export const GeneralParametersStep = ({
   setCoverPhoto,
   activeMember,
 }: Props) => {
+  const { errors } = useSchema({ title, coverPhotoLink }, schema)
   useEffect(() => {
     if (activeMember) setCreator(activeMember)
   }, [activeMember])
@@ -48,23 +57,28 @@ export const GeneralParametersStep = ({
             label="Bounty title"
             inputSize="m"
             required
-            message={title?.length > 70 ? 'Max length is 70 characters' : 'MAX 70'}
-            validation={title?.length > 70 ? 'invalid' : undefined}
+            message={hasError('title', errors) ? getErrorMessage('title', errors) : 'MAX 70'}
+            validation={hasError('title', errors) ? 'invalid' : undefined}
           >
-            <InputText id="field-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Type" />
+            <InputText id="field-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
           </StyledInputComponent>
           <StyledInputComponent
             id="field-photo"
             label="Cover photo"
             inputSize="m"
             required
-            message="JPG, PNG: 800x450px or aspect ratio: 16:9"
+            message={
+              hasError('coverPhotoLink', errors)
+                ? getErrorMessage('coverPhotoLink', errors)
+                : 'JPG, PNG: 800x450px or aspect ratio: 16:9'
+            }
+            validation={hasError('coverPhotoLink', errors) ? 'invalid' : undefined}
           >
             <InputText
               id="field-photo"
               value={coverPhotoLink}
               onChange={(e) => setCoverPhoto(e.target.value)}
-              placeholder="Paste link to bounty’s cover photo"
+              placeholder="Paste a link to bounty cover photo"
             />
           </StyledInputComponent>
           <InputComponent id="field-description" inputSize="auto" label="Bounty description" required>
@@ -81,8 +95,8 @@ export const GeneralParametersStep = ({
   )
 }
 
-const StyledInputComponent = styled(InputComponent)`
-  ${InputNotificationMessage} {
-    text-align: right;
+const StyledInputComponent = styled(InputComponent)<{ validation?: string | undefined }>`
+  ${InputNotification} {
+    justify-content: ${({ validation }) => validation === undefined && 'end'};
   }
 `

@@ -129,6 +129,7 @@ export type AddBountyEvent =
   | SetForumThreadDescriptionEvent
   | { type: 'NEXT' }
   | { type: 'FAIL' }
+  | { type: 'BACK' }
 
 export type AddBountyModalMachineState = State<
   AddBountyContext,
@@ -184,6 +185,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     },
     [AddBountyStates.fundingPeriodDetails]: {
       on: {
+        BACK: AddBountyStates.generalParameters,
         NEXT: AddBountyStates.workingPeriodDetails,
         SET_CHERRY: {
           actions: assign({
@@ -215,6 +217,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     },
     [AddBountyStates.workingPeriodDetails]: {
       on: {
+        BACK: AddBountyStates.fundingPeriodDetails,
         NEXT: AddBountyStates.judgingPeriodDetails,
         SET_WORKING_PERIOD_TYPE: {
           actions: assign({
@@ -248,6 +251,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     },
     [AddBountyStates.judgingPeriodDetails]: {
       on: {
+        BACK: AddBountyStates.workingPeriodDetails,
         NEXT: AddBountyStates.forumThreadDetails,
         SET_JUDGING_PERIOD_LENGTH: {
           actions: assign({
@@ -264,6 +268,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     },
     [AddBountyStates.forumThreadDetails]: {
       on: {
+        BACK: AddBountyStates.judgingPeriodDetails,
         NEXT: AddBountyStates.transaction,
         SET_FORUM_THREAD_TOPIC: {
           actions: assign({

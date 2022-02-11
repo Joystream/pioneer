@@ -493,14 +493,14 @@ const InputUnits = styled.span`
   text-transform: uppercase;
 `
 
-const InputNotification = styled.div<InputProps>`
+export const InputNotification = styled.div<InputProps>`
   display: grid;
   min-height: 18px;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
   width: 100%;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: max-content;
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':
