@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '@/common/components/List'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { useToggle } from '@/common/hooks/useToggle'
 import {
   ContentWrapper,
   ElementWrapper,
@@ -15,24 +16,25 @@ import {
   TopElementsWrapper,
 } from '@/overview/components/DeadlineList/styles'
 
-export interface OpeningsListProps {
+export interface OpeningsListItemProps {
   title: string
   type: 'openings' | 'upcoming'
   groupName: string
 }
 
-export const OpeningsList = ({ title, type, groupName }: OpeningsListProps) => {
+export const OpeningsListItem = ({ title, type, groupName }: OpeningsListItemProps) => {
   const { t } = useTranslation('overview')
-  const [hideElement, setHideElement] = useState(false)
+  const [hideElement, setHideElement] = useToggle(false)
 
-  const closeDeadline = () => {
-    setHideElement(true)
+  if (hideElement) {
+    return null
   }
-  return !hideElement ? (
+
+  return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle /> <StyledClosedButton onClick={closeDeadline} />
+          <StyledTriangle /> <StyledClosedButton onClick={setHideElement} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
@@ -50,5 +52,5 @@ export const OpeningsList = ({ title, type, groupName }: OpeningsListProps) => {
         </ContentWrapper>
       </ListItem>
     </ElementWrapper>
-  ) : null
+  )
 }

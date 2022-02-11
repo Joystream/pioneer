@@ -6,9 +6,9 @@ import { List } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { Colors } from '@/common/constants'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
-import { ElectionList } from '@/overview/components/DeadlineList/ElectionList'
-import { OpeningsList } from '@/overview/components/DeadlineList/OpeningsList'
-import { ProposalList } from '@/overview/components/DeadlineList/ProposalList'
+import { ElectionListItem } from '@/overview/components/DeadlineList/ElectionListItem'
+import { OpeningsListItem } from '@/overview/components/DeadlineList/OpeningsListItem'
+import { ProposalListItem } from '@/overview/components/DeadlineList/ProposalListItem'
 import { StyledBadge, StyledText, TimeWrapper } from '@/overview/components/DeadlineList/styles'
 import { useProposals } from '@/proposals/hooks/useProposals'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
@@ -19,7 +19,7 @@ export interface DeadlineListProps {
   workingGroup?: WorkingGroup
 }
 
-export const DeadlineList = ({ workingGroup }: DeadlineListProps) => {
+export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGroup }) => {
   const { t } = useTranslation('overview')
   const { isLoading: proposalLoading, proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
   const { election } = useCurrentElection()
@@ -47,22 +47,22 @@ export const DeadlineList = ({ workingGroup }: DeadlineListProps) => {
       ) : (
         <List>
           {proposals?.map((proposal) => (
-            <ProposalList key={proposal.id} proposalId={proposal.id} title={proposal.title} />
+            <ProposalListItem key={proposal.id} proposalId={proposal.id} title={proposal.title} />
           ))}
           {election?.candidates.map((elections) => (
-            <ElectionList electionId={elections.id} title={elections.info.title} key={elections.id} />
+            <ElectionListItem electionId={elections.id} title={elections.info.title} key={elections.id} />
           ))}
           {openings.map((opening) => (
-            <OpeningsList key={opening.id} title={opening.title} type="openings" groupName={opening.groupName} />
+            <OpeningsListItem key={opening.id} title={opening.title} type="openings" groupName={opening.groupName} />
           ))}
           {upcomingOpenings.map((upcoming) => (
-            <OpeningsList key={upcoming.id} title={upcoming.title} type="upcoming" groupName={upcoming.groupName} />
+            <OpeningsListItem key={upcoming.id} title={upcoming.title} type="upcoming" groupName={upcoming.groupName} />
           ))}
         </List>
       )}
     </>
   )
-}
+})
 
 export const EmptyStateWrapper = styled.div`
   height: 66px;

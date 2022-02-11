@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '@/common/components/List'
 import { formatDuration } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { useToggle } from '@/common/hooks/useToggle'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
@@ -20,19 +21,19 @@ import {
   TopElementsWrapper,
 } from './styles'
 
-export interface ElectionListProps {
+export interface ElectionListItemProps {
   electionId: string
   title: string
-  duration?: string
 }
 
-export const ElectionList = ({ electionId, title }: ElectionListProps) => {
+export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ electionId, title }) => {
   const { t } = useTranslation('overview')
   const { stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
   const timeRemaining = formatDuration(remainingPeriod?.toNumber() || 0)
-  const [hideElement, setHideElement] = useState(false)
-  const remainingCalculation = () => {
+  const [hideElement, setHideElement] = useToggle(false)
+
+  const remainingCalculation = useMemo(() => {
     const dayChecker = timeRemaining[0][1] === 'd'
     const dayNumberChecker = timeRemaining[0][0]
     if (
@@ -45,11 +46,7 @@ export const ElectionList = ({ electionId, title }: ElectionListProps) => {
     if (dayNumberChecker > 1 && dayNumberChecker < 3 && dayChecker) {
       return '3day'
     }
-  }
-
-  const closeDeadline = () => {
-    setHideElement(true)
-  }
+  }, [])
 
   const copyMessage = () => {
     const urlAddress = '#/election?candidate='
@@ -78,11 +75,15 @@ export const ElectionList = ({ electionId, title }: ElectionListProps) => {
     }
   }
 
-  return !hideElement ? (
+  if (hideElement) {
+    return null
+  }
+
+  return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle deadlineTime={remainingCalculation()} /> <StyledClosedButton onClick={closeDeadline} />
+          <StyledTriangle deadlineTime={remainingCalculation} /> <StyledClosedButton onClick={setHideElement} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
@@ -95,5 +96,5 @@ export const ElectionList = ({ electionId, title }: ElectionListProps) => {
         </ContentWrapper>
       </ListItem>
     </ElementWrapper>
-  ) : null
-}
+  )
+})

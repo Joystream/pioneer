@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '@/common/components/List'
 import { formatDuration } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { useToggle } from '@/common/hooks/useToggle'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -21,17 +22,17 @@ import {
   TopElementsWrapper,
 } from './styles'
 
-export interface ProposalListProps {
+export interface ProposalListItemProps {
   proposalId: string
   title: string
 }
 
-export const ProposalList = ({ proposalId, title }: ProposalListProps) => {
+export const ProposalListItem = ({ proposalId, title }: ProposalListItemProps) => {
   const { t } = useTranslation('overview')
   const { proposal } = useProposal(proposalId)
   const constants = useProposalConstants(proposal?.details.type)
   const blocksToEnd = useBlocksToProposalExecution(proposal, constants) || 0
-  const [hideElement, setHideElement] = useState(false)
+  const [hideElement, setHideElement] = useToggle(false)
 
   const remainingCalculation = () => {
     const endsInSec = blocksToEnd * 6
@@ -46,14 +47,15 @@ export const ProposalList = ({ proposalId, title }: ProposalListProps) => {
   }
 
   const urlAddress = '/#/proposals/preview/' + proposalId
-  const closeDeadline = () => {
-    setHideElement(true)
+
+  if (hideElement) {
+    return null
   }
-  return !hideElement ? (
+  return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle deadlineTime={remainingCalculation()} /> <StyledClosedButton onClick={closeDeadline} />
+          <StyledTriangle deadlineTime={remainingCalculation()} /> <StyledClosedButton onClick={setHideElement} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
@@ -69,5 +71,5 @@ export const ProposalList = ({ proposalId, title }: ProposalListProps) => {
         </ContentWrapper>
       </ListItem>
     </ElementWrapper>
-  ) : null
+  )
 }
