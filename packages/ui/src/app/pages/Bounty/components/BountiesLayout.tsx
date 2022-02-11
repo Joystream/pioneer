@@ -7,6 +7,7 @@ import { BountiesList } from '@/bounty/components/BountiesList'
 import { BountyStatus, QueryExtraFilter, useBounties } from '@/bounty/hooks/useBounties'
 import { BountyOrderByInput } from '@/common/api/queries'
 import { EmptyTab } from '@/common/components/EmptyTab'
+import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { Pagination } from '@/common/components/Pagination'
@@ -29,6 +30,7 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
 
   const { isLoading, bounties, pagination } = useBounties({ order, filters, status: bountyStatus, extraFilter })
+  const isInitialLoading = filters === BountyEmptyFilter && isLoading
 
   return (
     <PageLayout
@@ -38,14 +40,20 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
           <EmptyTab />
         ) : (
           <MainPanel>
-            {tilesComponent}
-            <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
-            {isLoading ? (
-              <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
+            {isInitialLoading ? (
+              <Loading />
             ) : (
-              <BountiesList getSortProps={getSortProps} bounties={bounties} />
+              <>
+                {tilesComponent}
+                <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
+                {isLoading ? (
+                  <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />
+                ) : (
+                  <BountiesList getSortProps={getSortProps} bounties={bounties} />
+                )}
+                <Pagination {...pagination} />
+              </>
             )}
-            <Pagination {...pagination} />
           </MainPanel>
         )
       }
