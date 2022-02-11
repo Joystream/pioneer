@@ -96,14 +96,7 @@ export const WorkingDetailsStep = ({
                 </Tooltip>
               </CheckBoxLabelWrapper>
             }
-            trueLabel={
-              <CheckBoxLabelWrapper>
-                Open
-                <Tooltip tooltipText="Lorem ipsum...">
-                  <TooltipDefault />
-                </Tooltip>
-              </CheckBoxLabelWrapper>
-            }
+            trueLabel={<CheckBoxLabelWrapper>Open</CheckBoxLabelWrapper>}
           />
         </InlineToggleWrap>
       </Row>
@@ -111,7 +104,7 @@ export const WorkingDetailsStep = ({
       {workingPeriodType === 'closed' && (
         <RowGapBlock gap={10}>
           <TextMedium bold>Whitelist</TextMedium>
-          <TextMedium>The upper bound for whitelist is {whitelistLimit?.toHuman() || 0}.</TextMedium>
+          <TextMedium>Maximum {whitelistLimit?.toHuman() || 0} members.</TextMedium>
           <InputComponent
             disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
             tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
