@@ -14,13 +14,12 @@ const GeneralParametersStepTemplate: Story = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [coverPhotoLink, setCoverPhoto] = useState('')
-  const [activeMember, setCreator] = useState<Member>()
+  const [activeMember] = useState<Member>()
 
   return (
     <MockApolloProvider members>
       <GeneralParametersStep
         setTitle={setTitle}
-        setCreator={setCreator}
         activeMember={activeMember}
         setCoverPhoto={setCoverPhoto}
         setDescription={setDescription}

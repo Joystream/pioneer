@@ -1,3 +1,4 @@
+import { BountyMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -27,6 +28,7 @@ import { TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -67,6 +69,14 @@ export const AddBountyModal = () => {
     )
   }, [state])
 
+  useEffect(() => {
+    if (state.matches(AddBountyStates.generalParameters)) {
+      if (activeMember && !state.context.creator) {
+        send('SET_CREATOR', { creator: activeMember })
+      }
+    }
+  }, [activeMember, state])
+
   if (!activeMember || !api) {
     return null
   }
@@ -75,11 +85,10 @@ export const AddBountyModal = () => {
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
       createBountyParametersFactory(state as AddBountyModalMachineState),
-      createBountyMetadataFactory(state as AddBountyModalMachineState)
+      metadataToBytes(BountyMetadata, createBountyMetadataFactory(state as AddBountyModalMachineState))
     )
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
-    // todo check creating bounty on node with worker
     return (
       <AuthorizeTransactionModal
         onClose={hideModal}
@@ -126,7 +135,6 @@ export const AddBountyModal = () => {
                 setTitle={(title: string) => send('SET_BOUNTY_TITLE', { title })}
                 description={state.context.description}
                 setDescription={(description: string) => send('SET_BOUNTY_DESCRIPTION', { description })}
-                setCreator={(creator: Member) => send('SET_CREATOR', { creator })}
                 coverPhotoLink={state.context.coverPhotoLink}
                 setCoverPhoto={(coverPhotoLink: string) => send('SET_COVER_PHOTO', { coverPhotoLink })}
                 activeMember={activeMember}

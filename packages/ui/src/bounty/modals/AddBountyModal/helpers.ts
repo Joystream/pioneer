@@ -1,8 +1,10 @@
+import { IBountyMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { AugmentedConst } from '@polkadot/api/types'
 import { u32 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
+import Long from 'long'
 
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
@@ -71,43 +73,53 @@ export const createBountyParametersFactory = (state: AddBountyModalMachineState)
     oracle: createType('BountyActor', {
       Member: createType('u64', Number(state.context.oracle?.id || 0)),
     }),
-    contract_type: createType(
-      'AssuranceContractType',
-      state.context.workingPeriodType === 'open'
-        ? { Open: null }
-        : {
-            Closed: state.context.workingPeriodWhitelist?.map((memberId) => createType('u64', Number(memberId))) ?? [],
-          }
-    ),
+    contract_type: createType('AssuranceContractType', contractTypeFactory(state)),
     creator: createType('BountyActor', {
-      Member: createType('u64', Number(state.context.creator || 0)),
+      Member: createType('u64', Number(state.context.creator?.id || 0)),
     }),
     cherry: createType('u128', state.context.cherry || 0),
     entrant_stake: createType('u128', state.context.workingPeriodStake || 0),
-    funding_type: createType('FundingType', {
+    funding_type: createType('FundingType', fundingTypeFactory(state)),
+    work_period: createType('u32', state.context.workingPeriodLength || 0),
+    judging_period: createType('u32', state.context.judgingPeriodLength || 0),
+  })
+
+const contractTypeFactory = (state: AddBountyModalMachineState) => {
+  if (state.context.workingPeriodType === 'open') {
+    return {
+      Open: null,
+    }
+  }
+
+  return {
+    Closed: state.context.workingPeriodWhitelist?.map((memberId) => createType('u64', Number(memberId))) ?? [],
+  }
+}
+
+const fundingTypeFactory = (state: AddBountyModalMachineState) => {
+  if (state.context.fundingPeriodType === 'perpetual') {
+    return {
       Perpetual: createType('FundingType_Perpetual', {
         target: createType('u128', state.context.fundingMaximalRange || 0),
       }),
-      Limited: createType('FundingType_Limited', {
-        min_funding_amount: createType('u128', state.context.fundingMinimalRange || 0),
-        max_funding_amount: createType('u128', state.context.fundingMaximalRange || 0),
-        funding_period: createType('u32', state.context.fundingPeriodLength || 0),
-      }),
-    }),
-    work_period: createType('u128', state.context.workingPeriodLength || 0),
-    judging_period: createType('u128', state.context.judgingPeriodLength || 0),
-  })
+    }
+  }
 
-export const createBountyMetadataFactory = (state: AddBountyModalMachineState) => {
-  const buffer = Buffer.from(
-    JSON.stringify({
-      title: state.context.title,
-      description: state.context.description,
-      photo_url: state.context.coverPhotoLink,
-    })
-  )
-  return createType('Bytes', '0x' + buffer)
+  return {
+    Limited: createType('FundingType_Limited', {
+      min_funding_amount: createType('u128', state.context.fundingMinimalRange || 0),
+      max_funding_amount: createType('u128', state.context.fundingMaximalRange || 0),
+      funding_period: createType('u32', state.context.fundingPeriodLength || 0),
+    }),
+  }
 }
+
+export const createBountyMetadataFactory = (state: AddBountyModalMachineState): IBountyMetadata => ({
+  title: state.context.title,
+  description: state.context.description,
+  bannerImageUri: state.context.coverPhotoLink,
+  discussionThread: Long.fromString('1'),
+})
 
 export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState) => {
   const buffer = Buffer.from(

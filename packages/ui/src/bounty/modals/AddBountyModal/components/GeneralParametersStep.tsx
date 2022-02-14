@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -14,7 +14,6 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 interface Props extends Omit<GeneralParametersContext, 'creator'> {
-  setCreator: (creator: Member) => void
   setTitle: (title: string) => void
   setCoverPhoto: (link: string) => void
   setDescription: (description: string) => void
@@ -27,7 +26,6 @@ const schema = Yup.object().shape({
 })
 
 export const GeneralParametersStep = ({
-  setCreator,
   title,
   description,
   setDescription,
@@ -37,9 +35,6 @@ export const GeneralParametersStep = ({
   activeMember,
 }: Props) => {
   const { errors } = useSchema({ title, coverPhotoLink }, schema)
-  useEffect(() => {
-    if (activeMember) setCreator(activeMember)
-  }, [activeMember])
 
   return (
     <RowGapBlock gap={24}>
