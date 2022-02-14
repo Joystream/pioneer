@@ -46,7 +46,7 @@ export const CouncilOverview = () => {
         <OverviewInfoElement value={nextElectionIn} label={t('council.nextElectionIn')} isLoading={electionLoading} />
       </>
     ),
-    [councilSize, stageLabel, round, nextElectionIn]
+    [councilSize, stageLabel, round, nextElectionIn, electionLoading]
   )
 
   const scroller = useMemo(() => {
