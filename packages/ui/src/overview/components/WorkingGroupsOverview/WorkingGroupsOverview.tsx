@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Loading } from '@/common/components/Loading'
 import { TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { OverviewInfoElement } from '@/overview/components/OverviewInfoElement'
@@ -28,21 +27,21 @@ export const WorkingGroupsOverview = () => {
   const infoElements = useMemo(
     () => (
       <>
-        {groupsLoading ? (
-          <Loading />
-        ) : (
-          <OverviewInfoElement value={groupsCount} label={t('workingGroups.workingGroups')} />
-        )}
-        {workersCountLoading ? (
-          <Loading />
-        ) : (
-          <OverviewInfoElement value={workersCount} label={t('workingGroups.workers')} />
-        )}
-        {groupsLoading ? (
-          <Loading />
-        ) : (
-          <OverviewInfoElement value={<TokenValue value={totalBudget} />} label={t('workingGroups.totalBudget')} />
-        )}
+        {<OverviewInfoElement value={groupsCount} label={t('workingGroups.workingGroups')} isLoading={groupsLoading} />}
+        {
+          <OverviewInfoElement
+            value={workersCount}
+            label={t('workingGroups.workers')}
+            isLoading={workersCountLoading}
+          />
+        }
+        {
+          <OverviewInfoElement
+            value={<TokenValue value={totalBudget} />}
+            label={t('workingGroups.totalBudget')}
+            isLoading={groupsLoading}
+          />
+        }
       </>
     ),
     [t, groupsCount, workersCount, totalBudget]
