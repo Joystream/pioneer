@@ -94,5 +94,26 @@
     "votes": "votes"
   },
   "welcome": "Hi, ",
-  "guest": "Stranger"
+  "guest": "Stranger",
+  "deadline": {
+    "remainingTime": "Remaining time: ",
+    "proposal": "Proposal",
+    "election": "Election",
+    "proposalMessage": "Proposal decision period for {{proposalName}} ending soon, ",
+    "proposalLink": "cast your vote",
+    "announcingPeriod": "Announcing period for {{electionName}} is ending soon, ",
+    "announcingLink": "Announce candidacy",
+    "votingPeriod": "Voting period for {{electionName}} is ending soon, ",
+    "votingLink": "View candidates",
+    "revealingPeriod": "revealing period for {{electionName}} is ending soon,",
+    "revealingLink": "Reveal your vote",
+    "upcomingOpenings": "Upcoming Openings",
+    "opening": "Opening",
+    "upcomingOpeningsMessage": "Upcoming openings",
+    "openingMessage": "The opening for {{openingName}} by {{workerGroupName}} is going to be active soon, ",
+    "openingLink": " apply",
+    "startInFuture": "Start in the future",
+    "deadlinesTitle": "Deadlines",
+    "emptyState": "You don't have any deadlines"
+  }
 }

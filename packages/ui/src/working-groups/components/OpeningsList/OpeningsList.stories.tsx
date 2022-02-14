@@ -8,7 +8,7 @@ import { getMockAsUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 import { OpeningsList, OpeningsListProps } from './OpeningsList'
 
 export default {
-  title: 'WorkingGroup/OpeningsList',
+  title: 'WorkingGroup/OpeningsListItem',
   component: OpeningsList,
 } as Meta
 
