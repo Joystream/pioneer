@@ -5,6 +5,7 @@ import { MainPanel } from '@/common/components/page/PageContent'
 import { TextExtraHuge } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { DeadlineList } from '@/overview/components/DeadlineList/DeadlineList'
+import { OverviewSidebar } from '@/overview/components/OverviewSidebar/OverviewSidebar'
 
 export const OverviewMain = () => {
   const { active } = useMyMemberships()
@@ -15,6 +16,7 @@ export const OverviewMain = () => {
       <TextExtraHuge>
         {t('welcome')} {active ? active?.handle : t('guest')}
       </TextExtraHuge>
+      <OverviewSidebar />
       <DeadlineList />
     </MainPanel>
   )
