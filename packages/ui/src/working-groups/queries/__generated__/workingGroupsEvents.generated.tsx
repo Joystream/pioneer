@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type AppliedOnOpeningEventFieldsFragment = {
   __typename: 'AppliedOnOpeningEvent'
   id: string
@@ -96,11 +96,8 @@ export type StatusTextChangedEventFieldsFragment = {
   __typename: 'StatusTextChangedEvent'
   id: string
   createdAt: any
-  workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-  upcomingworkinggroupopeningcreatedInEvent?:
-    | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-    | null
-    | undefined
+  workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null
+  upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }> | null
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
@@ -356,11 +353,8 @@ export type GetGroupEventsQuery = {
     __typename: 'StatusTextChangedEvent'
     id: string
     createdAt: any
-    workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-    upcomingworkinggroupopeningcreatedInEvent?:
-      | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-      | null
-      | undefined
+    workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null
+    upcomingworkinggroupopeningcreatedInEvent?: Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }> | null
     group: { __typename: 'WorkingGroup'; name: string }
   }>
   budgetSetEvents: Array<{
@@ -638,11 +632,11 @@ export type GetOpeningsEventsQuery = {
         __typename: 'StatusTextChangedEvent'
         id: string
         createdAt: any
-        workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null | undefined
-        upcomingworkinggroupopeningcreatedInEvent?:
-          | Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
-          | null
-          | undefined
+        workinggroupmetadatasetInEvent?: Array<{ __typename: 'WorkingGroupMetadata'; id: string }> | null
+        upcomingworkinggroupopeningcreatedInEvent?: Array<{
+          __typename: 'UpcomingWorkingGroupOpening'
+          id: string
+        }> | null
         group: { __typename: 'WorkingGroup'; name: string }
       }
     | {

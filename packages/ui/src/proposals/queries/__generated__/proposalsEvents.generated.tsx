@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type ProposalCreatedEventFieldsFragment = {
   __typename: 'ProposalCreatedEvent'
   id: string

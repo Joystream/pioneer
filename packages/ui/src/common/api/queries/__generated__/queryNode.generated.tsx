@@ -2,7 +2,7 @@ import * as Types from './baseTypes.generated'
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type GetQueryNodeStateSubscriptionVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetQueryNodeStateSubscription = {
