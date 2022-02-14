@@ -116,3 +116,15 @@ query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
     totalCount
   }
 }
+
+query GetMemberRowDetails($workerId_in: [ID!]!) {
+  stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+}

@@ -5,6 +5,7 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography/TokenValue'
 import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
+import { useMemberRowWorkDetails } from '@/memberships/hooks/useMemberRowWorkDetails'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 import { MemberInfo } from '..'
@@ -15,6 +16,7 @@ import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberModalTrigger, Memb
 
 export const MemberListItem = ({ member }: { member: Member }) => {
   const balance = useBalance(member.controllerAccount)
+  const { slashed, terminated } = useMemberRowWorkDetails(member)
   const isCouncilMember = useIsCouncilMember(member)
   const showMemberModal = useShowMemberModal(member.id)
 
@@ -37,10 +39,10 @@ export const MemberListItem = ({ member }: { member: Member }) => {
         <MemberRoles wrapable roles={member.roles} size="l" />
       </MemberRolesColumn>
       <MemberColumn>
-        <CountInfo count={0} />
+        <CountInfo count={slashed} />
       </MemberColumn>
       <MemberColumn>
-        <CountInfo count={0} />
+        <CountInfo count={terminated} />
       </MemberColumn>
 
       <MemberColumn>
