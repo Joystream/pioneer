@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { AccountLocks } from '@/accounts/components/AccountLocks'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography/TokenValue'
 import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
@@ -12,6 +14,7 @@ import { MemberRoles } from '../MemberRoles'
 import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberModalTrigger, MemberRolesColumn } from './Fileds'
 
 export const MemberListItem = ({ member }: { member: Member }) => {
+  const balance = useBalance(member.controllerAccount)
   const isCouncilMember = useIsCouncilMember(member)
   const showMemberModal = useShowMemberModal(member.id)
 
@@ -41,10 +44,11 @@ export const MemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberColumn>
-        <TokenValue value={0} />
+        <TokenValue value={balance?.total} />
       </MemberColumn>
       <MemberColumn>
-        <TokenValue value={0} />
+        <TokenValue value={balance?.locked} />
+        <AccountLocks locks={balance?.locks} />
       </MemberColumn>
     </MemberItemWrap>
   )
