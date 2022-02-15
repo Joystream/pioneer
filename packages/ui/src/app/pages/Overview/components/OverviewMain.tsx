@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -16,27 +16,33 @@ export const OverviewMain = () => {
   const { active } = useMyMemberships()
   const { t } = useTranslation('overview')
 
+  const content = useMemo(() => {
+    if (active) {
+      return (
+        <>
+          {/*//TODO value has to be added*/}
+          <EarnedAndReward earnedTitle={t('totalEarned')} rewardTitle={t('totalOwed')} />
+          <DeadlineList />
+        </>
+      )
+    } else {
+      return (
+        <SectionsWrapper>
+          <WorkingGroupsOverview />
+          <CouncilOverview />
+          <ProposalsOverview />
+          <ForumThreadsOverview />
+        </SectionsWrapper>
+      )
+    }
+  }, [active])
+
   return (
     <MainPanel>
       <PageTitle>
         {t('welcome')} {active?.handle ?? t('guest')}
       </PageTitle>
-      <SectionsWrapper>
-        {!active?.handle ? (
-          <>
-            <WorkingGroupsOverview />
-            <CouncilOverview />
-            <ProposalsOverview />
-            <ForumThreadsOverview />
-          </>
-        ) : (
-          <>
-            {/*//TODO value has to be added*/}
-            <EarnedAndReward earnedTitle={t('totalEarned')} rewardTitle={t('totalOwed')} />
-            <DeadlineList />
-          </>
-        )}
-      </SectionsWrapper>
+      {content}
     </MainPanel>
   )
 }
