@@ -266,7 +266,12 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         />
       )
     case state.matches('specificParameters.setInitialInvitationCount'):
-      return <SetInitialInvitationCount setNewCount={(count) => send('SET_INVITATION_COUNT', { count })} />
+      return (
+        <SetInitialInvitationCount
+          setNewCount={(count) => send('SET_INVITATION_COUNT', { count })}
+          invitationCount={state.context.specifics?.invitationCount}
+        />
+      )
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut
