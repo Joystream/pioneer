@@ -24,9 +24,9 @@ export const Info = styled.span`
   font-weight: 700;
   z-index: 1;
 `
-export const CountInfo = ({ count, times }: { count: number; times?: boolean }) => (
+export const CountInfo = ({ count, times }: { count?: number; times?: boolean }) => (
   <Info>
-    {count}
+    {count ?? '-'}
     {times && ' times'}
   </Info>
 )

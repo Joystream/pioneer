@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type MemberFieldsFragment = {
   __typename: 'Membership'
   id: string
@@ -16,9 +16,9 @@ export type MemberFieldsFragment = {
   createdAt: any
   metadata: {
     __typename: 'MemberMetadata'
-    name?: string | null | undefined
-    about?: string | null | undefined
-    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    name?: string | null
+    about?: string | null
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
   }
   roles: Array<{
     __typename: 'Worker'
@@ -41,20 +41,24 @@ export type MemberWithDetailsFieldsFragment = {
   inviteCount: number
   createdAt: any
   entry:
-    | { __typename: 'MembershipEntryGenesis'; phantom?: number | null | undefined }
+    | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
     | {
         __typename: 'MembershipEntryInvited'
-        memberInvitedEvent?:
-          | { __typename: 'MemberInvitedEvent'; createdAt: any; inBlock: number; network: Types.Network }
-          | null
-          | undefined
+        memberInvitedEvent?: {
+          __typename: 'MemberInvitedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
       }
     | {
         __typename: 'MembershipEntryPaid'
-        membershipBoughtEvent?:
-          | { __typename: 'MembershipBoughtEvent'; createdAt: any; inBlock: number; network: Types.Network }
-          | null
-          | undefined
+        membershipBoughtEvent?: {
+          __typename: 'MembershipBoughtEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
       }
   invitees: Array<{
     __typename: 'Membership'
@@ -69,9 +73,9 @@ export type MemberWithDetailsFieldsFragment = {
     createdAt: any
     metadata: {
       __typename: 'MemberMetadata'
-      name?: string | null | undefined
-      about?: string | null | undefined
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
       __typename: 'Worker'
@@ -83,9 +87,9 @@ export type MemberWithDetailsFieldsFragment = {
   }>
   metadata: {
     __typename: 'MemberMetadata'
-    name?: string | null | undefined
-    about?: string | null | undefined
-    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+    name?: string | null
+    about?: string | null
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
   }
   roles: Array<{
     __typename: 'Worker'
@@ -118,9 +122,9 @@ export type GetMembersQuery = {
     createdAt: any
     metadata: {
       __typename: 'MemberMetadata'
-      name?: string | null | undefined
-      about?: string | null | undefined
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
       __typename: 'Worker'
@@ -147,75 +151,76 @@ export type GetMemberQueryVariables = Types.Exact<{
 
 export type GetMemberQuery = {
   __typename: 'Query'
-  membershipByUniqueInput?:
-    | {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null | undefined }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?:
-                | { __typename: 'MemberInvitedEvent'; createdAt: any; inBlock: number; network: Types.Network }
-                | null
-                | undefined
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?:
-                | { __typename: 'MembershipBoughtEvent'; createdAt: any; inBlock: number; network: Types.Network }
-                | null
-                | undefined
-            }
-        invitees: Array<{
-          __typename: 'Membership'
-          id: string
-          rootAccount: string
-          controllerAccount: string
-          boundAccounts: Array<string>
-          handle: string
-          isVerified: boolean
-          isFoundingMember: boolean
-          inviteCount: number
-          createdAt: any
-          metadata: {
-            __typename: 'MemberMetadata'
-            name?: string | null | undefined
-            about?: string | null | undefined
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
-          }
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
+  membershipByUniqueInput?: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
             createdAt: any
-            isLead: boolean
-            group: { __typename: 'WorkingGroup'; name: string }
-          }>
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null | undefined
-          about?: string | null | undefined
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+            inBlock: number
+            network: Types.Network
+          } | null
         }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+    invitees: Array<{
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
-    | null
-    | undefined
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }>
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  } | null
 }
 
 export type SearchMembersQueryVariables = Types.Exact<{
@@ -238,9 +243,9 @@ export type SearchMembersQuery = {
     createdAt: any
     metadata: {
       __typename: 'MemberMetadata'
-      name?: string | null | undefined
-      about?: string | null | undefined
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null | undefined
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
       __typename: 'Worker'
@@ -266,6 +271,17 @@ export type GetMemberExtraInfoQuery = {
   terminatedLeaderEventsConnection: { __typename: 'TerminatedLeaderEventConnection'; totalCount: number }
   terminatedWorkerEventsConnection: { __typename: 'TerminatedWorkerEventConnection'; totalCount: number }
   workerStartedLeavingEventsConnection: { __typename: 'WorkerStartedLeavingEventConnection'; totalCount: number }
+}
+
+export type GetMemberRowWorkDetailsQueryVariables = Types.Exact<{
+  workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
+}>
+
+export type GetMemberRowWorkDetailsQuery = {
+  __typename: 'Query'
+  stakeSlashedEventsConnection: { __typename: 'StakeSlashedEventConnection'; totalCount: number }
+  terminatedLeaderEventsConnection: { __typename: 'TerminatedLeaderEventConnection'; totalCount: number }
+  terminatedWorkerEventsConnection: { __typename: 'TerminatedWorkerEventConnection'; totalCount: number }
 }
 
 export const MemberFieldsFragmentDoc = gql`
@@ -549,4 +565,58 @@ export type GetMemberExtraInfoLazyQueryHookResult = ReturnType<typeof useGetMemb
 export type GetMemberExtraInfoQueryResult = Apollo.QueryResult<
   GetMemberExtraInfoQuery,
   GetMemberExtraInfoQueryVariables
+>
+export const GetMemberRowWorkDetailsDocument = gql`
+  query GetMemberRowWorkDetails($workerId_in: [ID!]!) {
+    stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetMemberRowWorkDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetMemberRowWorkDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberRowWorkDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberRowWorkDetailsQuery({
+ *   variables: {
+ *      workerId_in: // value for 'workerId_in'
+ *   },
+ * });
+ */
+export function useGetMemberRowWorkDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>(
+    GetMemberRowWorkDetailsDocument,
+    options
+  )
+}
+export function useGetMemberRowWorkDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>(
+    GetMemberRowWorkDetailsDocument,
+    options
+  )
+}
+export type GetMemberRowWorkDetailsQueryHookResult = ReturnType<typeof useGetMemberRowWorkDetailsQuery>
+export type GetMemberRowWorkDetailsLazyQueryHookResult = ReturnType<typeof useGetMemberRowWorkDetailsLazyQuery>
+export type GetMemberRowWorkDetailsQueryResult = Apollo.QueryResult<
+  GetMemberRowWorkDetailsQuery,
+  GetMemberRowWorkDetailsQueryVariables
 >
