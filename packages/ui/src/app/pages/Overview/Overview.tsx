@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { OverviewPageLayout } from '@/app/components/OverviewPageLayout'
 import { OverviewMain } from '@/app/pages/Overview/components/OverviewMain'
+import { OverviewSidebar } from '@/overview/components/OverviewSidebar/OverviewSidebar'
 
 export const Overview = () => {
-  return <PageLayout main={<OverviewMain />} />
+  return <OverviewPageLayout main={<OverviewMain />} sidebar={<OverviewSidebar />} />
 }

@@ -45,11 +45,11 @@ interface ListProps {
 export const WorkingGroupsTilesList = React.memo(({ openings }: ListProps) => {
   const { t } = useTranslation('overview')
   const tiles = openings.map((opening) => <WorkingGroupTile key={opening.id} opening={opening} />)
-  return tiles.length ? (
+  return (
     <ScrollerWrapper>
       <Scroller title={t('workingGroups.openings')} count={tiles.length} items={tiles} />
     </ScrollerWrapper>
-  ) : null
+  )
 })
 
 const Wrapper = styled.div`
@@ -75,10 +75,10 @@ const TimeLabel = styled(TextSmall)`
     grid-column-gap: 2px;
     font-size: 12px;
     font-weight: 700;
-    color: ${Colors.Black[500]}
+    color: ${Colors.Black[500]};
   }
   & span {
-    margin 0 2px 0 0;
+    margin: 0 2px 0 0;
   }
 `
 

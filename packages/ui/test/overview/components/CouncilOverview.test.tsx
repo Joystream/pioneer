@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -31,7 +31,7 @@ describe('UI: Council overview', () => {
   })
 
   describe('Stage: Normal', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       stubCouncilAndReferendum(api, 'Idle', 'Inactive')
       renderComponent()
     })
@@ -46,6 +46,8 @@ describe('UI: Council overview', () => {
     })
 
     it('Displays time to Next Election', async () => {
+      await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 3000 })
+
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
       expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
     })
@@ -56,7 +58,7 @@ describe('UI: Council overview', () => {
   })
 
   describe('Stage: Election Announcing Period', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
       seedCouncilElection(
         {
@@ -68,6 +70,7 @@ describe('UI: Council overview', () => {
       )
       seedCouncilCandidate(CANDIDATE_DATA, server.server)
       renderComponent()
+      await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
     })
 
     it('Displays proper stage', () => {
@@ -98,7 +101,7 @@ describe('UI: Council overview', () => {
   })
 
   describe('Stage: Election Revealing Period', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       stubCouncilAndReferendum(api, 'Election', 'Revealing')
       seedCouncilElection(
         {
@@ -121,7 +124,8 @@ describe('UI: Council overview', () => {
       expect(screen.queryByText(2)).not.toBeNull()
     })
 
-    it('Displays time to Next Election', () => {
+    it('Displays time to Next Election', async () => {
+      await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
       expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
     })

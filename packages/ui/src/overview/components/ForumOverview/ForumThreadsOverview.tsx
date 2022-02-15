@@ -16,10 +16,10 @@ const WEEK_AGO = subDays(startOfToday(), 7).toISOString()
 export const ForumThreadsOverview = () => {
   const { t } = useTranslation('overview')
   const { threads } = useLatestForumThreads(THREADS_NUMBER)
-  const { threadsCount } = useThreadsCount(WEEK_AGO)
+  const { threadsCount, isLoading: threadsCountLoading } = useThreadsCount(WEEK_AGO)
 
   const infoElements = useMemo(
-    () => <OverviewInfoElement value={threadsCount} label={t('forum.newThreads')} />,
+    () => <OverviewInfoElement value={threadsCount} label={t('forum.newThreads')} isLoading={threadsCountLoading} />,
     [t, threadsCount]
   )
 

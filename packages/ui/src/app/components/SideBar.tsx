@@ -177,7 +177,6 @@ const NavigationLinks = styled.ul`
   max-height: 100%;
   overflow: hidden;
   overflow-y: scroll;
-  mask-image: linear-gradient(0deg, transparent 0px, black 8px, black calc(100% - 8px), transparent 100%);
   ${RemoveScrollbar};
 `
 
