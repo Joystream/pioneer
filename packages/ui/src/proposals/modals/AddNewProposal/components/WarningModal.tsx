@@ -25,6 +25,7 @@ export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
           A proposal is a motion to change the state or policy of the system in some way. While we encourage you to make
           proposals that benefit the network, there are certain risks associated with proposals.
         </TextMedium>
+        ū
         <Info>
           <TextMedium margin="s">- proposals can get rejected by the council</TextMedium>
           <TextMedium margin="s">
