@@ -316,6 +316,17 @@ export type GetMemberExtraInfoQuery = {
   workerStartedLeavingEventsConnection: { __typename: 'WorkerStartedLeavingEventConnection'; totalCount: number }
 }
 
+export type GetMemberRowDetailsQueryVariables = Types.Exact<{
+  workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
+}>
+
+export type GetMemberRowDetailsQuery = {
+  __typename: 'Query'
+  stakeSlashedEventsConnection: { __typename: 'StakeSlashedEventConnection'; totalCount: number }
+  terminatedLeaderEventsConnection: { __typename: 'TerminatedLeaderEventConnection'; totalCount: number }
+  terminatedWorkerEventsConnection: { __typename: 'TerminatedWorkerEventConnection'; totalCount: number }
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Membership {
     id
@@ -687,4 +698,58 @@ export type GetMemberExtraInfoLazyQueryHookResult = ReturnType<typeof useGetMemb
 export type GetMemberExtraInfoQueryResult = Apollo.QueryResult<
   GetMemberExtraInfoQuery,
   GetMemberExtraInfoQueryVariables
+>
+export const GetMemberRowDetailsDocument = gql`
+  query GetMemberRowDetails($workerId_in: [ID!]!) {
+    stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetMemberRowDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetMemberRowDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberRowDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberRowDetailsQuery({
+ *   variables: {
+ *      workerId_in: // value for 'workerId_in'
+ *   },
+ * });
+ */
+export function useGetMemberRowDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>(
+    GetMemberRowDetailsDocument,
+    options
+  )
+}
+export function useGetMemberRowDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>(
+    GetMemberRowDetailsDocument,
+    options
+  )
+}
+export type GetMemberRowDetailsQueryHookResult = ReturnType<typeof useGetMemberRowDetailsQuery>
+export type GetMemberRowDetailsLazyQueryHookResult = ReturnType<typeof useGetMemberRowDetailsLazyQuery>
+export type GetMemberRowDetailsQueryResult = Apollo.QueryResult<
+  GetMemberRowDetailsQuery,
+  GetMemberRowDetailsQueryVariables
 >
