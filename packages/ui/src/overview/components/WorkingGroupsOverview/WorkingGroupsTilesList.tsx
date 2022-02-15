@@ -75,10 +75,10 @@ const TimeLabel = styled(TextSmall)`
     grid-column-gap: 2px;
     font-size: 12px;
     font-weight: 700;
-    color: ${Colors.Black[500]}
+    color: ${Colors.Black[500]};
   }
   & span {
-    margin 0 2px 0 0;
+    margin: 0 2px 0 0;
   }
 `
 

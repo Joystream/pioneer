@@ -95,6 +95,8 @@
   },
   "welcome": "Hi, ",
   "guest": "Stranger",
+  "totalEarned": "Total earned this month",
+  "totalOwed": "Total owed reward this month",
   "deadline": {
     "remainingTime": "Remaining time: ",
     "proposal": "Proposal",

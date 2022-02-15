@@ -7,6 +7,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { CouncilOverview } from '@/overview/components/CouncilOverview/CouncilOverview'
 import { DeadlineList } from '@/overview/components/DeadlineList/DeadlineList'
+import { EarnedAndReward } from '@/overview/components/EarnedAndReward/EarnedAndReward'
 import { ForumThreadsOverview } from '@/overview/components/ForumOverview/ForumThreadsOverview'
 import { ProposalsOverview } from '@/overview/components/ProposalsOverview/ProposalsOverview'
 import { WorkingGroupsOverview } from '@/overview/components/WorkingGroupsOverview/WorkingGroupsOverview'
@@ -17,7 +18,13 @@ export const OverviewMain = () => {
 
   const content = useMemo(() => {
     if (active) {
-      return <DeadlineList />
+      return (
+        <>
+          {/*//TODO value has to be added*/}
+          <EarnedAndReward earnedTitle={t('totalEarned')} rewardTitle={t('totalOwed')} />
+          <DeadlineList />
+        </>
+      )
     } else {
       return (
         <SectionsWrapper>
