@@ -8,7 +8,7 @@ import { TokenValue } from './typography'
 interface TransactionInfoProps {
   title: string
   value?: BN
-  tooltipText?: string
+  tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string

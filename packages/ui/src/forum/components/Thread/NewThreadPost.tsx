@@ -68,7 +68,10 @@ export const NewThreadPost = React.forwardRef(
             <MarkdownPreview markdown={replyTo.text} size="s" isReply />
           </Reply>
         )}
-        <InputComponent inputSize="auto">
+        <InputComponent
+          inputSize="auto"
+          message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
+        >
           <EditorMemo setNewText={setText} editorRef={editorRef} />
         </InputComponent>
         <ButtonsGroup>

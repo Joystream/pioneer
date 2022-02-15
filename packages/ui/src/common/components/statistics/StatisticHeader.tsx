@@ -6,7 +6,7 @@ import { Label } from '@/common/components/typography'
 
 export interface StatisticHeaderProps {
   title?: string
-  tooltipText?: string
+  tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string

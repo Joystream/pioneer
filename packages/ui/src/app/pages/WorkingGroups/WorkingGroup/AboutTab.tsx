@@ -25,7 +25,11 @@ export const AboutTab = ({ workingGroup }: Props) => {
     <MainPanel>
       <Statistics>
         {statistics.spending ? (
-          <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
+          <TokenValueStat
+            title="Spending"
+            tooltipText="Total spending of the working group in"
+            value={statistics.spending}
+          />
         ) : (
           <StatisticItem centered>
             <Loading />

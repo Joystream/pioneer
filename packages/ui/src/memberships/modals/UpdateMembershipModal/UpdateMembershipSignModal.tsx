@@ -97,7 +97,9 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={
+              'Transaction fee covers the cost of processing the update and storing the record on the chain.'
+            }
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>

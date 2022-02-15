@@ -7,10 +7,7 @@ import { AnnounceCandidacyButton } from '@/council/components/election/announcin
 export const NoCandidates = () => (
   <NoData>
     <h3>There are no candidates yet</h3>
-    <TextMedium>
-      Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit
-      mollit. Exercitation veniam consequat sunt nostrud amet.
-    </TextMedium>
+    <TextMedium>Be the first one to announce your candidacy. </TextMedium>
     <AnnounceCandidacyButton />
   </NoData>
 )

@@ -91,7 +91,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           <Row>
             <InputComponent
               label="Root account"
-              tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              tooltipText="Root account is used to create membership and sign membership updates. All other transactions on the network are signed with controller account."
               required
               inputSize="l"
             >
@@ -106,7 +106,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           <Row>
             <InputComponent
               label="Controller account"
-              tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              tooltipText="Controller account is used to sign transactions."
               required
               inputSize="l"
             >
@@ -167,7 +167,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               message={
                 hasError('avatarUri', errors)
                   ? getErrorMessage('avatarUri', errors)
-                  : 'Paste an URL of your avatar image. Text lorem ipsum.'
+                  : 'Paste a URL of your avatar image.'
               }
               placeholder="Image URL"
             >
