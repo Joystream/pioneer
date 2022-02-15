@@ -288,7 +288,12 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         />
       )
     case state.matches('specificParameters.setInitialInvitationBalance'): {
-      return <SetInitialInvitationBalance setAmount={(amount) => send('SET_AMOUNT', { amount })} />
+      return (
+        <SetInitialInvitationBalance
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
+          amount={state.context.specifics?.amount}
+        />
+      )
     }
     case state.matches('specificParameters.setMaxValidatorCount'):
       return (
