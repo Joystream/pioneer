@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import { ProposalMock } from 'dev/query-node-mocks/generators/generateProposals'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -90,9 +90,11 @@ describe('UI: Proposals overview', () => {
   })
 
   describe('Displays proper number of', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
+      stubProposalConstants(api)
       testProposals.map((proposal) => seedProposal(proposal, mockServer.server))
       renderComponent()
+      await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'), { timeout: 300 })
     })
 
     it('New proposals', async () => {

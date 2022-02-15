@@ -1,5 +1,5 @@
 import { createType } from '@joystream/types'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -46,6 +46,7 @@ describe('UI: Working groups overview', () => {
     beforeEach(async () => {
       stubConst(api, 'forumWorkingGroup.maxWorkerNumberLimit', createType('u32', 10))
       renderComponent()
+      await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'), { timeout: 300 })
     })
 
     it('Displays number of working groups', async () => {
@@ -82,6 +83,7 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays openings number', async () => {
+      await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'), { timeout: 300 })
       expect((await screen.findByText('workingGroups.openings')).lastChild?.textContent).toBe('1')
     })
 
