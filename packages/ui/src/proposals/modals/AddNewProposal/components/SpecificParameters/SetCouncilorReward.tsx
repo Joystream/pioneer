@@ -1,12 +1,10 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
 
 export interface SetCouncilorRewardParameters {
   amount?: BN
@@ -16,13 +14,7 @@ interface Props extends SetCouncilorRewardParameters {
   setAmount: (amount: BN) => void
 }
 
-export const SetCouncilorReward = ({ amount: initialAmount, setAmount: setCouncilorReward }: Props) => {
-  const [amount, setAmount] = useNumberInput(0, initialAmount)
-
-  useEffect(() => {
-    setCouncilorReward(new BN(amount))
-  }, [amount])
-
+export const SetCouncilorReward = ({ amount, setAmount }: Props) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -36,9 +28,10 @@ export const SetCouncilorReward = ({ amount: initialAmount, setAmount: setCounci
           <InputComponent label="New Councilor Reward" tight units="JOY" required>
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={amount?.toString()}
               placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => setAmount(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>
