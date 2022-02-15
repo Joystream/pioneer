@@ -6,8 +6,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
@@ -22,9 +20,7 @@ export interface SlashWorkingGroupLeadParameters {
 
 interface SlashWorkingGroupLeadProps extends SlashWorkingGroupLeadParameters {
   setSlashingAmount: (amount: BN) => void
-
   setGroupId(groupId: string): void
-
   setWorkerId(workerId?: number): void
 }
 
@@ -35,14 +31,11 @@ export const SlashWorkingGroupLead = ({
   setGroupId,
   setWorkerId,
 }: SlashWorkingGroupLeadProps) => {
-  const [amount, setAmount] = useNumberInput(0, slashingAmount)
-
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
   const isDisabled = !group || (group && !group.leadId)
 
-  useEffect(() => setSlashingAmount(new BN(amount)), [amount])
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
     setWorkerId(group?.leadWorker?.runtimeId)
@@ -77,14 +70,16 @@ export const SlashWorkingGroupLead = ({
             units="JOY"
             inputWidth="s"
             tooltipText="Amount to be slashed"
+            message="Amount must be greater than zero"
             required
             disabled={isDisabled}
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={slashingAmount?.toString()}
               placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => setSlashingAmount(new BN(value))}
               disabled={isDisabled}
             />
           </InputComponent>
