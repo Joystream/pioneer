@@ -260,6 +260,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         <UpdateWorkingGroupBudget
           setBudgetUpdate={(amount) => send('SET_BUDGET_UPDATE', { amount })}
           setBudgetUpdateKind={(kind) => send('SET_BUDGET_UPDATE_KIND', { kind })}
+          budgetUpdate={state.context.specifics?.budgetUpdate}
           groupId={state.context.specifics?.groupId}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
