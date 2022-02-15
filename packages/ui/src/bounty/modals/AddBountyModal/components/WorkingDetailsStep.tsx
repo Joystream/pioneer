@@ -1,8 +1,9 @@
 import { AugmentedConst } from '@polkadot/api/types'
 import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import {
   FundingPeriodDetailsContext,
@@ -11,11 +12,13 @@ import {
 } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useSchema } from '@/common/hooks/useSchema'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -26,22 +29,25 @@ interface Props extends Omit<WorkingPeriodDetailsContext, keyof FundingPeriodDet
   setWorkingPeriodWhitelist: (members: Member[]) => void
   setWorkingPeriodType: (type: WorkingPeriodType) => void
   setWorkingPeriodStake: (stake: BN) => void
-  setWorkingPeriodStakeAllowance: (allowance: boolean) => void
   whitelistLimit?: u32 & AugmentedConst<'rxjs'>
+  minEntrantStake?: BN
 }
+
+const baseSchema = Yup.object().shape({
+  workingPeriodStake: Yup.number(),
+})
 
 export const WorkingDetailsStep = ({
   workingPeriodLength,
   workingPeriodWhitelist,
   workingPeriodType,
   workingPeriodStake,
-  workingPeriodStakeAllowance,
   setWorkingPeriodLength,
   setWorkingPeriodStake,
-  setWorkingPeriodStakeAllowance,
   setWorkingPeriodType,
   setWorkingPeriodWhitelist,
   whitelistLimit,
+  minEntrantStake,
 }: Props) => {
   const onMemberAdd = (member: Member) => {
     setWorkingPeriodWhitelist([...workingPeriodWhitelist, member])
@@ -53,6 +59,22 @@ export const WorkingDetailsStep = ({
   const removeMemberFromWhitelist = (member: Member) => () => {
     setWorkingPeriodWhitelist(workingPeriodWhitelist.filter((mapMember) => mapMember.id !== member.id))
   }
+
+  const schema = useMemo(() => {
+    baseSchema.fields.workingPeriodStake = baseSchema.fields.workingPeriodStake.min(
+      minEntrantStake?.toNumber() ?? 0,
+      'Entrant stake must be greater than minimum of ${min} JOY'
+    )
+
+    return baseSchema
+  }, [workingPeriodStake])
+
+  const { errors } = useSchema(
+    {
+      workingPeriodStake: workingPeriodStake?.toNumber(),
+    },
+    schema
+  )
 
   return (
     <RowGapBlock gap={24}>
@@ -74,14 +96,7 @@ export const WorkingDetailsStep = ({
                 </Tooltip>
               </CheckBoxLabelWrapper>
             }
-            trueLabel={
-              <CheckBoxLabelWrapper>
-                Open
-                <Tooltip tooltipText="Lorem ipsum...">
-                  <TooltipDefault />
-                </Tooltip>
-              </CheckBoxLabelWrapper>
-            }
+            trueLabel={<CheckBoxLabelWrapper>Open</CheckBoxLabelWrapper>}
           />
         </InlineToggleWrap>
       </Row>
@@ -89,7 +104,7 @@ export const WorkingDetailsStep = ({
       {workingPeriodType === 'closed' && (
         <RowGapBlock gap={10}>
           <TextMedium bold>Whitelist</TextMedium>
-          <TextMedium>The upper bound for whitelist is {whitelistLimit?.toHuman() || 0}.</TextMedium>
+          <TextMedium>Maximum {whitelistLimit?.toHuman() || 0} members.</TextMedium>
           <InputComponent
             disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
             tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
@@ -132,44 +147,28 @@ export const WorkingDetailsStep = ({
         </InputComponent>
       </Row>
 
-      <Row>
-        <InlineToggleWrap>
-          <Label>Stake </Label>
-          <ToggleCheckbox
-            checked={workingPeriodStakeAllowance}
-            onChange={(isSet) => setWorkingPeriodStakeAllowance(isSet)}
-            trueLabel={
-              <CheckBoxLabelWrapper>
-                Yes{' '}
-                <Tooltip tooltipText="Lorem ipsum...">
-                  <TooltipDefault />
-                </Tooltip>
-              </CheckBoxLabelWrapper>
-            }
-            falseLabel={
-              <CheckBoxLabelWrapper>
-                No{' '}
-                <Tooltip tooltipText="Lorem ipsum...">
-                  <TooltipDefault />
-                </Tooltip>
-              </CheckBoxLabelWrapper>
-            }
-          />
-        </InlineToggleWrap>
-      </Row>
-
-      {workingPeriodStakeAllowance && (
-        <Row>
-          <InputComponent id="field-periodStake" units="JOY" inputSize="m" tight>
-            <InputNumber
-              isTokenValue
-              id="field-periodStake"
-              value={workingPeriodStake?.toString()}
-              onChange={(_, value) => setWorkingPeriodStake(new BN(value))}
-            />
-          </InputComponent>
-        </Row>
-      )}
+      <InputComponent
+        id="field-periodStake"
+        label="Entrant stake"
+        units="JOY"
+        inputSize="m"
+        tight
+        required
+        message={
+          hasError('workingPeriodStake', errors)
+            ? getErrorMessage('workingPeriodStake', errors)
+            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} JOY`
+        }
+        validation={hasError('workingPeriodStake', errors) ? 'invalid' : undefined}
+      >
+        <InputNumber
+          isTokenValue
+          id="field-periodStake"
+          placeholder="0"
+          value={workingPeriodStake?.toString()}
+          onChange={(_, value) => setWorkingPeriodStake(new BN(value))}
+        />
+      </InputComponent>
     </RowGapBlock>
   )
 }

@@ -17,7 +17,6 @@ const WorkingDetailsStepTemplate: Story = () => {
   const [workingPeriodWhitelist, setWorkingPeriodWhitelist] = useState<Member[]>([])
   const [, setWorkingPeriodType] = useState<WorkingPeriodType>()
   const [workingPeriodStake, setWorkingPeriodStake] = useState(BN_ZERO)
-  const [workingPeriodStakeAllowance, setWorkingPeriodStakeAllowance] = useState(false)
   return (
     <MockApolloProvider members>
       <WorkingDetailsStep
@@ -25,11 +24,9 @@ const WorkingDetailsStepTemplate: Story = () => {
         setWorkingPeriodWhitelist={setWorkingPeriodWhitelist}
         setWorkingPeriodType={setWorkingPeriodType}
         setWorkingPeriodStake={setWorkingPeriodStake}
-        setWorkingPeriodStakeAllowance={setWorkingPeriodStakeAllowance}
         workingPeriodType={'closed'}
         workingPeriodLength={workingPeriodLength}
         workingPeriodWhitelist={workingPeriodWhitelist}
-        workingPeriodStakeAllowance={workingPeriodStakeAllowance}
         workingPeriodStake={workingPeriodStake}
       />
     </MockApolloProvider>

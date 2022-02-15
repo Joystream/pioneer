@@ -34,7 +34,6 @@ export interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext
   workingPeriodType: WorkingPeriodType
   workingPeriodLength: BN
   workingPeriodWhitelist: Member[]
-  workingPeriodStakeAllowance: boolean
   workingPeriodStake?: BN
 }
 
@@ -100,7 +99,6 @@ type SetFundingMinimalRangeEvent = { type: 'SET_FUNDING_MINIMAL_RANGE'; fundingM
 type SetFundingMaximalRangeEvent = { type: 'SET_FUNDING_MAXIMAL_RANGE'; fundingMaximalRange: BN }
 type SetWorkingPeriodTypeEvent = { type: 'SET_WORKING_PERIOD_TYPE'; workingPeriodType: WorkingPeriodType }
 type SetWorkingPeriodLengthEvent = { type: 'SET_WORKING_PERIOD_LENGTH'; workingPeriodLength: BN }
-type SetAllowWorkingPeriodEvent = { type: 'SET_ALLOW_WORKING_PERIOD_STAKE'; workingPeriodStakeAllowance: boolean }
 type SetWorkingPeriodStakeEvent = { type: 'SET_WORKING_PERIOD_STAKE'; workingPeriodStake: BN }
 type SetWorkingPeriodWhitelistEvent = { type: 'SET_WORKING_PERIOD_WHITELIST'; workingPeriodWhitelist: Member[] }
 type SetJudgingPeriodLengthEvent = { type: 'SET_JUDGING_PERIOD_LENGTH'; judgingPeriodLength: BN }
@@ -120,7 +118,6 @@ export type AddBountyEvent =
   | SetFundingMaximalRangeEvent
   | SetWorkingPeriodTypeEvent
   | SetWorkingPeriodLengthEvent
-  | SetAllowWorkingPeriodEvent
   | SetWorkingPeriodStakeEvent
   | SetWorkingPeriodWhitelistEvent
   | SetJudgingPeriodLengthEvent
@@ -146,7 +143,6 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     description: '',
     fundingPeriodType: 'perpetual',
     workingPeriodType: 'open',
-    workingPeriodStakeAllowance: true,
     workingPeriodWhitelist: [],
   },
   states: {
@@ -233,12 +229,6 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
           actions: assign({
             workingPeriodWhitelist: (context, event) =>
               (event as SetWorkingPeriodWhitelistEvent).workingPeriodWhitelist,
-          }),
-        },
-        SET_ALLOW_WORKING_PERIOD_STAKE: {
-          actions: assign({
-            workingPeriodStakeAllowance: (context, event) =>
-              (event as SetAllowWorkingPeriodEvent).workingPeriodStakeAllowance,
           }),
         },
         SET_WORKING_PERIOD_STAKE: {

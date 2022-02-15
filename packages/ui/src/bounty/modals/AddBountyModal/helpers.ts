@@ -47,9 +47,7 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
       )
     }
     case state.matches(AddBountyStates.workingPeriodDetails): {
-      const stake = !!(context.workingPeriodStakeAllowance
-        ? context.workingPeriodStake && conditions.minWorkEntrantStake?.lt(context.workingPeriodStake)
-        : true)
+      const stake = context.workingPeriodStake && conditions.minWorkEntrantStake?.lt(context.workingPeriodStake)
       const type = !!(context.workingPeriodType === 'closed'
         ? context.workingPeriodWhitelist?.length &&
           conditions.maxWhitelistSize?.gtn(context.workingPeriodWhitelist.length)
