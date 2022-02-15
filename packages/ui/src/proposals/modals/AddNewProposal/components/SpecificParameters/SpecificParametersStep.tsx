@@ -77,7 +77,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
         specifics?.rewardPerBlock &&
         specifics?.rewardPerBlock.gtn(0) &&
         specifics.groupId &&
-        specifics.workerId
+        typeof specifics.workerId === 'number'
       )
     }
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
