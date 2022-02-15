@@ -118,6 +118,7 @@ describe('UI: AddNewProposalModal', () => {
   let batchTx: any
   let bindAccountTx: any
   let changeModeTx: any
+  let createProposalTxMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -148,7 +149,11 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
+
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
+    createProposalTxMock.mockClear()
+
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
       api,
@@ -653,6 +658,15 @@ describe('UI: AddNewProposalModal', () => {
 
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(100)
           expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Stake policy', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10)
+
+          const [, txSpecificParameters] = createProposalTxMock.mock.calls[createProposalTxMock.mock.calls.length - 1]
+          const stakePolicy = txSpecificParameters.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
+
+          expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
         })
       })
 
@@ -1329,6 +1343,20 @@ describe('UI: AddNewProposalModal', () => {
       fillDescription: async (value: string) => await fillField('field-description', value),
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
+      finish: async (group: string, description: string, shortDesc: string, stake: number, unstakingPeriod: number) => {
+        await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription(shortDesc)
+        await clickNextButton()
+
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stake)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
+
+        const createButton = await getCreateButton()
+        await act(async () => {
+          fireEvent.click(createButton as HTMLElement)
+        })
+      },
     },
     CancelWorkingGroupLeadOpening: {
       selectedOpening,
