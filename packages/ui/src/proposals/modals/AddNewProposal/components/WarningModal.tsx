@@ -22,17 +22,18 @@ export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
       <ModalHeader onClick={hideModal} title="Caution" icon={<AlertSymbol />} />
       <ModalBody>
         <TextMedium margin="s">
-          A proposal is a motion to change the state or policy of the system in some way. While we encourage you to make
-          proposals that benefit the network, there are certain risks associated with proposals.
+          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
+          velit mollit. Exercitation veniam consequat sunt nostrud amet.
         </TextMedium>
-        ū
         <Info>
-          <TextMedium margin="s">- proposals can get rejected by the council</TextMedium>
           <TextMedium margin="s">
-            - a rejection fee will be withheld upon stake recovery from rejected proposals
+            - you may get rejected amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit
+            officia consequat duis enim velit mollit
           </TextMedium>
+          <TextMedium margin="s">- you may lose a rejection fee from any required stake.</TextMedium>
           <TextMedium margin="s">
-            - you may get outright slashed, losing your entire stake. This applies only to some proposal types
+            - you may get outright slashed on top of the rejection, depending on what type of proposal this is (not true
+            for all proposal types), which means you will lose the entire stake put up.
           </TextMedium>
         </Info>
         <Checkbox id="aware-of-risks" onChange={setAwareChecked} isChecked={isAwareChecked}>
@@ -41,7 +42,7 @@ export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
       </ModalBody>
       <ModalFooter>
         <ButtonPrimary disabled={!isAwareChecked} onClick={onNext} size="medium">
-          Create A Proposal
+          I want to create a proposal anyway
           <Arrow direction="right" />
         </ButtonPrimary>
       </ModalFooter>
