@@ -64,7 +64,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
       return createType('ProposalDetailsOf', {
         CreateWorkingGroupLeadOpening: {
           description: specifics?.description,
-          staking_policy: {
+          stake_policy: {
             stake_amount: specifics?.stakingAmount,
             leaving_unstaking_period: specifics?.leavingUnstakingPeriod,
           },
