@@ -1,31 +1,24 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { useObservable } from '@/common/hooks/useObservable'
-import { formatTokenValue } from '@/common/model/formatters'
 
 export interface SetInitialInvitationCountParameters {
   invitationCount?: BN
 }
 
-interface InvitationCountProps {
+interface InvitationCountProps extends SetInitialInvitationCountParameters {
   setNewCount: (count: BN | undefined) => void
 }
 
-export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps) => {
-  const [count, setCount] = useNumberInput(0)
+export const SetInitialInvitationCount = ({ setNewCount, invitationCount }: InvitationCountProps) => {
   const { api } = useApi()
   const currentCount = useObservable(api?.query.members.initialInvitationCount(), [])
-
-  useEffect(() => {
-    setNewCount(count ? new BN(count) : undefined)
-  }, [count])
 
   return (
     <RowGapBlock gap={24}>
@@ -40,9 +33,10 @@ export const SetInitialInvitationCount = ({ setNewCount }: InvitationCountProps)
           <InputComponent label="New Count" tight required id="count-input">
             <InputNumber
               id="count-input"
-              value={formatTokenValue(count)}
+              isTokenValue
+              value={invitationCount?.toString()}
               placeholder="0"
-              onChange={(event) => setCount(event.target.value)}
+              onChange={(_, value) => setNewCount(new BN(value))}
             />
           </InputComponent>
         </Row>

@@ -1,12 +1,10 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
 
 export interface SetMembershipPriceParameters {
   amount?: BN
@@ -16,13 +14,7 @@ interface Props extends SetMembershipPriceParameters {
   setAmount: (amount: BN) => void
 }
 
-export const SetMembershipPrice = ({ amount: price, setAmount: setPrice }: Props) => {
-  const [amount, setAmount] = useNumberInput(0, price)
-
-  useEffect(() => {
-    setPrice(new BN(amount))
-  }, [amount])
-
+export const SetMembershipPrice = ({ amount, setAmount }: Props) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -33,12 +25,13 @@ export const SetMembershipPrice = ({ amount: price, setAmount: setPrice }: Props
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Membership price" tight units="JOY" required>
+          <InputComponent label="Membership price" tight units="JOY" required message="Value must be greater than zero">
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              isTokenValue
+              value={amount?.toString()}
               placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => setAmount(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>

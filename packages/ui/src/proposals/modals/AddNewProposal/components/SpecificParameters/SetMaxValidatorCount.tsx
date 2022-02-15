@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -7,9 +7,7 @@ import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useForm } from '@/common/hooks/useForm'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
+import { useSchema } from '@/common/hooks/useSchema'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 
 export interface SetMaxValidatorCountParameters {
@@ -23,10 +21,6 @@ interface SetMaxValidatorCountProps {
 
 export const MAX_VALIDATOR_COUNT = 300
 
-interface SetMaxValidatorCountForm {
-  amount?: number
-}
-
 const schemaFactory = (min?: number) => {
   const schema = Yup.object().shape({
     amount: Yup.number().max(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${max}').required(),
@@ -35,6 +29,7 @@ const schemaFactory = (min?: number) => {
   if (min) {
     schema.fields.amount = schema.fields.amount.min(min, 'Minimal amount allowed is ${min}')
   }
+
   return schema
 }
 
@@ -43,24 +38,9 @@ export const SetMaxValidatorCount = ({
   setValidatorCount: setValidator,
 }: SetMaxValidatorCountProps) => {
   const minCount = useMinimumValidatorCount()
-  const [validatorCount, setValidatorCount] = useNumberInput(0, maxValidatorCount)
-
   const schema = useMemo(() => schemaFactory(minCount?.toNumber()), [minCount])
 
-  const {
-    validation: { errors },
-    changeField,
-    fields: { amount },
-  } = useForm<SetMaxValidatorCountForm>({ amount: undefined }, schema)
-
-  useEffect(() => {
-    setValidator(new BN(validatorCount))
-  }, [validatorCount])
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValidatorCount(e.target.value)
-    changeField('amount', Number(e.target.value.replace(/,/g, ''))) // FIXME temporary
-  }
+  const { errors } = useSchema({ amount: maxValidatorCount?.toNumber() }, schema)
 
   return (
     <RowGapBlock gap={24}>
@@ -73,8 +53,11 @@ export const SetMaxValidatorCount = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
+            validation={maxValidatorCount && hasError('amount', errors) ? 'invalid' : undefined}
+            message={
+              (maxValidatorCount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) ||
+              'Amount must be greater than zero'
+            }
             label="Amount"
             tight
             units="JOY"
@@ -82,9 +65,10 @@ export const SetMaxValidatorCount = ({
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(validatorCount)}
+              isTokenValue
+              value={maxValidatorCount?.toString()}
               placeholder="0"
-              onChange={onChange}
+              onChange={(_, value) => setValidator(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>

@@ -652,6 +652,9 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(100)
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(100)
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -914,7 +917,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -1329,6 +1332,7 @@ describe('UI: AddNewProposalModal', () => {
       fillDescription: async (value: string) => await fillField('field-description', value),
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
+      fillRewardPerBlock: async (value: number) => await fillField('reward-per-block', value),
     },
     CancelWorkingGroupLeadOpening: {
       selectedOpening,
