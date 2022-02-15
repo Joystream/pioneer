@@ -1,6 +1,7 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -93,6 +94,29 @@ const APPLICATION_DATA = {
   answers: [],
   status: 'pending',
 }
+
+describe('AddNewProposalModal types parameters', () => {
+  describe('Specific parameters', () => {
+    describe('createWorkingGroupLeadOpening', () => {
+      const result = createType('ProposalDetailsOf', {
+        CreateWorkingGroupLeadOpening: {
+          description: 'Dolor deserunt adipisicing velit et.',
+          stake_policy: {
+            stake_amount: new BN(100),
+            leaving_unstaking_period: 10,
+          },
+          reward_per_block: 10,
+          working_group: 'Forum',
+        },
+      })
+
+      it('Stake policy', () => {
+        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
+        expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+      })
+    })
+  })
+})
 
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
