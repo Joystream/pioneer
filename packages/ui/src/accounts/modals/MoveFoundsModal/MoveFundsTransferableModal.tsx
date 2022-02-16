@@ -37,18 +37,18 @@ export const MoveFundsTransferableModal = ({
       <ModalHeader onClick={onClose} title="Move funds" />
       <ModalBody>
         <RowGapBlock gap={32}>
-          <TextMedium light>
-            Unfortunately, you don’t have any accounts suitable for applying to this role. You need at least{' '}
-            <TokenValue value={requiredStake} /> to apply for this role. Please move your funds.
+          <TextMedium margin="l">
+            Unfortunately, you don’t have any accounts suitable for applying to this role. In order to create this
+            proposal or apply for this role you need at least
+            <TokenValue value={requiredStake} /> on the balances free from{' '}
+            <a href="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1">rivalrous locks.</a>
           </TextMedium>
           <RowGapBlock gap={4}>
             <TextMedium bold>Accounts with transferable balances:</TextMedium>
             <RowGapBlock gap={16}>
               <MemberRowsList balances={balances} accounts={accounts} lock={lock} />
               <Info title="Info">
-                <TextMedium light>
-                  You can combine balances in one of your account or transfer tokens into new account.
-                </TextMedium>
+                <TextMedium light>Transfer the balances to lock-free accounts in My profile</TextMedium>
               </Info>
             </RowGapBlock>
           </RowGapBlock>
