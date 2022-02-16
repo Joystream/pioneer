@@ -70,6 +70,7 @@ describe('UI: AddNewBountyModal', () => {
 
   let useAccounts: UseAccounts
   let createTransaction: any
+  let forumThreadTransaction: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -92,6 +93,7 @@ describe('UI: AddNewBountyModal', () => {
     stubDefaultBalances(api)
     stubBountyConstants(api)
     createTransaction = stubTransaction(api, 'api.tx.bounty.createBounty', 100)
+    forumThreadTransaction = stubTransaction(api, 'api.tx.forum.createThread', 100)
   })
 
   describe('Requirements', () => {
@@ -311,7 +313,7 @@ describe('UI: AddNewBountyModal', () => {
       })
     })
 
-    describe('Transaction', () => {
+    describe('Forum Thread Transaction', () => {
       beforeEach(async () => {
         renderModal()
         await fillGeneralParameters()
@@ -322,16 +324,41 @@ describe('UI: AddNewBountyModal', () => {
       })
 
       it('Renders', async () => {
-        const signButton = await getButton(/^Sign transaction and Create$/i)
+        const signButton = await getThreadTxButton()
         expect(signButton).not.toBeDisabled()
       })
 
-      it('Success', async () => {
-        stubTransactionSuccess(createTransaction, 'bounty', 'BountyCreated')
-        const button = await getButton(/^Sign transaction and Create$/i)
+      it('Failure', async () => {
+        stubTransactionFailure(forumThreadTransaction)
+        const button = await getThreadTxButton()
         fireEvent.click(button)
 
-        expect(await screen.findByText(/^Success$/i)).toBeDefined()
+        expect(await screen.findByText(/^Failure$/i)).toBeDefined()
+      })
+
+      it('Success', async () => {
+        stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+        const button = await getThreadTxButton()
+        fireEvent.click(button)
+
+        expect(await screen.findByText(/^Sign transaction and Create$/i)).toBeDefined()
+      })
+    })
+
+    describe('Transaction', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+        await fillFundingPeriod()
+        await fillWorkingPeriod()
+        await fillJudgingPeriod()
+        await fillForumThread()
+        await fillForumThreadTransaction()
+      })
+
+      it('Renders', async () => {
+        const signButton = await getButton(/^Sign transaction and Create$/i)
+        expect(signButton).not.toBeDisabled()
       })
 
       it('Failure', async () => {
@@ -340,6 +367,14 @@ describe('UI: AddNewBountyModal', () => {
         fireEvent.click(button)
 
         expect(await screen.findByText(/^Failure$/i)).toBeDefined()
+      })
+
+      it('Success', async () => {
+        stubTransactionSuccess(createTransaction, 'bounty', 'BountyCreated')
+        const button = await getButton(/^Sign transaction and Create$/i)
+        fireEvent.click(button)
+
+        expect(await screen.findByText(/^Success$/i)).toBeDefined()
       })
     })
   })
@@ -406,6 +441,12 @@ describe('UI: AddNewBountyModal', () => {
     }
   }
 
+  const fillForumThreadTransaction = async () => {
+    const button = await getThreadTxButton()
+    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+    fireEvent.click(button)
+  }
+
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     fireEvent.change(amountInput, { target: { value } })
@@ -424,6 +465,7 @@ describe('UI: AddNewBountyModal', () => {
     fireEvent.click(nextButton)
   }
 
+  const getThreadTxButton = async () => getButton(/^Create Forum Thread$/i)
   const getCreateButton = async () => getButton(/create bounty/i)
 
   const createBounty = async () => {

@@ -69,6 +69,7 @@ export enum AddBountyStates {
   judgingPeriodDetails = 'judgingPeriodDetails',
   forumThreadDetails = 'forumThreadDetails',
   beforeTransaction = 'beforeTransaction',
+  createThread = 'createThread',
   transaction = 'transaction',
   success = 'success',
   error = 'error',
@@ -83,6 +84,7 @@ export type AddBountyState =
   | { value: AddBountyStates.workingPeriodDetails; context: WorkingPeriodDetailsContext }
   | { value: AddBountyStates.judgingPeriodDetails; context: JudgingPeriodDetailsContext }
   | { value: AddBountyStates.forumThreadDetails; context: ForumThreadDetailsContext }
+  | { value: AddBountyStates.createThread; context: Required<AddBountyContext> }
   | { value: AddBountyStates.transaction; context: Required<AddBountyContext> }
   | { value: AddBountyStates.success; context: Required<AddBountyContext> }
   | { value: AddBountyStates.error; context: AddBountyContext }
@@ -259,7 +261,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     [AddBountyStates.forumThreadDetails]: {
       on: {
         BACK: AddBountyStates.judgingPeriodDetails,
-        NEXT: AddBountyStates.transaction,
+        NEXT: AddBountyStates.createThread,
         SET_FORUM_THREAD_TOPIC: {
           actions: assign({
             forumThreadTopic: (context, event) => (event as SetForumThreadTopicEvent).forumThreadTopic,
@@ -273,6 +275,28 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
         },
       },
       meta: { isStep: true, stepTitle: 'Forum Thread' },
+    },
+    [AddBountyStates.createThread]: {
+      invoke: {
+        id: AddBountyStates.createThread,
+        src: transactionMachine,
+        onDone: [
+          {
+            target: [AddBountyStates.transaction],
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: (context, event) => isTransactionSuccess(context, event),
+          },
+          {
+            target: [AddBountyStates.error],
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+          {
+            target: [AddBountyStates.canceled],
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
     },
     [AddBountyStates.transaction]: {
       invoke: {
