@@ -688,7 +688,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Stake policy', async () => {
-          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10, 50)
 
           const [, txSpecificParameters] = createProposalTxMock.mock.calls[createProposalTxMock.mock.calls.length - 1]
           const stakePolicy = txSpecificParameters.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
@@ -1371,7 +1371,14 @@ describe('UI: AddNewProposalModal', () => {
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
       fillRewardPerBlock: async (value: number) => await fillField('reward-per-block', value),
-      finish: async (group: string, description: string, shortDesc: string, stake: number, unstakingPeriod: number) => {
+      finish: async (
+        group: string,
+        description: string,
+        shortDesc: string,
+        stake: number,
+        unstakingPeriod: number,
+        rewardPerBlock: number
+      ) => {
         await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription(shortDesc)
@@ -1379,6 +1386,7 @@ describe('UI: AddNewProposalModal', () => {
 
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stake)
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(rewardPerBlock)
 
         const createButton = await getCreateButton()
         await act(async () => {
