@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { BalanceLock, LockType } from '@/accounts/types'
+import { QuestionIcon } from '@/common/components/icons'
 import {
   EnvelopeIcon,
   LabelIcon,
@@ -43,7 +44,7 @@ const locksMap: Record<LockType, ReactElement> = {
   'Distribution Worker': <LockIcon />, // TODO this might need a different icon
 }
 
-export const lockIcon = (type: LockType) => locksMap[type]
+export const lockIcon = (type: LockType) => locksMap[type] ?? <QuestionIcon />
 
 export interface AccountLocksProps {
   locks?: BalanceLock[]
@@ -57,7 +58,7 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
   return (
     <AccountLocksWrapper gap={4}>
       {locks.map((lock, index) => (
-        <AccountLockIconWrapper key={index} title={lock.type}>
+        <AccountLockIconWrapper key={index} title={lock.type ?? 'Unknown lock'}>
           {lockIcon(lock.type)}
         </AccountLockIconWrapper>
       ))}

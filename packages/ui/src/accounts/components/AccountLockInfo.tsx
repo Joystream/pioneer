@@ -23,7 +23,7 @@ export const AccountLockInfo = ({ account, amount, lockType }: AccountLockInfoPr
       <AccountInfo account={account} />
       <div>
         {lockIcon(lockType)}
-        {lockType} stake
+        {lockType ?? 'Unknown'} stake
       </div>
       <TokenValueWrapper>
         <TokenValue value={amount} />
