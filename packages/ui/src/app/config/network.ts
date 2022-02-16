@@ -1,7 +1,7 @@
 export type NetworkType = 'local' | 'local-mocks' | 'olympia-testnet'
 
 export const OLYMPIA_TESTNET_CONFIG_ENDPOINT =
-  process.env.REACT_APP_OLYMPIA_TESTNET_CONFIG_ENDPOINT ?? 'https://54.210.109.171.nip.io/config.json'
+  process.env.REACT_APP_OLYMPIA_TESTNET_CONFIG_ENDPOINT ?? 'https://3.93.173.102.nip.io/network/config.json'
 
 const OLYMPIA_TESTNET_NODE_SOCKET = process.env.REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET
 const OLYMPIA_TESTNET_QUERY_NODE = process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE
