@@ -117,7 +117,11 @@ export const stubBatchTransactionSuccess = (transaction: any) => {
 export const stubTransaction = (api: UseApi, transactionPath: string, fee = 25) => {
   const transaction = {}
   set(transaction, 'paymentInfo', () => of(createRuntimeDispatchInfo(fee)))
-  set(api, transactionPath, () => transaction)
+  set(
+    api,
+    transactionPath,
+    jest.fn(() => transaction)
+  )
   return transaction
 }
 
