@@ -1,6 +1,7 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -94,6 +95,29 @@ const APPLICATION_DATA = {
   status: 'pending',
 }
 
+describe('AddNewProposalModal types parameters', () => {
+  describe('Specific parameters', () => {
+    describe('createWorkingGroupLeadOpening', () => {
+      const result = createType('ProposalDetailsOf', {
+        CreateWorkingGroupLeadOpening: {
+          description: 'Dolor deserunt adipisicing velit et.',
+          stake_policy: {
+            stake_amount: new BN(100),
+            leaving_unstaking_period: 10,
+          },
+          reward_per_block: 10,
+          working_group: 'Forum',
+        },
+      })
+
+      it('Stake policy', () => {
+        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
+        expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+      })
+    })
+  })
+})
+
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -118,6 +142,7 @@ describe('UI: AddNewProposalModal', () => {
   let batchTx: any
   let bindAccountTx: any
   let changeModeTx: any
+  let createProposalTxMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -148,7 +173,11 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
+
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock.mockClear()
+
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
       api,
@@ -656,6 +685,15 @@ describe('UI: AddNewProposalModal', () => {
 
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(100)
           expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Stake policy', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10)
+
+          const [, txSpecificParameters] = createProposalTxMock.mock.calls[createProposalTxMock.mock.calls.length - 1]
+          const stakePolicy = txSpecificParameters.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
+
+          expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
         })
       })
 
@@ -1333,6 +1371,20 @@ describe('UI: AddNewProposalModal', () => {
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
       fillRewardPerBlock: async (value: number) => await fillField('reward-per-block', value),
+      finish: async (group: string, description: string, shortDesc: string, stake: number, unstakingPeriod: number) => {
+        await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription(shortDesc)
+        await clickNextButton()
+
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stake)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
+
+        const createButton = await getCreateButton()
+        await act(async () => {
+          fireEvent.click(createButton as HTMLElement)
+        })
+      },
     },
     CancelWorkingGroupLeadOpening: {
       selectedOpening,
