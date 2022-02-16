@@ -34,7 +34,7 @@ const locksMap: Record<LockType, ReactElement> = {
   'Forum Worker': <ForumWorkerIcon />,
   'Membership Worker': <LabelIcon />,
   Invitation: <EnvelopeIcon />,
-  'Staking Candidate': <StakingIcon />,
+  'Bound Staking Account': <StakingIcon />,
   Bounties: <BountiesIcon />,
   'Gateway Worker': <OperationsWorkerIcon />,
   'Builders Worker': <OperationsWorkerIcon />,

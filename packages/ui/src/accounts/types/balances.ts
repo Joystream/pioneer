@@ -22,7 +22,7 @@ export type LockType =
   | 'Forum Worker'
   | 'Membership Worker'
   | 'Invitation'
-  | 'Staking Candidate'
+  | 'Bound Staking Account'
   | 'Bounties'
   | 'Gateway Worker'
   | 'Builders Worker'

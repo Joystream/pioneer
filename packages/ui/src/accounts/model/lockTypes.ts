@@ -17,8 +17,8 @@ export const lockTypes: { [key: string]: LockType } = {
   ['wg-forum']: 'Forum Worker',
   ['wg-membr']: 'Membership Worker',
   ['invitemb']: 'Invitation',
-  ['stakcand']: 'Staking Candidate', // TODO remove once joystream#3201 gets merged
-  ['boundsta']: 'Staking Candidate',
+  ['stakcand']: 'Bound Staking Account', // TODO remove once joystream#3201 gets merged
+  ['boundsta']: 'Bound Staking Account',
   ['bounty  ']: 'Bounties',
   ['wg-gatew']: 'Gateway Worker',
   ['wg-opera']: 'Builders Worker',

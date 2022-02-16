@@ -33,7 +33,7 @@ const LOCK_TYPE_TO_ID: Record<LockType, number> = {
   'Forum Worker': 8,
   'Membership Worker': 9,
   Invitation: 10,
-  'Staking Candidate': 11,
+  'Bound Staking Account': 11,
   Bounties: 12,
   'Gateway Worker': 13,
   'Distribution Worker': 14,
@@ -45,7 +45,7 @@ const LOCK_TYPE_TO_ID: Record<LockType, number> = {
 export const creteLockIdentifier = (type: LockType) =>
   createType('LockIdentifier', new Uint8Array(new Array(8).fill(LOCK_TYPE_TO_ID[type])))
 
-export const createBalanceLock = (amount: number, type: LockType = 'Staking Candidate') =>
+export const createBalanceLock = (amount: number, type: LockType = 'Bound Staking Account') =>
   createType('BalanceLock', {
     id: creteLockIdentifier(type),
     amount: createBalance(amount),
