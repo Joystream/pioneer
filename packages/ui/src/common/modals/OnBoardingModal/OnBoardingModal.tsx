@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
-import { MEMBERSHIP_FAUCET_ENDPOINT } from '@/app/config'
 import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
@@ -14,7 +13,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { useNetwork } from '@/common/hooks/useNetwork'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useQueryNodeTransactionStatus } from '@/common/hooks/useQueryNodeTransactionStatus'
 import { onBoardingMachine } from '@/common/modals/OnBoardingModal/machine'
@@ -31,7 +30,7 @@ export const OnBoardingModal = () => {
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
-  const [network] = useNetwork()
+  const [endpoints] = useNetworkEndpoints()
 
   const step = useMemo(() => {
     switch (status) {
@@ -63,7 +62,7 @@ export const OnBoardingModal = () => {
           about: form.about,
         }
 
-        const response = await fetch(MEMBERSHIP_FAUCET_ENDPOINT[network], {
+        const response = await fetch(endpoints.membershipFaucetEndpoint, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -87,7 +86,7 @@ export const OnBoardingModal = () => {
     if (state.matches('transaction')) {
       submitNewMembership(state.context.form)
     }
-  }, [JSON.stringify(state)])
+  }, [endpoints.membershipFaucetEndpoint, JSON.stringify(state)])
 
   useEffect(() => {
     if (membershipData?.blockHash && transactionStatus === 'confirmed') {

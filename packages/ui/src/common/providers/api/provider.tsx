@@ -5,9 +5,7 @@ import { ApiRx, WsProvider } from '@polkadot/api'
 import rpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 
-import { NODE_RPC_ENDPOINT } from '@/app/config'
-
-import { useNetwork } from '../../hooks/useNetwork'
+import { useNetworkEndpoints } from '../../hooks/useNetworkEndpoints'
 
 import { ApiContext } from './context'
 
@@ -45,10 +43,10 @@ export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 export const ApiContextProvider = ({ children }: Props) => {
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
-  const [network] = useNetwork()
+  const [endpoints] = useNetworkEndpoints()
 
   const api = useMemo(() => {
-    const provider = new WsProvider(NODE_RPC_ENDPOINT[network])
+    const provider = new WsProvider(endpoints.nodeRpcEndpoint)
     return new ApiRx({ provider, rpc, types, registry })
   }, [])
 
