@@ -50,7 +50,7 @@ export const StakingAccountStep = ({
             </TextMedium>
           </RowGapBlock>
           <InputComponent
-            label="Select account for Staking *"
+            label="Select account for Staking"
             tooltipText={
               <>
                 The budget is the root resource pool for all token minting in the working group, and the size of the
@@ -64,6 +64,7 @@ export const StakingAccountStep = ({
               </>
             }
             inputSize="l"
+            required
             validation={status === 'other' ? 'invalid' : undefined}
             message={status === 'other' ? 'This account is bound to the another member' : undefined}
           >

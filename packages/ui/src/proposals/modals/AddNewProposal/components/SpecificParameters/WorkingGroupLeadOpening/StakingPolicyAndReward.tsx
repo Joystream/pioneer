@@ -73,11 +73,12 @@ export const StakingPolicyAndReward = ({
             />
           </InputComponent>
           <InputComponent
-            id="reward-per-block *"
-            label="Reward amount per Block *"
+            id="reward-per-block"
+            label="Reward amount per Block"
             units="JOY"
             tooltipText="Reward in Joy tokens for the Working group lead"
             tight
+            required
           >
             <InputNumber
               id="reward-per-block"
