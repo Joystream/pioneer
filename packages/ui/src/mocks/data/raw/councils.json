@@ -1,46 +1,41 @@
 [
   {
     "id": "0",
-    "electedAtBlock": 84787,
-    "electedAtTime": "2021-12-03T08:26:05.473Z",
+    "electedAtBlock": 91389,
+    "electedAtTime": "2022-01-19T19:17:05.895Z",
     "electedAtNetwork": "OLYMPIA",
-    "endedAtBlock": 6257,
-    "endedAtTime": "2021-08-02T15:11:04.387Z",
-    "endedAtNetwork": "OLYMPIA",
-    "isResigned": false
+    "endedAtBlock": 60783,
+    "endedAtTime": "2021-11-28T11:20:57.030Z",
+    "endedAtNetwork": "OLYMPIA"
   },
   {
     "id": "1",
-    "electedAtBlock": 56292,
-    "electedAtTime": "2021-12-22T23:50:27.090Z",
+    "electedAtBlock": 14840,
+    "electedAtTime": "2021-10-02T11:19:42.807Z",
     "electedAtNetwork": "OLYMPIA",
-    "endedAtBlock": 73227,
-    "endedAtTime": "2022-01-26T08:50:29.989Z",
-    "endedAtNetwork": "OLYMPIA",
-    "isResigned": false
+    "endedAtBlock": 98236,
+    "endedAtTime": "2021-09-05T16:33:42.037Z",
+    "endedAtNetwork": "OLYMPIA"
   },
   {
     "id": "2",
-    "electedAtBlock": 28197,
-    "electedAtTime": "2022-01-11T08:53:23.857Z",
+    "electedAtBlock": 99395,
+    "electedAtTime": "2021-08-14T10:37:51.393Z",
     "electedAtNetwork": "OLYMPIA",
-    "endedAtBlock": 42379,
-    "endedAtTime": "2021-11-24T17:03:43.260Z",
-    "endedAtNetwork": "OLYMPIA",
-    "isResigned": false
+    "endedAtBlock": 28586,
+    "endedAtTime": "2021-11-15T20:16:18.846Z",
+    "endedAtNetwork": "OLYMPIA"
   },
   {
     "id": "3",
-    "electedAtBlock": 99194,
-    "electedAtTime": "2021-09-24T05:47:10.991Z",
-    "electedAtNetwork": "OLYMPIA",
-    "isResigned": false
+    "electedAtBlock": 60005,
+    "electedAtTime": "2021-12-28T01:59:11.517Z",
+    "electedAtNetwork": "OLYMPIA"
   },
   {
     "id": "4",
-    "electedAtBlock": 28779,
-    "electedAtTime": "2021-08-18T18:06:49.712Z",
-    "electedAtNetwork": "OLYMPIA",
-    "isResigned": false
+    "electedAtBlock": 19895,
+    "electedAtTime": "2021-09-23T08:15:55.129Z",
+    "electedAtNetwork": "OLYMPIA"
   }
 ]

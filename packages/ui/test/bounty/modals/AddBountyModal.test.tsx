@@ -1,0 +1,456 @@
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import React from 'react'
+import { MemoryRouter } from 'react-router'
+import { interpret } from 'xstate'
+
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { AddBountyModal } from '@/bounty/modals/AddBountyModal'
+import { addBountyMachine } from '@/bounty/modals/AddBountyModal/machine'
+import { CKEditorProps } from '@/common/components/CKEditor'
+import { getSteps } from '@/common/model/machines/getSteps'
+import { ApiContext } from '@/common/providers/api/context'
+import { ModalContext } from '@/common/providers/modal/context'
+import { UseModal } from '@/common/providers/modal/types'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { seedMembers } from '@/mocks/data'
+
+import { getButton } from '../../_helpers/getButton'
+import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
+import { mockCKEditor } from '../../_mocks/components/CKEditor'
+import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
+import { alice, bob } from '../../_mocks/keyring'
+import { getMember } from '../../_mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { setupMockServer } from '../../_mocks/server'
+import {
+  stubApi,
+  stubBountyConstants,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
+
+configure({ testIdAttribute: 'id' })
+
+jest.mock('@/common/components/CKEditor', () => ({
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+}))
+
+jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
+  useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
+}))
+
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
+describe('UI: AddNewBountyModal', () => {
+  const api = stubApi()
+  const useModal: UseModal<any> = {
+    hideModal: jest.fn(),
+    showModal: jest.fn(),
+    modal: null,
+    modalData: undefined,
+  }
+  const useMyMemberships: MyMemberships = {
+    active: undefined,
+    members: [],
+    setActive: (member) => (useMyMemberships.active = member),
+    isLoading: false,
+    hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
+  }
+
+  let useAccounts: UseAccounts
+  let createTransaction: any
+
+  const server = setupMockServer({ noCleanupAfterEach: true })
+
+  beforeAll(async () => {
+    await cryptoWaitReady()
+
+    seedMembers(server.server)
+
+    useAccounts = {
+      isLoading: false,
+      hasAccounts: true,
+      allAccounts: [alice, bob],
+    }
+  })
+
+  beforeEach(async () => {
+    useMyMemberships.members = [getMember('alice'), getMember('bob')]
+    useMyMemberships.setActive(getMember('alice'))
+
+    stubDefaultBalances(api)
+    stubBountyConstants(api)
+    createTransaction = stubTransaction(api, 'api.tx.bounty.createBounty', 100)
+  })
+
+  describe('Requirements', () => {
+    beforeEach(renderModal)
+
+    it('No active member', async () => {
+      useMyMemberships.active = undefined
+
+      renderModal()
+
+      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+    })
+  })
+
+  describe('Type - stepper modal', () => {
+    beforeEach(renderModal)
+
+    it('Render modal', async () => {
+      expect(await screen.queryByText('Creating New Bounty')).toBeDefined()
+    })
+
+    it('Steps', () => {
+      const service = interpret(addBountyMachine)
+      service.start()
+
+      expect(getSteps(service)).toEqual([
+        {
+          title: 'General Parameters',
+          type: 'next',
+        },
+        {
+          title: 'Funding Period Details',
+          type: 'next',
+        },
+        {
+          title: 'Working Period Details',
+          type: 'next',
+        },
+        {
+          title: 'Judging Period Details',
+          type: 'next',
+        },
+        {
+          title: 'Forum Thread',
+          type: 'next',
+        },
+      ])
+    })
+  })
+
+  describe('Details', () => {
+    describe('General Parameters', () => {
+      it('Renders', async () => {
+        renderModal()
+
+        expect(await screen.queryByText('General parameters')).toBeDefined()
+        expect(await getNextButton()).toBeDisabled()
+      })
+
+      it('Validates', async () => {
+        renderModal()
+
+        await fillGeneralParameters(false)
+
+        expect(await getNextButton()).not.toBeDisabled()
+      })
+    })
+
+    describe('Funding Details', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+      })
+
+      it('Renders', async () => {
+        expect(await screen.queryByText('Funding period details')).toBeDefined()
+        expect(await getNextButton()).toBeDisabled()
+      })
+
+      describe('Valid form', () => {
+        it('Type: Limited ', async () => {
+          await fillFundingPeriod(false)
+
+          expect(await getNextButton()).not.toBeDisabled()
+        })
+
+        it('Type: Perpetual', async () => {
+          await fillFundingPeriod(false)
+          await triggerSwitch('Perpetual')
+
+          expect(await getNextButton()).not.toBeDisabled()
+        })
+      })
+
+      describe('Invalid form', () => {
+        it('Cherry too low', async () => {
+          await fillFundingPeriod(false)
+          await fillField('field-cherry', 5)
+
+          expect(await getNextButton()).toBeDisabled()
+        })
+
+        it('Cherry exceeds balance', async () => {
+          await fillFundingPeriod(false)
+          await fillField('field-cherry', 3000)
+
+          expect(await getNextButton()).toBeDisabled()
+        })
+
+        it('Min range bigger than max range', async () => {
+          await fillFundingPeriod(false)
+          await fillField('field-minRange', 102)
+
+          expect(await getNextButton()).toBeDisabled()
+        })
+
+        // it('Min funding ???')
+      })
+    })
+
+    describe('Working Details', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+        await fillFundingPeriod()
+      })
+
+      it('Renders', async () => {
+        expect(await screen.queryAllByText('Cherry')).toBeDefined()
+        expect(await getNextButton()).toBeDisabled()
+      })
+
+      describe('Valid from', () => {
+        it('Closed with stake', async () => {
+          await fillWorkingPeriod(false)
+
+          expect(await getNextButton()).not.toBeDisabled()
+        })
+      })
+
+      describe('Invalid form', () => {
+        it('Stake too low', async () => {
+          await fillWorkingPeriod(false)
+          await fillField('field-periodStake', 5)
+
+          expect(await getNextButton()).toBeDisabled()
+        })
+      })
+    })
+
+    describe('Judgment Details', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+        await fillFundingPeriod()
+        await fillWorkingPeriod()
+      })
+
+      it('Renders', async () => {
+        expect(await screen.queryAllByText('Oralce')).toBeDefined()
+        expect(await getNextButton()).toBeDisabled()
+      })
+
+      it('Valid form', async () => {
+        await fillJudgingPeriod(false)
+
+        expect(await getNextButton()).not.toBeDisabled()
+      })
+
+      describe('Invalid form', () => {
+        it('No oracle', async () => {
+          await fillField('field-periodLength', 100)
+
+          expect(await getNextButton()).toBeDisabled()
+        })
+
+        it('No period length', async () => {
+          await selectFromDropdown('Oracle', 'bob')
+
+          expect(await getNextButton()).toBeDisabled()
+        })
+      })
+    })
+
+    describe('Forum Thread', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+        await fillFundingPeriod()
+        await fillWorkingPeriod()
+        await fillJudgingPeriod()
+      })
+
+      it('Renders', async () => {
+        expect(await screen.queryAllByText('Topic')).toBeDefined()
+        expect(await getCreateButton()).toBeDisabled()
+      })
+
+      it('Valid form', async () => {
+        await fillForumThread(false)
+
+        expect(await getCreateButton()).not.toBeDisabled()
+      })
+
+      describe('Invalid form', () => {
+        it('No topic', async () => {
+          await fillField('field-description', 'Description')
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('No description', async () => {
+          await fillField('field-topic', 'Topic')
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+      })
+    })
+
+    describe('Transaction', () => {
+      beforeEach(async () => {
+        renderModal()
+        await fillGeneralParameters()
+        await fillFundingPeriod()
+        await fillWorkingPeriod()
+        await fillJudgingPeriod()
+        await fillForumThread()
+      })
+
+      it('Renders', async () => {
+        const signButton = await getButton(/^Sign transaction and Create$/i)
+        expect(signButton).not.toBeDisabled()
+      })
+
+      it('Success', async () => {
+        stubTransactionSuccess(createTransaction, 'bounty', 'BountyCreated')
+        const button = await getButton(/^Sign transaction and Create$/i)
+        fireEvent.click(button)
+
+        expect(await screen.findByText(/^Success$/i)).toBeDefined()
+      })
+
+      it('Failure', async () => {
+        stubTransactionFailure(createTransaction)
+        const button = await getButton(/^Sign transaction and Create$/i)
+        fireEvent.click(button)
+
+        expect(await screen.findByText(/^Failure$/i)).toBeDefined()
+      })
+    })
+  })
+
+  const fillGeneralParameters = async (proceedToNextStep = true) => {
+    await fillField('field-title', 'Title')
+    await fillField('field-photo', 'Photo')
+    await fillField('field-description', 'Description')
+
+    if (proceedToNextStep) {
+      await goToNext()
+
+      await waitFor(async () => expect(await screen.queryByText('Cherry')).toBeDefined())
+    }
+  }
+
+  const fillFundingPeriod = async (proceedToNextStep = true) => {
+    await fillField('field-cherry', 100)
+    await triggerSwitch('Limited')
+    await fillField('field-periodLength', 100)
+    await fillField('field-minRange', 100)
+    await fillField('field-maxRange', 101)
+
+    if (proceedToNextStep) {
+      await goToNext()
+
+      await waitFor(async () => expect(await screen.queryByText('Stake')).toBeDefined())
+    }
+  }
+
+  const fillWorkingPeriod = async (proceedToNextStep = true) => {
+    await triggerSwitch(/^closed$/i)
+    await waitFor(async () => expect(await screen.queryByText('Whitelist')))
+    await selectFromDropdownWithId('select-whitelist', 'bob')
+    await fillField('field-periodLength', 100)
+    await fillField('field-periodStake', 100)
+
+    if (proceedToNextStep) {
+      await goToNext()
+
+      await waitFor(async () => expect(await screen.queryByText('Oracle')).toBeDefined())
+    }
+  }
+
+  const fillJudgingPeriod = async (proceedToNextStep = true) => {
+    await fillField('field-periodLength', 100)
+    await selectFromDropdown('Oracle', 'bob')
+
+    if (proceedToNextStep) {
+      await goToNext()
+
+      await waitFor(async () => expect(await screen.queryByText(/^Topic$/)).toBeDefined())
+    }
+  }
+
+  const fillForumThread = async (proceedToNextStep = true) => {
+    await fillField('field-topic', 'Topic')
+    await fillField('field-description', 'Description')
+
+    if (proceedToNextStep) {
+      await createBounty()
+
+      await waitFor(async () => expect(await screen.queryByText(/^Sign transaction and Create$/i)).toBeDefined())
+    }
+  }
+
+  async function fillField(id: string, value: number | string) {
+    const amountInput = await screen.getByTestId(id)
+    fireEvent.change(amountInput, { target: { value } })
+  }
+
+  const triggerSwitch = async (label: string | RegExp) => {
+    const labelElement = await screen.findByText(label)
+    fireEvent.click(labelElement)
+  }
+
+  const getNextButton = async () => getButton(/next step/i)
+
+  const goToNext = async () => {
+    const nextButton = await getNextButton()
+
+    fireEvent.click(nextButton)
+  }
+
+  const getCreateButton = async () => getButton(/create bounty/i)
+
+  const createBounty = async () => {
+    const createButton = await getCreateButton()
+
+    fireEvent.click(createButton)
+  }
+
+  function renderModal() {
+    return render(
+      <MemoryRouter>
+        <ModalContext.Provider value={useModal}>
+          <MockQueryNodeProviders>
+            <MockKeyringProvider>
+              <AccountsContext.Provider value={useAccounts}>
+                <ApiContext.Provider value={api}>
+                  <BalancesContextProvider>
+                    <MembershipContext.Provider value={useMyMemberships}>
+                      <AddBountyModal />
+                    </MembershipContext.Provider>
+                  </BalancesContextProvider>
+                </ApiContext.Provider>
+              </AccountsContext.Provider>
+            </MockKeyringProvider>
+          </MockQueryNodeProviders>
+        </ModalContext.Provider>
+      </MemoryRouter>
+    )
+  }
+})

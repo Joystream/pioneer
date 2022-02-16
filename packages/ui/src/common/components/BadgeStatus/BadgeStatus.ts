@@ -9,6 +9,7 @@ export interface BadgeStatusProps {
   ended?: boolean
   inverted?: boolean
   children?: string
+  color?: string
 }
 
 export const BadgeStatus = styled.span.attrs((props) => ({
@@ -31,7 +32,7 @@ export const BadgeStatus = styled.span.attrs((props) => ({
   ${({ separated }) =>
     separated &&
     css`
-      margin: 0px 4px;
+      margin: 0 4px;
 
       &:last-child {
         margin-right: 0;
@@ -42,7 +43,7 @@ export const BadgeStatus = styled.span.attrs((props) => ({
       }
     `};
 
-  ${({ inverted, ended, succeeded }) => {
+  ${({ inverted, ended, succeeded, color }) => {
     if (succeeded)
       return css`
         color: ${Colors.Green[500]};
@@ -61,7 +62,7 @@ export const BadgeStatus = styled.span.attrs((props) => ({
     else
       return css`
         color: ${Colors.White};
-        background-color: ${Colors.Blue[200]};
+        background-color: ${color || Colors.Blue[200]};
       `
   }}
 `

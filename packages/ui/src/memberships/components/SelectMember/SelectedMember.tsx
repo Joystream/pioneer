@@ -7,14 +7,21 @@ import { MemberInfo, MemberInfoProps } from '@/memberships/components/MemberInfo
 import { Member } from '@/memberships/types'
 
 export interface SelectedMemberProps
-  extends Pick<InputComponentProps, 'label' | 'disabled'>,
+  extends Pick<InputComponentProps, 'label' | 'disabled' | 'tooltipText'>,
     Pick<MemberInfoProps, 'hideGroup'> {
   member: Member | undefined
   size?: 'm' | 'l'
 }
 
-export const SelectedMember = ({ label, member, size = 'm', hideGroup, disabled }: SelectedMemberProps) => (
-  <Container label={label} inputSize={size === 'm' ? 'l' : 'xl'} disabled={disabled}>
+export const SelectedMember = ({
+  label,
+  member,
+  size = 'm',
+  hideGroup,
+  disabled,
+  tooltipText,
+}: SelectedMemberProps) => (
+  <Container label={label} inputSize={size === 'm' ? 'l' : 'xl'} disabled={disabled} tooltipText={tooltipText}>
     {member ? (
       <MemberInfo member={member} memberSize={size} size={size} hideGroup={hideGroup} skipModal />
     ) : (

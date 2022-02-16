@@ -9,7 +9,7 @@ export interface Step {
 }
 
 const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: StateNode) => {
-  if (state.matches(stateNode.path.join('.'))) {
+  if (state?.matches(stateNode.path.join('.'))) {
     return stateNode.order
   }
 

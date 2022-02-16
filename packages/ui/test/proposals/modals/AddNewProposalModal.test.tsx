@@ -211,7 +211,7 @@ describe('UI: AddNewProposalModal', () => {
 
       const { findByText } = renderModal()
 
-      expect(await findByText('Insufficient Funds')).toBeDefined()
+      expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 
@@ -681,11 +681,14 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(100)
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(100)
           expect(await getCreateButton()).toBeEnabled()
         })
 
         it('Stake policy', async () => {
-          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10, 50)
 
           const [, txSpecificParameters] = createProposalTxMock.mock.calls[createProposalTxMock.mock.calls.length - 1]
           const stakePolicy = txSpecificParameters.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
@@ -952,7 +955,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -1367,7 +1370,15 @@ describe('UI: AddNewProposalModal', () => {
       fillDescription: async (value: string) => await fillField('field-description', value),
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
-      finish: async (group: string, description: string, shortDesc: string, stake: number, unstakingPeriod: number) => {
+      fillRewardPerBlock: async (value: number) => await fillField('reward-per-block', value),
+      finish: async (
+        group: string,
+        description: string,
+        shortDesc: string,
+        stake: number,
+        unstakingPeriod: number,
+        rewardPerBlock: number
+      ) => {
         await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription(shortDesc)
@@ -1375,6 +1386,7 @@ describe('UI: AddNewProposalModal', () => {
 
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stake)
         await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(rewardPerBlock)
 
         const createButton = await getCreateButton()
         await act(async () => {

@@ -257,6 +257,49 @@ export type SearchMembersQuery = {
   }>
 }
 
+export type SimpleSearchMembersQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchMembersQuery = {
+  __typename: 'Query'
+  memberships: Array<{ __typename: 'Membership'; id: string; handle: string }>
+}
+
+export type GetMemberMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetMemberMentionQuery = {
+  __typename: 'Query'
+  membership?: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  } | null
+}
+
 export type GetMemberExtraInfoQueryVariables = Types.Exact<{
   membershipId_eq: Types.Scalars['ID']
   workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
@@ -273,11 +316,11 @@ export type GetMemberExtraInfoQuery = {
   workerStartedLeavingEventsConnection: { __typename: 'WorkerStartedLeavingEventConnection'; totalCount: number }
 }
 
-export type GetMemberRowWorkDetailsQueryVariables = Types.Exact<{
+export type GetMemberRowDetailsQueryVariables = Types.Exact<{
   workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
 }>
 
-export type GetMemberRowWorkDetailsQuery = {
+export type GetMemberRowDetailsQuery = {
   __typename: 'Query'
   stakeSlashedEventsConnection: { __typename: 'StakeSlashedEventConnection'; totalCount: number }
   terminatedLeaderEventsConnection: { __typename: 'TerminatedLeaderEventConnection'; totalCount: number }
@@ -502,6 +545,96 @@ export function useSearchMembersLazyQuery(
 export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQuery>
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
+export const SimpleSearchMembersDocument = gql`
+  query SimpleSearchMembers($text: String!, $limit: Int) {
+    memberships(where: { handle_contains: $text }, limit: $limit) {
+      id
+      handle
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchMembersQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchMembersQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>(
+    SimpleSearchMembersDocument,
+    options
+  )
+}
+export function useSimpleSearchMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchMembersQuery, SimpleSearchMembersQueryVariables>(
+    SimpleSearchMembersDocument,
+    options
+  )
+}
+export type SimpleSearchMembersQueryHookResult = ReturnType<typeof useSimpleSearchMembersQuery>
+export type SimpleSearchMembersLazyQueryHookResult = ReturnType<typeof useSimpleSearchMembersLazyQuery>
+export type SimpleSearchMembersQueryResult = Apollo.QueryResult<
+  SimpleSearchMembersQuery,
+  SimpleSearchMembersQueryVariables
+>
+export const GetMemberMentionDocument = gql`
+  query GetMemberMention($id: ID!) {
+    membership: membershipByUniqueInput(where: { id: $id }) {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+
+/**
+ * __useGetMemberMentionQuery__
+ *
+ * To run a query within a React component, call `useGetMemberMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetMemberMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberMentionQuery, GetMemberMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberMentionQuery, GetMemberMentionQueryVariables>(GetMemberMentionDocument, options)
+}
+export function useGetMemberMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberMentionQuery, GetMemberMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberMentionQuery, GetMemberMentionQueryVariables>(GetMemberMentionDocument, options)
+}
+export type GetMemberMentionQueryHookResult = ReturnType<typeof useGetMemberMentionQuery>
+export type GetMemberMentionLazyQueryHookResult = ReturnType<typeof useGetMemberMentionLazyQuery>
+export type GetMemberMentionQueryResult = Apollo.QueryResult<GetMemberMentionQuery, GetMemberMentionQueryVariables>
 export const GetMemberExtraInfoDocument = gql`
   query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
     councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {
@@ -566,8 +699,8 @@ export type GetMemberExtraInfoQueryResult = Apollo.QueryResult<
   GetMemberExtraInfoQuery,
   GetMemberExtraInfoQueryVariables
 >
-export const GetMemberRowWorkDetailsDocument = gql`
-  query GetMemberRowWorkDetails($workerId_in: [ID!]!) {
+export const GetMemberRowDetailsDocument = gql`
+  query GetMemberRowDetails($workerId_in: [ID!]!) {
     stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
       totalCount
     }
@@ -581,42 +714,42 @@ export const GetMemberRowWorkDetailsDocument = gql`
 `
 
 /**
- * __useGetMemberRowWorkDetailsQuery__
+ * __useGetMemberRowDetailsQuery__
  *
- * To run a query within a React component, call `useGetMemberRowWorkDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMemberRowWorkDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMemberRowDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberRowDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetMemberRowWorkDetailsQuery({
+ * const { data, loading, error } = useGetMemberRowDetailsQuery({
  *   variables: {
  *      workerId_in: // value for 'workerId_in'
  *   },
  * });
  */
-export function useGetMemberRowWorkDetailsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>
+export function useGetMemberRowDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>(
-    GetMemberRowWorkDetailsDocument,
+  return Apollo.useQuery<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>(
+    GetMemberRowDetailsDocument,
     options
   )
 }
-export function useGetMemberRowWorkDetailsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>
+export function useGetMemberRowDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetMemberRowWorkDetailsQuery, GetMemberRowWorkDetailsQueryVariables>(
-    GetMemberRowWorkDetailsDocument,
+  return Apollo.useLazyQuery<GetMemberRowDetailsQuery, GetMemberRowDetailsQueryVariables>(
+    GetMemberRowDetailsDocument,
     options
   )
 }
-export type GetMemberRowWorkDetailsQueryHookResult = ReturnType<typeof useGetMemberRowWorkDetailsQuery>
-export type GetMemberRowWorkDetailsLazyQueryHookResult = ReturnType<typeof useGetMemberRowWorkDetailsLazyQuery>
-export type GetMemberRowWorkDetailsQueryResult = Apollo.QueryResult<
-  GetMemberRowWorkDetailsQuery,
-  GetMemberRowWorkDetailsQueryVariables
+export type GetMemberRowDetailsQueryHookResult = ReturnType<typeof useGetMemberRowDetailsQuery>
+export type GetMemberRowDetailsLazyQueryHookResult = ReturnType<typeof useGetMemberRowDetailsLazyQuery>
+export type GetMemberRowDetailsQueryResult = Apollo.QueryResult<
+  GetMemberRowDetailsQuery,
+  GetMemberRowDetailsQueryVariables
 >

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { Account } from '@/accounts/types'
@@ -7,8 +7,6 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
 
 export interface FundingRequestParameters {
   amount?: BN
@@ -22,18 +20,7 @@ interface FundingRequestProps {
   setAccount: (account: Account) => void
 }
 
-export const FundingRequest = ({
-  amount: initialAmount,
-  account,
-  setAmount: saveAmount,
-  setAccount,
-}: FundingRequestProps) => {
-  const [amount, setAmount] = useNumberInput(0, initialAmount)
-
-  useEffect(() => {
-    saveAmount(new BN(amount))
-  }, [amount])
-
+export const FundingRequest = ({ amount, account, setAmount, setAccount }: FundingRequestProps) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -44,12 +31,13 @@ export const FundingRequest = ({
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Amount" tight units="JOY" required>
+          <InputComponent label="Amount" tight units="JOY" required message="Amount must be greater than zero">
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={amount?.toString()}
               placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => setAmount(new BN(value))}
             />
           </InputComponent>
           <InputComponent label="Recipient account" required inputSize="l">

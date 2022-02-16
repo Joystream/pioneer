@@ -692,6 +692,88 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
 
 export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
 
+export type ProposalMentionFieldsFragment = {
+  __typename: 'Proposal'
+  id: string
+  title: string
+  description: string
+  exactExecutionBlock?: number | null
+  statusSetAtBlock: number
+  statusSetAtTime: any
+  createdAt: any
+  createdInEvent: { __typename: 'ProposalCreatedEvent'; network: Types.Network }
+  details:
+    | { __typename: 'AmendConstitutionProposalDetails' }
+    | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'CreateBlogPostProposalDetails' }
+    | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+    | { __typename: 'EditBlogPostProposalDetails' }
+    | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'FundingRequestProposalDetails' }
+    | { __typename: 'LockBlogPostProposalDetails' }
+    | { __typename: 'RuntimeUpgradeProposalDetails' }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+    | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+    | { __typename: 'SetInitialInvitationCountProposalDetails' }
+    | { __typename: 'SetMaxValidatorCountProposalDetails' }
+    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+    | { __typename: 'SetMembershipPriceProposalDetails' }
+    | { __typename: 'SetReferralCutProposalDetails' }
+    | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+    | { __typename: 'SignalProposalDetails' }
+    | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+    | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UnlockBlogPostProposalDetails' }
+    | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+    | { __typename: 'VetoProposalDetails' }
+  status:
+    | { __typename: 'ProposalStatusCanceledByRuntime' }
+    | { __typename: 'ProposalStatusCancelled' }
+    | { __typename: 'ProposalStatusDeciding' }
+    | { __typename: 'ProposalStatusDormant' }
+    | { __typename: 'ProposalStatusExecuted' }
+    | { __typename: 'ProposalStatusExecutionFailed' }
+    | { __typename: 'ProposalStatusExpired' }
+    | { __typename: 'ProposalStatusGracing' }
+    | { __typename: 'ProposalStatusRejected' }
+    | { __typename: 'ProposalStatusSlashed' }
+    | { __typename: 'ProposalStatusVetoed' }
+}
+
+export type ProposalDiscussionPostMentionFieldsFragment = {
+  __typename: 'ProposalDiscussionPost'
+  id: string
+  text: string
+  createdAt: any
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+}
+
 export type GetProposalsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProposalWhereInput>
 }>
@@ -1177,6 +1259,31 @@ export type GetProposalQuery = {
   } | null
 }
 
+export type SimpleSearchProposalsQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchProposalsQuery = {
+  __typename: 'Query'
+  proposals: Array<{ __typename: 'Proposal'; id: string; title: string }>
+}
+
+export type SimpleSearchProposalDiscussionQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchProposalDiscussionQuery = {
+  __typename: 'Query'
+  proposalDiscussionPosts: Array<{
+    __typename: 'ProposalDiscussionPost'
+    id: string
+    text: string
+    discussionThreadId: string
+  }>
+}
+
 export type GetVoteWithDetailsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']
 }>
@@ -1277,6 +1384,102 @@ export type GetProposalVotesQuery = {
       }>
     }
   }>
+}
+
+export type GetProposalMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetProposalMentionQuery = {
+  __typename: 'Query'
+  proposal?: {
+    __typename: 'Proposal'
+    id: string
+    title: string
+    description: string
+    exactExecutionBlock?: number | null
+    statusSetAtBlock: number
+    statusSetAtTime: any
+    createdAt: any
+    createdInEvent: { __typename: 'ProposalCreatedEvent'; network: Types.Network }
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateBlogPostProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'EditBlogPostProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'FundingRequestProposalDetails' }
+      | { __typename: 'LockBlogPostProposalDetails' }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UnlockBlogPostProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
+    status:
+      | { __typename: 'ProposalStatusCanceledByRuntime' }
+      | { __typename: 'ProposalStatusCancelled' }
+      | { __typename: 'ProposalStatusDeciding' }
+      | { __typename: 'ProposalStatusDormant' }
+      | { __typename: 'ProposalStatusExecuted' }
+      | { __typename: 'ProposalStatusExecutionFailed' }
+      | { __typename: 'ProposalStatusExpired' }
+      | { __typename: 'ProposalStatusGracing' }
+      | { __typename: 'ProposalStatusRejected' }
+      | { __typename: 'ProposalStatusSlashed' }
+      | { __typename: 'ProposalStatusVetoed' }
+  } | null
+}
+
+export type GetProposalDiscussionPostMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetProposalDiscussionPostMentionQuery = {
+  __typename: 'Query'
+  proposalPost?: {
+    __typename: 'ProposalDiscussionPost'
+    id: string
+    text: string
+    createdAt: any
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  } | null
 }
 
 export const VoteFieldsFragmentDoc = gql`
@@ -1525,6 +1728,37 @@ export const ProposalPostParentsFragmentDoc = gql`
     discussionThreadId
   }
 `
+export const ProposalMentionFieldsFragmentDoc = gql`
+  fragment ProposalMentionFields on Proposal {
+    id
+    title
+    description
+    exactExecutionBlock
+    statusSetAtBlock
+    statusSetAtTime
+    createdAt
+    createdInEvent {
+      network
+    }
+    details {
+      __typename
+    }
+    status {
+      __typename
+    }
+  }
+`
+export const ProposalDiscussionPostMentionFieldsFragmentDoc = gql`
+  fragment ProposalDiscussionPostMentionFields on ProposalDiscussionPost {
+    id
+    text
+    createdAt
+    author {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
     proposals(where: $where) {
@@ -1603,6 +1837,115 @@ export function useGetProposalLazyQuery(
 export type GetProposalQueryHookResult = ReturnType<typeof useGetProposalQuery>
 export type GetProposalLazyQueryHookResult = ReturnType<typeof useGetProposalLazyQuery>
 export type GetProposalQueryResult = Apollo.QueryResult<GetProposalQuery, GetProposalQueryVariables>
+export const SimpleSearchProposalsDocument = gql`
+  query SimpleSearchProposals($text: String!, $limit: Int) {
+    proposals(where: { title_contains: $text }, limit: $limit) {
+      id
+      title
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchProposalsQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchProposalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchProposalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchProposalsQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchProposalsQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>(
+    SimpleSearchProposalsDocument,
+    options
+  )
+}
+export function useSimpleSearchProposalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchProposalsQuery, SimpleSearchProposalsQueryVariables>(
+    SimpleSearchProposalsDocument,
+    options
+  )
+}
+export type SimpleSearchProposalsQueryHookResult = ReturnType<typeof useSimpleSearchProposalsQuery>
+export type SimpleSearchProposalsLazyQueryHookResult = ReturnType<typeof useSimpleSearchProposalsLazyQuery>
+export type SimpleSearchProposalsQueryResult = Apollo.QueryResult<
+  SimpleSearchProposalsQuery,
+  SimpleSearchProposalsQueryVariables
+>
+export const SimpleSearchProposalDiscussionDocument = gql`
+  query SimpleSearchProposalDiscussion($text: String!, $limit: Int) {
+    proposalDiscussionPosts(where: { text_contains: $text }, limit: $limit) {
+      id
+      text
+      discussionThreadId
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchProposalDiscussionQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchProposalDiscussionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchProposalDiscussionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchProposalDiscussionQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchProposalDiscussionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SimpleSearchProposalDiscussionQuery,
+    SimpleSearchProposalDiscussionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchProposalDiscussionQuery, SimpleSearchProposalDiscussionQueryVariables>(
+    SimpleSearchProposalDiscussionDocument,
+    options
+  )
+}
+export function useSimpleSearchProposalDiscussionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SimpleSearchProposalDiscussionQuery,
+    SimpleSearchProposalDiscussionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchProposalDiscussionQuery, SimpleSearchProposalDiscussionQueryVariables>(
+    SimpleSearchProposalDiscussionDocument,
+    options
+  )
+}
+export type SimpleSearchProposalDiscussionQueryHookResult = ReturnType<typeof useSimpleSearchProposalDiscussionQuery>
+export type SimpleSearchProposalDiscussionLazyQueryHookResult = ReturnType<
+  typeof useSimpleSearchProposalDiscussionLazyQuery
+>
+export type SimpleSearchProposalDiscussionQueryResult = Apollo.QueryResult<
+  SimpleSearchProposalDiscussionQuery,
+  SimpleSearchProposalDiscussionQueryVariables
+>
 export const GetVoteWithDetailsDocument = gql`
   query GetVoteWithDetails($id: ID!) {
     proposalVotedEventByUniqueInput(where: { id: $id }) {
@@ -1788,3 +2131,108 @@ export function useGetProposalVotesLazyQuery(
 export type GetProposalVotesQueryHookResult = ReturnType<typeof useGetProposalVotesQuery>
 export type GetProposalVotesLazyQueryHookResult = ReturnType<typeof useGetProposalVotesLazyQuery>
 export type GetProposalVotesQueryResult = Apollo.QueryResult<GetProposalVotesQuery, GetProposalVotesQueryVariables>
+export const GetProposalMentionDocument = gql`
+  query GetProposalMention($id: ID!) {
+    proposal: proposalByUniqueInput(where: { id: $id }) {
+      ...ProposalMentionFields
+    }
+  }
+  ${ProposalMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetProposalMentionQuery__
+ *
+ * To run a query within a React component, call `useGetProposalMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProposalMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetProposalMentionQuery, GetProposalMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProposalMentionQuery, GetProposalMentionQueryVariables>(GetProposalMentionDocument, options)
+}
+export function useGetProposalMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProposalMentionQuery, GetProposalMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProposalMentionQuery, GetProposalMentionQueryVariables>(
+    GetProposalMentionDocument,
+    options
+  )
+}
+export type GetProposalMentionQueryHookResult = ReturnType<typeof useGetProposalMentionQuery>
+export type GetProposalMentionLazyQueryHookResult = ReturnType<typeof useGetProposalMentionLazyQuery>
+export type GetProposalMentionQueryResult = Apollo.QueryResult<
+  GetProposalMentionQuery,
+  GetProposalMentionQueryVariables
+>
+export const GetProposalDiscussionPostMentionDocument = gql`
+  query GetProposalDiscussionPostMention($id: ID!) {
+    proposalPost: proposalDiscussionPostByUniqueInput(where: { id: $id }) {
+      ...ProposalDiscussionPostMentionFields
+    }
+  }
+  ${ProposalDiscussionPostMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetProposalDiscussionPostMentionQuery__
+ *
+ * To run a query within a React component, call `useGetProposalDiscussionPostMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalDiscussionPostMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalDiscussionPostMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProposalDiscussionPostMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProposalDiscussionPostMentionQuery,
+    GetProposalDiscussionPostMentionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProposalDiscussionPostMentionQuery, GetProposalDiscussionPostMentionQueryVariables>(
+    GetProposalDiscussionPostMentionDocument,
+    options
+  )
+}
+export function useGetProposalDiscussionPostMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProposalDiscussionPostMentionQuery,
+    GetProposalDiscussionPostMentionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProposalDiscussionPostMentionQuery, GetProposalDiscussionPostMentionQueryVariables>(
+    GetProposalDiscussionPostMentionDocument,
+    options
+  )
+}
+export type GetProposalDiscussionPostMentionQueryHookResult = ReturnType<
+  typeof useGetProposalDiscussionPostMentionQuery
+>
+export type GetProposalDiscussionPostMentionLazyQueryHookResult = ReturnType<
+  typeof useGetProposalDiscussionPostMentionLazyQuery
+>
+export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
+  GetProposalDiscussionPostMentionQuery,
+  GetProposalDiscussionPostMentionQueryVariables
+>

@@ -6,7 +6,7 @@ import {
   isTransactionError,
   isTransactionSuccess,
   transactionMachine,
-} from '@/common/model/machines'
+} from '@/common/model/machines/index'
 import { EmptyObject } from '@/common/types'
 
 interface TransactionContext {
@@ -20,9 +20,9 @@ type PostActionState =
   | { value: 'success'; context: EmptyObject }
   | { value: 'error'; context: Required<TransactionContext> }
 
-export type PostActionEvent = { type: 'FAIL' } | { type: 'PASS' }
+export type ActionEvents = { type: 'FAIL' } | { type: 'PASS' }
 
-export const postActionMachine = createMachine<TransactionContext, PostActionEvent, PostActionState>({
+export const defaultTransactionModalMachine = createMachine<TransactionContext, ActionEvents, PostActionState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {

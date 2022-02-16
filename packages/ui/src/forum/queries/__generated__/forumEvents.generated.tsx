@@ -107,6 +107,8 @@ export type GetForumEventsQuery = {
     | { __typename: 'AnnouncingPeriodStartedEvent' }
     | { __typename: 'ApplicationWithdrawnEvent' }
     | { __typename: 'AppliedOnOpeningEvent' }
+    | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyMaxFundingReachedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
@@ -262,6 +264,8 @@ export type GetForumEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }

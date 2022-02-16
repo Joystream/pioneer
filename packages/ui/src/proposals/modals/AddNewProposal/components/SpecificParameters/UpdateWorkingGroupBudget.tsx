@@ -10,7 +10,6 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
@@ -37,17 +36,11 @@ export const UpdateWorkingGroupBudget = ({
   groupId,
   setGroupId,
 }: UpdateWorkingGroupBudgetProps) => {
-  const [amount, setAmount] = useNumberInput(0, budgetUpdate)
-
   const { group } = useWorkingGroup({ name: groupId })
 
   const [updateKind, setUpdateKind] = useState<UpdateKind>('Positive')
 
   const isDisabled = !group
-
-  useEffect(() => {
-    setBudgetUpdate(new BN(amount))
-  }, [amount])
 
   useEffect(() => {
     setBudgetUpdate(BN_ZERO)
@@ -109,13 +102,15 @@ export const UpdateWorkingGroupBudget = ({
             inputWidth="s"
             tooltipText="Signed amount change in budget. If budget_update is non-negative, then this amount is reduced from the council budget and credited to the group budget, otherwise the reverse."
             required
+            message="Value must be greater than zero"
             disabled={isDisabled}
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(new BN(amount))}
+              isTokenValue
+              value={budgetUpdate?.toString()}
               placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => setBudgetUpdate(new BN(value))}
               disabled={isDisabled}
             />
           </InputComponent>

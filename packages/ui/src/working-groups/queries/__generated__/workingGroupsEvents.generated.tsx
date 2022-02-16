@@ -503,6 +503,8 @@ export type GetOpeningsEventsQuery = {
         opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
         group: { __typename: 'WorkingGroup'; name: string }
       }
+    | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyMaxFundingReachedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
@@ -662,6 +664,8 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | {
         __typename: 'WorkerExitedEvent'
         id: string

@@ -165,7 +165,7 @@ describe('UI: TransferModal', () => {
 
     fireEvent.click(button)
 
-    expect(await screen.findByText(/Authorize transaction/i)).toBeDefined()
+    expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
     expect((await screen.findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
   })
 
@@ -188,7 +188,7 @@ describe('UI: TransferModal', () => {
     expect(button).not.toBeDisabled()
     fireEvent.click(button)
 
-    expect(await screen.findByText(/Authorize transaction/i)).toBeDefined()
+    expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
 
     const signButton = await getButton(/Sign transaction and Transfer/i)
     fireEvent.click(signButton)

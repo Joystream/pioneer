@@ -402,6 +402,71 @@ export type ForumPostParentsFragment = {
   thread: { __typename: 'ForumThread'; id: string; category: { __typename: 'ForumCategory'; id: string } }
 }
 
+export type ForumThreadMentionFieldsFragment = {
+  __typename: 'ForumThread'
+  id: string
+  title: string
+  visiblePostsCount: number
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+  initialPost?: { __typename: 'ForumPost'; text: string } | null
+}
+
+export type ForumPostMentionFieldsFragment = {
+  __typename: 'ForumPost'
+  id: string
+  text: string
+  createdAt: any
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+}
+
 export type GetForumCategoriesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
 }>
@@ -882,6 +947,110 @@ export type SearchForumPostQuery = {
   }>
 }
 
+export type SimpleSearchForumPostQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchForumPostQuery = {
+  __typename: 'Query'
+  forumPosts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    text: string
+    thread: { __typename: 'ForumThread'; id: string }
+  }>
+}
+
+export type SimpleSearchForumThreadsQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchForumThreadsQuery = {
+  __typename: 'Query'
+  forumThreads: Array<{ __typename: 'ForumThread'; id: string; title: string }>
+}
+
+export type GetForumPostMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetForumPostMentionQuery = {
+  __typename: 'Query'
+  forumPost?: {
+    __typename: 'ForumPost'
+    id: string
+    text: string
+    createdAt: any
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+  } | null
+}
+
+export type GetForumThreadMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetForumThreadMentionQuery = {
+  __typename: 'Query'
+  forumThread?: {
+    __typename: 'ForumThread'
+    id: string
+    title: string
+    visiblePostsCount: number
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    initialPost?: { __typename: 'ForumPost'; text: string } | null
+  } | null
+}
+
 export const ForumBaseCategoryFieldsFragmentDoc = gql`
   fragment ForumBaseCategoryFields on ForumCategory {
     id
@@ -1061,6 +1230,31 @@ export const ForumPostParentsFragmentDoc = gql`
       }
     }
   }
+`
+export const ForumThreadMentionFieldsFragmentDoc = gql`
+  fragment ForumThreadMentionFields on ForumThread {
+    id
+    title
+    visiblePostsCount
+    author {
+      ...MemberFields
+    }
+    initialPost {
+      text
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const ForumPostMentionFieldsFragmentDoc = gql`
+  fragment ForumPostMentionFields on ForumPost {
+    id
+    text
+    createdAt
+    author {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
 `
 export const GetForumCategoriesDocument = gql`
   query GetForumCategories($where: ForumCategoryWhereInput) {
@@ -1802,3 +1996,204 @@ export function useSearchForumPostLazyQuery(
 export type SearchForumPostQueryHookResult = ReturnType<typeof useSearchForumPostQuery>
 export type SearchForumPostLazyQueryHookResult = ReturnType<typeof useSearchForumPostLazyQuery>
 export type SearchForumPostQueryResult = Apollo.QueryResult<SearchForumPostQuery, SearchForumPostQueryVariables>
+export const SimpleSearchForumPostDocument = gql`
+  query SimpleSearchForumPost($text: String!, $limit: Int) {
+    forumPosts(where: { text_contains: $text }, limit: $limit) {
+      id
+      text
+      thread {
+        id
+      }
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchForumPostQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchForumPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchForumPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchForumPostQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchForumPostQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>(
+    SimpleSearchForumPostDocument,
+    options
+  )
+}
+export function useSimpleSearchForumPostLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchForumPostQuery, SimpleSearchForumPostQueryVariables>(
+    SimpleSearchForumPostDocument,
+    options
+  )
+}
+export type SimpleSearchForumPostQueryHookResult = ReturnType<typeof useSimpleSearchForumPostQuery>
+export type SimpleSearchForumPostLazyQueryHookResult = ReturnType<typeof useSimpleSearchForumPostLazyQuery>
+export type SimpleSearchForumPostQueryResult = Apollo.QueryResult<
+  SimpleSearchForumPostQuery,
+  SimpleSearchForumPostQueryVariables
+>
+export const SimpleSearchForumThreadsDocument = gql`
+  query SimpleSearchForumThreads($text: String!, $limit: Int) {
+    forumThreads(where: { title_contains: $text }, limit: $limit) {
+      id
+      title
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchForumThreadsQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchForumThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchForumThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchForumThreadsQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchForumThreadsQuery(
+  baseOptions: Apollo.QueryHookOptions<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>(
+    SimpleSearchForumThreadsDocument,
+    options
+  )
+}
+export function useSimpleSearchForumThreadsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchForumThreadsQuery, SimpleSearchForumThreadsQueryVariables>(
+    SimpleSearchForumThreadsDocument,
+    options
+  )
+}
+export type SimpleSearchForumThreadsQueryHookResult = ReturnType<typeof useSimpleSearchForumThreadsQuery>
+export type SimpleSearchForumThreadsLazyQueryHookResult = ReturnType<typeof useSimpleSearchForumThreadsLazyQuery>
+export type SimpleSearchForumThreadsQueryResult = Apollo.QueryResult<
+  SimpleSearchForumThreadsQuery,
+  SimpleSearchForumThreadsQueryVariables
+>
+export const GetForumPostMentionDocument = gql`
+  query GetForumPostMention($id: ID!) {
+    forumPost: forumPostByUniqueInput(where: { id: $id }) {
+      ...ForumPostMentionFields
+    }
+  }
+  ${ForumPostMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumPostMentionQuery__
+ *
+ * To run a query within a React component, call `useGetForumPostMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumPostMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumPostMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetForumPostMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>(
+    GetForumPostMentionDocument,
+    options
+  )
+}
+export function useGetForumPostMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumPostMentionQuery, GetForumPostMentionQueryVariables>(
+    GetForumPostMentionDocument,
+    options
+  )
+}
+export type GetForumPostMentionQueryHookResult = ReturnType<typeof useGetForumPostMentionQuery>
+export type GetForumPostMentionLazyQueryHookResult = ReturnType<typeof useGetForumPostMentionLazyQuery>
+export type GetForumPostMentionQueryResult = Apollo.QueryResult<
+  GetForumPostMentionQuery,
+  GetForumPostMentionQueryVariables
+>
+export const GetForumThreadMentionDocument = gql`
+  query GetForumThreadMention($id: ID!) {
+    forumThread: forumThreadByUniqueInput(where: { id: $id }) {
+      ...ForumThreadMentionFields
+    }
+  }
+  ${ForumThreadMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumThreadMentionQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetForumThreadMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>(
+    GetForumThreadMentionDocument,
+    options
+  )
+}
+export function useGetForumThreadMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadMentionQuery, GetForumThreadMentionQueryVariables>(
+    GetForumThreadMentionDocument,
+    options
+  )
+}
+export type GetForumThreadMentionQueryHookResult = ReturnType<typeof useGetForumThreadMentionQuery>
+export type GetForumThreadMentionLazyQueryHookResult = ReturnType<typeof useGetForumThreadMentionLazyQuery>
+export type GetForumThreadMentionQueryResult = Apollo.QueryResult<
+  GetForumThreadMentionQuery,
+  GetForumThreadMentionQueryVariables
+>

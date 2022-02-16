@@ -1,6 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { cleanInputValue } from '@/common/hooks/useNumberInput'
+import { formatTokenValue } from '@/common/model/formatters'
+
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
 import { AlertSymbol, SuccessSymbol } from '../icons/symbols'
@@ -14,6 +17,8 @@ export type InputComponentProps = InputProps &
   DisabledInputProps & {
     id?: string
     label?: string
+    sublabel?: string
+    inputDisabled?: boolean
     required?: boolean
     value?: string
     icon?: React.ReactElement
@@ -59,9 +64,11 @@ export const InputComponent = React.memo(
   ({
     id,
     label,
+    sublabel,
     required,
     validation,
     disabled,
+    inputDisabled,
     value,
     inputSize,
     inputWidth,
@@ -97,13 +104,18 @@ export const InputComponent = React.memo(
             )}
           </InputLabel>
         )}
+        {sublabel && (
+          <InputSublabelWrapper>
+            <InputSublabel>{sublabel}</InputSublabel>
+          </InputSublabelWrapper>
+        )}
         <InputContainer
           copy={copy}
           units={units}
           icon={icon}
           iconRight={iconRight}
           validation={validation}
-          disabled={disabled}
+          disabled={disabled || inputDisabled}
           inputSize={inputSize}
           borderless={borderless}
         >
@@ -145,19 +157,40 @@ export const InputText = React.memo((props: InputProps) => {
   return <Input name={props.id} type="text" autoComplete="off" {...props} />
 })
 
+interface NumberInputProps extends Omit<InputProps, 'onChange'> {
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
+  isTokenValue?: boolean
+}
+
 export const InputNumber = React.memo(
-  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+  ({
+    id,
+    required,
+    validation,
+    placeholder,
+    disabled,
+    onChange,
+    isTokenValue = false,
+    value = '',
+  }: NumberInputProps) => {
+    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const eventValue = +cleanInputValue(event.target.value)
+      if (isNaN(eventValue)) return
+
+      onChange?.(event, eventValue)
+    }
+
     return (
       <StyledNumberInput
         id={id}
         name={id}
         type="string"
-        value={value ?? ''}
+        value={isTokenValue ? formatTokenValue(value) : value}
         required={required}
         validation={validation}
         placeholder={placeholder}
         disabled={disabled}
-        onChange={onChange}
+        onChange={onInputChange}
         autoComplete="off"
       />
     )
@@ -266,6 +299,20 @@ export const InputElement = styled.div<InputElementProps>`
 const InputLabel = styled(Label)<DisabledInputProps>`
   margin-bottom: 0;
   color: ${({ disabled }) => (disabled ? Colors.Black[500] : Colors.Black[900])};
+`
+
+const InputSublabelWrapper = styled.div`
+  position: relative;
+  height: 20px;
+  margin-bottom: 16px;
+`
+
+const InputSublabel = styled(Label)`
+  font-weight: 400;
+  font-family: ${Fonts.Inter};
+  color: ${Colors.Black[700]};
+  position: absolute;
+  white-space: nowrap;
 `
 
 export const InputIcon = styled.div<DisabledInputProps>`
@@ -446,13 +493,14 @@ const InputUnits = styled.span`
   text-transform: uppercase;
 `
 
-const InputNotification = styled.div<InputProps>`
+export const InputNotification = styled.div<InputProps>`
   display: grid;
   min-height: 18px;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
-  width: fit-content;
+  width: 100%;
+  grid-template-columns: max-content;
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':
@@ -482,6 +530,6 @@ const InputNotificationIcon = styled.div`
   }
 `
 
-const InputNotificationMessage = styled(TextSmall)`
+export const InputNotificationMessage = styled(TextSmall)`
   color: inherit;
 `

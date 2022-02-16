@@ -8,7 +8,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -35,17 +34,14 @@ export const DecreaseWorkingGroupLeadStake = ({
   setGroupId,
   setWorkerId,
 }: DecreaseWorkingGroupLeadStakeProps) => {
-  const [amount, setAmount] = useNumberInput(0, stakingAmount)
-
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
-  const byHalf = () => setAmount(group && group.leadWorker ? group.leadWorker.stake.divn(2).toString() : '')
-  const byThird = () => setAmount(group && group.leadWorker ? group.leadWorker.stake.divn(3).toString() : '')
+  const byHalf = () => setStakingAmount(group && group.leadWorker ? group.leadWorker.stake.divn(2) : BN_ZERO)
+  const byThird = () => setStakingAmount(group && group.leadWorker ? group.leadWorker.stake.divn(3) : BN_ZERO)
 
   const isDisabled = !group || (group && !group.leadId)
 
-  useEffect(() => setStakingAmount(new BN(amount)), [amount])
   useEffect(() => {
     setStakingAmount(BN_ZERO)
     setWorkerId(group?.leadWorker?.runtimeId)
@@ -91,12 +87,14 @@ export const DecreaseWorkingGroupLeadStake = ({
               tooltipText="Amount by which to decrease stake."
               required
               disabled={isDisabled}
+              message="Amount must be greater than zero"
             >
               <InputNumber
                 id="amount-input"
-                value={formatTokenValue(amount)}
+                isTokenValue
+                value={stakingAmount?.toString()}
                 placeholder="0"
-                onChange={(event) => setAmount(event.target.value)}
+                onChange={(_, value) => setStakingAmount(new BN(value))}
                 disabled={isDisabled}
               />
             </InputComponent>

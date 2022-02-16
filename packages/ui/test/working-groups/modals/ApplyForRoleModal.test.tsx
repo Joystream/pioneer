@@ -146,7 +146,7 @@ describe('UI: ApplyForRoleModal', () => {
 
       renderModal()
 
-      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 

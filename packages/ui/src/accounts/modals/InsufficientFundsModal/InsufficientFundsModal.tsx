@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
@@ -29,6 +30,7 @@ export interface InsufficientFundsModalProps {
 }
 
 export function InsufficientFundsModal({ onClose, address, amount }: InsufficientFundsModalProps) {
+  const { t } = useTranslation('accounts')
   const { showModal } = useModal()
   const { allAccounts } = useMyAccounts()
   const account = useMemo(() => accountOrNamed(allAccounts, address, 'Controller account'), [allAccounts])
@@ -36,16 +38,17 @@ export function InsufficientFundsModal({ onClose, address, amount }: Insufficien
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Insufficient Funds" />
+      <ModalHeader onClick={onClose} title={t('modals.insufficientFunds.title')} />
       <ModalBody>
         <TextMedium margin="s">
-          Unfortunately, you don't have enough Tokens on your Controller account. You need at least{' '}
-          <TokenValue value={amount} /> for the transaction fee.
+          {t('modals.insufficientFunds.feeInfo1')}
+          <TokenValue value={amount} />
+          {t('modals.insufficientFunds.feeInfo2')}
         </TextMedium>
         <MemberRow>
           <AccountInfo account={account} />
           <BalanceInfoInRow>
-            <InfoTitle>Transferable balance</InfoTitle>
+            <InfoTitle>{t('modals.insufficientFunds.transferable')}</InfoTitle>
             <InfoValue>
               <TokenValue value={transferable} />
             </InfoValue>
@@ -57,7 +60,7 @@ export function InsufficientFundsModal({ onClose, address, amount }: Insufficien
           size="medium"
           onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { to: account } })}
         >
-          Add JOY to Controller Account
+          {t('modals.insufficientFunds.addJoy')}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

@@ -1,8 +1,8 @@
-import { useGetMemberRowWorkDetailsQuery } from '@/memberships/queries'
+import { useGetMemberRowDetailsQuery } from '@/memberships/queries'
 import { Member } from '@/memberships/types'
 
 export function useMemberRowWorkDetails(member: Member) {
-  const { data } = useGetMemberRowWorkDetailsQuery({
+  const { data } = useGetMemberRowDetailsQuery({
     variables: { workerId_in: member.roles.map(({ id }) => id) },
   })
 

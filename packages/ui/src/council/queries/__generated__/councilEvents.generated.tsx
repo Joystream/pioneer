@@ -63,6 +63,8 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'AnnouncingPeriodStartedEvent'; id: string; createdAt: any }
     | { __typename: 'ApplicationWithdrawnEvent' }
     | { __typename: 'AppliedOnOpeningEvent' }
+    | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyMaxFundingReachedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
@@ -158,6 +160,8 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent'; id: string; createdAt: any }
+    | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }

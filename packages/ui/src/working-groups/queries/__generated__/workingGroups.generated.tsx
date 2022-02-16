@@ -675,6 +675,20 @@ export type GetWorkingGroupOpeningsQuery = {
   }>
 }
 
+export type SimpleSearchWorkingGroupOpeningsQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchWorkingGroupOpeningsQuery = {
+  __typename: 'Query'
+  workingGroupOpenings: Array<{
+    __typename: 'WorkingGroupOpening'
+    id: string
+    metadata: { __typename: 'WorkingGroupOpeningMetadata'; shortDescription?: string | null }
+  }>
+}
+
 export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
   where: Types.WorkingGroupOpeningWhereUniqueInput
 }>
@@ -743,6 +757,140 @@ export type GetWorkingGroupOpeningQuery = {
       __typename: 'OpeningFilledEvent'
       workersHired: Array<{ __typename: 'Worker'; id: string }>
     }> | null
+  } | null
+}
+
+export type WorkingGroupOpeningMentionFieldsFragment = {
+  __typename: 'WorkingGroupOpening'
+  id: string
+  type: Types.WorkingGroupOpeningType
+  rewardPerBlock: any
+  metadata: {
+    __typename: 'WorkingGroupOpeningMetadata'
+    shortDescription?: string | null
+    description?: string | null
+    hiringLimit?: number | null
+    expectedEnding?: any | null
+  }
+  applications: Array<{ __typename: 'WorkingGroupApplication'; applicantId: string }>
+  openingfilledeventopening?: Array<{
+    __typename: 'OpeningFilledEvent'
+    id: string
+    workersHired: Array<{ __typename: 'Worker'; id: string }>
+  }> | null
+}
+
+export type GetWorkingGroupOpeningMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetWorkingGroupOpeningMentionQuery = {
+  __typename: 'Query'
+  opening?: {
+    __typename: 'WorkingGroupOpening'
+    id: string
+    type: Types.WorkingGroupOpeningType
+    rewardPerBlock: any
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      shortDescription?: string | null
+      description?: string | null
+      hiringLimit?: number | null
+      expectedEnding?: any | null
+    }
+    applications: Array<{ __typename: 'WorkingGroupApplication'; applicantId: string }>
+    openingfilledeventopening?: Array<{
+      __typename: 'OpeningFilledEvent'
+      id: string
+      workersHired: Array<{ __typename: 'Worker'; id: string }>
+    }> | null
+  } | null
+}
+
+export type WorkingGroupApplicationMentionFieldsFragment = {
+  __typename: 'WorkingGroupApplication'
+  id: string
+  createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  applicant: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+  }
+  opening: {
+    __typename: 'WorkingGroupOpening'
+    type: Types.WorkingGroupOpeningType
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      shortDescription?: string | null
+      description?: string | null
+    }
+  }
+}
+
+export type GetWorkingGroupApplicationMentionQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetWorkingGroupApplicationMentionQuery = {
+  __typename: 'Query'
+  application?: {
+    __typename: 'WorkingGroupApplication'
+    id: string
+    createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    applicant: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    opening: {
+      __typename: 'WorkingGroupOpening'
+      type: Types.WorkingGroupOpeningType
+      metadata: {
+        __typename: 'WorkingGroupOpeningMetadata'
+        shortDescription?: string | null
+        description?: string | null
+      }
+    }
   } | null
 }
 
@@ -892,6 +1040,20 @@ export type GetWorkingGroupApplicationsQuery = {
       | { __typename: 'ApplicationStatusRejected' }
       | { __typename: 'ApplicationStatusWithdrawn' }
     createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
+}
+
+export type SimpleSearchWorkingGroupApplicationsQueryVariables = Types.Exact<{
+  text: Types.Scalars['String']
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type SimpleSearchWorkingGroupApplicationsQuery = {
+  __typename: 'Query'
+  workingGroupApplications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    applicant: { __typename: 'Membership'; id: string; handle: string }
   }>
 }
 
@@ -1280,6 +1442,49 @@ export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
     }
   }
   ${WorkingGroupOpeningFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
+`
+export const WorkingGroupOpeningMentionFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningMentionFields on WorkingGroupOpening {
+    id
+    type
+    rewardPerBlock
+    metadata {
+      shortDescription
+      description
+      hiringLimit
+      expectedEnding
+    }
+    applications {
+      applicantId
+    }
+    openingfilledeventopening {
+      id
+      workersHired {
+        id
+      }
+    }
+  }
+`
+export const WorkingGroupApplicationMentionFieldsFragmentDoc = gql`
+  fragment WorkingGroupApplicationMentionFields on WorkingGroupApplication {
+    id
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+    applicant {
+      ...MemberFields
+    }
+    opening {
+      type
+      metadata {
+        shortDescription
+        description
+      }
+    }
+  }
   ${MemberFieldsFragmentDoc}
 `
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
@@ -1862,6 +2067,68 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQuery,
   GetWorkingGroupOpeningsQueryVariables
 >
+export const SimpleSearchWorkingGroupOpeningsDocument = gql`
+  query SimpleSearchWorkingGroupOpenings($text: String!, $limit: Int) {
+    workingGroupOpenings(where: { metadata: { shortDescription_contains: $text } }, limit: $limit) {
+      id
+      metadata {
+        shortDescription
+      }
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchWorkingGroupOpeningsQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchWorkingGroupOpeningsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchWorkingGroupOpeningsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchWorkingGroupOpeningsQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchWorkingGroupOpeningsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SimpleSearchWorkingGroupOpeningsQuery,
+    SimpleSearchWorkingGroupOpeningsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchWorkingGroupOpeningsQuery, SimpleSearchWorkingGroupOpeningsQueryVariables>(
+    SimpleSearchWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export function useSimpleSearchWorkingGroupOpeningsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SimpleSearchWorkingGroupOpeningsQuery,
+    SimpleSearchWorkingGroupOpeningsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SimpleSearchWorkingGroupOpeningsQuery, SimpleSearchWorkingGroupOpeningsQueryVariables>(
+    SimpleSearchWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export type SimpleSearchWorkingGroupOpeningsQueryHookResult = ReturnType<
+  typeof useSimpleSearchWorkingGroupOpeningsQuery
+>
+export type SimpleSearchWorkingGroupOpeningsLazyQueryHookResult = ReturnType<
+  typeof useSimpleSearchWorkingGroupOpeningsLazyQuery
+>
+export type SimpleSearchWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
+  SimpleSearchWorkingGroupOpeningsQuery,
+  SimpleSearchWorkingGroupOpeningsQueryVariables
+>
 export const GetWorkingGroupOpeningDocument = gql`
   query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
     workingGroupOpeningByUniqueInput(where: $where) {
@@ -1910,6 +2177,119 @@ export type GetWorkingGroupOpeningLazyQueryHookResult = ReturnType<typeof useGet
 export type GetWorkingGroupOpeningQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningQuery,
   GetWorkingGroupOpeningQueryVariables
+>
+export const GetWorkingGroupOpeningMentionDocument = gql`
+  query GetWorkingGroupOpeningMention($id: ID!) {
+    opening: workingGroupOpeningByUniqueInput(where: { id: $id }) {
+      ...WorkingGroupOpeningMentionFields
+    }
+  }
+  ${WorkingGroupOpeningMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningMentionQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupOpeningMentionQuery, GetWorkingGroupOpeningMentionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningMentionQuery, GetWorkingGroupOpeningMentionQueryVariables>(
+    GetWorkingGroupOpeningMentionDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupOpeningMentionQuery,
+    GetWorkingGroupOpeningMentionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningMentionQuery, GetWorkingGroupOpeningMentionQueryVariables>(
+    GetWorkingGroupOpeningMentionDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningMentionQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningMentionQuery>
+export type GetWorkingGroupOpeningMentionLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningMentionLazyQuery
+>
+export type GetWorkingGroupOpeningMentionQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningMentionQuery,
+  GetWorkingGroupOpeningMentionQueryVariables
+>
+export const GetWorkingGroupApplicationMentionDocument = gql`
+  query GetWorkingGroupApplicationMention($id: ID!) {
+    application: workingGroupApplicationByUniqueInput(where: { id: $id }) {
+      ...WorkingGroupApplicationMentionFields
+    }
+  }
+  ${WorkingGroupApplicationMentionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupApplicationMentionQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupApplicationMentionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupApplicationMentionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupApplicationMentionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupApplicationMentionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetWorkingGroupApplicationMentionQuery,
+    GetWorkingGroupApplicationMentionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupApplicationMentionQuery, GetWorkingGroupApplicationMentionQueryVariables>(
+    GetWorkingGroupApplicationMentionDocument,
+    options
+  )
+}
+export function useGetWorkingGroupApplicationMentionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupApplicationMentionQuery,
+    GetWorkingGroupApplicationMentionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupApplicationMentionQuery, GetWorkingGroupApplicationMentionQueryVariables>(
+    GetWorkingGroupApplicationMentionDocument,
+    options
+  )
+}
+export type GetWorkingGroupApplicationMentionQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupApplicationMentionQuery
+>
+export type GetWorkingGroupApplicationMentionLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupApplicationMentionLazyQuery
+>
+export type GetWorkingGroupApplicationMentionQueryResult = Apollo.QueryResult<
+  GetWorkingGroupApplicationMentionQuery,
+  GetWorkingGroupApplicationMentionQueryVariables
 >
 export const GetWorkingGroupOpeningQuestionsDocument = gql`
   query GetWorkingGroupOpeningQuestions($id: ID!) {
@@ -2060,6 +2440,69 @@ export type GetWorkingGroupApplicationsLazyQueryHookResult = ReturnType<typeof u
 export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
   GetWorkingGroupApplicationsQuery,
   GetWorkingGroupApplicationsQueryVariables
+>
+export const SimpleSearchWorkingGroupApplicationsDocument = gql`
+  query SimpleSearchWorkingGroupApplications($text: String!, $limit: Int) {
+    workingGroupApplications(where: { applicant: { handle_contains: $text } }, limit: $limit) {
+      id
+      applicant {
+        id
+        handle
+      }
+    }
+  }
+`
+
+/**
+ * __useSimpleSearchWorkingGroupApplicationsQuery__
+ *
+ * To run a query within a React component, call `useSimpleSearchWorkingGroupApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSimpleSearchWorkingGroupApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSimpleSearchWorkingGroupApplicationsQuery({
+ *   variables: {
+ *      text: // value for 'text'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSimpleSearchWorkingGroupApplicationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SimpleSearchWorkingGroupApplicationsQuery,
+    SimpleSearchWorkingGroupApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SimpleSearchWorkingGroupApplicationsQuery, SimpleSearchWorkingGroupApplicationsQueryVariables>(
+    SimpleSearchWorkingGroupApplicationsDocument,
+    options
+  )
+}
+export function useSimpleSearchWorkingGroupApplicationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SimpleSearchWorkingGroupApplicationsQuery,
+    SimpleSearchWorkingGroupApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    SimpleSearchWorkingGroupApplicationsQuery,
+    SimpleSearchWorkingGroupApplicationsQueryVariables
+  >(SimpleSearchWorkingGroupApplicationsDocument, options)
+}
+export type SimpleSearchWorkingGroupApplicationsQueryHookResult = ReturnType<
+  typeof useSimpleSearchWorkingGroupApplicationsQuery
+>
+export type SimpleSearchWorkingGroupApplicationsLazyQueryHookResult = ReturnType<
+  typeof useSimpleSearchWorkingGroupApplicationsLazyQuery
+>
+export type SimpleSearchWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
+  SimpleSearchWorkingGroupApplicationsQuery,
+  SimpleSearchWorkingGroupApplicationsQueryVariables
 >
 export const GetWorkingGroupApplicationIdsDocument = gql`
   query GetWorkingGroupApplicationIds($where: WorkingGroupApplicationWhereInput) {
