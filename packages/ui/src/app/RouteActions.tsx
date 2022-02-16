@@ -15,6 +15,9 @@ export const RouteActions = ({ children }: Props) => {
     const configEndpoint = query.get('network-config') ?? query.get('networkConfig')
     if (configEndpoint) {
       updateNetworkConfig(configEndpoint)
+
+      // Remove the query
+      window.location.replace(window.location.href.replace(/\?.*/, ''))
     }
   }, [query])
 

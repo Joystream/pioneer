@@ -11,7 +11,7 @@ import {
 import { Loading } from '@/common/components/Loading'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
-import { isDefined } from '@/common/utils'
+import { isDefined, objectEquals } from '@/common/utils'
 
 import { localEndpoints, NetworkEndpoints, NetworkEndpointsContext } from './context'
 
@@ -23,23 +23,36 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
   const [network, setNetwork] = useNetwork()
   const [endpoints, setEndpoints] = useState<Partial<NetworkEndpoints>>({})
   const [storedNetworkConfig, storeNetworkConfig] = useLocalStorage<Partial<NetworkEndpoints>>('network_config')
+  const [isLoading, setIsLoading] = useState(false)
 
   const updateNetworkConfig = useCallback(
     async (configEndpoint: string, fallbackOnLocalEndpoints = false) => {
+      setIsLoading(true)
       try {
         const config = await (await fetch(configEndpoint)).json()
 
-        storeNetworkConfig({
+        const newNetworkConfig = {
           queryNodeEndpointSubscription: config['graphql_server_websocket'],
           queryNodeEndpoint: config['graphql_server'],
           membershipFaucetEndpoint: config['member_faucet'],
           nodeRpcEndpoint: config['websocket_rpc'],
-        })
+        }
 
-        if (network !== 'olympia-testnet') {
+        const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(storedNetworkConfig ?? {})
+        const shouldUpdateNetwork = network !== 'olympia-testnet'
+
+        if (shouldUpdateConfig) {
+          storeNetworkConfig(newNetworkConfig)
+        }
+        if (shouldUpdateNetwork) {
           setNetwork('olympia-testnet')
         }
+        if (shouldUpdateConfig || shouldUpdateNetwork) {
+          return window.location.reload()
+        }
+        setIsLoading(false)
       } catch (err) {
+        setIsLoading(false)
         const errMsg = `Failed to fetch the network configuration from ${configEndpoint}.`
 
         if (fallbackOnLocalEndpoints) {
@@ -61,9 +74,9 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
     } else {
       setEndpoints(endpoints)
     }
-  }, [network, storedNetworkConfig, updateNetworkConfig])
+  }, [network, updateNetworkConfig])
 
-  if (!endpointsAreDefined(endpoints)) {
+  if (!endpointsAreDefined(endpoints) || isLoading) {
     return <Loading text="Loading network endpoints" />
   }
 
