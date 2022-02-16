@@ -16,7 +16,7 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
-import { TransactionModal } from '@/common/modals/TransactionModal'
+import { MultiTransactionConfig, TransactionModal } from '@/common/modals/TransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
 
 export interface Props {
@@ -27,6 +27,7 @@ export interface Props {
   description: React.ReactNode
   buttonLabel: string
   contributeAmount?: BN
+  useMultiTransaction?: MultiTransactionConfig
 }
 
 export const AuthorizeTransactionModal = ({
@@ -37,6 +38,7 @@ export const AuthorizeTransactionModal = ({
   description,
   buttonLabel,
   contributeAmount,
+  useMultiTransaction,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
@@ -61,10 +63,9 @@ export const AuthorizeTransactionModal = ({
     [balances, paymentInfo?.partialFee]
   )
 
-  const accountsFilter = useCallback(
-    (acc: Account) => accountsWithValidAmount.includes(acc.address),
-    [accountsWithValidAmount.length]
-  )
+  const accountsFilter = useCallback((acc: Account) => accountsWithValidAmount.includes(acc.address), [
+    accountsWithValidAmount.length,
+  ])
 
   useEffect(() => {
     if (selectedAccount && paymentInfo?.partialFee) {
@@ -73,7 +74,7 @@ export const AuthorizeTransactionModal = ({
   }, [selectedAccount, paymentInfo?.partialFee])
 
   return (
-    <TransactionModal onClose={onClose} service={service}>
+    <TransactionModal onClose={onClose} service={service} useMultiTransaction={useMultiTransaction}>
       <ModalBody>
         <div>
           <TextMedium light margin="xs">

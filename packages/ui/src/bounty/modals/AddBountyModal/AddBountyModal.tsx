@@ -19,7 +19,7 @@ import {
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { ButtonPrimary, ButtonsGroup, ButtonGhost } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -33,6 +33,8 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { Member } from '@/memberships/types'
+
+const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
   const { hideModal, showModal } = useModal()
@@ -81,6 +83,25 @@ export const AddBountyModal = () => {
     return null
   }
 
+  if (state.matches(AddBountyStates.createThread)) {
+    const { forumThreadTopic, forumThreadDescription } = state.context
+    const transaction = api.tx.forum.createThread(activeMember.id, 0, forumThreadTopic, forumThreadDescription, null)
+    const service = state.children.createThread
+    const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
+
+    return (
+      <AuthorizeTransactionModal
+        onClose={hideModal}
+        transaction={transaction}
+        service={service}
+        controllerAccount={controllerAccount}
+        description="You intend to create forum thread for your bounty."
+        buttonLabel="Create Forum Thread"
+        useMultiTransaction={{ steps: transactionSteps, active: 0 }}
+      />
+    )
+  }
+
   if (state.matches(AddBountyStates.transaction)) {
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
@@ -101,6 +122,7 @@ export const AddBountyModal = () => {
           </>
         }
         controllerAccount={controllerAccount}
+        useMultiTransaction={{ steps: transactionSteps, active: 1 }}
       />
     )
   }
