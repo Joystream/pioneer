@@ -63,9 +63,10 @@ export const AuthorizeTransactionModal = ({
     [balances, paymentInfo?.partialFee]
   )
 
-  const accountsFilter = useCallback((acc: Account) => accountsWithValidAmount.includes(acc.address), [
-    accountsWithValidAmount.length,
-  ])
+  const accountsFilter = useCallback(
+    (acc: Account) => accountsWithValidAmount.includes(acc.address),
+    [accountsWithValidAmount.length]
+  )
 
   useEffect(() => {
     if (selectedAccount && paymentInfo?.partialFee) {
