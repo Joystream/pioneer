@@ -22,6 +22,7 @@ import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
 const locksMap: Record<LockType, ReactElement> = {
   Staking: <LockIcon />,
+  Vesting: <LockIcon />, // TODO this might need a different icon
   Voting: <VoteIcon />,
   'Council Candidate': <CouncilCandidateIcon />,
   Councilor: <CouncilorIcon />,
@@ -35,8 +36,11 @@ const locksMap: Record<LockType, ReactElement> = {
   Invitation: <EnvelopeIcon />,
   'Staking Candidate': <StakingIcon />,
   Bounties: <BountiesIcon />,
-  'Gateway Worker': <LockIcon />,
-  'Distribution Worker': <OperationsWorkerIcon />,
+  'Gateway Worker': <OperationsWorkerIcon />,
+  'Builders Worker': <OperationsWorkerIcon />,
+  'HR Worker': <OperationsWorkerIcon />,
+  'Marketing Worker': <OperationsWorkerIcon />,
+  'Distribution Worker': <LockIcon />, // TODO this might need a different icon
 }
 
 export const lockIcon = (type: LockType) => locksMap[type]

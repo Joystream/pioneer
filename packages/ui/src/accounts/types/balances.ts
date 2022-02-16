@@ -6,9 +6,11 @@ import { Address } from '@/common/types'
  * The default Polkadot lock ("staking ")
  */
 type PolkadotStakingLock = 'Staking'
+type PolkadotVestingLock = 'Vesting'
 
 export type LockType =
   | PolkadotStakingLock
+  | PolkadotVestingLock
   | 'Voting'
   | 'Council Candidate'
   | 'Councilor'
@@ -23,6 +25,9 @@ export type LockType =
   | 'Staking Candidate'
   | 'Bounties'
   | 'Gateway Worker'
+  | 'Builders Worker'
+  | 'HR Worker'
+  | 'Marketing Worker'
   | 'Distribution Worker'
 
 export interface BalanceLock {
