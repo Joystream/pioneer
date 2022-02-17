@@ -74,7 +74,7 @@ export const CANDIDATE_DATA = {
   stakingAccountId: '',
   rewardAccountId: '',
   noteMetadata: {
-    header: '',
+    header: 'Default title',
     bulletPoints: [],
     bannerImageUri: '',
     description: '',

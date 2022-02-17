@@ -124,8 +124,8 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>
             <TextMedium>
-              You must stake <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to announce candidacy. This stake
-              will be returned to you when the lorem ipsum dolor sit amet.
+              You must stake <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to announce candidacy. his stake
+              will be return to you if your candidacy fails as a result of the council voting.
             </TextMedium>
           </RowGapBlock>
           <InputComponent

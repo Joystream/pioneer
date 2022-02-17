@@ -5,52 +5,37 @@ type ProposalDescriptions = {
 }
 export const proposalDescriptions: ProposalDescriptions = {
   signal:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  runtimeUpgrade:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  fundingRequest:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  setMaxValidatorCount:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'Think of signal as the what, whereas rationale parameter in other proposals would be the why. Signal proposal does not effect any platform parameters when accepted. ',
+  runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',
+  fundingRequest: 'Request to credit council budget and transfer tokens to specified accounts.',
+  setMaxValidatorCount: 'Specifies maximum allowed validator workers on the platform.',
   createWorkingGroupLeadOpening:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  fillWorkingGroupLeadOpening:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  updateWorkingGroupBudget:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  decreaseWorkingGroupLeadStake:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  slashWorkingGroupLead:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  setWorkingGroupLeadReward:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'Same effect as when creating an opening for workers in the given group with given inputs, except the opening type is for lead.',
+  fillWorkingGroupLeadOpening: 'Same effect as when filling opening in group for worker with given inputs.',
+  updateWorkingGroupBudget: 'Same effect as when filling opening in group for worker with given inputs.',
+  decreaseWorkingGroupLeadStake: 'Same effect as when decreasing worker stake in group with given inputs.',
+  slashWorkingGroupLead: 'Same effect as slashing worker in the group, the staking account gets slashed.',
+  setWorkingGroupLeadReward: 'Same effect as updating the reward of the worker.',
   terminateWorkingGroupLead:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  amendConstitution:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  cancelWorkingGroupLeadOpening:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  setMembershipPrice:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'Same as when terminating a worker in group with given inputs, and removing lead designation.',
+  amendConstitution: 'Proposal to amend constitution. Does not effect platform parameters.',
+  cancelWorkingGroupLeadOpening: 'Same as when cancelling an opening for workers in the given group with given inputs.',
+  setMembershipPrice: 'Sets new membership price.',
   setCouncilBudgetIncrement:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'This proposal sets how much tokens is added to council budget every new budget period. This budget is spent on working groups, spending proposals and council rewards.',
   setCouncilorReward:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'All councillors are paid out the same flat reward rate from the councillor budget, subject to budget constraints. ',
   setInitialInvitationBalance:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'Invitation balance is deposited to new member’s account to cover basic transactions. This balance can only be used on fees.',
   setInitialInvitationCount:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'New members have default allocation of new members invite. Invites can be transferred to other members.',
   setMembershipLeadInvitationQuota:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'Membership Workgroup Lead is automatically assigned invitations upon taking the role. This proposals is aimed on managing this invitations count.',
   setReferralCut:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  createBlogPost:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  editBlogPost:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  lockBlogPost:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  unlockBlogPost:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  veto: 'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+    'Referrals, same as new membership invitations are incentivised by the platform. Referral cut entails the reward to the originator of invitation links which resulted in new memberships.',
+  createBlogPost: 'Council blog',
+  editBlogPost: 'Unlocked blog post can be edited.',
+  lockBlogPost: 'When a post is locked it can no longer be modified.',
+  unlockBlogPost: 'Unlocked post can be modified.',
+  veto: 'Veto for a particular, previously issued proposal. Vetoed proposal is automatically discarded.',
 }

@@ -33,6 +33,26 @@ export interface ProposalListItemProps {
 
 export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }: ProposalListItemProps) => {
   const displayDate = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
+  const checkStatus = () => {
+    switch (proposal.status) {
+      case 'deciding':
+        return 'Initial stage for all successfully created proposals. This is the only stage where votes submitted can actually impact the outcome. If a new council is elected, any present stake is slashed by rejection fee, the staking lock is removed and the proposal transitions to the rejected stage.'
+      case 'dormant':
+        return 'Proposal was approved by current council, but requires further approvals to satisfy constitutionality requirement, which is a minimum number of consecutive council votes. Transitions to deciding stage when next council is elected.'
+      case 'gracing':
+        return 'Proposal was approved by current council, but requires further approvals to satisfy constitutionality requirement, which is a minimum number of consecutive council votes. Transitions to deciding stage when next council is elected.'
+      case 'vetoed':
+        return 'Was halted by SUDO, nothing further can happen. This will be removed at mainnet.'
+      case 'slashed':
+        return 'Was rejected with full stake penalty by the current council.'
+      case 'executed':
+        return 'Execution succeeded, nothing further can happen.'
+      case 'executionFailed':
+        return 'Execution failed due to unsatisfied execution conditions, nothing further can happen.'
+      case 'rejected':
+        return 'Proposal was rejected by council. Rationale can be checked in proposal details, and nothing further can happen.'
+    }
+  }
   return (
     <ProposalItem
       as={GhostRouterLink}
@@ -43,7 +63,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <Subscription>
-            {isPast ? 'Ended at:' : 'Created at:'} {toDDMMYY(displayDate)}
+            {isPast ? 'Ended at:' : 'Created at:'} {toDDMMYY(displayDate)}ž
           </Subscription>
           <BadgeStatus>{camelCaseToText(proposal.type)}</BadgeStatus>
         </ToggleableItemInfoTop>
@@ -51,7 +71,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       </ToggleableItemInfo>
       <StageField>
         <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
-        <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
+        <Tooltip tooltipText={checkStatus()}>
           <TooltipDefault />
         </Tooltip>
       </StageField>

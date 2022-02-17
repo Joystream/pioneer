@@ -1299,7 +1299,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getWarningNextButton() {
-    return (await screen.findByText('I want to create a proposal anyway')).parentElement
+    return (await screen.findByText('Create A Proposal')).parentElement
   }
 
   async function getPreviousStepButton() {

@@ -2,10 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
-import { Label } from '@/common/components/typography'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { Label, TextMedium } from '@/common/components/typography'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
@@ -26,9 +28,43 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
   return (
     <MainPanel>
       <Statistics>
-        <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
-        <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={debt} />
-        <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={workingGroup.averageStake} />
+        <TokenValueStat
+          title="Current budget"
+          tooltipText={
+            <>
+              The budget is the root resource pool for all token minting in the working group, and the size of the pool
+              is denoted by budget.
+              <TooltipExternalLink
+                href="https://joystream.gitbook.io/joystream-handbook/governance/working-groups#budget"
+                target="_blank"
+              >
+                <TextMedium>Link</TextMedium> <LinkSymbol />
+              </TooltipExternalLink>
+            </>
+          }
+          value={workingGroup.budget}
+        />
+        <TokenValueStat
+          title="Working Group Debt"
+          tooltipText="If funds are insufficient over payout periods, the working group can incur a debt, which is owed to workers. "
+          value={debt}
+        />
+        <TokenValueStat
+          title="Avg stake"
+          tooltipText={
+            <>
+              If funds are insufficient over payout periods, the working group can incur a debt, which is owed to
+              workers.{' '}
+              <TooltipExternalLink
+                href="https://joystream.gitbook.io/joystream-handbook/governance/working-groups#staking"
+                target="_blank"
+              >
+                <TextMedium>Link</TextMedium> <LinkSymbol />
+              </TooltipExternalLink>
+            </>
+          }
+          value={workingGroup.averageStake}
+        />
       </Statistics>
 
       <OpeningsCategories>

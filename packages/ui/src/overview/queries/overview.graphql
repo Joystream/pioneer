@@ -1,0 +1,49 @@
+query GetSidebarInfo($memberId: ID!) {
+  workers(where: { membership: { id_eq: $memberId } }) {
+    group {
+      name
+    }
+    isLead
+    payouts {
+      amount
+    }
+  }
+
+  councilMembers(where: { member: { id_eq: $memberId } }) {
+    accumulatedReward
+    id
+  }
+
+  workingGroupApplications(
+    where: { applicant: { id_eq: $memberId }, status_json: { isTypeOf_eq: "ApplicationStatusPending" } }
+  ) {
+    opening {
+      group {
+        name
+      }
+      metadata {
+        expectedEnding
+      }
+    }
+  }
+
+  candidacyNoteMetadata(
+    where: {
+      candidacynoteseteventnoteMetadata_every: { candidate: { status_eq: ACTIVE, member: { id_eq: $memberId } } }
+    }
+  ) {
+    id
+    header
+  }
+
+  proposals(where: { creator: { id_eq: $memberId } }) {
+    id
+  }
+
+  forumThreads(where: { author: { id_eq: $memberId } }) {
+    title
+    posts {
+      id
+    }
+  }
+}

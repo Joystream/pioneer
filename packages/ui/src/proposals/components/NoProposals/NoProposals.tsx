@@ -9,8 +9,8 @@ export const NoProposals = () => (
   <NoData>
     <h3>There are no current proposals yet</h3>
     <TextMedium>
-      Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit
-      mollit. Exercitation veniam consequat sunt nostrud amet.
+      The proposal system is the way changes to the platform state and policy are suggested, discussed, voted on by the
+      council, and finalized as accepted or rejected.
     </TextMedium>
     <AddProposalButton />
   </NoData>
