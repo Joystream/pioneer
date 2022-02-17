@@ -109,7 +109,7 @@ describe('UI: ApplyForRoleModal', () => {
       available: 2000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
-    applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
+    applyOnOpeningTxMock = (api.api.tx.forumWorkingGroup.applyOnOpening as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
@@ -388,7 +388,7 @@ describe('UI: ApplyForRoleModal', () => {
     const { stake_parameters, member_id, role_account_id, reward_account_id } = params
     // TODO test description and opening_id too
 
-    expect(member_id).toBe('0')
+    expect(member_id).toBe(useMyMemberships.active?.id)
     expect(role_account_id).toBe(alice.address)
     expect(reward_account_id).toBe(alice.address)
 
