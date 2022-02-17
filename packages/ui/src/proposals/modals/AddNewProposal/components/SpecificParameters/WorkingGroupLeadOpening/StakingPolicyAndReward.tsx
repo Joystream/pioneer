@@ -39,11 +39,10 @@ export const StakingPolicyAndReward = ({
         <RowGapBlock gap={20}>
           <InputComponent
             id="staking-amount"
-            label="Staking amount"
-            tooltipText="Pleas type the minimum number of tokens required to stake"
+            label="Staking amount *"
+            tooltipText="Minimum staking requirement for all applicants to this role"
             units="JOY"
             tight
-            required
           >
             <InputNumber
               id="staking-amount"
@@ -58,7 +57,7 @@ export const StakingPolicyAndReward = ({
             label="Leaving unstaking period"
             units="blocks"
             inputSize="s"
-            tooltipText="Lorem ipsum..."
+            tooltipText="Number of blocks that need to pass from the ending block of the active role of member, for the stake to be recoverable."
             message={leavingUnstakingPeriod ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}` : ''}
             tight
           >
@@ -68,7 +67,14 @@ export const StakingPolicyAndReward = ({
               onChange={(event) => updateBlock(event.target.value)}
             />
           </InputComponent>
-          <InputComponent id="reward-per-block" label="Reward amount per Block" units="JOY" tight required>
+          <InputComponent
+            id="reward-per-block"
+            label="Reward amount per Block"
+            units="JOY"
+            tooltipText="Reward in Joy tokens for the Working group lead"
+            tight
+            required
+          >
             <InputNumber
               id="reward-per-block"
               isTokenValue

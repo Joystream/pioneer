@@ -18,7 +18,7 @@ export function getRoleWarning(status: WorkerStatusTypename, unstakingEnd?: stri
 
   return {
     title: 'Role Ended',
-    content: 'We are sorry, but this role has already ended.',
+    content: 'Your role is now terminated.',
     isClosable: false,
   }
 }

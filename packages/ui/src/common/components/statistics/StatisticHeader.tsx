@@ -7,12 +7,13 @@ import { Colors } from '@/common/constants'
 
 export interface StatisticHeaderProps {
   title?: string
-  tooltipText?: string
+  tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
   TooltipIcon?: React.ElementType
   counter?: number
+  dotElement?: React.ReactNode
 }
 
 export const StatisticHeader = ({
@@ -22,10 +23,12 @@ export const StatisticHeader = ({
   tooltipLinkText,
   tooltipLinkURL,
   counter,
+  dotElement,
   TooltipIcon = TooltipDefault,
 }: StatisticHeaderProps) => (
   <StatsHeader>
     <StatsInfo>
+      {dotElement}
       {title}
       {tooltipText && (
         <Tooltip

@@ -101,7 +101,7 @@ export const WorkingGroupOpening = () => {
       {opening.status === OpeningStatuses.OPEN && (
         <RowGapBlock gap={16}>
           <h4>No applicants yet</h4>
-          <TextSmall>There are no applicants yet lorem ipsum dolor sit amet.</TextSmall>
+          <TextSmall>Be the first one to apply.</TextSmall>
         </RowGapBlock>
       )}
       {opening.status === OpeningStatuses.OPEN && <ApplyButton />}

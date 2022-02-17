@@ -34,8 +34,10 @@ export const MoveFundsLockedModal = ({
       <ModalHeader onClick={onClose} title="Move founds into a locked account" />
       <ModalBody>
         <TextMedium margin="l">
-          Unfortunately, you don’t have any accounts suitable for applying to this role. You need at least{' '}
-          <TokenValue value={requiredStake} /> to apply for this role. Please move your funds.
+          Unfortunately, you don’t have any accounts suitable for applying to this role. In order to create this
+          proposal or apply for this role you need at least
+          <TokenValue value={requiredStake} /> on the balances free from{' '}
+          <a href="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1">rivalrous locks.</a>
         </TextMedium>
         <TextMedium margin="s" bold>
           Accounts with locked balances:

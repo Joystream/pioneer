@@ -142,6 +142,7 @@ export const makeServer = (environment = 'development', endpoints = localEndpoin
               openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalDiscussionPostByUniqueInput: getUniqueResolver('ProposalDiscussionPost'),
+              proposalsConnection: getConnectionResolver('ProposalConnection'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               proposalVotedEvents: getWhereResolver('ProposalVotedEvent'),
               proposals: getWhereResolver('Proposal'),

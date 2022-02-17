@@ -30,7 +30,12 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
         </ContentWithTabs>
       )}
       {hiringComplete && myApplication && !hired && (
-        <Warning title={'Hiring complete!'} content={'We are very sorry, you haven’t been chosen.'} />
+        <Warning
+          title={'Hiring complete!'}
+          content={
+            'Hiring complete! We are sorry, your application was not successful this time. We encourage you to explore alternative openings and subscribe to notifications.'
+          }
+        />
       )}
       {hired && (
         <ContentWithTabs>

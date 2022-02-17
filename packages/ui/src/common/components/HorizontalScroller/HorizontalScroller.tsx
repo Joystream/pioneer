@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost } from '@/common/components/buttons'
+import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { TextExtraSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -9,11 +10,14 @@ import { Colors } from '@/common/constants'
 interface Props {
   items: React.ReactNode[] | React.ReactNode
   title?: string
+  count?: number
   className?: string
 }
 
-export const HorizontalScroller = React.memo(({ items, className, title }: Props) => {
+export const HorizontalScroller = React.memo(({ items, className, title, count }: Props) => {
   const [wrapperWidth, setWrapperWidth] = useState<number>()
+  const [scrollNumber, setScrollNumber] = useState<number>(16)
+  const [isTooSmallForScroll, setIsTooSmallForScroll] = useState<boolean>(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -28,10 +32,18 @@ export const HorizontalScroller = React.memo(({ items, className, title }: Props
     return () => window.removeEventListener('resize', calcContentMaxHeight)
   }, [wrapperRef, wrapperWidth])
 
-  const scrollNumber = useMemo(() => {
+  useLayoutEffect(() => {
     const childrenWidth = (wrapperRef.current?.children[0]?.clientWidth ?? 0) + 16
-    return Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth
-  }, [wrapperRef, wrapperWidth])
+    const scrollNumber = Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth
+
+    if ((wrapperWidth || 1) > childrenWidth * (wrapperRef.current?.children?.length || 1)) {
+      setIsTooSmallForScroll(true)
+    } else {
+      setIsTooSmallForScroll(false)
+    }
+
+    setScrollNumber(scrollNumber)
+  }, [wrapperRef, wrapperWidth, items])
 
   const scrollRight = useCallback(() => {
     wrapperRef.current?.scrollBy({ left: scrollNumber, behavior: 'smooth' })
@@ -44,15 +56,20 @@ export const HorizontalScroller = React.memo(({ items, className, title }: Props
   return (
     <Wrapper>
       <HeaderWrapper>
-        <Title>{title}</Title>
-        <ButtonWrapper>
-          <ButtonGhost size="small" square onClick={scrollLeft}>
-            <Arrow direction="left" />
-          </ButtonGhost>
-          <ButtonGhost size="small" square onClick={scrollRight}>
-            <Arrow direction="right" />
-          </ButtonGhost>
-        </ButtonWrapper>
+        <Title lighter>
+          {title}
+          {!!count && <CountBadge count={count} />}
+        </Title>
+        {!isTooSmallForScroll && (
+          <ButtonWrapper>
+            <ButtonGhost size="small" square onClick={scrollLeft}>
+              <Arrow direction="left" />
+            </ButtonGhost>
+            <ButtonGhost size="small" square onClick={scrollRight}>
+              <Arrow direction="right" />
+            </ButtonGhost>
+          </ButtonWrapper>
+        )}
       </HeaderWrapper>
       <ItemsWrapper ref={wrapperRef} className={className}>
         {items}
@@ -80,15 +97,21 @@ const ItemsWrapper = styled.div`
   overflow-x: hidden;
   height: min-content;
   width: 100%;
-  padding-top: 10px;
+  padding: 10px 0;
 `
 
 const ButtonWrapper = styled.div`
   display: flex;
   column-gap: 5px;
+  padding-right: 16px;
 `
 
 const Title = styled(TextExtraSmall)`
   text-transform: uppercase;
   color: ${Colors.Black[500]};
+  display: flex;
+
+  > *:last-child {
+    margin-left: 5px;
+  }
 `

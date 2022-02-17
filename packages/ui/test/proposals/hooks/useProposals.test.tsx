@@ -97,10 +97,10 @@ describe('useProposals', () => {
             type: 'runtimeUpgrade',
           },
         })
-        expect(result.proposals.length).toBe(2)
+        expect(result.proposals.length).toBe(4)
         result.proposals.forEach((proposal) => {
           expect(proposal.type).toBe('runtimeUpgrade')
-          expect(['2', '3']).toContain(proposal.id)
+          expect(['2', '3', '4', '5']).toContain(proposal.id)
         })
       })
 
@@ -112,10 +112,10 @@ describe('useProposals', () => {
             proposer: bob,
           },
         })
-        expect(result.proposals.length).toBe(2)
+        expect(result.proposals.length).toBe(4)
         result.proposals.forEach((proposal) => {
           expect(proposal.proposer.id).toBe(bob.id)
-          expect(['1', '3']).toContain(proposal.id)
+          expect(['1', '3', '4', '5']).toContain(proposal.id)
         })
       })
 
@@ -131,7 +131,7 @@ describe('useProposals', () => {
               },
             },
           })
-          expect(result.proposals.length).toBe(3)
+          expect(result.proposals.length).toBe(5)
           result.proposals.forEach((proposal) => {
             expect(proposal.endedAt).toBeDefined()
             proposal.endedAt && expect(new Date(proposal.endedAt).getTime()).toBeGreaterThanOrEqual(start.getTime())
@@ -180,7 +180,7 @@ describe('useProposals', () => {
         },
       })
 
-      expect(byProposer.length).toBe(2)
+      expect(byProposer.length).toBe(4)
       expect(byStatus.length).toBe(2)
       expect(byProposerAndStatus.length).toBe(1)
 

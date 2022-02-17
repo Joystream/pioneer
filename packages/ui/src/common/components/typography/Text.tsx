@@ -17,6 +17,7 @@ interface TextProps {
   value?: boolean
   inter?: boolean
   error?: boolean
+  truncate?: boolean
 }
 
 const TextValueStyle = css`
@@ -63,6 +64,12 @@ const TextErrorStyle = css`
   color: ${Colors.Negative[500]};
 `
 
+const TextTruncateStyle = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 const TextMargins = css<TextProps>`
   margin-bottom: ${({ margin }) => {
     switch (margin) {
@@ -95,6 +102,7 @@ const TextAllStyles = css<TextProps>`
   ${({ inter }) => inter && TextInterStyle};
   ${({ normalWeight }) => normalWeight && TextNormalWeightStyle};
   ${({ error }) => error && TextErrorStyle}
+  ${({ truncate }) => truncate && TextTruncateStyle};
   ${TextMargins};
 `
 

@@ -26,6 +26,8 @@
     "@joystream/markdown-editor": "^0.0.1",
     "@joystream/metadata-protobuf": "^2.0.0",
     "@joystream/types": "0.18.0",
+    "@nivo/bar": "^0.79.1",
+    "@nivo/core": "^0.79.0",
     "@polkadot/api": "5.9.1",
     "@polkadot/extension-dapp": "0.40.2",
     "@polkadot/keyring": "7.3.1",

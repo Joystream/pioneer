@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
+
 import { Modal, ModalBody, ModalHeader } from '../../../common/components/Modal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
@@ -19,7 +22,14 @@ export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
       <ModalHeader onClick={onClose} title="Insufficient Working Group budget" />
       <ModalBody>
         <TextMedium margin="s">
-          Unfortunately, the Membership Working group budget is Lorem ipsum dolor sit enim. Please try again later.
+          Memberships Working Group budget has to be sufficient to cover new member invitations. Speak with the
+          Membership Working Group Lead on Discord to find out about the upcoming funding proposals for this group.
+          <TooltipExternalLink
+            href="https://joystream.gitbook.io/joystream-handbook/subsystems/membership#working-group"
+            target="_blank"
+          >
+            <TextMedium>Link</TextMedium> <LinkSymbol />
+          </TooltipExternalLink>
         </TextMedium>
         <TextMedium>
           Current budget: <TokenValue value={workingGroupBudget?.toBn()} />

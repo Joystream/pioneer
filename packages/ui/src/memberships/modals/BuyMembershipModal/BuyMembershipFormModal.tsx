@@ -21,6 +21,7 @@ import {
 } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
   ModalFooter,
   ModalFooterGroup,
@@ -31,6 +32,7 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
@@ -252,7 +254,18 @@ export const BuyMembershipForm = ({
               <TransactionInfo
                 title="Creation fee:"
                 value={membershipPrice?.toBn()}
-                tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+                tooltipText={
+                  <>
+                    Creation fee is the price of membership, it is managed by council through the proposal system. It is
+                    inclusive of transaction fee.
+                    <TooltipExternalLink
+                      href="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
+                      target="_blank"
+                    >
+                      <TextMedium>Link</TextMedium> <LinkSymbol />
+                    </TooltipExternalLink>
+                  </>
+                }
               />
             </TransactionInfoContainer>
           )}

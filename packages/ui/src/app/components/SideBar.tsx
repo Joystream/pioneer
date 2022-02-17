@@ -35,6 +35,7 @@ import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
+import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
@@ -57,6 +58,11 @@ export const SideBar = () => {
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
+            <NavigationLinksItem>
+              <NavigationLink to={OverviewRoutes.overview} icon={<OverviewIcon />}>
+                Overview
+              </NavigationLink>
+            </NavigationLinksItem>
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile
@@ -123,11 +129,6 @@ export const SideBar = () => {
                   </NavigationLinksItem>
 
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<OverviewIcon />} disabled>
-                      Overview
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<FinancialsIcon />} disabled>
                       Financials
                     </NavigationLink>
@@ -178,7 +179,6 @@ const NavigationLinks = styled.ul`
   max-height: 100%;
   overflow: hidden;
   overflow-y: scroll;
-  mask-image: linear-gradient(0deg, transparent 0px, black 8px, black calc(100% - 8px), transparent 100%);
   ${RemoveScrollbar};
 `
 
