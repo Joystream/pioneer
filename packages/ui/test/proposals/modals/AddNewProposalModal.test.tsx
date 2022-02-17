@@ -15,6 +15,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -176,7 +177,6 @@ describe('UI: AddNewProposalModal', () => {
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
     createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
-    createProposalTxMock.mockClear()
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -690,7 +690,7 @@ describe('UI: AddNewProposalModal', () => {
         it('Stake policy', async () => {
           await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10, 50)
 
-          const [, txSpecificParameters] = createProposalTxMock.mock.calls[createProposalTxMock.mock.calls.length - 1]
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const stakePolicy = txSpecificParameters.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
 
           expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
