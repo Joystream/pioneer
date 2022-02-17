@@ -3,6 +3,9 @@ import React, { FC, useEffect, useState } from 'react'
 
 import {
   seedApplications,
+  seedBounties,
+  seedBountyContributions,
+  seedBountyEntries,
   seedCouncilCandidates,
   seedCouncilElections,
   seedCouncilMembers,
@@ -45,6 +48,7 @@ interface Seeds {
   workers?: boolean
   forum?: boolean | ForumSeed
   council?: boolean
+  bounty?: boolean
 }
 
 // NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
@@ -106,6 +110,12 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
       seedCouncilMembers(MockServer.server)
       seedCouncilElections(MockServer.server)
       seedCouncilCandidates(MockServer.server)
+    }
+
+    if (toSeed.bounty) {
+      seedBounties(MockServer.server)
+      seedBountyContributions(MockServer.server)
+      seedBountyEntries(MockServer.server)
     }
 
     setReady(true)

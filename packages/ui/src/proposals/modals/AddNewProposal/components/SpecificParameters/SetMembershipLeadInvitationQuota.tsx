@@ -1,12 +1,10 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { cleanInputValue, useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export interface SetMembershipLeadInvitationParameters {
@@ -19,18 +17,12 @@ interface Props extends SetMembershipLeadInvitationParameters {
 
 const MAX_VALUE = Math.pow(2, 32) - 1
 
-export const SetMembershipLeadInvitationQuota = ({ amount: initialAmount, setAmount: setQuota }: Props) => {
-  const [amount, setAmount] = useNumberInput(0, initialAmount)
+export const SetMembershipLeadInvitationQuota = ({ amount, setAmount }: Props) => {
   const { isLoading, group } = useWorkingGroup({ name: 'membershipWorkingGroup' })
 
-  useEffect(() => {
-    setQuota(new BN(amount))
-  }, [amount])
-
-  const setInvitationQuota = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = cleanInputValue(event.target.value)
+  const setInvitationQuota = (_: any, value: number) => {
     if (Number(value) < MAX_VALUE) {
-      setAmount(value)
+      setAmount(new BN(value))
     }
   }
 
@@ -50,11 +42,16 @@ export const SetMembershipLeadInvitationQuota = ({ amount: initialAmount, setAmo
             units="JOY"
             required
             disabled={isLoading || !group?.leadId}
-            message={!group?.leadId ? "Proposal can't be created because there's no working group lead" : undefined}
+            message={
+              !group?.leadId
+                ? "Proposal can't be created because there's no working group lead"
+                : 'Amount must be greater than zero'
+            }
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={amount?.toString()}
               placeholder="0"
               onChange={setInvitationQuota}
               disabled={isLoading || !group?.leadId}

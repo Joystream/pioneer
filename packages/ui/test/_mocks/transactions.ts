@@ -117,7 +117,11 @@ export const stubBatchTransactionSuccess = (transaction: any) => {
 export const stubTransaction = (api: UseApi, transactionPath: string, fee = 25) => {
   const transaction = {}
   set(transaction, 'paymentInfo', () => of(createRuntimeDispatchInfo(fee)))
-  set(api, transactionPath, () => transaction)
+  set(
+    api,
+    transactionPath,
+    jest.fn(() => transaction)
+  )
   return transaction
 }
 
@@ -196,6 +200,16 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
       constitutionality: new BN(10),
     })
   }
+}
+
+export const stubBountyConstants = (api: UseApi) => {
+  set(api, 'api.consts.bounty', {
+    minCherryLimit: createType('BalanceOf', 10),
+    minFundingLimit: createType('BalanceOf', 10),
+    closedContractSizeLimit: createType('u32', 2),
+    minWorkEntrantStake: createType('BalanceOf', 10),
+    bountyLockId: createType('LockIdentifier', 1),
+  })
 }
 
 export const stubCouncilAndReferendum = (

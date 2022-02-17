@@ -1,9 +1,7 @@
-import { useApolloClient } from '@apollo/client'
 import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
-import React, { Ref, RefObject, useCallback, useEffect, useRef } from 'react'
+import React, { Ref, RefObject, useEffect, useRef } from 'react'
 
-import { debounce } from '@/common/utils'
-import { SearchMembersDocument, SearchMembersQuery, SearchMembersQueryVariables } from '@/memberships/queries'
+import { useMentions } from '@/common/hooks/useMentions'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 
@@ -28,6 +26,8 @@ export const CKEditor = React.forwardRef(
     const elementRef: RefObject<HTMLDivElement> = (ref ?? localRef) as RefObject<HTMLDivElement>
     const editorRef = useRef<Editor | null>(null)
 
+    const { mentionMembersFeed, mentionFeed, itemRenderer } = useMentions()
+
     useEffect(() => {
       if (!editorRef.current) {
         return
@@ -35,18 +35,6 @@ export const CKEditor = React.forwardRef(
 
       editorRef.current.isReadOnly = !!disabled
     }, [disabled])
-
-    const client = useApolloClient()
-    const mentionFeed = useCallback(
-      debounce(async (text: string) => {
-        const { data } = await client.query<SearchMembersQuery, SearchMembersQueryVariables>({
-          query: SearchMembersDocument,
-          variables: { text, limit: 10 },
-        })
-        return data.memberships.map(({ id, handle }) => ({ id: `@${handle}`, memberId: id }))
-      }),
-      [client]
-    )
 
     useEffect(() => {
       const createPromise: Promise<Editor> = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
@@ -71,7 +59,10 @@ export const CKEditor = React.forwardRef(
             ],
           },
           mention: {
-            feeds: [{ marker: '@', feed: mentionFeed, minimumCharacters: 1 }],
+            feeds: [
+              { marker: '@', feed: mentionMembersFeed, minimumCharacters: 1 },
+              { marker: '#', feed: mentionFeed, itemRenderer, dropdownLimit: 10 },
+            ],
           },
           image: {
             toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],

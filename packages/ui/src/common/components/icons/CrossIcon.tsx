@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Icon } from './Icon'
 
-export const CrossIcon = React.memo(({ className }: { className?: string }) => (
+export const CrossIcon = React.memo(({ className, onClick }: { className?: string; onClick?: () => void }) => (
   <Icon
     size="20"
     viewBox="0 0 24 24"
@@ -10,6 +10,7 @@ export const CrossIcon = React.memo(({ className }: { className?: string }) => (
     fill="none"
     color="currentColor"
     className={className}
+    onClick={onClick}
   >
     <path
       fillRule="evenodd"

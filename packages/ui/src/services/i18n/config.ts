@@ -5,9 +5,9 @@ import { initReactI18next } from 'react-i18next'
 import dictEN from './dict/en'
 import dictRU from './dict/ru'
 
-export type Locales = 'en' | 'en-GB' | 'en-US' | 'ru' | 'ru-RU'
+export type Locale = 'en' | 'en-GB' | 'en-US' | 'ru' | 'ru-RU'
 
-const resources: Record<Locales, ResourceLanguage> = {
+const resources: Record<Locale, ResourceLanguage> = {
   en: dictEN,
   'en-GB': dictEN,
   'en-US': dictEN,

@@ -1,0 +1,365 @@
+{
+  "bounties": "Bounties",
+  "council": "Council",
+  "entries": "Entries",
+  "stake": "Stake",
+  "submittedWorks": "Submitted works",
+  "withdrawals": "Withdrawals",
+  "modals": {
+    "common": {
+      "transactionFee": {
+        "label": "Transaction fee:",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "amount": "Amount",
+      "contributeAmount": "Contribute amount:"
+    },
+    "authorizeTransaction": {
+      "feeAccount": {
+        "label": "Fee sending from account",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "feeInfo": "Fees of {{value}} JOY will be applied to the transaction"
+    },
+    "contribute": {
+      "title": "Contribute",
+      "nextButton": "Contribute",
+      "halfButton": "Use half",
+      "maxButton": "Use max",
+      "bountyId": {
+        "label": "Bounty ID",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "stakingAccount": {
+        "label": "Staking account",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "selectAmount": "Select amount for contributing",
+      "selectAmountSubtitle": "You must contribute at least {{value}} JOY.",
+      "authorizeDescription": "You contribute {{value}} JOY",
+      "error": "Something went wrong",
+      "success": "You have just successfully contribute {{bounty}}”.",
+      "successButton": "Back to bounty"
+    },
+    "announceWorkEntry": {
+      "title": "Announce Work Entry",
+      "nextButton": "Announce work Entry",
+      "bountyId": {
+        "label": "Bounty ID",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "memberId": {
+        "label": "Member ID",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "stakingAccount": {
+        "label": "Staking account",
+        "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      },
+      "fillDetails": "Please fill in all the details below.",
+      "selectAmount": "Contribution stake",
+      "selectAmountSubtitle": "This stake will be returned to you when the bounty is complete",
+      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY.",
+      "error": "Something went wrong",
+      "success": "You have just successfully announce work entry for {{bounty}}”.",
+      "successButton": "Back to bounty"
+    },
+    "bountyCancel": {
+      "title": "Cancel Bounty",
+      "warningBox": {
+        "question1": "Are you sure?",
+        "question2": "Do you really want to cancel bounty?"
+      },
+      "bountyInput": {
+        "label": "Bounty ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "memberInput": {
+        "label": "Member ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "authorization": {
+        "title": "Authorize transaction",
+        "informationBox": {
+          "info1": "You are canceling your bounty",
+          "info2": "Fees of {fee} JOY will be applied to the transaction."
+        },
+        "accountInput": {
+          "label": "Fee sending from account",
+          "tooltipText": "Lorem ipsum"
+        },
+        "button": "Cancel Bounty"
+      },
+      "success": {
+        "message": "You have just successfully canceled bounty!",
+        "button": "Go to Current Bounties"
+      },
+      "error": "There was a problem canceling bounty."
+    },
+    "submitWork": {
+      "title": "Submit work",
+      "subtitle": "Submit work",
+      "submitWorkInput": {
+        "bountyId": "Bounty ID",
+        "memberId": "Member ID",
+        "workTitle": "Work Title",
+        "workTitlePlaceholder": "Type",
+        "entryDescription": "Entry description"
+      },
+      "button": {
+        "submitWork": "Submit Work"
+      },
+      "authorizeDescription": "You submitting your work",
+      "validation": {
+        "maxLengthMessage": "Max length is 70 characters",
+        "max70": "MAX 70"
+      }
+    },
+    "withdraw": {
+      "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
+      "extraTooltipInformation": "This bounty was created with a cherry, which gets split among all contributors equally in the case when bounty fails",
+      "contribution": {
+        "title": "Withdraw Contribution",
+        "description": "You intend to withdraw {{value}} JOY contribution locks from accounts.",
+        "button": "Withdraw Contribution",
+        "stakingFrom": "Staking from bounty",
+        "amountTitle": "Contribution amount"
+      },
+      "stake": {
+        "title": "Withdraw Stake",
+        "description": "You intend to withdraw {{value}} stake locks from accounts.",
+        "button": "Withdraw Stake",
+        "stakingFrom": "Staking from bounty",
+        "amountTitle": "Stake  amount"
+      },
+      "reward": {
+        "title": "Claim Reward",
+        "description": "You intend to claim reward",
+        "button": "Claim Reward",
+        "stakingFrom": "Reward from bounty",
+        "amountTitle": "Reward amount",
+        "success": "You have successfully claimed your reward.",
+        "error": "There was a problem while claiming your reward."
+      }
+    },
+    "withdrawContribution": {
+      "success": "Your contribution has been successfully withdrawn.",
+      "successButton": "Back to bounty",
+      "error": "There was a problem while withdrawing your contribution."
+    },
+    "withdrawWorkEntry": {
+      "title": "Withdraw work entry",
+      "warningBox": {
+        "question": "Are you sure?",
+        "text": "All of your submitted works will be withdrawed and you won't be participating in the bounty."
+      },
+      "bountyInput": {
+        "label": "Bounty ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "memberInput": {
+        "label": "Member ID",
+        "tooltipText": "Lorem ipsum"
+      },
+      "workInput": "Work Title {{value}}",
+      "stakeInput": "Amount of stake you will recover",
+      "authorizeDescription": "You are going to withdraw your work entry",
+      "submitButton": "Withdraw",
+      "success": "Your work entry has been successfully withdrawn.",
+      "successButton": "Back to bounty",
+      "error": "There was a problem while withdrawing your work entry."
+    },
+    "submitJudgement": {
+      "validation": {
+        "pickWinner": "Pick a winner or mark bounty as failed",
+        "winnerNoReward": "Some winner do not have reward amount",
+        "amountTooLow": "Distributed amount must equal total reward",
+        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it."
+      },
+      "authorizeModal": {
+        "description": "You are announcing Bounty winners",
+        "button": "Submit Judgement"
+      },
+      "successModal": {
+        "message": "You have successfully submitted your judgement",
+        "button": "Done"
+      },
+      "failedModal": "There has been an error while submitting judgement",
+      "canceledModal": "Transaction has been canceled",
+      "selectWinners": "Select Winners",
+      "checkbox": {
+        "label": "Does Bounty have a winner?",
+        "true": "Yes",
+        "false": "No"
+      },
+      "progressBar": {
+        "distributed": "Distributed",
+        "totalReward": "Total Reward",
+        "distributeEqually": "Distribute equally"
+      },
+      "winner": {
+        "buttons": {
+          "addWinner": "Add winner",
+          "removeWinner": "Substract last Winner"
+        },
+        "worker": {
+          "label": "Winner {{number}}",
+          "tooltip": "Lorem ipsum"
+        },
+        "reward": "Reward"
+      },
+      "noWinner": {
+        "title": "Are you sure?",
+        "description": "Bounty will be closed and marked as failed."
+      },
+      "amountButtons": {
+        "useHalf": "Use Half",
+        "useMax": "Use Max"
+      },
+      "slash": {
+        "title": "Slash workers",
+        "description": "You can optionally slash workers. Worker will be slash for whole stake.",
+        "worker": {
+          "label": "Rejected {{number}}",
+          "tooltip": "Lorem ipsum",
+          "addSlashed": "Add Slashed",
+          "removeSlashed": "Substract last slashed worker"
+        }
+      },
+      "authorizeTransaction": "Authorize Transaction",
+      "submitJudgement": "Submit Judgement"
+    }
+  },
+  "tiles": {
+    "progressBar": {
+      "funded": "Funded",
+      "maxRange": "Maximal Range",
+      "minRange": "Minimal Range"
+    },
+    "stage": {
+      "title": "Stage",
+      "tooltip": "Lorem ipsum dolor sit amet, con"
+    },
+    "periodLength": {
+      "title": "Period Length",
+      "tooltip": "Lorem ipsum d",
+      "closed": "Closed"
+    },
+    "bountyCreator": {
+      "title": "Bounty Creator"
+    },
+    "oracle": {
+      "title": "Oracle"
+    },
+    "funded": {
+      "title": "Funded",
+      "tooltip": "Lorem ipsum d"
+    },
+    "cherry": {
+      "title": "Cherry",
+      "tooltip": "Lorem ipsum d"
+    },
+    "entrantStake": {
+      "title": "Entrant stake",
+      "tooltip": "Lorem ipsum d"
+    },
+    "worksSubmitted": {
+      "title": "Works Submitted",
+      "tooltip": "Lorem ipsum d"
+    },
+    "winners": {
+      "title": "Winners",
+      "tooltip": "Lorem ipsum d"
+    },
+    "unwithdrawnFunds": {
+      "title": "Unwithdrawn Funds",
+      "tooltip": "Lorem ipsum d"
+    },
+    "myEntries": {
+      "title": "My Entries Submitted",
+      "tooltip": "Lorem ipsum d"
+    },
+    "earned": {
+      "title": "Earned",
+      "tooltip": "Lorem ipsum d"
+    },
+    "contributed": {
+      "title": "Contributed",
+      "tooltip": "Lorem ipsum d"
+    }
+  },
+  "tabs": {
+    "bounty": "Bounty",
+    "works": "Works",
+    "winners": "Winners"
+  },
+  "workTab": {
+    "filter": {
+      "label": "Entrant",
+      "placeholder": "Filter entrant"
+    },
+    "noWorks": "No works submitted yet"
+  },
+  "sidebar": {
+    "entrants": "Entrants",
+    "withdrawals": "Withdrawals",
+    "contributors": "Contributors"
+  },
+  "bountyFields": {
+    "cherry": "Cherry",
+    "entrantStake": "Entrant Stake",
+    "working": "Working period",
+    "expired": "Expired period",
+    "judgement": "Judgement period",
+    "perpetual": "Perpetual",
+    "limited": "Limited",
+    "withdrawalPeriod": "Withdrawal period",
+    "fundingPeriod": "Funding Period",
+    "terminated": "Terminated"
+  },
+  "buttons": {
+    "announceEntry": "Announce Entry",
+    "submitWork": "Submit Work",
+    "submitJudgement": "Submit Judgement",
+    "cancelBounty": "Cancel Bounty",
+    "contributeFunds": "Contribute",
+    "createBounty": "Create Bounty",
+    "withdrawWorkEntry": "Withdraw",
+    "claimReward": "Claim Reward",
+    "loserWithdrawStake": "Withdraw Stake",
+    "contributorWithdrawStake": "Withdraw Contribution"
+  },
+  "information": {
+    "bountyFailed": {
+      "title": "Bounty Failed",
+      "description": "The oracle did not choose a winner. If you are a worker or contributor you can withdraw your stake now."
+    }
+  },
+  "list": {
+    "notFound": "No Bounties",
+    "notFoundText": "No bounties matching search criteria",
+    "searching": "Searching",
+    "searchingText": "We are searching through all bounties to find what your are looking for. ",
+    "sorting": "sorting"
+  },
+  "filters": {
+    "name": "Name",
+    "period": "Period",
+    "creator": "Creator",
+    "oracle": "Oracle"
+  },
+  "topContributors": {
+    "title": "Top contributors past week",
+    "amountTitle": "Contributed",
+    "notFound": "No contributors",
+    "notFoundText": "Lorem ipsum dolor sit amet enim"
+  },
+  "discussionThread": {
+    "title": "Bounty discussion thread",
+    "cancelBounty": "Cancel Bounty"
+  },
+  "slashed": {
+    "title": "You are slashed",
+    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis"
+  }
+}

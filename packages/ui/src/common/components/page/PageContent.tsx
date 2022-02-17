@@ -17,6 +17,7 @@ export const ContentWithSidePanel = styled.div`
   display: grid;
   position: relative;
   grid-template-columns: 1fr 280px;
+  grid-gap: 20px;
   width: 100%;
   height: 100%;
   max-height: fit-content;

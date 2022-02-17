@@ -3,6 +3,20 @@ import React, { ReactElement } from 'react'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
+import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyModal'
+import { AnnounceWorkEntryModal, BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal'
+import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
+import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
+import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
+import { SubmitJudgementModal, SubmitJudgementModalCall } from '@/bounty/modals/SubmitJudgementModal'
+import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
+import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
+import { WithdrawStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
+import {
+  BountyWithdrawContributionModalCall,
+  WithdrawContributionModal,
+} from '@/bounty/modals/WithdrawContributionModal'
+import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -68,6 +82,16 @@ export type ModalNames =
   | ModalName<IncreaseWorkerStakeModalCall>
   | ModalName<OnBoardingModalCall>
   | ModalName<RestoreVotesModalCall>
+  | ModalName<AddBountyModalCall>
+  | ModalName<BountyWithdrawContributionModalCall>
+  | ModalName<BountyContributeFundsModalCall>
+  | ModalName<BountyCancelModalCall>
+  | ModalName<WithdrawStakeModalCall>
+  | ModalName<SubmitWorkModalCall>
+  | ModalName<BountyAnnounceWorkEntryModalCall>
+  | ModalName<ClaimRewardModalCall>
+  | ModalName<SubmitJudgementModalCall>
+  | ModalName<BountyWithdrawWorkEntryModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -99,6 +123,16 @@ const modals: Record<ModalNames, ReactElement> = {
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
+  AddBounty: <AddBountyModal />,
+  BountyWithdrawContributionModal: <WithdrawContributionModal />,
+  BountyCancel: <BountyCancelModal />,
+  SubmitWork: <SubmitWorkModal />,
+  BountyContributeFundsModal: <ContributeFundsModal />,
+  ClaimReward: <ClaimRewardModal />,
+  BountyAnnounceWorkEntryModal: <AnnounceWorkEntryModal />,
+  BountyWithdrawWorkEntryModal: <WithdrawWorkEntryModal />,
+  WithdrawStakeModal: <WithdrawStakeModal />,
+  SubmitJudgementModal: <SubmitJudgementModal />,
 }
 
 export const GlobalModals = () => {

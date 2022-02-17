@@ -7,6 +7,7 @@ import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoarding
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
 import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
+import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
@@ -21,6 +22,7 @@ import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
+import { BountyModule } from './pages/Bounty/BountyModule'
 import { ElectionModule } from './pages/Election/ElectionModule'
 import { ForumModule } from './pages/Forum'
 import { Members } from './pages/Members/Members'
@@ -45,6 +47,7 @@ export const App = () => (
           <Route path={CouncilRoutes.council} component={CouncilModule} />
           <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
           <Route path={ForumRoutes.forum} component={ForumModule} />
+          <Route path={BountyRoutes.bounties} component={BountyModule} />
           <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
           <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
           <Route exact path={MembersRoutes.members} component={Members} />

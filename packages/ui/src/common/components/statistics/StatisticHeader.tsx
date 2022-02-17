@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
 export interface StatisticHeaderProps {
   title?: string
@@ -11,6 +12,7 @@ export interface StatisticHeaderProps {
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
   TooltipIcon?: React.ElementType
+  counter?: number
   dotElement?: React.ReactNode
 }
 
@@ -20,6 +22,7 @@ export const StatisticHeader = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
+  counter,
   dotElement,
   TooltipIcon = TooltipDefault,
 }: StatisticHeaderProps) => (
@@ -34,9 +37,11 @@ export const StatisticHeader = ({
           tooltipLinkText={tooltipLinkText}
           tooltipLinkURL={tooltipLinkURL}
         >
+          {' '}
           <TooltipIcon />
         </Tooltip>
       )}
+      {counter && <Counter>{counter}</Counter>}
     </StatsInfo>
   </StatsHeader>
 )
@@ -52,4 +57,17 @@ const StatsHeader = styled.div`
 const StatsInfo = styled(Label)`
   position: relative;
   align-items: start;
+`
+
+const Counter = styled.div`
+  position: relative;
+  background-color: ${Colors.Blue[50]};
+  color: ${Colors.Blue[500]};
+  width: 16px;
+  height: 16px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
 `

@@ -1,9 +1,9 @@
 import BN from 'bn.js'
 
 import { asBlock, Block } from '@/common/types'
-import { Member } from '@/memberships/types'
+import { asMember, Member } from '@/memberships/types'
 
-import { WorkingGroupApplicationFieldsFragment } from '../queries'
+import { WorkingGroupApplicationFieldsFragment, WorkingGroupApplicationMentionFieldsFragment } from '../queries'
 
 import { GroupIdName } from '.'
 import { asWorkingGroupName } from './WorkingGroup'
@@ -37,4 +37,28 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,
   createdAtBlock: asBlock(fields.createdInEvent),
+})
+
+export interface WorkingGroupApplicationMention {
+  id: string
+  applicant: Member
+  createdAtBlock: Block
+  opening: {
+    type: string
+    shortDescription: string | null | undefined
+    description: string | null | undefined
+  }
+}
+
+export const asWorkingGroupApplicationMention = (
+  fields: WorkingGroupApplicationMentionFieldsFragment
+): WorkingGroupApplicationMention => ({
+  id: fields.id,
+  createdAtBlock: asBlock(fields.createdInEvent),
+  applicant: asMember(fields.applicant),
+  opening: {
+    type: fields.opening.type,
+    shortDescription: fields.opening.metadata.shortDescription,
+    description: fields.opening.metadata.description,
+  },
 })

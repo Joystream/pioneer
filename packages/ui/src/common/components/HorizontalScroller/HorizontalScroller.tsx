@@ -5,6 +5,7 @@ import { ButtonGhost } from '@/common/components/buttons'
 import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { TextExtraSmall } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
 interface Props {
   items: React.ReactNode[] | React.ReactNode
@@ -107,6 +108,7 @@ const ButtonWrapper = styled.div`
 
 const Title = styled(TextExtraSmall)`
   text-transform: uppercase;
+  color: ${Colors.Black[500]};
   display: flex;
 
   > *:last-child {

@@ -19,7 +19,7 @@ const i18nextDecorator = (Story) => (
   </React.Suspense>
 )
 
-export const decorators = [stylesWrapperDecorator]
+export const decorators = [stylesWrapperDecorator, i18nextDecorator]
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

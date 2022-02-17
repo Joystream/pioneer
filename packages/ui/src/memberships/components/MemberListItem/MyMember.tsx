@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useMemberRowWorkDetails } from '@/memberships/hooks/useMemberRowWorkDetails'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 import { MemberInfo } from '..'
@@ -19,7 +20,9 @@ import {
 } from './Fileds'
 
 export const MyMemberListItem = ({ member }: { member: Member }) => {
+  const { slashed, terminated } = useMemberRowWorkDetails(member)
   const showMemberModal = useShowMemberModal(member.id)
+
   return (
     <MemberItemWrap kind="MyMember">
       <MemberModalTrigger onClick={showMemberModal} />
@@ -31,10 +34,10 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
         <MemberRoles wrapable roles={member.roles} size="l" />
       </MemberRolesColumn>
       <MemberColumn>
-        <CountInfo count={0} times />
+        <CountInfo count={slashed} times />
       </MemberColumn>
       <MemberColumn>
-        <CountInfo count={0} times />
+        <CountInfo count={terminated} times />
       </MemberColumn>
 
       <MemberColumn>

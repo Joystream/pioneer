@@ -16,6 +16,7 @@ interface TextProps {
   colorInherit?: boolean
   value?: boolean
   inter?: boolean
+  error?: boolean
   truncate?: boolean
 }
 
@@ -59,6 +60,10 @@ const TextLightStyle = css`
   color: ${Colors.Black[600]};
 `
 
+const TextErrorStyle = css`
+  color: ${Colors.Negative[500]};
+`
+
 const TextTruncateStyle = css`
   white-space: nowrap;
   overflow: hidden;
@@ -96,6 +101,7 @@ const TextAllStyles = css<TextProps>`
   ${({ value }) => value && TextValueStyle};
   ${({ inter }) => inter && TextInterStyle};
   ${({ normalWeight }) => normalWeight && TextNormalWeightStyle};
+  ${({ error }) => error && TextErrorStyle}
   ${({ truncate }) => truncate && TextTruncateStyle};
   ${TextMargins};
 `

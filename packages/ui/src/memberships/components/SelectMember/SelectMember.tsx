@@ -31,9 +31,10 @@ interface Props {
   filter?: (option: Member) => boolean
   selected?: Member
   disabled?: boolean
+  id?: string
 }
 
-export const SelectMember = ({ onChange, filter, selected, disabled }: Props) => {
+export const SelectMember = ({ onChange, filter, selected, disabled, id }: Props) => {
   const baseFilter = filter || (() => true)
   const [search, setSearch] = useState('')
   const searchDebounced = useDebounce(search, 400)
@@ -51,6 +52,7 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
 
   return (
     <Select
+      id={id}
       selected={selected}
       onChange={change}
       disabled={disabled}

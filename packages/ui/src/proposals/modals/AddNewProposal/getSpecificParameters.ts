@@ -9,11 +9,11 @@ import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/ma
 import { GroupIdName } from '@/working-groups/types'
 
 const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
-  contentDirectoryWorkingGroup: 'Content',
+  contentWorkingGroup: 'Content',
   forumWorkingGroup: 'Forum',
   gatewayWorkingGroup: 'Gateway',
   membershipWorkingGroup: 'Membership',
-  operationsWorkingGroup: 'Operations',
+  distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
 }
 
@@ -55,14 +55,16 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'runtimeUpgrade': {
       return createType('ProposalDetailsOf', {
-        RuntimeUpgrade: createType('Bytes', specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array()),
+        RuntimeUpgrade: createType('Bytes', [
+          specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array(),
+        ]),
       })
     }
     case 'createWorkingGroupLeadOpening': {
       return createType('ProposalDetailsOf', {
         CreateWorkingGroupLeadOpening: {
           description: specifics?.description,
-          staking_policy: {
+          stake_policy: {
             stake_amount: specifics?.stakingAmount,
             leaving_unstaking_period: specifics?.leavingUnstakingPeriod,
           },

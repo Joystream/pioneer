@@ -6,3 +6,4 @@ build-storybook
 *.log
 .DS_Store
 packages/ui/.env
+packages/ui/src/services/i18n/utils/csv

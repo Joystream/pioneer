@@ -34,6 +34,7 @@ export interface MemberInfoContainerProps {
   size?: MemberSize
   className?: string
   maxRoles?: number
+  avatarSmall?: boolean
   skipModal?: boolean
 }
 
@@ -52,6 +53,7 @@ export const MemberInfo = React.memo(
     maxRoles,
     isLead,
     skipModal,
+    avatarSmall,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     const showMemberModal = useShowMemberModal(member.id)
@@ -68,7 +70,7 @@ export const MemberInfo = React.memo(
         skipModal={skipModal}
         onlyTop={onlyTop}
       >
-        <MemberPhoto>
+        <MemberPhoto small={avatarSmall}>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
             {isLead && (

@@ -1,31 +1,24 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { useObservable } from '@/common/hooks/useObservable'
-import { formatTokenValue } from '@/common/model/formatters'
 
 export interface SetInitialInvitationBalanceParameters {
   amount?: BN
 }
 
-interface FundingRequestProps {
+interface FundingRequestProps extends SetInitialInvitationBalanceParameters {
   setAmount: (amount: BN) => void
 }
 
-export const SetInitialInvitationBalance = ({ setAmount: saveAmount }: FundingRequestProps) => {
-  const [amount, setAmount] = useNumberInput(0)
+export const SetInitialInvitationBalance = ({ setAmount, amount }: FundingRequestProps) => {
   const { api } = useApi()
   const currentBalance = useObservable(api?.query.members.initialInvitationBalance(), [])
-
-  useEffect(() => {
-    saveAmount(new BN(amount))
-  }, [amount])
 
   return (
     <RowGapBlock gap={24}>
@@ -40,9 +33,10 @@ export const SetInitialInvitationBalance = ({ setAmount: saveAmount }: FundingRe
           <InputComponent label="Invitation Balance" tight units="JOY" required>
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={amount?.toString()}
               placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => setAmount(new BN(value))}
             />
           </InputComponent>
           <Row>

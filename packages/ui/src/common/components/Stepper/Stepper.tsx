@@ -35,7 +35,7 @@ export const Stepper = ({ steps, theme = 'dark' }: StepperProps) => {
   return (
     <StepperWrap theme={StepperTheme[theme]}>
       {stepsToRender.map((step, index) => (
-        <StepWrap key={index} theme={StepperTheme[theme]} {...step}>
+        <StepWrap data-testid={`${step.title}-${step.type}`} key={index} theme={StepperTheme[theme]} {...step}>
           <StepNumber>
             <StepNumberText value>{getStepFace(step)}</StepNumberText>
           </StepNumber>
@@ -80,7 +80,7 @@ const StepBody = styled.div`
   row-gap: 8px;
 `
 
-type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'> & { onClick?: () => void }
+type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'hideNumber' | 'isBaby'> & { onClick?: () => void }
 
 const StepWrap = styled.div<StepNumberProps>`
   display: grid;
@@ -123,14 +123,14 @@ const StepWrap = styled.div<StepNumberProps>`
         `
     }};
 
-    ${({ isActive, isPast, theme }) => {
+    ${({ isActive, isPast, hideNumber, theme }) => {
       if (isActive)
         return css`
           background-color: ${Colors.Blue[500]};
           border-color: ${Colors.Blue[500]};
           color: ${Colors.White};
         `
-      if (isPast)
+      if (isPast || hideNumber)
         return css`
           background-color: ${theme.stepperPastBackground};
           border-color: ${theme.stepperPastBackground};

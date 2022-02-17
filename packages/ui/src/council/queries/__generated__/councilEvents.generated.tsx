@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type NewCouncilElectedEventFieldsFragment = {
   __typename: 'NewCouncilElectedEvent'
   id: string
@@ -161,6 +161,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent'; id: string; createdAt: any }
     | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkSubmittedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }
     | { __typename: 'WorkerRewardAmountUpdatedEvent' }

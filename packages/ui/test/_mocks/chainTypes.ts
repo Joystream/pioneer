@@ -35,7 +35,7 @@ const LOCK_TYPE_TO_ID: Record<LockType, number> = {
   'Staking Candidate': 11,
   Bounties: 12,
   'Gateway Worker': 13,
-  'Operations Worker': 14,
+  'Distribution Worker': 14,
 } as const
 
 export const creteLockIdentifier = (type: LockType) =>

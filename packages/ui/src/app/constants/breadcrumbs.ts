@@ -1,3 +1,4 @@
+import { BountyRoutes } from '@/bounty/constants'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -20,6 +21,9 @@ const knownRoutes = [
   { path: ForumRoutes.latestThreads, breadcrumb: 'Latest Threads' },
   { path: ForumRoutes.myThreads, breadcrumb: 'My Threads' },
   { path: ForumRoutes.topThreads, breadcrumb: 'Top Threads' },
+  { path: BountyRoutes.myContributions, breadcrumb: 'My Contributions' },
+  { path: BountyRoutes.myBounties, breadcrumb: 'My Bounties' },
+  { path: BountyRoutes.myEntries, breadcrumb: 'My Entries' },
 ]
 
 const excludePaths = ['/', WorkingGroupsRoutes.upcomingOpenings, ProposalsRoutes.preview]

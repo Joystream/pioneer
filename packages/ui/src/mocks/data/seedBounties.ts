@@ -1,5 +1,6 @@
 import { seedOverridableEntities } from '../helpers/seedEntities'
 
+import { BlockFieldsMock } from './common'
 import rawBounties from './raw/bounties.json'
 import rawContributions from './raw/bountyContributions.json'
 import rawEntries from './raw/bountyEntries.json'
@@ -20,6 +21,9 @@ export interface RawBountyMock {
   judgingPeriod: number
   stage: string
   totalFunding: string
+  discussionThreadId: string
+  createdInEvent: BlockFieldsMock
+  maxFundingReachedEvent?: BlockFieldsMock
 }
 
 export interface RawBountyContributionMock {
@@ -36,11 +40,12 @@ export interface RawBountyEntryMock {
   stake: string
   stakingAccount: string
   workSubmitted: boolean
-  works: RawBountyWorkDataMock[]
+  works?: RawWorkSubmittedEventMock[]
   status: { type: string; reward?: string }
+  announcedInEvent: BlockFieldsMock
 }
 
-export interface RawBountyWorkDataMock {
+export interface RawWorkSubmittedEventMock extends BlockFieldsMock {
   title: string
   description: string
 }
@@ -51,11 +56,18 @@ const seedFundingType = ({ type, ...data }: RawBountyMock['fundingType'], server
 const seedContractType = ({ type, ...data }: RawBountyMock['contractType'], server: any) =>
   server.schema.create(`BountyContract${type}`, data)
 
-export const seedBounty = ({ fundingType, contractType, ...data }: RawBountyMock, server: any) =>
+export const seedBounty = (
+  { fundingType, contractType, createdInEvent, maxFundingReachedEvent, ...data }: RawBountyMock,
+  server: any
+) =>
   server.schema.create('Bounty', {
     ...data,
     fundingType: seedFundingType(fundingType, server),
     contractType: seedContractType(contractType, server),
+    createdInEvent: server.schema.create('BountyCreatedEvent', createdInEvent),
+    ...(maxFundingReachedEvent
+      ? { maxFundingReachedEvent: server.schema.create('BountyMaxFundingReachedEvent', createdInEvent) }
+      : {}),
   })
 
 export const seedBounties = seedOverridableEntities<RawBountyMock>(rawBounties, seedBounty)
@@ -71,11 +83,12 @@ export const seedBountyContributions = seedOverridableEntities<RawBountyContribu
 const seedEntryStatus = ({ type, ...data }: RawBountyEntryMock['status'], server: any) =>
   server.schema.create(`BountyEntryStatus${type}`, data)
 
-export const seedBountyEntry = ({ works, status, ...data }: RawBountyEntryMock, server: any) =>
+export const seedBountyEntry = ({ works, status, announcedInEvent, ...data }: RawBountyEntryMock, server: any) =>
   server.schema.create('BountyEntry', {
     ...data,
-    works: works.map((work) => server.schema.create('BountyWorkData', work)),
+    works: works?.map((work) => server.schema.create('WorkSubmittedEvent', work)) ?? [],
     status: seedEntryStatus(status, server),
+    announcedInEvent: server.schema.create('WorkEntryAnnouncedEvent', announcedInEvent),
   })
 
 export const seedBountyEntries = seedOverridableEntities(rawEntries, seedBountyEntry)

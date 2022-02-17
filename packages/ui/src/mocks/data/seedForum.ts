@@ -1,5 +1,7 @@
 import { BlockFieldsMock } from '@/mocks/data/common'
 
+import { seedOverridableEntities } from '../helpers/seedEntities'
+
 import rawForumCategories from './raw/forumCategories.json'
 import rawForumPosts from './raw/forumPosts.json'
 import rawForumThreads from './raw/forumThreads.json'
@@ -72,9 +74,7 @@ export function seedForumCategory(forumCategoryData: RawForumCategoryMock, serve
   })
 }
 
-export const seedForumCategories = (server: any) => {
-  categoriesData.map((forumCategoryData) => seedForumCategory(forumCategoryData, server))
-}
+export const seedForumCategories = seedOverridableEntities<RawForumCategoryMock>(categoriesData, seedForumCategory)
 
 const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
@@ -103,9 +103,7 @@ export async function seedForumThread(data: RawForumThreadMock, server: any) {
   return thread.update({ status: seedThreadStatus(data.status, data.id, server) })
 }
 
-export const seedForumThreads = (server: any) => {
-  threadsData.map((data) => seedForumThread(data, server))
-}
+export const seedForumThreads = seedOverridableEntities<RawForumThreadMock>(threadsData, seedForumThread)
 
 export function seedForumPost(data: RawForumPostMock, server: any) {
   const sortedEdits = data.edits.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -125,6 +123,4 @@ export function seedForumPost(data: RawForumPostMock, server: any) {
   })
 }
 
-export const seedForumPosts = (server: any) => {
-  postsData.map((data) => seedForumPost(data, server))
-}
+export const seedForumPosts = seedOverridableEntities<RawForumPostMock>(postsData, seedForumPost)

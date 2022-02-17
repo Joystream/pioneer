@@ -1,11 +1,20 @@
-import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache, split } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloProvider,
+  from,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+  split,
+} from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 
-import { NetworkType, QUERY_NODE_ENDPOINT, QUERY_NODE_ENDPOINT_SUBSCRIPTION } from '@/app/config'
+import { Loading } from '@/common/components/Loading'
 import { useNetwork } from '@/common/hooks/useNetwork'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { error } from '@/common/logger'
 import { ServerContextProvider } from '@/common/providers/server/provider'
 import { makeServer } from '@/mocks/server'
@@ -16,21 +25,31 @@ interface Props {
 
 export const QueryNodeProvider = ({ children }: Props) => {
   const [network] = useNetwork()
+  const [endpoints] = useNetworkEndpoints()
+  const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>()
+
+  useEffect(() => {
+    setApolloClient(getApolloClient(endpoints.queryNodeEndpoint, endpoints.queryNodeEndpointSubscription))
+  }, [endpoints.queryNodeEndpointSubscription, endpoints.queryNodeEndpoint])
+
+  if (!apolloClient) {
+    return <Loading text={'Loading query nodes'} />
+  }
 
   if (network === 'local-mocks') {
     return (
-      <ServerContextProvider value={makeServer('development', network)}>
-        <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
+      <ServerContextProvider value={makeServer('development', endpoints)}>
+        <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
       </ServerContextProvider>
     )
   }
 
-  return <ApolloProvider client={getApolloClient(network)}>{children}</ApolloProvider>
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
 }
 
-const getApolloClient = (network: NetworkType) => {
+const getApolloClient = (queryNodeEndpoint: string, queryNodeEndpointSubscription: string) => {
   const httpLink = new HttpLink({
-    uri: QUERY_NODE_ENDPOINT[network],
+    uri: queryNodeEndpoint,
   })
 
   const errorLink = onError((errorResponse) => {
@@ -45,7 +64,7 @@ const getApolloClient = (network: NetworkType) => {
 
   const queryLink = from([errorLink, httpLink])
   const subscriptionLink = new WebSocketLink({
-    uri: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
+    uri: queryNodeEndpointSubscription,
     options: {
       reconnect: true,
       reconnectionAttempts: 5,

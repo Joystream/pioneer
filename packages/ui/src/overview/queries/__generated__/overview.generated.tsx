@@ -2,7 +2,7 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
-const defaultOptions = {}
+const defaultOptions = {} as const
 export type GetSidebarInfoQueryVariables = Types.Exact<{
   memberId: Types.Scalars['ID']
 }>
@@ -21,10 +21,10 @@ export type GetSidebarInfoQuery = {
     opening: {
       __typename: 'WorkingGroupOpening'
       group: { __typename: 'WorkingGroup'; name: string }
-      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null | undefined }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
   }>
-  candidacyNoteMetadata: Array<{ __typename: 'CandidacyNoteMetadata'; id: string; header?: string | null | undefined }>
+  candidacyNoteMetadata: Array<{ __typename: 'CandidacyNoteMetadata'; id: string; header?: string | null }>
   proposals: Array<{ __typename: 'Proposal'; id: string }>
   forumThreads: Array<{
     __typename: 'ForumThread'

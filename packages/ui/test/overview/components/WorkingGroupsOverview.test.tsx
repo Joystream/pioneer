@@ -91,9 +91,16 @@ describe('UI: Working groups overview', () => {
       expect(await screen.findByText('forum Working Group regular')).toBeDefined()
     })
 
+    it('Displays period of reward', async () => {
+      const mockRewardPerBlock = OPENING_DATA.rewardPerBlock
+      expect(await screen.findByText(`workingGroups.rewardPerBlock ${mockRewardPerBlock}`)).toBeDefined()
+    })
+
     it('Displays reward', async () => {
+      const mockRewardPerBlock = OPENING_DATA.rewardPerBlock
       const mockReward = mockWorkingGroups?.find((group) => group.id === OPENING_DATA.groupId)?.budget
-      const reward = (await screen.findByText('workingGroups.rewardPerBlock')).previousSibling?.textContent
+      const reward = (await screen.findByText(`workingGroups.rewardPerBlock ${mockRewardPerBlock}`)).previousSibling
+        ?.textContent
       expect(formatAmount(reward)).toBe(mockReward?.toString())
     })
 

@@ -93,6 +93,19 @@ query SearchMembers($text: String!, $limit: Int) {
   }
 }
 
+query SimpleSearchMembers($text: String!, $limit: Int) {
+  memberships(where: { handle_contains: $text }, limit: $limit) {
+    id
+    handle
+  }
+}
+
+query GetMemberMention($id: ID!) {
+  membership: membershipByUniqueInput(where: { id: $id }) {
+    ...MemberFields
+  }
+}
+
 query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
   councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {
     totalCount
@@ -113,6 +126,18 @@ query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
     totalCount
   }
   workerStartedLeavingEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+}
+
+query GetMemberRowDetails($workerId_in: [ID!]!) {
+  stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
     totalCount
   }
 }
