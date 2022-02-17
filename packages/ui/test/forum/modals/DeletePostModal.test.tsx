@@ -37,8 +37,12 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deletePosts'
+  const postId = 1
+
   let tx: any
+  let txMock: jest.Mock
   stubTransaction(api, txPath)
+
   const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
       id: '0',
@@ -52,7 +56,7 @@ describe('UI: DeletePostModal', () => {
       new PostsToDeleteMap(registry, [
         [
           {
-            post_id: 1,
+            post_id: postId,
             thread_id: 1,
             category_id: 1,
           },
@@ -101,12 +105,13 @@ describe('UI: DeletePostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
+    txMock = (api.api.tx.forum.deletePosts as unknown) as jest.Mock
     modalData.transaction = api.api.tx.forum.deletePosts(
-      1,
+      useMyMemberships.active?.id,
       new PostsToDeleteMap(registry, [
         [
           {
-            post_id: 1,
+            post_id: postId,
             thread_id: 1,
             category_id: 1,
           },
@@ -127,13 +132,12 @@ describe('UI: DeletePostModal', () => {
   it('Requirements failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
     modalData.transaction = api.api.tx.forum.deletePosts(
-      1,
+      useMyMemberships.active?.id,
       new PostsToDeleteMap(registry, [
         [
           {
-            post_id: 1,
+            post_id: postId,
             thread_id: 1,
-            category_id: 1,
           },
           true,
         ],
@@ -150,6 +154,8 @@ describe('UI: DeletePostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
+
+    expect(txMock.mock.calls[0][0]).toBe(postId)
     expect(await screen.findByText('There was a problem deleting your post.')).toBeDefined()
   })
 
@@ -159,6 +165,11 @@ describe('UI: DeletePostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
+
+    // todo BTreeMap to decode
+    console.log(txMock.mock.calls[0][1])
+
+    expect(txMock.mock.calls[0][0]).toBe(useMyMemberships.active?.id)
     expect(await screen.findByText('Your post has been deleted.')).toBeDefined()
   })
 
