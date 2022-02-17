@@ -46,6 +46,7 @@ export const ApplyForRoleModal = () => {
     requiredStake,
     groupToLockId(opening.groupId)
   )
+
   const transaction = useMemo(() => {
     if (activeMember && api) {
       return api.tx[opening.groupId].applyOnOpening({
@@ -55,11 +56,11 @@ export const ApplyForRoleModal = () => {
         reward_account_id: activeMember?.controllerAccount,
         stake_parameters: {
           stake: opening.stake,
-          staking_account_id: activeMember?.controllerAccount,
+          staking_account_id: state.context.stake?.account?.address,
         },
       })
     }
-  }, [activeMember?.id, connectionState])
+  }, [activeMember?.id, connectionState, state.context.stake?.account?.address])
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
   const stakingStatus = useStakingAccountStatus(state.context?.stake?.account?.address, activeMember?.id)
 

@@ -13,6 +13,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -76,6 +77,7 @@ describe('UI: ApplyForRoleModal', () => {
   let batchTx: any
   let bindAccountTx: any
   let applyTransaction: any
+  let applyOnOpeningTxMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -107,6 +109,8 @@ describe('UI: ApplyForRoleModal', () => {
       available: 2000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+    applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
+
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
       api,
@@ -214,16 +218,6 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   describe('Authorize', () => {
-    async function fillSteps() {
-      await renderModal()
-      await fillAndSubmitStakeStep()
-
-      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.click(await getNextStepButton())
-    }
-
     describe('Staking account is not nor staking candidate', () => {
       it('Bind account step', async () => {
         await fillSteps()
@@ -387,16 +381,41 @@ describe('UI: ApplyForRoleModal', () => {
     })
   })
 
+  it('Parameters', async () => {
+    await fillSteps('bob')
+
+    const [params] = last(applyOnOpeningTxMock.mock.calls)
+    const { stake_parameters, member_id, role_account_id, reward_account_id } = params
+    // TODO test description and opening_id too
+
+    expect(member_id).toBe(useMyMemberships.active?.id)
+    expect(role_account_id).toBe(alice.address)
+    expect(reward_account_id).toBe(alice.address)
+
+    expect(stake_parameters.staking_account_id).toBe(bob.address)
+    expect(stake_parameters.stake.toNumber()).toBe(2000)
+  })
+
   async function getNextStepButton() {
     return getButton(/Next step/i)
   }
 
-  async function fillAndSubmitStakeStep() {
-    await selectFromDropdown('Select account for Staking', 'alice')
+  async function fillAndSubmitStakeStep(stakingAccount = 'alice') {
+    await selectFromDropdown('Select account for Staking', stakingAccount)
     const input = await screen.findByLabelText(/Select amount for staking/i)
     fireEvent.change(input, { target: { value: '2000' } })
     fireEvent.click(await getNextStepButton())
     await screen.findByText('Application')
+  }
+
+  async function fillSteps(stakingAccount = 'alice') {
+    await renderModal()
+    await fillAndSubmitStakeStep(stakingAccount)
+
+    fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+    fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+    fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+    fireEvent.click(await getNextStepButton())
   }
 
   function renderModal() {
