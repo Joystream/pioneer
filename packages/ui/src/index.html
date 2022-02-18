@@ -15,6 +15,30 @@
       script.src =
         'https://widget.usersnap.com/global/load/6e7b3746-b1a3-4dec-9e40-2fe82a6fd468?onload=onUsersnapCXLoad'
       document.getElementsByTagName('head')[0].appendChild(script)
+
+      !(function (w, d, t, u) {
+        if (w.__ls) return
+        var f = (w.__ls = function () {
+          f.push ? f.push.apply(f, arguments) : f.store.push(arguments)
+        })
+        if (!w.__ls) w.__ls = f
+        f.store = []
+        f.v = '1.0'
+
+        var ls = d.createElement(t)
+        ls.async = true
+        ls.src = u
+        var s = d.getElementsByTagName(t)[0]
+        s.parentNode.insertBefore(ls, s)
+      })(
+        window,
+        document,
+        'script',
+        ('https:' == window.location.protocol ? 'https://' : 'http://') + 'cdn.livesession.io/track.js'
+      )
+
+      __ls('init', '029d5963.78116ee8', { keystrokes: false })
+      __ls('newPageView')
     </script>
   </head>
   <body>
