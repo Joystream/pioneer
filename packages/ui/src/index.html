@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
     <title>Joystream Governance App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
     <script>
+      // Usersnap script:
       var global = window
       window.onUsersnapCXLoad = function (api) {
         api.init()
@@ -16,6 +21,7 @@
         'https://widget.usersnap.com/global/load/6e7b3746-b1a3-4dec-9e40-2fe82a6fd468?onload=onUsersnapCXLoad'
       document.getElementsByTagName('head')[0].appendChild(script)
 
+      // LiveSession script:
       !(function (w, d, t, u) {
         if (w.__ls) return
         var f = (w.__ls = function () {
@@ -36,12 +42,8 @@
         'script',
         ('https:' == window.location.protocol ? 'https://' : 'http://') + 'cdn.livesession.io/track.js'
       )
-
       __ls('init', '029d5963.78116ee8', { keystrokes: false })
       __ls('newPageView')
     </script>
-  </head>
-  <body>
-    <div id="app"></div>
   </body>
 </html>
