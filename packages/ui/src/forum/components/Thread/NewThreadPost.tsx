@@ -110,5 +110,6 @@ const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
     ref={editorRef}
     onChange={(_, editor) => setNewText(editor.getData())}
     onReady={(editor) => editor.setData('')}
+    onFocus={() => console.log('focus')}
   />
 ))

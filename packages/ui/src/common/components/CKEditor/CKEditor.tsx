@@ -86,8 +86,9 @@ export const CKEditor = React.forwardRef(
               onChange(event, editor)
             }
           })
-
           viewDocument.on('focus', (event: EventInfo) => {
+            const displayData = editor.getData()
+            editor.setData(displayData)
             if (onFocus) {
               onFocus(event, editor)
             }

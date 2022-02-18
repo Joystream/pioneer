@@ -40,6 +40,7 @@ export interface MentionItem {
   name: string
   type: MentionType
   addon?: unknown
+  helper?: string
 }
 
 export type MentionFn = (text: string) => Promise<MentionItem[] | undefined>
@@ -54,13 +55,12 @@ export const useMentions = (): UseMentions => {
   const client = useApolloClient()
 
   const query = useCallback(
-    <Query>(query: DocumentNode) =>
-      async (text: string) =>
-        await client.query<Query>({
-          query,
-          variables: { text, limit: 10 },
-          fetchPolicy: 'cache-first',
-        }),
+    <Query>(query: DocumentNode) => async (text: string) =>
+      await client.query<Query>({
+        query,
+        variables: { text, limit: 10 },
+        fetchPolicy: 'cache-first',
+      }),
     [client]
   )
 
@@ -147,11 +147,6 @@ export const useMentions = (): UseMentions => {
     }))
   }, [])
 
-  const mentionResources = useCallback(async (text: string) => {
-    const data = await Promise.all([mentionProposals(text), mentionForumThread(text)])
-    return data.flat().sort(sortMentions)
-  }, [])
-
   const mentionFeed = useCallback(
     debounce(async (text: string) => {
       const proposal = text.match(/proposal:(.+)$/)
@@ -178,12 +173,9 @@ export const useMentions = (): UseMentions => {
       if (application) {
         return await mentionApplication(application[1])
       }
-      if (text.length > 0) {
-        return await mentionResources(text)
-      }
       return generalItems
     }),
-    [mentionProposals, mentionResources]
+    [mentionProposals]
   )
 
   return {
@@ -199,44 +191,53 @@ const generalItems: MentionItem[] = [
     type: MentionType.General,
     itemId: MentionType.Proposal,
     name: MentionType.Proposal,
+    helper: 'proposal_name',
   },
   {
     id: `#${MentionType.ProposalPost}:`,
     type: MentionType.General,
     itemId: MentionType.ProposalPost,
     name: MentionType.ProposalPost,
+    helper: 'proposal_post_name',
   },
   {
     id: `#${MentionType.ForumThread}:`,
     type: MentionType.General,
     itemId: MentionType.ForumThread,
     name: MentionType.ForumThread,
+    helper: 'forum_thread_name',
   },
   {
     id: `#${MentionType.ForumPost}:`,
     type: MentionType.General,
     itemId: MentionType.ForumPost,
     name: MentionType.ForumPost,
+    helper: 'forum_post_name',
   },
-  { id: `#${MentionType.Opening}:`, type: MentionType.General, itemId: MentionType.Opening, name: MentionType.Opening },
+  {
+    id: `#${MentionType.Opening}:`,
+    type: MentionType.General,
+    itemId: MentionType.Opening,
+    name: MentionType.Opening,
+    helper: 'opening_name',
+  },
   {
     id: `#${MentionType.Application}:`,
     type: MentionType.General,
     itemId: MentionType.Application,
     name: MentionType.Application,
+    helper: 'application_name',
   },
 ]
 
-const itemRenderer = ({ id, itemId, type }: MentionItem) => {
+const itemRenderer = ({ id, itemId, type, helper }: MentionItem) => {
   const itemElement = document.createElement('div')
-
   itemElement.classList.add('custom-item')
   itemElement.id = `mention-list-item-id-${itemId}`
-  itemElement.textContent = `${id}${type === 'general' ? `<${i18next.t('mentions.name')}>` : ''}`
+  itemElement.textContent = `${id}${type === 'general' ? helper : ''}`
 
   if (type !== 'general') {
     const typeElement = document.createElement('span')
-
     typeElement.classList.add('custom-item-type')
     typeElement.textContent = i18next.t(`mentions.type.${type}`)
 
