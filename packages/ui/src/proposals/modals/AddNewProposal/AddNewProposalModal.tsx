@@ -31,6 +31,7 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
+import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
@@ -74,6 +75,7 @@ export const AddNewProposalModal = () => {
     'Proposals'
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
+  const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
   const transactionsSteps = useMemo(
     () =>
@@ -278,7 +280,7 @@ export const AddNewProposalModal = () => {
           <StepDescriptionColumn>
             <ProposalConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
-          <StepperBody>
+          <StyledStepperBody>
             {state.matches('proposalType') && (
               <ProposalTypeStep
                 type={state.context.type}
@@ -317,7 +319,8 @@ export const AddNewProposalModal = () => {
                 send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
               />
             )}
-          </StepperBody>
+            <ExecutionRequirementsWarning setValid={setWarningAccepted} state={state as AddNewProposalMachineState} />
+          </StyledStepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter twoColumns>
@@ -330,7 +333,7 @@ export const AddNewProposalModal = () => {
           )}
         </ButtonsGroup>
         <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+          <ButtonPrimary disabled={!isValidNext || !warningAccepted} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
@@ -342,4 +345,9 @@ export const AddNewProposalModal = () => {
 
 export const StepperProposalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 220px 336px 1fr;
+`
+
+const StyledStepperBody = styled(StepperBody)`
+  flex-direction: column;
+  row-gap: 20px;
 `
