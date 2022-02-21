@@ -55,12 +55,13 @@ export const useMentions = (): UseMentions => {
   const client = useApolloClient()
 
   const query = useCallback(
-    <Query>(query: DocumentNode) => async (text: string) =>
-      await client.query<Query>({
-        query,
-        variables: { text, limit: 10 },
-        fetchPolicy: 'cache-first',
-      }),
+    <Query>(query: DocumentNode) =>
+      async (text: string) =>
+        await client.query<Query>({
+          query,
+          variables: { text, limit: 10 },
+          fetchPolicy: 'cache-first',
+        }),
     [client]
   )
 
@@ -247,14 +248,14 @@ const itemRenderer = ({ id, itemId, type, helper }: MentionItem) => {
   return itemElement
 }
 
-const sortMentions = (a: MentionItem, b: MentionItem) => {
-  if (a.name > b.name) {
-    return 1
-  }
-  if (b.name > a.name) {
-    return -1
-  }
-  return 0
-}
+// const sortMentions = (a: MentionItem, b: MentionItem) => {
+//   if (a.name > b.name) {
+//     return 1
+//   }
+//   if (b.name > a.name) {
+//     return -1
+//   }
+//   return 0
+// }
 
 const sliceDescription = (text: string) => text.slice(0, 33) + '...'
