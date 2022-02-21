@@ -1,6 +1,7 @@
 import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -19,6 +20,7 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { DeleteThreadModalCall } from '.'
 
 export const DeleteThreadModal = () => {
+  const { t } = useTranslation('forum')
   const {
     modalData: { thread },
     showModal,
@@ -69,20 +71,20 @@ export const DeleteThreadModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        description="You intend to delete your thread."
-        buttonLabel="Delete"
+        description={t('modals.deleteThread.description')}
+        buttonLabel={t('modals.deleteThread.buttonLabel')}
       />
     )
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} text="Your thread has been deleted." />
+    return <SuccessModal onClose={hideModal} text={t('modals.deleteThread.success')} />
   }
 
   if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem deleting your thread.
+        {t('modals.deleteThread.error')}
       </FailureModal>
     )
   }
