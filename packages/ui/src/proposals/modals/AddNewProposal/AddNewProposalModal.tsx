@@ -12,6 +12,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Checkbox } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import {
@@ -31,7 +32,10 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
-import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
+import {
+  ExecutionRequirementsWarning,
+  proposalsWithExecutionRequirements,
+} from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
@@ -90,6 +94,11 @@ export const AddNewProposalModal = () => {
     ...(state.context.stakingAccount ? { staking_account_id: state.context.stakingAccount.address } : {}),
     ...(state.context.triggerBlock ? { exact_execution_block: state.context.triggerBlock } : {}),
   }
+
+  const doNeedExecutionValidation = useMemo(
+    () => proposalsWithExecutionRequirements.some((proposal) => state.matches(proposal)),
+    [state]
+  )
 
   const transaction = useMemo(() => {
     if (activeMember && api) {
@@ -330,6 +339,11 @@ export const AddNewProposalModal = () => {
               <Arrow direction="left" />
               Previous step
             </ButtonGhost>
+          )}
+          {doNeedExecutionValidation && (
+            <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
+              I understand this proposal will fail if execution constraints remain unchanged.{' '}
+            </Checkbox>
           )}
         </ButtonsGroup>
         <ButtonsGroup align="right">
