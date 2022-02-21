@@ -45,11 +45,13 @@ describe('UI: SubmitJudgementModal', () => {
       totalFunding: new BN(15999),
       entries: [
         {
+          id: '1',
           worker: {
             id: '7',
           },
         },
         {
+          id: '2',
           worker: {
             id: '8',
           },
@@ -102,7 +104,7 @@ describe('UI: SubmitJudgementModal', () => {
     stubDefaultBalances(api)
     stubBountyConstants(api)
     transaction = stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 100)
-    txMock = api.api.tx.bounty.submitOracleJudgment as unknown as jest.Mock
+    txMock = (api.api.tx.bounty.submitOracleJudgment as unknown) as jest.Mock
   })
 
   it('Renders', () => {
@@ -139,7 +141,7 @@ describe('UI: SubmitJudgementModal', () => {
       const [, , oracleJudgment] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(1)
       const [[winner, reward]] = oracleJudgment.entries()
-      expect(winner.toJSON()).toBe(0)
+      expect(winner.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
       expect(reward.toJSON()).toEqual({ winner: { reward: 15999 } })
     })
 
@@ -155,9 +157,10 @@ describe('UI: SubmitJudgementModal', () => {
       const [, , oracleJudgment] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(2)
       const [[winner, reward], [rejected, judgment]] = oracleJudgment.entries()
-      expect(winner.toJSON()).toBe(0)
+
+      expect(winner.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
       expect(reward.toJSON()).toEqual({ winner: { reward: 15999 } })
-      expect(rejected.toJSON()).toBe(1)
+      expect(rejected.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
       expect(judgment.toJSON()).toEqual({ rejected: null })
     })
 
@@ -173,8 +176,8 @@ describe('UI: SubmitJudgementModal', () => {
       const [, , oracleJudgment] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(2)
       const [[winner1, reward1], [winner2, reward2]] = oracleJudgment.entries()
-      expect(winner1.toJSON()).toBe(0)
-      expect(winner2.toJSON()).toBe(1)
+      expect(winner1.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
+      expect(winner2.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
       expect(reward1.toJSON()).toEqual({ winner: { reward: 8000 } })
       expect(reward2.toJSON()).toEqual({ winner: { reward: 7999 } })
     })
@@ -194,7 +197,7 @@ describe('UI: SubmitJudgementModal', () => {
       const [, , oracleJudgment] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(1)
       const [[rejected, judgment]] = oracleJudgment.entries()
-      expect(rejected.toJSON()).toBe(0)
+      expect(rejected.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
       expect(judgment.toJSON()).toEqual({ rejected: null })
     })
   })

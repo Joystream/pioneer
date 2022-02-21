@@ -17,6 +17,7 @@ import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionM
 import { SlashedSelection } from '@/bounty/modals/SubmitJudgementModal/components/SlashedSelection'
 import { WinnersSelection } from '@/bounty/modals/SubmitJudgementModal/components/WinnersSelection'
 import {
+  BountyRejected,
   BountyWinner,
   submitJudgementMachine,
   SubmitJudgementStates,
@@ -104,23 +105,26 @@ export const SubmitJudgementModal = () => {
           ] as const
       )
 
-      // todo handle rejected when submitOracleJudgement is ready
-      // const validRejections = state.context.rejected.filter(
-      //   (rejection) => rejection.rejected
-      // ) as Required<BountyRejected>[]
-      // const rejectedApi = validRejections.map(
-      //   (loser) =>
-      //     [
-      //       createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
-      //       null,
-      //     ] as const
-      // )
+      const validRejections = state.context.rejected.filter(
+        (rejection) => rejection.rejected
+      ) as Required<BountyRejected>[]
+      const rejectedApi = validRejections.map(
+        (loser) =>
+          [
+            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
+            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+              Rejected: null,
+            }),
+          ] as const
+      )
 
       const rationale = '' // TODO
+      const judgements = [...winnersApi, ...rejectedApi]
+
       return api?.tx.bounty.submitOracleJudgment(
         { Member: createType('u64', Number(activeMember?.id || 0)) },
         createType('u32', Number(bounty.id || 0)),
-        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map(winnersApi)),
+        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map(judgements)),
         rationale
       )
     }
