@@ -2,8 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { State, Typestate } from 'xstate'
 
-import { Checkbox } from '@/common/components/forms'
-import { WarningIcon } from '@/common/components/icons/WarningIcon'
+import { AlertSymbol } from '@/common/components/icons/symbols'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { AddNewProposalContext, AddNewProposalEvent } from '@/proposals/modals/AddNewProposal/machine'
@@ -12,6 +11,9 @@ interface Props {
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
   setValid: (state: boolean) => void
 }
+
+// They `state.matches` fn couldn't accept `as const` for `specificParameters` values and `any` was only solution I saw
+export const proposalsWithExecutionRequirements: any[] = ['specificParameters.fundingRequest']
 
 export const ExecutionRequirementsWarning = ({ state, setValid }: Props) => {
   const children = useMemo(() => {
@@ -35,7 +37,7 @@ export const ExecutionRequirementsWarning = ({ state, setValid }: Props) => {
     return null
   }
 
-  return <WarningContainer setValue={setValid} children={children} />
+  return <WarningContainer children={children} />
 }
 
 const Container = styled.div`
@@ -49,25 +51,21 @@ const Container = styled.div`
   ${TextMedium} {
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    column-gap: 4px;
   }
 `
 
 interface WarningContainerProps {
   children: React.ReactNode
-  setValue(value: boolean): void
 }
 
-const WarningContainer = ({ children, setValue }: WarningContainerProps) => {
+const WarningContainer = ({ children }: WarningContainerProps) => {
   return (
     <Container>
       <TextMedium bold>
-        <WarningIcon /> WARNING
+        <AlertSymbol /> Warning
       </TextMedium>
       {children}
-      <TextMedium>
-        <Checkbox isRequired onChange={setValue} id="execution-requirement" />I understand the risk and want to proceed
-      </TextMedium>
     </Container>
   )
 }
