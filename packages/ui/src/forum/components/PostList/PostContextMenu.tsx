@@ -1,5 +1,5 @@
-import { createType, registry } from '@joystream/types'
-import { PostsToDeleteMap } from '@joystream/types/src/forum'
+import { createType } from '@joystream/types'
+import { PostId } from '@joystream/types/common'
 import React, { useMemo } from 'react'
 
 import { ContextMenu } from '@/common/components/ContextMenu'
@@ -8,6 +8,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { PostListItemType } from '@/forum/components/PostList/PostListItem'
 import { useForumPostParents } from '@/forum/hooks/useForumPostParents'
 import { DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
+import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useProposalPostParents } from '@/proposals/hooks/useProposalPostParents'
@@ -31,20 +32,9 @@ export const PostContextMenu = ({ post, onEdit, type }: Props) => {
   const deletePostTransaction = useMemo(() => {
     if (api && connectionState === 'connected') {
       if (type === 'forum' && forumPostData.categoryId && forumPostData.threadId) {
-        return api.tx.forum.deletePosts(
-          createType('ForumUserId', Number.parseInt(post.author.id)),
-          new PostsToDeleteMap(registry, [
-            [
-              {
-                post_id: post.id,
-                thread_id: forumPostData.threadId,
-                category_id: forumPostData.categoryId,
-              },
-              true,
-            ],
-          ]),
-          ''
-        )
+        const postId = createType<PostId, 'PostId'>('PostId', Number(post.id))
+        const deleteMap = postsToDeleteMap(postId, forumPostData.threadId, forumPostData.categoryId)
+        return api.tx.forum.deletePosts(createType('ForumUserId', Number.parseInt(post.author.id)), deleteMap, '')
       }
       if (type === 'proposal' && proposalPostData.threadId) {
         return api.tx.proposalsDiscussion.deletePost(
