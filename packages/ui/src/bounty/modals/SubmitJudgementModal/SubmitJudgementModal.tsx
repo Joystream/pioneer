@@ -1,5 +1,6 @@
 import { createType, registry } from '@joystream/types'
-import { OracleJudgment } from '@joystream/types/bounty'
+import { EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
+import { BTreeMap } from '@polkadot/types'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -93,8 +94,13 @@ export const SubmitJudgementModal = () => {
       const winnersApi = validWinners.map(
         ({ winner, reward }) =>
           [
-            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0),
-            { Winner: { reward: createType('u128', reward) } },
+            createType<EntryId, 'EntryId'>(
+              'EntryId',
+              Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0
+            ),
+            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+              Winner: { reward: createType('u128', reward) },
+            }),
           ] as const
       )
 
@@ -114,7 +120,7 @@ export const SubmitJudgementModal = () => {
       return api?.tx.bounty.submitOracleJudgment(
         { Member: createType('u64', Number(activeMember?.id || 0)) },
         createType('u32', Number(bounty.id || 0)),
-        new OracleJudgment(registry, new Map([...winnersApi])),
+        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map(winnersApi)),
         rationale
       )
     }
