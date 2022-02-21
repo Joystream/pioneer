@@ -244,7 +244,9 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
         frozenFee: new BN(0),
         frozenMisc: new BN(0),
         isVesting: false,
-        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Staking Candidate')],
+        lockedBreakdown: lockedBalance.eq(BN_ZERO)
+          ? []
+          : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
         reservedBalance: new BN(0),
         vestedBalance: new BN(0),
         vestedClaimable: new BN(0),

@@ -2,103 +2,67 @@ import { LockIdentifier } from '@polkadot/types/interfaces'
 
 import { BalanceLock, LockType } from '@/accounts/types'
 
+// Mapping from:
+// - [/runtime/src/constants.rs:104](https://github.com/Joystream/joystream/blob/5a153fa18351a8fefd919a7d5230b911f180e13d/runtime/src/constants.rs#L104)
+// - and the [handbook](https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1)
 export const lockTypes: { [key: string]: LockType } = {
-  '0x7374616b696e6720': 'Staking',
-  '0x0000000000000000': 'Voting',
-  '0x0101010101010101': 'Council Candidate',
-  '0x0202020202020202': 'Councilor',
-  '0x0303030303030303': 'Validation',
-  '0x0404040404040404': 'Nomination',
-  '0x0505050505050505': 'Proposals',
-  '0x0606060606060606': 'Storage Worker',
-  '0x0707070707070707': 'Content Directory Worker',
-  '0x0808080808080808': 'Forum Worker',
-  '0x0909090909090909': 'Membership Worker',
-  '0x0a0a0a0a0a0a0a0a': 'Invitation',
-  '0x0b0b0b0b0b0b0b0b': 'Staking Candidate',
-  '0x0c0c0c0c0c0c0c0c': 'Bounties',
-  '0x0d0d0d0d0d0d0d0d': 'Gateway Worker',
-  '0x0e0e0e0e0e0e0e0e': 'Distribution Worker',
+  ['staking ']: 'Staking',
+  ['vesting ']: 'Vesting',
+  ['voting  ']: 'Voting',
+  ['candidac']: 'Council Candidate',
+  ['councilo']: 'Councilor',
+  ['proposal']: 'Proposals',
+  ['wg-storg']: 'Storage Worker',
+  ['wg-contt']: 'Content Directory Worker',
+  ['wg-forum']: 'Forum Worker',
+  ['wg-membr']: 'Membership Worker',
+  ['invitemb']: 'Invitation',
+  ['boundsta']: 'Bound Staking Account',
+  ['bounty  ']: 'Bounties',
+  ['wg-gatew']: 'Gateway Worker',
+  ['wg-opera']: 'Builders Worker',
+  ['wg-operb']: 'HR Worker',
+  ['wg-operg']: 'Marketing Worker',
+  ['wg-distr']: 'Distribution Worker',
 }
 
-const ANY_WORKER: LockType[] = [
-  'Forum Worker',
+const RIVALROUS: LockType[] = [
+  'Council Candidate',
+  'Councilor',
+  'Staking',
+  'Proposals',
   'Storage Worker',
   'Content Directory Worker',
-  'Gateway Worker',
+  'Forum Worker',
   'Membership Worker',
+  'Bounties',
+  'Gateway Worker',
+  'Builders Worker',
+  'HR Worker',
+  'Marketing Worker',
   'Distribution Worker',
 ]
 
-const STAKING_INVITATION_VOTING: LockType[] = ['Staking Candidate', 'Invitation', 'Voting']
 const RECOVERABLE: LockType[] = ['Voting', 'Council Candidate']
-const COMPATIBLE_LOCKS: Record<LockType, Set<LockType>> = {
-  Staking: new Set<LockType>(),
-  'Staking Candidate': new Set<LockType>([
-    'Invitation',
-    'Voting',
-    'Council Candidate',
-    'Councilor',
-    'Validation',
-    'Nomination',
-    'Proposals',
-    'Bounties',
-    ...ANY_WORKER,
-  ]),
-  Invitation: new Set([
-    'Staking Candidate',
-    'Voting',
-    'Council Candidate',
-    'Councilor',
-    'Validation',
-    'Nomination',
-    'Proposals',
-    'Bounties',
-    ...ANY_WORKER,
-  ]),
-  Voting: new Set([
-    'Staking Candidate',
-    'Invitation',
-    'Council Candidate',
-    'Councilor',
-    'Validation',
-    'Nomination',
-    'Proposals',
-    'Bounties',
-    ...ANY_WORKER,
-  ]),
-  'Council Candidate': new Set([...STAKING_INVITATION_VOTING, 'Councilor']),
-  Councilor: new Set([...STAKING_INVITATION_VOTING, 'Council Candidate']),
-  Validation: new Set(STAKING_INVITATION_VOTING),
-  Nomination: new Set(STAKING_INVITATION_VOTING),
-  Proposals: new Set(STAKING_INVITATION_VOTING),
-  Bounties: new Set(['Staking Candidate', 'Voting']),
-  'Content Directory Worker': new Set(STAKING_INVITATION_VOTING),
-  'Forum Worker': new Set(STAKING_INVITATION_VOTING),
-  'Gateway Worker': new Set(STAKING_INVITATION_VOTING),
-  'Membership Worker': new Set(STAKING_INVITATION_VOTING),
-  'Distribution Worker': new Set(STAKING_INVITATION_VOTING),
-  'Storage Worker': new Set(STAKING_INVITATION_VOTING),
+
+const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
+const asLockTypes = (locks: BalanceLock[]): LockType[] => locks.flatMap((lock) => lock.type ?? [])
+const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boolean) => {
+  if (!lockTypeA) {
+    return () => false // Don't block transactions based on unknown locks
+  } else if (isRivalrous(lockTypeA)) {
+    return isRivalrous
+  } else {
+    return (lockTypeB) => lockTypeA === lockTypeB
+  }
 }
 
 export const isRecoverable = (type: LockType): boolean => RECOVERABLE.includes(type)
 
-export const areLocksConflicting = (lock: LockType, existingLocks: BalanceLock[]) => {
-  if (existingLocks.length < 1) {
-    return false
-  }
+export const areLocksConflicting = (lockType: LockType, existingLocks: BalanceLock[]) =>
+  existingLocks.length > 0 && asLockTypes(existingLocks).some(isConflictingWith(lockType))
 
-  return existingLocks.some(({ type }) => !COMPATIBLE_LOCKS[lock].has(type))
-}
+export const conflictingLocks = (lockType: LockType, existingLocks: BalanceLock[]) =>
+  asLockTypes(existingLocks).filter(isConflictingWith(lockType))
 
-const isLockType = (item: LockType | undefined): item is LockType => {
-  return !!item
-}
-
-export const conflictingLocks = (lock: LockType, existingLocks: BalanceLock[]) => {
-  return existingLocks.map(({ type }) => (!COMPATIBLE_LOCKS[lock].has(type) ? type : undefined)).filter(isLockType)
-}
-
-export const lockLookup = (id: LockIdentifier): LockType => {
-  return lockTypes[id.toHex()]
-}
+export const lockLookup = (id: LockIdentifier): LockType => lockTypes[id.toUtf8()]
