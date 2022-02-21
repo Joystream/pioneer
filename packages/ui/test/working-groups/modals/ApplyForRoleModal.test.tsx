@@ -1,3 +1,4 @@
+import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
@@ -9,6 +10,7 @@ import { interpret } from 'xstate'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -381,19 +383,46 @@ describe('UI: ApplyForRoleModal', () => {
     })
   })
 
-  it('Parameters', async () => {
+  it.only('Parameters', async () => {
+    stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
+    stubTransactionFailure(batchTx)
+
     await fillSteps('bob')
 
-    const [params] = last(applyOnOpeningTxMock.mock.calls)
-    const { stake_parameters, member_id, role_account_id, reward_account_id } = params
-    // TODO test description and opening_id too
+    await act(async () => {
+      fireEvent.click(screen.getByText(/^Sign transaction/i))
+    })
 
-    expect(member_id).toBe(useMyMemberships.active?.id)
-    expect(role_account_id).toBe(alice.address)
-    expect(reward_account_id).toBe(alice.address)
+    await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
 
-    expect(stake_parameters.staking_account_id).toBe(bob.address)
-    expect(stake_parameters.stake.toNumber()).toBe(2000)
+    const [beforeTransactionParam] = last(applyOnOpeningTxMock.mock.calls)
+    expect(beforeTransactionParam.opening_id).toBe(1)
+
+    expect(beforeTransactionParam.member_id).toBe(useMyMemberships.active?.id)
+    expect(beforeTransactionParam.role_account_id).toBe(alice.address)
+    expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
+
+    expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
+    expect(beforeTransactionParam.stake_parameters.stake).toBe('2000')
+
+    await act(async () => {
+      fireEvent.click(await screen.findByText(/^Sign transaction/i))
+    })
+
+    const [transactionParam] = last(applyOnOpeningTxMock.mock.calls)
+
+    expect(transactionParam.opening_id).toBe(1)
+
+    expect(transactionParam.member_id).toBe(useMyMemberships.active?.id)
+    expect(transactionParam.role_account_id).toBe(alice.address)
+    expect(transactionParam.reward_account_id).toBe(alice.address)
+
+    expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
+    expect(transactionParam.stake_parameters.stake).toBe('2000')
+
+    expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
+      answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],
+    })
   })
 
   async function getNextStepButton() {
