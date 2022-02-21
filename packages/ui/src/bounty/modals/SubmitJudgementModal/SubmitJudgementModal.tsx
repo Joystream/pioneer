@@ -1,5 +1,5 @@
 import { createType, registry } from '@joystream/types'
-import { BTreeMap } from '@polkadot/types'
+import { OracleJudgment } from '@joystream/types/bounty'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -114,7 +114,7 @@ export const SubmitJudgementModal = () => {
       return api?.tx.bounty.submitOracleJudgment(
         { Member: createType('u64', Number(activeMember?.id || 0)) },
         createType('u32', Number(bounty.id || 0)),
-        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map([...winnersApi])),
+        new OracleJudgment(registry, new Map([...winnersApi])),
         rationale
       )
     }
