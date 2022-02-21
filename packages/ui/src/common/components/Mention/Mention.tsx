@@ -180,32 +180,6 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
     }
   }, [type])
 
-  const Content = useMemo(() => {
-    switch (type) {
-      case 'proposal': {
-        return <ProposalTooltip onMount={onMount} mention={data as ProposalMention} />
-      }
-      case 'proposalDiscussionEntry': {
-        return <ProposalDiscussionEntryTooltip onMount={onMount} mention={data as ProposalDiscussionPostMention} />
-      }
-      case 'forumThread': {
-        return <ForumThreadTooltip onMount={onMount} mention={data as ForumThreadMention} />
-      }
-      case 'forumPost': {
-        return <ForumPostTooltip onMount={onMount} mention={data as ForumPostMention} />
-      }
-      case 'member': {
-        return <MemberTooltip onMount={onMount} mention={data as Member} />
-      }
-      case 'opening': {
-        return <OpeningTooltip onMount={onMount} mention={data as WorkingGroupOpeningMention} />
-      }
-      case 'application': {
-        return <ApplicationTooltip onMount={onMount} mention={data as WorkingGroupApplicationMention} />
-      }
-    }
-  }, [type, onMount, data])
-
   const UrlAddress = useMemo(() => {
     switch (type) {
       case 'proposalDiscussionEntry':
@@ -227,6 +201,46 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
       }
     }
   }, [type])
+
+  const Content = useMemo(() => {
+    switch (type) {
+      case 'proposal': {
+        return <ProposalTooltip onMount={onMount} mention={data as ProposalMention} urlAddress={'#' + UrlAddress} />
+      }
+      case 'proposalDiscussionEntry': {
+        return <ProposalDiscussionEntryTooltip onMount={onMount} mention={data as ProposalDiscussionPostMention} />
+      }
+      case 'forumThread': {
+        return (
+          <ForumThreadTooltip onMount={onMount} mention={data as ForumThreadMention} urlAddress={'#' + UrlAddress} />
+        )
+      }
+      case 'forumPost': {
+        return <ForumPostTooltip onMount={onMount} mention={data as ForumPostMention} />
+      }
+      case 'member': {
+        return <MemberTooltip onMount={onMount} mention={data as Member} />
+      }
+      case 'opening': {
+        return (
+          <OpeningTooltip
+            onMount={onMount}
+            mention={data as WorkingGroupOpeningMention}
+            urlAddress={'#' + UrlAddress}
+          />
+        )
+      }
+      case 'application': {
+        return (
+          <ApplicationTooltip
+            onMount={onMount}
+            mention={data as WorkingGroupApplicationMention}
+            urlAddress={'#' + UrlAddress}
+          />
+        )
+      }
+    }
+  }, [type, onMount, data])
 
   return (
     <Container data-testid="mention-container">
@@ -253,5 +267,8 @@ const Container = styled.div`
 
   ${TextMedium} {
     cursor: pointer;
+    &:hover {
+      color: ${Colors.Blue[500]};
+    }
   }
 `

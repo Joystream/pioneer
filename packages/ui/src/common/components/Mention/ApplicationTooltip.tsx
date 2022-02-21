@@ -15,9 +15,10 @@ import { BadgeStatus } from '../BadgeStatus'
 export interface ApplicationTooltipProps {
   onMount(): void
   mention?: WorkingGroupApplicationMention
+  urlAddress?: string
 }
 
-export const ApplicationTooltip = React.memo(({ mention, onMount }: ApplicationTooltipProps) => {
+export const ApplicationTooltip = React.memo(({ mention, onMount, urlAddress }: ApplicationTooltipProps) => {
   const { t } = useTranslation()
 
   const date = useMemo(() => mention && format(new Date(mention.createdAtBlock.timestamp), 'Pp'), [mention])
@@ -42,7 +43,9 @@ export const ApplicationTooltip = React.memo(({ mention, onMount }: ApplicationT
           <MemberInfo member={mention.applicant} size="s" memberSize="s" hideGroup isOnDark />
           <Footer>
             <FooterRow>
-              <TextMedium bold>{shortDescription}</TextMedium>
+              <a href={urlAddress}>
+                <TextMedium bold>{shortDescription}</TextMedium>
+              </a>
               <BadgeStatus inverted size="l">
                 {mention.opening.type}
               </BadgeStatus>
@@ -61,6 +64,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 14px;
+  min-width: 150px;
 
   ${TextMedium} {
     color: ${Colors.White};
@@ -90,5 +94,8 @@ const FooterRow = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    &:hover {
+      color: ${Colors.Blue[500]};
+    }
   }
 `

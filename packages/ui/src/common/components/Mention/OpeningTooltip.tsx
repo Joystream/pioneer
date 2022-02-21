@@ -15,9 +15,10 @@ import { WorkingGroupOpeningMention } from '@/working-groups/types'
 export interface OpeningTooltipProps {
   onMount(): void
   mention?: WorkingGroupOpeningMention
+  urlAddress?: string
 }
 
-export const OpeningTooltip = ({ onMount, mention }: OpeningTooltipProps) => {
+export const OpeningTooltip = ({ onMount, mention, urlAddress }: OpeningTooltipProps) => {
   const { t } = useTranslation()
 
   const shortDescription = useMemo(() => mention?.shortDescription && cutText(mention.shortDescription, 20), [mention])
@@ -46,7 +47,9 @@ export const OpeningTooltip = ({ onMount, mention }: OpeningTooltipProps) => {
               : t('mentions.tooltips.opening.past')}
           </TextSmall>
           <Row>
-            <TextMedium bold>{shortDescription}</TextMedium>
+            <a href={urlAddress}>
+              <TextMedium bold>{shortDescription}</TextMedium>
+            </a>
             <BadgeStatus inverted size="l">
               {mention.type}
             </BadgeStatus>
@@ -88,6 +91,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 14px;
+  min-width: 150px;
 
   ${TextMedium} {
     &:first-child {

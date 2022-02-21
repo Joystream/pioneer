@@ -16,9 +16,10 @@ import { BadgeStatus } from '../BadgeStatus'
 export interface ProposalTooltipProps {
   onMount(): void
   mention?: ProposalMention
+  urlAddress?: string
 }
 
-export const ProposalTooltip = React.memo(({ mention, onMount }: ProposalTooltipProps) => {
+export const ProposalTooltip = React.memo(({ mention, onMount, urlAddress }: ProposalTooltipProps) => {
   const { t } = useTranslation()
   const constants = useProposalConstants(mention?.type)
   const blocksUntil = useBlocksToProposalExecution(mention, constants)
@@ -50,7 +51,9 @@ export const ProposalTooltip = React.memo(({ mention, onMount }: ProposalTooltip
               : t('mentions.tooltips.proposal.past')}
           </TextSmall>
           <Row>
-            <TextMedium bold>{title}</TextMedium>
+            <a href={urlAddress}>
+              <TextMedium bold>{title}</TextMedium>
+            </a>
             <BadgeStatus inverted size="l">
               {mention.status}
             </BadgeStatus>
@@ -68,13 +71,16 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 14px;
+  min-width: 150px;
 `
 
 const Row = styled.div`
   display: inline-flex;
   justify-content: space-between;
-
   ${TextMedium} {
     color: ${Colors.White};
+    &:hover {
+      color: ${Colors.Blue[500]};
+    }
   }
 `
