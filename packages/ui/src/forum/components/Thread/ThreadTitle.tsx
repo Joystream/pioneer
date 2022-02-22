@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { ButtonBareGhost, ButtonInnerWrapper, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { InputArea, InputComponent, InputText } from '@/common/components/forms'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
-import { EditSymbol } from '@/common/components/icons/symbols'
+import { EditSymbol, FailureSymbol } from '@/common/components/icons/symbols'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Colors } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
@@ -105,7 +105,8 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
       )}
       {isMyThread && (
         <ActionButtonWrapper onClick={() => deleteThread()} size="small" square>
-          <CrossIcon />
+          {/* TODO: Replace it with BinIcon when it's prepared */}
+          <FailureSymbol />
         </ActionButtonWrapper>
       )}
     </>
@@ -131,7 +132,9 @@ const EditAction = styled(ButtonPrimary)`
   }
 `
 
-const ActionButtonWrapper = styled(ButtonBareGhost)``
+const ActionButtonWrapper = styled(ButtonBareGhost)`
+  padding-right: 0;
+`
 
 const EditTitleInputComponent = styled(InputComponent)`
   position: absolute;
