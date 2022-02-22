@@ -48,7 +48,7 @@ describe('UI: DeleteThreadModal', () => {
       tags: [],
       visiblePostsCount: 5,
       status: { __typename: 'ThreadStatusActive' },
-    }
+    },
   }
 
   const useModal: UseModal<any> = {
