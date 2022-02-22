@@ -1,0 +1,9 @@
+{
+  "network": "Network",
+  "settings": "Settings",
+  "selectNetwork": "Select Network",
+  "networkDetails": "Network Details",
+  "networkIp": "Network IP: ",
+  "QueryNodeIp": "Query Node IP: ",
+  "url": "Url: "
+}
