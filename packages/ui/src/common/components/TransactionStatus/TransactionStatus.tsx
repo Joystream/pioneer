@@ -5,6 +5,9 @@ import { TransactionStateValue } from '@/common/model/machines'
 
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
+// Time after TransactionStatus with Success disappears
+const HIDE_STATUS_TIMEOUT = 5000
+
 export const TransactionStatus = () => {
   const { status } = useTransactionStatus()
   const [isVisible, setVisible] = useState(false)
@@ -16,6 +19,11 @@ export const TransactionStatus = () => {
 
     if (status === 'signWithExtension') {
       setVisible(true)
+    }
+
+    if (status === 'success') {
+      const timeout = setTimeout(() => setVisible(false), HIDE_STATUS_TIMEOUT)
+      return () => clearTimeout(timeout)
     }
   }, [status])
 
