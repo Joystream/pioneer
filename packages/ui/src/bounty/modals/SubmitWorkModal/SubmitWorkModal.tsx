@@ -1,4 +1,6 @@
 import { createType } from '@joystream/types'
+import { BountyId, EntryId } from '@joystream/types/bounty'
+import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -61,9 +63,9 @@ export const SubmitWorkModal = () => {
     const entryId = modalData.bounty.entries?.find((entryId) => entryId.id === 'id')
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
-        createType('u64', Number(activeMember?.id || 0)),
-        createType('u32', Number(modalData.bounty.id || 0)),
-        createType('u32', Number(entryId || 0)),
+        createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)),
+        createType<BountyId, 'BountyId'>('BountyId', Number(modalData.bounty.id || 0)),
+        createType<EntryId, 'EntryId'>('EntryId', Number(entryId || 0)),
         submitWorkMetadataFactory(state as SubmitWorkModalMachineState)
       )
     }
