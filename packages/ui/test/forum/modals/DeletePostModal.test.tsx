@@ -1,5 +1,6 @@
-import { registry } from '@joystream/types'
-import { PostsToDeleteMap } from '@joystream/types/src/forum'
+import { createType } from '@joystream/types'
+import { PostId, ThreadId } from '@joystream/types/common'
+import { CategoryId } from '@joystream/types/forum'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -10,6 +11,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
+import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMember } from '@/mocks/data'
@@ -37,8 +39,16 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deletePosts'
+  const postId = 1
+  const deleteMap = postsToDeleteMap(
+    createType<PostId, 'PostId'>('PostId', postId),
+    createType<ThreadId, 'ThreadId'>('ThreadId', 2),
+    createType<CategoryId, 'CategoryId'>('CategoryId', 3)
+  )
+
   let tx: any
   stubTransaction(api, txPath)
+
   const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
       id: '0',
@@ -47,20 +57,6 @@ describe('UI: DeletePostModal', () => {
       text: 'Sample post text',
       status: 'PostStatusActive',
     },
-    transaction: api.api.tx.forum.deletePosts(
-      1,
-      new PostsToDeleteMap(registry, [
-        [
-          {
-            post_id: 1,
-            thread_id: 1,
-            category_id: 1,
-          },
-          true,
-        ],
-      ]),
-      ''
-    ),
   }
 
   const useModal: UseModal<any> = {
@@ -101,20 +97,7 @@ describe('UI: DeletePostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
-    modalData.transaction = api.api.tx.forum.deletePosts(
-      1,
-      new PostsToDeleteMap(registry, [
-        [
-          {
-            post_id: 1,
-            thread_id: 1,
-            category_id: 1,
-          },
-          true,
-        ],
-      ]),
-      ''
-    )
+    modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
   })
 
   it('Requirements passed', async () => {
@@ -126,20 +109,7 @@ describe('UI: DeletePostModal', () => {
 
   it('Requirements failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
-    modalData.transaction = api.api.tx.forum.deletePosts(
-      1,
-      new PostsToDeleteMap(registry, [
-        [
-          {
-            post_id: 1,
-            thread_id: 1,
-            category_id: 1,
-          },
-          true,
-        ],
-      ]),
-      ''
-    )
+    modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
@@ -150,6 +120,7 @@ describe('UI: DeletePostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
+
     expect(await screen.findByText('There was a problem deleting your post.')).toBeDefined()
   })
 
@@ -159,6 +130,7 @@ describe('UI: DeletePostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
+
     expect(await screen.findByText('Your post has been deleted.')).toBeDefined()
   })
 
