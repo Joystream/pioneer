@@ -4,8 +4,8 @@ import * as Yup from 'yup'
 
 import { ButtonBareGhost, ButtonInnerWrapper, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { InputArea, InputComponent, InputText } from '@/common/components/forms'
-import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
-import { EditSymbol, FailureSymbol } from '@/common/components/icons/symbols'
+import { BinIcon, CheckboxIcon, CrossIcon } from '@/common/components/icons'
+import { EditSymbol } from '@/common/components/icons/symbols'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Colors } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
@@ -105,8 +105,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
       )}
       {isMyThread && (
         <ActionButtonWrapper onClick={() => deleteThread()} size="small" square>
-          {/* TODO: Replace it with BinIcon when it's prepared */}
-          <FailureSymbol />
+          <DeleteIcon />
         </ActionButtonWrapper>
       )}
     </>
@@ -145,4 +144,9 @@ const EditTitleInputComponent = styled(InputComponent)`
   ${InputArea} {
     padding-right: 8px;
   }
+`
+
+const DeleteIcon = styled(BinIcon)`
+  height: 16px;
+  width: 16px;
 `
