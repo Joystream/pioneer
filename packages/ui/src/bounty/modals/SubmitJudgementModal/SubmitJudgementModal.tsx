@@ -1,6 +1,7 @@
-import { createType, registry } from '@joystream/types'
-import { EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
-import { BTreeMap } from '@polkadot/types'
+import { createType } from '@joystream/types'
+import { OracleJudgment } from '@joystream/types/augment'
+import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
+import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -122,12 +123,12 @@ export const SubmitJudgementModal = () => {
       )
 
       const rationale = '' // TODO
-      const judgements = [...winnersApi, ...rejectedApi]
+      const judgments = [...winnersApi, ...rejectedApi]
 
       return api?.tx.bounty.submitOracleJudgment(
-        { Member: createType('u64', Number(activeMember?.id || 0)) },
-        createType('u32', Number(bounty.id || 0)),
-        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map(judgements)),
+        { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
+        createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
+        createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
         rationale
       )
     }
