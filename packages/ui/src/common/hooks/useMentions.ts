@@ -55,12 +55,13 @@ export const useMentions = (): UseMentions => {
   const client = useApolloClient()
 
   const query = useCallback(
-    <Query>(query: DocumentNode) => async (text: string) =>
-      await client.query<Query>({
-        query,
-        variables: { text, limit: 10 },
-        fetchPolicy: 'cache-first',
-      }),
+    <Query>(query: DocumentNode) =>
+      async (text: string) =>
+        await client.query<Query>({
+          query,
+          variables: { text, limit: 10 },
+          fetchPolicy: 'cache-first',
+        }),
     [client]
   )
 
