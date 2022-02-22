@@ -150,14 +150,14 @@ export const ApplyForRoleModal = () => {
     const { stake, answers } = state.context
 
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
-      opening_id: opening.runtimeId,
       member_id: activeMember?.id,
+      opening_id: opening.runtimeId,
       role_account_id: activeMember?.controllerAccount,
-      reward_account_id: activeMember?.rootAccount,
+      reward_account_id: activeMember?.controllerAccount,
       description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
       stake_parameters: {
         stake: stake.amount,
-        stake_account_id: stake.account?.address,
+        staking_account_id: stake.account?.address,
       },
     })
 
