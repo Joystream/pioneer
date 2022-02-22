@@ -103,7 +103,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
-      return !!(specifics?.applicationId && specifics?.openingId)
+      return typeof specifics?.applicationId === 'number' && typeof specifics?.openingId === 'number'
     }
     case state.matches('specificParameters.updateWorkingGroupBudget'): {
       return !!(
