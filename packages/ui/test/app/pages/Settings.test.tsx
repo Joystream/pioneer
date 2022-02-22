@@ -16,13 +16,13 @@ describe('Settings', () => {
   it('Renders page', async () => {
     renderPage()
 
-    expect(await screen.findByRole('heading', { name: 'Settings' })).toBeDefined()
+    expect(await screen.findByRole('heading', { name: 'settings' })).toBeDefined()
   })
 
   it('General settings', async () => {
     renderPage()
 
-    expect(await screen.findByText(/network/i)).toBeDefined()
+    expect(await screen.findByText('selectNetwork')).toBeDefined()
   })
 
   function renderPage() {
