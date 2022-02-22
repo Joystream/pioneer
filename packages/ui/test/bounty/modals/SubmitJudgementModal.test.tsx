@@ -11,6 +11,7 @@ import { AddressToBalanceMap } from '@/accounts/types'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
+import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { seedMembers } from '@/mocks/data'
 import bounties from '@/mocks/data/raw/bounties.json'
@@ -44,11 +45,13 @@ describe('UI: SubmitJudgementModal', () => {
       totalFunding: new BN(15999),
       entries: [
         {
+          id: '1',
           worker: {
             id: '7',
           },
         },
         {
+          id: '2',
           worker: {
             id: '8',
           },
@@ -86,6 +89,7 @@ describe('UI: SubmitJudgementModal', () => {
   }
 
   let transaction: any
+  let txMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
   const api = stubApi()
@@ -100,6 +104,7 @@ describe('UI: SubmitJudgementModal', () => {
     stubDefaultBalances(api)
     stubBountyConstants(api)
     transaction = stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 100)
+    txMock = api.api.tx.bounty.submitOracleJudgment as unknown as jest.Mock
   })
 
   it('Renders', () => {
@@ -118,6 +123,12 @@ describe('UI: SubmitJudgementModal', () => {
 
       expect(screen.queryByText('modals.submitJudgement.noWinner.title')).toBeInTheDocument()
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
+
+      const [actor, bountyId, oracleJudgment, rationale] = last(txMock.mock.calls)
+      expect(actor?.Member.toJSON()).toBe(0)
+      expect(bountyId?.toJSON()).toBe(0)
+      expect(rationale).toBe('')
+      expect(oracleJudgment.size).toBe(0)
     })
 
     it('One winner', async () => {
@@ -126,6 +137,12 @@ describe('UI: SubmitJudgementModal', () => {
       await selectWinner(memberMock.find((member) => member.id === modalData.bounty.entries[0].worker.id)?.handle)
 
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
+
+      const [, , oracleJudgment] = last(txMock.mock.calls)
+      expect(oracleJudgment.size).toBe(1)
+      const [[winner, reward]] = oracleJudgment.entries()
+      expect(winner.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
+      expect(reward.toJSON()).toEqual({ winner: { reward: 15999 } })
     })
 
     it('One winner, one rejected', async () => {
@@ -136,6 +153,15 @@ describe('UI: SubmitJudgementModal', () => {
       await selectRejected(findHandleById(modalData.bounty.entries[1].worker.id))
 
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
+
+      const [, , oracleJudgment] = last(txMock.mock.calls)
+      expect(oracleJudgment.size).toBe(2)
+      const [[winner, reward], [rejected, judgment]] = oracleJudgment.entries()
+
+      expect(winner.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
+      expect(reward.toJSON()).toEqual({ winner: { reward: 15999 } })
+      expect(rejected.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
+      expect(judgment.toJSON()).toEqual({ rejected: null })
     })
 
     it('Two winners', async () => {
@@ -146,6 +172,14 @@ describe('UI: SubmitJudgementModal', () => {
       await selectWinner(findHandleById(modalData.bounty.entries[1].worker.id), 2)
 
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
+
+      const [, , oracleJudgment] = last(txMock.mock.calls)
+      expect(oracleJudgment.size).toBe(2)
+      const [[winner1, reward1], [winner2, reward2]] = oracleJudgment.entries()
+      expect(winner1.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
+      expect(winner2.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
+      expect(reward1.toJSON()).toEqual({ winner: { reward: 8000 } })
+      expect(reward2.toJSON()).toEqual({ winner: { reward: 7999 } })
     })
 
     it('Failed with one rejected', async () => {
@@ -159,6 +193,12 @@ describe('UI: SubmitJudgementModal', () => {
 
       expect(screen.queryByText('modals.submitJudgement.noWinner.title')).toBeInTheDocument()
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
+
+      const [, , oracleJudgment] = last(txMock.mock.calls)
+      expect(oracleJudgment.size).toBe(1)
+      const [[rejected, judgment]] = oracleJudgment.entries()
+      expect(rejected.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
+      expect(judgment.toJSON()).toEqual({ rejected: null })
     })
   })
 

@@ -1,5 +1,7 @@
-import { createType, registry } from '@joystream/types'
-import { BTreeMap } from '@polkadot/types'
+import { createType } from '@joystream/types'
+import { OracleJudgment } from '@joystream/types/augment'
+import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
+import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +18,7 @@ import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionM
 import { SlashedSelection } from '@/bounty/modals/SubmitJudgementModal/components/SlashedSelection'
 import { WinnersSelection } from '@/bounty/modals/SubmitJudgementModal/components/WinnersSelection'
 import {
+  BountyRejected,
   BountyWinner,
   submitJudgementMachine,
   SubmitJudgementStates,
@@ -93,28 +96,39 @@ export const SubmitJudgementModal = () => {
       const winnersApi = validWinners.map(
         ({ winner, reward }) =>
           [
-            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0),
-            { Winner: { reward: createType('u128', reward) } },
+            createType<EntryId, 'EntryId'>(
+              'EntryId',
+              Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0
+            ),
+            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+              Winner: { reward: createType('u128', reward) },
+            }),
           ] as const
       )
 
-      // todo handle rejected when submitOracleJudgement is ready
-      // const validRejections = state.context.rejected.filter(
-      //   (rejection) => rejection.rejected
-      // ) as Required<BountyRejected>[]
-      // const rejectedApi = validRejections.map(
-      //   (loser) =>
-      //     [
-      //       createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
-      //       null,
-      //     ] as const
-      // )
+      const validRejections = state.context.rejected.filter(
+        (rejection) => rejection.rejected
+      ) as Required<BountyRejected>[]
+      const rejectedApi = validRejections.map(
+        (loser) =>
+          [
+            createType<EntryId, 'EntryId'>(
+              'EntryId',
+              Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0
+            ),
+            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+              Rejected: null,
+            }),
+          ] as const
+      )
 
       const rationale = '' // TODO
+      const judgments = [...winnersApi, ...rejectedApi]
+
       return api?.tx.bounty.submitOracleJudgment(
-        { Member: createType('u64', Number(activeMember?.id || 0)) },
-        createType('u32', Number(bounty.id || 0)),
-        new BTreeMap(registry, 'EntryId', 'OracleWorkEntryJudgment', new Map([...winnersApi])),
+        { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
+        createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
+        createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
         rationale
       )
     }
