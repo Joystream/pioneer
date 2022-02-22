@@ -111,7 +111,10 @@ export const SubmitJudgementModal = () => {
       const rejectedApi = validRejections.map(
         (loser) =>
           [
-            createType('u32', Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0),
+            createType<EntryId, 'EntryId'>(
+              'EntryId',
+              Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0
+            ),
             createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
               Rejected: null,
             }),
