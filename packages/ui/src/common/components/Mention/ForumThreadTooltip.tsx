@@ -14,9 +14,10 @@ import { MemberInfo } from '@/memberships/components'
 export interface ForumThreadTooltipProps {
   onMount(): void
   mention?: ForumThreadMention
+  urlAddress?: string
 }
 
-export const ForumThreadTooltip = ({ onMount, mention }: ForumThreadTooltipProps) => {
+export const ForumThreadTooltip = ({ onMount, mention, urlAddress }: ForumThreadTooltipProps) => {
   const { t } = useTranslation()
 
   const description = useMemo(() => mention?.text && cutText(mention.text), [mention])
@@ -34,9 +35,11 @@ export const ForumThreadTooltip = ({ onMount, mention }: ForumThreadTooltipProps
           {description && <TextMedium lighter>{description}</TextMedium>}
           <Footer>
             <ForumIcon />
-            <TextExtraSmall bold lighter>
-              {t('mentions.tooltips.forumThread.answers')}
-            </TextExtraSmall>
+            <a href={urlAddress}>
+              <TextExtraSmall bold lighter>
+                {t('mentions.tooltips.forumThread.answers')}
+              </TextExtraSmall>
+            </a>
             <ItemCount count={mention.visiblePostsCount - 1} />
           </Footer>
         </>
@@ -51,10 +54,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 14px;
+  min-width: 150px;
 
   ${TextMedium} {
     &:first-child {
       color: ${Colors.White};
+      &:hover {
+        color: ${Colors.Blue[500]};
+      }
     }
   }
 `
