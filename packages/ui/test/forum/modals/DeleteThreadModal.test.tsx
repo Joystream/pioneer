@@ -8,6 +8,7 @@ import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -67,7 +68,10 @@ describe('UI: DeleteThreadModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
+
   let useAccounts: UseAccounts
+  let transaction: any
+  let txMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -87,6 +91,8 @@ describe('UI: DeleteThreadModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
+    transaction = stubTransaction(api, txPath, 100)
+    txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
   })
 
   it('Requirements passed', async () => {
@@ -103,23 +109,34 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   it('Transaction failed', async () => {
-    const tx = stubTransaction(api, txPath)
-    stubTransactionFailure(tx)
+    stubTransactionFailure(transaction)
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
     })
     expect(await screen.findByText('modals.deleteThread.error')).toBeDefined()
+
+    const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
+    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
+    expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
+    expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
+    expect(hide).toBe(true)
   })
 
   it('Transaction success', async () => {
-    const tx = stubTransaction(api, txPath)
-    stubTransactionSuccess(tx, 'forum', 'ThreadDeleted')
+    stubTransactionSuccess(transaction, 'forum', 'ThreadDeleted')
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
     })
+
     expect(await screen.findByText('modals.deleteThread.success')).toBeDefined()
+
+    const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
+    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
+    expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
+    expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
+    expect(hide).toBe(true)
   })
 
   const renderModal = () =>
