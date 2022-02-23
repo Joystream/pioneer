@@ -45,6 +45,7 @@ const StakingTemplate: Story = () => {
         setLeavingUnstakingPeriod={setLeavingUnstakingPeriod}
         rewardPerBlock={rewardPerBlock}
         setRewardPerBlock={setRewardPerBlock}
+        setIsExecutionError={() => undefined}
       />
     </MockApolloProvider>
   )
