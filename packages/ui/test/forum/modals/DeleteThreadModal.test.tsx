@@ -96,10 +96,16 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   it('Requirements passed', async () => {
-    stubTransaction(api, txPath, 10)
     renderModal()
     expect(screen.findByText('modals.deleteThread.description')).toBeDefined()
     expect(screen.findByText('modals.deleteThread.buttonLabel')).toBeDefined()
+
+    const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
+
+    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
+    expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
+    expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
+    expect(hide).toBe(true)
   })
 
   it('Requirements failed', async () => {
@@ -115,12 +121,6 @@ describe('UI: DeleteThreadModal', () => {
       fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
     })
     expect(await screen.findByText('modals.deleteThread.error')).toBeDefined()
-
-    const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
-    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
-    expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
-    expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
-    expect(hide).toBe(true)
   })
 
   it('Transaction success', async () => {
@@ -131,12 +131,6 @@ describe('UI: DeleteThreadModal', () => {
     })
 
     expect(await screen.findByText('modals.deleteThread.success')).toBeDefined()
-
-    const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
-    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
-    expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
-    expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
-    expect(hide).toBe(true)
   })
 
   const renderModal = () =>
