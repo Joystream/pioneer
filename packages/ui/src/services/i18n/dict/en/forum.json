@@ -1,0 +1,10 @@
+{
+  "modals": {
+    "deleteThread": {
+      "description": "You intend to delete your thread",
+      "buttonLabel": "Delete",
+      "success": "Your thread has been deleted.",
+      "error": "There was a problem deleting your thread."
+    }
+  }
+}

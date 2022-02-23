@@ -30,6 +30,7 @@ import { VoteForCouncilModal, VoteForCouncilModalCall } from '@/council/modals/V
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
+import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
@@ -66,6 +67,7 @@ export type ModalNames =
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
   | ModalName<CreateThreadModalCall>
+  | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
   | ModalName<EditPostModalCall>
   | ModalName<PostHistoryModalCall>
@@ -107,6 +109,7 @@ const modals: Record<ModalNames, ReactElement> = {
   AddNewProposalModal: <AddNewProposalModal />,
   VoteRationaleModal: <VoteRationale />,
   CreateThreadModal: <CreateThreadModal />,
+  DeleteThreadModal: <DeleteThreadModal />,
   DeletePost: <DeletePostModal />,
   EditPost: <EditPostModal />,
   PostHistory: <PostHistoryModal />,
