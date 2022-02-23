@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { NetworkType } from '@/app/config'
@@ -32,37 +33,43 @@ export const Settings = () => {
     }
   }
   return (
-    <PageLayout
-      header={
-        <PageHeaderWrapper>
-          <PageTitle>{t('settings')}</PageTitle>
-        </PageHeaderWrapper>
-      }
-      main={
-        <MainPanel>
-          <RowGapBlock gap={32}>
-            <Tabs tabsSize="xs" tabs={tabs} />
-            {currentTab === 'LANGUAGE' && <LanguageSelect />}
-            {currentTab === 'SETTINGS' && (
-              <>
-                <SimpleSelect
-                  title={t('selectNetwork')}
-                  options={options}
-                  value={network}
-                  onChange={switchNetwork}
-                  selectSize="l"
-                />
-                <NetworkInfo
-                  detailsTitle={t('networkDetails')}
-                  urlAddress={window.location.origin}
-                  networkIp={endpoints.membershipFaucetEndpoint}
-                  queryNodeIp={endpoints.queryNodeEndpoint}
-                />
-              </>
-            )}
-          </RowGapBlock>
-        </MainPanel>
-      }
-    />
+    <Container>
+      <PageLayout
+        header={
+          <PageHeaderWrapper>
+            <PageTitle>{t('settings')}</PageTitle>
+          </PageHeaderWrapper>
+        }
+        main={
+          <MainPanel>
+            <RowGapBlock gap={32}>
+              <Tabs tabsSize="xs" tabs={tabs} />
+              {currentTab === 'LANGUAGE' && <LanguageSelect />}
+              {currentTab === 'SETTINGS' && (
+                <>
+                  <SimpleSelect
+                    title={t('selectNetwork')}
+                    options={options}
+                    value={network}
+                    onChange={switchNetwork}
+                    selectSize="l"
+                  />
+                  <NetworkInfo
+                    detailsTitle={t('networkDetails')}
+                    urlAddress={endpoints.membershipFaucetEndpoint}
+                    networkAddress={endpoints.membershipFaucetEndpoint}
+                    queryNodeAddress={endpoints.queryNodeEndpoint}
+                  />
+                </>
+              )}
+            </RowGapBlock>
+          </MainPanel>
+        }
+      />
+    </Container>
   )
 }
+
+export const Container = styled.div`
+  width: 50%;
+`

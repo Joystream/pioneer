@@ -11,35 +11,37 @@ import { Colors } from '@/common/constants'
 export interface NetworkInfoProps {
   detailsTitle: string
   urlAddress: string
-  networkIp: string
-  queryNodeIp: string
+  networkAddress: string
+  queryNodeAddress: string
 }
 
-const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(({ detailsTitle, urlAddress, networkIp, queryNodeIp }) => {
-  const { t } = useTranslation('settings')
-  return (
-    <NetworkDetailsWrapper>
-      <Info>
-        <DetailsItemWrapper>
-          <WarnedIcon />
-          <StyledDetailsText bold>{detailsTitle}</StyledDetailsText>
-        </DetailsItemWrapper>
-        <DetailsItemWrapper>
-          <TextMedium lighter>{t('networkIp')}</TextMedium>
-          <CopyText copyText={networkIp} />
-        </DetailsItemWrapper>
-        <DetailsItemWrapper>
-          <TextMedium lighter>{t('QueryNodeIp')}</TextMedium>
-          <CopyText copyText={queryNodeIp} />
-        </DetailsItemWrapper>
-        <DetailsItemWrapper>
-          <TextMedium lighter>{t('url')}</TextMedium>
-          <CopyText copyText={urlAddress} />
-        </DetailsItemWrapper>
-      </Info>
-    </NetworkDetailsWrapper>
-  )
-})
+const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
+  ({ detailsTitle, urlAddress, networkAddress, queryNodeAddress }) => {
+    const { t } = useTranslation('settings')
+    return (
+      <NetworkDetailsWrapper>
+        <Info>
+          <DetailsItemWrapper>
+            <WarnedIcon />
+            <StyledDetailsText bold>{detailsTitle}</StyledDetailsText>
+          </DetailsItemWrapper>
+          <DetailsItemWrapper>
+            <TextMedium lighter>{t('networkAddress')}</TextMedium>
+            <CopyText copyText={networkAddress} />
+          </DetailsItemWrapper>
+          <DetailsItemWrapper>
+            <TextMedium lighter>{t('QueryNodeAddress')}</TextMedium>
+            <CopyText copyText={queryNodeAddress} />
+          </DetailsItemWrapper>
+          <DetailsItemWrapper>
+            <TextMedium lighter>{t('url')}</TextMedium>
+            <CopyText copyText={urlAddress} />
+          </DetailsItemWrapper>
+        </Info>
+      </NetworkDetailsWrapper>
+    )
+  }
+)
 
 NetworkInfo.displayName = 'NetworkInfo'
 
