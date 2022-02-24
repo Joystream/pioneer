@@ -16,10 +16,9 @@ const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development'
   const parsedEnvFile = dotenv.config().parsed || {}
-  const envVariables = Object.keys(parsedEnvFile).reduce((prev, next) => {
-    prev[`process.env.${next}`] = JSON.stringify(parsedEnvFile[next])
-    return prev
-  }, {})
+  const envVariables = [...Object.entries(parsedEnvFile), ...Object.entries(process.env)]
+    .filter(([key]) => key.startsWith('REACT_APP_'))
+    .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
   const plugins = [
     ...shared.plugins,
@@ -30,7 +29,7 @@ module.exports = (env, argv) => {
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
-      ...envVariables,
+      ...Object.fromEntries(envVariables),
     }),
     new CopyPlugin({
       patterns: [
