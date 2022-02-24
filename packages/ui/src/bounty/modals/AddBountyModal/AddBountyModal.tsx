@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useBountyForumCategory } from '@/bounty/hooks/useBountyForumCategory'
 import { ForumThreadStep } from '@/bounty/modals/AddBountyModal/components/ForumThreadStep'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
@@ -37,6 +38,7 @@ import { Member } from '@/memberships/types'
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
+  const { threadCategory } = useBountyForumCategory()
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -62,6 +64,7 @@ export const AddBountyModal = () => {
 
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
+        threadCategory,
         minCherryLimit: bountyApi?.minCherryLimit,
         maxCherryLimit: balance?.transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
@@ -69,7 +72,7 @@ export const AddBountyModal = () => {
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
-  }, [state])
+  }, [state, threadCategory?.id])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.generalParameters)) {
@@ -83,9 +86,15 @@ export const AddBountyModal = () => {
     return null
   }
 
-  if (state.matches(AddBountyStates.createThread)) {
+  if (state.matches(AddBountyStates.createThread) && threadCategory) {
     const { forumThreadTopic, forumThreadDescription } = state.context
-    const transaction = api.tx.forum.createThread(activeMember.id, 0, forumThreadTopic, forumThreadDescription, null)
+    const transaction = api.tx.forum.createThread(
+      activeMember.id,
+      threadCategory.id,
+      forumThreadTopic,
+      forumThreadDescription,
+      null
+    )
     const service = state.children.createThread
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 

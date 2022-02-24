@@ -1,6 +1,7 @@
 export * from './seedApplications'
 export * from './seedBounties'
 export * from './seedCouncils'
+export * from './seedForum'
 export * from './seedMembers'
 export * from './seedOpenings'
 export * from './seedProposals'
