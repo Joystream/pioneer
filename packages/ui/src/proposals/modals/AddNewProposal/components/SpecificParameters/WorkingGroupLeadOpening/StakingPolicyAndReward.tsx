@@ -24,7 +24,7 @@ interface Props extends StakingPolicyAndRewardParameters, ExecutionProps {
 
 const baseSchema = Yup.object().shape({
   block: Yup.number(),
-  rewardPerBlock: Yup.number().min(1),
+  rewardPerBlock: Yup.number().min(1, 'Amount must be greater than zero'),
   stakingAmount: Yup.number(),
 })
 
@@ -67,7 +67,7 @@ export const StakingPolicyAndReward = ({
 
   useEffect(() => setLeavingUnstakingPeriod(block.toNumber()), [block.toNumber()])
   useEffect(() => {
-    setIsExecutionError(!!errors.length)
+    setIsExecutionError(!!errors.length && errors[0].path !== 'rewardPerBlock')
   }, [errors])
 
   return (

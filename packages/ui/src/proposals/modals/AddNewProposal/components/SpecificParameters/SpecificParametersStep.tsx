@@ -58,7 +58,11 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
-      return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
+      return !!(
+        specifics?.stakingAmount?.toNumber() &&
+        specifics.leavingUnstakingPeriod &&
+        specifics.rewardPerBlock?.toNumber()
+      )
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
