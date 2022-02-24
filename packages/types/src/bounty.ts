@@ -1,17 +1,29 @@
-import { Null, u32, u128, bool, Option, Vec, BTreeMap } from '@polkadot/types'
-import { JoyEnum, JoyStructDecorated, MemberId, AccountId } from './common'
+import {
+  Null,
+  u32,
+  u64,
+  u128,
+  bool,
+  Option,
+  BTreeSet,
+  BTreeMap,
+} from "@polkadot/types";
 
-export class BountyId extends u32 {}
-export class EntryId extends u32 {}
+import { JoyEnum, JoyStructDecorated, MemberId, AccountId } from "./common";
+
+export class BountyId extends u64 {}
+export class EntryId extends u64 {}
 
 export class BountyActor extends JoyEnum({
   Council: Null,
   Member: MemberId,
 }) {}
 
+export class AssuranceContractType_Closed extends BTreeSet.with(MemberId) {}
+
 export class AssuranceContractType extends JoyEnum({
   Open: Null,
-  Closed: Vec.with(MemberId), // FIXME: @polkadot/typegen Error: Enum: AssuranceContractType: Unhandled nested "BTreeSet"
+  Closed: AssuranceContractType_Closed,
 }) {}
 
 export class FundingType_Perpetual extends JoyStructDecorated({
@@ -49,7 +61,10 @@ export class OracleWorkEntryJudgment extends JoyEnum({
   Rejected: Null,
 }) {}
 
-export class OracleJudgment extends BTreeMap.with(EntryId, OracleWorkEntryJudgment) {}
+export class OracleJudgment extends BTreeMap.with(
+  EntryId,
+  OracleWorkEntryJudgment
+) {}
 
 export class Entry extends JoyStructDecorated({
   member_id: MemberId,
@@ -63,6 +78,7 @@ export const bountyTypes = {
   BountyId,
   EntryId,
   BountyActor,
+  AssuranceContractType_Closed,
   AssuranceContractType,
   FundingType_Limited,
   FundingType_Perpetual,
@@ -72,6 +88,6 @@ export const bountyTypes = {
   OracleWorkEntryJudgment,
   OracleJudgment,
   Entry,
-}
+};
 
-export default bountyTypes
+export default bountyTypes;

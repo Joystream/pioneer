@@ -1,5 +1,7 @@
 import { IBountyMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
+import { AssuranceContractType_Closed } from '@joystream/types/bounty'
+import { MemberId } from '@joystream/types/common'
 import { AugmentedConst } from '@polkadot/api/types'
 import { u32 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
@@ -89,8 +91,15 @@ const contractTypeFactory = (state: AddBountyModalMachineState) => {
     }
   }
 
+  const whiteList =
+    state.context.workingPeriodWhitelist?.map((memberId) =>
+      createType<MemberId, 'MemberId'>('MemberId', Number(memberId))
+    ) ?? []
   return {
-    Closed: state.context.workingPeriodWhitelist?.map((memberId) => createType('u64', Number(memberId))) ?? [],
+    Closed: createType<AssuranceContractType_Closed, 'AssuranceContractType_Closed'>(
+      'AssuranceContractType_Closed',
+      whiteList
+    ),
   }
 }
 

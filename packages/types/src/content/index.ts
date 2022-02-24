@@ -1,9 +1,26 @@
-import { Vec, Option, Tuple, BTreeSet, UInt } from '@polkadot/types'
-import { bool, u64, u32, Null, Bytes } from '@polkadot/types/primitive'
-import { JoyStructDecorated, JoyEnum, ChannelId, MemberId, Balance, Hash, BlockNumber, BalanceOf } from '../common'
+import { Vec, Option, Tuple, BTreeSet, UInt } from "@polkadot/types";
+import { GenericAccountId as AccountId } from "@polkadot/types/generic/AccountId";
+import {
+  bool,
+  u8,
+  u32,
+  u64,
+  u128,
+  Null,
+  Bytes,
+} from "@polkadot/types/primitive";
 
-import { GenericAccountId as AccountId } from '@polkadot/types/generic/AccountId'
-import { DataObjectId, DataObjectCreationParameters } from '../storage'
+import {
+  JoyStructDecorated,
+  JoyEnum,
+  ChannelId,
+  MemberId,
+  Balance,
+  Hash,
+  BlockNumber,
+  BalanceOf,
+} from "../common";
+import { DataObjectId, DataObjectCreationParameters } from "../storage";
 
 export class CuratorId extends u64 {}
 export class CuratorGroupId extends u64 {}
@@ -236,6 +253,29 @@ export class PullPayment extends JoyStructDecorated({
 
 export class ModeratorSet extends BTreeSet.with(MemberId) {}
 
+export class NftMetadata extends Vec.with(u8) {}
+
+export class AuctionRecord extends JoyStructDecorated({
+  starting_price: u128, // Balance
+  buy_now_price: u128, // Balance
+  auction_type: AuctionType,
+  minimal_bid_step: u128, // Balance
+  last_bid: Option.with(Bid),
+  starts_at: Option.with(u32), // Option<BlockNumber>
+  whitelist: BTreeSet.with(MemberId),
+}) {}
+
+export class NFTOwner extends JoyEnum({
+  ChannelOwner: Null,
+  Member: MemberId,
+}) {}
+
+export class OwnedNFT extends JoyStructDecorated({
+  owner: NFTOwner,
+  transactional_status: TransactionalStatus,
+  creator_royalty: Option.with(Royalty),
+}) {}
+
 export const contentTypes = {
   CuratorId,
   CuratorGroupId,
@@ -287,6 +327,10 @@ export const contentTypes = {
   CurrencyAmount,
   InitTransactionalStatus,
   NftIssuanceParameters,
-}
+  AuctionRecord,
+  NFTOwner,
+  OwnedNFT,
+  NftMetadata,
+};
 
-export default contentTypes
+export default contentTypes;

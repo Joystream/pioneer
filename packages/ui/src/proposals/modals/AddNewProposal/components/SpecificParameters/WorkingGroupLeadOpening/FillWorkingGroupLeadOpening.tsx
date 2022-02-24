@@ -53,13 +53,13 @@ export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicati
             required
             inputSize="l"
             tooltipText="Please select an identifier for Application"
-            disabled={!openingId}
+            disabled={typeof openingId !== 'number'}
           >
             <SelectWorkingGroupApplication
               id="application"
               selectedApplicationId={applicationId}
               onChange={(selected) => setApplicationId(selected.runtimeId)}
-              disabled={!openingId}
+              disabled={typeof openingId !== 'number'}
               openingId={openingId}
               applicationsStatus="pending"
             />

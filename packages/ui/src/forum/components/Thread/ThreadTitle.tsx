@@ -4,12 +4,13 @@ import * as Yup from 'yup'
 
 import { ButtonBareGhost, ButtonInnerWrapper, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { InputArea, InputComponent, InputText } from '@/common/components/forms'
-import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
+import { BinIcon, CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { EditSymbol } from '@/common/components/icons/symbols'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Colors } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
+import { DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -62,6 +63,13 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
     setEditTitle(false)
   }, [])
 
+  const deleteThread = useCallback(() => {
+    showModal<DeleteThreadModalCall>({
+      modal: 'DeleteThreadModal',
+      data: { thread },
+    })
+  }, [])
+
   return (
     <>
       {!isEditTitle && <PageTitle>{fields.initialTitle}</PageTitle>}
@@ -91,9 +99,14 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
         </EditTitleWrapper>
       )}
       {isMyThread && !isEditTitle && (
-        <StartEditAction onClick={toggleEditTitle} size="small" square>
+        <ActionButtonWrapper onClick={toggleEditTitle} size="small" square>
           <EditSymbol />
-        </StartEditAction>
+        </ActionButtonWrapper>
+      )}
+      {isMyThread && (
+        <ActionButtonWrapper onClick={() => deleteThread()} size="small" square>
+          <DeleteIcon />
+        </ActionButtonWrapper>
       )}
     </>
   )
@@ -118,7 +131,9 @@ const EditAction = styled(ButtonPrimary)`
   }
 `
 
-const StartEditAction = styled(ButtonBareGhost)``
+const ActionButtonWrapper = styled(ButtonBareGhost)`
+  padding-right: 0;
+`
 
 const EditTitleInputComponent = styled(InputComponent)`
   position: absolute;
@@ -129,4 +144,9 @@ const EditTitleInputComponent = styled(InputComponent)`
   ${InputArea} {
     padding-right: 8px;
   }
+`
+
+const DeleteIcon = styled(BinIcon)`
+  height: 16px;
+  width: 16px;
 `
