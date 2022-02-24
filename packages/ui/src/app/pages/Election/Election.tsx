@@ -23,15 +23,11 @@ import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidate
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
-import { Election as ElectionType, ElectionStage } from '@/council/types/Election'
+import { Election as ElectionType } from '@/council/types/Election'
 
 import { ElectionTabs } from './components/ElectionTabs'
 
-const displayElectionRound = (election: ElectionType | undefined, electionStage: ElectionStage): string => {
-  if (electionStage === 'announcing') {
-    return 'Announcing period'
-  }
-
+const displayElectionRound = (election: ElectionType | undefined): string => {
   if (!election) {
     return '-'
   }
@@ -117,7 +113,7 @@ export const Election = () => {
           title="Election round"
           tooltipText="Elections are held in consecutive rounds. This is the number of current election."
         >
-          <TextHuge bold>{displayElectionRound(election, electionStage)}</TextHuge>
+          <TextHuge bold>{displayElectionRound(election)}</TextHuge>
         </StatisticItem>
       </Statistics>
       {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
