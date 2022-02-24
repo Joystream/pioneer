@@ -11,10 +11,12 @@ import Long from 'long'
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
+import { ForumCategory } from '@/forum/types'
 
 import { BountyCreationParameters } from '../../../../../types/augment'
 
 interface Conditions {
+  threadCategory: ForumCategory | undefined
   minCherryLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxCherryLimit?: BN
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
@@ -25,6 +27,9 @@ interface Conditions {
 export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {
   const { context } = state
   switch (true) {
+    case !conditions.threadCategory: {
+      return false
+    }
     case state.matches(AddBountyStates.generalParameters): {
       return !!(context.creator && context.description && context.title && context.coverPhotoLink)
     }

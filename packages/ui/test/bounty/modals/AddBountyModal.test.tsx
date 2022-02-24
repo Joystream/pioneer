@@ -16,7 +16,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { seedForumCategories, seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
@@ -24,7 +24,7 @@ import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
   stubApi,
@@ -77,7 +77,10 @@ describe('UI: AddNewBountyModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
 
-    seedMembers(server.server)
+    seedMembers(server.server, 2)
+    seedForumCategories(server.server, [
+      { parentId: null, status: { __typename: 'CategoryStatusActive' }, moderatorIds: [] },
+    ])
 
     useAccounts = {
       isLoading: false,
@@ -158,7 +161,8 @@ describe('UI: AddNewBountyModal', () => {
 
         await fillGeneralParameters(false)
 
-        expect(await getNextButton()).not.toBeDisabled()
+        const nextButton = await getNextButton()
+        await waitFor(() => expect(nextButton).not.toBeDisabled())
       })
     })
 
@@ -462,6 +466,7 @@ describe('UI: AddNewBountyModal', () => {
   const goToNext = async () => {
     const nextButton = await getNextButton()
 
+    await waitFor(() => expect(nextButton).not.toBeDisabled())
     fireEvent.click(nextButton)
   }
 
@@ -478,19 +483,19 @@ describe('UI: AddNewBountyModal', () => {
     return render(
       <MemoryRouter>
         <ModalContext.Provider value={useModal}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
+          <MockKeyringProvider>
+            <AccountsContext.Provider value={useAccounts}>
+              <ApiContext.Provider value={api}>
+                <BalancesContextProvider>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <MockApolloProvider>
                       <AddBountyModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
+                    </MockApolloProvider>
+                  </MembershipContext.Provider>
+                </BalancesContextProvider>
+              </ApiContext.Provider>
+            </AccountsContext.Provider>
+          </MockKeyringProvider>
         </ModalContext.Provider>
       </MemoryRouter>
     )
