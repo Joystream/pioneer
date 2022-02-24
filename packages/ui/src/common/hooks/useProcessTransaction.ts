@@ -8,7 +8,7 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
-import { error } from '../logger'
+import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
@@ -41,20 +41,22 @@ const observeTransaction = (
 
     if (status.isInBlock) {
       const hash = status.asInBlock.toString()
+      const transactionInfo = [
+        events.map((event) => event.event.method).join(', '),
+        `on network: ${nodeRpcEndpoint}`,
+        `in block: ${hash}`,
+        `more details at: https://polkadot.js.org/apps/?rpc=${nodeRpcEndpoint}#/explorer/query/${hash}`,
+      ].join('\n')
+
       setBlockHash && setBlockHash(hash)
 
       if (hasErrorEvent(events)) {
         subscription.unsubscribe()
         send('ERROR')
-        error(
-          'Transaction error:',
-          events.map((event) => event.event.method).join(', '),
-          `\non network: ${nodeRpcEndpoint}`,
-          `\nin block: ${hash}`,
-          `\nmore details at: https://polkadot.js.org/apps/?rpc=${nodeRpcEndpoint}#/explorer/query/${hash}`
-        )
+        error('Transaction error:', transactionInfo)
       } else {
         send({ type: 'FINALIZING', fee })
+        info('Successful transaction:', transactionInfo)
       }
     }
 
