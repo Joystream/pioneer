@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { AlertSymbol } from '@/common/components/icons/symbols'
+import { AlertSymbol, LinkSymbol } from '@/common/components/icons/symbols'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -16,12 +17,12 @@ export const ExecutionRequirementsWarning = React.memo(() => {
         creation and execution constraints. Current inputs for proposal parameters violate the execution constraints for
         this proposal, meaning while you can create this proposal, if the runtime execution constraints for this
         proposal remain unchanged at the time of council vote, this proposal will be automatically rejected.
-        <a
+        <TooltipExternalLink
           href="https://app.gitbook.com/o/-M-C0Rf1ILeSmMugzduG/s/-M-C0W9924TH_Qp2jnDV/governance/proposals#parameters-general-and-specific"
           target="_blank"
         >
-          Learn more &#62;
-        </a>
+          <TextMedium>Learn more</TextMedium> <LinkSymbol />
+        </TooltipExternalLink>
       </TextMedium>{' '}
     </Container>
   )
@@ -44,5 +45,9 @@ const Container = styled.div`
   p:last-child {
     display: flex;
     flex-direction: column;
+
+    a {
+      margin-top: 10px;
+    }
   }
 `

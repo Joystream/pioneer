@@ -342,13 +342,13 @@ export const AddNewProposalModal = () => {
               Previous step
             </ButtonGhost>
           )}
+        </StyledButtonsGroup>
+        <ButtonsGroup align="right">
           {isExecutionError && (
             <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
               I understand the implications of overriding the execution constraints validation.
             </Checkbox>
           )}
-        </StyledButtonsGroup>
-        <ButtonsGroup align="right">
           <ButtonPrimary disabled={!isValidNext || !warningAccepted} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
@@ -369,7 +369,5 @@ const StyledStepperBody = styled(StepperBody)`
 `
 
 const StyledButtonsGroup = styled(ButtonsGroup)`
-  label {
-    margin-left: 64px;
-  }
+  min-width: max-content;
 `
