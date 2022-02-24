@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextExtraSmall } from '@/common/components/typography'
+import { TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { Overflow, Fonts, Transitions, Colors } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
@@ -17,7 +17,7 @@ export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
   const { isLoading, threads } = useForumPopularThreads({ categoryId })
 
   if (isLoading) return <Loading />
-  else if (!threads?.[0]) return <>-</>
+  else if (!threads?.[0]) return <TextMedium>-</TextMedium>
 
   const thread = threads[0]
 
