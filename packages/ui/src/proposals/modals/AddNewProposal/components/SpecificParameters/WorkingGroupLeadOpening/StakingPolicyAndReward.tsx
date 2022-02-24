@@ -49,7 +49,7 @@ export const StakingPolicyAndReward = ({
         'Execution constraint of ${min} JOY is violated'
       )
       baseSchema.fields.block = baseSchema.fields.block.min(
-        workingGroupConsts.minUnstakingPeriodLimit.toNumber(),
+        workingGroupConsts.minUnstakingPeriodLimit.toNumber() - 1,
         'Execution constraint of ${min} is violated'
       )
     }

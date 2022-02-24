@@ -335,7 +335,7 @@ export const AddNewProposalModal = () => {
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter twoColumns>
-        <ButtonsGroup align="left">
+        <StyledButtonsGroup align="left">
           {!state.matches('proposalType') && (
             <ButtonGhost onClick={goToPrevious} size="medium">
               <Arrow direction="left" />
@@ -344,10 +344,10 @@ export const AddNewProposalModal = () => {
           )}
           {isExecutionError && (
             <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
-              I understand this proposal will fail if execution constraints remain unchanged.{' '}
+              I understand the implications of overriding the execution constraints validation.
             </Checkbox>
           )}
-        </ButtonsGroup>
+        </StyledButtonsGroup>
         <ButtonsGroup align="right">
           <ButtonPrimary disabled={!isValidNext || !warningAccepted} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
@@ -366,4 +366,10 @@ export const StepperProposalWrapper = styled(StepperModalWrapper)`
 const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;
   row-gap: 20px;
+`
+
+const StyledButtonsGroup = styled(ButtonsGroup)`
+  label {
+    margin-left: 64px;
+  }
 `
