@@ -3,7 +3,7 @@
   "settings": "Settings",
   "selectNetwork": "Select Network",
   "networkDetails": "Network Details",
-  "networkAddress": "Network Address: ",
-  "QueryNodeAddress": "Query Node Address: ",
-  "url": "Faucet Url: "
+  "networkAddress": "Network: ",
+  "QueryNodeAddress": "Query Node: ",
+  "url": "Faucet: "
 }
