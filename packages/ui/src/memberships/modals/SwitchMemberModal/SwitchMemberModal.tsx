@@ -1,10 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
-import { Notification, NotificationComponent } from '../../../common/components/Notification'
-import { BorderRad, Colors, RemoveScrollbar, Transitions } from '../../../common/constants'
-import { useModal } from '../../../common/hooks/useModal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Notification, NotificationComponent } from '@/common/components/Notification'
+import { BorderRad, Colors, RemoveScrollbar, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/types'
+
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
 import { AddMembershipButtonSwitch } from '../../components/AddMembershipButtonSwitch'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
@@ -13,10 +15,11 @@ import { BuyMembershipModalCall } from '../BuyMembershipModal'
 
 export const SwitchMemberModal = () => {
   const { members, setActive, active } = useMyMemberships()
-  const { showModal, hideModal } = useModal()
+  const { showModal, hideModal, modalData } = useModal<SwitchMemberModalCall>()
   const count = members.length
   const switchMember = (member: Member) => {
     setActive(member)
+    modalData?.callback?.()
     hideModal()
   }
 

@@ -109,7 +109,10 @@ export const AddNewProposalModal = () => {
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
       if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        return showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: { callback: () => showModal<AddNewProposalModalCall>({ modal: 'AddNewProposalModal' }) },
+        })
       }
 
       if (feeInfo && feeInfo.canAfford) {

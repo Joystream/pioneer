@@ -1,3 +1,8 @@
-import { ModalCall } from '../../../common/providers/modal/types'
+import { OptionalDataModalCall } from '@/common/providers/modal/types'
 
-export type SwitchMemberModalCall = ModalCall<'SwitchMember'>
+export type SwitchMemberModalCall = OptionalDataModalCall<
+  'SwitchMember',
+  {
+    callback?: () => void
+  }
+>
