@@ -23,7 +23,7 @@ export const Settings = () => {
   const [currentTab, setCurrentTab] = useState<Tab>('SETTINGS')
   const tabs = [
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
-    { title: t('settings'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
+    { title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
 
   const switchNetwork = (network: NetworkType | null) => {
