@@ -1,5 +1,15 @@
-import { Null, u32, u64, u128, bool, Option, BTreeSet, BTreeMap } from '@polkadot/types'
-import { JoyEnum, JoyStructDecorated, MemberId, AccountId } from './common'
+import {
+  Null,
+  u32,
+  u64,
+  u128,
+  bool,
+  Option,
+  BTreeSet,
+  BTreeMap,
+} from "@polkadot/types";
+
+import { JoyEnum, JoyStructDecorated, MemberId, AccountId } from "./common";
 
 export class BountyId extends u64 {}
 export class EntryId extends u64 {}
@@ -51,7 +61,10 @@ export class OracleWorkEntryJudgment extends JoyEnum({
   Rejected: Null,
 }) {}
 
-export class OracleJudgment extends BTreeMap.with(EntryId, OracleWorkEntryJudgment) {}
+export class OracleJudgment extends BTreeMap.with(
+  EntryId,
+  OracleWorkEntryJudgment
+) {}
 
 export class Entry extends JoyStructDecorated({
   member_id: MemberId,
@@ -75,6 +88,6 @@ export const bountyTypes = {
   OracleWorkEntryJudgment,
   OracleJudgment,
   Entry,
-}
+};
 
-export default bountyTypes
+export default bountyTypes;

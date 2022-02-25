@@ -1,9 +1,26 @@
-import { Vec, Option, Tuple, BTreeSet, UInt } from '@polkadot/types'
-import { bool, u8, u32, u64, u128, Null, Bytes } from '@polkadot/types/primitive'
-import { JoyStructDecorated, JoyEnum, ChannelId, MemberId, Balance, Hash, BlockNumber, BalanceOf } from '../common'
+import { Vec, Option, Tuple, BTreeSet, UInt } from "@polkadot/types";
+import { GenericAccountId as AccountId } from "@polkadot/types/generic/AccountId";
+import {
+  bool,
+  u8,
+  u32,
+  u64,
+  u128,
+  Null,
+  Bytes,
+} from "@polkadot/types/primitive";
 
-import { GenericAccountId as AccountId } from '@polkadot/types/generic/AccountId'
-import { DataObjectId, DataObjectCreationParameters } from '../storage'
+import {
+  JoyStructDecorated,
+  JoyEnum,
+  ChannelId,
+  MemberId,
+  Balance,
+  Hash,
+  BlockNumber,
+  BalanceOf,
+} from "../common";
+import { DataObjectId, DataObjectCreationParameters } from "../storage";
 
 export class CuratorId extends u64 {}
 export class CuratorGroupId extends u64 {}
@@ -314,6 +331,6 @@ export const contentTypes = {
   NFTOwner,
   OwnedNFT,
   NftMetadata,
-}
+};
 
-export default contentTypes
+export default contentTypes;

@@ -1,0 +1,9 @@
+{
+  "network": "Network",
+  "language": "Language",
+  "selectNetwork": "Select Network",
+  "networkDetails": "Network Details",
+  "networkAddress": "Network: ",
+  "QueryNodeAddress": "Query Node: ",
+  "url": "Faucet: "
+}
