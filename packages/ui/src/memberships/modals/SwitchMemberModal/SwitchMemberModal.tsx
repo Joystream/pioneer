@@ -15,12 +15,18 @@ import { BuyMembershipModalCall } from '../BuyMembershipModal'
 
 export const SwitchMemberModal = () => {
   const { members, setActive, active } = useMyMemberships()
-  const { showModal, hideModal, modalData } = useModal<SwitchMemberModalCall>()
+  const {
+    showModal,
+    hideModal,
+    modalData: { originalModalData, originalModalName },
+  } = useModal<SwitchMemberModalCall>()
   const count = members.length
   const switchMember = (member: Member) => {
     setActive(member)
-    modalData?.callback?.()
     hideModal()
+    if (originalModalName) {
+      showModal({ modal: originalModalName, data: originalModalData })
+    }
   }
 
   return (
