@@ -18,7 +18,7 @@ export const SwitchMemberModal = () => {
   const {
     showModal,
     hideModal,
-    modalData: { originalModalData, originalModalName },
+    modalData: { originalModalData, originalModalName } = {},
   } = useModal<SwitchMemberModalCall>()
   const count = members.length
   const switchMember = (member: Member) => {

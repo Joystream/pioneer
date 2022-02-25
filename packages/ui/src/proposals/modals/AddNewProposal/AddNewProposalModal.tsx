@@ -111,7 +111,9 @@ export const AddNewProposalModal = () => {
       if (!activeMember) {
         return showModal<SwitchMemberModalCall>({
           modal: 'SwitchMember',
-          data: { callback: () => showModal<AddNewProposalModalCall>({ modal: 'AddNewProposalModal' }) },
+          data: {
+            originalModalName: 'AddNewProposalModal',
+          },
         })
       }
 
