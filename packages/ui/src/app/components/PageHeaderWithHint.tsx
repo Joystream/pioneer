@@ -64,7 +64,9 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
     <PageHeader
       title={title}
       tabs={tabs}
-      // buttons={compiledButtons} video={video}
+      buttons={buttons}
+      // buttons={compiledButtons}
+      // video={video}
     />
   )
 }
