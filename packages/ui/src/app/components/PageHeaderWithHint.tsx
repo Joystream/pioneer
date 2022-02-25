@@ -35,21 +35,22 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
   //   }
   // }, [experiencedCloseTooltip])
 
-  // const compiledButtons = useMemo(
-  //   () => (
-  //     <>
-  //       {buttons}
-  //       <HintButton
-  //         isActive={isHintVisible}
-  //         onClick={toggleHint}
-  //         tooltip={showCloseTooltip ? 'Click here to see video again' : undefined}
-  //         onTooltipClose={() => toggleCloseTooltip()}
-  //         isOnTop={showCloseTooltip}
-  //       />
-  //     </>
-  //   ),
-  //   [isHintVisible, showCloseTooltip]
-  // )
+  const compiledButtons = useMemo(
+    () => (
+      <>
+        {buttons}
+        {/*<HintButton*/}
+        {/*  isActive={isHintVisible}*/}
+        {/*  onClick={toggleHint}*/}
+        {/*  tooltip={showCloseTooltip ? 'Click here to see video again' : undefined}*/}
+        {/*  onTooltipClose={() => toggleCloseTooltip()}*/}
+        {/*  isOnTop={showCloseTooltip}*/}
+        {/*/>*/}
+      </>
+    ),
+    // [isHintVisible, showCloseTooltip]
+    []
+  )
   //
   // const video = useMemo(
   //   () => (
@@ -64,7 +65,8 @@ export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeade
     <PageHeader
       title={title}
       tabs={tabs}
-      // buttons={compiledButtons} video={video}
+      buttons={compiledButtons}
+      // video={video}
     />
   )
 }
