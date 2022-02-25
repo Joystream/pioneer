@@ -1,9 +1,10 @@
+import { ModalNames } from '@/app/GlobalModals'
 import { OptionalDataModalCall } from '@/common/providers/modal/types'
 
 export type SwitchMemberModalCall = OptionalDataModalCall<
   'SwitchMember',
   {
-    originalModalName?: string
+    originalModalName?: ModalNames
     originalModalData?: unknown
   }
 >
