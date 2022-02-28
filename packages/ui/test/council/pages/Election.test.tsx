@@ -140,10 +140,9 @@ describe('UI: Election page', () => {
       })
 
       it('Displays stage and round', async () => {
-        const { queryAllByText } = await renderComponent()
+        const { queryByText } = await renderComponent()
 
-        // Except to see 'Announcing period' in 2 places: Election stage and Election round
-        expect(queryAllByText(/Announcing period/i)).toHaveLength(2)
+        expect(queryByText(/Announcing period/i)).toBeInTheDocument()
       })
 
       describe('Tabs', () => {
