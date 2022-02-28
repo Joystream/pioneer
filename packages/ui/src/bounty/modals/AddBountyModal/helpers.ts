@@ -65,9 +65,6 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
     case state.matches(AddBountyStates.judgingPeriodDetails): {
       return !!(context.oracle && context.judgingPeriodLength)
     }
-    case state.matches(AddBountyStates.forumThreadDetails): {
-      return !!(context.forumThreadTopic && context.forumThreadDescription)
-    }
     default:
       return false
   }
@@ -130,7 +127,7 @@ export const createBountyMetadataFactory = (state: AddBountyModalMachineState): 
   title: state.context.title,
   description: state.context.description,
   bannerImageUri: state.context.coverPhotoLink,
-  discussionThread: Long.fromString('1'),
+  discussionThread: Long.fromString(String(state.context.newThreadId) ?? '1'),
 })
 
 export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState) => {
