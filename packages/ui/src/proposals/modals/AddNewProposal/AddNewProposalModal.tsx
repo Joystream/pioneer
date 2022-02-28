@@ -2,7 +2,7 @@ import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -12,6 +12,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Checkbox } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import {
@@ -31,6 +32,7 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
+import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
@@ -74,6 +76,9 @@ export const AddNewProposalModal = () => {
     'Proposals'
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
+  const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
+  const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
+
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
   const transactionsSteps = useMemo(
     () =>
@@ -165,6 +170,13 @@ export const AddNewProposalModal = () => {
       send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
     }
   }, [state, stakingStatus])
+
+  useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
+
+  const goToPrevious = useCallback(() => {
+    send('BACK')
+    setIsExecutionError(false)
+  }, [send])
 
   if (!api || !activeMember || !transaction || !feeInfo || state.matches('requirementsVerification')) {
     return null
@@ -278,7 +290,7 @@ export const AddNewProposalModal = () => {
           <StepDescriptionColumn>
             <ProposalConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
-          <StepperBody>
+          <StyledStepperBody>
             {state.matches('proposalType') && (
               <ProposalTypeStep
                 type={state.context.type}
@@ -315,22 +327,29 @@ export const AddNewProposalModal = () => {
               <SpecificParametersStep
                 state={state as AddNewProposalMachineState}
                 send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
+                setIsExecutionError={setIsExecutionError}
               />
             )}
-          </StepperBody>
+            {isExecutionError && <ExecutionRequirementsWarning />}
+          </StyledStepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter twoColumns>
-        <ButtonsGroup align="left">
+        <StyledButtonsGroup align="left">
           {!state.matches('proposalType') && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
+            <ButtonGhost onClick={goToPrevious} size="medium">
               <Arrow direction="left" />
               Previous step
             </ButtonGhost>
           )}
-        </ButtonsGroup>
+        </StyledButtonsGroup>
         <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+          {isExecutionError && (
+            <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
+              I understand the implications of overriding the execution constraints validation.
+            </Checkbox>
+          )}
+          <ButtonPrimary disabled={!isValidNext || !warningAccepted} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
@@ -342,4 +361,13 @@ export const AddNewProposalModal = () => {
 
 export const StepperProposalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 220px 336px 1fr;
+`
+
+const StyledStepperBody = styled(StepperBody)`
+  flex-direction: column;
+  row-gap: 20px;
+`
+
+const StyledButtonsGroup = styled(ButtonsGroup)`
+  min-width: max-content;
 `

@@ -32,7 +32,11 @@ import {
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 
-interface SpecificParametersStepProps {
+export interface ExecutionProps {
+  setIsExecutionError: (value: boolean) => void
+}
+
+interface SpecificParametersStepProps extends ExecutionProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
 }
@@ -54,7 +58,11 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
-      return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
+      return !!(
+        specifics?.stakingAmount?.toNumber() &&
+        specifics.leavingUnstakingPeriod &&
+        specifics.rewardPerBlock?.toNumber()
+      )
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
@@ -130,7 +138,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   }
 }
 
-export const SpecificParametersStep = ({ send, state }: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({ send, state, setIsExecutionError }: SpecificParametersStepProps) => {
   const {
     context: { specifics },
   } = state
@@ -209,6 +217,8 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
             send('SET_LEAVING_UNSTAKING_PERIOD', { leavingUnstakingPeriod })
           }
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
+          setIsExecutionError={setIsExecutionError}
+          workingGroupId={state.context.specifics?.groupId}
         />
       )
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
