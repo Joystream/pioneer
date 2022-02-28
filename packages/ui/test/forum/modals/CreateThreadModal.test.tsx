@@ -73,7 +73,13 @@ describe('CreateThreadModal', () => {
     it('No active member', () => {
       useMyMemberships.active = undefined
       renderModal()
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'CreateThreadModal',
+          originalModalData: useModal.modalData,
+        },
+      })
     })
 
     it('Insufficient funds for minimum fee', async () => {

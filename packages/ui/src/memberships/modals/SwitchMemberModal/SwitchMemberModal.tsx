@@ -20,7 +20,7 @@ export const SwitchMemberModal = () => {
   const switchMember = (member: Member) => {
     setActive(member)
     hideModal()
-    if (modalData.originalModalName) {
+    if (modalData?.originalModalName) {
       showModal({ modal: modalData.originalModalName, data: modalData?.originalModalData })
     }
   }
