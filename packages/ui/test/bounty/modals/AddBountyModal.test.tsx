@@ -399,7 +399,10 @@ describe('UI: AddNewBountyModal', () => {
 
   const fillForumThreadTransaction = async () => {
     const button = await getThreadTxButton()
-    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated', [
+      createType('CategoryId', 0),
+      createType('ThreadId', 1337),
+    ])
     fireEvent.click(button)
   }
 
