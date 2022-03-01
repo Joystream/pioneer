@@ -176,7 +176,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -770,6 +770,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asCancelWorkingGroupLeadOpening.toJSON()
+          expect(parameters).toEqual([1337, 'Forum'])
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -882,6 +885,13 @@ describe('UI: AddNewProposalModal', () => {
         it('Valid form', async () => {
           await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
           await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
+          expect(parameters).toEqual({
+            opening_id: 1337,
+            successful_application_id: 1337,
+            working_group: 'Forum',
+          })
           expect(await getCreateButton()).toBeEnabled()
         })
       })

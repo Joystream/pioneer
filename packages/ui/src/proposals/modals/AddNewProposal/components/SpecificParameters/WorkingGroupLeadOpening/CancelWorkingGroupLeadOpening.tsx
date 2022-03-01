@@ -20,6 +20,7 @@ export const CancelWorkingGroupLeadOpening = ({
   openingId,
   groupId,
   setOpeningId,
+  setGroupId,
 }: CancelWorkingGroupLeadStakeProps) => {
   return (
     <RowGapBlock gap={24}>
@@ -43,7 +44,10 @@ export const CancelWorkingGroupLeadOpening = ({
             <SelectWorkingGroupOpening
               id="opening"
               openingsPositionType="LEADER"
-              onChange={(selected) => setOpeningId(selected.runtimeId)}
+              onChange={(selected) => {
+                setGroupId(selected.groupId)
+                setOpeningId(selected.runtimeId)
+              }}
               selectedOpeningId={openingId}
             />
           </InputComponent>
