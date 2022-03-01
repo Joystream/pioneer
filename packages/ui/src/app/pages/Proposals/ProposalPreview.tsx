@@ -41,7 +41,7 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
-  const { isLoading, proposal } = useProposal(id)
+  const { isLoading, proposal, refetch } = useProposal(id)
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
@@ -156,8 +156,7 @@ export const ProposalPreview = () => {
             <ProposalDetails proposalDetails={proposal.details} />
 
             <RationalePreview rationale={proposal.rationale} />
-
-            <ProposalDiscussions thread={proposal.discussionThread} proposalId={id} />
+            <ProposalDiscussions thread={proposal.discussionThread} proposalId={id} refetch={refetch} />
           </RowGapBlock>
         </MainPanel>
       }

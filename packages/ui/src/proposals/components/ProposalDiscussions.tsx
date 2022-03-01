@@ -1,3 +1,4 @@
+import { ApolloQueryResult } from '@apollo/client'
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import React, { RefObject, useEffect, useRef, useState } from 'react'
@@ -22,9 +23,10 @@ import { ProposalDiscussionThread } from '@/proposals/types'
 interface Props {
   thread: ProposalDiscussionThread
   proposalId: string
+  refetch?: () => Promise<ApolloQueryResult<unknown>>
 }
 
-export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
+export const ProposalDiscussions = ({ thread, proposalId, refetch }: Props) => {
   const query = useRouteQuery()
   const { api } = useApi()
   const { active, members } = useMyMemberships()
@@ -71,6 +73,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           getTransaction={getTransaction}
           removeReply={() => setReplyTo(undefined)}
           replyToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${replyTo?.id}`}
+          refetch={refetch}
         />
       )
     }

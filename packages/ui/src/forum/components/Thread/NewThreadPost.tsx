@@ -1,3 +1,4 @@
+import { ApolloQueryResult } from '@apollo/client'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { Ref, RefObject, useCallback, useRef, useState } from 'react'
@@ -27,21 +28,25 @@ export interface NewPostProps {
   replyTo?: ForumPost
   removeReply: () => void
   replyToLink: string
+  refetch?: () => Promise<ApolloQueryResult<unknown>>
 }
 
 export const NewThreadPost = React.forwardRef(
-  ({ getTransaction, replyTo, removeReply, replyToLink }: NewPostProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+  (
+    { getTransaction, replyTo, removeReply, replyToLink, refetch }: NewPostProps,
+    ref: React.ForwardedRef<HTMLDivElement>
+  ) => {
     const [postText, setText] = useState('')
     const [isEditable, setEditable] = useState(false)
     const { active } = useMyMemberships()
     const { showModal } = useModal()
     const [editorRef, setEditorRef] = useState<RefObject<HTMLDivElement>>(useRef<HTMLDivElement>(null))
 
-    const onSuccess = useCallback(() => {
+    const onSuccess = useCallback(async () => {
       setText('')
       setEditorRef({ ...editorRef })
       setEditable(false)
-      removeReply()
+      await refetch?.()
     }, [])
 
     if (!active) {
