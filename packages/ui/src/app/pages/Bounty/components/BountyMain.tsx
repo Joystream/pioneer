@@ -17,6 +17,9 @@ export interface BountyMainProps {
 
 export const BountyMain = React.memo(({ bounty }: BountyMainProps) => {
   const page = useMemo(() => {
+    if (bounty.isTerminated) {
+      return <BountyTerminated bounty={bounty} />
+    }
     switch (bounty.stage) {
       case 'funding':
         return <BountyFunding bounty={bounty} />
@@ -30,8 +33,6 @@ export const BountyMain = React.memo(({ bounty }: BountyMainProps) => {
         return <BountySuccessful bounty={bounty} />
       case 'failed':
         return <BountyFailed bounty={bounty} />
-      case 'terminated':
-        return <BountyTerminated bounty={bounty} />
       default:
         return null
     }

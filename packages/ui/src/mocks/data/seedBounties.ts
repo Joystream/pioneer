@@ -16,7 +16,7 @@ export interface RawBountyMock {
   fundingType:
     | { type: string; target: string }
     | { type: string; minFundingAmount: string; maxFundingAmount: string; fundingPeriod: number }
-  contractType: { type: string; whitelistIds?: string[] }
+  entrantWhitelist?: string[]
   workPeriod: number
   judgingPeriod: number
   stage: string
@@ -53,17 +53,17 @@ export interface RawWorkSubmittedEventMock extends BlockFieldsMock {
 const seedFundingType = ({ type, ...data }: RawBountyMock['fundingType'], server: any) =>
   server.schema.create(`BountyFunding${type}`, data)
 
-const seedContractType = ({ type, ...data }: RawBountyMock['contractType'], server: any) =>
-  server.schema.create(`BountyContract${type}`, data)
+const seedEntrantWhitelist = (memberIds: RawBountyMock['entrantWhitelist'], server: any) =>
+  server.schema.create('BountyEntrantWhitelist', { memberIds })
 
 export const seedBounty = (
-  { fundingType, contractType, createdInEvent, maxFundingReachedEvent, ...data }: RawBountyMock,
+  { fundingType, entrantWhitelist, createdInEvent, maxFundingReachedEvent, ...data }: RawBountyMock,
   server: any
 ) =>
   server.schema.create('Bounty', {
     ...data,
     fundingType: seedFundingType(fundingType, server),
-    contractType: seedContractType(contractType, server),
+    entrantWhitelist: entrantWhitelist ? seedEntrantWhitelist(entrantWhitelist, server) : null,
     createdInEvent: server.schema.create('BountyCreatedEvent', createdInEvent),
     ...(maxFundingReachedEvent
       ? { maxFundingReachedEvent: server.schema.create('BountyMaxFundingReachedEvent', createdInEvent) }
