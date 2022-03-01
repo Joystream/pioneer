@@ -22,68 +22,60 @@ fragment BountyFields on Bounty {
       target
     }
   }
-  contractType {
-    ... on BountyContractClosed {
-      whitelist {
-        id
-      }
+  entrantWhitelist {
+    members {
+      id
     }
   }
   workPeriod
   judgingPeriod
   stage
+  isTerminated
   totalFunding
   discussionThreadId
   contributions {
-    amount
-    contributor {
-      ...MemberFields
-    }
+    ...BountyContributionFields
   }
   entries {
-    id
-    bountyId
-    worker {
-      ...MemberFields
-    }
-    workSubmitted
-    status {
-      ... on BountyEntryStatusWinner {
-        reward
-      }
-    }
-    works {
-      id
-      title
-      description
-    }
-    stake
-    works {
-      id
-    }
+    ...BountyEntryWithDetailsFields
   }
   createdInEvent {
     inBlock
   }
 }
 
+fragment BountyEntryFields on BountyEntry {
+  id
+  worker {
+    ...MemberFields
+  }
+  workSubmitted
+  status {
+    ... on BountyEntryStatusWinner {
+      reward
+    }
+  }
+}
+fragment BountyEntryWithDetailsFields on BountyEntry {
+  ...BountyEntryFields
+  works {
+    ...BountyWorkFields
+  }
+}
+
 fragment BountyWorkFields on WorkSubmittedEvent {
   id
-  description
   title
+  description
+}
+
+fragment BountyWorkWithDetailsFields on WorkSubmittedEvent {
+  ...BountyWorkFields
   inBlock
   createdAt
   network
   entry {
-    worker {
-      ...MemberFields
-    }
-    status {
-      __typename
-      ... on BountyEntryStatusWinner {
-        reward
-      }
-    }
+    ...BountyEntryFields
   }
 }
 
@@ -120,7 +112,7 @@ query GetBountyWorks(
   $limit: Int
 ) {
   workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
-    ...BountyWorkFields
+    ...BountyWorkWithDetailsFields
   }
 }
 
