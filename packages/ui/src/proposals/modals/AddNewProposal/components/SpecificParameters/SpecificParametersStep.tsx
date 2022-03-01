@@ -183,6 +183,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
           openingId={specifics?.openingId}
           setApplicationId={(applicationId: number) => send('SET_APPLICATION_ID', { applicationId })}
           setOpeningId={(openingId: number) => send('SET_OPENING_ID', { openingId })}
+          setWorkingGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
       )
     }

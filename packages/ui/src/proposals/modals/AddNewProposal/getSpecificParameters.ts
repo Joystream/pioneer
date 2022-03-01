@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { ProposalDetailsOf } from '@joystream/types/augment'
-import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
+import { WorkingGroupKey } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
 import { ITuple } from '@polkadot/types/types'
 
@@ -111,7 +111,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'cancelWorkingGroupLeadOpening': {
       return createType('ProposalDetailsOf', {
-        CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum],
+        CancelWorkingGroupLeadOpening: [specifics?.openingId, getWorkingGroupParam(specifics?.groupId)],
       })
     }
     case 'setCouncilorReward': {
@@ -125,7 +125,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         FillWorkingGroupLeadOpening: {
           opening_id: specifics?.openingId,
           successful_application_id: specifics?.applicationId,
-          workingGroup: WorkingGroupDef.Forum,
+          working_group: getWorkingGroupParam(specifics?.groupId),
         },
       })
     }
