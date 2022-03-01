@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
 import { Account } from '@/accounts/types'
@@ -19,6 +19,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { Step } from '@/common/model/machines/getSteps'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
+import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
@@ -34,6 +35,12 @@ interface Props {
 export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, steps }: Props) => {
   const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
   const { push } = useHistory()
+  const { refetch: refetchApplications } = useMyApplications()
+  const viewApplications = useCallback(async () => {
+    push(WorkingGroupsRoutes.myApplications)
+    await refetchApplications()
+    hideModal()
+  }, [])
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -69,7 +76,7 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, s
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={() => push(WorkingGroupsRoutes.myApplications)} size="medium">
+        <ButtonGhost onClick={viewApplications} size="medium">
           Go to my applications
           <Arrow direction="right" />
         </ButtonGhost>
