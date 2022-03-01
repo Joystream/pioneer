@@ -20,9 +20,8 @@ import {
 } from './Fileds'
 
 export const MyMemberListItem = ({ member }: { member: Member }) => {
-  const { slashed, terminated } = useMemberRowWorkDetails(member)
+  const { slashed, terminated, invited } = useMemberRowWorkDetails(member)
   const showMemberModal = useShowMemberModal(member.id)
-
   return (
     <MemberItemWrap kind="MyMember">
       <MemberModalTrigger onClick={showMemberModal} />
@@ -45,7 +44,7 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
         <TransferInviteButton member={member} />
       </MemberColumn>
       <MemberColumn>
-        <CountInfo count={0} />
+        <CountInfo count={invited} />
       </MemberColumn>
       <MemberControls>
         <EditMembershipButton member={member} size="small">
