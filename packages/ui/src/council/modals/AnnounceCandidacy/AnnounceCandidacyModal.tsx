@@ -19,6 +19,7 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
 import { RewardAccountStep } from '@/council/modals/AnnounceCandidacy/components/RewardAccountStep'
@@ -67,6 +68,8 @@ export const AnnounceCandidacyModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
+
+  const { refetch: refetchCandidates } = useCurrentElection()
 
   const constants = useCouncilConstants()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
@@ -255,6 +258,7 @@ export const AnnounceCandidacyModal = () => {
   }
 
   if (state.matches('success')) {
+    refetchCandidates?.()
     return <SuccessModal onClose={hideModal} memberId={activeMember.id} />
   }
 
