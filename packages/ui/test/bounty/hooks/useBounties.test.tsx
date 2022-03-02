@@ -30,7 +30,7 @@ describe('useBounties', () => {
       { title: mockTitles[1], stage: 'WorkSubmission' },
       { stage: 'Judgment' },
       { stage: 'Expired' },
-      { stage: 'Terminated' },
+      { isTerminated: true },
     ])
   })
 
