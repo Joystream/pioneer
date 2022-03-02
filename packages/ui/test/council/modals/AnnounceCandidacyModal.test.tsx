@@ -116,7 +116,15 @@ describe('UI: Announce Candidacy Modal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      const switchMemberModalCall = {
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'AnnounceCandidateModal',
+        },
+      }
+
+      expect(useModal.showModal).toBeCalledTimes(2)
+      expect(useModal.showModal).toBeCalledWith({ ...switchMemberModalCall })
     })
 
     it('Transaction fee', async () => {

@@ -55,7 +55,12 @@ export const AddBountyModal = () => {
   useEffect(() => {
     if (state.matches(AddBountyStates.requirementsVerification)) {
       if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        return showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'AddBounty',
+          },
+        })
       }
       if (activeMember) {
         send('NEXT')

@@ -129,7 +129,12 @@ describe('UI: Vote for Council Modal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'VoteForCouncil',
+        },
+      })
     })
 
     it('Insufficient funds', async () => {

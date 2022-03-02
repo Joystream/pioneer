@@ -50,7 +50,13 @@ export const DeleteThreadModal = () => {
       return
     }
     if (!activeMember) {
-      return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+      return showModal<SwitchMemberModalCall>({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'DeleteThreadModal',
+          originalModalData: { thread },
+        },
+      })
     }
     if (transaction && feeInfo) {
       feeInfo.canAfford && send('PASS')
