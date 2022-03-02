@@ -10,14 +10,15 @@ export const seedSafeBounties = (server: any, overrides: Partial<RawBountyMock>[
   const baseBounty = {
     creatorId: undefined,
     oracleId: undefined,
-    contractType: { type: 'Open' },
+    entrantWhitelist: undefined,
     discussionThreadId: '0',
+    isTerminated: false,
   }
   const safeBounties = [
     { ...baseBounty, creatorId: '0' },
     { ...baseBounty, creatorId: '0', oracleId: '1' },
     { ...baseBounty, oracleId: '1' },
-    { ...baseBounty, contractType: { type: 'Closed', whitelistIds: ['0', '1'] } },
+    { ...baseBounty, entrantWhitelist: ['0', '1'] },
   ]
 
   const bounties = overrides.map((override, index) => {

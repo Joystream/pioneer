@@ -683,24 +683,865 @@ input AppliedOnOpeningEventWhereUniqueInput {
   id: ID!
 }
 
-union Asset = AssetExternal | AssetJoystreamStorage | AssetNone
+"""
+Represents NFT auction
+"""
+type Auction implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  nft: OwnedNft!
+  nftId: String!
+  initialOwner: Membership
+  initialOwnerId: String
+  winningMember: Membership
+  winningMemberId: String
 
-type AssetExternal {
   """
-  JSON array of the urls
+  Auction starting price
   """
-  urls: String!
+  startingPrice: BigInt!
+
+  """
+  Whether auction can be completed instantly
+  """
+  buyNowPrice: BigInt
+
+  """
+  The type of auction
+  """
+  auctionType: AuctionType!
+
+  """
+  Minimal step between auction bids
+  """
+  minimalBidStep: BigInt!
+  lastBid: Bid
+  lastBidId: String
+  bids: [Bid!]!
+
+  """
+  Block when auction starts
+  """
+  startsAtBlock: Int!
+
+  """
+  Block when auction ended
+  """
+  endedAtBlock: Int
+
+  """
+  Block when auction is supposed to end
+  """
+  plannedEndAtBlock: Int
+
+  """
+  Is auction canceled
+  """
+  isCanceled: Boolean!
+
+  """
+  Is auction completed
+  """
+  isCompleted: Boolean!
+  whitelistedMembers: [Membership!]!
+  auctionstartedeventauction: [AuctionStartedEvent!]
 }
 
-type AssetJoystreamStorage {
+type AuctionBidCanceledEvent implements Event & BaseGraphQLObject {
   """
-  Related DataObject entity
+  Hash of the extrinsic which caused the event to be emitted.
   """
-  dataObject: DataObject
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  member: Membership!
+  memberId: String!
+  video: Video!
+  videoId: String!
 }
 
-type AssetNone {
-  phantom: Int
+type AuctionBidCanceledEventConnection {
+  totalCount: Int!
+  edges: [AuctionBidCanceledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input AuctionBidCanceledEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  member: ID!
+  video: ID!
+}
+
+type AuctionBidCanceledEventEdge {
+  node: AuctionBidCanceledEvent!
+  cursor: String!
+}
+
+enum AuctionBidCanceledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  member_ASC
+  member_DESC
+  video_ASC
+  video_DESC
+}
+
+input AuctionBidCanceledEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  member: ID
+  video: ID
+}
+
+input AuctionBidCanceledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  member: MembershipWhereInput
+  video: VideoWhereInput
+  AND: [AuctionBidCanceledEventWhereInput!]
+  OR: [AuctionBidCanceledEventWhereInput!]
+}
+
+input AuctionBidCanceledEventWhereUniqueInput {
+  id: ID!
+}
+
+type AuctionBidMadeEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  member: Membership!
+  memberId: String!
+  video: Video!
+  videoId: String!
+
+  """
+  Bid made.
+  """
+  bidAmount: BigInt!
+
+  """
+  Sign of auction duration being extended by making this bid.
+  """
+  extendsAuction: Boolean!
+}
+
+type AuctionBidMadeEventConnection {
+  totalCount: Int!
+  edges: [AuctionBidMadeEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input AuctionBidMadeEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  member: ID!
+  video: ID!
+  bidAmount: String!
+  extendsAuction: Boolean!
+}
+
+type AuctionBidMadeEventEdge {
+  node: AuctionBidMadeEvent!
+  cursor: String!
+}
+
+enum AuctionBidMadeEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  member_ASC
+  member_DESC
+  video_ASC
+  video_DESC
+  bidAmount_ASC
+  bidAmount_DESC
+  extendsAuction_ASC
+  extendsAuction_DESC
+}
+
+input AuctionBidMadeEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  member: ID
+  video: ID
+  bidAmount: String
+  extendsAuction: Boolean
+}
+
+input AuctionBidMadeEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bidAmount_eq: BigInt
+  bidAmount_gt: BigInt
+  bidAmount_gte: BigInt
+  bidAmount_lt: BigInt
+  bidAmount_lte: BigInt
+  bidAmount_in: [BigInt!]
+  extendsAuction_eq: Boolean
+  extendsAuction_in: [Boolean!]
+  member: MembershipWhereInput
+  video: VideoWhereInput
+  AND: [AuctionBidMadeEventWhereInput!]
+  OR: [AuctionBidMadeEventWhereInput!]
+}
+
+input AuctionBidMadeEventWhereUniqueInput {
+  id: ID!
+}
+
+type AuctionCanceledEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Content actor canceling the event.
+  """
+  contentActor: ContentActor!
+  video: Video!
+  videoId: String!
+}
+
+type AuctionCanceledEventConnection {
+  totalCount: Int!
+  edges: [AuctionCanceledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input AuctionCanceledEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  contentActor: JSONObject!
+  video: ID!
+}
+
+type AuctionCanceledEventEdge {
+  node: AuctionCanceledEvent!
+  cursor: String!
+}
+
+enum AuctionCanceledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+}
+
+input AuctionCanceledEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  contentActor: JSONObject
+  video: ID
+}
+
+input AuctionCanceledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  video: VideoWhereInput
+  AND: [AuctionCanceledEventWhereInput!]
+  OR: [AuctionCanceledEventWhereInput!]
+}
+
+input AuctionCanceledEventWhereUniqueInput {
+  id: ID!
+}
+
+type AuctionConnection {
+  totalCount: Int!
+  edges: [AuctionEdge!]!
+  pageInfo: PageInfo!
+}
+
+input AuctionCreateInput {
+  nft: ID!
+  initialOwner: ID
+  winningMember: ID
+  startingPrice: String!
+  buyNowPrice: String
+  auctionType: JSONObject!
+  minimalBidStep: String!
+  lastBid: ID
+  startsAtBlock: Float!
+  endedAtBlock: Float
+  plannedEndAtBlock: Float
+  isCanceled: Boolean!
+  isCompleted: Boolean!
+}
+
+type AuctionEdge {
+  node: Auction!
+  cursor: String!
+}
+
+enum AuctionOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  nft_ASC
+  nft_DESC
+  initialOwner_ASC
+  initialOwner_DESC
+  winningMember_ASC
+  winningMember_DESC
+  startingPrice_ASC
+  startingPrice_DESC
+  buyNowPrice_ASC
+  buyNowPrice_DESC
+  minimalBidStep_ASC
+  minimalBidStep_DESC
+  lastBid_ASC
+  lastBid_DESC
+  startsAtBlock_ASC
+  startsAtBlock_DESC
+  endedAtBlock_ASC
+  endedAtBlock_DESC
+  plannedEndAtBlock_ASC
+  plannedEndAtBlock_DESC
+  isCanceled_ASC
+  isCanceled_DESC
+  isCompleted_ASC
+  isCompleted_DESC
+}
+
+type AuctionStartedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Actor that started this auction.
+  """
+  actor: ContentActor!
+  video: Video!
+  videoId: String!
+  auction: Auction!
+  auctionId: String!
+}
+
+type AuctionStartedEventConnection {
+  totalCount: Int!
+  edges: [AuctionStartedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input AuctionStartedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  actor: JSONObject!
+  video: ID!
+  auction: ID!
+}
+
+type AuctionStartedEventEdge {
+  node: AuctionStartedEvent!
+  cursor: String!
+}
+
+enum AuctionStartedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  auction_ASC
+  auction_DESC
+}
+
+input AuctionStartedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  actor: JSONObject
+  video: ID
+  auction: ID
+}
+
+input AuctionStartedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  actor_json: JSONObject
+  video: VideoWhereInput
+  auction: AuctionWhereInput
+  AND: [AuctionStartedEventWhereInput!]
+  OR: [AuctionStartedEventWhereInput!]
+}
+
+input AuctionStartedEventWhereUniqueInput {
+  id: ID!
+}
+
+union AuctionType = AuctionTypeEnglish | AuctionTypeOpen
+
+type AuctionTypeEnglish {
+  """
+  English auction duration
+  """
+  duration: Int!
+
+  """
+  Auction extension time
+  """
+  extensionPeriod: Int
+}
+
+type AuctionTypeOpen {
+  """
+  Auction bid lock duration
+  """
+  bidLockingTime: Int!
+}
+
+input AuctionUpdateInput {
+  nft: ID
+  initialOwner: ID
+  winningMember: ID
+  startingPrice: String
+  buyNowPrice: String
+  auctionType: JSONObject
+  minimalBidStep: String
+  lastBid: ID
+  startsAtBlock: Float
+  endedAtBlock: Float
+  plannedEndAtBlock: Float
+  isCanceled: Boolean
+  isCompleted: Boolean
+}
+
+input AuctionWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  startingPrice_eq: BigInt
+  startingPrice_gt: BigInt
+  startingPrice_gte: BigInt
+  startingPrice_lt: BigInt
+  startingPrice_lte: BigInt
+  startingPrice_in: [BigInt!]
+  buyNowPrice_eq: BigInt
+  buyNowPrice_gt: BigInt
+  buyNowPrice_gte: BigInt
+  buyNowPrice_lt: BigInt
+  buyNowPrice_lte: BigInt
+  buyNowPrice_in: [BigInt!]
+  auctionType_json: JSONObject
+  minimalBidStep_eq: BigInt
+  minimalBidStep_gt: BigInt
+  minimalBidStep_gte: BigInt
+  minimalBidStep_lt: BigInt
+  minimalBidStep_lte: BigInt
+  minimalBidStep_in: [BigInt!]
+  startsAtBlock_eq: Int
+  startsAtBlock_gt: Int
+  startsAtBlock_gte: Int
+  startsAtBlock_lt: Int
+  startsAtBlock_lte: Int
+  startsAtBlock_in: [Int!]
+  endedAtBlock_eq: Int
+  endedAtBlock_gt: Int
+  endedAtBlock_gte: Int
+  endedAtBlock_lt: Int
+  endedAtBlock_lte: Int
+  endedAtBlock_in: [Int!]
+  plannedEndAtBlock_eq: Int
+  plannedEndAtBlock_gt: Int
+  plannedEndAtBlock_gte: Int
+  plannedEndAtBlock_lt: Int
+  plannedEndAtBlock_lte: Int
+  plannedEndAtBlock_in: [Int!]
+  isCanceled_eq: Boolean
+  isCanceled_in: [Boolean!]
+  isCompleted_eq: Boolean
+  isCompleted_in: [Boolean!]
+  nft: OwnedNftWhereInput
+  initialOwner: MembershipWhereInput
+  winningMember: MembershipWhereInput
+  lastBid: BidWhereInput
+  bids_none: BidWhereInput
+  bids_some: BidWhereInput
+  bids_every: BidWhereInput
+  whitelistedMembers_none: MembershipWhereInput
+  whitelistedMembers_some: MembershipWhereInput
+  whitelistedMembers_every: MembershipWhereInput
+  auctionstartedeventauction_none: AuctionStartedEventWhereInput
+  auctionstartedeventauction_some: AuctionStartedEventWhereInput
+  auctionstartedeventauction_every: AuctionStartedEventWhereInput
+  AND: [AuctionWhereInput!]
+  OR: [AuctionWhereInput!]
+}
+
+input AuctionWhereUniqueInput {
+  id: ID!
 }
 
 union Avatar = AvatarObject | AvatarUri
@@ -709,7 +1550,7 @@ type AvatarObject {
   """
   The avatar data object
   """
-  avatarObject: DataObject
+  avatarObject: StorageDataObject
 }
 
 type AvatarUri {
@@ -777,6 +1618,281 @@ input BaseWhereInput {
 }
 
 """
+Represents bid in NFT auction
+"""
+type Bid implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  auction: Auction!
+  auctionId: String!
+  bidder: Membership!
+  bidderId: String!
+
+  """
+  Amount bidded
+  """
+  amount: BigInt!
+
+  """
+  Sign for canceled bid
+  """
+  isCanceled: Boolean!
+
+  """
+  Block in which the bid was placed
+  """
+  createdInBlock: Int!
+  auctionlastBid: [Auction!]
+}
+
+type BidConnection {
+  totalCount: Int!
+  edges: [BidEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BidCreateInput {
+  auction: ID!
+  bidder: ID!
+  amount: String!
+  isCanceled: Boolean!
+  createdInBlock: Float!
+}
+
+type BidEdge {
+  node: Bid!
+  cursor: String!
+}
+
+type BidMadeCompletingAuctionEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  member: Membership!
+  memberId: String!
+  video: Video!
+  videoId: String!
+}
+
+type BidMadeCompletingAuctionEventConnection {
+  totalCount: Int!
+  edges: [BidMadeCompletingAuctionEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BidMadeCompletingAuctionEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  member: ID!
+  video: ID!
+}
+
+type BidMadeCompletingAuctionEventEdge {
+  node: BidMadeCompletingAuctionEvent!
+  cursor: String!
+}
+
+enum BidMadeCompletingAuctionEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  member_ASC
+  member_DESC
+  video_ASC
+  video_DESC
+}
+
+input BidMadeCompletingAuctionEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  member: ID
+  video: ID
+}
+
+input BidMadeCompletingAuctionEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  member: MembershipWhereInput
+  video: VideoWhereInput
+  AND: [BidMadeCompletingAuctionEventWhereInput!]
+  OR: [BidMadeCompletingAuctionEventWhereInput!]
+}
+
+input BidMadeCompletingAuctionEventWhereUniqueInput {
+  id: ID!
+}
+
+enum BidOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  auction_ASC
+  auction_DESC
+  bidder_ASC
+  bidder_DESC
+  amount_ASC
+  amount_DESC
+  isCanceled_ASC
+  isCanceled_DESC
+  createdInBlock_ASC
+  createdInBlock_DESC
+}
+
+input BidUpdateInput {
+  auction: ID
+  bidder: ID
+  amount: String
+  isCanceled: Boolean
+  createdInBlock: Float
+}
+
+input BidWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  isCanceled_eq: Boolean
+  isCanceled_in: [Boolean!]
+  createdInBlock_eq: Int
+  createdInBlock_gt: Int
+  createdInBlock_gte: Int
+  createdInBlock_lt: Int
+  createdInBlock_lte: Int
+  createdInBlock_in: [Int!]
+  auction: AuctionWhereInput
+  bidder: MembershipWhereInput
+  auctionlastBid_none: AuctionWhereInput
+  auctionlastBid_some: AuctionWhereInput
+  auctionlastBid_every: AuctionWhereInput
+  AND: [BidWhereInput!]
+  OR: [BidWhereInput!]
+}
+
+input BidWhereUniqueInput {
+  id: ID!
+}
+
+"""
 GraphQL representation of BigInt
 """
 scalar BigInt
@@ -794,12 +1910,12 @@ type Bounty implements BaseGraphQLObject {
   """
   Bounty title
   """
-  title: String!
+  title: String
 
   """
   Bounty description
   """
-  description: String!
+  description: String
 
   """
   Bounty image uri
@@ -824,11 +1940,8 @@ type Bounty implements BaseGraphQLObject {
   Bounty funding type
   """
   fundingType: BountyFundingType!
-
-  """
-  Bounty assurance contract type
-  """
-  contractType: BountyContractType!
+  entrantWhitelist: BountyEntrantWhitelist
+  entrantWhitelistId: String
 
   """
   Number of blocks from end of funding period until people can no longer submit bounty submissions
@@ -846,15 +1959,161 @@ type Bounty implements BaseGraphQLObject {
   stage: BountyStage!
 
   """
-  Total amount currently available for the reward
+  Total amount once contributed to the bounty (excluding the cherry)
   """
   totalFunding: BigInt!
-  discussionThread: ForumThread!
-  discussionThreadId: String!
+  discussionThread: ForumThread
+  discussionThreadId: String
   contributions: [BountyContribution!]
   entries: [BountyEntry!]
+
+  """
+  If true the bounty lifecycle ended and its state will not change anymore
+  """
+  isTerminated: Boolean!
   createdInEvent: BountyCreatedEvent!
+  canceledEvent: BountyCanceledEvent
+  vetoedEvent: BountyVetoedEvent
   maxFundingReachedEvent: BountyMaxFundingReachedEvent
+  removedInEvent: BountyRemovedEvent
+  judgment: OracleJudgmentSubmittedEvent
+  bountycreatorcherrywithdrawaleventbounty: [BountyCreatorCherryWithdrawalEvent!]
+}
+
+type BountyCanceledEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+}
+
+type BountyCanceledEventConnection {
+  totalCount: Int!
+  edges: [BountyCanceledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyCanceledEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  bounty: ID!
+}
+
+type BountyCanceledEventEdge {
+  node: BountyCanceledEvent!
+  cursor: String!
+}
+
+enum BountyCanceledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
+}
+
+input BountyCanceledEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  bounty: ID
+}
+
+input BountyCanceledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bounty: BountyWhereInput
+  AND: [BountyCanceledEventWhereInput!]
+  OR: [BountyCanceledEventWhereInput!]
+}
+
+input BountyCanceledEventWhereUniqueInput {
+  id: ID!
 }
 
 type BountyConnection {
@@ -862,16 +2121,6 @@ type BountyConnection {
   edges: [BountyEdge!]!
   pageInfo: PageInfo!
 }
-
-type BountyContractClosed {
-  whitelist: [Membership!]
-}
-
-type BountyContractOpen {
-  dummy: Int
-}
-
-union BountyContractType = BountyContractOpen | BountyContractClosed
 
 type BountyContribution implements BaseGraphQLObject {
   id: ID!
@@ -891,6 +2140,8 @@ type BountyContribution implements BaseGraphQLObject {
   Amount of the contribution
   """
   amount: BigInt!
+  createdInEvent: BountyFundedEvent!
+  withdrawnInEvent: BountyFundingWithdrawalEvent
 }
 
 type BountyContributionConnection {
@@ -964,6 +2215,8 @@ input BountyContributionWhereInput {
   amount_in: [BigInt!]
   bounty: BountyWhereInput
   contributor: MembershipWhereInput
+  createdInEvent: BountyFundedEventWhereInput
+  withdrawnInEvent: BountyFundingWithdrawalEventWhereInput
   AND: [BountyContributionWhereInput!]
   OR: [BountyContributionWhereInput!]
 }
@@ -1109,25 +2362,251 @@ input BountyCreatedEventWhereUniqueInput {
 }
 
 input BountyCreateInput {
-  title: String!
-  description: String!
+  title: String
+  description: String
   bannerImageUri: String
   cherry: String!
   entrantStake: String!
   creator: ID
   oracle: ID
   fundingType: JSONObject!
-  contractType: JSONObject!
+  entrantWhitelist: ID
   workPeriod: Float!
   judgingPeriod: Float!
   stage: BountyStage!
   totalFunding: String!
-  discussionThread: ID!
+  discussionThread: ID
+  isTerminated: Boolean!
+}
+
+type BountyCreatorCherryWithdrawalEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+}
+
+type BountyCreatorCherryWithdrawalEventConnection {
+  totalCount: Int!
+  edges: [BountyCreatorCherryWithdrawalEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyCreatorCherryWithdrawalEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  bounty: ID!
+}
+
+type BountyCreatorCherryWithdrawalEventEdge {
+  node: BountyCreatorCherryWithdrawalEvent!
+  cursor: String!
+}
+
+enum BountyCreatorCherryWithdrawalEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
+}
+
+input BountyCreatorCherryWithdrawalEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  bounty: ID
+}
+
+input BountyCreatorCherryWithdrawalEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bounty: BountyWhereInput
+  AND: [BountyCreatorCherryWithdrawalEventWhereInput!]
+  OR: [BountyCreatorCherryWithdrawalEventWhereInput!]
+}
+
+input BountyCreatorCherryWithdrawalEventWhereUniqueInput {
+  id: ID!
 }
 
 type BountyEdge {
   node: Bounty!
   cursor: String!
+}
+
+type BountyEntrantWhitelist implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  phantom: Int
+  members: [Membership!]!
+  bountyentrantWhitelist: [Bounty!]
+}
+
+type BountyEntrantWhitelistConnection {
+  totalCount: Int!
+  edges: [BountyEntrantWhitelistEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyEntrantWhitelistCreateInput {
+  phantom: Float
+}
+
+type BountyEntrantWhitelistEdge {
+  node: BountyEntrantWhitelist!
+  cursor: String!
+}
+
+enum BountyEntrantWhitelistOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  phantom_ASC
+  phantom_DESC
+}
+
+input BountyEntrantWhitelistUpdateInput {
+  phantom: Float
+}
+
+input BountyEntrantWhitelistWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  phantom_eq: Int
+  phantom_gt: Int
+  phantom_gte: Int
+  phantom_lt: Int
+  phantom_lte: Int
+  phantom_in: [Int!]
+  members_none: MembershipWhereInput
+  members_some: MembershipWhereInput
+  members_every: MembershipWhereInput
+  bountyentrantWhitelist_none: BountyWhereInput
+  bountyentrantWhitelist_some: BountyWhereInput
+  bountyentrantWhitelist_every: BountyWhereInput
+  AND: [BountyEntrantWhitelistWhereInput!]
+  OR: [BountyEntrantWhitelistWhereInput!]
+}
+
+input BountyEntrantWhitelistWhereUniqueInput {
+  id: ID!
 }
 
 type BountyEntry implements BaseGraphQLObject {
@@ -1145,11 +2624,6 @@ type BountyEntry implements BaseGraphQLObject {
   workerId: String!
 
   """
-  Stake used to announce the work entry.
-  """
-  stake: BigInt!
-
-  """
   Staking account with the work entry stake
   """
   stakingAccount: String
@@ -1164,7 +2638,10 @@ type BountyEntry implements BaseGraphQLObject {
   """
   status: BountyEntryStatus!
   announcedInEvent: WorkEntryAnnouncedEvent!
+  withdrawnInEvent: WorkEntryWithdrawnEvent
+  slashedInEvent: WorkEntrySlashedEvent
   works: [WorkSubmittedEvent!]
+  cashedOutInEvent: WorkEntrantFundsWithdrawnEvent
 }
 
 type BountyEntryConnection {
@@ -1176,7 +2653,6 @@ type BountyEntryConnection {
 input BountyEntryCreateInput {
   bounty: ID!
   worker: ID!
-  stake: String!
   stakingAccount: String
   workSubmitted: Boolean!
   status: JSONObject!
@@ -1198,8 +2674,6 @@ enum BountyEntryOrderByInput {
   bounty_DESC
   worker_ASC
   worker_DESC
-  stake_ASC
-  stake_DESC
   stakingAccount_ASC
   stakingAccount_DESC
   workSubmitted_ASC
@@ -1215,7 +2689,7 @@ union BountyEntryStatus =
   | BountyEntryStatusCashedOut
 
 type BountyEntryStatusCashedOut {
-  dummy: Int
+  reward: Float
 }
 
 type BountyEntryStatusPassed {
@@ -1241,7 +2715,6 @@ type BountyEntryStatusWorking {
 input BountyEntryUpdateInput {
   bounty: ID
   worker: ID
-  stake: String
   stakingAccount: String
   workSubmitted: Boolean
   status: JSONObject
@@ -1272,12 +2745,6 @@ input BountyEntryWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  stake_eq: BigInt
-  stake_gt: BigInt
-  stake_gte: BigInt
-  stake_lt: BigInt
-  stake_lte: BigInt
-  stake_in: [BigInt!]
   stakingAccount_eq: String
   stakingAccount_contains: String
   stakingAccount_startsWith: String
@@ -1289,14 +2756,153 @@ input BountyEntryWhereInput {
   bounty: BountyWhereInput
   worker: MembershipWhereInput
   announcedInEvent: WorkEntryAnnouncedEventWhereInput
+  withdrawnInEvent: WorkEntryWithdrawnEventWhereInput
+  slashedInEvent: WorkEntrySlashedEventWhereInput
   works_none: WorkSubmittedEventWhereInput
   works_some: WorkSubmittedEventWhereInput
   works_every: WorkSubmittedEventWhereInput
+  cashedOutInEvent: WorkEntrantFundsWithdrawnEventWhereInput
   AND: [BountyEntryWhereInput!]
   OR: [BountyEntryWhereInput!]
 }
 
 input BountyEntryWhereUniqueInput {
+  id: ID!
+}
+
+type BountyFundedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  contribution: BountyContribution!
+  contributionId: String!
+}
+
+type BountyFundedEventConnection {
+  totalCount: Int!
+  edges: [BountyFundedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyFundedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  contribution: ID!
+}
+
+type BountyFundedEventEdge {
+  node: BountyFundedEvent!
+  cursor: String!
+}
+
+enum BountyFundedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  contribution_ASC
+  contribution_DESC
+}
+
+input BountyFundedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  contribution: ID
+}
+
+input BountyFundedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contribution: BountyContributionWhereInput
+  AND: [BountyFundedEventWhereInput!]
+  OR: [BountyFundedEventWhereInput!]
+}
+
+input BountyFundedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -1325,6 +2931,142 @@ type BountyFundingPerpetual {
 }
 
 union BountyFundingType = BountyFundingPerpetual | BountyFundingLimited
+
+type BountyFundingWithdrawalEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  contribution: BountyContribution!
+  contributionId: String!
+}
+
+type BountyFundingWithdrawalEventConnection {
+  totalCount: Int!
+  edges: [BountyFundingWithdrawalEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyFundingWithdrawalEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  contribution: ID!
+}
+
+type BountyFundingWithdrawalEventEdge {
+  node: BountyFundingWithdrawalEvent!
+  cursor: String!
+}
+
+enum BountyFundingWithdrawalEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  contribution_ASC
+  contribution_DESC
+}
+
+input BountyFundingWithdrawalEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  contribution: ID
+}
+
+input BountyFundingWithdrawalEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contribution: BountyContributionWhereInput
+  AND: [BountyFundingWithdrawalEventWhereInput!]
+  OR: [BountyFundingWithdrawalEventWhereInput!]
+}
+
+input BountyFundingWithdrawalEventWhereUniqueInput {
+  id: ID!
+}
 
 type BountyMaxFundingReachedEvent implements Event & BaseGraphQLObject {
   """
@@ -1483,6 +3225,8 @@ enum BountyOrderByInput {
   creator_DESC
   oracle_ASC
   oracle_DESC
+  entrantWhitelist_ASC
+  entrantWhitelist_DESC
   workPeriod_ASC
   workPeriod_DESC
   judgingPeriod_ASC
@@ -1493,6 +3237,144 @@ enum BountyOrderByInput {
   totalFunding_DESC
   discussionThread_ASC
   discussionThread_DESC
+  isTerminated_ASC
+  isTerminated_DESC
+}
+
+type BountyRemovedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+}
+
+type BountyRemovedEventConnection {
+  totalCount: Int!
+  edges: [BountyRemovedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyRemovedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  bounty: ID!
+}
+
+type BountyRemovedEventEdge {
+  node: BountyRemovedEvent!
+  cursor: String!
+}
+
+enum BountyRemovedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
+}
+
+input BountyRemovedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  bounty: ID
+}
+
+input BountyRemovedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bounty: BountyWhereInput
+  AND: [BountyRemovedEventWhereInput!]
+  OR: [BountyRemovedEventWhereInput!]
+}
+
+input BountyRemovedEventWhereUniqueInput {
+  id: ID!
 }
 
 enum BountyStage {
@@ -1502,7 +3384,6 @@ enum BountyStage {
   Judgment
   Successful
   Failed
-  Terminated
 }
 
 input BountyUpdateInput {
@@ -1514,12 +3395,149 @@ input BountyUpdateInput {
   creator: ID
   oracle: ID
   fundingType: JSONObject
-  contractType: JSONObject
+  entrantWhitelist: ID
   workPeriod: Float
   judgingPeriod: Float
   stage: BountyStage
   totalFunding: String
   discussionThread: ID
+  isTerminated: Boolean
+}
+
+type BountyVetoedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+}
+
+type BountyVetoedEventConnection {
+  totalCount: Int!
+  edges: [BountyVetoedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BountyVetoedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  bounty: ID!
+}
+
+type BountyVetoedEventEdge {
+  node: BountyVetoedEvent!
+  cursor: String!
+}
+
+enum BountyVetoedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
+}
+
+input BountyVetoedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  bounty: ID
+}
+
+input BountyVetoedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bounty: BountyWhereInput
+  AND: [BountyVetoedEventWhereInput!]
+  OR: [BountyVetoedEventWhereInput!]
+}
+
+input BountyVetoedEventWhereUniqueInput {
+  id: ID!
 }
 
 input BountyWhereInput {
@@ -1575,7 +3593,6 @@ input BountyWhereInput {
   entrantStake_lte: BigInt
   entrantStake_in: [BigInt!]
   fundingType_json: JSONObject
-  contractType_json: JSONObject
   workPeriod_eq: Int
   workPeriod_gt: Int
   workPeriod_gte: Int
@@ -1596,8 +3613,11 @@ input BountyWhereInput {
   totalFunding_lt: BigInt
   totalFunding_lte: BigInt
   totalFunding_in: [BigInt!]
+  isTerminated_eq: Boolean
+  isTerminated_in: [Boolean!]
   creator: MembershipWhereInput
   oracle: MembershipWhereInput
+  entrantWhitelist: BountyEntrantWhitelistWhereInput
   discussionThread: ForumThreadWhereInput
   contributions_none: BountyContributionWhereInput
   contributions_some: BountyContributionWhereInput
@@ -1606,7 +3626,14 @@ input BountyWhereInput {
   entries_some: BountyEntryWhereInput
   entries_every: BountyEntryWhereInput
   createdInEvent: BountyCreatedEventWhereInput
+  canceledEvent: BountyCanceledEventWhereInput
+  vetoedEvent: BountyVetoedEventWhereInput
   maxFundingReachedEvent: BountyMaxFundingReachedEventWhereInput
+  removedInEvent: BountyRemovedEventWhereInput
+  judgment: OracleJudgmentSubmittedEventWhereInput
+  bountycreatorcherrywithdrawaleventbounty_none: BountyCreatorCherryWithdrawalEventWhereInput
+  bountycreatorcherrywithdrawaleventbounty_some: BountyCreatorCherryWithdrawalEventWhereInput
+  bountycreatorcherrywithdrawaleventbounty_every: BountyCreatorCherryWithdrawalEventWhereInput
   AND: [BountyWhereInput!]
   OR: [BountyWhereInput!]
 }
@@ -2514,6 +4541,150 @@ input BudgetSpendingEventWhereInput {
 }
 
 input BudgetSpendingEventWhereUniqueInput {
+  id: ID!
+}
+
+type BuyNowCanceledEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor acting as NFT owner.
+  """
+  contentActor: ContentActor!
+}
+
+type BuyNowCanceledEventConnection {
+  totalCount: Int!
+  edges: [BuyNowCanceledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BuyNowCanceledEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  contentActor: JSONObject!
+}
+
+type BuyNowCanceledEventEdge {
+  node: BuyNowCanceledEvent!
+  cursor: String!
+}
+
+enum BuyNowCanceledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+}
+
+input BuyNowCanceledEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  contentActor: JSONObject
+}
+
+input BuyNowCanceledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  video: VideoWhereInput
+  AND: [BuyNowCanceledEventWhereInput!]
+  OR: [BuyNowCanceledEventWhereInput!]
+}
+
+input BuyNowCanceledEventWhereUniqueInput {
   id: ID!
 }
 
@@ -4249,14 +6420,13 @@ type Channel implements BaseGraphQLObject {
   description: String
 
   """
-  Channel's cover (background) photo asset. Recommended ratio: 16:9.
+  Count of channel's videos with an uploaded asset that are public and not censored.
   """
-  coverPhoto: Asset
-
-  """
-  Channel's avatar photo asset.
-  """
-  avatarPhoto: Asset
+  activeVideosCounter: Int!
+  coverPhoto: StorageDataObject
+  coverPhotoId: String
+  avatarPhoto: StorageDataObject
+  avatarPhotoId: String
 
   """
   Flag signaling whether a channel is public.
@@ -4270,7 +6440,12 @@ type Channel implements BaseGraphQLObject {
   language: Language
   languageId: String
   videos: [Video!]!
+
+  """
+  Number of the block the channel was created in
+  """
   createdInBlock: Int!
+  collaborators: [Membership!]!
 }
 
 type ChannelCategoriesByNameFTSOutput {
@@ -4299,6 +6474,11 @@ type ChannelCategory implements BaseGraphQLObject {
   The name of the category
   """
   name: String
+
+  """
+  Count of channel's videos with an uploaded asset that are public and not censored.
+  """
+  activeVideosCounter: Int!
   channels: [Channel!]!
   createdInBlock: Int!
 }
@@ -4311,6 +6491,7 @@ type ChannelCategoryConnection {
 
 input ChannelCategoryCreateInput {
   name: String
+  activeVideosCounter: Float!
   createdInBlock: Float!
 }
 
@@ -4328,12 +6509,15 @@ enum ChannelCategoryOrderByInput {
   deletedAt_DESC
   name_ASC
   name_DESC
+  activeVideosCounter_ASC
+  activeVideosCounter_DESC
   createdInBlock_ASC
   createdInBlock_DESC
 }
 
 input ChannelCategoryUpdateInput {
   name: String
+  activeVideosCounter: Float
   createdInBlock: Float
 }
 
@@ -4367,6 +6551,12 @@ input ChannelCategoryWhereInput {
   name_startsWith: String
   name_endsWith: String
   name_in: [String!]
+  activeVideosCounter_eq: Int
+  activeVideosCounter_gt: Int
+  activeVideosCounter_gte: Int
+  activeVideosCounter_lt: Int
+  activeVideosCounter_lte: Int
+  activeVideosCounter_in: [Int!]
   createdInBlock_eq: Int
   createdInBlock_gt: Int
   createdInBlock_gte: Int
@@ -4397,8 +6587,9 @@ input ChannelCreateInput {
   rewardAccount: String
   title: String
   description: String
-  coverPhoto: JSONObject!
-  avatarPhoto: JSONObject!
+  activeVideosCounter: Float!
+  coverPhoto: ID
+  avatarPhoto: ID
   isPublic: Boolean
   isCensored: Boolean!
   language: ID
@@ -4429,6 +6620,12 @@ enum ChannelOrderByInput {
   title_DESC
   description_ASC
   description_DESC
+  activeVideosCounter_ASC
+  activeVideosCounter_DESC
+  coverPhoto_ASC
+  coverPhoto_DESC
+  avatarPhoto_ASC
+  avatarPhoto_DESC
   isPublic_ASC
   isPublic_DESC
   isCensored_ASC
@@ -4446,8 +6643,9 @@ input ChannelUpdateInput {
   rewardAccount: String
   title: String
   description: String
-  coverPhoto: JSONObject
-  avatarPhoto: JSONObject
+  activeVideosCounter: Float
+  coverPhoto: ID
+  avatarPhoto: ID
   isPublic: Boolean
   isCensored: Boolean
   language: ID
@@ -4494,8 +6692,12 @@ input ChannelWhereInput {
   description_startsWith: String
   description_endsWith: String
   description_in: [String!]
-  coverPhoto_json: JSONObject
-  avatarPhoto_json: JSONObject
+  activeVideosCounter_eq: Int
+  activeVideosCounter_gt: Int
+  activeVideosCounter_gte: Int
+  activeVideosCounter_lt: Int
+  activeVideosCounter_lte: Int
+  activeVideosCounter_in: [Int!]
   isPublic_eq: Boolean
   isPublic_in: [Boolean!]
   isCensored_eq: Boolean
@@ -4509,16 +6711,64 @@ input ChannelWhereInput {
   ownerMember: MembershipWhereInput
   ownerCuratorGroup: CuratorGroupWhereInput
   category: ChannelCategoryWhereInput
+  coverPhoto: StorageDataObjectWhereInput
+  avatarPhoto: StorageDataObjectWhereInput
   language: LanguageWhereInput
   videos_none: VideoWhereInput
   videos_some: VideoWhereInput
   videos_every: VideoWhereInput
+  collaborators_none: MembershipWhereInput
+  collaborators_some: MembershipWhereInput
+  collaborators_every: MembershipWhereInput
   AND: [ChannelWhereInput!]
   OR: [ChannelWhereInput!]
 }
 
 input ChannelWhereUniqueInput {
   id: ID!
+}
+
+union ContentActor = ContentActorCurator | ContentActorMember | ContentActorLead | ContentActorCollaborator
+
+type ContentActorCollaborator {
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+  member: Membership
+}
+
+type ContentActorCurator {
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+  curator: Curator
+}
+
+type ContentActorLead {
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+}
+
+type ContentActorMember {
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+  member: Membership
+}
+
+enum Continent {
+  AF
+  NA
+  OC
+  AN
+  AS
+  EU
+  SA
 }
 
 type CouncilMember implements BaseGraphQLObject {
@@ -5011,6 +7261,38 @@ type CreateWorkingGroupLeadOpeningProposalDetails {
   group: WorkingGroup
 }
 
+type Curator implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+  curatorGroups: [CuratorGroup!]!
+}
+
+type CuratorConnection {
+  totalCount: Int!
+  edges: [CuratorEdge!]!
+  pageInfo: PageInfo!
+}
+
+input CuratorCreateInput {
+  dummy: Float
+}
+
+type CuratorEdge {
+  node: Curator!
+  cursor: String!
+}
+
 type CuratorGroup implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -5022,14 +7304,10 @@ type CuratorGroup implements BaseGraphQLObject {
   version: Int!
 
   """
-  Curators belonging to this group
-  """
-  curatorIds: [Int!]!
-
-  """
   Is group active or not
   """
   isActive: Boolean!
+  curators: [Curator!]!
   channels: [Channel!]!
 }
 
@@ -5040,7 +7318,6 @@ type CuratorGroupConnection {
 }
 
 input CuratorGroupCreateInput {
-  curatorIds: [Int!]!
   isActive: Boolean!
 }
 
@@ -5061,7 +7338,6 @@ enum CuratorGroupOrderByInput {
 }
 
 input CuratorGroupUpdateInput {
-  curatorIds: [Int!]
   isActive: Boolean
 }
 
@@ -5090,11 +7366,11 @@ input CuratorGroupWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  curatorIds_containsAll: [Int!]
-  curatorIds_containsNone: [Int!]
-  curatorIds_containsAny: [Int!]
   isActive_eq: Boolean
   isActive_in: [Boolean!]
+  curators_none: CuratorWhereInput
+  curators_some: CuratorWhereInput
+  curators_every: CuratorWhereInput
   channels_none: ChannelWhereInput
   channels_some: ChannelWhereInput
   channels_every: ChannelWhereInput
@@ -5106,166 +7382,22 @@ input CuratorGroupWhereUniqueInput {
   id: ID!
 }
 
-"""
-Manages content ids, type and storage provider decision about it
-"""
-type DataObject implements BaseGraphQLObject {
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
-  """
-  Content owner
-  """
-  owner: DataObjectOwner!
-
-  """
-  Content added at
-  """
-  createdInBlock: Int!
-
-  """
-  Content type id
-  """
-  typeId: Int!
-
-  """
-  Content size in bytes
-  """
-  size: BigInt!
-  liaison: Worker
-  liaisonId: String
-
-  """
-  Storage provider as liaison judgment
-  """
-  liaisonJudgement: LiaisonJudgement!
-
-  """
-  IPFS content id
-  """
-  ipfsContentId: String!
-
-  """
-  Joystream runtime content
-  """
-  joystreamContentId: String!
-}
-
-type DataObjectConnection {
-  totalCount: Int!
-  edges: [DataObjectEdge!]!
-  pageInfo: PageInfo!
-}
-
-input DataObjectCreateInput {
-  owner: JSONObject!
-  createdInBlock: Float!
-  typeId: Float!
-  size: String!
-  liaison: ID
-  liaisonJudgement: LiaisonJudgement!
-  ipfsContentId: String!
-  joystreamContentId: String!
-}
-
-type DataObjectEdge {
-  node: DataObject!
-  cursor: String!
-}
-
-enum DataObjectOrderByInput {
+enum CuratorOrderByInput {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
-  createdInBlock_ASC
-  createdInBlock_DESC
-  typeId_ASC
-  typeId_DESC
-  size_ASC
-  size_DESC
-  liaison_ASC
-  liaison_DESC
-  liaisonJudgement_ASC
-  liaisonJudgement_DESC
-  ipfsContentId_ASC
-  ipfsContentId_DESC
-  joystreamContentId_ASC
-  joystreamContentId_DESC
+  dummy_ASC
+  dummy_DESC
 }
 
-union DataObjectOwner =
-    DataObjectOwnerMember
-  | DataObjectOwnerChannel
-  | DataObjectOwnerDao
-  | DataObjectOwnerCouncil
-  | DataObjectOwnerWorkingGroup
-
-type DataObjectOwnerChannel {
-  """
-  Related channel
-  """
-  channel: Channel
-
-  """
-  Variant needs to have at least one property. This value is not used.
-  """
-  dummy: Int
+input CuratorUpdateInput {
+  dummy: Float
 }
 
-type DataObjectOwnerCouncil {
-  """
-  Variant needs to have at least one property. This value is not used.
-  """
-  dummy: Int
-}
-
-type DataObjectOwnerDao {
-  """
-  DAO identifier
-  """
-  dao: Int!
-}
-
-type DataObjectOwnerMember {
-  """
-  Related member
-  """
-  member: Membership
-
-  """
-  Variant needs to have at least one property. This value is not used.
-  """
-  dummy: Int
-}
-
-type DataObjectOwnerWorkingGroup {
-  """
-  Working group
-  """
-  workingGroup: WorkingGroup
-}
-
-input DataObjectUpdateInput {
-  owner: JSONObject
-  createdInBlock: Float
-  typeId: Float
-  size: String
-  liaison: ID
-  liaisonJudgement: LiaisonJudgement
-  ipfsContentId: String
-  joystreamContentId: String
-}
-
-input DataObjectWhereInput {
+input CuratorWhereInput {
   id_eq: ID
   id_in: [ID!]
   createdAt_eq: DateTime
@@ -5290,44 +7422,60 @@ input DataObjectWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  owner_json: JSONObject
-  createdInBlock_eq: Int
-  createdInBlock_gt: Int
-  createdInBlock_gte: Int
-  createdInBlock_lt: Int
-  createdInBlock_lte: Int
-  createdInBlock_in: [Int!]
-  typeId_eq: Int
-  typeId_gt: Int
-  typeId_gte: Int
-  typeId_lt: Int
-  typeId_lte: Int
-  typeId_in: [Int!]
-  size_eq: BigInt
-  size_gt: BigInt
-  size_gte: BigInt
-  size_lt: BigInt
-  size_lte: BigInt
-  size_in: [BigInt!]
-  liaisonJudgement_eq: LiaisonJudgement
-  liaisonJudgement_in: [LiaisonJudgement!]
-  ipfsContentId_eq: String
-  ipfsContentId_contains: String
-  ipfsContentId_startsWith: String
-  ipfsContentId_endsWith: String
-  ipfsContentId_in: [String!]
-  joystreamContentId_eq: String
-  joystreamContentId_contains: String
-  joystreamContentId_startsWith: String
-  joystreamContentId_endsWith: String
-  joystreamContentId_in: [String!]
-  liaison: WorkerWhereInput
-  AND: [DataObjectWhereInput!]
-  OR: [DataObjectWhereInput!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+  curatorGroups_none: CuratorGroupWhereInput
+  curatorGroups_some: CuratorGroupWhereInput
+  curatorGroups_every: CuratorGroupWhereInput
+  AND: [CuratorWhereInput!]
+  OR: [CuratorWhereInput!]
 }
 
-input DataObjectWhereUniqueInput {
+input CuratorWhereUniqueInput {
   id: ID!
+}
+
+union DataObjectType =
+    DataObjectTypeChannelAvatar
+  | DataObjectTypeChannelCoverPhoto
+  | DataObjectTypeVideoMedia
+  | DataObjectTypeVideoThumbnail
+  | DataObjectTypeUnknown
+
+type DataObjectTypeChannelAvatar {
+  """
+  Related channel entity
+  """
+  channel: Channel
+}
+
+type DataObjectTypeChannelCoverPhoto {
+  """
+  Related channel entity
+  """
+  channel: Channel
+}
+
+type DataObjectTypeUnknown {
+  phantom: Int
+}
+
+type DataObjectTypeVideoMedia {
+  """
+  Related video entity
+  """
+  video: Video
+}
+
+type DataObjectTypeVideoThumbnail {
+  """
+  Related video entity
+  """
+  video: Video
 }
 
 """
@@ -5348,6 +7496,634 @@ type DecreaseWorkingGroupLeadStakeProposalDetails {
 }
 
 interface DeleteResponse {
+  id: ID!
+}
+
+type DistributionBucket implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  family: DistributionBucketFamily!
+  familyId: String!
+
+  """
+  Bucket index within the family
+  """
+  bucketIndex: Int!
+  operators: [DistributionBucketOperator!]!
+
+  """
+  Whether the bucket is accepting any new bags
+  """
+  acceptingNewBags: Boolean!
+
+  """
+  Whether the bucket is currently distributing content
+  """
+  distributing: Boolean!
+  bags: [StorageBag!]!
+}
+
+type DistributionBucketConnection {
+  totalCount: Int!
+  edges: [DistributionBucketEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DistributionBucketCreateInput {
+  family: ID!
+  bucketIndex: Float!
+  acceptingNewBags: Boolean!
+  distributing: Boolean!
+}
+
+type DistributionBucketEdge {
+  node: DistributionBucket!
+  cursor: String!
+}
+
+type DistributionBucketFamily implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  metadata: DistributionBucketFamilyMetadata
+  metadataId: String
+  buckets: [DistributionBucket!]!
+}
+
+type DistributionBucketFamilyConnection {
+  totalCount: Int!
+  edges: [DistributionBucketFamilyEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DistributionBucketFamilyCreateInput {
+  metadata: ID
+}
+
+type DistributionBucketFamilyEdge {
+  node: DistributionBucketFamily!
+  cursor: String!
+}
+
+type DistributionBucketFamilyGeographicArea implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Geographical area (continent / country / subdivision)
+  """
+  area: GeographicalArea!
+  distributionBucketFamilyMetadata: DistributionBucketFamilyMetadata!
+  distributionBucketFamilyMetadataId: String!
+}
+
+type DistributionBucketFamilyGeographicAreaConnection {
+  totalCount: Int!
+  edges: [DistributionBucketFamilyGeographicAreaEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DistributionBucketFamilyGeographicAreaCreateInput {
+  area: JSONObject!
+  distributionBucketFamilyMetadata: ID!
+}
+
+type DistributionBucketFamilyGeographicAreaEdge {
+  node: DistributionBucketFamilyGeographicArea!
+  cursor: String!
+}
+
+enum DistributionBucketFamilyGeographicAreaOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  distributionBucketFamilyMetadata_ASC
+  distributionBucketFamilyMetadata_DESC
+}
+
+input DistributionBucketFamilyGeographicAreaUpdateInput {
+  area: JSONObject
+  distributionBucketFamilyMetadata: ID
+}
+
+input DistributionBucketFamilyGeographicAreaWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  area_json: JSONObject
+  distributionBucketFamilyMetadata: DistributionBucketFamilyMetadataWhereInput
+  AND: [DistributionBucketFamilyGeographicAreaWhereInput!]
+  OR: [DistributionBucketFamilyGeographicAreaWhereInput!]
+}
+
+input DistributionBucketFamilyGeographicAreaWhereUniqueInput {
+  id: ID!
+}
+
+type DistributionBucketFamilyMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Name of the geographical region covered by the family (ie.: us-east-1)
+  """
+  region: String
+
+  """
+  Optional, more specific description of the region covered by the family
+  """
+  description: String
+  areas: [DistributionBucketFamilyGeographicArea!]!
+
+  """
+  List of targets (hosts/ips) best suited latency measurements for the family
+  """
+  latencyTestTargets: [String!]
+  distributionbucketfamilymetadata: [DistributionBucketFamily!]
+}
+
+type DistributionBucketFamilyMetadataConnection {
+  totalCount: Int!
+  edges: [DistributionBucketFamilyMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DistributionBucketFamilyMetadataCreateInput {
+  region: String
+  description: String
+  latencyTestTargets: [String!]
+}
+
+type DistributionBucketFamilyMetadataEdge {
+  node: DistributionBucketFamilyMetadata!
+  cursor: String!
+}
+
+enum DistributionBucketFamilyMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  region_ASC
+  region_DESC
+  description_ASC
+  description_DESC
+}
+
+input DistributionBucketFamilyMetadataUpdateInput {
+  region: String
+  description: String
+  latencyTestTargets: [String!]
+}
+
+input DistributionBucketFamilyMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  region_eq: String
+  region_contains: String
+  region_startsWith: String
+  region_endsWith: String
+  region_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  latencyTestTargets_containsAll: [String!]
+  latencyTestTargets_containsNone: [String!]
+  latencyTestTargets_containsAny: [String!]
+  areas_none: DistributionBucketFamilyGeographicAreaWhereInput
+  areas_some: DistributionBucketFamilyGeographicAreaWhereInput
+  areas_every: DistributionBucketFamilyGeographicAreaWhereInput
+  distributionbucketfamilymetadata_none: DistributionBucketFamilyWhereInput
+  distributionbucketfamilymetadata_some: DistributionBucketFamilyWhereInput
+  distributionbucketfamilymetadata_every: DistributionBucketFamilyWhereInput
+  AND: [DistributionBucketFamilyMetadataWhereInput!]
+  OR: [DistributionBucketFamilyMetadataWhereInput!]
+}
+
+input DistributionBucketFamilyMetadataWhereUniqueInput {
+  id: ID!
+}
+
+enum DistributionBucketFamilyOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  metadata_ASC
+  metadata_DESC
+}
+
+input DistributionBucketFamilyUpdateInput {
+  metadata: ID
+}
+
+input DistributionBucketFamilyWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  metadata: DistributionBucketFamilyMetadataWhereInput
+  buckets_none: DistributionBucketWhereInput
+  buckets_some: DistributionBucketWhereInput
+  buckets_every: DistributionBucketWhereInput
+  AND: [DistributionBucketFamilyWhereInput!]
+  OR: [DistributionBucketFamilyWhereInput!]
+}
+
+input DistributionBucketFamilyWhereUniqueInput {
+  id: ID!
+}
+
+type DistributionBucketOperator implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  distributionBucket: DistributionBucket!
+  distributionBucketId: String!
+
+  """
+  ID of the distribution group worker
+  """
+  workerId: Int!
+
+  """
+  Current operator status
+  """
+  status: DistributionBucketOperatorStatus!
+  metadata: DistributionBucketOperatorMetadata
+  metadataId: String
+}
+
+type DistributionBucketOperatorConnection {
+  totalCount: Int!
+  edges: [DistributionBucketOperatorEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DistributionBucketOperatorCreateInput {
+  distributionBucket: ID!
+  workerId: Float!
+  status: DistributionBucketOperatorStatus!
+  metadata: ID
+}
+
+type DistributionBucketOperatorEdge {
+  node: DistributionBucketOperator!
+  cursor: String!
+}
+
+type DistributionBucketOperatorMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Root distributor node api endpoint
+  """
+  nodeEndpoint: String
+  nodeLocation: NodeLocationMetadata
+  nodeLocationId: String
+
+  """
+  Additional information about the node/operator
+  """
+  extra: String
+  distributionbucketoperatormetadata: [DistributionBucketOperator!]
+}
+
+type DistributionBucketOperatorMetadataConnection {
+  totalCount: Int!
+  edges: [DistributionBucketOperatorMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DistributionBucketOperatorMetadataCreateInput {
+  nodeEndpoint: String
+  nodeLocation: ID
+  extra: String
+}
+
+type DistributionBucketOperatorMetadataEdge {
+  node: DistributionBucketOperatorMetadata!
+  cursor: String!
+}
+
+enum DistributionBucketOperatorMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  nodeEndpoint_ASC
+  nodeEndpoint_DESC
+  nodeLocation_ASC
+  nodeLocation_DESC
+  extra_ASC
+  extra_DESC
+}
+
+input DistributionBucketOperatorMetadataUpdateInput {
+  nodeEndpoint: String
+  nodeLocation: ID
+  extra: String
+}
+
+input DistributionBucketOperatorMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  nodeEndpoint_eq: String
+  nodeEndpoint_contains: String
+  nodeEndpoint_startsWith: String
+  nodeEndpoint_endsWith: String
+  nodeEndpoint_in: [String!]
+  extra_eq: String
+  extra_contains: String
+  extra_startsWith: String
+  extra_endsWith: String
+  extra_in: [String!]
+  nodeLocation: NodeLocationMetadataWhereInput
+  distributionbucketoperatormetadata_none: DistributionBucketOperatorWhereInput
+  distributionbucketoperatormetadata_some: DistributionBucketOperatorWhereInput
+  distributionbucketoperatormetadata_every: DistributionBucketOperatorWhereInput
+  AND: [DistributionBucketOperatorMetadataWhereInput!]
+  OR: [DistributionBucketOperatorMetadataWhereInput!]
+}
+
+input DistributionBucketOperatorMetadataWhereUniqueInput {
+  id: ID!
+}
+
+enum DistributionBucketOperatorOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  distributionBucket_ASC
+  distributionBucket_DESC
+  workerId_ASC
+  workerId_DESC
+  status_ASC
+  status_DESC
+  metadata_ASC
+  metadata_DESC
+}
+
+enum DistributionBucketOperatorStatus {
+  INVITED
+  ACTIVE
+}
+
+input DistributionBucketOperatorUpdateInput {
+  distributionBucket: ID
+  workerId: Float
+  status: DistributionBucketOperatorStatus
+  metadata: ID
+}
+
+input DistributionBucketOperatorWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  workerId_eq: Int
+  workerId_gt: Int
+  workerId_gte: Int
+  workerId_lt: Int
+  workerId_lte: Int
+  workerId_in: [Int!]
+  status_eq: DistributionBucketOperatorStatus
+  status_in: [DistributionBucketOperatorStatus!]
+  distributionBucket: DistributionBucketWhereInput
+  metadata: DistributionBucketOperatorMetadataWhereInput
+  AND: [DistributionBucketOperatorWhereInput!]
+  OR: [DistributionBucketOperatorWhereInput!]
+}
+
+input DistributionBucketOperatorWhereUniqueInput {
+  id: ID!
+}
+
+enum DistributionBucketOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  family_ASC
+  family_DESC
+  bucketIndex_ASC
+  bucketIndex_DESC
+  acceptingNewBags_ASC
+  acceptingNewBags_DESC
+  distributing_ASC
+  distributing_DESC
+}
+
+input DistributionBucketUpdateInput {
+  family: ID
+  bucketIndex: Float
+  acceptingNewBags: Boolean
+  distributing: Boolean
+}
+
+input DistributionBucketWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  bucketIndex_eq: Int
+  bucketIndex_gt: Int
+  bucketIndex_gte: Int
+  bucketIndex_lt: Int
+  bucketIndex_lte: Int
+  bucketIndex_in: [Int!]
+  acceptingNewBags_eq: Boolean
+  acceptingNewBags_in: [Boolean!]
+  distributing_eq: Boolean
+  distributing_in: [Boolean!]
+  family: DistributionBucketFamilyWhereInput
+  operators_none: DistributionBucketOperatorWhereInput
+  operators_some: DistributionBucketOperatorWhereInput
+  operators_every: DistributionBucketOperatorWhereInput
+  bags_none: StorageBagWhereInput
+  bags_some: StorageBagWhereInput
+  bags_every: StorageBagWhereInput
+  AND: [DistributionBucketWhereInput!]
+  OR: [DistributionBucketWhereInput!]
+}
+
+input DistributionBucketWhereUniqueInput {
   id: ID!
 }
 
@@ -5716,6 +8492,149 @@ input ElectionRoundWhereUniqueInput {
   id: ID!
 }
 
+type EnglishAuctionCompletedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  winner: Membership!
+  winnerId: String!
+  video: Video!
+  videoId: String!
+}
+
+type EnglishAuctionCompletedEventConnection {
+  totalCount: Int!
+  edges: [EnglishAuctionCompletedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input EnglishAuctionCompletedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  winner: ID!
+  video: ID!
+}
+
+type EnglishAuctionCompletedEventEdge {
+  node: EnglishAuctionCompletedEvent!
+  cursor: String!
+}
+
+enum EnglishAuctionCompletedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  winner_ASC
+  winner_DESC
+  video_ASC
+  video_DESC
+}
+
+input EnglishAuctionCompletedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  winner: ID
+  video: ID
+}
+
+input EnglishAuctionCompletedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  winner: MembershipWhereInput
+  video: VideoWhereInput
+  AND: [EnglishAuctionCompletedEventWhereInput!]
+  OR: [EnglishAuctionCompletedEventWhereInput!]
+}
+
+input EnglishAuctionCompletedEventWhereUniqueInput {
+  id: ID!
+}
+
 interface Event {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -5774,14 +8693,26 @@ enum EventTypeOptions {
   AnnouncingPeriodStartedEvent
   ApplicationWithdrawnEvent
   AppliedOnOpeningEvent
+  AuctionBidCanceledEvent
+  AuctionBidMadeEvent
+  AuctionCanceledEvent
+  AuctionStartedEvent
+  BidMadeCompletingAuctionEvent
+  BountyCanceledEvent
   BountyCreatedEvent
+  BountyCreatorCherryWithdrawalEvent
+  BountyFundedEvent
+  BountyFundingWithdrawalEvent
   BountyMaxFundingReachedEvent
+  BountyRemovedEvent
+  BountyVetoedEvent
   BudgetBalanceSetEvent
   BudgetIncrementUpdatedEvent
   BudgetRefillEvent
   BudgetRefillPlannedEvent
   BudgetSetEvent
   BudgetSpendingEvent
+  BuyNowCanceledEvent
   CandidacyNoteSetEvent
   CandidacyStakeReleaseEvent
   CandidacyWithdrawEvent
@@ -5791,6 +8722,7 @@ enum EventTypeOptions {
   CategoryMembershipOfModeratorUpdatedEvent
   CategoryStickyThreadUpdateEvent
   CouncilorRewardUpdatedEvent
+  EnglishAuctionCompletedEvent
   InitialInvitationBalanceUpdatedEvent
   InitialInvitationCountUpdatedEvent
   InvitesTransferredEvent
@@ -5807,10 +8739,17 @@ enum EventTypeOptions {
   NewCouncilElectedEvent
   NewCouncilNotElectedEvent
   NewMissedRewardLevelReachedEvent
+  NftBoughtEvent
+  NftIssuedEvent
   NotEnoughCandidatesEvent
+  OfferAcceptedEvent
+  OfferCanceledEvent
+  OfferStartedEvent
+  OpenAuctionBidAcceptedEvent
   OpeningAddedEvent
   OpeningCanceledEvent
   OpeningFilledEvent
+  OracleJudgmentSubmittedEvent
   PostAddedEvent
   PostDeletedEvent
   PostModeratedEvent
@@ -5853,7 +8792,10 @@ enum EventTypeOptions {
   VoteOnPollEvent
   VoteRevealedEvent
   VotingPeriodStartedEvent
+  WorkEntrantFundsWithdrawnEvent
   WorkEntryAnnouncedEvent
+  WorkEntrySlashedEvent
+  WorkEntryWithdrawnEvent
   WorkSubmittedEvent
   WorkerExitedEvent
   WorkerRewardAccountUpdatedEvent
@@ -7041,6 +9983,165 @@ type FundingRequestProposalDetails {
   destinationsList: FundingRequestDestinationsList
 }
 
+type GeoCoordinates implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  latitude: Float!
+  longitude: Float!
+  nodelocationmetadatacoordinates: [NodeLocationMetadata!]
+}
+
+type GeoCoordinatesConnection {
+  totalCount: Int!
+  edges: [GeoCoordinatesEdge!]!
+  pageInfo: PageInfo!
+}
+
+input GeoCoordinatesCreateInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+type GeoCoordinatesEdge {
+  node: GeoCoordinates!
+  cursor: String!
+}
+
+enum GeoCoordinatesOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  latitude_ASC
+  latitude_DESC
+  longitude_ASC
+  longitude_DESC
+}
+
+input GeoCoordinatesUpdateInput {
+  latitude: Float
+  longitude: Float
+}
+
+input GeoCoordinatesWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  latitude_eq: Float
+  latitude_gt: Float
+  latitude_gte: Float
+  latitude_lt: Float
+  latitude_lte: Float
+  latitude_in: [Float!]
+  longitude_eq: Float
+  longitude_gt: Float
+  longitude_gte: Float
+  longitude_lt: Float
+  longitude_lte: Float
+  longitude_in: [Float!]
+  nodelocationmetadatacoordinates_none: NodeLocationMetadataWhereInput
+  nodelocationmetadatacoordinates_some: NodeLocationMetadataWhereInput
+  nodelocationmetadatacoordinates_every: NodeLocationMetadataWhereInput
+  AND: [GeoCoordinatesWhereInput!]
+  OR: [GeoCoordinatesWhereInput!]
+}
+
+input GeoCoordinatesWhereUniqueInput {
+  id: ID!
+}
+
+union GeographicalArea = GeographicalAreaContinent | GeographicalAreaCountry | GeographicalAreaSubdivistion
+
+type GeographicalAreaContinent {
+  code: Continent
+}
+
+input GeographicalAreaContinentCreateInput {
+  code: Continent
+}
+
+input GeographicalAreaContinentUpdateInput {
+  code: Continent
+}
+
+input GeographicalAreaContinentWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  code_eq: Continent
+  code_in: [Continent!]
+  AND: [GeographicalAreaContinentWhereInput!]
+  OR: [GeographicalAreaContinentWhereInput!]
+}
+
+input GeographicalAreaContinentWhereUniqueInput {
+  id: ID!
+}
+
+type GeographicalAreaCountry {
+  """
+  ISO 3166-1 alpha-2 country code
+  """
+  code: String
+}
+
+type GeographicalAreaSubdivistion {
+  """
+  ISO 3166-2 subdivision code
+  """
+  code: String
+}
+
 type InitialInvitationBalanceUpdatedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -8032,11 +11133,6 @@ input LeaderUnsetEventWhereUniqueInput {
   id: ID!
 }
 
-enum LiaisonJudgement {
-  PENDING
-  ACCEPTED
-}
-
 type License implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -8872,13 +11968,24 @@ type Membership implements BaseGraphQLObject {
   isCouncilMember: Boolean!
   roles: [Worker!]!
   whitelistedIn: [ProposalDiscussionWhitelist!]!
+  whitelistedInBounties: [BountyEntrantWhitelist!]!
   channels: [Channel!]!
+  collaboratorInChannels: [Channel!]!
   councilCandidacies: [Candidate!]!
   councilMembers: [CouncilMember!]!
+  whitelistedInAuctions: [Auction!]!
+  ownedNfts: [OwnedNft!]!
+  auctioninitialOwner: [Auction!]
+  auctionwinningMember: [Auction!]
+  auctionbidcanceledeventmember: [AuctionBidCanceledEvent!]
+  auctionbidmadeeventmember: [AuctionBidMadeEvent!]
+  bidbidder: [Bid!]
+  bidmadecompletingauctioneventmember: [BidMadeCompletingAuctionEvent!]
   bountycreator: [Bounty!]
   bountyoracle: [Bounty!]
   bountycontributioncontributor: [BountyContribution!]
   bountyentryworker: [BountyEntry!]
+  englishauctioncompletedeventwinner: [EnglishAuctionCompletedEvent!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
   forumthreadauthor: [ForumThread!]
@@ -8891,6 +11998,9 @@ type Membership implements BaseGraphQLObject {
   memberverificationstatusupdatedeventmember: [MemberVerificationStatusUpdatedEvent!]
   membershipboughteventnewMember: [MembershipBoughtEvent!]
   membershipboughteventreferrer: [MembershipBoughtEvent!]
+  nftboughteventmember: [NftBoughtEvent!]
+  nftissuedeventnewOwner: [NftIssuedEvent!]
+  offerstartedeventmember: [OfferStartedEvent!]
   postdeletedeventactor: [PostDeletedEvent!]
   postreactedeventreactingMember: [PostReactedEvent!]
   proposalcreator: [Proposal!]
@@ -9547,15 +12657,45 @@ input MembershipWhereInput {
   whitelistedIn_none: ProposalDiscussionWhitelistWhereInput
   whitelistedIn_some: ProposalDiscussionWhitelistWhereInput
   whitelistedIn_every: ProposalDiscussionWhitelistWhereInput
+  whitelistedInBounties_none: BountyEntrantWhitelistWhereInput
+  whitelistedInBounties_some: BountyEntrantWhitelistWhereInput
+  whitelistedInBounties_every: BountyEntrantWhitelistWhereInput
   channels_none: ChannelWhereInput
   channels_some: ChannelWhereInput
   channels_every: ChannelWhereInput
+  collaboratorInChannels_none: ChannelWhereInput
+  collaboratorInChannels_some: ChannelWhereInput
+  collaboratorInChannels_every: ChannelWhereInput
   councilCandidacies_none: CandidateWhereInput
   councilCandidacies_some: CandidateWhereInput
   councilCandidacies_every: CandidateWhereInput
   councilMembers_none: CouncilMemberWhereInput
   councilMembers_some: CouncilMemberWhereInput
   councilMembers_every: CouncilMemberWhereInput
+  whitelistedInAuctions_none: AuctionWhereInput
+  whitelistedInAuctions_some: AuctionWhereInput
+  whitelistedInAuctions_every: AuctionWhereInput
+  ownedNfts_none: OwnedNftWhereInput
+  ownedNfts_some: OwnedNftWhereInput
+  ownedNfts_every: OwnedNftWhereInput
+  auctioninitialOwner_none: AuctionWhereInput
+  auctioninitialOwner_some: AuctionWhereInput
+  auctioninitialOwner_every: AuctionWhereInput
+  auctionwinningMember_none: AuctionWhereInput
+  auctionwinningMember_some: AuctionWhereInput
+  auctionwinningMember_every: AuctionWhereInput
+  auctionbidcanceledeventmember_none: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventmember_some: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventmember_every: AuctionBidCanceledEventWhereInput
+  auctionbidmadeeventmember_none: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventmember_some: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventmember_every: AuctionBidMadeEventWhereInput
+  bidbidder_none: BidWhereInput
+  bidbidder_some: BidWhereInput
+  bidbidder_every: BidWhereInput
+  bidmadecompletingauctioneventmember_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventmember_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventmember_every: BidMadeCompletingAuctionEventWhereInput
   bountycreator_none: BountyWhereInput
   bountycreator_some: BountyWhereInput
   bountycreator_every: BountyWhereInput
@@ -9568,6 +12708,9 @@ input MembershipWhereInput {
   bountyentryworker_none: BountyEntryWhereInput
   bountyentryworker_some: BountyEntryWhereInput
   bountyentryworker_every: BountyEntryWhereInput
+  englishauctioncompletedeventwinner_none: EnglishAuctionCompletedEventWhereInput
+  englishauctioncompletedeventwinner_some: EnglishAuctionCompletedEventWhereInput
+  englishauctioncompletedeventwinner_every: EnglishAuctionCompletedEventWhereInput
   forumpostauthor_none: ForumPostWhereInput
   forumpostauthor_some: ForumPostWhereInput
   forumpostauthor_every: ForumPostWhereInput
@@ -9604,6 +12747,15 @@ input MembershipWhereInput {
   membershipboughteventreferrer_none: MembershipBoughtEventWhereInput
   membershipboughteventreferrer_some: MembershipBoughtEventWhereInput
   membershipboughteventreferrer_every: MembershipBoughtEventWhereInput
+  nftboughteventmember_none: NftBoughtEventWhereInput
+  nftboughteventmember_some: NftBoughtEventWhereInput
+  nftboughteventmember_every: NftBoughtEventWhereInput
+  nftissuedeventnewOwner_none: NftIssuedEventWhereInput
+  nftissuedeventnewOwner_some: NftIssuedEventWhereInput
+  nftissuedeventnewOwner_every: NftIssuedEventWhereInput
+  offerstartedeventmember_none: OfferStartedEventWhereInput
+  offerstartedeventmember_some: OfferStartedEventWhereInput
+  offerstartedeventmember_every: OfferStartedEventWhereInput
   postdeletedeventactor_none: PostDeletedEventWhereInput
   postdeletedeventactor_some: PostDeletedEventWhereInput
   postdeletedeventactor_every: PostDeletedEventWhereInput
@@ -9807,6 +12959,7 @@ enum Network {
   BABYLON
   ALEXANDRIA
   ROME
+  GIZA
   OLYMPIA
 }
 
@@ -10412,6 +13565,597 @@ input NewMissedRewardLevelReachedEventWhereUniqueInput {
   id: ID!
 }
 
+type NftBoughtEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+  member: Membership!
+  memberId: String!
+}
+
+type NftBoughtEventConnection {
+  totalCount: Int!
+  edges: [NftBoughtEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NftBoughtEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  member: ID!
+}
+
+type NftBoughtEventEdge {
+  node: NftBoughtEvent!
+  cursor: String!
+}
+
+enum NftBoughtEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  member_ASC
+  member_DESC
+}
+
+input NftBoughtEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  member: ID
+}
+
+input NftBoughtEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  video: VideoWhereInput
+  member: MembershipWhereInput
+  AND: [NftBoughtEventWhereInput!]
+  OR: [NftBoughtEventWhereInput!]
+}
+
+input NftBoughtEventWhereUniqueInput {
+  id: ID!
+}
+
+type NftIssuedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Content actor that issued the NFT.
+  """
+  contentActor: ContentActor!
+  video: Video!
+  videoId: String!
+
+  """
+  Royalty for the NFT/video.
+  """
+  royalty: Float
+
+  """
+  NFT's metadata.
+  """
+  metadata: String!
+  newOwner: Membership
+  newOwnerId: String
+}
+
+type NftIssuedEventConnection {
+  totalCount: Int!
+  edges: [NftIssuedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NftIssuedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  contentActor: JSONObject!
+  video: ID!
+  royalty: Float
+  metadata: String!
+  newOwner: ID
+}
+
+type NftIssuedEventEdge {
+  node: NftIssuedEvent!
+  cursor: String!
+}
+
+enum NftIssuedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  royalty_ASC
+  royalty_DESC
+  metadata_ASC
+  metadata_DESC
+  newOwner_ASC
+  newOwner_DESC
+}
+
+input NftIssuedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  contentActor: JSONObject
+  video: ID
+  royalty: Float
+  metadata: String
+  newOwner: ID
+}
+
+input NftIssuedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  royalty_eq: Float
+  royalty_gt: Float
+  royalty_gte: Float
+  royalty_lt: Float
+  royalty_lte: Float
+  royalty_in: [Float!]
+  metadata_eq: String
+  metadata_contains: String
+  metadata_startsWith: String
+  metadata_endsWith: String
+  metadata_in: [String!]
+  video: VideoWhereInput
+  newOwner: MembershipWhereInput
+  AND: [NftIssuedEventWhereInput!]
+  OR: [NftIssuedEventWhereInput!]
+}
+
+input NftIssuedEventWhereUniqueInput {
+  id: ID!
+}
+
+type NftSellOrderMadeEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor acting as NFT owner.
+  """
+  contentActor: ContentActor!
+
+  """
+  Offer's price.
+  """
+  price: BigInt!
+}
+
+type NftSellOrderMadeEventConnection {
+  totalCount: Int!
+  edges: [NftSellOrderMadeEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NftSellOrderMadeEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  contentActor: JSONObject!
+  price: String!
+}
+
+type NftSellOrderMadeEventEdge {
+  node: NftSellOrderMadeEvent!
+  cursor: String!
+}
+
+enum NftSellOrderMadeEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  price_ASC
+  price_DESC
+}
+
+input NftSellOrderMadeEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  contentActor: JSONObject
+  price: String
+}
+
+input NftSellOrderMadeEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  price_eq: BigInt
+  price_gt: BigInt
+  price_gte: BigInt
+  price_lt: BigInt
+  price_lte: BigInt
+  price_in: [BigInt!]
+  video: VideoWhereInput
+  AND: [NftSellOrderMadeEventWhereInput!]
+  OR: [NftSellOrderMadeEventWhereInput!]
+}
+
+input NftSellOrderMadeEventWhereUniqueInput {
+  id: ID!
+}
+
+type NodeLocationMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  ISO 3166-1 alpha-2 country code (2 letters)
+  """
+  countryCode: String
+
+  """
+  City name
+  """
+  city: String
+  coordinates: GeoCoordinates
+  coordinatesId: String
+  distributionbucketoperatormetadatanodeLocation: [DistributionBucketOperatorMetadata!]
+  storagebucketoperatormetadatanodeLocation: [StorageBucketOperatorMetadata!]
+}
+
+type NodeLocationMetadataConnection {
+  totalCount: Int!
+  edges: [NodeLocationMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NodeLocationMetadataCreateInput {
+  countryCode: String
+  city: String
+  coordinates: ID
+}
+
+type NodeLocationMetadataEdge {
+  node: NodeLocationMetadata!
+  cursor: String!
+}
+
+enum NodeLocationMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  countryCode_ASC
+  countryCode_DESC
+  city_ASC
+  city_DESC
+  coordinates_ASC
+  coordinates_DESC
+}
+
+input NodeLocationMetadataUpdateInput {
+  countryCode: String
+  city: String
+  coordinates: ID
+}
+
+input NodeLocationMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  countryCode_eq: String
+  countryCode_contains: String
+  countryCode_startsWith: String
+  countryCode_endsWith: String
+  countryCode_in: [String!]
+  city_eq: String
+  city_contains: String
+  city_startsWith: String
+  city_endsWith: String
+  city_in: [String!]
+  coordinates: GeoCoordinatesWhereInput
+  distributionbucketoperatormetadatanodeLocation_none: DistributionBucketOperatorMetadataWhereInput
+  distributionbucketoperatormetadatanodeLocation_some: DistributionBucketOperatorMetadataWhereInput
+  distributionbucketoperatormetadatanodeLocation_every: DistributionBucketOperatorMetadataWhereInput
+  storagebucketoperatormetadatanodeLocation_none: StorageBucketOperatorMetadataWhereInput
+  storagebucketoperatormetadatanodeLocation_some: StorageBucketOperatorMetadataWhereInput
+  storagebucketoperatormetadatanodeLocation_every: StorageBucketOperatorMetadataWhereInput
+  AND: [NodeLocationMetadataWhereInput!]
+  OR: [NodeLocationMetadataWhereInput!]
+}
+
+input NodeLocationMetadataWhereUniqueInput {
+  id: ID!
+}
+
 type NotEnoughCandidatesEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -10538,6 +14282,596 @@ input NotEnoughCandidatesEventWhereInput {
 }
 
 input NotEnoughCandidatesEventWhereUniqueInput {
+  id: ID!
+}
+
+type OfferAcceptedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+}
+
+type OfferAcceptedEventConnection {
+  totalCount: Int!
+  edges: [OfferAcceptedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OfferAcceptedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+}
+
+type OfferAcceptedEventEdge {
+  node: OfferAcceptedEvent!
+  cursor: String!
+}
+
+enum OfferAcceptedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+}
+
+input OfferAcceptedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+}
+
+input OfferAcceptedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  video: VideoWhereInput
+  AND: [OfferAcceptedEventWhereInput!]
+  OR: [OfferAcceptedEventWhereInput!]
+}
+
+input OfferAcceptedEventWhereUniqueInput {
+  id: ID!
+}
+
+type OfferCanceledEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor acting as NFT owner.
+  """
+  contentActor: ContentActor!
+}
+
+type OfferCanceledEventConnection {
+  totalCount: Int!
+  edges: [OfferCanceledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OfferCanceledEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  contentActor: JSONObject!
+}
+
+type OfferCanceledEventEdge {
+  node: OfferCanceledEvent!
+  cursor: String!
+}
+
+enum OfferCanceledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+}
+
+input OfferCanceledEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  contentActor: JSONObject
+}
+
+input OfferCanceledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  video: VideoWhereInput
+  AND: [OfferCanceledEventWhereInput!]
+  OR: [OfferCanceledEventWhereInput!]
+}
+
+input OfferCanceledEventWhereUniqueInput {
+  id: ID!
+}
+
+type OfferStartedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor acting as NFT owner.
+  """
+  contentActor: ContentActor!
+  member: Membership!
+  memberId: String!
+
+  """
+  Offer's price.
+  """
+  price: BigInt
+}
+
+type OfferStartedEventConnection {
+  totalCount: Int!
+  edges: [OfferStartedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OfferStartedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  contentActor: JSONObject!
+  member: ID!
+  price: String
+}
+
+type OfferStartedEventEdge {
+  node: OfferStartedEvent!
+  cursor: String!
+}
+
+enum OfferStartedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  member_ASC
+  member_DESC
+  price_ASC
+  price_DESC
+}
+
+input OfferStartedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  contentActor: JSONObject
+  member: ID
+  price: String
+}
+
+input OfferStartedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  price_eq: BigInt
+  price_gt: BigInt
+  price_gte: BigInt
+  price_lt: BigInt
+  price_lte: BigInt
+  price_in: [BigInt!]
+  video: VideoWhereInput
+  member: MembershipWhereInput
+  AND: [OfferStartedEventWhereInput!]
+  OR: [OfferStartedEventWhereInput!]
+}
+
+input OfferStartedEventWhereUniqueInput {
+  id: ID!
+}
+
+type OpenAuctionBidAcceptedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Content actor canceling the event.
+  """
+  contentActor: ContentActor!
+  video: Video!
+  videoId: String!
+}
+
+type OpenAuctionBidAcceptedEventConnection {
+  totalCount: Int!
+  edges: [OpenAuctionBidAcceptedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OpenAuctionBidAcceptedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  contentActor: JSONObject!
+  video: ID!
+}
+
+type OpenAuctionBidAcceptedEventEdge {
+  node: OpenAuctionBidAcceptedEvent!
+  cursor: String!
+}
+
+enum OpenAuctionBidAcceptedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+}
+
+input OpenAuctionBidAcceptedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  contentActor: JSONObject
+  video: ID
+}
+
+input OpenAuctionBidAcceptedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  video: VideoWhereInput
+  AND: [OpenAuctionBidAcceptedEventWhereInput!]
+  OR: [OpenAuctionBidAcceptedEventWhereInput!]
+}
+
+input OpenAuctionBidAcceptedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -10990,6 +15324,269 @@ type OpeningStatusFilled {
 
 type OpeningStatusOpen {
   phantom: Int
+}
+
+type OracleJudgmentSubmittedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+}
+
+type OracleJudgmentSubmittedEventConnection {
+  totalCount: Int!
+  edges: [OracleJudgmentSubmittedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OracleJudgmentSubmittedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  bounty: ID!
+}
+
+type OracleJudgmentSubmittedEventEdge {
+  node: OracleJudgmentSubmittedEvent!
+  cursor: String!
+}
+
+enum OracleJudgmentSubmittedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
+}
+
+input OracleJudgmentSubmittedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  bounty: ID
+}
+
+input OracleJudgmentSubmittedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  bounty: BountyWhereInput
+  AND: [OracleJudgmentSubmittedEventWhereInput!]
+  OR: [OracleJudgmentSubmittedEventWhereInput!]
+}
+
+input OracleJudgmentSubmittedEventWhereUniqueInput {
+  id: ID!
+}
+
+"""
+Represents NFT details
+"""
+type OwnedNft implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  auctions: [Auction!]!
+  ownerMember: Membership
+  ownerMemberId: String
+
+  """
+  NFT's metadata
+  """
+  metadata: String!
+
+  """
+  NFT transactional status
+  """
+  transactionalStatus: TransactionalStatus!
+  transactionalStatusUpdates: [TransactionalStatusUpdate!]!
+
+  """
+  Creator royalty
+  """
+  creatorRoyalty: Float
+}
+
+type OwnedNftConnection {
+  totalCount: Int!
+  edges: [OwnedNftEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OwnedNftCreateInput {
+  ownerMember: ID
+  metadata: String!
+  transactionalStatus: JSONObject!
+  creatorRoyalty: Float
+}
+
+type OwnedNftEdge {
+  node: OwnedNft!
+  cursor: String!
+}
+
+enum OwnedNftOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  metadata_ASC
+  metadata_DESC
+  creatorRoyalty_ASC
+  creatorRoyalty_DESC
+}
+
+input OwnedNftUpdateInput {
+  ownerMember: ID
+  metadata: String
+  transactionalStatus: JSONObject
+  creatorRoyalty: Float
+}
+
+input OwnedNftWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  metadata_eq: String
+  metadata_contains: String
+  metadata_startsWith: String
+  metadata_endsWith: String
+  metadata_in: [String!]
+  transactionalStatus_json: JSONObject
+  creatorRoyalty_eq: Float
+  creatorRoyalty_gt: Float
+  creatorRoyalty_gte: Float
+  creatorRoyalty_lt: Float
+  creatorRoyalty_lte: Float
+  creatorRoyalty_in: [Float!]
+  video: VideoWhereInput
+  auctions_none: AuctionWhereInput
+  auctions_some: AuctionWhereInput
+  auctions_every: AuctionWhereInput
+  ownerMember: MembershipWhereInput
+  transactionalStatusUpdates_none: TransactionalStatusUpdateWhereInput
+  transactionalStatusUpdates_some: TransactionalStatusUpdateWhereInput
+  transactionalStatusUpdates_every: TransactionalStatusUpdateWhereInput
+  AND: [OwnedNftWhereInput!]
+  OR: [OwnedNftWhereInput!]
+}
+
+input OwnedNftWhereUniqueInput {
+  id: ID!
 }
 
 type PageInfo {
@@ -13563,15 +18160,6 @@ enum ProposalOrderByInput {
   statusSetAtTime_DESC
 }
 
-type ProposalsByDescriptionFTSOutput {
-  item: ProposalsByDescriptionSearchResult!
-  rank: Float!
-  isTypeOf: String!
-  highlight: String!
-}
-
-union ProposalsByDescriptionSearchResult = Proposal
-
 type ProposalsByTitleFTSOutput {
   item: ProposalsByTitleSearchResult!
   rank: Float!
@@ -14199,6 +18787,118 @@ type Query {
     where: AppliedOnOpeningEventWhereInput
     orderBy: [AppliedOnOpeningEventOrderByInput!]
   ): AppliedOnOpeningEventConnection!
+  auctionBidCanceledEvents(
+    offset: Int
+    limit: Int = 50
+    where: AuctionBidCanceledEventWhereInput
+    orderBy: [AuctionBidCanceledEventOrderByInput!]
+  ): [AuctionBidCanceledEvent!]!
+  auctionBidCanceledEventByUniqueInput(where: AuctionBidCanceledEventWhereUniqueInput!): AuctionBidCanceledEvent
+  auctionBidCanceledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AuctionBidCanceledEventWhereInput
+    orderBy: [AuctionBidCanceledEventOrderByInput!]
+  ): AuctionBidCanceledEventConnection!
+  auctionBidMadeEvents(
+    offset: Int
+    limit: Int = 50
+    where: AuctionBidMadeEventWhereInput
+    orderBy: [AuctionBidMadeEventOrderByInput!]
+  ): [AuctionBidMadeEvent!]!
+  auctionBidMadeEventByUniqueInput(where: AuctionBidMadeEventWhereUniqueInput!): AuctionBidMadeEvent
+  auctionBidMadeEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AuctionBidMadeEventWhereInput
+    orderBy: [AuctionBidMadeEventOrderByInput!]
+  ): AuctionBidMadeEventConnection!
+  auctionCanceledEvents(
+    offset: Int
+    limit: Int = 50
+    where: AuctionCanceledEventWhereInput
+    orderBy: [AuctionCanceledEventOrderByInput!]
+  ): [AuctionCanceledEvent!]!
+  auctionCanceledEventByUniqueInput(where: AuctionCanceledEventWhereUniqueInput!): AuctionCanceledEvent
+  auctionCanceledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AuctionCanceledEventWhereInput
+    orderBy: [AuctionCanceledEventOrderByInput!]
+  ): AuctionCanceledEventConnection!
+  auctionStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: AuctionStartedEventWhereInput
+    orderBy: [AuctionStartedEventOrderByInput!]
+  ): [AuctionStartedEvent!]!
+  auctionStartedEventByUniqueInput(where: AuctionStartedEventWhereUniqueInput!): AuctionStartedEvent
+  auctionStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AuctionStartedEventWhereInput
+    orderBy: [AuctionStartedEventOrderByInput!]
+  ): AuctionStartedEventConnection!
+  auctions(offset: Int, limit: Int = 50, where: AuctionWhereInput, orderBy: [AuctionOrderByInput!]): [Auction!]!
+  auctionByUniqueInput(where: AuctionWhereUniqueInput!): Auction
+  auctionsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: AuctionWhereInput
+    orderBy: [AuctionOrderByInput!]
+  ): AuctionConnection!
+  bidMadeCompletingAuctionEvents(
+    offset: Int
+    limit: Int = 50
+    where: BidMadeCompletingAuctionEventWhereInput
+    orderBy: [BidMadeCompletingAuctionEventOrderByInput!]
+  ): [BidMadeCompletingAuctionEvent!]!
+  bidMadeCompletingAuctionEventByUniqueInput(
+    where: BidMadeCompletingAuctionEventWhereUniqueInput!
+  ): BidMadeCompletingAuctionEvent
+  bidMadeCompletingAuctionEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BidMadeCompletingAuctionEventWhereInput
+    orderBy: [BidMadeCompletingAuctionEventOrderByInput!]
+  ): BidMadeCompletingAuctionEventConnection!
+  bids(offset: Int, limit: Int = 50, where: BidWhereInput, orderBy: [BidOrderByInput!]): [Bid!]!
+  bidByUniqueInput(where: BidWhereUniqueInput!): Bid
+  bidsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BidWhereInput
+    orderBy: [BidOrderByInput!]
+  ): BidConnection!
+  bountyCanceledEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyCanceledEventWhereInput
+    orderBy: [BountyCanceledEventOrderByInput!]
+  ): [BountyCanceledEvent!]!
+  bountyCanceledEventByUniqueInput(where: BountyCanceledEventWhereUniqueInput!): BountyCanceledEvent
+  bountyCanceledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyCanceledEventWhereInput
+    orderBy: [BountyCanceledEventOrderByInput!]
+  ): BountyCanceledEventConnection!
   bountyContributions(
     offset: Int
     limit: Int = 50
@@ -14229,6 +18929,38 @@ type Query {
     where: BountyCreatedEventWhereInput
     orderBy: [BountyCreatedEventOrderByInput!]
   ): BountyCreatedEventConnection!
+  bountyCreatorCherryWithdrawalEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyCreatorCherryWithdrawalEventWhereInput
+    orderBy: [BountyCreatorCherryWithdrawalEventOrderByInput!]
+  ): [BountyCreatorCherryWithdrawalEvent!]!
+  bountyCreatorCherryWithdrawalEventByUniqueInput(
+    where: BountyCreatorCherryWithdrawalEventWhereUniqueInput!
+  ): BountyCreatorCherryWithdrawalEvent
+  bountyCreatorCherryWithdrawalEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyCreatorCherryWithdrawalEventWhereInput
+    orderBy: [BountyCreatorCherryWithdrawalEventOrderByInput!]
+  ): BountyCreatorCherryWithdrawalEventConnection!
+  bountyEntrantWhitelists(
+    offset: Int
+    limit: Int = 50
+    where: BountyEntrantWhitelistWhereInput
+    orderBy: [BountyEntrantWhitelistOrderByInput!]
+  ): [BountyEntrantWhitelist!]!
+  bountyEntrantWhitelistByUniqueInput(where: BountyEntrantWhitelistWhereUniqueInput!): BountyEntrantWhitelist
+  bountyEntrantWhitelistsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyEntrantWhitelistWhereInput
+    orderBy: [BountyEntrantWhitelistOrderByInput!]
+  ): BountyEntrantWhitelistConnection!
   bountyEntries(
     offset: Int
     limit: Int = 50
@@ -14244,6 +18976,38 @@ type Query {
     where: BountyEntryWhereInput
     orderBy: [BountyEntryOrderByInput!]
   ): BountyEntryConnection!
+  bountyFundedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyFundedEventWhereInput
+    orderBy: [BountyFundedEventOrderByInput!]
+  ): [BountyFundedEvent!]!
+  bountyFundedEventByUniqueInput(where: BountyFundedEventWhereUniqueInput!): BountyFundedEvent
+  bountyFundedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyFundedEventWhereInput
+    orderBy: [BountyFundedEventOrderByInput!]
+  ): BountyFundedEventConnection!
+  bountyFundingWithdrawalEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyFundingWithdrawalEventWhereInput
+    orderBy: [BountyFundingWithdrawalEventOrderByInput!]
+  ): [BountyFundingWithdrawalEvent!]!
+  bountyFundingWithdrawalEventByUniqueInput(
+    where: BountyFundingWithdrawalEventWhereUniqueInput!
+  ): BountyFundingWithdrawalEvent
+  bountyFundingWithdrawalEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyFundingWithdrawalEventWhereInput
+    orderBy: [BountyFundingWithdrawalEventOrderByInput!]
+  ): BountyFundingWithdrawalEventConnection!
   bountyMaxFundingReachedEvents(
     offset: Int
     limit: Int = 50
@@ -14261,6 +19025,36 @@ type Query {
     where: BountyMaxFundingReachedEventWhereInput
     orderBy: [BountyMaxFundingReachedEventOrderByInput!]
   ): BountyMaxFundingReachedEventConnection!
+  bountyRemovedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyRemovedEventWhereInput
+    orderBy: [BountyRemovedEventOrderByInput!]
+  ): [BountyRemovedEvent!]!
+  bountyRemovedEventByUniqueInput(where: BountyRemovedEventWhereUniqueInput!): BountyRemovedEvent
+  bountyRemovedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyRemovedEventWhereInput
+    orderBy: [BountyRemovedEventOrderByInput!]
+  ): BountyRemovedEventConnection!
+  bountyVetoedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BountyVetoedEventWhereInput
+    orderBy: [BountyVetoedEventOrderByInput!]
+  ): [BountyVetoedEvent!]!
+  bountyVetoedEventByUniqueInput(where: BountyVetoedEventWhereUniqueInput!): BountyVetoedEvent
+  bountyVetoedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BountyVetoedEventWhereInput
+    orderBy: [BountyVetoedEventOrderByInput!]
+  ): BountyVetoedEventConnection!
   bounties(offset: Int, limit: Int = 50, where: BountyWhereInput, orderBy: [BountyOrderByInput!]): [Bounty!]!
   bountyByUniqueInput(where: BountyWhereUniqueInput!): Bounty
   bountiesConnection(
@@ -14363,6 +19157,21 @@ type Query {
     where: BudgetSpendingEventWhereInput
     orderBy: [BudgetSpendingEventOrderByInput!]
   ): BudgetSpendingEventConnection!
+  buyNowCanceledEvents(
+    offset: Int
+    limit: Int = 50
+    where: BuyNowCanceledEventWhereInput
+    orderBy: [BuyNowCanceledEventOrderByInput!]
+  ): [BuyNowCanceledEvent!]!
+  buyNowCanceledEventByUniqueInput(where: BuyNowCanceledEventWhereUniqueInput!): BuyNowCanceledEvent
+  buyNowCanceledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BuyNowCanceledEventWhereInput
+    orderBy: [BuyNowCanceledEventOrderByInput!]
+  ): BuyNowCanceledEventConnection!
   candidacyNoteMetadata(
     offset: Int
     limit: Int = 50
@@ -14613,21 +19422,114 @@ type Query {
     where: CuratorGroupWhereInput
     orderBy: [CuratorGroupOrderByInput!]
   ): CuratorGroupConnection!
-  dataObjects(
-    offset: Int
-    limit: Int = 50
-    where: DataObjectWhereInput
-    orderBy: [DataObjectOrderByInput!]
-  ): [DataObject!]!
-  dataObjectByUniqueInput(where: DataObjectWhereUniqueInput!): DataObject
-  dataObjectsConnection(
+  curators(offset: Int, limit: Int = 50, where: CuratorWhereInput, orderBy: [CuratorOrderByInput!]): [Curator!]!
+  curatorByUniqueInput(where: CuratorWhereUniqueInput!): Curator
+  curatorsConnection(
     first: Int
     after: String
     last: Int
     before: String
-    where: DataObjectWhereInput
-    orderBy: [DataObjectOrderByInput!]
-  ): DataObjectConnection!
+    where: CuratorWhereInput
+    orderBy: [CuratorOrderByInput!]
+  ): CuratorConnection!
+  distributionBucketFamilyGeographicAreas(
+    offset: Int
+    limit: Int = 50
+    where: DistributionBucketFamilyGeographicAreaWhereInput
+    orderBy: [DistributionBucketFamilyGeographicAreaOrderByInput!]
+  ): [DistributionBucketFamilyGeographicArea!]!
+  distributionBucketFamilyGeographicAreaByUniqueInput(
+    where: DistributionBucketFamilyGeographicAreaWhereUniqueInput!
+  ): DistributionBucketFamilyGeographicArea
+  distributionBucketFamilyGeographicAreasConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DistributionBucketFamilyGeographicAreaWhereInput
+    orderBy: [DistributionBucketFamilyGeographicAreaOrderByInput!]
+  ): DistributionBucketFamilyGeographicAreaConnection!
+  distributionBucketFamilyMetadata(
+    offset: Int
+    limit: Int = 50
+    where: DistributionBucketFamilyMetadataWhereInput
+    orderBy: [DistributionBucketFamilyMetadataOrderByInput!]
+  ): [DistributionBucketFamilyMetadata!]!
+  distributionBucketFamilyMetadataByUniqueInput(
+    where: DistributionBucketFamilyMetadataWhereUniqueInput!
+  ): DistributionBucketFamilyMetadata
+  distributionBucketFamilyMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DistributionBucketFamilyMetadataWhereInput
+    orderBy: [DistributionBucketFamilyMetadataOrderByInput!]
+  ): DistributionBucketFamilyMetadataConnection!
+  distributionBucketFamilies(
+    offset: Int
+    limit: Int = 50
+    where: DistributionBucketFamilyWhereInput
+    orderBy: [DistributionBucketFamilyOrderByInput!]
+  ): [DistributionBucketFamily!]!
+  distributionBucketFamilyByUniqueInput(where: DistributionBucketFamilyWhereUniqueInput!): DistributionBucketFamily
+  distributionBucketFamiliesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DistributionBucketFamilyWhereInput
+    orderBy: [DistributionBucketFamilyOrderByInput!]
+  ): DistributionBucketFamilyConnection!
+  distributionBucketOperatorMetadata(
+    offset: Int
+    limit: Int = 50
+    where: DistributionBucketOperatorMetadataWhereInput
+    orderBy: [DistributionBucketOperatorMetadataOrderByInput!]
+  ): [DistributionBucketOperatorMetadata!]!
+  distributionBucketOperatorMetadataByUniqueInput(
+    where: DistributionBucketOperatorMetadataWhereUniqueInput!
+  ): DistributionBucketOperatorMetadata
+  distributionBucketOperatorMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DistributionBucketOperatorMetadataWhereInput
+    orderBy: [DistributionBucketOperatorMetadataOrderByInput!]
+  ): DistributionBucketOperatorMetadataConnection!
+  distributionBucketOperators(
+    offset: Int
+    limit: Int = 50
+    where: DistributionBucketOperatorWhereInput
+    orderBy: [DistributionBucketOperatorOrderByInput!]
+  ): [DistributionBucketOperator!]!
+  distributionBucketOperatorByUniqueInput(
+    where: DistributionBucketOperatorWhereUniqueInput!
+  ): DistributionBucketOperator
+  distributionBucketOperatorsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DistributionBucketOperatorWhereInput
+    orderBy: [DistributionBucketOperatorOrderByInput!]
+  ): DistributionBucketOperatorConnection!
+  distributionBuckets(
+    offset: Int
+    limit: Int = 50
+    where: DistributionBucketWhereInput
+    orderBy: [DistributionBucketOrderByInput!]
+  ): [DistributionBucket!]!
+  distributionBucketByUniqueInput(where: DistributionBucketWhereUniqueInput!): DistributionBucket
+  distributionBucketsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: DistributionBucketWhereInput
+    orderBy: [DistributionBucketOrderByInput!]
+  ): DistributionBucketConnection!
   electedCouncils(
     offset: Int
     limit: Int = 50
@@ -14658,6 +19560,23 @@ type Query {
     where: ElectionRoundWhereInput
     orderBy: [ElectionRoundOrderByInput!]
   ): ElectionRoundConnection!
+  englishAuctionCompletedEvents(
+    offset: Int
+    limit: Int = 50
+    where: EnglishAuctionCompletedEventWhereInput
+    orderBy: [EnglishAuctionCompletedEventOrderByInput!]
+  ): [EnglishAuctionCompletedEvent!]!
+  englishAuctionCompletedEventByUniqueInput(
+    where: EnglishAuctionCompletedEventWhereUniqueInput!
+  ): EnglishAuctionCompletedEvent
+  englishAuctionCompletedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: EnglishAuctionCompletedEventWhereInput
+    orderBy: [EnglishAuctionCompletedEventOrderByInput!]
+  ): EnglishAuctionCompletedEventConnection!
   events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: [EventOrderByInput!]): [Event!]!
   forumCategories(
     offset: Int
@@ -14786,6 +19705,21 @@ type Query {
     where: FundingRequestDestinationsListWhereInput
     orderBy: [FundingRequestDestinationsListOrderByInput!]
   ): FundingRequestDestinationsListConnection!
+  geoCoordinates(
+    offset: Int
+    limit: Int = 50
+    where: GeoCoordinatesWhereInput
+    orderBy: [GeoCoordinatesOrderByInput!]
+  ): [GeoCoordinates!]!
+  geoCoordinatesByUniqueInput(where: GeoCoordinatesWhereUniqueInput!): GeoCoordinates
+  geoCoordinatesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: GeoCoordinatesWhereInput
+    orderBy: [GeoCoordinatesOrderByInput!]
+  ): GeoCoordinatesConnection!
   initialInvitationBalanceUpdatedEvents(
     offset: Int
     limit: Int = 50
@@ -15105,6 +20039,66 @@ type Query {
     where: NewMissedRewardLevelReachedEventWhereInput
     orderBy: [NewMissedRewardLevelReachedEventOrderByInput!]
   ): NewMissedRewardLevelReachedEventConnection!
+  nftBoughtEvents(
+    offset: Int
+    limit: Int = 50
+    where: NftBoughtEventWhereInput
+    orderBy: [NftBoughtEventOrderByInput!]
+  ): [NftBoughtEvent!]!
+  nftBoughtEventByUniqueInput(where: NftBoughtEventWhereUniqueInput!): NftBoughtEvent
+  nftBoughtEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NftBoughtEventWhereInput
+    orderBy: [NftBoughtEventOrderByInput!]
+  ): NftBoughtEventConnection!
+  nftIssuedEvents(
+    offset: Int
+    limit: Int = 50
+    where: NftIssuedEventWhereInput
+    orderBy: [NftIssuedEventOrderByInput!]
+  ): [NftIssuedEvent!]!
+  nftIssuedEventByUniqueInput(where: NftIssuedEventWhereUniqueInput!): NftIssuedEvent
+  nftIssuedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NftIssuedEventWhereInput
+    orderBy: [NftIssuedEventOrderByInput!]
+  ): NftIssuedEventConnection!
+  nftSellOrderMadeEvents(
+    offset: Int
+    limit: Int = 50
+    where: NftSellOrderMadeEventWhereInput
+    orderBy: [NftSellOrderMadeEventOrderByInput!]
+  ): [NftSellOrderMadeEvent!]!
+  nftSellOrderMadeEventByUniqueInput(where: NftSellOrderMadeEventWhereUniqueInput!): NftSellOrderMadeEvent
+  nftSellOrderMadeEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NftSellOrderMadeEventWhereInput
+    orderBy: [NftSellOrderMadeEventOrderByInput!]
+  ): NftSellOrderMadeEventConnection!
+  nodeLocationMetadata(
+    offset: Int
+    limit: Int = 50
+    where: NodeLocationMetadataWhereInput
+    orderBy: [NodeLocationMetadataOrderByInput!]
+  ): [NodeLocationMetadata!]!
+  nodeLocationMetadataByUniqueInput(where: NodeLocationMetadataWhereUniqueInput!): NodeLocationMetadata
+  nodeLocationMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NodeLocationMetadataWhereInput
+    orderBy: [NodeLocationMetadataOrderByInput!]
+  ): NodeLocationMetadataConnection!
   notEnoughCandidatesEvents(
     offset: Int
     limit: Int = 50
@@ -15120,6 +20114,68 @@ type Query {
     where: NotEnoughCandidatesEventWhereInput
     orderBy: [NotEnoughCandidatesEventOrderByInput!]
   ): NotEnoughCandidatesEventConnection!
+  offerAcceptedEvents(
+    offset: Int
+    limit: Int = 50
+    where: OfferAcceptedEventWhereInput
+    orderBy: [OfferAcceptedEventOrderByInput!]
+  ): [OfferAcceptedEvent!]!
+  offerAcceptedEventByUniqueInput(where: OfferAcceptedEventWhereUniqueInput!): OfferAcceptedEvent
+  offerAcceptedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OfferAcceptedEventWhereInput
+    orderBy: [OfferAcceptedEventOrderByInput!]
+  ): OfferAcceptedEventConnection!
+  offerCanceledEvents(
+    offset: Int
+    limit: Int = 50
+    where: OfferCanceledEventWhereInput
+    orderBy: [OfferCanceledEventOrderByInput!]
+  ): [OfferCanceledEvent!]!
+  offerCanceledEventByUniqueInput(where: OfferCanceledEventWhereUniqueInput!): OfferCanceledEvent
+  offerCanceledEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OfferCanceledEventWhereInput
+    orderBy: [OfferCanceledEventOrderByInput!]
+  ): OfferCanceledEventConnection!
+  offerStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: OfferStartedEventWhereInput
+    orderBy: [OfferStartedEventOrderByInput!]
+  ): [OfferStartedEvent!]!
+  offerStartedEventByUniqueInput(where: OfferStartedEventWhereUniqueInput!): OfferStartedEvent
+  offerStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OfferStartedEventWhereInput
+    orderBy: [OfferStartedEventOrderByInput!]
+  ): OfferStartedEventConnection!
+  openAuctionBidAcceptedEvents(
+    offset: Int
+    limit: Int = 50
+    where: OpenAuctionBidAcceptedEventWhereInput
+    orderBy: [OpenAuctionBidAcceptedEventOrderByInput!]
+  ): [OpenAuctionBidAcceptedEvent!]!
+  openAuctionBidAcceptedEventByUniqueInput(
+    where: OpenAuctionBidAcceptedEventWhereUniqueInput!
+  ): OpenAuctionBidAcceptedEvent
+  openAuctionBidAcceptedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OpenAuctionBidAcceptedEventWhereInput
+    orderBy: [OpenAuctionBidAcceptedEventOrderByInput!]
+  ): OpenAuctionBidAcceptedEventConnection!
   openingAddedEvents(
     offset: Int
     limit: Int = 50
@@ -15165,6 +20221,33 @@ type Query {
     where: OpeningFilledEventWhereInput
     orderBy: [OpeningFilledEventOrderByInput!]
   ): OpeningFilledEventConnection!
+  oracleJudgmentSubmittedEvents(
+    offset: Int
+    limit: Int = 50
+    where: OracleJudgmentSubmittedEventWhereInput
+    orderBy: [OracleJudgmentSubmittedEventOrderByInput!]
+  ): [OracleJudgmentSubmittedEvent!]!
+  oracleJudgmentSubmittedEventByUniqueInput(
+    where: OracleJudgmentSubmittedEventWhereUniqueInput!
+  ): OracleJudgmentSubmittedEvent
+  oracleJudgmentSubmittedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OracleJudgmentSubmittedEventWhereInput
+    orderBy: [OracleJudgmentSubmittedEventOrderByInput!]
+  ): OracleJudgmentSubmittedEventConnection!
+  ownedNfts(offset: Int, limit: Int = 50, where: OwnedNftWhereInput, orderBy: [OwnedNftOrderByInput!]): [OwnedNft!]!
+  ownedNftByUniqueInput(where: OwnedNftWhereUniqueInput!): OwnedNft
+  ownedNftsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OwnedNftWhereInput
+    orderBy: [OwnedNftOrderByInput!]
+  ): OwnedNftConnection!
   postAddedEvents(
     offset: Int
     limit: Int = 50
@@ -15475,12 +20558,6 @@ type Query {
     limit: Int = 5
     text: String!
   ): [PostsByTextFTSOutput!]!
-  proposalsByDescription(
-    whereProposal: ProposalWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [ProposalsByDescriptionFTSOutput!]!
   proposalsByTitle(
     whereProposal: ProposalWhereInput
     skip: Int = 0
@@ -15799,6 +20876,83 @@ type Query {
     where: StatusTextChangedEventWhereInput
     orderBy: [StatusTextChangedEventOrderByInput!]
   ): StatusTextChangedEventConnection!
+  storageBags(
+    offset: Int
+    limit: Int = 50
+    where: StorageBagWhereInput
+    orderBy: [StorageBagOrderByInput!]
+  ): [StorageBag!]!
+  storageBagByUniqueInput(where: StorageBagWhereUniqueInput!): StorageBag
+  storageBagsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StorageBagWhereInput
+    orderBy: [StorageBagOrderByInput!]
+  ): StorageBagConnection!
+  storageBucketOperatorMetadata(
+    offset: Int
+    limit: Int = 50
+    where: StorageBucketOperatorMetadataWhereInput
+    orderBy: [StorageBucketOperatorMetadataOrderByInput!]
+  ): [StorageBucketOperatorMetadata!]!
+  storageBucketOperatorMetadataByUniqueInput(
+    where: StorageBucketOperatorMetadataWhereUniqueInput!
+  ): StorageBucketOperatorMetadata
+  storageBucketOperatorMetadataConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StorageBucketOperatorMetadataWhereInput
+    orderBy: [StorageBucketOperatorMetadataOrderByInput!]
+  ): StorageBucketOperatorMetadataConnection!
+  storageBuckets(
+    offset: Int
+    limit: Int = 50
+    where: StorageBucketWhereInput
+    orderBy: [StorageBucketOrderByInput!]
+  ): [StorageBucket!]!
+  storageBucketByUniqueInput(where: StorageBucketWhereUniqueInput!): StorageBucket
+  storageBucketsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StorageBucketWhereInput
+    orderBy: [StorageBucketOrderByInput!]
+  ): StorageBucketConnection!
+  storageDataObjects(
+    offset: Int
+    limit: Int = 50
+    where: StorageDataObjectWhereInput
+    orderBy: [StorageDataObjectOrderByInput!]
+  ): [StorageDataObject!]!
+  storageDataObjectByUniqueInput(where: StorageDataObjectWhereUniqueInput!): StorageDataObject
+  storageDataObjectsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StorageDataObjectWhereInput
+    orderBy: [StorageDataObjectOrderByInput!]
+  ): StorageDataObjectConnection!
+  storageSystemParameters(
+    offset: Int
+    limit: Int = 50
+    where: StorageSystemParametersWhereInput
+    orderBy: [StorageSystemParametersOrderByInput!]
+  ): [StorageSystemParameters!]!
+  storageSystemParametersByUniqueInput(where: StorageSystemParametersWhereUniqueInput!): StorageSystemParameters
+  storageSystemParametersConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: StorageSystemParametersWhereInput
+    orderBy: [StorageSystemParametersOrderByInput!]
+  ): StorageSystemParametersConnection!
   terminatedLeaderEvents(
     offset: Int
     limit: Int = 50
@@ -15906,6 +21060,21 @@ type Query {
     where: ThreadMovedEventWhereInput
     orderBy: [ThreadMovedEventOrderByInput!]
   ): ThreadMovedEventConnection!
+  transactionalStatusUpdates(
+    offset: Int
+    limit: Int = 50
+    where: TransactionalStatusUpdateWhereInput
+    orderBy: [TransactionalStatusUpdateOrderByInput!]
+  ): [TransactionalStatusUpdate!]!
+  transactionalStatusUpdateByUniqueInput(where: TransactionalStatusUpdateWhereUniqueInput!): TransactionalStatusUpdate
+  transactionalStatusUpdatesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: TransactionalStatusUpdateWhereInput
+    orderBy: [TransactionalStatusUpdateOrderByInput!]
+  ): TransactionalStatusUpdateConnection!
   upcomingWorkingGroupOpenings(
     offset: Int
     limit: Int = 50
@@ -16038,6 +21207,23 @@ type Query {
     where: VotingPeriodStartedEventWhereInput
     orderBy: [VotingPeriodStartedEventOrderByInput!]
   ): VotingPeriodStartedEventConnection!
+  workEntrantFundsWithdrawnEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkEntrantFundsWithdrawnEventWhereInput
+    orderBy: [WorkEntrantFundsWithdrawnEventOrderByInput!]
+  ): [WorkEntrantFundsWithdrawnEvent!]!
+  workEntrantFundsWithdrawnEventByUniqueInput(
+    where: WorkEntrantFundsWithdrawnEventWhereUniqueInput!
+  ): WorkEntrantFundsWithdrawnEvent
+  workEntrantFundsWithdrawnEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkEntrantFundsWithdrawnEventWhereInput
+    orderBy: [WorkEntrantFundsWithdrawnEventOrderByInput!]
+  ): WorkEntrantFundsWithdrawnEventConnection!
   workEntryAnnouncedEvents(
     offset: Int
     limit: Int = 50
@@ -16053,6 +21239,36 @@ type Query {
     where: WorkEntryAnnouncedEventWhereInput
     orderBy: [WorkEntryAnnouncedEventOrderByInput!]
   ): WorkEntryAnnouncedEventConnection!
+  workEntrySlashedEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkEntrySlashedEventWhereInput
+    orderBy: [WorkEntrySlashedEventOrderByInput!]
+  ): [WorkEntrySlashedEvent!]!
+  workEntrySlashedEventByUniqueInput(where: WorkEntrySlashedEventWhereUniqueInput!): WorkEntrySlashedEvent
+  workEntrySlashedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkEntrySlashedEventWhereInput
+    orderBy: [WorkEntrySlashedEventOrderByInput!]
+  ): WorkEntrySlashedEventConnection!
+  workEntryWithdrawnEvents(
+    offset: Int
+    limit: Int = 50
+    where: WorkEntryWithdrawnEventWhereInput
+    orderBy: [WorkEntryWithdrawnEventOrderByInput!]
+  ): [WorkEntryWithdrawnEvent!]!
+  workEntryWithdrawnEventByUniqueInput(where: WorkEntryWithdrawnEventWhereUniqueInput!): WorkEntryWithdrawnEvent
+  workEntryWithdrawnEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: WorkEntryWithdrawnEventWhereInput
+    orderBy: [WorkEntryWithdrawnEventOrderByInput!]
+  ): WorkEntryWithdrawnEventConnection!
   workSubmittedEvents(
     offset: Int
     limit: Int = 50
@@ -19118,6 +24334,760 @@ input StatusTextChangedEventWhereUniqueInput {
   id: ID!
 }
 
+type StorageBag implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  objects: [StorageDataObject!]!
+  storageBuckets: [StorageBucket!]!
+  distributionBuckets: [DistributionBucket!]!
+
+  """
+  Owner of the storage bag
+  """
+  owner: StorageBagOwner!
+}
+
+type StorageBagConnection {
+  totalCount: Int!
+  edges: [StorageBagEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StorageBagCreateInput {
+  owner: JSONObject!
+}
+
+type StorageBagEdge {
+  node: StorageBag!
+  cursor: String!
+}
+
+enum StorageBagOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+}
+
+union StorageBagOwner =
+    StorageBagOwnerCouncil
+  | StorageBagOwnerWorkingGroup
+  | StorageBagOwnerMember
+  | StorageBagOwnerChannel
+  | StorageBagOwnerDAO
+
+type StorageBagOwnerChannel {
+  channelId: Int
+}
+
+type StorageBagOwnerCouncil {
+  phantom: Int
+}
+
+type StorageBagOwnerDAO {
+  daoId: Int
+}
+
+type StorageBagOwnerMember {
+  memberId: Int
+}
+
+type StorageBagOwnerWorkingGroup {
+  workingGroupId: String
+}
+
+input StorageBagUpdateInput {
+  owner: JSONObject
+}
+
+input StorageBagWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  owner_json: JSONObject
+  objects_none: StorageDataObjectWhereInput
+  objects_some: StorageDataObjectWhereInput
+  objects_every: StorageDataObjectWhereInput
+  storageBuckets_none: StorageBucketWhereInput
+  storageBuckets_some: StorageBucketWhereInput
+  storageBuckets_every: StorageBucketWhereInput
+  distributionBuckets_none: DistributionBucketWhereInput
+  distributionBuckets_some: DistributionBucketWhereInput
+  distributionBuckets_every: DistributionBucketWhereInput
+  AND: [StorageBagWhereInput!]
+  OR: [StorageBagWhereInput!]
+}
+
+input StorageBagWhereUniqueInput {
+  id: ID!
+}
+
+type StorageBucket implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Current bucket operator status
+  """
+  operatorStatus: StorageBucketOperatorStatus!
+  operatorMetadata: StorageBucketOperatorMetadata
+  operatorMetadataId: String
+
+  """
+  Whether the bucket is accepting any new storage bags
+  """
+  acceptingNewBags: Boolean!
+  bags: [StorageBag!]!
+
+  """
+  Bucket's data object size limit in bytes
+  """
+  dataObjectsSizeLimit: BigInt!
+
+  """
+  Bucket's data object count limit
+  """
+  dataObjectCountLimit: BigInt!
+
+  """
+  Number of assigned data objects
+  """
+  dataObjectsCount: BigInt!
+
+  """
+  Total size of assigned data objects
+  """
+  dataObjectsSize: BigInt!
+}
+
+type StorageBucketConnection {
+  totalCount: Int!
+  edges: [StorageBucketEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StorageBucketCreateInput {
+  operatorStatus: JSONObject!
+  operatorMetadata: ID
+  acceptingNewBags: Boolean!
+  dataObjectsSizeLimit: String!
+  dataObjectCountLimit: String!
+  dataObjectsCount: String!
+  dataObjectsSize: String!
+}
+
+type StorageBucketEdge {
+  node: StorageBucket!
+  cursor: String!
+}
+
+type StorageBucketOperatorMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Root node endpoint
+  """
+  nodeEndpoint: String
+  nodeLocation: NodeLocationMetadata
+  nodeLocationId: String
+
+  """
+  Additional information about the node/operator
+  """
+  extra: String
+  storagebucketoperatorMetadata: [StorageBucket!]
+}
+
+type StorageBucketOperatorMetadataConnection {
+  totalCount: Int!
+  edges: [StorageBucketOperatorMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StorageBucketOperatorMetadataCreateInput {
+  nodeEndpoint: String
+  nodeLocation: ID
+  extra: String
+}
+
+type StorageBucketOperatorMetadataEdge {
+  node: StorageBucketOperatorMetadata!
+  cursor: String!
+}
+
+enum StorageBucketOperatorMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  nodeEndpoint_ASC
+  nodeEndpoint_DESC
+  nodeLocation_ASC
+  nodeLocation_DESC
+  extra_ASC
+  extra_DESC
+}
+
+input StorageBucketOperatorMetadataUpdateInput {
+  nodeEndpoint: String
+  nodeLocation: ID
+  extra: String
+}
+
+input StorageBucketOperatorMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  nodeEndpoint_eq: String
+  nodeEndpoint_contains: String
+  nodeEndpoint_startsWith: String
+  nodeEndpoint_endsWith: String
+  nodeEndpoint_in: [String!]
+  extra_eq: String
+  extra_contains: String
+  extra_startsWith: String
+  extra_endsWith: String
+  extra_in: [String!]
+  nodeLocation: NodeLocationMetadataWhereInput
+  storagebucketoperatorMetadata_none: StorageBucketWhereInput
+  storagebucketoperatorMetadata_some: StorageBucketWhereInput
+  storagebucketoperatorMetadata_every: StorageBucketWhereInput
+  AND: [StorageBucketOperatorMetadataWhereInput!]
+  OR: [StorageBucketOperatorMetadataWhereInput!]
+}
+
+input StorageBucketOperatorMetadataWhereUniqueInput {
+  id: ID!
+}
+
+union StorageBucketOperatorStatus =
+    StorageBucketOperatorStatusMissing
+  | StorageBucketOperatorStatusInvited
+  | StorageBucketOperatorStatusActive
+
+type StorageBucketOperatorStatusActive {
+  workerId: Int!
+  transactorAccountId: String!
+}
+
+type StorageBucketOperatorStatusInvited {
+  workerId: Int!
+}
+
+type StorageBucketOperatorStatusMissing {
+  phantom: Int
+}
+
+enum StorageBucketOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  operatorMetadata_ASC
+  operatorMetadata_DESC
+  acceptingNewBags_ASC
+  acceptingNewBags_DESC
+  dataObjectsSizeLimit_ASC
+  dataObjectsSizeLimit_DESC
+  dataObjectCountLimit_ASC
+  dataObjectCountLimit_DESC
+  dataObjectsCount_ASC
+  dataObjectsCount_DESC
+  dataObjectsSize_ASC
+  dataObjectsSize_DESC
+}
+
+input StorageBucketUpdateInput {
+  operatorStatus: JSONObject
+  operatorMetadata: ID
+  acceptingNewBags: Boolean
+  dataObjectsSizeLimit: String
+  dataObjectCountLimit: String
+  dataObjectsCount: String
+  dataObjectsSize: String
+}
+
+input StorageBucketWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  operatorStatus_json: JSONObject
+  acceptingNewBags_eq: Boolean
+  acceptingNewBags_in: [Boolean!]
+  dataObjectsSizeLimit_eq: BigInt
+  dataObjectsSizeLimit_gt: BigInt
+  dataObjectsSizeLimit_gte: BigInt
+  dataObjectsSizeLimit_lt: BigInt
+  dataObjectsSizeLimit_lte: BigInt
+  dataObjectsSizeLimit_in: [BigInt!]
+  dataObjectCountLimit_eq: BigInt
+  dataObjectCountLimit_gt: BigInt
+  dataObjectCountLimit_gte: BigInt
+  dataObjectCountLimit_lt: BigInt
+  dataObjectCountLimit_lte: BigInt
+  dataObjectCountLimit_in: [BigInt!]
+  dataObjectsCount_eq: BigInt
+  dataObjectsCount_gt: BigInt
+  dataObjectsCount_gte: BigInt
+  dataObjectsCount_lt: BigInt
+  dataObjectsCount_lte: BigInt
+  dataObjectsCount_in: [BigInt!]
+  dataObjectsSize_eq: BigInt
+  dataObjectsSize_gt: BigInt
+  dataObjectsSize_gte: BigInt
+  dataObjectsSize_lt: BigInt
+  dataObjectsSize_lte: BigInt
+  dataObjectsSize_in: [BigInt!]
+  operatorMetadata: StorageBucketOperatorMetadataWhereInput
+  bags_none: StorageBagWhereInput
+  bags_some: StorageBagWhereInput
+  bags_every: StorageBagWhereInput
+  AND: [StorageBucketWhereInput!]
+  OR: [StorageBucketWhereInput!]
+}
+
+input StorageBucketWhereUniqueInput {
+  id: ID!
+}
+
+type StorageDataObject implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Whether the data object was uploaded and accepted by the storage provider
+  """
+  isAccepted: Boolean!
+
+  """
+  Data object size in bytes
+  """
+  size: BigInt!
+  storageBag: StorageBag!
+  storageBagId: String!
+
+  """
+  IPFS content hash
+  """
+  ipfsHash: String!
+
+  """
+  The type of the asset that the data object represents (if known)
+  """
+  type: DataObjectType!
+
+  """
+  Prize for removing the data object
+  """
+  deletionPrize: BigInt!
+
+  """
+  If the object is no longer used as an asset - the time at which it was unset (if known)
+  """
+  unsetAt: DateTime
+  videoThumbnail: Video
+  videoMedia: Video
+  channelcoverPhoto: [Channel!]
+  channelavatarPhoto: [Channel!]
+}
+
+type StorageDataObjectConnection {
+  totalCount: Int!
+  edges: [StorageDataObjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StorageDataObjectCreateInput {
+  isAccepted: Boolean!
+  size: String!
+  storageBag: ID!
+  ipfsHash: String!
+  type: JSONObject!
+  deletionPrize: String!
+  unsetAt: DateTime
+}
+
+type StorageDataObjectEdge {
+  node: StorageDataObject!
+  cursor: String!
+}
+
+enum StorageDataObjectOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  isAccepted_ASC
+  isAccepted_DESC
+  size_ASC
+  size_DESC
+  storageBag_ASC
+  storageBag_DESC
+  ipfsHash_ASC
+  ipfsHash_DESC
+  deletionPrize_ASC
+  deletionPrize_DESC
+  unsetAt_ASC
+  unsetAt_DESC
+}
+
+input StorageDataObjectUpdateInput {
+  isAccepted: Boolean
+  size: String
+  storageBag: ID
+  ipfsHash: String
+  type: JSONObject
+  deletionPrize: String
+  unsetAt: DateTime
+}
+
+input StorageDataObjectWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  isAccepted_eq: Boolean
+  isAccepted_in: [Boolean!]
+  size_eq: BigInt
+  size_gt: BigInt
+  size_gte: BigInt
+  size_lt: BigInt
+  size_lte: BigInt
+  size_in: [BigInt!]
+  ipfsHash_eq: String
+  ipfsHash_contains: String
+  ipfsHash_startsWith: String
+  ipfsHash_endsWith: String
+  ipfsHash_in: [String!]
+  type_json: JSONObject
+  deletionPrize_eq: BigInt
+  deletionPrize_gt: BigInt
+  deletionPrize_gte: BigInt
+  deletionPrize_lt: BigInt
+  deletionPrize_lte: BigInt
+  deletionPrize_in: [BigInt!]
+  unsetAt_eq: DateTime
+  unsetAt_lt: DateTime
+  unsetAt_lte: DateTime
+  unsetAt_gt: DateTime
+  unsetAt_gte: DateTime
+  storageBag: StorageBagWhereInput
+  videoThumbnail: VideoWhereInput
+  videoMedia: VideoWhereInput
+  channelcoverPhoto_none: ChannelWhereInput
+  channelcoverPhoto_some: ChannelWhereInput
+  channelcoverPhoto_every: ChannelWhereInput
+  channelavatarPhoto_none: ChannelWhereInput
+  channelavatarPhoto_some: ChannelWhereInput
+  channelavatarPhoto_every: ChannelWhereInput
+  AND: [StorageDataObjectWhereInput!]
+  OR: [StorageDataObjectWhereInput!]
+}
+
+input StorageDataObjectWhereUniqueInput {
+  id: ID!
+}
+
+"""
+Global storage system parameters
+"""
+type StorageSystemParameters implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Blacklisted content hashes
+  """
+  blacklist: [String!]!
+
+  """
+  How many buckets can be assigned to store a bag
+  """
+  storageBucketsPerBagLimit: Int!
+
+  """
+  How many buckets can be assigned to distribute a bag
+  """
+  distributionBucketsPerBagLimit: Int!
+
+  """
+  Whether the uploading is globally blocked
+  """
+  uploadingBlocked: Boolean!
+
+  """
+  Additional fee for storing 1 MB of data
+  """
+  dataObjectFeePerMb: BigInt!
+
+  """
+  Global max. number of objects a storage bucket can store (can also be further limitted the provider)
+  """
+  storageBucketMaxObjectsCountLimit: BigInt!
+
+  """
+  Global max. size of objects a storage bucket can store (can also be further limitted the provider)
+  """
+  storageBucketMaxObjectsSizeLimit: BigInt!
+
+  """
+  ID of the next data object when created
+  """
+  nextDataObjectId: BigInt!
+}
+
+type StorageSystemParametersConnection {
+  totalCount: Int!
+  edges: [StorageSystemParametersEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StorageSystemParametersCreateInput {
+  blacklist: [String!]!
+  storageBucketsPerBagLimit: Float!
+  distributionBucketsPerBagLimit: Float!
+  uploadingBlocked: Boolean!
+  dataObjectFeePerMb: String!
+  storageBucketMaxObjectsCountLimit: String!
+  storageBucketMaxObjectsSizeLimit: String!
+  nextDataObjectId: String!
+}
+
+type StorageSystemParametersEdge {
+  node: StorageSystemParameters!
+  cursor: String!
+}
+
+enum StorageSystemParametersOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  storageBucketsPerBagLimit_ASC
+  storageBucketsPerBagLimit_DESC
+  distributionBucketsPerBagLimit_ASC
+  distributionBucketsPerBagLimit_DESC
+  uploadingBlocked_ASC
+  uploadingBlocked_DESC
+  dataObjectFeePerMb_ASC
+  dataObjectFeePerMb_DESC
+  storageBucketMaxObjectsCountLimit_ASC
+  storageBucketMaxObjectsCountLimit_DESC
+  storageBucketMaxObjectsSizeLimit_ASC
+  storageBucketMaxObjectsSizeLimit_DESC
+  nextDataObjectId_ASC
+  nextDataObjectId_DESC
+}
+
+input StorageSystemParametersUpdateInput {
+  blacklist: [String!]
+  storageBucketsPerBagLimit: Float
+  distributionBucketsPerBagLimit: Float
+  uploadingBlocked: Boolean
+  dataObjectFeePerMb: String
+  storageBucketMaxObjectsCountLimit: String
+  storageBucketMaxObjectsSizeLimit: String
+  nextDataObjectId: String
+}
+
+input StorageSystemParametersWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  blacklist_containsAll: [String!]
+  blacklist_containsNone: [String!]
+  blacklist_containsAny: [String!]
+  storageBucketsPerBagLimit_eq: Int
+  storageBucketsPerBagLimit_gt: Int
+  storageBucketsPerBagLimit_gte: Int
+  storageBucketsPerBagLimit_lt: Int
+  storageBucketsPerBagLimit_lte: Int
+  storageBucketsPerBagLimit_in: [Int!]
+  distributionBucketsPerBagLimit_eq: Int
+  distributionBucketsPerBagLimit_gt: Int
+  distributionBucketsPerBagLimit_gte: Int
+  distributionBucketsPerBagLimit_lt: Int
+  distributionBucketsPerBagLimit_lte: Int
+  distributionBucketsPerBagLimit_in: [Int!]
+  uploadingBlocked_eq: Boolean
+  uploadingBlocked_in: [Boolean!]
+  dataObjectFeePerMb_eq: BigInt
+  dataObjectFeePerMb_gt: BigInt
+  dataObjectFeePerMb_gte: BigInt
+  dataObjectFeePerMb_lt: BigInt
+  dataObjectFeePerMb_lte: BigInt
+  dataObjectFeePerMb_in: [BigInt!]
+  storageBucketMaxObjectsCountLimit_eq: BigInt
+  storageBucketMaxObjectsCountLimit_gt: BigInt
+  storageBucketMaxObjectsCountLimit_gte: BigInt
+  storageBucketMaxObjectsCountLimit_lt: BigInt
+  storageBucketMaxObjectsCountLimit_lte: BigInt
+  storageBucketMaxObjectsCountLimit_in: [BigInt!]
+  storageBucketMaxObjectsSizeLimit_eq: BigInt
+  storageBucketMaxObjectsSizeLimit_gt: BigInt
+  storageBucketMaxObjectsSizeLimit_gte: BigInt
+  storageBucketMaxObjectsSizeLimit_lt: BigInt
+  storageBucketMaxObjectsSizeLimit_lte: BigInt
+  storageBucketMaxObjectsSizeLimit_in: [BigInt!]
+  nextDataObjectId_eq: BigInt
+  nextDataObjectId_gt: BigInt
+  nextDataObjectId_gte: BigInt
+  nextDataObjectId_lt: BigInt
+  nextDataObjectId_lte: BigInt
+  nextDataObjectId_in: [BigInt!]
+  AND: [StorageSystemParametersWhereInput!]
+  OR: [StorageSystemParametersWhereInput!]
+}
+
+input StorageSystemParametersWhereUniqueInput {
+  id: ID!
+}
+
 type Subscription {
   stateSubscription: ProcessorState!
 }
@@ -20278,6 +26248,147 @@ type ThreadStatusRemoved {
   threadDeletedEvent: ThreadDeletedEvent
 }
 
+union TransactionalStatus =
+    TransactionalStatusIdle
+  | TransactionalStatusInitiatedOfferToMember
+  | TransactionalStatusAuction
+  | TransactionalStatusBuyNow
+
+type TransactionalStatusAuction {
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+
+  """
+  Auction
+  """
+  auction: Auction
+}
+
+type TransactionalStatusBuyNow {
+  price: Float!
+}
+
+type TransactionalStatusIdle {
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+}
+
+type TransactionalStatusInitiatedOfferToMember {
+  """
+  Member identifier
+  """
+  memberId: Int!
+
+  """
+  Whether member should pay to accept offer (optional)
+  """
+  price: Float
+}
+
+type TransactionalStatusUpdate implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  nft: OwnedNft!
+  nftId: String!
+
+  """
+  NFT transactional status
+  """
+  transactionalStatus: TransactionalStatus!
+
+  """
+  Block number at which change happened
+  """
+  changedAt: Int!
+}
+
+type TransactionalStatusUpdateConnection {
+  totalCount: Int!
+  edges: [TransactionalStatusUpdateEdge!]!
+  pageInfo: PageInfo!
+}
+
+input TransactionalStatusUpdateCreateInput {
+  nft: ID!
+  transactionalStatus: JSONObject!
+  changedAt: Float!
+}
+
+type TransactionalStatusUpdateEdge {
+  node: TransactionalStatusUpdate!
+  cursor: String!
+}
+
+enum TransactionalStatusUpdateOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  nft_ASC
+  nft_DESC
+  changedAt_ASC
+  changedAt_DESC
+}
+
+input TransactionalStatusUpdateUpdateInput {
+  nft: ID
+  transactionalStatus: JSONObject
+  changedAt: Float
+}
+
+input TransactionalStatusUpdateWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  transactionalStatus_json: JSONObject
+  changedAt_eq: Int
+  changedAt_gt: Int
+  changedAt_gte: Int
+  changedAt_lt: Int
+  changedAt_lte: Int
+  changedAt_in: [Int!]
+  nft: OwnedNftWhereInput
+  AND: [TransactionalStatusUpdateWhereInput!]
+  OR: [TransactionalStatusUpdateWhereInput!]
+}
+
+input TransactionalStatusUpdateWhereUniqueInput {
+  id: ID!
+}
+
 type UnlockBlogPostProposalDetails {
   """
   The blog post that should be unlocked
@@ -20479,11 +26590,8 @@ type Video implements BaseGraphQLObject {
   Video duration in seconds
   """
   duration: Int
-
-  """
-  Video thumbnail asset (recommended ratio: 16:9)
-  """
-  thumbnailPhoto: Asset
+  thumbnailPhoto: StorageDataObject
+  thumbnailPhotoId: String
   language: Language
   languageId: String
 
@@ -20506,6 +26614,8 @@ type Video implements BaseGraphQLObject {
   Flag signaling whether a video is censored.
   """
   isCensored: Boolean!
+  nft: OwnedNft
+  nftId: String
 
   """
   Whether the Video contains explicit material.
@@ -20513,11 +26623,8 @@ type Video implements BaseGraphQLObject {
   isExplicit: Boolean
   license: License
   licenseId: String
-
-  """
-  Video media asset
-  """
-  media: Asset
+  media: StorageDataObject
+  mediaId: String
   mediaMetadata: VideoMediaMetadata
   mediaMetadataId: String
   createdInBlock: Int!
@@ -20526,6 +26633,20 @@ type Video implements BaseGraphQLObject {
   Is video featured or not
   """
   isFeatured: Boolean!
+  auctionbidcanceledeventvideo: [AuctionBidCanceledEvent!]
+  auctionbidmadeeventvideo: [AuctionBidMadeEvent!]
+  auctioncanceledeventvideo: [AuctionCanceledEvent!]
+  auctionstartedeventvideo: [AuctionStartedEvent!]
+  bidmadecompletingauctioneventvideo: [BidMadeCompletingAuctionEvent!]
+  buynowcanceledeventvideo: [BuyNowCanceledEvent!]
+  englishauctioncompletedeventvideo: [EnglishAuctionCompletedEvent!]
+  nftboughteventvideo: [NftBoughtEvent!]
+  nftissuedeventvideo: [NftIssuedEvent!]
+  nftsellordermadeeventvideo: [NftSellOrderMadeEvent!]
+  offeracceptedeventvideo: [OfferAcceptedEvent!]
+  offercanceledeventvideo: [OfferCanceledEvent!]
+  offerstartedeventvideo: [OfferStartedEvent!]
+  openauctionbidacceptedeventvideo: [OpenAuctionBidAcceptedEvent!]
 }
 
 type VideoCategoriesByNameFTSOutput {
@@ -20551,6 +26672,11 @@ type VideoCategory implements BaseGraphQLObject {
   The name of the category
   """
   name: String
+
+  """
+  Count of channel's videos with an uploaded asset that are public and not censored.
+  """
+  activeVideosCounter: Int!
   videos: [Video!]!
   createdInBlock: Int!
 }
@@ -20563,6 +26689,7 @@ type VideoCategoryConnection {
 
 input VideoCategoryCreateInput {
   name: String
+  activeVideosCounter: Float!
   createdInBlock: Float!
 }
 
@@ -20580,12 +26707,15 @@ enum VideoCategoryOrderByInput {
   deletedAt_DESC
   name_ASC
   name_DESC
+  activeVideosCounter_ASC
+  activeVideosCounter_DESC
   createdInBlock_ASC
   createdInBlock_DESC
 }
 
 input VideoCategoryUpdateInput {
   name: String
+  activeVideosCounter: Float
   createdInBlock: Float
 }
 
@@ -20619,6 +26749,12 @@ input VideoCategoryWhereInput {
   name_startsWith: String
   name_endsWith: String
   name_in: [String!]
+  activeVideosCounter_eq: Int
+  activeVideosCounter_gt: Int
+  activeVideosCounter_gte: Int
+  activeVideosCounter_lt: Int
+  activeVideosCounter_lte: Int
+  activeVideosCounter_in: [Int!]
   createdInBlock_eq: Int
   createdInBlock_gt: Int
   createdInBlock_gte: Int
@@ -20648,15 +26784,16 @@ input VideoCreateInput {
   title: String
   description: String
   duration: Float
-  thumbnailPhoto: JSONObject!
+  thumbnailPhoto: ID
   language: ID
   hasMarketing: Boolean
   publishedBeforeJoystream: DateTime
   isPublic: Boolean
   isCensored: Boolean!
+  nft: ID
   isExplicit: Boolean
   license: ID
-  media: JSONObject!
+  media: ID
   mediaMetadata: ID
   createdInBlock: Float!
   isFeatured: Boolean!
@@ -20935,6 +27072,8 @@ enum VideoOrderByInput {
   description_DESC
   duration_ASC
   duration_DESC
+  thumbnailPhoto_ASC
+  thumbnailPhoto_DESC
   language_ASC
   language_DESC
   hasMarketing_ASC
@@ -20945,10 +27084,14 @@ enum VideoOrderByInput {
   isPublic_DESC
   isCensored_ASC
   isCensored_DESC
+  nft_ASC
+  nft_DESC
   isExplicit_ASC
   isExplicit_DESC
   license_ASC
   license_DESC
+  media_ASC
+  media_DESC
   mediaMetadata_ASC
   mediaMetadata_DESC
   createdInBlock_ASC
@@ -20963,15 +27106,16 @@ input VideoUpdateInput {
   title: String
   description: String
   duration: Float
-  thumbnailPhoto: JSONObject
+  thumbnailPhoto: ID
   language: ID
   hasMarketing: Boolean
   publishedBeforeJoystream: DateTime
   isPublic: Boolean
   isCensored: Boolean
+  nft: ID
   isExplicit: Boolean
   license: ID
-  media: JSONObject
+  media: ID
   mediaMetadata: ID
   createdInBlock: Float
   isFeatured: Boolean
@@ -21018,7 +27162,6 @@ input VideoWhereInput {
   duration_lt: Int
   duration_lte: Int
   duration_in: [Int!]
-  thumbnailPhoto_json: JSONObject
   hasMarketing_eq: Boolean
   hasMarketing_in: [Boolean!]
   publishedBeforeJoystream_eq: DateTime
@@ -21032,7 +27175,6 @@ input VideoWhereInput {
   isCensored_in: [Boolean!]
   isExplicit_eq: Boolean
   isExplicit_in: [Boolean!]
-  media_json: JSONObject
   createdInBlock_eq: Int
   createdInBlock_gt: Int
   createdInBlock_gte: Int
@@ -21043,9 +27185,54 @@ input VideoWhereInput {
   isFeatured_in: [Boolean!]
   channel: ChannelWhereInput
   category: VideoCategoryWhereInput
+  thumbnailPhoto: StorageDataObjectWhereInput
   language: LanguageWhereInput
+  nft: OwnedNftWhereInput
   license: LicenseWhereInput
+  media: StorageDataObjectWhereInput
   mediaMetadata: VideoMediaMetadataWhereInput
+  auctionbidcanceledeventvideo_none: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventvideo_some: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventvideo_every: AuctionBidCanceledEventWhereInput
+  auctionbidmadeeventvideo_none: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventvideo_some: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventvideo_every: AuctionBidMadeEventWhereInput
+  auctioncanceledeventvideo_none: AuctionCanceledEventWhereInput
+  auctioncanceledeventvideo_some: AuctionCanceledEventWhereInput
+  auctioncanceledeventvideo_every: AuctionCanceledEventWhereInput
+  auctionstartedeventvideo_none: AuctionStartedEventWhereInput
+  auctionstartedeventvideo_some: AuctionStartedEventWhereInput
+  auctionstartedeventvideo_every: AuctionStartedEventWhereInput
+  bidmadecompletingauctioneventvideo_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventvideo_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventvideo_every: BidMadeCompletingAuctionEventWhereInput
+  buynowcanceledeventvideo_none: BuyNowCanceledEventWhereInput
+  buynowcanceledeventvideo_some: BuyNowCanceledEventWhereInput
+  buynowcanceledeventvideo_every: BuyNowCanceledEventWhereInput
+  englishauctioncompletedeventvideo_none: EnglishAuctionCompletedEventWhereInput
+  englishauctioncompletedeventvideo_some: EnglishAuctionCompletedEventWhereInput
+  englishauctioncompletedeventvideo_every: EnglishAuctionCompletedEventWhereInput
+  nftboughteventvideo_none: NftBoughtEventWhereInput
+  nftboughteventvideo_some: NftBoughtEventWhereInput
+  nftboughteventvideo_every: NftBoughtEventWhereInput
+  nftissuedeventvideo_none: NftIssuedEventWhereInput
+  nftissuedeventvideo_some: NftIssuedEventWhereInput
+  nftissuedeventvideo_every: NftIssuedEventWhereInput
+  nftsellordermadeeventvideo_none: NftSellOrderMadeEventWhereInput
+  nftsellordermadeeventvideo_some: NftSellOrderMadeEventWhereInput
+  nftsellordermadeeventvideo_every: NftSellOrderMadeEventWhereInput
+  offeracceptedeventvideo_none: OfferAcceptedEventWhereInput
+  offeracceptedeventvideo_some: OfferAcceptedEventWhereInput
+  offeracceptedeventvideo_every: OfferAcceptedEventWhereInput
+  offercanceledeventvideo_none: OfferCanceledEventWhereInput
+  offercanceledeventvideo_some: OfferCanceledEventWhereInput
+  offercanceledeventvideo_every: OfferCanceledEventWhereInput
+  offerstartedeventvideo_none: OfferStartedEventWhereInput
+  offerstartedeventvideo_some: OfferStartedEventWhereInput
+  offerstartedeventvideo_every: OfferStartedEventWhereInput
+  openauctionbidacceptedeventvideo_none: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventvideo_some: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventvideo_every: OpenAuctionBidAcceptedEventWhereInput
   AND: [VideoWhereInput!]
   OR: [VideoWhereInput!]
 }
@@ -21613,6 +27800,142 @@ input VotingPeriodStartedEventWhereUniqueInput {
   id: ID!
 }
 
+type WorkEntrantFundsWithdrawnEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  entry: BountyEntry!
+  entryId: String!
+}
+
+type WorkEntrantFundsWithdrawnEventConnection {
+  totalCount: Int!
+  edges: [WorkEntrantFundsWithdrawnEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkEntrantFundsWithdrawnEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  entry: ID!
+}
+
+type WorkEntrantFundsWithdrawnEventEdge {
+  node: WorkEntrantFundsWithdrawnEvent!
+  cursor: String!
+}
+
+enum WorkEntrantFundsWithdrawnEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  entry_ASC
+  entry_DESC
+}
+
+input WorkEntrantFundsWithdrawnEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  entry: ID
+}
+
+input WorkEntrantFundsWithdrawnEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  entry: BountyEntryWhereInput
+  AND: [WorkEntrantFundsWithdrawnEventWhereInput!]
+  OR: [WorkEntrantFundsWithdrawnEventWhereInput!]
+}
+
+input WorkEntrantFundsWithdrawnEventWhereUniqueInput {
+  id: ID!
+}
+
 type WorkEntryAnnouncedEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted
@@ -21749,6 +28072,278 @@ input WorkEntryAnnouncedEventWhereUniqueInput {
   id: ID!
 }
 
+type WorkEntrySlashedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  entry: BountyEntry!
+  entryId: String!
+}
+
+type WorkEntrySlashedEventConnection {
+  totalCount: Int!
+  edges: [WorkEntrySlashedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkEntrySlashedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  entry: ID!
+}
+
+type WorkEntrySlashedEventEdge {
+  node: WorkEntrySlashedEvent!
+  cursor: String!
+}
+
+enum WorkEntrySlashedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  entry_ASC
+  entry_DESC
+}
+
+input WorkEntrySlashedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  entry: ID
+}
+
+input WorkEntrySlashedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  entry: BountyEntryWhereInput
+  AND: [WorkEntrySlashedEventWhereInput!]
+  OR: [WorkEntrySlashedEventWhereInput!]
+}
+
+input WorkEntrySlashedEventWhereUniqueInput {
+  id: ID!
+}
+
+type WorkEntryWithdrawnEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  entry: BountyEntry!
+  entryId: String!
+}
+
+type WorkEntryWithdrawnEventConnection {
+  totalCount: Int!
+  edges: [WorkEntryWithdrawnEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkEntryWithdrawnEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  entry: ID!
+}
+
+type WorkEntryWithdrawnEventEdge {
+  node: WorkEntryWithdrawnEvent!
+  cursor: String!
+}
+
+enum WorkEntryWithdrawnEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  entry_ASC
+  entry_DESC
+}
+
+input WorkEntryWithdrawnEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  entry: ID
+}
+
+input WorkEntryWithdrawnEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  entry: BountyEntryWhereInput
+  AND: [WorkEntryWithdrawnEventWhereInput!]
+  OR: [WorkEntryWithdrawnEventWhereInput!]
+}
+
+input WorkEntryWithdrawnEventWhereUniqueInput {
+  id: ID!
+}
+
 type Worker implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -21798,6 +28393,11 @@ type Worker implements BaseGraphQLObject {
   isLead: Boolean!
 
   """
+  Whether the worker is currently active
+  """
+  isActive: Boolean!
+
+  """
   Current role stake (in JOY)
   """
   stake: BigInt!
@@ -21823,7 +28423,6 @@ type Worker implements BaseGraphQLObject {
   """
   storage: String
   managedForumCategories: [ForumCategory!]!
-  dataObjects: [DataObject!]!
   categoryarchivalstatusupdatedeventactor: [CategoryArchivalStatusUpdatedEvent!]
   categorydeletedeventactor: [CategoryDeletedEvent!]
   categorymembershipofmoderatorupdatedeventmoderator: [CategoryMembershipOfModeratorUpdatedEvent!]
@@ -21863,6 +28462,7 @@ input WorkerCreateInput {
   stakeAccount: String!
   status: JSONObject!
   isLead: Boolean!
+  isActive: Boolean!
   stake: String!
   rewardPerBlock: String!
   missingRewardAmount: String
@@ -22042,6 +28642,8 @@ enum WorkerOrderByInput {
   stakeAccount_DESC
   isLead_ASC
   isLead_DESC
+  isActive_ASC
+  isActive_DESC
   stake_ASC
   stake_DESC
   rewardPerBlock_ASC
@@ -22727,6 +29329,7 @@ input WorkerUpdateInput {
   stakeAccount: String
   status: JSONObject
   isLead: Boolean
+  isActive: Boolean
   stake: String
   rewardPerBlock: String
   missingRewardAmount: String
@@ -22789,6 +29392,8 @@ input WorkerWhereInput {
   status_json: JSONObject
   isLead_eq: Boolean
   isLead_in: [Boolean!]
+  isActive_eq: Boolean
+  isActive_in: [Boolean!]
   stake_eq: BigInt
   stake_gt: BigInt
   stake_gte: BigInt
@@ -22825,9 +29430,6 @@ input WorkerWhereInput {
   managedForumCategories_none: ForumCategoryWhereInput
   managedForumCategories_some: ForumCategoryWhereInput
   managedForumCategories_every: ForumCategoryWhereInput
-  dataObjects_none: DataObjectWhereInput
-  dataObjects_some: DataObjectWhereInput
-  dataObjects_every: DataObjectWhereInput
   categoryarchivalstatusupdatedeventactor_none: CategoryArchivalStatusUpdatedEventWhereInput
   categoryarchivalstatusupdatedeventactor_some: CategoryArchivalStatusUpdatedEventWhereInput
   categoryarchivalstatusupdatedeventactor_every: CategoryArchivalStatusUpdatedEventWhereInput
@@ -23856,12 +30458,12 @@ type WorkSubmittedEvent implements Event & BaseGraphQLObject {
   """
   Title of the work
   """
-  title: String!
+  title: String
 
   """
   Description which contains the work itself as a URL, a BLOB, or just text
   """
-  description: String!
+  description: String
 }
 
 type WorkSubmittedEventConnection {
@@ -23876,8 +30478,8 @@ input WorkSubmittedEventCreateInput {
   network: Network!
   indexInBlock: Float!
   entry: ID!
-  title: String!
-  description: String!
+  title: String
+  description: String
 }
 
 type WorkSubmittedEventEdge {

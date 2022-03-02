@@ -15,9 +15,11 @@ export const BountyTab = React.memo(({ bounty }: Props) => {
   return (
     <RowGapBlock gap={4}>
       <Description imageUrl={bounty.imageUri} title={bounty.title} description={bounty.description} />
-      <ForumThreadWrapper>
-        <BountyDiscussion discussionThreadId={bounty.discussionThreadId} />
-      </ForumThreadWrapper>
+      {bounty.discussionThreadId && (
+        <ForumThreadWrapper>
+          <BountyDiscussion discussionThreadId={bounty.discussionThreadId} />
+        </ForumThreadWrapper>
+      )}
     </RowGapBlock>
   )
 })

@@ -52,14 +52,13 @@ describe('UI: BountyPreviewHeader', () => {
       maxAmount: new BN(10),
       maxPeriod: 9,
     },
-    contractType: {
-      whitelist: ['16'],
-    },
+    entrantWhitelist: ['16'],
     entries: [],
     contributors: [],
     workPeriod: 10,
     judgingPeriod: 10,
     stage: 'expired',
+    isTerminated: false,
     totalFunding: new BN(10),
     discussionThreadId: '1',
   }
@@ -100,9 +99,7 @@ describe('UI: BountyPreviewHeader', () => {
       bounty.fundingType = {
         target: new BN(1),
       }
-      bounty.contractType = {
-        whitelist: ['12'],
-      }
+      bounty.entrantWhitelist = ['12']
 
       renderHeader()
 
@@ -116,7 +113,7 @@ describe('UI: BountyPreviewHeader', () => {
         maxPeriod: 1,
         maxAmount: new BN(2),
       }
-      bounty.contractType = 'ContractOpen'
+      bounty.entrantWhitelist = undefined
 
       renderHeader()
 
@@ -130,9 +127,7 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('Closed and member out of whitelist', async () => {
-      bounty.contractType = {
-        whitelist: ['3'],
-      }
+      bounty.entrantWhitelist = ['3']
 
       renderHeader()
 
@@ -140,9 +135,7 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('Closed and member in whitelist', async () => {
-      bounty.contractType = {
-        whitelist: ['0'],
-      }
+      bounty.entrantWhitelist = ['0']
 
       renderHeader()
 
@@ -151,7 +144,7 @@ describe('UI: BountyPreviewHeader', () => {
 
     describe('Open', () => {
       beforeEach(() => {
-        bounty.contractType = 'ContractOpen'
+        bounty.entrantWhitelist = undefined
       })
 
       it('No entry', async () => {

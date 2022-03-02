@@ -79,13 +79,7 @@ export interface PeriodsLengthsType {
   judgingPeriodLength: number
 }
 
-export type ContractType = 'ContractOpen' | ContractClosed
-
-export type ContractClosed = {
-  whitelist: string[]
-}
-
-export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed'
 
 export interface WorkEntry {
   id: string
@@ -125,21 +119,22 @@ export interface BountyContribution {
 export interface Bounty {
   id: string
   title: string
-  imageUri: string | null | undefined
+  imageUri: string | undefined
   description: string
   createdAt: string
   cherry: BN
   entrantStake: BN
+  entrantWhitelist: string[] | undefined
   creator?: Member
   oracle?: Member
   fundingType: FundingType
   workPeriod: number
   judgingPeriod: number
   stage: BountyStage
+  isTerminated: boolean
   totalFunding: BN
   entries?: WorkEntry[]
   inBlock: number
-  contractType: ContractType
   contributors: Contributor[]
-  discussionThreadId: string
+  discussionThreadId: string | undefined
 }
