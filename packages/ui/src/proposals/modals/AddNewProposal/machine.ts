@@ -782,6 +782,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 }),
               }),
             },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
+                }),
+              }),
+            },
           },
         },
         setInitialInvitationBalance: {

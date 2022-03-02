@@ -93,16 +93,16 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'terminateWorkingGroupLead': {
       return createType('ProposalDetailsOf', {
-        TerminateWorkingGroupLead: [
-          specifics?.workerId,
-          specifics?.stakingAmount,
-          getWorkingGroupParam(specifics?.groupId),
-        ],
+        TerminateWorkingGroupLead: {
+          worker_id: specifics?.workerId,
+          working_group: getWorkingGroupParam(specifics?.groupId),
+          slashing_amount: specifics?.slashingAmount,
+        },
       })
     }
     case 'setWorkingGroupLeadReward': {
       return createType('ProposalDetailsOf', {
-        SlashWorkingGroupLead: [
+        SetWorkingGroupLeadReward: [
           specifics?.workerId,
           specifics?.rewardPerBlock,
           getWorkingGroupParam(specifics?.groupId),
