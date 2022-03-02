@@ -22,7 +22,7 @@ interface BountyData {
   bountyEntries: RawBountyEntryMock[]
 }
 
-const NUMBER_OF_BOUNTIES = 8
+const NUMBER_OF_BOUNTIES = 12
 
 export const generateBounties = (
   mocks: DependOnMocks = {
@@ -59,6 +59,11 @@ const generateBounty =
   (mocks: DependOnMocks): Reducer<BountyData, any> =>
   (data, _, bountyIndex) => {
     // Generate the bounty
+    const stage = bountyStage()
+    const creatorId =
+      bountyIndex < 3 ? String(bountyIndex % 2) : Math.random() < 0.7 ? randomMember(mocks.members).id : undefined
+    const oracleId =
+      bountyIndex < 3 ? String((bountyIndex + 1) % 2) : Math.random() < 0.7 ? randomMember(mocks.members).id : undefined
     const bounty = {
       id: String(bountyIndex),
       createdAt: faker.date.recent(20),
@@ -66,19 +71,20 @@ const generateBounty =
       description: randomMarkdown(),
       cherry: String(randomFromRange(1, 5) * 1000),
       entrantStake: String(randomFromRange(1, 5) * 1000),
-      ...(datatype.boolean() ? { creatorId: randomMember(mocks.members).id } : {}),
-      ...(datatype.boolean() ? { oracleId: randomMember(mocks.members).id } : {}),
+      creatorId: creatorId,
+      oracleId: oracleId,
       fundingType: generateBountyFundingType(),
       entrantWhitelist: datatype.boolean()
         ? random.arrayElements(mocks.members, randomFromRange(1, 10)).map(({ id }) => id)
         : undefined,
       workPeriod: randomFromRange(5, 20),
       judgingPeriod: randomFromRange(5, 20),
-      stage: bountyStage(),
+      stage,
       totalFunding: String(randomFromRange(5, 10) * 1000),
       discussionThreadId: random.arrayElement(mocks.forumThreads).id,
       createdInEvent: randomRawBlock(),
       ...(datatype.boolean() ? { maxFundingReachedEvent: randomRawBlock() } : {}),
+      isTerminated: Math.random() < 0.2 && ['Funding', 'Expired', 'Successful', 'Failed'].includes(stage),
     }
 
     // Generate the bounty contributions

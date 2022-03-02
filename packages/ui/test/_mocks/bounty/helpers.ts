@@ -12,6 +12,7 @@ export const seedSafeBounties = (server: any, overrides: Partial<RawBountyMock>[
     oracleId: undefined,
     entrantWhitelist: undefined,
     discussionThreadId: '0',
+    isTerminated: false,
   }
   const safeBounties = [
     { ...baseBounty, creatorId: '0' },

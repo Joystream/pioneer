@@ -24,6 +24,7 @@ export interface RawBountyMock {
   discussionThreadId: string
   createdInEvent: BlockFieldsMock
   maxFundingReachedEvent?: BlockFieldsMock
+  isTerminated?: boolean
 }
 
 export interface RawBountyContributionMock {
@@ -57,11 +58,19 @@ const seedEntrantWhitelist = (memberIds: RawBountyMock['entrantWhitelist'], serv
   server.schema.create('BountyEntrantWhitelist', { memberIds })
 
 export const seedBounty = (
-  { fundingType, entrantWhitelist, createdInEvent, maxFundingReachedEvent, ...data }: RawBountyMock,
+  {
+    fundingType,
+    entrantWhitelist,
+    createdInEvent,
+    maxFundingReachedEvent,
+    isTerminated = false,
+    ...data
+  }: RawBountyMock,
   server: any
 ) =>
   server.schema.create('Bounty', {
     ...data,
+    isTerminated,
     fundingType: seedFundingType(fundingType, server),
     entrantWhitelist: entrantWhitelist ? seedEntrantWhitelist(entrantWhitelist, server) : null,
     createdInEvent: server.schema.create('BountyCreatedEvent', createdInEvent),
