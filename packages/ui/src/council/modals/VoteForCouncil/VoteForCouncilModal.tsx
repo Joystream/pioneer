@@ -10,6 +10,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
@@ -26,6 +27,8 @@ export const VoteForCouncilModal = () => {
   const { api } = useApi()
 
   const { active: activeMember } = useMyMemberships()
+
+  const { refetch: refetchElection } = useCurrentElection()
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
@@ -57,6 +60,7 @@ export const VoteForCouncilModal = () => {
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
 
   if (state.matches('success')) {
+    refetchElection?.()
     return <VoteForCouncilSuccessModal />
   } else if (state.matches('error')) {
     return (
