@@ -18,20 +18,6 @@ const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   storageWorkingGroup: 'Storage',
 }
 
-// type SpecificParameters<PARAM extends string> = Extract<keyof ProposalDetailsOf, `as${PARAM}`> extends `${infer KEY}`
-//   ? KEY extends keyof ProposalDetailsOf
-//     ? ProposalDetailsOf[KEY] extends ITuple<infer TUPLE>
-//       ? TUPLE
-//       : ProposalDetailsOf[KEY]
-//     : never
-//   : never
-//
-// const buildSpecificParams = <PARAM extends string>(name: PARAM, params: SpecificParameters<PARAM>) => {
-//   return {
-//     [name]: params,
-//   }
-// }
-
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   if (!groupId) return undefined
 

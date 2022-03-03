@@ -30,10 +30,10 @@ import {
   seedWorkingGroups,
   updateWorkingGroups,
 } from '@/mocks/data'
+import workingGroups from '@/mocks/data/raw/workingGroups.json'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
-import workingGroups from '@/mocks/data/raw/workingGroups.json'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -53,7 +53,6 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { Bytes } from '@polkadot/types/primitive'
 
 configure({ testIdAttribute: 'id' })
 
@@ -179,7 +178,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
+    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
