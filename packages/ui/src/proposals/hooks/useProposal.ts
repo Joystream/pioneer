@@ -1,12 +1,11 @@
-import { ApolloQueryResult } from '@apollo/client'
-
+import { RefetchQuery } from '@/common/types/queries'
 import { useGetProposalQuery } from '@/proposals/queries'
 import { asProposalWithDetails, ProposalWithDetails } from '@/proposals/types'
 
 interface UseProposal {
   isLoading: boolean
   proposal: ProposalWithDetails | null
-  refetch: () => Promise<ApolloQueryResult<unknown>>
+  refetch: RefetchQuery
 }
 
 export const useProposal = (id: string): UseProposal => {

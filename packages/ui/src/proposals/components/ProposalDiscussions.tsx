@@ -1,4 +1,3 @@
-import { ApolloQueryResult } from '@apollo/client'
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import React, { RefObject, useEffect, useRef, useState } from 'react'
@@ -12,6 +11,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
+import { RefetchQuery } from '@/common/types/queries'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
@@ -23,7 +23,7 @@ import { ProposalDiscussionThread } from '@/proposals/types'
 interface Props {
   thread: ProposalDiscussionThread
   proposalId: string
-  refetch?: () => Promise<ApolloQueryResult<unknown>>
+  refetch?: RefetchQuery
 }
 
 export const ProposalDiscussions = ({ thread, proposalId, refetch }: Props) => {

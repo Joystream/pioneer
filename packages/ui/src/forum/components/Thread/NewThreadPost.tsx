@@ -1,4 +1,3 @@
-import { ApolloQueryResult } from '@apollo/client'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { Ref, RefObject, useCallback, useRef, useState } from 'react'
@@ -13,6 +12,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Badge, TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { RefetchQuery } from '@/common/types/queries'
 import { Reply, ReplyBadge } from '@/forum/components/PostList/PostListItem'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumPost } from '@/forum/types'
@@ -28,7 +28,7 @@ export interface NewPostProps {
   replyTo?: ForumPost
   removeReply: () => void
   replyToLink: string
-  refetch?: () => Promise<ApolloQueryResult<unknown>>
+  refetch?: RefetchQuery
 }
 
 export const NewThreadPost = React.forwardRef(

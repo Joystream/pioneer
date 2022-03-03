@@ -1,8 +1,9 @@
-import { ApolloQueryResult, LazyQueryResult } from '@apollo/client'
+import { LazyQueryResult } from '@apollo/client'
 import { useEffect, useMemo } from 'react'
 
 import { ForumPostOrderByInput, ForumPostWhereInput } from '@/common/api/queries'
 import { Defined } from '@/common/types/helpers'
+import { RefetchQuery } from '@/common/types/queries'
 import { isDefined } from '@/common/utils'
 import { useGetForumPostsCountQuery, useGetForumPostsIdsLazyQuery, useGetForumPostsLazyQuery } from '@/forum/queries'
 import { asForumPost, ForumPost } from '@/forum/types/ForumPost'
@@ -19,7 +20,7 @@ interface UseForumThreadPosts {
   posts: ForumPost[]
   page?: number
   pageCount?: number
-  refetch?: () => Promise<ApolloQueryResult<unknown>>
+  refetch?: RefetchQuery
 }
 
 export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNavigation): UseForumThreadPosts => {

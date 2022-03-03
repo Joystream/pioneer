@@ -1,6 +1,6 @@
-import { ApolloQueryResult } from '@apollo/client'
 import { useMemo } from 'react'
 
+import { RefetchQuery } from '@/common/types/queries'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { useGetWorkingGroupApplicationsQuery } from '../queries'
@@ -9,7 +9,7 @@ import { asApplication, WorkingGroupApplication } from '../types/WorkingGroupApp
 interface UseMyApplications {
   isLoading: boolean
   applications?: WorkingGroupApplication[]
-  refetch: () => Promise<ApolloQueryResult<unknown>>
+  refetch: RefetchQuery
 }
 
 export function useMyApplications(): UseMyApplications {
