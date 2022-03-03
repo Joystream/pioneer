@@ -89,7 +89,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         SlashWorkingGroupLead: [
           specifics?.workerId ?? 0,
-          specifics?.stakingAmount ?? BN_ZERO,
+          specifics?.slashingAmount ?? BN_ZERO,
           getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
         ],
       })
