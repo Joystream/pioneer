@@ -24,7 +24,6 @@ interface Props {
 export const BountiesList = memo(({ bounties, getSortProps }: Props) => {
   const { t } = useTranslation('bounty')
   const { onSort, isDescending } = getSortProps?.('createdAt') || {}
-  console.log('bounties', bounties)
   const bountiesComponents = useMemo(() => {
     return bounties?.length ? (
       <StyledList as="div">
