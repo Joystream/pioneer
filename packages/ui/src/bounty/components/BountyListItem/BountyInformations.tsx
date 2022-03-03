@@ -21,18 +21,13 @@ export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) =>
           <TextMedium bold>
             {creator.handle}
             <AvatarWrapper>
-              <MemberInfoAvatar member={creator} />
+              <MemberInfoAvatar member={creator} avatarUri={creator.avatar} />
             </AvatarWrapper>
           </TextMedium>
         )}
         <Title bold>{title}</Title>
       </TitleContainer>
       <BadgeDurationContainer>
-        <BadgesRow space={8}>
-          {/* TODO: add tags to schema */}
-          <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
-          <BadgeStatus inverted>ELECTION #6</BadgeStatus>
-        </BadgesRow>
         {timeToEnd && <BlockDurationStatistics size="s" value={timeToEnd} title="Time left" hideBlockNumber />}
       </BadgeDurationContainer>
     </Wrapper>

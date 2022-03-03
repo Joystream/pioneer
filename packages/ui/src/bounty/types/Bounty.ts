@@ -9,7 +9,16 @@ export interface BountyContributionsFiltersState {
   createdAfter?: Date
 }
 
-export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired' | 'terminated'
+export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'expired' | 'terminated' | 'failed' | 'successful'
+
+export type BountyPeriodFilters =
+  | 'funding'
+  | 'working'
+  | 'judgement'
+  | 'expired'
+  | 'Terminated - successful'
+  | 'Terminated - failed'
+  | 'Terminated - funding'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 

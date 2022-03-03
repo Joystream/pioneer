@@ -44,7 +44,7 @@ export const BountyFailed = React.memo(({ bounty }: Props) => {
               entrants={entrants}
               withdrawals={withdrawns}
               entrantResult={entrantResult}
-              stage="withdrawal"
+              stage="failed"
             />
           </RowGapBlock>
         </ContentWithSidePanel>

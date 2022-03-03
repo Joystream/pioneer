@@ -1,6 +1,7 @@
 import {
   BountyEntryStatus,
   BountyPeriod,
+  BountyPeriodFilters,
   EntrantResult,
   FundingType,
   isBountyEntryStatusWinner,
@@ -12,7 +13,8 @@ export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
   funding: Colors.Orange[500],
   working: Colors.Blue[500],
   judgement: Colors.Purple[200],
-  withdrawal: Colors.Green[500],
+  successful: Colors.Green[500],
+  failed: Colors.Red[300],
   expired: Colors.Red[300],
   terminated: Colors.Red[500],
 }
@@ -27,21 +29,32 @@ export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
   winner: {
     color: Colors.Green[50],
     title: 'You are a winner',
-    text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    text:
+      'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
   },
   loser: {
     color: Colors.Blue[50],
     title: 'You can withdrawn stake',
-    text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    text:
+      'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
   },
   slashed: {
     color: Colors.Red[50],
     title: 'You are slashed',
-    text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    text:
+      'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
   },
 }
 
-export const bountyPeriods: BountyPeriod[] = ['funding', 'working', 'judgement', 'withdrawal', 'expired']
+export const bountyPeriods: BountyPeriodFilters[] = [
+  'funding',
+  'working',
+  'judgement',
+  'expired',
+  'Terminated - failed',
+  'Terminated - successful',
+  'Terminated - funding',
+]
 
 export const sortingOptions = ['Latest', 'Earliest']
 

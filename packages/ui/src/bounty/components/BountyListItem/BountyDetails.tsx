@@ -29,17 +29,15 @@ export const BountyDetails = memo(
 
     const entrants = useMemo(() => entries?.map((entry) => entry.worker), [entries?.length])
 
-    const worksSubmitted = useMemo(
-      () => entries?.reduce((prev, current) => prev + (current.works?.length || 0), 0),
-      [entries?.length]
-    )
+    const worksSubmitted = useMemo(() => entries?.reduce((prev, current) => prev + (current.works?.length || 0), 0), [
+      entries?.length,
+    ])
 
     const worksWithdrawn = useMemo(() => entries?.filter((entry) => entry.withdrawn).length, [entries?.length])
 
-    const winners = useMemo(
-      () => entries?.filter((entry) => entry.winner).map((entry) => entry.worker),
-      [entries?.length]
-    )
+    const winners = useMemo(() => entries?.filter((entry) => entry.winner).map((entry) => entry.worker), [
+      entries?.length,
+    ])
 
     const content = useMemo(() => {
       switch (type) {
@@ -62,7 +60,12 @@ export const BountyDetails = memo(
         case 'terminated': {
           return <TerminatedDetails entrants={entrants} />
         }
-        case 'withdrawal':
+        case 'successful': {
+          return <TerminatedDetails entrants={entrants} />
+        }
+        case 'failed': {
+          return <TerminatedDetails entrants={entrants} />
+        }
         case 'expired': {
           return <WithdrawalDetails unwithdrawnFunds={totalFunding} winners={winners} entrants={entrants} />
         }
