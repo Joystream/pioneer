@@ -1,4 +1,4 @@
-import { LazyQueryResult } from '@apollo/client'
+import { ApolloQueryResult, LazyQueryResult } from '@apollo/client'
 import { useEffect, useMemo } from 'react'
 
 import { ForumPostOrderByInput, ForumPostWhereInput } from '@/common/api/queries'
@@ -19,6 +19,7 @@ interface UseForumThreadPosts {
   posts: ForumPost[]
   page?: number
   pageCount?: number
+  refetch?: () => Promise<ApolloQueryResult<unknown>>
 }
 
 export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNavigation): UseForumThreadPosts => {
@@ -35,9 +36,12 @@ export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNav
     }
   }, [navigation.post, navigation.page, idsResults.data, where])
 
+  const getPostsQuery = () =>
+    getPosts({ variables: { where, offset, limit: POSTS_PER_PAGE, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
+
   useEffect(() => {
     if (isDefined(offset)) {
-      getPosts({ variables: { where, offset, limit: POSTS_PER_PAGE, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
+      getPostsQuery()
     } else {
       getPostIds({ variables: { where, limit: 100000, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
     }
@@ -53,6 +57,7 @@ export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNav
     posts: postsResults.data?.forumPosts.map(asForumPost) ?? [],
     page: 1 + (offset ?? 0) / POSTS_PER_PAGE,
     pageCount: totalCount && Math.ceil(totalCount / POSTS_PER_PAGE),
+    refetch: getPostsQuery,
   }
 }
 

@@ -22,6 +22,7 @@ import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
+import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -37,6 +38,9 @@ export const ForumThread = () => {
   const newPostRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
+
+  // TODO: refactor and figure out better solution
+  const { refetch } = useForumThreadPosts(thread ? thread.id : '-1', { post: null, page: null })
 
   useEffect(() => {
     replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
@@ -114,6 +118,7 @@ export const ForumThread = () => {
           removeReply={() => setReplyTo(undefined)}
           getTransaction={getTransaction}
           replyToLink={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${replyTo?.id}`}
+          refetch={refetch}
         />
       )}
     </MainPanel>
