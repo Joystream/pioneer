@@ -1967,7 +1967,7 @@ export type BountyContribution = BaseGraphQlObject & {
   contributorId?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
-  createdInEvent: BountyFundedEvent
+  createdInEvent?: Maybe<Array<BountyFundedEvent>>
   deletedAt?: Maybe<Scalars['DateTime']>
   deletedById?: Maybe<Scalars['String']>
   id: Scalars['ID']
@@ -2035,7 +2035,9 @@ export type BountyContributionWhereInput = {
   createdAt_lte?: InputMaybe<Scalars['DateTime']>
   createdById_eq?: InputMaybe<Scalars['ID']>
   createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  createdInEvent?: InputMaybe<BountyFundedEventWhereInput>
+  createdInEvent_every?: InputMaybe<BountyFundedEventWhereInput>
+  createdInEvent_none?: InputMaybe<BountyFundedEventWhereInput>
+  createdInEvent_some?: InputMaybe<BountyFundedEventWhereInput>
   deletedAt_all?: InputMaybe<Scalars['Boolean']>
   deletedAt_eq?: InputMaybe<Scalars['DateTime']>
   deletedAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -14260,6 +14262,8 @@ export type OracleJudgmentSubmittedEvent = BaseGraphQlObject &
     indexInBlock: Scalars['Int']
     /** Network the block was produced in */
     network: Network
+    /** Rationale of the judgment */
+    rationale?: Maybe<Scalars['String']>
     /** Filtering options for interface implementers */
     type?: Maybe<EventTypeOptions>
     updatedAt?: Maybe<Scalars['DateTime']>
@@ -14280,6 +14284,7 @@ export type OracleJudgmentSubmittedEventCreateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
   network: Network
+  rationale?: InputMaybe<Scalars['String']>
 }
 
 export type OracleJudgmentSubmittedEventEdge = {
@@ -14303,6 +14308,8 @@ export enum OracleJudgmentSubmittedEventOrderByInput {
   IndexInBlockDesc = 'indexInBlock_DESC',
   NetworkAsc = 'network_ASC',
   NetworkDesc = 'network_DESC',
+  RationaleAsc = 'rationale_ASC',
+  RationaleDesc = 'rationale_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
 }
@@ -14313,6 +14320,7 @@ export type OracleJudgmentSubmittedEventUpdateInput = {
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
   network?: InputMaybe<Network>
+  rationale?: InputMaybe<Scalars['String']>
 }
 
 export type OracleJudgmentSubmittedEventWhereInput = {
@@ -14355,6 +14363,11 @@ export type OracleJudgmentSubmittedEventWhereInput = {
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
+  rationale_contains?: InputMaybe<Scalars['String']>
+  rationale_endsWith?: InputMaybe<Scalars['String']>
+  rationale_eq?: InputMaybe<Scalars['String']>
+  rationale_in?: InputMaybe<Array<Scalars['String']>>
+  rationale_startsWith?: InputMaybe<Scalars['String']>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>

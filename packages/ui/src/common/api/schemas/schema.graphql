@@ -2140,7 +2140,7 @@ type BountyContribution implements BaseGraphQLObject {
   Amount of the contribution
   """
   amount: BigInt!
-  createdInEvent: BountyFundedEvent!
+  createdInEvent: [BountyFundedEvent!]
   withdrawnInEvent: BountyFundingWithdrawalEvent
 }
 
@@ -2215,7 +2215,9 @@ input BountyContributionWhereInput {
   amount_in: [BigInt!]
   bounty: BountyWhereInput
   contributor: MembershipWhereInput
-  createdInEvent: BountyFundedEventWhereInput
+  createdInEvent_none: BountyFundedEventWhereInput
+  createdInEvent_some: BountyFundedEventWhereInput
+  createdInEvent_every: BountyFundedEventWhereInput
   withdrawnInEvent: BountyFundingWithdrawalEventWhereInput
   AND: [BountyContributionWhereInput!]
   OR: [BountyContributionWhereInput!]
@@ -15361,6 +15363,11 @@ type OracleJudgmentSubmittedEvent implements Event & BaseGraphQLObject {
   version: Int!
   bounty: Bounty!
   bountyId: String!
+
+  """
+  Rationale of the judgment
+  """
+  rationale: String
 }
 
 type OracleJudgmentSubmittedEventConnection {
@@ -15375,6 +15382,7 @@ input OracleJudgmentSubmittedEventCreateInput {
   network: Network!
   indexInBlock: Float!
   bounty: ID!
+  rationale: String
 }
 
 type OracleJudgmentSubmittedEventEdge {
@@ -15399,6 +15407,8 @@ enum OracleJudgmentSubmittedEventOrderByInput {
   indexInBlock_DESC
   bounty_ASC
   bounty_DESC
+  rationale_ASC
+  rationale_DESC
 }
 
 input OracleJudgmentSubmittedEventUpdateInput {
@@ -15407,6 +15417,7 @@ input OracleJudgmentSubmittedEventUpdateInput {
   network: Network
   indexInBlock: Float
   bounty: ID
+  rationale: String
 }
 
 input OracleJudgmentSubmittedEventWhereInput {
@@ -15453,6 +15464,11 @@ input OracleJudgmentSubmittedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
   bounty: BountyWhereInput
   AND: [OracleJudgmentSubmittedEventWhereInput!]
   OR: [OracleJudgmentSubmittedEventWhereInput!]
