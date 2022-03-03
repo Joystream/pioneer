@@ -15,6 +15,7 @@ describe('UI: BountyListItem', () => {
   const props: Omit<Bounty, 'stage'> = {
     id: '1',
     createdAt: '2021-12-31',
+    isTerminated: false,
     description: 'Description',
     imageUri: '',
     inBlock: 12,
@@ -32,7 +33,7 @@ describe('UI: BountyListItem', () => {
     judgingPeriod: 1000,
     totalFunding: new BN(2000),
     contributors: [],
-    contractType: 'ContractOpen' as const,
+    entrantWhitelist: undefined,
     entries: [
       {
         worker: getMember('alice'),

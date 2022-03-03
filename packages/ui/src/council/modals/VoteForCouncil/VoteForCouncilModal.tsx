@@ -42,7 +42,12 @@ export const VoteForCouncilModal = () => {
   useEffect(() => {
     if (state.matches('requirementsVerification'))
       if (!activeMember) {
-        showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'VoteForCouncil',
+          },
+        })
       } else if (!hasRequiredStake) {
         const data = {
           accountsWithCompatibleLocks,

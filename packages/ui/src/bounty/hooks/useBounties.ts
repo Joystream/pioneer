@@ -37,16 +37,7 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
       where.title_contains = filters.search
     }
 
-    if (status === 'past') {
-      where.stage_in = [BountyStage['Terminated'], BountyStage['Successful'], BountyStage['Failed']]
-    } else {
-      where.stage_in = [
-        BountyStage['Funding'],
-        BountyStage['WorkSubmission'],
-        BountyStage['Judgment'],
-        BountyStage['Expired'],
-      ]
-    }
+    where.isTerminated_eq = status === 'past'
 
     if (filters?.period) {
       switch (filters?.period) {
@@ -63,7 +54,7 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
           where.stage_eq = BountyStage['Expired']
           break
         case 'Terminated-funding':
-          where.stage_eq = BountyStage['Terminated']
+          where.stage_eq = BountyStage['Funding']
           break
         case 'Terminated-failed':
           where.stage_eq = BountyStage['Failed']

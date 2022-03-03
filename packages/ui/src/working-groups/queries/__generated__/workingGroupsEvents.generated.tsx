@@ -503,8 +503,19 @@ export type GetOpeningsEventsQuery = {
         opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
         group: { __typename: 'WorkingGroup'; name: string }
       }
+    | { __typename: 'AuctionBidCanceledEvent' }
+    | { __typename: 'AuctionBidMadeEvent' }
+    | { __typename: 'AuctionCanceledEvent' }
+    | { __typename: 'AuctionStartedEvent' }
+    | { __typename: 'BidMadeCompletingAuctionEvent' }
+    | { __typename: 'BountyCanceledEvent' }
     | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyCreatorCherryWithdrawalEvent' }
+    | { __typename: 'BountyFundedEvent' }
+    | { __typename: 'BountyFundingWithdrawalEvent' }
     | { __typename: 'BountyMaxFundingReachedEvent' }
+    | { __typename: 'BountyRemovedEvent' }
+    | { __typename: 'BountyVetoedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
@@ -523,6 +534,7 @@ export type GetOpeningsEventsQuery = {
         amount: any
         group: { __typename: 'WorkingGroup'; name: string }
       }
+    | { __typename: 'BuyNowCanceledEvent' }
     | { __typename: 'CandidacyNoteSetEvent' }
     | { __typename: 'CandidacyStakeReleaseEvent' }
     | { __typename: 'CandidacyWithdrawEvent' }
@@ -532,6 +544,7 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent' }
+    | { __typename: 'EnglishAuctionCompletedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -548,7 +561,13 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'NewCouncilElectedEvent' }
     | { __typename: 'NewCouncilNotElectedEvent' }
     | { __typename: 'NewMissedRewardLevelReachedEvent' }
+    | { __typename: 'NftBoughtEvent' }
+    | { __typename: 'NftIssuedEvent' }
     | { __typename: 'NotEnoughCandidatesEvent' }
+    | { __typename: 'OfferAcceptedEvent' }
+    | { __typename: 'OfferCanceledEvent' }
+    | { __typename: 'OfferStartedEvent' }
+    | { __typename: 'OpenAuctionBidAcceptedEvent' }
     | {
         __typename: 'OpeningAddedEvent'
         id: string
@@ -582,6 +601,7 @@ export type GetOpeningsEventsQuery = {
           membership: { __typename: 'Membership'; id: string; handle: string }
         }>
       }
+    | { __typename: 'OracleJudgmentSubmittedEvent' }
     | { __typename: 'PostAddedEvent' }
     | { __typename: 'PostDeletedEvent' }
     | { __typename: 'PostModeratedEvent' }
@@ -664,7 +684,10 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntrantFundsWithdrawnEvent' }
     | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkEntrySlashedEvent' }
+    | { __typename: 'WorkEntryWithdrawnEvent' }
     | { __typename: 'WorkSubmittedEvent' }
     | {
         __typename: 'WorkerExitedEvent'

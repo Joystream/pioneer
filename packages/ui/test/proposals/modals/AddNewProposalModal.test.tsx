@@ -203,7 +203,10 @@ describe('UI: AddNewProposalModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: { originalModalName: 'AddNewProposalModal' },
+      })
     })
 
     it('Insufficient funds', async () => {

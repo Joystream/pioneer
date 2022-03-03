@@ -41,7 +41,13 @@ export const CreateThreadModal = () => {
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
       if (!member) {
-        showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalData: modalData,
+            originalModalName: 'CreateThreadModal',
+          },
+        })
       } else if (balance && minimumTransactionCost) {
         const canAfford = balance.transferable.gte(minimumTransactionCost)
         const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')

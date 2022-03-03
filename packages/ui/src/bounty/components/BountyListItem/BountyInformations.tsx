@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
-import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockDurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
@@ -34,7 +33,7 @@ export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) =>
   )
 })
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isTerminated?: boolean }>`
   flex: 6;
   width: 100%;
   display: flex;
