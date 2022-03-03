@@ -46,11 +46,11 @@ export const StakingPolicyAndReward = ({
     if (workingGroupConsts) {
       baseSchema.fields.stakingAmount = baseSchema.fields.stakingAmount.min(
         workingGroupConsts.leaderOpeningStake.toNumber(),
-        'Execution constraint of ${min} JOY is violated'
+        'Input must be greater than ${min} for proposal to execute'
       )
       baseSchema.fields.block = baseSchema.fields.block.min(
         workingGroupConsts.minUnstakingPeriodLimit.toNumber() + 1,
-        'Execution constraint of ${min} is violated'
+        'Input must be greater than ${min} for proposal to execute'
       )
     }
     return baseSchema
