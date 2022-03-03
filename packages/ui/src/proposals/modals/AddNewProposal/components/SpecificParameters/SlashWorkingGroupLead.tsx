@@ -21,7 +21,7 @@ export interface SlashWorkingGroupLeadParameters {
 interface SlashWorkingGroupLeadProps extends SlashWorkingGroupLeadParameters {
   setSlashingAmount: (amount: BN) => void
   setGroupId(groupId: string): void
-  setWorkerId(workerId?: string): void
+  setWorkerId(workerId?: number): void
 }
 
 export const SlashWorkingGroupLead = ({
@@ -38,8 +38,8 @@ export const SlashWorkingGroupLead = ({
 
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
-    setWorkerId(group?.leadId)
-  }, [groupId, group?.leadId])
+    setWorkerId(group?.leadWorker?.runtimeId)
+  }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
