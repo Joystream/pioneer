@@ -77,9 +77,14 @@ interface BountyHeaderButtonsProps {
   t: TFunction
 }
 
-const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps) => {
+const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeaderButtonsProps) => {
   const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
+  const bountyCreator = bounty.creator
+  const isCreator = bountyCreator?.id === activeMember?.id
 
+  if (!isCreator || !bountyCreator) {
+    return <ContributeFundsButton bounty={bounty} />
+  }
   return (
     <>
       {shouldDisplayStatistics && (
@@ -93,6 +98,7 @@ const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps)
         </>
       )}
       <ContributeFundsButton bounty={bounty} />
+      <CancelBountyButton bounty={bounty} creator={bountyCreator} />
     </>
   )
 })
@@ -195,7 +201,6 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
 const ExpiredStageButtons = React.memo(({ bounty, activeMember }: BountyHeaderButtonsProps) => {
   const bountyCreator = bounty.creator
   const isCreator = bountyCreator?.id === activeMember?.id
-
   if (!isCreator || !bountyCreator) {
     return null
   }
