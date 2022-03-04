@@ -7,7 +7,6 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useBountyForumCategory } from '@/bounty/hooks/useBountyForumCategory'
-import { ForumThreadStep } from '@/bounty/modals/AddBountyModal/components/ForumThreadStep'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
 import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/JudgingDetailsStep'
@@ -92,12 +91,12 @@ export const AddBountyModal = () => {
   }
 
   if (state.matches(AddBountyStates.createThread) && threadCategory) {
-    const { forumThreadTopic, forumThreadDescription } = state.context
+    const { title, creator } = state.context
     const transaction = api.tx.forum.createThread(
       activeMember.id,
-      threadCategory.id,
-      forumThreadTopic,
-      forumThreadDescription,
+      threadCategory?.id ?? 0,
+      `${title} by ${creator?.handle}`,
+      `This is the description thread for ${title}`,
       null
     )
     const service = state.children.createThread
@@ -116,7 +115,7 @@ export const AddBountyModal = () => {
     )
   }
 
-  if (state.matches(AddBountyStates.transaction)) {
+  if (state.matches(AddBountyStates.transaction) && state.context.newThreadId) {
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
       createBountyParametersFactory(state as AddBountyModalMachineState),
@@ -226,16 +225,6 @@ export const AddBountyModal = () => {
                   send('SET_JUDGING_PERIOD_LENGTH', { judgingPeriodLength })
                 }
                 setOracle={(oracle) => send('SET_ORACLE', { oracle })}
-              />
-            )}
-            {state.matches(AddBountyStates.forumThreadDetails) && (
-              <ForumThreadStep
-                setForumThreadDescription={(forumThreadDescription) =>
-                  send('SET_FORUM_THREAD_DESCRIPTION', { forumThreadDescription })
-                }
-                setForumThreadTopic={(forumThreadTopic) => send('SET_FORUM_THREAD_TOPIC', { forumThreadTopic })}
-                forumThreadTopic={state.context.forumThreadTopic}
-                forumThreadDescription={state.context.forumThreadDescription}
               />
             )}
           </StepperBody>

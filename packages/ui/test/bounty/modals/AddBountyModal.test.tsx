@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -144,10 +145,6 @@ describe('UI: AddNewBountyModal', () => {
           title: 'Judging Period Details',
           type: 'next',
         },
-        {
-          title: 'Forum Thread',
-          type: 'next',
-        },
       ])
     })
   })
@@ -263,59 +260,24 @@ describe('UI: AddNewBountyModal', () => {
 
       it('Renders', async () => {
         expect(await screen.queryAllByText('Oralce')).toBeDefined()
-        expect(await getNextButton()).toBeDisabled()
+        expect(await getCreateButton()).toBeDisabled()
       })
 
       it('Valid form', async () => {
         await fillJudgingPeriod(false)
 
-        expect(await getNextButton()).not.toBeDisabled()
+        expect(await getCreateButton()).not.toBeDisabled()
       })
 
       describe('Invalid form', () => {
         it('No oracle', async () => {
           await fillField('field-periodLength', 100)
 
-          expect(await getNextButton()).toBeDisabled()
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('No period length', async () => {
           await selectFromDropdown('Oracle', 'bob')
-
-          expect(await getNextButton()).toBeDisabled()
-        })
-      })
-    })
-
-    describe('Forum Thread', () => {
-      beforeEach(async () => {
-        renderModal()
-        await fillGeneralParameters()
-        await fillFundingPeriod()
-        await fillWorkingPeriod()
-        await fillJudgingPeriod()
-      })
-
-      it('Renders', async () => {
-        expect(await screen.queryAllByText('Topic')).toBeDefined()
-        expect(await getCreateButton()).toBeDisabled()
-      })
-
-      it('Valid form', async () => {
-        await fillForumThread(false)
-
-        expect(await getCreateButton()).not.toBeDisabled()
-      })
-
-      describe('Invalid form', () => {
-        it('No topic', async () => {
-          await fillField('field-description', 'Description')
-
-          expect(await getCreateButton()).toBeDisabled()
-        })
-
-        it('No description', async () => {
-          await fillField('field-topic', 'Topic')
 
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -329,7 +291,6 @@ describe('UI: AddNewBountyModal', () => {
         await fillFundingPeriod()
         await fillWorkingPeriod()
         await fillJudgingPeriod()
-        await fillForumThread()
       })
 
       it('Renders', async () => {
@@ -346,7 +307,10 @@ describe('UI: AddNewBountyModal', () => {
       })
 
       it('Success', async () => {
-        stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+        stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated', [
+          createType('CategoryId', 0),
+          createType('ThreadId', 1337),
+        ])
         const button = await getThreadTxButton()
         fireEvent.click(button)
 
@@ -361,7 +325,6 @@ describe('UI: AddNewBountyModal', () => {
         await fillFundingPeriod()
         await fillWorkingPeriod()
         await fillJudgingPeriod()
-        await fillForumThread()
         await fillForumThreadTransaction()
       })
 
@@ -433,26 +396,18 @@ describe('UI: AddNewBountyModal', () => {
     await selectFromDropdown('Oracle', 'bob')
 
     if (proceedToNextStep) {
-      await goToNext()
-
-      await waitFor(async () => expect(await screen.queryByText(/^Topic$/)).toBeDefined())
-    }
-  }
-
-  const fillForumThread = async (proceedToNextStep = true) => {
-    await fillField('field-topic', 'Topic')
-    await fillField('field-description', 'Description')
-
-    if (proceedToNextStep) {
       await createBounty()
 
-      await waitFor(async () => expect(await screen.queryByText(/^Sign transaction and Create$/i)).toBeDefined())
+      await waitFor(async () => expect(await screen.queryByText(/^Create Forum Thread$/i)).toBeDefined())
     }
   }
 
   const fillForumThreadTransaction = async () => {
     const button = await getThreadTxButton()
-    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated', [
+      createType('CategoryId', 0),
+      createType('ThreadId', 1337),
+    ])
     fireEvent.click(button)
   }
 

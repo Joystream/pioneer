@@ -1,8 +1,10 @@
+import { ThreadId } from '@joystream/types/common'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
+import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -42,22 +44,14 @@ export interface JudgingPeriodDetailsContext extends WorkingPeriodDetailsContext
   oracle: Member
 }
 
-export interface ForumThreadDetailsContext extends JudgingPeriodDetailsContext {
-  forumThreadTopic: string
-  forumThreadDescription: string
-}
-
 interface TransactionContext extends JudgingPeriodDetailsContext {
   transactionEvents?: EventRecord[]
   bountyId?: number
+  newThreadId?: ThreadId
 }
 
 export type AddBountyContext = Partial<
-  GeneralParametersContext &
-    ForumThreadDetailsContext &
-    WorkingPeriodDetailsContext &
-    JudgingPeriodDetailsContext &
-    TransactionContext
+  GeneralParametersContext & WorkingPeriodDetailsContext & JudgingPeriodDetailsContext & TransactionContext
 >
 
 export enum AddBountyStates {
@@ -67,7 +61,6 @@ export enum AddBountyStates {
   fundingPeriodDetails = 'fundingPeriodDetails',
   workingPeriodDetails = 'workingPeriodDetails',
   judgingPeriodDetails = 'judgingPeriodDetails',
-  forumThreadDetails = 'forumThreadDetails',
   beforeTransaction = 'beforeTransaction',
   createThread = 'createThread',
   transaction = 'transaction',
@@ -83,7 +76,6 @@ export type AddBountyState =
   | { value: AddBountyStates.fundingPeriodDetails; context: FundingPeriodDetailsContext }
   | { value: AddBountyStates.workingPeriodDetails; context: WorkingPeriodDetailsContext }
   | { value: AddBountyStates.judgingPeriodDetails; context: JudgingPeriodDetailsContext }
-  | { value: AddBountyStates.forumThreadDetails; context: ForumThreadDetailsContext }
   | { value: AddBountyStates.createThread; context: Required<AddBountyContext> }
   | { value: AddBountyStates.transaction; context: Required<AddBountyContext> }
   | { value: AddBountyStates.success; context: Required<AddBountyContext> }
@@ -105,8 +97,6 @@ type SetWorkingPeriodStakeEvent = { type: 'SET_WORKING_PERIOD_STAKE'; workingPer
 type SetWorkingPeriodWhitelistEvent = { type: 'SET_WORKING_PERIOD_WHITELIST'; workingPeriodWhitelist: Member[] }
 type SetJudgingPeriodLengthEvent = { type: 'SET_JUDGING_PERIOD_LENGTH'; judgingPeriodLength: BN }
 type SetOracleEvent = { type: 'SET_ORACLE'; oracle: Member }
-type SetForumThreadTopicEvent = { type: 'SET_FORUM_THREAD_TOPIC'; forumThreadTopic: string }
-type SetForumThreadDescriptionEvent = { type: 'SET_FORUM_THREAD_DESCRIPTION'; forumThreadDescription: string }
 
 export type AddBountyEvent =
   | SetCreatorEvent
@@ -124,8 +114,6 @@ export type AddBountyEvent =
   | SetWorkingPeriodWhitelistEvent
   | SetJudgingPeriodLengthEvent
   | SetOracleEvent
-  | SetForumThreadTopicEvent
-  | SetForumThreadDescriptionEvent
   | { type: 'NEXT' }
   | { type: 'FAIL' }
   | { type: 'BACK' }
@@ -244,7 +232,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     [AddBountyStates.judgingPeriodDetails]: {
       on: {
         BACK: AddBountyStates.workingPeriodDetails,
-        NEXT: AddBountyStates.forumThreadDetails,
+        NEXT: AddBountyStates.createThread,
         SET_JUDGING_PERIOD_LENGTH: {
           actions: assign({
             judgingPeriodLength: (context, event) => (event as SetJudgingPeriodLengthEvent).judgingPeriodLength,
@@ -258,24 +246,6 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
       },
       meta: { isStep: true, stepTitle: 'Judging Period Details' },
     },
-    [AddBountyStates.forumThreadDetails]: {
-      on: {
-        BACK: AddBountyStates.judgingPeriodDetails,
-        NEXT: AddBountyStates.createThread,
-        SET_FORUM_THREAD_TOPIC: {
-          actions: assign({
-            forumThreadTopic: (context, event) => (event as SetForumThreadTopicEvent).forumThreadTopic,
-          }),
-        },
-        SET_FORUM_THREAD_DESCRIPTION: {
-          actions: assign({
-            forumThreadDescription: (context, event) =>
-              (event as SetForumThreadDescriptionEvent).forumThreadDescription,
-          }),
-        },
-      },
-      meta: { isStep: true, stepTitle: 'Forum Thread' },
-    },
     [AddBountyStates.createThread]: {
       invoke: {
         id: AddBountyStates.createThread,
@@ -283,7 +253,9 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
         onDone: [
           {
             target: [AddBountyStates.transaction],
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            actions: assign({
+              newThreadId: (_, event) => getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 1),
+            }),
             cond: (context, event) => isTransactionSuccess(context, event),
           },
           {
