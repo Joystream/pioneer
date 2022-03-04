@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { useMemberRowWorkDetails } from '@/memberships/hooks/useMemberRowWorkDetails'
+import { EditSymbol } from '@/common/components/icons/symbols'
+import { useMemberActions } from '@/memberships/hooks/useMemberActions'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 import { MemberInfo } from '..'
-import { EditSymbol } from '../../../common/components/icons/symbols'
 import { Member } from '../../types'
 import { EditMembershipButton } from '../EditMembershipButton'
 import { MemberRoles } from '../MemberRoles'
@@ -20,7 +20,7 @@ import {
 } from './Fileds'
 
 export const MyMemberListItem = ({ member }: { member: Member }) => {
-  const { slashed, terminated, invited } = useMemberRowWorkDetails(member)
+  const { slashed, terminated, invited } = useMemberActions(member)
   const showMemberModal = useShowMemberModal(member.id)
   return (
     <MemberItemWrap kind="MyMember">
