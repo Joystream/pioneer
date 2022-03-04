@@ -2140,7 +2140,7 @@ type BountyContribution implements BaseGraphQLObject {
   Amount of the contribution
   """
   amount: BigInt!
-  createdInEvent: [BountyFundedEvent!]
+  bountyFundedEvents: [BountyFundedEvent!]!
   withdrawnInEvent: BountyFundingWithdrawalEvent
 }
 
@@ -2215,9 +2215,9 @@ input BountyContributionWhereInput {
   amount_in: [BigInt!]
   bounty: BountyWhereInput
   contributor: MembershipWhereInput
-  createdInEvent_none: BountyFundedEventWhereInput
-  createdInEvent_some: BountyFundedEventWhereInput
-  createdInEvent_every: BountyFundedEventWhereInput
+  bountyFundedEvents_none: BountyFundedEventWhereInput
+  bountyFundedEvents_some: BountyFundedEventWhereInput
+  bountyFundedEvents_every: BountyFundedEventWhereInput
   withdrawnInEvent: BountyFundingWithdrawalEventWhereInput
   AND: [BountyContributionWhereInput!]
   OR: [BountyContributionWhereInput!]
@@ -16263,7 +16263,7 @@ type PostReactionResultCancel {
 }
 
 type PostReactionResultInvalid {
-  reactionId: Int!
+  reactionId: String!
 }
 
 type PostReactionResultValid {

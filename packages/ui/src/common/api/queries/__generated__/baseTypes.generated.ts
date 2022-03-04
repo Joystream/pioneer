@@ -1962,12 +1962,12 @@ export type BountyContribution = BaseGraphQlObject & {
   /** Amount of the contribution */
   amount: Scalars['BigInt']
   bounty: Bounty
+  bountyFundedEvents: Array<BountyFundedEvent>
   bountyId: Scalars['String']
   contributor?: Maybe<Membership>
   contributorId?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
-  createdInEvent?: Maybe<Array<BountyFundedEvent>>
   deletedAt?: Maybe<Scalars['DateTime']>
   deletedById?: Maybe<Scalars['String']>
   id: Scalars['ID']
@@ -2027,6 +2027,9 @@ export type BountyContributionWhereInput = {
   amount_lt?: InputMaybe<Scalars['BigInt']>
   amount_lte?: InputMaybe<Scalars['BigInt']>
   bounty?: InputMaybe<BountyWhereInput>
+  bountyFundedEvents_every?: InputMaybe<BountyFundedEventWhereInput>
+  bountyFundedEvents_none?: InputMaybe<BountyFundedEventWhereInput>
+  bountyFundedEvents_some?: InputMaybe<BountyFundedEventWhereInput>
   contributor?: InputMaybe<MembershipWhereInput>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -2035,9 +2038,6 @@ export type BountyContributionWhereInput = {
   createdAt_lte?: InputMaybe<Scalars['DateTime']>
   createdById_eq?: InputMaybe<Scalars['ID']>
   createdById_in?: InputMaybe<Array<Scalars['ID']>>
-  createdInEvent_every?: InputMaybe<BountyFundedEventWhereInput>
-  createdInEvent_none?: InputMaybe<BountyFundedEventWhereInput>
-  createdInEvent_some?: InputMaybe<BountyFundedEventWhereInput>
   deletedAt_all?: InputMaybe<Scalars['Boolean']>
   deletedAt_eq?: InputMaybe<Scalars['DateTime']>
   deletedAt_gt?: InputMaybe<Scalars['DateTime']>
@@ -15106,7 +15106,7 @@ export type PostReactionResultCancel = {
 
 export type PostReactionResultInvalid = {
   __typename: 'PostReactionResultInvalid'
-  reactionId: Scalars['Int']
+  reactionId: Scalars['String']
 }
 
 export type PostReactionResultValid = {
