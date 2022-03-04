@@ -7,6 +7,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { SelectWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/SelectWorkingGroupApplication'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
+import { GroupIdName } from '@/working-groups/types'
 
 export interface FillWorkingGroupLeadOpeningParameters {
   openingId?: number
@@ -16,9 +17,16 @@ export interface FillWorkingGroupLeadOpeningParameters {
 interface Props extends FillWorkingGroupLeadOpeningParameters {
   setOpeningId: (openingId: number) => void
   setApplicationId: (applicationId: number) => void
+  setWorkingGroupId: (workingGroupId: GroupIdName) => void
 }
 
-export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicationId, setApplicationId }: Props) => {
+export const FillWorkingGroupLeadOpening = ({
+  openingId,
+  setOpeningId,
+  applicationId,
+  setApplicationId,
+  setWorkingGroupId,
+}: Props) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -39,7 +47,10 @@ export const FillWorkingGroupLeadOpening = ({ openingId, setOpeningId, applicati
             <SelectWorkingGroupOpening
               id="opening"
               selectedOpeningId={openingId}
-              onChange={(selected) => setOpeningId(selected.runtimeId)}
+              onChange={(selected) => {
+                setWorkingGroupId(selected.groupId)
+                setOpeningId(selected.runtimeId)
+              }}
               openingsPositionType={WorkingGroupOpeningType.Leader}
             />
           </InputComponent>
