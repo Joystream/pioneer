@@ -6,8 +6,9 @@ import * as Yup from 'yup'
 import { FundingPeriodDetailsContext, GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
-import { Tooltip, TooltipContainer, TooltipDefault } from '@/common/components/Tooltip'
+import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { useSchema } from '@/common/hooks/useSchema'
@@ -102,12 +103,28 @@ export const FundingDetailsStep = ({
       </RowGapBlock>
       <RowGapBlock gap={20}>
         <InlineToggleWrap>
-          <Label>Discussion mode :</Label>
+          <Label>Funding period :</Label>
           <ToggleCheckbox
             falseLabel={
               <CheckBoxLabelWrapper>
                 Perpetual
-                <Tooltip tooltipText="Lorem ipsum...">
+                <Tooltip
+                  tooltipText={
+                    <>
+                      The funding period type refers to how funds are collected for the benefit of a bounty, and there
+                      are fundamentally two types: Perpetual: new contributors can join on an ongoing basis before a
+                      target which sets the upper bound for how much can be contributed. Limited: The funding lasts for
+                      no longer than a given number of blocks, called the funding period. There is a lower bound and
+                      upper bound for how much must be contributed.{' '}
+                      <TooltipExternalLink
+                        href="https://joystream.gitbook.io/testnet-workspace/system/bounties#funding-period-type"
+                        target="_blank"
+                      >
+                        <TextMedium>Learn more</TextMedium> <LinkSymbol />
+                      </TooltipExternalLink>
+                    </>
+                  }
+                >
                   <TooltipDefault />
                 </Tooltip>
               </CheckBoxLabelWrapper>
@@ -115,9 +132,6 @@ export const FundingDetailsStep = ({
             trueLabel={
               <CheckBoxLabelWrapper>
                 <StyledParagraph>Limited</StyledParagraph>
-                <Tooltip tooltipText="Lorem ipsum...">
-                  <TooltipDefault />
-                </Tooltip>
               </CheckBoxLabelWrapper>
             }
             checked={fundingPeriodType === 'limited'}
