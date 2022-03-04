@@ -53,8 +53,14 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
         case 'Expired':
           where.stage_eq = BountyStage['Expired']
           break
-        case 'Withdrawal':
-          where.stage_in = [BountyStage['Successful'], BountyStage['Failed']]
+        case 'Terminated-funding':
+          where.stage_eq = BountyStage['Funding']
+          break
+        case 'Terminated-failed':
+          where.stage_eq = BountyStage['Failed']
+          break
+        case 'Terminated-successful':
+          where.stage_eq = BountyStage['Successful']
           break
       }
     }

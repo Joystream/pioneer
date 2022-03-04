@@ -9,7 +9,16 @@ export interface BountyContributionsFiltersState {
   createdAfter?: Date
 }
 
-export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired' | 'terminated'
+export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'expired' | 'terminated' | 'failed' | 'successful'
+
+export type BountyPeriodFilters =
+  | 'funding'
+  | 'working'
+  | 'judgement'
+  | 'expired'
+  | 'Terminated - successful'
+  | 'Terminated - failed'
+  | 'Terminated - funding'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
@@ -79,7 +88,7 @@ export interface PeriodsLengthsType {
   judgingPeriodLength: number
 }
 
-export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed'
+export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
 
 export interface WorkEntry {
   id: string

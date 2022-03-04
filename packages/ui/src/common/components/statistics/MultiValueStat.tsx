@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TextInlineBig, TextBig } from '@/common/components/typography'
-import { Fonts } from '@/common/constants'
+import { Colors, Fonts } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
 import { toNumber } from '@/common/utils'
@@ -19,10 +19,11 @@ interface LabelledValue {
 
 interface MultiTokenValueStatProps extends StatisticItemProps {
   values: LabelledValue[]
+  isTerminated?: boolean
 }
 
-export const MultiValueStat = ({ title, values }: MultiTokenValueStatProps) => (
-  <MultiStatisticItem title={title}>
+export const MultiValueStat = ({ title, values, isTerminated }: MultiTokenValueStatProps) => (
+  <MultiStatisticItem title={title} isTerminated={isTerminated}>
     {values.map(({ label, value, type = 'token' }) => (
       <StatisticItemSpacedContent key={label}>
         <StatisticLabel>{label}</StatisticLabel>
@@ -47,8 +48,9 @@ const StatisticValue = ({ type, value }: Omit<LabelledValue, 'label'>) => {
   }
 }
 
-export const MultiStatisticItem = styled(StatisticItem)<{ moreInnerSpace?: boolean }>`
+export const MultiStatisticItem = styled(StatisticItem)<{ moreInnerSpace?: boolean; isTerminated?: boolean }>`
   padding: ${({ moreInnerSpace }) => (moreInnerSpace ? '12px 16px 4px' : '12px 16px 16px')};
+  background-color: ${(props) => (props.isTerminated ? Colors.Black[50] : null)};
 `
 
 const BlocksValue = styled(TextBig)`

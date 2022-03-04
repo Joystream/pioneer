@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -26,6 +26,7 @@ export const BountyListItem = memo(
     stage,
     totalFunding,
     entries,
+    isTerminated,
   }: Bounty) => {
     const history = useHistory()
 
@@ -43,8 +44,9 @@ export const BountyListItem = memo(
       }
     }, [period, fundingType])
 
+    const periodStatus = period === 'failed' || period === 'successful' || period === 'terminated'
     return (
-      <Wrapper>
+      <Wrapper isTerminated={isTerminated}>
         {/* TODO: add image url to schema */}
         <BountyImage src="https://picsum.photos/500/300" />
         <Info>
@@ -62,8 +64,10 @@ export const BountyListItem = memo(
         <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
           <Arrow direction="right" />
         </ArrowWrapper>
-
-        <TypeBadge color={BountyPeriodColorMapper[period]}>{`${period.toUpperCase()} PERIOD`}</TypeBadge>
+        <TypeBadge color={BountyPeriodColorMapper[period]}>
+          {period.toUpperCase()}
+          {!periodStatus ? ' PERIOD' : null}
+        </TypeBadge>
       </Wrapper>
     )
   }
@@ -83,7 +87,7 @@ const TypeBadge = styled(BadgeStatus)`
   left: 16px;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isTerminated?: boolean }>`
   width: 100%;
   height: 180px;
   border: 1px solid ${Colors.Black[100]};
@@ -91,6 +95,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: nowrap;
   position: relative;
+  background-color: ${(props) => (props.isTerminated ? Colors.Black[50] : null)}; ;
 `
 
 const BountyImage = styled.img`

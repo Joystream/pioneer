@@ -151,7 +151,6 @@ const SuccessfulStageButtons = React.memo(({ bounty, activeMember, t }: BountyHe
     () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
     [bounty]
   )
-
   return (
     <>
       <ButtonGhost size="large">
@@ -176,18 +175,19 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected
+  const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected && !bounty.isTerminated
+  const isTerminated = !bounty.isTerminated
 
   if (!hasAnnounced && !isContributor) {
     return null
   }
-
   return (
     <>
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {hasLost ? <WithdrawStakeButton bounty={bounty} /> : <WithdrawContributionButton bounty={bounty} />}
+      {hasLost && <WithdrawStakeButton bounty={bounty} />}
+      {isTerminated && <WithdrawContributionButton bounty={bounty} />}
     </>
   )
 })

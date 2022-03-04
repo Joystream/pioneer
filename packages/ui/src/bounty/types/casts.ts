@@ -29,12 +29,15 @@ import {
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
   switch (stage) {
     case 'successful':
+      return 'successful'
     case 'failed':
-      return 'withdrawal'
+      return 'failed'
     case 'workSubmission':
       return 'working'
     case 'judgment':
       return 'judgement'
+    case 'terminated':
+      return 'terminated'
     default:
       return stage as BountyPeriod
   }

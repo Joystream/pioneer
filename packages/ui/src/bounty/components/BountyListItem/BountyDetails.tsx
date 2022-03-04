@@ -59,10 +59,11 @@ export const BountyDetails = memo(
         case 'judgement': {
           return <JudgmentDetails withdrawals={worksWithdrawn} worksSubmitted={worksSubmitted} entrants={entrants} />
         }
-        case 'terminated': {
+        case 'terminated':
+        case 'successful':
+        case 'failed': {
           return <TerminatedDetails entrants={entrants} />
         }
-        case 'withdrawal':
         case 'expired': {
           return <WithdrawalDetails unwithdrawnFunds={totalFunding} winners={winners} entrants={entrants} />
         }

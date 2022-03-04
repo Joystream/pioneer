@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
-import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockDurationStatistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
@@ -21,25 +20,20 @@ export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) =>
           <TextMedium bold>
             {creator.handle}
             <AvatarWrapper>
-              <MemberInfoAvatar member={creator} />
+              <MemberInfoAvatar member={creator} avatarUri={creator.avatar} />
             </AvatarWrapper>
           </TextMedium>
         )}
         <Title bold>{title}</Title>
       </TitleContainer>
       <BadgeDurationContainer>
-        <BadgesRow space={8}>
-          {/* TODO: add tags to schema */}
-          <BadgeStatus inverted>GOVERNANCE BUDGET</BadgeStatus>
-          <BadgeStatus inverted>ELECTION #6</BadgeStatus>
-        </BadgesRow>
         {timeToEnd && <BlockDurationStatistics size="s" value={timeToEnd} title="Time left" hideBlockNumber />}
       </BadgeDurationContainer>
     </Wrapper>
   )
 })
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isTerminated?: boolean }>`
   flex: 6;
   width: 100%;
   display: flex;
