@@ -35,10 +35,10 @@ export const SelectWorkingGroupOpeningBase = ({
   openingsPositionType,
 }: Props) => {
   const { openings } = useOpenings({ type: 'open', groupId, openingsPositionType })
-  const selectedOpening = useMemo(() => openings.find((opening) => opening.id === selectedOpeningId), [
-    selectedOpeningId,
-    openings.length,
-  ])
+  const selectedOpening = useMemo(
+    () => openings.find((opening) => opening.id === selectedOpeningId),
+    [selectedOpeningId, openings.length]
+  )
 
   const change = (selected: WorkingGroupOpening, close: () => void) => {
     onChange(selected)
