@@ -4,14 +4,10 @@ import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { CancelWorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 
-export interface CancelWorkingGroupLeadStakeParameters {
-  groupId?: string
-  openingId?: string
-}
-
-interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadStakeParameters {
+interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadOpeningParameters {
   setGroupId(groupId: string): void
   setOpeningId(openingId?: string): void
 }
