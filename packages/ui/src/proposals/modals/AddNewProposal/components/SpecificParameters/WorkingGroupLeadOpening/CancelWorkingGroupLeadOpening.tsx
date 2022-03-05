@@ -8,12 +8,12 @@ import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWor
 
 export interface CancelWorkingGroupLeadStakeParameters {
   groupId?: string
-  openingId?: number
+  openingId?: string
 }
 
 interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadStakeParameters {
   setGroupId(groupId: string): void
-  setOpeningId(openingId?: number): void
+  setOpeningId(openingId?: string): void
 }
 
 export const CancelWorkingGroupLeadOpening = ({
@@ -46,7 +46,7 @@ export const CancelWorkingGroupLeadOpening = ({
               openingsPositionType="LEADER"
               onChange={(selected) => {
                 setGroupId(selected.groupId)
-                setOpeningId(selected.runtimeId)
+                setOpeningId(selected.id)
               }}
               selectedOpeningId={openingId}
             />

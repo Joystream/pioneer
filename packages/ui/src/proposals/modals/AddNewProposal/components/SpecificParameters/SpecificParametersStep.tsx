@@ -111,7 +111,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
-      return typeof specifics?.applicationId === 'number' && typeof specifics?.openingId === 'number'
+      return typeof specifics?.applicationId === 'string' && typeof specifics?.openingId === 'string'
     }
     case state.matches('specificParameters.updateWorkingGroupBudget'): {
       return !!(
@@ -181,8 +181,8 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
         <FillWorkingGroupLeadOpening
           applicationId={specifics?.applicationId}
           openingId={specifics?.openingId}
-          setApplicationId={(applicationId: number) => send('SET_APPLICATION_ID', { applicationId })}
-          setOpeningId={(openingId: number) => send('SET_OPENING_ID', { openingId })}
+          setApplicationId={(applicationId) => send('SET_APPLICATION_ID', { applicationId })}
+          setOpeningId={(openingId) => send('SET_OPENING_ID', { openingId })}
           setWorkingGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
       )

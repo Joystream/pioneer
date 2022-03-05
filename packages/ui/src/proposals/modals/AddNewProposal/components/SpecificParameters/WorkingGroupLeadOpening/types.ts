@@ -15,5 +15,5 @@ export interface WorkingGroupAndOpeningDetailsParameters {
 }
 
 export interface CancelWorkingGroupLeadOpeningParameters {
-  openingId?: number
+  openingId?: string
 }
