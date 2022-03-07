@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -39,6 +40,7 @@ export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const history = useHistory()
   useCandidatePreviewViaUrlParameter()
 
   if (isLoadingElectionStage) {
@@ -46,7 +48,7 @@ export const Election = () => {
   }
 
   if (electionStage === 'inactive') {
-    return null
+    return history.replace({ pathname: ElectionRoutes.pastElections })
   }
 
   const header = (
