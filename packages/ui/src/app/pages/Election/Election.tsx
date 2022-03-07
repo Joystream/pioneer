@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -43,12 +43,14 @@ export const Election = () => {
   const history = useHistory()
   useCandidatePreviewViaUrlParameter()
 
+  useEffect(() => {
+    if (electionStage === 'inactive') {
+      history.replace(ElectionRoutes.pastElections)
+    }
+  }, [electionStage])
+
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
-  }
-
-  if (electionStage === 'inactive') {
-    return history.replace({ pathname: ElectionRoutes.pastElections })
   }
 
   const header = (
