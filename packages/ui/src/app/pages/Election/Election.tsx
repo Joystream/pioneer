@@ -44,7 +44,7 @@ export const Election = () => {
   useCandidatePreviewViaUrlParameter()
 
   useEffect(() => {
-    if (electionStage === 'inactive') {
+    if (!isLoadingElectionStage && electionStage === 'inactive') {
       history.replace(ElectionRoutes.pastElections)
     }
   }, [electionStage])
