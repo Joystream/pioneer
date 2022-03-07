@@ -19,6 +19,7 @@ import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
+import { BN_ZERO } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
@@ -81,9 +82,13 @@ const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeade
   const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
   const bountyCreator = bounty.creator
   const isCreator = bountyCreator?.id === activeMember?.id
+  const isCancelAvailable = bounty.totalFunding > BN_ZERO
 
   if (!isCreator || !bountyCreator) {
     return <ContributeFundsButton bounty={bounty} />
+  }
+  if (isCancelAvailable) {
+    return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
   }
   return (
     <>
@@ -98,7 +103,6 @@ const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeade
         </>
       )}
       <ContributeFundsButton bounty={bounty} />
-      <CancelBountyButton bounty={bounty} creator={bountyCreator} />
     </>
   )
 })
