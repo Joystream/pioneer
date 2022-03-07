@@ -259,6 +259,7 @@ export type AddNewProposalState =
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+type SetReferralCutEvent = { type: 'SET_REFERRAL_CUT'; referralCut: number }
 type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
 type SetBudgetUpdateKindEvent = { type: 'SET_BUDGET_UPDATE_KIND'; kind: UpdateKind }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
@@ -309,6 +310,7 @@ export type AddNewProposalEvent =
   | SetRuntime
   | SetSlashingAmount
   | SetInvitationCount
+  | SetReferralCutEvent
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
@@ -499,10 +501,10 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
         setReferralCut: {
           on: {
-            SET_AMOUNT: {
+            SET_REFERRAL_CUT: {
               actions: assign({
                 specifics: (context, event) => {
-                  return { ...context.specifics, amount: event.amount }
+                  return { ...context.specifics, referralCut: event.referralCut }
                 },
               }),
             },

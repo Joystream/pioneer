@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -7,18 +6,18 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
 export interface SetReferralCutParameters {
-  amount?: BN
+  referralCut?: number
 }
 
 interface Props extends SetReferralCutParameters {
-  setAmount: (amount: BN) => void
+  setReferralCut: (amount: number) => void
 }
 
-export const SetReferralCut = ({ amount, setAmount }: Props) => {
+export const SetReferralCut = ({ referralCut, setReferralCut }: Props) => {
   const onChange = (_: any, value: number) => {
     if (Number(value) > 255) return
 
-    setAmount(new BN(value))
+    setReferralCut(value)
   }
 
   return (
@@ -41,7 +40,7 @@ export const SetReferralCut = ({ amount, setAmount }: Props) => {
             <InputNumber
               id="amount-input"
               isTokenValue
-              value={amount?.toString()}
+              value={referralCut?.toString()}
               placeholder="0"
               onChange={onChange}
             />

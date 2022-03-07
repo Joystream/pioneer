@@ -141,7 +141,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'setReferralCut': {
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
-        SetReferralCut: specifics?.amount?.toNumber() ?? 0,
+        SetReferralCut: specifics?.referralCut ?? 0,
       })
     }
     case 'setInitialInvitationBalance': {
