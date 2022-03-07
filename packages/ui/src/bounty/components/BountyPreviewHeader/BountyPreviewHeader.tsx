@@ -102,7 +102,6 @@ const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeade
           </div>
         </>
       )}
-      <ContributeFundsButton bounty={bounty} />
     </>
   )
 })

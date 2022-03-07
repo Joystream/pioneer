@@ -117,7 +117,7 @@ describe('UI: BountyPreviewHeader', () => {
 
       renderHeader()
 
-      expect(await getButton('buttons.contributeFunds')).toBeDefined()
+      expect(await getButton('buttons.cancelBounty')).toBeDefined()
     })
   })
 
