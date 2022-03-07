@@ -19,6 +19,7 @@ import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
+import { BN_ZERO } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
@@ -77,9 +78,18 @@ interface BountyHeaderButtonsProps {
   t: TFunction
 }
 
-const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps) => {
+const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeaderButtonsProps) => {
   const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
+  const bountyCreator = bounty.creator
+  const isCreator = bountyCreator?.id === activeMember?.id
+  const isCancelAvailable = bounty.totalFunding > BN_ZERO
 
+  if (!isCreator || !bountyCreator) {
+    return <ContributeFundsButton bounty={bounty} />
+  }
+  if (isCancelAvailable) {
+    return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
+  }
   return (
     <>
       {shouldDisplayStatistics && (
@@ -92,7 +102,6 @@ const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps)
           </div>
         </>
       )}
-      <ContributeFundsButton bounty={bounty} />
     </>
   )
 })
@@ -195,7 +204,6 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
 const ExpiredStageButtons = React.memo(({ bounty, activeMember }: BountyHeaderButtonsProps) => {
   const bountyCreator = bounty.creator
   const isCreator = bountyCreator?.id === activeMember?.id
-
   if (!isCreator || !bountyCreator) {
     return null
   }
