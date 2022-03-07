@@ -150,7 +150,7 @@ describe('UI: Election page', () => {
           it('No candidates', async () => {
             const { queryByText } = await renderComponent()
 
-            expect(queryByText(/There is no election now/i)).not.toBeNull()
+            expect(queryByText(/There are no candidates yet/i)).not.toBeNull()
           })
 
           it('Has candidates', async () => {
@@ -170,7 +170,7 @@ describe('UI: Election page', () => {
 
             const { queryByText } = await renderComponent()
 
-            expect(queryByText(/There is no election now/i)).toBeNull()
+            expect(queryByText(/There are no candidates yet/i)).toBeNull()
             expect(queryByText('My candidates')).toBeNull()
           })
 
