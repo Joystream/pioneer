@@ -9,6 +9,7 @@ import { BalancesContext } from '@/accounts/providers/balances/context'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { AddressToBalanceMap } from '@/accounts/types'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { last } from '@/common/utils'
@@ -19,6 +20,7 @@ import memberMock from '@/mocks/data/raw/members.json'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
+import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -36,6 +38,10 @@ configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
+jest.mock('@/common/components/CKEditor', () => ({
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 describe('UI: SubmitJudgementModal', () => {
@@ -104,7 +110,7 @@ describe('UI: SubmitJudgementModal', () => {
     stubDefaultBalances(api)
     stubBountyConstants(api)
     transaction = stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 100)
-    txMock = api.api.tx.bounty.submitOracleJudgment as unknown as jest.Mock
+    txMock = (api.api.tx.bounty.submitOracleJudgment as unknown) as jest.Mock
   })
 
   it('Renders', () => {
@@ -118,43 +124,49 @@ describe('UI: SubmitJudgementModal', () => {
     it('Bounty failed', async () => {
       renderModal()
 
+      const rationale = 'Rationale'
       const checkbox = screen.getByText('modals.submitJudgement.checkbox.label')?.nextSibling?.childNodes.item(1)
       fireEvent.click(checkbox as Node)
+      fillRationale(rationale)
 
       expect(screen.queryByText('modals.submitJudgement.noWinner.title')).toBeInTheDocument()
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
 
-      const [actor, bountyId, oracleJudgment, rationale] = last(txMock.mock.calls)
+      const [actor, bountyId, oracleJudgment, txRationale] = last(txMock.mock.calls)
       expect(actor?.Member.toJSON()).toBe(0)
       expect(bountyId?.toJSON()).toBe(0)
-      expect(rationale).toBe('')
+      expect(txRationale).toBe(rationale)
       expect(oracleJudgment.size).toBe(0)
     })
 
     it('One winner', async () => {
       renderModal()
 
+      const rationale = 'one winner'
       await selectWinner(memberMock.find((member) => member.id === modalData.bounty.entries[0].worker.id)?.handle)
-
+      fillRationale(rationale)
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
 
-      const [, , oracleJudgment] = last(txMock.mock.calls)
+      const [, , oracleJudgment, txRationale] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(1)
       const [[winner, reward]] = oracleJudgment.entries()
       expect(winner.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
       expect(reward.toJSON()).toEqual({ winner: { reward: 15999 } })
+      expect(txRationale).toBe(rationale)
     })
 
     it('One winner, one rejected', async () => {
       renderModal()
 
+      const rationale = 'one winner, one rejected'
       await selectWinner(findHandleById(modalData.bounty.entries[0].worker.id))
       await addRejected()
       await selectRejected(findHandleById(modalData.bounty.entries[1].worker.id))
+      fillRationale(rationale)
 
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
 
-      const [, , oracleJudgment] = last(txMock.mock.calls)
+      const [, , oracleJudgment, txRationale] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(2)
       const [[winner, reward], [rejected, judgment]] = oracleJudgment.entries()
 
@@ -162,31 +174,37 @@ describe('UI: SubmitJudgementModal', () => {
       expect(reward.toJSON()).toEqual({ winner: { reward: 15999 } })
       expect(rejected.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
       expect(judgment.toJSON()).toEqual({ rejected: null })
+      expect(txRationale).toBe(rationale)
     })
 
     it('Two winners', async () => {
       renderModal()
 
+      const rationale = 'two winners'
       await selectWinner(findHandleById(modalData.bounty.entries[0].worker.id))
       await addWinner()
       await selectWinner(findHandleById(modalData.bounty.entries[1].worker.id), 2)
+      fillRationale(rationale)
 
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
 
-      const [, , oracleJudgment] = last(txMock.mock.calls)
+      const [, , oracleJudgment, txRationale] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(2)
       const [[winner1, reward1], [winner2, reward2]] = oracleJudgment.entries()
       expect(winner1.toJSON()).toBe(Number(modalData.bounty.entries[0].id))
       expect(winner2.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
       expect(reward1.toJSON()).toEqual({ winner: { reward: 8000 } })
       expect(reward2.toJSON()).toEqual({ winner: { reward: 7999 } })
+      expect(txRationale).toBe(rationale)
     })
 
     it('Failed with one rejected', async () => {
       renderModal()
 
+      const rationale = 'failed with one rejected'
       const checkbox = screen.getByText('modals.submitJudgement.checkbox.label')?.nextSibling?.childNodes.item(1)
       fireEvent.click(checkbox as Node)
+      fillRationale(rationale)
 
       await addRejected()
       await selectRejected(findHandleById(modalData.bounty.entries[1].worker.id))
@@ -194,11 +212,12 @@ describe('UI: SubmitJudgementModal', () => {
       expect(screen.queryByText('modals.submitJudgement.noWinner.title')).toBeInTheDocument()
       expect(await getButton('modals.submitJudgement.authorizeTransaction')).toBeEnabled()
 
-      const [, , oracleJudgment] = last(txMock.mock.calls)
+      const [, , oracleJudgment, txRationale] = last(txMock.mock.calls)
       expect(oracleJudgment.size).toBe(1)
       const [[rejected, judgment]] = oracleJudgment.entries()
       expect(rejected.toJSON()).toBe(Number(modalData.bounty.entries[1].id))
       expect(judgment.toJSON()).toEqual({ rejected: null })
+      expect(txRationale).toBe(rationale)
     })
   })
 
@@ -228,6 +247,16 @@ describe('UI: SubmitJudgementModal', () => {
       editWinnerReward(0)
 
       expect(screen.queryByText('modals.submitJudgement.validation.winnerNoReward')).toBeInTheDocument()
+      expect(nextButton).toBeDisabled()
+    })
+
+    it('No rationale', async () => {
+      renderModal()
+      const checkbox = screen.getByText('modals.submitJudgement.checkbox.label')?.nextSibling?.childNodes.item(1)
+      fireEvent.click(checkbox as Node)
+      expect(screen.queryByText('modals.submitJudgement.validation.rationaleMissing')).toBeInTheDocument()
+
+      const nextButton = await getButton('modals.submitJudgement.authorizeTransaction')
       expect(nextButton).toBeDisabled()
     })
   })
@@ -277,6 +306,7 @@ describe('UI: SubmitJudgementModal', () => {
   const proceedToAuthorizationModal = () => {
     const checkbox = screen.getByText('modals.submitJudgement.checkbox.label')?.nextSibling?.childNodes.item(1)
     fireEvent.click(checkbox as Node)
+    fillRationale('rationale')
 
     const button = screen.getByText('modals.submitJudgement.authorizeTransaction')
     fireEvent.click(button)
@@ -305,6 +335,12 @@ describe('UI: SubmitJudgementModal', () => {
     const button = await getButton('modals.submitJudgement.slash.worker.addSlashed')
 
     fireEvent.click(button)
+  }
+
+  const fillRationale = (rationale: string) => {
+    const editor = screen.getByTestId('field-rationale')
+
+    fireEvent.change(editor, { target: { value: rationale } })
   }
 
   const renderModal = () =>
