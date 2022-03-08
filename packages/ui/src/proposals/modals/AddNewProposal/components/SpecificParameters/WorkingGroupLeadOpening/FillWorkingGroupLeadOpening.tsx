@@ -10,13 +10,13 @@ import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWor
 import { GroupIdName } from '@/working-groups/types'
 
 export interface FillWorkingGroupLeadOpeningParameters {
-  openingId?: number
-  applicationId?: number
+  openingId?: string
+  applicationId?: string
 }
 
 interface Props extends FillWorkingGroupLeadOpeningParameters {
-  setOpeningId: (openingId: number) => void
-  setApplicationId: (applicationId: number) => void
+  setOpeningId: (openingId: string) => void
+  setApplicationId: (applicationId: string) => void
   setWorkingGroupId: (workingGroupId: GroupIdName) => void
 }
 
@@ -49,7 +49,7 @@ export const FillWorkingGroupLeadOpening = ({
               selectedOpeningId={openingId}
               onChange={(selected) => {
                 setWorkingGroupId(selected.groupId)
-                setOpeningId(selected.runtimeId)
+                setOpeningId(selected.id)
               }}
               openingsPositionType={WorkingGroupOpeningType.Leader}
             />
@@ -64,13 +64,13 @@ export const FillWorkingGroupLeadOpening = ({
             required
             inputSize="l"
             tooltipText="Please select an identifier for Application"
-            disabled={typeof openingId !== 'number'}
+            disabled={typeof openingId !== 'string'}
           >
             <SelectWorkingGroupApplication
               id="application"
               selectedApplicationId={applicationId}
-              onChange={(selected) => setApplicationId(selected.runtimeId)}
-              disabled={typeof openingId !== 'number'}
+              onChange={(selected) => setApplicationId(selected.id)}
+              disabled={typeof openingId !== 'string'}
               openingId={openingId}
               applicationsStatus="pending"
             />

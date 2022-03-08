@@ -4,16 +4,12 @@ import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { CancelWorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 
-export interface CancelWorkingGroupLeadStakeParameters {
-  groupId?: string
-  openingId?: number
-}
-
-interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadStakeParameters {
+interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadOpeningParameters {
   setGroupId(groupId: string): void
-  setOpeningId(openingId?: number): void
+  setOpeningId(openingId?: string): void
 }
 
 export const CancelWorkingGroupLeadOpening = ({
@@ -46,7 +42,7 @@ export const CancelWorkingGroupLeadOpening = ({
               openingsPositionType="LEADER"
               onChange={(selected) => {
                 setGroupId(selected.groupId)
-                setOpeningId(selected.runtimeId)
+                setOpeningId(selected.id)
               }}
               selectedOpeningId={openingId}
             />
