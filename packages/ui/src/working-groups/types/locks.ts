@@ -8,9 +8,9 @@ const GROUP_TO_LOCK_ID: Record<GroupIdName, LockType> = {
   storageWorkingGroup: 'Storage Worker',
   gatewayWorkingGroup: 'Gateway Worker',
   distributionWorkingGroup: 'Distribution Worker',
-  operationsWorkingGroupGamma: 'Operations Gamma Worker',
-  operationsWorkingGroupBeta: 'Operations Beta Worker',
-  operationsWorkingGroupAlpha: 'Operations Alpha Worker',
+  operationsWorkingGroupGamma: 'Builders Worker',
+  operationsWorkingGroupBeta: 'HR Worker',
+  operationsWorkingGroupAlpha: 'Marketing Worker',
 }
 
 export const groupToLockId = (groupName: GroupIdName): LockType => {
