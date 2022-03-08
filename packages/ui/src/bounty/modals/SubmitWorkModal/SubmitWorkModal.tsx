@@ -1,3 +1,4 @@
+import { BountyWorkData } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { BountyId, EntryId } from '@joystream/types/bounty'
 import { MemberId } from '@joystream/types/common'
@@ -36,6 +37,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -60,16 +62,16 @@ export const SubmitWorkModal = () => {
     }
   })
   const transaction = useMemo(() => {
-    const entryId = modalData.bounty.entries?.find((entryId) => entryId.id === 'id')
+    const entry = modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id)
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
-        createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)),
-        createType<BountyId, 'BountyId'>('BountyId', Number(modalData.bounty.id || 0)),
-        createType<EntryId, 'EntryId'>('EntryId', Number(entryId || 0)),
-        submitWorkMetadataFactory(state as SubmitWorkModalMachineState)
+        createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id)),
+        createType<BountyId, 'BountyId'>('BountyId', Number(modalData.bounty.id)),
+        createType<EntryId, 'EntryId'>('EntryId', Number(entry?.id)),
+        metadataToBytes(BountyWorkData, submitWorkMetadataFactory(state as SubmitWorkModalMachineState))
       )
     }
-  }, [JSON.stringify(activeMember), isConnected])
+  }, [activeMember?.id, isConnected, JSON.stringify(state.context)])
 
   const goToCurrentBounties = useCallback(() => {
     history.push(generatePath(BountyRoutes.currentBounties))
