@@ -32,7 +32,7 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
 
   const transaction = useMemo(() => {
     if (commitment) {
-      return api?.tx.referendum.vote(commitment, stake.amount)
+      return api?.tx.referendum.vote(commitment, new BN(stake.amount))
     }
   }, [commitment, stake.amount])
 
@@ -42,7 +42,7 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
     signer: stake.account.address,
   })
   const stakingAmount = new BN(stake.amount)
-
+  console.log(stake.amount, '<- stake amo')
   return (
     <TransactionModal onClose={hideModal} service={service}>
       <ModalBody>

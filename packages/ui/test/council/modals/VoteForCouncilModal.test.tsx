@@ -11,6 +11,7 @@ import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -64,6 +65,7 @@ describe('UI: Vote for Council Modal', () => {
 
   let useAccounts: UseAccounts
   let tx: any
+  let txMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -121,6 +123,7 @@ describe('UI: Vote for Council Modal', () => {
     stubDefaultBalances(api)
     stubCouncilConstants(api, { minStake: 500 })
     tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
+    txMock = (api.api.tx.referendum.vote as unknown) as jest.Mock
   })
 
   describe('Requirements', () => {
@@ -193,19 +196,22 @@ describe('UI: Vote for Council Modal', () => {
 
     it('Valid fields', async () => {
       renderModal()
-
       await fillStakeStep(2000)
       const button = await getNextStepButton()
+
       expect(button).not.toBeDisabled()
     })
   })
 
   it('Transaction sign', async () => {
     renderModal()
+    const stake = 2000
 
-    await fillStakeStep(2000)
+    await fillStakeStep(stake)
     fireEvent.click(await getNextStepButton())
 
+    const [, txStake] = last(txMock.mock.calls)
+    expect(txStake.toNumber()).toBe(stake)
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('2,000')
     expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
