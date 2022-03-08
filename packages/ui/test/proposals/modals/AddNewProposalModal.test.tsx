@@ -178,7 +178,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -544,12 +544,6 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - zero entered', async () => {
-          await SpecificParameters.fillAmount(0)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
-          expect(await getCreateButton()).toBeDisabled()
-        })
-
         it('Invalid - over 100 percent', async () => {
           await SpecificParameters.fillAmount(200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('')
@@ -557,9 +551,26 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid', async () => {
+          const amount = 40
+          await SpecificParameters.fillAmount(amount)
+          expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetReferralCut.toJSON()
+
+          expect(parameters).toEqual(amount)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Valid with execution warning', async () => {
           const amount = 100
           await SpecificParameters.fillAmount(amount)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
+          expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
+
+          expect(await getCreateButton()).toBeDisabled()
+
+          const checkbox = screen.getByTestId('execution-requirement')
+          fireEvent.click(checkbox)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()

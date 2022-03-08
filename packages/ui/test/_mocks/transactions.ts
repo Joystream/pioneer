@@ -4,7 +4,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of, asyncScheduler, scheduled } from 'rxjs'
+import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
@@ -135,7 +135,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as ApiRx,
+    api: ({} as unknown) as ApiRx,
     isConnected: true,
     connectionState: 'connected',
   }
@@ -200,6 +200,15 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
       constitutionality: new BN(10),
     })
   }
+  set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
+  set(
+    api,
+    'api.query.members.membershipPrice',
+    () =>
+      new Observable((subscriber) => {
+        subscriber.next(new BN(100))
+      })
+  )
 }
 
 export const stubBountyConstants = (api: UseApi) => {
