@@ -29,9 +29,6 @@ export type LockType =
   | 'HR Worker'
   | 'Marketing Worker'
   | 'Distribution Worker'
-  | 'Operations Gamma Worker'
-  | 'Operations Beta Worker'
-  | 'Operations Alpha Worker'
 
 export interface BalanceLock {
   amount: BN
