@@ -178,7 +178,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -711,7 +711,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Step 2: Invalid to valid', async () => {
           const description = 'Foo'
-          const group = 'Forum'
+          const group = 'Storage'
           const stakingAmount = 100
           const unstakingPeriod = 101
           const rewardPerBlock = 102

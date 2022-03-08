@@ -17,6 +17,9 @@ const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   membershipWorkingGroup: 'Membership',
   distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
+  operationsWorkingGroupAlpha: 'OperationsAlpha',
+  operationsWorkingGroupBeta: 'OperationsBeta',
+  operationsWorkingGroupGamma: 'OperationsGamma',
 }
 
 const idToRuntimeId = (id: string): number => Number(last(id.split('-')))

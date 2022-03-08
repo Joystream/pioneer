@@ -42,6 +42,9 @@ const locksMap: Record<LockType, ReactElement> = {
   'HR Worker': <OperationsWorkerIcon />,
   'Marketing Worker': <OperationsWorkerIcon />,
   'Distribution Worker': <LockIcon />, // TODO this might need a different icon
+  'Operations Gamma Worker': <LockIcon />, // TODO this might need a different icon
+  'Operations Beta Worker': <LockIcon />, // TODO this might need a different icon
+  'Operations Alpha Worker': <LockIcon />, // TODO this might need a different icon
 }
 
 export const lockIcon = (type: LockType) => locksMap[type] ?? <QuestionIcon />
