@@ -12,6 +12,7 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
+import { isDefined } from '@/common/utils'
 import { Member } from '@/memberships/types'
 
 export type FundingPeriodType = 'perpetual' | 'limited'
@@ -42,6 +43,7 @@ export interface WorkingPeriodDetailsContext extends FundingPeriodDetailsContext
 export interface JudgingPeriodDetailsContext extends WorkingPeriodDetailsContext {
   judgingPeriodLength: BN
   oracle: Member
+  threadCategoryId?: string
 }
 
 interface TransactionContext extends JudgingPeriodDetailsContext {
@@ -97,12 +99,14 @@ type SetWorkingPeriodStakeEvent = { type: 'SET_WORKING_PERIOD_STAKE'; workingPer
 type SetWorkingPeriodWhitelistEvent = { type: 'SET_WORKING_PERIOD_WHITELIST'; workingPeriodWhitelist: Member[] }
 type SetJudgingPeriodLengthEvent = { type: 'SET_JUDGING_PERIOD_LENGTH'; judgingPeriodLength: BN }
 type SetOracleEvent = { type: 'SET_ORACLE'; oracle: Member }
+type SetThreadCategoryIdEvent = { type: 'SET_THREAD_CATEGORY_ID'; threadCategoryId?: string }
 
 export type AddBountyEvent =
   | SetCreatorEvent
   | SetBountyTitleEvent
   | SetCoverPhotoEvent
   | SetBountyDescriptionEvent
+  | SetThreadCategoryIdEvent
   | SetCherryEvent
   | SetFundingPeriodTypeEvent
   | SetFundingPeriodLengthEvent
@@ -232,7 +236,15 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
     [AddBountyStates.judgingPeriodDetails]: {
       on: {
         BACK: AddBountyStates.workingPeriodDetails,
-        NEXT: AddBountyStates.createThread,
+        NEXT: [
+          { target: AddBountyStates.createThread, cond: (context) => isDefined(context.newThreadId) },
+          { target: AddBountyStates.transaction },
+        ],
+        SET_THREAD_CATEGORY_ID: {
+          actions: assign({
+            threadCategoryId: (context, event) => (event as SetThreadCategoryIdEvent).threadCategoryId,
+          }),
+        },
         SET_JUDGING_PERIOD_LENGTH: {
           actions: assign({
             judgingPeriodLength: (context, event) => (event as SetJudgingPeriodLengthEvent).judgingPeriodLength,

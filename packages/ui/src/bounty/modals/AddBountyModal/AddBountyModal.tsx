@@ -68,7 +68,6 @@ export const AddBountyModal = () => {
 
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
-        threadCategory,
         minCherryLimit: bountyApi?.minCherryLimit,
         maxCherryLimit: balance?.transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
@@ -76,12 +75,17 @@ export const AddBountyModal = () => {
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
-  }, [state, threadCategory?.id])
+  }, [state])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.generalParameters)) {
       if (activeMember && !state.context.creator) {
         send('SET_CREATOR', { creator: activeMember })
+      }
+    }
+    if (state.matches(AddBountyStates.generalParameters)) {
+      if (threadCategory) {
+        send('SET_THREAD_CATEGORY_ID', { threadCategoryId: threadCategory.id })
       }
     }
   }, [activeMember, state])
@@ -91,10 +95,10 @@ export const AddBountyModal = () => {
   }
 
   if (state.matches(AddBountyStates.createThread) && threadCategory) {
-    const { title, creator } = state.context
+    const { title, creator, threadCategoryId } = state.context
     const transaction = api.tx.forum.createThread(
       activeMember.id,
-      threadCategory?.id ?? 0,
+      threadCategoryId,
       `${title} by ${creator?.handle}`,
       `This is the description thread for ${title}`,
       null
@@ -115,7 +119,7 @@ export const AddBountyModal = () => {
     )
   }
 
-  if (state.matches(AddBountyStates.transaction) && state.context.newThreadId) {
+  if (state.matches(AddBountyStates.transaction)) {
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
       createBountyParametersFactory(state as AddBountyModalMachineState),
