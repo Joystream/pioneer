@@ -1,3 +1,3 @@
 import { ApolloQueryResult } from '@apollo/client'
 
-export type RefetchQuery = () => Promise<ApolloQueryResult<unknown>>
+export type RefetchQuery = (() => Promise<ApolloQueryResult<unknown>>) | undefined
