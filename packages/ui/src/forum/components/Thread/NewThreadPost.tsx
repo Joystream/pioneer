@@ -12,7 +12,6 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Badge, TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { RefetchQuery } from '@/common/types/queries'
 import { Reply, ReplyBadge } from '@/forum/components/PostList/PostListItem'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumPost } from '@/forum/types'
@@ -28,14 +27,10 @@ export interface NewPostProps {
   replyTo?: ForumPost
   removeReply: () => void
   replyToLink: string
-  refetch?: RefetchQuery
 }
 
 export const NewThreadPost = React.forwardRef(
-  (
-    { getTransaction, replyTo, removeReply, replyToLink, refetch }: NewPostProps,
-    ref: React.ForwardedRef<HTMLDivElement>
-  ) => {
+  ({ getTransaction, replyTo, removeReply, replyToLink }: NewPostProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const [postText, setText] = useState('')
     const [isEditable, setEditable] = useState(false)
     const { active } = useMyMemberships()
@@ -46,7 +41,6 @@ export const NewThreadPost = React.forwardRef(
       setText('')
       setEditorRef({ ...editorRef })
       setEditable(false)
-      await refetch?.()
     }, [])
 
     if (!active) {

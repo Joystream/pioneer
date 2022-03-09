@@ -19,7 +19,6 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { Step } from '@/common/model/machines/getSteps'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
-import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
@@ -35,10 +34,9 @@ interface Props {
 export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, steps }: Props) => {
   const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
   const { push } = useHistory()
-  const { refetch: refetchApplications } = useMyApplications()
+
   const viewApplications = useCallback(async () => {
     push(WorkingGroupsRoutes.myApplications)
-    await refetchApplications()
     hideModal()
   }, [])
 

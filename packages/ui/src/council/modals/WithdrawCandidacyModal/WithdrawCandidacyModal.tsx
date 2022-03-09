@@ -5,6 +5,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
 import { WithdrawSignModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawSignModal'
@@ -21,10 +22,8 @@ export const WithdrawCandidacyModal = () => {
   const onNext = useCallback(() => send('NEXT'), [send])
 
   const { refetch: refetchCandidates } = useCurrentElection()
-  const onSuccess = useCallback(() => {
-    refetchCandidates?.()
-    hideModal()
-  }, [])
+  useRefetch({ type: 'set', payload: refetchCandidates })
+  useRefetch({ type: 'do', payload: state.matches('success') })
 
   if (state.matches('warning')) {
     return <WithdrawWarningModal onNext={onNext} onClose={onClose} />
@@ -36,8 +35,8 @@ export const WithdrawCandidacyModal = () => {
 
   if (state.matches('success')) {
     return (
-      <Modal onClose={onSuccess} modalSize="m">
-        <ModalHeader onClick={onSuccess} title="Success!" />
+      <Modal onClose={onClose} modalSize="m">
+        <ModalHeader onClick={onClose} title="Success!" />
         <ModalBody>
           <TextMedium>You have successfully withdrawn your candidacy.</TextMedium>
         </ModalBody>

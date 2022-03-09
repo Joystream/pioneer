@@ -11,7 +11,6 @@ import { useApi } from '@/common/hooks/useApi'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
-import { RefetchQuery } from '@/common/types/queries'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
@@ -23,10 +22,9 @@ import { ProposalDiscussionThread } from '@/proposals/types'
 interface Props {
   thread: ProposalDiscussionThread
   proposalId: string
-  refetch?: RefetchQuery
 }
 
-export const ProposalDiscussions = ({ thread, proposalId, refetch }: Props) => {
+export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const query = useRouteQuery()
   const { api } = useApi()
   const { active, members } = useMyMemberships()
@@ -73,7 +71,6 @@ export const ProposalDiscussions = ({ thread, proposalId, refetch }: Props) => {
           getTransaction={getTransaction}
           removeReply={() => setReplyTo(undefined)}
           replyToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${replyTo?.id}`}
-          refetch={refetch}
         />
       )
     }

@@ -39,9 +39,6 @@ export const ForumThread = () => {
   const history = useHistory()
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
-  // TODO: refactor and figure out better solution
-  const { refetch } = useForumThreadPosts(thread ? thread.id : '-1', { post: null, page: null })
-
   useEffect(() => {
     replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
   }, [replyTo])
@@ -118,7 +115,6 @@ export const ForumThread = () => {
           removeReply={() => setReplyTo(undefined)}
           getTransaction={getTransaction}
           replyToLink={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${replyTo?.id}`}
-          refetch={refetch}
         />
       )}
     </MainPanel>
