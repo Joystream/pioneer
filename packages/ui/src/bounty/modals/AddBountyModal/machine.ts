@@ -237,7 +237,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
       on: {
         BACK: AddBountyStates.workingPeriodDetails,
         NEXT: [
-          { target: AddBountyStates.createThread, cond: (context) => isDefined(context.newThreadId) },
+          { target: AddBountyStates.createThread, cond: (context) => isDefined(context.threadCategoryId) },
           { target: AddBountyStates.transaction },
         ],
         SET_THREAD_CATEGORY_ID: {

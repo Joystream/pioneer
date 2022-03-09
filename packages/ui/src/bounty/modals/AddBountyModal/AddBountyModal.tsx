@@ -37,7 +37,7 @@ import { Member } from '@/memberships/types'
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
-  const { threadCategory } = useBountyForumCategory()
+  const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -68,6 +68,7 @@ export const AddBountyModal = () => {
 
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
+        isThreadCategoryLoading,
         minCherryLimit: bountyApi?.minCherryLimit,
         maxCherryLimit: balance?.transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
@@ -75,7 +76,7 @@ export const AddBountyModal = () => {
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
-  }, [state])
+  }, [state, isThreadCategoryLoading])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.generalParameters)) {
@@ -83,12 +84,12 @@ export const AddBountyModal = () => {
         send('SET_CREATOR', { creator: activeMember })
       }
     }
-    if (state.matches(AddBountyStates.generalParameters)) {
-      if (threadCategory) {
+    if (state.matches(AddBountyStates.judgingPeriodDetails)) {
+      if (threadCategory && !state.context.threadCategoryId) {
         send('SET_THREAD_CATEGORY_ID', { threadCategoryId: threadCategory.id })
       }
     }
-  }, [activeMember, state])
+  }, [activeMember, state, threadCategory?.id])
 
   if (!activeMember || !api) {
     return null

@@ -16,6 +16,7 @@ import { whenDefined } from '@/common/utils'
 import { BountyCreationParameters } from '../../../../../types/augment'
 
 interface Conditions {
+  isThreadCategoryLoading?: boolean
   minCherryLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxCherryLimit?: BN
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
@@ -59,7 +60,7 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
       return !!(stake && type && context.workingPeriodLength)
     }
     case state.matches(AddBountyStates.judgingPeriodDetails): {
-      return !!(context.oracle && context.judgingPeriodLength)
+      return !!(context.oracle && context.judgingPeriodLength && !conditions.isThreadCategoryLoading)
     }
     default:
       return false
