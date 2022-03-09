@@ -110,7 +110,7 @@ describe('UI: SubmitJudgementModal', () => {
     stubDefaultBalances(api)
     stubBountyConstants(api)
     transaction = stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 100)
-    txMock = (api.api.tx.bounty.submitOracleJudgment as unknown) as jest.Mock
+    txMock = api.api.tx.bounty.submitOracleJudgment as unknown as jest.Mock
   })
 
   it('Renders', () => {
