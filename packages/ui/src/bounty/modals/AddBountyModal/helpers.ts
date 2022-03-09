@@ -1,4 +1,4 @@
-import { IBountyMetadata } from '@joystream/metadata-protobuf'
+import { IBountyMetadata, IBountyWorkData } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { AssuranceContractType_Closed } from '@joystream/types/bounty'
 import { MemberId } from '@joystream/types/common'
@@ -130,12 +130,7 @@ export const createBountyMetadataFactory = (state: AddBountyModalMachineState): 
   discussionThread: Long.fromString(String(state.context.newThreadId) ?? '1'),
 })
 
-export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState) => {
-  const buffer = Buffer.from(
-    JSON.stringify({
-      workTitle: state.context.workTitle,
-      workDescription: state.context.workDescription,
-    })
-  )
-  return createType('Bytes', '0x' + buffer)
-}
+export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState): IBountyWorkData => ({
+  title: state.context.workTitle,
+  description: state.context.workDescription,
+})
