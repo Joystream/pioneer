@@ -5,8 +5,8 @@ import { getMaxBlock } from '@/common/model/getMaxBlock'
 
 import { SECONDS_PER_BLOCK } from '../constants'
 
-export function inBlocksDate(blocks: BN) {
-  const inBlocks = blocks.gte(getMaxBlock()) ? getMaxBlock().toNumber() : blocks.toNumber()
+export function inBlocksDate(blocks: BN | number) {
+  const inBlocks = Math.min(Number(getMaxBlock()), Number(blocks))
   const inSeconds = inBlocks * SECONDS_PER_BLOCK
 
   const blockDate = addSeconds(Date.now(), inSeconds)

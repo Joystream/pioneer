@@ -1,28 +1,40 @@
 import React from 'react'
+import * as Yup from 'yup'
 
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent, InputTextarea } from '@/common/components/forms'
+import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
+import { useSchema } from '@/common/hooks/useSchema'
+import { WorkingGroupAndDescriptionParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
 
-interface Props extends WorkingGroupAndOpeningDetailsParameters {
+interface Props extends WorkingGroupAndDescriptionParameters {
+  setTitle(title: string): void
   setDescription(description: string): void
   setShortDescription(shortDescription: string): void
   setGroupId(groupId: GroupIdName): void
 }
 
-export const CreateWorkingGroupLeadOpening = ({
+const schema = Yup.object().shape({
+  title: Yup.string().max(55, 'Max length is 55 characters'),
+})
+
+export const WorkingGroupAndDescription = ({
   groupId,
   setGroupId,
+  title,
+  setTitle,
   description,
   setDescription,
   shortDescription,
   setShortDescription,
 }: Props) => {
+  const { errors } = useSchema({ title }, schema)
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -34,7 +46,7 @@ export const CreateWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            id="working-group-select-input"
+            id="working-group-select"
             label="Working Group"
             required
             inputSize="l"
@@ -44,6 +56,21 @@ export const CreateWorkingGroupLeadOpening = ({
               id="working-group-select"
               selectedGroupId={groupId}
               onChange={(selected) => setGroupId(selected.id)}
+            />
+          </InputComponent>
+          <InputComponent
+            id="opening-title"
+            label="Opening title"
+            required
+            inputSize="m"
+            message={hasError('title', errors) ? getErrorMessage('title', errors) : 'MAX 55'}
+            validation={hasError('title', errors) ? 'invalid' : undefined}
+          >
+            <InputText
+              id="opening-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Opening title"
             />
           </InputComponent>
           <InputComponent id="short-description" label="Short description" required inputSize="l">

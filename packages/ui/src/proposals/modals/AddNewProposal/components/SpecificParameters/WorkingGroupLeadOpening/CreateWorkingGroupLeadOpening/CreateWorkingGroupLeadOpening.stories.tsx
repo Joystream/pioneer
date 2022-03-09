@@ -3,23 +3,26 @@ import BN from 'bn.js'
 import React, { useState } from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
-import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import { GroupIdName } from '@/working-groups/types'
+
+import { ApplicationForm, DurationAndProcess, StakingPolicyAndReward, WorkingGroupAndDescription } from '.'
 
 export default {
   title: 'Proposals/AddNewProposalModal/CreateWorkingGroupLeadOpening',
-  component: CreateWorkingGroupLeadOpening,
+  components: [ApplicationForm, DurationAndProcess, StakingPolicyAndReward, WorkingGroupAndDescription],
 } as Meta
 
-const OpeningTemplate: Story = () => {
+const WorkingGroupAndDescriptionTemplate: Story = () => {
+  const [title, setTitle] = useState('')
   const [shortDescription, setShortDescription] = useState('')
   const [description, setDescription] = useState('')
   const [groupId, setGroupId] = useState<GroupIdName>()
 
   return (
     <MockApolloProvider members council forum proposals workers workingGroups>
-      <CreateWorkingGroupLeadOpening
+      <WorkingGroupAndDescription
+        title={title}
+        setTitle={setTitle}
         description={description}
         shortDescription={shortDescription}
         groupId={groupId}
@@ -29,6 +32,23 @@ const OpeningTemplate: Story = () => {
       />
     </MockApolloProvider>
   )
+}
+
+const DurationAndProcessTemplate: Story = () => {
+  const [duration, setDuration] = useState<number>()
+  const [details, setDetails] = useState('')
+
+  return (
+    <MockApolloProvider>
+      <DurationAndProcess duration={duration} setDuration={setDuration} details={details} setDetails={setDetails} />
+    </MockApolloProvider>
+  )
+}
+
+const ApplicationFormTemplate: Story = () => {
+  const [questions, setQuestions] = useState<any>()
+
+  return <ApplicationForm questions={questions} setQuestions={setQuestions} />
 }
 
 const StakingTemplate: Story = () => {
@@ -51,6 +71,10 @@ const StakingTemplate: Story = () => {
   )
 }
 
-export const WorkingGroupAndOpeningDetailsStep = OpeningTemplate.bind({})
+export const Step1WorkingGroupAndDescription = WorkingGroupAndDescriptionTemplate.bind({})
 
-export const StakingPolicyAndRewardStep = StakingTemplate.bind({})
+export const Step2DurationAndProcess = DurationAndProcessTemplate.bind({})
+
+export const Step3ApplicationForm = ApplicationFormTemplate.bind({})
+
+export const Step4StakingPolicyAndRewardStep = StakingTemplate.bind({})

@@ -37,9 +37,9 @@ import {
 import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
 import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
 import {
+  ApplicationFormParameters,
   CancelWorkingGroupLeadOpeningParameters,
-  StakingPolicyAndRewardParameters,
-  WorkingGroupAndOpeningDetailsParameters,
+  CreateWorkingGroupLeadOpeningParameters,
 } from './components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 interface ProposalTypeContext {
@@ -70,7 +70,6 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | EmptyObject
     | SignalParameters
     | FundingRequestParameters
-    | WorkingGroupAndOpeningDetailsParameters
     | CancelWorkingGroupLeadOpeningParameters
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
@@ -81,7 +80,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetWorkingGroupLeadRewardParameters
     | SetCouncilBudgetIncrementParameters
     | SetMembershipLeadInvitationParameters
-    | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | CreateWorkingGroupLeadOpeningParameters
     | UpdateWorkingGroupBudgetParameters
     | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
@@ -109,10 +108,6 @@ interface SetReferralCutContext extends SpecificParametersContext {
   specifics: SetReferralCutParameters
 }
 
-interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
-  specifics: WorkingGroupAndOpeningDetailsParameters
-}
-
 interface FillWorkingGroupLeadOpeningContext extends SpecificParametersContext {
   specifics: FillWorkingGroupLeadOpeningParameters
 }
@@ -121,8 +116,8 @@ interface CancelWorkingGroupLeadOpeningContext extends SpecificParametersContext
   specifics: CancelWorkingGroupLeadOpeningParameters
 }
 
-interface StakingPolicyAndRewardContext extends SpecificParametersContext {
-  specifics: StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters
+interface CreateWorkingGroupLeadOpeningContext extends SpecificParametersContext {
+  specifics: CreateWorkingGroupLeadOpeningParameters
 }
 
 interface RuntimeUpgradeContext extends SpecificParametersContext {
@@ -186,12 +181,11 @@ export type AddNewProposalContext = Partial<
     SpecificParametersContext &
     SignalContext &
     FundingRequestContext &
-    WorkingGroupLeadOpeningContext &
+    CreateWorkingGroupLeadOpeningContext &
     CancelWorkingGroupLeadOpeningContext &
     FillWorkingGroupLeadOpeningContext &
     SetCouncilBudgetIncrementContext &
     SetCouncilorRewardContext &
-    StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
@@ -236,12 +230,20 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'setCouncilorReward' }; context: SetCouncilorRewardContext }
   | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
-      value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
-      context: WorkingGroupLeadOpeningContext
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndDescription' } }
+      context: CreateWorkingGroupLeadOpeningContext
+    }
+  | {
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'durationAndProcess' } }
+      context: CreateWorkingGroupLeadOpeningContext
+    }
+  | {
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'applicationForm' } }
+      context: CreateWorkingGroupLeadOpeningContext
     }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
-      context: StakingPolicyAndRewardContext
+      context: CreateWorkingGroupLeadOpeningContext
     }
   | { value: { specificParameters: 'fillWorkingGroupLeadOpening' }; context: FillWorkingGroupLeadOpeningContext }
   | {
@@ -270,6 +272,9 @@ type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscu
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
+type SetDuration = { type: 'SET_DURATION'; duration: number }
+type SetDetails = { type: 'SET_DETAILS'; details: string }
+type SetQuestions = { type: 'SET_QUESTIONS'; questions: ApplicationFormParameters['questions'] }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: string }
@@ -304,6 +309,9 @@ export type AddNewProposalEvent =
   | SetWorkingGroupEvent
   | SetWorkerEvent
   | SetShortDescriptionEvent
+  | SetDuration
+  | SetDetails
+  | SetQuestions
   | SetStakingAmount
   | SetLeavingUnstakingPeriod
   | SetRewardPerBlock
@@ -694,12 +702,12 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         createWorkingGroupLeadOpening: {
-          initial: 'workingGroupAndOpeningDetails',
+          initial: 'workingGroupAndDescription',
           states: {
-            workingGroupAndOpeningDetails: {
+            workingGroupAndDescription: {
               meta: {
                 isStep: true,
-                stepTitle: 'Working group & Opening details',
+                stepTitle: 'Working group & Description',
                 cond: isType('createWorkingGroupLeadOpening'),
               },
               on: {
@@ -708,6 +716,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     specifics: (context, event) => ({
                       ...context.specifics,
                       groupId: event.groupId,
+                    }),
+                  }),
+                },
+                SET_TITLE: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      title: event.title,
                     }),
                   }),
                 },
@@ -724,6 +740,50 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     specifics: (context, event) => ({
                       ...context.specifics,
                       description: event.description,
+                    }),
+                  }),
+                },
+                NEXT: 'durationAndProcess',
+              },
+            },
+            durationAndProcess: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Duration & Process',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                SET_DURATION: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      duration: event.duration,
+                    }),
+                  }),
+                },
+                SET_DETAILS: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      details: event.details,
+                    }),
+                  }),
+                },
+                NEXT: 'applicationForm',
+              },
+            },
+            applicationForm: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Application Form',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                SET_QUESTIONS: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      questions: event.questions,
                     }),
                   }),
                 },
