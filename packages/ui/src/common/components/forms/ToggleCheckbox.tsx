@@ -14,19 +14,28 @@ export interface Props {
   onChange: (value: boolean) => void
   trueLabel: ReactNode
   falseLabel: ReactNode
+  switchToggle?: boolean
 }
 
-export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: Props) {
+export function ToggleCheckbox({
+  isRequired,
+  disabled,
+  checked,
+  onChange,
+  trueLabel,
+  falseLabel,
+  switchToggle,
+}: Props) {
   const onClick = (setValue: boolean) => () => {
     if (disabled !== true) {
       onChange(setValue)
     }
   }
-
+  const toggleValidation = switchToggle ? switchToggle : false
   return (
     <ToggleContainer groupDisabled={disabled}>
       <ToggleLabel onClick={onClick(true)}>{trueLabel}</ToggleLabel>
-      <ToggleStyledInput isChecked={checked}>
+      <ToggleStyledInput isChecked={checked} switchToggle={toggleValidation}>
         <ToggleInput
           type="checkbox"
           disabled={disabled}
@@ -40,15 +49,6 @@ export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLa
   )
 }
 
-const ToggleLabel = styled.button`
-  outline: none;
-  font-family: ${Fonts.Inter};
-  font-size: 14px;
-  line-height: 20px;
-  color: ${Colors.Black[900]};
-  cursor: pointer;
-`
-
 const ToggleInput = styled.input`
   position: absolute;
   height: 0;
@@ -59,8 +59,16 @@ const ToggleInput = styled.input`
 
 interface ToggleStyledInputProps {
   isChecked: boolean
+  switchToggle: boolean
 }
-
+const ToggleLabel = styled.button`
+  outline: none;
+  font-family: ${Fonts.Inter};
+  font-size: 14px;
+  line-height: 20px;
+  color: ${Colors.Black[900]};
+  cursor: pointer;
+`
 const checkedBoxStyles = css`
   background-color: ${Colors.Blue[500]};
 
@@ -81,13 +89,13 @@ const ToggleStyledInput = styled.label<ToggleStyledInputProps>`
   margin: 0 10px;
   position: relative;
   border-radius: ${BorderRad.full};
-  background-color: ${Colors.Black[300]};
+  background-color: ${(switchToggle) => (switchToggle ? Colors.Blue[500] : Colors.Black[300])};
   cursor: pointer;
   transition: ${Transitions.all};
 
   &:hover,
   &:focus {
-    background-color: ${Colors.Black[200]};
+    background-color: ${(switchToggle) => (switchToggle ? Colors.Blue[400] : Colors.Black[200])};
   }
 
   &:after {
