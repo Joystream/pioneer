@@ -2,6 +2,8 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
@@ -122,6 +124,18 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               id="member-handle"
               label="Membership handle"
               required
+              tooltipText={
+                <>
+                  Membership handle is the primary way of how members are displayed throughout all interfaces of the
+                  platform. Membership handle can be updated any time by the account holder.
+                  <TooltipExternalLink
+                    target="_blank"
+                    href="https://joystream.gitbook.io/testnet-workspace/system/memberships#membership"
+                  >
+                    Learn more <LinkSymbol />
+                  </TooltipExternalLink>
+                </>
+              }
               validation={hasError('handle', errors) ? 'invalid' : undefined}
               message={hasError('handle', errors) ? getErrorMessage('handle', errors) : 'Do not use same handles'}
             >
