@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import React, { useState } from 'react'
 
 import EditableInputList, { EditableInputListProps } from '@/common/components/EditableInputList/EditableInputList'
 
@@ -9,7 +9,8 @@ export default {
 } as Meta
 
 const Template: Story<EditableInputListProps> = (args) => {
-  return <EditableInputList {...args} />
+  const [questionFields, addQuestionField] = useState()
+  return <EditableInputList {...args} value={questionFields} onChange={addQuestionField} />
 }
 
 export const Default = Template.bind({})
