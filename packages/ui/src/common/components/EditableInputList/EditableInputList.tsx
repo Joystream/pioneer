@@ -12,7 +12,6 @@ import { TextHuge, TextMedium } from '@/common/components/typography'
 export interface EditableInputListProps {
   title?: string
   buttonText: string
-  onChange: (value: boolean) => void
 }
 
 const EditableInputList: React.FC<EditableInputListProps> = React.memo(({ title, buttonText }) => {
