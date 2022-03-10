@@ -33,7 +33,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
     const votedForCandidates = allCandidates?.filter(({ voted }) => voted)
 
     return [allCandidates, votedForCandidates]
-  }, [optionIds?.size, election?.candidates.length])
+  }, [optionIds?.size, election?.candidates])
 
   return (
     <>

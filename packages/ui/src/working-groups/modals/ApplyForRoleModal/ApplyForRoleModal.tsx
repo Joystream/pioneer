@@ -13,11 +13,13 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
 import { groupToLockId } from '../../types'
@@ -40,6 +42,11 @@ export const ApplyForRoleModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
+
+  const { refetch: refetchApplications } = useMyApplications()
+  useRefetch({ type: 'set', payload: refetchApplications })
+  useRefetch({ type: 'do', payload: state.matches('success') })
+
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(

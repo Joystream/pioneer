@@ -9,7 +9,9 @@ import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
@@ -26,6 +28,10 @@ export const VoteForCouncilModal = () => {
   const { api } = useApi()
 
   const { active: activeMember } = useMyMemberships()
+
+  const { refetch: refetchElection } = useCurrentElection()
+  useRefetch({ type: 'set', payload: refetchElection })
+  useRefetch({ type: 'do', payload: state.matches('success') })
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake

@@ -37,11 +37,10 @@ export const NewThreadPost = React.forwardRef(
     const { showModal } = useModal()
     const [editorRef, setEditorRef] = useState<RefObject<HTMLDivElement>>(useRef<HTMLDivElement>(null))
 
-    const onSuccess = useCallback(() => {
+    const onSuccess = useCallback(async () => {
       setText('')
       setEditorRef({ ...editorRef })
       setEditable(false)
-      removeReply()
     }, [])
 
     if (!active) {
