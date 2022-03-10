@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import EditableInputList, { EditableInputListProps } from '@/common/components/EditableInputList/EditableInputList'
 
 export default {
-  title: 'Common/EditableInputList',
+  title: 'Common/Forms/EditableInputList',
   component: EditableInputList,
 } as Meta
 

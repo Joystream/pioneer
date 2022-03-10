@@ -1,17 +1,12 @@
 import BN from 'bn.js'
 
+import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { GroupIdName } from '@/working-groups/types'
 
 export interface StakingPolicyAndRewardParameters {
   stakingAmount?: BN
   leavingUnstakingPeriod?: number
   rewardPerBlock?: BN
-}
-
-// TODO move this somewhere else once #2506 is merged
-interface Question {
-  questionField: string
-  shortValue: boolean
 }
 
 export interface WorkingGroupAndDescriptionParameters {
@@ -27,7 +22,7 @@ export interface DurationAndProcessParameters {
 }
 
 export interface ApplicationFormParameters {
-  questions?: Question[]
+  questions?: QuestionValueProps[]
 }
 
 export type CreateWorkingGroupLeadOpeningParameters = WorkingGroupAndDescriptionParameters &

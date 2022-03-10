@@ -1,5 +1,6 @@
 import React from 'react'
 
+import EditableInputList from '@/common/components/EditableInputList/EditableInputList'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -19,7 +20,12 @@ export const ApplicationForm = ({ questions, setQuestions }: Props) => {
         </RowGapBlock>
       </Row>
       <Row>
-        <RowGapBlock gap={20}>{/* TODO add the questions */}</RowGapBlock>
+        <EditableInputList
+          title="Application form"
+          buttonText="Add new question"
+          value={questions}
+          onChange={setQuestions}
+        />
       </Row>
     </RowGapBlock>
   )

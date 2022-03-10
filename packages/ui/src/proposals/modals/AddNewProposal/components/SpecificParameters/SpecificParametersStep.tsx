@@ -65,7 +65,8 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!specifics?.details
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'): {
-      return true
+      const questions = specifics?.questions
+      return !!(questions?.[0] && questions?.every((question) => question.questionField))
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
       return !!(
