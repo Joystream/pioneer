@@ -12,14 +12,15 @@ import { TextHuge, TextMedium } from '@/common/components/typography'
 export interface EditableInputListProps {
   title?: string
   buttonText: string
+  onChange: (value: boolean) => void
 }
 
 const EditableInputList: React.FC<EditableInputListProps> = React.memo(({ title, buttonText }) => {
-  const [questionFields, addQuestionField] = useState([{ questionField: '', shortValue: true }])
+  const [questionFields, addQuestionField] = useState([{ questionField: '', shortValue: true, inputNumber: 0 }])
 
   const addFields = () => {
     const values = [...questionFields]
-    values.push({ questionField: '', shortValue: true })
+    values.push({ questionField: '', shortValue: true, inputNumber: 1 })
     addQuestionField(values)
   }
 
@@ -51,8 +52,9 @@ const EditableInputList: React.FC<EditableInputListProps> = React.memo(({ title,
         </TransactionButton>
       </HeaderWrapper>
       {questionFields.map((questionFields, index) => (
-        <>
+        <InputWrapper>
           <QuestionFieldWrapper>
+            <StyledNumber>{index + 1}.</StyledNumber>
             <StyledInputComponent
               id="field-title"
               inputSize="m"
@@ -77,16 +79,24 @@ const EditableInputList: React.FC<EditableInputListProps> = React.memo(({ title,
               falseLabel={!questionFields.shortValue ? <StyledLabel>Long answer</StyledLabel> : 'Long answer'}
               onChange={() => toggleLength(index, !questionFields.shortValue)}
               checked={questionFields.shortValue ?? false}
-              switchToggle
+              hasNoOffState
             />
           </ToggleWrapper>
-        </>
+        </InputWrapper>
       ))}
     </>
   )
 })
 
 export default EditableInputList
+
+const StyledNumber = styled(TextHuge)`
+  padding: 10px;
+`
+
+const InputWrapper = styled.div`
+  margin-top: 40px;
+`
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -111,6 +121,7 @@ const StyledInputComponent = styled(InputComponent)<{ validation?: string | unde
 const QuestionFieldWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-top: 20px;
 `
 
 const ToggleWrapper = styled.div`

@@ -14,7 +14,7 @@ export interface Props {
   onChange: (value: boolean) => void
   trueLabel: ReactNode
   falseLabel: ReactNode
-  switchToggle?: boolean
+  hasNoOffState?: boolean
 }
 
 export function ToggleCheckbox({
@@ -24,18 +24,17 @@ export function ToggleCheckbox({
   onChange,
   trueLabel,
   falseLabel,
-  switchToggle,
+  hasNoOffState = false,
 }: Props) {
   const onClick = (setValue: boolean) => () => {
     if (disabled !== true) {
       onChange(setValue)
     }
   }
-  const toggleValidation = switchToggle ? switchToggle : false
   return (
     <ToggleContainer groupDisabled={disabled}>
       <ToggleLabel onClick={onClick(true)}>{trueLabel}</ToggleLabel>
-      <ToggleStyledInput isChecked={checked} switchToggle={toggleValidation}>
+      <ToggleStyledInput isChecked={checked} hasNoOffState={hasNoOffState}>
         <ToggleInput
           type="checkbox"
           disabled={disabled}
@@ -59,7 +58,7 @@ const ToggleInput = styled.input`
 
 interface ToggleStyledInputProps {
   isChecked: boolean
-  switchToggle: boolean
+  hasNoOffState: boolean
 }
 const ToggleLabel = styled.button`
   outline: none;
@@ -89,13 +88,13 @@ const ToggleStyledInput = styled.label<ToggleStyledInputProps>`
   margin: 0 10px;
   position: relative;
   border-radius: ${BorderRad.full};
-  background-color: ${(switchToggle) => (switchToggle ? Colors.Blue[500] : Colors.Black[300])};
+  background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[500] : Colors.Black[300])};
   cursor: pointer;
   transition: ${Transitions.all};
 
   &:hover,
   &:focus {
-    background-color: ${(switchToggle) => (switchToggle ? Colors.Blue[400] : Colors.Black[200])};
+    background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[400] : Colors.Black[200])};
   }
 
   &:after {
