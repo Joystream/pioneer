@@ -22,7 +22,6 @@ import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
-import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
