@@ -30021,6 +30021,11 @@ type WorkingGroupOpeningMetadata implements BaseGraphQLObject {
   originallyValid: Boolean!
 
   """
+  Opening title
+  """
+  title: String
+
+  """
   Opening short description
   """
   shortDescription: String
@@ -30057,6 +30062,7 @@ type WorkingGroupOpeningMetadataConnection {
 
 input WorkingGroupOpeningMetadataCreateInput {
   originallyValid: Boolean!
+  title: String
   shortDescription: String
   description: String
   hiringLimit: Float
@@ -30078,6 +30084,8 @@ enum WorkingGroupOpeningMetadataOrderByInput {
   deletedAt_DESC
   originallyValid_ASC
   originallyValid_DESC
+  title_ASC
+  title_DESC
   shortDescription_ASC
   shortDescription_DESC
   description_ASC
@@ -30092,6 +30100,7 @@ enum WorkingGroupOpeningMetadataOrderByInput {
 
 input WorkingGroupOpeningMetadataUpdateInput {
   originallyValid: Boolean
+  title: String
   shortDescription: String
   description: String
   hiringLimit: Float
@@ -30126,6 +30135,11 @@ input WorkingGroupOpeningMetadataWhereInput {
   deletedById_in: [ID!]
   originallyValid_eq: Boolean
   originallyValid_in: [Boolean!]
+  title_eq: String
+  title_contains: String
+  title_startsWith: String
+  title_endsWith: String
+  title_in: [String!]
   shortDescription_eq: String
   shortDescription_contains: String
   shortDescription_startsWith: String
