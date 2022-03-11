@@ -53,12 +53,12 @@ export const WithdrawContributionModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (transaction && feeInfo && activeMember) {
+      if (transaction && feeInfo && activeMember && amount) {
         feeInfo.canAfford && send('PASS')
         !feeInfo.canAfford && send('FAIL')
       }
     }
-  }, [state.value, transaction, feeInfo?.canAfford])
+  }, [state.value, transaction, feeInfo?.canAfford, amount])
 
   if (state.matches('requirementsVerification')) {
     return (
@@ -66,6 +66,13 @@ export const WithdrawContributionModal = () => {
         title={t('common:modals.wait.title')}
         description={t('common:modals.wait.description')}
         onClose={hideModal}
+        requirements={[
+          { name: 'API', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!feeInfo },
+          { name: 'Calculating amount', state: !!amount },
+        ]}
       />
     )
   }

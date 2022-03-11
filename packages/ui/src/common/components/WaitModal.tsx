@@ -1,15 +1,24 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { RowGapBlock } from '@/common/components/page/PageContent'
 
 import { Loader } from './icons'
 import { WaitingIcon } from './icons/WaitingIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultTextWhite } from './Modal'
+
+interface RequirementProps {
+  name: string
+  state: boolean
+}
 
 export interface WaitModalProps {
   onClose: () => void
   title?: string
   description?: string
   requirementsCheck?: boolean
+  requirements?: RequirementProps[]
 }
 
 export const WaitModal = ({
@@ -17,6 +26,7 @@ export const WaitModal = ({
   title: baseTitle,
   description: baseDescription,
   requirementsCheck,
+  requirements,
 }: WaitModalProps) => {
   const { t } = useTranslation()
   const title = requirementsCheck ? t('modals.wait.title') : baseTitle
@@ -28,7 +38,23 @@ export const WaitModal = ({
         <WaitingIcon />
         <ModalTitle as="h4">{title}</ModalTitle>
         <ResultTextWhite>{description}</ResultTextWhite>
+        {requirements?.length && (
+          <RowGapBlock gap={4}>
+            {requirements.map((requirement) => (
+              <Requirement>
+                <ResultTextWhite>{requirement.name}</ResultTextWhite>
+                <ResultTextWhite>{requirement.state ? 'Loaded' : 'Loading...'}</ResultTextWhite>
+              </Requirement>
+            ))}
+          </RowGapBlock>
+        )}
       </ResultModalBody>
     </Modal>
   )
 }
+
+const Requirement = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
