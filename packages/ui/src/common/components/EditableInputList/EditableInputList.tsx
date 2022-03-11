@@ -18,7 +18,7 @@ export interface EditableInputListProps {
   title?: string
   buttonText: string
   value?: QuestionValueProps[]
-  onChange: (value: any) => void
+  onChange: (value: QuestionValueProps[]) => void
 }
 
 const EditableInputList: React.FC<EditableInputListProps> = React.memo(
@@ -59,7 +59,7 @@ const EditableInputList: React.FC<EditableInputListProps> = React.memo(
           </TransactionButton>
         </HeaderWrapper>
         {value.map((questionFields, index) => (
-          <InputWrapper>
+          <InputWrapper key={index}>
             <QuestionFieldWrapper>
               <StyledNumber bold value>
                 {index + 1}.

@@ -68,8 +68,8 @@ export const WorkingGroupAndDescription = ({
           >
             <InputText
               id="opening-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={title ?? ''}
+              onChange={(event) => setTitle(event.target.value)}
               placeholder="Opening title"
             />
           </InputComponent>
