@@ -113,7 +113,7 @@ describe('UI: ApplyForRoleModal', () => {
       available: 2000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
-    applyOnOpeningTxMock = (api.api.tx.forumWorkingGroup.applyOnOpening as unknown) as jest.Mock
+    applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
