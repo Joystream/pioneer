@@ -37,7 +37,7 @@ import { Member } from '@/memberships/types'
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
-  const { threadCategory } = useBountyForumCategory()
+  const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -68,7 +68,7 @@ export const AddBountyModal = () => {
 
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
-        threadCategory,
+        isThreadCategoryLoading,
         minCherryLimit: bountyApi?.minCherryLimit,
         maxCherryLimit: balance?.transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
@@ -76,7 +76,7 @@ export const AddBountyModal = () => {
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
-  }, [state, threadCategory?.id])
+  }, [state, isThreadCategoryLoading])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.generalParameters)) {
@@ -84,17 +84,22 @@ export const AddBountyModal = () => {
         send('SET_CREATOR', { creator: activeMember })
       }
     }
-  }, [activeMember, state])
+    if (state.matches(AddBountyStates.judgingPeriodDetails)) {
+      if (threadCategory && !state.context.threadCategoryId) {
+        send('SET_THREAD_CATEGORY_ID', { threadCategoryId: threadCategory.id })
+      }
+    }
+  }, [activeMember, state, threadCategory?.id])
 
   if (!activeMember || !api) {
     return null
   }
 
   if (state.matches(AddBountyStates.createThread) && threadCategory) {
-    const { title, creator } = state.context
+    const { title, creator, threadCategoryId } = state.context
     const transaction = api.tx.forum.createThread(
       activeMember.id,
-      threadCategory?.id ?? 0,
+      threadCategoryId,
       `${title} by ${creator?.handle}`,
       `This is the description thread for ${title}`,
       null
@@ -115,7 +120,7 @@ export const AddBountyModal = () => {
     )
   }
 
-  if (state.matches(AddBountyStates.transaction) && state.context.newThreadId) {
+  if (state.matches(AddBountyStates.transaction)) {
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
       createBountyParametersFactory(state as AddBountyModalMachineState),

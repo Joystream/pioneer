@@ -259,7 +259,7 @@ describe('UI: AddNewBountyModal', () => {
       })
 
       it('Renders', async () => {
-        expect(await screen.queryAllByText('Oralce')).toBeDefined()
+        expect(await screen.findByText('Oracle')).toBeInTheDocument()
         expect(await getCreateButton()).toBeDisabled()
       })
 

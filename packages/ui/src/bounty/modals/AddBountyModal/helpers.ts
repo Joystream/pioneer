@@ -11,12 +11,12 @@ import Long from 'long'
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
-import { ForumCategory } from '@/forum/types'
+import { whenDefined } from '@/common/utils'
 
 import { BountyCreationParameters } from '../../../../../types/augment'
 
 interface Conditions {
-  threadCategory: ForumCategory | undefined
+  isThreadCategoryLoading?: boolean
   minCherryLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxCherryLimit?: BN
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
@@ -27,9 +27,6 @@ interface Conditions {
 export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {
   const { context } = state
   switch (true) {
-    case !conditions.threadCategory: {
-      return false
-    }
     case state.matches(AddBountyStates.generalParameters): {
       return !!(context.creator && context.description && context.title && context.coverPhotoLink)
     }
@@ -63,7 +60,7 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
       return !!(stake && type && context.workingPeriodLength)
     }
     case state.matches(AddBountyStates.judgingPeriodDetails): {
-      return !!(context.oracle && context.judgingPeriodLength)
+      return !!(context.oracle && context.judgingPeriodLength && !conditions.isThreadCategoryLoading)
     }
     default:
       return false
@@ -127,7 +124,7 @@ export const createBountyMetadataFactory = (state: AddBountyModalMachineState): 
   title: state.context.title,
   description: state.context.description,
   bannerImageUri: state.context.coverPhotoLink,
-  discussionThread: Long.fromString(String(state.context.newThreadId) ?? '1'),
+  discussionThread: whenDefined(state.context.newThreadId, (id) => Long.fromString(String(id))),
 })
 
 export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState): IBountyWorkData => ({
