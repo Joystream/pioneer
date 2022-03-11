@@ -7,7 +7,7 @@ import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '
 
 export type GroupIdName = Extract<
   keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
-  `${string}WorkingGroup`
+  `${string}WorkingGroup` | `${string}WorkingGroup${string}`
 >
 export interface WorkingGroup {
   id: GroupIdName

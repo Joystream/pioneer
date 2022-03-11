@@ -5,6 +5,7 @@ import { ProposalDetails } from '@joystream/types/src/proposals'
 import { ApiRx } from '@polkadot/api'
 
 import { BN_ZERO } from '@/common/constants'
+import { last } from '@/common/utils'
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
@@ -16,7 +17,12 @@ const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   membershipWorkingGroup: 'Membership',
   distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
+  operationsWorkingGroupAlpha: 'OperationsAlpha',
+  operationsWorkingGroupBeta: 'OperationsBeta',
+  operationsWorkingGroupGamma: 'OperationsGamma',
 }
+
+const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   if (!groupId) return undefined
@@ -101,7 +107,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'cancelWorkingGroupLeadOpening': {
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         CancelWorkingGroupLeadOpening: [
-          specifics?.openingId ?? 0,
+          specifics?.openingId ? idToRuntimeId(specifics.openingId) : 0,
           getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
         ],
       })
@@ -119,8 +125,8 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'fillWorkingGroupLeadOpening': {
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         FillWorkingGroupLeadOpening: {
-          opening_id: specifics?.openingId,
-          successful_application_id: specifics?.applicationId,
+          opening_id: specifics?.openingId ? idToRuntimeId(specifics.openingId) : 0,
+          successful_application_id: specifics?.applicationId ? idToRuntimeId(specifics.applicationId) : 0,
           working_group: getWorkingGroupParam(specifics?.groupId),
         },
       })

@@ -711,7 +711,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Step 2: Invalid to valid', async () => {
           const description = 'Foo'
-          const group = 'Forum'
+          const group = 'Storage'
           const stakingAmount = 100
           const unstakingPeriod = 101
           const rewardPerBlock = 102
