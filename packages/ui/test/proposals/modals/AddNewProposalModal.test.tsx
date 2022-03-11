@@ -30,6 +30,7 @@ import {
   seedWorkingGroups,
   updateWorkingGroups,
 } from '@/mocks/data'
+import workingGroups from '@/mocks/data/raw/workingGroups.json'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
@@ -137,6 +138,7 @@ describe('UI: AddNewProposalModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
+  const forumLeadId = workingGroups.find((group) => group.id === 'forumWorkingGroup')?.leadId
 
   let useAccounts: UseAccounts
   let createProposalTx: any
@@ -203,7 +205,10 @@ describe('UI: AddNewProposalModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: { originalModalName: 'AddNewProposalModal' },
+      })
     })
 
     it('Insufficient funds', async () => {
@@ -468,8 +473,12 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid - signal field filled', async () => {
-          await SpecificParameters.Signal.fillSignal('Foo')
+          const signal = 'Foo'
+          await SpecificParameters.Signal.fillSignal(signal)
 
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSignal.toJSON()
+          expect(parameters).toEqual(signal)
           const button = await getCreateButton()
           expect(button).toBeEnabled()
         })
@@ -505,9 +514,18 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid - everything filled', async () => {
-          await SpecificParameters.fillAmount(100)
+          const amount = 100
+          await SpecificParameters.fillAmount(amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asFundingRequest.toJSON()
+          expect(parameters).toEqual([
+            {
+              account: getMember('bob').controllerAccount,
+              amount,
+            },
+          ])
           const button = await getCreateButton()
           expect(button).not.toBeDisabled()
         })
@@ -526,21 +544,38 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - zero entered', async () => {
-          await SpecificParameters.fillAmount(0)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
-          expect(await getCreateButton()).toBeDisabled()
-        })
-
-        it('Blocks value bigger than 255', async () => {
-          await SpecificParameters.fillAmount(300)
+        it('Invalid - over 100 percent', async () => {
+          await SpecificParameters.fillAmount(200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
-          await SpecificParameters.fillAmount(100)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
+          const amount = 40
+          await SpecificParameters.fillAmount(amount)
+          expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetReferralCut.toJSON()
+
+          expect(parameters).toEqual(amount)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Valid with execution warning', async () => {
+          const amount = 100
+          await SpecificParameters.fillAmount(amount)
+          expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
+
+          expect(await getCreateButton()).toBeDisabled()
+
+          const checkbox = screen.getByTestId('execution-requirement')
+          fireEvent.click(checkbox)
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetReferralCut.toJSON()
+
+          expect(parameters).toEqual(amount)
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -581,12 +616,17 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid - group selected, amount filled', async () => {
-          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
+          const amount = 100
+          const group = 'Forum'
+          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup(group)
           await waitFor(() =>
             expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
           )
+          await SpecificParameters.fillAmount(amount)
 
-          await SpecificParameters.fillAmount(100)
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asDecreaseWorkingGroupLeadStake.toJSON()
+          expect(parameters).toEqual([Number(forumLeadId?.split('-')[1]), amount, group])
 
           const button = await getCreateButton()
           expect(button).not.toBeDisabled()
@@ -609,16 +649,26 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid - group selected, amount: not filled/filled', async () => {
-          await SpecificParameters.TerminateWorkingGroupLead.selectGroup('Forum')
+          const group = 'Forum'
+          const slashingAmount = 100
+          await SpecificParameters.TerminateWorkingGroupLead.selectGroup(group)
           const workingGroup = server?.server?.schema.find('WorkingGroup', 'forumWorkingGroup') as any
-          const leadHandle = workingGroup?.leader.membership.handle
-          expect(await screen.findByText(leadHandle)).toBeDefined()
+          const leader = workingGroup?.leader.membership
+          expect(await screen.findByText(leader?.handle)).toBeDefined()
 
           const button = await getCreateButton()
           expect(button).not.toBeDisabled()
 
           await triggerYes()
           await SpecificParameters.fillAmount(100)
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
+          expect(parameters).toEqual({
+            slashing_amount: slashingAmount,
+            worker_id: Number(forumLeadId?.split('-')[1]),
+            working_group: group,
+          })
 
           expect(button).not.toBeDisabled()
         })
@@ -672,19 +722,35 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Step 2: Invalid to valid', async () => {
-          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup('Forum')
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Foo')
+          const description = 'Foo'
+          const group = 'Storage'
+          const stakingAmount = 100
+          const unstakingPeriod = 101
+          const rewardPerBlock = 102
+          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
           await clickNextButton()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(100)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stakingAmount)
           expect(await getCreateButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(100)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
           expect(await getCreateButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(100)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(rewardPerBlock)
           expect(await getCreateButton()).toBeEnabled()
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
+          expect(parameters).toEqual({
+            description: '0x' + Buffer.from(description).toString('hex'),
+            reward_per_block: rewardPerBlock,
+            stake_policy: {
+              stake_amount: stakingAmount,
+              leaving_unstaking_period: unstakingPeriod,
+            },
+            working_group: group,
+          })
         })
 
         it('Stake policy', async () => {
@@ -717,10 +783,16 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.SetWorkingGroupLeadReward.selectGroup('Forum')
+          const group = 'Forum'
+          const amount = 100
+          await SpecificParameters.SetWorkingGroupLeadReward.selectGroup(group)
           await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
-          await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(100)
+          await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetWorkingGroupLeadReward.toJSON()
+          expect(parameters).toEqual([Number(forumLeadId?.split('-')[1]), amount, group])
         })
       })
 
@@ -748,8 +820,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.fillAmount(100)
+          const amount = 100
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetMaxValidatorCount.toJSON()
+          expect(parameters).toEqual(amount)
         })
       })
 
@@ -770,6 +847,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asCancelWorkingGroupLeadOpening.toJSON()
+          expect(parameters).toEqual([1337, 'Forum'])
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -801,8 +881,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.fillAmount(100)
+          const amount = 100
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetCouncilBudgetIncrement.toJSON()
+          expect(parameters).toEqual(amount)
         })
       })
 
@@ -826,8 +911,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.fillAmount(100)
+          const amount = 100
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetCouncilorReward.toJSON()
+          expect(parameters).toEqual(amount)
         })
       })
 
@@ -859,9 +949,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
+          const amount = 100
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await SpecificParameters.fillAmount(100)
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetMembershipLeadInvitationQuota.toJSON()
+          expect(parameters).toEqual(amount)
         })
       })
       describe('Type - Fill Working Group Lead Opening', () => {
@@ -882,6 +977,13 @@ describe('UI: AddNewProposalModal', () => {
         it('Valid form', async () => {
           await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
           await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
+          expect(parameters).toEqual({
+            opening_id: 1337,
+            successful_application_id: 1337,
+            working_group: 'Forum',
+          })
           expect(await getCreateButton()).toBeEnabled()
         })
       })
@@ -909,10 +1011,15 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
+          const count = 1
           await SpecificParameters.SetInitialInvitationCount.fillCount(1)
           expect(await getCreateButton()).toBeEnabled()
-          await SpecificParameters.SetInitialInvitationCount.fillCount(0)
+          await SpecificParameters.SetInitialInvitationCount.fillCount(count)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetInitialInvitationCount.toJSON()
+          expect(parameters).toEqual(count)
         })
       })
       describe('Type - Set Initial Invitation Balance', () => {
@@ -938,8 +1045,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid form', async () => {
-          await SpecificParameters.fillAmount(1000)
+          const amount = 1000
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetInitialInvitationBalance.toJSON()
+          expect(parameters).toEqual(amount)
         })
 
         it('Displays current balance', async () => {
@@ -960,9 +1072,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid', async () => {
-          await SpecificParameters.fillAmount(100)
+          const price = 100
+          await SpecificParameters.fillAmount(price)
           expect(await screen.getByTestId('amount-input')).toHaveValue('100')
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetMembershipPrice.toJSON()
+          expect(parameters).toEqual(price)
         })
       })
 
@@ -996,6 +1113,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid - group selected, negative amount filled', async () => {
+          const amount = 100
+          const group = 'Forum'
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
 
@@ -1004,6 +1123,10 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(100)
 
           expect(await getCreateButton()).toBeEnabled()
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asUpdateWorkingGroupBudget.toJSON()
+          expect(parameters).toEqual([amount, group, 'Negative'])
         })
       })
     })

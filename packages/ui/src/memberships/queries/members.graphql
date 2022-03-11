@@ -141,3 +141,18 @@ query GetMemberRowDetails($workerId_in: [ID!]!) {
     totalCount
   }
 }
+
+query GetMemberActionDetails($workerId_in: [ID!]!) {
+  stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  memberInvitedEventsConnection(where: { invitingMember: { id_in: $workerId_in } }) {
+    totalCount
+  }
+}

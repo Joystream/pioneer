@@ -57,7 +57,7 @@ export const Settings = () => {
                   <NetworkInfo
                     detailsTitle={t('networkDetails')}
                     urlAddress={endpoints.membershipFaucetEndpoint}
-                    networkAddress={endpoints.membershipFaucetEndpoint}
+                    networkAddress={endpoints.nodeRpcEndpoint}
                     queryNodeAddress={endpoints.queryNodeEndpoint}
                   />
                 </>

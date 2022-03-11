@@ -259,6 +259,7 @@ export type AddNewProposalState =
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+type SetReferralCutEvent = { type: 'SET_REFERRAL_CUT'; referralCut: number }
 type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
 type SetBudgetUpdateKindEvent = { type: 'SET_BUDGET_UPDATE_KIND'; kind: UpdateKind }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
@@ -271,8 +272,8 @@ type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
-type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: number }
-type SetApplicationId = { type: 'SET_APPLICATION_ID'; applicationId: number }
+type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: string }
+type SetApplicationId = { type: 'SET_APPLICATION_ID'; applicationId: string }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
@@ -309,6 +310,7 @@ export type AddNewProposalEvent =
   | SetRuntime
   | SetSlashingAmount
   | SetInvitationCount
+  | SetReferralCutEvent
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
@@ -499,10 +501,10 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
         setReferralCut: {
           on: {
-            SET_AMOUNT: {
+            SET_REFERRAL_CUT: {
               actions: assign({
                 specifics: (context, event) => {
-                  return { ...context.specifics, amount: event.amount }
+                  return { ...context.specifics, referralCut: event.referralCut }
                 },
               }),
             },
@@ -779,6 +781,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   openingId: event.openingId,
+                }),
+              }),
+            },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
                 }),
               }),
             },

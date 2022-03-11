@@ -89,7 +89,13 @@ export const ContributeFundsModal = () => {
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
       if (!activeMember) {
-        showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'BountyContributeFundsModal',
+            originalModalData: { bounty },
+          },
+        })
       } else {
         nextStep()
       }

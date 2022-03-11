@@ -17,7 +17,7 @@ export const filterWorkingGroup = (filterOut: WorkingGroup | undefined) => {
 
 interface Props {
   onChange: (selected: WorkingGroupOpening) => void
-  selectedOpeningId?: number
+  selectedOpeningId?: string
   groupId?: string
   disabled?: boolean
   className?: string
@@ -36,7 +36,7 @@ export const SelectWorkingGroupOpeningBase = ({
 }: Props) => {
   const { openings } = useOpenings({ type: 'open', groupId, openingsPositionType })
   const selectedOpening = useMemo(
-    () => openings.find((opening) => opening.runtimeId === selectedOpeningId),
+    () => openings.find((opening) => opening.id === selectedOpeningId),
     [selectedOpeningId, openings.length]
   )
 

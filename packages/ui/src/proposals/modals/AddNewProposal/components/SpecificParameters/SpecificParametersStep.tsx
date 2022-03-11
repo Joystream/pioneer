@@ -105,13 +105,13 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       )
     }
     case state.matches('specificParameters.setReferralCut'): {
-      return !!(specifics?.amount && specifics?.amount.gtn(0))
+      return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
     }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
-      return typeof specifics?.applicationId === 'number' && typeof specifics?.openingId === 'number'
+      return typeof specifics?.applicationId === 'string' && typeof specifics?.openingId === 'string'
     }
     case state.matches('specificParameters.updateWorkingGroupBudget'): {
       return !!(
@@ -181,8 +181,9 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
         <FillWorkingGroupLeadOpening
           applicationId={specifics?.applicationId}
           openingId={specifics?.openingId}
-          setApplicationId={(applicationId: number) => send('SET_APPLICATION_ID', { applicationId })}
-          setOpeningId={(openingId: number) => send('SET_OPENING_ID', { openingId })}
+          setApplicationId={(applicationId) => send('SET_APPLICATION_ID', { applicationId })}
+          setOpeningId={(openingId) => send('SET_OPENING_ID', { openingId })}
+          setWorkingGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
       )
     }
@@ -285,8 +286,9 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-          amount={state.context.specifics?.amount}
+          setReferralCut={(referralCut) => send('SET_REFERRAL_CUT', { referralCut })}
+          referralCut={state.context.specifics?.referralCut}
+          setIsExecutionError={setIsExecutionError}
         />
       )
     }

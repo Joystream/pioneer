@@ -81,7 +81,13 @@ export const AnnounceWorkEntryModal = () => {
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
       if (!activeMember) {
-        showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'BountyAnnounceWorkEntryModal',
+            originalModalData: { bounty },
+          },
+        })
       } else {
         nextStep()
       }

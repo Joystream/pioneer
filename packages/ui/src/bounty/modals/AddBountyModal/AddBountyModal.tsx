@@ -7,7 +7,6 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useBountyForumCategory } from '@/bounty/hooks/useBountyForumCategory'
-import { ForumThreadStep } from '@/bounty/modals/AddBountyModal/components/ForumThreadStep'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
 import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/JudgingDetailsStep'
@@ -38,7 +37,7 @@ import { Member } from '@/memberships/types'
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
-  const { threadCategory } = useBountyForumCategory()
+  const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -55,7 +54,12 @@ export const AddBountyModal = () => {
   useEffect(() => {
     if (state.matches(AddBountyStates.requirementsVerification)) {
       if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        return showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'AddBounty',
+          },
+        })
       }
       if (activeMember) {
         send('NEXT')
@@ -64,7 +68,7 @@ export const AddBountyModal = () => {
 
     setValidNext(
       isNextStepValid(state as AddBountyModalMachineState, {
-        threadCategory,
+        isThreadCategoryLoading,
         minCherryLimit: bountyApi?.minCherryLimit,
         maxCherryLimit: balance?.transferable,
         minFundingLimit: bountyApi?.minFundingLimit,
@@ -72,7 +76,7 @@ export const AddBountyModal = () => {
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
-  }, [state, threadCategory?.id])
+  }, [state, isThreadCategoryLoading])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.generalParameters)) {
@@ -80,19 +84,24 @@ export const AddBountyModal = () => {
         send('SET_CREATOR', { creator: activeMember })
       }
     }
-  }, [activeMember, state])
+    if (state.matches(AddBountyStates.judgingPeriodDetails)) {
+      if (threadCategory && !state.context.threadCategoryId) {
+        send('SET_THREAD_CATEGORY_ID', { threadCategoryId: threadCategory.id })
+      }
+    }
+  }, [activeMember, state, threadCategory?.id])
 
   if (!activeMember || !api) {
     return null
   }
 
   if (state.matches(AddBountyStates.createThread) && threadCategory) {
-    const { forumThreadTopic, forumThreadDescription } = state.context
+    const { title, creator, threadCategoryId } = state.context
     const transaction = api.tx.forum.createThread(
       activeMember.id,
-      threadCategory.id,
-      forumThreadTopic,
-      forumThreadDescription,
+      threadCategoryId,
+      `${title} by ${creator?.handle}`,
+      `This is the description thread for ${title}`,
       null
     )
     const service = state.children.createThread
@@ -221,16 +230,6 @@ export const AddBountyModal = () => {
                   send('SET_JUDGING_PERIOD_LENGTH', { judgingPeriodLength })
                 }
                 setOracle={(oracle) => send('SET_ORACLE', { oracle })}
-              />
-            )}
-            {state.matches(AddBountyStates.forumThreadDetails) && (
-              <ForumThreadStep
-                setForumThreadDescription={(forumThreadDescription) =>
-                  send('SET_FORUM_THREAD_DESCRIPTION', { forumThreadDescription })
-                }
-                setForumThreadTopic={(forumThreadTopic) => send('SET_FORUM_THREAD_TOPIC', { forumThreadTopic })}
-                forumThreadTopic={state.context.forumThreadTopic}
-                forumThreadDescription={state.context.forumThreadDescription}
               />
             )}
           </StepperBody>

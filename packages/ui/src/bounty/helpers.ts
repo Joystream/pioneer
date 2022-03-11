@@ -1,6 +1,7 @@
 import {
   BountyEntryStatus,
   BountyPeriod,
+  BountyPeriodFilters,
   EntrantResult,
   FundingType,
   isBountyEntryStatusWinner,
@@ -12,7 +13,8 @@ export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
   funding: Colors.Orange[500],
   working: Colors.Blue[500],
   judgement: Colors.Purple[200],
-  withdrawal: Colors.Green[500],
+  successful: Colors.Green[500],
+  failed: Colors.Red[300],
   expired: Colors.Red[300],
   terminated: Colors.Red[500],
 }
@@ -41,7 +43,15 @@ export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
   },
 }
 
-export const bountyPeriods: BountyPeriod[] = ['funding', 'working', 'judgement', 'withdrawal', 'expired']
+export const bountyPeriods: BountyPeriodFilters[] = [
+  'funding',
+  'working',
+  'judgement',
+  'expired',
+  'Terminated - failed',
+  'Terminated - successful',
+  'Terminated - funding',
+]
 
 export const sortingOptions = ['Latest', 'Earliest']
 

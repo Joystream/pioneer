@@ -19,6 +19,8 @@ import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
+import { BN_ZERO } from '@/common/constants'
+import { isDefined } from '@/common/utils'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
@@ -76,9 +78,18 @@ interface BountyHeaderButtonsProps {
   t: TFunction
 }
 
-const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps) => {
-  const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && bounty?.contractType !== 'ContractOpen'
+const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeaderButtonsProps) => {
+  const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
+  const bountyCreator = bounty.creator
+  const isCreator = bountyCreator?.id === activeMember?.id
+  const isCancelAvailable = bounty.totalFunding > BN_ZERO
 
+  if (!isCreator || !bountyCreator) {
+    return <ContributeFundsButton bounty={bounty} />
+  }
+  if (isCancelAvailable) {
+    return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
+  }
   return (
     <>
       {shouldDisplayStatistics && (
@@ -91,7 +102,6 @@ const FundingStageButtons = React.memo(({ bounty, t }: BountyHeaderButtonsProps)
           </div>
         </>
       )}
-      <ContributeFundsButton bounty={bounty} />
     </>
   )
 })
@@ -100,13 +110,9 @@ const WorkingStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeade
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const isOnWhitelist = useMemo(
-    () =>
-      bounty.contractType !== 'ContractOpen' && bounty.contractType?.whitelist.some((id) => activeMember?.id === id),
-    [bounty]
-  )
+  const isOnWhitelist = useMemo(() => activeMember && bounty.entrantWhitelist?.includes(activeMember.id), [bounty])
 
-  if (bounty?.contractType !== 'ContractOpen' && !isOnWhitelist) {
+  if (isDefined(bounty?.entrantWhitelist) && !isOnWhitelist) {
     {
       /* TODO: https://github.com/Joystream/pioneer/issues/1937 */
     }
@@ -154,7 +160,6 @@ const SuccessfulStageButtons = React.memo(({ bounty, activeMember, t }: BountyHe
     () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
     [bounty]
   )
-
   return (
     <>
       <ButtonGhost size="large">
@@ -179,18 +184,19 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
   const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected
+  const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected && !bounty.isTerminated
+  const isTerminated = !bounty.isTerminated
 
   if (!hasAnnounced && !isContributor) {
     return null
   }
-
   return (
     <>
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {hasLost ? <WithdrawStakeButton bounty={bounty} /> : <WithdrawContributionButton bounty={bounty} />}
+      {hasLost && <WithdrawStakeButton bounty={bounty} />}
+      {isTerminated && <WithdrawContributionButton bounty={bounty} />}
     </>
   )
 })
@@ -198,7 +204,6 @@ const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeader
 const ExpiredStageButtons = React.memo(({ bounty, activeMember }: BountyHeaderButtonsProps) => {
   const bountyCreator = bounty.creator
   const isCreator = bountyCreator?.id === activeMember?.id
-
   if (!isCreator || !bountyCreator) {
     return null
   }

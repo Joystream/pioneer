@@ -9,7 +9,16 @@ export interface BountyContributionsFiltersState {
   createdAfter?: Date
 }
 
-export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'withdrawal' | 'expired' | 'terminated'
+export type BountyPeriod = 'funding' | 'working' | 'judgement' | 'expired' | 'terminated' | 'failed' | 'successful'
+
+export type BountyPeriodFilters =
+  | 'funding'
+  | 'working'
+  | 'judgement'
+  | 'expired'
+  | 'Terminated - successful'
+  | 'Terminated - failed'
+  | 'Terminated - funding'
 
 export type EntrantResult = 'winner' | 'loser' | 'slashed'
 
@@ -79,12 +88,6 @@ export interface PeriodsLengthsType {
   judgingPeriodLength: number
 }
 
-export type ContractType = 'ContractOpen' | ContractClosed
-
-export type ContractClosed = {
-  whitelist: string[]
-}
-
 export type BountyStage = 'funding' | 'expired' | 'workSubmission' | 'judgment' | 'successful' | 'failed' | 'terminated'
 
 export interface WorkEntry {
@@ -125,21 +128,22 @@ export interface BountyContribution {
 export interface Bounty {
   id: string
   title: string
-  imageUri: string | null | undefined
+  imageUri: string | undefined
   description: string
   createdAt: string
   cherry: BN
   entrantStake: BN
+  entrantWhitelist: string[] | undefined
   creator?: Member
   oracle?: Member
   fundingType: FundingType
   workPeriod: number
   judgingPeriod: number
   stage: BountyStage
+  isTerminated: boolean
   totalFunding: BN
   entries?: WorkEntry[]
   inBlock: number
-  contractType: ContractType
   contributors: Contributor[]
-  discussionThreadId: string
+  discussionThreadId: string | undefined
 }

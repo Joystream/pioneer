@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
+import { GroupIdName } from '@/working-groups/types'
 
 export default {
   title: 'Proposals/AddNewProposalModal/CancelWorkingGroupLeadOpening',
@@ -15,7 +16,7 @@ const CancelWorkingGroupLeadOpeningTemplate: Story = () => {
   return (
     <MockApolloProvider members workingGroups>
       <CancelWorkingGroupLeadOpening
-        groupId={groupId}
+        groupId={groupId as GroupIdName}
         setGroupId={setGroupId}
         openingId={openingId}
         setOpeningId={setOpeningId}

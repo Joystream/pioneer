@@ -12,12 +12,12 @@ import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupAppl
 
 interface Props {
   onChange: (selected: WorkingGroupApplication) => void
-  selectedApplicationId?: number
+  selectedApplicationId?: string
   applicationsStatus?: ApplicationStatus
   disabled?: boolean
   className?: string
   id?: string
-  openingId?: number
+  openingId?: string
 }
 
 const SelectWorkingGroupApplicationBase = ({
@@ -31,7 +31,7 @@ const SelectWorkingGroupApplicationBase = ({
 }: Props) => {
   const { applications } = useApplications({ applicationsStatus, openingId })
   const selectedApplication = useMemo(
-    () => applications?.find((application) => application.runtimeId === selectedApplicationId),
+    () => applications?.find((application) => application.id === selectedApplicationId),
     [selectedApplicationId, applications?.length]
   )
 

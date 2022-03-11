@@ -5,7 +5,7 @@ import { asApplication } from '../types/WorkingGroupApplication'
 
 export interface Props {
   applicationsStatus?: ApplicationStatus
-  openingId?: number
+  openingId?: string
 }
 
 export type ApplicationStatus = 'accepted' | 'rejected' | 'cancelled' | 'pending' | 'withdrawn'
@@ -22,7 +22,7 @@ export const useApplications = ({ applicationsStatus, openingId }: Props) => {
   const { loading, data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
-        opening: { runtimeId_eq: openingId },
+        opening: { id_eq: openingId },
         status_json: { isTypeOf_eq: applicationsStatus ? ApplicationStatusToTypename[applicationsStatus] : undefined },
       },
     },

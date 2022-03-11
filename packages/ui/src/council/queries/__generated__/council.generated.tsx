@@ -1998,7 +1998,7 @@ export type GetElectionCandidatesIdsQueryResult = Apollo.QueryResult<
 >
 export const GetCurrentCandidateIdByMemberDocument = gql`
   query GetCurrentCandidateIdByMember($memberId: ID!) {
-    candidates(where: { member: { id_eq: $memberId } }, orderBy: [electionRound_DESC], limit: 1) {
+    candidates(where: { member: { id_eq: $memberId } }, limit: 1) {
       id
     }
   }

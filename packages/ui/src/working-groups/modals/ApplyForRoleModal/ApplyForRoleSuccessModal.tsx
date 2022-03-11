@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
 import { Account } from '@/accounts/types'
@@ -35,6 +35,11 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, s
   const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
   const { push } = useHistory()
 
+  const viewApplications = useCallback(async () => {
+    push(WorkingGroupsRoutes.myApplications)
+    hideModal()
+  }, [])
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Applying for role" />
@@ -69,7 +74,7 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, s
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={() => push(WorkingGroupsRoutes.myApplications)} size="medium">
+        <ButtonGhost onClick={viewApplications} size="medium">
           Go to my applications
           <Arrow direction="right" />
         </ButtonGhost>
