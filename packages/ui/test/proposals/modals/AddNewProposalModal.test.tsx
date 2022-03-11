@@ -79,6 +79,7 @@ const OPENING_DATA = {
   status: 'open',
   unstakingPeriod: 25110,
   metadata: {
+    title: 'Foo',
     shortDescription: '',
     description: '',
     hiringLimit: 1,
