@@ -6,7 +6,6 @@ import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { NetworkType } from '@/app/config'
 import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
-import OpeningDuration from '@/common/components/OpeningDuration/OpeningDuration'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SimpleSelect } from '@/common/components/selects'
@@ -26,7 +25,6 @@ export const Settings = () => {
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
     { title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
-
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
       setNetwork(network)
@@ -61,7 +59,6 @@ export const Settings = () => {
                     networkAddress={endpoints.nodeRpcEndpoint}
                     queryNodeAddress={endpoints.queryNodeEndpoint}
                   />
-                  <OpeningDuration />
                 </>
               )}
             </RowGapBlock>
