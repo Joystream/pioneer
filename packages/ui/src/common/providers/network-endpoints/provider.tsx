@@ -37,6 +37,10 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
           nodeRpcEndpoint: config['websocket_rpc'],
         }
 
+        if (!endpointsAreDefined(newNetworkConfig)) {
+          throw new Error('fetched config missing endpoints')
+        }
+
         const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(storedAutoNetworkConfig ?? {})
         const shouldUpdateNetwork = network !== 'auto-conf'
 
@@ -55,7 +59,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
         const errMsg = `Failed to fetch the network configuration from ${configEndpoint}.`
 
         setEndpoints(localEndpoints)
-        throw new Error(`${errMsg} Falling back on the local endpoints.`)
+        throw new Error(`${errMsg} - Falling back on the local endpoints.`)
       }
     },
     [network]
