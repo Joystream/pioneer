@@ -2,7 +2,7 @@ import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -27,7 +27,7 @@ import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/typ
 
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { getButton } from '../../_helpers/getButton'
-import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
+import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -44,6 +44,8 @@ import {
 } from '../../_mocks/transactions'
 
 const useHasRequiredStake = { hasRequiredStake: true }
+
+configure({ testIdAttribute: 'id' })
 
 jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
   return {
@@ -144,7 +146,13 @@ describe('UI: ApplyForRoleModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalData: useModal.modalData,
+          originalModalName: 'ApplyForRoleModal',
+        },
+      })
     })
 
     it('Insufficient funds', async () => {
@@ -187,6 +195,8 @@ describe('UI: ApplyForRoleModal', () => {
       await selectFromDropdown('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
       fireEvent.change(input, { target: { value: '2000' } })
+      await selectFromDropdownWithId('role-account', 'alice')
+      await selectFromDropdownWithId('reward-account', 'bob')
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -383,7 +393,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
   })
 
-  it.only('Parameters', async () => {
+  it('Parameters', async () => {
     stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
     stubTransactionFailure(batchTx)
 
@@ -433,6 +443,8 @@ describe('UI: ApplyForRoleModal', () => {
     await selectFromDropdown('Select account for Staking', stakingAccount)
     const input = await screen.findByLabelText(/Select amount for staking/i)
     fireEvent.change(input, { target: { value: '2000' } })
+    await selectFromDropdownWithId('role-account', 'alice')
+    await selectFromDropdownWithId('reward-account', 'alice')
     fireEvent.click(await getNextStepButton())
     await screen.findByText('Application')
   }

@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { BN_ZERO } from '@/common/constants'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 
@@ -11,11 +10,11 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [amount, setAmount] = useState(BN_ZERO)
+  const [amount, setAmount] = useState(0)
 
   return (
     <MockApolloProvider>
-      <SetReferralCut setAmount={setAmount} amount={amount} />
+      <SetReferralCut setReferralCut={setAmount} referralCut={amount} setIsExecutionError={() => undefined} />
     </MockApolloProvider>
   )
 }

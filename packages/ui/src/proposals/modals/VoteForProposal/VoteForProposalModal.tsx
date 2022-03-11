@@ -84,7 +84,15 @@ export const VoteForProposalModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} voteStatus={state.context.voteStatus} proposalTitle={proposal.title} />
+    const proposalId = modalData.id
+    return (
+      <SuccessModal
+        onClose={hideModal}
+        voteStatus={state.context.voteStatus}
+        proposalTitle={proposal.title}
+        proposalId={proposalId}
+      />
+    )
   }
 
   if (state.matches('error')) {

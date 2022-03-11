@@ -1,9 +1,9 @@
-import { ApolloQueryResult } from '@apollo/client'
 import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { error } from '@/common/logger'
 import { Address } from '@/common/types'
+import { RefetchQuery } from '@/common/types/queries'
 
 import { useGetMembersQuery } from '../../queries'
 import { asMember, Member } from '../../types'
@@ -23,7 +23,7 @@ export interface MyMemberships {
   helpers: {
     getMemberIdByBoundAccountAddress: (address: Address) => Member['id'] | undefined
   }
-  refetch?: () => Promise<ApolloQueryResult<unknown>>
+  refetch?: RefetchQuery
 }
 
 export const MembershipContextProvider = (props: Props) => {

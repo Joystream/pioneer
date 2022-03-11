@@ -544,26 +544,38 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - zero entered', async () => {
-          await SpecificParameters.fillAmount(0)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
-          expect(await getCreateButton()).toBeDisabled()
-        })
-
-        it('Blocks value bigger than 255', async () => {
-          await SpecificParameters.fillAmount(300)
+        it('Invalid - over 100 percent', async () => {
+          await SpecificParameters.fillAmount(200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
-          const amount = 100
+          const amount = 40
           await SpecificParameters.fillAmount(amount)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
+          expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()
-          expect(parameters).toEqual(100)
+
+          expect(parameters).toEqual(amount)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Valid with execution warning', async () => {
+          const amount = 100
+          await SpecificParameters.fillAmount(amount)
+          expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
+
+          expect(await getCreateButton()).toBeDisabled()
+
+          const checkbox = screen.getByTestId('execution-requirement')
+          fireEvent.click(checkbox)
+
+          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const parameters = txSpecificParameters.asSetReferralCut.toJSON()
+
+          expect(parameters).toEqual(amount)
           expect(await getCreateButton()).toBeEnabled()
         })
       })

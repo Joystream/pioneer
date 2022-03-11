@@ -5,6 +5,8 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
 import { WithdrawSignModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawSignModal'
 import { WithdrawWarningModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawWarningModal'
@@ -15,8 +17,13 @@ export const WithdrawCandidacyModal = () => {
   const { hideModal, modalData } = useModal<WithdrawCandidacyModalCall>()
   const { member } = modalData
   const onClose = hideModal
+
   const [state, send] = useMachine(machine)
   const onNext = useCallback(() => send('NEXT'), [send])
+
+  const { refetch: refetchCandidates } = useCurrentElection()
+  useRefetch({ type: 'set', payload: refetchCandidates })
+  useRefetch({ type: 'do', payload: state.matches('success') })
 
   if (state.matches('warning')) {
     return <WithdrawWarningModal onNext={onNext} onClose={onClose} />

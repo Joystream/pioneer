@@ -105,7 +105,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       )
     }
     case state.matches('specificParameters.setReferralCut'): {
-      return !!(specifics?.amount && specifics?.amount.gtn(0))
+      return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
     }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
       return !!(specifics?.groupId && specifics.workerId !== undefined)
@@ -286,8 +286,9 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-          amount={state.context.specifics?.amount}
+          setReferralCut={(referralCut) => send('SET_REFERRAL_CUT', { referralCut })}
+          referralCut={state.context.specifics?.referralCut}
+          setIsExecutionError={setIsExecutionError}
         />
       )
     }
