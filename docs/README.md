@@ -185,10 +185,35 @@ To add any of the above:
 By default, only `Alice`, `Alice_Stash`, `Bob` and `Bob_Stash` accounts has any funds.
 
 ## Using custom addresses to connect with node/query node
+
+### Configure at build time
+
 To use custom addresses add the `.env` file in `packages/ui` (example: `packages/ui/.env.example`) and set
 
-1. `REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET` default `wss://olympia-dev.joystream.app/rpc`
-2. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE` default `https://olympia-dev.joystream.app/query/server/graphql`
-3. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET` default `wss://olympia-dev.joystream.app/query/server/graphql`
+1. `REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET` example `wss://olympia-dev.joystream.app/rpc`
+2. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE` example `https://olympia-dev.joystream.app/query/server/graphql`
+3. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET` example `wss://olympia-dev.joystream.app/query/server/graphql`
+4. `REACT_APP_OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL` example `https://olympia-dev.joystream.app/member/register`
 
 Please remember to restart the webpack process after each change.
+
+All the variables are required to be configured for the network to be used.
+
+### Auto-configure at runtime
+An auto configuration url can be used to configure pioneer. A url such as `https://playground.test/config.json` can respond with a JSON:
+
+```
+{
+  "websocket_rpc": "wss://rpc-endpoint.com:9944",
+  "graphql_server": "https://joystream.app/server/graphql",
+  "graphql_server_websocket": "wss://joystream.app/server/graphql",
+  "member_faucet": "https://joystream.app/member-faucet/register"
+}
+```
+
+By visiting pioneer with a query `network-config` as below:
+```
+https://pioneer.joystream.app/#/settings?network-config=https://playground.test/config.json
+```
+
+This will save the endpoints locally under the "Auto-conf" network.
