@@ -107,10 +107,16 @@ const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeade
 })
 
 const WorkingStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
-  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
+  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    bounty,
+    activeMember?.id,
+  ])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const isOnWhitelist = useMemo(() => activeMember && bounty.entrantWhitelist?.includes(activeMember.id), [bounty])
+  const isOnWhitelist = useMemo(() => activeMember && bounty.entrantWhitelist?.includes(activeMember.id), [
+    bounty,
+    activeMember?.id,
+  ])
 
   if (isDefined(bounty?.entrantWhitelist) && !isOnWhitelist) {
     {
@@ -150,15 +156,19 @@ const getReward = (entry: WorkEntry) => {
 }
 
 const SuccessfulStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
-  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
+  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    bounty,
+    activeMember?.id,
+  ])
   const entryId = userEntry?.id
   const reward = userEntry ? getReward(userEntry) : undefined
   const { winner, passed } =
-    useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty]) || {}
+    useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty, activeMember?.id]) ||
+    {}
   const winnerConditions = winner && entryId && reward
   const isContributor = useMemo(
     () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
-    [bounty]
+    [bounty, activeMember?.id]
   )
   return (
     <>
@@ -178,10 +188,13 @@ const SuccessfulStageButtons = React.memo(({ bounty, activeMember, t }: BountyHe
 const FailedStageButtons = React.memo(({ bounty, activeMember, t }: BountyHeaderButtonsProps) => {
   const isContributor = useMemo(
     () => bounty.contributors?.some((contributor) => contributor.actor?.id === activeMember?.id),
-    [bounty]
+    [bounty, activeMember?.id]
   )
 
-  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [bounty])
+  const userEntry = useMemo(() => bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    bounty,
+    activeMember?.id,
+  ])
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
   const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected && !bounty.isTerminated

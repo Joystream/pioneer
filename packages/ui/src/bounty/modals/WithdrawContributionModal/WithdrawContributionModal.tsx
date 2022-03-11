@@ -1,4 +1,7 @@
+import { createType } from '@joystream/types'
+import { BountyActor } from '@joystream/types/bounty'
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -10,6 +13,7 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -32,12 +36,16 @@ export const WithdrawContributionModal = () => {
 
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, bounty.id)
+      createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) })
+      return api.tx.bounty.withdrawFunding(
+        createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) }),
+        bounty.id
+      )
     }
   }, [JSON.stringify(activeMember), connectionState])
 
   const amount = useMemo(
-    () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id)?.amount,
+    () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id)?.amount ?? BN_ZERO,
     [activeMember?.id]
   )
 
@@ -77,7 +85,7 @@ export const WithdrawContributionModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        amount={amount}
+        amount={new BN(amount)}
         bounty={bounty}
         isContributor
       />
