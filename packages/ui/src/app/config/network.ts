@@ -9,9 +9,13 @@ export const configuredNetworks = () => {
   const networks: NetworkType[] = ['local', 'local-mocks', 'auto-conf']
 
   // Only include olympia-testnet if all env variables were defined
-  if(OLYMPIA_TESTNET_NODE_SOCKET && OLYMPIA_TESTNET_QUERY_NODE &&
-    OLYMPIA_TESTNET_QUERY_NODE_SOCKET && OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL) {
-      networks.push('olympia-testnet')
+  if (
+    OLYMPIA_TESTNET_NODE_SOCKET &&
+    OLYMPIA_TESTNET_QUERY_NODE &&
+    OLYMPIA_TESTNET_QUERY_NODE_SOCKET &&
+    OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL
+  ) {
+    networks.push('olympia-testnet')
   }
   return networks
 }

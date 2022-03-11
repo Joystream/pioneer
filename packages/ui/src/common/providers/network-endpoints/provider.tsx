@@ -21,7 +21,8 @@ interface Props {
 export const NetworkEndpointsProvider = ({ children }: Props) => {
   const [network, setNetwork] = useNetwork()
   const [endpoints, setEndpoints] = useState<Partial<NetworkEndpoints>>({})
-  const [storedAutoNetworkConfig, storeAutoNetworkConfig] = useLocalStorage<Partial<NetworkEndpoints>>('auto_network_config')
+  const [storedAutoNetworkConfig, storeAutoNetworkConfig] =
+    useLocalStorage<Partial<NetworkEndpoints>>('auto_network_config')
   const [isLoading, setIsLoading] = useState(false)
 
   const updateNetworkConfig = useCallback(
@@ -41,7 +42,9 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
           throw new Error('fetched config missing endpoints')
         }
 
-        const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(storedAutoNetworkConfig ?? {})
+        const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(
+          storedAutoNetworkConfig ?? {}
+        )
         const shouldUpdateNetwork = network !== 'auto-conf'
 
         if (shouldUpdateConfig) {
@@ -67,7 +70,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const endpoints = pickEndpoints(network, storedAutoNetworkConfig ?? {})
-    if(!endpointsAreDefined(endpoints) && network == 'auto-conf') {
+    if (!endpointsAreDefined(endpoints) && network == 'auto-conf') {
       setNetwork('local')
       setEndpoints(localEndpoints)
     } else {
@@ -90,7 +93,7 @@ const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints>): endpoints is
   Object.values(endpoints).length === 4 && Object.values(endpoints).every(isDefined)
 
 const pickEndpoints = <R extends Partial<NetworkEndpoints>>(network: NetworkType, endpoints: R) => {
-  if(network === 'auto-conf') {
+  if (network === 'auto-conf') {
     // Use the stored config in localstorage, fallback on 'local'
     // If config endpoints are partially configured this will produce mixed results, punn intended.
     return {
