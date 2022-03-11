@@ -10,7 +10,7 @@ import { DurationAndProcessParameters } from '@/proposals/modals/AddNewProposal/
 
 interface Props extends DurationAndProcessParameters {
   setDetails(details: string): void
-  setDuration(duration: number): void
+  setDuration(duration: number | undefined): void
 }
 
 export const DurationAndProcess = ({ duration, setDuration, details, setDetails }: Props) => {
@@ -36,7 +36,7 @@ export const DurationAndProcess = ({ duration, setDuration, details, setDetails 
               isTokenValue
               id="field-duration"
               placeholder="0"
-              onChange={(_, value) => setDuration(value)}
+              onChange={(_, value) => setDuration(value || undefined)}
               value={duration?.toString()}
             />
           </InputComponent>
