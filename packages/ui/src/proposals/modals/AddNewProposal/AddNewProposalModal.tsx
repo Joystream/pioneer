@@ -25,6 +25,7 @@ import {
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -32,6 +33,7 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
+import { useProposals } from '@/proposals/hooks/useProposals'
 import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
@@ -70,6 +72,11 @@ export const AddNewProposalModal = () => {
   const minCount = useMinimumValidatorCount()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
+
+  const { refetch: refetchProposals } = useProposals({ status: 'active' })
+  useRefetch({ type: 'set', payload: refetchProposals })
+  useRefetch({ type: 'do', payload: state.matches('success') })
+
   const constants = useProposalConstants(state.context.type)
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
     constants?.requiredStake.toNumber() || 0,
