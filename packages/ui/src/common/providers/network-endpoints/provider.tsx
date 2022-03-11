@@ -94,8 +94,6 @@ const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints>): endpoints is
 
 const pickEndpoints = <R extends Partial<NetworkEndpoints>>(network: NetworkType, endpoints: R) => {
   if (network === 'auto-conf') {
-    // Use the stored config in localstorage, fallback on 'local'
-    // If config endpoints are partially configured this will produce mixed results, punn intended.
     return {
       queryNodeEndpointSubscription: endpoints.queryNodeEndpointSubscription,
       queryNodeEndpoint: endpoints.queryNodeEndpoint,
