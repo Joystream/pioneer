@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { RefetchContext, UseRefetch } from '../providers/refetch/context'
 
@@ -6,7 +6,6 @@ type Action = { type: 'set'; payload: UseRefetch[0] } | { type: 'do'; payload?: 
 
 export const useRefetch = (action: Action) => {
   const [refetch, setRefetch] = useContext(RefetchContext)
-  const [refetching, setRefetching] = useState<Promise<any> | undefined>()
 
   useEffect(() => {
     switch (action.type) {
@@ -14,11 +13,9 @@ export const useRefetch = (action: Action) => {
         return setRefetch(action.payload)
       case 'do':
         if (action.payload) {
-          setRefetching(refetch?.())
+          refetch?.()
         }
         break
     }
   }, [action.type, action.payload])
-
-  return refetching
 }
