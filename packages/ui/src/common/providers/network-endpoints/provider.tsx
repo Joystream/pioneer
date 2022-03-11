@@ -63,7 +63,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const endpoints = pickEndpoints(network, storedAutoNetworkConfig ?? {})
-    if(!endpointsAreDefined(endpoints)) {
+    if(!endpointsAreDefined(endpoints) && network == 'auto-conf') {
       setNetwork('local')
       setEndpoints(localEndpoints)
     } else {
@@ -88,12 +88,12 @@ const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints>): endpoints is
 const pickEndpoints = <R extends Partial<NetworkEndpoints>>(network: NetworkType, endpoints: R) => {
   if(network === 'auto-conf') {
     // Use the stored config in localstorage, fallback on 'local'
-    // If config endpoints are partially configured this produce mixed results, punn intended.
+    // If config endpoints are partially configured this will produce mixed results, punn intended.
     return {
-      queryNodeEndpointSubscription: endpoints.queryNodeEndpointSubscription, // ?? QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
-      queryNodeEndpoint: endpoints.queryNodeEndpoint, // ?? QUERY_NODE_ENDPOINT[network],
-      membershipFaucetEndpoint: endpoints.membershipFaucetEndpoint, // ?? MEMBERSHIP_FAUCET_ENDPOINT[network],
-      nodeRpcEndpoint: endpoints.nodeRpcEndpoint, // ?? NODE_RPC_ENDPOINT[network],
+      queryNodeEndpointSubscription: endpoints.queryNodeEndpointSubscription,
+      queryNodeEndpoint: endpoints.queryNodeEndpoint,
+      membershipFaucetEndpoint: endpoints.membershipFaucetEndpoint,
+      nodeRpcEndpoint: endpoints.nodeRpcEndpoint,
     } as R
   } else {
     return {
