@@ -118,12 +118,17 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
           <h4>3. Select Role Account</h4>
           <TextMedium>Role account is used to perform all role-specific actions.</TextMedium>
           <InputComponent
-            label="Select role account for future worker"
+            label="Select Role Account"
+            id="role-account"
             required
             inputSize="l"
             tooltipText="We strongly advise you to use a separate role-dedicated account for this application. Role account is used to perform all role-specific actions. This should not be your Controller or Root account, even though this is technically possible."
           >
-            <SelectAccount onChange={(account) => changeField('roleAccount', account)} selected={fields.roleAccount} />
+            <SelectAccount
+              id="role-account"
+              onChange={(account) => changeField('roleAccount', account)}
+              selected={fields.roleAccount}
+            />
           </InputComponent>
 
           <h4>4. Select Reward Account</h4>
@@ -131,12 +136,14 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
             Reward account is used to collect the payments for the role rewards. We suggest to use controller account.
           </TextMedium>
           <InputComponent
-            label="Select reward account"
+            label="Select Reward Account"
+            id="reward-account"
             required
             inputSize="l"
             tooltipText="Member controller or root accounts are often chosen for this purpose."
           >
             <SelectAccount
+              id="reward-account"
               onChange={(account) => changeField('rewardAccount', account)}
               selected={fields.rewardAccount}
             />
