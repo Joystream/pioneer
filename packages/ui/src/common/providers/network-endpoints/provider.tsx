@@ -28,42 +28,42 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
   const updateNetworkConfig = useCallback(
     async (configEndpoint: string) => {
       setIsLoading(true)
+      let config
       try {
-        const config = await (await fetch(configEndpoint)).json()
-
-        const newNetworkConfig = {
-          queryNodeEndpointSubscription: config['graphql_server_websocket'],
-          queryNodeEndpoint: config['graphql_server'],
-          membershipFaucetEndpoint: config['member_faucet'],
-          nodeRpcEndpoint: config['websocket_rpc'],
-        }
-
-        if (!endpointsAreDefined(newNetworkConfig)) {
-          throw new Error('fetched config missing endpoints')
-        }
-
-        const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(
-          storedAutoNetworkConfig ?? {}
-        )
-        const shouldUpdateNetwork = network !== 'auto-conf'
-
-        if (shouldUpdateConfig) {
-          storeAutoNetworkConfig(newNetworkConfig)
-        }
-        if (shouldUpdateNetwork) {
-          setNetwork('auto-conf')
-        }
-        if (shouldUpdateConfig || shouldUpdateNetwork) {
-          return window.location.reload()
-        }
-        setIsLoading(false)
+        config = await (await fetch(configEndpoint)).json()
       } catch (err) {
         setIsLoading(false)
         const errMsg = `Failed to fetch the network configuration from ${configEndpoint}.`
-
-        setEndpoints(localEndpoints)
-        throw new Error(`${errMsg} - Falling back on the local endpoints.`)
+        throw new Error(`${errMsg}`)
       }
+
+      const newNetworkConfig = {
+        queryNodeEndpointSubscription: config['graphql_server_websocket'],
+        queryNodeEndpoint: config['graphql_server'],
+        membershipFaucetEndpoint: config['member_faucet'],
+        nodeRpcEndpoint: config['websocket_rpc'],
+      }
+
+      if (!endpointsAreDefined(newNetworkConfig)) {
+        setIsLoading(false)
+        throw new Error('fetched config missing endpoints')
+      }
+
+      const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(
+        storedAutoNetworkConfig ?? {}
+      )
+      const shouldUpdateNetwork = network !== 'auto-conf'
+
+      if (shouldUpdateConfig) {
+        storeAutoNetworkConfig(newNetworkConfig)
+      }
+      if (shouldUpdateNetwork) {
+        setNetwork('auto-conf')
+      }
+      if (shouldUpdateConfig || shouldUpdateNetwork) {
+        return window.location.reload()
+      }
+      setIsLoading(false)
     },
     [network]
   )
