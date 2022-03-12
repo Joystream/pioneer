@@ -76,7 +76,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
     } else {
       setEndpoints(endpoints)
     }
-  }, [network, updateNetworkConfig])
+  }, [network])
 
   if (!endpointsAreDefined(endpoints) || isLoading) {
     return <Loading text="Loading network endpoints" />
