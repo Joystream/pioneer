@@ -70,7 +70,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const endpoints = pickEndpoints(network, storedAutoNetworkConfig ?? {})
-    if (!endpointsAreDefined(endpoints) && network == 'auto-conf') {
+    if (!endpointsAreDefined(endpoints)) {
       setNetwork('local')
       setEndpoints(localEndpoints)
     } else {
