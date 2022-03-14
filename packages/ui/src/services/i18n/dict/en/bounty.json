@@ -174,7 +174,8 @@
         "pickWinner": "Pick a winner or mark bounty as failed",
         "winnerNoReward": "Some winner do not have reward amount",
         "amountTooLow": "Distributed amount must equal total reward",
-        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it."
+        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it",
+        "rationaleMissing": "Please fill out the rationale"
       },
       "authorizeModal": {
         "description": "You are announcing Bounty winners",
