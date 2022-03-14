@@ -5,17 +5,20 @@ import styled from 'styled-components'
 import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { useToggle } from '@/common/hooks/useToggle'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
+
+export interface InputValues {
+  isLimited: boolean
+  length: number
+}
 
 export interface OpeningDurationProps {
   label: string
-  onChange: (value: number) => void
-  value: number
+  value: InputValues
+  onChange: (value: InputValues) => void
 }
 
 const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, value, onChange }) => {
-  const [isLimited, setIsLimited] = useToggle(true)
   return (
     <>
       <ToggleCheckbox
@@ -26,15 +29,15 @@ const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, val
                 <TooltipDefault />
               </Tooltip>
             </TooltipWrapper>
-            {isLimited ? <StyledLabel>Limited</StyledLabel> : 'Limited'}
+            {value.isLimited ? <StyledLabel>Limited</StyledLabel> : 'Limited'}
           </LabelWrapper>
         }
-        falseLabel={!isLimited ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
-        onChange={() => setIsLimited()}
-        checked={isLimited}
+        falseLabel={!value.isLimited ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
+        onChange={() => onChange({ ...value, isLimited: !value.isLimited })}
+        checked={value.isLimited}
         hasNoOffState
       />
-      {isLimited && (
+      {value.isLimited && (
         <InputWrapper>
           <InputComponent
             label={label}
@@ -42,14 +45,14 @@ const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, val
             required
             units="blocks"
             inputSize="m"
-            message={value ? `≈ ${inBlocksDate(new BN(value))}` : ''}
+            message={value ? `≈ ${inBlocksDate(new BN(value.length))}` : ''}
             tight
           >
             <InputNumber
               id="field-periodLength"
               placeholder="type number of blocks here"
-              value={value?.toString()}
-              onChange={(_, numberValue) => onChange(numberValue)}
+              value={value?.length.toString()}
+              onChange={(_, length) => onChange({ ...value, length })}
             />
           </InputComponent>
         </InputWrapper>
