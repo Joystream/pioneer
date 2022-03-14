@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useBounties } from '@/bounty/hooks/useBounties'
 import { useBountyForumCategory } from '@/bounty/hooks/useBountyForumCategory'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
@@ -27,6 +28,7 @@ import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/c
 import { TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -43,6 +45,11 @@ export const AddBountyModal = () => {
   const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
   const [isValidNext, setValidNext] = useState(false)
+
+  const { refetch: refetchBounties } = useBounties({ status: 'active' })
+  useRefetch({ type: 'set', payload: refetchBounties })
+  useRefetch({ type: 'do', payload: state.matches(AddBountyStates.success) })
+
   const { api } = useApi()
   const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
