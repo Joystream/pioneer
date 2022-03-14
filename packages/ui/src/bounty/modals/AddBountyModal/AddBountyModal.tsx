@@ -1,6 +1,7 @@
 import { BountyMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -25,6 +26,7 @@ import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
+import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
@@ -37,6 +39,7 @@ import { Member } from '@/memberships/types'
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
+  const { t } = useTranslation()
   const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
@@ -61,7 +64,7 @@ export const AddBountyModal = () => {
           },
         })
       }
-      if (activeMember) {
+      if (activeMember && api) {
         send('NEXT')
       }
     }
@@ -76,7 +79,7 @@ export const AddBountyModal = () => {
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
       })
     )
-  }, [state, isThreadCategoryLoading])
+  }, [state, isThreadCategoryLoading, api])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.generalParameters)) {
@@ -90,6 +93,20 @@ export const AddBountyModal = () => {
       }
     }
   }, [activeMember, state, threadCategory?.id])
+
+  if (state.matches(AddBountyStates.requirementsVerification)) {
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'Initializing server connection', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+        ]}
+      />
+    )
+  }
 
   if (!activeMember || !api) {
     return null

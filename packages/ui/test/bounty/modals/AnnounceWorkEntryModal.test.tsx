@@ -34,7 +34,7 @@ const defaultBalance = {
   locks: [],
 }
 
-describe('UI: ContributeFundsModal', () => {
+describe('UI: AnnounceWorkEntryModal', () => {
   let renderResult: RenderResult
   const api = stubApi()
   stubBountyConstants(api)

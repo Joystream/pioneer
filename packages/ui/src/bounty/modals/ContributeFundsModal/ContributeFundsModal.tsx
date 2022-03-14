@@ -32,6 +32,7 @@ import {
   TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -102,7 +103,22 @@ export const ContributeFundsModal = () => {
     }
   }, [state, activeMember?.id])
 
-  if (!activeMember || !transaction || state.matches(ContributeFundStates.requirementsVerification)) {
+  if (state.matches(ContributeFundStates.requirementsVerification)) {
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'Initializing server connection', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+        ]}
+      />
+    )
+  }
+
+  if (!activeMember || !transaction || !api) {
     return null
   }
 

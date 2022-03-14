@@ -35,6 +35,7 @@ import {
 } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
+import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -62,7 +63,11 @@ export const SubmitWorkModal = () => {
     }
   })
   const transaction = useMemo(() => {
-    const entry = modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id)
+    const entry = modalData.bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id)
+    if (!entry) {
+      hideModal()
+    }
+
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
         createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id)),
@@ -77,8 +82,19 @@ export const SubmitWorkModal = () => {
     history.push(generatePath(BountyRoutes.currentBounties))
   }, [])
 
-  if (!activeMember || !transaction) {
-    return null
+  if (!activeMember || !transaction || !api) {
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'Initializing server connection', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+        ]}
+      />
+    )
   }
   if (state.matches(SubmitWorkStates.transaction)) {
     const service = state.children.transaction

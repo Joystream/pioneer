@@ -41,7 +41,7 @@ export const WaitModal = ({
         {requirements?.length && (
           <RowGapBlock gap={4}>
             {requirements.map((requirement) => (
-              <Requirement>
+              <Requirement key={requirement.name}>
                 <ResultTextWhite>{requirement.name}</ResultTextWhite>
                 <ResultTextWhite>{requirement.state ? 'Loaded' : 'Loading...'}</ResultTextWhite>
               </Requirement>
