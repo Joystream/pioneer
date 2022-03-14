@@ -11,14 +11,14 @@ import { TextMedium } from '@/common/components/typography'
 
 interface Props {
   onClose: () => void
-  bountyId?: number
+  bountyId: number
 }
 
 export const SuccessModal = ({ onClose, bountyId }: Props) => {
   const history = useHistory()
 
   const goToBounty = useCallback(() => {
-    history.push(generatePath(BountyRoutes.bounty, { id: bountyId || 1 }))
+    history.push(generatePath(BountyRoutes.bounty, { id: bountyId }))
   }, [bountyId])
 
   return (

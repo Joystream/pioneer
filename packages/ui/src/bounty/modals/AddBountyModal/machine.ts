@@ -289,12 +289,15 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
         onDone: [
           {
             target: [AddBountyStates.success],
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            actions: assign({
+              bountyId: (_, event) =>
+                parseInt(getDataFromEvent(event.data.events, 'bounty', 'BountyCreated', 1)?.toString() ?? '-1'),
+            }),
             cond: (context, event) => isTransactionSuccess(context, event),
           },
           {
             target: [AddBountyStates.error],
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            actions: assign({ transactionEvents: (_, event) => event.data.events }),
             cond: isTransactionError,
           },
           {

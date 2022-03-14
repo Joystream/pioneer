@@ -146,8 +146,7 @@ export const AddBountyModal = () => {
   }
 
   if (state.matches(AddBountyStates.success)) {
-    // todo extract bountyId from success event and pass it here
-    return <SuccessModal onClose={hideModal} bountyId={1} />
+    return <SuccessModal onClose={hideModal} bountyId={state.context.bountyId} />
   }
 
   if (state.matches(AddBountyStates.error)) {
