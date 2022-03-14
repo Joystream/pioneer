@@ -29,7 +29,13 @@ export const RecoverBalanceModal = () => {
   }, [connectionState, modalData?.memberId, modalData.lock.type])
 
   const { member } = useMember(modalData?.memberId)
-  const signer = member?.controllerAccount ?? modalData.address
+
+  const signer = useMemo(() => {
+    if (modalData.lock.type === 'Council Candidate') {
+      return member?.controllerAccount ?? modalData.address
+    }
+    return modalData.address
+  }, [modalData.lock.type, modalData.address, member])
 
   const feeInfo = useTransactionFee(signer, transaction)
 
