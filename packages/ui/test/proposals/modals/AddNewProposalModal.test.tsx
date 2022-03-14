@@ -34,12 +34,12 @@ import {
 } from '@/mocks/data'
 import workingGroups from '@/mocks/data/raw/workingGroups.json'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
-import { DurationAndProcessParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
+import { toggleCheckBox } from '../../_helpers/toggleCheckBox'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
@@ -715,10 +715,13 @@ describe('UI: AddNewProposalModal', () => {
           })
           expect(await getNextStepButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDuration(100)
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDetails('Lorem ipsum')
+          expect(await getNextStepButton()).toBeEnabled()
+
+          await fillField('field-period-length', '')
           expect(await getNextStepButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDetails('Lorem ipsum')
+          await toggleCheckBox(false)
           expect(await getNextStepButton()).toBeEnabled()
         })
 
@@ -1521,7 +1524,10 @@ describe('UI: AddNewProposalModal', () => {
       fillTitle: async (value: string) => await fillField('opening-title', value),
       fillShortDescription: async (value: string) => await fillField('short-description', value),
       fillDescription: async (value: string) => await fillField('field-description', value),
-      fillDuration: async (value: number) => await fillField('field-duration', value),
+      fillDuration: async (value: number | undefined) => {
+        await toggleCheckBox(!!value)
+        if (value) await fillField('field-period-length', value)
+      },
       fillDetails: async (value: string) => await fillField('field-details', value),
       fillQuestionField: async (value: string, index: number) => {
         const field = (await screen.findAllByRole('textbox'))[index]
@@ -1557,7 +1563,7 @@ describe('UI: AddNewProposalModal', () => {
       fillRewardPerBlock: async (value: number) => await fillField('reward-per-block', value),
       flow: async (
         step1?: { group: string; title: string; description: string; shortDesc: string },
-        step2?: Required<DurationAndProcessParameters>,
+        step2?: { duration: number | undefined; details: string },
         step3?: { questions: OpeningMetadata.IApplicationFormQuestion[] },
         step4?: { stake: number; unstakingPeriod: number; rewardPerBlock: number }
       ) => {
