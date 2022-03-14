@@ -25,7 +25,6 @@ export const Settings = () => {
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
     { title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
-
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
       setNetwork(network)
