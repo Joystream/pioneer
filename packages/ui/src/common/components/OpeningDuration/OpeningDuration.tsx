@@ -4,63 +4,59 @@ import styled from 'styled-components'
 
 import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextHuge, TextMedium } from '@/common/components/typography'
+import { TextMedium } from '@/common/components/typography'
 import { useToggle } from '@/common/hooks/useToggle'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 
 export interface OpeningDurationProps {
-  title: string
-  setHiringPeriodLength: (hiringPeriodLength: BN) => void
-  hiringPeriodLength: BN
+  label: string
+  onChange: (value: number) => void
+  value: number
 }
 
-const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(
-  ({ title, hiringPeriodLength = new BN(43200), setHiringPeriodLength }) => {
-    const [durationLength, setDurationLength] = useToggle(true)
-
-    return (
-      <>
-        <StyledTitle>{title}</StyledTitle>
-        <ToggleCheckbox
-          trueLabel={
-            <LabelWrapper>
-              <TooltipWrapper>
-                <Tooltip tooltipText="Applications can be made and used for filling the role even after this date expires.">
-                  <TooltipDefault />
-                </Tooltip>
-              </TooltipWrapper>
-              {durationLength ? <StyledLabel>Limited</StyledLabel> : 'Limited'}
-            </LabelWrapper>
-          }
-          falseLabel={!durationLength ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
-          onChange={() => setDurationLength()}
-          checked={durationLength ?? false}
-          hasNoOffState
-        />
-        {durationLength && (
-          <InputWrapper>
-            <InputComponent
-              label="Hiring period length"
+const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, value, onChange }) => {
+  const [isLimited, setIsLimited] = useToggle(true)
+  return (
+    <>
+      <ToggleCheckbox
+        trueLabel={
+          <LabelWrapper>
+            <TooltipWrapper>
+              <Tooltip tooltipText="Applications can be made and used for filling the role even after this date expires.">
+                <TooltipDefault />
+              </Tooltip>
+            </TooltipWrapper>
+            {isLimited ? <StyledLabel>Limited</StyledLabel> : 'Limited'}
+          </LabelWrapper>
+        }
+        falseLabel={!isLimited ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
+        onChange={() => setIsLimited()}
+        checked={isLimited}
+        hasNoOffState
+      />
+      {isLimited && (
+        <InputWrapper>
+          <InputComponent
+            label={label}
+            id="field-periodLength"
+            required
+            units="blocks"
+            inputSize="m"
+            message={value ? `≈ ${inBlocksDate(new BN(value))}` : ''}
+            tight
+          >
+            <InputNumber
               id="field-periodLength"
-              required
-              units="blocks"
-              inputSize="m"
-              message={hiringPeriodLength ? `≈ ${inBlocksDate(hiringPeriodLength)}` : ''}
-              tight
-            >
-              <InputNumber
-                id="field-periodLength"
-                placeholder="0"
-                value={hiringPeriodLength.toString()}
-                onChange={(_, numberValue) => setHiringPeriodLength(new BN(numberValue))}
-              />
-            </InputComponent>
-          </InputWrapper>
-        )}
-      </>
-    )
-  }
-)
+              placeholder="type number of blocks here"
+              value={value?.toString()}
+              onChange={(_, numberValue) => onChange(numberValue)}
+            />
+          </InputComponent>
+        </InputWrapper>
+      )}
+    </>
+  )
+})
 
 export default OpeningDuration
 
@@ -78,8 +74,4 @@ const LabelWrapper = styled.div`
 
 const InputWrapper = styled.div`
   padding-top: 20px;
-`
-
-const StyledTitle = styled(TextHuge)`
-  padding-bottom: 20px;
 `
