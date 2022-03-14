@@ -62,7 +62,11 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!(specifics?.groupId && specifics?.title && specifics.description && specifics.shortDescription)
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'): {
-      return !!specifics?.details
+      return (
+        !!specifics?.details &&
+        ((specifics?.duration?.isLimited === true && !!specifics?.duration?.length) ||
+          specifics?.duration?.isLimited === false)
+      )
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'): {
       const questions = specifics?.questions

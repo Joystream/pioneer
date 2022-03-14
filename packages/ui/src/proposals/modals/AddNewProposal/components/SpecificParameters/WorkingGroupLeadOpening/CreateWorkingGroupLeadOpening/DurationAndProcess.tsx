@@ -1,16 +1,16 @@
 import React from 'react'
 
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
+import { OpeningDuration, OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
-import { inBlocksDate } from '@/common/model/inBlocksDate'
+import { TextBig, TextMedium } from '@/common/components/typography'
 import { DurationAndProcessParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 interface Props extends DurationAndProcessParameters {
   setDetails(details: string): void
-  setDuration(duration: number | undefined): void
+  setDuration(duration: OpeningDurationProps['value']): void
 }
 
 export const DurationAndProcess = ({ duration, setDuration, details, setDetails }: Props) => {
@@ -24,22 +24,15 @@ export const DurationAndProcess = ({ duration, setDuration, details, setDetails 
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent
-            label="Duration"
-            inputSize="m"
-            tight
-            units="blocks"
-            id="field-duration"
-            message={duration ? `≈ ${inBlocksDate(duration)}` : ''}
-          >
-            <InputNumber
-              isTokenValue
-              id="field-duration"
-              placeholder="0"
-              onChange={(_, value) => setDuration(value || undefined)}
-              value={duration?.toString()}
-            />
-          </InputComponent>
+          <TextBig bold value>
+            Opening Duration
+          </TextBig>
+          <OpeningDuration
+            label="Expected length of the application period"
+            value={duration}
+            onChange={(value) => setDuration(value || undefined)}
+          />
+
           <InputComponent label="Application process" required inputSize="auto" id="field-details">
             <CKEditor
               id="field-details"

@@ -37,7 +37,6 @@ import {
 import { SetInitialInvitationBalanceParameters } from './components/SpecificParameters/SetInitialInvitationBalance'
 import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
 import {
-  ApplicationFormParameters,
   CancelWorkingGroupLeadOpeningParameters,
   CreateWorkingGroupLeadOpeningParameters,
 } from './components/SpecificParameters/WorkingGroupLeadOpening/types'
@@ -272,9 +271,9 @@ type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscu
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
-type SetDuration = { type: 'SET_DURATION'; duration: number }
+type SetDuration = { type: 'SET_DURATION'; duration: CreateWorkingGroupLeadOpeningParameters['duration'] }
 type SetDetails = { type: 'SET_DETAILS'; details: string }
-type SetQuestions = { type: 'SET_QUESTIONS'; questions: ApplicationFormParameters['questions'] }
+type SetQuestions = { type: 'SET_QUESTIONS'; questions: CreateWorkingGroupLeadOpeningParameters['questions'] }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: string }
@@ -363,7 +362,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         SET_TYPE: {
           actions: assign({
             specifics: (context, event) => {
-              if (context.type !== (event as SetTypeEvent).proposalType) {
+              const pickedType = (event as SetTypeEvent).proposalType
+              if (context.type !== pickedType) {
+                if (pickedType === 'createWorkingGroupLeadOpening') {
+                  return { duration: { isLimited: true, length: 43200 } }
+                }
                 return {}
               }
 

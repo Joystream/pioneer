@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React, { useState } from 'react'
 
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -36,7 +37,7 @@ const WorkingGroupAndDescriptionTemplate: Story = () => {
 }
 
 const DurationAndProcessTemplate: Story = () => {
-  const [duration, setDuration] = useState<number>()
+  const [duration, setDuration] = useState<OpeningDurationProps['value']>({ isLimited: true, length: 43200 })
   const [details, setDetails] = useState('')
 
   return (

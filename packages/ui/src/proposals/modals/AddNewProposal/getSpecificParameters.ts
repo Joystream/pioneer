@@ -65,7 +65,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
             shortDescription: specifics?.shortDescription,
             description: specifics?.description,
             hiringLimit: 1,
-            expectedEndingTimestamp: specifics?.duration,
+            expectedEndingTimestamp: specifics?.duration?.isLimited ? specifics.duration.length : undefined,
             applicationDetails: specifics?.details,
             applicationFormQuestions: specifics?.questions?.map(({ questionField, shortValue }) => ({
               question: questionField,

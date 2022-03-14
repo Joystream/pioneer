@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
 import { GroupIdName } from '@/working-groups/types'
 
 export interface StakingPolicyAndRewardParameters {
@@ -18,7 +19,7 @@ export interface WorkingGroupAndDescriptionParameters {
 
 export interface DurationAndProcessParameters {
   details?: string
-  duration?: number
+  duration?: OpeningDurationProps['value']
 }
 
 export interface ApplicationFormParameters {
