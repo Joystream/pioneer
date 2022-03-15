@@ -741,7 +741,7 @@ describe('UI: AddNewProposalModal', () => {
           })
           expect(await getNextStepButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.toggleQuestionType(false, 1)
+          await toggleCheckBox(false, 1)
           expect(await getNextStepButton()).toBeDisabled()
 
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillQuestionField('🐘?', 1)
@@ -1493,7 +1493,9 @@ describe('UI: AddNewProposalModal', () => {
 
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
-    fireEvent.change(amountInput, { target: { value } })
+    act(() => {
+      fireEvent.change(amountInput, { target: { value } })
+    })
   }
 
   const SpecificParameters = {
@@ -1510,7 +1512,9 @@ describe('UI: AddNewProposalModal', () => {
         await SpecificParameters.FundingRequest.selectRecipient(recipient)
 
         const button = await getCreateButton()
-        fireEvent.click(button as HTMLElement)
+        act(() => {
+          fireEvent.click(button as HTMLElement)
+        })
       },
     },
     DecreaseWorkingGroupLeadStake: {
@@ -1535,13 +1539,6 @@ describe('UI: AddNewProposalModal', () => {
           fireEvent.change(field, { target: { value } })
         })
       },
-      toggleQuestionType: async (check: boolean, index: number) => {
-        const toggle = (await screen.findAllByRole<HTMLInputElement>('checkbox'))[index]
-        if ((check && !toggle.checked) || (!check && toggle.checked))
-          act(() => {
-            fireEvent.click(toggle)
-          })
-      },
       fillQuestions: async (value: OpeningMetadata.IApplicationFormQuestion[]) => {
         const addQuestionBtn = await screen.findByText('Add new question')
 
@@ -1554,8 +1551,7 @@ describe('UI: AddNewProposalModal', () => {
           const question = value[index].question ?? ''
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillQuestionField(question, index)
 
-          const check = value[index].type === QUESTION_INPUT.TEXT
-          await SpecificParameters.CreateWorkingGroupLeadOpening.toggleQuestionType(check, index)
+          await toggleCheckBox(value[index].type === QUESTION_INPUT.TEXT, index)
         }
       },
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
