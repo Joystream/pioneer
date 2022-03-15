@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { useBounties } from '@/bounty/hooks/useBounties'
 import { useBountyForumCategory } from '@/bounty/hooks/useBountyForumCategory'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
@@ -46,8 +45,6 @@ export const AddBountyModal = () => {
   const [state, send, service] = useMachine(addBountyMachine)
   const [isValidNext, setValidNext] = useState(false)
 
-  const { refetch: refetchBounties } = useBounties({ status: 'active' })
-  useRefetch({ type: 'set', payload: refetchBounties })
   useRefetch({ type: 'do', payload: state.matches(AddBountyStates.success) })
 
   const { api } = useApi()
