@@ -11,9 +11,12 @@ import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { isPendingApplication } from '@/working-groups/model/isPendingApplication'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
+import { useRefetch } from '@/common/hooks/useRefetch'
 
 export const MyApplications = () => {
-  const { applications, isLoading } = useMyApplications()
+  const { applications, isLoading, refetch: refetchApplications } = useMyApplications()
+  useRefetch({ type: 'set', payload: refetchApplications })
+  
   const currentApplications = useMemo(() => applications?.filter(isPendingApplication), [applications, isLoading])
   const pastApplications = useMemo(
     () => applications?.filter((a) => !isPendingApplication(a)),

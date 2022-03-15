@@ -43,8 +43,6 @@ export const ApplyForRoleModal = () => {
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
 
-  const { refetch: refetchApplications } = useMyApplications()
-  useRefetch({ type: 'set', payload: refetchApplications })
   useRefetch({ type: 'do', payload: state.matches('success') })
 
   const opening = modalData.opening
