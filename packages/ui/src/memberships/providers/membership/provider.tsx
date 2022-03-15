@@ -38,7 +38,7 @@ export const MembershipContextProvider = (props: Props) => {
     error: err,
     refetch,
   } = useGetMembersQuery({
-    variables: { where: { rootAccount_in: addresses, controllerAccount_in: addresses } },
+    variables: { where: { controllerAccount_in: addresses } },
     skip: addresses.length < 1,
   })
 
