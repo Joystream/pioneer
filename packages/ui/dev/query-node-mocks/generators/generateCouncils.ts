@@ -9,7 +9,7 @@ import {
 } from '@/mocks/data/seedCouncils'
 import { RawNewMissedRewardLevelReachedEvent, RawProposalVotedEvent } from '@/mocks/data/seedEvents'
 
-import { ALICE, ALICE_STASH, BOB_STASH } from '../../node-mocks/data/addresses'
+import { ALICE, ALICE_STASH, BOB, BOB_STASH, CHARLIE } from '../../node-mocks/data/addresses'
 import { saveFile } from '../helpers/saveFile'
 
 import { MemberMock } from './generateMembers'
@@ -106,6 +106,8 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
   // Add Alice as the last candidate of the on going election
   if (!isFinished) {
     candidates.push(createCandidate(candidates.length, memberAt(mocks.members, 0)))
+    candidates.push(createCandidate(candidates.length, memberAt(mocks.members, 1)))
+    candidates.push(createCandidate(candidates.length, memberAt(mocks.members, 2)))
   }
 
   const voteKinds = ['APPROVE', 'REJECT', 'SLASH', 'ABSTAIN']
@@ -162,12 +164,27 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     ...(isFinished
       ? [createVote(22, { castBy: ALICE }), createVote(23, { castBy: BOB_STASH })]
       : [
-          // Add a revealable vote (matching the local storage entry below) on the on going election
+          // Add a revealable votes (matching the local storage entry below) on the on going election
           // key: votes:4
-          // value: [{"salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"}]
+          // value:
+          // [
+          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"},
+          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty","optionId":"1"},
+          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y","optionId":"2"},
+          // ]
           createVote(22, {
             castBy: ALICE,
-            commitment: '0xf633cd4396bde9b8fbf00be6cdacc471ae0215b15c6f1235554c059ed9187806',
+            commitment: '0xff2d0daf33420d47e5b4ee2d6e1fafc27cd180633425dd0a4377ef50efd359b6',
+            voteForId: undefined,
+          }),
+          createVote(23, {
+            castBy: BOB,
+            commitment: '0x9d7b93be695fd0916af9373560b70dd0cf95ac7dde779577b1be3db6ba9ef93d',
+            voteForId: undefined,
+          }),
+          createVote(24, {
+            castBy: CHARLIE,
+            commitment: '0x5ca3c389f3318da883951507c808924f07ac7844b8b1b4b81b1919f7f444dddb',
             voteForId: undefined,
           }),
         ]),
