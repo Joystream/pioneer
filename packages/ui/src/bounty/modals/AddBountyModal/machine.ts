@@ -290,8 +290,7 @@ export const addBountyMachine = createMachine<AddBountyContext, AddBountyEvent, 
           {
             target: [AddBountyStates.success],
             actions: assign({
-              bountyId: (_, event) =>
-                Number(getDataFromEvent(events, 'bounty', 'BountyCreated') ?? -1),
+              bountyId: (_, event) => Number(getDataFromEvent(event.data.events, 'bounty', 'BountyCreated') ?? -1),
             }),
             cond: (context, event) => isTransactionSuccess(context, event),
           },

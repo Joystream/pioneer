@@ -898,7 +898,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             target: 'success',
             actions: assign({
               proposalId: (_, event) =>
-                Number(getDataFromEvent(events, 'proposalsCodex', 'ProposalCreated') ?? -1),
+                Number(getDataFromEvent(event.data.events, 'proposalsCodex', 'ProposalCreated') ?? -1),
             }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode !== 'closed',
           },
