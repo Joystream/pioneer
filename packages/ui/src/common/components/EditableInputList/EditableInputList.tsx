@@ -18,7 +18,7 @@ export interface EditableInputListProps {
   title?: string
   buttonText: string
   value?: QuestionValueProps[]
-  onChange: (value: any) => void
+  onChange: (value: QuestionValueProps[]) => void
 }
 
 const EditableInputList: React.FC<EditableInputListProps> = React.memo(
@@ -50,16 +50,20 @@ const EditableInputList: React.FC<EditableInputListProps> = React.memo(
     return (
       <>
         <HeaderWrapper>
-          <TextHuge>{title}</TextHuge>
+          <TextHuge bold value>
+            {title}
+          </TextHuge>
           <TransactionButton style="primary" size="medium" onClick={() => addFields()}>
             <PlusIcon />
             {buttonText}
           </TransactionButton>
         </HeaderWrapper>
         {value.map((questionFields, index) => (
-          <InputWrapper>
+          <InputWrapper key={index}>
             <QuestionFieldWrapper>
-              <StyledNumber>{index + 1}.</StyledNumber>
+              <StyledNumber bold value>
+                {index + 1}.
+              </StyledNumber>
               <StyledInputComponent
                 id="field-title"
                 inputSize="m"
@@ -97,7 +101,7 @@ const EditableInputList: React.FC<EditableInputListProps> = React.memo(
 export default EditableInputList
 
 const StyledNumber = styled(TextHuge)`
-  padding: 10px;
+  margin-top: 10px;
 `
 
 const InputWrapper = styled.div`
@@ -110,7 +114,7 @@ const HeaderWrapper = styled.div`
 `
 
 const DeleteButtonWrapper = styled(ButtonBareGhost)`
-  padding-top: 20px;
+  margin-top: 8px;
 `
 
 const DeleteIcon = styled(BinIcon)`
@@ -128,6 +132,7 @@ const QuestionFieldWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
+  gap: 10px;
 `
 
 const ToggleWrapper = styled.div`

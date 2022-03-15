@@ -29593,6 +29593,8 @@ export type WorkingGroupOpeningMetadata = BaseGraphQlObject & {
   originallyValid: Scalars['Boolean']
   /** Opening short description */
   shortDescription?: Maybe<Scalars['String']>
+  /** Opening title */
+  title?: Maybe<Scalars['String']>
   upcomingworkinggroupopeningmetadata?: Maybe<Array<UpcomingWorkingGroupOpening>>
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['String']>
@@ -29614,6 +29616,7 @@ export type WorkingGroupOpeningMetadataCreateInput = {
   hiringLimit?: InputMaybe<Scalars['Float']>
   originallyValid: Scalars['Boolean']
   shortDescription?: InputMaybe<Scalars['String']>
+  title?: InputMaybe<Scalars['String']>
 }
 
 export type WorkingGroupOpeningMetadataEdge = {
@@ -29639,6 +29642,8 @@ export enum WorkingGroupOpeningMetadataOrderByInput {
   OriginallyValidDesc = 'originallyValid_DESC',
   ShortDescriptionAsc = 'shortDescription_ASC',
   ShortDescriptionDesc = 'shortDescription_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
 }
@@ -29650,6 +29655,7 @@ export type WorkingGroupOpeningMetadataUpdateInput = {
   hiringLimit?: InputMaybe<Scalars['Float']>
   originallyValid?: InputMaybe<Scalars['Boolean']>
   shortDescription?: InputMaybe<Scalars['String']>
+  title?: InputMaybe<Scalars['String']>
 }
 
 export type WorkingGroupOpeningMetadataWhereInput = {
@@ -29703,6 +29709,11 @@ export type WorkingGroupOpeningMetadataWhereInput = {
   shortDescription_eq?: InputMaybe<Scalars['String']>
   shortDescription_in?: InputMaybe<Array<Scalars['String']>>
   shortDescription_startsWith?: InputMaybe<Scalars['String']>
+  title_contains?: InputMaybe<Scalars['String']>
+  title_endsWith?: InputMaybe<Scalars['String']>
+  title_eq?: InputMaybe<Scalars['String']>
+  title_in?: InputMaybe<Array<Scalars['String']>>
+  title_startsWith?: InputMaybe<Scalars['String']>
   upcomingworkinggroupopeningmetadata_every?: InputMaybe<UpcomingWorkingGroupOpeningWhereInput>
   upcomingworkinggroupopeningmetadata_none?: InputMaybe<UpcomingWorkingGroupOpeningWhereInput>
   upcomingworkinggroupopeningmetadata_some?: InputMaybe<UpcomingWorkingGroupOpeningWhereInput>

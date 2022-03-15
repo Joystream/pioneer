@@ -9,6 +9,7 @@ const opening = async () => {
   await withApi(async (api) => {
     const tx = api.tx.membershipWorkingGroup.addOpening(
       metadataToBytes(OpeningMetadata, {
+        title: 'Test opening',
         shortDescription: 'Test opening',
         description: '# Test opening',
         expectedEndingTimestamp: new Date().getTime() + 10000,

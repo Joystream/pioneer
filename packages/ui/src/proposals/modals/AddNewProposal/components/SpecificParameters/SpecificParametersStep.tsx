@@ -20,9 +20,13 @@ import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/compone
 import { TerminateWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/TerminateWorkingGroupLead'
 import { UpdateWorkingGroupBudget } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/UpdateWorkingGroupBudget'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
-import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import {
+  ApplicationForm,
+  DurationAndProcess,
+  StakingPolicyAndReward,
+  WorkingGroupAndDescription,
+} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
-import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
   AddNewProposalContext,
   AddNewProposalEvent,
@@ -54,8 +58,19 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
-      return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'): {
+      return !!(specifics?.groupId && specifics?.title && specifics.description && specifics.shortDescription)
+    }
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'): {
+      return (
+        !!specifics?.details &&
+        ((specifics?.duration?.isLimited === true && !!specifics?.duration?.length) ||
+          specifics?.duration?.isLimited === false)
+      )
+    }
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'): {
+      const questions = specifics?.questions
+      return !!(questions?.[0] && questions?.every((question) => question.questionField))
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
       return !!(
@@ -187,15 +202,33 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
         />
       )
     }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'):
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
       return (
-        <CreateWorkingGroupLeadOpening
+        <WorkingGroupAndDescription
+          title={state.context.specifics?.title}
           description={state.context.specifics?.description}
           shortDescription={state.context.specifics?.shortDescription}
           groupId={state.context.specifics?.groupId}
+          setTitle={(title) => send('SET_TITLE', { title })}
           setDescription={(description) => send('SET_DESCRIPTION', { description })}
           setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
+      return (
+        <DurationAndProcess
+          duration={state.context.specifics?.duration}
+          details={state.context.specifics?.details}
+          setDuration={(duration) => send('SET_DURATION', { duration })}
+          setDetails={(details) => send('SET_DETAILS', { details })}
+        />
+      )
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
+      return (
+        <ApplicationForm
+          questions={state.context.specifics?.questions}
+          setQuestions={(questions) => send('SET_QUESTIONS', { questions })}
         />
       )
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):

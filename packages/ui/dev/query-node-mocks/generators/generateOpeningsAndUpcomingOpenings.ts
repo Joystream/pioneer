@@ -20,6 +20,7 @@ const getApplicationFormQuestions = () => [
 ]
 
 export const generateOpeningMetadata = () => ({
+  title: faker.random.words(4),
   shortDescription: faker.lorem.sentence(randomFromRange(20, 60)),
   description: randomMarkdown(),
   hiringLimit: 1,

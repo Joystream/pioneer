@@ -1,82 +1,82 @@
 [
   {
-    "inBlock": 76831,
-    "createdAt": "2021-11-10T07:07:37.805Z",
+    "inBlock": 21109,
+    "createdAt": "2022-02-05T00:06:51.017Z",
     "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-48",
-    "newRewardPerBlock": 49
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-6",
+    "newRewardPerBlock": 3
   },
   {
-    "inBlock": 57440,
-    "createdAt": "2021-08-17T15:29:35.120Z",
+    "inBlock": 57803,
+    "createdAt": "2021-10-07T14:06:22.694Z",
     "network": "OLYMPIA",
-    "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-35",
-    "newRewardPerBlock": 26
-  },
-  {
-    "inBlock": 46157,
-    "createdAt": "2021-09-08T14:07:00.755Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-57",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-69",
     "newRewardPerBlock": 43
   },
   {
-    "inBlock": 77413,
-    "createdAt": "2021-07-11T22:19:38.376Z",
+    "inBlock": 94446,
+    "createdAt": "2021-12-27T15:17:35.408Z",
+    "network": "OLYMPIA",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-80",
+    "newRewardPerBlock": 31
+  },
+  {
+    "inBlock": 31721,
+    "createdAt": "2022-01-11T22:11:03.536Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-60",
+    "newRewardPerBlock": 48
+  },
+  {
+    "inBlock": 99333,
+    "createdAt": "2022-01-28T08:43:03.059Z",
+    "network": "OLYMPIA",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-60",
+    "newRewardPerBlock": 10
+  },
+  {
+    "inBlock": 55871,
+    "createdAt": "2021-12-12T22:50:09.069Z",
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-15",
-    "newRewardPerBlock": 17
+    "workerId": "forumWorkingGroup-12",
+    "newRewardPerBlock": 2
   },
   {
-    "inBlock": 99921,
-    "createdAt": "2021-06-19T23:39:52.507Z",
+    "inBlock": 82416,
+    "createdAt": "2021-11-15T06:23:24.196Z",
     "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-82",
-    "newRewardPerBlock": 37
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-2",
+    "newRewardPerBlock": 40
   },
   {
-    "inBlock": 58580,
-    "createdAt": "2021-10-27T11:31:23.594Z",
+    "inBlock": 13302,
+    "createdAt": "2021-12-05T21:53:15.652Z",
     "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-87",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-4",
+    "newRewardPerBlock": 3
+  },
+  {
+    "inBlock": 60848,
+    "createdAt": "2022-03-01T14:50:36.695Z",
+    "network": "OLYMPIA",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-7",
     "newRewardPerBlock": 30
   },
   {
-    "inBlock": 3638,
-    "createdAt": "2021-08-29T12:54:15.667Z",
+    "inBlock": 6236,
+    "createdAt": "2022-02-15T16:21:38.089Z",
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-23",
-    "newRewardPerBlock": 32
-  },
-  {
-    "inBlock": 96079,
-    "createdAt": "2021-11-08T08:20:55.636Z",
-    "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-90",
-    "newRewardPerBlock": 41
-  },
-  {
-    "inBlock": 12631,
-    "createdAt": "2021-11-06T15:39:00.963Z",
-    "network": "OLYMPIA",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-64",
-    "newRewardPerBlock": 21
-  },
-  {
-    "inBlock": 77704,
-    "createdAt": "2021-07-11T18:50:16.436Z",
-    "network": "OLYMPIA",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-73",
-    "newRewardPerBlock": 24
+    "workerId": "forumWorkingGroup-11",
+    "newRewardPerBlock": 3
   }
 ]

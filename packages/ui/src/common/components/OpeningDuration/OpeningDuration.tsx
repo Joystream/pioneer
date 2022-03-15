@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -7,18 +6,20 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 
-export interface InputValues {
+export interface OpeningDurationValue {
   isLimited: boolean
-  length: number
+  length: number | undefined
 }
 
 export interface OpeningDurationProps {
   label: string
-  value: InputValues
-  onChange: (value: InputValues) => void
+  value: OpeningDurationValue | undefined
+  onChange: (value: OpeningDurationValue) => void
 }
 
-const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, value, onChange }) => {
+export const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, value, onChange }) => {
+  const isLimited = value?.isLimited ?? true
+  const length = value?.length
   return (
     <>
       <ToggleCheckbox
@@ -29,30 +30,30 @@ const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, val
                 <TooltipDefault />
               </Tooltip>
             </TooltipWrapper>
-            {value.isLimited ? <StyledLabel>Limited</StyledLabel> : 'Limited'}
+            {isLimited ? <StyledLabel>Limited</StyledLabel> : 'Limited'}
           </LabelWrapper>
         }
-        falseLabel={!value.isLimited ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
-        onChange={() => onChange({ ...value, isLimited: !value.isLimited })}
-        checked={value.isLimited}
+        falseLabel={!isLimited ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
+        onChange={() => onChange({ isLimited: !isLimited, length })}
+        checked={isLimited}
         hasNoOffState
       />
-      {value.isLimited && (
+      {isLimited && (
         <InputWrapper>
           <InputComponent
             label={label}
-            id="field-periodLength"
+            id="field-period-length"
             required
             units="blocks"
             inputSize="m"
-            message={value ? `≈ ${inBlocksDate(new BN(value.length))}` : ''}
+            message={value?.length ? `≈ ${inBlocksDate(value.length)}` : ''}
             tight
           >
             <InputNumber
-              id="field-periodLength"
+              id="field-period-length"
               placeholder="type number of blocks here"
-              value={value?.length.toString()}
-              onChange={(_, length) => onChange({ ...value, length })}
+              value={value?.length?.toString()}
+              onChange={(_, length) => onChange({ isLimited, length: length || undefined })}
             />
           </InputComponent>
         </InputWrapper>
@@ -60,8 +61,6 @@ const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, val
     </>
   )
 })
-
-export default OpeningDuration
 
 const StyledLabel = styled(TextMedium)`
   font-weight: 900;

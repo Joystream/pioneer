@@ -1,3 +1,4 @@
+import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { ProposalDetailsOf } from '@joystream/types/augment'
 import { WorkingGroupKey } from '@joystream/types/common'
@@ -5,6 +6,7 @@ import { ProposalDetails } from '@joystream/types/src/proposals'
 import { ApiRx } from '@polkadot/api'
 
 import { BN_ZERO } from '@/common/constants'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
@@ -58,7 +60,18 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     case 'createWorkingGroupLeadOpening': {
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         CreateWorkingGroupLeadOpening: {
-          description: specifics?.description,
+          description: metadataToBytes(OpeningMetadata, {
+            title: specifics?.title,
+            shortDescription: specifics?.shortDescription,
+            description: specifics?.description,
+            hiringLimit: 1,
+            expectedEndingTimestamp: specifics?.duration?.isLimited ? specifics.duration.length : undefined,
+            applicationDetails: specifics?.details,
+            applicationFormQuestions: specifics?.questions?.map(({ questionField, shortValue }) => ({
+              question: questionField,
+              type: OpeningMetadata.ApplicationFormQuestion.InputType[shortValue ? 'TEXT' : 'TEXTAREA'],
+            })),
+          }),
           stake_policy: {
             stake_amount: specifics?.stakingAmount,
             leaving_unstaking_period: specifics?.leavingUnstakingPeriod,
