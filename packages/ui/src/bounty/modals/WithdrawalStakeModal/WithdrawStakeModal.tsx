@@ -34,9 +34,10 @@ export const WithdrawStakeModal = () => {
     }
   }, [JSON.stringify(activeMember), connectionState])
 
-  const entry = useMemo(() => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
-    activeMember?.id,
-  ])
+  const entry = useMemo(
+    () => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id),
+    [activeMember?.id]
+  )
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 

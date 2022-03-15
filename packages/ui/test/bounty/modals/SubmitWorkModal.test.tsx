@@ -43,7 +43,7 @@ describe('UI: BountySubmitModal', () => {
   stubBountyConstants(api)
   const fee = 2000
   const transaction = stubTransaction(api, 'api.tx.bounty.submitWork', fee)
-  const txMock = (api.api.tx.bounty.submitWork as unknown) as jest.Mock
+  const txMock = api.api.tx.bounty.submitWork as unknown as jest.Mock
 
   let useModal: UseModal<any>
   beforeAll(async () => {
