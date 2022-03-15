@@ -1,3 +1,4 @@
+import { useRefetch } from '@/common/hooks/useRefetch'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -9,7 +10,8 @@ import { MembersSection } from '../../../../memberships/components/MembersSectio
 import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
 
 export function Memberships() {
-  const { isLoading, members, active, hasMembers } = useMyMemberships()
+  const { isLoading, members, active, hasMembers, refetch: refetchMemberships } = useMyMemberships()
+  useRefetch({ type: 'set', payload: refetchMemberships })
 
   if (isLoading) {
     return <Loading />
