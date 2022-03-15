@@ -19,7 +19,8 @@ export const SuccessModal = ({ onClose, bountyId }: Props) => {
 
   const goToBounty = useCallback(() => {
     history.push(generatePath(BountyRoutes.bounty, { id: bountyId }))
-  }, [bountyId])
+    onClose()
+  }, [bountyId, onClose])
 
   return (
     <Modal modalSize="s" modalHeight="s" onClose={onClose}>
@@ -30,7 +31,7 @@ export const SuccessModal = ({ onClose, bountyId }: Props) => {
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost disabled onClick={goToBounty} size="medium">
+        <ButtonGhost disabled={!bountyId} onClick={goToBounty} size="medium">
           See my Bounty
         </ButtonGhost>
       </ModalFooter>
