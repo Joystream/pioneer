@@ -73,8 +73,6 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
 
-  const { refetch: refetchProposals } = useProposals({ status: 'active' })
-  useRefetch({ type: 'set', payload: refetchProposals })
   useRefetch({ type: 'do', payload: state.matches('success') })
 
   const constants = useProposalConstants(state.context.type)
