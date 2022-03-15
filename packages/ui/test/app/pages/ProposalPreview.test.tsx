@@ -18,7 +18,7 @@ import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
-import { stubApi, stubQuery } from '../../_mocks/transactions'
+import { stubApi, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -47,6 +47,7 @@ describe('ProposalPreview', () => {
   beforeAll(cryptoWaitReady)
 
   beforeEach(() => {
+    stubProposalConstants(api)
     seedMembers(mockServer.server, 2)
     seedProposal(PROPOSAL_DATA, mockServer.server)
     stubQuery(api, 'council.councilMembers', [])

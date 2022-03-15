@@ -153,7 +153,7 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
 const percentageMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
   const defaultLabel = 'Percentage'
   const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
-    setReferralCut: 'Referral cut',
+    setReferralCut: 'Proposed referral cut',
   }
   const overriddenLabel = type && overriddenLabelsBy[type]
 
