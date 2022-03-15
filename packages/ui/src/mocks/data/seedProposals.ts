@@ -4,6 +4,7 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 import { ProposalStatus } from '@/proposals/types'
 
 import { ProposalMock } from '../../../dev/query-node-mocks/generators/generateProposals'
+import { seedOverridableEntities } from '../helpers/seedEntities'
 
 import rawProposals from './raw/proposals.json'
 import { seedProposalDetails } from './seedProposalDetails'
@@ -56,6 +57,4 @@ const seedDiscussionPosts = (posts: ThreadMock['discussionPosts'], server: any) 
     })
   )
 
-export const seedProposals = (server: any) => {
-  mockProposals.map((proposal) => seedProposal(proposal, server))
-}
+export const seedProposals = seedOverridableEntities(mockProposals, seedProposal)

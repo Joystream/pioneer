@@ -1,3 +1,4 @@
+import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
@@ -11,6 +12,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
+import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -37,6 +39,7 @@ import { ProposalType } from '@/proposals/types'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
+import { toggleCheckBox } from '../../_helpers/toggleCheckBox'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
@@ -53,6 +56,8 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+
+const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
 configure({ testIdAttribute: 'id' })
 
@@ -79,6 +84,7 @@ const OPENING_DATA = {
   status: 'open',
   unstakingPeriod: 25110,
   metadata: {
+    title: 'Foo',
     shortDescription: '',
     description: '',
     hiringLimit: 1,
@@ -684,82 +690,108 @@ describe('UI: AddNewProposalModal', () => {
           expect(screen.getByText(/^Create Working Group Lead Opening$/i)).toBeDefined()
         })
 
-        it('Step 1: Valid', async () => {
-          expect(screen.queryByLabelText(/^working group/i, { selector: 'input' })).toHaveValue('')
-          expect(screen.queryByLabelText(/^short description/i)).toHaveValue('')
-          expect(screen.queryByLabelText(/^description/i)).toHaveValue('')
-
-          expect(await getNextStepButton()).toBeDisabled()
-        })
-
         it('Step 1: Invalid to Valid', async () => {
+          expect(await getNextStepButton()).toBeDisabled()
+
           await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup('Forum')
           expect(await getNextStepButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Foo')
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillTitle('Foo')
           expect(await getNextStepButton()).toBeDisabled()
 
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Bar')
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Baz')
           expect(await getNextStepButton()).toBeEnabled()
         })
 
-        it('Step 2: Invalid ', async () => {
-          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup('Forum')
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Foo')
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
-          await clickNextButton()
-
-          expect(screen.queryByLabelText(/^staking amount/i, { selector: 'input' })).toHaveValue('')
-          expect(screen.queryByLabelText(/^leaving unstaking period/i, { selector: 'input' })).toHaveValue('0')
-          expect(screen.queryByLabelText(/^reward amount per block/i, { selector: 'input' })).toHaveValue('')
-
-          expect(await getCreateButton()).toBeDisabled()
-
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(0)
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(0)
-
-          expect(await getCreateButton()).toBeDisabled()
-        })
-
-        it('Step 2: Invalid to valid', async () => {
-          const description = 'Foo'
-          const group = 'Storage'
-          const stakingAmount = 100
-          const unstakingPeriod = 101
-          const rewardPerBlock = 102
-          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
-          await clickNextButton()
-
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stakingAmount)
-          expect(await getCreateButton()).toBeDisabled()
-
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
-          expect(await getCreateButton()).toBeDisabled()
-
-          await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(rewardPerBlock)
-          expect(await getCreateButton()).toBeEnabled()
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
-          const parameters = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
-          expect(parameters).toEqual({
-            description: '0x' + Buffer.from(description).toString('hex'),
-            reward_per_block: rewardPerBlock,
-            stake_policy: {
-              stake_amount: stakingAmount,
-              leaving_unstaking_period: unstakingPeriod,
-            },
-            working_group: group,
+        it('Step 2: Invalid to Valid', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.flow({
+            group: 'Forum',
+            title: 'Foo',
+            description: 'Bar',
+            shortDesc: 'Baz',
           })
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDetails('Lorem ipsum')
+          expect(await getNextStepButton()).toBeEnabled()
+
+          await fillField('field-period-length', '')
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await toggleCheckBox(false)
+          expect(await getNextStepButton()).toBeEnabled()
         })
 
-        it('Stake policy', async () => {
-          await SpecificParameters.CreateWorkingGroupLeadOpening.finish('Forum', 'Foo', 'Bar', 100, 10, 50)
+        it('Step 3: Invalid to Valid', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.flow(
+            { group: 'Forum', title: 'Foo', description: 'Bar', shortDesc: 'Baz' },
+            { duration: 100, details: 'Lorem ipsum' }
+          )
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillQuestionField('🐁?', 0)
+          expect(await getNextStepButton()).toBeEnabled()
+
+          const addQuestionBtn = await screen.findByText('Add new question')
+          act(() => {
+            fireEvent.click(addQuestionBtn)
+          })
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await toggleCheckBox(false, 1)
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillQuestionField('🐘?', 1)
+          expect(await getNextStepButton()).toBeEnabled()
+        })
+
+        it('Step 4: Invalid to valid', async () => {
+          const step1 = { group: 'Storage', title: 'Foo', description: 'Bar', shortDesc: 'Baz' }
+          const step2 = { duration: 100, details: 'Lorem ipsum' }
+          const step3 = {
+            questions: [
+              { question: 'Short?', type: QUESTION_INPUT.TEXT },
+              { question: 'Long?', type: QUESTION_INPUT.TEXTAREA },
+            ],
+          }
+          const step4 = { stake: 100, unstakingPeriod: 101, rewardPerBlock: 102 }
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.flow(step1, step2, step3)
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(step4.stake)
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(step4.unstakingPeriod)
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(step4.rewardPerBlock)
+          expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
-          const stakePolicy = txSpecificParameters.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
 
-          expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+          const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
+          expect(data).toEqual({
+            reward_per_block: step4.rewardPerBlock,
+            stake_policy: {
+              stake_amount: step4.stake,
+              leaving_unstaking_period: step4.unstakingPeriod,
+            },
+            working_group: step1.group,
+          })
+
+          expect(metadataFromBytes(OpeningMetadata, metadata)).toEqual({
+            title: step1.title,
+            shortDescription: step1.shortDesc,
+            description: step1.description,
+            hiringLimit: 1,
+            expectedEndingTimestamp: step2.duration,
+            applicationDetails: step2.details,
+            applicationFormQuestions: step3.questions,
+          })
         })
       })
 
@@ -1461,7 +1493,9 @@ describe('UI: AddNewProposalModal', () => {
 
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
-    fireEvent.change(amountInput, { target: { value } })
+    act(() => {
+      fireEvent.change(amountInput, { target: { value } })
+    })
   }
 
   const SpecificParameters = {
@@ -1478,7 +1512,9 @@ describe('UI: AddNewProposalModal', () => {
         await SpecificParameters.FundingRequest.selectRecipient(recipient)
 
         const button = await getCreateButton()
-        fireEvent.click(button as HTMLElement)
+        act(() => {
+          fireEvent.click(button as HTMLElement)
+        })
       },
     },
     DecreaseWorkingGroupLeadStake: {
@@ -1489,27 +1525,64 @@ describe('UI: AddNewProposalModal', () => {
     },
     CreateWorkingGroupLeadOpening: {
       selectGroup,
+      fillTitle: async (value: string) => await fillField('opening-title', value),
       fillShortDescription: async (value: string) => await fillField('short-description', value),
       fillDescription: async (value: string) => await fillField('field-description', value),
+      fillDuration: async (value: number | undefined) => {
+        await toggleCheckBox(!!value)
+        if (value) await fillField('field-period-length', value)
+      },
+      fillDetails: async (value: string) => await fillField('field-details', value),
+      fillQuestionField: async (value: string, index: number) => {
+        const field = (await screen.findAllByRole('textbox'))[index]
+        act(() => {
+          fireEvent.change(field, { target: { value } })
+        })
+      },
+      fillQuestions: async (value: OpeningMetadata.IApplicationFormQuestion[]) => {
+        const addQuestionBtn = await screen.findByText('Add new question')
+
+        for (let index = 0; index < value.length; index++) {
+          if (index > 0)
+            act(() => {
+              fireEvent.click(addQuestionBtn)
+            })
+
+          const question = value[index].question ?? ''
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillQuestionField(question, index)
+
+          await toggleCheckBox(value[index].type === QUESTION_INPUT.TEXT, index)
+        }
+      },
       fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
       fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
       fillRewardPerBlock: async (value: number) => await fillField('reward-per-block', value),
-      finish: async (
-        group: string,
-        description: string,
-        shortDesc: string,
-        stake: number,
-        unstakingPeriod: number,
-        rewardPerBlock: number
+      flow: async (
+        step1?: { group: string; title: string; description: string; shortDesc: string },
+        step2?: { duration: number | undefined; details: string },
+        step3?: { questions: OpeningMetadata.IApplicationFormQuestion[] },
+        step4?: { stake: number; unstakingPeriod: number; rewardPerBlock: number }
       ) => {
-        await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(group)
-        await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(description)
-        await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription(shortDesc)
+        if (!step1) return
+        await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup(step1.group)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillTitle(step1.title)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription(step1.description)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription(step1.shortDesc)
         await clickNextButton()
 
-        await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(stake)
-        await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(unstakingPeriod)
-        await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(rewardPerBlock)
+        if (!step2) return
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillDuration(step2.duration)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillDetails(step2.details)
+        await clickNextButton()
+
+        if (!step3) return
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillQuestions(step3.questions)
+        await clickNextButton()
+
+        if (!step4) return
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(step4.stake)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(step4.unstakingPeriod)
+        await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(step4.rewardPerBlock)
 
         const createButton = await getCreateButton()
         await act(async () => {
