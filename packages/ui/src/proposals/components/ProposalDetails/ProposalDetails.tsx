@@ -1,6 +1,7 @@
 import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { StatisticsThreeColumns } from '@/common/components/statistics'
+import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
 
@@ -38,6 +39,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Divider: Divider,
   ProposalLink: ProposalLink,
   OpeningLink: OpeningLink,
+  Percentage: Percentage,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
