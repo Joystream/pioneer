@@ -33,7 +33,6 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
-import { useProposals } from '@/proposals/hooks/useProposals'
 import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'

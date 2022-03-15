@@ -11,6 +11,7 @@ import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/com
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
@@ -26,7 +27,6 @@ import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
 
 import { ElectionTabs } from './components/ElectionTabs'
-import { useRefetch } from '@/common/hooks/useRefetch'
 
 const displayElectionRound = (election: ElectionType | undefined): string => {
   if (!election) {

@@ -19,7 +19,6 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
 import { groupToLockId } from '../../types'

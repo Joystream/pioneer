@@ -11,7 +11,6 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useRefetch } from '@/common/hooks/useRefetch'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
-import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
