@@ -26,6 +26,7 @@ import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
 
 import { ElectionTabs } from './components/ElectionTabs'
+import { useRefetch } from '@/common/hooks/useRefetch'
 
 const displayElectionRound = (election: ElectionType | undefined): string => {
   if (!election) {
@@ -36,7 +37,9 @@ const displayElectionRound = (election: ElectionType | undefined): string => {
 }
 
 export const Election = () => {
-  const { isLoading: isLoadingElection, election } = useCurrentElection()
+  const { isLoading: isLoadingElection, election, refetch: refetchElection } = useCurrentElection()
+  useRefetch({ type: 'set', payload: refetchElection })
+
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
   useCandidatePreviewViaUrlParameter()

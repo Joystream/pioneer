@@ -29,8 +29,6 @@ export const VoteForCouncilModal = () => {
 
   const { active: activeMember } = useMyMemberships()
 
-  const { refetch: refetchElection } = useCurrentElection()
-  useRefetch({ type: 'set', payload: refetchElection })
   useRefetch({ type: 'do', payload: state.matches('success') })
 
   const constants = useCouncilConstants()
