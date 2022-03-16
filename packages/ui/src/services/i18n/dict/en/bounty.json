@@ -31,7 +31,7 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "stakingAccount": {
-        "label": "Staking account",
+        "label": "Account for contributing",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "selectAmount": "Select amount for contributing",
