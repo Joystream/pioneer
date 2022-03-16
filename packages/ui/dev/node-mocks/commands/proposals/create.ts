@@ -48,7 +48,8 @@ const createProposal = (args: Args) => {
 
     const proposalId = Number(getDataFromEvent(events, 'proposalsCodex', 'ProposalCreated'))
     const proposalData = getDataFromEvent(events, 'proposalsCodex', 'ProposalCreated', 1)
-    console.log({ proposalId, ...proposalData?.toJSON() })
+    const threadId = Number(getDataFromEvent(events, 'proposalsDiscussion', 'ThreadCreated'))
+    console.log({ proposalId, ...proposalData?.toJSON(), threadId })
   })
 }
 
