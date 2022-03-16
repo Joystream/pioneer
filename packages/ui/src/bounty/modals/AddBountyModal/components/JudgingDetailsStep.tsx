@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React  from 'react'
+import React from 'react'
 
 import { JudgingPeriodDetailsContext, WorkingPeriodDetailsContext } from '@/bounty/modals/AddBountyModal/machine'
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -16,7 +16,6 @@ interface Props extends Omit<JudgingPeriodDetailsContext, keyof WorkingPeriodDet
 }
 
 export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, setJudgingPeriodLength }: Props) => {
-
   return (
     <RowGapBlock gap={24}>
       <Row>
