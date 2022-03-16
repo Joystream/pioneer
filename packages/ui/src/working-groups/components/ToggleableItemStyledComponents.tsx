@@ -72,7 +72,6 @@ export const ToggleableItemInfo = styled.div`
   grid-template-rows: 26px 24px;
   grid-row-gap: 4px;
   width: 100%;
-  max-width: 342px;
   align-items: center;
 `
 
