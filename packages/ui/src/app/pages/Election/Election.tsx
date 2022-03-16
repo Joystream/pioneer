@@ -11,6 +11,7 @@ import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/com
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
@@ -36,7 +37,9 @@ const displayElectionRound = (election: ElectionType | undefined): string => {
 }
 
 export const Election = () => {
-  const { isLoading: isLoadingElection, election } = useCurrentElection()
+  const { isLoading: isLoadingElection, election, refetch: refetchElection } = useCurrentElection()
+  useRefetch({ type: 'set', payload: refetchElection })
+
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
   useCandidatePreviewViaUrlParameter()
