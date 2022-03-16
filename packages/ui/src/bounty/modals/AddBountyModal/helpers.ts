@@ -1,19 +1,19 @@
-import {IBountyMetadata, IBountyWorkData} from '@joystream/metadata-protobuf'
-import {createType} from '@joystream/types'
-import {AssuranceContractType_Closed} from '@joystream/types/bounty'
-import {MemberId} from '@joystream/types/common'
-import {AugmentedConst} from '@polkadot/api/types'
-import {u32} from '@polkadot/types'
-import {BalanceOf} from '@polkadot/types/interfaces/runtime'
+import { IBountyMetadata, IBountyWorkData } from '@joystream/metadata-protobuf'
+import { createType } from '@joystream/types'
+import { AssuranceContractType_Closed } from '@joystream/types/bounty'
+import { MemberId } from '@joystream/types/common'
+import { AugmentedConst } from '@polkadot/api/types'
+import { u32 } from '@polkadot/types'
+import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import Long from 'long'
 
-import {AddBountyModalMachineState, AddBountyStates} from '@/bounty/modals/AddBountyModal/machine'
-import {SubmitWorkModalMachineState} from '@/bounty/modals/SubmitWorkModal/machine'
-import {BN_ZERO} from '@/common/constants'
-import {whenDefined} from '@/common/utils'
+import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
+import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
+import { BN_ZERO } from '@/common/constants'
+import { whenDefined } from '@/common/utils'
 
-import {BountyCreationParameters} from '../../../../../types/augment'
+import { BountyCreationParameters } from '../../../../../types/augment'
 
 interface Conditions {
   isThreadCategoryLoading?: boolean
@@ -24,10 +24,12 @@ interface Conditions {
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
 }
 
-export const isUrlValid  = (value: string) => {
+export const isUrlValid = (value: string) => {
   //check if url is valid
-    const urlValidation = value.match(/^(ftp:\/\/|http:\/\/|https:\/\/)[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/);
-    return (urlValidation !== null)
+  const urlValidation = value.match(
+    /^(ftp:\/\/|http:\/\/|https:\/\/)[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+  )
+  return urlValidation !== null
 }
 
 export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {
