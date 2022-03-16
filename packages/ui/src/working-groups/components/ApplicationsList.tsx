@@ -9,6 +9,7 @@ import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { useModal } from '@/common/hooks/useModal'
+
 import { openingTitle } from '../helpers'
 import { useRewardPeriod } from '../hooks/useRewardPeriod'
 import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
