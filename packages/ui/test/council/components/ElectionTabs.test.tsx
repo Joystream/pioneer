@@ -62,7 +62,7 @@ describe('CouncilTabs', () => {
 
     it('New voting period', async () => {
       window.localStorage.setItem(LocalStorageKey, JSON.stringify('inactive'))
-      stubCouncilAndReferendum(api, 'Election', 'Inactive')
+      stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
 
       renderComponent()
 
