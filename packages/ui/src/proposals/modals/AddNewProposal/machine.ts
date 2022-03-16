@@ -972,8 +972,9 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             target: 'discussionTransaction',
             actions: assign({
               transactionEvents: (context, event) => event.data.events,
-              discussionId: (_, event) =>
-                parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 1)?.toString() ?? '-1'),
+              discussionId: (_, event) => {
+                return parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 0)?.toString() ?? '-1')
+              },
             }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode === 'closed',
           },
