@@ -19,10 +19,8 @@ import { CreatePostModalCall } from '.'
 import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
-  const {
-    modalData: { postText, replyTo, transaction, isEditable, onSuccess },
-    hideModal,
-  } = useModal<CreatePostModalCall>()
+  const { modalData, hideModal } = useModal<CreatePostModalCall>()
+  const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
 
   const hideModalAfterSuccess = useCallback(() => {
     onSuccess()
@@ -37,7 +35,7 @@ export const CreatePostModal = () => {
   const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
 
-  const postDeposit = api?.consts.forum.postDeposit.toBn()
+  const postDeposit = api?.consts[module].postDeposit.toBn()
 
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
