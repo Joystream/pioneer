@@ -42,6 +42,11 @@ export const LockInfoContainer = styled(TableListItem)`
   max-height: ${Sizes.selectHeight};
   background-color: ${Colors.Black[75]};
   border: 1px solid ${Colors.Black[200]};
+
+  > *:nth-child(2) {
+    display: flex;
+    column-gap: 4px;
+  }
 `
 
 export const TokenValueWrapper = styled.div`
