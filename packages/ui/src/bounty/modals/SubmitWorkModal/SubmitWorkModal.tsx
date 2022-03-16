@@ -99,8 +99,8 @@ export const SubmitWorkModal = () => {
   if (state.matches(SubmitWorkStates.success)) {
     return (
       <SuccessTransactionModal
-        buttonLabel={t('modals.bountyCancel.success.button')}
-        message={t('modals.bountyCancel.success.message')}
+        buttonLabel={t('modals.submitWork.success.button')}
+        message={t('modals.submitWork.success.message')}
         onButtonClick={goToCurrentBounties}
         onClose={hideModal}
       />
@@ -110,7 +110,7 @@ export const SubmitWorkModal = () => {
   if (state.matches(SubmitWorkStates.error)) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.bountyCancel.error')}
+        {t('modals.submitWork.error')}
       </FailureModal>
     )
   }

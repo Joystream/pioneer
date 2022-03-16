@@ -113,7 +113,12 @@
       "validation": {
         "maxLengthMessage": "Max length is 70 characters",
         "max70": "MAX 70"
-      }
+      },
+      "success": {
+        "message": "You have just successfully canceled bounty!",
+        "button": "Go to Current Bounties"
+      },
+      "error": "There was a problem canceling bounty."
     },
     "withdraw": {
       "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
