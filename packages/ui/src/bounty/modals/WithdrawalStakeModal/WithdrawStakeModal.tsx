@@ -28,9 +28,10 @@ export const WithdrawStakeModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
-  const entry = useMemo(() => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
-    activeMember?.id,
-  ])
+  const entry = useMemo(
+    () => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id),
+    [activeMember?.id]
+  )
 
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember && entry) {

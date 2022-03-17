@@ -38,10 +38,10 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
     [bounty, activeMember?.id]
   )
 
-  const userEntry = useMemo(() => bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id), [
-    bounty,
-    activeMember?.id,
-  ])
+  const userEntry = useMemo(
+    () => bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id),
+    [bounty, activeMember?.id]
+  )
 
   const compiledButtons = useMemo(() => {
     if (!bounty) {
@@ -137,10 +137,10 @@ const FundingStageButtons = React.memo(({ bounty, t, isCreator }: BountyHeaderBu
 const WorkingStageButtons = React.memo(({ bounty, activeMember, t, userEntry }: BountyHeaderButtonsProps) => {
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const isOnWhitelist = useMemo(() => activeMember && bounty.entrantWhitelist?.includes(activeMember.id), [
-    bounty,
-    activeMember?.id,
-  ])
+  const isOnWhitelist = useMemo(
+    () => activeMember && bounty.entrantWhitelist?.includes(activeMember.id),
+    [bounty, activeMember?.id]
+  )
 
   if (isDefined(bounty?.entrantWhitelist) && !isOnWhitelist) {
     {
