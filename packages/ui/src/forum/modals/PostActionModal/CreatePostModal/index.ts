@@ -9,6 +9,7 @@ export type CreatePostModalCall = ModalWithDataCall<
   'CreatePost',
   {
     postText: string
+    module?: 'forum' | 'proposalsDiscussion'
     replyTo?: ForumPost
     isEditable: boolean
     transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
