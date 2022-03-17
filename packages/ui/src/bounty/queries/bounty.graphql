@@ -160,3 +160,9 @@ query GetBountyContributors(
     ...BountyContributionFields
   }
 }
+
+query GetContributorWithdrawal($id: ID!) {
+  bountyFundingWithdrawalEventByUniqueInput(where: { id: $id }) {
+    id
+  }
+}

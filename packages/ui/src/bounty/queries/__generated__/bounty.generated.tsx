@@ -788,6 +788,15 @@ export type GetBountyContributorsQuery = {
   }>
 }
 
+export type GetContributorWithdrawalQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetContributorWithdrawalQuery = {
+  __typename: 'Query'
+  bountyFundingWithdrawalEventByUniqueInput?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
+}
+
 export const BountyContributionFieldsFragmentDoc = gql`
   fragment BountyContributionFields on BountyContribution {
     id
@@ -1279,4 +1288,52 @@ export type GetBountyContributorsLazyQueryHookResult = ReturnType<typeof useGetB
 export type GetBountyContributorsQueryResult = Apollo.QueryResult<
   GetBountyContributorsQuery,
   GetBountyContributorsQueryVariables
+>
+export const GetContributorWithdrawalDocument = gql`
+  query GetContributorWithdrawal($id: ID!) {
+    bountyFundingWithdrawalEventByUniqueInput(where: { id: $id }) {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetContributorWithdrawalQuery__
+ *
+ * To run a query within a React component, call `useGetContributorWithdrawalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetContributorWithdrawalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetContributorWithdrawalQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetContributorWithdrawalQuery(
+  baseOptions: Apollo.QueryHookOptions<GetContributorWithdrawalQuery, GetContributorWithdrawalQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetContributorWithdrawalQuery, GetContributorWithdrawalQueryVariables>(
+    GetContributorWithdrawalDocument,
+    options
+  )
+}
+export function useGetContributorWithdrawalLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetContributorWithdrawalQuery, GetContributorWithdrawalQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetContributorWithdrawalQuery, GetContributorWithdrawalQueryVariables>(
+    GetContributorWithdrawalDocument,
+    options
+  )
+}
+export type GetContributorWithdrawalQueryHookResult = ReturnType<typeof useGetContributorWithdrawalQuery>
+export type GetContributorWithdrawalLazyQueryHookResult = ReturnType<typeof useGetContributorWithdrawalLazyQuery>
+export type GetContributorWithdrawalQueryResult = Apollo.QueryResult<
+  GetContributorWithdrawalQuery,
+  GetContributorWithdrawalQueryVariables
 >

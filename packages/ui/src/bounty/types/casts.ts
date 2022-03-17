@@ -80,7 +80,8 @@ const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFi
   })
 }
 
-export const asContributor = ({ amount, contributor }: BountyContributionFieldsFragment): Contributor => ({
+export const asContributor = ({ amount, contributor, id }: BountyContributionFieldsFragment): Contributor => ({
+  id,
   amount,
   actor: contributor ? asMember(contributor) : undefined,
 })

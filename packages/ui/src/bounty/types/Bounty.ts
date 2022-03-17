@@ -39,6 +39,7 @@ export type BountyEntryStatusWinner = {
 }
 
 export interface Contributor {
+  id: string
   actor: Member | undefined
   amount: BN
 }
