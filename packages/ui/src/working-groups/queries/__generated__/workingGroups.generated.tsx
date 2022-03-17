@@ -954,6 +954,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   id: string
   runtimeId: number
   stakingAccount: string
+  stake: any
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
@@ -1006,6 +1007,7 @@ export type GetWorkingGroupApplicationsQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
+    stake: any
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
@@ -1082,6 +1084,7 @@ export type GetWorkingGroupApplicationQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
+    stake: any
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
@@ -1516,6 +1519,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       __typename
     }
     stakingAccount
+    stake
     createdInEvent {
       createdAt
       inBlock

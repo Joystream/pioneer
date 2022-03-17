@@ -64,7 +64,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(100)} />
+            <TokenValue value={new BN(application.stake)} />
           </TextInlineBig>
           <Subscription>Staked</Subscription>
         </OpenItemSummaryColumn>

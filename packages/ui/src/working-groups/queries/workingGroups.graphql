@@ -354,6 +354,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
+  stake
   createdInEvent {
     createdAt
     inBlock

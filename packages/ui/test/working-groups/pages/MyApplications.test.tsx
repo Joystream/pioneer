@@ -30,6 +30,7 @@ const currentApplication: WorkingGroupApplication = {
     rewardPerBlock: BN_TEN,
   },
   createdAtBlock: block,
+  stake: BN_TEN,
   status: 'ApplicationStatusPending',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
@@ -45,6 +46,7 @@ const pastApplication: WorkingGroupApplication = {
     rewardPerBlock: BN_TEN,
   },
   createdAtBlock: block,
+  stake: BN_TEN,
   status: 'ApplicationStatusRejected',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
