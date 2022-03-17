@@ -7,6 +7,7 @@ import { u32 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import Long from 'long'
+import * as Yup from 'yup'
 
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
@@ -25,11 +26,7 @@ interface Conditions {
 }
 
 export const isUrlValid = (value: string) => {
-  //check if url is valid
-  const urlValidation = value.match(
-    /^(ftp:\/\/|http:\/\/|https:\/\/)[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-  )
-  return urlValidation !== null
+  return Yup.string().required().url().isValidSync(value)
 }
 
 export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {

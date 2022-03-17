@@ -353,7 +353,7 @@ describe('UI: AddNewBountyModal', () => {
 
   const fillGeneralParameters = async (proceedToNextStep = true) => {
     await fillField('field-title', 'Title')
-    await fillField('field-photo', 'Photo')
+    await fillField('field-photo', 'https://photo.com')
     await fillField('field-description', 'Description')
 
     if (proceedToNextStep) {
