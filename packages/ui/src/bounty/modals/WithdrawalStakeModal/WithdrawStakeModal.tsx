@@ -28,16 +28,15 @@ export const WithdrawStakeModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
+  const entry = useMemo(() => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    activeMember?.id,
+  ])
+
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, modalData.bounty.id)
+    if (api && connectionState === 'connected' && activeMember && entry) {
+      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, modalData.bounty.id, entry.id)
     }
   }, [JSON.stringify(activeMember), connectionState])
-
-  const entry = useMemo(
-    () => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id),
-    [activeMember?.id]
-  )
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
