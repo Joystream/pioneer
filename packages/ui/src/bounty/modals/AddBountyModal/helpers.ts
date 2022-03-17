@@ -7,6 +7,7 @@ import { u32 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import Long from 'long'
+import * as Yup from 'yup'
 
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
@@ -24,11 +25,15 @@ interface Conditions {
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
 }
 
+export const isUrlValid = (value: string) => {
+  return Yup.string().required().url().isValidSync(value)
+}
+
 export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {
   const { context } = state
   switch (true) {
     case state.matches(AddBountyStates.generalParameters): {
-      return !!(context.creator && context.description && context.title && context.coverPhotoLink)
+      return !!(context.creator && context.description && context.title && isUrlValid(context.coverPhotoLink ?? ''))
     }
     case state.matches(AddBountyStates.fundingPeriodDetails): {
       const isLimited = context.fundingPeriodType === 'limited'
