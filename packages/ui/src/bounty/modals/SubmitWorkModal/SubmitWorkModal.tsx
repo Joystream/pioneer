@@ -55,19 +55,13 @@ export const SubmitWorkModal = () => {
   if (!service.initialized) {
     service.start()
   }
-  useEffect(() => {
-    if (state.context.workTitle && state.context.workDescription !== '') {
-      setValidNext(true)
-    } else {
-      setValidNext(false)
-    }
-  })
-  const transaction = useMemo(() => {
-    const entry = modalData.bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id)
-    if (!entry) {
-      hideModal()
-    }
 
+  const entry = useMemo(
+    () => modalData.bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id) ?? undefined,
+    [activeMember?.id]
+  )
+
+  const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
         createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id)),
@@ -81,6 +75,20 @@ export const SubmitWorkModal = () => {
   const goToCurrentBounties = useCallback(() => {
     history.push(generatePath(BountyRoutes.currentBounties))
   }, [])
+
+  useEffect(() => {
+    if (state.context.workTitle && state.context.workDescription !== '') {
+      setValidNext(true)
+    } else {
+      setValidNext(false)
+    }
+  })
+
+  useEffect(() => {
+    if (!entry && activeMember?.id) {
+      hideModal()
+    }
+  }, [entry])
 
   if (!activeMember || !transaction || !api) {
     return (
@@ -96,6 +104,7 @@ export const SubmitWorkModal = () => {
       />
     )
   }
+
   if (state.matches(SubmitWorkStates.transaction)) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')

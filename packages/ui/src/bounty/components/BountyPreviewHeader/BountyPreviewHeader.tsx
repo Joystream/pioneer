@@ -38,10 +38,10 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
     [bounty, activeMember?.id]
   )
 
-  const userEntry = useMemo(
-    () => bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id),
-    [bounty, activeMember?.id]
-  )
+  const userEntry = useMemo(() => bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id), [
+    bounty,
+    activeMember?.id,
+  ])
 
   const compiledButtons = useMemo(() => {
     if (!bounty) {
@@ -137,10 +137,10 @@ const FundingStageButtons = React.memo(({ bounty, t, isCreator }: BountyHeaderBu
 const WorkingStageButtons = React.memo(({ bounty, activeMember, t, userEntry }: BountyHeaderButtonsProps) => {
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const isOnWhitelist = useMemo(
-    () => activeMember && bounty.entrantWhitelist?.includes(activeMember.id),
-    [bounty, activeMember?.id]
-  )
+  const isOnWhitelist = useMemo(() => activeMember && bounty.entrantWhitelist?.includes(activeMember.id), [
+    bounty,
+    activeMember?.id,
+  ])
 
   if (isDefined(bounty?.entrantWhitelist) && !isOnWhitelist) {
     {
@@ -177,7 +177,7 @@ const getReward = (entry: WorkEntry) => {
   return isBountyEntryStatusWinner(entry.status) ? new BN(entry.status.reward) : undefined
 }
 
-const SuccessfulStageButtons = React.memo(({ bounty, t, userEntry, isContributor }: BountyHeaderButtonsProps) => {
+const SuccessfulStageButtons = React.memo(({ bounty, t, userEntry }: BountyHeaderButtonsProps) => {
   const entryId = userEntry?.id
   const reward = userEntry ? getReward(userEntry) : undefined
   const winnerConditions = userEntry?.winner && entryId && reward
@@ -187,11 +187,7 @@ const SuccessfulStageButtons = React.memo(({ bounty, t, userEntry, isContributor
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
       {winnerConditions && <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />}
-      {(userEntry?.passed || isContributor) && isContributor ? (
-        <WithdrawContributionButton bounty={bounty} />
-      ) : (
-        <WithdrawStakeButton bounty={bounty} />
-      )}
+      {userEntry?.passed && <WithdrawStakeButton bounty={bounty} />}
     </>
   )
 })
@@ -199,19 +195,19 @@ const SuccessfulStageButtons = React.memo(({ bounty, t, userEntry, isContributor
 const FailedStageButtons = React.memo(({ bounty, t, userEntry, isContributor }: BountyHeaderButtonsProps) => {
   const hasAnnounced = !!userEntry
   const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const hasLost = hasSubmitted && !userEntry.winner && !userEntry.rejected && !bounty.isTerminated
-  const isTerminated = !bounty.isTerminated && isContributor
+  const canWithdrawStake = hasSubmitted && !userEntry.rejected
 
-  if (!hasAnnounced && !isContributor) {
+  if (bounty.isTerminated || (!hasAnnounced && !isContributor)) {
     return null
   }
+
   return (
     <>
       <ButtonGhost size="large">
         <BellIcon /> {t('common:buttons.notifyAboutChanges')}
       </ButtonGhost>
-      {hasLost && <WithdrawStakeButton bounty={bounty} />}
-      {isTerminated && <WithdrawContributionButton bounty={bounty} />}
+      {canWithdrawStake && <WithdrawStakeButton bounty={bounty} />}
+      {isContributor && <WithdrawContributionButton bounty={bounty} />}
     </>
   )
 })
