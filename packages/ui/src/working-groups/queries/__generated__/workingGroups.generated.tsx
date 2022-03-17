@@ -949,12 +949,14 @@ export type WorkingGroupApplicationFieldsFragment = {
   id: string
   runtimeId: number
   stakingAccount: string
+  stake: any
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
     type: Types.WorkingGroupOpeningType
     rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; id: string; name: string }
+    metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
   }
   applicant: {
     __typename: 'Membership'
@@ -1001,12 +1003,14 @@ export type GetWorkingGroupApplicationsQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
+    stake: any
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
     applicant: {
       __typename: 'Membership'
@@ -1077,12 +1081,14 @@ export type GetWorkingGroupApplicationQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
+    stake: any
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
     applicant: {
       __typename: 'Membership'
@@ -1499,6 +1505,9 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       }
       type
       rewardPerBlock
+      metadata {
+        expectedEnding
+      }
     }
     applicant {
       ...MemberFields
@@ -1512,6 +1521,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       inBlock
       network
     }
+    stake
   }
   ${MemberFieldsFragmentDoc}
 `

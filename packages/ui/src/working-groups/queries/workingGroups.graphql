@@ -345,6 +345,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     }
     type
     rewardPerBlock
+    metadata {
+      expectedEnding
+    }
   }
   applicant {
     ...MemberFields
@@ -358,6 +361,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     inBlock
     network
   }
+  stake
 }
 
 query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {

@@ -9,6 +9,7 @@ import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { useModal } from '@/common/hooks/useModal'
+import { relativeTime } from '@/common/model/relativeTime'
 
 import { openingTitle } from '../helpers'
 import { useRewardPeriod } from '../hooks/useRewardPeriod'
@@ -46,14 +47,14 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
     showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { applicationId: application.id } })
   }, [application.id])
   const rewardPeriod = useRewardPeriod(opening.groupId)
+  const isHired = application.status === 'ApplicationStatusAccepted'
 
   return (
     <ApplicationItemWrap past={past}>
       <ApplicationItemInfo>
         <ToggleableItemInfoTop>
           <ApplicationID title={application.id}>ID: {application.runtimeId}</ApplicationID>
-          {/* TODO: replace hardcoded value with calculated one */}
-          <Subscription>Time left: 6 days 23 minutes</Subscription>
+          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
           <BadgeStatus>{opening.groupName}</BadgeStatus>
           {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
         </ToggleableItemInfoTop>
@@ -68,12 +69,12 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(100)} />
+            <TokenValue value={application.stake} />
           </TextInlineBig>
           <Subscription>Staked</Subscription>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextInlineBig value>No</TextInlineBig>
+          <TextInlineBig value>{isHired ? 'Yes' : 'No'}</TextInlineBig>
           <Subscription>Hired</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
