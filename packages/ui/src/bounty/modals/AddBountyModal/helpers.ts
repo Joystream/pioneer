@@ -14,7 +14,6 @@ import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/mac
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
 
-
 interface Conditions {
   isThreadCategoryLoading?: boolean
   minCherryLimit?: BalanceOf & AugmentedConst<'rxjs'>
