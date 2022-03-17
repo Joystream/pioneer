@@ -78,7 +78,7 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
 
   return {
     id: fields.id,
-    title: `${groupName} Working Group`,
+    title: fields.metadata?.title ?? `${groupName} Working Group`,
     groupId: fields.groupId as GroupIdName,
     groupName: groupName,
     budget: fields.group.budget,
