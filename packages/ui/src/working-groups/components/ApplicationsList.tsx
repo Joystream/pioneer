@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -8,6 +7,7 @@ import { FileIcon } from '@/common/components/icons/FileIcon'
 import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { isInFuture } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
 
@@ -54,7 +54,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
       <ApplicationItemInfo>
         <ToggleableItemInfoTop>
           <ApplicationID title={application.id}>ID: {application.runtimeId}</ApplicationID>
-          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          {isInFuture(opening.expectedEnding) && <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>}
           <BadgeStatus>{opening.groupName}</BadgeStatus>
           {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
         </ToggleableItemInfoTop>

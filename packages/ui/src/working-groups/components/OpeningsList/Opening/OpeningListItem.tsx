@@ -4,6 +4,7 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { TextBig, TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { isInFuture } from '@/common/helpers'
 import { relativeTime } from '@/common/model/relativeTime'
 import {
   ToggleableItemInfo,
@@ -31,7 +32,7 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <Subscription title={`ID: ${opening.id}`}>ID: {opening.runtimeId}</Subscription>
-          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          {isInFuture(opening.expectedEnding) && <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>}
           <BadgeStatus>{opening.groupName}</BadgeStatus>
           {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
         </ToggleableItemInfoTop>
