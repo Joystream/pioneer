@@ -54,7 +54,9 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
       <ApplicationItemInfo>
         <ToggleableItemInfoTop>
           <ApplicationID title={application.id}>ID: {application.runtimeId}</ApplicationID>
-          {isInFuture(opening.expectedEnding) && <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>}
+          {isInFuture(opening.expectedEnding) && (
+            <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          )}
           <BadgeStatus>{opening.groupName}</BadgeStatus>
           {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
         </ToggleableItemInfoTop>

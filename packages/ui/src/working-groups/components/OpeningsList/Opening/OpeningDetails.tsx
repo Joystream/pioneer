@@ -28,7 +28,9 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
     <OpenedContainer onClick={onClick}>
       <OpenedWrapper>
         <OpenedTop>
-          {isInFuture(opening.expectedEnding) && <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>}
+          {isInFuture(opening.expectedEnding) && (
+            <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          )}
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
         <TextBig light>{opening.shortDescription}</TextBig>

@@ -10,7 +10,7 @@ export const plural = (quantity?: unknown, suffix = 's') => (quantity === 1 ? ''
 
 export const cutText = (text: string, length = 100) => (text.length > length ? text.slice(0, length) + '...' : text)
 
-export const isInFuture = (time: string) => { 
+export const isInFuture = (time: string) => {
   const timeAsDate = new Date(time).valueOf()
   return timeAsDate > Date.now()
 }
