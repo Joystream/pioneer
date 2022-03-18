@@ -41,7 +41,21 @@ const bountyButtonsMapper: Record<
   notify: SubmitJudgementButton, // todo
 }
 
-export const getMembershipsStatistics = (bounty?: Bounty, membershipsIdArray: string[]) => {
+const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStatistics> = {
+  announceWorkEntry: 'allMemberIds',
+  cancelBounty: 'idAsCreator',
+  claimReward: 'idsWithReward',
+  contributeFunds: 'allMemberIds',
+  submitWork: 'idsWithEntries',
+  withdrawEntryStake: 'idsWithLoss',
+  withdrawWorkEntry: 'idsWithEntries',
+  withdrawContribution: 'idsWithContribution',
+  submitJudgement: 'idAsOracle',
+  notify: 'allMemberIds',
+  statistics: 'allMemberIds',
+}
+
+export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: Bounty) => {
   const membersWithEntries = bounty?.entries?.filter((entry) => membershipsIdArray.includes(entry.worker.id)) ?? []
   const membersWithSubmission = membersWithEntries.filter((entry) => entry.hasSubmitted)
   const membersWithReward = membersWithSubmission.filter((entry) => isBountyEntryStatusWinner(entry.status))
@@ -53,10 +67,10 @@ export const getMembershipsStatistics = (bounty?: Bounty, membershipsIdArray: st
   const idsWithContribution =
     bounty?.contributors
       .filter((contribution) => membershipsIdArray.includes(contribution.actor?.id ?? '-1'))
-      .map((contribution) => contribution.actor?.id) ?? []
+      .map((contribution) => contribution.actor?.id ?? '-1') ?? []
 
-  const idAsCreator = membershipsIdArray.find((memberId) => bounty?.creator?.id === memberId)
-  const idAsOracle = membershipsIdArray.find((memberId) => bounty?.oracle?.id === memberId)
+  const idAsCreator = membershipsIdArray.filter((memberId) => bounty?.creator?.id === memberId)
+  const idAsOracle = membershipsIdArray.filter((memberId) => bounty?.oracle?.id === memberId)
 
   const extractEntryWorkerId = (entry: WorkEntry) => entry.worker.id
 
@@ -69,6 +83,7 @@ export const getMembershipsStatistics = (bounty?: Bounty, membershipsIdArray: st
     idsWithContribution,
     idAsCreator,
     idAsOracle,
+    allMemberIds: membershipsIdArray,
   }
 }
 
@@ -89,7 +104,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
   switch (bounty.stage) {
     case 'funding': {
       const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
-      const isCancelAvailable = bounty.totalFunding > BN_ZERO && idAsCreator
+      const isCancelAvailable = bounty.totalFunding > BN_ZERO && idAsCreator.length
 
       shouldDisplayStatistics && buttons.push('statistics')
       isCancelAvailable && buttons.push('cancelBounty')
@@ -104,7 +119,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
     }
     case 'judgment': {
       buttons.push('notify')
-      idAsOracle && buttons.push('submitJudgement')
+      idAsOracle.length && buttons.push('submitJudgement')
       break
     }
     case 'successful': {
@@ -121,7 +136,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
       break
     }
     case 'expired': {
-      idAsCreator && buttons.push('cancelBounty')
+      idAsCreator.length && buttons.push('cancelBounty')
       break
     }
   }
@@ -139,13 +154,13 @@ interface Props {
 }
 
 export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) => {
-  const { active: activeMember, members } = useMyMemberships()
+  const { members } = useMyMemberships()
 
-  const membershipsIdArray = useMemo(() => members.map((member) => member.id), [members.length])
+  const membershipsIdArray = useMemo(() => members.map((member) => member.id), [members])
 
   const membershipsBountyStatistics = useMemo(
-    () => getMembershipsStatistics(bounty, membershipsIdArray),
-    [members.length, bounty]
+    () => getMembershipsStatistics(membershipsIdArray, bounty),
+    [membershipsIdArray, bounty]
   )
 
   const compiledButtons = useMemo(() => {
@@ -153,16 +168,20 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
       return null
     }
 
-    const buttonsProps: BountyHeaderButtonsProps = { bounty, noActiveMemberCall: () => undefined }
-
     const buttons = bountyHeaderButtonsFactory(bounty, membershipsBountyStatistics)
 
     return buttons.map((button) => {
       const Component = bountyButtonsMapper[button]
 
-      return <Component {...buttonsProps} />
+      return (
+        <Component
+          key={button}
+          bounty={bounty}
+          validMemberIds={membershipsBountyStatistics[buttonValidMembersMapper[button]]}
+        />
+      )
     })
-  }, [bounty, activeMember])
+  }, [bounty, members])
 
   const badges = useMemo(
     () => (

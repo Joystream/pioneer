@@ -5,7 +5,7 @@ export type BountyMembershipsStatistics = ReturnType<typeof getMembershipsStatis
 
 export interface BountyHeaderButtonsProps {
   bounty: Bounty
-  noActiveMemberCall: () => void
+  validMemberIds: string[]
 }
 
 export type ButtonTypes =
