@@ -48,7 +48,7 @@ describe('WorkingGroup', () => {
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
     expect(await screen.findAllByText(/^forum Working Group regular$/i)).toHaveLength(2)
-    expect(await screen.findAllByText(/^forum Working Group$/i)).toHaveLength(2)
+    expect(await screen.findAllByText(UPCOMING_OPENING.metadata.title)).toHaveLength(2)
   })
 
   function renderPage(path = '/working-groups/forum') {

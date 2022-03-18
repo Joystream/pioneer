@@ -3,8 +3,8 @@
     "id": "0",
     "cycleId": 0,
     "isFinished": true,
-    "endedAtBlock": 33620,
-    "endedAtTime": "2021-10-24T08:55:06.257Z",
+    "endedAtBlock": 47289,
+    "endedAtTime": "2022-03-02T18:37:28.188Z",
     "endedAtNetwork": "OLYMPIA",
     "electedCouncilId": "0"
   },
@@ -12,8 +12,8 @@
     "id": "1",
     "cycleId": 1,
     "isFinished": true,
-    "endedAtBlock": 74737,
-    "endedAtTime": "2021-12-20T21:47:28.379Z",
+    "endedAtBlock": 60014,
+    "endedAtTime": "2022-03-12T18:48:03.625Z",
     "endedAtNetwork": "OLYMPIA",
     "electedCouncilId": "1"
   },
@@ -21,8 +21,8 @@
     "id": "2",
     "cycleId": 2,
     "isFinished": true,
-    "endedAtBlock": 31884,
-    "endedAtTime": "2022-01-10T12:39:40.852Z",
+    "endedAtBlock": 20126,
+    "endedAtTime": "2021-10-04T15:55:52.437Z",
     "endedAtNetwork": "OLYMPIA",
     "electedCouncilId": "2"
   },
@@ -30,8 +30,8 @@
     "id": "3",
     "cycleId": 3,
     "isFinished": true,
-    "endedAtBlock": 66763,
-    "endedAtTime": "2022-02-02T22:20:22.951Z",
+    "endedAtBlock": 43729,
+    "endedAtTime": "2021-11-19T08:25:37.930Z",
     "endedAtNetwork": "OLYMPIA",
     "electedCouncilId": "3"
   },

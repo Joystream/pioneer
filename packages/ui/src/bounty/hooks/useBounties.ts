@@ -17,7 +17,7 @@ export interface QueryExtraFilter<T> {
 }
 
 export interface UseBountiesProps {
-  order: SortOrder<BountyOrderByInput>
+  order?: SortOrder<BountyOrderByInput>
   perPage?: number
   filters?: BountyFiltersState
   status: BountyStatus
@@ -25,7 +25,7 @@ export interface UseBountiesProps {
 }
 
 export const useBounties = ({ order, perPage = 10, filters, status, extraFilter }: UseBountiesProps) => {
-  const orderBy = toQueryOrderByInput<BountyOrderByInput>(order)
+  const orderBy = order ? toQueryOrderByInput<BountyOrderByInput>(order) : BountyOrderByInput.CreatedAtDesc
   const { data: dataCount } = useGetBountiesCountQuery()
   const totalCountPerPage = dataCount?.bountiesConnection.totalCount
   const { offset, pagination } = usePagination(perPage, totalCountPerPage ?? 0, [order])
@@ -80,11 +80,12 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
     return { where, orderBy, limit: perPage, offset }
   }, [status, JSON.stringify(filters)])
 
-  const { loading, data } = useGetBountiesQuery({ variables })
+  const { loading, data, refetch } = useGetBountiesQuery({ variables })
 
   return {
     isLoading: loading,
     bounties: data?.bounties.map(asBounty) ?? [],
     pagination: pagination,
+    refetch,
   }
 }

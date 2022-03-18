@@ -80,16 +80,12 @@ interface BountyHeaderButtonsProps {
 
 const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeaderButtonsProps) => {
   const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
-  const bountyCreator = bounty.creator
-  const isCreator = bountyCreator?.id === activeMember?.id
-  const isCancelAvailable = bounty.totalFunding > BN_ZERO
+  const isCancelAvailable = bounty.totalFunding > BN_ZERO && activeMember?.id === bounty.creator?.id
 
-  if (!isCreator || !bountyCreator) {
-    return <ContributeFundsButton bounty={bounty} />
+  if (isCancelAvailable && bounty.creator) {
+    return <CancelBountyButton bounty={bounty} creator={bounty.creator} />
   }
-  if (isCancelAvailable) {
-    return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
-  }
+
   return (
     <>
       {shouldDisplayStatistics && (
@@ -102,6 +98,7 @@ const FundingStageButtons = React.memo(({ bounty, t, activeMember }: BountyHeade
           </div>
         </>
       )}
+      <ContributeFundsButton bounty={bounty} />
     </>
   )
 })

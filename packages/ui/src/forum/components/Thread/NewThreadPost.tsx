@@ -82,7 +82,7 @@ export const NewThreadPost = React.forwardRef(
               transaction &&
                 showModal<CreatePostModalCall>({
                   modal: 'CreatePost',
-                  data: { postText, replyTo, transaction, isEditable, onSuccess },
+                  data: { module: 'proposalsDiscussion', postText, replyTo, transaction, isEditable, onSuccess },
                 })
             }}
             disabled={postText === ''}

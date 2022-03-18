@@ -15,6 +15,8 @@ interface TransactionContext {
 
 export enum AnnounceWorkEntryStates {
   requirementsVerification = 'requirementsVerification',
+  beforeTransaction = 'beforeTransaction',
+  bindStakingAccount = 'bindStakingAccount',
   contribute = 'contribute',
   transaction = 'transaction',
   success = 'success',
@@ -22,12 +24,14 @@ export enum AnnounceWorkEntryStates {
   cancel = 'cancel',
 }
 
-type NextEvent = { type: 'NEXT' }
+type NextEvent = { type: 'NEXT' } | { type: 'BOUND' } | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
 export type AnnounceWorkEntryEvents = NextEvent
 
 export type AnnounceWorkEntryState =
   | { value: AnnounceWorkEntryStates.requirementsVerification; context: EmptyObject }
+  | { value: AnnounceWorkEntryStates.bindStakingAccount; context: EmptyObject }
+  | { value: AnnounceWorkEntryStates.beforeTransaction; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.contribute; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.transaction; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.success; context: EmptyObject }
@@ -46,10 +50,30 @@ export const announceWorkEntryMachine = createMachine<
         NEXT: AnnounceWorkEntryStates.contribute,
       },
     },
+    beforeTransaction: {
+      id: AnnounceWorkEntryStates.beforeTransaction,
+      on: {
+        BOUND: AnnounceWorkEntryStates.transaction,
+        REQUIRES_STAKING_CANDIDATE: AnnounceWorkEntryStates.bindStakingAccount,
+      },
+    },
+    [AnnounceWorkEntryStates.bindStakingAccount]: {
+      invoke: {
+        id: AnnounceWorkEntryStates.bindStakingAccount,
+        src: transactionMachine,
+        onDone: [
+          {
+            target: AnnounceWorkEntryStates.transaction,
+            cond: isTransactionSuccess,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+          },
+        ],
+      },
+    },
     [AnnounceWorkEntryStates.contribute]: {
       id: AnnounceWorkEntryStates.contribute,
       on: {
-        NEXT: AnnounceWorkEntryStates.transaction,
+        NEXT: AnnounceWorkEntryStates.beforeTransaction,
       },
     },
     [AnnounceWorkEntryStates.transaction]: {

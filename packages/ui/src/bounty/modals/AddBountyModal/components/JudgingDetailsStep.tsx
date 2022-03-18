@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import { JudgingPeriodDetailsContext, WorkingPeriodDetailsContext } from '@/bounty/modals/AddBountyModal/machine'
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -8,7 +8,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextHuge } from '@/common/components/typography'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { SelectMember } from '@/memberships/components/SelectMember'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
 interface Props extends Omit<JudgingPeriodDetailsContext, keyof WorkingPeriodDetailsContext> {
@@ -17,10 +16,6 @@ interface Props extends Omit<JudgingPeriodDetailsContext, keyof WorkingPeriodDet
 }
 
 export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, setJudgingPeriodLength }: Props) => {
-  const { active } = useMyMemberships()
-
-  const oracleFilter = useCallback((member) => member.id !== active?.id, [active])
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -48,7 +43,7 @@ export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, set
       </Row>
       <Row>
         <InputComponent label="Oracle" required inputSize="l">
-          <SelectMember onChange={(newOracle) => setOracle(newOracle)} selected={oracle} filter={oracleFilter} />
+          <SelectMember onChange={(newOracle) => setOracle(newOracle)} selected={oracle} />
         </InputComponent>
       </Row>
     </RowGapBlock>

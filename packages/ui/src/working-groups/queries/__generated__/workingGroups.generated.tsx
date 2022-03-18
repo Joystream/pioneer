@@ -516,6 +516,7 @@ export type GetRewardsQuery = {
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
+  title?: string | null
   applicationDetails?: string | null
   shortDescription?: string | null
   description?: string | null
@@ -536,6 +537,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     applicationDetails?: string | null
     shortDescription?: string | null
     description?: string | null
@@ -601,6 +603,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     applicationDetails?: string | null
     shortDescription?: string | null
     description?: string | null
@@ -657,6 +660,7 @@ export type GetWorkingGroupOpeningsQuery = {
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -743,6 +747,7 @@ export type GetWorkingGroupOpeningQuery = {
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -1165,6 +1170,7 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     applicationDetails?: string | null
     shortDescription?: string | null
     description?: string | null
@@ -1190,6 +1196,7 @@ export type GetUpcomingWorkingGroupOpeningQuery = {
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -1218,6 +1225,7 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -1388,6 +1396,7 @@ export const RewardPaidEventFieldsFragmentDoc = gql`
 `
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+    title
     applicationDetails
     shortDescription
     description

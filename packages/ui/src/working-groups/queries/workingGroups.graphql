@@ -170,6 +170,7 @@ query GetRewards($where: RewardPaidEventWhereInput) {
 }
 
 fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+  title
   applicationDetails
   shortDescription
   description
