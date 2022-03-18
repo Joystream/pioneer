@@ -1,26 +1,22 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BountyHeaderButtonsProps } from '@/bounty/components/BountyPreviewHeader/types'
 import { BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
-import { Bounty } from '@/bounty/types/Bounty'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
-import { Member } from '@/memberships/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface Props {
-  bounty: Bounty
-  creator: Member
-}
-
-export const CancelBountyButton = React.memo(({ bounty, creator }: Props) => {
+export const CancelBountyButton = React.memo(({ bounty }: BountyHeaderButtonsProps) => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
+  const { members } = useMyMemberships()
   const bountyCancelModal = useCallback(() => {
     showModal<BountyCancelModalCall>({
       modal: 'BountyCancel',
       data: {
         bounty,
-        creator,
+        creator: bounty.creator ?? members[0],
       },
     })
   }, [])
