@@ -6,6 +6,7 @@ import { TransactionButton } from '@/common/components/buttons/TransactionButton
 import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { isInFuture } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
 import { OpeningListItemProps } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
@@ -27,7 +28,9 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
     <OpenedContainer onClick={onClick}>
       <OpenedWrapper>
         <OpenedTop>
-          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          {isInFuture(opening.expectedEnding) && (
+            <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          )}
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
         <TextBig light>{opening.shortDescription}</TextBig>

@@ -145,8 +145,8 @@
     "inBlock": 79668,
     "createdAt": "2021-11-30T15:04:38.348Z",
     "network": "OLYMPIA",
-    "proposalId": "5",
-    "voteKind": "REJECT",
+    "proposalId": "18",
+    "voteKind": "SLASH",
     "votingRound": 1
   },
   {

@@ -53,8 +53,8 @@
   },
   {
     "electionRoundId": "0",
-    "stake": 6000,
-    "stakeLocked": false,
+    "stake": 10000,
+    "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "0-3",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -105,7 +105,7 @@
   },
   {
     "electionRoundId": "0",
-    "stake": 6000,
+    "stake": 7000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
@@ -118,8 +118,8 @@
   },
   {
     "electionRoundId": "0",
-    "stake": 9000,
-    "stakeLocked": true,
+    "stake": 1000,
+    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "0-2",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -170,10 +170,10 @@
   },
   {
     "electionRoundId": "0",
-    "stake": 2000,
+    "stake": 3000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
+    "voteForId": "0-4",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "voteCastEvent": {
       "inBlock": 67640,
@@ -183,7 +183,7 @@
   },
   {
     "electionRoundId": "0",
-    "stake": 3000,
+    "stake": 7000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "0-3",
@@ -264,7 +264,7 @@
     "stake": 1000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "1-5",
+    "voteForId": "1-0",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "voteCastEvent": {
       "inBlock": 93208,
@@ -277,7 +277,7 @@
     "stake": 9000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": "1-1",
+    "voteForId": null,
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "voteCastEvent": {
       "inBlock": 92669,
@@ -404,8 +404,8 @@
   },
   {
     "electionRoundId": "1",
-    "stake": 1000,
-    "stakeLocked": true,
+    "stake": 9000,
+    "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -667,7 +667,7 @@
     "stake": 1000,
     "stakeLocked": false,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
+    "voteForId": "2-0",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "voteCastEvent": {
       "inBlock": 72792,
@@ -795,7 +795,7 @@
   {
     "electionRoundId": "3",
     "stake": 3000,
-    "stakeLocked": false,
+    "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "3-1",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -901,7 +901,7 @@
     "stake": 6000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
+    "voteForId": "3-3",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "voteCastEvent": {
       "inBlock": 19682,
@@ -950,7 +950,7 @@
   },
   {
     "electionRoundId": "3",
-    "stake": 2000,
+    "stake": 6000,
     "stakeLocked": true,
     "castBy": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "voteForId": "3-0",
@@ -1106,7 +1106,7 @@
   },
   {
     "electionRoundId": "4",
-    "stake": 9000,
+    "stake": 6000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": null,
@@ -1122,7 +1122,7 @@
     "stake": 4000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
-    "voteForId": null,
+    "voteForId": "4-5",
     "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "voteCastEvent": {
       "inBlock": 33503,
@@ -1158,7 +1158,7 @@
   },
   {
     "electionRoundId": "4",
-    "stake": 4000,
+    "stake": 7000,
     "stakeLocked": true,
     "castBy": "5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU",
     "voteForId": "4-2",
@@ -1210,7 +1210,7 @@
   },
   {
     "electionRoundId": "4",
-    "stake": 9000,
+    "stake": 5000,
     "stakeLocked": true,
     "castBy": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
     "voteForId": null,

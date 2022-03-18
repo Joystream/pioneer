@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { TextBig, TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
@@ -27,6 +28,7 @@ export const UpcomingOpeningListItem = ({ opening, onClick }: UpcomingProps) => 
         <ToggleableItemInfoTop>
           <Subscription title={`ID: ${opening.id}`}>ID: {opening.id}</Subscription>
           <Subscription>Starts {relativeTime(opening.expectedStart)}</Subscription>
+          <BadgeStatus>{opening.groupName}</BadgeStatus>
         </ToggleableItemInfoTop>
         <ToggleableItemTitle>{opening.title}</ToggleableItemTitle>
       </ToggleableItemInfo>
