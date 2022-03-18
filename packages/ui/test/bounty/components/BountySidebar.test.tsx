@@ -14,7 +14,7 @@ describe('UI: Bounty Sidebar', () => {
   }
   const contributors: Contributor[] = [
     // Alice
-    { actor: memberMock[0] as unknown as Member, amount: new BN(1000) },
+    { id: '1', actor: memberMock[0] as unknown as Member, amount: new BN(1000) },
   ]
   const entrants: Entrant[] = [
     // Bob
