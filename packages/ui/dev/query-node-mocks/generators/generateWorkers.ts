@@ -25,6 +25,7 @@ const generateApplication = (opening: OpeningMock, status = 'pending') => (appli
       answer: faker.lorem.words(randomFromRange(5, 10)),
     })),
     status,
+    stake: randomFromRange(3, 8) * 1000,
   }
 }
 

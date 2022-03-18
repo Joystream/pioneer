@@ -7,14 +7,15 @@
     "answers": [
       {
         "questionId": "2",
-        "answer": "et molestias quia laudantium non consequatur"
+        "answer": "hic quidem sint nihil et omnis"
       },
       {
         "questionId": "3",
-        "answer": "nobis molestias et voluptas consequatur voluptate autem tempore qui voluptatibus"
+        "answer": "rem sunt incidunt error ea perferendis voluptatem excepturi aut"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "forumWorkingGroup-1",
@@ -24,14 +25,15 @@
     "answers": [
       {
         "questionId": "2",
-        "answer": "deserunt enim temporibus quis laborum qui"
+        "answer": "qui quidem est autem repudiandae vero vero"
       },
       {
         "questionId": "3",
-        "answer": "ad et esse quaerat modi qui qui"
+        "answer": "totam necessitatibus repellendus iusto in cupiditate ut vitae dolor"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "forumWorkingGroup-2",
@@ -41,14 +43,15 @@
     "answers": [
       {
         "questionId": "2",
-        "answer": "necessitatibus ipsum sapiente accusamus magnam"
+        "answer": "quia doloremque est aut reprehenderit"
       },
       {
         "questionId": "3",
-        "answer": "asperiores porro sequi provident consequuntur ut nesciunt"
+        "answer": "explicabo nam enim autem ab rem aut eaque"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "forumWorkingGroup-3",
@@ -58,3719 +61,3974 @@
     "answers": [
       {
         "questionId": "2",
-        "answer": "qui velit iure ipsum et aperiam est consectetur"
+        "answer": "quia explicabo voluptate nobis sapiente autem ullam aut dignissimos"
       },
       {
         "questionId": "3",
-        "answer": "architecto consequatur delectus repudiandae qui ut"
+        "answer": "voluptatem qui non libero voluptas maxime illum qui qui"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-4",
     "runtimeId": 4,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "29",
+    "applicantId": "5",
     "answers": [
       {
         "questionId": "2",
-        "answer": "exercitationem omnis saepe ab rem aliquam omnis aspernatur et"
+        "answer": "quidem vel aliquid soluta sit"
       },
       {
         "questionId": "3",
-        "answer": "aut sunt ullam et quod quia error nemo odio dicta"
+        "answer": "molestias perspiciatis et rerum ea sed illo quis qui"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-5",
     "runtimeId": 5,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "29",
+    "applicantId": "5",
     "answers": [
       {
         "questionId": "2",
-        "answer": "quia provident laborum ut non et"
+        "answer": "eum omnis consequatur et cupiditate est est necessitatibus"
       },
       {
         "questionId": "3",
-        "answer": "possimus quia dolores labore rerum quia esse voluptas"
+        "answer": "corporis libero repellendus eaque omnis autem excepturi sint"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "forumWorkingGroup-6",
     "runtimeId": 6,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "22",
+    "applicantId": "27",
     "answers": [
       {
         "questionId": "2",
-        "answer": "illum iure nostrum explicabo dolorem tempora omnis ut"
+        "answer": "dolores dolore necessitatibus itaque sunt fugit dolorum aliquam"
       },
       {
         "questionId": "3",
-        "answer": "vel ipsum rem amet quia ipsum ut nostrum"
+        "answer": "qui placeat sit porro aut commodi autem sed"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "forumWorkingGroup-7",
     "runtimeId": 7,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "22",
+    "applicantId": "27",
     "answers": [
       {
         "questionId": "2",
-        "answer": "qui repellat eum voluptates nihil beatae quis dignissimos"
+        "answer": "rerum ducimus est provident quia qui laboriosam"
       },
       {
         "questionId": "3",
-        "answer": "error et et asperiores dolorem voluptatem consequatur"
+        "answer": "cumque quia impedit non necessitatibus labore ut"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-8",
     "runtimeId": 8,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "48",
+    "applicantId": "39",
     "answers": [
       {
         "questionId": "2",
-        "answer": "reiciendis pariatur doloremque fuga blanditiis ut quod"
+        "answer": "alias optio mollitia nemo ea molestiae molestiae"
       },
       {
         "questionId": "3",
-        "answer": "voluptatem minima sunt non perspiciatis aut"
+        "answer": "sit eos sint nemo qui et adipisci quo"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "forumWorkingGroup-9",
     "runtimeId": 9,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "48",
+    "applicantId": "39",
     "answers": [
       {
         "questionId": "2",
-        "answer": "fugit ipsum non amet non est commodi sed ab"
+        "answer": "quos aut iusto ea similique assumenda et nesciunt quos"
       },
       {
         "questionId": "3",
-        "answer": "amet quae ratione sit doloremque dolorem vero voluptates dolor"
+        "answer": "quasi quia voluptatibus velit ab"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "forumWorkingGroup-10",
     "runtimeId": 10,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "17",
+    "applicantId": "23",
     "answers": [
       {
         "questionId": "2",
-        "answer": "repellat ut qui consequatur soluta autem"
+        "answer": "consequatur voluptas impedit reprehenderit quis architecto eos facilis aspernatur"
       },
       {
         "questionId": "3",
-        "answer": "sunt vel dolorem quisquam magni minima dolor"
+        "answer": "facilis quam omnis nostrum magni consequuntur"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-11",
     "runtimeId": 11,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "17",
+    "applicantId": "23",
     "answers": [
       {
         "questionId": "2",
-        "answer": "incidunt dolores fugiat voluptatem ut est omnis exercitationem quae"
+        "answer": "neque earum quidem nobis voluptate modi qui ut et"
       },
       {
         "questionId": "3",
-        "answer": "enim natus id voluptate ducimus deserunt aliquam optio"
+        "answer": "dolorum et ipsum odio amet dolor sequi magni sapiente"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-12",
     "runtimeId": 12,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "9",
+    "applicantId": "17",
     "answers": [
       {
         "questionId": "2",
-        "answer": "impedit dolor nulla nostrum deserunt"
+        "answer": "delectus sunt et voluptate minus vel harum iure beatae vero"
       },
       {
         "questionId": "3",
-        "answer": "tempore voluptatem aut et culpa"
+        "answer": "repudiandae beatae rerum quidem aliquid aut officia"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "forumWorkingGroup-13",
     "runtimeId": 13,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "9",
+    "applicantId": "17",
     "answers": [
       {
         "questionId": "2",
-        "answer": "possimus doloribus sunt corrupti nam dolor quo veritatis"
+        "answer": "possimus hic provident occaecati rerum aut quia ipsa"
       },
       {
         "questionId": "3",
-        "answer": "voluptatem illum eligendi qui et non"
+        "answer": "harum magni recusandae in odio debitis iste cumque"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-14",
     "runtimeId": 14,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "41",
+    "applicantId": "22",
     "answers": [
       {
         "questionId": "2",
-        "answer": "sequi in et incidunt et nulla accusamus nisi"
+        "answer": "saepe aliquam quis non quisquam vitae omnis vero laboriosam"
       },
       {
         "questionId": "3",
-        "answer": "sequi odit eius sapiente aliquam voluptate animi"
+        "answer": "ut aliquam esse qui quisquam nihil vero aspernatur"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "forumWorkingGroup-15",
     "runtimeId": 15,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "41",
+    "applicantId": "22",
     "answers": [
       {
         "questionId": "2",
-        "answer": "numquam aut eum sed consequatur eius officia ratione"
+        "answer": "aut quo et veniam similique error eos"
       },
       {
         "questionId": "3",
-        "answer": "expedita deserunt quaerat sint autem veritatis"
+        "answer": "numquam debitis deleniti ut omnis id"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
     "id": "forumWorkingGroup-16",
     "runtimeId": 16,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "49",
+    "applicantId": "13",
     "answers": [
       {
         "questionId": "2",
-        "answer": "facere quos enim perspiciatis eum recusandae dolores facere"
+        "answer": "qui saepe cumque minima quo quod quia nemo hic"
       },
       {
         "questionId": "3",
-        "answer": "dignissimos et consectetur eius dolor velit optio a"
+        "answer": "deserunt blanditiis cupiditate consectetur cupiditate inventore quasi ut eum sint"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "forumWorkingGroup-17",
     "runtimeId": 17,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "49",
+    "applicantId": "13",
     "answers": [
       {
         "questionId": "2",
-        "answer": "ratione et voluptatem a soluta unde commodi unde ab"
+        "answer": "est maxime iusto ipsam vel in et fuga harum voluptatum"
       },
       {
         "questionId": "3",
-        "answer": "minima est sint debitis earum perferendis"
+        "answer": "at aut ipsam quia fugit ab qui molestiae est"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-18",
     "runtimeId": 18,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "30",
+    "applicantId": "28",
     "answers": [
       {
         "questionId": "2",
-        "answer": "consequatur et id et magnam praesentium"
+        "answer": "dolorem praesentium numquam blanditiis inventore alias"
       },
       {
         "questionId": "3",
-        "answer": "impedit doloremque quia aliquam dolor"
+        "answer": "et assumenda et et sed qui"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-19",
     "runtimeId": 19,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "30",
+    "applicantId": "28",
     "answers": [
       {
         "questionId": "2",
-        "answer": "minus consequatur iure eius explicabo quia et"
+        "answer": "quam aut fuga iure dignissimos quia"
       },
       {
         "questionId": "3",
-        "answer": "quas pariatur saepe voluptatem enim aliquid quo"
+        "answer": "quis corrupti nihil in in ullam"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "forumWorkingGroup-20",
     "runtimeId": 20,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "3",
+    "applicantId": "40",
     "answers": [
       {
         "questionId": "2",
-        "answer": "quis rerum in soluta atque et temporibus"
+        "answer": "asperiores soluta et eum libero adipisci voluptatem"
       },
       {
         "questionId": "3",
-        "answer": "dolorem ullam est officiis ut reiciendis voluptatem"
+        "answer": "non est est esse quis"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "forumWorkingGroup-21",
     "runtimeId": 21,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "3",
+    "applicantId": "40",
     "answers": [
       {
         "questionId": "2",
-        "answer": "at alias qui iusto eum tenetur in expedita"
+        "answer": "accusamus eos quo delectus delectus iure rerum nihil"
       },
       {
         "questionId": "3",
-        "answer": "voluptatem ut quia quam impedit quos enim enim voluptatem quasi"
+        "answer": "at inventore facilis fugiat aspernatur voluptatibus voluptates deserunt"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-22",
     "runtimeId": 22,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "23",
+    "applicantId": "8",
     "answers": [
       {
         "questionId": "2",
-        "answer": "delectus repudiandae earum pariatur sunt nulla suscipit quidem"
+        "answer": "molestiae sit consequuntur omnis incidunt et et"
       },
       {
         "questionId": "3",
-        "answer": "dolor repudiandae animi et quasi consectetur corrupti"
+        "answer": "aut incidunt aut corrupti ut vel error"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "forumWorkingGroup-23",
     "runtimeId": 23,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "23",
+    "applicantId": "8",
     "answers": [
       {
         "questionId": "2",
-        "answer": "nobis ut consequatur placeat officia"
+        "answer": "perspiciatis adipisci omnis nam eaque delectus asperiores"
       },
       {
         "questionId": "3",
-        "answer": "quasi officiis fugiat voluptate occaecati officiis"
+        "answer": "qui consequatur possimus harum hic consectetur nobis voluptatum ut"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-24",
     "runtimeId": 24,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "26",
+    "applicantId": "36",
     "answers": [
       {
         "questionId": "2",
-        "answer": "quis et aut ducimus assumenda maiores"
+        "answer": "tempore autem sit non reiciendis et sit ab"
       },
       {
         "questionId": "3",
-        "answer": "sed dolorem sequi quo mollitia quia"
+        "answer": "soluta qui cupiditate magni sint ratione quae nesciunt corporis"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-25",
     "runtimeId": 25,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "26",
+    "applicantId": "36",
     "answers": [
       {
         "questionId": "2",
-        "answer": "qui amet sed quisquam quis et"
+        "answer": "quasi aut praesentium veniam et consequatur"
       },
       {
         "questionId": "3",
-        "answer": "aut qui enim neque molestias non aut et"
+        "answer": "et possimus sit distinctio dicta corporis"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-26",
     "runtimeId": 26,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "18",
+    "applicantId": "25",
     "answers": [
       {
         "questionId": "2",
-        "answer": "perspiciatis quam voluptates ipsam quod est"
+        "answer": "quaerat magni vitae enim est laborum veniam est omnis eum"
       },
       {
         "questionId": "3",
-        "answer": "sit rerum dolor nulla eius est ea et"
+        "answer": "eveniet quod sint dolor atque"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "forumWorkingGroup-27",
     "runtimeId": 27,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "18",
+    "applicantId": "25",
     "answers": [
       {
         "questionId": "2",
-        "answer": "molestiae sed voluptas voluptas distinctio"
+        "answer": "sapiente ad ut tenetur dolores voluptates dolor cupiditate consequatur nam"
       },
       {
         "questionId": "3",
-        "answer": "aut harum aliquam eaque pariatur rerum rerum adipisci eos"
+        "answer": "doloremque quis distinctio accusamus est"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "forumWorkingGroup-28",
     "runtimeId": 28,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "25",
+    "applicantId": "44",
     "answers": [
       {
         "questionId": "2",
-        "answer": "velit accusamus neque alias amet"
+        "answer": "voluptas quae nemo dolor voluptatem sint"
       },
       {
         "questionId": "3",
-        "answer": "consequatur officia eveniet dolorum voluptas natus consequatur quae qui"
+        "answer": "a doloribus similique voluptas at et necessitatibus"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-29",
     "runtimeId": 29,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "25",
+    "applicantId": "44",
     "answers": [
       {
         "questionId": "2",
-        "answer": "tempora nulla molestias ut est sit eum incidunt"
+        "answer": "nobis consequatur dolor ab earum fugiat asperiores ea"
       },
       {
         "questionId": "3",
-        "answer": "mollitia ea aut neque eius odio repudiandae vel"
+        "answer": "eos eos blanditiis excepturi occaecati voluptatem vitae"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "forumWorkingGroup-30",
     "runtimeId": 30,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "31",
+    "applicantId": "8",
     "answers": [
       {
         "questionId": "2",
-        "answer": "asperiores excepturi delectus saepe ad"
+        "answer": "facilis vel aspernatur ut exercitationem nostrum laudantium molestiae et qui"
       },
       {
         "questionId": "3",
-        "answer": "iste corrupti et odit voluptatem vero maxime adipisci"
+        "answer": "ducimus dolorum sit quis inventore perferendis"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "forumWorkingGroup-31",
     "runtimeId": 31,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "31",
+    "applicantId": "8",
     "answers": [
       {
         "questionId": "2",
-        "answer": "dolorem impedit dignissimos nam possimus reiciendis"
+        "answer": "necessitatibus laudantium rem occaecati quis velit et"
       },
       {
         "questionId": "3",
-        "answer": "hic saepe autem quasi ut adipisci"
+        "answer": "delectus asperiores maiores accusamus placeat laudantium quisquam ipsa necessitatibus"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "forumWorkingGroup-32",
     "runtimeId": 32,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "40",
+    "applicantId": "6",
     "answers": [
       {
         "questionId": "2",
-        "answer": "enim accusantium ipsa facere aut quis"
+        "answer": "at error nisi culpa voluptatibus ex"
       },
       {
         "questionId": "3",
-        "answer": "sit consectetur qui ut est ut quam et"
+        "answer": "perferendis fugiat sunt molestias quo enim nobis doloremque in"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "forumWorkingGroup-33",
     "runtimeId": 33,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "40",
+    "applicantId": "6",
     "answers": [
       {
         "questionId": "2",
-        "answer": "voluptatem aperiam vitae repudiandae molestiae"
+        "answer": "sint rerum enim expedita maiores vel necessitatibus aut"
       },
       {
         "questionId": "3",
-        "answer": "atque officiis deleniti dolores cupiditate illo aut"
+        "answer": "quo est omnis et commodi ut saepe commodi error"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
-    "id": "storageWorkingGroup-34",
+    "id": "forumWorkingGroup-34",
     "runtimeId": 34,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "0",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "13",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "quis expedita consequatur ipsum deleniti est rerum consectetur mollitia et"
+        "questionId": "2",
+        "answer": "sunt asperiores facere rem doloribus libero nesciunt"
       },
       {
-        "questionId": "17",
-        "answer": "reiciendis quis vitae illum provident rem ut"
+        "questionId": "3",
+        "answer": "quasi dolor voluptate sunt doloremque sequi"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
-    "id": "storageWorkingGroup-35",
+    "id": "forumWorkingGroup-35",
     "runtimeId": 35,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "0",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "13",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "qui qui quod mollitia ipsum sed reiciendis"
+        "questionId": "2",
+        "answer": "itaque voluptate dolorem laboriosam at id veritatis"
       },
       {
-        "questionId": "17",
-        "answer": "quia qui enim aut voluptatibus harum hic velit"
+        "questionId": "3",
+        "answer": "omnis quis sed voluptas quas totam odio atque"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
-    "id": "storageWorkingGroup-36",
+    "id": "forumWorkingGroup-36",
     "runtimeId": 36,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "1",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "31",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "minima amet qui non voluptate fugit porro et sunt"
+        "questionId": "2",
+        "answer": "nostrum magnam qui nisi optio eum hic vero"
       },
       {
-        "questionId": "17",
-        "answer": "maiores qui harum quaerat eum totam aut"
+        "questionId": "3",
+        "answer": "nesciunt officiis dignissimos voluptates aspernatur sed ducimus eum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
-    "id": "storageWorkingGroup-37",
+    "id": "forumWorkingGroup-37",
     "runtimeId": 37,
-    "openingId": "storageWorkingGroup-8",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "31",
+    "answers": [
+      {
+        "questionId": "2",
+        "answer": "magnam rerum cupiditate alias rerum ad nihil"
+      },
+      {
+        "questionId": "3",
+        "answer": "aut qui sapiente dolores non est aut rem qui fugiat"
+      }
+    ],
+    "status": "pending",
+    "stake": 5000
+  },
+  {
+    "id": "forumWorkingGroup-38",
+    "runtimeId": 38,
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "10",
+    "answers": [
+      {
+        "questionId": "2",
+        "answer": "mollitia eos mollitia accusantium est deserunt et omnis eius"
+      },
+      {
+        "questionId": "3",
+        "answer": "est non molestiae sunt aliquid pariatur a natus"
+      }
+    ],
+    "status": "filled",
+    "stake": 5000
+  },
+  {
+    "id": "forumWorkingGroup-39",
+    "runtimeId": 39,
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "10",
+    "answers": [
+      {
+        "questionId": "2",
+        "answer": "quia consequatur impedit et hic ratione natus assumenda"
+      },
+      {
+        "questionId": "3",
+        "answer": "sit sed odit enim quis"
+      }
+    ],
+    "status": "pending",
+    "stake": 6000
+  },
+  {
+    "id": "forumWorkingGroup-40",
+    "runtimeId": 40,
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "41",
+    "answers": [
+      {
+        "questionId": "2",
+        "answer": "ut sed aperiam odio praesentium qui quia rerum aut"
+      },
+      {
+        "questionId": "3",
+        "answer": "quis corrupti deleniti maiores dolorem quidem qui quisquam quidem ipsa"
+      }
+    ],
+    "status": "filled",
+    "stake": 8000
+  },
+  {
+    "id": "forumWorkingGroup-41",
+    "runtimeId": 41,
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "41",
+    "answers": [
+      {
+        "questionId": "2",
+        "answer": "esse animi officia nihil saepe maiores"
+      },
+      {
+        "questionId": "3",
+        "answer": "voluptatem esse nesciunt et accusamus ipsum"
+      }
+    ],
+    "status": "pending",
+    "stake": 3000
+  },
+  {
+    "id": "forumWorkingGroup-42",
+    "runtimeId": 42,
+    "openingId": "forumWorkingGroup-1",
     "applicantId": "1",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "veritatis quia recusandae perspiciatis excepturi et"
+        "questionId": "2",
+        "answer": "nemo nam autem rerum non voluptatem dolor"
       },
       {
-        "questionId": "17",
-        "answer": "velit veniam at aut eos quis provident magnam omnis vitae"
+        "questionId": "3",
+        "answer": "qui quidem sed eum sint facilis qui"
       }
     ],
-    "status": "pending"
+    "status": "filled",
+    "stake": 6000
   },
   {
-    "id": "storageWorkingGroup-38",
-    "runtimeId": 38,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "38",
-    "answers": [
-      {
-        "questionId": "16",
-        "answer": "natus ipsa veniam quia iure quibusdam nam"
-      },
-      {
-        "questionId": "17",
-        "answer": "perspiciatis est voluptatem iste ea"
-      }
-    ],
-    "status": "filled"
-  },
-  {
-    "id": "storageWorkingGroup-39",
-    "runtimeId": 39,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "38",
-    "answers": [
-      {
-        "questionId": "16",
-        "answer": "dolorem id deserunt omnis autem magnam amet quo doloremque"
-      },
-      {
-        "questionId": "17",
-        "answer": "est ullam voluptate et adipisci laudantium aut sequi sint sed"
-      }
-    ],
-    "status": "pending"
-  },
-  {
-    "id": "storageWorkingGroup-40",
-    "runtimeId": 40,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "31",
-    "answers": [
-      {
-        "questionId": "16",
-        "answer": "a inventore enim qui quam excepturi reprehenderit nesciunt asperiores"
-      },
-      {
-        "questionId": "17",
-        "answer": "qui non eum cum nemo et accusantium"
-      }
-    ],
-    "status": "filled"
-  },
-  {
-    "id": "storageWorkingGroup-41",
-    "runtimeId": 41,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "31",
-    "answers": [
-      {
-        "questionId": "16",
-        "answer": "id tenetur ratione cum eveniet dolorum"
-      },
-      {
-        "questionId": "17",
-        "answer": "sed ut maiores dicta rem"
-      }
-    ],
-    "status": "pending"
-  },
-  {
-    "id": "storageWorkingGroup-42",
-    "runtimeId": 42,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "17",
-    "answers": [
-      {
-        "questionId": "16",
-        "answer": "est maiores aliquam quis qui hic"
-      },
-      {
-        "questionId": "17",
-        "answer": "culpa non rerum qui sed aut non quae voluptatem autem"
-      }
-    ],
-    "status": "filled"
-  },
-  {
-    "id": "storageWorkingGroup-43",
+    "id": "forumWorkingGroup-43",
     "runtimeId": 43,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "17",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "natus eos consequatur nisi nihil et nobis dolor"
+        "questionId": "2",
+        "answer": "quis odio id voluptate voluptatem qui quia aut sit"
       },
       {
-        "questionId": "17",
-        "answer": "eum quia illum suscipit aspernatur non qui ea aliquid tempore"
+        "questionId": "3",
+        "answer": "et deserunt fugiat sit quo vel et sit voluptates"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
-    "id": "storageWorkingGroup-44",
+    "id": "forumWorkingGroup-44",
     "runtimeId": 44,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "9",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "amet aut illo officia aut quo facilis"
+        "questionId": "2",
+        "answer": "sint iusto expedita eius dolor consequatur aspernatur dicta ut"
       },
       {
-        "questionId": "17",
-        "answer": "ipsa incidunt voluptatum deserunt exercitationem qui"
+        "questionId": "3",
+        "answer": "quisquam dolores quam dolorum hic mollitia qui fugit inventore"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
-    "id": "storageWorkingGroup-45",
+    "id": "forumWorkingGroup-45",
     "runtimeId": 45,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "9",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "nostrum et quas animi est quisquam expedita inventore omnis et"
+        "questionId": "2",
+        "answer": "eos fugiat quia exercitationem numquam iure quos harum laboriosam quaerat"
       },
       {
-        "questionId": "17",
-        "answer": "nihil debitis incidunt quia non nostrum"
+        "questionId": "3",
+        "answer": "voluptatem ipsum dolorum similique assumenda nam eius similique"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
-    "id": "storageWorkingGroup-46",
+    "id": "forumWorkingGroup-46",
     "runtimeId": 46,
-    "openingId": "storageWorkingGroup-8",
+    "openingId": "forumWorkingGroup-1",
     "applicantId": "10",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "ex occaecati quisquam qui accusantium minima qui quisquam"
+        "questionId": "2",
+        "answer": "illum aut aut officiis dolore non voluptatibus temporibus dignissimos"
       },
       {
-        "questionId": "17",
-        "answer": "consequatur est occaecati sed aut modi aut aut"
+        "questionId": "3",
+        "answer": "optio repellendus quia cumque omnis eius hic possimus et sapiente"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
-    "id": "storageWorkingGroup-47",
+    "id": "forumWorkingGroup-47",
     "runtimeId": 47,
-    "openingId": "storageWorkingGroup-8",
+    "openingId": "forumWorkingGroup-1",
     "applicantId": "10",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "nam ab quis ipsa dolorem sint rerum ut maiores iure"
+        "questionId": "2",
+        "answer": "ducimus enim ut quisquam id aut dolorum tempore"
       },
       {
-        "questionId": "17",
-        "answer": "facilis veniam assumenda voluptatibus harum harum sit accusantium laborum ipsam"
+        "questionId": "3",
+        "answer": "necessitatibus qui vel quos vero quasi consequatur dignissimos voluptatum"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
-    "id": "storageWorkingGroup-48",
+    "id": "forumWorkingGroup-48",
     "runtimeId": 48,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "36",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "41",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "enim qui enim ducimus debitis itaque error aut occaecati non"
+        "questionId": "2",
+        "answer": "ipsum rerum ipsam ad consequatur commodi perspiciatis"
       },
       {
-        "questionId": "17",
-        "answer": "qui praesentium ut ad qui nihil"
+        "questionId": "3",
+        "answer": "nihil commodi amet eaque non explicabo"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
-    "id": "storageWorkingGroup-49",
+    "id": "forumWorkingGroup-49",
     "runtimeId": 49,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "36",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "41",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "quis temporibus sed labore maxime quia possimus quam"
+        "questionId": "2",
+        "answer": "exercitationem facere nostrum repudiandae excepturi minima quis"
       },
       {
-        "questionId": "17",
-        "answer": "alias nihil odit illo qui quos est perspiciatis repellendus autem"
+        "questionId": "3",
+        "answer": "vero ut molestiae est sed quidem est voluptatum"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
-    "id": "storageWorkingGroup-50",
+    "id": "forumWorkingGroup-50",
     "runtimeId": 50,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "27",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "non eveniet est exercitationem molestias dolorem itaque"
+        "questionId": "2",
+        "answer": "nostrum ducimus ut ut quisquam necessitatibus qui delectus dolorem"
       },
       {
-        "questionId": "17",
-        "answer": "quam est et exercitationem voluptatum exercitationem consequatur quis labore officia"
+        "questionId": "3",
+        "answer": "saepe adipisci voluptas nemo corporis rerum exercitationem hic exercitationem"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
-    "id": "storageWorkingGroup-51",
+    "id": "forumWorkingGroup-51",
     "runtimeId": 51,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "27",
+    "openingId": "forumWorkingGroup-1",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "molestiae ex et aut quo autem qui"
+        "questionId": "2",
+        "answer": "esse eaque voluptatibus quas blanditiis magni"
       },
       {
-        "questionId": "17",
-        "answer": "nihil omnis eligendi sint est est aspernatur nemo aut"
+        "questionId": "3",
+        "answer": "ad dolore odio reprehenderit rem deleniti voluptatem ad"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
     "id": "storageWorkingGroup-52",
     "runtimeId": 52,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "11",
+    "applicantId": "0",
     "answers": [
       {
         "questionId": "16",
-        "answer": "omnis et quia dicta quia accusamus dolorem enim facere"
+        "answer": "neque modi voluptatem dolor voluptatem quis praesentium officiis possimus"
       },
       {
         "questionId": "17",
-        "answer": "impedit qui iure qui repellendus consequuntur aut quaerat molestiae ut"
+        "answer": "magni et dolorum voluptas adipisci"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "storageWorkingGroup-53",
     "runtimeId": 53,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "11",
+    "applicantId": "0",
     "answers": [
       {
         "questionId": "16",
-        "answer": "delectus vel eos est tempore accusamus illo"
+        "answer": "magnam commodi iusto voluptatem dicta magni doloribus eligendi"
       },
       {
         "questionId": "17",
-        "answer": "sint ratione sapiente officiis recusandae"
+        "answer": "necessitatibus dolor iure magni et facere ut assumenda at"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "storageWorkingGroup-54",
     "runtimeId": 54,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "32",
+    "applicantId": "1",
     "answers": [
       {
         "questionId": "16",
-        "answer": "aut asperiores ut doloremque voluptatibus adipisci hic esse culpa nihil"
+        "answer": "sed ut consectetur ad odio nobis"
       },
       {
         "questionId": "17",
-        "answer": "dolor aut voluptate perferendis inventore qui dolor"
+        "answer": "nostrum inventore exercitationem rerum similique rerum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "storageWorkingGroup-55",
     "runtimeId": 55,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "32",
+    "applicantId": "1",
     "answers": [
       {
         "questionId": "16",
-        "answer": "labore quaerat ex molestiae perferendis delectus et"
+        "answer": "reiciendis labore distinctio labore consequuntur iure"
       },
       {
         "questionId": "17",
-        "answer": "consequuntur dolorem et quisquam eveniet et"
+        "answer": "sit et voluptas perspiciatis sed non dolorem saepe"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "storageWorkingGroup-56",
     "runtimeId": 56,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "21",
+    "applicantId": "12",
     "answers": [
       {
         "questionId": "16",
-        "answer": "rerum autem perspiciatis qui minima occaecati qui qui beatae aperiam"
+        "answer": "eligendi assumenda ea tempora et"
       },
       {
         "questionId": "17",
-        "answer": "earum quidem optio qui vel reprehenderit sed"
+        "answer": "et sed facilis omnis rem consequatur ullam"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "storageWorkingGroup-57",
     "runtimeId": 57,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "21",
+    "applicantId": "12",
     "answers": [
       {
         "questionId": "16",
-        "answer": "et temporibus et culpa quis dolorem harum quis"
+        "answer": "neque iusto rerum et dolorem"
       },
       {
         "questionId": "17",
-        "answer": "et delectus facilis velit et et"
+        "answer": "sed aspernatur nemo molestiae est alias non"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "storageWorkingGroup-58",
     "runtimeId": 58,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "8",
+    "applicantId": "20",
     "answers": [
       {
         "questionId": "16",
-        "answer": "suscipit magnam modi consequatur sint id suscipit"
+        "answer": "et sint unde vero magni"
       },
       {
         "questionId": "17",
-        "answer": "architecto ipsam velit distinctio et consequuntur eveniet et amet"
+        "answer": "quod quod odio velit modi iusto aperiam"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "storageWorkingGroup-59",
     "runtimeId": 59,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "8",
+    "applicantId": "20",
     "answers": [
       {
         "questionId": "16",
-        "answer": "voluptatem est iusto deserunt dicta possimus veniam omnis"
+        "answer": "id enim ducimus amet quas ex veniam"
       },
       {
         "questionId": "17",
-        "answer": "odit aut tempore saepe enim cupiditate natus similique minus"
+        "answer": "velit repellendus repellat quis officiis voluptatem expedita iste non"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "storageWorkingGroup-60",
     "runtimeId": 60,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "11",
+    "applicantId": "47",
     "answers": [
       {
         "questionId": "16",
-        "answer": "omnis sint tenetur nostrum sunt est"
+        "answer": "non magni alias molestiae dolores earum reprehenderit quis quo"
       },
       {
         "questionId": "17",
-        "answer": "dolorum amet nihil explicabo sunt expedita nostrum saepe"
+        "answer": "vel minima eum id repellendus delectus"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "storageWorkingGroup-61",
     "runtimeId": 61,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "11",
+    "applicantId": "47",
     "answers": [
       {
         "questionId": "16",
-        "answer": "temporibus nihil incidunt sunt possimus et aut"
+        "answer": "vero laudantium maxime repellendus corrupti voluptatem cumque eos dolor"
       },
       {
         "questionId": "17",
-        "answer": "atque ut id non aut ut quos sit veniam eos"
+        "answer": "provident aliquid temporibus consequatur atque rerum quia"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "storageWorkingGroup-62",
     "runtimeId": 62,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "14",
+    "applicantId": "25",
     "answers": [
       {
         "questionId": "16",
-        "answer": "ea et error amet non sit deleniti"
+        "answer": "praesentium reiciendis nulla voluptatem explicabo"
       },
       {
         "questionId": "17",
-        "answer": "non corporis neque maxime quos dolorum qui dolores"
+        "answer": "dolorem dolor expedita provident ipsam dignissimos vel ex voluptates alias"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "storageWorkingGroup-63",
     "runtimeId": 63,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "14",
+    "applicantId": "25",
     "answers": [
       {
         "questionId": "16",
-        "answer": "sapiente exercitationem ullam perspiciatis veritatis velit sit iste dolorem omnis"
+        "answer": "quis sapiente dolores beatae et impedit exercitationem soluta"
       },
       {
         "questionId": "17",
-        "answer": "quia voluptatibus error ratione nulla et nemo optio"
+        "answer": "et et reprehenderit necessitatibus maiores"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "storageWorkingGroup-64",
     "runtimeId": 64,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "30",
+    "applicantId": "41",
     "answers": [
       {
         "questionId": "16",
-        "answer": "iusto ut illum sint et culpa recusandae ut"
+        "answer": "neque sunt id dolorum soluta voluptatum neque est autem"
       },
       {
         "questionId": "17",
-        "answer": "quidem distinctio atque omnis enim distinctio aliquid distinctio officia rem"
+        "answer": "corporis magnam accusamus nobis neque voluptatibus omnis ut sit"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 8000
   },
   {
     "id": "storageWorkingGroup-65",
     "runtimeId": 65,
     "openingId": "storageWorkingGroup-8",
-    "applicantId": "30",
+    "applicantId": "41",
     "answers": [
       {
         "questionId": "16",
-        "answer": "et qui possimus similique nemo"
+        "answer": "nulla harum officia minima ducimus ratione dolorem est"
       },
       {
         "questionId": "17",
-        "answer": "est voluptate rem voluptate nisi consequatur quaerat"
+        "answer": "esse et consequuntur praesentium aut est"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
-    "id": "contentDirectoryWorkingGroup-66",
+    "id": "storageWorkingGroup-66",
     "runtimeId": 66,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "0",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "animi debitis sed itaque eos"
+        "questionId": "16",
+        "answer": "animi omnis omnis eius assumenda est in"
       },
       {
-        "questionId": "33",
-        "answer": "impedit ex et quia aut aut aliquam"
+        "questionId": "17",
+        "answer": "illum repellat est corrupti qui placeat"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
-    "id": "contentDirectoryWorkingGroup-67",
+    "id": "storageWorkingGroup-67",
     "runtimeId": 67,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "0",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "nisi et reiciendis eum quia voluptatem consequuntur"
+        "questionId": "16",
+        "answer": "esse aut accusantium iusto illo deserunt saepe eum"
       },
       {
-        "questionId": "33",
-        "answer": "amet ipsum impedit molestiae nesciunt cum culpa autem"
+        "questionId": "17",
+        "answer": "rerum aut illo omnis at voluptas quia"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
-    "id": "contentDirectoryWorkingGroup-68",
+    "id": "storageWorkingGroup-68",
     "runtimeId": 68,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "1",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "43",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "aut cupiditate non recusandae aliquam et in occaecati"
+        "questionId": "16",
+        "answer": "qui consequatur deleniti consequatur suscipit accusantium odio pariatur"
       },
       {
-        "questionId": "33",
-        "answer": "sunt sed nemo atque aliquam sit totam error ut"
+        "questionId": "17",
+        "answer": "sed architecto maxime aut et ut saepe consectetur et"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
-    "id": "contentDirectoryWorkingGroup-69",
+    "id": "storageWorkingGroup-69",
     "runtimeId": 69,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "1",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "43",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "cumque eos excepturi alias est voluptatum amet"
+        "questionId": "16",
+        "answer": "dolor dolores ut reiciendis omnis rerum aut voluptatem quis fugit"
       },
       {
-        "questionId": "33",
-        "answer": "error impedit mollitia earum earum eligendi"
+        "questionId": "17",
+        "answer": "laborum est praesentium veritatis corporis aut nisi quos"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
-    "id": "contentDirectoryWorkingGroup-70",
+    "id": "storageWorkingGroup-70",
     "runtimeId": 70,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "6",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "2",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "cum deserunt nostrum ea nulla eos"
+        "questionId": "16",
+        "answer": "tenetur debitis accusamus expedita ducimus explicabo"
       },
       {
-        "questionId": "33",
-        "answer": "et fuga magnam qui non error nam voluptas at"
+        "questionId": "17",
+        "answer": "saepe dolor incidunt numquam natus consequatur dolorem voluptatum similique eum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
-    "id": "contentDirectoryWorkingGroup-71",
+    "id": "storageWorkingGroup-71",
     "runtimeId": 71,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "6",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "2",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "laboriosam vel tempore dolores nam dicta exercitationem voluptatem pariatur"
+        "questionId": "16",
+        "answer": "harum soluta aut ea voluptates nulla est corrupti nobis dolores"
       },
       {
-        "questionId": "33",
-        "answer": "iure omnis aperiam amet ipsa illo nostrum aut illo"
+        "questionId": "17",
+        "answer": "at ut facilis temporibus facilis laborum ea iste"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
-    "id": "contentDirectoryWorkingGroup-72",
+    "id": "storageWorkingGroup-72",
     "runtimeId": 72,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "24",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "11",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "mollitia est tenetur illo sapiente impedit voluptatem"
+        "questionId": "16",
+        "answer": "nam et occaecati aut dolores dolore saepe quaerat repellendus"
       },
       {
-        "questionId": "33",
-        "answer": "aut qui reiciendis quos aliquam voluptas dolores quaerat omnis"
+        "questionId": "17",
+        "answer": "vel soluta et expedita eaque corrupti doloremque nostrum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
-    "id": "contentDirectoryWorkingGroup-73",
+    "id": "storageWorkingGroup-73",
     "runtimeId": 73,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "24",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "11",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "et voluptates temporibus quis incidunt earum non nesciunt laboriosam"
+        "questionId": "16",
+        "answer": "dignissimos adipisci ea ratione voluptas magnam veniam consequatur nostrum sint"
       },
       {
-        "questionId": "33",
-        "answer": "in quis ad in nam dolor unde"
+        "questionId": "17",
+        "answer": "laborum quo quis sed voluptate minima perferendis odio"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
-    "id": "contentDirectoryWorkingGroup-74",
+    "id": "storageWorkingGroup-74",
     "runtimeId": 74,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "49",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "31",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "voluptatem accusamus accusantium quod in incidunt"
+        "questionId": "16",
+        "answer": "officiis ut laudantium ratione ut rerum"
       },
       {
-        "questionId": "33",
-        "answer": "in quia facere non quis enim aut sit"
+        "questionId": "17",
+        "answer": "non quia quia earum quia alias vero ut"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
-    "id": "contentDirectoryWorkingGroup-75",
+    "id": "storageWorkingGroup-75",
     "runtimeId": 75,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "49",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "31",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "maxime illum voluptatem aut vel consequatur cupiditate optio"
+        "questionId": "16",
+        "answer": "nostrum numquam quo eius distinctio molestiae sunt"
       },
       {
-        "questionId": "33",
-        "answer": "deserunt quidem eum est tenetur"
+        "questionId": "17",
+        "answer": "dignissimos id est ex fugit ab iste"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
-    "id": "contentDirectoryWorkingGroup-76",
+    "id": "storageWorkingGroup-76",
     "runtimeId": 76,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "40",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "8",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "omnis iure perspiciatis id ratione earum et nesciunt"
+        "questionId": "16",
+        "answer": "libero eos nobis sed officia modi laborum dignissimos"
       },
       {
-        "questionId": "33",
-        "answer": "vel sit occaecati maxime quo suscipit voluptas dolores tempore"
+        "questionId": "17",
+        "answer": "explicabo sint est molestiae et quis voluptatibus porro"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
-    "id": "contentDirectoryWorkingGroup-77",
+    "id": "storageWorkingGroup-77",
     "runtimeId": 77,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "40",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "8",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "illo voluptatem modi quia non laboriosam facere iste"
+        "questionId": "16",
+        "answer": "reprehenderit voluptas porro alias at mollitia tempore"
       },
       {
-        "questionId": "33",
-        "answer": "nihil quia unde ea dolorem sint unde a"
+        "questionId": "17",
+        "answer": "occaecati ipsum similique ducimus quia quia enim nihil"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
-    "id": "contentDirectoryWorkingGroup-78",
+    "id": "storageWorkingGroup-78",
     "runtimeId": 78,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "44",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "3",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "incidunt recusandae at fugiat placeat numquam"
+        "questionId": "16",
+        "answer": "et deserunt qui consequuntur qui aspernatur sint inventore"
       },
       {
-        "questionId": "33",
-        "answer": "est quisquam soluta fuga vel magni illum consequuntur"
+        "questionId": "17",
+        "answer": "dolores vero quo eos voluptas ut sed velit et"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
-    "id": "contentDirectoryWorkingGroup-79",
+    "id": "storageWorkingGroup-79",
     "runtimeId": 79,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "44",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "3",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "eum perspiciatis omnis nobis aut eaque vitae iure beatae"
+        "questionId": "16",
+        "answer": "laudantium qui qui sit soluta laudantium voluptatum est ut est"
       },
       {
-        "questionId": "33",
-        "answer": "beatae cupiditate tenetur in incidunt unde facere et voluptatibus"
+        "questionId": "17",
+        "answer": "autem temporibus reprehenderit praesentium officia reiciendis culpa dolorum ipsam"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-80",
     "runtimeId": 80,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "47",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "0",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "aut recusandae officia et quia eius repellendus voluptas optio maxime"
+        "questionId": "28",
+        "answer": "cupiditate commodi eligendi dolorum enim eos occaecati dolore et"
       },
       {
-        "questionId": "33",
-        "answer": "omnis quasi deleniti quidem voluptatem unde ad ratione voluptates"
+        "questionId": "29",
+        "answer": "ut ipsum voluptatibus sequi commodi est quis ea"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-81",
     "runtimeId": 81,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "47",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "0",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "et soluta a et porro sed natus"
+        "questionId": "28",
+        "answer": "enim laboriosam accusantium molestias voluptate iure"
       },
       {
-        "questionId": "33",
-        "answer": "modi esse sed voluptatibus amet quaerat"
+        "questionId": "29",
+        "answer": "velit ex quasi nisi vel delectus rerum"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "contentDirectoryWorkingGroup-82",
     "runtimeId": 82,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "16",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "voluptate rem consequatur est dolorum quam unde quidem veritatis"
+        "questionId": "28",
+        "answer": "sunt ad ex corporis reprehenderit maiores unde eaque"
       },
       {
-        "questionId": "33",
-        "answer": "culpa deleniti dolores quam in tempora"
+        "questionId": "29",
+        "answer": "dolores enim atque tenetur perspiciatis sapiente minus rerum tempora modi"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-83",
     "runtimeId": 83,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "16",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "delectus repudiandae minus earum adipisci fugiat omnis"
+        "questionId": "28",
+        "answer": "ab voluptate et a natus sed enim vero officia et"
       },
       {
-        "questionId": "33",
-        "answer": "quasi nihil alias officia quas nostrum et amet adipisci"
+        "questionId": "29",
+        "answer": "impedit magni quod quod inventore et"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-84",
     "runtimeId": 84,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "5",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "21",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "aut deserunt repellendus sed culpa omnis sed"
+        "questionId": "28",
+        "answer": "deserunt non fugiat mollitia eos neque"
       },
       {
-        "questionId": "33",
-        "answer": "provident odio sit veritatis omnis aut ab"
+        "questionId": "29",
+        "answer": "ex voluptatum itaque rerum sit et"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-85",
     "runtimeId": 85,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "5",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "21",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "alias blanditiis nam pariatur qui repellat eaque eos"
+        "questionId": "28",
+        "answer": "consequuntur maiores rerum possimus illum eius quos"
       },
       {
-        "questionId": "33",
-        "answer": "id quaerat aut reprehenderit asperiores inventore sit"
+        "questionId": "29",
+        "answer": "sit rerum omnis accusamus perferendis ut accusamus nemo sint aliquid"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-86",
     "runtimeId": 86,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "29",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "4",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "doloribus ea voluptatem quis repellendus sint non totam ut"
+        "questionId": "28",
+        "answer": "saepe nulla nemo voluptatem iusto optio vel"
       },
       {
-        "questionId": "33",
-        "answer": "aperiam ullam molestiae quisquam voluptas"
+        "questionId": "29",
+        "answer": "repellendus ut molestiae quo quidem fugit id ullam sint optio"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-87",
     "runtimeId": 87,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "29",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "4",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "consequatur officiis debitis voluptatibus ea eos voluptatem quasi"
+        "questionId": "28",
+        "answer": "veniam corporis deserunt corrupti dicta aspernatur vel"
       },
       {
-        "questionId": "33",
-        "answer": "rerum sequi numquam optio vitae quo modi odit"
+        "questionId": "29",
+        "answer": "cumque praesentium rem voluptas natus provident enim est"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "contentDirectoryWorkingGroup-88",
     "runtimeId": 88,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "38",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "voluptatem saepe voluptas dignissimos natus minus qui"
+        "questionId": "28",
+        "answer": "ex rerum excepturi qui animi quod labore et sapiente"
       },
       {
-        "questionId": "33",
-        "answer": "vitae quidem nisi sapiente odit vel"
+        "questionId": "29",
+        "answer": "asperiores enim laborum ipsa eveniet velit aut nobis officiis et"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-89",
     "runtimeId": 89,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "38",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "culpa esse recusandae qui assumenda tempora odit quaerat"
+        "questionId": "28",
+        "answer": "in magnam doloribus impedit eligendi doloremque deserunt ullam qui"
       },
       {
-        "questionId": "33",
-        "answer": "eum ut eos rerum earum rerum"
+        "questionId": "29",
+        "answer": "non molestiae qui animi eius quibusdam in natus totam"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-90",
     "runtimeId": 90,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "32",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "28",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "consequatur aut dolor est libero sit ea distinctio"
+        "questionId": "28",
+        "answer": "quidem illo atque atque veniam eaque"
       },
       {
-        "questionId": "33",
-        "answer": "dolore alias omnis incidunt ipsa sed adipisci facilis"
+        "questionId": "29",
+        "answer": "quaerat rem esse a perspiciatis voluptatem ut soluta aliquam"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-91",
     "runtimeId": 91,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "32",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "28",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "aut aperiam nam dolorem officiis labore ducimus omnis"
+        "questionId": "28",
+        "answer": "occaecati praesentium est et voluptas aut non molestiae suscipit"
       },
       {
-        "questionId": "33",
-        "answer": "magni sint sint et facere animi numquam delectus"
+        "questionId": "29",
+        "answer": "odio et et ducimus et sequi architecto rerum omnis"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-92",
     "runtimeId": 92,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "6",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "exercitationem ratione repellat tenetur pariatur consequuntur"
+        "questionId": "28",
+        "answer": "ex sit est omnis illum exercitationem eligendi beatae"
       },
       {
-        "questionId": "33",
-        "answer": "ea ut soluta sit in perferendis et"
+        "questionId": "29",
+        "answer": "deserunt ducimus veritatis odit voluptatem laboriosam incidunt consequatur debitis facilis"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-93",
     "runtimeId": 93,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "6",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "quidem assumenda blanditiis omnis inventore et voluptate modi quos a"
+        "questionId": "28",
+        "answer": "aperiam mollitia reiciendis sunt et ipsum cum"
       },
       {
-        "questionId": "33",
-        "answer": "dolores tempore pariatur est molestiae dolor ut impedit corrupti repellendus"
+        "questionId": "29",
+        "answer": "itaque vel illo facilis qui tempora omnis molestiae"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-94",
     "runtimeId": 94,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "49",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "42",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "facere dolor sint inventore et fuga praesentium quo"
+        "questionId": "28",
+        "answer": "voluptatibus repellendus labore asperiores beatae repellat mollitia aut maiores"
       },
       {
-        "questionId": "33",
-        "answer": "voluptas consequatur facilis mollitia voluptatem quisquam consequatur"
+        "questionId": "29",
+        "answer": "laborum expedita nemo ratione adipisci sit laudantium"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-95",
     "runtimeId": 95,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "49",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "42",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "odio dolor cupiditate ut beatae suscipit"
+        "questionId": "28",
+        "answer": "sed facere earum explicabo unde qui"
       },
       {
-        "questionId": "33",
-        "answer": "voluptatem ipsam consequuntur veritatis quo laudantium animi sed"
+        "questionId": "29",
+        "answer": "totam alias tempora modi amet eligendi"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-96",
     "runtimeId": 96,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "43",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "3",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "molestiae aspernatur non est officiis saepe quasi id"
+        "questionId": "28",
+        "answer": "alias eos est aliquam beatae"
       },
       {
-        "questionId": "33",
-        "answer": "architecto soluta corrupti deserunt et dolores tenetur"
+        "questionId": "29",
+        "answer": "modi at odit laudantium qui sit vero eaque enim"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-97",
     "runtimeId": 97,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "43",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "3",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "recusandae eius in in quasi quos"
+        "questionId": "28",
+        "answer": "ut architecto aut nihil est ut"
       },
       {
-        "questionId": "33",
-        "answer": "molestias cum ex omnis enim eos"
+        "questionId": "29",
+        "answer": "iusto aut non omnis laboriosam porro a"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
     "id": "contentDirectoryWorkingGroup-98",
     "runtimeId": 98,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "48",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "36",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "animi ullam possimus quia consequatur animi numquam corporis"
+        "questionId": "28",
+        "answer": "ea doloribus perferendis odio rerum unde sed"
       },
       {
-        "questionId": "33",
-        "answer": "corrupti omnis culpa modi exercitationem animi vitae nulla architecto nemo"
+        "questionId": "29",
+        "answer": "consequatur autem ab ex neque dicta similique omnis quam asperiores"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-99",
     "runtimeId": 99,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "48",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "36",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "nesciunt blanditiis maiores commodi similique officia quos"
+        "questionId": "28",
+        "answer": "illo animi quas ab inventore"
       },
       {
-        "questionId": "33",
-        "answer": "maiores et quam et rerum eveniet atque quo sequi esse"
+        "questionId": "29",
+        "answer": "pariatur perferendis doloribus eos veniam qui excepturi est ut"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-100",
     "runtimeId": 100,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "27",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "13",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "fugiat sint pariatur culpa illum rerum quis"
+        "questionId": "28",
+        "answer": "omnis sapiente eos nihil sunt esse ullam iusto inventore ut"
       },
       {
-        "questionId": "33",
-        "answer": "iusto quae minima sapiente enim officia atque"
+        "questionId": "29",
+        "answer": "ut qui sapiente dolorem amet commodi ut possimus"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-101",
     "runtimeId": 101,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "27",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "13",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "beatae sunt nihil est facere et"
+        "questionId": "28",
+        "answer": "modi officia architecto id ea perspiciatis"
       },
       {
-        "questionId": "33",
-        "answer": "qui impedit saepe aperiam consequatur fugiat et consectetur modi quia"
+        "questionId": "29",
+        "answer": "doloribus quo non nobis excepturi rerum"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-102",
     "runtimeId": 102,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "18",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "25",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "molestias ut voluptatem voluptatem quis placeat doloremque"
+        "questionId": "28",
+        "answer": "iusto deserunt cupiditate earum nihil dolores atque"
       },
       {
-        "questionId": "33",
-        "answer": "neque ut et et qui porro quas"
+        "questionId": "29",
+        "answer": "voluptas consequatur incidunt fugiat et cupiditate sed consequatur ipsam sapiente"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-103",
     "runtimeId": 103,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "18",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "25",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "et nemo maxime aut magni qui voluptatum iure rem nisi"
+        "questionId": "28",
+        "answer": "fugiat voluptate voluptas minima dolor facilis perspiciatis omnis quod voluptatem"
       },
       {
-        "questionId": "33",
-        "answer": "quas veniam et unde ratione totam dicta qui"
+        "questionId": "29",
+        "answer": "occaecati cum enim sit natus quae et est"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "contentDirectoryWorkingGroup-104",
     "runtimeId": 104,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "21",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "ut voluptatem sapiente ipsum ea laudantium in quo quo excepturi"
+        "questionId": "28",
+        "answer": "ea tenetur consequatur unde nobis omnis eveniet suscipit repellendus et"
       },
       {
-        "questionId": "33",
-        "answer": "tempora quasi et reiciendis similique aliquam qui ullam"
+        "questionId": "29",
+        "answer": "odio voluptatem consectetur labore fugit rerum porro"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-105",
     "runtimeId": 105,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "21",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "id ut sed suscipit quia et itaque tempore"
+        "questionId": "28",
+        "answer": "non quis maiores molestiae reiciendis omnis"
       },
       {
-        "questionId": "33",
-        "answer": "repellat at nihil rerum corporis architecto"
+        "questionId": "29",
+        "answer": "officiis exercitationem aspernatur ex similique ut voluptatem sed"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-106",
     "runtimeId": 106,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "17",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "5",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "illo ut nihil id aliquam porro"
+        "questionId": "28",
+        "answer": "non voluptatem et non inventore doloremque aut et exercitationem"
       },
       {
-        "questionId": "33",
-        "answer": "et nostrum dolor enim magnam expedita architecto"
+        "questionId": "29",
+        "answer": "consequatur sit reprehenderit ab voluptate ullam"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "contentDirectoryWorkingGroup-107",
     "runtimeId": 107,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "17",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "5",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "nulla ut est deserunt aut dolore dolores labore quis"
+        "questionId": "28",
+        "answer": "assumenda labore sint nihil occaecati"
       },
       {
-        "questionId": "33",
-        "answer": "ut est eius illo et quia velit laboriosam nihil non"
+        "questionId": "29",
+        "answer": "voluptatibus molestiae quod placeat dignissimos blanditiis ducimus optio impedit"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-108",
     "runtimeId": 108,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "10",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "21",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "iste sit repudiandae consectetur nobis non neque ut perferendis"
+        "questionId": "28",
+        "answer": "vero quam animi sit natus"
       },
       {
-        "questionId": "33",
-        "answer": "vero et molestiae ea a numquam"
+        "questionId": "29",
+        "answer": "labore tenetur doloribus iste ab iste"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-109",
     "runtimeId": 109,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "10",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "21",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "soluta et soluta id non quae esse"
+        "questionId": "28",
+        "answer": "temporibus natus autem magni omnis ipsa"
       },
       {
-        "questionId": "33",
-        "answer": "nihil placeat sunt nihil perspiciatis eos"
+        "questionId": "29",
+        "answer": "itaque perferendis et provident omnis qui ut hic"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-110",
     "runtimeId": 110,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "20",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "0",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "nemo vitae omnis dolor officia sed modi ad ducimus"
+        "questionId": "28",
+        "answer": "natus sed iure qui minima explicabo dicta"
       },
       {
-        "questionId": "33",
-        "answer": "dolorum ea aut impedit repudiandae aut sunt"
+        "questionId": "29",
+        "answer": "neque necessitatibus pariatur alias mollitia non corporis error et"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-111",
     "runtimeId": 111,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "20",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "0",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "in vitae et doloribus quia eius"
+        "questionId": "28",
+        "answer": "et expedita eos iste blanditiis est autem"
       },
       {
-        "questionId": "33",
-        "answer": "labore repudiandae illum nulla ut ut inventore"
+        "questionId": "29",
+        "answer": "temporibus natus voluptatem sunt autem possimus repudiandae quaerat sapiente"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-112",
     "runtimeId": 112,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "12",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "2",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "molestiae itaque mollitia et quis commodi qui dicta quasi"
+        "questionId": "28",
+        "answer": "praesentium eum quam vero sequi dicta"
       },
       {
-        "questionId": "33",
-        "answer": "perferendis expedita aut cumque sed natus autem qui"
+        "questionId": "29",
+        "answer": "tempora ullam et distinctio a sapiente deleniti eum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-113",
     "runtimeId": 113,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "12",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "2",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "facilis aspernatur corporis labore eum ea molestiae quo et"
+        "questionId": "28",
+        "answer": "et sit soluta neque porro fugiat voluptatibus ipsam"
       },
       {
-        "questionId": "33",
-        "answer": "veniam veniam ducimus ut est iure autem possimus impedit rerum"
+        "questionId": "29",
+        "answer": "incidunt excepturi veritatis itaque molestiae autem veritatis voluptatem et"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
     "id": "contentDirectoryWorkingGroup-114",
     "runtimeId": 114,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "32",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "28",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "qui laudantium doloribus quibusdam cumque"
+        "questionId": "28",
+        "answer": "sint repudiandae quidem quae est ea architecto quis"
       },
       {
-        "questionId": "33",
-        "answer": "repellat rem debitis animi saepe vel eaque magnam voluptas"
+        "questionId": "29",
+        "answer": "nesciunt dignissimos qui dignissimos repudiandae qui"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-115",
     "runtimeId": 115,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "32",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "28",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "et qui soluta unde molestiae culpa quasi"
+        "questionId": "28",
+        "answer": "voluptatem voluptas nemo et recusandae"
       },
       {
-        "questionId": "33",
-        "answer": "ut non velit ab non quidem dolorem et autem"
+        "questionId": "29",
+        "answer": "dignissimos eveniet debitis tenetur cumque nisi sint"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-116",
     "runtimeId": 116,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "42",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "14",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "accusamus iste id aut laudantium dolore dolor ut praesentium"
+        "questionId": "28",
+        "answer": "magnam dignissimos sint qui ullam dicta eligendi voluptas"
       },
       {
-        "questionId": "33",
-        "answer": "aperiam quo rerum sint eum sit minima nostrum voluptas"
+        "questionId": "29",
+        "answer": "qui dolores voluptate voluptas sint nobis autem"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-117",
     "runtimeId": 117,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "42",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "14",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "minima error qui fugiat quae labore et impedit eligendi omnis"
+        "questionId": "28",
+        "answer": "eos dolorum tempore consequatur quis explicabo laboriosam sit"
       },
       {
-        "questionId": "33",
-        "answer": "illo id vero atque libero quia quam enim quis"
+        "questionId": "29",
+        "answer": "voluptatibus expedita quia ad officiis sit"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-118",
     "runtimeId": 118,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "13",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "12",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "sapiente sapiente odit qui quae aut"
+        "questionId": "28",
+        "answer": "sint enim distinctio itaque rerum perspiciatis"
       },
       {
-        "questionId": "33",
-        "answer": "accusantium quaerat ipsam mollitia ea aperiam quibusdam aut ea et"
+        "questionId": "29",
+        "answer": "omnis ex eos enim quis et non voluptatum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-119",
     "runtimeId": 119,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "13",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "12",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "nobis ut sed necessitatibus ipsam non et vero consequatur"
+        "questionId": "28",
+        "answer": "eveniet qui aut ullam error"
       },
       {
-        "questionId": "33",
-        "answer": "quod est eum voluptatum praesentium cumque"
+        "questionId": "29",
+        "answer": "quia vel dolores nostrum modi eveniet eos"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
-    "id": "contentDirectoryWorkingGroup-120",
+    "id": "membershipWorkingGroup-120",
     "runtimeId": 120,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "49",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "0",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "dolores aliquid et velit ut architecto"
+        "questionId": "40",
+        "answer": "perferendis dolorum vero sint ipsum blanditiis libero ab"
       },
       {
-        "questionId": "33",
-        "answer": "cum omnis rerum necessitatibus eos eveniet enim necessitatibus qui eius"
+        "questionId": "41",
+        "answer": "excepturi aut ad ad quos et ut"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
-    "id": "contentDirectoryWorkingGroup-121",
+    "id": "membershipWorkingGroup-121",
     "runtimeId": 121,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "49",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "0",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "mollitia aut possimus suscipit dolores minima"
+        "questionId": "40",
+        "answer": "dolorem distinctio non corrupti dolorum ad placeat dignissimos esse"
       },
       {
-        "questionId": "33",
-        "answer": "eos sunt quam ex quaerat mollitia et totam"
+        "questionId": "41",
+        "answer": "optio eveniet quis odit laboriosam voluptas doloribus"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-122",
     "runtimeId": 122,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "0",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "eius repellat doloremque numquam voluptatem sed dicta"
+        "questionId": "40",
+        "answer": "delectus eligendi ea sed necessitatibus eligendi illo et sint"
       },
       {
-        "questionId": "49",
-        "answer": "necessitatibus quia aut aut esse nihil delectus"
+        "questionId": "41",
+        "answer": "soluta ad natus voluptatem vero molestiae ducimus quia alias pariatur"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-123",
     "runtimeId": 123,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "0",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "aut suscipit corporis maxime et sunt possimus"
+        "questionId": "40",
+        "answer": "quidem praesentium ipsum possimus consequatur nisi deleniti quod"
       },
       {
-        "questionId": "49",
-        "answer": "asperiores neque molestiae est voluptate molestias consectetur nihil qui dolorum"
+        "questionId": "41",
+        "answer": "expedita est hic itaque voluptatem delectus illum quia"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-124",
     "runtimeId": 124,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "1",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "9",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "et dicta aliquid nisi quod vero eveniet omnis pariatur"
+        "questionId": "40",
+        "answer": "voluptatem eligendi non maiores accusantium minus mollitia iste"
       },
       {
-        "questionId": "49",
-        "answer": "iusto deserunt quia veritatis et tempora qui hic"
+        "questionId": "41",
+        "answer": "nemo repudiandae iste nulla sed nam neque"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-125",
     "runtimeId": 125,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "1",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "9",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "modi placeat saepe dolor enim tempora dolores"
+        "questionId": "40",
+        "answer": "aut eos asperiores eveniet laudantium autem harum"
       },
       {
-        "questionId": "49",
-        "answer": "et rerum ipsa iste qui quas consectetur facere omnis vero"
+        "questionId": "41",
+        "answer": "aspernatur magnam velit eligendi repellat eum iste et"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-126",
     "runtimeId": 126,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "29",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "41",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "soluta odio veritatis reprehenderit nihil sit et"
+        "questionId": "40",
+        "answer": "qui soluta corrupti velit debitis nihil"
       },
       {
-        "questionId": "49",
-        "answer": "et dignissimos qui ut commodi et enim"
+        "questionId": "41",
+        "answer": "consequuntur distinctio magni rerum et fugit assumenda autem pariatur"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-127",
     "runtimeId": 127,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "29",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "41",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "sed error recusandae autem deserunt et quas cupiditate et"
+        "questionId": "40",
+        "answer": "dicta tempore eligendi odio cupiditate sit quia et quia"
       },
       {
-        "questionId": "49",
-        "answer": "omnis quibusdam fugit et aut sit est eos ea"
+        "questionId": "41",
+        "answer": "occaecati molestiae minus est et libero blanditiis sit nihil"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-128",
     "runtimeId": 128,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "4",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "25",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "omnis maxime pariatur ipsum aut architecto sequi"
+        "questionId": "40",
+        "answer": "accusantium quod nemo et voluptas voluptatem fugiat cumque"
       },
       {
-        "questionId": "49",
-        "answer": "et temporibus perspiciatis et et sapiente ipsa fugit qui"
+        "questionId": "41",
+        "answer": "deleniti iure ut provident aliquid velit"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-129",
     "runtimeId": 129,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "4",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "25",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "esse aut est voluptas ut et"
+        "questionId": "40",
+        "answer": "rerum dolorem quo voluptas ut"
       },
       {
-        "questionId": "49",
-        "answer": "quia nihil expedita et labore quos sunt"
+        "questionId": "41",
+        "answer": "quia deserunt et distinctio quidem aut doloribus quam"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-130",
     "runtimeId": 130,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "18",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "16",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "corporis laudantium ut magnam aliquid atque eos"
+        "questionId": "40",
+        "answer": "sed sapiente quam aut error asperiores at eius"
       },
       {
-        "questionId": "49",
-        "answer": "sint magnam doloribus iusto perferendis quia quisquam omnis"
+        "questionId": "41",
+        "answer": "occaecati excepturi saepe fugit quisquam ut ut soluta qui voluptates"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-131",
     "runtimeId": 131,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "18",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "16",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "tempora voluptas tenetur dolores facilis molestias esse animi"
+        "questionId": "40",
+        "answer": "sed et voluptatum delectus qui et ut nihil"
       },
       {
-        "questionId": "49",
-        "answer": "nesciunt similique maxime voluptas at ducimus hic"
+        "questionId": "41",
+        "answer": "facilis deleniti sit occaecati eum quis"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-132",
     "runtimeId": 132,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "46",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "quam in aut error culpa esse ipsam hic amet"
+        "questionId": "40",
+        "answer": "magni modi neque ut esse eius dolore officiis"
       },
       {
-        "questionId": "49",
-        "answer": "saepe repellat aut ratione maxime sequi aut autem iusto"
+        "questionId": "41",
+        "answer": "ea laborum non eum eum et et sint tempore"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "membershipWorkingGroup-133",
     "runtimeId": 133,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "46",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "1",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "enim illo fuga ullam beatae inventore optio rem alias modi"
+        "questionId": "40",
+        "answer": "est iure vitae distinctio ab non neque"
       },
       {
-        "questionId": "49",
-        "answer": "totam quam voluptatem est quibusdam ad unde"
+        "questionId": "41",
+        "answer": "accusantium alias dolor nesciunt fugit voluptas ut doloremque"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-134",
     "runtimeId": 134,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "7",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "voluptatem non amet est et"
+        "questionId": "40",
+        "answer": "explicabo explicabo qui libero accusantium labore dolorum"
       },
       {
-        "questionId": "49",
-        "answer": "necessitatibus eaque possimus nisi molestias sint incidunt voluptate qui odio"
+        "questionId": "41",
+        "answer": "est nihil earum architecto porro omnis doloribus natus"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "membershipWorkingGroup-135",
     "runtimeId": 135,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "7",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "24",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "voluptatem ad numquam sit corrupti non vel corrupti et aliquid"
+        "questionId": "40",
+        "answer": "sit aliquam ut animi culpa vero"
       },
       {
-        "questionId": "49",
-        "answer": "quia maxime neque perspiciatis amet"
+        "questionId": "41",
+        "answer": "est est dignissimos voluptates aut nesciunt et"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-136",
     "runtimeId": 136,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "12",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "8",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "vero accusamus iure dolor consequuntur in"
+        "questionId": "40",
+        "answer": "eos sed omnis omnis earum repellat velit iusto"
       },
       {
-        "questionId": "49",
-        "answer": "optio sit facere ut beatae culpa et consectetur inventore"
+        "questionId": "41",
+        "answer": "incidunt vero totam possimus provident qui vel nisi laborum"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-137",
     "runtimeId": 137,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "12",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "8",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "nobis nemo quaerat ipsam inventore"
+        "questionId": "40",
+        "answer": "culpa mollitia molestiae adipisci esse aut"
       },
       {
-        "questionId": "49",
-        "answer": "qui animi magni id sunt illo sit"
+        "questionId": "41",
+        "answer": "autem consequatur ea porro culpa qui qui quis ipsum"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-138",
     "runtimeId": 138,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "17",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "32",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "amet aut eum occaecati tempore eum"
+        "questionId": "40",
+        "answer": "corrupti molestias voluptatem nostrum delectus corrupti nostrum"
       },
       {
-        "questionId": "49",
-        "answer": "et eligendi sed beatae et et"
+        "questionId": "41",
+        "answer": "doloribus inventore in minima quaerat et accusantium et delectus dolore"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "membershipWorkingGroup-139",
     "runtimeId": 139,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "17",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "32",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "neque accusantium veniam eveniet quod dolorem"
+        "questionId": "40",
+        "answer": "quos soluta modi et ipsam sequi facere aliquam quaerat"
       },
       {
-        "questionId": "49",
-        "answer": "ab ut molestiae adipisci facere voluptas corporis"
+        "questionId": "41",
+        "answer": "et sint molestiae eius veritatis unde"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "membershipWorkingGroup-140",
     "runtimeId": 140,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "18",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "2",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "eum dolorem et molestiae eligendi ipsum occaecati"
+        "questionId": "40",
+        "answer": "reiciendis labore at perferendis in tempore omnis ab velit"
       },
       {
-        "questionId": "49",
-        "answer": "dignissimos voluptatem est deleniti ut quia sit asperiores nobis"
+        "questionId": "41",
+        "answer": "nisi iste laborum molestiae aut sunt ut"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-141",
     "runtimeId": 141,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "18",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "2",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "perferendis voluptatem aut aperiam excepturi vitae in ut id"
+        "questionId": "40",
+        "answer": "recusandae culpa occaecati vel ullam consectetur"
       },
       {
-        "questionId": "49",
-        "answer": "doloremque itaque atque et ad"
+        "questionId": "41",
+        "answer": "tenetur soluta aliquid minus quam quidem expedita dolores"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-142",
     "runtimeId": 142,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "48",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "ipsum dicta tempora saepe nihil accusantium"
+        "questionId": "40",
+        "answer": "officiis debitis dignissimos vero voluptas ducimus delectus neque porro"
       },
       {
-        "questionId": "49",
-        "answer": "consequuntur aspernatur ut consequatur aliquid ea quam aperiam et"
+        "questionId": "41",
+        "answer": "expedita sunt aliquam in in hic"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-143",
     "runtimeId": 143,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "48",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "minima voluptatem illo voluptas ut magnam qui vitae nobis"
+        "questionId": "40",
+        "answer": "consequuntur sunt harum non delectus rem incidunt laudantium ad"
       },
       {
-        "questionId": "49",
-        "answer": "enim id provident voluptatum ut incidunt quas quasi error"
+        "questionId": "41",
+        "answer": "ipsa repellendus expedita distinctio porro nihil consequatur"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-144",
     "runtimeId": 144,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "22",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "40",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "quos illum dolores cupiditate quidem sunt nam nemo modi perferendis"
+        "questionId": "40",
+        "answer": "qui aut rerum repudiandae ipsam repudiandae laboriosam"
       },
       {
-        "questionId": "49",
-        "answer": "perferendis rerum nemo ea explicabo hic quasi"
+        "questionId": "41",
+        "answer": "ullam omnis ut labore accusamus suscipit praesentium deleniti sunt"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-145",
     "runtimeId": 145,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "22",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "40",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "assumenda dolorem consectetur alias ut dignissimos"
+        "questionId": "40",
+        "answer": "voluptatum veniam natus adipisci tempore veniam omnis fuga"
       },
       {
-        "questionId": "49",
-        "answer": "molestiae quia fugiat molestiae odit sunt"
+        "questionId": "41",
+        "answer": "in atque soluta autem tempora aut"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-146",
     "runtimeId": 146,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "3",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "46",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "qui molestias exercitationem harum ut sequi"
+        "questionId": "40",
+        "answer": "quam velit iure qui aut repellat"
       },
       {
-        "questionId": "49",
-        "answer": "fugit quam fugiat minima veniam sapiente"
+        "questionId": "41",
+        "answer": "earum enim rerum architecto et natus corrupti deserunt quia voluptatem"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-147",
     "runtimeId": 147,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "3",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "46",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "eos modi autem voluptas aspernatur"
+        "questionId": "40",
+        "answer": "quae nihil aliquam ea quia ut eos impedit nobis qui"
       },
       {
-        "questionId": "49",
-        "answer": "dolorem praesentium veritatis molestias consequatur aut nihil"
+        "questionId": "41",
+        "answer": "possimus perferendis labore facere inventore sit laboriosam"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-148",
     "runtimeId": 148,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "31",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "30",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "voluptatem porro voluptatem possimus ab sint adipisci quo totam eligendi"
+        "questionId": "40",
+        "answer": "voluptatem eveniet omnis qui consequatur"
       },
       {
-        "questionId": "49",
-        "answer": "repellat porro nobis corporis impedit nobis alias consequuntur"
+        "questionId": "41",
+        "answer": "temporibus aliquam maxime eius et voluptatem quibusdam vel ab"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-149",
     "runtimeId": 149,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "31",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "30",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "architecto sunt est aliquam ipsa sint"
+        "questionId": "40",
+        "answer": "ducimus aut nostrum qui voluptas aut libero est harum"
       },
       {
-        "questionId": "49",
-        "answer": "occaecati laudantium totam labore quod qui numquam"
+        "questionId": "41",
+        "answer": "sit dignissimos eos ut iure consequatur"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-150",
     "runtimeId": 150,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "28",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "5",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "eveniet totam veniam rerum officiis tempora"
+        "questionId": "40",
+        "answer": "reprehenderit autem rem harum at voluptatibus exercitationem optio iste dicta"
       },
       {
-        "questionId": "49",
-        "answer": "nam et enim sunt nobis saepe aut vitae id"
+        "questionId": "41",
+        "answer": "tempora ipsa quis quas tempora atque voluptas"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-151",
     "runtimeId": 151,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "28",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "5",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "sed voluptas veritatis velit occaecati facere est veniam"
+        "questionId": "40",
+        "answer": "odio sint minima nam tempora est voluptatem occaecati modi"
       },
       {
-        "questionId": "49",
-        "answer": "est provident quasi quia id"
+        "questionId": "41",
+        "answer": "quidem fugiat enim illo sunt quas"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 7000
   },
   {
     "id": "membershipWorkingGroup-152",
     "runtimeId": 152,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "37",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "9",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "nihil enim non omnis consectetur placeat est non dicta saepe"
+        "questionId": "40",
+        "answer": "ut molestiae optio itaque sed et"
       },
       {
-        "questionId": "49",
-        "answer": "et atque dolorem autem et aliquam"
+        "questionId": "41",
+        "answer": "sunt consequatur voluptas consequatur incidunt porro"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-153",
     "runtimeId": 153,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "37",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "9",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "quae sint eius dolor vero nulla praesentium"
+        "questionId": "40",
+        "answer": "at aperiam quo illo ipsam quis voluptas"
       },
       {
-        "questionId": "49",
-        "answer": "debitis eos veniam corrupti ullam voluptatem necessitatibus illo"
+        "questionId": "41",
+        "answer": "saepe est sed quos deleniti fuga voluptate ut tenetur"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 8000
   },
   {
     "id": "membershipWorkingGroup-154",
     "runtimeId": 154,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "41",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "38",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "ex similique qui sapiente et officiis ab maiores"
+        "questionId": "40",
+        "answer": "sint deserunt dolore laudantium sed velit ut dolor"
       },
       {
-        "questionId": "49",
-        "answer": "quia et quia eligendi voluptas repellendus omnis animi laudantium"
+        "questionId": "41",
+        "answer": "quia cum in qui quia voluptatem molestias omnis"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 3000
   },
   {
     "id": "membershipWorkingGroup-155",
     "runtimeId": 155,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "41",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "38",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "dolorem reiciendis et est provident magnam est vitae"
+        "questionId": "40",
+        "answer": "nobis sint id aspernatur officiis aut magni dolorem temporibus odio"
       },
       {
-        "questionId": "49",
-        "answer": "provident aut voluptatem aut nostrum"
+        "questionId": "41",
+        "answer": "voluptas sint tempore maxime ratione ut"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-156",
     "runtimeId": 156,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "6",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "12",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "iste dignissimos et quos ipsam est"
+        "questionId": "40",
+        "answer": "nostrum aperiam facilis porro expedita omnis facere id amet error"
       },
       {
-        "questionId": "49",
-        "answer": "ea voluptates et dolores nobis qui in est"
+        "questionId": "41",
+        "answer": "sunt deleniti porro voluptatibus ab aut rerum incidunt alias aut"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-157",
     "runtimeId": 157,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "6",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "12",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "magnam perspiciatis quam neque vero dolorum"
+        "questionId": "40",
+        "answer": "animi aut omnis exercitationem et repudiandae maiores nam commodi"
       },
       {
-        "questionId": "49",
-        "answer": "optio cum enim eius vero eum deserunt odio iure non"
+        "questionId": "41",
+        "answer": "eius incidunt atque quia ducimus quod ipsa nesciunt"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-158",
     "runtimeId": 158,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "35",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "41",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "dolores iure neque ipsam quod est est id"
+        "questionId": "40",
+        "answer": "iste voluptatum quas aut qui corporis aliquam"
       },
       {
-        "questionId": "49",
-        "answer": "sed voluptatem labore fuga eum vel dolores laboriosam omnis distinctio"
+        "questionId": "41",
+        "answer": "ut est expedita autem est et natus explicabo"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-159",
     "runtimeId": 159,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "35",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "41",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "eum dolorem pariatur maxime sed quaerat"
+        "questionId": "40",
+        "answer": "vitae excepturi modi vitae quod quam quis consectetur cumque"
       },
       {
-        "questionId": "49",
-        "answer": "laborum illo similique dicta aspernatur nam sed nisi amet"
+        "questionId": "41",
+        "answer": "porro et mollitia deleniti labore neque doloribus"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-160",
     "runtimeId": 160,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "32",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "35",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "consequatur delectus optio id nostrum dolorum ipsa qui voluptas"
+        "questionId": "40",
+        "answer": "asperiores nobis voluptates velit quo occaecati sit"
       },
       {
-        "questionId": "49",
-        "answer": "quae non est provident id mollitia sunt unde"
+        "questionId": "41",
+        "answer": "tempore ex earum eum ullam quasi"
       }
     ],
-    "status": "filled"
+    "status": "filled",
+    "stake": 7000
   },
   {
     "id": "membershipWorkingGroup-161",
     "runtimeId": 161,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "32",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "35",
     "answers": [
       {
-        "questionId": "48",
-        "answer": "qui ut qui quaerat sapiente in qui"
+        "questionId": "40",
+        "answer": "non velit laudantium nihil vel dolor"
       },
       {
-        "questionId": "49",
-        "answer": "molestiae veritatis illo at velit aut perferendis quisquam"
+        "questionId": "41",
+        "answer": "eum pariatur doloribus consequatur reprehenderit sit quasi ipsa ullam voluptas"
       }
     ],
-    "status": "pending"
+    "status": "pending",
+    "stake": 6000
   },
   {
-    "id": "forumWorkingGroup-162",
+    "id": "membershipWorkingGroup-162",
     "runtimeId": 162,
-    "openingId": "forumWorkingGroup-0",
-    "applicantId": "20",
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "29",
     "answers": [
       {
-        "questionId": "0",
-        "answer": "voluptates consequatur blanditiis corrupti aut qui perferendis"
+        "questionId": "40",
+        "answer": "ratione molestiae est pariatur quos iure"
       },
       {
-        "questionId": "1",
-        "answer": "reprehenderit eaque aut perferendis aliquam voluptates"
+        "questionId": "41",
+        "answer": "dicta ab dolor ipsum expedita dolore quibusdam facilis"
       }
     ],
-    "status": "withdrawn"
+    "status": "filled",
+    "stake": 5000
   },
   {
-    "id": "forumWorkingGroup-163",
+    "id": "membershipWorkingGroup-163",
     "runtimeId": 163,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "29",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "illum magnam voluptas possimus ipsam laudantium"
+      },
+      {
+        "questionId": "41",
+        "answer": "magnam et sed aut dolores dolorem"
+      }
+    ],
+    "status": "pending",
+    "stake": 8000
+  },
+  {
+    "id": "membershipWorkingGroup-164",
+    "runtimeId": 164,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "7",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "quasi quo accusantium excepturi eligendi tempora eius consequatur a"
+      },
+      {
+        "questionId": "41",
+        "answer": "et reprehenderit necessitatibus et impedit perspiciatis magni voluptatem reprehenderit"
+      }
+    ],
+    "status": "filled",
+    "stake": 5000
+  },
+  {
+    "id": "membershipWorkingGroup-165",
+    "runtimeId": 165,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "7",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "quam quo beatae est repudiandae dolores illum nostrum"
+      },
+      {
+        "questionId": "41",
+        "answer": "ad accusamus deleniti voluptas et quia non"
+      }
+    ],
+    "status": "pending",
+    "stake": 4000
+  },
+  {
+    "id": "membershipWorkingGroup-166",
+    "runtimeId": 166,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "38",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "ab eum quisquam blanditiis alias non perferendis ratione"
+      },
+      {
+        "questionId": "41",
+        "answer": "et dolor officiis dolores voluptatem sed sed laudantium quibusdam"
+      }
+    ],
+    "status": "filled",
+    "stake": 3000
+  },
+  {
+    "id": "membershipWorkingGroup-167",
+    "runtimeId": 167,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "38",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "consequatur quasi minus recusandae qui rem facilis vel provident fugiat"
+      },
+      {
+        "questionId": "41",
+        "answer": "id necessitatibus officiis explicabo dolorem et in deleniti dicta"
+      }
+    ],
+    "status": "pending",
+    "stake": 7000
+  },
+  {
+    "id": "membershipWorkingGroup-168",
+    "runtimeId": 168,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "44",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "explicabo nostrum ducimus ut molestias"
+      },
+      {
+        "questionId": "41",
+        "answer": "et esse aut et beatae cum corporis"
+      }
+    ],
+    "status": "filled",
+    "stake": 4000
+  },
+  {
+    "id": "membershipWorkingGroup-169",
+    "runtimeId": 169,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "44",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "neque sed quasi enim rerum est perferendis explicabo aliquam"
+      },
+      {
+        "questionId": "41",
+        "answer": "modi dolor sed in inventore ex"
+      }
+    ],
+    "status": "pending",
+    "stake": 3000
+  },
+  {
+    "id": "forumWorkingGroup-170",
+    "runtimeId": 170,
     "openingId": "forumWorkingGroup-0",
-    "applicantId": "3",
+    "applicantId": "13",
     "answers": [
       {
         "questionId": "0",
-        "answer": "cum impedit architecto sed modi"
+        "answer": "odio consequatur perferendis iusto distinctio exercitationem est voluptates"
       },
       {
         "questionId": "1",
-        "answer": "corrupti enim ullam nihil dolorum"
+        "answer": "molestiae eligendi illum nisi optio et"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
-    "id": "forumWorkingGroup-164",
-    "runtimeId": 164,
+    "id": "forumWorkingGroup-171",
+    "runtimeId": 171,
+    "openingId": "forumWorkingGroup-0",
+    "applicantId": "24",
+    "answers": [
+      {
+        "questionId": "0",
+        "answer": "officiis facere et est voluptate error quibusdam"
+      },
+      {
+        "questionId": "1",
+        "answer": "sit tempora ut quisquam tempora facere eius ut exercitationem"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 6000
+  },
+  {
+    "id": "forumWorkingGroup-172",
+    "runtimeId": 172,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "11",
+    "applicantId": "15",
     "answers": [
       {
         "questionId": "2",
-        "answer": "quam iure suscipit labore reprehenderit"
+        "answer": "voluptates ut officia inventore possimus reprehenderit aut natus voluptatem"
       },
       {
         "questionId": "3",
-        "answer": "soluta eveniet rerum distinctio asperiores inventore velit"
+        "answer": "maiores quas soluta voluptas assumenda vero"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
-    "id": "forumWorkingGroup-165",
-    "runtimeId": 165,
+    "id": "forumWorkingGroup-173",
+    "runtimeId": 173,
     "openingId": "forumWorkingGroup-1",
-    "applicantId": "41",
+    "applicantId": "18",
     "answers": [
       {
         "questionId": "2",
-        "answer": "et et nihil voluptatibus quisquam maiores consectetur"
+        "answer": "porro dolores ea asperiores sed laudantium dolorem"
       },
       {
         "questionId": "3",
-        "answer": "quidem eos magni modi nihil recusandae cupiditate"
+        "answer": "amet corrupti eum ut in"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
-    "id": "forumWorkingGroup-166",
-    "runtimeId": 166,
-    "openingId": "forumWorkingGroup-2",
-    "applicantId": "1",
-    "answers": [
-      {
-        "questionId": "4",
-        "answer": "quia doloremque tempore est explicabo"
-      },
-      {
-        "questionId": "5",
-        "answer": "cupiditate tempore itaque iure quisquam distinctio totam optio ut"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "forumWorkingGroup-167",
-    "runtimeId": 167,
+    "id": "forumWorkingGroup-174",
+    "runtimeId": 174,
     "openingId": "forumWorkingGroup-2",
     "applicantId": "47",
     "answers": [
       {
         "questionId": "4",
-        "answer": "consequatur facere ipsum reprehenderit eius nobis quia voluptatem explicabo"
+        "answer": "illum recusandae eius nisi sequi dolorem at laborum"
       },
       {
         "questionId": "5",
-        "answer": "recusandae explicabo tempore reiciendis aut nihil"
+        "answer": "similique minus vel provident numquam sed iure aut"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
-    "id": "forumWorkingGroup-168",
-    "runtimeId": 168,
-    "openingId": "forumWorkingGroup-3",
-    "applicantId": "41",
-    "answers": [
-      {
-        "questionId": "6",
-        "answer": "nulla voluptatem et quis omnis sequi sunt beatae rerum eum"
-      },
-      {
-        "questionId": "7",
-        "answer": "aut sunt fugiat sunt eum dolores"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "forumWorkingGroup-169",
-    "runtimeId": 169,
-    "openingId": "forumWorkingGroup-3",
-    "applicantId": "11",
-    "answers": [
-      {
-        "questionId": "6",
-        "answer": "quisquam cum quia omnis officia cumque corrupti veritatis ipsam"
-      },
-      {
-        "questionId": "7",
-        "answer": "quos velit quis assumenda minus incidunt est"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "forumWorkingGroup-170",
-    "runtimeId": 170,
-    "openingId": "forumWorkingGroup-4",
-    "applicantId": "9",
-    "answers": [
-      {
-        "questionId": "8",
-        "answer": "aspernatur esse ad quo quia omnis occaecati"
-      },
-      {
-        "questionId": "9",
-        "answer": "ipsa optio repellendus fugit voluptatem et et accusantium soluta"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "forumWorkingGroup-171",
-    "runtimeId": 171,
-    "openingId": "forumWorkingGroup-4",
-    "applicantId": "29",
-    "answers": [
-      {
-        "questionId": "8",
-        "answer": "iste tenetur blanditiis facere cumque et"
-      },
-      {
-        "questionId": "9",
-        "answer": "optio qui a cum ullam asperiores sed quo"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "forumWorkingGroup-172",
-    "runtimeId": 172,
-    "openingId": "forumWorkingGroup-5",
-    "applicantId": "6",
-    "answers": [
-      {
-        "questionId": "10",
-        "answer": "id odit dolore quidem ea dignissimos est minus sed"
-      },
-      {
-        "questionId": "11",
-        "answer": "error fuga neque culpa sint"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "forumWorkingGroup-173",
-    "runtimeId": 173,
-    "openingId": "forumWorkingGroup-5",
-    "applicantId": "12",
-    "answers": [
-      {
-        "questionId": "10",
-        "answer": "neque id aliquid quia sint quae molestiae libero maiores officiis"
-      },
-      {
-        "questionId": "11",
-        "answer": "et aut modi itaque non natus"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "storageWorkingGroup-174",
-    "runtimeId": 174,
-    "openingId": "storageWorkingGroup-6",
-    "applicantId": "3",
-    "answers": [
-      {
-        "questionId": "12",
-        "answer": "amet a ipsam corrupti aut sequi ea nesciunt"
-      },
-      {
-        "questionId": "13",
-        "answer": "sed rerum sunt ut voluptate cupiditate"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "storageWorkingGroup-175",
+    "id": "forumWorkingGroup-175",
     "runtimeId": 175,
-    "openingId": "storageWorkingGroup-6",
-    "applicantId": "7",
+    "openingId": "forumWorkingGroup-2",
+    "applicantId": "26",
     "answers": [
       {
-        "questionId": "12",
-        "answer": "sapiente doloremque omnis ipsam et nam quisquam aliquam quibusdam"
+        "questionId": "4",
+        "answer": "eum consequatur possimus et quo voluptates minima"
       },
       {
-        "questionId": "13",
-        "answer": "minima possimus consequatur explicabo eligendi qui et consequatur"
+        "questionId": "5",
+        "answer": "et molestias quaerat ut aspernatur occaecati dignissimos placeat magnam"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 3000
   },
   {
-    "id": "storageWorkingGroup-176",
+    "id": "forumWorkingGroup-176",
     "runtimeId": 176,
-    "openingId": "storageWorkingGroup-7",
-    "applicantId": "46",
+    "openingId": "forumWorkingGroup-3",
+    "applicantId": "14",
     "answers": [
       {
-        "questionId": "14",
-        "answer": "asperiores at molestias eos cum repellat deleniti vel iste"
+        "questionId": "6",
+        "answer": "eum occaecati ullam et dolorem omnis"
       },
       {
-        "questionId": "15",
-        "answer": "ut omnis id quibusdam rerum dicta"
+        "questionId": "7",
+        "answer": "nobis sed a et qui doloremque necessitatibus et"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
-    "id": "storageWorkingGroup-177",
+    "id": "forumWorkingGroup-177",
     "runtimeId": 177,
-    "openingId": "storageWorkingGroup-7",
-    "applicantId": "34",
+    "openingId": "forumWorkingGroup-3",
+    "applicantId": "40",
     "answers": [
       {
-        "questionId": "14",
-        "answer": "rem maiores corrupti unde dolores voluptatibus earum sit alias"
+        "questionId": "6",
+        "answer": "hic placeat eum quas et exercitationem"
       },
       {
-        "questionId": "15",
-        "answer": "culpa tempore aut vel dolores est occaecati qui"
+        "questionId": "7",
+        "answer": "in quis vel tempore vero sed ratione"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
-    "id": "storageWorkingGroup-178",
+    "id": "forumWorkingGroup-178",
     "runtimeId": 178,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "17",
+    "openingId": "forumWorkingGroup-4",
+    "applicantId": "26",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "totam qui sed sed odit reprehenderit quis non"
+        "questionId": "8",
+        "answer": "est ut expedita in vero ipsum ratione quis aut"
       },
       {
-        "questionId": "17",
-        "answer": "sunt officia repellat vel exercitationem autem nihil soluta"
+        "questionId": "9",
+        "answer": "velit laudantium minus quo quod saepe autem incidunt similique ut"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
-    "id": "storageWorkingGroup-179",
+    "id": "forumWorkingGroup-179",
     "runtimeId": 179,
-    "openingId": "storageWorkingGroup-8",
-    "applicantId": "19",
+    "openingId": "forumWorkingGroup-4",
+    "applicantId": "25",
     "answers": [
       {
-        "questionId": "16",
-        "answer": "quo facere repudiandae non ea et quo velit"
+        "questionId": "8",
+        "answer": "perspiciatis accusantium alias ipsum distinctio dolorem modi magnam laborum"
       },
       {
-        "questionId": "17",
-        "answer": "enim quis enim sequi velit enim"
+        "questionId": "9",
+        "answer": "velit non natus quae facilis qui aspernatur"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
-    "id": "storageWorkingGroup-180",
+    "id": "forumWorkingGroup-180",
     "runtimeId": 180,
-    "openingId": "storageWorkingGroup-9",
-    "applicantId": "49",
+    "openingId": "forumWorkingGroup-5",
+    "applicantId": "16",
     "answers": [
       {
-        "questionId": "18",
-        "answer": "sed quia veritatis excepturi est quis sed"
+        "questionId": "10",
+        "answer": "ut explicabo minus dolor nulla ipsum"
       },
       {
-        "questionId": "19",
-        "answer": "qui consectetur aliquid corrupti suscipit earum corrupti in ut"
+        "questionId": "11",
+        "answer": "ratione tenetur quis sed esse nobis velit"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 3000
   },
   {
-    "id": "storageWorkingGroup-181",
+    "id": "forumWorkingGroup-181",
     "runtimeId": 181,
-    "openingId": "storageWorkingGroup-9",
+    "openingId": "forumWorkingGroup-5",
     "applicantId": "37",
     "answers": [
       {
-        "questionId": "18",
-        "answer": "qui voluptates commodi quos accusantium"
+        "questionId": "10",
+        "answer": "doloribus suscipit ea iste quas veritatis"
       },
       {
-        "questionId": "19",
-        "answer": "ipsa rerum architecto veritatis ut rerum fugiat fugit laborum"
+        "questionId": "11",
+        "answer": "qui asperiores aliquid dolorum omnis"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 8000
   },
   {
     "id": "storageWorkingGroup-182",
     "runtimeId": 182,
-    "openingId": "storageWorkingGroup-10",
-    "applicantId": "17",
+    "openingId": "storageWorkingGroup-6",
+    "applicantId": "4",
     "answers": [
       {
-        "questionId": "20",
-        "answer": "modi quam in quos aut veniam ipsam est et"
+        "questionId": "12",
+        "answer": "maiores consequatur est vel repudiandae aut ut tempore non"
       },
       {
-        "questionId": "21",
-        "answer": "veniam aperiam vel cumque non doloremque"
+        "questionId": "13",
+        "answer": "consequatur accusantium delectus id repellat autem voluptatem"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 3000
   },
   {
     "id": "storageWorkingGroup-183",
     "runtimeId": 183,
-    "openingId": "storageWorkingGroup-10",
-    "applicantId": "14",
+    "openingId": "storageWorkingGroup-6",
+    "applicantId": "17",
     "answers": [
       {
-        "questionId": "20",
-        "answer": "sit molestiae molestiae tenetur ullam aut"
+        "questionId": "12",
+        "answer": "vero laboriosam consequatur est in esse qui dolores debitis necessitatibus"
       },
       {
-        "questionId": "21",
-        "answer": "dolor accusantium quia iste perferendis et a illum ducimus tempora"
+        "questionId": "13",
+        "answer": "et odio doloremque qui libero laboriosam odit repellendus"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
     "id": "storageWorkingGroup-184",
     "runtimeId": 184,
-    "openingId": "storageWorkingGroup-11",
-    "applicantId": "1",
+    "openingId": "storageWorkingGroup-7",
+    "applicantId": "44",
     "answers": [
       {
-        "questionId": "22",
-        "answer": "impedit mollitia qui et dolore odio quisquam"
+        "questionId": "14",
+        "answer": "voluptatem quasi in atque repudiandae"
       },
       {
-        "questionId": "23",
-        "answer": "atque vel dolores reiciendis esse voluptas error"
+        "questionId": "15",
+        "answer": "perspiciatis nesciunt exercitationem suscipit qui inventore dolores est"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
     "id": "storageWorkingGroup-185",
     "runtimeId": 185,
-    "openingId": "storageWorkingGroup-11",
-    "applicantId": "40",
+    "openingId": "storageWorkingGroup-7",
+    "applicantId": "43",
     "answers": [
       {
-        "questionId": "22",
-        "answer": "consectetur voluptas ex deleniti libero voluptas veniam distinctio"
+        "questionId": "14",
+        "answer": "earum qui et velit enim aspernatur sed veniam"
       },
       {
-        "questionId": "23",
-        "answer": "quibusdam et ut voluptatibus et soluta"
+        "questionId": "15",
+        "answer": "ut tempore incidunt alias consectetur iure"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
     "id": "storageWorkingGroup-186",
     "runtimeId": 186,
-    "openingId": "storageWorkingGroup-12",
-    "applicantId": "29",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "31",
     "answers": [
       {
-        "questionId": "24",
-        "answer": "aliquid accusamus corporis qui voluptatem deserunt laboriosam atque quo nisi"
+        "questionId": "16",
+        "answer": "cupiditate et optio unde consequuntur adipisci odio autem"
       },
       {
-        "questionId": "25",
-        "answer": "hic et ut deleniti natus voluptatem vel"
+        "questionId": "17",
+        "answer": "voluptatem officiis voluptate omnis optio delectus commodi"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
     "id": "storageWorkingGroup-187",
     "runtimeId": 187,
-    "openingId": "storageWorkingGroup-12",
-    "applicantId": "3",
+    "openingId": "storageWorkingGroup-8",
+    "applicantId": "5",
     "answers": [
       {
-        "questionId": "24",
-        "answer": "architecto ipsa numquam commodi dolore animi"
+        "questionId": "16",
+        "answer": "officiis dolores inventore nisi vitae occaecati enim"
       },
       {
-        "questionId": "25",
-        "answer": "quod enim eos sunt dolores tempore"
+        "questionId": "17",
+        "answer": "minus earum reiciendis ipsa laudantium autem"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
     "id": "storageWorkingGroup-188",
     "runtimeId": 188,
-    "openingId": "storageWorkingGroup-13",
-    "applicantId": "0",
+    "openingId": "storageWorkingGroup-9",
+    "applicantId": "44",
     "answers": [
       {
-        "questionId": "26",
-        "answer": "aspernatur adipisci quam natus et assumenda"
+        "questionId": "18",
+        "answer": "vitae inventore officia saepe quos cum officiis"
       },
       {
-        "questionId": "27",
-        "answer": "voluptas dolore exercitationem unde ratione temporibus atque unde"
+        "questionId": "19",
+        "answer": "vel voluptas aut voluptas vitae labore nihil"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 8000
   },
   {
     "id": "storageWorkingGroup-189",
     "runtimeId": 189,
-    "openingId": "storageWorkingGroup-13",
-    "applicantId": "50",
+    "openingId": "storageWorkingGroup-9",
+    "applicantId": "4",
     "answers": [
       {
-        "questionId": "26",
-        "answer": "dolor deleniti vel ut iusto rerum"
+        "questionId": "18",
+        "answer": "magnam at et optio rerum"
       },
       {
-        "questionId": "27",
-        "answer": "aut adipisci illo occaecati sit quo eum sint itaque"
+        "questionId": "19",
+        "answer": "sit illum labore maiores fugit sit dolor"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 8000
   },
   {
-    "id": "contentDirectoryWorkingGroup-190",
+    "id": "storageWorkingGroup-190",
     "runtimeId": 190,
-    "openingId": "contentDirectoryWorkingGroup-14",
-    "applicantId": "37",
+    "openingId": "storageWorkingGroup-10",
+    "applicantId": "19",
     "answers": [
       {
-        "questionId": "28",
-        "answer": "esse vitae reprehenderit aut sint et corporis velit aut"
+        "questionId": "20",
+        "answer": "quis expedita totam saepe pariatur veritatis eos"
       },
       {
-        "questionId": "29",
-        "answer": "veritatis ullam recusandae quis veritatis aut a qui"
+        "questionId": "21",
+        "answer": "aut et culpa quia ut"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
-    "id": "contentDirectoryWorkingGroup-191",
+    "id": "storageWorkingGroup-191",
     "runtimeId": 191,
-    "openingId": "contentDirectoryWorkingGroup-14",
+    "openingId": "storageWorkingGroup-10",
     "applicantId": "31",
     "answers": [
       {
-        "questionId": "28",
-        "answer": "nesciunt molestias corporis ratione laboriosam repellat accusamus odit"
+        "questionId": "20",
+        "answer": "earum fugiat nesciunt est consequatur"
       },
       {
-        "questionId": "29",
-        "answer": "sapiente quod suscipit aut porro velit"
+        "questionId": "21",
+        "answer": "voluptatem autem consequuntur debitis veritatis veritatis nisi nihil eum"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
-    "id": "contentDirectoryWorkingGroup-192",
+    "id": "storageWorkingGroup-192",
     "runtimeId": 192,
-    "openingId": "contentDirectoryWorkingGroup-15",
-    "applicantId": "48",
+    "openingId": "storageWorkingGroup-11",
+    "applicantId": "6",
     "answers": [
       {
-        "questionId": "30",
-        "answer": "est est sit quo ullam quaerat"
+        "questionId": "22",
+        "answer": "neque corrupti animi non et earum nisi sint ipsa"
       },
       {
-        "questionId": "31",
-        "answer": "autem sit quaerat beatae sequi consequatur natus officiis quos consectetur"
+        "questionId": "23",
+        "answer": "quia voluptate qui unde reprehenderit expedita quaerat nam quis"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
-    "id": "contentDirectoryWorkingGroup-193",
+    "id": "storageWorkingGroup-193",
     "runtimeId": 193,
-    "openingId": "contentDirectoryWorkingGroup-15",
-    "applicantId": "22",
+    "openingId": "storageWorkingGroup-11",
+    "applicantId": "30",
     "answers": [
       {
-        "questionId": "30",
-        "answer": "qui odio ad ratione voluptatem hic perspiciatis itaque"
+        "questionId": "22",
+        "answer": "quia est est nesciunt dolor libero reiciendis aliquam"
       },
       {
-        "questionId": "31",
-        "answer": "enim ullam dolores debitis ab dolores et officiis"
+        "questionId": "23",
+        "answer": "aut quidem fugiat vitae quam ea accusantium"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
-    "id": "contentDirectoryWorkingGroup-194",
+    "id": "storageWorkingGroup-194",
     "runtimeId": 194,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "22",
+    "openingId": "storageWorkingGroup-12",
+    "applicantId": "11",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "aut maiores unde reprehenderit tenetur debitis quam iure"
+        "questionId": "24",
+        "answer": "ut dignissimos eum temporibus perferendis vel quis soluta"
       },
       {
-        "questionId": "33",
-        "answer": "vero iusto suscipit quis ut eos ipsam est"
+        "questionId": "25",
+        "answer": "sunt molestiae velit repellendus reiciendis praesentium autem ipsam"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 8000
   },
   {
-    "id": "contentDirectoryWorkingGroup-195",
+    "id": "storageWorkingGroup-195",
     "runtimeId": 195,
-    "openingId": "contentDirectoryWorkingGroup-16",
-    "applicantId": "41",
+    "openingId": "storageWorkingGroup-12",
+    "applicantId": "49",
     "answers": [
       {
-        "questionId": "32",
-        "answer": "voluptas similique autem aut ipsum omnis"
+        "questionId": "24",
+        "answer": "eum id voluptatibus consequatur reprehenderit fugit autem"
       },
       {
-        "questionId": "33",
-        "answer": "est et occaecati quia qui et mollitia"
+        "questionId": "25",
+        "answer": "nulla quae commodi labore numquam nobis nostrum"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-196",
     "runtimeId": 196,
-    "openingId": "contentDirectoryWorkingGroup-17",
-    "applicantId": "6",
+    "openingId": "contentDirectoryWorkingGroup-13",
+    "applicantId": "26",
     "answers": [
       {
-        "questionId": "34",
-        "answer": "ratione cum occaecati mollitia quis voluptatibus aut magni unde"
+        "questionId": "26",
+        "answer": "vitae aut qui ut sunt perspiciatis qui exercitationem"
       },
       {
-        "questionId": "35",
-        "answer": "molestiae dicta id cupiditate nulla adipisci corrupti nesciunt"
+        "questionId": "27",
+        "answer": "voluptatem rerum saepe cumque quidem optio"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-197",
     "runtimeId": 197,
-    "openingId": "contentDirectoryWorkingGroup-17",
-    "applicantId": "30",
+    "openingId": "contentDirectoryWorkingGroup-13",
+    "applicantId": "47",
     "answers": [
       {
-        "questionId": "34",
-        "answer": "et vitae quaerat totam qui similique enim repellendus quae"
+        "questionId": "26",
+        "answer": "autem corporis dolores voluptas nesciunt ut rerum ut"
       },
       {
-        "questionId": "35",
-        "answer": "dolores voluptatem at vero eos asperiores qui commodi reprehenderit"
+        "questionId": "27",
+        "answer": "eligendi soluta ratione et alias consequuntur assumenda"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-198",
     "runtimeId": 198,
-    "openingId": "contentDirectoryWorkingGroup-18",
-    "applicantId": "17",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "22",
     "answers": [
       {
-        "questionId": "36",
-        "answer": "nihil minima magnam et cumque omnis maiores"
+        "questionId": "28",
+        "answer": "itaque doloribus sint vitae repellendus perferendis"
       },
       {
-        "questionId": "37",
-        "answer": "dolorem vel laboriosam nobis voluptate excepturi"
+        "questionId": "29",
+        "answer": "aut eveniet molestiae ut eligendi"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-199",
     "runtimeId": 199,
-    "openingId": "contentDirectoryWorkingGroup-18",
-    "applicantId": "32",
+    "openingId": "contentDirectoryWorkingGroup-14",
+    "applicantId": "48",
     "answers": [
       {
-        "questionId": "36",
-        "answer": "minus aut odit repellat placeat cupiditate"
+        "questionId": "28",
+        "answer": "repudiandae minus est aut velit unde et nihil dolorem"
       },
       {
-        "questionId": "37",
-        "answer": "necessitatibus explicabo rerum cupiditate iste ipsam ipsum debitis facilis"
+        "questionId": "29",
+        "answer": "ipsam sit sed veniam et nobis omnis sunt ab voluptatem"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-200",
     "runtimeId": 200,
-    "openingId": "contentDirectoryWorkingGroup-19",
-    "applicantId": "35",
+    "openingId": "contentDirectoryWorkingGroup-15",
+    "applicantId": "12",
     "answers": [
       {
-        "questionId": "38",
-        "answer": "pariatur voluptatum sed quasi eius odit quia a"
+        "questionId": "30",
+        "answer": "aperiam incidunt dolor voluptate vel aut dolores"
       },
       {
-        "questionId": "39",
-        "answer": "sint cumque et repellat porro et voluptas non libero"
+        "questionId": "31",
+        "answer": "et rem tempora alias amet velit necessitatibus"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-201",
     "runtimeId": 201,
-    "openingId": "contentDirectoryWorkingGroup-19",
-    "applicantId": "19",
+    "openingId": "contentDirectoryWorkingGroup-15",
+    "applicantId": "15",
     "answers": [
       {
-        "questionId": "38",
-        "answer": "quis aut similique enim est qui quis temporibus eum"
+        "questionId": "30",
+        "answer": "veritatis dolores iure voluptas accusantium nihil ipsum iure"
       },
       {
-        "questionId": "39",
-        "answer": "quis quam voluptas quos qui illo"
+        "questionId": "31",
+        "answer": "sapiente nesciunt unde debitis odit officiis odio perferendis"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "contentDirectoryWorkingGroup-202",
     "runtimeId": 202,
-    "openingId": "contentDirectoryWorkingGroup-20",
-    "applicantId": "3",
+    "openingId": "contentDirectoryWorkingGroup-16",
+    "applicantId": "34",
     "answers": [
       {
-        "questionId": "40",
-        "answer": "incidunt fugiat provident iusto quaerat debitis sed optio error"
+        "questionId": "32",
+        "answer": "ut corrupti voluptates nisi laborum quis nulla vitae velit"
       },
       {
-        "questionId": "41",
-        "answer": "quia exercitationem molestiae laudantium dolores quibusdam"
+        "questionId": "33",
+        "answer": "maiores velit in eum deleniti atque nesciunt ut aut"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 8000
   },
   {
     "id": "contentDirectoryWorkingGroup-203",
     "runtimeId": 203,
-    "openingId": "contentDirectoryWorkingGroup-20",
-    "applicantId": "23",
+    "openingId": "contentDirectoryWorkingGroup-16",
+    "applicantId": "14",
     "answers": [
       {
-        "questionId": "40",
-        "answer": "neque ad dolor dolores qui ipsum natus aut"
+        "questionId": "32",
+        "answer": "eum eos distinctio dolorem aliquid quasi"
       },
       {
-        "questionId": "41",
-        "answer": "fugit itaque consequatur aut accusamus et a autem eaque"
+        "questionId": "33",
+        "answer": "ab tenetur aut voluptas qui voluptatum ea reprehenderit"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-204",
     "runtimeId": 204,
-    "openingId": "contentDirectoryWorkingGroup-21",
-    "applicantId": "2",
+    "openingId": "contentDirectoryWorkingGroup-17",
+    "applicantId": "21",
     "answers": [
       {
-        "questionId": "42",
-        "answer": "enim culpa id odit ipsum voluptatum iste magni aperiam"
+        "questionId": "34",
+        "answer": "et occaecati est rerum dolores velit veniam"
       },
       {
-        "questionId": "43",
-        "answer": "vel eveniet enim et quasi est impedit"
+        "questionId": "35",
+        "answer": "a porro est quos illo quam dolorem"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
     "id": "contentDirectoryWorkingGroup-205",
     "runtimeId": 205,
-    "openingId": "contentDirectoryWorkingGroup-21",
-    "applicantId": "7",
+    "openingId": "contentDirectoryWorkingGroup-17",
+    "applicantId": "9",
     "answers": [
       {
-        "questionId": "42",
-        "answer": "dolores vel et laudantium inventore itaque"
+        "questionId": "34",
+        "answer": "tenetur adipisci maxime quia soluta quis repellat"
       },
       {
-        "questionId": "43",
-        "answer": "quae quis et voluptatem inventore perferendis"
+        "questionId": "35",
+        "answer": "provident ipsa deleniti numquam excepturi officia corporis"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 7000
   },
   {
     "id": "contentDirectoryWorkingGroup-206",
     "runtimeId": 206,
-    "openingId": "contentDirectoryWorkingGroup-22",
-    "applicantId": "21",
+    "openingId": "contentDirectoryWorkingGroup-18",
+    "applicantId": "50",
     "answers": [
       {
-        "questionId": "44",
-        "answer": "pariatur aut ipsam aut fugit"
+        "questionId": "36",
+        "answer": "eveniet eum quod pariatur ut libero dicta"
       },
       {
-        "questionId": "45",
-        "answer": "odio voluptatem aut consequatur earum qui possimus quisquam"
+        "questionId": "37",
+        "answer": "eaque dolores magnam eligendi voluptates"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
     "id": "contentDirectoryWorkingGroup-207",
     "runtimeId": 207,
-    "openingId": "contentDirectoryWorkingGroup-22",
-    "applicantId": "15",
+    "openingId": "contentDirectoryWorkingGroup-18",
+    "applicantId": "35",
     "answers": [
       {
-        "questionId": "44",
-        "answer": "similique ut amet soluta rerum consequuntur"
+        "questionId": "36",
+        "answer": "quo sunt sed et nesciunt aut amet et voluptatibus"
       },
       {
-        "questionId": "45",
-        "answer": "consequatur asperiores exercitationem est libero unde adipisci"
+        "questionId": "37",
+        "answer": "suscipit vero nobis sint inventore fugit debitis sapiente cumque"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-208",
     "runtimeId": 208,
-    "openingId": "membershipWorkingGroup-23",
-    "applicantId": "2",
+    "openingId": "membershipWorkingGroup-19",
+    "applicantId": "42",
     "answers": [
       {
-        "questionId": "46",
-        "answer": "eius incidunt provident delectus sit"
+        "questionId": "38",
+        "answer": "sapiente autem rerum aut in"
       },
       {
-        "questionId": "47",
-        "answer": "ea possimus amet amet corporis sunt rerum hic"
+        "questionId": "39",
+        "answer": "qui optio aut asperiores provident nemo qui"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
   },
   {
     "id": "membershipWorkingGroup-209",
     "runtimeId": 209,
-    "openingId": "membershipWorkingGroup-23",
-    "applicantId": "40",
+    "openingId": "membershipWorkingGroup-19",
+    "applicantId": "18",
     "answers": [
       {
-        "questionId": "46",
-        "answer": "architecto dignissimos laborum dicta sapiente expedita blanditiis"
+        "questionId": "38",
+        "answer": "nemo omnis molestiae ipsum voluptas harum rerum quidem"
       },
       {
-        "questionId": "47",
-        "answer": "itaque asperiores earum aut quis delectus sit quia aut"
+        "questionId": "39",
+        "answer": "veniam dolor sit repellat quasi quam quod"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 8000
   },
   {
     "id": "membershipWorkingGroup-210",
     "runtimeId": 210,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "7",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "ut voluptatem vel rerum aliquid nemo sequi facere"
+      },
+      {
+        "questionId": "41",
+        "answer": "autem nihil modi ut magnam quis praesentium aut enim"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 7000
+  },
+  {
+    "id": "membershipWorkingGroup-211",
+    "runtimeId": 211,
+    "openingId": "membershipWorkingGroup-20",
+    "applicantId": "17",
+    "answers": [
+      {
+        "questionId": "40",
+        "answer": "sapiente aperiam qui sit quis est"
+      },
+      {
+        "questionId": "41",
+        "answer": "nesciunt voluptate laudantium libero omnis qui corporis"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 7000
+  },
+  {
+    "id": "membershipWorkingGroup-212",
+    "runtimeId": 212,
+    "openingId": "membershipWorkingGroup-21",
+    "applicantId": "38",
+    "answers": [
+      {
+        "questionId": "42",
+        "answer": "dolor rerum repellat id excepturi asperiores est qui harum"
+      },
+      {
+        "questionId": "43",
+        "answer": "neque qui corporis autem voluptatem quos"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 4000
+  },
+  {
+    "id": "membershipWorkingGroup-213",
+    "runtimeId": 213,
+    "openingId": "membershipWorkingGroup-21",
+    "applicantId": "29",
+    "answers": [
+      {
+        "questionId": "42",
+        "answer": "itaque ipsa voluptatem et at similique et aut porro quidem"
+      },
+      {
+        "questionId": "43",
+        "answer": "vel amet et ducimus velit consectetur"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 3000
+  },
+  {
+    "id": "membershipWorkingGroup-214",
+    "runtimeId": 214,
+    "openingId": "membershipWorkingGroup-22",
+    "applicantId": "4",
+    "answers": [
+      {
+        "questionId": "44",
+        "answer": "et dignissimos reiciendis deserunt qui aperiam"
+      },
+      {
+        "questionId": "45",
+        "answer": "reiciendis expedita voluptas saepe vel voluptatum omnis inventore"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 4000
+  },
+  {
+    "id": "membershipWorkingGroup-215",
+    "runtimeId": 215,
+    "openingId": "membershipWorkingGroup-22",
+    "applicantId": "16",
+    "answers": [
+      {
+        "questionId": "44",
+        "answer": "labore dolor quidem molestias animi dolores aut aspernatur"
+      },
+      {
+        "questionId": "45",
+        "answer": "magni modi id atque mollitia eum suscipit"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 6000
+  },
+  {
+    "id": "membershipWorkingGroup-216",
+    "runtimeId": 216,
+    "openingId": "membershipWorkingGroup-23",
+    "applicantId": "48",
+    "answers": [
+      {
+        "questionId": "46",
+        "answer": "eius optio omnis dolor assumenda"
+      },
+      {
+        "questionId": "47",
+        "answer": "numquam officia officiis voluptas eveniet"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 5000
+  },
+  {
+    "id": "membershipWorkingGroup-217",
+    "runtimeId": 217,
+    "openingId": "membershipWorkingGroup-23",
+    "applicantId": "11",
+    "answers": [
+      {
+        "questionId": "46",
+        "answer": "officia magni blanditiis repellat et quam aut doloribus"
+      },
+      {
+        "questionId": "47",
+        "answer": "perspiciatis praesentium et sed ea non eligendi assumenda numquam"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 7000
+  },
+  {
+    "id": "membershipWorkingGroup-218",
+    "runtimeId": 218,
+    "openingId": "membershipWorkingGroup-24",
+    "applicantId": "42",
+    "answers": [
+      {
+        "questionId": "48",
+        "answer": "autem illum occaecati aliquam saepe perspiciatis rerum recusandae quis"
+      },
+      {
+        "questionId": "49",
+        "answer": "consequatur facere autem et dicta ipsum non"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 4000
+  },
+  {
+    "id": "membershipWorkingGroup-219",
+    "runtimeId": 219,
     "openingId": "membershipWorkingGroup-24",
     "applicantId": "20",
     "answers": [
       {
         "questionId": "48",
-        "answer": "natus ipsum quod est dolores eius voluptatem"
+        "answer": "doloremque ab et optio quae quia"
       },
       {
         "questionId": "49",
-        "answer": "dignissimos nostrum voluptatem corporis eligendi provident"
+        "answer": "consequuntur velit facere laudantium nihil aut necessitatibus et"
       }
     ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-211",
-    "runtimeId": 211,
-    "openingId": "membershipWorkingGroup-24",
-    "applicantId": "30",
-    "answers": [
-      {
-        "questionId": "48",
-        "answer": "explicabo id consectetur in dolores recusandae"
-      },
-      {
-        "questionId": "49",
-        "answer": "ratione et sint maiores ullam ad quae est quisquam"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-212",
-    "runtimeId": 212,
-    "openingId": "membershipWorkingGroup-25",
-    "applicantId": "2",
-    "answers": [
-      {
-        "questionId": "50",
-        "answer": "dolorem voluptas ut placeat qui dolorum qui"
-      },
-      {
-        "questionId": "51",
-        "answer": "aut sed iusto consequatur aut voluptas iste modi est"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-213",
-    "runtimeId": 213,
-    "openingId": "membershipWorkingGroup-25",
-    "applicantId": "40",
-    "answers": [
-      {
-        "questionId": "50",
-        "answer": "possimus ipsa praesentium eaque quis iusto laborum a"
-      },
-      {
-        "questionId": "51",
-        "answer": "esse ut excepturi eos voluptatibus voluptas amet consequatur quo dolorem"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-214",
-    "runtimeId": 214,
-    "openingId": "membershipWorkingGroup-26",
-    "applicantId": "35",
-    "answers": [
-      {
-        "questionId": "52",
-        "answer": "voluptatibus id quis hic sit et ipsa consequatur voluptas"
-      },
-      {
-        "questionId": "53",
-        "answer": "corrupti molestiae omnis voluptate odit maiores"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-215",
-    "runtimeId": 215,
-    "openingId": "membershipWorkingGroup-26",
-    "applicantId": "31",
-    "answers": [
-      {
-        "questionId": "52",
-        "answer": "consequuntur vel quis modi fuga maiores"
-      },
-      {
-        "questionId": "53",
-        "answer": "eaque ea aut et dicta"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-216",
-    "runtimeId": 216,
-    "openingId": "membershipWorkingGroup-27",
-    "applicantId": "24",
-    "answers": [
-      {
-        "questionId": "54",
-        "answer": "et id dignissimos in consequatur consectetur voluptatem dicta quisquam"
-      },
-      {
-        "questionId": "55",
-        "answer": "dolore quo esse facilis similique aspernatur aliquam"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-217",
-    "runtimeId": 217,
-    "openingId": "membershipWorkingGroup-27",
-    "applicantId": "4",
-    "answers": [
-      {
-        "questionId": "54",
-        "answer": "inventore qui vitae et quae eum esse"
-      },
-      {
-        "questionId": "55",
-        "answer": "ut aperiam voluptatem culpa quaerat laboriosam nisi maxime"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-218",
-    "runtimeId": 218,
-    "openingId": "membershipWorkingGroup-28",
-    "applicantId": "19",
-    "answers": [
-      {
-        "questionId": "56",
-        "answer": "est quo et ipsa nihil adipisci sunt"
-      },
-      {
-        "questionId": "57",
-        "answer": "nostrum modi dolores amet nobis vitae ipsa voluptates"
-      }
-    ],
-    "status": "withdrawn"
-  },
-  {
-    "id": "membershipWorkingGroup-219",
-    "runtimeId": 219,
-    "openingId": "membershipWorkingGroup-28",
-    "applicantId": "17",
-    "answers": [
-      {
-        "questionId": "56",
-        "answer": "doloremque sint dolor quam at vel ea"
-      },
-      {
-        "questionId": "57",
-        "answer": "omnis eveniet nesciunt porro officia ea dignissimos iusto ducimus"
-      }
-    ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 4000
   },
   {
     "id": "membershipWorkingGroup-220",
     "runtimeId": 220,
-    "openingId": "membershipWorkingGroup-29",
-    "applicantId": "16",
+    "openingId": "membershipWorkingGroup-25",
+    "applicantId": "37",
     "answers": [
       {
-        "questionId": "58",
-        "answer": "quis sint harum labore ipsum quo dignissimos similique"
+        "questionId": "50",
+        "answer": "ut expedita voluptatem sed nihil voluptatem velit quaerat maxime"
       },
       {
-        "questionId": "59",
-        "answer": "qui et accusamus nisi facilis officiis aspernatur"
+        "questionId": "51",
+        "answer": "aspernatur et nemo est magni delectus"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 6000
   },
   {
     "id": "membershipWorkingGroup-221",
     "runtimeId": 221,
-    "openingId": "membershipWorkingGroup-29",
-    "applicantId": "43",
+    "openingId": "membershipWorkingGroup-25",
+    "applicantId": "16",
     "answers": [
       {
-        "questionId": "58",
-        "answer": "laboriosam facilis aut aliquam consequatur architecto quibusdam sit porro"
+        "questionId": "50",
+        "answer": "blanditiis omnis nisi nam fuga incidunt omnis non"
       },
       {
-        "questionId": "59",
-        "answer": "tempora incidunt enim ipsa qui libero ut velit aut"
+        "questionId": "51",
+        "answer": "beatae ipsum ut a expedita enim aliquam quae adipisci"
       }
     ],
-    "status": "withdrawn"
+    "status": "withdrawn",
+    "stake": 5000
+  },
+  {
+    "id": "membershipWorkingGroup-222",
+    "runtimeId": 222,
+    "openingId": "membershipWorkingGroup-26",
+    "applicantId": "23",
+    "answers": [
+      {
+        "questionId": "52",
+        "answer": "provident doloribus et voluptatum nostrum tenetur porro"
+      },
+      {
+        "questionId": "53",
+        "answer": "nemo aperiam aut cumque maiores quibusdam"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 5000
+  },
+  {
+    "id": "membershipWorkingGroup-223",
+    "runtimeId": 223,
+    "openingId": "membershipWorkingGroup-26",
+    "applicantId": "39",
+    "answers": [
+      {
+        "questionId": "52",
+        "answer": "dolorem quod facere non perspiciatis"
+      },
+      {
+        "questionId": "53",
+        "answer": "accusamus commodi ut amet doloremque doloribus non"
+      }
+    ],
+    "status": "withdrawn",
+    "stake": 7000
   }
 ]
