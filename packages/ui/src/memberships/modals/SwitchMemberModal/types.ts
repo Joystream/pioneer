@@ -6,5 +6,7 @@ export type SwitchMemberModalCall = OptionalDataModalCall<
   {
     originalModalName?: ModalNames
     originalModalData?: unknown
+    noCreateButton?: boolean
+    membersToShow?: string[]
   }
 >

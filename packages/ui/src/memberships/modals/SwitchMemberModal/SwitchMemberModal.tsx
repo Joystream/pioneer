@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import styled from 'styled-components'
 
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -25,13 +25,21 @@ export const SwitchMemberModal = () => {
     }
   }
 
+  const filteredMembers = useMemo(() => {
+    if(modalData?.membersToShow) {
+      return members.filter(member => modalData.membersToShow?.includes(member.id))
+    }
+
+    return members
+  }, [members.length])
+
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
       <SwitchModalHeader title="Select Membership" onClick={hideModal} modalHeaderSize="s" />
       <SwitchModalBody>
         <MembershipsCount count={count} />
         <MembersList>
-          {members.map((member) => (
+          {filteredMembers.map((member) => (
             <MemberItem
               key={member.handle}
               onClick={() => switchMember(member)}
@@ -43,14 +51,14 @@ export const SwitchMemberModal = () => {
           ))}
         </MembersList>
       </SwitchModalBody>
-      <SwitchModalFooter>
+      {!modalData.noCreateButton && <SwitchModalFooter>
         <AddMembershipButtonSwitch
           onClick={() => {
             hideModal()
             showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
           }}
         />
-      </SwitchModalFooter>
+      </SwitchModalFooter>}
     </Modal>
   )
 }
