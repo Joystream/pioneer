@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
 
 import { PageHeader } from '@/app/components/PageHeader'
+import { BountyHeaderStatistics } from '@/bounty/components/BountyPreviewHeader/components/BountyHeaderStatistics'
+import { BountyNotifyButton } from '@/bounty/components/BountyPreviewHeader/components/BountyNotifyButton'
 import {
   BountyHeaderButtonsProps,
   BountyMembershipsStatistics,
@@ -37,8 +39,8 @@ const bountyButtonsMapper: Record<
   withdrawEntryStake: WithdrawStakeButton,
   withdrawContribution: WithdrawContributionButton,
   submitJudgement: SubmitJudgementButton,
-  statistics: SubmitJudgementButton, // todo
-  notify: SubmitJudgementButton, // todo
+  statistics: BountyHeaderStatistics,
+  notify: BountyNotifyButton,
 }
 
 const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStatistics> = {
