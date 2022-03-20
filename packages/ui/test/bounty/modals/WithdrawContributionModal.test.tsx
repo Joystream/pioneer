@@ -35,7 +35,6 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: WithdrawContributionModal', () => {
   const contributor: Contributor = {
-    id: '1',
     actor: getMember('alice'),
     amount: new BN('10000'),
   }

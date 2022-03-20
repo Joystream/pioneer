@@ -29,7 +29,6 @@ const accounts = {
 }
 
 const contributor: Contributor = {
-  id: '1',
   actor: getMember('alice'),
   amount: new BN('10000'),
 }
