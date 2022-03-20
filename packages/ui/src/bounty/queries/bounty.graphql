@@ -82,6 +82,9 @@ fragment BountyWorkWithDetailsFields on WorkSubmittedEvent {
 fragment BountyContributionFields on BountyContribution {
   id
   amount
+  withdrawnInEvent {
+    id
+  }
   contributor {
     ...MemberFields
   }

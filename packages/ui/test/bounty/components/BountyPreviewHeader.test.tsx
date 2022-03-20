@@ -277,10 +277,25 @@ describe('UI: BountyPreviewHeader', () => {
       expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
     })
 
+    it('Worker after cashout', async () => {
+      bounty.entries = [
+        {
+          ...defaultEntry,
+          hasSubmitted: true,
+          status: 'BountyEntryStatusCashedOut',
+        },
+      ]
+
+      renderHeader()
+
+      expect(screen.queryByText('buttons.loserWithdrawStake')).toBeNull()
+    })
+
     it('Contributor', async () => {
       bounty.entries = []
       bounty.contributors = [
         {
+          hasWithdrawn: false,
           actor: activeMember,
           amount: new BN(1222),
         },
@@ -289,6 +304,21 @@ describe('UI: BountyPreviewHeader', () => {
       renderHeader()
 
       expect(await getButton('buttons.contributorWithdrawStake')).toBeDefined()
+    })
+
+    it('Contributor after withdrawal', async () => {
+      bounty.entries = []
+      bounty.contributors = [
+        {
+          hasWithdrawn: true,
+          actor: activeMember,
+          amount: new BN(1222),
+        },
+      ]
+
+      renderHeader()
+
+      expect(screen.queryByText('buttons.contributorWithdrawStake')).toBeNull()
     })
 
     it('Other', async () => {
