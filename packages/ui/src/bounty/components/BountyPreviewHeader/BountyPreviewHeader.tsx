@@ -216,7 +216,7 @@ const FailedStageButtons = React.memo(
         <ButtonGhost size="large">
           <BellIcon /> {t('common:buttons.notifyAboutChanges')}
         </ButtonGhost>
-        {canWithdrawStake && !hasCashedOut && <WithdrawStakeButton bounty={bounty} />}
+        {canWithdrawStake && hasCashedOut && <WithdrawStakeButton bounty={bounty} />}
         {isContributor && !hasWithdrawnContribution && <WithdrawContributionButton bounty={bounty} />}
       </>
     )

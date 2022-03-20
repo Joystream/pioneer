@@ -30,14 +30,6 @@ const defaultEntry: WorkEntry = {
   withdrawn: false,
 }
 
-const useCheckContributionWithdrawalMock = {
-  hasWithdrawnContribution: false,
-}
-
-jest.mock('@/bounty/hooks/useCheckContributionWithdrawal', () => ({
-  useCheckContributionWithdrawal: () => useCheckContributionWithdrawalMock,
-}))
-
 describe('UI: BountyPreviewHeader', () => {
   const bounty: Bounty = {
     id: '6',
@@ -289,7 +281,6 @@ describe('UI: BountyPreviewHeader', () => {
       bounty.entries = []
       bounty.contributors = [
         {
-          id: '1',
           actor: activeMember,
           amount: new BN(1222),
         },
@@ -298,14 +289,6 @@ describe('UI: BountyPreviewHeader', () => {
       renderHeader()
 
       expect(await getButton('buttons.contributorWithdrawStake')).toBeDefined()
-    })
-
-    it('Contributor after withdrawal', async () => {
-      useCheckContributionWithdrawalMock.hasWithdrawnContribution = true
-
-      renderHeader()
-
-      expect(screen.queryByText('buttons.contributorWithdrawStake')).toBeNull()
     })
 
     it('Other', async () => {
