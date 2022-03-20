@@ -47,7 +47,11 @@ export const WithdrawSignModal = ({
     transaction,
     signer: controllerAccount.address,
   })
-
+  /*
+   *   FIXME: as bounty creator your cherry is transformed as contibution, so with bounty fails with no contributions
+   *    member is told that he can withdraw cherry multiplied by 2. Cherry / number of contributors, which is 123,
+   *     and cherry as contribution.
+   * */
   const extraAmount = bounty && isContributor ? bounty.cherry.toNumber() / (bounty.contributors.length || 1) : 0
   const bountyFailedInfo = bounty?.stage === 'failed' && isContributor
 

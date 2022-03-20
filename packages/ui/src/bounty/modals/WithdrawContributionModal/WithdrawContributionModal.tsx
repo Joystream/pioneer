@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -77,7 +78,7 @@ export const WithdrawContributionModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        amount={amount}
+        amount={new BN(amount)}
         bounty={bounty}
         isContributor
       />
