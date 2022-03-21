@@ -82,6 +82,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'BudgetRefillPlannedEvent' }
     | { __typename: 'BudgetSetEvent' }
     | { __typename: 'BudgetSpendingEvent' }
+    | { __typename: 'BudgetUpdatedEvent' }
     | { __typename: 'BuyNowCanceledEvent' }
     | { __typename: 'CandidacyNoteSetEvent' }
     | { __typename: 'CandidacyStakeReleaseEvent' }

@@ -534,6 +534,7 @@ export type GetOpeningsEventsQuery = {
         amount: any
         group: { __typename: 'WorkingGroup'; name: string }
       }
+    | { __typename: 'BudgetUpdatedEvent' }
     | { __typename: 'BuyNowCanceledEvent' }
     | { __typename: 'CandidacyNoteSetEvent' }
     | { __typename: 'CandidacyStakeReleaseEvent' }
