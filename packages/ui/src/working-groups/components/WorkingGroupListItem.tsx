@@ -41,7 +41,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         return group.name
     }
   }
-
+  const isLeadActive = lead && group.isActive
   return (
     <GroupItem as={GhostRouterLink} to={groupAddress}>
       <GroupImageContainer>
@@ -68,9 +68,9 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {lead ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
+            {isLeadActive ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
           </StatsValue>
-          <Subscription>WG Lead</Subscription>
+          <Subscription>{isLeadActive ? 'WG Lead' : 'No leader'}</Subscription>
         </StatsColumn>
       </GroupStats>
       <Arrow direction="right" className="WorkingGroupArrow" />
