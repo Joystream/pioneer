@@ -39,6 +39,7 @@ export type BountyEntryStatusWinner = {
 }
 
 export interface Contributor {
+  hasWithdrawn: boolean
   actor: Member | undefined
   amount: BN
 }

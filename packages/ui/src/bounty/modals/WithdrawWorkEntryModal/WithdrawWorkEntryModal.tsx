@@ -24,6 +24,7 @@ import {
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TextBig, TokenValue } from '@/common/components/typography'
+import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -54,7 +55,19 @@ export const WithdrawWorkEntryModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   if (!api || !activeMember || !transaction || !feeInfo) {
-    return null
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'API', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!feeInfo },
+        ]}
+      />
+    )
   }
 
   if (state.matches(WithdrawWorkModalState.transaction)) {

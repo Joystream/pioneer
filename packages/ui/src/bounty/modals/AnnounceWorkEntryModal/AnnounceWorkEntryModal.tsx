@@ -30,6 +30,7 @@ import {
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -94,7 +95,7 @@ export const AnnounceWorkEntryModal = () => {
             originalModalData: { bounty },
           },
         })
-      } else {
+      } else if (api && transaction) {
         nextStep()
       }
     }
@@ -111,7 +112,22 @@ export const AnnounceWorkEntryModal = () => {
     }
   }, [state, activeMember?.id, stakingStatus])
 
-  if (!activeMember || !transaction || state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
+  if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'Initializing server connection', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+        ]}
+      />
+    )
+  }
+
+  if (!activeMember || !transaction || !api) {
     return null
   }
 

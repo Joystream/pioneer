@@ -28,35 +28,43 @@ export const WithdrawStakeModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, modalData.bounty.id)
-    }
-  }, [JSON.stringify(activeMember), connectionState])
-
   const entry = useMemo(
     () => modalData.bounty.entries?.find((entry) => entry.worker.id === activeMember?.id),
     [activeMember?.id]
   )
+
+  const transaction = useMemo(() => {
+    if (api && connectionState === 'connected' && activeMember && entry) {
+      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, modalData.bounty.id, entry.id)
+    }
+  }, [JSON.stringify(activeMember), connectionState])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
     if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
       if (transaction && feeInfo && activeMember) {
-        if (transaction && feeInfo && activeMember) {
+        if (transaction && feeInfo && activeMember && entry) {
           feeInfo.canAfford && send('NEXT')
           !feeInfo.canAfford && send('ERROR')
         }
       }
     }
-  }, [state.value, transaction, feeInfo?.canAfford])
+  }, [state.value, transaction, feeInfo?.canAfford, entry])
+
   if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
     return (
       <WaitModal
         title={t('common:modals.wait.title')}
         description={t('common:modals.wait.description')}
         onClose={hideModal}
+        requirements={[
+          { name: 'API', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!feeInfo },
+          { name: 'Fetching entry', state: !!entry },
+        ]}
       />
     )
   }
