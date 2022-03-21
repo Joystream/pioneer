@@ -1,5 +1,6 @@
 import { IBountyMetadata, IBountyWorkData } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
+import { BountyCreationParameters } from '@joystream/types/augment'
 import { AssuranceContractType_Closed } from '@joystream/types/bounty'
 import { MemberId } from '@joystream/types/common'
 import { AugmentedConst } from '@polkadot/api/types'
@@ -7,13 +8,12 @@ import { u32 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import Long from 'long'
+import * as Yup from 'yup'
 
 import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
-
-import { BountyCreationParameters } from '../../../../../types/augment'
 
 interface Conditions {
   isThreadCategoryLoading?: boolean
@@ -24,11 +24,15 @@ interface Conditions {
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
 }
 
+export const isUrlValid = (value: string) => {
+  return Yup.string().required().url().isValidSync(value)
+}
+
 export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {
   const { context } = state
   switch (true) {
     case state.matches(AddBountyStates.generalParameters): {
-      return !!(context.creator && context.description && context.title && context.coverPhotoLink)
+      return !!(context.creator && context.description && context.title && isUrlValid(context.coverPhotoLink ?? ''))
     }
     case state.matches(AddBountyStates.fundingPeriodDetails): {
       const isLimited = context.fundingPeriodType === 'limited'
@@ -68,13 +72,13 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
 }
 
 export const createBountyParametersFactory = (state: AddBountyModalMachineState): BountyCreationParameters =>
-  createType('BountyCreationParameters', {
+  createType<BountyCreationParameters, 'BountyCreationParameters'>('BountyCreationParameters', {
     oracle: createType('BountyActor', {
-      Member: createType('u64', Number(state.context.oracle?.id || 0)),
+      Member: createType<MemberId, 'MemberId'>('MemberId', Number(state.context.oracle?.id || 0)),
     }),
     contract_type: createType('AssuranceContractType', contractTypeFactory(state)),
     creator: createType('BountyActor', {
-      Member: createType('u64', Number(state.context.creator?.id || 0)),
+      Member: createType<MemberId, 'MemberId'>('MemberId', Number(state.context.creator?.id || 0)),
     }),
     cherry: createType('u128', state.context.cherry || 0),
     entrant_stake: createType('u128', state.context.workingPeriodStake || 0),

@@ -36,10 +36,12 @@ type ValidStakeStepEvent = {
   type: 'VALID'
   stake: Required<StakeStepFormFields>
 }
+
 type ValidApplicationStepEvent = {
   type: 'VALID'
   answers: Record<number, string>
 }
+
 export type ApplyForRoleEvent =
   | { type: 'FAIL' }
   | { type: 'PASS' }

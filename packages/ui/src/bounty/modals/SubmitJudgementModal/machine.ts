@@ -26,6 +26,7 @@ export interface GeneralParametersContext {
   hasWinner: boolean
   winners: BountyWinner[]
   rejected: BountyRejected[]
+  rationale: string
 }
 
 interface TransactionContext extends GeneralParametersContext {
@@ -56,6 +57,7 @@ type AddWinnerEvent = { type: 'ADD_WINNER' }
 type AddSlashedEvent = { type: 'ADD_SLASHED' }
 type EditWinnerEvent = { type: 'EDIT_WINNER'; payload: { id: number; winner: Partial<BountyWinner> } }
 type EditRejectedEvent = { type: 'EDIT_REJECTED'; payload: { id: number; rejected: Member } }
+type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 
 export type SubmitJudgementEvent =
   | SetHasWinnerEvent
@@ -63,6 +65,7 @@ export type SubmitJudgementEvent =
   | AddSlashedEvent
   | EditWinnerEvent
   | EditRejectedEvent
+  | SetRationaleEvent
   | { type: 'CLEAN_WINNERS' }
   | { type: 'REMOVE_LAST_SLASHED' }
   | { type: 'REMOVE_LAST_WINNER' }
@@ -80,6 +83,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
   {
     initial: SubmitJudgementStates.requirementsVerification,
     context: {
+      rationale: '',
       hasWinner: true,
       winners: [
         {
@@ -98,6 +102,11 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
       [SubmitJudgementStates.generalParameters]: {
         on: {
           NEXT: SubmitJudgementStates.transaction,
+          SET_RATIONALE: {
+            actions: assign({
+              rationale: (_, event: SetRationaleEvent) => (event as SetRationaleEvent).rationale,
+            }),
+          },
           ADD_WINNER: {
             actions: assign({
               winners: (context) =>

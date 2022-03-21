@@ -37,7 +37,7 @@ describe('UpcomingWorkingGroupOpenings', () => {
 
     await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
-    expect(await screen.findByRole('heading', { name: /forum working group/i })).toBeDefined()
+    expect(await screen.findByRole('heading', { name: UPCOMING_OPENING.metadata.title })).toBeDefined()
   })
 
   function renderPage() {

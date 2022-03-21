@@ -64,7 +64,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
     <RoleItemWrapper>
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
-          <BadgeStatus inverted>{worker.group.name}</BadgeStatus>
+          <BadgeStatus>{worker.group.name}</BadgeStatus>
           {worker.isLead && <BadgeStatus>LEAD</BadgeStatus>}
         </ToggleableItemInfoTop>
         <RoleTitle as={GhostRouterLink} to={roleRoute}>

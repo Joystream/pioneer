@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
@@ -36,7 +37,10 @@ import { useModal } from '@/common/hooks/useModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+
+const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
 
 export const AnnounceWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
@@ -53,6 +57,8 @@ export const AnnounceWorkEntryModal = () => {
   const [state, send] = useMachine(announceWorkEntryMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
+  const stakingStatus = useStakingAccountStatus(account?.address, activeMember?.id)
+  const [isValidNext, setValidNext] = useState<boolean>(false)
 
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
@@ -93,7 +99,18 @@ export const AnnounceWorkEntryModal = () => {
         nextStep()
       }
     }
-  }, [state, activeMember?.id])
+    if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
+      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+    }
+    if (
+      state.matches(AnnounceWorkEntryStates.bindStakingAccount) &&
+      state.context.bindStakingAccount &&
+      stakingStatus !== 'unknown' &&
+      stakingStatus !== 'other'
+    ) {
+      return setValidNext(true)
+    }
+  }, [state, activeMember?.id, stakingStatus])
 
   if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
     return (
@@ -136,6 +153,21 @@ export const AnnounceWorkEntryModal = () => {
     return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
+  if (state.matches(AnnounceWorkEntryStates.bindStakingAccount)) {
+    const transaction = api?.tx.members.addStakingAccountCandidate(activeMember.id)
+
+    return (
+      <BindStakingAccountModal
+        onClose={hideModal}
+        transaction={transaction}
+        signer={account?.address ?? ''}
+        service={state.children.bindStakingAccount}
+        memberId={activeMember.id}
+        steps={transactionSteps}
+      />
+    )
+  }
+
   if (state.matches(AnnounceWorkEntryStates.transaction)) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
@@ -149,6 +181,7 @@ export const AnnounceWorkEntryModal = () => {
         description={t('modals.announceWorkEntry.authorizeDescription', { value: formatTokenValue(amount) })}
         buttonLabel={t('modals.announceWorkEntry.nextButton')}
         contributeAmount={contribution}
+        useMultiTransaction={{ steps: transactionSteps, active: 1 }}
       />
     )
   }
@@ -228,7 +261,7 @@ export const AnnounceWorkEntryModal = () => {
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!valid} onClick={nextStep}>
+        <ButtonPrimary size="medium" disabled={!valid && !isValidNext} onClick={nextStep}>
           {t('modals.announceWorkEntry.nextButton')}
         </ButtonPrimary>
       </ModalFooter>

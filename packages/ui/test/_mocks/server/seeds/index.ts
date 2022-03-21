@@ -32,7 +32,8 @@ export const OPENING_DATA: RawOpeningMock = {
   status: 'open',
   stakeAmount: 2000,
   metadata: {
-    shortDescription: 'Distribution Worker',
+    title: 'Distribution Worker',
+    shortDescription: 'Distribution Worker opening',
     description: '# Description',
     hiringLimit: 1,
     expectedEnding: '2022-03-09T10:18:04.155Z',
@@ -64,6 +65,7 @@ export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
   rewardPerBlock: 200,
   expectedStart: '2021-06-11T23:52:47.017Z',
   metadata: {
+    title: 'Upcoming Worker opening',
     shortDescription: 'Upcoming worker opening.officiis aliquam sapiente et quis sed',
     description: 'Description',
     hiringLimit: 1,

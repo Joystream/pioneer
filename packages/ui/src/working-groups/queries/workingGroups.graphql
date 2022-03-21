@@ -170,6 +170,7 @@ query GetRewards($where: RewardPaidEventWhereInput) {
 }
 
 fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+  title
   applicationDetails
   shortDescription
   description
@@ -345,6 +346,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     }
     type
     rewardPerBlock
+    metadata {
+      expectedEnding
+    }
   }
   applicant {
     ...MemberFields
@@ -358,6 +362,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     inBlock
     network
   }
+  stake
 }
 
 query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {

@@ -31,7 +31,7 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "stakingAccount": {
-        "label": "Staking account",
+        "label": "Account for contributing",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "selectAmount": "Select amount for contributing",
@@ -113,7 +113,12 @@
       "validation": {
         "maxLengthMessage": "Max length is 70 characters",
         "max70": "MAX 70"
-      }
+      },
+      "success": {
+        "message": "You have just successfully canceled bounty!",
+        "button": "Go to Current Bounties"
+      },
+      "error": "There was a problem canceling bounty."
     },
     "withdraw": {
       "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
@@ -174,7 +179,8 @@
         "pickWinner": "Pick a winner or mark bounty as failed",
         "winnerNoReward": "Some winner do not have reward amount",
         "amountTooLow": "Distributed amount must equal total reward",
-        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it."
+        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it",
+        "rationaleMissing": "Please fill out the rationale"
       },
       "authorizeModal": {
         "description": "You are announcing Bounty winners",

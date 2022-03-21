@@ -29,6 +29,7 @@ import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -46,6 +47,9 @@ export const AddBountyModal = () => {
   const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
   const [isValidNext, setValidNext] = useState(false)
+
+  useRefetch({ type: 'do', payload: state.matches(AddBountyStates.success) })
+
   const { api } = useApi()
   const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
@@ -163,8 +167,7 @@ export const AddBountyModal = () => {
   }
 
   if (state.matches(AddBountyStates.success)) {
-    // todo extract bountyId from success event and pass it here
-    return <SuccessModal onClose={hideModal} bountyId={1} />
+    return <SuccessModal onClose={hideModal} bountyId={state.context.bountyId} />
   }
 
   if (state.matches(AddBountyStates.error)) {

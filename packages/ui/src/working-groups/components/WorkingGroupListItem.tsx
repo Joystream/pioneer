@@ -27,6 +27,20 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
 
   const { member: lead } = useMember(group.leadId)
   const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
+  const nameMapping = () => {
+    switch (group.name) {
+      case 'Operations Alpha':
+        return 'Builders Worker'
+      case 'Gateway':
+        return 'Gateways'
+      case 'Operations Beta':
+        return 'HR'
+      case 'Operations Gamma':
+        return 'Marketing'
+      default:
+        return group.name
+    }
+  }
 
   return (
     <GroupItem as={GhostRouterLink} to={groupAddress}>
@@ -34,7 +48,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle>{group.name}</GroupTitle>
+        <GroupTitle>{nameMapping()}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>

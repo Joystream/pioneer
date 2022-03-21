@@ -44,7 +44,7 @@ export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const onClose = () => setNotificationsPanelOpen(false)
   const { stage: electionStage } = useElectionStage()
-  const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElection : ElectionRoutes.currentElection
+  const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElections : ElectionRoutes.currentElection
 
   return (
     <Navigation>

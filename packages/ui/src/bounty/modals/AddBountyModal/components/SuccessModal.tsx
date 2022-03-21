@@ -11,15 +11,16 @@ import { TextMedium } from '@/common/components/typography'
 
 interface Props {
   onClose: () => void
-  bountyId?: number
+  bountyId: number
 }
 
 export const SuccessModal = ({ onClose, bountyId }: Props) => {
   const history = useHistory()
 
   const goToBounty = useCallback(() => {
-    history.push(generatePath(BountyRoutes.bounty, { id: bountyId || 1 }))
-  }, [bountyId])
+    history.push(generatePath(BountyRoutes.bounty, { id: bountyId }))
+    onClose()
+  }, [bountyId, onClose])
 
   return (
     <Modal modalSize="s" modalHeight="s" onClose={onClose}>
@@ -30,7 +31,7 @@ export const SuccessModal = ({ onClose, bountyId }: Props) => {
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost disabled onClick={goToBounty} size="medium">
+        <ButtonGhost disabled={!bountyId} onClick={goToBounty} size="medium">
           See my Bounty
         </ButtonGhost>
       </ModalFooter>

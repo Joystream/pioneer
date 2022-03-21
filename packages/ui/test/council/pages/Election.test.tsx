@@ -130,7 +130,7 @@ describe('UI: Election page', () => {
 
     const { queryByText } = await renderComponent()
 
-    expect(queryByText('Stage')).toBeNull()
+    expect(queryByText('Stage')).not.toBeNull()
   })
 
   describe('Active', () => {
@@ -142,7 +142,7 @@ describe('UI: Election page', () => {
       it('Displays stage and round', async () => {
         const { queryByText } = await renderComponent()
 
-        expect(queryByText(/Announcing period/i)).toBeInTheDocument()
+        expect(queryByText('Announcing Period')).toBeInTheDocument()
       })
 
       describe('Tabs', () => {

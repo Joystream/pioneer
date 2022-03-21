@@ -1,5 +1,6 @@
 import { BN_TEN } from '@polkadot/util'
 import { render, screen } from '@testing-library/react'
+import faker from 'faker'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
@@ -28,10 +29,12 @@ const currentApplication: WorkingGroupApplication = {
     groupName: 'Storage',
     groupId: 'storageWorkingGroup',
     rewardPerBlock: BN_TEN,
+    expectedEnding: faker.date.soon(10).toString(),
   },
   createdAtBlock: block,
   status: 'ApplicationStatusPending',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  stake: BN_TEN,
 }
 
 const pastApplication: WorkingGroupApplication = {
@@ -43,10 +46,12 @@ const pastApplication: WorkingGroupApplication = {
     groupName: 'Forum',
     groupId: 'forumWorkingGroup',
     rewardPerBlock: BN_TEN,
+    expectedEnding: faker.date.recent(90).toString(),
   },
   createdAtBlock: block,
   status: 'ApplicationStatusRejected',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  stake: BN_TEN,
 }
 
 describe('UI: MyApplications', () => {

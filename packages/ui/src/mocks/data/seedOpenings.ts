@@ -14,6 +14,7 @@ interface QuestionMock {
 }
 
 export interface RawOpeningMetadata {
+  title: string
   shortDescription: string
   description: string
   hiringLimit: number

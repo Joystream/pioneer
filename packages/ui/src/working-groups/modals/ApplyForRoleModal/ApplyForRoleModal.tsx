@@ -19,7 +19,6 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
 import { groupToLockId } from '../../types'
@@ -43,8 +42,6 @@ export const ApplyForRoleModal = () => {
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
 
-  const { refetch: refetchApplications } = useMyApplications()
-  useRefetch({ type: 'set', payload: refetchApplications })
   useRefetch({ type: 'do', payload: state.matches('success') })
 
   const opening = modalData.opening
@@ -59,15 +56,20 @@ export const ApplyForRoleModal = () => {
       return api.tx[opening.groupId].applyOnOpening({
         member_id: activeMember?.id,
         opening_id: opening.runtimeId,
-        role_account_id: activeMember?.controllerAccount,
-        reward_account_id: activeMember?.controllerAccount,
+        role_account_id: state.context.stake?.roleAccount?.address,
+        reward_account_id: state.context.stake?.rewardAccount?.address,
         stake_parameters: {
           stake: opening.stake,
           staking_account_id: state.context.stake?.account?.address,
         },
       })
     }
-  }, [activeMember?.id, connectionState, state.context.stake?.account?.address])
+  }, [
+    activeMember?.id,
+    connectionState,
+    state.context.stake?.account?.address,
+    state.context.stake?.rewardAccount?.address,
+  ])
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
   const stakingStatus = useStakingAccountStatus(state.context?.stake?.account?.address, activeMember?.id)
 
@@ -96,7 +98,13 @@ export const ApplyForRoleModal = () => {
     }
 
     if (!activeMember && hasRequiredStake) {
-      showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+      showModal<SwitchMemberModalCall>({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'ApplyForRoleModal',
+          originalModalData: modalData,
+        },
+      })
     }
 
     if (feeInfo && !feeInfo.canAfford) {
@@ -159,8 +167,8 @@ export const ApplyForRoleModal = () => {
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
       member_id: activeMember?.id,
       opening_id: opening.runtimeId,
-      role_account_id: activeMember?.controllerAccount,
-      reward_account_id: activeMember?.controllerAccount,
+      role_account_id: stake.roleAccount.address,
+      reward_account_id: stake.rewardAccount.address,
       description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
       stake_parameters: {
         stake: stake.amount,

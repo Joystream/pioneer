@@ -11,7 +11,6 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useRefetch } from '@/common/hooks/useRefetch'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
-import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
@@ -23,14 +22,12 @@ import { VoteForCouncilSuccessModal } from './VoteForCouncilSuccessModal'
 
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
-  const { showModal, hideModal } = useModal<VoteForCouncilModalCall>()
+  const { showModal, hideModal, modalData } = useModal<VoteForCouncilModalCall>()
 
   const { api } = useApi()
 
   const { active: activeMember } = useMyMemberships()
 
-  const { refetch: refetchElection } = useCurrentElection()
-  useRefetch({ type: 'set', payload: refetchElection })
   useRefetch({ type: 'do', payload: state.matches('success') })
 
   const constants = useCouncilConstants()
@@ -46,12 +43,13 @@ export const VoteForCouncilModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
-    if (state.matches('requirementsVerification'))
+    if (state.matches('requirementsVerification')) {
       if (!activeMember) {
         showModal<SwitchMemberModalCall>({
           modal: 'SwitchMember',
           data: {
             originalModalName: 'VoteForCouncil',
+            originalModalData: modalData,
           },
         })
       } else if (!hasRequiredStake) {
@@ -65,6 +63,7 @@ export const VoteForCouncilModal = () => {
       } else if (feeInfo) {
         send(feeInfo.canAfford ? 'PASS' : 'FAIL')
       }
+    }
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
 
   if (state.matches('success')) {

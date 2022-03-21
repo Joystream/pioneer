@@ -134,6 +134,7 @@ const FundingStageButtons = React.memo(({ bounty, t, isCreator }: BountyHeaderBu
           </div>
         </>
       )}
+      <ContributeFundsButton bounty={bounty} />
     </>
   )
 })

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -98,6 +98,7 @@ export const ContributeFundsModal = () => {
           },
         })
       } else {
+        setAccount(accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account'))
         nextStep()
       }
     }
@@ -121,6 +122,7 @@ export const ContributeFundsModal = () => {
   if (!activeMember || !transaction || !api) {
     return null
   }
+  const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
   if (state.matches(ContributeFundStates.success)) {
     return (
@@ -147,7 +149,6 @@ export const ContributeFundsModal = () => {
 
   if (state.matches(ContributeFundStates.transaction)) {
     const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
     return (
       <AuthorizeTransactionModal
@@ -163,7 +164,7 @@ export const ContributeFundsModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+    <Modal onClose={hideModal} modalSize="l">
       <ModalHeader title={t('modals.contribute.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
@@ -184,8 +185,10 @@ export const ContributeFundsModal = () => {
               label={t('modals.contribute.stakingAccount.label')}
               tooltipText={t('modals.contribute.stakingAccount.tooltip')}
               required
+              inputDisabled
+              borderless
             >
-              <SelectAccount onChange={setAccount} selected={account} />
+              <SelectedAccount account={controllerAccount} />
             </InputComponent>
           </Row>
           <Row>

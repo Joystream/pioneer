@@ -6,6 +6,7 @@ import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Label } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { ApplicationsList } from '@/working-groups/components/ApplicationsList'
 import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { isPendingApplication } from '@/working-groups/model/isPendingApplication'
@@ -13,7 +14,9 @@ import { isPendingApplication } from '@/working-groups/model/isPendingApplicatio
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
 export const MyApplications = () => {
-  const { applications, isLoading } = useMyApplications()
+  const { applications, isLoading, refetch: refetchApplications } = useMyApplications()
+  useRefetch({ type: 'set', payload: refetchApplications })
+
   const currentApplications = useMemo(() => applications?.filter(isPendingApplication), [applications, isLoading])
   const pastApplications = useMemo(
     () => applications?.filter((a) => !isPendingApplication(a)),

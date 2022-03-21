@@ -26,6 +26,7 @@ import {
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
@@ -54,16 +55,20 @@ export const SubmitJudgementModal = () => {
     service.start()
   }
 
-  const switchCheckbox = useCallback((isSet: boolean) => {
-    if (!isSet) {
-      send('CLEAN_WINNERS')
-    }
-    send('SET_HAS_WINNER', { hasWinner: isSet })
+  const switchCheckbox = useCallback(
+    (isSet: boolean) => {
+      if (!isSet) {
+        send('CLEAN_WINNERS')
+      }
 
-    if (isSet && !state.context.hasWinner) {
-      send('ADD_WINNER')
-    }
-  }, [])
+      if (isSet && !state.context.hasWinner) {
+        send('ADD_WINNER')
+      }
+
+      send('SET_HAS_WINNER', { hasWinner: isSet })
+    },
+    [state.context.hasWinner]
+  )
 
   const amountDistributed = useMemo(
     () => state.context.winners?.reduce((prev, current) => prev + (current.reward ?? 0), 0) ?? 0,
@@ -123,14 +128,13 @@ export const SubmitJudgementModal = () => {
           ] as const
       )
 
-      const rationale = '' // TODO
       const judgments = [...winnersApi, ...rejectedApi]
 
       return api?.tx.bounty.submitOracleJudgment(
         { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
         createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
         createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
-        rationale
+        state.context.rationale
       )
     }
   }, [api, isConnected, bounty, state.context])
@@ -156,28 +160,31 @@ export const SubmitJudgementModal = () => {
   }, [state.context.winners?.length])
 
   useEffect(() => {
-    const { winners, hasWinner } = state.context
+    const { winners, hasWinner, rationale } = state.context
 
     switch (true) {
-      case !hasWinner:
+      case !hasWinner && rationale:
         return setIsValid(null)
 
       case hasWinner && (!winners?.length || winners?.some((winner) => !winner.winner)):
         return setIsValid('modals.submitJudgement.validation.pickWinner')
 
-      case winners?.some(({ reward }) => reward === 0):
+      case hasWinner && winners?.some(({ reward }) => reward === 0):
         return setIsValid('modals.submitJudgement.validation.winnerNoReward')
 
-      case amountDistributed < bounty.totalFunding.toNumber():
+      case hasWinner && amountDistributed < bounty.totalFunding.toNumber():
         return setIsValid('modals.submitJudgement.validation.amountTooLow')
 
-      case amountDistributed > bounty.totalFunding.toNumber():
+      case hasWinner && amountDistributed > bounty.totalFunding.toNumber():
         return setIsValid('modals.submitJudgement.validation.amountTooHigh')
+
+      case rationale === '':
+        return setIsValid('modals.submitJudgement.validation.rationaleMissing')
 
       default:
         return setIsValid(null)
     }
-  }, [state.context.winners, state.context.hasWinner])
+  }, [state.context.winners, state.context.hasWinner, state.context.rationale])
 
   if (state.matches(SubmitJudgementStates.requirementsVerification)) {
     return (
@@ -253,19 +260,22 @@ export const SubmitJudgementModal = () => {
               {bounty.title}
             </TextBig>
           </Container>
-          <InlineToggleWrap>
-            <Label>{t('modals.submitJudgement.checkbox.label')}</Label>
-            <ToggleCheckbox
-              falseLabel={<CheckBoxLabelWrapper>{t('modals.submitJudgement.checkbox.false')}</CheckBoxLabelWrapper>}
-              trueLabel={
-                <CheckBoxLabelWrapper>
-                  <StyledParagraph>{t('modals.submitJudgement.checkbox.true')}</StyledParagraph>
-                </CheckBoxLabelWrapper>
-              }
-              checked={state.context.hasWinner ?? true}
-              onChange={switchCheckbox}
-            />
-          </InlineToggleWrap>
+          <RowGapBlock>
+            <InlineToggleWrap>
+              <Label>{t('modals.submitJudgement.checkbox.label')}</Label>
+              <ToggleCheckbox
+                falseLabel={<CheckBoxLabelWrapper>{t('modals.submitJudgement.checkbox.false')}</CheckBoxLabelWrapper>}
+                trueLabel={
+                  <CheckBoxLabelWrapper>
+                    <StyledParagraph>{t('modals.submitJudgement.checkbox.true')}</StyledParagraph>
+                  </CheckBoxLabelWrapper>
+                }
+                checked={state.context.hasWinner ?? true}
+                onChange={switchCheckbox}
+              />
+            </InlineToggleWrap>
+            {isValid && !state.context.hasWinner && <TextMedium error>{t(isValid)}</TextMedium>}
+          </RowGapBlock>
           <WinnersSelection
             validationMessage={isValid}
             amountDistributed={amountDistributed}
@@ -289,6 +299,15 @@ export const SubmitJudgementModal = () => {
             editSlashed={(id, rejected) => send('EDIT_REJECTED', { payload: { id, rejected } })}
             slashed={state.context.rejected ?? []}
           />
+          <ModalDivider />
+          <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
+            <CKEditor
+              id="field-rationale"
+              minRows={5}
+              onChange={(event, editor) => send('SET_RATIONALE', { rationale: editor.getData() })}
+              onReady={(editor) => editor.setData(state.context.rationale)}
+            />
+          </InputComponent>
         </ModalContainer>
       </ScrolledModalBody>
       <ModalFooter>

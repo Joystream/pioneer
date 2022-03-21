@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
-import { NetworkType } from '@/app/config'
+import { NetworkType, configuredNetworks } from '@/app/config'
 import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -16,7 +16,7 @@ import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 type Tab = 'SETTINGS' | 'LANGUAGE'
 
 export const Settings = () => {
-  const options: NetworkType[] = ['local', 'local-mocks', 'olympia-testnet']
+  const options: NetworkType[] = configuredNetworks()
   const [network, setNetwork] = useNetwork()
   const { t } = useTranslation('settings')
   const [endpoints] = useNetworkEndpoints()
@@ -25,7 +25,6 @@ export const Settings = () => {
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
     { title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
-
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
       setNetwork(network)

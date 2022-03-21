@@ -1,6 +1,9 @@
 import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { StatisticsThreeColumns } from '@/common/components/statistics'
+import { useApi } from '@/common/hooks/useApi'
+import { useObservable } from '@/common/hooks/useObservable'
+import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
 
@@ -38,9 +41,12 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Divider: Divider,
   ProposalLink: ProposalLink,
   OpeningLink: OpeningLink,
+  Percentage: Percentage,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
+  const { api } = useApi()
+  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [api])
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {
@@ -49,11 +55,30 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
 
     return null
   }, [])
+
   const detailsRenderStructure = useMemo(() => getDetailsRenderStructure(proposalDetails), [proposalDetails])
+
+  const additionalDetails = useMemo(() => {
+    if (proposalDetails?.type === 'setReferralCut') {
+      return [
+        {
+          renderType: 'Amount',
+          label: 'Current membership price',
+          value: membershipPrice ?? 0,
+        },
+      ] as RenderNode[]
+    }
+
+    return []
+  }, [membershipPrice])
 
   if (!proposalDetails) {
     return null
   }
 
-  return <StatisticsThreeColumns>{detailsRenderStructure?.structure?.map(renderProposalDetail)}</StatisticsThreeColumns>
+  return (
+    <StatisticsThreeColumns>
+      {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails].map(renderProposalDetail)}
+    </StatisticsThreeColumns>
+  )
 }

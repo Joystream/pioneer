@@ -3,7 +3,6 @@ import React from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { useRefetch } from '@/common/hooks/useRefetch'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { Member } from '../../types'
 
@@ -20,8 +19,6 @@ interface MembershipModalProps {
 export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
   const [state, send] = useMachine(updateMembershipMachine)
 
-  const { refetch: refetchMemberships } = useMyMemberships()
-  useRefetch({ type: 'set', payload: refetchMemberships })
   useRefetch({ type: 'do', payload: state.matches('success') })
 
   if (state.matches('prepare')) {
