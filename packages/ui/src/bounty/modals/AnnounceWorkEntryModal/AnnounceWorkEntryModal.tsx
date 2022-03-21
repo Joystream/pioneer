@@ -34,6 +34,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -59,6 +60,8 @@ export const AnnounceWorkEntryModal = () => {
   const balance = useBalance(account?.address)
   const stakingStatus = useStakingAccountStatus(account?.address, activeMember?.id)
   const [isValidNext, setValidNext] = useState<boolean>(false)
+
+  useRefetch({ type: 'do', payload: state.matches(AnnounceWorkEntryStates.success) })
 
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
