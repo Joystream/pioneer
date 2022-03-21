@@ -35,7 +35,7 @@ export const BountiesTabs = () => {
         count: entriesCount,
       },
     ],
-    ['Tags', BountyRoutes.bountyTags],
+    // ['Tags', BountyRoutes.bountyTags],
   ])
 
   return <Tabs tabs={tabs} />
