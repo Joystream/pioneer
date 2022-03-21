@@ -1,5 +1,6 @@
 import { IBountyMetadata, IBountyWorkData } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
+import { BountyCreationParameters } from '@joystream/types/augment'
 import { AssuranceContractType_Closed } from '@joystream/types/bounty'
 import { MemberId } from '@joystream/types/common'
 import { AugmentedConst } from '@polkadot/api/types'
@@ -13,8 +14,6 @@ import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/Add
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
-
-import { BountyCreationParameters } from '../../../../../types/augment'
 
 interface Conditions {
   isThreadCategoryLoading?: boolean
@@ -73,13 +72,13 @@ export const isNextStepValid = (state: AddBountyModalMachineState, conditions: C
 }
 
 export const createBountyParametersFactory = (state: AddBountyModalMachineState): BountyCreationParameters =>
-  createType('BountyCreationParameters', {
+  createType<BountyCreationParameters, 'BountyCreationParameters'>('BountyCreationParameters', {
     oracle: createType('BountyActor', {
-      Member: createType('u64', Number(state.context.oracle?.id || 0)),
+      Member: createType<MemberId, 'MemberId'>('MemberId', Number(state.context.oracle?.id || 0)),
     }),
     contract_type: createType('AssuranceContractType', contractTypeFactory(state)),
     creator: createType('BountyActor', {
-      Member: createType('u64', Number(state.context.creator?.id || 0)),
+      Member: createType<MemberId, 'MemberId'>('MemberId', Number(state.context.creator?.id || 0)),
     }),
     cherry: createType('u128', state.context.cherry || 0),
     entrant_stake: createType('u128', state.context.workingPeriodStake || 0),

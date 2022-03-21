@@ -80,6 +80,7 @@ export type BountyFieldsFragment = {
     __typename: 'BountyContribution'
     id: string
     amount: any
+    withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
     contributor?: {
       __typename: 'Membership'
       id: string
@@ -292,6 +293,7 @@ export type BountyContributionFieldsFragment = {
   __typename: 'BountyContribution'
   id: string
   amount: any
+  withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
   contributor?: {
     __typename: 'Membership'
     id: string
@@ -409,6 +411,7 @@ export type GetBountiesQuery = {
       __typename: 'BountyContribution'
       id: string
       amount: any
+      withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
       contributor?: {
         __typename: 'Membership'
         id: string
@@ -578,6 +581,7 @@ export type GetBountyQuery = {
       __typename: 'BountyContribution'
       id: string
       amount: any
+      withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
       contributor?: {
         __typename: 'Membership'
         id: string
@@ -760,6 +764,7 @@ export type GetBountyContributorsQuery = {
     __typename: 'BountyContribution'
     id: string
     amount: any
+    withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
     contributor?: {
       __typename: 'Membership'
       id: string
@@ -792,6 +797,9 @@ export const BountyContributionFieldsFragmentDoc = gql`
   fragment BountyContributionFields on BountyContribution {
     id
     amount
+    withdrawnInEvent {
+      id
+    }
     contributor {
       ...MemberFields
     }

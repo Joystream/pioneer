@@ -66,7 +66,7 @@ const asNewCandidateActivity: CouncilActivityCast<NewCandidateEventFieldsFragmen
   eventType: fields.__typename,
   ...asBaseActivity(fields),
   candidateHandle: fields.candidate.member.handle,
-  memberId: fields.candidate.member.handle,
+  memberId: fields.candidate.member.id,
 })
 
 const asCandidacyWithdrawActivity: CouncilActivityCast<

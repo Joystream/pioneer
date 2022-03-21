@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useHistory } from 'react-router'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -7,7 +8,7 @@ import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
-import { isDefined } from '@/common/utils'
+import { isDefined, whenDefined } from '@/common/utils'
 import { getUrl } from '@/common/utils/getUrl'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { ElectionRoutes } from '@/council/constants'
@@ -35,6 +36,8 @@ const isNextDisabled = (candidateIndex: number | undefined, candidates: string[]
 export const CandidacyPreview = React.memo(() => {
   const [activeTab, setActiveTab] = useState<CandidacyPreviewTabs>('CANDIDACY')
   const { modalData, hideModal } = useModal<CandidacyPreviewModalCall>()
+  const history = useHistory()
+
   const [candidateId, setCandidateId] = useState(modalData.id)
   const { isLoading, candidate } = useCandidate(candidateId)
 
@@ -47,27 +50,22 @@ export const CandidacyPreview = React.memo(() => {
 
   const candidates = useElectionCandidatesIds(candidate?.cycleId)
   const candidateIndex = candidate && candidates?.findIndex((id) => id === candidate?.id)
-  const properUrl = getUrl({
-    route: candidate?.cycleFinished ? ElectionRoutes.pastElection : ElectionRoutes.currentElection,
-    params: { id: candidate?.cycleFinished && candidate?.cycleId ? candidate.cycleId : undefined },
-    query: { candidate: candidate?.id ?? '' },
-  })
+  const properUrl = useMemo(
+    () =>
+      whenDefined(candidate?.cycleId, (id) =>
+        getUrl({
+          route: candidate?.cycleFinished ? ElectionRoutes.pastElection : ElectionRoutes.currentElection,
+          params: { id },
+          query: { candidate: candidateId },
+        })
+      ),
+    [candidate]
+  )
 
   const closeModal = useCallback(() => {
     hideModal()
-    window.location.replace(
-      getUrl({
-        route: candidate?.cycleFinished ? ElectionRoutes.pastElection : ElectionRoutes.currentElection,
-        params: { id: candidate?.cycleFinished && candidate?.cycleId ? candidate.cycleId : undefined },
-      })
-    )
-  }, [hideModal])
-
-  useEffect(() => {
-    if (!isLoading && window.location.href !== properUrl) {
-      window.location.replace(properUrl)
-    }
-  }, [isLoading, properUrl])
+    history.location.search && history.push(history.location.pathname)
+  }, [hideModal, properUrl])
 
   const onClickLeft = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex - 1])
   const onClickRight = () => candidates && isDefined(candidateIndex) && setCandidateId(candidates[candidateIndex + 1])

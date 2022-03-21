@@ -61,12 +61,16 @@ const handler = (args: TransferArgs) => {
   // Mock the chain data
   membership.members = members
   council.announcementPeriodNr = CYCLE_ID
-  referendum.votes = votes
 
   const electionStarted = stage === 'voting' || stage === 'revealing'
 
   if (!electionStarted && isDefined(args.duration)) {
     council.stage.changed_at = args.duration - DefaultDurations[stage]
+  }
+
+  referendum.votes = []
+  if (stage === 'revealing') {
+    referendum.votes = votes
   }
 
   council.candidates = []

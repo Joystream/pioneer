@@ -53,6 +53,13 @@ export const KNOWN_MEMBERS: KnownMember[] = [
     isVerified: true,
     isCouncilMember: false,
   },
+  {
+    handle: 'ferdie',
+    rootAccount: accountsMap.ferdie,
+    controllerAccount: accountsMap.ferdie,
+    isVerified: true,
+    isCouncilMember: false,
+  },
 ]
 
 let nextId = 0
