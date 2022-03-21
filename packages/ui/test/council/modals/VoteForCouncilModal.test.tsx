@@ -132,6 +132,7 @@ describe('UI: Vote for Council Modal', () => {
       expect(useModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
+          originalModalData: { id: '0-0' },
           originalModalName: 'VoteForCouncil',
         },
       })

@@ -22,7 +22,7 @@ import { VoteForCouncilSuccessModal } from './VoteForCouncilSuccessModal'
 
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
-  const { showModal, hideModal } = useModal<VoteForCouncilModalCall>()
+  const { showModal, hideModal, modalData } = useModal<VoteForCouncilModalCall>()
 
   const { api } = useApi()
 
@@ -43,12 +43,13 @@ export const VoteForCouncilModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
-    if (state.matches('requirementsVerification'))
+    if (state.matches('requirementsVerification')) {
       if (!activeMember) {
         showModal<SwitchMemberModalCall>({
           modal: 'SwitchMember',
           data: {
             originalModalName: 'VoteForCouncil',
+            originalModalData: modalData,
           },
         })
       } else if (!hasRequiredStake) {
@@ -62,6 +63,7 @@ export const VoteForCouncilModal = () => {
       } else if (feeInfo) {
         send(feeInfo.canAfford ? 'PASS' : 'FAIL')
       }
+    }
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
 
   if (state.matches('success')) {
