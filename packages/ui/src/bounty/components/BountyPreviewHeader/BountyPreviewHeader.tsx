@@ -44,7 +44,7 @@ const bountyButtonsMapper: Record<
 }
 
 const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStatistics> = {
-  announceWorkEntry: 'allMemberIds',
+  announceWorkEntry: 'idsWithoutEntries',
   cancelBounty: 'idAsCreator',
   claimReward: 'idsWithReward',
   contributeFunds: 'allMemberIds',
@@ -58,7 +58,12 @@ const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStati
 }
 
 export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: Bounty) => {
+  const extractEntryWorkerId = (entry: WorkEntry) => entry.worker.id
+
   const membersWithEntries = bounty?.entries?.filter((entry) => membershipsIdArray.includes(entry.worker.id)) ?? []
+  const idsWithEntries = membersWithEntries.map(extractEntryWorkerId)
+  const idsWithoutEntries = membershipsIdArray.filter((memberId) => !idsWithEntries.includes(memberId))
+
   const membersWithSubmission = membersWithEntries.filter((entry) => entry.hasSubmitted)
   const membersWithReward = membersWithSubmission.filter((entry) => isBountyEntryStatusWinner(entry.status))
   const membersWithLoss = membersWithSubmission.filter(
@@ -68,19 +73,20 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
 
   const idsWithContribution =
     bounty?.contributors
-      .filter((contribution) => membershipsIdArray.includes(contribution.actor?.id ?? '-1'))
+      .filter(
+        (contribution) => membershipsIdArray.includes(contribution.actor?.id ?? '-1') && !contribution.hasWithdrawn
+      )
       .map((contribution) => contribution.actor?.id ?? '-1') ?? []
 
   const idAsCreator = membershipsIdArray.filter((memberId) => bounty?.creator?.id === memberId)
   const idAsOracle = membershipsIdArray.filter((memberId) => bounty?.oracle?.id === memberId)
-
-  const extractEntryWorkerId = (entry: WorkEntry) => entry.worker.id
 
   return {
     idsWithEntries: membersWithEntries.map(extractEntryWorkerId),
     idsWithSubmissions: membersWithSubmission.map(extractEntryWorkerId),
     idsWithReward: membersWithReward.map(extractEntryWorkerId),
     idsWithLoss: membersWithLoss.map(extractEntryWorkerId),
+    idsWithoutEntries,
     idsOnWhitelist,
     idsWithContribution,
     idAsCreator,
@@ -101,6 +107,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
     idsWithSubmissions,
     idsWithEntries,
     idAsOracle,
+    idsWithoutEntries,
   } = membershipsStatistics
 
   switch (bounty.stage) {
@@ -115,7 +122,8 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
     }
     case 'workSubmission': {
       isDefined(bounty?.entrantWhitelist) && !idsOnWhitelist.length && buttons.push('notify')
-      !idsWithEntries.length ? buttons.push('announceWorkEntry') : buttons.push('submitWork')
+      idsWithoutEntries.length && buttons.push('announceWorkEntry')
+      idsWithEntries.length && buttons.push('submitWork')
       idsWithSubmissions.length && buttons.push('withdrawWorkEntry')
       break
     }
@@ -133,6 +141,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
     }
     case 'failed': {
       buttons.push('notify')
+
       idsWithLoss.length && buttons.push('withdrawEntryStake')
       idsWithContribution.length && buttons.push('withdrawContribution')
       break

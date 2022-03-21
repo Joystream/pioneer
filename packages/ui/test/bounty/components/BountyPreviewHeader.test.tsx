@@ -64,7 +64,7 @@ describe('UI: BountyPreviewHeader', () => {
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,
-    members: [],
+    members: [{ ...activeMember }],
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
@@ -268,6 +268,7 @@ describe('UI: BountyPreviewHeader', () => {
       bounty.entries = [
         {
           ...defaultEntry,
+          passed: true,
           hasSubmitted: true,
         },
       ]
