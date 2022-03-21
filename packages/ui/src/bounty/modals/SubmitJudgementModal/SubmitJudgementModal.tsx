@@ -134,7 +134,7 @@ export const SubmitJudgementModal = () => {
         { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
         createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
         createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
-        state.context.rationale
+        state.context.rationale ?? ''
       )
     }
   }, [api, isConnected, bounty, state.context])
@@ -305,7 +305,7 @@ export const SubmitJudgementModal = () => {
               id="field-rationale"
               minRows={5}
               onChange={(event, editor) => send('SET_RATIONALE', { rationale: editor.getData() })}
-              onReady={(editor) => editor.setData(state.context.rationale)}
+              onReady={(editor) => editor.setData(state.context.rationale ?? '')}
             />
           </InputComponent>
         </ModalContainer>
