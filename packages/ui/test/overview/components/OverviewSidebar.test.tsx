@@ -51,6 +51,7 @@ describe('UI: OverviewSidebar', () => {
         newPrice: 4322,
       },
     },
+    discussionThread: { mode: 'ProposalDiscussionThreadModeOpen', discussionPosts: [] },
     votes: [],
   }
 

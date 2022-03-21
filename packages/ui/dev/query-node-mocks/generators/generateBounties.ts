@@ -123,10 +123,7 @@ const generateEntry =
       [1, { type: 'CashedOut' }]
     )
     const worker = randomMember(mocks.members)
-    const works = repeat(
-      () => ({ ...randomRawBlock(), title: lorem.sentence(), description: randomMessage() }),
-      randomFromRange(0, 5)
-    )
+    const works = repeat(generateWork, randomFromRange(0, 5))
 
     return {
       id: `${bounty.id}:${entryIndex}`,
@@ -140,6 +137,8 @@ const generateEntry =
       announcedInEvent: randomRawBlock(),
     }
   }
+
+export const generateWork = () => ({ ...randomRawBlock(), title: lorem.sentence(), description: randomMessage() })
 
 const generateBountyFundingType = (isPerpetual = datatype.boolean()) =>
   isPerpetual

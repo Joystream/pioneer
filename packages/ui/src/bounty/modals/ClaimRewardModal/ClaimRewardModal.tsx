@@ -38,7 +38,7 @@ export const ClaimRewardModal = () => {
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  const requirementsVerified = transaction && feeInfo && activeMember
+  const requirementsVerified = transaction && feeInfo && activeMember && reward && api
 
   useEffect(() => {
     if (state.matches('requirementsVerification') && requirementsVerified) {
@@ -48,7 +48,20 @@ export const ClaimRewardModal = () => {
   }, [state.value, transaction, feeInfo?.canAfford])
 
   if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'Initializing server connection', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!feeInfo },
+          { name: 'Calculating reward', state: !!reward },
+        ]}
+      />
+    )
   }
 
   if (!api || !activeMember || !transaction || !feeInfo || !reward) {
