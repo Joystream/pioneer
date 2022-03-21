@@ -17,6 +17,7 @@ import bounties from '@/mocks/data/raw/bounties.json'
 import entries from '@/mocks/data/raw/bountyEntries.json'
 import { getMember } from '@/mocks/helpers'
 
+import { generateWork } from '../../../dev/query-node-mocks/generators/generateBounties'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -30,7 +31,7 @@ import {
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
-const entry = { ...baseEntry, worker: getMember('bob') }
+const entry = { ...baseEntry, worker: getMember('bob'), works: [generateWork()] }
 
 const defaultBalance = {
   total: BN_ZERO,
