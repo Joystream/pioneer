@@ -1,12 +1,10 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
-import { renderHook } from '@testing-library/react-hooks'
 import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
-import { useBounty } from '@/bounty/hooks/useBounty'
 import { SubmitWorkModal } from '@/bounty/modals/SubmitWorkModal'
 import { BN_ZERO } from '@/common/constants'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
@@ -15,7 +13,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
-import { seedBounties, seedBountyEntries, seedMembers } from '@/mocks/data'
+import { seedMembers } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
@@ -50,42 +48,25 @@ describe('UI: BountySubmitModal', () => {
   let useModal: UseModal<any>
   beforeAll(async () => {
     seedMembers(mockServer.server, 2)
-    seedBounties(mockServer.server, [
-      {
-        id: '1',
-        stage: 'WorkSubmission',
-        discussionThreadId: undefined,
-        entrantWhitelist: undefined,
-        creatorId: '0',
-        oracleId: '0',
-        isTerminated: false,
-      },
-    ])
-    seedBountyEntries(mockServer.server, [
-      {
-        id: '1',
-        bountyId: '1',
-        workerId: '0',
-        status: { type: 'Working' },
-      },
-      {
-        id: '2',
-        bountyId: '1',
-        workerId: '1',
-        status: { type: 'Working' },
-      },
-    ])
-
-    const { waitForNextUpdate, result } = renderHook(() => useBounty('1'), {
-      wrapper: ({ children }) => <MockApolloProvider>{children}</MockApolloProvider>,
-    })
-    await waitForNextUpdate()
 
     useModal = {
       hideModal: jest.fn(),
       showModal: jest.fn(),
       modal: 'foo',
-      modalData: { bounty: result.current.bounty },
+      modalData: {
+        bounty: {
+          id: '1',
+          title: 'Bounty title 1',
+          entries: [
+            {
+              id: 2,
+              worker: {
+                id: getMember('bob').id,
+              },
+            },
+          ],
+        },
+      },
     }
   })
 

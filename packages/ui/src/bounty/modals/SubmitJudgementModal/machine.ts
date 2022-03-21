@@ -8,6 +8,7 @@ import {
   isTransactionSuccess,
   transactionMachine,
 } from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 export interface BountyWinner {
@@ -32,9 +33,10 @@ interface TransactionContext extends GeneralParametersContext {
   transactionEvents?: EventRecord[]
 }
 
-export type SubmitJudgementContext = TransactionContext & GeneralParametersContext
+export type SubmitJudgementContext = Partial<TransactionContext & GeneralParametersContext>
 
 export enum SubmitJudgementStates {
+  requirementsVerification = 'requirementsVerification',
   generalParameters = 'generalParameters',
   transaction = 'transaction',
   success = 'success',
@@ -43,6 +45,7 @@ export enum SubmitJudgementStates {
 }
 
 export type SubmitJudgementState =
+  | { value: SubmitJudgementStates.requirementsVerification; context: EmptyObject }
   | { value: SubmitJudgementStates.generalParameters; context: GeneralParametersContext }
   | { value: SubmitJudgementStates.transaction; context: Required<SubmitJudgementContext> }
   | { value: SubmitJudgementStates.success; context: Required<SubmitJudgementContext> }
@@ -78,7 +81,7 @@ export type SubmitJudgementModalMachineState = State<
 
 export const submitJudgementMachine = createMachine<SubmitJudgementContext, SubmitJudgementEvent, SubmitJudgementState>(
   {
-    initial: SubmitJudgementStates.generalParameters,
+    initial: SubmitJudgementStates.requirementsVerification,
     context: {
       rationale: '',
       hasWinner: true,
@@ -91,6 +94,11 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
       rejected: [],
     },
     states: {
+      [SubmitJudgementStates.requirementsVerification]: {
+        on: {
+          NEXT: SubmitJudgementStates.generalParameters,
+        },
+      },
       [SubmitJudgementStates.generalParameters]: {
         on: {
           NEXT: SubmitJudgementStates.transaction,
@@ -112,7 +120,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           },
           ADD_SLASHED: {
             actions: assign({
-              rejected: (context) => [...context.rejected, { id: context.rejected.length }],
+              rejected: (context) => [...(context?.rejected ?? []), { id: context.rejected?.length ?? 0 }],
             }),
           },
           REMOVE_LAST_WINNER: {
@@ -141,7 +149,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           EDIT_WINNER: {
             actions: assign({
               winners: (context, event) =>
-                context.winners.map((winner) => {
+                context.winners?.map((winner) => {
                   if (winner.id === (event as EditWinnerEvent).payload.id) {
                     winner = { ...winner, ...(event as EditWinnerEvent).payload.winner }
                     return winner
@@ -154,7 +162,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           EDIT_REJECTED: {
             actions: assign({
               rejected: (context, event) =>
-                context.rejected.map((loser) => {
+                context.rejected?.map((loser) => {
                   if (loser.id === (event as EditRejectedEvent).payload.id) {
                     loser = { ...loser, rejected: (event as EditRejectedEvent).payload.rejected }
                     return loser

@@ -31,6 +31,7 @@ const accounts = {
 const contributor: Contributor = {
   actor: getMember('alice'),
   amount: new BN('10000'),
+  hasWithdrawn: false,
 }
 
 const bounty: Bounty = {

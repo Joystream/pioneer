@@ -1,4 +1,7 @@
+import { createType } from '@joystream/types'
+import { BountyActor } from '@joystream/types/bounty'
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -10,6 +13,7 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -32,12 +36,16 @@ export const WithdrawContributionModal = () => {
 
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawFunding({ Member: activeMember.id }, bounty.id)
+      createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) })
+      return api.tx.bounty.withdrawFunding(
+        createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) }),
+        bounty.id
+      )
     }
   }, [JSON.stringify(activeMember), connectionState])
 
   const amount = useMemo(
-    () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id)?.amount,
+    () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id)?.amount ?? BN_ZERO,
     [activeMember?.id]
   )
 
@@ -45,12 +53,12 @@ export const WithdrawContributionModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (transaction && feeInfo && activeMember) {
+      if (transaction && feeInfo && activeMember && amount) {
         feeInfo.canAfford && send('PASS')
         !feeInfo.canAfford && send('FAIL')
       }
     }
-  }, [state.value, transaction, feeInfo?.canAfford])
+  }, [state.value, transaction, feeInfo?.canAfford, amount])
 
   if (state.matches('requirementsVerification')) {
     return (
@@ -58,6 +66,13 @@ export const WithdrawContributionModal = () => {
         title={t('common:modals.wait.title')}
         description={t('common:modals.wait.description')}
         onClose={hideModal}
+        requirements={[
+          { name: 'API', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!feeInfo },
+          { name: 'Calculating amount', state: !!amount },
+        ]}
       />
     )
   }
@@ -77,7 +92,7 @@ export const WithdrawContributionModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        amount={amount}
+        amount={new BN(amount)}
         bounty={bounty}
         isContributor
       />

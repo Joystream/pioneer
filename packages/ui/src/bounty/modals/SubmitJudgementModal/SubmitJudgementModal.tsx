@@ -32,6 +32,7 @@ import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/
 import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
+import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -70,7 +71,7 @@ export const SubmitJudgementModal = () => {
   )
 
   const amountDistributed = useMemo(
-    () => state.context.winners.reduce((prev, current) => prev + (current.reward ?? 0), 0),
+    () => state.context.winners?.reduce((prev, current) => prev + (current.reward ?? 0), 0) ?? 0,
     [state.context.winners]
   )
 
@@ -82,20 +83,20 @@ export const SubmitJudgementModal = () => {
       }
 
       const isWinner = state.context.winners
-        .filter((winner) => winner.winner && winner.reward)
+        ?.filter((winner) => winner.winner && winner.reward)
         .some((winner) => winner?.winner?.id === member.id)
       const isSlashed = state.context.rejected
-        .filter((loser) => !!loser.rejected)
+        ?.filter((loser) => !!loser.rejected)
         .some((loser) => loser.rejected?.id === member.id)
 
       return !(isWinner || isSlashed)
     },
-    [state.context.winners.length, state.context.rejected.length]
+    [state.context.winners?.length, state.context.rejected?.length]
   )
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
-      const validWinners = state.context.winners.filter(
+      const validWinners = state.context.winners?.filter(
         (winner) => winner.winner && winner.reward
       ) as Required<BountyWinner>[]
       const winnersApi = validWinners.map(
@@ -111,7 +112,7 @@ export const SubmitJudgementModal = () => {
           ] as const
       )
 
-      const validRejections = state.context.rejected.filter(
+      const validRejections = state.context.rejected?.filter(
         (rejection) => rejection.rejected
       ) as Required<BountyRejected>[]
       const rejectedApi = validRejections.map(
@@ -133,16 +134,22 @@ export const SubmitJudgementModal = () => {
         { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
         createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
         createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
-        state.context.rationale
+        state.context.rationale ?? ''
       )
     }
   }, [api, isConnected, bounty, state.context])
 
   useEffect(() => {
-    const rewardMod = bounty.totalFunding.toNumber() % state.context.winners.length
-    const reward = Math.floor(bounty.totalFunding.toNumber() / state.context.winners.length)
+    if (api && transaction && activeMember && state.matches(SubmitJudgementStates.requirementsVerification)) {
+      send('NEXT')
+    }
+  }, [api, transaction])
 
-    state.context.winners.forEach((winner, index) => {
+  useEffect(() => {
+    const rewardMod = bounty.totalFunding.toNumber() % (state.context?.winners?.length ?? 1)
+    const reward = Math.floor(bounty.totalFunding.toNumber() / (state.context?.winners?.length ?? 1))
+
+    state.context.winners?.forEach((winner, index) => {
       send('EDIT_WINNER', {
         payload: {
           id: winner.id,
@@ -150,7 +157,7 @@ export const SubmitJudgementModal = () => {
         },
       })
     })
-  }, [state.context.winners.length])
+  }, [state.context.winners?.length])
 
   useEffect(() => {
     const { winners, hasWinner, rationale } = state.context
@@ -159,10 +166,10 @@ export const SubmitJudgementModal = () => {
       case !hasWinner && rationale:
         return setIsValid(null)
 
-      case hasWinner && (!winners.length || winners.some((winner) => !winner.winner)):
+      case hasWinner && (!winners?.length || winners?.some((winner) => !winner.winner)):
         return setIsValid('modals.submitJudgement.validation.pickWinner')
 
-      case hasWinner && winners.some(({ reward }) => reward === 0):
+      case hasWinner && winners?.some(({ reward }) => reward === 0):
         return setIsValid('modals.submitJudgement.validation.winnerNoReward')
 
       case hasWinner && amountDistributed < bounty.totalFunding.toNumber():
@@ -179,7 +186,22 @@ export const SubmitJudgementModal = () => {
     }
   }, [state.context.winners, state.context.hasWinner, state.context.rationale])
 
-  if (!activeMember || !transaction) {
+  if (state.matches(SubmitJudgementStates.requirementsVerification)) {
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'Initializing server connection', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+        ]}
+      />
+    )
+  }
+
+  if (!activeMember || !transaction || !api) {
     return null
   }
 
@@ -248,7 +270,7 @@ export const SubmitJudgementModal = () => {
                     <StyledParagraph>{t('modals.submitJudgement.checkbox.true')}</StyledParagraph>
                   </CheckBoxLabelWrapper>
                 }
-                checked={state.context.hasWinner}
+                checked={state.context.hasWinner ?? true}
                 onChange={switchCheckbox}
               />
             </InlineToggleWrap>
@@ -260,7 +282,7 @@ export const SubmitJudgementModal = () => {
             bountyFunding={bounty.totalFunding}
             filter={selectWorkerFilter}
             noBountyWinners={!state.context.hasWinner}
-            winners={state.context.winners}
+            winners={state.context.winners ?? []}
             addWinner={() => send('ADD_WINNER')}
             removeLastWinner={() => send('REMOVE_LAST_WINNER')}
             editWinner={(id, winner) => send('EDIT_WINNER', { payload: { winner, id } })}
@@ -275,7 +297,7 @@ export const SubmitJudgementModal = () => {
             removeLastSlashed={() => send('REMOVE_LAST_SLASHED')}
             addSlashed={() => send('ADD_SLASHED')}
             editSlashed={(id, rejected) => send('EDIT_REJECTED', { payload: { id, rejected } })}
-            slashed={state.context.rejected}
+            slashed={state.context.rejected ?? []}
           />
           <ModalDivider />
           <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
@@ -283,7 +305,7 @@ export const SubmitJudgementModal = () => {
               id="field-rationale"
               minRows={5}
               onChange={(event, editor) => send('SET_RATIONALE', { rationale: editor.getData() })}
-              onReady={(editor) => editor.setData(state.context.rationale)}
+              onReady={(editor) => editor.setData(state.context.rationale ?? '')}
             />
           </InputComponent>
         </ModalContainer>
