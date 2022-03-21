@@ -20,10 +20,10 @@ export interface LayoutProps {
   tilesComponent?: React.ReactNode
   extraFilter?: QueryExtraFilter<unknown>
   bountyStatus?: BountyStatus
-  noMember?: boolean
+  hasNoMember?: boolean
 }
 
-export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'active', noMember }: LayoutProps) => {
+export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'active', hasNoMember }: LayoutProps) => {
   const searchSlot = useRef<HTMLDivElement>(null)
 
   const { t } = useTranslation('bounty')
@@ -44,7 +44,7 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
     <PageLayout
       header={<BountiesHeader />}
       main={
-        noMember ? (
+        hasNoMember ? (
           <EmptyTab />
         ) : (
           <MainPanel>
