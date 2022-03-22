@@ -30,7 +30,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const nameMapping = () => {
     switch (group.name) {
       case 'Operations Alpha':
-        return 'Builders Worker'
+        return 'Builders'
       case 'Gateway':
         return 'Gateways'
       case 'Operations Beta':
@@ -42,6 +42,10 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
     }
   }
   const isLeadActive = lead && group.isActive
+  //TODO this validation has to be deleted when Gateway working group will be ready
+  if (group.name === 'Gateway') {
+    return null
+  }
   return (
     <GroupItem as={GhostRouterLink} to={groupAddress}>
       <GroupImageContainer>
