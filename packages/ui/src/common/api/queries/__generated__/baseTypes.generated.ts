@@ -1965,6 +1965,7 @@ export type BountyContribution = BaseGraphQlObject & {
   bountyFundedEvents: Array<BountyFundedEvent>
   bountyId: Scalars['String']
   contributor?: Maybe<Membership>
+  /** The id of the contributor */
   contributorId?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
@@ -1988,6 +1989,7 @@ export type BountyContributionCreateInput = {
   amount: Scalars['String']
   bounty: Scalars['ID']
   contributor?: InputMaybe<Scalars['ID']>
+  contributorId?: InputMaybe<Scalars['String']>
 }
 
 export type BountyContributionEdge = {
@@ -2001,6 +2003,8 @@ export enum BountyContributionOrderByInput {
   AmountDesc = 'amount_DESC',
   BountyAsc = 'bounty_ASC',
   BountyDesc = 'bounty_DESC',
+  ContributorIdAsc = 'contributorId_ASC',
+  ContributorIdDesc = 'contributorId_DESC',
   ContributorAsc = 'contributor_ASC',
   ContributorDesc = 'contributor_DESC',
   CreatedAtAsc = 'createdAt_ASC',
@@ -2015,6 +2019,7 @@ export type BountyContributionUpdateInput = {
   amount?: InputMaybe<Scalars['String']>
   bounty?: InputMaybe<Scalars['ID']>
   contributor?: InputMaybe<Scalars['ID']>
+  contributorId?: InputMaybe<Scalars['String']>
 }
 
 export type BountyContributionWhereInput = {
@@ -2031,6 +2036,11 @@ export type BountyContributionWhereInput = {
   bountyFundedEvents_none?: InputMaybe<BountyFundedEventWhereInput>
   bountyFundedEvents_some?: InputMaybe<BountyFundedEventWhereInput>
   contributor?: InputMaybe<MembershipWhereInput>
+  contributorId_contains?: InputMaybe<Scalars['String']>
+  contributorId_endsWith?: InputMaybe<Scalars['String']>
+  contributorId_eq?: InputMaybe<Scalars['String']>
+  contributorId_in?: InputMaybe<Array<Scalars['String']>>
+  contributorId_startsWith?: InputMaybe<Scalars['String']>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -4223,6 +4233,144 @@ export type BudgetSpendingEventWhereInput = {
 }
 
 export type BudgetSpendingEventWhereUniqueInput = {
+  id: Scalars['ID']
+}
+
+export type BudgetUpdatedEvent = BaseGraphQlObject &
+  Event & {
+    __typename: 'BudgetUpdatedEvent'
+    /** Amount substracted from / added to the current budget */
+    budgetChangeAmount: Scalars['BigInt']
+    createdAt: Scalars['DateTime']
+    createdById: Scalars['String']
+    deletedAt?: Maybe<Scalars['DateTime']>
+    deletedById?: Maybe<Scalars['String']>
+    group: WorkingGroup
+    groupId: Scalars['String']
+    id: Scalars['ID']
+    /** Blocknumber of the block in which the event was emitted. */
+    inBlock: Scalars['Int']
+    /** Hash of the extrinsic which caused the event to be emitted */
+    inExtrinsic?: Maybe<Scalars['String']>
+    /** Index of event in block from which it was emitted. */
+    indexInBlock: Scalars['Int']
+    /** Network the block was produced in */
+    network: Network
+    /** Filtering options for interface implementers */
+    type?: Maybe<EventTypeOptions>
+    updatedAt?: Maybe<Scalars['DateTime']>
+    updatedById?: Maybe<Scalars['String']>
+    version: Scalars['Int']
+  }
+
+export type BudgetUpdatedEventConnection = {
+  __typename: 'BudgetUpdatedEventConnection'
+  edges: Array<BudgetUpdatedEventEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+}
+
+export type BudgetUpdatedEventCreateInput = {
+  budgetChangeAmount: Scalars['String']
+  group: Scalars['ID']
+  inBlock: Scalars['Float']
+  inExtrinsic?: InputMaybe<Scalars['String']>
+  indexInBlock: Scalars['Float']
+  network: Network
+}
+
+export type BudgetUpdatedEventEdge = {
+  __typename: 'BudgetUpdatedEventEdge'
+  cursor: Scalars['String']
+  node: BudgetUpdatedEvent
+}
+
+export enum BudgetUpdatedEventOrderByInput {
+  BudgetChangeAmountAsc = 'budgetChangeAmount_ASC',
+  BudgetChangeAmountDesc = 'budgetChangeAmount_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  GroupAsc = 'group_ASC',
+  GroupDesc = 'group_DESC',
+  InBlockAsc = 'inBlock_ASC',
+  InBlockDesc = 'inBlock_DESC',
+  InExtrinsicAsc = 'inExtrinsic_ASC',
+  InExtrinsicDesc = 'inExtrinsic_DESC',
+  IndexInBlockAsc = 'indexInBlock_ASC',
+  IndexInBlockDesc = 'indexInBlock_DESC',
+  NetworkAsc = 'network_ASC',
+  NetworkDesc = 'network_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+}
+
+export type BudgetUpdatedEventUpdateInput = {
+  budgetChangeAmount?: InputMaybe<Scalars['String']>
+  group?: InputMaybe<Scalars['ID']>
+  inBlock?: InputMaybe<Scalars['Float']>
+  inExtrinsic?: InputMaybe<Scalars['String']>
+  indexInBlock?: InputMaybe<Scalars['Float']>
+  network?: InputMaybe<Network>
+}
+
+export type BudgetUpdatedEventWhereInput = {
+  AND?: InputMaybe<Array<BudgetUpdatedEventWhereInput>>
+  OR?: InputMaybe<Array<BudgetUpdatedEventWhereInput>>
+  budgetChangeAmount_eq?: InputMaybe<Scalars['BigInt']>
+  budgetChangeAmount_gt?: InputMaybe<Scalars['BigInt']>
+  budgetChangeAmount_gte?: InputMaybe<Scalars['BigInt']>
+  budgetChangeAmount_in?: InputMaybe<Array<Scalars['BigInt']>>
+  budgetChangeAmount_lt?: InputMaybe<Scalars['BigInt']>
+  budgetChangeAmount_lte?: InputMaybe<Scalars['BigInt']>
+  createdAt_eq?: InputMaybe<Scalars['DateTime']>
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>
+  createdById_eq?: InputMaybe<Scalars['ID']>
+  createdById_in?: InputMaybe<Array<Scalars['ID']>>
+  deletedAt_all?: InputMaybe<Scalars['Boolean']>
+  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
+  deletedById_eq?: InputMaybe<Scalars['ID']>
+  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
+  group?: InputMaybe<WorkingGroupWhereInput>
+  id_eq?: InputMaybe<Scalars['ID']>
+  id_in?: InputMaybe<Array<Scalars['ID']>>
+  inBlock_eq?: InputMaybe<Scalars['Int']>
+  inBlock_gt?: InputMaybe<Scalars['Int']>
+  inBlock_gte?: InputMaybe<Scalars['Int']>
+  inBlock_in?: InputMaybe<Array<Scalars['Int']>>
+  inBlock_lt?: InputMaybe<Scalars['Int']>
+  inBlock_lte?: InputMaybe<Scalars['Int']>
+  inExtrinsic_contains?: InputMaybe<Scalars['String']>
+  inExtrinsic_endsWith?: InputMaybe<Scalars['String']>
+  inExtrinsic_eq?: InputMaybe<Scalars['String']>
+  inExtrinsic_in?: InputMaybe<Array<Scalars['String']>>
+  inExtrinsic_startsWith?: InputMaybe<Scalars['String']>
+  indexInBlock_eq?: InputMaybe<Scalars['Int']>
+  indexInBlock_gt?: InputMaybe<Scalars['Int']>
+  indexInBlock_gte?: InputMaybe<Scalars['Int']>
+  indexInBlock_in?: InputMaybe<Array<Scalars['Int']>>
+  indexInBlock_lt?: InputMaybe<Scalars['Int']>
+  indexInBlock_lte?: InputMaybe<Scalars['Int']>
+  network_eq?: InputMaybe<Network>
+  network_in?: InputMaybe<Array<Network>>
+  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
+  updatedById_eq?: InputMaybe<Scalars['ID']>
+  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+}
+
+export type BudgetUpdatedEventWhereUniqueInput = {
   id: Scalars['ID']
 }
 
@@ -8080,6 +8228,7 @@ export enum EventTypeOptions {
   BudgetRefillPlannedEvent = 'BudgetRefillPlannedEvent',
   BudgetSetEvent = 'BudgetSetEvent',
   BudgetSpendingEvent = 'BudgetSpendingEvent',
+  BudgetUpdatedEvent = 'BudgetUpdatedEvent',
   BuyNowCanceledEvent = 'BuyNowCanceledEvent',
   CandidacyNoteSetEvent = 'CandidacyNoteSetEvent',
   CandidacyStakeReleaseEvent = 'CandidacyStakeReleaseEvent',
@@ -17477,6 +17626,9 @@ export type Query = {
   budgetSpendingEventByUniqueInput?: Maybe<BudgetSpendingEvent>
   budgetSpendingEvents: Array<BudgetSpendingEvent>
   budgetSpendingEventsConnection: BudgetSpendingEventConnection
+  budgetUpdatedEventByUniqueInput?: Maybe<BudgetUpdatedEvent>
+  budgetUpdatedEvents: Array<BudgetUpdatedEvent>
+  budgetUpdatedEventsConnection: BudgetUpdatedEventConnection
   buyNowCanceledEventByUniqueInput?: Maybe<BuyNowCanceledEvent>
   buyNowCanceledEvents: Array<BuyNowCanceledEvent>
   buyNowCanceledEventsConnection: BuyNowCanceledEventConnection
@@ -18532,6 +18684,26 @@ export type QueryBudgetSpendingEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<BudgetSpendingEventOrderByInput>>
   where?: InputMaybe<BudgetSpendingEventWhereInput>
+}
+
+export type QueryBudgetUpdatedEventByUniqueInputArgs = {
+  where: BudgetUpdatedEventWhereUniqueInput
+}
+
+export type QueryBudgetUpdatedEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<BudgetUpdatedEventOrderByInput>>
+  where?: InputMaybe<BudgetUpdatedEventWhereInput>
+}
+
+export type QueryBudgetUpdatedEventsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<BudgetUpdatedEventOrderByInput>>
+  where?: InputMaybe<BudgetUpdatedEventWhereInput>
 }
 
 export type QueryBuyNowCanceledEventByUniqueInputArgs = {
@@ -29139,6 +29311,7 @@ export type WorkingGroup = BaseGraphQlObject & {
   budget: Scalars['BigInt']
   budgetseteventgroup?: Maybe<Array<BudgetSetEvent>>
   budgetspendingeventgroup?: Maybe<Array<BudgetSpendingEvent>>
+  budgetupdatedeventgroup?: Maybe<Array<BudgetUpdatedEvent>>
   createdAt: Scalars['DateTime']
   createdById: Scalars['String']
   deletedAt?: Maybe<Scalars['DateTime']>
@@ -29895,6 +30068,9 @@ export type WorkingGroupWhereInput = {
   budgetspendingeventgroup_every?: InputMaybe<BudgetSpendingEventWhereInput>
   budgetspendingeventgroup_none?: InputMaybe<BudgetSpendingEventWhereInput>
   budgetspendingeventgroup_some?: InputMaybe<BudgetSpendingEventWhereInput>
+  budgetupdatedeventgroup_every?: InputMaybe<BudgetUpdatedEventWhereInput>
+  budgetupdatedeventgroup_none?: InputMaybe<BudgetUpdatedEventWhereInput>
+  budgetupdatedeventgroup_some?: InputMaybe<BudgetUpdatedEventWhereInput>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>

@@ -1,10 +1,8 @@
 import { useGetUserBountyTabsInformationsQuery } from '@/bounty/queries'
 
-export const useUserBountyTabsInformations = (memberId: string) => {
+export const useUserBountyTabsInformations = (memberIds: string[]) => {
   const { data, loading } = useGetUserBountyTabsInformationsQuery({
-    variables: {
-      memberId,
-    },
+    variables: { memberIds: memberIds[0] && memberIds },
   })
 
   return {
