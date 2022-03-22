@@ -35,6 +35,7 @@ import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
@@ -48,6 +49,8 @@ export const SubmitJudgementModal = () => {
   const { allAccounts } = useMyAccounts()
   const { t } = useTranslation('bounty')
   const { api, isConnected } = useApi()
+
+  useRefetch({ type: 'do', payload: state.matches(SubmitJudgementStates.success) })
 
   const [isValid, setIsValid] = useState<string | null>(null)
 

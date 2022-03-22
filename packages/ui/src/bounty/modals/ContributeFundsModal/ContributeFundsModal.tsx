@@ -36,6 +36,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { formatTokenValue } from '@/common/model/formatters'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -55,6 +56,8 @@ export const ContributeFundsModal = () => {
   const [state, send] = useMachine(contributeFundsMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
+
+  useRefetch({ type: 'do', payload: state.matches(ContributeFundStates.success) })
 
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
