@@ -7,6 +7,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 
 import { RevealVoteModalCall } from '.'
 import { RevealVoteMachine } from './machine'
@@ -28,6 +29,8 @@ export const RevealVoteModal = () => {
     [vote?.salt, vote?.optionId]
   )
   const feeInfo = useTransactionFee(vote?.accountId, transaction)
+
+  useRefetch({ type: 'do', payload: state.matches('success') })
 
   useEffect(() => {
     if (state.matches('voteChoice') && votes.length === 1) {
