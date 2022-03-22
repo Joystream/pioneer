@@ -27,7 +27,7 @@ export interface CandidateStats {
 
 export const useElectionVotes = (election?: Election) => {
   const { allAccounts } = useMyAccounts()
-  const { data, loading } = useGetCouncilVotesQuery({
+  const { data, loading, refetch } = useGetCouncilVotesQuery({
     variables: { where: { electionRound: { cycleId_eq: election?.cycleId } } },
   })
   const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes.length])
@@ -80,5 +80,6 @@ export const useElectionVotes = (election?: Election) => {
     votesPerCandidate,
     sumOfStakes,
     isLoading: loading,
+    refetch,
   }
 }
