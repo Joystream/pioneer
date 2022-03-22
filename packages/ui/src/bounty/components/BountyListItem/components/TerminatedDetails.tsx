@@ -12,7 +12,7 @@ interface Props {
 export const TerminatedDetails = memo(({ entrants }: Props) => {
   return (
     <>
-      {entrants?.length && (
+      {!!entrants?.length && (
         <DetailBox title="Entries">
           <MemberStack members={membersMock} max={5} />
         </DetailBox>
