@@ -113,7 +113,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
   switch (bounty.stage) {
     case 'funding': {
       const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
-      const isCancelAvailable = bounty.totalFunding > BN_ZERO && idAsCreator.length
+      const isCancelAvailable = bounty.totalFunding.eq(BN_ZERO) && idAsCreator.length
 
       shouldDisplayStatistics && buttons.push('statistics')
       isCancelAvailable && buttons.push('cancelBounty')
