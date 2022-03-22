@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { TextMedium, TextInlineSmall } from '@/common/components/typography'
 import { Overflow, Transitions } from '@/common/constants'
-import { camelCaseToText } from '@/common/helpers'
+import { camelCaseToText, nameMapping } from '@/common/helpers'
 import { WorkingGroup } from '@/working-groups/types'
 
 interface Props {
@@ -11,20 +11,22 @@ interface Props {
   disabledNoLead?: boolean
 }
 
-export const OptionWorkingGroup = ({ group, disabledNoLead }: Props) => (
-  <OptionWorkingGroupWrapper>
-    <OptionWorkingGroupTitle>{camelCaseToText(group.name)}</OptionWorkingGroupTitle>
-    <TextMedium light>
-      {disabledNoLead && (
-        <>
-          <TextInlineSmall light> This group has no lead</TextInlineSmall>
-          <br />
-        </>
-      )}
-      {group.about}
-    </TextMedium>
-  </OptionWorkingGroupWrapper>
-)
+export const OptionWorkingGroup = ({ group, disabledNoLead }: Props) => {
+  return (
+    <OptionWorkingGroupWrapper>
+      <OptionWorkingGroupTitle>{camelCaseToText(nameMapping(group.name))}</OptionWorkingGroupTitle>
+      <TextMedium light>
+        {disabledNoLead && (
+          <>
+            <TextInlineSmall light> This group has no lead</TextInlineSmall>
+            <br />
+          </>
+        )}
+        {group.about}
+      </TextMedium>
+    </OptionWorkingGroupWrapper>
+  )
+}
 
 const OptionWorkingGroupWrapper = styled.div`
   display: flex;

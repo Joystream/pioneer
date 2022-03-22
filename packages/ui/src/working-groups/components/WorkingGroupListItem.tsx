@@ -7,6 +7,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { nameMapping } from '@/common/helpers'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
@@ -27,20 +28,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
 
   const { member: lead } = useMember(group.leadId)
   const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
-  const nameMapping = () => {
-    switch (group.name) {
-      case 'Operations Alpha':
-        return 'Builders'
-      case 'Gateway':
-        return 'Gateways'
-      case 'Operations Beta':
-        return 'HR'
-      case 'Operations Gamma':
-        return 'Marketing'
-      default:
-        return group.name
-    }
-  }
+  // const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
   //TODO this validation has to be deleted when Gateway working group will be ready
   if (group.name === 'Gateway') {
@@ -52,7 +40,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle>{nameMapping()}</GroupTitle>
+        <GroupTitle>{nameMapping(group.name)}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
