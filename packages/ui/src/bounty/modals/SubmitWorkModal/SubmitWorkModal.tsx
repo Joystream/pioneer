@@ -38,6 +38,7 @@ import { TextBig } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -51,6 +52,8 @@ export const SubmitWorkModal = () => {
   const [isValidNext, setValidNext] = useState(false)
   const { allAccounts } = useMyAccounts()
   const { api, isConnected } = useApi()
+
+  useRefetch({ type: 'do', payload: state.matches(SubmitWorkStates.success) })
 
   if (!service.initialized) {
     service.start()
