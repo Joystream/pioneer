@@ -87,6 +87,7 @@ fragment WorkingGroupFields on WorkingGroup {
   }
   leader {
     membershipId
+    isActive
   }
 }
 
