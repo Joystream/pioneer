@@ -28,6 +28,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetch } from '@/common/hooks/useRefetch'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -42,6 +43,8 @@ export const WithdrawWorkEntryModal = () => {
   } = useModal<BountyWithdrawWorkEntryModalCall>()
 
   const [state, send] = useMachine(WithdrawWorkModalMachine)
+
+  useRefetch({ type: 'do', payload: state.matches(WithdrawWorkModalState.success) })
 
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
