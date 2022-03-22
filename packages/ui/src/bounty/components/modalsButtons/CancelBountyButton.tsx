@@ -12,7 +12,6 @@ export const CancelBountyButton = React.memo(({ bounty, validMemberIds }: Bounty
   const { active } = useMyMemberships()
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
-  const { members } = useMyMemberships()
   const bountyCancelModal = useCallback(() => {
     if (!active || !validMemberIds.includes(active.id)) {
       return showModal<SwitchMemberModalCall>({
@@ -23,7 +22,7 @@ export const CancelBountyButton = React.memo(({ bounty, validMemberIds }: Bounty
           originalModalName: 'BountyCancel',
           originalModalData: {
             bounty,
-            creator: bounty.creator ?? members[0], // todo make creator optional
+            creator: bounty.creator,
           },
         },
       })
@@ -33,7 +32,7 @@ export const CancelBountyButton = React.memo(({ bounty, validMemberIds }: Bounty
       modal: 'BountyCancel',
       data: {
         bounty,
-        creator: bounty.creator ?? members[0],
+        creator: bounty.creator,
       },
     })
   }, [validMemberIds, active])
