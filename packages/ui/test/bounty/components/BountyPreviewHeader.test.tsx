@@ -6,6 +6,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
 import { Bounty, BountyEntryStatusWinner, WorkEntry } from '@/bounty/types/Bounty'
+import { BN_ZERO } from '@/common/constants'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { Member } from '@/memberships/types'
@@ -105,6 +106,14 @@ describe('UI: BountyPreviewHeader', () => {
 
       expect(await screen.queryByText('bountyFields.cherry')).toBeDefined()
       expect(await screen.queryByText('bountyFields.entrantStake')).toBeDefined()
+    })
+
+    it('No contributors', async () => {
+      bounty.totalFunding = BN_ZERO
+
+      renderHeader()
+
+      expect(await getButton('buttons.cancelBounty')).toBeDefined()
     })
 
     it('Other', async () => {
