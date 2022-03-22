@@ -2134,6 +2134,10 @@ type BountyContribution implements BaseGraphQLObject {
   bounty: Bounty!
   bountyId: String!
   contributor: Membership
+
+  """
+  The id of the contributor
+  """
   contributorId: String
 
   """
@@ -2153,6 +2157,7 @@ type BountyContributionConnection {
 input BountyContributionCreateInput {
   bounty: ID!
   contributor: ID
+  contributorId: String
   amount: String!
 }
 
@@ -2172,6 +2177,8 @@ enum BountyContributionOrderByInput {
   bounty_DESC
   contributor_ASC
   contributor_DESC
+  contributorId_ASC
+  contributorId_DESC
   amount_ASC
   amount_DESC
 }
@@ -2179,6 +2186,7 @@ enum BountyContributionOrderByInput {
 input BountyContributionUpdateInput {
   bounty: ID
   contributor: ID
+  contributorId: String
   amount: String
 }
 
@@ -2207,6 +2215,11 @@ input BountyContributionWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
+  contributorId_eq: String
+  contributorId_contains: String
+  contributorId_startsWith: String
+  contributorId_endsWith: String
+  contributorId_in: [String!]
   amount_eq: BigInt
   amount_gt: BigInt
   amount_gte: BigInt
@@ -4543,6 +4556,157 @@ input BudgetSpendingEventWhereInput {
 }
 
 input BudgetSpendingEventWhereUniqueInput {
+  id: ID!
+}
+
+type BudgetUpdatedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  group: WorkingGroup!
+  groupId: String!
+
+  """
+  Amount substracted from / added to the current budget
+  """
+  budgetChangeAmount: BigInt!
+}
+
+type BudgetUpdatedEventConnection {
+  totalCount: Int!
+  edges: [BudgetUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BudgetUpdatedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  group: ID!
+  budgetChangeAmount: String!
+}
+
+type BudgetUpdatedEventEdge {
+  node: BudgetUpdatedEvent!
+  cursor: String!
+}
+
+enum BudgetUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  group_ASC
+  group_DESC
+  budgetChangeAmount_ASC
+  budgetChangeAmount_DESC
+}
+
+input BudgetUpdatedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  group: ID
+  budgetChangeAmount: String
+}
+
+input BudgetUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  budgetChangeAmount_eq: BigInt
+  budgetChangeAmount_gt: BigInt
+  budgetChangeAmount_gte: BigInt
+  budgetChangeAmount_lt: BigInt
+  budgetChangeAmount_lte: BigInt
+  budgetChangeAmount_in: [BigInt!]
+  group: WorkingGroupWhereInput
+  AND: [BudgetUpdatedEventWhereInput!]
+  OR: [BudgetUpdatedEventWhereInput!]
+}
+
+input BudgetUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -8714,6 +8878,7 @@ enum EventTypeOptions {
   BudgetRefillPlannedEvent
   BudgetSetEvent
   BudgetSpendingEvent
+  BudgetUpdatedEvent
   BuyNowCanceledEvent
   CandidacyNoteSetEvent
   CandidacyStakeReleaseEvent
@@ -19173,6 +19338,21 @@ type Query {
     where: BudgetSpendingEventWhereInput
     orderBy: [BudgetSpendingEventOrderByInput!]
   ): BudgetSpendingEventConnection!
+  budgetUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BudgetUpdatedEventWhereInput
+    orderBy: [BudgetUpdatedEventOrderByInput!]
+  ): [BudgetUpdatedEvent!]!
+  budgetUpdatedEventByUniqueInput(where: BudgetUpdatedEventWhereUniqueInput!): BudgetUpdatedEvent
+  budgetUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BudgetUpdatedEventWhereInput
+    orderBy: [BudgetUpdatedEventOrderByInput!]
+  ): BudgetUpdatedEventConnection!
   buyNowCanceledEvents(
     offset: Int
     limit: Int = 50
@@ -29546,6 +29726,7 @@ type WorkingGroup implements BaseGraphQLObject {
   appliedonopeningeventgroup: [AppliedOnOpeningEvent!]
   budgetseteventgroup: [BudgetSetEvent!]
   budgetspendingeventgroup: [BudgetSpendingEvent!]
+  budgetupdatedeventgroup: [BudgetUpdatedEvent!]
   leaderseteventgroup: [LeaderSetEvent!]
   leaderunseteventgroup: [LeaderUnsetEvent!]
   newmissedrewardlevelreachedeventgroup: [NewMissedRewardLevelReachedEvent!]
@@ -30380,6 +30561,9 @@ input WorkingGroupWhereInput {
   budgetspendingeventgroup_none: BudgetSpendingEventWhereInput
   budgetspendingeventgroup_some: BudgetSpendingEventWhereInput
   budgetspendingeventgroup_every: BudgetSpendingEventWhereInput
+  budgetupdatedeventgroup_none: BudgetUpdatedEventWhereInput
+  budgetupdatedeventgroup_some: BudgetUpdatedEventWhereInput
+  budgetupdatedeventgroup_every: BudgetUpdatedEventWhereInput
   leaderseteventgroup_none: LeaderSetEventWhereInput
   leaderseteventgroup_some: LeaderSetEventWhereInput
   leaderseteventgroup_every: LeaderSetEventWhereInput

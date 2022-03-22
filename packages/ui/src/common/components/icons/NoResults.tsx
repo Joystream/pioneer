@@ -50,7 +50,7 @@ export const NoResultsTile = React.memo(({ className }: Props) => {
         d="M31.8945 53.7073V59H41.7491H41.7494H48.847C48.9477 58.3481 48.9999 57.6801 48.9999 57C48.9999 49.8203 43.1796 44 35.9999 44C34.5653 44 33.185 44.2324 31.8945 44.6615V48.1359V53.7073Z"
         fill="black"
       />
-      <path d="M27 57C27 52.0294 31.0294 48 36 48" stroke="white" stroke-width="2" />
+      <path d="M27 57C27 52.0294 31.0294 48 36 48" stroke="white" strokeWidth="2" />
     </Icon>
   )
 })

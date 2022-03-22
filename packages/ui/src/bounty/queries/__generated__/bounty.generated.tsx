@@ -741,7 +741,7 @@ export type GetUserBountyStatisticsQuery = {
 }
 
 export type GetUserBountyTabsInformationsQueryVariables = Types.Exact<{
-  memberId: Types.Scalars['ID']
+  memberIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type GetUserBountyTabsInformationsQuery = {
@@ -1173,14 +1173,14 @@ export type GetUserBountyStatisticsQueryResult = Apollo.QueryResult<
   GetUserBountyStatisticsQueryVariables
 >
 export const GetUserBountyTabsInformationsDocument = gql`
-  query GetUserBountyTabsInformations($memberId: ID!) {
-    bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+  query GetUserBountyTabsInformations($memberIds: [ID!]) {
+    bountiesConnection(where: { creator: { id_in: $memberIds } }) {
       totalCount
     }
-    bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+    bountyContributionsConnection(where: { contributor: { id_in: $memberIds } }) {
       totalCount
     }
-    bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+    bountyEntriesConnection(where: { worker: { id_in: $memberIds } }) {
       totalCount
     }
   }
@@ -1198,12 +1198,12 @@ export const GetUserBountyTabsInformationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserBountyTabsInformationsQuery({
  *   variables: {
- *      memberId: // value for 'memberId'
+ *      memberIds: // value for 'memberIds'
  *   },
  * });
  */
 export function useGetUserBountyTabsInformationsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(

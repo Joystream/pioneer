@@ -174,7 +174,7 @@ export type WorkingGroupFieldsFragment = {
     statusMessage?: string | null
   } | null
   workers: Array<{ __typename: 'Worker'; stake: any }>
-  leader?: { __typename: 'Worker'; membershipId: string } | null
+  leader?: { __typename: 'Worker'; membershipId: string; isActive: boolean } | null
 }
 
 export type WorkingGroupDetailedFieldsFragment = {
@@ -182,7 +182,14 @@ export type WorkingGroupDetailedFieldsFragment = {
   id: string
   name: string
   budget: any
-  leader?: { __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string } | null
+  leader?: {
+    __typename: 'Worker'
+    id: string
+    runtimeId: number
+    stake: any
+    membershipId: string
+    isActive: boolean
+  } | null
   metadata?: {
     __typename: 'WorkingGroupMetadata'
     about?: string | null
@@ -243,7 +250,7 @@ export type GetWorkingGroupsQuery = {
       statusMessage?: string | null
     } | null
     workers: Array<{ __typename: 'Worker'; stake: any }>
-    leader?: { __typename: 'Worker'; membershipId: string } | null
+    leader?: { __typename: 'Worker'; membershipId: string; isActive: boolean } | null
   }>
 }
 
@@ -937,7 +944,14 @@ export type GetWorkingGroupQuery = {
     id: string
     name: string
     budget: any
-    leader?: { __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string } | null
+    leader?: {
+      __typename: 'Worker'
+      id: string
+      runtimeId: number
+      stake: any
+      membershipId: string
+      isActive: boolean
+    } | null
     metadata?: {
       __typename: 'WorkingGroupMetadata'
       about?: string | null
@@ -1361,6 +1375,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     }
     leader {
       membershipId
+      isActive
     }
   }
   ${WorkingGroupMetadataFieldsFragmentDoc}

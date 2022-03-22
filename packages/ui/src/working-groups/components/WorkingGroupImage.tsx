@@ -280,7 +280,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
             d="M56.2 58.6C56.2 67.2156 49.2156 74.2 40.6 74.2C31.9844 74.2 25 67.2156 25 58.6C25 49.9844 31.9844 43 40.6 43C49.2156 43 56.2 49.9844 56.2 58.6Z"
             fill="#3F38FF"
           />
-          <path d="M29.8 58.6008C29.8 52.6361 34.6354 47.8008 40.6 47.8008" stroke="white" stroke-width="2" />
+          <path d="M29.8 58.6008C29.8 52.6361 34.6354 47.8008 40.6 47.8008" stroke="white" strokeWidth="2" />
           <path
             fill-rule="evenodd"
             clip-rule="evenodd"

@@ -139,16 +139,16 @@ query GetUserBountyStatistics($memberId: ID!) {
   }
 }
 
-query GetUserBountyTabsInformations($memberId: ID!) {
-  bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+query GetUserBountyTabsInformations($memberIds: [ID!]) {
+  bountiesConnection(where: { creator: { id_in: $memberIds } }) {
     totalCount
   }
 
-  bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+  bountyContributionsConnection(where: { contributor: { id_in: $memberIds } }) {
     totalCount
   }
 
-  bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+  bountyEntriesConnection(where: { worker: { id_in: $memberIds } }) {
     totalCount
   }
 }

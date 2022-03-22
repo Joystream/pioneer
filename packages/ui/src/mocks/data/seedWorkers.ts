@@ -35,6 +35,7 @@ export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 export const seedWorker = (rawWorker: RawWorker, server: any) => {
   const member = server.schema.find('Membership', rawWorker.membershipId)
   const group = server.schema.find('WorkingGroup', rawWorker.groupId)
+  const activeStatus: WorkerStatusType[] = ['WorkerStatusActive', 'WorkerStatusLeaving']
 
   const worker = server.schema.create('Worker', {
     roleAccount: member.controllerAccount,
@@ -42,6 +43,7 @@ export const seedWorker = (rawWorker: RawWorker, server: any) => {
     rewardAccount: member.rootAccount,
     ...rawWorker,
     status: null,
+    isActive: activeStatus.includes(rawWorker.status.type as WorkerStatusType),
     isLead: group.leaderId === rawWorker.id,
     entry: server.schema.create('OpeningFilledEvent', {
       openingId: group.openings.models[0].id,
