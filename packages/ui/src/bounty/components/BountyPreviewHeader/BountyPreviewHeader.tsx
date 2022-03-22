@@ -82,10 +82,10 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
   const idAsOracle = membershipsIdArray.filter((memberId) => bounty?.oracle?.id === memberId)
 
   return {
-    idsWithEntries: membersWithEntries.map(extractEntryWorkerId),
     idsWithSubmissions: membersWithSubmission.map(extractEntryWorkerId),
     idsWithReward: membersWithReward.map(extractEntryWorkerId),
     idsWithLoss: membersWithLoss.map(extractEntryWorkerId),
+    idsWithEntries,
     idsWithoutEntries,
     idsOnWhitelist,
     idsWithContribution,
