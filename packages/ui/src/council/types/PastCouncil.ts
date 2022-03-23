@@ -52,8 +52,8 @@ export const asPastCouncilWithDetails = (
   return {
     ...asPastCouncil(councilFields),
     totalSpent: getTotalSpent(spendingEvents),
-    totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.unpaidReward), BN_ZERO).neg(),
-    totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.addn(b.accumulatedReward), BN_ZERO),
+    totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.addn(Number(b.unpaidReward)), BN_ZERO).neg(),
+    totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.addn(Number(+b.accumulatedReward)), BN_ZERO),
     totalSpentOnProposals: getSpentOnProposals(fundingRequestsApproved),
   }
 }
