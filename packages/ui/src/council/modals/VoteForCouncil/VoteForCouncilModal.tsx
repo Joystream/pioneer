@@ -67,7 +67,7 @@ export const VoteForCouncilModal = () => {
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
 
   if (state.matches('success')) {
-    return <VoteForCouncilSuccessModal />
+    return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
   } else if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
