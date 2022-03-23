@@ -6,6 +6,6 @@ export type BountyCancelModalCall = ModalWithDataCall<
   'BountyCancel',
   {
     bounty: Bounty
-    creator: Member
+    creator?: Member
   }
 >

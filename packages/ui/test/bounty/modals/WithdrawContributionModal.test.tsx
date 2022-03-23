@@ -43,6 +43,7 @@ describe('UI: WithdrawContributionModal', () => {
   const bounty: Bounty = {
     id: 'bounty 1',
     contributors: [contributor],
+    totalFunding: new BN('11000'),
   } as Bounty
   const modalData: ModalCallData<BountyWithdrawContributionModalCall> = {
     bounty: {
@@ -100,16 +101,18 @@ describe('UI: WithdrawContributionModal', () => {
       modalData: { bounty },
     } = useModal
 
-    const amountFromCherry = bounty.cherry / bounty.contributors.length
     const activeMemberContribute =
       bounty.contributors.find((contribution: Contributor) => contribution.actor?.id === useMyMemberships.active?.id)
         ?.amount ?? BN_ZERO
-    const expected = formatTokenValue(activeMemberContribute.toNumber() + amountFromCherry)
+
+    const amountFromCherry = bounty.cherry.mul(activeMemberContribute.div(bounty.totalFunding))
+    const expected = formatTokenValue(activeMemberContribute.toNumber() + amountFromCherry.toNumber())
 
     bounty.stage = 'failed'
     renderModal()
 
     const amountContainer = screen.getByText('modals.common.amount')?.nextSibling
+
     expect(
       screen.queryByText(
         `modals.withdraw.contribution.description ${formatTokenValue(

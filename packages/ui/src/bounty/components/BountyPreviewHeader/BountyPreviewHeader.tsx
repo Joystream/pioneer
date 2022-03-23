@@ -1,8 +1,13 @@
-import BN from 'bn.js'
 import React, { useMemo } from 'react'
-import { TFunction, useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/app/components/PageHeader'
+import { BountyHeaderStatistics } from '@/bounty/components/BountyPreviewHeader/components/BountyHeaderStatistics'
+import { BountyNotifyButton } from '@/bounty/components/BountyPreviewHeader/components/BountyNotifyButton'
+import {
+  BountyHeaderButtonsProps,
+  BountyMembershipsStatistics,
+  ButtonTypes,
+} from '@/bounty/components/BountyPreviewHeader/types'
 import {
   AnnounceWorkEntryButton,
   CancelBountyButton,
@@ -12,17 +17,147 @@ import {
   WithdrawStakeButton,
   WithdrawWorkEntryButton,
   SubmitJudgementButton,
+  WithdrawContributionButton,
 } from '@/bounty/components/modalsButtons'
-import { WithdrawContributionButton } from '@/bounty/components/modalsButtons/WithdrawContributionButton'
 import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
-import { ButtonGhost } from '@/common/components/buttons'
-import { BellIcon } from '@/common/components/icons/BellIcon'
 import { BN_ZERO } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { Member } from '@/memberships/types'
+
+const bountyButtonsMapper: Record<
+  ButtonTypes,
+  React.MemoExoticComponent<(props: BountyHeaderButtonsProps) => React.ReactElement>
+> = {
+  announceWorkEntry: AnnounceWorkEntryButton,
+  cancelBounty: CancelBountyButton,
+  claimReward: ClaimRewardButton,
+  contributeFunds: ContributeFundsButton,
+  submitWork: SubmitWorkButton,
+  withdrawWorkEntry: WithdrawWorkEntryButton,
+  withdrawEntryStake: WithdrawStakeButton,
+  withdrawContribution: WithdrawContributionButton,
+  submitJudgement: SubmitJudgementButton,
+  statistics: BountyHeaderStatistics,
+  notify: BountyNotifyButton,
+}
+
+const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStatistics> = {
+  announceWorkEntry: 'idsWithoutEntries',
+  cancelBounty: 'idAsCreator',
+  claimReward: 'idsWithReward',
+  contributeFunds: 'allMemberIds',
+  submitWork: 'idsWithEntries',
+  withdrawEntryStake: 'idsWithLoss',
+  withdrawWorkEntry: 'idsWithEntries',
+  withdrawContribution: 'idsWithContribution',
+  submitJudgement: 'idAsOracle',
+  notify: 'allMemberIds',
+  statistics: 'allMemberIds',
+}
+
+export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: Bounty) => {
+  const extractEntryWorkerId = (entry: WorkEntry) => entry.worker.id
+
+  const membersWithEntries = bounty?.entries?.filter((entry) => membershipsIdArray.includes(entry.worker.id)) ?? []
+  const idsWithEntries = membersWithEntries.map(extractEntryWorkerId)
+  const idsWithoutEntries = membershipsIdArray.filter((memberId) => !idsWithEntries.includes(memberId))
+
+  const membersWithSubmission = membersWithEntries.filter((entry) => entry.hasSubmitted)
+  const membersWithReward = membersWithSubmission.filter((entry) => isBountyEntryStatusWinner(entry.status))
+  const membersWithLoss = membersWithSubmission.filter(
+    (entry) => entry.passed && entry.status !== 'BountyEntryStatusCashedOut'
+  )
+  const idsOnWhitelist = membershipsIdArray.filter((memberId) => bounty?.entrantWhitelist?.includes(memberId))
+
+  const idsWithContribution =
+    bounty?.contributors
+      .filter(
+        (contribution) => membershipsIdArray.includes(contribution.actor?.id ?? '-1') && !contribution.hasWithdrawn
+      )
+      .map((contribution) => contribution.actor?.id ?? '-1') ?? []
+
+  const idAsCreator = membershipsIdArray.filter((memberId) => bounty?.creator?.id === memberId)
+  const idAsOracle = membershipsIdArray.filter((memberId) => bounty?.oracle?.id === memberId)
+
+  return {
+    idsWithSubmissions: membersWithSubmission.map(extractEntryWorkerId),
+    idsWithReward: membersWithReward.map(extractEntryWorkerId),
+    idsWithLoss: membersWithLoss.map(extractEntryWorkerId),
+    idsWithEntries,
+    idsWithoutEntries,
+    idsOnWhitelist,
+    idsWithContribution,
+    idAsCreator,
+    idAsOracle,
+    allMemberIds: membershipsIdArray,
+  }
+}
+
+const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: BountyMembershipsStatistics) => {
+  const buttons: (keyof typeof bountyButtonsMapper)[] = []
+
+  const {
+    idsWithContribution,
+    idAsCreator,
+    idsOnWhitelist,
+    idsWithLoss,
+    idsWithReward,
+    idsWithSubmissions,
+    idsWithEntries,
+    idAsOracle,
+    idsWithoutEntries,
+  } = membershipsStatistics
+
+  switch (bounty.stage) {
+    case 'funding': {
+      const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
+      const isCancelAvailable = bounty.totalFunding.eq(BN_ZERO) && idAsCreator.length
+
+      shouldDisplayStatistics && buttons.push('statistics')
+      isCancelAvailable && buttons.push('cancelBounty')
+      buttons.push('contributeFunds')
+      break
+    }
+    case 'workSubmission': {
+      isDefined(bounty?.entrantWhitelist) && !idsOnWhitelist.length && buttons.push('notify')
+      idsWithoutEntries.length && buttons.push('announceWorkEntry')
+      idsWithEntries.length && buttons.push('submitWork')
+      idsWithSubmissions.length && buttons.push('withdrawWorkEntry')
+      break
+    }
+    case 'judgment': {
+      buttons.push('notify')
+      idAsOracle.length && buttons.push('submitJudgement')
+      break
+    }
+    case 'successful': {
+      buttons.push('notify')
+
+      idsWithReward.length && buttons.push('claimReward')
+      idsWithLoss.length && buttons.push('withdrawEntryStake')
+      break
+    }
+    case 'failed': {
+      buttons.push('notify')
+
+      idsWithLoss.length && buttons.push('withdrawEntryStake')
+      idsWithContribution.length && buttons.push('withdrawContribution')
+      break
+    }
+    case 'expired': {
+      idAsCreator.length && buttons.push('cancelBounty')
+      break
+    }
+  }
+
+  if (bounty.isTerminated) {
+    buttons.length = 0
+  }
+
+  return buttons
+}
 
 interface Props {
   bounty?: Bounty
@@ -30,17 +165,13 @@ interface Props {
 }
 
 export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) => {
-  const { t } = useTranslation('bounty')
-  const { active: activeMember } = useMyMemberships()
+  const { members } = useMyMemberships()
 
-  const contribution = useMemo(
-    () => bounty?.contributors?.find((contributor) => contributor.actor?.id === activeMember?.id),
-    [bounty, activeMember?.id]
-  )
+  const membershipsIdArray = useMemo(() => members.map((member) => member.id), [members])
 
-  const userEntry = useMemo(
-    () => bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id),
-    [bounty, activeMember?.id]
+  const membershipsBountyStatistics = useMemo(
+    () => getMembershipsStatistics(membershipsIdArray, bounty),
+    [membershipsIdArray, bounty]
   )
 
   const compiledButtons = useMemo(() => {
@@ -48,38 +179,20 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
       return null
     }
 
-    const activeMemberId = activeMember?.id
-    const buttonsProps: BountyHeaderButtonsProps = {
-      t,
-      bounty,
-      activeMember,
-      isOracle: bounty.oracle?.id === activeMemberId,
-      isCreator: bounty.creator?.id === activeMemberId,
-      isContributor: !!contribution,
-      userEntry,
-      hasAnnounced: !!userEntry,
-      hasSubmitted: !!userEntry?.hasSubmitted,
-      hasCashedOut: (userEntry as WorkEntry)?.status === 'BountyEntryStatusCashedOut',
-      hasWithdrawnContribution: contribution?.hasWithdrawn ?? false,
-    }
+    const buttons = bountyHeaderButtonsFactory(bounty, membershipsBountyStatistics)
 
-    switch (bounty.stage) {
-      case 'funding':
-        return <FundingStageButtons {...buttonsProps} />
-      case 'workSubmission':
-        return <WorkingStageButtons {...buttonsProps} />
-      case 'judgment':
-        return <JudgingStageButtons {...buttonsProps} />
-      case 'successful':
-        return <SuccessfulStageButtons {...buttonsProps} />
-      case 'failed':
-        return <FailedStageButtons {...buttonsProps} />
-      case 'expired':
-        return <ExpiredStageButtons {...buttonsProps} />
-      default:
-        return null
-    }
-  }, [bounty, activeMember])
+    return buttons.map((button) => {
+      const Component = bountyButtonsMapper[button]
+
+      return (
+        <Component
+          key={button}
+          bounty={bounty}
+          validMemberIds={membershipsBountyStatistics[buttonValidMembersMapper[button]]}
+        />
+      )
+    })
+  }, [bounty, members])
 
   const badges = useMemo(
     () => (
@@ -93,139 +206,4 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
   )
 
   return <PageHeader title={bounty?.title || ''} buttons={compiledButtons} badges={badges} canGoBack />
-})
-
-interface BountyHeaderButtonsProps {
-  bounty: Bounty
-  hasAnnounced: boolean
-  isContributor: boolean
-  isCreator: boolean
-  hasSubmitted: boolean
-  isOracle: boolean
-  t: TFunction
-  userEntry?: WorkEntry
-  activeMember?: Member
-  hasCashedOut: boolean
-  hasWithdrawnContribution: boolean
-}
-
-const FundingStageButtons = React.memo(({ bounty, t, isCreator }: BountyHeaderButtonsProps) => {
-  const shouldDisplayStatistics = !isFundingLimited(bounty.fundingType) && isDefined(bounty?.entrantWhitelist)
-  const bountyCreator = bounty.creator
-  const isCancelAvailable = bounty.totalFunding > BN_ZERO
-
-  if (!isCreator || !bountyCreator) {
-    return <ContributeFundsButton bounty={bounty} />
-  }
-
-  if (isCancelAvailable) {
-    return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
-  }
-
-  return (
-    <>
-      {shouldDisplayStatistics && (
-        <>
-          <div>
-            {t('bountyFields.cherry')} {bounty.cherry.toNumber()}
-          </div>
-          <div>
-            {t('bountyFields.entrantStake')} {bounty.entrantStake.toNumber()}
-          </div>
-        </>
-      )}
-      <ContributeFundsButton bounty={bounty} />
-    </>
-  )
-})
-
-const WorkingStageButtons = React.memo(({ bounty, activeMember, t, userEntry }: BountyHeaderButtonsProps) => {
-  const hasAnnounced = !!userEntry
-  const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-  const isOnWhitelist = useMemo(
-    () => activeMember && bounty.entrantWhitelist?.includes(activeMember.id),
-    [bounty, activeMember?.id]
-  )
-
-  if (isDefined(bounty?.entrantWhitelist) && !isOnWhitelist) {
-    {
-      /* TODO: https://github.com/Joystream/pioneer/issues/1937 */
-    }
-    return (
-      <ButtonGhost size="large">
-        <BellIcon /> {t('common:buttons.notifyAboutChanges')}
-      </ButtonGhost>
-    )
-  }
-
-  return (
-    <>
-      {!hasAnnounced && <AnnounceWorkEntryButton bounty={bounty} />}
-      {hasAnnounced && <SubmitWorkButton bounty={bounty} />}
-      {hasSubmitted && <WithdrawWorkEntryButton bounty={bounty} entry={userEntry} />}
-    </>
-  )
-})
-
-const JudgingStageButtons = React.memo(({ bounty, isOracle, t }: BountyHeaderButtonsProps) => {
-  return (
-    <>
-      <ButtonGhost size="large">
-        <BellIcon /> {t('common:buttons.notifyAboutChanges')}
-      </ButtonGhost>
-      {isOracle && <SubmitJudgementButton bounty={bounty} />}
-    </>
-  )
-})
-
-const getReward = (entry: WorkEntry) => {
-  return isBountyEntryStatusWinner(entry.status) ? new BN(entry.status.reward) : undefined
-}
-
-const SuccessfulStageButtons = React.memo(({ bounty, t, userEntry, hasCashedOut }: BountyHeaderButtonsProps) => {
-  const entryId = userEntry?.id
-  const reward = userEntry ? getReward(userEntry) : undefined
-  const winnerConditions = userEntry?.winner && entryId && reward
-  return (
-    <>
-      <ButtonGhost size="large">
-        <BellIcon /> {t('common:buttons.notifyAboutChanges')}
-      </ButtonGhost>
-      {winnerConditions && !hasCashedOut && (
-        <ClaimRewardButton bountyId={bounty.id} entryId={entryId} reward={reward} />
-      )}
-      {userEntry?.passed && !hasCashedOut && <WithdrawStakeButton bounty={bounty} />}
-    </>
-  )
-})
-
-const FailedStageButtons = React.memo(
-  ({ bounty, t, userEntry, isContributor, hasCashedOut, hasWithdrawnContribution }: BountyHeaderButtonsProps) => {
-    const hasAnnounced = !!userEntry
-    const hasSubmitted = hasAnnounced && userEntry.hasSubmitted
-    const canWithdrawStake = hasSubmitted && !userEntry.rejected
-
-    if (bounty.isTerminated || (!hasAnnounced && !isContributor)) {
-      return null
-    }
-
-    return (
-      <>
-        <ButtonGhost size="large">
-          <BellIcon /> {t('common:buttons.notifyAboutChanges')}
-        </ButtonGhost>
-        {canWithdrawStake && !hasCashedOut && <WithdrawStakeButton bounty={bounty} />}
-        {isContributor && !hasWithdrawnContribution && <WithdrawContributionButton bounty={bounty} />}
-      </>
-    )
-  }
-)
-
-const ExpiredStageButtons = React.memo(({ bounty, isCreator }: BountyHeaderButtonsProps) => {
-  const bountyCreator = bounty.creator
-  if (!isCreator || !bountyCreator) {
-    return null
-  }
-
-  return <CancelBountyButton bounty={bounty} creator={bountyCreator} />
 })
