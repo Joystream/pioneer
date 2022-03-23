@@ -73,6 +73,10 @@ describe('UI: AnnounceWorkEntryModal', () => {
   }
 
   beforeEach(() => {
+    stubTransaction(api, 'api.tx.utility.batch', fee)
+    stubTransaction(api, 'api.tx.members.addStakingAccountCandidate')
+    stubTransaction(api, 'api.tx.members.confirmStakingAccount')
+
     renderResult = render(<Modal />)
   })
 
