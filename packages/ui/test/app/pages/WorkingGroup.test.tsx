@@ -47,7 +47,7 @@ describe('WorkingGroup', () => {
     renderPage()
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
-    expect(await screen.findAllByText(/^forum Working Group regular$/i)).toHaveLength(2)
+    expect(await screen.findAllByText(OPENING_DATA.metadata.title)).toHaveLength(2)
     expect(await screen.findAllByText(UPCOMING_OPENING.metadata.title)).toHaveLength(2)
   })
 
