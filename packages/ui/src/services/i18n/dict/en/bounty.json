@@ -61,7 +61,7 @@
       "selectAmountSubtitle": "This stake will be returned to you when the bounty is complete",
       "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY.",
       "error": "Something went wrong",
-      "success": "You have just successfully announce work entry for {{bounty}}”.",
+      "success": "You have just successfully announce work entry for ”{{bounty}}”.",
       "successButton": "Back to bounty"
     },
     "bountyCancel": {
@@ -115,10 +115,10 @@
         "max70": "MAX 70"
       },
       "success": {
-        "message": "You have just successfully canceled bounty!",
+        "message": "You have just successfully submitted a work!",
         "button": "Go to Current Bounties"
       },
-      "error": "There was a problem canceling bounty."
+      "error": "There was a problem submitting your work."
     },
     "withdraw": {
       "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
