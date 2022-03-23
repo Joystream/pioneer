@@ -58,6 +58,11 @@ export const SubmitJudgementModal = () => {
     service.start()
   }
 
+  const validEntriesMembersIds = useMemo(
+    () => bounty.entries?.filter((entry) => entry.hasSubmitted).map((entry) => entry.worker.id) ?? [],
+    [bounty]
+  )
+
   const switchCheckbox = useCallback(
     (isSet: boolean) => {
       if (!isSet) {
@@ -94,7 +99,7 @@ export const SubmitJudgementModal = () => {
 
       return !(isWinner || isSlashed)
     },
-    [state.context.winners?.length, state.context.rejected?.length]
+    [state.context.winners, state.context.rejected]
   )
 
   const transaction = useMemo(() => {
@@ -163,7 +168,7 @@ export const SubmitJudgementModal = () => {
   }, [state.context.winners?.length])
 
   useEffect(() => {
-    const { winners, hasWinner, rationale } = state.context
+    const { winners, hasWinner, rationale, rejected } = state.context
 
     switch (true) {
       case !hasWinner && rationale:
@@ -184,10 +189,13 @@ export const SubmitJudgementModal = () => {
       case rationale === '':
         return setIsValid('modals.submitJudgement.validation.rationaleMissing')
 
+      case rejected?.length && rejected.some((rejected) => typeof rejected.rejected === 'undefined'):
+        return setIsValid('modals.submitJudgement.validation.noSlashedWorkerSelected')
+
       default:
         return setIsValid(null)
     }
-  }, [state.context.winners, state.context.hasWinner, state.context.rationale])
+  }, [state.context.winners, state.context.hasWinner, state.context.rationale, state.context.rejected])
 
   if (state.matches(SubmitJudgementStates.requirementsVerification)) {
     return (
@@ -280,6 +288,7 @@ export const SubmitJudgementModal = () => {
             {isValid && !state.context.hasWinner && <TextMedium error>{t(isValid)}</TextMedium>}
           </RowGapBlock>
           <WinnersSelection
+            validIds={validEntriesMembersIds}
             validationMessage={isValid}
             amountDistributed={amountDistributed}
             bountyFunding={bounty.totalFunding}
@@ -297,6 +306,7 @@ export const SubmitJudgementModal = () => {
           <TextMedium inter>{t('modals.submitJudgement.slash.description')}</TextMedium>
           <SlashedSelection
             filter={selectWorkerFilter}
+            validIds={validEntriesMembersIds}
             removeLastSlashed={() => send('REMOVE_LAST_SLASHED')}
             addSlashed={() => send('ADD_SLASHED')}
             editSlashed={(id, rejected) => send('EDIT_REJECTED', { payload: { id, rejected } })}
