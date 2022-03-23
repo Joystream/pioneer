@@ -779,6 +779,7 @@ export type WorkingGroupOpeningMentionFieldsFragment = {
   rewardPerBlock: any
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     shortDescription?: string | null
     description?: string | null
     hiringLimit?: number | null
@@ -805,6 +806,7 @@ export type GetWorkingGroupOpeningMentionQuery = {
     rewardPerBlock: any
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       shortDescription?: string | null
       description?: string | null
       hiringLimit?: number | null
@@ -1480,6 +1482,7 @@ export const WorkingGroupOpeningMentionFieldsFragmentDoc = gql`
     type
     rewardPerBlock
     metadata {
+      title
       shortDescription
       description
       hiringLimit

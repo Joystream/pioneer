@@ -267,6 +267,7 @@ fragment WorkingGroupOpeningMentionFields on WorkingGroupOpening {
   type
   rewardPerBlock
   metadata {
+    title
     shortDescription
     description
     hiringLimit
@@ -302,6 +303,7 @@ fragment WorkingGroupApplicationMentionFields on WorkingGroupApplication {
   opening {
     type
     metadata {
+      title
       shortDescription
       description
     }
