@@ -27,8 +27,8 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
   const { member: lead } = useMember(group.leadId)
-  const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
-  // const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
+  // const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
+  const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
   //TODO this validation has to be deleted when Gateway working group will be ready
   if (group.name === 'Gateway') {
