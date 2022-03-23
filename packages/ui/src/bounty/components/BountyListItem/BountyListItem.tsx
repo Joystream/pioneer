@@ -27,6 +27,7 @@ export const BountyListItem = memo(
     totalFunding,
     entries,
     isTerminated,
+    imageUri,
   }: Bounty) => {
     const history = useHistory()
 
@@ -47,8 +48,7 @@ export const BountyListItem = memo(
     const periodStatus = period === 'failed' || period === 'successful' || period === 'terminated'
     return (
       <Wrapper isTerminated={isTerminated}>
-        {/* TODO: add image url to schema */}
-        <BountyImage src="https://picsum.photos/500/300" />
+        <BountyImage src={imageUri} />
         <Info>
           <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
           <BountyDetails
@@ -99,8 +99,9 @@ const Wrapper = styled.div<{ isTerminated?: boolean }>`
 `
 
 const BountyImage = styled.img`
-  object-fit: contain;
+  object-fit: cover;
   height: 100%;
+  width: 260px;
   margin-right: 25px;
   border-radius: ${BorderRad.s};
 `
