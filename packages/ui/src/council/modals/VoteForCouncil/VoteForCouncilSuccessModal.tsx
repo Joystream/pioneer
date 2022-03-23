@@ -38,7 +38,7 @@ export const VoteForCouncilSuccessModal = ({ onClose, candidateId }: Props) => {
 
       <ModalFooter>
         <ButtonGhost onClick={goToElection} size="medium">
-          See my Vote
+          Back to Candidates
         </ButtonGhost>
       </ModalFooter>
     </Modal>
