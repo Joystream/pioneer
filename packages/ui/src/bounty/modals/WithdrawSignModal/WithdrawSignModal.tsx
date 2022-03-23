@@ -9,7 +9,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { WithdrawInfo } from '@/bounty/components/WithdrawInfo/WithdrawInfo'
-import { Bounty, Contributor } from '@/bounty/types/Bounty'
+import { Bounty } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
@@ -27,7 +27,7 @@ export interface Props {
   type: 'stake' | 'contribution' | 'reward'
   amount: BN
   bounty?: Bounty
-  contribution?: Contributor
+  isContributor?: boolean
 }
 
 export const WithdrawSignModal = ({
@@ -38,7 +38,7 @@ export const WithdrawSignModal = ({
   type,
   amount,
   bounty,
-  contribution,
+  isContributor,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
@@ -49,9 +49,8 @@ export const WithdrawSignModal = ({
     signer: controllerAccount.address,
   })
 
-  const extraAmount =
-    bounty && contribution ? bounty.cherry.muln((contribution.amount as any) / bounty.totalFunding.toNumber()) : BN_ZERO
-  const bountyFailedInfo = bounty?.stage === 'failed' && !!contribution
+  const extraAmount = bounty && isContributor ? bounty.cherry.mul(amount.div(bounty.totalFunding)) : BN_ZERO
+  const bountyFailedInfo = bounty?.stage === 'failed' && !!isContributor
 
   return (
     <TransactionModal onClose={onClose} service={service} title={t(`modals.withdraw.${type}.title`)}>

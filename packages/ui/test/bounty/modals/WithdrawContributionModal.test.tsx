@@ -105,7 +105,7 @@ describe('UI: WithdrawContributionModal', () => {
       bounty.contributors.find((contribution: Contributor) => contribution.actor?.id === useMyMemberships.active?.id)
         ?.amount ?? BN_ZERO
 
-    const amountFromCherry = bounty.cherry.muln(activeMemberContribute.toNumber() / bounty.totalFunding.toNumber())
+    const amountFromCherry = bounty.cherry.mul(activeMemberContribute.div(bounty.totalFunding))
     const expected = formatTokenValue(activeMemberContribute.toNumber() + amountFromCherry.toNumber())
 
     bounty.stage = 'failed'
