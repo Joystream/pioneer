@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -27,9 +27,10 @@ export interface InsufficientFundsModalProps {
   onClose: () => void
   address: string
   amount: BN
+  children?: ReactNode
 }
 
-export function InsufficientFundsModal({ onClose, address, amount }: InsufficientFundsModalProps) {
+export function InsufficientFundsModal({ onClose, address, amount, children }: InsufficientFundsModalProps) {
   const { t } = useTranslation('accounts')
   const { showModal } = useModal()
   const { allAccounts } = useMyAccounts()
@@ -40,11 +41,13 @@ export function InsufficientFundsModal({ onClose, address, amount }: Insufficien
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title={t('modals.insufficientFunds.title')} />
       <ModalBody>
-        <TextMedium margin="s">
-          {t('modals.insufficientFunds.feeInfo1')}
-          <TokenValue value={amount} />
-          {t('modals.insufficientFunds.feeInfo2')}
-        </TextMedium>
+        {children ?? (
+          <TextMedium margin="s">
+            {t('modals.insufficientFunds.feeInfo1')}
+            <TokenValue value={amount} />
+            {t('modals.insufficientFunds.feeInfo2')}
+          </TextMedium>
+        )}
         <MemberRow>
           <AccountInfo account={account} />
           <BalanceInfoInRow>
