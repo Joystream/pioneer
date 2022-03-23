@@ -97,7 +97,6 @@ export const WithdrawContributionModal = () => {
         amount={new BN(amount)}
         bounty={bounty}
         contribution={activeMemberContribution}
-        isContributor
       />
     )
   }
