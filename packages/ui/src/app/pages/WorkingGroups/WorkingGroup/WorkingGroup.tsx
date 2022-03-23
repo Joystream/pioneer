@@ -54,14 +54,12 @@ export function WorkingGroup() {
       )
     }
   }
-  const replaceName = () => nameMapping(group?.name ?? name)
-
   return (
     <PageLayout
       header={
         <PageHeaderWrapper>
           <PreviousPage>
-            <PageTitle>{replaceName()}</PageTitle>
+            <PageTitle>{nameMapping(group?.name ?? name)}</PageTitle>
             {group?.status && (
               <StatusGroup>
                 <StatusBadge>{group?.status}</StatusBadge>
@@ -74,7 +72,7 @@ export function WorkingGroup() {
       main={displayTabsContent()}
       sidebar={displayTabsSidebar()}
       sidebarScrollable
-      lastBreadcrumb={replaceName()}
+      lastBreadcrumb={nameMapping(group?.name ?? name)}
     />
   )
 }
