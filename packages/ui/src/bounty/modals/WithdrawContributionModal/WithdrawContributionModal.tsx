@@ -44,10 +44,12 @@ export const WithdrawContributionModal = () => {
     }
   }, [JSON.stringify(activeMember), connectionState])
 
-  const amount = useMemo(
-    () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id)?.amount ?? BN_ZERO,
+  const activeMemberContribution = useMemo(
+    () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id),
     [activeMember?.id]
   )
+
+  const amount = activeMemberContribution?.amount ?? BN_ZERO
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -94,6 +96,7 @@ export const WithdrawContributionModal = () => {
         controllerAccount={controllerAccount}
         amount={new BN(amount)}
         bounty={bounty}
+        contribution={activeMemberContribution}
         isContributor
       />
     )

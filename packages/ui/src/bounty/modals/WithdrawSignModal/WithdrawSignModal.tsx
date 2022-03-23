@@ -9,7 +9,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { WithdrawInfo } from '@/bounty/components/WithdrawInfo/WithdrawInfo'
-import { Bounty } from '@/bounty/types/Bounty'
+import { Bounty, Contributor } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
@@ -27,6 +27,7 @@ export interface Props {
   amount: BN
   isContributor?: boolean
   bounty?: Bounty
+  contribution?: Contributor
 }
 
 export const WithdrawSignModal = ({
@@ -38,6 +39,7 @@ export const WithdrawSignModal = ({
   amount,
   isContributor,
   bounty,
+  contribution,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
@@ -47,12 +49,11 @@ export const WithdrawSignModal = ({
     transaction,
     signer: controllerAccount.address,
   })
-  /*
-   *   FIXME: as bounty creator your cherry is transformed as contibution, so with bounty fails with no contributions
-   *    member is told that he can withdraw cherry multiplied by 2. Cherry / number of contributors, which is 123,
-   *     and cherry as contribution.
-   * */
-  const extraAmount = bounty && isContributor ? bounty.cherry.toNumber() / (bounty.contributors.length || 1) : 0
+
+  const extraAmount =
+    bounty && isContributor && contribution
+      ? bounty.cherry.toNumber() * ((contribution.amount as any) / bounty.totalFunding.toNumber())
+      : 0
   const bountyFailedInfo = bounty?.stage === 'failed' && isContributor
 
   return (
