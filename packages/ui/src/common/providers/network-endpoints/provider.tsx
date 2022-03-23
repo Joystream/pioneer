@@ -12,7 +12,7 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
 import { isDefined, objectEquals } from '@/common/utils'
 
-import { localEndpoints, NetworkEndpoints, NetworkEndpointsContext } from './context'
+import { NetworkEndpoints, NetworkEndpointsContext, olympiaEndpoints } from './context'
 
 interface Props {
   children: ReactNode
@@ -71,8 +71,8 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
   useEffect(() => {
     const endpoints = pickEndpoints(network, storedAutoNetworkConfig ?? {})
     if (!endpointsAreDefined(endpoints)) {
-      setNetwork('local')
-      setEndpoints(localEndpoints)
+      setNetwork('olympia-testnet')
+      setEndpoints(olympiaEndpoints)
     } else {
       setEndpoints(endpoints)
     }

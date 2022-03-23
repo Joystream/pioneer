@@ -21,6 +21,13 @@ export const localEndpoints = {
   nodeRpcEndpoint: NODE_RPC_ENDPOINT.local,
 } as NetworkEndpoints
 
+export const olympiaEndpoints = {
+  queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION['olympia-testnet'],
+  queryNodeEndpoint: QUERY_NODE_ENDPOINT['olympia-testnet'],
+  membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT['olympia-testnet'],
+  nodeRpcEndpoint: NODE_RPC_ENDPOINT['olympia-testnet'],
+} as NetworkEndpoints
+
 type UseNetworkEndpoints = [NetworkEndpoints, (endpoint: string) => void]
 
-export const NetworkEndpointsContext = createContext<UseNetworkEndpoints>([localEndpoints, () => undefined])
+export const NetworkEndpointsContext = createContext<UseNetworkEndpoints>([olympiaEndpoints, () => undefined])
