@@ -56,8 +56,9 @@ export const ContributeFundsModal = () => {
   const [state, send] = useMachine(contributeFundsMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
+  const { fireRefetch } = useRefetch()
 
-  useRefetch({ type: 'do', payload: state.matches(ContributeFundStates.success) })
+  // useRefetch({ type: 'do', payload: state.matches(ContributeFundStates.success) })
 
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
@@ -128,6 +129,8 @@ export const ContributeFundsModal = () => {
   const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
   if (state.matches(ContributeFundStates.success)) {
+    fireRefetch('useBounty')
+    fireRefetch('useProposal')
     return (
       <SuccessTransactionModal
         buttonLabel={t('modals.contribute.successButton')}
