@@ -52,12 +52,14 @@ describe('UI: SubmitJudgementModal', () => {
       entries: [
         {
           id: '1',
+          hasSubmitted: true,
           worker: {
             id: '7',
           },
         },
         {
           id: '2',
+          hasSubmitted: true,
           worker: {
             id: '8',
           },

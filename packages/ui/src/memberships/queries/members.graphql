@@ -87,8 +87,8 @@ query GetMember($where: MembershipWhereUniqueInput!) {
   }
 }
 
-query SearchMembers($text: String!, $limit: Int) {
-  memberships(where: { handle_contains: $text }, limit: $limit) {
+query SearchMembers($text: String!, $limit: Int, $validIds: [ID!]) {
+  memberships(where: { handle_contains: $text, id_in: $validIds }, limit: $limit) {
     ...MemberFields
   }
 }
