@@ -13,10 +13,11 @@ interface Props {
 
 export const SlashedTab = ({ bounty }: Props) => {
   const slashedComponents = useMemo(() => {
-    if (bounty.entries?.length) {
+    const slashedWorkers = bounty?.entries?.filter((entry) => entry.rejected) ?? []
+    if (slashedWorkers.length) {
       return (
         <List as="div">
-          {bounty.entries
+          {slashedWorkers
             .filter((entry) => entry.rejected)
             .map((entry) => (
               <BountySlashedListItem entrant={entry.worker} inBlock={randomBlock()} link="xd" />
