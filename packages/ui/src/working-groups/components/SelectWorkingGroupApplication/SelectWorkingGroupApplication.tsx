@@ -31,7 +31,7 @@ const SelectWorkingGroupApplicationBase = ({
 }: Props) => {
   const { applications } = useApplications({ applicationsStatus, openingId })
   const selectedApplication = useMemo(
-    () => applications?.find((application) => application.id === selectedApplicationId),
+    () => applications?.find((application) => application.applicant.id === selectedApplicationId),
     [selectedApplicationId, applications?.length]
   )
 
@@ -39,7 +39,6 @@ const SelectWorkingGroupApplicationBase = ({
     onChange(selected)
     close()
   }
-
   return (
     <Select
       id={id}

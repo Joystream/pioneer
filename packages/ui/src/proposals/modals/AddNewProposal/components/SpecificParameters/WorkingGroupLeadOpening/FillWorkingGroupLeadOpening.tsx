@@ -1,10 +1,12 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { WorkingGroupOpeningType } from '@/common/api/queries'
 import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { SelectWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/SelectWorkingGroupApplication'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 import { GroupIdName } from '@/working-groups/types'
@@ -69,7 +71,7 @@ export const FillWorkingGroupLeadOpening = ({
             <SelectWorkingGroupApplication
               id="application"
               selectedApplicationId={applicationId}
-              onChange={(selected) => setApplicationId(selected.id)}
+              onChange={(selected) => setApplicationId(selected.applicant.id)}
               disabled={typeof openingId !== 'string'}
               openingId={openingId}
               applicationsStatus="pending"
@@ -77,6 +79,17 @@ export const FillWorkingGroupLeadOpening = ({
           </InputComponent>
         </RowGapBlock>
       </Row>
+      <Row>
+        <RowGapBlock gap={20}>
+          <StyledText>Applicant's Details</StyledText>
+        </RowGapBlock>
+      </Row>
     </RowGapBlock>
   )
 }
+
+const StyledText = styled(TextMedium)`
+  font-size: 14px;
+  color: ${Colors.Black[900]};
+  font-weight: 700;
+`

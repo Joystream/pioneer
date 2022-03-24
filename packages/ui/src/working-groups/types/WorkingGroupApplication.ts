@@ -19,7 +19,7 @@ export interface WorkingGroupApplication {
     rewardPerBlock: BN
     expectedEnding: string
   }
-  applicant?: Member
+  applicant: Member
   stakingAccount: string
   stake: BN
   status?: string
@@ -40,6 +40,7 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,
   stake: new BN(fields.stake),
+  applicant: asMember(fields.applicant),
   createdAtBlock: asBlock(fields.createdInEvent),
 })
 
