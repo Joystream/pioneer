@@ -1,11 +1,17 @@
-import { capitalizeFirstLetter } from '@/common/helpers'
-
-const exceptionWorkingGroupNames = ['operations-beta', 'operations-gamma', 'operations-alpha']
+const exceptionWorkingGroupNames = ['hr', 'marketing', 'builders']
 
 export const urlParamToWorkingGroupId = (name: string) => {
   if (exceptionWorkingGroupNames.includes(name)) {
-    const splittedName = name.split('-')
-    return `${splittedName[0]}WorkingGroup${capitalizeFirstLetter(splittedName[1])}`
+    switch (name) {
+      case 'builders':
+        return 'operationsWorkingGroupAlpha'
+      case 'hr':
+        return 'operationsWorkingGroupBeta'
+      case 'marketing':
+        return 'operationsWorkingGroupGamma'
+      default:
+        return name
+    }
   }
 
   return `${name.replace(/-([a-z])/g, (match, firstLetter) => firstLetter.toUpperCase())}WorkingGroup`

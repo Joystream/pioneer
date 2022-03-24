@@ -14,3 +14,18 @@ export const isInFuture = (time: string) => {
   const timeAsDate = new Date(time).valueOf()
   return timeAsDate > Date.now()
 }
+
+export const nameMapping = (value: string) => {
+  switch (value) {
+    case 'Operations Alpha':
+      return 'Builders'
+    case 'Gateway':
+      return 'Gateways'
+    case 'Operations Beta':
+      return 'HR'
+    case 'Operations Gamma':
+      return 'Marketing'
+    default:
+      return value
+  }
+}
