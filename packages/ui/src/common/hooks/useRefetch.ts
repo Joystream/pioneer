@@ -5,7 +5,7 @@ import { RefetchContext, UseRefetch } from '../providers/refetch/context'
 type Action = { type: 'set'; payload: UseRefetch[0] } | { type: 'do'; payload?: boolean }
 
 export const useRefetch = (action?: Action) => {
-  const [setRefetch, fireRefetch] = useContext(RefetchContext)
+  const [, setRefetch, fireRefetch] = useContext(RefetchContext)
 
   // useEffect(() => {
   //   switch (action.type) {
