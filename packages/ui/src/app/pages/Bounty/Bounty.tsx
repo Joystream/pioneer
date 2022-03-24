@@ -7,12 +7,10 @@ import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/Bou
 import { BountyRouteParams } from '@/bounty/constants'
 import { useBounty } from '@/bounty/hooks/useBounty'
 import { Loading } from '@/common/components/Loading'
-import { useRefetch } from '@/common/hooks/useRefetch'
 
 export const Bounty = () => {
   const { id } = useParams<BountyRouteParams>()
-  const { isLoading, bounty, refetch } = useBounty(id)
-  useRefetch({ type: 'set', payload: refetch })
+  const { isLoading, bounty } = useBounty(id)
 
   if (isLoading || !bounty) {
     return <Loading />

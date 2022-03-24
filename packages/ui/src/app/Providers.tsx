@@ -9,7 +9,6 @@ import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
-import { RefetchProvider } from '@/common/providers/refetch/provider'
 import { TransactionContextProvider } from '@/common/providers/transaction/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
@@ -33,10 +32,8 @@ export const Providers = ({ children }: Props) => (
                     <RouteActions>
                       <ModalContextProvider>
                         <OnBoardingProvider>
-                          <RefetchProvider>
-                            <GlobalStyle />
-                            {children}
-                          </RefetchProvider>
+                          <GlobalStyle />
+                          {children}
                         </OnBoardingProvider>
                       </ModalContextProvider>
                     </RouteActions>

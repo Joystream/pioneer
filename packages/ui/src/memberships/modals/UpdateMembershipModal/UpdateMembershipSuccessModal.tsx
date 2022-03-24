@@ -6,7 +6,6 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberModalCall } from '@/memberships/components/MemberProfile'
-import { useRefetchMyMemberships } from '@/memberships/hooks/useRefetchMyMemberships'
 import { MemberRow } from '@/memberships/modals/components'
 
 import { MemberInfo } from '../../components'
@@ -18,7 +17,6 @@ interface Props {
 }
 
 export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
-  useRefetchMyMemberships()
   const { showModal } = useModal()
 
   const viewMember = () => {
