@@ -106,7 +106,8 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   return {
     ...asBaseOpening(fields),
     runtimeId: fields.runtimeId,
-    title: `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
+    title:
+      fields.metadata?.title ?? `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
     type: type as WorkingGroupOpeningType,
     status: fields.status.__typename,
     leadId: fields.group.leaderId,

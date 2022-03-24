@@ -5,6 +5,7 @@ import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetchMyMemberships } from '@/memberships/hooks/useRefetchMyMemberships'
 import { MemberRow } from '@/memberships/modals/components'
 
 import { MemberInfo } from '../../components'
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) => {
+  useRefetchMyMemberships()
   const { showModal } = useModal()
   const viewMember = () => {
     onClose()

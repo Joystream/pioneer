@@ -88,7 +88,7 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays opening title', async () => {
-      expect(await screen.findByText('forum Working Group regular')).toBeDefined()
+      expect(await screen.findByText(OPENING_DATA.metadata.title)).toBeDefined()
     })
 
     it('Displays period of reward', async () => {

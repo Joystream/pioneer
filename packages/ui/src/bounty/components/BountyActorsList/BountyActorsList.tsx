@@ -33,7 +33,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
   if (isEntrant(el)) {
     return (
       <ValueText lighter>
-        Work entries
+        Works submitted
         <CountValue bold dark>
           {el.count}
         </CountValue>
