@@ -76,6 +76,7 @@ export const SubmitWorkModal = () => {
   }, [activeMember?.id, isConnected, JSON.stringify(state.context)])
 
   const goToCurrentBounties = useCallback(() => {
+    hideModal()
     history.push(generatePath(BountyRoutes.currentBounties))
   }, [])
 
