@@ -8,6 +8,7 @@ import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { CandidacyStatus } from '@/council/types'
 import { Election } from '@/council/types/Election'
+import { NoData } from '@/common/components/NoData'
 
 interface VotingStageProps {
   election: Election | undefined
@@ -43,11 +44,19 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
         tab={tab}
         onSetTab={(tab) => setTab(tab as VotingStageTab)}
       />
-      <CandidateCardList
-        candidates={tab === 'candidates' ? allCandidates : votedForCandidates}
-        isLoading={isLoading}
-        canVote={canVote}
-      />
+      {
+      (tab === 'myVotes' && !myVotes?.length) ? (
+        <NoData>
+          Your votes will be shown in this list. Single member can vote multiple times with different accounts.'
+        </NoData>
+      ) : (
+        <CandidateCardList
+          candidates={tab === 'candidates' ? allCandidates : votedForCandidates}
+          isLoading={isLoading}
+          canVote={canVote}
+        />
+        )
+      }
     </>
   )
 }
