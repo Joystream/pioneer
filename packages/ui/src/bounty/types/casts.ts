@@ -24,6 +24,8 @@ import {
   BountyEntryStatus,
   BountyContribution,
   WorkInfo,
+  isBountyEntryStatusWinner,
+  BountyEntryStatusWinner,
 } from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
@@ -77,6 +79,9 @@ const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFi
     rejected: entry.status.__typename === 'BountyEntryStatusRejected',
     withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
     stake,
+    reward: isBountyEntryStatusWinner(asBountyEntryStatus(entry.status))
+      ? (asBountyEntryStatus(entry.status) as BountyEntryStatusWinner).reward
+      : 0,
   })
 }
 

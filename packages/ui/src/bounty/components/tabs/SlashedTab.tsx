@@ -27,7 +27,7 @@ export const SlashedTab = ({ bounty }: Props) => {
     }
 
     return <NotFoundText>No slashed workers</NotFoundText>
-  }, [])
+  }, [bounty])
 
   return <RowGapBlock gap={4}>{slashedComponents}</RowGapBlock>
 }
