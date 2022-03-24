@@ -11,7 +11,6 @@ import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { Pagination } from '@/common/components/Pagination'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { useSort } from '@/common/hooks/useSort'
 
 import { BountiesHeader } from './BountiesHeader'
@@ -30,13 +29,7 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
   const [filters, setFilters] = useState(BountyEmptyFilter)
   const { order, getSortProps } = useSort<BountyOrderByInput>('createdAt')
 
-  const {
-    isLoading,
-    bounties,
-    pagination,
-    refetch: refetchBounties,
-  } = useBounties({ order, filters, status: bountyStatus, extraFilter })
-  useRefetch({ type: 'set', payload: refetchBounties })
+  const { isLoading, bounties, pagination } = useBounties({ order, filters, status: bountyStatus, extraFilter })
 
   const isInitialLoading = filters === BountyEmptyFilter && isLoading
 

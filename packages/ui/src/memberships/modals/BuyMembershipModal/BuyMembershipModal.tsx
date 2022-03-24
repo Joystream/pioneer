@@ -5,7 +5,6 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -19,8 +18,6 @@ export const BuyMembershipModal = () => {
 
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(buyMembershipMachine)
-
-  useRefetch({ type: 'do', payload: state.matches('success') })
 
   if (state.matches('prepare')) {
     const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })
