@@ -25,9 +25,9 @@ export const Providers = ({ children }: Props) => (
     <NetworkEndpointsProvider>
       <ApiContextProvider>
         <AccountsContextProvider>
-          <TransactionContextProvider>
-            <BalancesContextProvider>
-              <QueryNodeProvider>
+          <QueryNodeProvider>
+            <TransactionContextProvider>
+              <BalancesContextProvider>
                 <MembershipContextProvider>
                   <HashRouter>
                     <RouteActions>
@@ -42,9 +42,9 @@ export const Providers = ({ children }: Props) => (
                     </RouteActions>
                   </HashRouter>
                 </MembershipContextProvider>
-              </QueryNodeProvider>
-            </BalancesContextProvider>
-          </TransactionContextProvider>
+              </BalancesContextProvider>
+            </TransactionContextProvider>
+          </QueryNodeProvider>
         </AccountsContextProvider>
       </ApiContextProvider>
     </NetworkEndpointsProvider>
