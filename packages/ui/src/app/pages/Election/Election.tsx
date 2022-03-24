@@ -34,7 +34,7 @@ const displayElectionRound = (election: ElectionType | undefined): string => {
     return '-'
   }
 
-  return `${election.cycleId} round`
+  return String(election.cycleId)
 }
 
 export const Election = () => {
