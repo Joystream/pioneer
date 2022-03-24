@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { NoData } from '@/common/components/NoData'
 import { isDefined } from '@/common/utils'
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
 import { CurrentElectionTabs, VotingStageTab } from '@/council/components/election/CurrentElectionTabs'
@@ -8,7 +9,6 @@ import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { useVerifiedVotingAttempts } from '@/council/hooks/useVerifiedVotingAttempts'
 import { CandidacyStatus } from '@/council/types'
 import { Election } from '@/council/types/Election'
-import { NoData } from '@/common/components/NoData'
 
 interface VotingStageProps {
   election: Election | undefined
@@ -44,8 +44,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
         tab={tab}
         onSetTab={(tab) => setTab(tab as VotingStageTab)}
       />
-      {
-      (tab === 'myVotes' && !myVotes?.length) ? (
+      {tab === 'myVotes' && !myVotes?.length ? (
         <NoData>
           Your votes will be shown in this list. Single member can vote multiple times with different accounts.'
         </NoData>
@@ -55,8 +54,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
           isLoading={isLoading}
           canVote={canVote}
         />
-        )
-      }
+      )}
     </>
   )
 }
