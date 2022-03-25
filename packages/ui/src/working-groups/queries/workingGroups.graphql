@@ -341,6 +341,9 @@ query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
 fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   id
   runtimeId
+  answers {
+    answer
+  }
   opening {
     id
     group {
@@ -351,6 +354,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     rewardPerBlock
     metadata {
       expectedEnding
+      applicationFormQuestions {
+        question
+      }
     }
   }
   applicant {

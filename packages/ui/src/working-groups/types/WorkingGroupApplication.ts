@@ -18,12 +18,18 @@ export interface WorkingGroupApplication {
     groupId: GroupIdName
     rewardPerBlock: BN
     expectedEnding: string
+    applicationFormQuestions: {
+      question: string
+    }
   }
   applicant: Member
   stakingAccount: string
   stake: BN
   status?: string
   createdAtBlock: Block
+  answers: {
+    answer: string
+  }
 }
 
 export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): WorkingGroupApplication => ({
@@ -36,7 +42,9 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
     groupId: fields.opening.group.id as GroupIdName,
     rewardPerBlock: new BN(fields.opening.rewardPerBlock),
     expectedEnding: fields.opening.metadata.expectedEnding,
+    applicationFormQuestions: fields.opening.metadata.applicationFormQuestions[0] as { question: '' },
   },
+  answers: fields.answers[0],
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,
   stake: new BN(fields.stake),

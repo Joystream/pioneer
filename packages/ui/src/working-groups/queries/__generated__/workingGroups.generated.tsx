@@ -855,6 +855,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
     type: Types.WorkingGroupOpeningType
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       shortDescription?: string | null
       description?: string | null
     }
@@ -901,6 +902,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
       type: Types.WorkingGroupOpeningType
       metadata: {
         __typename: 'WorkingGroupOpeningMetadata'
+        title?: string | null
         shortDescription?: string | null
         description?: string | null
       }
@@ -971,13 +973,18 @@ export type WorkingGroupApplicationFieldsFragment = {
   runtimeId: number
   stakingAccount: string
   stake: any
+  answers: Array<{ __typename: 'ApplicationFormQuestionAnswer'; answer: string }>
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
     type: Types.WorkingGroupOpeningType
     rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; id: string; name: string }
-    metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      expectedEnding?: any | null
+      applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion'; question?: string | null }>
+    }
   }
   applicant: {
     __typename: 'Membership'
@@ -1025,13 +1032,18 @@ export type GetWorkingGroupApplicationsQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
+    answers: Array<{ __typename: 'ApplicationFormQuestionAnswer'; answer: string }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
-      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
+      metadata: {
+        __typename: 'WorkingGroupOpeningMetadata'
+        expectedEnding?: any | null
+        applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion'; question?: string | null }>
+      }
     }
     applicant: {
       __typename: 'Membership'
@@ -1103,13 +1115,18 @@ export type GetWorkingGroupApplicationQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
+    answers: Array<{ __typename: 'ApplicationFormQuestionAnswer'; answer: string }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
-      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
+      metadata: {
+        __typename: 'WorkingGroupOpeningMetadata'
+        expectedEnding?: any | null
+        applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion'; question?: string | null }>
+      }
     }
     applicant: {
       __typename: 'Membership'
@@ -1513,6 +1530,7 @@ export const WorkingGroupApplicationMentionFieldsFragmentDoc = gql`
     opening {
       type
       metadata {
+        title
         shortDescription
         description
       }
@@ -1524,6 +1542,9 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
     runtimeId
+    answers {
+      answer
+    }
     opening {
       id
       group {
@@ -1534,6 +1555,9 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       rewardPerBlock
       metadata {
         expectedEnding
+        applicationFormQuestions {
+          question
+        }
       }
     }
     applicant {
