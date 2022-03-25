@@ -20,7 +20,7 @@ export const SubmitJudgementButton = React.memo(({ bounty, validMemberIds }: Bou
         data: {
           noCreateButton: true,
           membersToShow: validMemberIds,
-          originalModalName: 'BountyAnnounceWorkEntryModal',
+          originalModalName: 'SubmitJudgementModal',
           originalModalData: {
             bounty,
           },
