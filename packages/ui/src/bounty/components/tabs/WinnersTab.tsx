@@ -24,7 +24,11 @@ export const WinnersTab = ({ bounty }: Props) => {
       return (
         <List as="div">
           {winners.map((winner) => (
-            <BountyWinnerListItem entrant={winner.worker} inBlock={randomBlock()} reward={winner.reward ?? 0} />
+            <BountyWinnerListItem
+              entrant={winner.worker}
+              inBlock={bounty.judgement?.inBlock ?? randomBlock()}
+              reward={winner.reward ?? 0}
+            />
           ))}
         </List>
       )

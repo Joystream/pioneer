@@ -148,4 +148,8 @@ export interface Bounty {
   inBlock: number
   contributors: Contributor[]
   discussionThreadId: string | undefined
+  judgement?: {
+    inBlock?: Block
+    rationale?: string | null
+  }
 }

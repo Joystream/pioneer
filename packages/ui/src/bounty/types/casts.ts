@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
 import { lowerFirstLetter } from '@/common/helpers'
-import { asBlock } from '@/common/types'
+import { asBlock, maybeAsBlock } from '@/common/types'
 import { asMember } from '@/memberships/types'
 
 import {
@@ -136,6 +136,10 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   entries: fields.entries?.map(asEntry(fields.id, new BN(fields.entrantStake))),
   contributors: fields.contributions?.map(asContributor) ?? [],
   inBlock: fields.createdInEvent.inBlock,
+  judgement: {
+    inBlock: maybeAsBlock(fields.judgment?.inBlock, fields.judgment?.createdAt, fields.judgment?.network),
+    rationale: fields.judgment?.rationale,
+  },
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({
