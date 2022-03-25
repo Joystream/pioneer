@@ -23,6 +23,10 @@ export const BountyCancelModal = () => {
   const [state, send] = useMachine(bountyCancelMachine)
   const { hideModal, modalData } = useModal<BountyCancelModalCall>()
 
+  if (!modalData?.creator) {
+    return null
+  }
+
   if (state.matches(BountyCancelStates.transaction)) {
     return (
       <AuthorizationModal

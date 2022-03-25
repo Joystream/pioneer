@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { ProposalWhereInput } from '@/common/api/queries'
-import { RefetchQuery } from '@/common/types/queries'
 import { proposalStatusToTypename } from '@/proposals/model/proposalStatus'
 import { useGetProposalsQuery } from '@/proposals/queries'
 import { asProposal, Proposal, ProposalStatus } from '@/proposals/types'
@@ -18,7 +17,6 @@ export interface UseProposalsProps {
 interface UseProposals {
   isLoading: boolean
   proposals: Proposal[]
-  refetch: RefetchQuery
 }
 
 export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
@@ -56,11 +54,10 @@ export const useProposals = ({ status, filters }: UseProposalsProps): UseProposa
     return { where }
   }, [status, JSON.stringify(filters)])
 
-  const { loading, data, refetch } = useGetProposalsQuery({ variables })
+  const { loading, data } = useGetProposalsQuery({ variables })
 
   return {
     isLoading: loading,
     proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
-    refetch,
   }
 }

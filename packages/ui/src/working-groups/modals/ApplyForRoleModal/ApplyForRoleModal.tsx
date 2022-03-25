@@ -13,7 +13,6 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -41,8 +40,6 @@ export const ApplyForRoleModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
-
-  useRefetch({ type: 'do', payload: state.matches('success') })
 
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()

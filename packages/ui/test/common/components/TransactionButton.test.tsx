@@ -13,7 +13,7 @@ import { TransactionContextProvider } from '@/common/providers/transaction/provi
 
 import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionPending, stubTransactionSuccess } from '../../_mocks/transactions'
 
 describe('UI: TransactionButton', () => {
@@ -89,16 +89,18 @@ describe('UI: TransactionButton', () => {
   const renderComponents = () =>
     render(
       <MockKeyringProvider>
-        <AccountsContext.Provider value={useAccounts}>
-          <ApiContext.Provider value={api}>
-            <TransactionContextProvider>
-              <TestButton />
-              <TransactionButton style="primary" size="large">
-                Start new transaction
-              </TransactionButton>
-            </TransactionContextProvider>
-          </ApiContext.Provider>
-        </AccountsContext.Provider>
+        <MockApolloProvider>
+          <AccountsContext.Provider value={useAccounts}>
+            <ApiContext.Provider value={api}>
+              <TransactionContextProvider>
+                <TestButton />
+                <TransactionButton style="primary" size="large">
+                  Start new transaction
+                </TransactionButton>
+              </TransactionContextProvider>
+            </ApiContext.Provider>
+          </AccountsContext.Provider>
+        </MockApolloProvider>
       </MockKeyringProvider>
     )
 })

@@ -1,5 +1,6 @@
 import { omit } from 'lodash'
 
+import { nameMapping } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
 import {
   ProposalDetails,
@@ -81,7 +82,7 @@ const groupMapper: Mapper<GroupDetail, 'group'> = (value): RenderNode[] => {
   return [
     {
       label: 'Working Group',
-      value: value.name,
+      value: nameMapping(value.name),
       renderType: 'Text',
     },
   ]

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { Election } from '@/council/types/Election'
@@ -19,14 +18,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
   const [tab, setTab] = useState<RevealingStageTab>('results')
   const { votesTotal } = useMyCurrentVotesCount(election?.cycleId)
 
-  const {
-    votesPerCandidate,
-    sumOfStakes: totalStake,
-    isLoading: votesLoading,
-    refetch: refetchVotes,
-  } = useElectionVotes(election)
-
-  useRefetch({ type: 'set', payload: refetchVotes })
+  const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
 
   if (isLoading) {
     return <Loading />

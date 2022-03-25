@@ -14,9 +14,10 @@ interface Props {
   filter: (member: Member) => boolean
   slashed: BountyRejected[]
   editSlashed: (id: number, rejected: Member) => void
+  validIds: string[]
 }
 
-export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filter, editSlashed }: Props) => {
+export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filter, editSlashed, validIds }: Props) => {
   const { t } = useTranslation('bounty')
   const onSlashedEdit = useCallback(
     (id: number) => (member: Member) => {
@@ -40,6 +41,7 @@ export const SlashedSelection = ({ addSlashed, removeLastSlashed, slashed, filte
             filter={filter}
             selected={loser.rejected}
             onChange={onSlashedEdit(loser.id)}
+            validIds={validIds}
           />
         </InputComponent>
       ))}

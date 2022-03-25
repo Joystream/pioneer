@@ -50,7 +50,13 @@ export const announceWorkEntryMachine = createMachine<
         NEXT: AnnounceWorkEntryStates.contribute,
       },
     },
-    beforeTransaction: {
+    [AnnounceWorkEntryStates.contribute]: {
+      id: AnnounceWorkEntryStates.contribute,
+      on: {
+        NEXT: AnnounceWorkEntryStates.beforeTransaction,
+      },
+    },
+    [AnnounceWorkEntryStates.beforeTransaction]: {
       id: AnnounceWorkEntryStates.beforeTransaction,
       on: {
         BOUND: AnnounceWorkEntryStates.transaction,
@@ -68,12 +74,6 @@ export const announceWorkEntryMachine = createMachine<
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
         ],
-      },
-    },
-    [AnnounceWorkEntryStates.contribute]: {
-      id: AnnounceWorkEntryStates.contribute,
-      on: {
-        NEXT: AnnounceWorkEntryStates.beforeTransaction,
       },
     },
     [AnnounceWorkEntryStates.transaction]: {
