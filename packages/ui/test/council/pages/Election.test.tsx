@@ -217,8 +217,8 @@ describe('UI: Election page', () => {
         await renderComponent([])
         await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
-        expect(screen.queryByText('Vote')).toBeNull()
+        expect(screen.queryByText(/My Votes/i)).toBeDefined()
+        expect(screen.queryByText('Vote')).toBeDefined()
       })
 
       it('No votes', async () => {
@@ -227,7 +227,6 @@ describe('UI: Election page', () => {
         await renderComponent()
 
         expect(await screen.findAllByText('Vote')).toHaveLength(2)
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
       })
 
@@ -261,7 +260,7 @@ describe('UI: Election page', () => {
         await renderComponent()
         await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
+        expect(screen.queryByText(/My Votes/i)).toBeDefined()
         expect(screen.queryByText('Vote')).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
       })
@@ -274,7 +273,7 @@ describe('UI: Election page', () => {
 
           await renderComponent([alice, bob])
 
-          const myVotesTab = await screen.findByText(/My Votes/i)
+          const myVotesTab = await screen.findByText(/My votes/i)
           expect(myVotesTab.firstElementChild).toHaveTextContent('2')
         })
 
