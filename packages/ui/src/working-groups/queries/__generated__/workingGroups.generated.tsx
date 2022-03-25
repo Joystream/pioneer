@@ -855,6 +855,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
     type: Types.WorkingGroupOpeningType
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       shortDescription?: string | null
       description?: string | null
     }
@@ -901,6 +902,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
       type: Types.WorkingGroupOpeningType
       metadata: {
         __typename: 'WorkingGroupOpeningMetadata'
+        title?: string | null
         shortDescription?: string | null
         description?: string | null
       }
@@ -1513,6 +1515,7 @@ export const WorkingGroupApplicationMentionFieldsFragmentDoc = gql`
     opening {
       type
       metadata {
+        title
         shortDescription
         description
       }
