@@ -9,7 +9,6 @@ import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -27,8 +26,6 @@ export const VoteForCouncilModal = () => {
   const { api } = useApi()
 
   const { active: activeMember } = useMyMemberships()
-
-  useRefetch({ type: 'do', payload: state.matches('success') })
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
@@ -67,7 +64,7 @@ export const VoteForCouncilModal = () => {
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
 
   if (state.matches('success')) {
-    return <VoteForCouncilSuccessModal />
+    return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
   } else if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>

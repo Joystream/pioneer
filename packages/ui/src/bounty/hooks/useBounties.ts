@@ -80,12 +80,11 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
     return { where, orderBy, limit: perPage, offset }
   }, [status, JSON.stringify(filters), extraFilter?.path, JSON.stringify(extraFilter?.value)])
 
-  const { loading, data, refetch } = useGetBountiesQuery({ variables })
+  const { loading, data } = useGetBountiesQuery({ variables })
 
   return {
     isLoading: loading,
     bounties: data?.bounties.map(asBounty) ?? [],
     pagination: pagination,
-    refetch,
   }
 }
