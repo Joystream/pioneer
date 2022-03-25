@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
-import { NetworkType, configuredNetworks } from '@/app/config'
+import { NetworkType } from '@/app/config'
 import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -16,8 +16,7 @@ import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 type Tab = 'SETTINGS' | 'LANGUAGE'
 
 export const Settings = () => {
-  const options: NetworkType[] = configuredNetworks()
-  const [network, setNetwork] = useNetwork()
+  const { network, setNetwork, networks } = useNetwork()
   const { t } = useTranslation('settings')
   const [endpoints] = useNetworkEndpoints()
   const [currentTab, setCurrentTab] = useState<Tab>('SETTINGS')
@@ -48,7 +47,7 @@ export const Settings = () => {
                 <>
                   <SimpleSelect
                     title={t('selectNetwork')}
-                    options={options}
+                    options={networks}
                     value={network}
                     onChange={switchNetwork}
                     selectSize="l"

@@ -2,7 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { localEndpoints } from '@/common/providers/network-endpoints/context'
+import { DEFAULT_NETWORK } from '@/app/config'
 import { seedForumCategories, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
@@ -88,7 +88,7 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
     membershipModel.class.prototype.associations.bountycreator
 }
 
-export const makeServer = (environment = 'development', endpoints = localEndpoints) => {
+export const makeServer = (environment = 'development', endpoints = DEFAULT_NETWORK.endpoints) => {
   return createServer({
     environment,
 
