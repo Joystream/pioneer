@@ -7,7 +7,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
-import { nameMapping } from '@/common/helpers'
+import { nameMapping, subtitleMapping } from '@/common/helpers'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
@@ -41,7 +41,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       </GroupImageContainer>
       <GroupContentBlock>
         <GroupTitle>{nameMapping(group.name)}</GroupTitle>
-        {group.about && <GroupContent>{group.about}</GroupContent>}
+        <GroupContent>{subtitleMapping(group.name)}</GroupContent>
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
