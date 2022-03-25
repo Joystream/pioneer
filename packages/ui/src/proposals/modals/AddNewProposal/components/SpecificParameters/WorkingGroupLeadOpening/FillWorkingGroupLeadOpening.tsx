@@ -1,20 +1,16 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import {WorkingGroupOpeningType} from '@/common/api/queries'
-import {InputComponent} from '@/common/components/forms'
-import {Row} from '@/common/components/Modal'
-import {RowGapBlock} from '@/common/components/page/PageContent'
-import {TextMedium} from '@/common/components/typography'
-import {Colors} from '@/common/constants'
-import {
-  SelectWorkingGroupApplication
-} from '@/working-groups/components/SelectWorkingGroupApplication/SelectWorkingGroupApplication'
-import {
-  SelectWorkingGroupOpening
-} from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
-import {GroupIdName} from '@/working-groups/types'
-import {WorkingGroupApplication} from '@/working-groups/types/WorkingGroupApplication'
+import { WorkingGroupOpeningType } from '@/common/api/queries'
+import { InputComponent } from '@/common/components/forms'
+import { Row } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
+import { SelectWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/SelectWorkingGroupApplication'
+import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
+import { GroupIdName } from '@/working-groups/types'
+import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export interface FillWorkingGroupLeadOpeningParameters {
   openingId?: string
