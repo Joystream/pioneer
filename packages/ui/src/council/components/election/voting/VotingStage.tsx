@@ -40,7 +40,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
     <>
       <CurrentElectionTabs
         stage="voting"
-        myVotes={myVotes?.length && votesTotal}
+        myVotes={votesTotal}
         tab={tab}
         onSetTab={(tab) => setTab(tab as VotingStageTab)}
       />

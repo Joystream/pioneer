@@ -25,7 +25,6 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
     isLoading: votesLoading,
     refetch: refetchVotes,
   } = useElectionVotes(election)
-  const asDisplayableVotes = votesPerCandidate.some((vote) => vote.myVotes.length)
 
   useRefetch({ type: 'set', payload: refetchVotes })
 
@@ -37,7 +36,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
     <>
       <CurrentElectionTabs
         stage="revealing"
-        myVotes={asDisplayableVotes && votesTotal}
+        myVotes={votesTotal}
         tab={tab}
         onSetTab={(tab) => setTab(tab as RevealingStageTab)}
       />
