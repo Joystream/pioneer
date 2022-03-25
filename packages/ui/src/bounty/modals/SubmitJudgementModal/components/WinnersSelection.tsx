@@ -25,6 +25,7 @@ interface Props {
   bountyFunding: BN
   amountDistributed: number
   validationMessage: string | null
+  validIds: string[]
 }
 
 export const WinnersSelection = ({
@@ -37,6 +38,7 @@ export const WinnersSelection = ({
   bountyFunding,
   amountDistributed,
   validationMessage,
+  validIds,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const handleMemberSelection = useCallback(
@@ -97,6 +99,7 @@ export const WinnersSelection = ({
               selected={winner.winner}
               filter={filter}
               onChange={handleMemberSelection(winner.id)}
+              validIds={validIds}
             />
           </InputComponent>
           <TransactionAmount>

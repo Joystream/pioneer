@@ -3,7 +3,6 @@ import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { error } from '@/common/logger'
 import { Address } from '@/common/types'
-import { RefetchQuery } from '@/common/types/queries'
 
 import { useGetMembersQuery } from '../../queries'
 import { asMember, Member } from '../../types'
@@ -23,7 +22,6 @@ export interface MyMemberships {
   helpers: {
     getMemberIdByBoundAccountAddress: (address: Address) => Member['id'] | undefined
   }
-  refetch?: RefetchQuery
 }
 
 export const MembershipContextProvider = (props: Props) => {
@@ -36,7 +34,6 @@ export const MembershipContextProvider = (props: Props) => {
     data,
     loading,
     error: err,
-    refetch,
   } = useGetMembersQuery({
     variables: { where: { controllerAccount_in: addresses } },
     skip: addresses.length < 1,
@@ -80,7 +77,6 @@ export const MembershipContextProvider = (props: Props) => {
     helpers: {
       getMemberIdByBoundAccountAddress,
     },
-    refetch,
   }
 
   return <MembershipContext.Provider value={value}>{props.children}</MembershipContext.Provider>

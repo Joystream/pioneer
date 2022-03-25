@@ -36,7 +36,7 @@ export const BountyMain = React.memo(({ bounty }: BountyMainProps) => {
       default:
         return null
     }
-  }, [bounty.stage])
+  }, [bounty])
 
   return <Container>{page}</Container>
 })

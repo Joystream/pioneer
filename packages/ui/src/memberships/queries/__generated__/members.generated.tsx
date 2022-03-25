@@ -226,6 +226,7 @@ export type GetMemberQuery = {
 export type SearchMembersQueryVariables = Types.Exact<{
   text: Types.Scalars['String']
   limit?: Types.InputMaybe<Types.Scalars['Int']>
+  validIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type SearchMembersQuery = {
@@ -517,8 +518,8 @@ export type GetMemberQueryHookResult = ReturnType<typeof useGetMemberQuery>
 export type GetMemberLazyQueryHookResult = ReturnType<typeof useGetMemberLazyQuery>
 export type GetMemberQueryResult = Apollo.QueryResult<GetMemberQuery, GetMemberQueryVariables>
 export const SearchMembersDocument = gql`
-  query SearchMembers($text: String!, $limit: Int) {
-    memberships(where: { handle_contains: $text }, limit: $limit) {
+  query SearchMembers($text: String!, $limit: Int, $validIds: [ID!]) {
+    memberships(where: { handle_contains: $text, id_in: $validIds }, limit: $limit) {
       ...MemberFields
     }
   }
@@ -539,6 +540,7 @@ export const SearchMembersDocument = gql`
  *   variables: {
  *      text: // value for 'text'
  *      limit: // value for 'limit'
+ *      validIds: // value for 'validIds'
  *   },
  * });
  */

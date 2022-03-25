@@ -16,7 +16,6 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
@@ -42,8 +41,7 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
-  const { isLoading, proposal, refetch } = useProposal(id)
-  useRefetch({ type: 'set', payload: refetch })
+  const { isLoading, proposal } = useProposal(id)
 
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()

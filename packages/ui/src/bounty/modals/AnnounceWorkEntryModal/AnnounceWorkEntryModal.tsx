@@ -5,8 +5,10 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
@@ -34,7 +36,6 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -54,6 +55,7 @@ export const AnnounceWorkEntryModal = () => {
   const minWorkEntrantStake = api?.consts.bounty.minWorkEntrantStake.toNumber() ?? 0
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
+  const balances = useMyBalances()
   const [amount, setAmount] = useState<string>(String(minWorkEntrantStake))
   const [state, send] = useMachine(announceWorkEntryMachine)
   const [account, setAccount] = useState<Account>()
@@ -61,17 +63,22 @@ export const AnnounceWorkEntryModal = () => {
   const stakingStatus = useStakingAccountStatus(account?.address, activeMember?.id)
   const [isValidNext, setValidNext] = useState<boolean>(false)
 
-  useRefetch({ type: 'do', payload: state.matches(AnnounceWorkEntryStates.success) })
-
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
   const valid = useMemo(() => new BN(amount).gten(minWorkEntrantStake) && !!account, [amount, account])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
-      return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, account?.address ?? '')
+      if (stakingStatus === 'confirmed') {
+        return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, account?.address ?? '')
+      }
+
+      return api.tx.utility.batch([
+        api.tx.members.confirmStakingAccount(activeMember.id, account?.address ?? ''),
+        api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, account?.address ?? ''),
+      ])
     }
-  }, [activeMember?.id, account?.address, isConnected])
+  }, [activeMember?.id, account?.address, isConnected, stakingStatus])
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -91,7 +98,7 @@ export const AnnounceWorkEntryModal = () => {
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
       if (!activeMember) {
-        showModal<SwitchMemberModalCall>({
+        return showModal<SwitchMemberModalCall>({
           modal: 'SwitchMember',
           data: {
             originalModalName: 'BountyAnnounceWorkEntryModal',
@@ -102,16 +109,20 @@ export const AnnounceWorkEntryModal = () => {
         nextStep()
       }
     }
-    if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
-    }
+
     if (
-      state.matches(AnnounceWorkEntryStates.bindStakingAccount) &&
-      state.context.bindStakingAccount &&
+      state.matches(AnnounceWorkEntryStates.contribute) &&
+      account &&
       stakingStatus !== 'unknown' &&
       stakingStatus !== 'other'
     ) {
-      return setValidNext(true)
+      setValidNext(true)
+    } else {
+      setValidNext(false)
+    }
+
+    if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
+      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
     }
   }, [state, activeMember?.id, stakingStatus])
 
@@ -225,8 +236,16 @@ export const AnnounceWorkEntryModal = () => {
               label={t('modals.announceWorkEntry.stakingAccount.label')}
               tooltipText={t('modals.announceWorkEntry.stakingAccount.tooltip')}
               required
+              validation={stakingStatus === 'other' ? 'invalid' : undefined}
+              message={stakingStatus === 'other' ? 'This account is bound to the another member' : undefined}
             >
-              <SelectAccount onChange={setAccount} selected={account} />
+              <SelectAccount
+                onChange={setAccount}
+                selected={account}
+                filter={(account) =>
+                  filterByRequiredStake(new BN(minWorkEntrantStake), 'Bounties', balances[account.address])
+                }
+              />
             </InputComponent>
           </Row>
           <Row>
@@ -264,7 +283,7 @@ export const AnnounceWorkEntryModal = () => {
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!valid && !isValidNext} onClick={nextStep}>
+        <ButtonPrimary size="medium" disabled={!valid || !isValidNext} onClick={nextStep}>
           {t('modals.announceWorkEntry.nextButton')}
         </ButtonPrimary>
       </ModalFooter>

@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 
-import { RefetchQuery } from '@/common/types/queries'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { useGetWorkingGroupApplicationsQuery } from '../queries'
@@ -9,7 +8,6 @@ import { asApplication, WorkingGroupApplication } from '../types/WorkingGroupApp
 interface UseMyApplications {
   isLoading: boolean
   applications?: WorkingGroupApplication[]
-  refetch: RefetchQuery
 }
 
 export function useMyApplications(): UseMyApplications {
@@ -24,7 +22,7 @@ export function useMyApplications(): UseMyApplications {
     },
   }
 
-  const { loading, data, refetch } = useGetWorkingGroupApplicationsQuery(params)
+  const { loading, data } = useGetWorkingGroupApplicationsQuery(params)
   const applications = useMemo(() => data?.workingGroupApplications?.map(asApplication), [loading, data])
-  return { isLoading: loading, applications, refetch }
+  return { isLoading: loading, applications }
 }
