@@ -322,7 +322,8 @@
     "limited": "Limited",
     "withdrawalPeriod": "Withdrawal period",
     "fundingPeriod": "Funding Period",
-    "terminated": "Terminated"
+    "terminated": "Terminated",
+    "successful": "Successful"
   },
   "buttons": {
     "announceEntry": "Announce Entry",

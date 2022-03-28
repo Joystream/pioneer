@@ -20,6 +20,7 @@ export const BountyMain = React.memo(({ bounty }: BountyMainProps) => {
     if (bounty.isTerminated) {
       return <BountyTerminated bounty={bounty} />
     }
+
     switch (bounty.stage) {
       case 'funding':
         return <BountyFunding bounty={bounty} />
