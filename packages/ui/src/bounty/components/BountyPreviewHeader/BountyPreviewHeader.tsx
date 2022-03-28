@@ -66,7 +66,7 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
 
   const membersWithSubmission = membersWithEntries.filter((entry) => entry.hasSubmitted)
   const membersWithReward = membersWithSubmission.filter((entry) => isBountyEntryStatusWinner(entry.status))
-  const membersWithLoss = membersWithSubmission.filter(
+  const membersWithLoss = membersWithEntries.filter(
     (entry) => entry.passed && entry.status !== 'BountyEntryStatusCashedOut'
   )
   const idsOnWhitelist = membershipsIdArray.filter((memberId) => bounty?.entrantWhitelist?.includes(memberId))
