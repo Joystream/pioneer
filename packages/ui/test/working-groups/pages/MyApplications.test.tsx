@@ -23,7 +23,7 @@ const block: Block = {
 
 const currentApplication: WorkingGroupApplication = {
   applicant: getMember('alice'),
-  answers: { answer: '20' },
+  answers: [],
   id: '1',
   runtimeId: 1,
   opening: {
@@ -33,9 +33,6 @@ const currentApplication: WorkingGroupApplication = {
     groupId: 'storageWorkingGroup',
     rewardPerBlock: BN_TEN,
     expectedEnding: faker.date.soon(10).toString(),
-    applicationFormQuestions: {
-      question: 'How old are you?',
-    },
   },
   createdAtBlock: block,
   status: 'ApplicationStatusPending',
@@ -44,7 +41,7 @@ const currentApplication: WorkingGroupApplication = {
 }
 
 const pastApplication: WorkingGroupApplication = {
-  answers: { answer: '20' },
+  answers: [],
   applicant: getMember('alice'),
   id: '2',
   runtimeId: 2,
@@ -55,9 +52,6 @@ const pastApplication: WorkingGroupApplication = {
     groupId: 'forumWorkingGroup',
     rewardPerBlock: BN_TEN,
     expectedEnding: faker.date.recent(90).toString(),
-    applicationFormQuestions: {
-      question: 'How old are you?',
-    },
   },
   createdAtBlock: block,
   status: 'ApplicationStatusRejected',

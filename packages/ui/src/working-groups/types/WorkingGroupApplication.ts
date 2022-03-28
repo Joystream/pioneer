@@ -8,6 +8,11 @@ import { WorkingGroupApplicationFieldsFragment, WorkingGroupApplicationMentionFi
 import { GroupIdName } from '.'
 import { asWorkingGroupName } from './WorkingGroup'
 
+export interface ApplicationAnswer {
+  answer: string
+  question?: string | null
+}
+
 export interface WorkingGroupApplication {
   id: string
   runtimeId: number
@@ -18,18 +23,13 @@ export interface WorkingGroupApplication {
     groupId: GroupIdName
     rewardPerBlock: BN
     expectedEnding: string
-    applicationFormQuestions: {
-      question: string
-    }
   }
   applicant: Member
   stakingAccount: string
   stake: BN
   status?: string
   createdAtBlock: Block
-  answers: {
-    answer: string
-  }
+  answers: ApplicationAnswer[]
 }
 
 export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): WorkingGroupApplication => ({
@@ -42,9 +42,11 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
     groupId: fields.opening.group.id as GroupIdName,
     rewardPerBlock: new BN(fields.opening.rewardPerBlock),
     expectedEnding: fields.opening.metadata.expectedEnding,
-    applicationFormQuestions: fields.opening.metadata.applicationFormQuestions[0] as { question: '' },
   },
-  answers: fields.answers[0],
+  answers: fields.answers.map((answer) => ({
+    answer: answer.answer,
+    question: answer.question.question,
+  })),
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,
   stake: new BN(fields.stake),

@@ -973,18 +973,18 @@ export type WorkingGroupApplicationFieldsFragment = {
   runtimeId: number
   stakingAccount: string
   stake: any
-  answers: Array<{ __typename: 'ApplicationFormQuestionAnswer'; answer: string }>
+  answers: Array<{
+    __typename: 'ApplicationFormQuestionAnswer'
+    answer: string
+    question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+  }>
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
     type: Types.WorkingGroupOpeningType
     rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; id: string; name: string }
-    metadata: {
-      __typename: 'WorkingGroupOpeningMetadata'
-      expectedEnding?: any | null
-      applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion'; question?: string | null }>
-    }
+    metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
   }
   applicant: {
     __typename: 'Membership'
@@ -1032,18 +1032,18 @@ export type GetWorkingGroupApplicationsQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
-    answers: Array<{ __typename: 'ApplicationFormQuestionAnswer'; answer: string }>
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
-      metadata: {
-        __typename: 'WorkingGroupOpeningMetadata'
-        expectedEnding?: any | null
-        applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion'; question?: string | null }>
-      }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
     applicant: {
       __typename: 'Membership'
@@ -1115,18 +1115,18 @@ export type GetWorkingGroupApplicationQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
-    answers: Array<{ __typename: 'ApplicationFormQuestionAnswer'; answer: string }>
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
-      metadata: {
-        __typename: 'WorkingGroupOpeningMetadata'
-        expectedEnding?: any | null
-        applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion'; question?: string | null }>
-      }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
     applicant: {
       __typename: 'Membership'
@@ -1544,6 +1544,9 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
     runtimeId
     answers {
       answer
+      question {
+        question
+      }
     }
     opening {
       id
@@ -1555,9 +1558,6 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       rewardPerBlock
       metadata {
         expectedEnding
-        applicationFormQuestions {
-          question
-        }
       }
     }
     applicant {

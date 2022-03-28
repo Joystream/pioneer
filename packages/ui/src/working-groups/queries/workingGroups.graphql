@@ -343,6 +343,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   runtimeId
   answers {
     answer
+    question {
+      question
+    }
   }
   opening {
     id
@@ -354,9 +357,6 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     rewardPerBlock
     metadata {
       expectedEnding
-      applicationFormQuestions {
-        question
-      }
     }
   }
   applicant {

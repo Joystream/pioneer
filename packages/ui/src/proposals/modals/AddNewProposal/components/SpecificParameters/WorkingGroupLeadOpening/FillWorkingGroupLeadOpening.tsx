@@ -10,7 +10,7 @@ import { Colors } from '@/common/constants'
 import { SelectWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/SelectWorkingGroupApplication'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 import { GroupIdName } from '@/working-groups/types'
-import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
+import { ApplicationAnswer, WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export interface FillWorkingGroupLeadOpeningParameters {
   openingId?: string
@@ -30,15 +30,12 @@ export const FillWorkingGroupLeadOpening = ({
   setApplicationId,
   setWorkingGroupId,
 }: Props) => {
-  const [answer, setAnswer] = useState('-')
-  const [question, setQuestion] = useState('-')
+  const [answers, setAnswer] = useState<ApplicationAnswer[]>([])
 
   const selectApplication = (selected: WorkingGroupApplication) => {
-    setApplicationId(selected.applicant.id)
-    setQuestion(selected.opening.applicationFormQuestions?.question)
-    setAnswer(selected.answers.answer)
+    setApplicationId(selected.id)
+    setAnswer(selected.answers)
   }
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -92,8 +89,12 @@ export const FillWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <StyledText>Applicant's Details</StyledText>
-          <StyledInformation>{question}</StyledInformation>
-          <StyledInformation>{answer}</StyledInformation>
+          {answers.map((userInfo) => (
+            <>
+              <StyledInformation>{userInfo.question}</StyledInformation>
+              <StyledInformation>{userInfo.answer}</StyledInformation>
+            </>
+          ))}
         </RowGapBlock>
       </Row>
     </RowGapBlock>
