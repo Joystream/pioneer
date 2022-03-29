@@ -69,7 +69,3 @@ export const App = () => (
     </NotificationsHolder>
   </Providers>
 )
-
-export const Mobile = () => (
-  <div>test</div>
-)
