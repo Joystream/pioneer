@@ -39,7 +39,6 @@ const SelectWorkingGroupApplicationBase = ({
     onChange(selected)
     close()
   }
-
   return (
     <Select
       id={id}
