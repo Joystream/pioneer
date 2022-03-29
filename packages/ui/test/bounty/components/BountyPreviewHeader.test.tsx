@@ -29,6 +29,7 @@ const defaultEntry: WorkEntry = {
   bountyId: '0',
   stake: new BN(10),
   withdrawn: false,
+  hasCashedOut: false,
 }
 
 describe('UI: BountyPreviewHeader', () => {
@@ -292,7 +293,8 @@ describe('UI: BountyPreviewHeader', () => {
         {
           ...defaultEntry,
           hasSubmitted: true,
-          status: 'BountyEntryStatusCashedOut',
+          passed: true,
+          hasCashedOut: true,
         },
       ]
 

@@ -61,6 +61,7 @@ Default.args = {
       rejected: false,
       works: [],
       withdrawn: false,
+      hasCashedOut: false,
     },
   ],
 }
