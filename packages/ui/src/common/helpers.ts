@@ -2,9 +2,8 @@ export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
 
 export const lowerFirstLetter = (str: string): string => str.charAt(0).toLowerCase() + str.slice(1)
-export const camelCaseToText = (str: string): string => {
-  return capitalizeFirstLetter(str.replace(/([A-Z]+)*([A-Z][a-z])/g, '$1 $2'))
-}
+
+export { startCase as camelCaseToText } from 'lodash'
 
 export const plural = (quantity?: unknown, suffix = 's') => (quantity === 1 ? '' : suffix)
 
