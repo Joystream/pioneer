@@ -14,7 +14,7 @@ import { stubApi, stubProposalConstants } from '../../_mocks/transactions'
 
 const decidingProposalMock: ProposalMock = {
   ...baseMock,
-  id: '4',
+  id: '7',
   title: 'Deciding Test Proposal',
   status: 'deciding',
   createdAt: '2021-07-21T10:00:00.000Z',
@@ -60,7 +60,7 @@ const decidingProposalMock: ProposalMock = {
 
 const dormantProposalMock = {
   ...baseMock,
-  id: '4',
+  id: '7',
   title: 'Dormant Test Proposal',
   status: 'dormant',
   createdAt: '2021-07-21T10:00:00.000Z',
@@ -87,32 +87,23 @@ describe('UI: Proposals overview', () => {
 
   beforeEach(() => {
     seedMembers(mockServer.server, 2)
+    stubProposalConstants(api)
   })
 
-  describe('Displays proper number of', () => {
-    beforeEach(async () => {
-      stubProposalConstants(api)
-      testProposals.map((proposal) => seedProposal(proposal, mockServer.server))
-      renderComponent()
-      await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'), { timeout: 300 })
-    })
+  it('Displays proper number of proposals', async () => {
+    testProposals.forEach((proposal) => seedProposal(proposal, mockServer.server))
+    seedProposal(dormantProposalMock, mockServer.server)
 
-    it('New proposals', async () => {
-      expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
-    })
+    renderComponent()
+    await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'))
 
-    it('Proposals approved', async () => {
-      expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
-    })
-
-    it('Proposals rejected', async () => {
-      expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
-    })
+    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
+    expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
+    expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
   })
 
   describe('Proposal in Deciding stage', () => {
     beforeEach(() => {
-      stubProposalConstants(api)
       seedProposal(decidingProposalMock, mockServer.server)
       renderComponent()
     })
@@ -136,7 +127,6 @@ describe('UI: Proposals overview', () => {
 
   describe('Proposal in Dormant stage', () => {
     beforeEach(() => {
-      stubProposalConstants(api)
       seedProposal(dormantProposalMock, mockServer.server)
       renderComponent()
     })
