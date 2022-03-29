@@ -12,8 +12,7 @@ export const cutText = (text: string, length = 100) => (text.length > length ? t
 
 export const isInFuture = (time: string) => {
   const timeAsDate = new Date(time).valueOf()
-  return timeAsDate > Date.now
-  ()
+  return timeAsDate > Date.now()
 }
 
 export const nameMapping = (value: string) => {
