@@ -46,6 +46,7 @@ describe('UI: BountyListItem', () => {
         stake: new BN(10),
         rejected: false,
         withdrawn: false,
+        hasCashedOut: false,
       },
     ],
     discussionThreadId: '1',
