@@ -19,8 +19,9 @@ export const OnBoardingPlugin = () => {
       <ScrolledModalBody>
         <Wrapper>
           <TextMedium lighter>
-            We notice you don't have a Polkadot.js extension yet. To apply to an opening you need to connect you
-            Polkadot.js extension with Joystream and then create your membership
+            Connect your Polkadot.js plugin with Joystream and then create your membership to partake and vote for
+            council elections, create proposals, participate in bounties, forum discussions, and many other features.
+            The plugin is available on Firefox and Chrome.
           </TextMedium>
           <PolkadotIcon />
           <TextExtraHuge bold>Install Polkadot plugin</TextExtraHuge>

@@ -9,6 +9,7 @@ import { NotFound } from '@/app/pages/NotFound'
 import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
+import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
@@ -67,5 +68,11 @@ export const App = () => (
       <ConnectionStatus />
       <ExtensionWarning />
     </NotificationsHolder>
+  </Providers>
+)
+
+export const Mobile = () => (
+  <Providers>
+    <MobileView />
   </Providers>
 )
