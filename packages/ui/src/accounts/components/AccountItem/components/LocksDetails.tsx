@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { LockItem } from '@/accounts/components/AccountItem/components/LockItem'
 import { isRecoverable } from '@/accounts/model/lockTypes'
@@ -6,6 +6,7 @@ import { Balances } from '@/accounts/types'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextMedium } from '@/common/components/typography'
 import { Address } from '@/common/types'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 
 interface LocksDetailsProps {
   balance: Balances | null
@@ -13,13 +14,20 @@ interface LocksDetailsProps {
 }
 
 export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
+  const { election } = useCurrentElection()
+
+  const candidateOnLock = useMemo(
+    () => election?.candidates.find((candidate) => candidate.stakingAccount === address),
+    [election, address]
+  )
+
   if (!balance || !balance.locks.length) {
     return <TextMedium light>No locks found.</TextMedium>
   }
 
   const allLocks = balance.locks
-  const recoverable = allLocks.filter(({ type }) => isRecoverable(type))
-  const nonRecoverable = allLocks.filter(({ type }) => !isRecoverable(type))
+  const recoverable = allLocks.filter(({ type }) => isRecoverable(type, candidateOnLock?.status === 'ACTIVE'))
+  const nonRecoverable = allLocks.filter(({ type }) => !isRecoverable(type, candidateOnLock?.status === 'ACTIVE'))
 
   return (
     <>

@@ -57,7 +57,13 @@ const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boole
   }
 }
 
-export const isRecoverable = (type: LockType): boolean => RECOVERABLE.includes(type)
+export const isRecoverable = (type: LockType, isActiveCandidate?: boolean): boolean => {
+  if (isActiveCandidate) {
+    return type === 'Voting'
+  }
+
+  return RECOVERABLE.includes(type)
+}
 
 export const areLocksConflicting = (lockType: LockType, existingLocks: BalanceLock[]) =>
   existingLocks.length > 0 && asLockTypes(existingLocks).some(isConflictingWith(lockType))

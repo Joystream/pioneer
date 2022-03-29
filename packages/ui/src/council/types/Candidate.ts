@@ -17,6 +17,7 @@ export interface ElectionCandidate {
     bannerUri?: string
   }
   status: CandidacyStatus
+  stakingAccount: any
 }
 
 export interface ElectionCandidateWithDetails extends ElectionCandidate {
@@ -37,6 +38,7 @@ export const asElectionCandidate = (fields: ElectionCandidateFieldsFragment): El
     bannerUri: fields.noteMetadata.bannerImageUri ?? undefined,
   },
   status: fields.status,
+  stakingAccount: fields.stakingAccountId,
 })
 
 export const asElectionCandidateWithDetails = (
