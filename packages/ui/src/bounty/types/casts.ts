@@ -68,6 +68,7 @@ const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFi
   return (entry) => ({
     id: entry.id,
     bountyId,
+    stake,
     worker: asMember(entry.worker),
     hasSubmitted: entry.workSubmitted,
     status: asBountyEntryStatus(entry.status),
@@ -76,7 +77,7 @@ const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFi
     passed: entry.status.__typename === 'BountyEntryStatusPassed',
     rejected: entry.status.__typename === 'BountyEntryStatusRejected',
     withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
-    stake,
+    hasCashedOut: !!entry.withdrawnInEvent,
   })
 }
 

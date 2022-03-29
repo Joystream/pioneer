@@ -55,6 +55,9 @@ fragment BountyEntryFields on BountyEntry {
       reward
     }
   }
+  withdrawnInEvent {
+    inBlock
+  }
 }
 fragment BountyEntryWithDetailsFields on BountyEntry {
   ...BountyEntryFields

@@ -65,10 +65,10 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
   const idsWithoutEntries = membershipsIdArray.filter((memberId) => !idsWithEntries.includes(memberId))
 
   const membersWithSubmission = membersWithEntries.filter((entry) => entry.hasSubmitted)
-  const membersWithReward = membersWithSubmission.filter((entry) => isBountyEntryStatusWinner(entry.status))
-  const membersWithLoss = membersWithSubmission.filter(
-    (entry) => entry.passed && entry.status !== 'BountyEntryStatusCashedOut'
+  const membersWithReward = membersWithSubmission.filter(
+    (entry) => isBountyEntryStatusWinner(entry.status) && !entry.hasCashedOut
   )
+  const membersWithLoss = membersWithSubmission.filter((entry) => entry.passed && !entry.hasCashedOut)
   const idsOnWhitelist = membershipsIdArray.filter((memberId) => bounty?.entrantWhitelist?.includes(memberId))
 
   const idsWithContribution =
