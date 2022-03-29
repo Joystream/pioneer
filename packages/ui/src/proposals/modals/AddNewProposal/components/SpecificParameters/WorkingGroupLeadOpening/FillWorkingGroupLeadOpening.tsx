@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Children, useState } from 'react'
 import styled from 'styled-components'
 
 import { WorkingGroupOpeningType } from '@/common/api/queries'
@@ -89,12 +89,14 @@ export const FillWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <StyledText>Applicant's Details</StyledText>
-          {answers.map((userInfo) => (
-            <>
-              <StyledInformation>{userInfo.question}</StyledInformation>
-              <StyledInformation>{userInfo.answer}</StyledInformation>
-            </>
-          ))}
+          {Children.toArray(
+            answers.map((userInfo) => (
+              <>
+                <StyledInformation>{userInfo.question}</StyledInformation>
+                <StyledInformation>{userInfo.answer}</StyledInformation>
+              </>
+            ))
+          )}
         </RowGapBlock>
       </Row>
     </RowGapBlock>
