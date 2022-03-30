@@ -12,9 +12,11 @@ import { ProposalsTilesList } from './ProposalsTilesList'
 export const ProposalsOverview = () => {
   const { t } = useTranslation('overview')
   const { proposals } = useProposals({ status: 'active' })
-  const { count, loading: countLoading } = useProposalsCount('all')
-  const { count: approvedCount, loading: approvedCountLoading } = useProposalsCount('approved')
-  const { count: rejectedCount, loading: rejectedCountLoading } = useProposalsCount('rejected')
+  const {
+    toBeDecided: { count, isLoading: countLoading },
+    approved: { count: approvedCount, isLoading: approvedCountLoading },
+    rejected: { count: rejectedCount, isLoading: rejectedCountLoading },
+  } = useProposalsCount()
 
   const infoElements = useMemo(
     () => (
@@ -24,7 +26,7 @@ export const ProposalsOverview = () => {
         {<OverviewInfoElement value={rejectedCount} label={t('proposals.rejected')} isLoading={rejectedCountLoading} />}
       </>
     ),
-    [t, count, approvedCount, rejectedCount]
+    [t, countLoading, approvedCountLoading, rejectedCountLoading]
   )
 
   return (
