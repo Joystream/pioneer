@@ -10,4 +10,4 @@ export default {
 
 const Template: Story = () => <MobileView />
 
-export const NotificationComponent = Template.bind({})
+export const MobileViewComponent = Template.bind({})
