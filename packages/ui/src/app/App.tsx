@@ -7,8 +7,10 @@ import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoarding
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
 import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
+import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
+import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
@@ -68,4 +70,11 @@ export const App = () => (
       <ExtensionWarning />
     </NotificationsHolder>
   </Providers>
+)
+
+export const Mobile = () => (
+  <>
+    <GlobalStyle />
+    <MobileView />
+  </>
 )
