@@ -7,6 +7,7 @@ import { HashRouter } from 'react-router-dom'
 import { MyApplications } from '../../../src/app/pages/WorkingGroups/MyApplications'
 import { Block } from '../../../src/common/types'
 import { WorkingGroupApplication } from '../../../src/working-groups/types/WorkingGroupApplication'
+import { getMember } from '../../_mocks/members'
 
 let mockApplications: { isLoading: boolean; applications: WorkingGroupApplication[] }
 
@@ -21,6 +22,8 @@ const block: Block = {
 }
 
 const currentApplication: WorkingGroupApplication = {
+  applicant: getMember('alice'),
+  answers: [],
   id: '1',
   runtimeId: 1,
   opening: {
@@ -38,6 +41,8 @@ const currentApplication: WorkingGroupApplication = {
 }
 
 const pastApplication: WorkingGroupApplication = {
+  answers: [],
+  applicant: getMember('alice'),
   id: '2',
   runtimeId: 2,
   opening: {

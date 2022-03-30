@@ -103,6 +103,7 @@ export interface WorkEntry {
   passed: boolean
   rejected: boolean
   withdrawn: boolean
+  hasCashedOut: boolean
 }
 
 export interface WorkInfo {
