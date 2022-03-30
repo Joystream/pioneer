@@ -12,6 +12,7 @@ interface Params {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   signer: Address
   service: ActorRef<any>
+  skipQueryNode?: boolean
 }
 
 // Transactions which emit events handled by QueryNode use useSignAndSendQueryNodeTransaction hook
@@ -48,16 +49,27 @@ export const useSignAndSendQueryNodeTransaction = ({ transaction, signer, servic
   }
 }
 
-export const useSignAndSendTransaction = ({ transaction, signer, service }: Params) => {
-  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({ transaction, signer, service })
+export const useSignAndSendTransaction = ({ transaction, signer, service, skipQueryNode = false }: Params) => {
+  const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
+  const queryNodeStatus = useQueryNodeTransactionStatus(blockHash, skipQueryNode)
+  const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
+    transaction,
+    signer,
+    service,
+    setBlockHash,
+  })
 
   const sign = useCallback(() => send('SIGN'), [service])
 
   useEffect(() => {
-    if (isProcessing) {
+    if (skipQueryNode && isProcessing) {
       send('SUCCESS')
     }
-  }, [isProcessing])
+
+    if (!skipQueryNode && queryNodeStatus === 'confirmed') {
+      send('SUCCESS')
+    }
+  }, [isProcessing, skipQueryNode, queryNodeStatus])
 
   return {
     paymentInfo,
