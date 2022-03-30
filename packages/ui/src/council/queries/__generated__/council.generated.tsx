@@ -190,6 +190,7 @@ export type ElectionCandidateFieldsFragment = {
   id: string
   stake: any
   status: Types.CandidacyStatus
+  stakingAccountId: string
   member: {
     __typename: 'Membership'
     id: string
@@ -232,6 +233,7 @@ export type ElectionRoundFieldsFragment = {
     id: string
     stake: any
     status: Types.CandidacyStatus
+    stakingAccountId: string
     member: {
       __typename: 'Membership'
       id: string
@@ -290,6 +292,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
     stake: any
     id: string
     status: Types.CandidacyStatus
+    stakingAccountId: string
     member: {
       __typename: 'Membership'
       id: string
@@ -386,6 +389,7 @@ export type CastVoteFieldsFragment = {
     id: string
     stake: any
     status: Types.CandidacyStatus
+    stakingAccountId: string
     member: {
       __typename: 'Membership'
       id: string
@@ -818,6 +822,7 @@ export type GetCurrentElectionQuery = {
       id: string
       stake: any
       status: Types.CandidacyStatus
+      stakingAccountId: string
       member: {
         __typename: 'Membership'
         id: string
@@ -899,6 +904,7 @@ export type GetPastElectionQuery = {
       stake: any
       id: string
       status: Types.CandidacyStatus
+      stakingAccountId: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1041,6 +1047,7 @@ export type GetCouncilVotesQuery = {
       id: string
       stake: any
       status: Types.CandidacyStatus
+      stakingAccountId: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1276,6 +1283,7 @@ export const ElectionCandidateFieldsFragmentDoc = gql`
       description
     }
     status
+    stakingAccountId
   }
   ${MemberFieldsFragmentDoc}
 `
