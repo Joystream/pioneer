@@ -15,9 +15,9 @@ interface Params {
   skipQueryNode?: boolean
 }
 
-// Transactions which emit events handled by QueryNode use useSignAndSendQueryNodeTransaction hook
-// that waits for QueryNode confirmation on PROCESSING stage.
-// Other transactions use simplified hook useSignAndSendTransaction which automatically switch
+// Transactions which emit events handled by QueryNode use useSignAndSendTransaction w/o skipQueryNode parameter,
+// it will wait for QueryNode confirmation on PROCESSING stage.
+// Other transactions use skipQueryNode with true value which automatically switch
 // from PROCESSING state to SUCCESS/ERROR.
 
 export const useSignAndSendTransaction = ({ transaction, signer, service, skipQueryNode = false }: Params) => {
