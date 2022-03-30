@@ -7,6 +7,7 @@ import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoarding
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
 import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
+import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { MobileView } from '@/common/components/page/MobileView/MobileView'
@@ -72,7 +73,8 @@ export const App = () => (
 )
 
 export const Mobile = () => (
-  <Providers>
+  <>
+    <GlobalStyle />
     <MobileView />
-  </Providers>
+  </>
 )
