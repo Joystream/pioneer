@@ -180,7 +180,8 @@
         "winnerNoReward": "Some winner do not have reward amount",
         "amountTooLow": "Distributed amount must equal total reward",
         "amountTooHigh": "Distributed amount exceed total reward! Please decrease it",
-        "rationaleMissing": "Please fill out the rationale"
+        "rationaleMissing": "Please fill out the rationale",
+        "noSlashedWorkerSelected": "Please select worker to slash or remove the option"
       },
       "authorizeModal": {
         "description": "You are announcing Bounty winners",
@@ -322,7 +323,8 @@
     "limited": "Limited",
     "withdrawalPeriod": "Withdrawal period",
     "fundingPeriod": "Funding Period",
-    "terminated": "Terminated"
+    "terminated": "Terminated",
+    "successful": "Successful"
   },
   "buttons": {
     "announceEntry": "Announce Entry",

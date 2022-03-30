@@ -14,7 +14,6 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetch } from '@/common/hooks/useRefetch'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -32,7 +31,6 @@ export const CreatePostModal = () => {
   }, [])
 
   const [state, send] = useMachine(defaultTransactionModalMachine)
-  useRefetch({ type: 'do', payload: state.matches('success') })
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()

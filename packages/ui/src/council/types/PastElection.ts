@@ -42,7 +42,8 @@ export const asPastElectionWithDetails = (
   ...asPastElection(fields),
   totalStake: sumStakes(fields.castVotes),
   votingResults: fields.candidates.map((candidate) => {
-    const candidateVotes = fields.castVotes.filter(({ voteForId }) => voteForId === candidate.member.id)
+    const candidateVotes = fields.castVotes.filter(({ voteForId }) => voteForId === candidate.id)
+
     return {
       candidate: asElectionCandidate(candidate),
       votes: candidateVotes.map((castVote) =>

@@ -2,7 +2,6 @@ import { useMachine } from '@xstate/react'
 import React from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
-import { useRefetch } from '@/common/hooks/useRefetch'
 
 import { Member } from '../../types'
 
@@ -18,8 +17,6 @@ interface MembershipModalProps {
 
 export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
   const [state, send] = useMachine(updateMembershipMachine)
-
-  useRefetch({ type: 'do', payload: state.matches('success') })
 
   if (state.matches('prepare')) {
     return (

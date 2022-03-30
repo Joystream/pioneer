@@ -149,6 +149,7 @@ export type BountyFieldsFragment = {
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
+    withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }> | null
   createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
   judgment?: {
@@ -196,6 +197,7 @@ export type BountyEntryFieldsFragment = {
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
+  withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
 }
 
 export type BountyEntryWithDetailsFieldsFragment = {
@@ -240,6 +242,7 @@ export type BountyEntryWithDetailsFieldsFragment = {
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
+  withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
 }
 
 export type BountyWorkFieldsFragment = {
@@ -293,6 +296,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
+    withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }
 }
 
@@ -487,6 +491,7 @@ export type GetBountiesQuery = {
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
+      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
     judgment?: {
@@ -664,6 +669,7 @@ export type GetBountyQuery = {
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
+      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
     judgment?: {
@@ -729,6 +735,7 @@ export type GetBountyWorksQuery = {
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
+      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }
   }>
 }
@@ -838,6 +845,9 @@ export const BountyEntryFieldsFragmentDoc = gql`
       ... on BountyEntryStatusWinner {
         reward
       }
+    }
+    withdrawnInEvent {
+      inBlock
     }
   }
   ${MemberFieldsFragmentDoc}

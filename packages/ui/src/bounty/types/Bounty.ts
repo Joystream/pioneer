@@ -104,6 +104,7 @@ export interface WorkEntry {
   rejected: boolean
   withdrawn: boolean
   reward?: number
+  hasCashedOut: boolean
 }
 
 export interface WorkInfo {

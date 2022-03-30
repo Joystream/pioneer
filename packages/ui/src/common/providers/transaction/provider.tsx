@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ActorRef, State, Subscription } from 'xstate'
 
@@ -18,6 +19,13 @@ const getIsPendingStatus = (status: TransactionStateValue | null): boolean => {
 export const TransactionContextProvider = ({ children }: Props) => {
   const [transactionService, setService] = useState<ActorRef<TransactionEvent, State<TxContext>>>()
   const [status, setStatus] = useState<TransactionStateValue | null>(null)
+  const apolloClient = useApolloClient()
+
+  useEffect(() => {
+    if (status === 'success') {
+      apolloClient.refetchQueries({ include: 'active' })
+    }
+  }, [status])
 
   useEffect(() => {
     let subscription: Subscription

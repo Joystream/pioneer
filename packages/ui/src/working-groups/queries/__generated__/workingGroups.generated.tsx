@@ -973,6 +973,11 @@ export type WorkingGroupApplicationFieldsFragment = {
   runtimeId: number
   stakingAccount: string
   stake: any
+  answers: Array<{
+    __typename: 'ApplicationFormQuestionAnswer'
+    answer: string
+    question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+  }>
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
@@ -1027,6 +1032,11 @@ export type GetWorkingGroupApplicationsQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
@@ -1105,6 +1115,11 @@ export type GetWorkingGroupApplicationQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
@@ -1527,6 +1542,12 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
     runtimeId
+    answers {
+      answer
+      question {
+        question
+      }
+    }
     opening {
       id
       group {
