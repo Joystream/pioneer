@@ -78,7 +78,7 @@ export const ClaimRewardModal = () => {
     )
   }
 
-  if (!api || !activeMember || !transaction || !feeInfo || !reward) {
+  if (!api || !activeMember || !transaction || !feeInfo || !entry || !reward) {
     return null
   }
 
@@ -93,7 +93,9 @@ export const ClaimRewardModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        amount={reward}
+        reward={reward}
+        stake={entry.stake}
+        amount={reward.add(entry.stake)}
       />
     )
   }
