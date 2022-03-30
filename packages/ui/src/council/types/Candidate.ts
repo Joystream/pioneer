@@ -17,7 +17,7 @@ export interface ElectionCandidate {
     bannerUri?: string
   }
   status: CandidacyStatus
-  stakingAccount: any
+  stakingAccount: string
 }
 
 export interface ElectionCandidateWithDetails extends ElectionCandidate {

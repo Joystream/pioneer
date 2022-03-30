@@ -16,8 +16,8 @@ interface LocksDetailsProps {
 export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
   const { election } = useCurrentElection()
 
-  const candidateOnLock = useMemo(
-    () => election?.candidates.find((candidate) => candidate.stakingAccount === address),
+  const isActiveCandidate = useMemo(
+    () => election?.candidates.find((candidate) => candidate.stakingAccount === address)?.status === 'ACTIVE',
     [election, address]
   )
 
@@ -26,8 +26,8 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
   }
 
   const allLocks = balance.locks
-  const recoverable = allLocks.filter(({ type }) => isRecoverable(type, candidateOnLock?.status === 'ACTIVE'))
-  const nonRecoverable = allLocks.filter(({ type }) => !isRecoverable(type, candidateOnLock?.status === 'ACTIVE'))
+  const recoverable = allLocks.filter(({ type }) => isRecoverable(type, isActiveCandidate))
+  const nonRecoverable = allLocks.filter(({ type }) => !isRecoverable(type, isActiveCandidate))
 
   return (
     <>
