@@ -15,7 +15,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
 import { getMessage } from './utils'
@@ -36,7 +36,7 @@ export const CreateThreadSignModal = ({
   threadDeposit,
 }: Props) => {
   const { hideModal } = useModal()
-  const { isReady, paymentInfo, sign } = useSignAndSendQueryNodeTransaction({
+  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({
     transaction,
     signer: controllerAccount.address,
     service,
