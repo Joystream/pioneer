@@ -15,11 +15,13 @@ export interface DescriptionProps {
 export const Description = React.memo(({ imageUrl, className, title, description }: DescriptionProps) => {
   return (
     <DescriptionContainer>
-      {imageUrl ? (
-        <DescriptionImage src={imageUrl} className={className} />
-      ) : (
-        <ImagePlaceholder className={className} />
-      )}
+      <ImageContainer>
+        {imageUrl ? (
+          <DescriptionImage src={imageUrl} className={className} />
+        ) : (
+          <ImagePlaceholder className={className} />
+        )}
+      </ImageContainer>
       <TextHuge bold>{title}</TextHuge>
       <DescriptionText>{description}</DescriptionText>
     </DescriptionContainer>
@@ -32,9 +34,13 @@ const DescriptionContainer = styled.div`
   flex-direction: column;
   row-gap: 32px;
 `
+
+const ImageContainer = styled.div`
+  max-width: 100%;
+`
+
 const DescriptionImage = styled.img`
-  width: 100%;
-  object-fit: cover;
+  object-fit: contain;
 `
 
 const DescriptionText = styled(TextMedium)`
