@@ -298,7 +298,8 @@
   "tabs": {
     "bounty": "Bounty",
     "works": "Works",
-    "winners": "Winners"
+    "winners": "Winners",
+    "slashed": "Slashed"
   },
   "workTab": {
     "filter": {

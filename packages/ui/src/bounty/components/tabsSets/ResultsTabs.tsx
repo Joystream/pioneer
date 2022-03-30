@@ -25,7 +25,7 @@ export const ResultsTabs = React.memo(({ setActive, active }: Props) => {
         onClick: () => setActive('Winners'),
       },
       {
-        title: t('tabs.winners'),
+        title: t('tabs.slashed'),
         active: active === 'Slashed',
         onClick: () => setActive('Slashed'),
       },

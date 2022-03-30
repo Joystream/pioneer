@@ -103,6 +103,7 @@ export interface WorkEntry {
   passed: boolean
   rejected: boolean
   withdrawn: boolean
+  reward?: number
   hasCashedOut: boolean
 }
 
@@ -148,4 +149,8 @@ export interface Bounty {
   inBlock: number
   contributors: Contributor[]
   discussionThreadId: string | undefined
+  judgement?: {
+    inBlock?: Block
+    rationale?: string | null
+  }
 }

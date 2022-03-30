@@ -152,6 +152,13 @@ export type BountyFieldsFragment = {
     withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }> | null
   createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+  judgment?: {
+    __typename: 'OracleJudgmentSubmittedEvent'
+    inBlock: number
+    rationale?: string | null
+    createdAt: any
+    network: Types.Network
+  } | null
 }
 
 export type BountyEntryFieldsFragment = {
@@ -487,6 +494,13 @@ export type GetBountiesQuery = {
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+    judgment?: {
+      __typename: 'OracleJudgmentSubmittedEvent'
+      inBlock: number
+      rationale?: string | null
+      createdAt: any
+      network: Types.Network
+    } | null
   }>
 }
 
@@ -658,6 +672,13 @@ export type GetBountyQuery = {
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+    judgment?: {
+      __typename: 'OracleJudgmentSubmittedEvent'
+      inBlock: number
+      rationale?: string | null
+      createdAt: any
+      network: Types.Network
+    } | null
   } | null
 }
 
@@ -892,6 +913,12 @@ export const BountyFieldsFragmentDoc = gql`
     }
     createdInEvent {
       inBlock
+    }
+    judgment {
+      inBlock
+      rationale
+      createdAt
+      network
     }
   }
   ${MemberFieldsFragmentDoc}

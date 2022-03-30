@@ -13,10 +13,8 @@ export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) =
   const { data: dataCount } = useGetBountyWorksCountQuery({
     variables: {
       where: {
-        entry: {
-          bounty: {
-            id_eq: bountyId,
-          },
+        bounty: {
+          id_eq: bountyId,
         },
       },
     },
@@ -33,12 +31,12 @@ export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) =
       order: WorkSubmittedEventOrderByInput.CreatedAtDesc,
       where: {
         entry: {
-          bounty: {
-            id_eq: bountyId,
-          },
           worker: {
             handle_startsWith: workerHandle,
           },
+        },
+        bounty: {
+          id_eq: bountyId,
         },
       },
     },
