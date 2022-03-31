@@ -28,6 +28,7 @@ export interface Props {
   buttonLabel: string
   contributeAmount?: BN
   useMultiTransaction?: MultiTransactionConfig
+  skipQueryNodeCheck?: boolean
 }
 
 export const AuthorizeTransactionModal = ({
@@ -39,6 +40,7 @@ export const AuthorizeTransactionModal = ({
   buttonLabel,
   contributeAmount,
   useMultiTransaction,
+  skipQueryNodeCheck,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
@@ -52,6 +54,7 @@ export const AuthorizeTransactionModal = ({
     service,
     transaction,
     signer: selectedAccount?.address || controllerAccount.address,
+    skipQueryNode: skipQueryNodeCheck,
   })
   const accountsWithValidAmount = useMemo(
     () =>

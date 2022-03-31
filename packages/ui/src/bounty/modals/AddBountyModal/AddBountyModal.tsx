@@ -134,6 +134,7 @@ export const AddBountyModal = () => {
         description="You intend to create forum thread for your bounty."
         buttonLabel="Create Forum Thread"
         useMultiTransaction={{ steps: transactionSteps, active: 0 }}
+        skipQueryNodeCheck
       />
     )
   }
