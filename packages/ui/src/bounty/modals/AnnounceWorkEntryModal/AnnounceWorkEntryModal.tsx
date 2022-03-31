@@ -73,8 +73,10 @@ export const AnnounceWorkEntryModal = () => {
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
   const schema = useMemo(() => {
-    baseSchema.fields.entrantStake = baseSchema.fields.entrantStake
-      .min(minWorkEntrantStake.toNumber(), 'Stake must be greater than minimum of ${min} JOY')
+    baseSchema.fields.entrantStake = baseSchema.fields.entrantStake.min(
+      minWorkEntrantStake.toNumber(),
+      'Stake must be at least ${min} JOY'
+    )
 
     return baseSchema
   }, [minWorkEntrantStake])
@@ -218,7 +220,7 @@ export const AnnounceWorkEntryModal = () => {
       />
     )
   }
-  
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title={t('modals.announceWorkEntry.title')} onClick={hideModal} />
