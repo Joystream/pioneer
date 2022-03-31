@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
@@ -20,6 +21,7 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
   ModalFooter,
@@ -36,13 +38,20 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { StakingAccountSchema } from '@/memberships/model/validation'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
+
+const schema = Yup.object().shape({
+  amount: Yup.string(),
+  account: StakingAccountSchema,
+})
 
 export const AnnounceWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
@@ -66,6 +75,18 @@ export const AnnounceWorkEntryModal = () => {
   const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
 
   const valid = useMemo(() => new BN(amount).gten(minWorkEntrantStake) && !!account, [amount, account])
+
+  const { setContext, errors } = useSchema({ account, amount }, schema)
+
+  useEffect(() => {
+    if (balance) {
+      setContext({
+        balances: balance,
+        stakeLock: 'Bounty',
+        requiredAmount: new BN(minWorkEntrantStake),
+      })
+    }
+  }, [JSON.stringify(balance), minWorkEntrantStake])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
@@ -236,8 +257,12 @@ export const AnnounceWorkEntryModal = () => {
               label={t('modals.announceWorkEntry.stakingAccount.label')}
               tooltipText={t('modals.announceWorkEntry.stakingAccount.tooltip')}
               required
-              validation={stakingStatus === 'other' ? 'invalid' : undefined}
-              message={stakingStatus === 'other' ? 'This account is bound to the another member' : undefined}
+              validation={stakingStatus === 'other' || hasError('account', errors) ? 'invalid' : undefined}
+              message={
+                stakingStatus === 'other'
+                  ? 'This account is bound to the another member'
+                  : getErrorMessage('account', errors) ?? ''
+              }
             >
               <SelectAccount
                 onChange={setAccount}
