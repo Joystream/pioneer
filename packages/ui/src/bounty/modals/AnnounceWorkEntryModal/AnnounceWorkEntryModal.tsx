@@ -44,7 +44,7 @@ import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { StakingAccountSchema } from '@/memberships/model/validation'
+import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
 
@@ -76,17 +76,18 @@ export const AnnounceWorkEntryModal = () => {
 
   const valid = useMemo(() => new BN(amount).gten(minWorkEntrantStake) && !!account, [amount, account])
 
-  const { setContext, errors } = useSchema({ account, amount }, schema)
+  const { setContext, errors } = useSchema<IStakingAccountSchema>({ account, amount }, schema)
 
   useEffect(() => {
     if (balance) {
       setContext({
         balances: balance,
-        stakeLock: 'Bounty',
+        stakeLock: 'Bounties',
         requiredAmount: new BN(minWorkEntrantStake),
+        requiresBounding: stakingStatus === 'free',
       })
     }
-  }, [JSON.stringify(balance), minWorkEntrantStake])
+  }, [JSON.stringify(balance), minWorkEntrantStake, stakingStatus])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {

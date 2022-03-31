@@ -4,7 +4,8 @@ import { AnySchema } from 'yup'
 
 import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { areLocksConflicting } from '@/accounts/model/lockTypes'
-import { Balances } from '@/accounts/types'
+import { Balances, LockType } from '@/accounts/types'
+import { BN_ZERO } from '@/common/constants'
 
 export const AccountSchema = Yup.object()
 
@@ -20,16 +21,24 @@ export const ReferrerSchema = Yup.object().when('isReferred', (isReferred: boole
   return isReferred ? schema.required() : schema
 })
 
+export interface IStakingAccountSchema {
+  requiredAmount: BN
+  balances: Balances
+  stakeLock: LockType
+  requiresBounding: boolean
+}
+
 export const StakingAccountSchema = Yup.object()
   .test('balance', 'Balance on this account is insufficient', (value, context) => {
     if (!value) {
       return true
     }
 
-    const validationContext = context.options.context
+    const validationContext = context.options.context as IStakingAccountSchema
+    const extraAmount = validationContext?.requiresBounding ? new BN(200) : BN_ZERO
     return (
       !!validationContext?.balances &&
-      (validationContext.balances as Balances).transferable.gte(validationContext.requiredAmount)
+      (validationContext.balances as Balances).transferable.gte(validationContext.requiredAmount.add(extraAmount))
     )
   })
   .test('locks', 'This account has conflicting locks', (value, context) => {
@@ -37,7 +46,7 @@ export const StakingAccountSchema = Yup.object()
       return true
     }
 
-    const validationContext = context.options.context
+    const validationContext = context.options.context as IStakingAccountSchema
     return (
       !!validationContext?.balances &&
       !areLocksConflicting(validationContext.stakeLock, validationContext.balances.locks)
