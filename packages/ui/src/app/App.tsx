@@ -57,7 +57,7 @@ export const App = () => (
           <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
           <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
           <Route exact path="/404" component={NotFound} />
-          <Redirect exact from="/" to={ProfileRoutes.profile} />
+          <Redirect exact from="/" to={OverviewRoutes.overview} />
           <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
           <Redirect from="*" to="/404" />
         </Switch>
