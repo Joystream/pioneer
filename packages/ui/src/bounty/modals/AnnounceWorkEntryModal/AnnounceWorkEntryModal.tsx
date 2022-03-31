@@ -218,7 +218,7 @@ export const AnnounceWorkEntryModal = () => {
       />
     )
   }
-  console.log(hasError('entrantStake', errors))
+  
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title={t('modals.announceWorkEntry.title')} onClick={hideModal} />
