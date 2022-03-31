@@ -3,7 +3,6 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
@@ -21,7 +20,6 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
-import { hasError, getErrorMessage } from '@/common/components/forms/FieldError'
 import {
   Modal,
   ModalFooter,
@@ -38,7 +36,6 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -46,10 +43,6 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
-
-const baseSchema = Yup.object().shape({
-  entrantStake: Yup.number(),
-})
 
 export const AnnounceWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
@@ -69,24 +62,6 @@ export const AnnounceWorkEntryModal = () => {
   const balance = useBalance(account?.address)
   const stakingStatus = useStakingAccountStatus(account?.address, activeMember?.id)
   const [isValidNext, setValidNext] = useState<boolean>(false)
-
-  const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
-
-  const schema = useMemo(() => {
-    baseSchema.fields.entrantStake = baseSchema.fields.entrantStake.min(
-      minWorkEntrantStake.toNumber(),
-      'Stake must be at least ${min} JOY'
-    )
-
-    return baseSchema
-  }, [minWorkEntrantStake])
-
-  const { errors, isValid } = useSchema(
-    {
-      entrantStake: amount,
-    },
-    schema
-  )
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
@@ -280,16 +255,9 @@ export const AnnounceWorkEntryModal = () => {
                 required
                 inputWidth="s"
                 units="JOY"
-                message={hasError('entrantStake', errors) ? getErrorMessage('entrantStake', errors) : ' '}
-                validation={hasError('entrantStake', errors) ? 'invalid' : undefined}
+                disabled
               >
-                <InputNumber
-                  id="amount-input"
-                  value={amount}
-                  onChange={setStakingAmount}
-                  placeholder="0"
-                  isTokenValue
-                />
+                <InputNumber id="amount-input" value={amount} isTokenValue />
               </InputComponent>
             </TransactionAmount>
           </Row>
@@ -304,7 +272,7 @@ export const AnnounceWorkEntryModal = () => {
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValid || !isValidNext} onClick={nextStep}>
+        <ButtonPrimary size="medium" disabled={!isValidNext} onClick={nextStep}>
           {t('modals.announceWorkEntry.nextButton')}
         </ButtonPrimary>
       </ModalFooter>
