@@ -23,6 +23,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { formatTokenValue } from '@/common/model/formatters'
 
 const [bounty] = bounties
 
@@ -100,11 +101,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555
-    const expected = String(value)
-    const input = screen.getByLabelText('modals.announceWorkEntry.selectAmount')
-    fireEvent.input(input, { target: { value } })
-
+    const expected = formatTokenValue(bounty.entrantStake)
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
