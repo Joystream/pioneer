@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,8 +9,10 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
+import { isBountyEntryStatusWinner } from '@/bounty/types/Bounty'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -21,7 +24,7 @@ export const ClaimRewardModal = () => {
   const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
-    modalData: { bountyId, entryId, reward },
+    modalData: { bounty },
     hideModal,
   } = useModal<ClaimRewardModalCall>()
 
@@ -30,11 +33,22 @@ export const ClaimRewardModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bountyId, entryId)
+  const entry = useMemo(
+    () => activeMember && bounty.entries?.find((entry) => entry.worker.id === activeMember.id),
+    [activeMember?.id]
+  )
+
+  const reward = useMemo(() => {
+    if (entry) {
+      return isBountyEntryStatusWinner(entry.status) ? new BN(entry.status.reward) : BN_ZERO
     }
-  }, [JSON.stringify(activeMember), connectionState])
+  }, [entry?.id])
+
+  const transaction = useMemo(() => {
+    if (api && connectionState === 'connected' && activeMember && entry) {
+      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bounty.id, entry.id)
+    }
+  }, [activeMember?.id, entry?.id, connectionState])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 

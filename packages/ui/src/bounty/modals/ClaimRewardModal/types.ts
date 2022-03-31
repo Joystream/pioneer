@@ -1,12 +1,4 @@
-import BN from 'bn.js'
-
+import { Bounty } from '@/bounty/types/Bounty'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 
-export type ClaimRewardModalCall = ModalWithDataCall<
-  'ClaimReward',
-  {
-    bountyId: string
-    entryId: string
-    reward: BN
-  }
->
+export type ClaimRewardModalCall = ModalWithDataCall<'ClaimReward', { bounty: Bounty }>

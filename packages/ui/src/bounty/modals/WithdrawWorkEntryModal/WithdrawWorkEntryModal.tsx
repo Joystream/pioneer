@@ -37,7 +37,7 @@ export const WithdrawWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
-    modalData: { bounty, entry },
+    modalData: { bounty },
     hideModal,
   } = useModal<BountyWithdrawWorkEntryModalCall>()
 
@@ -46,11 +46,16 @@ export const WithdrawWorkEntryModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
+  const entry = useMemo(
+    () => activeMember && bounty.entries?.find((entry) => entry.worker.id === activeMember.id),
+    [activeMember?.id]
+  )
+
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
+    if (api && connectionState === 'connected' && activeMember && entry) {
       return api.tx.bounty.withdrawWorkEntry(activeMember.id, bounty.id, entry.id)
     }
-  }, [JSON.stringify(activeMember), connectionState])
+  }, [activeMember?.id, entry?.id, connectionState])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -134,9 +139,9 @@ export const WithdrawWorkEntryModal = () => {
             disabled
             label={t('modals.withdrawWorkEntry.memberInput.label')}
             tooltipText={t('modals.withdrawWorkEntry.memberInput.tooltipText')}
-            member={entry.worker}
+            member={entry?.worker}
           />
-          {entry.works?.map((work, index) => (
+          {entry?.works?.map((work, index) => (
             <Container key={work.id} label={t('modals.withdrawWorkEntry.workInput', { value: index + 1 })} disabled>
               <TextMedium value bold>
                 {work.title}
@@ -144,7 +149,7 @@ export const WithdrawWorkEntryModal = () => {
             </Container>
           ))}
           <Container disabled label={t('modals.withdrawWorkEntry.stakeInput')} inputSize="l">
-            <TokenValue value={entry.stake} size="s" />
+            <TokenValue value={entry?.stake} size="s" />
           </Container>
         </ScrolledModalContainer>
       </ScrolledModalBody>
