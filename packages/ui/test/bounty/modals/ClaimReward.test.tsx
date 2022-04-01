@@ -1,6 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -13,6 +12,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
 import { getButton } from '../../_helpers/getButton'
+import { baseBounty, baseEntry } from '../../_mocks/bounty'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -29,10 +29,9 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 }))
 
 describe('UI: ClaimRewardModal', () => {
+  const reward = 100_000
   const modalData: ModalCallData<ClaimRewardModalCall> = {
-    bountyId: '1',
-    entryId: '0',
-    reward: new BN(100000),
+    bounty: { ...baseBounty, entries: [{ ...baseEntry, status: { reward } }] },
   }
 
   const api = stubApi()
@@ -74,9 +73,7 @@ describe('UI: ClaimRewardModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(
-      screen.queryByText(`modals.withdraw.reward.description ${formatTokenValue(modalData.reward)}`)
-    ).not.toBeNull()
+    expect(screen.queryByText(`modals.withdraw.reward.description ${formatTokenValue(reward)}`)).not.toBeNull()
     expect(await getButton('modals.withdraw.reward.button')).toBeDefined()
   })
 
