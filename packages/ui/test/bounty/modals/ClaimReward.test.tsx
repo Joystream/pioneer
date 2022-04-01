@@ -73,7 +73,8 @@ describe('UI: ClaimRewardModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(screen.queryByText(`modals.withdraw.reward.description ${formatTokenValue(reward)}`)).not.toBeNull()
+    const amount = reward + baseEntry.stake.toNumber()
+    expect(await screen.findByText(`modals.withdraw.reward.description ${formatTokenValue(amount)}`)).toBeDefined()
     expect(await getButton('modals.withdraw.reward.button')).toBeDefined()
   })
 
