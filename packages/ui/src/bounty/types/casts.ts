@@ -24,7 +24,6 @@ import {
   BountyEntryStatus,
   BountyContribution,
   WorkInfo,
-  isBountyEntryStatusWinner,
   BountyEntryStatusWinner,
 } from './Bounty'
 
@@ -80,9 +79,7 @@ const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFi
     rejected: entry.status.__typename === 'BountyEntryStatusRejected',
     withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
     hasCashedOut: !!entry.withdrawnInEvent,
-    reward: isBountyEntryStatusWinner(asBountyEntryStatus(entry.status))
-      ? (asBountyEntryStatus(entry.status) as BountyEntryStatusWinner).reward
-      : 0,
+    reward: (asBountyEntryStatus(entry.status) as BountyEntryStatusWinner).reward,
   })
 }
 
@@ -98,9 +95,7 @@ export const asContributor = ({
 
 const asBountyEntryStatus = (field: BountyEntryWithDetailsFieldsFragment['status']): BountyEntryStatus => {
   if (field.__typename === 'BountyEntryStatusWinner') {
-    return {
-      reward: field.reward,
-    }
+    return { reward: new BN(field.reward) }
   }
 
   return field.__typename

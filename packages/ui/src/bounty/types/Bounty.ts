@@ -30,12 +30,8 @@ export type BountyEntryStatus =
   | 'BountyEntryStatusRejected'
   | 'BountyEntryStatusCashedOut'
 
-export const isBountyEntryStatusWinner = (status: BountyEntryStatus): status is BountyEntryStatusWinner => {
-  return (status as BountyEntryStatusWinner)?.reward !== undefined
-}
-
 export type BountyEntryStatusWinner = {
-  reward: number
+  reward: BN
 }
 
 export interface Contributor {
@@ -103,7 +99,7 @@ export interface WorkEntry {
   passed: boolean
   rejected: boolean
   withdrawn: boolean
-  reward?: number
+  reward?: BN
   hasCashedOut: boolean
 }
 
