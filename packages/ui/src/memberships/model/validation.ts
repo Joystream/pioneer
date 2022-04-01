@@ -62,3 +62,44 @@ export const NewAddressSchema = (which: string) =>
       const keyring = testContext?.options?.context?.keyring
       return value.address ? isValidAddress(value.address, keyring) : true
     })
+
+Yup.addMethod(Yup.number, 'maxContext', function test(msg: string, contextPath: string) {
+  // @ts-expect-error: yup
+  return this.test({
+    name: 'maxContext',
+    exclusive: false,
+    test(value: number) {
+      if (!value) {
+        return true
+      }
+      const validationValue = this.options.context?.[contextPath]
+
+      if (!(validationValue?.gten(value) || value <= validationValue)) {
+        return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
+      }
+
+      return true
+    },
+  })
+})
+
+Yup.addMethod(Yup.number, 'minContext', function test(msg: string, contextPath: string) {
+  // @ts-expect-error: yup
+  return this.test({
+    name: 'minContext',
+    exclusive: false,
+    test(value: number) {
+      if (!value) {
+        return true
+      }
+      const validationValue = this.options.context?.[contextPath]
+      if (!validationValue?.lten(value) || !value >= validationValue) {
+        return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
+      }
+
+      return true
+    },
+  })
+})
+
+export default Yup

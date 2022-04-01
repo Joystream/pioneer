@@ -15,13 +15,14 @@ import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/mac
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
 
-interface Conditions {
+export interface Conditions {
   isThreadCategoryLoading?: boolean
   minCherryLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxCherryLimit?: BN
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxWhitelistSize?: u32 & AugmentedConst<'rxjs'>
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
+  isLimited: boolean
 }
 
 export const isUrlValid = (value: string) => {

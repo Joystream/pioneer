@@ -7,7 +7,7 @@ export const useSchema = <T>(fields: Record<string, any>, schema: AnyObjectSchem
 
   const isValid = useMemo(() => {
     try {
-      if(path) {
+      if (path) {
         schema.validateSyncAt(path, fields, { abortEarly: false, stripUnknown: true, context: context })
       } else {
         schema.validateSync(fields, { abortEarly: false, stripUnknown: true, context: context })
@@ -15,7 +15,7 @@ export const useSchema = <T>(fields: Record<string, any>, schema: AnyObjectSchem
       setErrors([])
       return true
     } catch (error) {
-      setErrors((error as any).inner)
+      setErrors((error as any).inner ?? [])
       return false
     }
   }, [JSON.stringify(fields), JSON.stringify(context), schema, path])

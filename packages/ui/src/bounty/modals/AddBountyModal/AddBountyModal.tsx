@@ -1,5 +1,6 @@
 import { BountyMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -14,6 +15,7 @@ import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/Ju
 import { SuccessModal } from '@/bounty/modals/AddBountyModal/components/SuccessModal'
 import { WorkingDetailsStep } from '@/bounty/modals/AddBountyModal/components/WorkingDetailsStep'
 import {
+  Conditions,
   createBountyMetadataFactory,
   createBountyParametersFactory,
   isNextStepValid,
@@ -22,21 +24,67 @@ import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { getErrorMessage } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import Yup, { MemberSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
+
+const baseSchema = Yup.object().shape({
+  [AddBountyStates.generalParameters]: Yup.object().shape({
+    title: Yup.string().max(70, 'Max length is 70 characters').required(),
+    coverPhotoLink: Yup.string().url('Invalid URL').required(),
+    creator: MemberSchema.required(),
+    description: Yup.string().required(),
+  }),
+  [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
+    cherry: Yup.number()
+      // @ts-expect-error: custom yup validator method
+      .minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit')
+      .maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit')
+      .required(),
+    fundingMaximalRange: Yup.number().required(),
+    fundingMinimalRange: Yup.number()
+      .lessThan(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal')
+      // @ts-expect-error: custom yup validator method
+      .minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'),
+  }),
+  [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
+    // @ts-expect-error: custom yup validator method
+    workingPeriodStake: Yup.number().minContext(
+      'Entrant stake must be greater than minimum of ${min} JOY',
+      'minWorkEntrantStake'
+    ),
+    workingPeriodType: Yup.string(),
+    workingPeriodWhitelist: Yup.array().test((value, context) => {
+      if (!value) {
+        return true
+      }
+
+      const validationContext = context.options.context as Conditions
+      if (context.parent.workingPeriodType === 'closed') {
+        return value.length > 0 && validationContext.maxWhitelistSize.gten(value.length)
+      }
+
+      return true
+    }),
+  }),
+  [AddBountyStates.judgingPeriodDetails]: Yup.object().shape({}),
+})
 
 export const AddBountyModal = () => {
   const { t } = useTranslation()
@@ -51,9 +99,31 @@ export const AddBountyModal = () => {
   const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
 
+  const { errors, setContext } = useSchema<Conditions>(
+    {
+      generalParameters: { ...state.context },
+      [AddBountyStates.fundingPeriodDetails]: { ...state.context },
+      [AddBountyStates.workingPeriodDetails]: { ...state.context },
+    },
+    baseSchema,
+    typeof state.value === 'string' ? state.value : undefined
+  )
+  console.log(errors, ' erry', state.context.workingPeriodWhitelist)
   if (!service.initialized) {
     service.start()
   }
+
+  useEffect(() => {
+    setContext({
+      isThreadCategoryLoading,
+      minCherryLimit: bountyApi?.minCherryLimit,
+      maxCherryLimit: balance?.transferable,
+      minFundingLimit: bountyApi?.minFundingLimit,
+      maxWhitelistSize: bountyApi?.closedContractSizeLimit,
+      minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
+      isLimited: state.context.fundingPeriodType === 'limited',
+    })
+  }, [bountyApi, JSON.stringify(balance?.transferable), state.context.fundingPeriodType])
 
   useEffect(() => {
     if (state.matches(AddBountyStates.requirementsVerification)) {
@@ -78,6 +148,7 @@ export const AddBountyModal = () => {
         minFundingLimit: bountyApi?.minFundingLimit,
         maxWhitelistSize: bountyApi?.closedContractSizeLimit,
         minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
+        isLimited: state.context.fundingPeriodType === 'limited',
       })
     )
   }, [state, isThreadCategoryLoading, api])

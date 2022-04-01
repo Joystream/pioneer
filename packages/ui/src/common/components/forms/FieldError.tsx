@@ -4,6 +4,7 @@ export const getError = <T extends any>(field: keyof T, errors: ValidationError[
   errors.find((error) => error.path === field)
 
 export const getErrorMessage = <T extends any>(field: keyof T, errors: ValidationError[]) => {
+  console.log(errors, ' i co kurwa')
   const error = getError(field, errors)
   return error?.message
 }
