@@ -16,7 +16,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubBountyConstants,
@@ -145,18 +145,20 @@ describe('UI: ContributeFundsModal', () => {
   }
 
   const Modal = () => (
-    <ModalContext.Provider value={useModal}>
-      <MockKeyringProvider>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider value={useMembership}>
-            <AccountsContext.Provider value={useAccounts}>
-              <BalancesContext.Provider value={useBalances}>
-                <ContributeFundsModal />
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MockKeyringProvider>
-    </ModalContext.Provider>
+    <MockApolloProvider>
+      <ModalContext.Provider value={useModal}>
+        <MockKeyringProvider>
+          <ApiContext.Provider value={api}>
+            <MembershipContext.Provider value={useMembership}>
+              <AccountsContext.Provider value={useAccounts}>
+                <BalancesContext.Provider value={useBalances}>
+                  <ContributeFundsModal />
+                </BalancesContext.Provider>
+              </AccountsContext.Provider>
+            </MembershipContext.Provider>
+          </ApiContext.Provider>
+        </MockKeyringProvider>
+      </ModalContext.Provider>
+    </MockApolloProvider>
   )
 })

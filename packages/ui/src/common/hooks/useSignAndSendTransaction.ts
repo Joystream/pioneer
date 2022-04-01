@@ -37,12 +37,12 @@ export const useSignAndSendTransaction = ({ transaction, signer, service, skipQu
   useEffect(() => {
     if (skipQueryNode && isProcessing) {
       send('SUCCESS')
-
-      apolloClient.refetchQueries({ include: 'active' })
     }
 
-    if (!skipQueryNode && queryNodeStatus === 'confirmed') {
+    if (!skipQueryNode && queryNodeStatus === 'confirmed' && isProcessing) {
       send('SUCCESS')
+
+      apolloClient.refetchQueries({ include: 'active' })
     }
   }, [isProcessing, skipQueryNode, queryNodeStatus])
 
