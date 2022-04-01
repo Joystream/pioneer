@@ -25,14 +25,10 @@ export type EntrantResult = 'winner' | 'loser' | 'slashed'
 export type BountyEntryStatus =
   | 'BountyEntryStatusWorking'
   | 'BountyEntryStatusWithdrawn'
-  | BountyEntryStatusWinner
+  | 'BountyEntryStatusWinner'
   | 'BountyEntryStatusPassed'
   | 'BountyEntryStatusRejected'
   | 'BountyEntryStatusCashedOut'
-
-export type BountyEntryStatusWinner = {
-  reward: BN
-}
 
 export interface Contributor {
   hasWithdrawn: boolean
