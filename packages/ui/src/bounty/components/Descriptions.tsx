@@ -40,6 +40,7 @@ const ImageContainer = styled.div`
 `
 
 const DescriptionImage = styled.img`
+  max-width: 100%;
   object-fit: contain;
 `
 

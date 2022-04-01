@@ -7,7 +7,7 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { List } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextHuge, TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BN_ZERO, Colors } from '@/common/constants'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 interface Props {
@@ -27,7 +27,7 @@ export const WinnersTab = ({ bounty }: Props) => {
             <BountyWinnerListItem
               entrant={winner.worker}
               inBlock={bounty.judgement?.inBlock ?? randomBlock()}
-              reward={winner.reward ?? 0}
+              reward={winner.reward ?? BN_ZERO}
             />
           ))}
         </List>

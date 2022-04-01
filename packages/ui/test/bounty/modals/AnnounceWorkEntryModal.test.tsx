@@ -6,6 +6,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { BN_ZERO } from '@/common/constants'
+import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -100,11 +101,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555
-    const expected = String(value)
-    const input = screen.getByLabelText('modals.announceWorkEntry.selectAmount')
-    fireEvent.input(input, { target: { value } })
-
+    const expected = formatTokenValue(bounty.entrantStake)
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)

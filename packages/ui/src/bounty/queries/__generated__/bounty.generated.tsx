@@ -143,7 +143,6 @@ export type BountyFieldsFragment = {
       }>
     }
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -191,7 +190,6 @@ export type BountyEntryFieldsFragment = {
     }>
   }
   status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -236,7 +234,6 @@ export type BountyEntryWithDetailsFieldsFragment = {
     }>
   }
   status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -290,7 +287,6 @@ export type BountyWorkWithDetailsFieldsFragment = {
       }>
     }
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -485,7 +481,6 @@ export type GetBountiesQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -663,7 +658,6 @@ export type GetBountyQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -729,7 +723,6 @@ export type GetBountyWorksQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -758,7 +751,6 @@ export type GetUserBountyStatisticsQuery = {
   bountyEntries: Array<{
     __typename: 'BountyEntry'
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
