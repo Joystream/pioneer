@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
 import { lowerFirstLetter } from '@/common/helpers'
-import { asBlock } from '@/common/types'
+import { asBlock, maybeAsBlock } from '@/common/types'
 import { asMember } from '@/memberships/types'
 
 import {
@@ -21,7 +21,6 @@ import {
   FundingType,
   Contributor,
   BountyWork,
-  BountyEntryStatus,
   BountyContribution,
   WorkInfo,
 } from './Bounty'
@@ -68,15 +67,17 @@ const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFi
   return (entry) => ({
     id: entry.id,
     bountyId,
+    stake,
     worker: asMember(entry.worker),
     hasSubmitted: entry.workSubmitted,
-    status: asBountyEntryStatus(entry.status),
+    status: entry.status.__typename,
     winner: entry.status.__typename === 'BountyEntryStatusWinner',
     works: entry.works?.map(asWorkInfo),
     passed: entry.status.__typename === 'BountyEntryStatusPassed',
     rejected: entry.status.__typename === 'BountyEntryStatusRejected',
     withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
-    stake,
+    hasCashedOut: !!entry.withdrawnInEvent,
+    reward: 'reward' in entry.status ? new BN(entry.status.reward) : undefined,
   })
 }
 
@@ -90,22 +91,12 @@ export const asContributor = ({
   actor: contributor ? asMember(contributor) : undefined,
 })
 
-const asBountyEntryStatus = (field: BountyEntryWithDetailsFieldsFragment['status']): BountyEntryStatus => {
-  if (field.__typename === 'BountyEntryStatusWinner') {
-    return {
-      reward: field.reward,
-    }
-  }
-
-  return field.__typename
-}
-
 export const asBountyWork = (fields: BountyWorkWithDetailsFieldsFragment): BountyWork => ({
   id: fields.id,
   title: fields.title ?? '',
   description: fields.description ?? '',
   worker: asMember(fields.entry.worker),
-  status: asBountyEntryStatus(fields.entry.status),
+  status: fields.entry.status.__typename,
   inBlock: asBlock(fields),
 })
 
@@ -131,6 +122,10 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   entries: fields.entries?.map(asEntry(fields.id, new BN(fields.entrantStake))),
   contributors: fields.contributions?.map(asContributor) ?? [],
   inBlock: fields.createdInEvent.inBlock,
+  judgement: {
+    inBlock: maybeAsBlock(fields.judgment?.inBlock, fields.judgment?.createdAt, fields.judgment?.network),
+    rationale: fields.judgment?.rationale,
+  },
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({

@@ -143,14 +143,21 @@ export type BountyFieldsFragment = {
       }>
     }
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
+    withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }> | null
   createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+  judgment?: {
+    __typename: 'OracleJudgmentSubmittedEvent'
+    inBlock: number
+    rationale?: string | null
+    createdAt: any
+    network: Types.Network
+  } | null
 }
 
 export type BountyEntryFieldsFragment = {
@@ -183,12 +190,12 @@ export type BountyEntryFieldsFragment = {
     }>
   }
   status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
+  withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
 }
 
 export type BountyEntryWithDetailsFieldsFragment = {
@@ -227,12 +234,12 @@ export type BountyEntryWithDetailsFieldsFragment = {
     }>
   }
   status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
+  withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
 }
 
 export type BountyWorkFieldsFragment = {
@@ -280,12 +287,12 @@ export type BountyWorkWithDetailsFieldsFragment = {
       }>
     }
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
+    withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }
 }
 
@@ -474,14 +481,21 @@ export type GetBountiesQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
+      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+    judgment?: {
+      __typename: 'OracleJudgmentSubmittedEvent'
+      inBlock: number
+      rationale?: string | null
+      createdAt: any
+      network: Types.Network
+    } | null
   }>
 }
 
@@ -644,14 +658,21 @@ export type GetBountyQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
+      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+    judgment?: {
+      __typename: 'OracleJudgmentSubmittedEvent'
+      inBlock: number
+      rationale?: string | null
+      createdAt: any
+      network: Types.Network
+    } | null
   } | null
 }
 
@@ -702,12 +723,12 @@ export type GetBountyWorksQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
+      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }
   }>
 }
@@ -730,7 +751,6 @@ export type GetUserBountyStatisticsQuery = {
   bountyEntries: Array<{
     __typename: 'BountyEntry'
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -818,6 +838,9 @@ export const BountyEntryFieldsFragmentDoc = gql`
         reward
       }
     }
+    withdrawnInEvent {
+      inBlock
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -882,6 +905,12 @@ export const BountyFieldsFragmentDoc = gql`
     }
     createdInEvent {
       inBlock
+    }
+    judgment {
+      inBlock
+      rationale
+      createdAt
+      network
     }
   }
   ${MemberFieldsFragmentDoc}

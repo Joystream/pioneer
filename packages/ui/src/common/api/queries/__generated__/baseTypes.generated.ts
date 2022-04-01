@@ -1822,6 +1822,7 @@ export type Bounty = BaseGraphQlObject & {
   vetoedEvent?: Maybe<BountyVetoedEvent>
   /** Number of blocks from end of funding period until people can no longer submit bounty submissions */
   workPeriod: Scalars['Int']
+  worksubmittedeventbounty?: Maybe<Array<WorkSubmittedEvent>>
 }
 
 export type BountyCanceledEvent = BaseGraphQlObject &
@@ -2506,17 +2507,11 @@ export enum BountyEntryOrderByInput {
 }
 
 export type BountyEntryStatus =
-  | BountyEntryStatusCashedOut
   | BountyEntryStatusPassed
   | BountyEntryStatusRejected
   | BountyEntryStatusWinner
   | BountyEntryStatusWithdrawn
   | BountyEntryStatusWorking
-
-export type BountyEntryStatusCashedOut = {
-  __typename: 'BountyEntryStatusCashedOut'
-  reward?: Maybe<Scalars['Float']>
-}
 
 export type BountyEntryStatusPassed = {
   __typename: 'BountyEntryStatusPassed'
@@ -3409,6 +3404,9 @@ export type BountyWhereInput = {
   workPeriod_in?: InputMaybe<Array<Scalars['Int']>>
   workPeriod_lt?: InputMaybe<Scalars['Int']>
   workPeriod_lte?: InputMaybe<Scalars['Int']>
+  worksubmittedeventbounty_every?: InputMaybe<WorkSubmittedEventWhereInput>
+  worksubmittedeventbounty_none?: InputMaybe<WorkSubmittedEventWhereInput>
+  worksubmittedeventbounty_some?: InputMaybe<WorkSubmittedEventWhereInput>
 }
 
 export type BountyWhereUniqueInput = {
@@ -28101,6 +28099,8 @@ export type WorkEntryWithdrawnEventWhereUniqueInput = {
 export type WorkSubmittedEvent = BaseGraphQlObject &
   Event & {
     __typename: 'WorkSubmittedEvent'
+    bounty: Bounty
+    bountyId: Scalars['String']
     createdAt: Scalars['DateTime']
     createdById: Scalars['String']
     deletedAt?: Maybe<Scalars['DateTime']>
@@ -28135,6 +28135,7 @@ export type WorkSubmittedEventConnection = {
 }
 
 export type WorkSubmittedEventCreateInput = {
+  bounty: Scalars['ID']
   description?: InputMaybe<Scalars['String']>
   entry: Scalars['ID']
   inBlock: Scalars['Float']
@@ -28151,6 +28152,8 @@ export type WorkSubmittedEventEdge = {
 }
 
 export enum WorkSubmittedEventOrderByInput {
+  BountyAsc = 'bounty_ASC',
+  BountyDesc = 'bounty_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
@@ -28174,6 +28177,7 @@ export enum WorkSubmittedEventOrderByInput {
 }
 
 export type WorkSubmittedEventUpdateInput = {
+  bounty?: InputMaybe<Scalars['ID']>
   description?: InputMaybe<Scalars['String']>
   entry?: InputMaybe<Scalars['ID']>
   inBlock?: InputMaybe<Scalars['Float']>
@@ -28186,6 +28190,7 @@ export type WorkSubmittedEventUpdateInput = {
 export type WorkSubmittedEventWhereInput = {
   AND?: InputMaybe<Array<WorkSubmittedEventWhereInput>>
   OR?: InputMaybe<Array<WorkSubmittedEventWhereInput>>
+  bounty?: InputMaybe<BountyWhereInput>
   createdAt_eq?: InputMaybe<Scalars['DateTime']>
   createdAt_gt?: InputMaybe<Scalars['DateTime']>
   createdAt_gte?: InputMaybe<Scalars['DateTime']>

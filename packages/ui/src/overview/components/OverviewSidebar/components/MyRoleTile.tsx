@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -30,7 +31,7 @@ const iconMapper = (group: string) => {
 
 interface Props extends Omit<OverviewSidebarRole, 'reward'> {
   pendingProposals?: number
-  reward?: number
+  reward?: BN
 }
 
 export const MyRoleTile = ({ role, reward, isLead, pendingProposals }: Props) => {

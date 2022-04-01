@@ -1,55 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 
 import { BountyListItem } from '@/bounty/components/BountyListItem/BountyListItem'
 import { Bounty, BountyStage } from '@/bounty/types/Bounty'
 import { seedMembers } from '@/mocks/data'
 
-import { getMember } from '../../_mocks/members'
+import { baseBounty, baseEntry } from '../../_mocks/bounty'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 describe('UI: BountyListItem', () => {
   const server = setupMockServer()
-  const props: Omit<Bounty, 'stage'> = {
-    id: '1',
-    createdAt: '2021-12-31',
-    isTerminated: false,
-    description: 'Description',
-    imageUri: '',
-    inBlock: 12,
-    title: 'Title',
-    cherry: new BN(1010),
-    entrantStake: new BN(10000),
-    creator: getMember('alice'),
-    oracle: getMember('bob'),
-    fundingType: {
-      minAmount: new BN(10000),
-      maxAmount: new BN(12000),
-      maxPeriod: 2000,
-    },
-    workPeriod: 1000,
-    judgingPeriod: 1000,
-    totalFunding: new BN(2000),
-    contributors: [],
-    entrantWhitelist: undefined,
-    entries: [
-      {
-        worker: getMember('alice'),
-        status: 'BountyEntryStatusWorking',
-        winner: true,
-        hasSubmitted: true,
-        passed: false,
-        id: '1',
-        bountyId: '0',
-        stake: new BN(10),
-        rejected: false,
-        withdrawn: false,
-      },
-    ],
-    discussionThreadId: '1',
-  }
+  const props: Bounty = { ...baseBounty, entries: [baseEntry] }
 
   beforeAll(() => {
     seedMembers(server.server, 4)

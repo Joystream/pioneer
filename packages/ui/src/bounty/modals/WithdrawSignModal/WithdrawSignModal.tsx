@@ -77,7 +77,7 @@ export const WithdrawSignModal = ({
             tooltipText={bountyFailedInfo ? t('modals.withdraw.extraTooltipInformation') : undefined}
           />
           <TransactionInfo
-            title={t('modals.common.transactionFee.title')}
+            title={t('modals.common.transactionFee.label')}
             value={paymentInfo?.partialFee.toBn()}
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />

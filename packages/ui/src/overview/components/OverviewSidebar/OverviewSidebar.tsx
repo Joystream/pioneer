@@ -17,7 +17,7 @@ import { useProposals } from '@/proposals/hooks/useProposals'
 export const OverviewSidebar = () => {
   const { t } = useTranslation('overview')
   const { active } = useMyMemberships()
-  const { informations } = useOverviewSidebarInformation(active?.id || '3')
+  const { informations } = useOverviewSidebarInformation(active?.id)
   const { proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
 
   return (

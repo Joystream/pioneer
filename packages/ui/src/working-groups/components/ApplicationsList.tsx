@@ -77,7 +77,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig value>{isHired ? 'Yes' : 'No'}</TextInlineBig>
-          <Subscription>Hired</Subscription>
+          <Subscription>{!isHired ? 'Pending' : 'Hired'}</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
       <ButtonGhost square size="medium" onClick={showApplicationModal}>

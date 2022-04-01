@@ -7,8 +7,10 @@ import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoarding
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
 import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
+import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
+import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
@@ -55,7 +57,7 @@ export const App = () => (
           <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
           <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
           <Route exact path="/404" component={NotFound} />
-          <Redirect exact from="/" to={ProfileRoutes.profile} />
+          <Redirect exact from="/" to={OverviewRoutes.overview} />
           <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
           <Redirect from="*" to="/404" />
         </Switch>
@@ -68,4 +70,11 @@ export const App = () => (
       <ExtensionWarning />
     </NotificationsHolder>
   </Providers>
+)
+
+export const Mobile = () => (
+  <>
+    <GlobalStyle />
+    <MobileView />
+  </>
 )

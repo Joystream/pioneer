@@ -855,6 +855,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
     type: Types.WorkingGroupOpeningType
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       shortDescription?: string | null
       description?: string | null
     }
@@ -901,6 +902,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
       type: Types.WorkingGroupOpeningType
       metadata: {
         __typename: 'WorkingGroupOpeningMetadata'
+        title?: string | null
         shortDescription?: string | null
         description?: string | null
       }
@@ -971,6 +973,11 @@ export type WorkingGroupApplicationFieldsFragment = {
   runtimeId: number
   stakingAccount: string
   stake: any
+  answers: Array<{
+    __typename: 'ApplicationFormQuestionAnswer'
+    answer: string
+    question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+  }>
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
@@ -1025,6 +1032,11 @@ export type GetWorkingGroupApplicationsQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
@@ -1103,6 +1115,11 @@ export type GetWorkingGroupApplicationQuery = {
     runtimeId: number
     stakingAccount: string
     stake: any
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
@@ -1513,6 +1530,7 @@ export const WorkingGroupApplicationMentionFieldsFragmentDoc = gql`
     opening {
       type
       metadata {
+        title
         shortDescription
         description
       }
@@ -1524,6 +1542,12 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
     runtimeId
+    answers {
+      answer
+      question {
+        question
+      }
+    }
     opening {
       id
       group {

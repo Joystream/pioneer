@@ -1009,7 +1009,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.FillWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
-          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication('forumWorkingGroup-1337')
+          await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication(
+            `Member ID: ${APPLICATION_DATA.applicantId}`
+          )
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({

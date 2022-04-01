@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import * as faker from 'faker'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
@@ -71,7 +72,7 @@ describe('UI: OverviewSidebar', () => {
 
   it('Renders roles', () => {
     const role = 'Forum'
-    const reward = 1000
+    const reward = new BN(1000)
     useOverviewSidebarInformationMock.informations.roles = [
       {
         reward,

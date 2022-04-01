@@ -27,13 +27,11 @@ query GetSidebarInfo($memberId: ID!) {
     }
   }
 
-  candidacyNoteMetadata(
-    where: {
-      candidacynoteseteventnoteMetadata_every: { candidate: { status_eq: ACTIVE, member: { id_eq: $memberId } } }
+  candidates(where: { status_eq: ACTIVE, member: { id_eq: $memberId } }) {
+    noteMetadata {
+      id
+      header
     }
-  ) {
-    id
-    header
   }
 
   proposals(where: { creator: { id_eq: $memberId } }) {

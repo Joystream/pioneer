@@ -20,7 +20,7 @@ export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props
 
   if (!isFundingLimited(fundingType)) {
     const { target } = fundingType
-    const currentProgress = totalFunding.div(fundingType.target).toNumber()
+    const currentProgress = totalFunding.muln(100).div(target).toNumber() / 100
     const color = currentProgress < 1 ? Colors.Orange[300] : Colors.Blue[500]
     return (
       <ProgressBarWrapper>
