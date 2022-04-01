@@ -36,7 +36,6 @@ export const CandidacyNoteTransaction = ({
     transaction,
     signer,
     service,
-    skipQueryNode: true,
   })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)

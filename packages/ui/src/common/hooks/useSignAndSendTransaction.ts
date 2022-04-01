@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { Hash } from '@polkadot/types/interfaces/types'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,6 +24,7 @@ interface Params {
 export const useSignAndSendTransaction = ({ transaction, signer, service, skipQueryNode = false }: Params) => {
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
   const queryNodeStatus = useQueryNodeTransactionStatus(blockHash, skipQueryNode)
+  const apolloClient = useApolloClient()
   const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
     transaction,
     signer,
@@ -35,6 +37,8 @@ export const useSignAndSendTransaction = ({ transaction, signer, service, skipQu
   useEffect(() => {
     if (skipQueryNode && isProcessing) {
       send('SUCCESS')
+
+      apolloClient.refetchQueries({ include: 'active' })
     }
 
     if (!skipQueryNode && queryNodeStatus === 'confirmed') {
