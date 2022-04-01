@@ -33,7 +33,7 @@ export const baseBounty: Bounty = {
 
 export const baseEntry: WorkEntry = {
   worker: getMember('alice'),
-  status: 'BountyEntryStatusWorking',
+  status: 'BountyEntryStatusCashedOut',
   winner: true,
   hasSubmitted: true,
   passed: false,
@@ -42,5 +42,5 @@ export const baseEntry: WorkEntry = {
   stake: new BN(10),
   rejected: false,
   withdrawn: false,
-  hasCashedOut: false,
+  hasCashedOut: true,
 }

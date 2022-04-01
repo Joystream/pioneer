@@ -5,7 +5,7 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
-import { Bounty, BountyEntryStatusWinner, WorkEntry } from '@/bounty/types/Bounty'
+import { Bounty, WorkEntry } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -229,10 +229,9 @@ describe('UI: BountyPreviewHeader', () => {
         {
           ...defaultEntry,
           hasSubmitted: true,
-          status: {
-            reward: new BN(1000),
-          } as BountyEntryStatusWinner,
+          status: 'BountyEntryStatusWinner',
           winner: true,
+          reward: new BN(1000),
         },
       ]
 
