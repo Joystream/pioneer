@@ -75,8 +75,7 @@ export const AnnounceWorkEntryModal = () => {
 
   useEffect(() => {
     if (balance) {
-      const requiredAmount =
-        stakingStatus === 'free' ? boundingLock.add(amount) : amount
+      const requiredAmount = stakingStatus === 'free' ? boundingLock.add(amount) : amount
       setContext({
         balances: balance,
         stakeLock: 'Bounties',
