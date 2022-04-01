@@ -219,6 +219,7 @@ export const stubBountyConstants = (api: UseApi) => {
     minWorkEntrantStake: createType('BalanceOf', 10),
     bountyLockId: createType('LockIdentifier', 1),
   })
+  set(api, 'api.consts.members.candidateStake', new BN(200))
 }
 
 export const stubCouncilAndReferendum = (

@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { AnyObjectSchema, ValidationError } from 'yup'
 
-export const useSchema = (fields: Record<string, any>, schema: AnyObjectSchema) => {
+export const useSchema = <T>(fields: Record<string, any>, schema: AnyObjectSchema) => {
   const [errors, setErrors] = useState<ValidationError[]>([])
-  const [context, setContext] = useState<unknown>()
+  const [context, setContext] = useState<T>()
 
   const isValid = useMemo(() => {
     try {

@@ -15,7 +15,7 @@ import bounties from '@/mocks/data/raw/bounties.json'
 
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction } from '../../_mocks/transactions'
+import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@xstate/react', () => ({
   ...jest.requireActual('@xstate/react'),
@@ -60,6 +60,7 @@ describe('UI: AuthorizeTransactionModal', () => {
   }
 
   beforeEach(() => {
+    stubDefaultBalances(api)
     renderModal()
   })
 
