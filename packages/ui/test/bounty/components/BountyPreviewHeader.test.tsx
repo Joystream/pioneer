@@ -230,7 +230,7 @@ describe('UI: BountyPreviewHeader', () => {
           ...defaultEntry,
           hasSubmitted: true,
           status: {
-            reward: 1000,
+            reward: new BN(1000),
           } as BountyEntryStatusWinner,
           winner: true,
         },
