@@ -35,7 +35,7 @@ import {
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { Fonts } from '@/common/constants'
+import { BN_ZERO, Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
@@ -62,6 +62,7 @@ export const AnnounceWorkEntryModal = () => {
   } = useModal<BountyAnnounceWorkEntryModalCall>()
   const { api, isConnected } = useApi()
   const minWorkEntrantStake = api?.consts.bounty.minWorkEntrantStake.toNumber() ?? 0
+  const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
@@ -80,11 +81,13 @@ export const AnnounceWorkEntryModal = () => {
 
   useEffect(() => {
     if (balance) {
+      const requiredAmount =
+        stakingStatus === 'free' ? boundingLock.addn(minWorkEntrantStake) : new BN(minWorkEntrantStake)
       setContext({
         balances: balance,
         stakeLock: 'Bounties',
-        requiredAmount: new BN(minWorkEntrantStake),
-        requiresBounding: stakingStatus === 'free',
+        requiredAmount,
+        stakingStatus: stakingStatus,
       })
     }
   }, [JSON.stringify(balance), minWorkEntrantStake, stakingStatus])

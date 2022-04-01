@@ -2,10 +2,10 @@ import BN from 'bn.js'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 
+import { StakingStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { areLocksConflicting } from '@/accounts/model/lockTypes'
 import { Balances, LockType } from '@/accounts/types'
-import { BN_ZERO } from '@/common/constants'
 
 export const AccountSchema = Yup.object()
 
@@ -25,7 +25,7 @@ export interface IStakingAccountSchema {
   requiredAmount: BN
   balances: Balances
   stakeLock: LockType
-  requiresBounding: boolean
+  stakingStatus: StakingStatus
 }
 
 export const StakingAccountSchema = Yup.object()
@@ -35,10 +35,9 @@ export const StakingAccountSchema = Yup.object()
     }
 
     const validationContext = context.options.context as IStakingAccountSchema
-    const extraAmount = validationContext?.requiresBounding ? new BN(200) : BN_ZERO
     return (
       !!validationContext?.balances &&
-      (validationContext.balances as Balances).transferable.gte(validationContext.requiredAmount.add(extraAmount))
+      (validationContext.balances as Balances).transferable.gte(validationContext.requiredAmount)
     )
   })
   .test('locks', 'This account has conflicting locks', (value, context) => {
