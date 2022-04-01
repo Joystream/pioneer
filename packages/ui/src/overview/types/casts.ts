@@ -1,4 +1,7 @@
-import { GetSidebarInfoQuery } from '@/overview/queries/__generated__/overview.generated'
+import BN from 'bn.js'
+
+import { BN_ZERO } from '@/common/constants'
+import { GetSidebarInfoQuery } from '@/overview/queries'
 import {
   OverviewSidebarApplication,
   OverviewSidebarCandidacy,
@@ -10,7 +13,7 @@ import { asWorkingGroupName } from '@/working-groups/types'
 
 const asOverviewSidebarRole = (data: GetSidebarInfoQuery['workers'][number]): OverviewSidebarRole => ({
   role: asWorkingGroupName(data.group.name),
-  reward: data.payouts.reduce((prev, next) => prev + next.amount.toNumber(), 0),
+  reward: data.payouts.reduce((prev, next) => prev.add(new BN(next.amount)), BN_ZERO),
   isLead: data.isLead,
 })
 

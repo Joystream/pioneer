@@ -1,6 +1,8 @@
+import BN from 'bn.js'
+
 export interface OverviewSidebarRole {
   role: string
-  reward: number
+  reward: BN
   isLead: boolean
 }
 
