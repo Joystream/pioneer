@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -29,9 +30,9 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 }))
 
 describe('UI: ClaimRewardModal', () => {
-  const reward = 100_000
+  const reward = new BN(100_000)
   const modalData: ModalCallData<ClaimRewardModalCall> = {
-    bounty: { ...baseBounty, entries: [{ ...baseEntry, status: { reward } }] },
+    bounty: { ...baseBounty, entries: [{ ...baseEntry, status: 'BountyEntryStatusWinner', winner: true, reward }] },
   }
 
   const api = stubApi()

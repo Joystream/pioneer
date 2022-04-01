@@ -1,5 +1,4 @@
 import { useMachine } from '@xstate/react'
-import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,10 +8,8 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
-import { isBountyEntryStatusWinner } from '@/bounty/types/Bounty'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -38,12 +35,6 @@ export const ClaimRewardModal = () => {
     [activeMember?.id]
   )
 
-  const reward = useMemo(() => {
-    if (entry) {
-      return isBountyEntryStatusWinner(entry.status) ? new BN(entry.status.reward) : BN_ZERO
-    }
-  }, [entry?.id])
-
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember && entry) {
       return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bounty.id, entry.id)
@@ -52,7 +43,7 @@ export const ClaimRewardModal = () => {
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  const requirementsVerified = transaction && feeInfo && activeMember && reward && api
+  const requirementsVerified = transaction && feeInfo && activeMember && entry?.reward && api
 
   useEffect(() => {
     if (state.matches('requirementsVerification') && requirementsVerified) {
@@ -72,13 +63,13 @@ export const ClaimRewardModal = () => {
           { name: 'Loading member', state: !!activeMember },
           { name: 'Creating transaction', state: !!transaction },
           { name: 'Calculating fee', state: !!feeInfo },
-          { name: 'Calculating reward', state: !!reward },
+          { name: 'Calculating reward', state: !!entry?.reward },
         ]}
       />
     )
   }
 
-  if (!api || !activeMember || !transaction || !feeInfo || !reward) {
+  if (!api || !activeMember || !transaction || !feeInfo || !entry?.reward) {
     return null
   }
 
@@ -93,7 +84,7 @@ export const ClaimRewardModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        amount={reward}
+        amount={entry.reward}
       />
     )
   }

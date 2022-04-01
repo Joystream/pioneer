@@ -2507,17 +2507,11 @@ export enum BountyEntryOrderByInput {
 }
 
 export type BountyEntryStatus =
-  | BountyEntryStatusCashedOut
   | BountyEntryStatusPassed
   | BountyEntryStatusRejected
   | BountyEntryStatusWinner
   | BountyEntryStatusWithdrawn
   | BountyEntryStatusWorking
-
-export type BountyEntryStatusCashedOut = {
-  __typename: 'BountyEntryStatusCashedOut'
-  reward?: Maybe<Scalars['Float']>
-}
 
 export type BountyEntryStatusPassed = {
   __typename: 'BountyEntryStatusPassed'

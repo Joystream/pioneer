@@ -4,7 +4,6 @@ import {
   BountyPeriodFilters,
   EntrantResult,
   FundingType,
-  isBountyEntryStatusWinner,
   isFundingLimited,
 } from '@/bounty/types/Bounty'
 import { Colors } from '@/common/constants'
@@ -62,11 +61,14 @@ export const getFundingPeriodLength = (funding: FundingType) => {
 }
 
 export const statusToEntrantResult = (status: BountyEntryStatus): EntrantResult => {
-  if (isBountyEntryStatusWinner(status)) {
-    return 'winner'
+  switch (status) {
+    case 'BountyEntryStatusWinner':
+      return 'winner'
+
+    case 'BountyEntryStatusPassed':
+      return 'slashed'
+
+    default:
+      return 'loser'
   }
-  if (status === 'BountyEntryStatusRejected') {
-    return 'slashed'
-  }
-  return 'loser'
 }

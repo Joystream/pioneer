@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -12,7 +13,7 @@ import { Member } from '@/memberships/types'
 export interface BountyWinnerListItemProps {
   entrant: Member
   inBlock: Block
-  reward: number
+  reward: BN
 }
 
 export const BountyWinnerListItem = ({ entrant, inBlock, reward }: BountyWinnerListItemProps) => {

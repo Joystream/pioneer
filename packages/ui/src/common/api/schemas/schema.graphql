@@ -2702,11 +2702,6 @@ union BountyEntryStatus =
   | BountyEntryStatusWinner
   | BountyEntryStatusPassed
   | BountyEntryStatusRejected
-  | BountyEntryStatusCashedOut
-
-type BountyEntryStatusCashedOut {
-  reward: Float
-}
 
 type BountyEntryStatusPassed {
   dummy: Int
