@@ -55,8 +55,7 @@ export const AnnounceWorkEntryModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
-  const minWorkEntrantStake = bounty.entrantStake
-  const [amount, setAmount] = useState<string>(minWorkEntrantStake.toString())
+  const amount = bounty.entrantStake
   const [state, send] = useMachine(announceWorkEntryMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
@@ -78,18 +77,9 @@ export const AnnounceWorkEntryModal = () => {
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  const contribution = useMemo(() => new BN(amount), [amount])
-
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
-
-  useEffect(() => {
-    balance &&
-      setAmount(
-        balance.transferable.gte(minWorkEntrantStake) ? String(minWorkEntrantStake) : balance.transferable.toString()
-      )
-  }, [balance?.transferable.toString(), account?.address])
 
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
@@ -190,7 +180,7 @@ export const AnnounceWorkEntryModal = () => {
         controllerAccount={controllerAccount}
         description={t('modals.announceWorkEntry.authorizeDescription', { value: formatTokenValue(amount) })}
         buttonLabel={t('modals.announceWorkEntry.nextButton')}
-        contributeAmount={contribution}
+        contributeAmount={amount}
         useMultiTransaction={{ steps: transactionSteps, active: 1 }}
       />
     )
@@ -238,9 +228,7 @@ export const AnnounceWorkEntryModal = () => {
               <SelectAccount
                 onChange={setAccount}
                 selected={account}
-                filter={(account) =>
-                  filterByRequiredStake(new BN(minWorkEntrantStake), 'Bounties', balances[account.address])
-                }
+                filter={(account) => filterByRequiredStake(amount, 'Bounties', balances[account.address])}
               />
             </InputComponent>
           </Row>
@@ -248,16 +236,14 @@ export const AnnounceWorkEntryModal = () => {
             <TransactionAmount alignItemsToEnd>
               <InputComponent
                 label={t('modals.announceWorkEntry.selectAmount')}
-                sublabel={t('modals.announceWorkEntry.selectAmountSubtitle', {
-                  value: formatTokenValue(minWorkEntrantStake),
-                })}
+                sublabel={t('modals.announceWorkEntry.selectAmountSubtitle')}
                 id="amount-input"
                 required
                 inputWidth="s"
                 units="JOY"
                 disabled
               >
-                <InputNumber id="amount-input" value={amount} isTokenValue />
+                <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>
@@ -265,7 +251,7 @@ export const AnnounceWorkEntryModal = () => {
       </ScrolledModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={contribution} />
+          <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
           <TransactionInfo
             title={t('modals.common.transactionFee.label')}
             value={fee?.transactionFee}
