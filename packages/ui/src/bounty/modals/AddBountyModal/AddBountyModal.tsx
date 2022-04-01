@@ -1,6 +1,5 @@
 import { BountyMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
-import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -24,7 +23,6 @@ import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { getErrorMessage } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
@@ -59,16 +57,31 @@ const baseSchema = Yup.object().shape({
       .required(),
     fundingMaximalRange: Yup.number().required(),
     fundingMinimalRange: Yup.number()
+      .test('required', 'Minimal range is now required', (value, context) => {
+        return !(context.parent.fundingPeriodType === 'limited' && !value)
+      })
       .lessThan(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal')
       // @ts-expect-error: custom yup validator method
       .minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'),
+    fundingPeriodLength: Yup.number().test((value, context) => {
+      if (context.parent.fundingPeriodType !== 'limited') {
+        return true
+      }
+
+      if (!value) {
+        return context.createError({ message: 'Funding period length is required' })
+      }
+
+      return true
+    }),
+    fundingPeriodType: Yup.string(),
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
-    // @ts-expect-error: custom yup validator method
-    workingPeriodStake: Yup.number().minContext(
-      'Entrant stake must be greater than minimum of ${min} JOY',
-      'minWorkEntrantStake'
-    ),
+    workingPeriodStake: Yup.number()
+      // @ts-expect-error: custom yup validator method
+      .minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
+      .required(),
+    workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
     workingPeriodType: Yup.string(),
     workingPeriodWhitelist: Yup.array().test((value, context) => {
       if (!value) {
@@ -77,13 +90,16 @@ const baseSchema = Yup.object().shape({
 
       const validationContext = context.options.context as Conditions
       if (context.parent.workingPeriodType === 'closed') {
-        return value.length > 0 && validationContext.maxWhitelistSize.gten(value.length)
+        return value.length > 0 && (validationContext.maxWhitelistSize ?? BN_ZERO).gten(value.length)
       }
 
       return true
     }),
   }),
-  [AddBountyStates.judgingPeriodDetails]: Yup.object().shape({}),
+  [AddBountyStates.judgingPeriodDetails]: Yup.object().shape({
+    oracle: MemberSchema.required(),
+    judgingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
+  }),
 })
 
 export const AddBountyModal = () => {
@@ -99,16 +115,25 @@ export const AddBountyModal = () => {
   const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
 
-  const { errors, setContext } = useSchema<Conditions>(
+  const { setContext } = useSchema<Conditions>(
     {
       generalParameters: { ...state.context },
       [AddBountyStates.fundingPeriodDetails]: { ...state.context },
-      [AddBountyStates.workingPeriodDetails]: { ...state.context },
+      [AddBountyStates.workingPeriodDetails]: {
+        workingPeriodLength: state.context.workingPeriodLength?.toNumber(),
+        workingPeriodWhitelist: state.context.workingPeriodWhitelist,
+        workingPeriodType: state.context.workingPeriodType,
+        workingPeriodStake: state.context.workingPeriodStake?.toNumber(),
+      },
+      [AddBountyStates.judgingPeriodDetails]: {
+        oracle: state.context.oracle,
+        judgingPeriodLength: state.context.judgingPeriodLength?.toNumber(),
+      },
     },
     baseSchema,
     typeof state.value === 'string' ? state.value : undefined
   )
-  console.log(errors, ' erry', state.context.workingPeriodWhitelist)
+
   if (!service.initialized) {
     service.start()
   }
