@@ -4,7 +4,7 @@ import { TokenValueStat } from '@/common/components/statistics'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 import { Worker } from '@/working-groups/types'
 
-const getTotalStake = (workers: Worker[]) => workers.reduce((total, worker) => total + worker.stake, 0)
+const getTotalStake = (workers: Worker[]) => workers.reduce((total, worker) => total + Number(worker.stake), 0)
 
 export const MyStakeStat = () => {
   const { workers } = useMyWorkers()
