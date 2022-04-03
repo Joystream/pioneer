@@ -20,20 +20,16 @@ export const WithdrawWorkEntryButton = React.memo(({ bounty, validMemberIds }: B
         data: {
           noCreateButton: true,
           membersToShow: validMemberIds,
+          originalModalName: 'BountyWithdrawWorkEntryModal',
+          originalModalData: { bounty },
         },
       })
     }
 
-    const entry = bounty.entries?.find((entry) => entry.worker.id === active.id)
-    if (entry) {
-      showModal<BountyWithdrawWorkEntryModalCall>({
-        modal: 'BountyWithdrawWorkEntryModal',
-        data: {
-          bounty,
-          entry: entry,
-        },
-      })
-    }
+    showModal<BountyWithdrawWorkEntryModalCall>({
+      modal: 'BountyWithdrawWorkEntryModal',
+      data: { bounty },
+    })
   }, [validMemberIds, active])
 
   return (

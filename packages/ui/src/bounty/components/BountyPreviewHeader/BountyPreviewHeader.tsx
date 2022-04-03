@@ -19,7 +19,7 @@ import {
   SubmitJudgementButton,
   WithdrawContributionButton,
 } from '@/bounty/components/modalsButtons'
-import { Bounty, isBountyEntryStatusWinner, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
+import { Bounty, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { BN_ZERO } from '@/common/constants'
@@ -65,9 +65,7 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
   const idsWithoutEntries = membershipsIdArray.filter((memberId) => !idsWithEntries.includes(memberId))
 
   const membersWithSubmission = membersWithEntries.filter((entry) => entry.hasSubmitted)
-  const membersWithReward = membersWithSubmission.filter(
-    (entry) => isBountyEntryStatusWinner(entry.status) && !entry.hasCashedOut
-  )
+  const membersWithReward = membersWithSubmission.filter((entry) => entry.winner && !entry.hasCashedOut)
   const membersWithLoss = membersWithSubmission.filter((entry) => entry.passed && !entry.hasCashedOut)
   const idsOnWhitelist = membershipsIdArray.filter((memberId) => bounty?.entrantWhitelist?.includes(memberId))
 

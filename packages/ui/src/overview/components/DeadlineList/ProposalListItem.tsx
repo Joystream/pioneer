@@ -59,7 +59,7 @@ export const ProposalListItem = ({ proposalId, title }: ProposalListItemProps) =
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
-            <Subscription>
+            <Subscription as="div">
               {t('deadline.remainingTime')} {<DurationValue value={formatDuration(blocksToEnd)} />}
             </Subscription>
             <StyledBadge>{t('deadline.proposal')}</StyledBadge>

@@ -25,7 +25,7 @@ const WorkingGroupTile = React.memo(({ opening }: TileProps) => {
       <Title bold black value>
         {title}
       </Title>
-      <TimeLabel lighter>
+      <TimeLabel lighter as="div">
         {t('workingGroups.timeLeft')} {<DurationValue value={formatDurationDate(timeLeft)} />}
       </TimeLabel>
       <BudgetValue value={budget} />

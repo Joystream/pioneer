@@ -1,8 +1,8 @@
 import { useMachine } from '@xstate/react'
-import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
@@ -20,6 +20,7 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
   ModalFooter,
@@ -33,16 +34,23 @@ import {
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { Fonts } from '@/common/constants'
+import { BN_ZERO, Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
+
+const schema = Yup.object().shape({
+  amount: Yup.string(),
+  account: StakingAccountSchema,
+})
 
 export const AnnounceWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
@@ -52,20 +60,30 @@ export const AnnounceWorkEntryModal = () => {
     showModal,
   } = useModal<BountyAnnounceWorkEntryModalCall>()
   const { api, isConnected } = useApi()
-  const minWorkEntrantStake = api?.consts.bounty.minWorkEntrantStake.toNumber() ?? 0
+  const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
-  const [amount, setAmount] = useState<string>(String(minWorkEntrantStake))
+  const amount = bounty.entrantStake
   const [state, send] = useMachine(announceWorkEntryMachine)
   const [account, setAccount] = useState<Account>()
   const balance = useBalance(account?.address)
   const stakingStatus = useStakingAccountStatus(account?.address, activeMember?.id)
   const [isValidNext, setValidNext] = useState<boolean>(false)
 
-  const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
+  const { setContext, errors } = useSchema<IStakingAccountSchema>({ account, amount }, schema)
 
-  const valid = useMemo(() => new BN(amount).gten(minWorkEntrantStake) && !!account, [amount, account])
+  useEffect(() => {
+    if (balance) {
+      const requiredAmount = stakingStatus === 'free' ? boundingLock.add(amount) : amount
+      setContext({
+        balances: balance,
+        stakeLock: 'Bounties',
+        requiredAmount,
+        stakingStatus: stakingStatus,
+      })
+    }
+  }, [JSON.stringify(balance), amount, stakingStatus])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
@@ -82,18 +100,9 @@ export const AnnounceWorkEntryModal = () => {
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  const contribution = useMemo(() => new BN(amount), [amount])
-
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
-
-  useEffect(() => {
-    balance &&
-      setAmount(
-        balance.transferable.gten(minWorkEntrantStake) ? String(minWorkEntrantStake) : balance.transferable.toString()
-      )
-  }, [balance?.transferable.toString(), account?.address])
 
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
@@ -194,7 +203,7 @@ export const AnnounceWorkEntryModal = () => {
         controllerAccount={controllerAccount}
         description={t('modals.announceWorkEntry.authorizeDescription', { value: formatTokenValue(amount) })}
         buttonLabel={t('modals.announceWorkEntry.nextButton')}
-        contributeAmount={contribution}
+        contributeAmount={amount}
         useMultiTransaction={{ steps: transactionSteps, active: 1 }}
       />
     )
@@ -236,15 +245,17 @@ export const AnnounceWorkEntryModal = () => {
               label={t('modals.announceWorkEntry.stakingAccount.label')}
               tooltipText={t('modals.announceWorkEntry.stakingAccount.tooltip')}
               required
-              validation={stakingStatus === 'other' ? 'invalid' : undefined}
-              message={stakingStatus === 'other' ? 'This account is bound to the another member' : undefined}
+              validation={stakingStatus === 'other' || hasError('account', errors) ? 'invalid' : undefined}
+              message={
+                stakingStatus === 'other'
+                  ? 'This account is bound to the another member'
+                  : getErrorMessage('account', errors) ?? ''
+              }
             >
               <SelectAccount
                 onChange={setAccount}
                 selected={account}
-                filter={(account) =>
-                  filterByRequiredStake(new BN(minWorkEntrantStake), 'Bounties', balances[account.address])
-                }
+                filter={(account) => filterByRequiredStake(amount, 'Bounties', balances[account.address])}
               />
             </InputComponent>
           </Row>
@@ -252,23 +263,14 @@ export const AnnounceWorkEntryModal = () => {
             <TransactionAmount alignItemsToEnd>
               <InputComponent
                 label={t('modals.announceWorkEntry.selectAmount')}
-                sublabel={t('modals.announceWorkEntry.selectAmountSubtitle', {
-                  value: formatTokenValue(minWorkEntrantStake),
-                })}
+                sublabel={t('modals.announceWorkEntry.selectAmountSubtitle')}
                 id="amount-input"
                 required
                 inputWidth="s"
                 units="JOY"
                 disabled
               >
-                <InputNumber
-                  id="amount-input"
-                  value={amount}
-                  onChange={setStakingAmount}
-                  placeholder="0"
-                  isTokenValue
-                  disabled
-                />
+                <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>
@@ -276,14 +278,14 @@ export const AnnounceWorkEntryModal = () => {
       </ScrolledModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={contribution} />
+          <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
           <TransactionInfo
             title={t('modals.common.transactionFee.label')}
             value={fee?.transactionFee}
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!valid || !isValidNext} onClick={nextStep}>
+        <ButtonPrimary size="medium" disabled={!isValidNext} onClick={nextStep}>
           {t('modals.announceWorkEntry.nextButton')}
         </ButtonPrimary>
       </ModalFooter>

@@ -21,7 +21,7 @@ export const ClaimRewardModal = () => {
   const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
-    modalData: { bountyId, entryId, reward },
+    modalData: { bounty },
     hideModal,
   } = useModal<ClaimRewardModalCall>()
 
@@ -30,15 +30,20 @@ export const ClaimRewardModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
+  const entry = useMemo(
+    () => activeMember && bounty.entries?.find((entry) => entry.worker.id === activeMember.id),
+    [activeMember?.id]
+  )
+
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
-      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bountyId, entryId)
+    if (api && connectionState === 'connected' && activeMember && entry) {
+      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bounty.id, entry.id)
     }
-  }, [JSON.stringify(activeMember), connectionState])
+  }, [activeMember?.id, entry?.id, connectionState])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  const requirementsVerified = transaction && feeInfo && activeMember && reward && api
+  const requirementsVerified = transaction && feeInfo && activeMember && entry?.reward && api
 
   useEffect(() => {
     if (state.matches('requirementsVerification') && requirementsVerified) {
@@ -58,13 +63,13 @@ export const ClaimRewardModal = () => {
           { name: 'Loading member', state: !!activeMember },
           { name: 'Creating transaction', state: !!transaction },
           { name: 'Calculating fee', state: !!feeInfo },
-          { name: 'Calculating reward', state: !!reward },
+          { name: 'Calculating reward', state: !!entry?.reward },
         ]}
       />
     )
   }
 
-  if (!api || !activeMember || !transaction || !feeInfo || !reward) {
+  if (!api || !activeMember || !transaction || !feeInfo || !entry?.reward) {
     return null
   }
 
@@ -79,7 +84,7 @@ export const ClaimRewardModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        amount={reward}
+        amount={entry.reward}
       />
     )
   }

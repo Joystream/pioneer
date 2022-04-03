@@ -1,12 +1,11 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -14,7 +13,6 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { MultiTransactionConfig, TransactionModal } from '@/common/modals/TransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -43,39 +41,21 @@ export const AuthorizeTransactionModal = ({
   skipQueryNodeCheck,
 }: Props) => {
   const { t } = useTranslation('bounty')
-  const { allAccounts } = useMyAccounts()
   const [hasFunds, setHasFunds] = useState<boolean>(false)
-  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(
-    allAccounts.find((acc) => acc.address === controllerAccount.address)
-  )
   const balances = useMyBalances()
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
     service,
     transaction,
-    signer: selectedAccount?.address || controllerAccount.address,
+    signer: controllerAccount.address,
     skipQueryNode: skipQueryNodeCheck,
   })
-  const accountsWithValidAmount = useMemo(
-    () =>
-      Object.entries(balances).map(([address, balance]) => {
-        if (balance.transferable.gte(paymentInfo?.partialFee || BN_ZERO)) {
-          return address
-        }
-      }),
-    [balances, paymentInfo?.partialFee]
-  )
-
-  const accountsFilter = useCallback(
-    (acc: Account) => accountsWithValidAmount.includes(acc.address),
-    [accountsWithValidAmount.length]
-  )
 
   useEffect(() => {
-    if (selectedAccount && paymentInfo?.partialFee) {
-      setHasFunds(balances[selectedAccount.address].transferable.gte(paymentInfo.partialFee))
+    if (controllerAccount && paymentInfo?.partialFee) {
+      setHasFunds(balances[controllerAccount.address]?.transferable.gte(paymentInfo.partialFee))
     }
-  }, [selectedAccount, paymentInfo?.partialFee])
+  }, [controllerAccount, paymentInfo?.partialFee])
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={useMultiTransaction}>
@@ -94,11 +74,7 @@ export const AuthorizeTransactionModal = ({
           required
           tooltipText={t('modals.authorizeTransaction.feeAccount.tooltip')}
         >
-          <SelectAccount
-            filter={accountsFilter}
-            onChange={(account) => setSelectedAccount(account)}
-            selected={selectedAccount}
-          />
+          <SelectedAccount account={controllerAccount} />
         </InputComponent>
       </ModalBody>
       <ModalFooter>

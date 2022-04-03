@@ -143,7 +143,6 @@ export type BountyFieldsFragment = {
       }>
     }
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -152,6 +151,13 @@ export type BountyFieldsFragment = {
     withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }> | null
   createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+  judgment?: {
+    __typename: 'OracleJudgmentSubmittedEvent'
+    inBlock: number
+    rationale?: string | null
+    createdAt: any
+    network: Types.Network
+  } | null
 }
 
 export type BountyEntryFieldsFragment = {
@@ -184,7 +190,6 @@ export type BountyEntryFieldsFragment = {
     }>
   }
   status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -229,7 +234,6 @@ export type BountyEntryWithDetailsFieldsFragment = {
     }>
   }
   status:
-    | { __typename: 'BountyEntryStatusCashedOut' }
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
     | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -283,7 +287,6 @@ export type BountyWorkWithDetailsFieldsFragment = {
       }>
     }
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -478,7 +481,6 @@ export type GetBountiesQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -487,6 +489,13 @@ export type GetBountiesQuery = {
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+    judgment?: {
+      __typename: 'OracleJudgmentSubmittedEvent'
+      inBlock: number
+      rationale?: string | null
+      createdAt: any
+      network: Types.Network
+    } | null
   }>
 }
 
@@ -649,7 +658,6 @@ export type GetBountyQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -658,6 +666,13 @@ export type GetBountyQuery = {
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
     }> | null
     createdInEvent: { __typename: 'BountyCreatedEvent'; inBlock: number }
+    judgment?: {
+      __typename: 'OracleJudgmentSubmittedEvent'
+      inBlock: number
+      rationale?: string | null
+      createdAt: any
+      network: Types.Network
+    } | null
   } | null
 }
 
@@ -708,7 +723,6 @@ export type GetBountyWorksQuery = {
         }>
       }
       status:
-        | { __typename: 'BountyEntryStatusCashedOut' }
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
         | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -737,7 +751,6 @@ export type GetUserBountyStatisticsQuery = {
   bountyEntries: Array<{
     __typename: 'BountyEntry'
     status:
-      | { __typename: 'BountyEntryStatusCashedOut' }
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
       | { __typename: 'BountyEntryStatusWinner'; reward: number }
@@ -892,6 +905,12 @@ export const BountyFieldsFragmentDoc = gql`
     }
     createdInEvent {
       inBlock
+    }
+    judgment {
+      inBlock
+      rationale
+      createdAt
+      network
     }
   }
   ${MemberFieldsFragmentDoc}

@@ -1,11 +1,5 @@
-import { Bounty, WorkEntry } from '@/bounty/types/Bounty'
+import { Bounty } from '@/bounty/types/Bounty'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 
 export * from './WithdrawWorkEntryModal'
-export type BountyWithdrawWorkEntryModalCall = ModalWithDataCall<
-  'BountyWithdrawWorkEntryModal',
-  {
-    bounty: Bounty
-    entry: WorkEntry
-  }
->
+export type BountyWithdrawWorkEntryModalCall = ModalWithDataCall<'BountyWithdrawWorkEntryModal', { bounty: Bounty }>

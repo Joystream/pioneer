@@ -1,17 +1,11 @@
 import { RawBountyMock, seedBounties } from '@/mocks/data'
-import { seedForumCategories, seedForumThreads } from '@/mocks/data/seedForum'
-
-export const seedBountyThread = (server: any) => {
-  seedForumCategories(server, [{ moderatorIds: [] }])
-  seedForumThreads(server, [{ authorId: '0' }])
-}
 
 export const seedSafeBounties = (server: any, overrides: Partial<RawBountyMock>[] = [{}, {}, {}, {}]) => {
   const baseBounty = {
     creatorId: undefined,
     oracleId: undefined,
     entrantWhitelist: undefined,
-    discussionThreadId: '0',
+    discussionThreadId: undefined,
     isTerminated: false,
   }
   const safeBounties = [

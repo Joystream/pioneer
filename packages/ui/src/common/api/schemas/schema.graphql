@@ -1978,6 +1978,7 @@ type Bounty implements BaseGraphQLObject {
   removedInEvent: BountyRemovedEvent
   judgment: OracleJudgmentSubmittedEvent
   bountycreatorcherrywithdrawaleventbounty: [BountyCreatorCherryWithdrawalEvent!]
+  worksubmittedeventbounty: [WorkSubmittedEvent!]
 }
 
 type BountyCanceledEvent implements Event & BaseGraphQLObject {
@@ -2701,11 +2702,6 @@ union BountyEntryStatus =
   | BountyEntryStatusWinner
   | BountyEntryStatusPassed
   | BountyEntryStatusRejected
-  | BountyEntryStatusCashedOut
-
-type BountyEntryStatusCashedOut {
-  reward: Float
-}
 
 type BountyEntryStatusPassed {
   dummy: Int
@@ -3649,6 +3645,9 @@ input BountyWhereInput {
   bountycreatorcherrywithdrawaleventbounty_none: BountyCreatorCherryWithdrawalEventWhereInput
   bountycreatorcherrywithdrawaleventbounty_some: BountyCreatorCherryWithdrawalEventWhereInput
   bountycreatorcherrywithdrawaleventbounty_every: BountyCreatorCherryWithdrawalEventWhereInput
+  worksubmittedeventbounty_none: WorkSubmittedEventWhereInput
+  worksubmittedeventbounty_some: WorkSubmittedEventWhereInput
+  worksubmittedeventbounty_every: WorkSubmittedEventWhereInput
   AND: [BountyWhereInput!]
   OR: [BountyWhereInput!]
 }
@@ -30666,6 +30665,8 @@ type WorkSubmittedEvent implements Event & BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
+  bounty: Bounty!
+  bountyId: String!
   entry: BountyEntry!
   entryId: String!
 
@@ -30691,6 +30692,7 @@ input WorkSubmittedEventCreateInput {
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
+  bounty: ID!
   entry: ID!
   title: String
   description: String
@@ -30716,6 +30718,8 @@ enum WorkSubmittedEventOrderByInput {
   network_DESC
   indexInBlock_ASC
   indexInBlock_DESC
+  bounty_ASC
+  bounty_DESC
   entry_ASC
   entry_DESC
   title_ASC
@@ -30729,6 +30733,7 @@ input WorkSubmittedEventUpdateInput {
   inBlock: Float
   network: Network
   indexInBlock: Float
+  bounty: ID
   entry: ID
   title: String
   description: String
@@ -30788,6 +30793,7 @@ input WorkSubmittedEventWhereInput {
   description_startsWith: String
   description_endsWith: String
   description_in: [String!]
+  bounty: BountyWhereInput
   entry: BountyEntryWhereInput
   AND: [WorkSubmittedEventWhereInput!]
   OR: [WorkSubmittedEventWhereInput!]
