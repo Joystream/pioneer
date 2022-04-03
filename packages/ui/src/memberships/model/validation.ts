@@ -11,6 +11,8 @@ export const AccountSchema = Yup.object()
 
 export const MemberSchema = Yup.object()
 
+export const BNSchema = Yup.mixed()
+
 export const AvatarURISchema = Yup.string().url()
 
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
@@ -63,43 +65,53 @@ export const NewAddressSchema = (which: string) =>
       return value.address ? isValidAddress(value.address, keyring) : true
     })
 
-Yup.addMethod(Yup.number, 'maxContext', function test(msg: string, contextPath: string) {
+function maxContext(msg: string, contextPath: string) {
   // @ts-expect-error: yup
   return this.test({
     name: 'maxContext',
     exclusive: false,
-    test(value: number) {
+    test(value: number | BN) {
       if (!value) {
         return true
       }
-      const validationValue = this.options.context?.[contextPath]
 
-      if (!(validationValue?.gten(value) || value <= validationValue)) {
+      const parsedValue = new BN(value)
+      const validationValue = this.options.context?.[contextPath]
+      if (!(validationValue?.gte(parsedValue) || parsedValue.lten(validationValue))) {
         return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
       }
 
       return true
     },
   })
-})
+}
 
-Yup.addMethod(Yup.number, 'minContext', function test(msg: string, contextPath: string) {
+Yup.addMethod(Yup.number, 'maxContext', maxContext)
+
+function minContext(msg: string, contextPath: string) {
   // @ts-expect-error: yup
   return this.test({
     name: 'minContext',
     exclusive: false,
-    test(value: number) {
+    test(value: number | BN) {
       if (!value) {
         return true
       }
+
+      const parsedValue = new BN(value)
       const validationValue = this.options.context?.[contextPath]
-      if (!validationValue?.lten(value) || !value >= validationValue) {
+      if (!(validationValue?.lte(parsedValue) || parsedValue.gtn(validationValue))) {
         return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
       }
 
       return true
     },
   })
-})
+}
+
+Yup.addMethod(Yup.number, 'minContext', minContext)
+
+Yup.addMethod(Yup.mixed, 'minContext', minContext)
+Yup.addMethod(Yup.mixed, 'maxContext', maxContext)
 
 export default Yup

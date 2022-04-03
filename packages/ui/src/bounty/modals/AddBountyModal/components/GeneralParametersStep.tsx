@@ -1,29 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import * as Yup from 'yup'
 
+import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputNotification, InputText } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useSchema } from '@/common/hooks/useSchema'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
-interface Props extends Omit<GeneralParametersContext, 'creator'> {
+interface Props extends Omit<GeneralParametersContext, 'creator'>, ValidationHelpers {
   setTitle: (title: string) => void
   setCoverPhoto: (link: string) => void
   setDescription: (description: string) => void
   activeMember?: Member
 }
-
-const schema = Yup.object().shape({
-  title: Yup.string().max(70, 'Max length is 70 characters'),
-  coverPhotoLink: Yup.string().url('Invalid URL'),
-})
 
 export const GeneralParametersStep = ({
   title,
@@ -33,9 +26,9 @@ export const GeneralParametersStep = ({
   coverPhotoLink,
   setCoverPhoto,
   activeMember,
+  errorMessageGetter,
+  errorChecker,
 }: Props) => {
-  const { errors } = useSchema({ title, coverPhotoLink }, schema)
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -52,8 +45,8 @@ export const GeneralParametersStep = ({
             label="Bounty title"
             inputSize="m"
             required
-            message={hasError('title', errors) ? getErrorMessage('title', errors) : 'MAX 70'}
-            validation={hasError('title', errors) ? 'invalid' : undefined}
+            message={errorChecker('title') ? errorMessageGetter('title') : 'MAX 70'}
+            validation={errorChecker('title') ? 'invalid' : undefined}
           >
             <InputText id="field-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
           </StyledInputComponent>
@@ -63,11 +56,11 @@ export const GeneralParametersStep = ({
             inputSize="m"
             required
             message={
-              hasError('coverPhotoLink', errors)
-                ? getErrorMessage('coverPhotoLink', errors)
+              errorChecker('coverPhotoLink')
+                ? errorMessageGetter('coverPhotoLink')
                 : 'JPG, PNG: 800x450px or aspect ratio: 16:9'
             }
-            validation={hasError('coverPhotoLink', errors) ? 'invalid' : undefined}
+            validation={errorChecker('coverPhotoLink') ? 'invalid' : undefined}
           >
             <InputText
               id="field-photo"

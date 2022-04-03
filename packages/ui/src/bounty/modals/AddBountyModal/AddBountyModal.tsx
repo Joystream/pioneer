@@ -1,6 +1,6 @@
 import { BountyMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -17,12 +17,12 @@ import {
   Conditions,
   createBountyMetadataFactory,
   createBountyParametersFactory,
-  isNextStepValid,
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { getStepErrorMessage, hasStepError } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
@@ -37,25 +37,30 @@ import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import Yup, { MemberSchema } from '@/memberships/model/validation'
+import Yup, { BNSchema, MemberSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
+
+export interface ValidationHelpers {
+  errorMessageGetter: (field: string) => string | undefined
+  errorChecker: (field: string) => boolean
+}
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 const baseSchema = Yup.object().shape({
   [AddBountyStates.generalParameters]: Yup.object().shape({
-    title: Yup.string().max(70, 'Max length is 70 characters').required(),
-    coverPhotoLink: Yup.string().url('Invalid URL').required(),
+    title: Yup.string().max(70, 'Max length is 70 characters').required(''),
+    coverPhotoLink: Yup.string().url('Invalid URL').required(''),
     creator: MemberSchema.required(),
     description: Yup.string().required(),
   }),
   [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
-    cherry: Yup.number()
+    cherry: BNSchema
       // @ts-expect-error: custom yup validator method
       .minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit')
       .maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit')
-      .required(),
-    fundingMaximalRange: Yup.number().required(),
+      .required(''),
+    fundingMaximalRange: Yup.number().min(1, 'Value must be greater than zero').required(''),
     fundingMinimalRange: Yup.number()
       .test('required', 'Minimal range is now required', (value, context) => {
         return !(context.parent.fundingPeriodType === 'limited' && !value)
@@ -67,20 +72,18 @@ const baseSchema = Yup.object().shape({
       if (context.parent.fundingPeriodType !== 'limited') {
         return true
       }
-
       if (!value) {
         return context.createError({ message: 'Funding period length is required' })
       }
-
       return true
     }),
     fundingPeriodType: Yup.string(),
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
-    workingPeriodStake: Yup.number()
+    workingPeriodStake: BNSchema
       // @ts-expect-error: custom yup validator method
       .minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
-      .required(),
+      .required(''),
     workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
     workingPeriodType: Yup.string(),
     workingPeriodWhitelist: Yup.array().test((value, context) => {
@@ -109,21 +112,26 @@ export const AddBountyModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
-  const [isValidNext, setValidNext] = useState(false)
 
   const { api } = useApi()
   const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
 
-  const { setContext } = useSchema<Conditions>(
+  const { setContext, errors, isValid } = useSchema<Conditions>(
     {
       generalParameters: { ...state.context },
-      [AddBountyStates.fundingPeriodDetails]: { ...state.context },
+      [AddBountyStates.fundingPeriodDetails]: {
+        cherry: state.context.cherry,
+        fundingMaximalRange: state.context.fundingMaximalRange?.toNumber(),
+        fundingMinimalRange: state.context.fundingMinimalRange?.toNumber(),
+        fundingPeriodLength: state.context.fundingPeriodLength?.toNumber(),
+        fundingPeriodType: state.context.fundingPeriodType,
+      },
       [AddBountyStates.workingPeriodDetails]: {
         workingPeriodLength: state.context.workingPeriodLength?.toNumber(),
         workingPeriodWhitelist: state.context.workingPeriodWhitelist,
         workingPeriodType: state.context.workingPeriodType,
-        workingPeriodStake: state.context.workingPeriodStake?.toNumber(),
+        workingPeriodStake: state.context.workingPeriodStake,
       },
       [AddBountyStates.judgingPeriodDetails]: {
         oracle: state.context.oracle,
@@ -132,6 +140,15 @@ export const AddBountyModal = () => {
     },
     baseSchema,
     typeof state.value === 'string' ? state.value : undefined
+  )
+
+  const errorChecker = useCallback(
+    (field: string) => hasStepError(typeof state.value === 'string' ? state.value : '', errors)(field),
+    [errors, state.value]
+  )
+  const errorMessageGetter = useCallback(
+    (field: string) => getStepErrorMessage(typeof state.value === 'string' ? state.value : '', errors)(field),
+    [errors, state.value]
   )
 
   if (!service.initialized) {
@@ -164,18 +181,6 @@ export const AddBountyModal = () => {
         send('NEXT')
       }
     }
-
-    setValidNext(
-      isNextStepValid(state as AddBountyModalMachineState, {
-        isThreadCategoryLoading,
-        minCherryLimit: bountyApi?.minCherryLimit,
-        maxCherryLimit: balance?.transferable,
-        minFundingLimit: bountyApi?.minFundingLimit,
-        maxWhitelistSize: bountyApi?.closedContractSizeLimit,
-        minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
-        isLimited: state.context.fundingPeriodType === 'limited',
-      })
-    )
   }, [state, isThreadCategoryLoading, api])
 
   useEffect(() => {
@@ -292,6 +297,8 @@ export const AddBountyModal = () => {
                 coverPhotoLink={state.context.coverPhotoLink}
                 setCoverPhoto={(coverPhotoLink: string) => send('SET_COVER_PHOTO', { coverPhotoLink })}
                 activeMember={activeMember}
+                errorChecker={errorChecker}
+                errorMessageGetter={errorMessageGetter}
               />
             )}
 
@@ -299,7 +306,6 @@ export const AddBountyModal = () => {
               <FundingDetailsStep
                 cherry={state.context.cherry}
                 setCherry={(cherry) => send('SET_CHERRY', { cherry })}
-                maxCherryLimit={balance?.transferable.toNumber() || 0}
                 minCherryLimit={bountyApi?.minCherryLimit.toNumber() || 0}
                 fundingMaximalRange={state.context.fundingMaximalRange}
                 setFundingMaximalRange={(fundingMaximalRange) =>
@@ -311,11 +317,12 @@ export const AddBountyModal = () => {
                 }
                 fundingPeriodType={state.context.fundingPeriodType}
                 setFundingPeriodType={(fundingPeriodType) => send('SET_FUNDING_PERIOD_TYPE', { fundingPeriodType })}
-                account={activeMember?.controllerAccount}
                 fundingPeriodLength={state.context.fundingPeriodLength}
                 setFundingPeriodLength={(fundingPeriodLength) =>
                   send('SET_FUNDING_PERIOD_LENGTH', { fundingPeriodLength })
                 }
+                errorChecker={errorChecker}
+                errorMessageGetter={errorMessageGetter}
               />
             )}
             {state.matches(AddBountyStates.workingPeriodDetails) && (
@@ -334,6 +341,8 @@ export const AddBountyModal = () => {
                 setWorkingPeriodStake={(workingPeriodStake) => send('SET_WORKING_PERIOD_STAKE', { workingPeriodStake })}
                 setWorkingPeriodType={(workingPeriodType) => send('SET_WORKING_PERIOD_TYPE', { workingPeriodType })}
                 whitelistLimit={bountyApi?.closedContractSizeLimit}
+                errorChecker={errorChecker}
+                errorMessageGetter={errorMessageGetter}
               />
             )}
             {state.matches(AddBountyStates.judgingPeriodDetails) && (
@@ -359,7 +368,7 @@ export const AddBountyModal = () => {
           )}
         </ButtonsGroup>
         <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+          <ButtonPrimary disabled={!isValid} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step'}
           </ButtonPrimary>
         </ButtonsGroup>
