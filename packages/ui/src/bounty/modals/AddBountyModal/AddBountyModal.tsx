@@ -14,21 +14,22 @@ import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/Ju
 import { SuccessModal } from '@/bounty/modals/AddBountyModal/components/SuccessModal'
 import { WorkingDetailsStep } from '@/bounty/modals/AddBountyModal/components/WorkingDetailsStep'
 import {
+  addBountyModalSchema,
   Conditions,
   createBountyMetadataFactory,
   createBountyParametersFactory,
+  getSchemaFields,
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { getStepErrorMessage, hasStepError } from '@/common/components/forms/FieldError'
+import { hasError, getErrorMessage } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
@@ -37,7 +38,6 @@ import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import Yup, { BNSchema, MemberSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 
 export interface ValidationHelpers {
@@ -46,64 +46,6 @@ export interface ValidationHelpers {
 }
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
-
-const baseSchema = Yup.object().shape({
-  [AddBountyStates.generalParameters]: Yup.object().shape({
-    title: Yup.string().max(70, 'Max length is 70 characters').required(''),
-    coverPhotoLink: Yup.string().url('Invalid URL').required(''),
-    creator: MemberSchema.required(),
-    description: Yup.string().required(),
-  }),
-  [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
-    cherry: BNSchema
-      // @ts-expect-error: custom yup validator method
-      .minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit')
-      .maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit')
-      .required(''),
-    fundingMaximalRange: Yup.number().min(1, 'Value must be greater than zero').required(''),
-    fundingMinimalRange: Yup.number()
-      .test('required', 'Minimal range is now required', (value, context) => {
-        return !(context.parent.fundingPeriodType === 'limited' && !value)
-      })
-      .lessThan(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal')
-      // @ts-expect-error: custom yup validator method
-      .minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'),
-    fundingPeriodLength: Yup.number().test((value, context) => {
-      if (context.parent.fundingPeriodType !== 'limited') {
-        return true
-      }
-      if (!value) {
-        return context.createError({ message: 'Funding period length is required' })
-      }
-      return true
-    }),
-    fundingPeriodType: Yup.string(),
-  }),
-  [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
-    workingPeriodStake: BNSchema
-      // @ts-expect-error: custom yup validator method
-      .minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
-      .required(''),
-    workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
-    workingPeriodType: Yup.string(),
-    workingPeriodWhitelist: Yup.array().test((value, context) => {
-      if (!value) {
-        return true
-      }
-
-      const validationContext = context.options.context as Conditions
-      if (context.parent.workingPeriodType === 'closed') {
-        return value.length > 0 && (validationContext.maxWhitelistSize ?? BN_ZERO).gten(value.length)
-      }
-
-      return true
-    }),
-  }),
-  [AddBountyStates.judgingPeriodDetails]: Yup.object().shape({
-    oracle: MemberSchema.required(),
-    judgingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
-  }),
-})
 
 export const AddBountyModal = () => {
   const { t } = useTranslation()
@@ -118,36 +60,17 @@ export const AddBountyModal = () => {
   const bountyApi = api?.consts.bounty
 
   const { setContext, errors, isValid } = useSchema<Conditions>(
-    {
-      generalParameters: { ...state.context },
-      [AddBountyStates.fundingPeriodDetails]: {
-        cherry: state.context.cherry,
-        fundingMaximalRange: state.context.fundingMaximalRange?.toNumber(),
-        fundingMinimalRange: state.context.fundingMinimalRange?.toNumber(),
-        fundingPeriodLength: state.context.fundingPeriodLength?.toNumber(),
-        fundingPeriodType: state.context.fundingPeriodType,
-      },
-      [AddBountyStates.workingPeriodDetails]: {
-        workingPeriodLength: state.context.workingPeriodLength?.toNumber(),
-        workingPeriodWhitelist: state.context.workingPeriodWhitelist,
-        workingPeriodType: state.context.workingPeriodType,
-        workingPeriodStake: state.context.workingPeriodStake,
-      },
-      [AddBountyStates.judgingPeriodDetails]: {
-        oracle: state.context.oracle,
-        judgingPeriodLength: state.context.judgingPeriodLength?.toNumber(),
-      },
-    },
-    baseSchema,
+    getSchemaFields(state as AddBountyModalMachineState),
+    addBountyModalSchema,
     typeof state.value === 'string' ? state.value : undefined
   )
 
   const errorChecker = useCallback(
-    (field: string) => hasStepError(typeof state.value === 'string' ? state.value : '', errors)(field),
+    (field: string) => hasError(typeof state.value === 'string' ? `${state.value}.${field}` : field, errors),
     [errors, state.value]
   )
   const errorMessageGetter = useCallback(
-    (field: string) => getStepErrorMessage(typeof state.value === 'string' ? state.value : '', errors)(field),
+    (field: string) => getErrorMessage(typeof state.value === 'string' ? `${state.value}.${field}` : field, errors),
     [errors, state.value]
   )
 
