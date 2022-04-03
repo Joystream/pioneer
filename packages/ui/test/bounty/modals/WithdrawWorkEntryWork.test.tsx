@@ -20,7 +20,7 @@ import { getMember } from '@/mocks/helpers'
 import { generateWork } from '../../../dev/query-node-mocks/generators/generateBounties'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import {
   stubApi,
   stubDefaultBalances,
@@ -159,21 +159,23 @@ describe('UI: WithdrawWorkEntryModal', () => {
 
   const renderModal = () => {
     render(
-      <ModalContext.Provider value={useModal}>
-        <MockQueryNodeProviders>
-          <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContext.Provider value={useBalances}>
-                    <WithdrawWorkEntryModal />
-                  </BalancesContext.Provider>
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
-          </MockKeyringProvider>
-        </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      <MockApolloProvider>
+        <ModalContext.Provider value={useModal}>
+          <MockQueryNodeProviders>
+            <MockKeyringProvider>
+              <AccountsContext.Provider value={useAccounts}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <ApiContext.Provider value={api}>
+                    <BalancesContext.Provider value={useBalances}>
+                      <WithdrawWorkEntryModal />
+                    </BalancesContext.Provider>
+                  </ApiContext.Provider>
+                </MembershipContext.Provider>
+              </AccountsContext.Provider>
+            </MockKeyringProvider>
+          </MockQueryNodeProviders>
+        </ModalContext.Provider>
+      </MockApolloProvider>
     )
   }
 })
