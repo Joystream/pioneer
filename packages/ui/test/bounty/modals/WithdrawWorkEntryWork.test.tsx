@@ -158,17 +158,17 @@ describe('UI: WithdrawWorkEntryModal', () => {
     render(
       <MockApolloProvider>
         <ModalContext.Provider value={useModal}>
-            <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <ApiContext.Provider value={api}>
-                    <BalancesContext.Provider value={useBalances}>
-                      <WithdrawWorkEntryModal />
-                    </BalancesContext.Provider>
-                  </ApiContext.Provider>
-                </MembershipContext.Provider>
-              </AccountsContext.Provider>
-            </MockKeyringProvider>
+          <MockKeyringProvider>
+            <AccountsContext.Provider value={useAccounts}>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <ApiContext.Provider value={api}>
+                  <BalancesContext.Provider value={useBalances}>
+                    <WithdrawWorkEntryModal />
+                  </BalancesContext.Provider>
+                </ApiContext.Provider>
+              </MembershipContext.Provider>
+            </AccountsContext.Provider>
+          </MockKeyringProvider>
         </ModalContext.Provider>
       </MockApolloProvider>
     )
