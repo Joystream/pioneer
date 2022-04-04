@@ -53,7 +53,7 @@ export const StakingAccountSchema = Yup.object()
       !areLocksConflicting(validationContext.stakeLock, validationContext.balances.locks)
     )
   })
-  .test('stakingStatus', 'Account staking status is not valid', (value, context) => {
+  .test('stakingStatus', 'Account might be bound to another member', (value, context) => {
     if (!value) {
       return true
     }

@@ -233,7 +233,7 @@ export const AnnounceWorkEntryModal = () => {
               label={t('modals.announceWorkEntry.stakingAccount.label')}
               tooltipText={t('modals.announceWorkEntry.stakingAccount.tooltip')}
               required
-              validation={stakingStatus === 'other' || hasError('account', errors) ? 'invalid' : undefined}
+              validation={hasError('account', errors) ? 'invalid' : undefined}
               message={getErrorMessage('account', errors) ?? ''}
             >
               <SelectAccount
