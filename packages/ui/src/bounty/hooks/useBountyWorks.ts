@@ -9,7 +9,7 @@ interface Props {
   workerHandle: string
 }
 
-export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) => {
+export const useBountyWorks = ({ bountyId, perPage = 4 }: Props) => {
   const { data: dataCount } = useGetBountyWorksCountQuery({
     variables: {
       where: {
@@ -30,11 +30,11 @@ export const useBountyWorks = ({ bountyId, perPage = 4, workerHandle }: Props) =
       limit: perPage,
       order: WorkSubmittedEventOrderByInput.CreatedAtDesc,
       where: {
-        entry: {
-          worker: {
-            handle_startsWith: workerHandle,
-          },
-        },
+        // entry: {
+        //   worker: {
+        //     handle_startsWith: workerHandle,
+        //   },
+        // },
         bounty: {
           id_eq: bountyId,
         },
