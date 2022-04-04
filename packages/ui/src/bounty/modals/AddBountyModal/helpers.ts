@@ -39,8 +39,8 @@ export const getSchemaFields = (state: AddBountyModalMachineState) => ({
   },
   [AddBountyStates.fundingPeriodDetails]: {
     cherry: state.context.cherry,
-    fundingMaximalRange: state.context.fundingMaximalRange?.toNumber(),
-    fundingMinimalRange: state.context.fundingMinimalRange?.toNumber(),
+    fundingMaximalRange: state.context.fundingMaximalRange,
+    fundingMinimalRange: state.context.fundingMinimalRange,
     fundingPeriodLength: state.context.fundingPeriodLength?.toNumber(),
     fundingPeriodType: state.context.fundingPeriodType,
   },
@@ -69,13 +69,15 @@ export const addBountyModalSchema = Yup.object().shape({
       .minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit')
       .maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit')
       .required(''),
-    fundingMaximalRange: Yup.number().min(1, 'Value must be greater than zero').required(''),
-    fundingMinimalRange: Yup.number()
-      .test('required', 'Minimal range is now required', (value, context) => {
-        return !(context.parent.fundingPeriodType === 'limited' && !value)
-      })
-      .lessThan(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal')
+    fundingMaximalRange: BNSchema
       // @ts-expect-error: custom yup validator method
+      .moreThanMixed(0, 'Value must be greater than zero')
+      .required(''),
+    fundingMinimalRange: BNSchema.test('required', 'Minimal range is now required', (value, context) => {
+      return !(context.parent.fundingPeriodType === 'limited' && !value)
+    })
+      // @ts-expect-error: custom yup validator method
+      .lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal')
       .minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'),
     fundingPeriodLength: Yup.number().test((value, context) => {
       if (context.parent.fundingPeriodType !== 'limited') {

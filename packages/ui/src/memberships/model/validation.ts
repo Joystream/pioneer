@@ -1,6 +1,8 @@
+import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
+import Reference from 'yup/lib/Reference'
 
 import { StakingStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
@@ -109,9 +111,48 @@ function minContext(msg: string, contextPath: string) {
   })
 }
 
+function lessThanMixed(less: Reference<unknown> | number, message: string) {
+  // @ts-expect-error: yup
+  return this.test({
+    message,
+    name: 'lessThanMixed',
+    exclusive: false,
+    test(value: BN) {
+      if (!value || !isBn(value)) {
+        return true
+      }
+
+      const lessValue = this.resolve(less)
+
+      return isBn(lessValue) ? value.lt(lessValue) : value.ltn(lessValue)
+    },
+  })
+}
+
+function moreThanMixed(more: Reference<unknown> | number, message: string) {
+  // @ts-expect-error: yup
+  return this.test({
+    message,
+    name: 'lessThanMixed',
+    params: { more },
+    exclusive: false,
+    test(value: BN) {
+      if (!value || !isBn(value)) {
+        return true
+      }
+
+      const lessValue = this.resolve(more)
+
+      return isBn(lessValue) ? value.gt(lessValue) : value.gtn(lessValue)
+    },
+  })
+}
+
 Yup.addMethod(Yup.number, 'minContext', minContext)
 
 Yup.addMethod(Yup.mixed, 'minContext', minContext)
 Yup.addMethod(Yup.mixed, 'maxContext', maxContext)
+Yup.addMethod(Yup.mixed, 'lessThanMixed', lessThanMixed)
+Yup.addMethod(Yup.mixed, 'moreThanMixed', moreThanMixed)
 
 export default Yup

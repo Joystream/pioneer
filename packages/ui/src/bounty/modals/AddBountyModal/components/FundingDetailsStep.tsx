@@ -9,14 +9,14 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO, Colors } from '@/common/constants'
+import { Colors } from '@/common/constants'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 
 export interface FundingDetailsStepProps
   extends Omit<FundingPeriodDetailsContext, keyof GeneralParametersContext>,
     ValidationHelpers {
   setFundingMaximalRange: (fundingMaximalRange: BN) => void
-  setFundingMinimalRange: (fundingMinimalRange: BN) => void
+  setFundingMinimalRange: (fundingMinimalRange: BN | undefined) => void
   setCherry: (cherry: BN) => void
   setFundingPeriodLength: (fundingPeriodLength: BN) => void
   setFundingPeriodType: (fundingPeriodType: string) => void
@@ -43,7 +43,7 @@ export const FundingDetailsStep = ({
       return setFundingPeriodType('limited')
     }
     setFundingPeriodType('perpetual')
-    setFundingMinimalRange(BN_ZERO)
+    setFundingMinimalRange(undefined)
   }
 
   return (
