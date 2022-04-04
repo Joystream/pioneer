@@ -15,7 +15,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
 
 const bounty = bounties[0]
@@ -146,17 +146,19 @@ describe('UI: BountyCancelModal', () => {
 
   const renderModal = () => {
     render(
-      <ModalContext.Provider value={useModal}>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <AccountsContext.Provider value={useAccounts}>
-              <BalancesContext.Provider value={useBalances}>
-                <BountyCancelModal />
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </ModalContext.Provider>
+      <MockApolloProvider>
+        <ModalContext.Provider value={useModal}>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <AccountsContext.Provider value={useAccounts}>
+                <BalancesContext.Provider value={useBalances}>
+                  <BountyCancelModal />
+                </BalancesContext.Provider>
+              </AccountsContext.Provider>
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </ModalContext.Provider>
+      </MockApolloProvider>
     )
   }
 })

@@ -35,7 +35,12 @@ export const AnnounceCandidacyTransaction = ({
 }: AnnounceCandidacyTransactionProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+    transaction,
+    signer,
+    service,
+    skipQueryNode: true,
+  })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)
   const transferable = balance?.transferable

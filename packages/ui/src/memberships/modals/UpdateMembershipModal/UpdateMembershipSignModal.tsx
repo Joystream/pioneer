@@ -13,7 +13,7 @@ import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { WithNullableValues } from '@/common/types/form'
@@ -74,7 +74,7 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
   const transaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
   const signer = accountOrNamed(allAccounts, member.controllerAccount, 'Controller account')
 
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signer.address,
     service,

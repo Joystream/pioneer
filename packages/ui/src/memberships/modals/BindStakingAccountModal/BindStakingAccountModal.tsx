@@ -11,7 +11,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { Label, TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 import { MemberInfo } from '@/memberships/components'
@@ -31,7 +31,12 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
   const { allAccounts } = useMyAccounts()
   const { member } = useMember(memberId)
   const signerAccount = accountOrNamed(allAccounts, signer, 'Account to Bind')
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+    transaction,
+    signer,
+    service,
+    skipQueryNode: true,
+  })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)
   const transferable = balance?.transferable

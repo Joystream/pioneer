@@ -26,6 +26,7 @@ export interface Props {
   buttonLabel: string
   contributeAmount?: BN
   useMultiTransaction?: MultiTransactionConfig
+  skipQueryNodeCheck?: boolean
 }
 
 export const AuthorizeTransactionModal = ({
@@ -37,6 +38,7 @@ export const AuthorizeTransactionModal = ({
   buttonLabel,
   contributeAmount,
   useMultiTransaction,
+  skipQueryNodeCheck,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const [hasFunds, setHasFunds] = useState<boolean>(false)
@@ -46,6 +48,7 @@ export const AuthorizeTransactionModal = ({
     service,
     transaction,
     signer: controllerAccount.address,
+    skipQueryNode: skipQueryNodeCheck,
   })
 
   useEffect(() => {

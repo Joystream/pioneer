@@ -8,8 +8,8 @@ import { useQueryNodeStateSubscription } from './useQueryNode'
 
 type TransactionStatus = 'confirmed' | 'rejected' | 'unknown'
 
-export function useQueryNodeTransactionStatus(blockHash?: Hash | string) {
-  const { queryNodeState, error: queryNodeStateError } = useQueryNodeStateSubscription()
+export function useQueryNodeTransactionStatus(blockHash?: Hash | string, shouldSkipSubscription?: boolean) {
+  const { queryNodeState, error: queryNodeStateError } = useQueryNodeStateSubscription({ skip: shouldSkipSubscription })
   const [status, setStatus] = useState<TransactionStatus>('unknown')
   const queryNodeBlockHash = useBlockHash(queryNodeState?.indexerHead)
 
