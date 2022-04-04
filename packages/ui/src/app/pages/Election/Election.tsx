@@ -33,7 +33,7 @@ const displayElectionRound = (election: ElectionType | undefined): string => {
     return '-'
   }
 
-  return `${election.cycleId} round`
+  return String(election.cycleId)
 }
 
 export const Election = () => {
@@ -118,7 +118,9 @@ export const Election = () => {
           title="Election round"
           tooltipText="Elections are held in consecutive rounds. This is the number of current election."
         >
-          <TextHuge bold>{displayElectionRound(election)}</TextHuge>
+          <TextHuge id="election-round-value" bold>
+            {displayElectionRound(election)}
+          </TextHuge>
         </StatisticItem>
       </Statistics>
       {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}

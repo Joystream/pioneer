@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -24,6 +24,8 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+
+configure({ testIdAttribute: 'id' })
 
 const mockCandidateStats = {
   isLoading: false,
@@ -200,9 +202,9 @@ describe('UI: Election page', () => {
       })
 
       it('Displays election round', async () => {
-        const { queryByText } = await renderComponent()
+        await renderComponent()
 
-        expect(queryByText(/1 round/i)).not.toBeNull()
+        expect((await screen.findByTestId('election-round-value')).textContent).toBe('1')
       })
 
       it('Displays stage', async () => {
