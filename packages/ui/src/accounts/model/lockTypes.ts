@@ -57,7 +57,7 @@ const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boole
   }
 }
 
-export const isRecoverable = (type: LockType, isActiveCandidate?: boolean): boolean => {
+export const isRecoverable = (type: LockType, isActiveCandidate?: boolean, isVoteStakeLocked?: boolean): boolean => {
   if (!RECOVERABLE.includes(type)) {
     return false
   }
@@ -65,6 +65,9 @@ export const isRecoverable = (type: LockType, isActiveCandidate?: boolean): bool
   switch (type) {
     case 'Council Candidate':
       return !isActiveCandidate
+
+    case 'Voting':
+      return !isVoteStakeLocked
 
     default:
       return true
