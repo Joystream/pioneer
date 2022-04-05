@@ -52,7 +52,7 @@ export const WorkingGroupsOverview = () => {
       title={t('workingGroups.title')}
       linkPath={WorkingGroupsRoutes.groups}
       infoElements={infoElements}
-      scroller={<WorkingGroupsTilesList openings={openings} />}
+      scroller={<WorkingGroupsTilesList openings={openings} isLoading={groupsLoading} />}
     />
   )
 }

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { Loading } from '@/common/components/Loading'
 import { formatDurationDate } from '@/common/components/statistics'
 import { TextBig, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
@@ -40,14 +41,17 @@ const WorkingGroupTile = React.memo(({ opening }: TileProps) => {
 
 interface ListProps {
   openings: WorkingGroupOpening[]
+  isLoading: boolean
 }
 
-export const WorkingGroupsTilesList = React.memo(({ openings }: ListProps) => {
+export const WorkingGroupsTilesList = React.memo(({ openings, isLoading }: ListProps) => {
   const { t } = useTranslation('overview')
   const tiles = openings.map((opening) => <WorkingGroupTile key={opening.id} opening={opening} />)
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <ScrollerWrapper>
-      <Scroller title={t('workingGroups.openings')} count={tiles.length} items={tiles} />
+      <Scroller title={t('workingGroups.openings')} count={openings.length} items={tiles} />
     </ScrollerWrapper>
   )
 })
