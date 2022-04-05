@@ -15,7 +15,9 @@ export const Amount = ({ label, value }: Props) => (
     <RowGapBlock gap={4}>
       <Label>{label}</Label>
       <TextMedium lighter>
-        <TextInlineMedium dark><TokenValue value={value}/></TextInlineMedium>
+        <TextInlineMedium dark>
+          <TokenValue value={value} />
+        </TextInlineMedium>
       </TextMedium>
     </RowGapBlock>
   </Row>
