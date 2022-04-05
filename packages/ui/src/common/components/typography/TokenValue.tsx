@@ -40,13 +40,12 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
   font-family: ${Fonts.Grotesk};
 
   &:after {
-    content: 'JOY';
+    content: 'tJOY';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
     color: ${Colors.Black[400]};
-    text-transform: uppercase;
     font-family: ${Fonts.Grotesk};
   }
 
