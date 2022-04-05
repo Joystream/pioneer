@@ -82,7 +82,7 @@ export const DecreaseWorkingGroupLeadStake = ({
             <InputComponent
               label="Decrease Stake Amount"
               tight
-              units="JOY"
+              units="tJOY"
               inputWidth="s"
               tooltipText="Amount by which to decrease stake."
               required

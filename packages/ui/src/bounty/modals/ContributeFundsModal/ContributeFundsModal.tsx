@@ -199,7 +199,7 @@ export const ContributeFundsModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="JOY"
+                units="tJOY"
               >
                 <InputNumber
                   id="amount-input"

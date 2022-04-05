@@ -131,7 +131,7 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
           <InputComponent
             id="amount-input"
             label="Select amount for Staking"
-            units="JOY"
+            units="tJOY"
             required
             validation={fields.stake && !isValidStake ? 'invalid' : undefined}
             message={getStakeFieldMessage()}

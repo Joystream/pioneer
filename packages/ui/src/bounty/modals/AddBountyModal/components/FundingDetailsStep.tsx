@@ -84,7 +84,7 @@ export const FundingDetailsStep = ({
           id="field-cherry"
           label="Cherry"
           tight
-          units="JOY"
+          units="tJOY"
           required
           tooltipText="Funding period tooltip"
           message={
@@ -170,7 +170,7 @@ export const FundingDetailsStep = ({
         <InputComponent
           id="field-minRange"
           tight
-          units="JOY"
+          units="tJOY"
           required
           disabled={fundingPeriodType === 'perpetual'}
           message={hasError('fundingMinimalRange', errors) ? getErrorMessage('fundingMinimalRange', errors) : ' '}
@@ -186,7 +186,7 @@ export const FundingDetailsStep = ({
             onChange={(_, value) => setFundingMinimalRange(new BN(value))}
           />
         </InputComponent>
-        <InputComponent id="field-maxRange" tight units="JOY" required label="Maximal range">
+        <InputComponent id="field-maxRange" tight units="tJOY" required label="Maximal range">
           <InputNumber
             isTokenValue
             id="field-maxRange"

@@ -31,7 +31,7 @@ export const FundingRequest = ({ amount, account, setAmount, setAccount }: Fundi
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Amount" tight units="JOY" required message="Amount must be greater than zero">
+          <InputComponent label="Amount" tight units="tJOY" required message="Amount must be greater than zero">
             <InputNumber
               id="amount-input"
               isTokenValue

@@ -98,7 +98,7 @@ export const UpdateWorkingGroupBudget = ({
           <InputComponent
             label="Budget Update"
             tight
-            units="JOY"
+            units="tJOY"
             inputWidth="s"
             tooltipText="Signed amount change in budget. If budget_update is non-negative, then this amount is reduced from the council budget and credited to the group budget, otherwise the reverse."
             required

@@ -150,7 +150,7 @@ export const WorkingDetailsStep = ({
       <InputComponent
         id="field-periodStake"
         label="Entrant stake"
-        units="JOY"
+        units="tJOY"
         inputSize="m"
         tight
         required
