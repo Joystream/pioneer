@@ -87,7 +87,7 @@ export const TerminateWorkingGroupLead = ({
             <InputComponent
               label="Optional slashing Amount"
               tight
-              units="JOY"
+              units="tJOY"
               inputWidth="s"
               tooltipText="Optional amount to be slashed"
               disabled={isDisabled}

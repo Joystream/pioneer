@@ -63,7 +63,7 @@ export const WorkingDetailsStep = ({
   const schema = useMemo(() => {
     baseSchema.fields.workingPeriodStake = baseSchema.fields.workingPeriodStake.min(
       minEntrantStake?.toNumber() ?? 0,
-      'Entrant stake must be greater than minimum of ${min} JOY'
+      'Entrant stake must be greater than minimum of ${min} tJOY'
     )
 
     return baseSchema
@@ -150,14 +150,14 @@ export const WorkingDetailsStep = ({
       <InputComponent
         id="field-periodStake"
         label="Entrant stake"
-        units="JOY"
+        units="tJOY"
         inputSize="m"
         tight
         required
         message={
           hasError('workingPeriodStake', errors)
             ? getErrorMessage('workingPeriodStake', errors)
-            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} JOY`
+            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} tJOY`
         }
         validation={hasError('workingPeriodStake', errors) ? 'invalid' : undefined}
       >

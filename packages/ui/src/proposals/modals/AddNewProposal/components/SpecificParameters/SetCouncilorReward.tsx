@@ -25,7 +25,7 @@ export const SetCouncilorReward = ({ amount, setAmount }: Props) => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="New Councilor Reward" tight units="JOY" required>
+          <InputComponent label="New Councilor Reward" tight units="tJOY" required>
             <InputNumber
               id="amount-input"
               isTokenValue

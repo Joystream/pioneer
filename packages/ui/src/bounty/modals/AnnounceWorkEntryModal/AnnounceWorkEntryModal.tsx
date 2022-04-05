@@ -240,7 +240,7 @@ export const AnnounceWorkEntryModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="JOY"
+                units="tJOY"
                 disabled
               >
                 <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />

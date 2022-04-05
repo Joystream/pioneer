@@ -99,7 +99,7 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="JOY"
+            units="tJOY"
             validation={fields.amount && hasError('amount', errors) ? 'invalid' : undefined}
             message={
               (fields.amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '

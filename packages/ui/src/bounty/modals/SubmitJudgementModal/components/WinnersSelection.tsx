@@ -108,7 +108,7 @@ export const WinnersSelection = ({
               inputWidth="s"
               label={t('modals.submitJudgement.winner.reward')}
               required
-              units="JOY"
+              units="tJOY"
               tight
             >
               <InputNumber

@@ -59,8 +59,8 @@ export const FundingDetailsStep = ({
 
   const schema = useMemo(() => {
     baseSchema.fields.cherry = baseSchema.fields.cherry
-      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} JOY')
-      .max(maxCherryLimit, 'Cherry of ${max} JOY exceeds your balance')
+      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} tJOY')
+      .max(maxCherryLimit, 'Cherry of ${max} tJOY exceeds your balance')
 
     return baseSchema
   }, [maxCherryLimit, minCherryLimit])
@@ -84,11 +84,11 @@ export const FundingDetailsStep = ({
           id="field-cherry"
           label="Cherry"
           tight
-          units="JOY"
+          units="tJOY"
           required
           tooltipText="Funding period tooltip"
           message={
-            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} JOY`
+            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} tJOY`
           }
           validation={hasError('cherry', errors) ? 'invalid' : undefined}
         >
@@ -170,7 +170,7 @@ export const FundingDetailsStep = ({
         <InputComponent
           id="field-minRange"
           tight
-          units="JOY"
+          units="tJOY"
           required
           disabled={fundingPeriodType === 'perpetual'}
           message={hasError('fundingMinimalRange', errors) ? getErrorMessage('fundingMinimalRange', errors) : ' '}
@@ -186,7 +186,7 @@ export const FundingDetailsStep = ({
             onChange={(_, value) => setFundingMinimalRange(new BN(value))}
           />
         </InputComponent>
-        <InputComponent id="field-maxRange" tight units="JOY" required label="Maximal range">
+        <InputComponent id="field-maxRange" tight units="tJOY" required label="Maximal range">
           <InputNumber
             isTokenValue
             id="field-maxRange"

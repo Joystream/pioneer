@@ -84,7 +84,7 @@ export const StakingPolicyAndReward = ({
             id="staking-amount"
             label="Staking amount *"
             tooltipText="Minimum staking requirement for all applicants to this role"
-            units="JOY"
+            units="tJOY"
             tight
             validation={hasError('stakingAmount', errors) ? 'invalid' : undefined}
             message={hasError('stakingAmount', errors) ? getErrorMessage('stakingAmount', errors) : ' '}
@@ -122,8 +122,8 @@ export const StakingPolicyAndReward = ({
           <InputComponent
             id="reward-per-block"
             label="Reward amount per Block"
-            units="JOY"
-            tooltipText="Reward in Joy tokens for the Working group lead"
+            units="tJOY"
+            tooltipText="Reward in tJOY tokens for the Working group lead"
             tight
             validation={hasError('rewardPerBlock', errors) ? 'invalid' : undefined}
             message={hasError('rewardPerBlock', errors) ? getErrorMessage('rewardPerBlock', errors) : ' '}
