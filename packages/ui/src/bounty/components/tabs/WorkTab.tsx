@@ -6,11 +6,16 @@ import styled from 'styled-components'
 import { BountyWorkListItem } from '@/bounty/components/BountyWorkListItem/BountyWorkListItem'
 import { BountyRoutes } from '@/bounty/constants'
 import { useBountyWorks } from '@/bounty/hooks/useBountyWorks'
+import { InputComponent, InputText } from '@/common/components/forms'
+import { CrossIcon } from '@/common/components/icons'
 import { List } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
+import { TextExtraSmall } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
+import { Colors } from '@/common/constants'
+import { useDebounce } from '@/common/hooks/useDebounce'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 
 interface Props {
@@ -21,8 +26,9 @@ interface Props {
 
 export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
   const { t } = useTranslation('bounty')
-  const [entrantSearch] = useState<string>('')
-  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 5, workerHandle: entrantSearch })
+  const [entrantSearch, setEntrantSearch] = useState<string>('')
+  const workerHandleDebounced = useDebounce(entrantSearch, 400)
+  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 5, workerHandle: workerHandleDebounced })
   const query = useRouteQuery()
   const { replace } = useHistory()
   const workId = query.get('work')
@@ -71,7 +77,7 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
 
   return (
     <RowGapBlock gap={4}>
-      {/*{(!!works?.length || entrantSearch) && (
+      {(!!(works.length || isLoading) || workerHandleDebounced) && (
         <FilterContainer>
           {entrantSearch && (
             <ResetFilter light onClick={() => setEntrantSearch('')}>
@@ -91,43 +97,42 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
             </InputComponent>
           </div>
         </FilterContainer>
-      )}*/}
+      )}
       {isLoading ? <Loading /> : worksComponents}
     </RowGapBlock>
   )
 }
 
-// const FilterContainer = styled.div`
-//   width: 100%;
-//   display: flex;
-//   align-items: center;
-//   padding: 10px;
-//   background-color: ${Colors.Black[50]};
-//   height: 68px;
-//   ${TextExtraSmall} {
-//     color: ${Colors.Black[400]};
-//     text-transform: uppercase;
-//     padding-bottom: 5px;
-//   }
-//   position: relative;
-//   margin-top: 15px;
-// `
-//
-// const ResetFilter = styled(TextExtraSmall)`
-//   display: flex;
-//   align-items: center;
-//   position: absolute;
-//   top: -15px;
-//   right: 0;
-//   cursor: pointer;
-//
-//   svg {
-//     width: 11px;
-//     height: 11px;
-//   }
-// `
+const FilterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: ${Colors.Black[50]};
+  height: 68px;
+  ${TextExtraSmall} {
+    color: ${Colors.Black[400]};
+    text-transform: uppercase;
+    padding-bottom: 5px;
+  }
+  position: relative;
+  margin-top: 15px;
+`
+
+const ResetFilter = styled(TextExtraSmall)`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: -15px;
+  right: 0;
+  cursor: pointer;
+
+  svg {
+    width: 11px;
+    height: 11px;
+  }
+`
 
 const StyledList = styled(List)`
-  //margin-top: 40px;
-  margin-top: 0;
+  margin-top: 40px;
 `
