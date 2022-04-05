@@ -135,14 +135,14 @@
         "description": "You intend to withdraw {{value}} stake locks from accounts.",
         "button": "Withdraw Stake",
         "stakingFrom": "Staking from bounty",
-        "amountTitle": "Stake  amount"
+        "amountTitle": "Stake amount"
       },
       "reward": {
         "title": "Claim Reward",
         "description": "You intend to claim reward",
         "button": "Claim Reward",
         "stakingFrom": "Reward from bounty",
-        "amountTitle": "Reward amount",
+        "amountTitle": "Amount",
         "success": "You have successfully claimed your reward.",
         "error": "There was a problem while claiming your reward."
       }

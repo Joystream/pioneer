@@ -14,7 +14,6 @@ const Template: Story<WithdrawInfoProps> = (args) => <WithdrawInfo {...args} />
 export const Default = Template.bind({})
 Default.args = {
   account: { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
-  stakingFromTitle: 'Staking from bounty',
   amountTitle: 'Contribution amount',
-  amount: new BN(20000),
+  rows: [{ stakingFromTitle: 'Staking from bounty', amount: new BN(20000) }],
 }
