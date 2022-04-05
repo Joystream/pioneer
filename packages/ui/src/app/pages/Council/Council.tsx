@@ -71,7 +71,18 @@ export const Council = () => {
 
 const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Councilor) => number) => {
   const direction = isDescending ? -1 : 1
-  return key === 'member'
-    ? (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
-    : (a, b) => (a[key] - b[key]) * direction
+  switch (key) {
+    case 'member': {
+      return (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
+    }
+    case 'electionRoundId': {
+      return (a, b) => a.electionRoundId ? a.electionRoundId.localeCompare(b.electionRoundId ?? '') * direction : -1
+    }
+    default:
+      return (a, b) => (a[key] - b[key]) * direction
+  }
 }
+//   return key === 'member'
+//     ? (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
+//     : (a, b) => (a[key] - b[key]) * direction
+// }

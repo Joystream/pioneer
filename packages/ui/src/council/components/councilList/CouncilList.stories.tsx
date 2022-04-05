@@ -34,6 +34,7 @@ Default.args = {
     unpaidReward: 13923,
     stake: 130923,
     numberOfTerms: 2,
+    electionRoundId: '100'
   },
   isLoading: false,
 }

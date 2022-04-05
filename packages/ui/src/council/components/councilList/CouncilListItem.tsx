@@ -4,16 +4,19 @@ import styled from 'styled-components'
 import { TableListItem } from '@/common/components/List'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { CouncilColLayout } from '@/council/constants/styles'
+import {useVoteStake} from '@/council/hooks/useVoteStake';
 import { Councilor } from '@/council/types'
 import { MemberInfo } from '@/memberships/components'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
+
 export interface CouncilListItemProps {
-  councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms'>
+  councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms' | 'electionRoundId'>
 }
 export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
   const showMemberModal = useShowMemberModal(councilor.member.id)
-
+  const data = useVoteStake( [councilor.member.id], councilor.electionRoundId)
+  console.log('councilor', councilor)
   return (
     <CouncilListItemStyles onClick={showMemberModal}>
       <MemberInfo member={councilor.member} />
