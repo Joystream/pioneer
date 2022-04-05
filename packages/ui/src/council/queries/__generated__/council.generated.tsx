@@ -5,7 +5,7 @@ import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generate
 import { ProposalFieldsFragmentDoc } from '../../../proposals/queries/__generated__/proposals.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type CouncilMemberFieldsFragment = { __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> }, electedInCouncil: { __typename: 'ElectedCouncil', councilElections: Array<{ __typename: 'ElectionRound', id: string }> } };
+export type CouncilMemberFieldsFragment = { __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } };
 
 export type PastCouncilProposalsFieldsFragment = { __typename: 'ProposalVotedEvent', voteKind: Types.ProposalVoteKind, voterId: string, proposal: { __typename: 'Proposal', id: string, title: string, statusSetAtTime: any, createdAt: any, councilApprovals: number, status: { __typename: 'ProposalStatusCanceledByRuntime' } | { __typename: 'ProposalStatusCancelled' } | { __typename: 'ProposalStatusDeciding' } | { __typename: 'ProposalStatusDormant' } | { __typename: 'ProposalStatusExecuted' } | { __typename: 'ProposalStatusExecutionFailed' } | { __typename: 'ProposalStatusExpired' } | { __typename: 'ProposalStatusGracing' } | { __typename: 'ProposalStatusRejected' } | { __typename: 'ProposalStatusSlashed' } | { __typename: 'ProposalStatusVetoed' }, details: { __typename: 'AmendConstitutionProposalDetails' } | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' } | { __typename: 'CreateBlogPostProposalDetails' } | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' } | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' } | { __typename: 'EditBlogPostProposalDetails' } | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' } | { __typename: 'FundingRequestProposalDetails' } | { __typename: 'LockBlogPostProposalDetails' } | { __typename: 'RuntimeUpgradeProposalDetails' } | { __typename: 'SetCouncilBudgetIncrementProposalDetails' } | { __typename: 'SetCouncilorRewardProposalDetails' } | { __typename: 'SetInitialInvitationBalanceProposalDetails' } | { __typename: 'SetInitialInvitationCountProposalDetails' } | { __typename: 'SetMaxValidatorCountProposalDetails' } | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' } | { __typename: 'SetMembershipPriceProposalDetails' } | { __typename: 'SetReferralCutProposalDetails' } | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' } | { __typename: 'SignalProposalDetails' } | { __typename: 'SlashWorkingGroupLeadProposalDetails' } | { __typename: 'TerminateWorkingGroupLeadProposalDetails' } | { __typename: 'UnlockBlogPostProposalDetails' } | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' } | { __typename: 'VetoProposalDetails' }, creator: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } } };
 
@@ -17,7 +17,7 @@ export type PastCouncilRewardPaidEventFieldsFragment = { __typename: 'RewardPaid
 
 export type PastCouncilNewMissedRewardLevelReachedEventFieldsFragment = { __typename: 'NewMissedRewardLevelReachedEvent', groupId: string, workerId: string, newMissedRewardAmount: any };
 
-export type ElectedCouncilFieldsFragment = { __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> }, electedInCouncil: { __typename: 'ElectedCouncil', councilElections: Array<{ __typename: 'ElectionRound', id: string }> } }> };
+export type ElectedCouncilFieldsFragment = { __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', id: string }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> };
 
 export type PastCouncilFieldsFragment = { __typename: 'ElectedCouncil', id: string, endedAtBlock?: number | null, endedAtNetwork?: Types.Network | null, endedAtTime?: any | null };
 
@@ -42,7 +42,7 @@ export type FundingRequestApprovedFragment = { __typename: 'ProposalExecutedEven
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetElectedCouncilQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> }, electedInCouncil: { __typename: 'ElectedCouncil', councilElections: Array<{ __typename: 'ElectionRound', id: string }> } }> }> };
+export type GetElectedCouncilQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', id: string }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> }> };
 
 export type GetVoterStakeQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -246,11 +246,6 @@ export const CouncilMemberFieldsFragmentDoc = gql`
   }
   unpaidReward
   stake
-  electedInCouncil {
-    councilElections {
-      id
-    }
-  }
 }
     ${MemberFieldsFragmentDoc}`;
 export const ElectedCouncilFieldsFragmentDoc = gql`
@@ -259,6 +254,9 @@ export const ElectedCouncilFieldsFragmentDoc = gql`
   electedAtBlock
   electedAtTime
   electedAtNetwork
+  councilElections {
+    id
+  }
   councilMembers {
     ...CouncilMemberFields
   }

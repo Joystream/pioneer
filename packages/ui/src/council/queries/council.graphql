@@ -8,11 +8,6 @@ fragment CouncilMemberFields on CouncilMember {
   }
   unpaidReward
   stake
-  electedInCouncil {
-    councilElections {
-      id
-    }
-  }
 }
 
 fragment PastCouncilProposalsFields on ProposalVotedEvent {
@@ -49,6 +44,9 @@ fragment ElectedCouncilFields on ElectedCouncil {
   electedAtBlock
   electedAtTime
   electedAtNetwork
+  councilElections {
+    id
+  }
   councilMembers {
     ...CouncilMemberFields
   }

@@ -7,7 +7,6 @@ export interface Councilor {
   numberOfTerms: number
   unpaidReward: number
   stake: number
-  electionRoundId: string | undefined
 }
 
 export const asCouncilor = (fields: CouncilMemberFieldsFragment): Councilor => ({
@@ -16,5 +15,4 @@ export const asCouncilor = (fields: CouncilMemberFieldsFragment): Councilor => (
   numberOfTerms: fields.member.councilMembers.length,
   unpaidReward: fields.unpaidReward,
   stake: fields.stake,
-  electionRoundId: fields.electedInCouncil.councilElections[0]?.id
 })

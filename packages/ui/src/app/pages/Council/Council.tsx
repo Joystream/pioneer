@@ -22,7 +22,6 @@ export const Council = () => {
   const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
   const { activities } = useCouncilActivities()
   const { stage: electionStage } = useElectionStage()
-
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
 
@@ -55,7 +54,7 @@ export const Council = () => {
       {!isLoading && councilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
       ) : (
-        <CouncilList councilors={councilors} order={order} onSort={setOrder} isLoading={isLoading} />
+        <CouncilList councilors={councilors} order={order} onSort={setOrder} isLoading={isLoading}/>
       )}
     </MainPanel>
   )
@@ -71,18 +70,7 @@ export const Council = () => {
 
 const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Councilor) => number) => {
   const direction = isDescending ? -1 : 1
-  switch (key) {
-    case 'member': {
-      return (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
-    }
-    case 'electionRoundId': {
-      return (a, b) => a.electionRoundId ? a.electionRoundId.localeCompare(b.electionRoundId ?? '') * direction : -1
-    }
-    default:
-      return (a, b) => (a[key] - b[key]) * direction
-  }
+  return key === 'member'
+    ? (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
+    : (a, b) => (a[key] - b[key]) * direction
 }
-//   return key === 'member'
-//     ? (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
-//     : (a, b) => (a[key] - b[key]) * direction
-// }
