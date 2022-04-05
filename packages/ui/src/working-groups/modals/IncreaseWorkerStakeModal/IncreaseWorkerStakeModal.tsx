@@ -42,7 +42,7 @@ export const IncreaseWorkerStakeModal = () => {
     if (balance?.transferable) {
       StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.max(
         balance?.transferable.toNumber(),
-        'Given amount exceed your transferable balance of ${max} JOY'
+        'Given amount exceed your transferable balance of ${max} tJOY'
       )
     }
     return StakeFormSchema

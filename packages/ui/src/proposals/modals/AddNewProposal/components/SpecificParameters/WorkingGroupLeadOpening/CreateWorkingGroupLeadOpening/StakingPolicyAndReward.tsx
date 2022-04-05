@@ -123,7 +123,7 @@ export const StakingPolicyAndReward = ({
             id="reward-per-block"
             label="Reward amount per Block"
             units="tJOY"
-            tooltipText="Reward in Joy tokens for the Working group lead"
+            tooltipText="Reward in tJOY tokens for the Working group lead"
             tight
             validation={hasError('rewardPerBlock', errors) ? 'invalid' : undefined}
             message={hasError('rewardPerBlock', errors) ? getErrorMessage('rewardPerBlock', errors) : ' '}

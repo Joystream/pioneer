@@ -76,11 +76,11 @@ export const StakeStep = ({ candidacyMember, minStake, stake, setStake, account,
 
     return isSomeBalanceGteStake ? (
       <>
-        Minimum stake amount is <TextInlineSmall bold>{formatTokenValue(minStake)} JOY</TextInlineSmall>
+        Minimum stake amount is <TextInlineSmall bold>{formatTokenValue(minStake)} tJOY</TextInlineSmall>
       </>
     ) : (
       <>
-        You have no <TextInlineSmall bold>{formatTokenValue(fields.stake)} JOY</TextInlineSmall> on any of your
+        You have no <TextInlineSmall bold>{formatTokenValue(fields.stake)} tJOY</TextInlineSmall> on any of your
         accounts.
       </>
     )

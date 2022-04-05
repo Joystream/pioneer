@@ -77,7 +77,7 @@ export const UpdateWorkingGroupBudget = ({
             <Info>
               <TextMedium>
                 Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.budget)} JOY</TextInlineMedium>.
+                <TextInlineMedium bold>{formatTokenValue(group.budget)} tJOY</TextInlineMedium>.
               </TextMedium>
             </Info>
           )}

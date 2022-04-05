@@ -65,7 +65,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Required Stake</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.requiredStake)}</TextInlineMedium> JOY
+          <TextInlineMedium dark>{formatTokenValue(constants?.requiredStake)}</TextInlineMedium> tJOY
         </TextMedium>
       </RowGapBlock>
     </Row>

@@ -40,7 +40,7 @@ export const SetInitialInvitationBalance = ({ setAmount, amount }: FundingReques
             />
           </InputComponent>
           <Row>
-            <TextMedium lighter>The current balance is {currentBalance?.toString()} JOY.</TextMedium>
+            <TextMedium lighter>The current balance is {currentBalance?.toString()} tJOY.</TextMedium>
           </Row>
         </RowGapBlock>
       </Row>

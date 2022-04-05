@@ -59,8 +59,8 @@ export const FundingDetailsStep = ({
 
   const schema = useMemo(() => {
     baseSchema.fields.cherry = baseSchema.fields.cherry
-      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} JOY')
-      .max(maxCherryLimit, 'Cherry of ${max} JOY exceeds your balance')
+      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} tJOY')
+      .max(maxCherryLimit, 'Cherry of ${max} tJOY exceeds your balance')
 
     return baseSchema
   }, [maxCherryLimit, minCherryLimit])
@@ -88,7 +88,7 @@ export const FundingDetailsStep = ({
           required
           tooltipText="Funding period tooltip"
           message={
-            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} JOY`
+            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} tJOY`
           }
           validation={hasError('cherry', errors) ? 'invalid' : undefined}
         >
