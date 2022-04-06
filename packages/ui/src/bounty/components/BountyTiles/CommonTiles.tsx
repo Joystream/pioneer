@@ -19,10 +19,8 @@ export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const { data } = useGetBountyWorksCountQuery({
     variables: {
       where: {
-        entry: {
-          bounty: {
-            id_eq: bounty.id,
-          },
+        bounty: {
+          id_eq: bounty.id,
         },
       },
     },

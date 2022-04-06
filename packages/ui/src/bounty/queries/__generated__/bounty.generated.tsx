@@ -250,50 +250,50 @@ export type BountyWorkFieldsFragment = {
 }
 
 export type BountyWorkWithDetailsFieldsFragment = {
-  __typename: 'WorkSubmittedEvent'
-  inBlock: number
-  createdAt: any
-  network: Types.Network
+  __typename: 'BountyEntry'
   id: string
-  title?: string | null
-  description?: string | null
-  entry: {
-    __typename: 'BountyEntry'
+  workSubmitted: boolean
+  works?: Array<{
+    __typename: 'WorkSubmittedEvent'
+    inBlock: number
+    createdAt: any
+    network: Types.Network
     id: string
-    workSubmitted: boolean
-    worker: {
-      __typename: 'Membership'
-      id: string
-      rootAccount: string
-      controllerAccount: string
-      boundAccounts: Array<string>
-      handle: string
-      isVerified: boolean
-      isFoundingMember: boolean
-      inviteCount: number
-      createdAt: any
-      metadata: {
-        __typename: 'MemberMetadata'
-        name?: string | null
-        about?: string | null
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        isLead: boolean
-        group: { __typename: 'WorkingGroup'; name: string }
-      }>
+    title?: string | null
+    description?: string | null
+  }> | null
+  worker: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
-    status:
-      | { __typename: 'BountyEntryStatusPassed' }
-      | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
-      | { __typename: 'BountyEntryStatusWithdrawn' }
-      | { __typename: 'BountyEntryStatusWorking' }
-    withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
   }
+  status:
+    | { __typename: 'BountyEntryStatusPassed' }
+    | { __typename: 'BountyEntryStatusRejected' }
+    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWithdrawn' }
+    | { __typename: 'BountyEntryStatusWorking' }
+  withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
 }
 
 export type BountyContributionFieldsFragment = {
@@ -677,59 +677,59 @@ export type GetBountyQuery = {
 }
 
 export type GetBountyWorksQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.WorkSubmittedEventWhereInput>
-  order?: Types.InputMaybe<Array<Types.WorkSubmittedEventOrderByInput> | Types.WorkSubmittedEventOrderByInput>
+  where?: Types.InputMaybe<Types.BountyEntryWhereInput>
+  order?: Types.InputMaybe<Array<Types.BountyEntryOrderByInput> | Types.BountyEntryOrderByInput>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
   limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetBountyWorksQuery = {
   __typename: 'Query'
-  workSubmittedEvents: Array<{
-    __typename: 'WorkSubmittedEvent'
-    inBlock: number
-    createdAt: any
-    network: Types.Network
+  bountyEntries: Array<{
+    __typename: 'BountyEntry'
     id: string
-    title?: string | null
-    description?: string | null
-    entry: {
-      __typename: 'BountyEntry'
+    workSubmitted: boolean
+    works?: Array<{
+      __typename: 'WorkSubmittedEvent'
+      inBlock: number
+      createdAt: any
+      network: Types.Network
       id: string
-      workSubmitted: boolean
-      worker: {
-        __typename: 'Membership'
-        id: string
-        rootAccount: string
-        controllerAccount: string
-        boundAccounts: Array<string>
-        handle: string
-        isVerified: boolean
-        isFoundingMember: boolean
-        inviteCount: number
-        createdAt: any
-        metadata: {
-          __typename: 'MemberMetadata'
-          name?: string | null
-          about?: string | null
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          isLead: boolean
-          group: { __typename: 'WorkingGroup'; name: string }
-        }>
+      title?: string | null
+      description?: string | null
+    }> | null
+    worker: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
-      status:
-        | { __typename: 'BountyEntryStatusPassed' }
-        | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
-        | { __typename: 'BountyEntryStatusWithdrawn' }
-        | { __typename: 'BountyEntryStatusWorking' }
-      withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
     }
+    status:
+      | { __typename: 'BountyEntryStatusPassed' }
+      | { __typename: 'BountyEntryStatusRejected' }
+      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWithdrawn' }
+      | { __typename: 'BountyEntryStatusWorking' }
+    withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
   }>
 }
 
@@ -918,17 +918,17 @@ export const BountyFieldsFragmentDoc = gql`
   ${BountyEntryWithDetailsFieldsFragmentDoc}
 `
 export const BountyWorkWithDetailsFieldsFragmentDoc = gql`
-  fragment BountyWorkWithDetailsFields on WorkSubmittedEvent {
-    ...BountyWorkFields
-    inBlock
-    createdAt
-    network
-    entry {
-      ...BountyEntryFields
+  fragment BountyWorkWithDetailsFields on BountyEntry {
+    ...BountyEntryFields
+    works {
+      ...BountyWorkFields
+      inBlock
+      createdAt
+      network
     }
   }
-  ${BountyWorkFieldsFragmentDoc}
   ${BountyEntryFieldsFragmentDoc}
+  ${BountyWorkFieldsFragmentDoc}
 `
 export const GetBountiesDocument = gql`
   query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
@@ -1051,13 +1051,8 @@ export type GetBountyQueryHookResult = ReturnType<typeof useGetBountyQuery>
 export type GetBountyLazyQueryHookResult = ReturnType<typeof useGetBountyLazyQuery>
 export type GetBountyQueryResult = Apollo.QueryResult<GetBountyQuery, GetBountyQueryVariables>
 export const GetBountyWorksDocument = gql`
-  query GetBountyWorks(
-    $where: WorkSubmittedEventWhereInput
-    $order: [WorkSubmittedEventOrderByInput!]
-    $offset: Int
-    $limit: Int
-  ) {
-    workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+  query GetBountyWorks($where: BountyEntryWhereInput, $order: [BountyEntryOrderByInput!], $offset: Int, $limit: Int) {
+    bountyEntries(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
       ...BountyWorkWithDetailsFields
     }
   }

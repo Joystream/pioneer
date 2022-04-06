@@ -58,7 +58,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
       <HeaderWrapper>
         <Title lighter>
           {title}
-          {!!count && <CountBadge count={count} />}
+          {typeof count === 'number' && <CountBadge count={count} />}
         </Title>
         {!isTooSmallForScroll && (
           <ButtonWrapper>

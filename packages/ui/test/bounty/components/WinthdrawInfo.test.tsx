@@ -12,9 +12,8 @@ describe('UI: WithdrawInfo', () => {
   const stakingFromTitle = 'staking-from-title'
   const props: WithdrawInfoProps = {
     account,
-    amount,
     amountTitle,
-    stakingFromTitle,
+    rows: [{ amount, stakingFromTitle }],
   }
 
   beforeEach(() => {

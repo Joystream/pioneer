@@ -14,7 +14,8 @@ import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/Add
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
-import { BNSchema, MemberSchema } from '@/memberships/model/validation'
+import { BNSchema, minContext, maxContext, moreThanMixed, lessThanMixed } from '@/common/utils/validation'
+import { MemberSchema } from '@/memberships/model/validation'
 
 export interface Conditions {
   isThreadCategoryLoading?: boolean
@@ -39,8 +40,8 @@ export const getSchemaFields = (state: AddBountyModalMachineState) => ({
   },
   [AddBountyStates.fundingPeriodDetails]: {
     cherry: state.context.cherry,
-    fundingMaximalRange: state.context.fundingMaximalRange?.toNumber(),
-    fundingMinimalRange: state.context.fundingMinimalRange?.toNumber(),
+    fundingMaximalRange: state.context.fundingMaximalRange,
+    fundingMinimalRange: state.context.fundingMinimalRange,
     fundingPeriodLength: state.context.fundingPeriodLength?.toNumber(),
     fundingPeriodType: state.context.fundingPeriodType,
   },
@@ -64,19 +65,15 @@ export const addBountyModalSchema = Yup.object().shape({
     description: Yup.string().required(),
   }),
   [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
-    cherry: BNSchema
-      // @ts-expect-error: custom yup validator method
-      .minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit')
-      .maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit')
+    cherry: BNSchema.test(minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit'))
+      .test(maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit'))
       .required(''),
-    fundingMaximalRange: Yup.number().min(1, 'Value must be greater than zero').required(''),
-    fundingMinimalRange: Yup.number()
-      .test('required', 'Minimal range is now required', (value, context) => {
-        return !(context.parent.fundingPeriodType === 'limited' && !value)
-      })
-      .lessThan(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal')
-      // @ts-expect-error: custom yup validator method
-      .minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'),
+    fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero')).required(''),
+    fundingMinimalRange: BNSchema.test('required', 'Minimal range is now required', (value, context) => {
+      return !(context.parent.fundingPeriodType === 'limited' && !value)
+    })
+      .test(lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal'))
+      .test(minContext('Minimal range must be bigger than ${min}', 'minFundingLimit')),
     fundingPeriodLength: Yup.number().test((value, context) => {
       if (context.parent.fundingPeriodType !== 'limited') {
         return true
@@ -89,10 +86,9 @@ export const addBountyModalSchema = Yup.object().shape({
     fundingPeriodType: Yup.string(),
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
-    workingPeriodStake: BNSchema
-      // @ts-expect-error: custom yup validator method
-      .minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
-      .required(''),
+    workingPeriodStake: BNSchema.test(
+      minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
+    ).required(''),
     workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
     workingPeriodType: Yup.string(),
     workingPeriodWhitelist: Yup.array().test((value, context) => {
