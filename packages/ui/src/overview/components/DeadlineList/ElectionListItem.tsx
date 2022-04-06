@@ -24,9 +24,10 @@ import {
 export interface ElectionListItemProps {
   electionId: string
   title: string
+  hideForStorage: (id: string) => void
 }
 
-export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ electionId, title }) => {
+export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ electionId, title, hideForStorage }) => {
   const { t } = useTranslation('overview')
   const { stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
@@ -83,7 +84,13 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ e
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle deadlineTime={remainingCalculation} /> <StyledClosedButton onClick={setHideElement} />
+          <StyledTriangle deadlineTime={remainingCalculation} />{' '}
+          <StyledClosedButton
+            onClick={() => {
+              setHideElement()
+              hideForStorage(electionId)
+            }}
+          />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>

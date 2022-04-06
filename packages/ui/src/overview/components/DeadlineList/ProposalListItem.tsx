@@ -25,9 +25,10 @@ import {
 export interface ProposalListItemProps {
   proposalId: string
   title: string
+  hideForStorage: (id: string) => void
 }
 
-export const ProposalListItem = ({ proposalId, title }: ProposalListItemProps) => {
+export const ProposalListItem = ({ proposalId, title, hideForStorage }: ProposalListItemProps) => {
   const { t } = useTranslation('overview')
   const { proposal } = useProposal(proposalId)
   const constants = useProposalConstants(proposal?.details.type)
@@ -55,7 +56,13 @@ export const ProposalListItem = ({ proposalId, title }: ProposalListItemProps) =
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle deadlineTime={remainingCalculation()} /> <StyledClosedButton onClick={setHideElement} />
+          <StyledTriangle deadlineTime={remainingCalculation()} />{' '}
+          <StyledClosedButton
+            onClick={() => {
+              setHideElement()
+              hideForStorage(proposalId)
+            }}
+          />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>

@@ -20,9 +20,11 @@ export interface OpeningsListItemProps {
   title: string
   type: 'openings' | 'upcoming'
   groupName: string
+  hideForStorage: (id: string) => void
+  id: string
 }
 
-export const OpeningsListItem = ({ title, type, groupName }: OpeningsListItemProps) => {
+export const OpeningsListItem = ({ title, type, groupName, hideForStorage, id }: OpeningsListItemProps) => {
   const { t } = useTranslation('overview')
   const [hideElement, setHideElement] = useToggle(false)
 
@@ -34,7 +36,13 @@ export const OpeningsListItem = ({ title, type, groupName }: OpeningsListItemPro
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle /> <StyledClosedButton onClick={setHideElement} />
+          <StyledTriangle />{' '}
+          <StyledClosedButton
+            onClick={() => {
+              setHideElement()
+              hideForStorage(id)
+            }}
+          />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
