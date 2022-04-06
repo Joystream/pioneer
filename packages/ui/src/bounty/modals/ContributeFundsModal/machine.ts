@@ -1,4 +1,5 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
+import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import {
@@ -9,9 +10,15 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-interface TransactionContext {
+interface ContributeContext {
+  amount: BN
+}
+
+interface TransactionContext extends ContributeContext {
   transactionEvents?: EventRecord[]
 }
+
+type ContributeFundsMachineContext = Partial<ContributeContext | TransactionContext>
 
 export enum ContributeFundStates {
   requirementsVerification = 'requirementsVerification',
@@ -23,18 +30,23 @@ export enum ContributeFundStates {
 }
 
 type NextEvent = { type: 'NEXT' }
+type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 
-export type ContributeFundEvents = NextEvent
+export type ContributeFundEvents = NextEvent | SetAmountEvent
 
 export type ContributeFundsState =
   | { value: ContributeFundStates.requirementsVerification; context: EmptyObject }
-  | { value: ContributeFundStates.contribute; context: EmptyObject }
+  | { value: ContributeFundStates.contribute; context: Required<ContributeContext> }
   | { value: ContributeFundStates.transaction; context: EmptyObject }
   | { value: ContributeFundStates.success; context: EmptyObject }
   | { value: ContributeFundStates.cancel; context: EmptyObject }
   | { value: ContributeFundStates.error; context: Required<TransactionContext> }
 
-export const contributeFundsMachine = createMachine<TransactionContext, ContributeFundEvents, ContributeFundsState>({
+export const contributeFundsMachine = createMachine<
+  ContributeFundsMachineContext,
+  ContributeFundEvents,
+  ContributeFundsState
+>({
   initial: 'requirementsVerification',
   states: {
     [ContributeFundStates.requirementsVerification]: {
@@ -45,6 +57,11 @@ export const contributeFundsMachine = createMachine<TransactionContext, Contribu
     [ContributeFundStates.contribute]: {
       id: ContributeFundStates.contribute,
       on: {
+        SET_AMOUNT: {
+          actions: assign({
+            amount: (context, event) => (event as SetAmountEvent).amount,
+          }),
+        },
         NEXT: ContributeFundStates.transaction,
       },
     },
