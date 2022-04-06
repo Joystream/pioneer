@@ -28,6 +28,8 @@ const WorkingDetailsStepTemplate: Story = () => {
         workingPeriodLength={workingPeriodLength}
         workingPeriodWhitelist={workingPeriodWhitelist}
         workingPeriodStake={workingPeriodStake}
+        errorChecker={() => false}
+        errorMessageGetter={() => undefined}
       />
     </MockApolloProvider>
   )

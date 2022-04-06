@@ -13,7 +13,7 @@ export default {
 
 const FundingDetailsTemplate: Story = () => {
   const [fundingMaximalRange, setFundingMaximalRange] = useState(BN_ZERO)
-  const [fundingMinimalRange, setFundingMinimalRange] = useState(BN_ZERO)
+  const [fundingMinimalRange] = useState(BN_ZERO)
   const [cherry, setCherry] = useState(BN_ZERO)
   const [, setFundingPeriodType] = useState('')
   const [fundingPeriodLength, setFundingPeriodLength] = useState(BN_ZERO)
@@ -22,17 +22,18 @@ const FundingDetailsTemplate: Story = () => {
     <MockApolloProvider members>
       <FundingDetailsStep
         setFundingMaximalRange={setFundingMaximalRange}
-        setFundingMinimalRange={setFundingMinimalRange}
+        setFundingMinimalRange={() => undefined}
         fundingMaximalRange={fundingMaximalRange}
         fundingMinimalRange={fundingMinimalRange}
         cherry={cherry}
         setCherry={setCherry}
-        maxCherryLimit={1000}
         minCherryLimit={10}
         setFundingPeriodLength={setFundingPeriodLength}
         fundingPeriodLength={fundingPeriodLength}
         setFundingPeriodType={setFundingPeriodType}
         fundingPeriodType="limited"
+        errorChecker={() => false}
+        errorMessageGetter={() => undefined}
       />
     </MockApolloProvider>
   )
