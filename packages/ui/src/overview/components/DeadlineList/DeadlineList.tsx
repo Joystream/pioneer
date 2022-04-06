@@ -11,7 +11,6 @@ import { ElectionListItem } from '@/overview/components/DeadlineList/ElectionLis
 import { OpeningsListItem } from '@/overview/components/DeadlineList/OpeningsListItem'
 import { ProposalListItem } from '@/overview/components/DeadlineList/ProposalListItem'
 import { StyledBadge, StyledText, TimeWrapper } from '@/overview/components/DeadlineList/styles'
-import { useDeadlines } from '@/overview/hooks/useDeadlines'
 import { useProposals } from '@/proposals/hooks/useProposals'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -23,7 +22,7 @@ export interface DeadlineListProps {
 
 export type DeadlineNamespace = 'election' | 'proposals' | 'openings' | 'upcomingOpenings'
 
-const initalizer: Record<DeadlineNamespace, string[]> = {
+const initializer: Record<DeadlineNamespace, string[]> = {
   proposals: [],
   openings: [],
   upcomingOpenings: [],
@@ -37,31 +36,23 @@ export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGr
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup?.id })
   const { isLoading: openingLoading, openings } = useOpenings({ groupId: workingGroup?.id, type: 'open' })
   const [storageDeadlines, setStorageDeadlines] = useLocalStorage<Record<DeadlineNamespace, string[]>>('deadlines')
-  const [tempProposals, setTempProposals] = useState<Record<DeadlineNamespace, string[]> | null>(null)
+  const [tempDeadlines, setTempDeadlines] = useState<Record<DeadlineNamespace, string[]> | null>(null)
   const tempRef = useRef<boolean>(false)
   useEffect(() => {
-    if (!tempRef.current && !tempProposals) {
-      setTempProposals(storageDeadlines ?? initalizer)
+    if (!tempRef.current && !tempDeadlines) {
+      setTempDeadlines(storageDeadlines ?? initializer)
       tempRef.current = true
     }
 
     return () => {
-      if (tempProposals) {
-        setStorageDeadlines(tempProposals)
+      if (tempDeadlines) {
+        setStorageDeadlines(tempDeadlines)
       }
     }
-  }, [storageDeadlines, tempProposals])
+  }, [storageDeadlines, tempDeadlines])
 
-  // useEffect(() => {
-  //   return () => {
-  //     console.log('unmounted', tempProposals)
-  //     if (tempProposals) {
-  //       setStorageDeadlines(tempProposals)
-  //     }
-  //   }
-  // }, [JSON.stringify(tempProposals)])
   const helper = (namespace: DeadlineNamespace) => (id: string) => {
-    setTempProposals((prev) => {
+    setTempDeadlines((prev) => {
       return prev
         ? {
             ...prev,
@@ -73,17 +64,17 @@ export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGr
 
   const deadlines = useMemo((): Record<DeadlineNamespace, any[]> => {
     return {
-      proposals: tempProposals?.proposals
-        ? proposals.filter((proposal) => !tempProposals.proposals.includes(proposal.id))
+      proposals: tempDeadlines?.proposals
+        ? proposals.filter((proposal) => !tempDeadlines.proposals.includes(proposal.id))
         : proposals,
-      election: tempProposals?.election
-        ? election?.candidates.filter((candidate) => !tempProposals.election.includes(candidate.id)) ?? []
+      election: tempDeadlines?.election
+        ? election?.candidates.filter((candidate) => !tempDeadlines.election.includes(candidate.id)) ?? []
         : election?.candidates ?? [],
-      openings: tempProposals?.openings
-        ? openings.filter((opening) => !tempProposals.openings.includes(opening.id))
+      openings: tempDeadlines?.openings
+        ? openings.filter((opening) => !tempDeadlines.openings.includes(opening.id))
         : openings,
-      upcomingOpenings: tempProposals?.upcomingOpenings
-        ? upcomingOpenings.filter((upcomingOpening) => !tempProposals.upcomingOpenings.includes(upcomingOpening.id))
+      upcomingOpenings: tempDeadlines?.upcomingOpenings
+        ? upcomingOpenings.filter((upcomingOpening) => !tempDeadlines.upcomingOpenings.includes(upcomingOpening.id))
         : upcomingOpenings,
     }
   }, [storageDeadlines?.proposals, proposals, election, upcomingOpenings, openings])
