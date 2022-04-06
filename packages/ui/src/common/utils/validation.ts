@@ -20,9 +20,8 @@ export const maxContext = (msg: string, contextPath: string): Yup.TestConfig<any
       return true
     }
 
-    const parsedValue = new BN(value)
     const validationValue = this.options.context?.[contextPath]
-    if (!(validationValue?.gte(parsedValue) || parsedValue.lten(validationValue))) {
+    if (validationValue && new BN(validationValue).lt(new BN(value))) {
       return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
     }
 
@@ -38,9 +37,8 @@ export const minContext = (msg: string, contextPath: string): Yup.TestConfig<any
       return true
     }
 
-    const parsedValue = new BN(value)
     const validationValue = this.options.context?.[contextPath]
-    if (!(validationValue?.lte(parsedValue) || parsedValue.gtn(validationValue))) {
+    if (validationValue && new BN(validationValue).gt(new BN(value))) {
       return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
     }
 
@@ -56,13 +54,7 @@ export const lessThanMixed = (
   name: 'lessThanMixed',
   exclusive: false,
   test(value: BN) {
-    if (!value || !isBn(value)) {
-      return true
-    }
-
-    const lessValue = this.resolve(less)
-
-    return isBn(lessValue) ? value.lt(lessValue) : value.ltn(lessValue)
+    return !value || !isBn(value) || value.lt(new BN(this.resolve(less)))
   },
 })
 
@@ -75,12 +67,6 @@ export const moreThanMixed = (
   params: { more },
   exclusive: false,
   test(value: BN) {
-    if (!value || !isBn(value)) {
-      return true
-    }
-
-    const lessValue = this.resolve(more)
-
-    return isBn(lessValue) ? value.gt(lessValue) : value.gtn(lessValue)
+    return !value || !isBn(value) || value.gt(new BN(this.resolve(more)))
   },
 })
