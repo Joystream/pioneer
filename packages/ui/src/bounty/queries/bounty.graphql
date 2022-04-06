@@ -118,9 +118,6 @@ query GetBounty($where: BountyWhereUniqueInput!) {
 }
 
 query GetBountyWorks($where: BountyEntryWhereInput, $order: [BountyEntryOrderByInput!], $offset: Int, $limit: Int) {
-  #  workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
-  #    ...BountyWorkWithDetailsFields
-  #  }
   bountyEntries(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
     ...BountyWorkWithDetailsFields
   }
