@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { Children } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -12,12 +12,15 @@ import { Colors, Sizes } from '@/common/constants'
 
 export interface WithdrawInfoProps {
   account: Account
-  stakingFromTitle: string
   amountTitle: string
+  rows: WithdrawInfoRow[]
+}
+export interface WithdrawInfoRow {
+  stakingFromTitle: string
   amount: BN
 }
 
-export const WithdrawInfo = React.memo(({ account, stakingFromTitle, amountTitle, amount }: WithdrawInfoProps) => {
+export const WithdrawInfo = React.memo(({ account, amountTitle, rows }: WithdrawInfoProps) => {
   const { t } = useTranslation()
 
   return (
@@ -27,17 +30,23 @@ export const WithdrawInfo = React.memo(({ account, stakingFromTitle, amountTitle
         <BalanceInfoInRow>
           <DataWrapper>
             <TextSmall lighter>{t('withdrawing')}</TextSmall>
-            <TitleWithIcon>
-              <VotingSymbol />
-              <InfoTitle>{stakingFromTitle}</InfoTitle>
-            </TitleWithIcon>
           </DataWrapper>
-          <InfoValue>
-            <DataWrapper last>
-              <TextSmall lighter>{amountTitle}</TextSmall>
-              <TokenValue value={amount} />
-            </DataWrapper>
-          </InfoValue>
+          <DataWrapper last>
+            <TextSmall lighter>{amountTitle}</TextSmall>
+          </DataWrapper>
+          {Children.toArray(
+            rows.map(({ stakingFromTitle, amount }) => (
+              <>
+                <TitleWithIcon>
+                  <VotingSymbol />
+                  <InfoTitle>{stakingFromTitle}</InfoTitle>
+                </TitleWithIcon>
+                <InfoValue>
+                  <TokenValue value={amount} />
+                </InfoValue>
+              </>
+            ))
+          )}
         </BalanceInfoInRow>
       </LockedAccount>
     </Wrapper>
@@ -47,14 +56,18 @@ export const WithdrawInfo = React.memo(({ account, stakingFromTitle, amountTitle
 const Wrapper = styled.div`
   position: relative;
   display: flex;
-  margin-top: 20px;
   > div {
     background: ${Colors.White};
   }
+
+  ${BalanceInfoInRow} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
-const DataWrapper = styled.span<{ last?: boolean }>`
-  > p {
+const DataWrapper = styled.div<{ last?: boolean }>`
+  ${TextSmall} {
     position: absolute;
     bottom: calc((${Sizes.selectHeight} / 2) + 50% + 4px);
     right: ${({ last }) => last && '0'};

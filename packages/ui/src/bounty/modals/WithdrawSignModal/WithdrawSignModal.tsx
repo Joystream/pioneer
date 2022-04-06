@@ -25,6 +25,8 @@ export interface Props {
   service: ActorRef<any>
   controllerAccount: Account
   type: 'stake' | 'contribution' | 'reward'
+  reward?: BN
+  stake?: BN
   amount: BN
   bounty?: Bounty
   isContributor?: boolean
@@ -36,6 +38,8 @@ export const WithdrawSignModal = ({
   service,
   controllerAccount,
   type,
+  reward,
+  stake,
   amount,
   bounty,
   isContributor,
@@ -62,11 +66,17 @@ export const WithdrawSignModal = ({
               })
             : ''
         }`}</TextMedium>
+
         <WithdrawInfo
           account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')}
-          stakingFromTitle={t(`modals.withdraw.${type}.stakingFrom`)}
           amountTitle={t(`modals.withdraw.${type}.amountTitle`)}
-          amount={amount.add(extraAmount)}
+          rows={[
+            ...(stake ? [{ stakingFromTitle: t('modals.withdraw.stake.stakingFrom'), amount: stake }] : []),
+            ...(reward ? [{ stakingFromTitle: t('modals.withdraw.reward.stakingFrom'), amount: reward }] : []),
+            ...(!stake && !reward
+              ? [{ stakingFromTitle: t(`modals.withdraw.${type}.stakingFrom`), amount: amount.add(extraAmount) }]
+              : []),
+          ]}
         />
       </ModalBody>
       <ModalFooter>
