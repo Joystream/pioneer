@@ -66,7 +66,8 @@ export const SubmitWorkModal = () => {
   const { isValid, errors } = useSchema({ ...state.context }, schema)
 
   const entry = useMemo(
-    () => modalData.bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id) ?? undefined,
+    () =>
+      modalData.bounty?.entries?.find((entry) => entry.worker.id === activeMember?.id && !entry.withdrawn) ?? undefined,
     [activeMember?.id]
   )
 
