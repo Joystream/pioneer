@@ -55,7 +55,7 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
   const signDisabled = !isReady || !hasFunds
 
   const getMessage = (fee?: BN) => {
-    return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} JOY on your account for this action.`
+    return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} tJOY on your account for this action.`
   }
 
   if (!threadAuthor || !controllerAccount) {

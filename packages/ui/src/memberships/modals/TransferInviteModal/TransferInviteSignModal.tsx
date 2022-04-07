@@ -48,7 +48,7 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
         <SignTransferContainer>
           <TextMedium margin="m">
             You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of {formatTokenValue(fee)}{' '}
-            JOY will be applied to the transaction.
+            tJOY will be applied to the transaction.
           </TextMedium>
           <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
             <SelectedAccount

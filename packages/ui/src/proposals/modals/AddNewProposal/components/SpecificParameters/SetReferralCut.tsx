@@ -59,7 +59,7 @@ export const SetReferralCut = ({ referralCut, setReferralCut, setIsExecutionErro
           <TextMedium lighter>
             {' '}
             Set referral cut as % from price of creating new membership, currently set as {membershipPrice?.toString()}{' '}
-            JOY
+            tJOY
           </TextMedium>
         </RowGapBlock>
       </Row>
