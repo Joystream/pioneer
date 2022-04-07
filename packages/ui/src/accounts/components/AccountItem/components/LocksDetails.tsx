@@ -6,7 +6,7 @@ import { Balances } from '@/accounts/types'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextMedium } from '@/common/components/typography'
 import { Address } from '@/common/types'
-import { useCurrentElection } from '@/council/hooks/useCurrentElection'
+import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 
 interface LocksDetailsProps {
@@ -15,8 +15,8 @@ interface LocksDetailsProps {
 }
 
 export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
-  const { election } = useCurrentElection()
-  const { votes } = useMyCastVotes()
+  const { election } = useLatestElection()
+  const { votes } = useMyCastVotes(election?.cycleId)
 
   const isActiveCandidate = useMemo(
     () => election?.candidates.find((candidate) => candidate.stakingAccount === address)?.status === 'ACTIVE',
@@ -35,8 +35,8 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
   }
 
   const allLocks = balance.locks
-  const recoverable = allLocks.filter(({ type }) => isRecoverable(type, isActiveCandidate, isVoteStakeLocked))
-  const nonRecoverable = allLocks.filter(({ type }) => !isRecoverable(type, isActiveCandidate, isVoteStakeLocked))
+  const recoverable = allLocks.filter(({ type }) => isRecoverable(type, { isActiveCandidate, isVoteStakeLocked }))
+  const nonRecoverable = allLocks.filter(({ type }) => !isRecoverable(type, { isActiveCandidate, isVoteStakeLocked }))
 
   return (
     <>
