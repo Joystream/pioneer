@@ -61,7 +61,7 @@ export const ContributeFundsModal = () => {
   const { allAccounts } = useMyAccounts()
   const balance = useBalance(activeMember?.controllerAccount)
 
-  const setAmount = useCallback((amount: BN | string) => send('SET_AMOUNT', { amount: new BN(amount) }), [])
+  const setAmount = useCallback((amount: BN) => send('SET_AMOUNT', { amount }), [])
 
   const { setContext, isValid, errors } = useSchema({ amount: state.context.amount }, schema)
   useEffect(() => {
@@ -71,7 +71,7 @@ export const ContributeFundsModal = () => {
       })
 
       if (!state.context.amount && state.matches(ContributeFundStates.contribute)) {
-        setAmount(minFundingLimit.toString())
+        setAmount(minFundingLimit)
       }
     }
   }, [minFundingLimit, state.value])
@@ -165,7 +165,7 @@ export const ContributeFundsModal = () => {
         service={service}
         controllerAccount={controllerAccount}
         description={t('modals.contribute.authorizeDescription', {
-          value: formatTokenValue(state.context.amount.toString()),
+          value: formatTokenValue(state.context.amount),
         })}
         buttonLabel={t('modals.contribute.nextButton')}
         contributeAmount={state.context.amount}
