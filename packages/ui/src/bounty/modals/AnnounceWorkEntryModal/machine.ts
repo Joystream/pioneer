@@ -11,14 +11,12 @@ import {
 import { EmptyObject } from '@/common/types'
 
 interface ContributionContext {
-  stakingAccount: Account
+  stakingAccount?: Account
 }
 
 interface TransactionContext extends ContributionContext {
   transactionEvents?: EventRecord[]
 }
-
-type AnnounceWorkEntryContext = Partial<ContributionContext & TransactionContext>
 
 export enum AnnounceWorkEntryStates {
   requirementsVerification = 'requirementsVerification',
@@ -40,14 +38,14 @@ export type AnnounceWorkEntryState =
   | { value: AnnounceWorkEntryStates.requirementsVerification; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.bindStakingAccount; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.beforeTransaction; context: EmptyObject }
-  | { value: AnnounceWorkEntryStates.contribute; context: ContributionContext }
+  | { value: AnnounceWorkEntryStates.contribute; context: Required<ContributionContext> }
   | { value: AnnounceWorkEntryStates.transaction; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.success; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.cancel; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.error; context: Required<TransactionContext> }
 
 export const announceWorkEntryMachine = createMachine<
-  AnnounceWorkEntryContext,
+  TransactionContext,
   AnnounceWorkEntryEvents,
   AnnounceWorkEntryState
 >({
