@@ -238,6 +238,12 @@ query GetCurrentElection {
   }
 }
 
+query GetLatestElection {
+  electionRounds(orderBy: [cycleId_DESC], limit: 1) {
+    ...ElectionRoundFields
+  }
+}
+
 query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
   electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
     ...PastElectionRoundFields
