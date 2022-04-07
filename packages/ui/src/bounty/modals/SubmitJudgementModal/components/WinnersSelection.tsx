@@ -23,7 +23,7 @@ interface Props {
   noBountyWinners: boolean
   filter: (member: Member) => boolean
   bountyFunding: BN
-  amountDistributed: number
+  amountDistributed: BN
   validationMessage: string | null
   validIds: string[]
 }
@@ -73,7 +73,10 @@ export const WinnersSelection = ({
               {t('modals.submitJudgement.progressBar.distributed')}
               <TokenValue size="s" value={amountDistributed} />
             </DistributedText>
-            <ProgressBar size="big" end={!amountDistributed ? 0 : amountDistributed / bountyFunding.toNumber()} />
+            <ProgressBar
+              size="big"
+              end={!amountDistributed ? 0 : amountDistributed.toNumber() / bountyFunding.toNumber()}
+            />
             <RowGapBlock gap={5}>
               <TextSmall light>{t('modals.submitJudgement.progressBar.totalReward')}</TextSmall>
               <TokenValue size="s" value={bountyFunding.toNumber()} />

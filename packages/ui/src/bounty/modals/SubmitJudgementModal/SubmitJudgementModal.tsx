@@ -3,9 +3,11 @@ import { OracleJudgment } from '@joystream/types/augment'
 import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
 import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import BN from 'bn.js'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
@@ -33,10 +35,54 @@ import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
+
+interface ISchema {
+  totalFunding: BN
+  amountDistributed: BN
+}
+
+const schema = Yup.object().shape({
+  hasWinner: Yup.boolean(),
+  winners: Yup.array().test((value, context) => {
+    if (!context.parent.hasWinner) {
+      return true
+    }
+
+    const { amountDistributed, totalFunding } = context.options.context as ISchema
+
+    if (!!value?.length && value?.some((winner) => !winner.winner)) {
+      return context.createError({ message: 'modals.submitJudgement.validation.pickWinner' })
+    }
+
+    if (value?.some(({ reward }) => reward === 0)) {
+      return context.createError({ message: 'modals.submitJudgement.validation.winnerNoReward' })
+    }
+
+    if (totalFunding.lt(amountDistributed)) {
+      return context.createError({ message: 'modals.submitJudgement.validation.amountTooHigh' })
+    }
+
+    if (totalFunding.gt(amountDistributed)) {
+      return context.createError({ message: 'modals.submitJudgement.validation.amountTooLow' })
+    }
+
+    return true
+  }),
+  rejected: Yup.array().test((value, context) => {
+    if (value?.length && value.some((rejected) => typeof rejected.rejected === 'undefined')) {
+      return context.createError({ message: 'modals.submitJudgement.validation.noSlashedWorkerSelected' })
+    }
+
+    return true
+  }),
+  rationale: Yup.string().required('modals.submitJudgement.validation.rationaleMissing'),
+})
 
 export const SubmitJudgementModal = () => {
   const {
@@ -48,8 +94,19 @@ export const SubmitJudgementModal = () => {
   const { allAccounts } = useMyAccounts()
   const { t } = useTranslation('bounty')
   const { api, isConnected } = useApi()
+  const { errors, isValid, setContext } = useSchema<ISchema>({ ...state.context }, schema)
 
-  const [isValid, setIsValid] = useState<string | null>(null)
+  const amountDistributed = useMemo(
+    () => state.context.winners?.reduce((prev, current) => prev.addn(current.reward ?? 0), BN_ZERO) ?? BN_ZERO,
+    [state.context.winners]
+  )
+
+  useEffect(() => {
+    setContext({
+      totalFunding: bounty.totalFunding,
+      amountDistributed: amountDistributed,
+    })
+  }, [amountDistributed])
 
   if (!service.initialized) {
     service.start()
@@ -73,11 +130,6 @@ export const SubmitJudgementModal = () => {
       send('SET_HAS_WINNER', { hasWinner: isSet })
     },
     [state.context.hasWinner]
-  )
-
-  const amountDistributed = useMemo(
-    () => state.context.winners?.reduce((prev, current) => prev + (current.reward ?? 0), 0) ?? 0,
-    [state.context.winners]
   )
 
   const selectWorkerFilter = useCallback(
@@ -163,36 +215,6 @@ export const SubmitJudgementModal = () => {
       })
     })
   }, [state.context.winners?.length])
-
-  useEffect(() => {
-    const { winners, hasWinner, rationale, rejected } = state.context
-
-    switch (true) {
-      case !hasWinner && rationale:
-        return setIsValid(null)
-
-      case hasWinner && (!winners?.length || winners?.some((winner) => !winner.winner)):
-        return setIsValid('modals.submitJudgement.validation.pickWinner')
-
-      case hasWinner && winners?.some(({ reward }) => reward === 0):
-        return setIsValid('modals.submitJudgement.validation.winnerNoReward')
-
-      case hasWinner && amountDistributed < bounty.totalFunding.toNumber():
-        return setIsValid('modals.submitJudgement.validation.amountTooLow')
-
-      case hasWinner && amountDistributed > bounty.totalFunding.toNumber():
-        return setIsValid('modals.submitJudgement.validation.amountTooHigh')
-
-      case rationale === '':
-        return setIsValid('modals.submitJudgement.validation.rationaleMissing')
-
-      case rejected?.length && rejected.some((rejected) => typeof rejected.rejected === 'undefined'):
-        return setIsValid('modals.submitJudgement.validation.noSlashedWorkerSelected')
-
-      default:
-        return setIsValid(null)
-    }
-  }, [state.context.winners, state.context.hasWinner, state.context.rationale, state.context.rejected])
 
   if (state.matches(SubmitJudgementStates.requirementsVerification)) {
     return (
@@ -282,11 +304,11 @@ export const SubmitJudgementModal = () => {
                 onChange={switchCheckbox}
               />
             </InlineToggleWrap>
-            {isValid && !state.context.hasWinner && <TextMedium error>{t(isValid)}</TextMedium>}
+            {!isValid && !state.context.hasWinner && <TextMedium error>{t(errors[0]?.message ?? '')}</TextMedium>}
           </RowGapBlock>
           <WinnersSelection
             validIds={validEntriesMembersIds}
-            validationMessage={isValid}
+            validationMessage={errors[0]?.message ?? ''}
             amountDistributed={amountDistributed}
             bountyFunding={bounty.totalFunding}
             filter={selectWorkerFilter}
@@ -321,7 +343,7 @@ export const SubmitJudgementModal = () => {
         </ModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!!isValid} size="medium" onClick={() => send('NEXT')}>
+        <ButtonPrimary disabled={!isValid} size="medium" onClick={() => send('NEXT')}>
           {t('modals.submitJudgement.authorizeTransaction')}
         </ButtonPrimary>
       </ModalFooter>
