@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { Account } from '@/accounts/types'
@@ -13,13 +14,12 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { useForm } from '@/common/hooks/useForm'
 import { formatTokenValue } from '@/common/model/formatters'
+import { minContext } from '@/common/utils/validation'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 
 import { groupToLockId, WorkingGroupOpening } from '../../types'
-import { minContext } from '@/common/utils/validation'
-import { useBalance } from '@/accounts/hooks/useBalance'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface StakeStepProps {
   opening: WorkingGroupOpening
@@ -45,13 +45,6 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
   const minStake = opening.stake
   const balances = useMyBalances()
   const { active } = useMyMemberships()
-  // const schema = useMemo(() => {
-  //   StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
-  //     minStake.toNumber(),
-  //     'You need at least ${min} stake'
-  //   )
-  //   return StakeStepFormSchema
-  // }, [minStake.toString()])
 
   const formInitializer = {
     account: undefined,
@@ -92,8 +85,8 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
             label="Select account for Staking"
             required
             inputSize="l"
-            validation={status === 'other' ? 'invalid' : undefined}
-            message={status === 'other' ? 'This account is bound to the another member' : undefined}
+            validation={hasError('account', errors) ? 'invalid' : undefined}
+            message={hasError('account', errors) ? getErrorMessage('account', errors) : undefined}
             tooltipText="Staking account will bear the role-specific lock, meaning you will not be able to re-use this account for other purposes, while in the role if your application accepted"
           >
             <SelectAccount
