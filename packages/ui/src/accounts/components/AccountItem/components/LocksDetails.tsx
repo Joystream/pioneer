@@ -27,7 +27,7 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
     const candidate = votes?.find((vote) => vote.castBy === address)?.voteFor
     // Disable recovering during election or if candidate won previous election
     // Enable recovering if new council is elected
-    return !!(election || (candidate?.isCouncilMember && !election))
+    return !!candidate && (!election?.isFinished || candidate.isCouncilMember)
   }, [votes, address, election])
 
   if (!balance || !balance.locks.length) {
