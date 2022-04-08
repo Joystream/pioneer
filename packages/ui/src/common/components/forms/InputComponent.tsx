@@ -465,6 +465,7 @@ export const InputArea = styled.div`
   height: 100%;
   justify-content: flex-start;
   align-items: center;
+  min-width: 0;
 `
 
 const InputRightSide = styled.div<DisabledInputProps>`
