@@ -1,5 +1,5 @@
 import { useGetLatestElectionQuery } from '@/council/queries'
-import { asElection } from '@/council/types/Election'
+import { asLatestElection } from '@/council/types/LatestElection'
 
 export const useLatestElection = () => {
   const { loading, data } = useGetLatestElectionQuery()
@@ -7,6 +7,6 @@ export const useLatestElection = () => {
 
   return {
     isLoading: loading,
-    election: rawElection && asElection(rawElection),
+    election: rawElection && asLatestElection(rawElection),
   }
 }

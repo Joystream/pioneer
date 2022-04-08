@@ -269,6 +269,51 @@ export type ElectionRoundFieldsFragment = {
   }>
 }
 
+export type LatestElectionRoundFieldsFragment = {
+  __typename: 'ElectionRound'
+  isFinished: boolean
+  cycleId: number
+  candidates: Array<{
+    __typename: 'Candidate'
+    id: string
+    stake: any
+    status: Types.CandidacyStatus
+    stakingAccountId: string
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    noteMetadata: {
+      __typename: 'CandidacyNoteMetadata'
+      header?: string | null
+      bulletPoints: Array<string>
+      bannerImageUri?: string | null
+      description?: string | null
+    }
+  }>
+}
+
 export type PastElectionRoundFieldsFragment = {
   __typename: 'ElectionRound'
   id: string
@@ -865,6 +910,7 @@ export type GetLatestElectionQuery = {
   __typename: 'Query'
   electionRounds: Array<{
     __typename: 'ElectionRound'
+    isFinished: boolean
     cycleId: number
     candidates: Array<{
       __typename: 'Candidate'
@@ -1344,6 +1390,13 @@ export const ElectionRoundFieldsFragmentDoc = gql`
     }
   }
   ${ElectionCandidateFieldsFragmentDoc}
+`
+export const LatestElectionRoundFieldsFragmentDoc = gql`
+  fragment LatestElectionRoundFields on ElectionRound {
+    ...ElectionRoundFields
+    isFinished
+  }
+  ${ElectionRoundFieldsFragmentDoc}
 `
 export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
@@ -1840,6 +1893,7 @@ export const GetLatestElectionDocument = gql`
   query GetLatestElection {
     electionRounds(orderBy: [cycleId_DESC], limit: 1) {
       ...ElectionRoundFields
+      isFinished
     }
   }
   ${ElectionRoundFieldsFragmentDoc}

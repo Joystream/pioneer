@@ -87,6 +87,11 @@ fragment ElectionRoundFields on ElectionRound {
   }
 }
 
+fragment LatestElectionRoundFields on ElectionRound {
+  ...ElectionRoundFields
+  isFinished
+}
+
 fragment PastElectionRoundFields on ElectionRound {
   id
   cycleId
@@ -241,6 +246,7 @@ query GetCurrentElection {
 query GetLatestElection {
   electionRounds(orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields
+    isFinished
   }
 }
 
