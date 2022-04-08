@@ -13,10 +13,13 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { useForm } from '@/common/hooks/useForm'
 import { formatTokenValue } from '@/common/model/formatters'
-import { AccountSchema } from '@/memberships/model/validation'
+import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 
 import { groupToLockId, WorkingGroupOpening } from '../../types'
+import { minContext } from '@/common/utils/validation'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface StakeStepProps {
   opening: WorkingGroupOpening
@@ -32,22 +35,23 @@ export interface StakeStepFormFields {
 }
 
 const StakeStepFormSchema = Yup.object().shape({
-  account: AccountSchema.required(),
+  account: StakingAccountSchema.required(),
   roleAccount: AccountSchema.required(),
   rewardAccount: AccountSchema.required(),
-  amount: Yup.number().required(),
+  amount: Yup.number().test(minContext('You need at least ${min} stake', 'minStake')).required(),
 })
 
 export function StakeStep({ onChange, opening, member }: StakeStepProps) {
   const minStake = opening.stake
   const balances = useMyBalances()
-  const schema = useMemo(() => {
-    StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
-      minStake.toNumber(),
-      'You need at least ${min} stake'
-    )
-    return StakeStepFormSchema
-  }, [minStake.toString()])
+  const { active } = useMyMemberships()
+  // const schema = useMemo(() => {
+  //   StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
+  //     minStake.toNumber(),
+  //     'You need at least ${min} stake'
+  //   )
+  //   return StakeStepFormSchema
+  // }, [minStake.toString()])
 
   const formInitializer = {
     account: undefined,
@@ -55,11 +59,23 @@ export function StakeStep({ onChange, opening, member }: StakeStepProps) {
     rewardAccount: undefined,
     roleAccount: undefined,
   }
-  const { changeField, validation, fields } = useForm<StakeStepFormFields>(formInitializer, schema)
+  const { changeField, validation, fields } = useForm<StakeStepFormFields>(formInitializer, StakeStepFormSchema)
+  const balance = useBalance(fields?.account?.address)
+  const stakingStatus = useStakingAccountStatus(fields.account?.address, active?.id)
   const { isValid, errors } = validation
   const status = useStakingAccountStatus(fields.account?.address, member.id)
 
   useEffect(() => onChange(isValid && status !== 'other', fields), [isValid, status, JSON.stringify(fields)])
+
+  useEffect(() => {
+    validation.setContext({
+      minStake: minStake,
+      balances: balance,
+      stakeLock: groupToLockId(opening.groupId),
+      requiredAmount: minStake,
+      stakingStatus,
+    })
+  }, [minStake.toString(), JSON.stringify(balance), stakingStatus])
 
   const accountsFilter = useCallback(
     (account: Account) => filterByRequiredStake(minStake, groupToLockId(opening.groupId), balances[account.address]),
