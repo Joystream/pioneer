@@ -490,7 +490,6 @@ const InputUnits = styled.span`
   line-height: 1.5;
   font-weight: 700;
   color: ${Colors.Black[400]};
-  text-transform: uppercase;
 `
 
 export const InputNotification = styled.div<InputProps>`

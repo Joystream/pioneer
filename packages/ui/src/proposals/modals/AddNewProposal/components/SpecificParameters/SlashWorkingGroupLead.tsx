@@ -67,7 +67,7 @@ export const SlashWorkingGroupLead = ({
           <InputComponent
             label="Slashing Amount"
             tight
-            units="JOY"
+            units="tJOY"
             inputWidth="s"
             tooltipText="Amount to be slashed"
             message="Amount must be greater than zero"

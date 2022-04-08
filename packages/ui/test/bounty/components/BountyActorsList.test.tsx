@@ -12,7 +12,7 @@ describe('BountyActorsList', () => {
     const contributorsList = [{ actor: getMember('alice'), amount: new BN(1000) }]
     render(<BountyActorsList title={title} elements={contributorsList} />)
     expect(screen.queryByText('CONTRIBUTORS')).toBeDefined()
-    expect(screen.queryByText('1,000 JOY')).toBeDefined()
+    expect(screen.queryByText('1,000 tJOY')).toBeDefined()
   })
   it('should display proper title and count for entrants', () => {
     const title = 'ENTRANTS'

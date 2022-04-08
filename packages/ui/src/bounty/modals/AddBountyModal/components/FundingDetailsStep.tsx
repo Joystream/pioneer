@@ -56,10 +56,10 @@ export const FundingDetailsStep = ({
           id="field-cherry"
           label="Cherry"
           tight
-          units="JOY"
+          units="tJOY"
           required
           tooltipText="Funding period tooltip"
-          message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} JOY`}
+          message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
           <InputNumber
@@ -140,7 +140,7 @@ export const FundingDetailsStep = ({
         <InputComponent
           id="field-minRange"
           tight
-          units="JOY"
+          units="tJOY"
           required
           disabled={fundingPeriodType === 'perpetual'}
           message={errorChecker('fundingMinimalRange') ? errorMessageGetter('fundingMinimalRange') : ' '}
@@ -156,7 +156,7 @@ export const FundingDetailsStep = ({
             onChange={(_, value) => setFundingMinimalRange(new BN(value))}
           />
         </InputComponent>
-        <InputComponent id="field-maxRange" tight units="JOY" required label="Maximal range">
+        <InputComponent id="field-maxRange" tight units="tJOY" required label="Maximal range">
           <InputNumber
             isTokenValue
             id="field-maxRange"

@@ -1090,7 +1090,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Displays current balance', async () => {
-          expect(await screen.findByText('The current balance is 2137 JOY.')).toBeDefined()
+          expect(await screen.findByText('The current balance is 2137 tJOY.')).toBeDefined()
         })
       })
       describe('Type - Set Membership price', () => {

@@ -6,11 +6,13 @@ import { TransactionEvent, TransactionContext as TxContext, TransactionStateValu
 export interface UseTransaction {
   isTransactionPending: boolean
   status: TransactionStateValue | null
+  setStatus: (status: TransactionStateValue | null) => void
   setService: (service: ActorRef<TransactionEvent, State<TxContext>>) => void
 }
 
 export const TransactionContext = createContext<UseTransaction>({
   isTransactionPending: false,
   status: null,
+  setStatus: () => undefined,
   setService: () => undefined,
 })

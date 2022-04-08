@@ -36,6 +36,7 @@ export const TransactionContextProvider = ({ children }: Props) => {
       value={{
         isTransactionPending: getIsPendingStatus(status),
         status,
+        setStatus,
         setService,
       }}
     >

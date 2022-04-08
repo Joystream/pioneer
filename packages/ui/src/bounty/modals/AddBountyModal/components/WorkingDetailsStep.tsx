@@ -130,14 +130,14 @@ export const WorkingDetailsStep = ({
       <InputComponent
         id="field-periodStake"
         label="Entrant stake"
-        units="JOY"
+        units="tJOY"
         inputSize="m"
         tight
         required
         message={
           errorChecker('workingPeriodStake')
             ? errorMessageGetter('workingPeriodStake')
-            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} JOY`
+            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} tJOY`
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
