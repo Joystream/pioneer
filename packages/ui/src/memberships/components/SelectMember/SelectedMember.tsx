@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { InputComponent, InputComponentProps, InputContainer } from '@/common/components/forms'
@@ -35,3 +36,18 @@ const Container = styled(InputComponent)`
     padding-left: 16px;
   }
 `
+
+interface ControlledSelectedMemberProps extends SelectedMemberProps {
+  name: string
+}
+
+export const ControlledSelectedMember = ({ name, ...props }: ControlledSelectedMemberProps) => {
+  const formContext = useFormContext()
+  useEffect(() => {
+    if (props.member) {
+      formContext.setValue(name, props.member)
+    }
+  }, [props.member])
+
+  return <SelectedMember {...props} />
+}

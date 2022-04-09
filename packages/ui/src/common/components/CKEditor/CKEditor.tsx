@@ -1,5 +1,6 @@
 import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
 import React, { Ref, RefObject, useEffect, useRef } from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
 
 import { useMentions } from '@/common/hooks/useMentions'
 
@@ -116,3 +117,25 @@ export const CKEditor = React.forwardRef(
     )
   }
 )
+
+interface ControlledCKEditorProps extends CKEditorProps {
+  name: string
+}
+
+export const ControlledCKEditor = ({ name, ...props }: ControlledCKEditorProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <CKEditor {...props} />
+  }
+
+  return (
+    <Controller
+      name={name}
+      control={formContext.control}
+      render={({ field }) => (
+        <CKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
+      )}
+    />
+  )
+}

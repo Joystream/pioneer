@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { forwardRef, RefObject } from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
@@ -153,9 +154,21 @@ export const InputComponent = React.memo(
   }
 )
 
-export const InputText = React.memo((props: InputProps) => {
-  return <Input name={props.id} type="text" autoComplete="off" {...props} />
-})
+export const InputText = React.memo(
+  forwardRef((props: InputProps, ref) => {
+    return <Input type="text" autoComplete="off" ref={ref as RefObject<HTMLInputElement>} {...props} />
+  })
+)
+
+export const ControlledInputText = (props: InputProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !props.name) {
+    return <InputText {...props} />
+  }
+
+  return <InputText {...props} {...formContext.register(props.name)} />
+}
 
 interface NumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
