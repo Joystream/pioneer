@@ -26,7 +26,6 @@ export interface Conditions {
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxWhitelistSize?: u32 & AugmentedConst<'rxjs'>
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
-  isLimited: boolean
 }
 
 export type IFormFields = Required<typeof formDefaultValues>

@@ -69,7 +69,6 @@ export const AddBountyModal = () => {
       minFundingLimit: bountyApi?.minFundingLimit,
       maxWhitelistSize: bountyApi?.closedContractSizeLimit,
       minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
-      isLimited: state.context.fundingPeriodType === 'limited',
     } as Conditions,
     mode: 'onBlur',
     reValidateMode: 'onChange',
@@ -108,11 +107,6 @@ export const AddBountyModal = () => {
   }, [state, isThreadCategoryLoading, api])
 
   useEffect(() => {
-    if (state.matches(AddBountyStates.generalParameters)) {
-      if (activeMember && !state.context.creator) {
-        send('SET_CREATOR', { creator: activeMember })
-      }
-    }
     if (state.matches(AddBountyStates.judgingPeriodDetails)) {
       if (threadCategory && !state.context.threadCategoryId) {
         send('SET_THREAD_CATEGORY_ID', { threadCategoryId: threadCategory.id })
@@ -167,13 +161,11 @@ export const AddBountyModal = () => {
   }
 
   if (state.matches(AddBountyStates.transaction)) {
+    const fromFields = form.getValues()
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
-      createBountyParametersFactory(form.getValues() as IFormFields),
-      metadataToBytes(
-        BountyMetadata,
-        createBountyMetadataFactory(form.getValues() as IFormFields, state.context.newThreadId)
-      )
+      createBountyParametersFactory(fromFields as IFormFields),
+      metadataToBytes(BountyMetadata, createBountyMetadataFactory(fromFields as IFormFields, state.context.newThreadId))
     )
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
@@ -185,7 +177,8 @@ export const AddBountyModal = () => {
         buttonLabel="Sign transaction and Create"
         description={
           <>
-            You intend to create a bounty. You will be charged <TokenValue value={state.context.cherry} /> for cherry.
+            You intend to create a bounty. You will be charged{' '}
+            <TokenValue value={fromFields[AddBountyStates.fundingPeriodDetails].cherry} /> for cherry.
           </>
         }
         controllerAccount={controllerAccount}
