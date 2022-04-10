@@ -1,5 +1,6 @@
+import BN from 'bn.js'
 import React, { forwardRef, RefObject } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
@@ -176,16 +177,7 @@ interface NumberInputProps extends Omit<InputProps, 'onChange'> {
 }
 
 export const InputNumber = React.memo(
-  ({
-    id,
-    required,
-    validation,
-    placeholder,
-    disabled,
-    onChange,
-    isTokenValue = false,
-    value = '',
-  }: NumberInputProps) => {
+  ({ id, onChange, isTokenValue = false, value = '', ...props }: NumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
       if (isNaN(eventValue)) return
@@ -199,16 +191,42 @@ export const InputNumber = React.memo(
         name={id}
         type="string"
         value={isTokenValue ? formatTokenValue(value) : value}
-        required={required}
-        validation={validation}
-        placeholder={placeholder}
-        disabled={disabled}
         onChange={onInputChange}
         autoComplete="off"
+        {...props}
       />
     )
   }
 )
+
+interface ControlledInputNumberProps extends NumberInputProps {
+  isInBN?: boolean
+}
+
+export const ControlledInputNumber = React.memo(({ name, isInBN = true, ...props }: ControlledInputNumberProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <InputNumber {...props} />
+  }
+
+  return (
+    <Controller
+      control={formContext.control}
+      name={name}
+      render={({ field }) => {
+        return (
+          <InputNumber
+            {...props}
+            value={new BN(field.value)?.toString()}
+            onChange={(_, value) => field.onChange(isInBN ? new BN(value) : value)}
+            onBlur={field.onBlur}
+          />
+        )
+      }}
+    />
+  )
+})
 
 type TextAreaProps = InputProps<HTMLTextAreaElement & HTMLInputElement>
 export const InputTextarea = React.memo(

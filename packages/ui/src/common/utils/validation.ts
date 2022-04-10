@@ -83,7 +83,6 @@ export const useYupValidationResolver = (validationSchema: AnyObjectSchema, path
   useCallback(
     async (data, context) => {
       let values
-      console.log(data, ' resolver', context, path)
       try {
         if (path) {
           values = await validationSchema.validateSyncAt(path, data, {
@@ -106,7 +105,7 @@ export const useYupValidationResolver = (validationSchema: AnyObjectSchema, path
       } catch (errors: any) {
         return {
           values: {},
-          errors: errors.inner.reduce(
+          errors: errors.inner?.reduce(
             (allErrors: Record<string, IFormError>, currentError: ValidationError) => ({
               ...allErrors,
               [currentError.path as string]: {

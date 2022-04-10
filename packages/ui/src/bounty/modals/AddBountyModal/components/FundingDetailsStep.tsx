@@ -1,50 +1,39 @@
-import BN from 'bn.js'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
-import { FundingPeriodDetailsContext, GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
-import { InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
+import { ControlledInputNumber, ControlledToggleCheckbox, InputComponent, Label } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BN_ZERO, Colors } from '@/common/constants'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 
-export interface FundingDetailsStepProps
-  extends Omit<FundingPeriodDetailsContext, keyof GeneralParametersContext>,
-    ValidationHelpers {
-  setFundingMaximalRange: (fundingMaximalRange: BN) => void
-  setFundingMinimalRange: (fundingMinimalRange: BN | undefined) => void
-  setCherry: (cherry: BN) => void
-  setFundingPeriodLength: (fundingPeriodLength: BN) => void
-  setFundingPeriodType: (fundingPeriodType: string) => void
+export interface FundingDetailsStepProps extends ValidationHelpers {
   minCherryLimit: number
 }
 
-export const FundingDetailsStep = ({
-  fundingMaximalRange,
-  fundingMinimalRange,
-  cherry,
-  fundingPeriodLength,
-  fundingPeriodType,
-  setCherry,
-  setFundingPeriodType,
-  setFundingPeriodLength,
-  setFundingMinimalRange,
-  setFundingMaximalRange,
-  minCherryLimit,
-  errorMessageGetter,
-  errorChecker,
-}: FundingDetailsStepProps) => {
-  const switchCheckbox = (isSet: boolean) => {
-    if (isSet) {
-      return setFundingPeriodType('limited')
+export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorChecker }: FundingDetailsStepProps) => {
+  const form = useFormContext()
+  const [isPerpetual, fundingPeriodLength, maximalRange] = form.watch([
+    `${AddBountyStates.fundingPeriodDetails}.isPerpetual`,
+    `${AddBountyStates.fundingPeriodDetails}.fundingPeriodLength`,
+    `${AddBountyStates.fundingPeriodDetails}.fundingMaximalRange`,
+  ])
+
+  useEffect(() => {
+    if (isPerpetual) {
+      form.setValue('fundingPeriodDetails.fundingMinimalRange', BN_ZERO)
+      form.trigger('fundingPeriodDetails.fundingMinimalRange')
     }
-    setFundingPeriodType('perpetual')
-    setFundingMinimalRange(undefined)
-  }
+  }, [isPerpetual])
+
+  useEffect(() => {
+    form.trigger('fundingPeriodDetails.fundingMinimalRange')
+  }, [maximalRange])
 
   return (
     <RowGapBlock gap={24}>
@@ -62,20 +51,14 @@ export const FundingDetailsStep = ({
           message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
-          <InputNumber
-            id="field-cherry"
-            isTokenValue
-            value={cherry?.toString()}
-            placeholder="0"
-            onChange={(_, value) => setCherry(new BN(value))}
-          />
+          <ControlledInputNumber id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
         </InputComponent>
       </RowGapBlock>
       <RowGapBlock gap={20}>
         <InlineToggleWrap>
           <Label>Funding period :</Label>
-          <ToggleCheckbox
-            falseLabel={
+          <ControlledToggleCheckbox
+            trueLabel={
               <CheckBoxLabelWrapper>
                 Perpetual
                 <Tooltip
@@ -99,17 +82,16 @@ export const FundingDetailsStep = ({
                 </Tooltip>
               </CheckBoxLabelWrapper>
             }
-            trueLabel={
+            falseLabel={
               <CheckBoxLabelWrapper>
                 <StyledParagraph>Limited</StyledParagraph>
               </CheckBoxLabelWrapper>
             }
-            checked={fundingPeriodType === 'limited'}
-            onChange={switchCheckbox}
+            name="fundingPeriodDetails.isPerpetual"
           />
         </InlineToggleWrap>
       </RowGapBlock>
-      {fundingPeriodType === 'limited' && (
+      {!isPerpetual && (
         <RowGapBlock gap={20}>
           <InputComponent
             label="Funding period length"
@@ -119,12 +101,11 @@ export const FundingDetailsStep = ({
             id="field-periodLength"
             message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
-            <InputNumber
-              value={fundingPeriodLength?.toString()}
-              placeholder="0"
+            <ControlledInputNumber
               id="field-periodLength"
+              name="fundingPeriodDetails.fundingPeriodLength"
+              placeholder="0"
               isTokenValue
-              onChange={(_, value) => setFundingPeriodLength(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>
@@ -142,27 +123,27 @@ export const FundingDetailsStep = ({
           tight
           units="tJOY"
           required
-          disabled={fundingPeriodType === 'perpetual'}
-          message={errorChecker('fundingMinimalRange') ? errorMessageGetter('fundingMinimalRange') : ' '}
-          validation={errorChecker('fundingMinimalRange') ? 'invalid' : undefined}
+          disabled={isPerpetual}
+          message={
+            !isPerpetual && errorChecker('fundingMinimalRange') ? errorMessageGetter('fundingMinimalRange') : ' '
+          }
+          validation={!isPerpetual && errorChecker('fundingMinimalRange') ? 'invalid' : undefined}
           label="Minimal range"
         >
-          <InputNumber
-            isTokenValue
+          <ControlledInputNumber
             id="field-minRange"
-            disabled={fundingPeriodType === 'perpetual'}
-            value={fundingMinimalRange?.toString()}
+            name="fundingPeriodDetails.fundingMinimalRange"
+            disabled={isPerpetual}
             placeholder="0"
-            onChange={(_, value) => setFundingMinimalRange(new BN(value))}
+            isTokenValue
           />
         </InputComponent>
         <InputComponent id="field-maxRange" tight units="tJOY" required label="Maximal range">
-          <InputNumber
-            isTokenValue
+          <ControlledInputNumber
             id="field-maxRange"
-            value={fundingMaximalRange?.toString()}
+            name="fundingPeriodDetails.fundingMaximalRange"
             placeholder="0"
-            onChange={(_, value) => setFundingMaximalRange(new BN(value))}
+            isTokenValue
           />
         </InputComponent>
       </ColumnGapBlock>

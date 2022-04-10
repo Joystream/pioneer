@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { TooltipContainer } from '@/common/components/Tooltip'
@@ -10,11 +11,12 @@ import { Label } from './Label'
 export interface Props {
   isRequired?: boolean
   disabled?: boolean
-  checked: boolean
-  onChange: (value: boolean) => void
+  checked?: boolean
+  onChange?: (value: boolean) => void
   trueLabel: ReactNode
   falseLabel: ReactNode
   hasNoOffState?: boolean
+  onBlur?: any
 }
 
 export function ToggleCheckbox({
@@ -25,26 +27,51 @@ export function ToggleCheckbox({
   trueLabel,
   falseLabel,
   hasNoOffState = false,
+  onBlur,
 }: Props) {
   const onClick = (setValue: boolean) => () => {
     if (disabled !== true) {
-      onChange(setValue)
+      onChange?.(setValue)
     }
   }
+
   return (
     <ToggleContainer groupDisabled={disabled}>
       <ToggleLabel onClick={onClick(true)}>{trueLabel}</ToggleLabel>
-      <ToggleStyledInput isChecked={checked} hasNoOffState={hasNoOffState}>
+      <ToggleStyledInput isChecked={checked ?? false} hasNoOffState={hasNoOffState}>
         <ToggleInput
           type="checkbox"
           disabled={disabled}
           checked={checked}
-          onChange={(event) => onChange(event.currentTarget.checked)}
+          onChange={(event) => onChange?.(event.currentTarget.checked)}
           required={isRequired}
+          onBlur={onBlur}
         />
       </ToggleStyledInput>
       <ToggleLabel onClick={onClick(false)}>{falseLabel}</ToggleLabel>
     </ToggleContainer>
+  )
+}
+
+interface ControlledCheckboxProps extends Props {
+  name: string
+}
+
+export const ControlledToggleCheckbox = ({ name, ...props }: ControlledCheckboxProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <ToggleCheckbox {...props} />
+  }
+
+  return (
+    <Controller
+      control={formContext.control}
+      name={name}
+      render={({ field }) => (
+        <ToggleCheckbox {...props} checked={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+      )}
+    />
   )
 }
 
