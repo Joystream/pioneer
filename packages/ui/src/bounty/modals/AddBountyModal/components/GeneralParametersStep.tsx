@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
-import { GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { ControlledCKEditor } from '@/common/components/CKEditor'
 import { ControlledInputText, InputComponent, InputNotification } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -11,7 +10,7 @@ import { TextMedium } from '@/common/components/typography'
 import { ControlledSelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
-interface Props extends Partial<Omit<GeneralParametersContext, 'creator'>>, ValidationHelpers {
+interface Props extends ValidationHelpers {
   activeMember?: Member
 }
 
