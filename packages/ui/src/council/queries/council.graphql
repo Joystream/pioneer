@@ -245,8 +245,7 @@ query GetCurrentElection {
 
 query GetLatestElection {
   electionRounds(orderBy: [cycleId_DESC], limit: 1) {
-    ...ElectionRoundFields
-    isFinished
+    ...LatestElectionRoundFields
   }
 }
 

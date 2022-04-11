@@ -1892,11 +1892,10 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
 export const GetLatestElectionDocument = gql`
   query GetLatestElection {
     electionRounds(orderBy: [cycleId_DESC], limit: 1) {
-      ...ElectionRoundFields
-      isFinished
+      ...LatestElectionRoundFields
     }
   }
-  ${ElectionRoundFieldsFragmentDoc}
+  ${LatestElectionRoundFieldsFragmentDoc}
 `
 
 /**
