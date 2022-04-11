@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
-import { ControlledInputNumber, InputComponent } from '@/common/components/forms'
+import { InputNumber, InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextHuge } from '@/common/components/typography'
@@ -40,14 +40,8 @@ export const JudgingDetailsStep = () => {
           id="field-periodLength"
           message={judgingPeriodLength ? `≈ ${inBlocksDate(judgingPeriodLength)}` : ''}
         >
-          {/*<InputNumber*/}
-          {/*  isTokenValue*/}
-          {/*  id="field-periodLength"*/}
-          {/*  placeholder="0"*/}
-          {/*  onChange={(_, value) => setJudgingPeriodLength(new BN(value))}*/}
-          {/*  value={judgingPeriodLength?.toString()}*/}
-          {/*/>*/}
-          <ControlledInputNumber
+          <InputNumber
+            isInBN
             isTokenValue
             id="field-periodLength"
             placeholder="0"

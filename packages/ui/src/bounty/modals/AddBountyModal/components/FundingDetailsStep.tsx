@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
-import { ControlledInputNumber, ControlledToggleCheckbox, InputComponent, Label } from '@/common/components/forms'
+import { InputNumber, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
@@ -51,13 +51,13 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
-          <ControlledInputNumber id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
+          <InputNumber isInBN id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
         </InputComponent>
       </RowGapBlock>
       <RowGapBlock gap={20}>
         <InlineToggleWrap>
           <Label>Funding period :</Label>
-          <ControlledToggleCheckbox
+          <ToggleCheckbox
             trueLabel={
               <CheckBoxLabelWrapper>
                 Perpetual
@@ -101,7 +101,8 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
             id="field-periodLength"
             message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
-            <ControlledInputNumber
+            <InputNumber
+              isInBN
               id="field-periodLength"
               name="fundingPeriodDetails.fundingPeriodLength"
               placeholder="0"
@@ -130,7 +131,8 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           validation={!isPerpetual && errorChecker('fundingMinimalRange') ? 'invalid' : undefined}
           label="Minimal range"
         >
-          <ControlledInputNumber
+          <InputNumber
+            isInBN
             id="field-minRange"
             name="fundingPeriodDetails.fundingMinimalRange"
             disabled={isPerpetual}
@@ -139,7 +141,8 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           />
         </InputComponent>
         <InputComponent id="field-maxRange" tight units="tJOY" required label="Maximal range">
-          <ControlledInputNumber
+          <InputNumber
+            isInBN
             id="field-maxRange"
             name="fundingPeriodDetails.fundingMaximalRange"
             placeholder="0"

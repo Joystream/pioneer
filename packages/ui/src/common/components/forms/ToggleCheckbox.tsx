@@ -19,7 +19,7 @@ export interface Props {
   onBlur?: any
 }
 
-export function ToggleCheckbox({
+function BaseToggleCheckbox({
   isRequired,
   disabled,
   checked,
@@ -57,11 +57,11 @@ interface ControlledCheckboxProps extends Props {
   name: string
 }
 
-export const ControlledToggleCheckbox = ({ name, ...props }: ControlledCheckboxProps) => {
+export const ToggleCheckbox = ({ name, ...props }: ControlledCheckboxProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {
-    return <ToggleCheckbox {...props} />
+    return <BaseToggleCheckbox {...props} />
   }
 
   return (
@@ -69,7 +69,7 @@ export const ControlledToggleCheckbox = ({ name, ...props }: ControlledCheckboxP
       control={formContext.control}
       name={name}
       render={({ field }) => (
-        <ToggleCheckbox {...props} checked={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+        <BaseToggleCheckbox {...props} checked={field.value} onChange={field.onChange} onBlur={field.onBlur} />
       )}
     />
   )

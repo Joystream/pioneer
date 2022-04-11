@@ -18,7 +18,7 @@ export interface CKEditorProps {
   inline?: boolean
 }
 
-export const CKEditor = React.forwardRef(
+const BaseCKEditor = React.forwardRef(
   (
     { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
     ref?: Ref<HTMLDivElement>
@@ -119,14 +119,14 @@ export const CKEditor = React.forwardRef(
 )
 
 interface ControlledCKEditorProps extends CKEditorProps {
-  name: string
+  name?: string
 }
 
-export const ControlledCKEditor = ({ name, ...props }: ControlledCKEditorProps) => {
+export const CKEditor = ({ name, ...props }: ControlledCKEditorProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {
-    return <CKEditor {...props} />
+    return <BaseCKEditor {...props} />
   }
 
   return (
@@ -134,7 +134,7 @@ export const ControlledCKEditor = ({ name, ...props }: ControlledCKEditorProps) 
       name={name}
       control={formContext.control}
       render={({ field }) => (
-        <CKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
+        <BaseCKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
       )}
     />
   )

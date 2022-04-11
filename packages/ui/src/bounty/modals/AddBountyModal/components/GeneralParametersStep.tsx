@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
-import { ControlledCKEditor } from '@/common/components/CKEditor'
-import { ControlledInputText, InputComponent, InputNotification } from '@/common/components/forms'
+import { CKEditor } from '@/common/components/CKEditor'
+import { InputText, InputComponent, InputNotification } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -34,7 +34,7 @@ export const GeneralParametersStep = ({ activeMember, errorMessageGetter, errorC
             message={errorChecker('title') ? errorMessageGetter('title') : 'MAX 70'}
             validation={errorChecker('title') ? 'invalid' : undefined}
           >
-            <ControlledInputText name="generalParameters.title" id="field-title" placeholder="Title" />
+            <InputText name="generalParameters.title" id="field-title" placeholder="Title" />
           </StyledInputComponent>
           <StyledInputComponent
             id="field-photo"
@@ -48,14 +48,14 @@ export const GeneralParametersStep = ({ activeMember, errorMessageGetter, errorC
             }
             validation={errorChecker('coverPhotoLink') ? 'invalid' : undefined}
           >
-            <ControlledInputText
+            <InputText
               id="field-photo"
               name="generalParameters.coverPhotoLink"
               placeholder="Paste a link to bounty cover photo"
             />
           </StyledInputComponent>
           <InputComponent id="field-description" inputSize="auto" label="Bounty description" required>
-            <ControlledCKEditor id="field-description" minRows={3} name="generalParameters.description" />
+            <CKEditor id="field-description" minRows={3} name="generalParameters.description" />
           </InputComponent>
         </RowGapBlock>
       </Row>

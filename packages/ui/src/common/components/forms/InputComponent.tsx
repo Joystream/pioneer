@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { forwardRef, RefObject } from 'react'
+import React from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
@@ -155,28 +155,22 @@ export const InputComponent = React.memo(
   }
 )
 
-export const InputText = React.memo(
-  forwardRef((props: InputProps, ref) => {
-    return <Input type="text" autoComplete="off" ref={ref as RefObject<HTMLInputElement>} {...props} />
-  })
-)
-
-export const ControlledInputText = (props: InputProps) => {
+export const InputText = React.memo((props: InputProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !props.name) {
-    return <InputText {...props} />
+    return <Input type="text" autoComplete="off" {...props} />
   }
 
-  return <InputText {...props} {...formContext.register(props.name)} />
-}
+  return <Input type="text" autoComplete="off" {...props} {...formContext.register(props.name)} />
+})
 
 interface NumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
   isTokenValue?: boolean
 }
 
-export const InputNumber = React.memo(
+const BasedInputNumber = React.memo(
   ({ id, onChange, isTokenValue = false, value = '', ...props }: NumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
@@ -203,11 +197,11 @@ interface ControlledInputNumberProps extends NumberInputProps {
   isInBN?: boolean
 }
 
-export const ControlledInputNumber = React.memo(({ name, isInBN = true, ...props }: ControlledInputNumberProps) => {
+export const InputNumber = React.memo(({ name, isInBN = false, ...props }: ControlledInputNumberProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {
-    return <InputNumber {...props} />
+    return <BasedInputNumber {...props} />
   }
 
   return (
@@ -216,7 +210,7 @@ export const ControlledInputNumber = React.memo(({ name, isInBN = true, ...props
       name={name}
       render={({ field }) => {
         return (
-          <InputNumber
+          <BasedInputNumber
             {...props}
             value={new BN(field.value)?.toString()}
             onChange={(_, value) => field.onChange(isInBN ? new BN(value) : value)}

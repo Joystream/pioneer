@@ -9,8 +9,8 @@ import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
 import {
-  ControlledInputNumber,
-  ControlledToggleCheckbox,
+  InputNumber,
+  ToggleCheckbox,
   InlineToggleWrap,
   InputComponent,
   Label,
@@ -68,7 +68,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
       <Row>
         <InlineToggleWrap>
           <Label>Bounty type:</Label>
-          <ControlledToggleCheckbox
+          <ToggleCheckbox
             falseLabel={
               <CheckBoxLabelWrapper>
                 Closed{' '}
@@ -120,11 +120,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
           tight
           message={workingPeriodLength ? `≈ ${inBlocksDate(workingPeriodLength)}` : ''}
         >
-          <ControlledInputNumber
-            name="workingPeriodDetails.workingPeriodLength"
-            id="field-periodLength"
-            placeholder="0"
-          />
+          <InputNumber isInBN name="workingPeriodDetails.workingPeriodLength" id="field-periodLength" placeholder="0" />
         </InputComponent>
       </Row>
 
@@ -142,7 +138,8 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
-        <ControlledInputNumber
+        <InputNumber
+          isInBN
           name="workingPeriodDetails.workingPeriodStake"
           isTokenValue
           id="field-periodStake"
