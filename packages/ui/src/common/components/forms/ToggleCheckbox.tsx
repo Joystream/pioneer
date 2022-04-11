@@ -54,7 +54,7 @@ function BaseToggleCheckbox({
 }
 
 interface ControlledCheckboxProps extends Props {
-  name: string
+  name?: string
 }
 
 export const ToggleCheckbox = ({ name, ...props }: ControlledCheckboxProps) => {

@@ -122,20 +122,22 @@ export interface ControlledCKEditorProps extends CKEditorProps {
   name?: string
 }
 
-export const CKEditor = ({ name, ...props }: ControlledCKEditorProps) => {
-  const formContext = useFormContext()
+export const CKEditor = React.memo(
+  React.forwardRef(({ name, ...props }: ControlledCKEditorProps) => {
+    const formContext = useFormContext()
 
-  if (!formContext || !name) {
-    return <BaseCKEditor {...props} />
-  }
+    if (!formContext || !name) {
+      return <BaseCKEditor {...props} />
+    }
 
-  return (
-    <Controller
-      name={name}
-      control={formContext.control}
-      render={({ field }) => (
-        <BaseCKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
-      )}
-    />
-  )
-}
+    return (
+      <Controller
+        name={name}
+        control={formContext.control}
+        render={({ field }) => (
+          <BaseCKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
+        )}
+      />
+    )
+  })
+)
