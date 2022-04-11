@@ -25,8 +25,8 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
 
   const isVoteStakeLocked = useMemo(() => {
     const candidate = votes?.find((vote) => vote.castBy === address)?.voteFor
-    // Disable recovering during election or if candidate won previous election
-    // Enable recovering if new council is elected
+    // Lock stake if the vote was cast: in current election or to winning candidate
+    // Enable stake recovery if election is finished
     return !!candidate && (!election?.isFinished || candidate.isCouncilMember)
   }, [votes, address, election])
 
