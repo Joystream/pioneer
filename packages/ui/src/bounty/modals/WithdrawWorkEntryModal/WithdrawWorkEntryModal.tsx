@@ -47,7 +47,7 @@ export const WithdrawWorkEntryModal = () => {
   const { allAccounts } = useMyAccounts()
 
   const entry = useMemo(
-    () => activeMember && bounty.entries?.find((entry) => entry.worker.id === activeMember.id),
+    () => activeMember && bounty.entries?.find((entry) => entry.worker.id === activeMember.id && !entry.withdrawn),
     [activeMember?.id]
   )
 
@@ -111,7 +111,7 @@ export const WithdrawWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+    <Modal onClose={hideModal} modalSize="l">
       <ModalHeader title={t('modals.withdrawWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>

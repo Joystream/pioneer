@@ -209,7 +209,7 @@ export const ContributeFundsModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="JOY"
+                units="tJOY"
                 validation={hasError('amount', errors) ? 'invalid' : undefined}
                 message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
               >

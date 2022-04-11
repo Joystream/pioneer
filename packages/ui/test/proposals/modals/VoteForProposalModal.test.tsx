@@ -150,7 +150,7 @@ describe('UI: Vote for Proposal Modal', () => {
         await beforeEach(true)
 
         expect(await getButton(/^sign transaction and vote/i)).not.toBeDisabled()
-        expect(screen.queryByText(/^(.*?)You need at least \d+ JOY(.*)/i)).toBeNull()
+        expect(screen.queryByText(/^(.*?)You need at least \d+ tJOY(.*)/i)).toBeNull()
       })
     })
 

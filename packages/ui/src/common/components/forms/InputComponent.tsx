@@ -465,6 +465,7 @@ export const InputArea = styled.div`
   height: 100%;
   justify-content: flex-start;
   align-items: center;
+  min-width: 0;
 `
 
 const InputRightSide = styled.div<DisabledInputProps>`
@@ -490,7 +491,6 @@ const InputUnits = styled.span`
   line-height: 1.5;
   font-weight: 700;
   color: ${Colors.Black[400]};
-  text-transform: uppercase;
 `
 
 export const InputNotification = styled.div<InputProps>`

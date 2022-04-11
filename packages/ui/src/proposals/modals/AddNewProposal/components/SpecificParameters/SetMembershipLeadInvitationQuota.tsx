@@ -39,7 +39,7 @@ export const SetMembershipLeadInvitationQuota = ({ amount, setAmount }: Props) =
           <InputComponent
             label="Lead Invitation Quota Amount"
             tight
-            units="JOY"
+            units="tJOY"
             required
             disabled={isLoading || !group?.leadId}
             message={

@@ -60,7 +60,9 @@ const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStati
 export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: Bounty) => {
   const extractEntryWorkerId = (entry: WorkEntry) => entry.worker.id
 
-  const membersWithEntries = bounty?.entries?.filter((entry) => membershipsIdArray.includes(entry.worker.id)) ?? []
+  const membersWithEntries =
+    bounty?.entries?.filter((entry: WorkEntry) => membershipsIdArray.includes(entry.worker.id) && !entry.withdrawn) ??
+    []
   const idsWithEntries = membersWithEntries.map(extractEntryWorkerId)
   const idsWithoutEntries = membershipsIdArray.filter((memberId) => !idsWithEntries.includes(memberId))
 
@@ -80,7 +82,6 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
   const idAsOracle = membershipsIdArray.filter((memberId) => bounty?.oracle?.id === memberId)
 
   return {
-    idsWithSubmissions: membersWithSubmission.map(extractEntryWorkerId),
     idsWithReward: membersWithReward.map(extractEntryWorkerId),
     idsWithLoss: membersWithLoss.map(extractEntryWorkerId),
     idsWithEntries,
@@ -102,7 +103,6 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
     idsOnWhitelist,
     idsWithLoss,
     idsWithReward,
-    idsWithSubmissions,
     idsWithEntries,
     idAsOracle,
     idsWithoutEntries,
@@ -122,7 +122,7 @@ const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: Bount
       isDefined(bounty?.entrantWhitelist) && !idsOnWhitelist.length && buttons.push('notify')
       idsWithoutEntries.length && buttons.push('announceWorkEntry')
       idsWithEntries.length && buttons.push('submitWork')
-      idsWithSubmissions.length && buttons.push('withdrawWorkEntry')
+      idsWithEntries.length && buttons.push('withdrawWorkEntry')
       break
     }
     case 'judgment': {

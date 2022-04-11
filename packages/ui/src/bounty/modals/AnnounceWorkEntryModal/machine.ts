@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { Account } from '@/accounts/types'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -9,7 +10,11 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-interface TransactionContext {
+interface ContributionContext {
+  stakingAccount?: Account
+}
+
+interface TransactionContext extends ContributionContext {
   transactionEvents?: EventRecord[]
 }
 
@@ -25,14 +30,15 @@ export enum AnnounceWorkEntryStates {
 }
 
 type NextEvent = { type: 'NEXT' } | { type: 'BOUND' } | { type: 'REQUIRES_STAKING_CANDIDATE' }
+type SetStakingAccountEvent = { type: 'SET_STAKING_ACCOUNT'; account: Account }
 
-export type AnnounceWorkEntryEvents = NextEvent
+export type AnnounceWorkEntryEvents = NextEvent | SetStakingAccountEvent
 
 export type AnnounceWorkEntryState =
   | { value: AnnounceWorkEntryStates.requirementsVerification; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.bindStakingAccount; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.beforeTransaction; context: EmptyObject }
-  | { value: AnnounceWorkEntryStates.contribute; context: EmptyObject }
+  | { value: AnnounceWorkEntryStates.contribute; context: Required<ContributionContext> }
   | { value: AnnounceWorkEntryStates.transaction; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.success; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.cancel; context: EmptyObject }
@@ -54,6 +60,11 @@ export const announceWorkEntryMachine = createMachine<
       id: AnnounceWorkEntryStates.contribute,
       on: {
         NEXT: AnnounceWorkEntryStates.beforeTransaction,
+        SET_STAKING_ACCOUNT: {
+          actions: assign({
+            stakingAccount: (context, event) => (event as SetStakingAccountEvent).account,
+          }),
+        },
       },
     },
     [AnnounceWorkEntryStates.beforeTransaction]: {

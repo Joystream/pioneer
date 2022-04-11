@@ -74,7 +74,7 @@ export const DecreaseWorkingGroupLeadStake = ({
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.leadWorker?.stake)} JOY</TextInlineMedium>.
+                <TextInlineMedium bold>{formatTokenValue(group.leadWorker?.stake)} tJOY</TextInlineMedium>.
               </TextMedium>
             </Info>
           )}
@@ -82,7 +82,7 @@ export const DecreaseWorkingGroupLeadStake = ({
             <InputComponent
               label="Decrease Stake Amount"
               tight
-              units="JOY"
+              units="tJOY"
               inputWidth="s"
               tooltipText="Amount by which to decrease stake."
               required

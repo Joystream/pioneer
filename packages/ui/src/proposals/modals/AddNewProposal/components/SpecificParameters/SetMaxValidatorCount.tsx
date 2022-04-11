@@ -60,7 +60,7 @@ export const SetMaxValidatorCount = ({
             }
             label="Amount"
             tight
-            units="JOY"
+            units="tJOY"
             required
           >
             <InputNumber
