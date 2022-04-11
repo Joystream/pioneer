@@ -32,7 +32,6 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ e
   const { stage: electionStage } = useElectionStage()
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
   const timeRemaining = formatDuration(remainingPeriod?.toNumber() || 0)
-  const [hideElement, setHideElement] = useToggle(false)
 
   const remainingCalculation = useMemo(() => {
     const dayChecker = timeRemaining[0][1] === 'd'
@@ -76,21 +75,12 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ e
     }
   }
 
-  if (hideElement) {
-    return null
-  }
-
   return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
           <StyledTriangle deadlineTime={remainingCalculation} />{' '}
-          <StyledClosedButton
-            onClick={() => {
-              setHideElement()
-              hideForStorage(electionId)
-            }}
-          />
+          <StyledClosedButton onClick={() => hideForStorage(electionId)} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '@/common/components/List'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { useToggle } from '@/common/hooks/useToggle'
 import {
   ContentWrapper,
   ElementWrapper,
@@ -26,23 +25,12 @@ export interface OpeningsListItemProps {
 
 export const OpeningsListItem = ({ title, type, groupName, hideForStorage, id }: OpeningsListItemProps) => {
   const { t } = useTranslation('overview')
-  const [hideElement, setHideElement] = useToggle(false)
-
-  if (hideElement) {
-    return null
-  }
 
   return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle />{' '}
-          <StyledClosedButton
-            onClick={() => {
-              setHideElement()
-              hideForStorage(id)
-            }}
-          />
+          <StyledTriangle /> <StyledClosedButton onClick={() => hideForStorage(id)} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>

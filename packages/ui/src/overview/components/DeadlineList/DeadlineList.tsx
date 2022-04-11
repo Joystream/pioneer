@@ -11,6 +11,7 @@ import { ElectionListItem } from '@/overview/components/DeadlineList/ElectionLis
 import { OpeningsListItem } from '@/overview/components/DeadlineList/OpeningsListItem'
 import { ProposalListItem } from '@/overview/components/DeadlineList/ProposalListItem'
 import { StyledBadge, StyledText, TimeWrapper } from '@/overview/components/DeadlineList/styles'
+import { useDeadlines } from '@/overview/hooks/useDeadlines'
 import { useProposals } from '@/proposals/hooks/useProposals'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -31,10 +32,7 @@ const initializer: Record<DeadlineNamespace, string[]> = {
 
 export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGroup }) => {
   const { t } = useTranslation('overview')
-  const { isLoading: proposalLoading, proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
-  const { election } = useCurrentElection()
-  const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup?.id })
-  const { isLoading: openingLoading, openings } = useOpenings({ groupId: workingGroup?.id, type: 'open' })
+  const { election, proposals, upcomingOpenings, openings, isLoading } = useDeadlines({ groupId: workingGroup?.id })
   const [storageDeadlines, setStorageDeadlines] = useLocalStorage<Record<DeadlineNamespace, string[]>>('deadlines')
   const [tempDeadlines, setTempDeadlines] = useState<Record<DeadlineNamespace, string[]> | null>(null)
   const tempRef = useRef<boolean>(false)
@@ -79,7 +77,7 @@ export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGr
     }
   }, [storageDeadlines?.proposals, proposals, election, upcomingOpenings, openings])
 
-  if (proposalLoading || upcomingLoading || openingLoading) {
+  if (isLoading) {
     return <Loading />
   }
 
@@ -120,9 +118,9 @@ export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGr
               hideForStorage={helper('openings')}
               id={opening.id}
               key={opening.id}
-              title={opening.title}
+              title={opening.metadata.title}
               type="openings"
-              groupName={opening.groupName}
+              groupName={opening.group.name}
             />
           ))}
           {deadlines.upcomingOpenings.map((upcoming) => (
