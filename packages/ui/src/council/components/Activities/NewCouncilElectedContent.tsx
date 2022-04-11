@@ -7,6 +7,6 @@ import { NewCouncilElectedActivity } from '@/council/types/CouncilActivities'
 
 export const NewCouncilElectedContent: ActivityContentComponent<NewCouncilElectedActivity> = ({ activity }) => (
   <ActivityRouterLink to={CouncilRoutes.council}>
-    {activity.electedMembersCount} councilors have been elected.
+    New council elected.
   </ActivityRouterLink>
 )
