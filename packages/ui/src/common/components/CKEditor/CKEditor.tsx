@@ -118,7 +118,7 @@ const BaseCKEditor = React.forwardRef(
   }
 )
 
-interface ControlledCKEditorProps extends CKEditorProps {
+export interface ControlledCKEditorProps extends CKEditorProps {
   name?: string
 }
 

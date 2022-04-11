@@ -10,7 +10,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { addBountyMachine } from '@/bounty/modals/AddBountyModal/machine'
-import { CKEditorProps } from '@/common/components/CKEditor'
+import { ControlledCKEditorProps } from '@/common/components/CKEditor'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -39,7 +39,7 @@ import {
 configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  CKEditor: (props: ControlledCKEditorProps) => mockCKEditor(props),
 }))
 
 jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
@@ -414,6 +414,7 @@ describe('UI: AddNewBountyModal', () => {
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     fireEvent.change(amountInput, { target: { value } })
+    fireEvent.blur(amountInput)
   }
 
   const triggerSwitch = async (label: string | RegExp) => {

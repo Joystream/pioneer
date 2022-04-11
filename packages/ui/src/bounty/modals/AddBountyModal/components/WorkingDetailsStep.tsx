@@ -8,13 +8,7 @@ import styled from 'styled-components'
 import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
-import {
-  InputNumber,
-  ToggleCheckbox,
-  InlineToggleWrap,
-  InputComponent,
-  Label,
-} from '@/common/components/forms'
+import { InputNumber, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
