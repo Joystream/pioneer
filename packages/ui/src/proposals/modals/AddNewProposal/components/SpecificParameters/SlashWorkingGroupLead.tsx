@@ -1,10 +1,11 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
+import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -35,11 +36,13 @@ export const SlashWorkingGroupLead = ({
   const { member: lead } = useMember(group?.leadId)
 
   const isDisabled = !group || (group && !group.leadId)
+  const [leadWorkerStake, setLeadWorkerStake] = useState<BN>()
 
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
     setWorkerId(group?.leadWorker?.runtimeId)
-  }, [groupId, group?.leadWorker?.runtimeId])
+    setLeadWorkerStake(group?.leadWorker?.stake)
+  }, [groupId, group?.leadWorker?.runtimeId, group?.leadWorker?.stake])
 
   return (
     <RowGapBlock gap={24}>
@@ -64,6 +67,14 @@ export const SlashWorkingGroupLead = ({
             />
           </InputComponent>
           <SelectedMember label="Working Group Lead" member={lead} disabled />
+          {leadWorkerStake && (
+            <Info>
+              <TextMedium bold>Info</TextMedium>
+              <TextMedium lighter>
+                The actual stake height for Working Group Lead is {<TokenValue value={leadWorkerStake} />}
+              </TextMedium>
+            </Info>
+          )}
           <InputComponent
             label="Slashing Amount"
             tight
