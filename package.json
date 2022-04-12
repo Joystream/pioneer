@@ -17,14 +17,17 @@
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --package ui -c test",
     "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit --package ui -c test",
-    "start": "wsrun --package ui -c start"
+    "start": "wsrun --package ui -c start",
+    "prepare": "husky install"
   },
   "dependencies": {
     "eslint-plugin-import": "^2.23.4",
     "wsrun": "^5.2.4"
   },
   "devDependencies": {
-    "eslint": "^7.29.0"
+    "eslint": "^7.29.0",
+    "husky": ">=6",
+    "lint-staged": ">=10"
   },
   "resolutions": {
     "@polkadot/api": "5.9.1",
@@ -47,5 +50,8 @@
   "engines": {
     "node": ">=14.0.0",
     "yarn": "^1.22.0"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
   }
 }
