@@ -1,15 +1,15 @@
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { Account } from '@/accounts/types'
 import { FundedRange } from '@/bounty/components/FundedRange'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index'
@@ -19,6 +19,7 @@ import { FundingLimited, isPerpetual } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   AmountButton,
   AmountButtons,
@@ -33,12 +34,18 @@ import {
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { WaitModal } from '@/common/components/WaitModal'
-import { Fonts } from '@/common/constants'
+import { BN_ZERO, Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
+import { BNSchema, minContext } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+
+const schema = Yup.object().shape({
+  amount: BNSchema.test(minContext('${min} tJOY is smallest allowed contribution', 'minAmount')),
+})
 
 export const ContributeFundsModal = () => {
   const { t } = useTranslation('bounty')
@@ -48,44 +55,46 @@ export const ContributeFundsModal = () => {
     showModal,
   } = useModal<BountyContributeFundsModalCall>()
   const { api, isConnected } = useApi()
-  const minFundingLimit = api?.consts.bounty.minFundingLimit.toNumber() ?? 0
+  const [state, send] = useMachine(contributeFundsMachine)
+  const minFundingLimit = api?.consts.bounty.minFundingLimit ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const [amount, setAmount] = useState<string>(String(minFundingLimit))
-  const [state, send] = useMachine(contributeFundsMachine)
-  const [account, setAccount] = useState<Account>()
-  const balance = useBalance(account?.address)
+  const balance = useBalance(activeMember?.controllerAccount)
 
-  const setStakingAmount = useCallback((_, value: number) => setAmount(String(value)), [])
+  const setAmount = useCallback((amount: BN) => send('SET_AMOUNT', { amount }), [])
 
-  const valid = useMemo(() => new BN(amount).gten(minFundingLimit) && !!account, [amount, account])
+  const { setContext, isValid, errors } = useSchema({ amount: state.context.amount }, schema)
+  useEffect(() => {
+    if (minFundingLimit) {
+      setContext({
+        minAmount: minFundingLimit,
+      })
+
+      if (!state.context.amount && state.matches(ContributeFundStates.contribute)) {
+        setAmount(minFundingLimit)
+      }
+    }
+  }, [minFundingLimit, state.value])
 
   const setMaxAmount = useCallback(() => {
-    balance && setAmount(balance.transferable.toString())
+    balance && setAmount(balance.transferable)
   }, [balance])
 
   const setHalfAmount = useCallback(() => {
-    balance && setAmount(balance.transferable.divn(2).toString())
+    balance && setAmount(balance.transferable.divn(2))
   }, [balance])
 
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
-      return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, amount)
+      return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
     }
-  }, [activeMember?.id, amount, isConnected])
+  }, [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()])
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
-
-  const contribution = useMemo(() => new BN(amount), [amount])
 
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
-
-  useEffect(() => {
-    balance &&
-      setAmount(balance.transferable.gten(minFundingLimit) ? String(minFundingLimit) : balance.transferable.toString())
-  }, [balance?.transferable.toString(), account?.address])
 
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
@@ -98,7 +107,6 @@ export const ContributeFundsModal = () => {
           },
         })
       } else {
-        setAccount(accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account'))
         nextStep()
       }
     }
@@ -147,7 +155,7 @@ export const ContributeFundsModal = () => {
     return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
-  if (state.matches(ContributeFundStates.transaction)) {
+  if (state.matches(ContributeFundStates.transaction) && state.context.amount) {
     const service = state.children.transaction
 
     return (
@@ -156,9 +164,11 @@ export const ContributeFundsModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        description={t('modals.contribute.authorizeDescription', { value: formatTokenValue(amount) })}
+        description={t('modals.contribute.authorizeDescription', {
+          value: formatTokenValue(state.context.amount),
+        })}
         buttonLabel={t('modals.contribute.nextButton')}
-        contributeAmount={contribution}
+        contributeAmount={state.context.amount}
       />
     )
   }
@@ -192,7 +202,7 @@ export const ContributeFundsModal = () => {
             </InputComponent>
           </Row>
           <Row>
-            <TransactionAmount alignItemsToEnd>
+            <TransactionAmount>
               <InputComponent
                 label={t('modals.contribute.selectAmount')}
                 sublabel={t('modals.contribute.selectAmountSubtitle', { value: formatTokenValue(minFundingLimit) })}
@@ -200,23 +210,25 @@ export const ContributeFundsModal = () => {
                 required
                 inputWidth="s"
                 units="tJOY"
+                validation={hasError('amount', errors) ? 'invalid' : undefined}
+                message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
               >
                 <InputNumber
                   id="amount-input"
-                  value={amount}
-                  onChange={setStakingAmount}
+                  value={state.context.amount?.toString()}
+                  onChange={(_, value) => setAmount(new BN(value))}
                   placeholder="0"
                   isTokenValue
                 />
               </InputComponent>
-              <AmountButtons>
+              <StyledAmountButtons>
                 <AmountButton size="small" onClick={setHalfAmount}>
                   {t('modals.contribute.halfButton')}
                 </AmountButton>
                 <AmountButton size="small" onClick={setMaxAmount}>
                   {t('modals.contribute.maxButton')}
                 </AmountButton>
-              </AmountButtons>
+              </StyledAmountButtons>
             </TransactionAmount>
           </Row>
           {!isPerpetual(bounty.fundingType) && (
@@ -233,14 +245,14 @@ export const ContributeFundsModal = () => {
       </ScrolledModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={contribution} />
+          <TransactionInfo title={t('modals.common.contributeAmount')} value={state.context.amount} />
           <TransactionInfo
             title={t('modals.common.transactionFee.label')}
             value={fee?.transactionFee}
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!valid} onClick={nextStep}>
+        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
           {t('modals.contribute.nextButton')}
         </ButtonPrimary>
       </ModalFooter>
@@ -253,4 +265,8 @@ const ReadOnlyInput = styled(Input)`
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;
+`
+
+const StyledAmountButtons = styled(AmountButtons)`
+  margin-bottom: -40px;
 `
