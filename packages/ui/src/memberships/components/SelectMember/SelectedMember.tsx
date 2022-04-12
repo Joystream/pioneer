@@ -7,7 +7,7 @@ import { Loading } from '@/common/components/Loading'
 import { MemberInfo, MemberInfoProps } from '@/memberships/components/MemberInfo'
 import { Member } from '@/memberships/types'
 
-export interface BaseSelectedMemberProps
+interface BaseSelectedMemberProps
   extends Pick<InputComponentProps, 'label' | 'disabled' | 'tooltipText'>,
     Pick<MemberInfoProps, 'hideGroup'> {
   member: Member | undefined
@@ -37,15 +37,15 @@ const Container = styled(InputComponent)`
   }
 `
 
-interface SelectedMemberProps extends BaseSelectedMemberProps {
-  name: string
+export interface SelectedMemberProps extends BaseSelectedMemberProps {
+  name?: string
 }
 
 export const SelectedMember = ({ name, ...props }: SelectedMemberProps) => {
   const formContext = useFormContext()
 
   useEffect(() => {
-    if (props.member && formContext) {
+    if (props.member && formContext && name) {
       formContext.setValue(name, props.member)
     }
   }, [props.member, formContext])
