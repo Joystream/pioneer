@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -66,15 +66,14 @@ export const SlashWorkingGroupLead = ({
           <SelectedMember label="Working Group Lead" member={lead} disabled />
           {group?.leadWorker?.stake && group?.name && (
             <Info>
-              <TextMedium bold>Info</TextMedium>
               <TextMedium>
-                The actual Stake height for {group?.name} Working Group Lead is{' '}
+                The actual stake for {group?.name} Working Group Lead is{' '}
                 {<TokenValue value={group?.leadWorker?.stake} />}
               </TextMedium>
             </Info>
           )}
           <InputComponent
-            label="Slashing Amount"
+            label="Decrease Stake Amount"
             tight
             units="tJOY"
             inputWidth="s"
