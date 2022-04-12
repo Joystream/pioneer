@@ -10,7 +10,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { addBountyMachine } from '@/bounty/modals/AddBountyModal/machine'
-import { ControlledCKEditorProps } from '@/common/components/CKEditor'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -39,7 +39,7 @@ import {
 configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: ControlledCKEditorProps) => mockCKEditor(props),
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({

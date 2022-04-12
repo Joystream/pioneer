@@ -7,21 +7,21 @@ import { Loading } from '@/common/components/Loading'
 import { MemberInfo, MemberInfoProps } from '@/memberships/components/MemberInfo'
 import { Member } from '@/memberships/types'
 
-export interface SelectedMemberProps
+export interface BaseSelectedMemberProps
   extends Pick<InputComponentProps, 'label' | 'disabled' | 'tooltipText'>,
     Pick<MemberInfoProps, 'hideGroup'> {
   member: Member | undefined
   size?: 'm' | 'l'
 }
 
-export const SelectedMember = ({
+const BasedSelectedMember = ({
   label,
   member,
   size = 'm',
   hideGroup,
   disabled,
   tooltipText,
-}: SelectedMemberProps) => (
+}: BaseSelectedMemberProps) => (
   <Container label={label} inputSize={size === 'm' ? 'l' : 'xl'} disabled={disabled} tooltipText={tooltipText}>
     {member ? (
       <MemberInfo member={member} memberSize={size} size={size} hideGroup={hideGroup} skipModal />
@@ -37,17 +37,18 @@ const Container = styled(InputComponent)`
   }
 `
 
-interface ControlledSelectedMemberProps extends SelectedMemberProps {
+interface SelectedMemberProps extends BaseSelectedMemberProps {
   name: string
 }
 
-export const ControlledSelectedMember = ({ name, ...props }: ControlledSelectedMemberProps) => {
+export const SelectedMember = ({ name, ...props }: SelectedMemberProps) => {
   const formContext = useFormContext()
+
   useEffect(() => {
-    if (props.member) {
+    if (props.member && formContext) {
       formContext.setValue(name, props.member)
     }
-  }, [props.member])
+  }, [props.member, formContext])
 
-  return <SelectedMember {...props} />
+  return <BasedSelectedMember {...props} />
 }

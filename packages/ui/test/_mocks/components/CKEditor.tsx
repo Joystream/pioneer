@@ -1,7 +1,7 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { CKEditorProps, ControlledCKEditorProps } from '@/common/components/CKEditor'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { Input } from '@/common/components/forms'
 
 import { Editor, EventInfo } from '../../../../markdown-editor'
@@ -21,7 +21,7 @@ const BaseCKEditor = ({ id, onChange, onBlur }: CKEditorProps) => (
   />
 )
 
-const CKEditor = ({ name, ...props }: ControlledCKEditorProps) => {
+const CKEditor = ({ name, ...props }: CKEditorProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {

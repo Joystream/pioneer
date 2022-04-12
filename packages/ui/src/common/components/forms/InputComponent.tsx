@@ -165,13 +165,13 @@ export const InputText = React.memo((props: InputProps) => {
   return <Input type="text" autoComplete="off" {...props} {...formContext.register(props.name)} />
 })
 
-interface NumberInputProps extends Omit<InputProps, 'onChange'> {
+interface BaseNumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
   isTokenValue?: boolean
 }
 
 const BasedInputNumber = React.memo(
-  ({ id, onChange, isTokenValue = false, value = '', ...props }: NumberInputProps) => {
+  ({ id, onChange, isTokenValue = false, value = '', ...props }: BaseNumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
       if (isNaN(eventValue)) return
@@ -193,11 +193,11 @@ const BasedInputNumber = React.memo(
   }
 )
 
-interface ControlledInputNumberProps extends NumberInputProps {
+interface InputNumberProps extends BaseNumberInputProps {
   isInBN?: boolean
 }
 
-export const InputNumber = React.memo(({ name, isInBN = false, ...props }: ControlledInputNumberProps) => {
+export const InputNumber = React.memo(({ name, isInBN = false, ...props }: InputNumberProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {

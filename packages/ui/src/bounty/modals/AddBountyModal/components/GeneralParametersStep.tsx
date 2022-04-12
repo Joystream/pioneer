@@ -7,7 +7,7 @@ import { InputText, InputComponent, InputNotification } from '@/common/component
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { ControlledSelectedMember } from '@/memberships/components/SelectMember'
+import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 interface Props extends ValidationHelpers {
@@ -25,7 +25,7 @@ export const GeneralParametersStep = ({ activeMember, errorMessageGetter, errorC
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <ControlledSelectedMember name="generalParameters.creator" disabled member={activeMember} label="Creator" />
+          <SelectedMember name="generalParameters.creator" disabled member={activeMember} label="Creator" />
           <StyledInputComponent
             id="field-title"
             label="Bounty title"

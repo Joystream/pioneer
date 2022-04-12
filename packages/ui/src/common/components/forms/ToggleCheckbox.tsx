@@ -53,11 +53,11 @@ function BaseToggleCheckbox({
   )
 }
 
-interface ControlledCheckboxProps extends Props {
+interface CheckboxProps extends Props {
   name?: string
 }
 
-export const ToggleCheckbox = ({ name, ...props }: ControlledCheckboxProps) => {
+export const ToggleCheckbox = ({ name, ...props }: CheckboxProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {

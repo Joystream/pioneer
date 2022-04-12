@@ -6,7 +6,7 @@ import { useMentions } from '@/common/hooks/useMentions'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 
-export interface CKEditorProps {
+export interface BaseCKEditorProps {
   id?: string
   maxRows?: number
   minRows?: number
@@ -118,12 +118,12 @@ const BaseCKEditor = React.forwardRef(
   }
 )
 
-export interface ControlledCKEditorProps extends CKEditorProps {
+export interface CKEditorProps extends BaseCKEditorProps {
   name?: string
 }
 
 export const CKEditor = React.memo(
-  React.forwardRef(({ name, ...props }: ControlledCKEditorProps) => {
+  React.forwardRef(({ name, ...props }: CKEditorProps) => {
     const formContext = useFormContext()
 
     if (!formContext || !name) {
