@@ -1,3 +1,5 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '@/common/components/List'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -13,8 +15,6 @@ import {
   TimeWrapper,
   TopElementsWrapper,
 } from '@/overview/components/DeadlineList/styles'
-import { useTranslation } from 'react-i18next'
-import React from 'react'
 
 export interface OpeningsListItemProps {
   title: string

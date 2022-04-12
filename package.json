@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "lint": "wsrun --package ui -c lint",
+    "lint": "wsrun --package ui -c lint:fix",
     "build": "wsrun --fast-exit --stages -c --exclude @joystream/markdown-editor build",
     "build:storybook": "wsrun --fast-exit --stages -c --exclude ui --exclude-missing build && wsrun --package ui -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
@@ -52,6 +52,9 @@
     "yarn": "^1.22.0"
   },
   "lint-staged": {
+    "packages/ui/src/**/*.{js,ts,tsx}": [
+      "yarn lint"
+    ],
     "*.js": "eslint --cache --fix"
   }
 }
