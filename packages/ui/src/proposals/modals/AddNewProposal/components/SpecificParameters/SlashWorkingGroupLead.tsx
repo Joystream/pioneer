@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -17,26 +17,29 @@ export interface SlashWorkingGroupLeadParameters {
   slashingAmount?: BN
   groupId?: GroupIdName
   workerId?: number
+  leadWorkerStake?: BN | undefined
 }
 
 interface SlashWorkingGroupLeadProps extends SlashWorkingGroupLeadParameters {
   setSlashingAmount: (amount: BN) => void
   setGroupId(groupId: string): void
   setWorkerId(workerId?: number): void
+  setLeadWorkerStake: (amount: BN | undefined) => void
 }
 
 export const SlashWorkingGroupLead = ({
   slashingAmount,
   groupId,
+  leadWorkerStake,
   setSlashingAmount,
   setGroupId,
   setWorkerId,
+  setLeadWorkerStake,
 }: SlashWorkingGroupLeadProps) => {
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
   const isDisabled = !group || (group && !group.leadId)
-  const [leadWorkerStake, setLeadWorkerStake] = useState<BN>()
 
   useEffect(() => {
     setSlashingAmount(BN_ZERO)

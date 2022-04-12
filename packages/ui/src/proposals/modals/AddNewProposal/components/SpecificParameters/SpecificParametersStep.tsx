@@ -272,9 +272,11 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
           slashingAmount={state.context.specifics?.slashingAmount}
           groupId={state.context.specifics?.groupId}
           workerId={state.context.specifics?.workerId}
+          leadWorkerStake={state.context.specifics?.leadWorkerStake}
           setSlashingAmount={(slashingAmount) => send('SET_SLASHING_AMOUNT', { slashingAmount })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+          setLeadWorkerStake={(amount) => send('SET_LEAD_WORKER_STAKE', { amount })}
         />
       )
     case state.matches('specificParameters.terminateWorkingGroupLead'):
