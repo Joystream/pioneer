@@ -5,7 +5,6 @@ import { ListItem } from '@/common/components/List'
 import { formatDuration } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { useToggle } from '@/common/hooks/useToggle'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -25,14 +24,14 @@ import {
 export interface ProposalListItemProps {
   proposalId: string
   title: string
+  hideForStorage: (id: string) => void
 }
 
-export const ProposalListItem = ({ proposalId, title }: ProposalListItemProps) => {
+export const ProposalListItem = ({ proposalId, title, hideForStorage }: ProposalListItemProps) => {
   const { t } = useTranslation('overview')
   const { proposal } = useProposal(proposalId)
   const constants = useProposalConstants(proposal?.details.type)
   const blocksToEnd = useBlocksToProposalExecution(proposal, constants) || 0
-  const [hideElement, setHideElement] = useToggle(false)
 
   const remainingCalculation = () => {
     const endsInSec = blocksToEnd * 6
@@ -48,14 +47,12 @@ export const ProposalListItem = ({ proposalId, title }: ProposalListItemProps) =
 
   const urlAddress = '/#/proposals/preview/' + proposalId
 
-  if (hideElement) {
-    return null
-  }
   return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle deadlineTime={remainingCalculation()} /> <StyledClosedButton onClick={setHideElement} />
+          <StyledTriangle deadlineTime={remainingCalculation()} />{' '}
+          <StyledClosedButton onClick={() => hideForStorage(proposalId)} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
