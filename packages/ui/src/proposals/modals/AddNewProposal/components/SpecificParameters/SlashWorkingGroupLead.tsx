@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -17,35 +17,29 @@ export interface SlashWorkingGroupLeadParameters {
   slashingAmount?: BN
   groupId?: GroupIdName
   workerId?: number
-  leadWorkerStake?: BN | undefined
 }
 
 interface SlashWorkingGroupLeadProps extends SlashWorkingGroupLeadParameters {
   setSlashingAmount: (amount: BN) => void
   setGroupId(groupId: string): void
   setWorkerId(workerId?: number): void
-  setLeadWorkerStake: (amount: BN | undefined) => void
 }
 
 export const SlashWorkingGroupLead = ({
   slashingAmount,
   groupId,
-  leadWorkerStake,
   setSlashingAmount,
   setGroupId,
   setWorkerId,
-  setLeadWorkerStake,
 }: SlashWorkingGroupLeadProps) => {
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
-
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
     setWorkerId(group?.leadWorker?.runtimeId)
-    setLeadWorkerStake(group?.leadWorker?.stake)
-  }, [groupId, group?.leadWorker?.runtimeId, group?.leadWorker?.stake])
+  }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
@@ -70,11 +64,12 @@ export const SlashWorkingGroupLead = ({
             />
           </InputComponent>
           <SelectedMember label="Working Group Lead" member={lead} disabled />
-          {leadWorkerStake && (
+          {group?.leadWorker?.stake && group?.name && (
             <Info>
               <TextMedium bold>Info</TextMedium>
-              <TextMedium lighter>
-                The actual stake height for Working Group Lead is {<TokenValue value={leadWorkerStake} />}
+              <TextMedium>
+                The actual Stake height for {group?.name} Working Group Lead is{' '}
+                {<TokenValue value={group?.leadWorker?.stake} />}
               </TextMedium>
             </Info>
           )}

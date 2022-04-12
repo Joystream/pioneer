@@ -276,7 +276,6 @@ type SetDetails = { type: 'SET_DETAILS'; details: string }
 type SetQuestions = { type: 'SET_QUESTIONS'; questions: CreateWorkingGroupLeadOpeningParameters['questions'] }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
-type SetLeaWorkerState = { type: 'SET_LEAD_WORKER_STAKE'; amount: BN }
 type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: string }
 type SetApplicationId = { type: 'SET_APPLICATION_ID'; applicationId: string }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
@@ -308,7 +307,6 @@ export type AddNewProposalEvent =
   | SetDescriptionEvent
   | SetWorkingGroupEvent
   | SetWorkerEvent
-  | SetLeaWorkerState
   | SetShortDescriptionEvent
   | SetDuration
   | SetDetails
