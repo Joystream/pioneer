@@ -16,6 +16,7 @@ import { TransactionModal } from '@/common/modals/TransactionModal'
 
 import { Worker } from '../../types'
 
+
 interface Props {
   onClose: () => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
