@@ -1,3 +1,4 @@
+import { lockLookup } from '../../../../src/accounts/model/lockTypes'
 import { flatMapP, mapP } from '../../../../src/common/utils'
 import memberData from '../../../../src/mocks/data/raw/members.json'
 import { accountsMap } from '../../data/addresses'
@@ -7,6 +8,7 @@ import { createMembersCommand } from '../members/create'
 const announceCandidacies = () => {
   withApi(async (api) => {
     const candidateCount = api.consts.council.councilSize.toNumber() + 1
+    const announceStake = api.consts.council.minCandidateStake
     const members = memberData.slice(0, candidateCount)
 
     // Create accounts
@@ -16,11 +18,11 @@ const announceCandidacies = () => {
     }
 
     // Fund the empty accounts
-    const accountToFund = ['charlie', 'dave', 'eve'] as const
-    const fundingTx = await flatMapP(accountToFund, async (name) => {
-      const address = accountsMap[name]
+    const requiredBalance = announceStake.add(api.consts.referendum.minimumStake).muln(1.5) // 1.5 extra margin for potential transaction fees
+    const memberToFund = members.filter(({ boundAccounts }) => !boundAccounts?.length)
+    const fundingTx = await flatMapP(memberToFund, async ({ controllerAccount: address }) => {
       const { data } = await api.query.system.account(address)
-      return data.free.toNumber() < 30_000 ? [api.tx.balances.transfer(address, 100_000)] : []
+      return data.free.lt(requiredBalance) ? [api.tx.balances.transfer(address, requiredBalance)] : []
     })
 
     if (fundingTx.length > 0) {
@@ -37,12 +39,16 @@ const announceCandidacies = () => {
         // Confirm staking account
         await signAndSend(api.tx.members.confirmStakingAccount(id, address), address)
       } else {
-        // Release stakes
-        await signAndSend(api.tx.council.releaseCandidacyStake(id), address)
+        const locks = await api.query.balances.locks(address)
+
+        if (locks.some(({ id }) => lockLookup(id) === 'Council Candidate')) {
+          // Release stakes
+          await signAndSend(api.tx.council.releaseCandidacyStake(id), address)
+        }
       }
 
       // Announce candidacy
-      await signAndSend(api.tx.council.announceCandidacy(id, address, address, 15_000), address)
+      await signAndSend(api.tx.council.announceCandidacy(id, address, address, announceStake), address)
     })
   })
 }

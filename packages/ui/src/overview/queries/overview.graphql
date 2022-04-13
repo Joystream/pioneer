@@ -45,3 +45,25 @@ query GetSidebarInfo($memberId: ID!) {
     }
   }
 }
+
+query GetAllDeadLines($group: WorkingGroupWhereInput) {
+  electionRounds(where: { isFinished_eq: false }) {
+    cycleId
+    candidates {
+      ...ElectionCandidateFields
+    }
+  }
+  proposals(where: { status_json: { isTypeOf_eq: "ProposalStatusDeciding" } }) {
+    updatedAt
+    id
+    title
+  }
+
+  upcomingWorkingGroupOpenings(where: { group: $group }) {
+    ...UpcomingWorkingGroupOpeningFields
+  }
+
+  workingGroupOpenings(where: { group: $group, status_json: { isTypeOf_eq: "OpeningStatusOpen" } }) {
+    ...WorkingGroupOpeningFields
+  }
+}

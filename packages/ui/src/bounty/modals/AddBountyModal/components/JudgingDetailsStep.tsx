@@ -1,8 +1,8 @@
-import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useFormContext } from 'react-hook-form'
 
-import { JudgingPeriodDetailsContext, WorkingPeriodDetailsContext } from '@/bounty/modals/AddBountyModal/machine'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
+import { InputNumber, InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextHuge } from '@/common/components/typography'
@@ -10,12 +10,20 @@ import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
-interface Props extends Omit<JudgingPeriodDetailsContext, keyof WorkingPeriodDetailsContext> {
-  setJudgingPeriodLength: (length: BN) => void
-  setOracle: (oracle: Member) => void
-}
+export const JudgingDetailsStep = () => {
+  const form = useFormContext()
+  const [judgingPeriodLength, oracle] = form.watch([
+    `${AddBountyStates.judgingPeriodDetails}.judgingPeriodLength`,
+    `${AddBountyStates.judgingPeriodDetails}.oracle`,
+  ])
 
-export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, setJudgingPeriodLength }: Props) => {
+  const setOracle = useCallback(
+    (member: Member) => {
+      form.setValue(`${AddBountyStates.judgingPeriodDetails}.oracle`, member, { shouldValidate: true })
+    },
+    [form.setValue]
+  )
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -33,11 +41,11 @@ export const JudgingDetailsStep = ({ judgingPeriodLength, oracle, setOracle, set
           message={judgingPeriodLength ? `≈ ${inBlocksDate(judgingPeriodLength)}` : ''}
         >
           <InputNumber
+            isInBN
             isTokenValue
             id="field-periodLength"
             placeholder="0"
-            onChange={(_, value) => setJudgingPeriodLength(new BN(value))}
-            value={judgingPeriodLength?.toString()}
+            name={`${AddBountyStates.judgingPeriodDetails}.judgingPeriodLength`}
           />
         </InputComponent>
       </Row>
