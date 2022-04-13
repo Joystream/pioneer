@@ -9,46 +9,27 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-import { StakeStepFormFields } from './StakeStep'
-
 interface ApplyForRoleContext {
-  stake?: StakeStepFormFields
-  answers?: Record<number, string>
   transactionEvents?: EventRecord[]
 }
-
-type ValidStakeState = { stake: Required<StakeStepFormFields> }
-type ValidFormState = ValidStakeState & { answers: Record<number, string> }
-type AfterTransactionState = ValidFormState & { transactionEvents: EventRecord[] }
 
 type ApplyForRoleState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
-  | { value: 'form'; context: ValidStakeState }
-  | { value: 'beforeTransaction'; context: ValidFormState }
-  | { value: 'bindStakingAccount'; context: ValidFormState }
-  | { value: 'transaction'; context: ValidFormState }
-  | { value: 'success'; context: AfterTransactionState }
-  | { value: 'error'; context: AfterTransactionState }
-
-type ValidStakeStepEvent = {
-  type: 'VALID'
-  stake: Required<StakeStepFormFields>
-}
-
-type ValidApplicationStepEvent = {
-  type: 'VALID'
-  answers: Record<number, string>
-}
+  | { value: 'form'; context: EmptyObject }
+  | { value: 'beforeTransaction'; context: EmptyObject }
+  | { value: 'bindStakingAccount'; context: EmptyObject }
+  | { value: 'transaction'; context: EmptyObject }
+  | { value: 'success'; context: Required<ApplyForRoleContext> }
+  | { value: 'error'; context: Required<ApplyForRoleContext> }
 
 export type ApplyForRoleEvent =
   | { type: 'FAIL' }
   | { type: 'PASS' }
-  | ValidStakeStepEvent
-  | ValidApplicationStepEvent
   | { type: 'BOUND' }
   | { type: 'UNBOUND' }
+  | { type: 'NEXT' }
 
 export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
   initial: 'requirementsVerification',
@@ -63,23 +44,13 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
     stake: {
       meta: { isStep: true, stepTitle: 'Stake' },
       on: {
-        VALID: {
-          target: 'form',
-          actions: assign({
-            stake: (context, event) => (event as ValidStakeStepEvent).stake,
-          }),
-        },
+        NEXT: 'form',
       },
     },
     form: {
       meta: { isStep: true, stepTitle: 'Form' },
       on: {
-        VALID: {
-          target: 'beforeTransaction',
-          actions: assign({
-            answers: (context, event) => (event as ValidApplicationStepEvent).answers,
-          }),
-        },
+        NEXT: 'beforeTransaction',
       },
     },
     beforeTransaction: {
