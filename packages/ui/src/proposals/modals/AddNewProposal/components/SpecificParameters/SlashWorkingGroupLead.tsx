@@ -2,9 +2,10 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
+import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -33,7 +34,6 @@ export const SlashWorkingGroupLead = ({
 }: SlashWorkingGroupLeadProps) => {
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
-
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
@@ -64,8 +64,16 @@ export const SlashWorkingGroupLead = ({
             />
           </InputComponent>
           <SelectedMember label="Working Group Lead" member={lead} disabled />
+          {group?.leadWorker?.stake && group?.name && (
+            <Info>
+              <TextMedium>
+                The actual stake for {group?.name} Working Group Lead is{' '}
+                {<TokenValue value={group?.leadWorker?.stake} />}
+              </TextMedium>
+            </Info>
+          )}
           <InputComponent
-            label="Slashing Amount"
+            label="Decrease Stake Amount"
             tight
             units="tJOY"
             inputWidth="s"
