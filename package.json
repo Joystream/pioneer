@@ -53,7 +53,8 @@
   },
   "lint-staged": {
     "packages/ui/src/**/*.{js,ts,tsx,html}": [
-      "yarn lint"
+      "prettier --write",
+      "eslint --fix"
     ],
     "*.js": "eslint --cache --fix"
   }

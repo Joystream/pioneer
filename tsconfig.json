@@ -1,0 +1,23 @@
+{
+  "ts-node": {
+    "files": false
+  },
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "lib": ["DOM", "ES2020"],
+    "types": ["jest"],
+    "paths": {
+      "@/*": ["src/*"],
+      "@polkadot/api/augment": ["../types/augment/augment-api.ts"],
+      "@polkadot/types/augment": ["../types/augment/augment-types.ts"]
+    },
+    "baseUrl": "."
+  }
+}
