@@ -1,7 +1,6 @@
 import { BountyMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
-import { at } from 'lodash'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -37,15 +36,9 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { useYupValidationResolver } from '@/common/utils/validation'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-
-export interface ValidationHelpers {
-  errorMessageGetter: (field: string) => string | undefined
-  errorChecker: (field: string) => boolean
-  formValueGetter?: () => any
-}
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
@@ -74,17 +67,6 @@ export const AddBountyModal = () => {
     reValidateMode: 'onChange',
     defaultValues: formDefaultValues,
   })
-
-  const errorChecker = useCallback(
-    (field: string) =>
-      !!at(form.formState.errors, typeof state.value === 'string' ? `${state.value}.${field}` : field)[0],
-    [form.formState.errors, state.value]
-  )
-  const errorMessageGetter = useCallback(
-    (field: string) =>
-      at(form.formState.errors, typeof state.value === 'string' ? `${state.value}.${field}` : field)[0]?.message,
-    [form.formState.errors, state.value]
-  )
 
   if (!service.initialized) {
     service.start()
@@ -214,24 +196,24 @@ export const AddBountyModal = () => {
               {state.matches(AddBountyStates.generalParameters) && (
                 <GeneralParametersStep
                   activeMember={activeMember}
-                  errorChecker={errorChecker}
-                  errorMessageGetter={errorMessageGetter}
+                  errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
+                  errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
               )}
 
               {state.matches(AddBountyStates.fundingPeriodDetails) && (
                 <FundingDetailsStep
                   minCherryLimit={bountyApi?.minCherryLimit.toNumber() || 0}
-                  errorChecker={errorChecker}
-                  errorMessageGetter={errorMessageGetter}
+                  errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
+                  errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
               )}
               {state.matches(AddBountyStates.workingPeriodDetails) && (
                 <WorkingDetailsStep
                   minEntrantStake={bountyApi?.minWorkEntrantStake}
                   whitelistLimit={bountyApi?.closedContractSizeLimit}
-                  errorChecker={errorChecker}
-                  errorMessageGetter={errorMessageGetter}
+                  errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
+                  errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
               )}
               {state.matches(AddBountyStates.judgingPeriodDetails) && <JudgingDetailsStep />}

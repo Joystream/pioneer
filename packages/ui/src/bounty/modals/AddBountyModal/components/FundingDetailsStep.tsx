@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
-import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { InputNumber, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
@@ -11,6 +10,7 @@ import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
+import { ValidationHelpers } from '@/common/utils/validation'
 
 export interface FundingDetailsStepProps extends ValidationHelpers {
   minCherryLimit: number
