@@ -1,7 +1,8 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
+import { at } from 'lodash'
 import { useCallback } from 'react'
-import { Resolver } from 'react-hook-form'
+import { FieldErrors, Resolver } from 'react-hook-form'
 import * as Yup from 'yup'
 import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
@@ -120,3 +121,14 @@ export const useYupValidationResolver = (validationSchema: AnyObjectSchema, path
     },
     [validationSchema, path]
   )
+
+export interface ValidationHelpers {
+  errorMessageGetter: (field: string) => string | undefined
+  errorChecker: (field: string) => boolean
+  formValueGetter?: () => any
+}
+
+export const enhancedHasError = (errors: FieldErrors, depthPath?: string) => (field: string) =>
+  !!at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
+export const enhancedGetErrorMessage = (errors: FieldErrors, depthPath?: string) => (field: string) =>
+  at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]?.message
