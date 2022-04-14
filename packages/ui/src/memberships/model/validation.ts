@@ -51,14 +51,13 @@ export const StakingAccountSchema = Yup.object()
       !areLocksConflicting(validationContext.stakeLock, validationContext.balances.locks)
     )
   })
-  .test('stakingStatus', 'Account might be bound to another member', (value, context) => {
-    if (!value) {
-      return true
-    }
-
+  .test('otherStatus', 'This account is bound to another member', (value, context) => {
     const { stakingStatus } = context.options.context as IStakingAccountSchema
-
-    return stakingStatus !== 'unknown' && stakingStatus !== 'other'
+    return stakingStatus !== 'other'
+  })
+  .test('unknownStatus', '', (value, context) => {
+    const { stakingStatus } = context.options.context as IStakingAccountSchema
+    return stakingStatus !== 'unknown'
   })
 
 export const NewAddressSchema = (which: string) =>
