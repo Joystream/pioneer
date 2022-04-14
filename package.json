@@ -53,8 +53,7 @@
   },
   "lint-staged": {
     "packages/ui/src/**/*.{js,ts,tsx,html}": [
-      "prettier --write",
-      "eslint --fix"
+      "prettier --write"
     ],
     "*.js": "eslint --cache --fix"
   }
