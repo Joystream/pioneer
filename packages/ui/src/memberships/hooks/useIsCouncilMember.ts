@@ -9,5 +9,6 @@ export const useIsCouncilMember = (member?: Member) => {
   const { api, connectionState } = useApi()
   const council = useObservable(api?.query.council.councilMembers(), [connectionState])
   const councilMembersIds = council?.map(({ membership_id }) => membership_id.toNumber()) ?? []
-  return useMemo(() => !!member && councilMembersIds.includes(parseInt(member.id)), [member, councilMembersIds])
+
+  return useMemo(() => member && councilMembersIds.includes(parseInt(member.id)), [member, councilMembersIds])
 }
