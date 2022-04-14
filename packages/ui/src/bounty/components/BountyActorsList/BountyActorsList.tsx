@@ -40,7 +40,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
       </ValueText>
     )
   }
-  return <ValueText lighter>Work withdrawn</ValueText>
+  return <ValueText lighter>Entry withdrawn</ValueText>
 }
 
 export const BountyActorsList = memo(

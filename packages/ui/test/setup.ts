@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom'
 import BN from 'bn.js'
 
+jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
+  useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {

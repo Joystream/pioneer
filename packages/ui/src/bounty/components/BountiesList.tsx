@@ -32,7 +32,7 @@ export const BountiesList = memo(({ bounties, getSortProps }: Props) => {
         })}
       </StyledList>
     ) : null
-  }, [bounties.length])
+  }, [bounties])
 
   if (!bounties.length) {
     return (

@@ -10,16 +10,17 @@ import { ProposalTile } from './ProposalTile'
 
 interface ListProps {
   proposals: Proposal[]
+  isLoading: boolean
 }
 
-export const ProposalsTilesList = React.memo(({ proposals }: ListProps) => {
+export const ProposalsTilesList = React.memo(({ proposals, isLoading }: ListProps) => {
   const { t } = useTranslation('overview')
   const tiles = proposals.map((proposal) => <ProposalTile key={proposal.id} proposalId={proposal.id} />)
-  return !tiles ? (
+  return isLoading ? (
     <Loading />
   ) : (
     <ScrollerWrapper>
-      <Scroller title={t('proposals.title')} count={tiles.length} items={tiles} />
+      <Scroller title={t('proposals.title')} count={proposals.length} items={tiles} />
     </ScrollerWrapper>
   )
 })

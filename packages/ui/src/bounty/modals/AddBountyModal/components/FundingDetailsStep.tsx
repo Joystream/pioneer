@@ -1,39 +1,27 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import * as Yup from 'yup'
 
+import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { FundingPeriodDetailsContext, GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
 import { InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO, Colors } from '@/common/constants'
-import { useSchema } from '@/common/hooks/useSchema'
+import { Colors } from '@/common/constants'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
-import { Address } from '@/common/types'
 
-export interface FundingDetailsStepProps extends Omit<FundingPeriodDetailsContext, keyof GeneralParametersContext> {
+export interface FundingDetailsStepProps
+  extends Omit<FundingPeriodDetailsContext, keyof GeneralParametersContext>,
+    ValidationHelpers {
   setFundingMaximalRange: (fundingMaximalRange: BN) => void
-  setFundingMinimalRange: (fundingMinimalRange: BN) => void
+  setFundingMinimalRange: (fundingMinimalRange: BN | undefined) => void
   setCherry: (cherry: BN) => void
   setFundingPeriodLength: (fundingPeriodLength: BN) => void
   setFundingPeriodType: (fundingPeriodType: string) => void
-  account?: Address
-  maxCherryLimit: number
   minCherryLimit: number
 }
-
-const baseSchema = Yup.object().shape({
-  cherry: Yup.number(),
-  fundingMaximalRange: Yup.number(),
-  fundingMinimalRange: Yup.number().lessThan(
-    Yup.ref('fundingMaximalRange'),
-    'Minimal range cannot be greater than maximal'
-  ),
-})
 
 export const FundingDetailsStep = ({
   fundingMaximalRange,
@@ -46,33 +34,17 @@ export const FundingDetailsStep = ({
   setFundingPeriodLength,
   setFundingMinimalRange,
   setFundingMaximalRange,
-  maxCherryLimit,
   minCherryLimit,
+  errorMessageGetter,
+  errorChecker,
 }: FundingDetailsStepProps) => {
   const switchCheckbox = (isSet: boolean) => {
     if (isSet) {
       return setFundingPeriodType('limited')
     }
     setFundingPeriodType('perpetual')
-    setFundingMinimalRange(BN_ZERO)
+    setFundingMinimalRange(undefined)
   }
-
-  const schema = useMemo(() => {
-    baseSchema.fields.cherry = baseSchema.fields.cherry
-      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} tJOY')
-      .max(maxCherryLimit, 'Cherry of ${max} tJOY exceeds your balance')
-
-    return baseSchema
-  }, [maxCherryLimit, minCherryLimit])
-
-  const { errors } = useSchema(
-    {
-      cherry: cherry?.toNumber(),
-      fundingMinimalRange: fundingMinimalRange?.toNumber(),
-      fundingMaximalRange: fundingMaximalRange?.toNumber(),
-    },
-    schema
-  )
 
   return (
     <RowGapBlock gap={24}>
@@ -87,10 +59,8 @@ export const FundingDetailsStep = ({
           units="tJOY"
           required
           tooltipText="Funding period tooltip"
-          message={
-            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} tJOY`
-          }
-          validation={hasError('cherry', errors) ? 'invalid' : undefined}
+          message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
+          validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
           <InputNumber
             id="field-cherry"
@@ -173,8 +143,8 @@ export const FundingDetailsStep = ({
           units="tJOY"
           required
           disabled={fundingPeriodType === 'perpetual'}
-          message={hasError('fundingMinimalRange', errors) ? getErrorMessage('fundingMinimalRange', errors) : ' '}
-          validation={hasError('fundingMinimalRange', errors) ? 'invalid' : undefined}
+          message={errorChecker('fundingMinimalRange') ? errorMessageGetter('fundingMinimalRange') : ' '}
+          validation={errorChecker('fundingMinimalRange') ? 'invalid' : undefined}
           label="Minimal range"
         >
           <InputNumber

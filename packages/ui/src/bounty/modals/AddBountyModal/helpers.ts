@@ -14,62 +14,101 @@ import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/Add
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
+import { BNSchema, minContext, maxContext, moreThanMixed, lessThanMixed } from '@/common/utils/validation'
+import { MemberSchema } from '@/memberships/model/validation'
 
-interface Conditions {
+export interface Conditions {
   isThreadCategoryLoading?: boolean
   minCherryLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxCherryLimit?: BN
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxWhitelistSize?: u32 & AugmentedConst<'rxjs'>
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
+  isLimited: boolean
 }
 
 export const isUrlValid = (value: string) => {
   return Yup.string().required().url().isValidSync(value)
 }
 
-export const isNextStepValid = (state: AddBountyModalMachineState, conditions: Conditions): boolean => {
-  const { context } = state
-  switch (true) {
-    case state.matches(AddBountyStates.generalParameters): {
-      return !!(context.creator && context.description && context.title && isUrlValid(context.coverPhotoLink ?? ''))
-    }
-    case state.matches(AddBountyStates.fundingPeriodDetails): {
-      const isLimited = context.fundingPeriodType === 'limited'
-      const limitedConditions = isLimited
-        ? context.fundingPeriodLength &&
-          context.fundingMinimalRange &&
-          context.fundingMinimalRange.gtn(conditions.minFundingLimit?.toNumber() || 0) &&
-          context.fundingMinimalRange.lt(context.fundingMaximalRange || BN_ZERO)
-        : true
-      const cherryConditions =
-        context.cherry?.lte(conditions.maxCherryLimit || BN_ZERO) &&
-        context.cherry?.gten(conditions.minCherryLimit?.toNumber() || 0)
+export const getSchemaFields = (state: AddBountyModalMachineState) => ({
+  [AddBountyStates.generalParameters]: {
+    title: state.context.title,
+    coverPhotoLink: state.context.coverPhotoLink,
+    creator: state.context.creator,
+    description: state.context.description,
+  },
+  [AddBountyStates.fundingPeriodDetails]: {
+    cherry: state.context.cherry,
+    fundingMaximalRange: state.context.fundingMaximalRange,
+    fundingMinimalRange: state.context.fundingMinimalRange,
+    fundingPeriodLength: state.context.fundingPeriodLength?.toNumber(),
+    fundingPeriodType: state.context.fundingPeriodType,
+  },
+  [AddBountyStates.workingPeriodDetails]: {
+    workingPeriodLength: state.context.workingPeriodLength?.toNumber(),
+    workingPeriodWhitelist: state.context.workingPeriodWhitelist,
+    workingPeriodType: state.context.workingPeriodType,
+    workingPeriodStake: state.context.workingPeriodStake,
+  },
+  [AddBountyStates.judgingPeriodDetails]: {
+    oracle: state.context.oracle,
+    judgingPeriodLength: state.context.judgingPeriodLength?.toNumber(),
+  },
+})
 
-      return !!(
-        context.cherry &&
-        cherryConditions &&
-        context.fundingMaximalRange &&
-        context.fundingMaximalRange.gtn(0) &&
-        limitedConditions
-      )
-    }
-    case state.matches(AddBountyStates.workingPeriodDetails): {
-      const stake = context.workingPeriodStake && conditions.minWorkEntrantStake?.lt(context.workingPeriodStake)
-      const type = !!(context.workingPeriodType === 'closed'
-        ? context.workingPeriodWhitelist?.length &&
-          conditions.maxWhitelistSize?.gtn(context.workingPeriodWhitelist.length)
-        : true)
+export const addBountyModalSchema = Yup.object().shape({
+  [AddBountyStates.generalParameters]: Yup.object().shape({
+    title: Yup.string().max(70, 'Max length is 70 characters').required(''),
+    coverPhotoLink: Yup.string().url('Invalid URL').required(''),
+    creator: MemberSchema.required(),
+    description: Yup.string().required(),
+  }),
+  [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
+    cherry: BNSchema.test(minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit'))
+      .test(maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit'))
+      .required(''),
+    fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero')).required(''),
+    fundingMinimalRange: BNSchema.test('required', 'Minimal range is now required', (value, context) => {
+      return !(context.parent.fundingPeriodType === 'limited' && !value)
+    })
+      .test(lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal'))
+      .test(minContext('Minimal range must be bigger than ${min}', 'minFundingLimit')),
+    fundingPeriodLength: Yup.number().test((value, context) => {
+      if (context.parent.fundingPeriodType !== 'limited') {
+        return true
+      }
+      if (!value) {
+        return context.createError({ message: 'Funding period length is required' })
+      }
+      return true
+    }),
+    fundingPeriodType: Yup.string(),
+  }),
+  [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
+    workingPeriodStake: BNSchema.test(
+      minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
+    ).required(''),
+    workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
+    workingPeriodType: Yup.string(),
+    workingPeriodWhitelist: Yup.array().test((value, context) => {
+      if (!value) {
+        return true
+      }
 
-      return !!(stake && type && context.workingPeriodLength)
-    }
-    case state.matches(AddBountyStates.judgingPeriodDetails): {
-      return !!(context.oracle && context.judgingPeriodLength && !conditions.isThreadCategoryLoading)
-    }
-    default:
-      return false
-  }
-}
+      const validationContext = context.options.context as Conditions
+      if (context.parent.workingPeriodType === 'closed') {
+        return value.length > 0 && (validationContext.maxWhitelistSize ?? BN_ZERO).gten(value.length)
+      }
+
+      return true
+    }),
+  }),
+  [AddBountyStates.judgingPeriodDetails]: Yup.object().shape({
+    oracle: MemberSchema.required(),
+    judgingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
+  }),
+})
 
 export const createBountyParametersFactory = (state: AddBountyModalMachineState): BountyCreationParameters =>
   createType<BountyCreationParameters, 'BountyCreationParameters'>('BountyCreationParameters', {

@@ -91,14 +91,16 @@ export const asContributor = ({
   actor: contributor ? asMember(contributor) : undefined,
 })
 
-export const asBountyWork = (fields: BountyWorkWithDetailsFieldsFragment): BountyWork => ({
-  id: fields.id,
-  title: fields.title ?? '',
-  description: fields.description ?? '',
-  worker: asMember(fields.entry.worker),
-  status: fields.entry.status.__typename,
-  inBlock: asBlock(fields),
-})
+export const asBountyWork =
+  (worker: BountyWorkWithDetailsFieldsFragment['worker'], entryStatus: BountyWorkWithDetailsFieldsFragment['status']) =>
+  (fields: NonNullable<BountyWorkWithDetailsFieldsFragment['works']>[number]): BountyWork => ({
+    id: fields.id,
+    title: fields.title ?? '',
+    description: fields.description ?? '',
+    worker: asMember(worker),
+    status: entryStatus.__typename,
+    inBlock: asBlock(fields),
+  })
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,

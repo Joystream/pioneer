@@ -1,10 +1,10 @@
 import { AugmentedConst } from '@polkadot/api/types'
 import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import * as Yup from 'yup'
 
+import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import {
   FundingPeriodDetailsContext,
   WorkingPeriodDetailsContext,
@@ -12,19 +12,17 @@ import {
 } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useSchema } from '@/common/hooks/useSchema'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
-interface Props extends Omit<WorkingPeriodDetailsContext, keyof FundingPeriodDetailsContext> {
+interface Props extends Omit<WorkingPeriodDetailsContext, keyof FundingPeriodDetailsContext>, ValidationHelpers {
   setWorkingPeriodLength: (workingPeriodLength: BN) => void
   setWorkingPeriodWhitelist: (members: Member[]) => void
   setWorkingPeriodType: (type: WorkingPeriodType) => void
@@ -32,10 +30,6 @@ interface Props extends Omit<WorkingPeriodDetailsContext, keyof FundingPeriodDet
   whitelistLimit?: u32 & AugmentedConst<'rxjs'>
   minEntrantStake?: BN
 }
-
-const baseSchema = Yup.object().shape({
-  workingPeriodStake: Yup.number(),
-})
 
 export const WorkingDetailsStep = ({
   workingPeriodLength,
@@ -48,6 +42,8 @@ export const WorkingDetailsStep = ({
   setWorkingPeriodWhitelist,
   whitelistLimit,
   minEntrantStake,
+  errorChecker,
+  errorMessageGetter,
 }: Props) => {
   const onMemberAdd = (member: Member) => {
     setWorkingPeriodWhitelist([...workingPeriodWhitelist, member])
@@ -59,22 +55,6 @@ export const WorkingDetailsStep = ({
   const removeMemberFromWhitelist = (member: Member) => () => {
     setWorkingPeriodWhitelist(workingPeriodWhitelist.filter((mapMember) => mapMember.id !== member.id))
   }
-
-  const schema = useMemo(() => {
-    baseSchema.fields.workingPeriodStake = baseSchema.fields.workingPeriodStake.min(
-      minEntrantStake?.toNumber() ?? 0,
-      'Entrant stake must be greater than minimum of ${min} tJOY'
-    )
-
-    return baseSchema
-  }, [workingPeriodStake])
-
-  const { errors } = useSchema(
-    {
-      workingPeriodStake: workingPeriodStake?.toNumber(),
-    },
-    schema
-  )
 
   return (
     <RowGapBlock gap={24}>
@@ -155,11 +135,11 @@ export const WorkingDetailsStep = ({
         tight
         required
         message={
-          hasError('workingPeriodStake', errors)
-            ? getErrorMessage('workingPeriodStake', errors)
+          errorChecker('workingPeriodStake')
+            ? errorMessageGetter('workingPeriodStake')
             : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} tJOY`
         }
-        validation={hasError('workingPeriodStake', errors) ? 'invalid' : undefined}
+        validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
         <InputNumber
           isTokenValue

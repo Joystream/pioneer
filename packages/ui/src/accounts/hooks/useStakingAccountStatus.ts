@@ -1,7 +1,7 @@
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
-type StakingStatus = 'unknown' | 'free' | 'other' | 'candidate' | 'confirmed'
+export type StakingStatus = 'unknown' | 'free' | 'other' | 'candidate' | 'confirmed'
 
 export const useStakingAccountStatus = (address?: string, memberId?: string): StakingStatus => {
   const { api } = useApi()

@@ -32,7 +32,11 @@ export const CandidacyNoteTransaction = ({
 }: CandidacyNoteTransactionProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+    transaction,
+    signer,
+    service,
+  })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)
   const transferable = balance?.transferable

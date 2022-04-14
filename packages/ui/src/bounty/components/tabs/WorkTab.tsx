@@ -15,18 +15,20 @@ import { Pagination } from '@/common/components/Pagination'
 import { TextExtraSmall } from '@/common/components/typography'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Colors } from '@/common/constants'
+import { useDebounce } from '@/common/hooks/useDebounce'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 
 interface Props {
   bountyId: string
-  wasSearched?: boolean
-  setWasSearched?(value: boolean): void
+  wasSearched: boolean
+  setWasSearched(value: boolean): void
 }
 
 export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
   const { t } = useTranslation('bounty')
   const [entrantSearch, setEntrantSearch] = useState<string>('')
-  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 5, workerHandle: entrantSearch })
+  const workerHandleDebounced = useDebounce(entrantSearch, 400)
+  const { works, isLoading, pagination } = useBountyWorks({ bountyId, perPage: 5, workerHandle: workerHandleDebounced })
   const query = useRouteQuery()
   const { replace } = useHistory()
   const workId = query.get('work')
@@ -75,7 +77,7 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
 
   return (
     <RowGapBlock gap={4}>
-      {(!!works?.length || entrantSearch) && (
+      {(!!(works.length || isLoading) || workerHandleDebounced) && (
         <FilterContainer>
           {entrantSearch && (
             <ResetFilter light onClick={() => setEntrantSearch('')}>

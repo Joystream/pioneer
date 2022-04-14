@@ -26,6 +26,8 @@ const GeneralParametersStepTemplate: Story = () => {
         title={title}
         coverPhotoLink={coverPhotoLink}
         description={description}
+        errorChecker={() => false}
+        errorMessageGetter={() => undefined}
       />
     </MockApolloProvider>
   )

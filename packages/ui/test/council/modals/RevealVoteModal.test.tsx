@@ -9,8 +9,8 @@ import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVote'
 
 import { getButton } from '../../_helpers/getButton'
-import { alice, bob } from '../../_mocks/keyring/signers'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { alice, bob } from '../../_mocks/keyring'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
 
 describe('UI: RevealVoteModal', () => {
@@ -106,14 +106,16 @@ describe('UI: RevealVoteModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
-        <MockKeyringProvider>
-          <AccountsContext.Provider value={useAccounts}>
-            <ApiContext.Provider value={api}>
-              <RevealVoteModal />
-            </ApiContext.Provider>
-          </AccountsContext.Provider>
-        </MockKeyringProvider>
-      </ModalContext.Provider>
+      <MockApolloProvider>
+        <ModalContext.Provider value={useModal}>
+          <MockKeyringProvider>
+            <AccountsContext.Provider value={useAccounts}>
+              <ApiContext.Provider value={api}>
+                <RevealVoteModal />
+              </ApiContext.Provider>
+            </AccountsContext.Provider>
+          </MockKeyringProvider>
+        </ModalContext.Provider>
+      </MockApolloProvider>
     )
 })

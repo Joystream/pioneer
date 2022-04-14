@@ -5,14 +5,11 @@ import styled from 'styled-components'
 import { List } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { Colors } from '@/common/constants'
-import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { ElectionListItem } from '@/overview/components/DeadlineList/ElectionListItem'
 import { OpeningsListItem } from '@/overview/components/DeadlineList/OpeningsListItem'
 import { ProposalListItem } from '@/overview/components/DeadlineList/ProposalListItem'
 import { StyledBadge, StyledText, TimeWrapper } from '@/overview/components/DeadlineList/styles'
-import { useProposals } from '@/proposals/hooks/useProposals'
-import { useOpenings } from '@/working-groups/hooks/useOpenings'
-import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
+import { useDeadlines } from '@/overview/hooks/useDeadlines'
 import { WorkingGroup } from '@/working-groups/types'
 
 export interface DeadlineListProps {
@@ -21,42 +18,61 @@ export interface DeadlineListProps {
 
 export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGroup }) => {
   const { t } = useTranslation('overview')
-  const { isLoading: proposalLoading, proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
-  const { election } = useCurrentElection()
-  const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup?.id })
-  const { isLoading: openingLoading, openings } = useOpenings({ groupId: workingGroup?.id, type: 'open' })
+  const { isLoading, deadlines, hideForStorage, count } = useDeadlines({ groupId: workingGroup?.id })
 
-  if (proposalLoading || upcomingLoading || openingLoading) {
+  if (isLoading) {
     return <Loading />
   }
 
-  const elementsLength =
-    proposals.length + (election ? election.candidates.length : 0) + upcomingOpenings.length + openings.length
   return (
     <>
       <TimeWrapper>
         <StyledText>
           {t('deadline.deadlinesTitle')}
-          <StyledBadge>{elementsLength}</StyledBadge>
+          <StyledBadge>{count}</StyledBadge>
         </StyledText>
       </TimeWrapper>
-      {elementsLength === 0 ? (
+      {count === 0 ? (
         <EmptyStateWrapper>
           <EmptyMessage>{t('deadline.emptyState')}</EmptyMessage>
         </EmptyStateWrapper>
       ) : (
         <List>
-          {proposals?.map((proposal) => (
-            <ProposalListItem key={proposal.id} proposalId={proposal.id} title={proposal.title} />
+          {deadlines.proposals?.map((proposal) => (
+            <ProposalListItem
+              key={proposal.id}
+              proposalId={proposal.id}
+              title={proposal.title}
+              hideForStorage={hideForStorage('proposals')}
+            />
           ))}
-          {election?.candidates.map((elections) => (
-            <ElectionListItem electionId={elections.id} title={elections.info.title} key={elections.id} />
+          {deadlines.election?.map((elections) => (
+            <ElectionListItem
+              hideForStorage={hideForStorage('election')}
+              electionId={elections.id}
+              title={elections.info.title}
+              key={elections.id}
+            />
           ))}
-          {openings.map((opening) => (
-            <OpeningsListItem key={opening.id} title={opening.title} type="openings" groupName={opening.groupName} />
+          {deadlines.openings.map((opening) => (
+            <OpeningsListItem
+              hideForStorage={hideForStorage('openings')}
+              id={opening.id}
+              key={opening.id}
+              title={opening.metadata.title}
+              type="openings"
+              groupName={opening.group.name}
+            />
           ))}
-          {upcomingOpenings.map((upcoming) => (
-            <OpeningsListItem key={upcoming.id} title={upcoming.title} type="upcoming" groupName={upcoming.groupName} />
+          {deadlines.upcomingOpenings.map((upcoming) => (
+            <OpeningsListItem
+              hideForStorage={hideForStorage('upcomingOpenings')}
+              id={upcoming.id}
+              key={upcoming.id}
+              title={upcoming.title}
+              type="upcoming"
+              groupName={upcoming.groupName}
+            />
           ))}
         </List>
       )}

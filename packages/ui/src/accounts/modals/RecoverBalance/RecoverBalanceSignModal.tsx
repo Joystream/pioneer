@@ -31,6 +31,7 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
     transaction,
     signer: signer,
     service,
+    skipQueryNode: true,
   })
   const { allAccounts } = useMyAccounts()
   const recoverAccount = accountOrNamed(allAccounts, address, 'Recover account')
