@@ -19,5 +19,7 @@
       "@polkadot/types/augment": ["../types/augment/augment-types.ts"]
     },
     "baseUrl": "."
-  }
+  },
+  "include": ["packages/ui/src"],
+  "exclude": ["**/node_modules"]
 }
