@@ -2,59 +2,56 @@ import { AugmentedConst } from '@polkadot/api/types'
 import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
-import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
-import {
-  FundingPeriodDetailsContext,
-  WorkingPeriodDetailsContext,
-  WorkingPeriodType,
-} from '@/bounty/modals/AddBountyModal/machine'
+import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
-import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InputNumber, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
+import { ValidationHelpers } from '@/common/utils/validation'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
-interface Props extends Omit<WorkingPeriodDetailsContext, keyof FundingPeriodDetailsContext>, ValidationHelpers {
-  setWorkingPeriodLength: (workingPeriodLength: BN) => void
-  setWorkingPeriodWhitelist: (members: Member[]) => void
-  setWorkingPeriodType: (type: WorkingPeriodType) => void
-  setWorkingPeriodStake: (stake: BN) => void
+interface Props extends ValidationHelpers {
   whitelistLimit?: u32 & AugmentedConst<'rxjs'>
   minEntrantStake?: BN
 }
 
-export const WorkingDetailsStep = ({
-  workingPeriodLength,
-  workingPeriodWhitelist,
-  workingPeriodType,
-  workingPeriodStake,
-  setWorkingPeriodLength,
-  setWorkingPeriodStake,
-  setWorkingPeriodType,
-  setWorkingPeriodWhitelist,
-  whitelistLimit,
-  minEntrantStake,
-  errorChecker,
-  errorMessageGetter,
-}: Props) => {
+export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorChecker, errorMessageGetter }: Props) => {
+  const form = useFormContext()
+  const [isWorkingPeriodOpen, workingPeriodWhitelist, workingPeriodLength] = form.watch([
+    `${AddBountyStates.workingPeriodDetails}.isWorkingPeriodOpen`,
+    `${AddBountyStates.workingPeriodDetails}.workingPeriodWhitelist`,
+    `${AddBountyStates.workingPeriodDetails}.workingPeriodLength`,
+  ])
+
   const onMemberAdd = (member: Member) => {
-    setWorkingPeriodWhitelist([...workingPeriodWhitelist, member])
+    form.setValue(
+      `${AddBountyStates.workingPeriodDetails}.workingPeriodWhitelist`,
+      [...workingPeriodWhitelist, member],
+      {
+        shouldValidate: true,
+      }
+    )
+  }
+
+  const removeMemberFromWhitelist = (member: Member) => () => {
+    form.setValue(
+      `${AddBountyStates.workingPeriodDetails}.workingPeriodWhitelist`,
+      workingPeriodWhitelist.filter((mapMember: Member) => mapMember.id !== member.id),
+      { shouldValidate: true }
+    )
   }
 
   const whitelistFilter = (member: Member): boolean =>
-    !workingPeriodWhitelist.some((oldMember) => member.id === oldMember.id)
-
-  const removeMemberFromWhitelist = (member: Member) => () => {
-    setWorkingPeriodWhitelist(workingPeriodWhitelist.filter((mapMember) => mapMember.id !== member.id))
-  }
+    !workingPeriodWhitelist.some((oldMember: Member) => member.id === oldMember.id)
 
   return (
     <RowGapBlock gap={24}>
@@ -66,8 +63,6 @@ export const WorkingDetailsStep = ({
         <InlineToggleWrap>
           <Label>Bounty type:</Label>
           <ToggleCheckbox
-            checked={workingPeriodType === 'open'}
-            onChange={(isSet) => (isSet ? setWorkingPeriodType('open') : setWorkingPeriodType('closed'))}
             falseLabel={
               <CheckBoxLabelWrapper>
                 Closed{' '}
@@ -77,11 +72,12 @@ export const WorkingDetailsStep = ({
               </CheckBoxLabelWrapper>
             }
             trueLabel={<CheckBoxLabelWrapper>Open</CheckBoxLabelWrapper>}
+            name="workingPeriodDetails.isWorkingPeriodOpen"
           />
         </InlineToggleWrap>
       </Row>
 
-      {workingPeriodType === 'closed' && (
+      {!isWorkingPeriodOpen && (
         <RowGapBlock gap={10}>
           <TextMedium bold>Whitelist</TextMedium>
           <TextMedium>Maximum {whitelistLimit?.toHuman() || 0} members.</TextMedium>
@@ -98,7 +94,7 @@ export const WorkingDetailsStep = ({
             />
           </InputComponent>
           <WhitelistWrapper>
-            {workingPeriodWhitelist?.map((member) => (
+            {workingPeriodWhitelist?.map((member: Member) => (
               <MemberWrapper key={member.id}>
                 <MemberInfo member={member} />
                 <CloseButton onClick={removeMemberFromWhitelist(member)} />
@@ -118,12 +114,7 @@ export const WorkingDetailsStep = ({
           tight
           message={workingPeriodLength ? `≈ ${inBlocksDate(workingPeriodLength)}` : ''}
         >
-          <InputNumber
-            id="field-periodLength"
-            placeholder="0"
-            value={workingPeriodLength?.toString()}
-            onChange={(_, numberValue) => setWorkingPeriodLength(new BN(numberValue))}
-          />
+          <InputNumber isInBN name="workingPeriodDetails.workingPeriodLength" id="field-periodLength" placeholder="0" />
         </InputComponent>
       </Row>
 
@@ -142,11 +133,11 @@ export const WorkingDetailsStep = ({
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
         <InputNumber
+          isInBN
+          name="workingPeriodDetails.workingPeriodStake"
           isTokenValue
           id="field-periodStake"
           placeholder="0"
-          value={workingPeriodStake?.toString()}
-          onChange={(_, value) => setWorkingPeriodStake(new BN(value))}
         />
       </InputComponent>
     </RowGapBlock>

@@ -11,21 +11,12 @@ export default {
 } as Meta
 
 const GeneralParametersStepTemplate: Story = () => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [coverPhotoLink, setCoverPhoto] = useState('')
   const [activeMember] = useState<Member>()
 
   return (
     <MockApolloProvider members>
       <GeneralParametersStep
-        setTitle={setTitle}
         activeMember={activeMember}
-        setCoverPhoto={setCoverPhoto}
-        setDescription={setDescription}
-        title={title}
-        coverPhotoLink={coverPhotoLink}
-        description={description}
         errorChecker={() => false}
         errorMessageGetter={() => undefined}
       />

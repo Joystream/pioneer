@@ -126,28 +126,26 @@ export const BuyMembershipForm = ({
     <>
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          {type === 'general' && (
-            <Row>
-              <InlineToggleWrap>
-                <Label>I was referred by a member: </Label>
-                <ToggleCheckbox
-                  trueLabel="Yes"
-                  falseLabel="No"
-                  onChange={(isSet) => changeField('isReferred', isSet)}
-                  checked={isReferred ?? false}
+          <Row>
+            <InlineToggleWrap>
+              <Label>I was referred by a member: </Label>
+              <ToggleCheckbox
+                trueLabel="Yes"
+                falseLabel="No"
+                onChange={(isSet) => changeField('isReferred', isSet)}
+                checked={isReferred ?? false}
+              />
+            </InlineToggleWrap>
+            {isReferred && (
+              <InputComponent required inputSize="l">
+                <SelectMember
+                  onChange={(member) => changeField('referrer', member)}
+                  disabled={!isReferred}
+                  selected={referrer}
                 />
-              </InlineToggleWrap>
-              {isReferred && (
-                <InputComponent required inputSize="l">
-                  <SelectMember
-                    onChange={(member) => changeField('referrer', member)}
-                    disabled={!isReferred}
-                    selected={referrer}
-                  />
-                </InputComponent>
-              )}
-            </Row>
-          )}
+              </InputComponent>
+            )}
+          </Row>
           <Row>
             <TextMedium dark>Please fill in all the details below.</TextMedium>
           </Row>
