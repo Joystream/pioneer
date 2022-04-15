@@ -102,7 +102,6 @@
     "@types/mime": "^2.0.3",
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
     "babel": "^6.23.0",
     "babel-jest": "^27.2.5",
     "babel-loader": "^8.2.2",

@@ -31,7 +31,6 @@ export const LeaveRoleSignModal = ({ onClose, transaction, worker, service }: Pr
     signer: signer?.address ?? '',
     service,
   })
-
   return (
     <TransactionModal service={service} onClose={onClose}>
       <ModalBody>
