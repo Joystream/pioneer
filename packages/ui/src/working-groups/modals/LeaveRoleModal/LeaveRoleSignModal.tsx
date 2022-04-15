@@ -14,7 +14,7 @@ import { TextMedium } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
-import {WorkerWithDetails} from '../../types'
+import { WorkerWithDetails } from '../../types'
 
 interface Props {
   onClose: () => void
