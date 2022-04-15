@@ -18,7 +18,6 @@ import { PastVoteColumns } from './styles'
 export const PastVotesList = () => {
   const { order, getSortProps } = useSort<CastVoteOrderByInput>('createdAt')
   const { votes, isLoading, pagination } = useMyPastVotes({ order })
-  const { election: latestElection } = useLatestElection()
 
   if (isLoading) {
     return <Loading />
@@ -40,7 +39,7 @@ export const PastVotesList = () => {
       </ListHeaders>
       <List>
         {votes.map((vote) => (
-          <PastVote vote={vote} latestElection={latestElection} key={vote.id} $colLayout={PastVoteColumns} />
+          <PastVote vote={vote} key={vote.id} $colLayout={PastVoteColumns} />
         ))}
       </List>
       <Pagination {...pagination} />

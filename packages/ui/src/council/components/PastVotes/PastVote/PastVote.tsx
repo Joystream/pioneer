@@ -18,11 +18,10 @@ import { PastVoteTableListItem, StakeRecoveringButton } from '../styles'
 
 export interface PastVoteProps {
   vote: Vote
-  latestElection?: LatestElection
   $colLayout: string
 }
 
-export const PastVote = ({ vote, latestElection, $colLayout }: PastVoteProps) => {
+export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
   const { allAccounts } = useMyAccounts()
   const { showModal } = useModal()
   const { isTransactionPending } = useTransactionStatus()
@@ -39,7 +38,7 @@ export const PastVote = ({ vote, latestElection, $colLayout }: PastVoteProps) =>
     })
   }
 
-  const isVoteStakeLocked = useIsVoteStakeLocked(latestElection, vote.voteFor)
+  const isVoteStakeLocked = useIsVoteStakeLocked(vote.voteFor, false)
   // Reflects if the stake has been already released by the member.
   const isRecovered = !vote.stakeLocked
   const isDisabled = isVoteStakeLocked || isRecovered || isTransactionPending

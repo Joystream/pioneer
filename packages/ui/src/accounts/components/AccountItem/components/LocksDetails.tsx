@@ -28,7 +28,7 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
     return votes?.find((vote) => vote.castBy === address)?.voteFor
   }, [votes])
 
-  const isVoteStakeLocked = !!useIsVoteStakeLocked(election, candidate)
+  const isVoteStakeLocked = !!useIsVoteStakeLocked(candidate, election?.isFinished)
 
   if (!balance || !balance.locks.length) {
     return <TextMedium light>No locks found.</TextMedium>
