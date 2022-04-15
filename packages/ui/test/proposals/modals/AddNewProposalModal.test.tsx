@@ -218,13 +218,13 @@ describe('UI: AddNewProposalModal', () => {
       })
     })
 
-    // it('Insufficient funds', async () => {
-    //   stubTransaction(api, 'api.tx.utility.batch', 10000)
-    //
-    //   const { findByText } = renderModal()
-    //
-    //   expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
-    // })
+    it('Insufficient funds', async () => {
+      stubTransaction(api, 'api.tx.utility.batch', 10000)
+
+      const { findByText } = renderModal()
+
+      expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
+    })
   })
 
   describe('Warning modal', () => {

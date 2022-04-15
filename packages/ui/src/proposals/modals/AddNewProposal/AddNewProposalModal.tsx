@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
@@ -187,15 +188,15 @@ export const AddNewProposalModal = () => {
     return null
   }
 
-  // if (state.matches('requirementsFailed')) {
-  //   return (
-  //     <InsufficientFundsModal
-  //       onClose={hideModal}
-  //       address={activeMember.controllerAccount}
-  //       amount={feeInfo.transactionFee}
-  //     />
-  //   )
-  // }
+  if (feeInfo && !feeInfo.canAfford) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
+    )
+  }
 
   if (state.matches('warning')) {
     return <WarningModal onNext={() => send('NEXT')} />
