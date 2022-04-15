@@ -22,6 +22,7 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -63,6 +64,11 @@ export type BaseProposalParams = Exclude<
 >
 
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
+
+const feeFallback = {
+  transactionFee: BN_ZERO,
+  canAfford: true,
+}
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
@@ -110,7 +116,7 @@ export const AddNewProposalModal = () => {
     }
   }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState, stakingStatus])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction) ?? feeFallback
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -123,13 +129,7 @@ export const AddNewProposalModal = () => {
         })
       }
 
-      if (feeInfo && feeInfo.canAfford) {
-        return send('NEXT')
-      }
-
-      if (feeInfo && !feeInfo.canAfford) {
-        return send('FAIL')
-      }
+      return send('NEXT')
     }
 
     if (state.matches('requiredStakeVerification')) {
@@ -184,7 +184,7 @@ export const AddNewProposalModal = () => {
     setIsExecutionError(false)
   }, [send])
 
-  if (!api || !activeMember || !transaction || !feeInfo || state.matches('requirementsVerification')) {
+  if (!api || !activeMember || !transaction || state.matches('requirementsVerification')) {
     return null
   }
 
