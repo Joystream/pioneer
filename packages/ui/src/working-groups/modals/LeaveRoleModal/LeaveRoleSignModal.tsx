@@ -44,7 +44,7 @@ export const LeaveRoleSignModal = ({ onClose, transaction, worker, service }: Pr
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
-          <TransactionInfo title="Transaction fee:" value={paymentInfo?.partialFee?.toBn()} />
+          <TransactionInfo title="Transaction fee:" value={paymentInfo?.partialFee.toBn()} />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={sign} disabled={!signer || !isReady}>
           Sign and leave role
