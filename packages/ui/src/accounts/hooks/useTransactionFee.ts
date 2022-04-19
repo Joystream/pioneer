@@ -2,12 +2,18 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useEffect, useMemo } from 'react'
 
+import { BN_ZERO } from '@/common/constants'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { Address } from '@/common/types'
 import { whenDefined } from '@/common/utils'
 
 import { useBalance } from './useBalance'
+
+const feeFallback = {
+  transactionFee: BN_ZERO,
+  canAfford: true,
+}
 
 export function useTransactionFee(address?: Address, transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>) {
   const { status, setStatus } = useTransactionStatus()
@@ -35,7 +41,7 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
             transactionFee: paymentInfo.partialFee,
             canAfford: balance.transferable.gte(paymentInfo.partialFee),
           }
-        : undefined,
+        : feeFallback,
     [balance, paymentInfo]
   )
 }

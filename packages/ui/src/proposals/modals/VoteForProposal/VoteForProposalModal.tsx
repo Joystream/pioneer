@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
@@ -29,20 +29,14 @@ export const VoteForProposalModal = () => {
 
   const [state, send] = useMachine(machine)
 
-  useEffect((): any => {
-    if (state.matches('requirementsVerification')) {
-      if (feeInfo && feeInfo.canAfford) {
-        return send('PASS')
-      }
-
-      if (feeInfo && !feeInfo.canAfford) {
-        return send('FAIL')
-      }
-    }
-  }, [state, JSON.stringify(feeInfo)])
-
-  if (isLoading || !proposal || !api || !active || !feeInfo) {
+  if (isLoading || !proposal || !api || !active) {
     return null
+  }
+
+  if (feeInfo && !feeInfo.canAfford) {
+    return (
+      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+    )
   }
 
   if (state.matches('requirementsFailed')) {
