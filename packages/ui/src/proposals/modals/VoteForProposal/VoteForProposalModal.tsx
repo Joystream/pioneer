@@ -5,6 +5,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TextInlineMedium } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -16,6 +17,11 @@ import { VoteForProposalSignModal } from '@/proposals/modals/VoteForProposal/Vot
 
 import { VoteForProposalMachine as machine, VoteStatus } from './machine'
 
+const feeFallback = {
+  transactionFee: BN_ZERO,
+  canAfford: true,
+}
+
 export const VoteForProposalModal = () => {
   const { hideModal, modalData } = useModal<VoteForProposalModalCall>()
   const { api } = useApi()
@@ -25,7 +31,7 @@ export const VoteForProposalModal = () => {
     () => (active?.id ? api?.tx.proposalsEngine.vote(active?.id, modalData.id, 'Approve', '') : undefined),
     [active?.id]
   )
-  const feeInfo = useTransactionFee(active?.controllerAccount, transactionFee)
+  const feeInfo = useTransactionFee(active?.controllerAccount, transactionFee) ?? feeFallback
 
   const [state, send] = useMachine(machine)
 
