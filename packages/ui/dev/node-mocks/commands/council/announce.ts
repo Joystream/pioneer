@@ -5,17 +5,13 @@ import { accountsMap } from '../../data/addresses'
 import { signAndSend, withApi } from '../../lib/api'
 import { createMembersCommand } from '../members/create'
 
-const announceCandidacies = () => {
+const announceCandidacies = async () => {
+  await createMembersCommand()
+
   withApi(async (api) => {
     const candidateCount = api.consts.council.councilSize.toNumber() + 1
     const announceStake = api.consts.council.minCandidateStake
     const members = memberData.slice(0, candidateCount)
-
-    // Create accounts
-    const nextId = await api.query.members.nextMemberId()
-    if (Number(nextId) < candidateCount) {
-      await createMembersCommand()
-    }
 
     // Fund the empty accounts
     const requiredBalance = announceStake.add(api.consts.referendum.minimumStake).muln(1.5) // 1.5 extra margin for potential transaction fees
