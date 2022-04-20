@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ValidationHelpers } from '@/bounty/modals/AddBountyModal'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputText, InputComponent, InputNotification } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 

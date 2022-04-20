@@ -182,8 +182,7 @@ describe('UI: ApplyForRoleModal', () => {
       renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '50' } })
+      await fillFieldByLabel(/Select amount for staking/i, '50')
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
@@ -193,8 +192,7 @@ describe('UI: ApplyForRoleModal', () => {
       renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '2000' } })
+      await fillFieldByLabel(/Select amount for staking/i, '2000')
       await selectFromDropdownWithId('role-account', 'alice')
       await selectFromDropdownWithId('reward-account', 'bob')
 
@@ -220,9 +218,9 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
+      await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
+      await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -413,7 +411,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
 
     expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(beforeTransactionParam.stake_parameters.stake).toBe('2000')
+    expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     await act(async () => {
       fireEvent.click(await screen.findByText(/^Sign transaction/i))
@@ -428,7 +426,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(transactionParam.reward_account_id).toBe(alice.address)
 
     expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(transactionParam.stake_parameters.stake).toBe('2000')
+    expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
       answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],
@@ -441,8 +439,7 @@ describe('UI: ApplyForRoleModal', () => {
 
   async function fillAndSubmitStakeStep(stakingAccount = 'alice') {
     await selectFromDropdown('Select account for Staking', stakingAccount)
-    const input = await screen.findByLabelText(/Select amount for staking/i)
-    fireEvent.change(input, { target: { value: '2000' } })
+    await fillFieldByLabel(/Select amount for staking/i, '2000')
     await selectFromDropdownWithId('role-account', 'alice')
     await selectFromDropdownWithId('reward-account', 'alice')
     fireEvent.click(await getNextStepButton())
@@ -453,10 +450,16 @@ describe('UI: ApplyForRoleModal', () => {
     await renderModal()
     await fillAndSubmitStakeStep(stakingAccount)
 
-    fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-    fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-    fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+    await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
+    await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
+    await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
     fireEvent.click(await getNextStepButton())
+  }
+
+  async function fillFieldByLabel(label: string | RegExp, value: number | string) {
+    const amountInput = await screen.findByLabelText(label)
+    fireEvent.change(amountInput, { target: { value } })
+    fireEvent.blur(amountInput)
   }
 
   function renderModal() {
