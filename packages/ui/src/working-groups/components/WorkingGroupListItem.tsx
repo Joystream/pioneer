@@ -60,7 +60,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {isLeadActive ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
+            {isLeadActive ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} fixedSize /> : 'None'}
           </StatsValue>
           <Subscription>{isLeadActive ? 'WG Lead' : 'No leader'}</Subscription>
         </StatsColumn>
