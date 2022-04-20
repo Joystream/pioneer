@@ -19,28 +19,20 @@ interface FinalContext extends Required<VoteContext> {
 
 type VoteForProposalState =
   | { value: 'vote'; context: VoteContext }
-  | { value: 'requirementsVerification'; context: VoteContext }
   | { value: 'requirementsFailed'; context: VoteContext }
   | { value: 'transaction'; context: FinalContext }
   | { value: 'success'; context: FinalContext }
   | { value: 'error'; context: FinalContext }
 
-type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
-type VoteForProposalEvent = FailEvent | PassEvent | SetRationaleEvent | SetVoteStatus
+type VoteForProposalEvent = PassEvent | SetRationaleEvent | SetVoteStatus
 export type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
 type SetVoteStatus = { type: 'SET_VOTE_STATUS'; status: VoteStatus }
 
 export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteForProposalEvent, VoteForProposalState>({
-  initial: 'requirementsVerification',
+  initial: 'vote',
   states: {
-    requirementsVerification: {
-      on: {
-        PASS: 'vote',
-        FAIL: 'requirementsFailed',
-      },
-    },
     vote: {
       on: {
         SET_VOTE_STATUS: {
