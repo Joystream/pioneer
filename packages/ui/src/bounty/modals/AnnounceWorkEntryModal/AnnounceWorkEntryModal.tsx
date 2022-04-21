@@ -11,6 +11,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
@@ -113,15 +114,21 @@ export const AnnounceWorkEntryModal = () => {
             originalModalData: { bounty },
           },
         })
-      } else if (api && transaction) {
+      }
+
+      if (fee && fee?.canAfford) {
         nextStep()
+      }
+
+      if (fee && !fee?.canAfford) {
+        send('FAIL')
       }
     }
 
     if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      fee?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, stakingStatus])
+  }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee)])
 
   if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
     return (
@@ -133,13 +140,24 @@ export const AnnounceWorkEntryModal = () => {
           { name: 'Initializing server connection', state: !!api },
           { name: 'Loading member', state: !!activeMember },
           { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!fee },
         ]}
       />
     )
   }
 
-  if (!activeMember || !transaction || !api) {
+  if (!activeMember || !transaction || !api || !fee) {
     return null
+  }
+
+  if (state.matches(AnnounceWorkEntryStates.requirementsFailed)) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={fee.transactionFee}
+      />
+    )
   }
 
   if (state.matches(AnnounceWorkEntryStates.success)) {

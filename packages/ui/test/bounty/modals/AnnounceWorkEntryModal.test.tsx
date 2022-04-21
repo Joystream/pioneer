@@ -85,6 +85,14 @@ describe('UI: AnnounceWorkEntryModal', () => {
     expect(screen.getByText('modals.announceWorkEntry.title')).toBeInTheDocument()
   })
 
+  it('Insufficient funds', async () => {
+    stubTransaction(api, 'api.tx.utility.batch', 9999999)
+    renderResult.unmount()
+    render(<Modal />)
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+  })
+
   it('Displays correct bounty id', () => {
     expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
   })

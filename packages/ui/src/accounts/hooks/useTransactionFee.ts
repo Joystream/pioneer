@@ -30,8 +30,9 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
         defaultWhenTimeout(BN_ZERO, 1000)
       )
     ),
-    [transaction, address]
+    [address]
   )
+
   const balance = useBalance(address)
 
   useEffect(() => {
