@@ -11,17 +11,17 @@ import { TextInlineMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { Vote } from '@/council/types'
-import { LatestElection } from '@/council/types/LatestElection'
 import { MemberInfo } from '@/memberships/components'
 
 import { PastVoteTableListItem, StakeRecoveringButton } from '../styles'
 
 export interface PastVoteProps {
   vote: Vote
+  latestCycleId?: number
   $colLayout: string
 }
 
-export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
+export const PastVote = ({ vote, latestCycleId, $colLayout }: PastVoteProps) => {
   const { allAccounts } = useMyAccounts()
   const { showModal } = useModal()
   const { isTransactionPending } = useTransactionStatus()
@@ -38,7 +38,9 @@ export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
     })
   }
 
-  const isVoteStakeLocked = useIsVoteStakeLocked(vote.voteFor, false)
+  // Reflects if the vote was cast in latest election
+  const isLatestElection = vote.cycleId === latestCycleId
+  const isVoteStakeLocked = useIsVoteStakeLocked(vote.voteFor, { isLatestElection })
   // Reflects if the stake has been already released by the member.
   const isRecovered = !vote.stakeLocked
   const isDisabled = isVoteStakeLocked || isRecovered || isTransactionPending
