@@ -49,7 +49,7 @@ describe('UI: ContributeFundsModal', () => {
   const api = stubApi()
   stubBountyConstants(api)
   const fee = 888
-  const transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
+  let transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -83,11 +83,20 @@ describe('UI: ContributeFundsModal', () => {
   }
 
   beforeEach(() => {
+    transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
     renderResult = render(<Modal />)
   })
 
   it('Renders', () => {
     expect(screen.getByText('modals.contribute.title')).toBeInTheDocument()
+  })
+
+  it('Insufficient funds', async () => {
+    stubTransaction(api, 'api.tx.bounty.fundBounty', 99999)
+    renderResult.unmount()
+    render(<Modal />)
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Displays correct bounty id', () => {
