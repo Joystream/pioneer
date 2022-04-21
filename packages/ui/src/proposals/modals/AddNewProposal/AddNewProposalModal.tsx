@@ -175,7 +175,7 @@ export const AddNewProposalModal = () => {
     if (state.matches('beforeTransaction')) {
       feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, stakingStatus])
+  }, [state, stakingStatus, feeInfo])
 
   useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
 
