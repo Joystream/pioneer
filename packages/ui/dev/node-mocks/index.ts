@@ -10,6 +10,7 @@ import { fillOpeningModule } from './commands/opening/fill'
 import { createProposalModule } from './commands/proposals/create'
 import { setBudgetModule } from './commands/setBudget'
 import { transferModule } from './commands/transfer'
+import { createUpcomingOpeningModule } from './commands/upcomingOpening/create'
 
 yargs(process.argv.slice(2))
   .usage('yarn node-mocks <command>')
@@ -22,6 +23,7 @@ yargs(process.argv.slice(2))
   .command(createMembersModule)
   .command(setBudgetModule)
   .command(createOpeningModule)
+  .command(createUpcomingOpeningModule)
   .command(fillOpeningModule)
   .command(transferModule)
   .demandCommand().argv

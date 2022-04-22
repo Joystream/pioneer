@@ -90,10 +90,12 @@ export async function signAndSend(
   })
 }
 
-export async function withApi(callback: (api: ApiPromise) => Promise<void>) {
+export async function withApi<T>(callback: (api: ApiPromise) => Promise<T>) {
   const api = await getApi()
 
-  await callback(api)
+  const result = await callback(api)
 
   await api.disconnect()
+
+  return result
 }
