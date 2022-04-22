@@ -19,9 +19,7 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
-import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
@@ -142,18 +140,12 @@ const modals: Record<ModalNames, ReactElement> = {
 }
 
 export const GlobalModals = () => {
-  const { modal, hideModal } = useModal()
-  const { status } = useTransactionStatus()
+  const { modal } = useModal()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   if (Modal) {
-    return ReactDOM.createPortal(
-      <>
-        <Modal />
-        {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
-      </>,
-      document.body
-    )
+    return ReactDOM.createPortal(<Modal />, document.body)
   }
+
   return null
 }
