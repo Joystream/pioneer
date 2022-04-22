@@ -1214,7 +1214,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.findByText(/^Sign transaction and Create$/i))
           })
 
-          expect(await screen.findByText('See my Proposal')).toBeDefined()
+          expect(await screen.findByText('Back to proposals')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -1264,7 +1264,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(await screen.findByText('See my Proposal')).toBeDefined()
+          expect(await screen.findByText('Back to proposals')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -1312,7 +1312,7 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
           })
 
-          expect(await screen.findByText('See my Proposal')).toBeDefined()
+          expect(await screen.findByText('Back to proposals')).toBeDefined()
         })
 
         it('Create proposal failure', async () => {
@@ -1383,7 +1383,7 @@ describe('UI: AddNewProposalModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(await screen.findByText('See my Proposal')).toBeDefined()
+        expect(await screen.findByText('Back to proposals')).toBeDefined()
       })
 
       it('Failure', async () => {

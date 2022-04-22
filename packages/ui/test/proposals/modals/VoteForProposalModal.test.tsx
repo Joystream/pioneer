@@ -163,7 +163,7 @@ describe('UI: Vote for Proposal Modal', () => {
       })
 
       expect(await screen.findByText('Success')).toBeDefined()
-      expect(await getButton(/See my proposal/i)).toBeDefined()
+      expect(await getButton(/Back to proposals/i)).toBeDefined()
     })
 
     it('Error', async () => {
