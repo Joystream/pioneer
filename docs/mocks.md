@@ -18,6 +18,7 @@ Available commands:
 - `yarn workspace ui node-mocks set-budget` - Set membership Working Group budget
 - `yarn workspace ui node-mocks opening:create` - Create an opening
 - `yarn workspace ui node-mocks opening:fill` - Fill existing opening
+- `yarn workspace ui node-mocks upcoming-opening:create` - Create an upcoming opening
 - `yarn workspace ui node-mocks transfer` - Transfer tokens between accounts
 
 To show help:
