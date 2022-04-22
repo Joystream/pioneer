@@ -1,13 +1,13 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import { useEffect, useMemo } from 'react'
-import { map, takeUntil, timer, merge, switchAll, defaultIfEmpty, of, Observable } from 'rxjs'
+import BN from 'bn.js'
+import { useEffect, useMemo, useRef } from 'react'
+import { map, takeUntil, timer, merge, switchAll, defaultIfEmpty, of, Observable, Subject } from 'rxjs'
 
 import { BN_ZERO } from '@/common/constants'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { Address } from '@/common/types'
-import { whenDefined } from '@/common/utils'
 
 import { useBalance } from './useBalance'
 
@@ -23,15 +23,22 @@ const defaultWhenTimeout =
 
 export function useTransactionFee(address?: Address, transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>) {
   const { status, setStatus } = useTransactionStatus()
+  const transactionStream = useRef(new Subject<Observable<BN>>())
   const partialFee = useObservable(
-    whenDefined(address, (address) =>
-      transaction?.paymentInfo(address).pipe(
-        map((paymentInfo) => paymentInfo.partialFee),
-        defaultWhenTimeout(BN_ZERO, 1000)
-      )
+    transactionStream.current.pipe(
+      map((observable, index) => (index === 0 ? observable.pipe(defaultWhenTimeout(BN_ZERO, 1000)) : observable)),
+      switchAll()
     ),
-    [address]
+    []
   )
+
+  useEffect(() => {
+    if (transaction && address) {
+      transactionStream.current.next(
+        transaction.paymentInfo(address).pipe(map((paymentInfo) => paymentInfo.partialFee))
+      )
+    }
+  }, [transaction, address])
 
   const balance = useBalance(address)
 
