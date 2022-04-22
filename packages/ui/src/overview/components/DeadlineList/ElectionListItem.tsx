@@ -1,13 +1,18 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ListItem } from '@/common/components/List'
 import { formatDuration } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { useToggle } from '@/common/hooks/useToggle'
+import { isDefined } from '@/common/utils'
 import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
+import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
+import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
+import { Election } from '@/council/types/Election'
+import { Member } from '@/memberships/types'
 
 import {
   ContentWrapper,
@@ -22,15 +27,19 @@ import {
 } from './styles'
 
 export interface ElectionListItemProps {
-  electionId: string
-  title: string
+  election: Election
   hideForStorage: (id: string) => void
+  member: Member
 }
 
-export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ electionId, title, hideForStorage }) => {
+export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ hideForStorage, member, election }) => {
   const { t } = useTranslation('overview')
   const { stage: electionStage } = useElectionStage()
+  const { allAccounts } = useMyAccounts()
+  const { votesTotal } = useMyCurrentVotesCount(election.cycleId)
+  const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const { votes } = useMyCastVotes(election.cycleId)
   const timeRemaining = formatDuration(remainingPeriod?.toNumber() || 0)
 
   const remainingCalculation = useMemo(() => {
@@ -48,39 +57,52 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ e
     }
   }, [])
 
-  const copyMessage = () => {
-    const urlAddress = '#/election?candidate='
+  const getCopyMessage = () => {
+    const allVotesRevealed = votes?.every((vote) => vote.voteFor)
+    const urlAddress = '#/election'
     switch (electionStage) {
       case 'announcing':
+        if (election.candidates.some((candidate) => candidate.member.id === member.id)) {
+          return null
+        }
         return (
           <StyledText>
-            {t('deadline.announcingPeriod', { electionName: title })}
-            <StyledLink href={urlAddress + electionId}>{t('deadline.announcingLink')}</StyledLink>
+            {t('deadline.announcingPeriod')}
+            <StyledLink href={urlAddress}>{t('deadline.announcingLink')}</StyledLink>
           </StyledText>
         )
       case 'voting':
+        if (!canVote) {
+          return null
+        }
         return (
           <StyledText>
-            {t('deadline.votingPeriod', { electionName: title })}{' '}
-            <StyledLink href={urlAddress + electionId}>{t('deadline.votingLink')}</StyledLink>
+            {t('deadline.votingPeriod')} <StyledLink href={urlAddress}>{t('deadline.votingLink')}</StyledLink>
           </StyledText>
         )
       case 'revealing':
+        if (!allVotesRevealed) {
+          return null
+        }
         return (
           <StyledText>
-            {t('deadline.revealingPeriod', { electionName: title })}
-            <StyledLink href={urlAddress + electionId}>{t('deadline.revealingLink')}</StyledLink>
+            {t('deadline.revealingPeriod')}
+            <StyledLink href={urlAddress}>{t('deadline.revealingLink')}</StyledLink>
           </StyledText>
         )
     }
   }
 
+  const copyMessage = getCopyMessage()
+  if (!copyMessage) {
+    return null
+  }
   return (
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
           <StyledTriangle deadlineTime={remainingCalculation} />{' '}
-          <StyledClosedButton onClick={() => hideForStorage(electionId)} />
+          <StyledClosedButton onClick={() => hideForStorage(`${election.cycleId}:${electionStage}`)} />
         </TopElementsWrapper>
         <ContentWrapper>
           <TimeWrapper>
@@ -89,7 +111,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ e
             </Subscription>
             <StyledBadge>{t('deadline.election')}</StyledBadge>
           </TimeWrapper>
-          <StyledText>{copyMessage()}</StyledText>
+          <StyledText>{getCopyMessage()}</StyledText>
         </ContentWrapper>
       </ListItem>
     </ElementWrapper>

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import {Member} from '@/memberships/types';
 import { seedElectedCouncil, seedMembers, seedProposal, seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
@@ -14,6 +15,7 @@ import { OPENING_DATA, PROPOSAL_DATA, UPCOMING_OPENING } from '../../_mocks/serv
 
 describe('DeadlineList', () => {
   const mockServer = setupMockServer()
+  let member: Member
 
   beforeEach(async () => {
     seedMembers(mockServer.server, 2)
@@ -35,24 +37,24 @@ describe('DeadlineList', () => {
     seedProposal(testProposals[0], mockServer.server)
   })
   it('render proposal', async () => {
-    renderComponent()
+    renderComponent(member)
     expect(await screen.queryByText('deadline.proposalMessage')).toBeDefined()
   })
   it('render election list', async () => {
-    renderComponent()
+    renderComponent(member)
     expect(await screen.queryByText('deadline.announcingPeriod')).toBeDefined()
   })
   it('Render opening list', async () => {
-    renderComponent()
+    renderComponent(member)
     expect(await screen.findByText('deadline.upcomingOpeningsMessage')).toBeDefined()
     expect(await screen.findByText('deadline.opening')).toBeDefined()
   })
 
-  function renderComponent() {
+  function renderComponent(member: Member) {
     return render(
       <MemoryRouter>
         <MockQueryNodeProviders>
-          <DeadlineList />
+          <DeadlineList member={member}/>
         </MockQueryNodeProviders>
       </MemoryRouter>
     )
