@@ -18,50 +18,50 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           <rect x="42.8284" y="42.8281" width="22" height="22" fill="#5D6B80" />
           <circle cx="54" cy="54" r="2" fill="white" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M53.8284 24L60.2426 30.4142L57.4142 33.2426L55.8284 31.6569V47.8284H51.8284V31.6569L50.2426 33.2426L47.4142 30.4142L53.8284 24Z"
             fill="#3F38FF"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M55.8284 42.8281V47.8281H51.8284V42.8281H55.8284Z"
             fill="black"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M53.8284 83.6562L60.2426 77.242L57.4142 74.4136L55.8284 75.9994V59.8278H51.8284V75.9994L50.2426 74.4136L47.4142 77.242L53.8284 83.6562Z"
             fill="#3F38FF"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M83.6567 53.8283L77.2425 60.2425L74.4141 57.4141L75.9999 55.8283L59.8283 55.8283L59.8283 51.8283L75.9999 51.8283L74.4141 50.2425L77.2425 47.4141L83.6567 53.8283Z"
             fill="#3F38FF"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M24 53.8283L30.4142 60.2425L33.2426 57.4141L31.6569 55.8283L47.8284 55.8283L47.8284 51.8283L31.6569 51.8283L33.2426 50.2425L30.4142 47.4141L24 53.8283Z"
             fill="#3F38FF"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M55.8284 59.8281V64.8281H51.8284V59.8281H55.8284Z"
             fill="black"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M47.8284 55.8281L42.8284 55.8281L42.8284 51.8281L47.8284 51.8281L47.8284 55.8281Z"
             fill="black"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M64.8284 55.8281L59.8284 55.8281L59.8284 51.8281L64.8284 51.8281L64.8284 55.8281Z"
             fill="black"
           />
@@ -263,27 +263,27 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <rect width="108" height="108" rx="2" fill="#F9FAFC" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M56.3526 44.6441C53.437 45.9898 51.2287 48.0333 49.6286 50.3485C46.8887 54.3128 46 58.9452 46 61.9789V63.7892L47.629 64.5988C50.0971 65.8255 56.5607 68 64.5 68C72.4393 68 78.9029 65.8255 81.371 64.5988L83 63.7892V61.9789C83 58.9452 82.1113 54.3128 79.3714 50.3485C77.7713 48.0333 75.563 45.9898 72.6474 44.6441C70.3787 46.3269 67.5575 47.3243 64.5 47.3243C61.4425 47.3243 58.6213 46.3269 56.3526 44.6441ZM53.4 33.9459C53.4 27.9007 58.3696 23 64.5 23C70.6304 23 75.6 27.9007 75.6 33.9459C75.6 39.9912 70.6304 44.8919 64.5 44.8919C58.3696 44.8919 53.4 39.9912 53.4 33.9459Z"
             fill="#5D6B80"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M66.2929 81.8301C66.6835 81.4395 66.6835 80.8064 66.2929 80.4159L51.6779 65.8008L47.8 69.6786L62.4151 84.2937C62.8056 84.6842 63.4388 84.6842 63.8293 84.2937L66.2929 81.8301Z"
             fill="#3F38FF"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M56.2 58.6C56.2 67.2156 49.2156 74.2 40.6 74.2C31.9844 74.2 25 67.2156 25 58.6C25 49.9844 31.9844 43 40.6 43C49.2156 43 56.2 49.9844 56.2 58.6Z"
             fill="#3F38FF"
           />
           <path d="M29.8 58.6008C29.8 52.6361 34.6354 47.8008 40.6 47.8008" stroke="white" strokeWidth="2" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M53.9133 66.7356C55.3638 64.3669 56.2 61.5812 56.2 58.6001C56.2 54.3874 54.5302 50.5647 51.8163 47.7578C50.988 48.5615 50.2608 49.4339 49.6286 50.3487C46.8887 54.3129 46 58.9454 46 61.979V63.7894L47.629 64.599C48.849 65.2053 51.0452 66.0432 53.9133 66.7356Z"
             fill="black"
           />
@@ -318,8 +318,8 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
             fill="#3F38FF"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M59.6117 64.9373C58.4551 66.1073 57.0111 66.9197 55.4475 67.3042C53.6196 66.3049 51.9329 65.0457 50.4438 63.5566C47.3671 60.4798 45.2718 56.5598 44.4229 52.2922C44.2499 51.4224 44.1302 50.546 44.0635 49.668H51.016H51.4287H53.3595C55.7045 49.668 57.9534 50.6103 59.6115 52.2878C59.7518 52.4297 59.8869 52.5759 60.0167 52.7262C60.12 52.8643 60.229 52.9981 60.3434 53.1272C61.5412 54.6878 62.2012 56.6158 62.2012 58.6125C62.2012 59.7769 61.9768 60.9178 61.5522 61.9762C61.5522 61.9762 61.5523 61.9762 61.5523 61.9762C61.1119 63.0741 60.456 64.0832 59.6117 64.9373Z"
             fill="black"
           />
