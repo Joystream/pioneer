@@ -50,7 +50,6 @@ describe('ProposalPreview', () => {
     stubProposalConstants(api)
     seedMembers(mockServer.server, 2)
     seedProposal(PROPOSAL_DATA, mockServer.server)
-    stubQuery(api, 'council.councilMembers', [])
     stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
   })
 
@@ -106,7 +105,7 @@ describe('ProposalPreview', () => {
 
     describe('Member is a council member', () => {
       beforeEach(() => {
-        stubQuery(api, 'council.councilMembers', [{ membership_id: createType('MemberId', 0) }])
+        useMyMemberships.setActive({ ...getMember('alice'), isCouncilMember: true })
       })
 
       it('Member has not voted yet', async () => {
@@ -123,10 +122,6 @@ describe('ProposalPreview', () => {
   })
 
   describe('"You voted for" section', () => {
-    beforeEach(() => {
-      stubQuery(api, 'council.councilMembers', [{ membership_id: createType('MemberId', 0) }])
-    })
-
     it('No vote cast', () => {
       renderPage()
       expect(screen.queryByText(/You voted for:/i)).toBeNull()
