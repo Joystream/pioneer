@@ -55,6 +55,7 @@ export const FillWorkingGroupLeadOpening = ({
           >
             <SelectWorkingGroupOpening
               id="opening"
+              placeholder="Select applicant to hire"
               selectedOpeningId={openingId}
               onChange={(selected) => {
                 setWorkingGroupId(selected.groupId)
