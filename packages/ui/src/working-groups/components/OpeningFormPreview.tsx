@@ -78,7 +78,7 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
         <RowGapBlock gap={4}>
           <Label>Stake required</Label>
           <TextInlineHuge>
-            <TokenValue value={200_000} />
+            <TokenValue value={opening.stake} />
           </TextInlineHuge>
         </RowGapBlock>
       </Row>
