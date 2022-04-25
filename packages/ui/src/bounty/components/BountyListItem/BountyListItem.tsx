@@ -47,7 +47,7 @@ export const BountyListItem = memo(
 
     const periodStatus = period === 'failed' || period === 'successful' || period === 'terminated'
     return (
-      <Wrapper isTerminated={isTerminated}>
+      <Wrapper isTerminated={isTerminated} onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
         <BountyImage src={imageUri} />
         <Info>
           <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
@@ -61,7 +61,7 @@ export const BountyListItem = memo(
             entries={entries}
           />
         </Info>
-        <ArrowWrapper onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
+        <ArrowWrapper>
           <Arrow direction="right" />
         </ArrowWrapper>
         <TypeBadge color={BountyPeriodColorMapper[period]}>
@@ -95,7 +95,8 @@ const Wrapper = styled.div<{ isTerminated?: boolean }>`
   display: flex;
   flex-wrap: nowrap;
   position: relative;
-  background-color: ${(props) => (props.isTerminated ? Colors.Black[50] : null)}; ;
+  cursor: pointer;
+  background-color: ${(props) => (props.isTerminated ? Colors.Black[50] : null)};
 `
 
 const BountyImage = styled.img`
