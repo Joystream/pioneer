@@ -53,7 +53,13 @@ const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boole
   } else if (isRivalrous(lockTypeA)) {
     return isRivalrous
   } else {
-    return (lockTypeB) => lockTypeA === lockTypeB
+    return (lockTypeB) => {
+      if (lockTypeA === 'Voting' && lockTypeB === 'Voting') {
+        return false
+      } else {
+        return lockTypeA === lockTypeB
+      }
+    }
   }
 }
 
