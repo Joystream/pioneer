@@ -15,11 +15,12 @@ import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionM
 import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index'
 import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { FundingLimited, isPerpetual } from '@/bounty/types/Bounty'
+import { isFundingLimited } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
   AmountButton,
   AmountButtons,
@@ -32,7 +33,9 @@ import {
   TransactionAmount,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
@@ -95,6 +98,18 @@ export const ContributeFundsModal = () => {
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
+
+  const fundedDetails = useMemo(() => {
+    const funding = bounty.fundingType
+    const isLimited = isFundingLimited(funding)
+    const minRangeValue = isLimited ? funding.minAmount : undefined
+    const maxRangeValue = isLimited ? funding.maxAmount : funding.target
+    return {
+      rangeValue: bounty.totalFunding,
+      minRangeValue,
+      maxRangeValue,
+    }
+  }, [bounty])
 
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
@@ -186,7 +201,7 @@ export const ContributeFundsModal = () => {
               required
               inputDisabled
             >
-              <ReadOnlyInput value={bounty.id} readOnly />
+              <ReadOnlyInput value={bounty.title} readOnly />
             </InputComponent>
           </Row>
           <Row>
@@ -212,6 +227,18 @@ export const ContributeFundsModal = () => {
                 units="tJOY"
                 validation={hasError('amount', errors) ? 'invalid' : undefined}
                 message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
+                tooltipText={
+                  <>
+                    If a contribution is made that brings the cumulative funding equal to or above the upper bound, then
+                    the difference is returned, and the bounty proceeds to the Working Period stage.
+                    <TooltipExternalLink
+                      href="https://joystream.gitbook.io/testnet-workspace/system/bounties#stage"
+                      target="_blank"
+                    >
+                      <TextMedium>Learn more</TextMedium> <LinkSymbol />
+                    </TooltipExternalLink>
+                  </>
+                }
               >
                 <InputNumber
                   id="amount-input"
@@ -231,16 +258,13 @@ export const ContributeFundsModal = () => {
               </StyledAmountButtons>
             </TransactionAmount>
           </Row>
-          {!isPerpetual(bounty.fundingType) && (
-            <Row>
-              <FundedRange
-                rangeValue={bounty.totalFunding}
-                maxRangeValue={(bounty.fundingType as FundingLimited).maxAmount}
-                minRangeValue={(bounty.fundingType as FundingLimited).minAmount}
-                flat
-              />
-            </Row>
-          )}
+          <Row>
+            <FundedRange
+              {...fundedDetails}
+              rangeValue={fundedDetails.rangeValue.add(state.context.amount ?? BN_ZERO)}
+              flat
+            />
+          </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
