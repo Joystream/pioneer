@@ -45,6 +45,8 @@ interface Props {
 const TransactionStatusContent = ({ status, onClose, events }: Props) => {
   const errorEvents = events?.filter(isErrorEvent) ?? []
 
+  const errorDetails = errorEvents[0] && toDispatchError(errorEvents[0])
+
   if (status === 'signWithExtension') {
     return (
       <TransactionStatusNotification
@@ -115,8 +117,11 @@ const TransactionStatusContent = ({ status, onClose, events }: Props) => {
     return (
       <TransactionStatusNotification
         title="Transaction failed"
-        // message="cxd"
-        message={errorEvents[0] ? toDispatchError(errorEvents[0])?.docs : 'Something went wrong with your transaction.'}
+        message={
+          errorDetails
+            ? `Error code: ${errorDetails.section}.${errorDetails.name}`
+            : 'Something went wrong with your transaction.'
+        }
         state="failure"
         onClose={onClose}
       />
