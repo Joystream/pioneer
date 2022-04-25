@@ -1,6 +1,8 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import React, { useEffect, useState } from 'react'
 
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+import { isErrorEvent, toDispatchError } from '@/common/model/JoystreamNode'
 import { TransactionStateValue } from '@/common/model/machines'
 
 import { TransactionStatusNotification } from './TransactionStatusNotification'
@@ -9,7 +11,7 @@ import { TransactionStatusNotification } from './TransactionStatusNotification'
 const HIDE_STATUS_TIMEOUT = 5000
 
 export const TransactionStatus = () => {
-  const { status } = useTransactionStatus()
+  const { status, transactionEvents } = useTransactionStatus()
   const [isVisible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export const TransactionStatus = () => {
   }, [status])
 
   if (isVisible && status) {
-    return <TransactionStatusContent status={status} onClose={() => setVisible(false)} />
+    return <TransactionStatusContent status={status} events={transactionEvents} onClose={() => setVisible(false)} />
   }
 
   return null
@@ -37,9 +39,12 @@ export const TransactionStatus = () => {
 interface Props {
   status: TransactionStateValue
   onClose: () => void
+  events: EventRecord[] | null
 }
 
-const TransactionStatusContent = ({ status, onClose }: Props) => {
+const TransactionStatusContent = ({ status, onClose, events }: Props) => {
+  const errorEvents = events?.filter(isErrorEvent) ?? []
+
   if (status === 'signWithExtension') {
     return (
       <TransactionStatusNotification
@@ -110,7 +115,8 @@ const TransactionStatusContent = ({ status, onClose }: Props) => {
     return (
       <TransactionStatusNotification
         title="Transaction failed"
-        message="Something went wrong with your transaction."
+        // message="cxd"
+        message={errorEvents[0] ? toDispatchError(errorEvents[0])?.docs : 'Something went wrong with your transaction.'}
         state="failure"
         onClose={onClose}
       />
