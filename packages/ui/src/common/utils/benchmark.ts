@@ -14,5 +14,5 @@ export const benchmark = async (
     count++
   }
   const average = (performance.now() - start) / count
-  info(`${title}: Average of ${average}ms (${count} samples)`)
+  info(`${title}: Average of ${average.toLocaleString('en-GB')}ms (${count} samples)`)
 }
