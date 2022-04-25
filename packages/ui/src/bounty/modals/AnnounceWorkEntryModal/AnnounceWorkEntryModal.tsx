@@ -198,7 +198,7 @@ export const AnnounceWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.announceWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
@@ -210,7 +210,7 @@ export const AnnounceWorkEntryModal = () => {
               required
               inputDisabled
             >
-              <ReadOnlyInput value={bounty.id} readOnly />
+              <ReadOnlyInput value={bounty.title} readOnly />
             </InputComponent>
           </Row>
           <Row>
