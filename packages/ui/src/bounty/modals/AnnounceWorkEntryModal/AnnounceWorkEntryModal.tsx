@@ -253,6 +253,7 @@ export const AnnounceWorkEntryModal = () => {
                 inputWidth="s"
                 units="tJOY"
                 disabled
+                tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
                 <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>

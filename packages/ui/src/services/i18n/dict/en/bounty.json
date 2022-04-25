@@ -59,6 +59,7 @@
       "fillDetails": "Please fill in all the details below.",
       "selectAmount": "Entrant stake",
       "selectAmountSubtitle": "Entrant stake is returned to your account automatically, when bounty is finished.",
+      "selectAmountTooltip": "Minimum entrant stake is defined by the bounty creator.",
       "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} tJOY.",
       "error": "Something went wrong",
       "success": "You have just successfully announce work entry for ”{{bounty}}”.",
