@@ -71,7 +71,7 @@ export const MemberInfoAvatar = React.memo(
     return (
       <Tooltip forBig={forBig} popupContent={<MemberInfo member={member} isOnDark isLead={isLead} />}>
         <MemberPhoto small={small} noArea={noArea}>
-          <MemberPhotoContainer small={fixedSize}>
+          <MemberPhotoContainer fixedSize={fixedSize}>
             <Avatar avatarUri={avatarUri} className={className} />
           </MemberPhotoContainer>
         </MemberPhoto>
