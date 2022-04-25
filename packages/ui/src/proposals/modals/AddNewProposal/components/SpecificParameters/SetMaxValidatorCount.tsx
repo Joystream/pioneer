@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -17,17 +17,24 @@ export interface SetMaxValidatorCountParameters {
 interface SetMaxValidatorCountProps {
   validatorCount?: BN
   setValidatorCount: (validatorCount: BN) => void
+  setIsExecutionError: (value: boolean) => void
 }
 
 export const MAX_VALIDATOR_COUNT = 300
 
 const schemaFactory = (min?: number) => {
   const schema = Yup.object().shape({
-    amount: Yup.number().max(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${max}').required(),
+    amount: Yup.number().max(
+      MAX_VALIDATOR_COUNT,
+      `Input value must be between ${min} and ${MAX_VALIDATOR_COUNT} to execute`
+    ),
   })
 
   if (min) {
-    schema.fields.amount = schema.fields.amount.min(min, 'Minimal amount allowed is ${min}')
+    schema.fields.amount = schema.fields.amount.min(
+      min,
+      `Input value must be between ${min} and ${MAX_VALIDATOR_COUNT} to execute`
+    )
   }
 
   return schema
@@ -36,11 +43,16 @@ const schemaFactory = (min?: number) => {
 export const SetMaxValidatorCount = ({
   validatorCount: maxValidatorCount,
   setValidatorCount: setValidator,
+  setIsExecutionError,
 }: SetMaxValidatorCountProps) => {
   const minCount = useMinimumValidatorCount()
   const schema = useMemo(() => schemaFactory(minCount?.toNumber()), [minCount])
 
   const { errors } = useSchema({ amount: maxValidatorCount?.toNumber() }, schema)
+
+  useEffect(() => {
+    setIsExecutionError(!!errors.length)
+  }, [errors])
 
   return (
     <RowGapBlock gap={24}>
@@ -60,7 +72,6 @@ export const SetMaxValidatorCount = ({
             }
             label="Amount"
             tight
-            units="tJOY"
             required
           >
             <InputNumber
