@@ -90,8 +90,8 @@ describe('UI: ContributeFundsModal', () => {
     expect(screen.getByText('modals.contribute.title')).toBeInTheDocument()
   })
 
-  it('Displays correct bounty id', () => {
-    expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
+  it('Displays correct bounty title', () => {
+    expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
   })
 
   it('Displays correct transaction fee', () => {
