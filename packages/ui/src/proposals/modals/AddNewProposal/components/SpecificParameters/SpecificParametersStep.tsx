@@ -1,4 +1,3 @@
-import { u32 } from '@polkadot/types'
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
@@ -7,10 +6,7 @@ import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/Spe
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
 import { SetCouncilorReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilorReward'
-import {
-  MAX_VALIDATOR_COUNT,
-  SetMaxValidatorCount,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
+import { SetMaxValidatorCount } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetMembershipPrice } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipPrice'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
@@ -45,7 +41,7 @@ interface SpecificParametersStepProps extends ExecutionProps {
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
 }
 
-export const isValidSpecificParameters = (state: AddNewProposalMachineState, minimumValidatorCount?: u32): boolean => {
+export const isValidSpecificParameters = (state: AddNewProposalMachineState): boolean => {
   const specifics = state.context.specifics
 
   switch (true) {
@@ -83,11 +79,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       return !!specifics?.openingId
     }
     case state.matches('specificParameters.setMaxValidatorCount'): {
-      return !!(
-        specifics?.amount &&
-        specifics.amount.ltn(MAX_VALIDATOR_COUNT) &&
-        specifics.amount.gtn(minimumValidatorCount?.toNumber() || 0)
-      )
+      return !!specifics?.amount
     }
     case state.matches('specificParameters.setCouncilorReward'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
@@ -345,6 +337,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
         <SetMaxValidatorCount
           setValidatorCount={(amount) => send('SET_AMOUNT', { amount })}
           validatorCount={state.context.specifics?.amount}
+          setIsExecutionError={setIsExecutionError}
         />
       )
     case state.matches('specificParameters.setMembershipPrice'): {
