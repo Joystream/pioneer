@@ -1,13 +1,21 @@
-import { useApi } from '@/common/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useGetMemberVoteCountOnProposalQuery } from '@/proposals/queries'
 
 export const useHasMemberVotedOnProposal = (proposalId: string, memberId?: string) => {
-  const { api } = useApi()
-  const voteStatusSize = useObservable(
-    memberId
-      ? api?.query.proposalsEngine.voteExistsByProposalByVoter.size(parseInt(proposalId), parseInt(memberId))
-      : undefined,
-    [memberId]
-  )
-  return voteStatusSize?.gtn(0)
+  const { data } = useGetMemberVoteCountOnProposalQuery({
+    variables: {
+      where: {
+        proposal: {
+          id_eq: proposalId,
+        },
+        voter: {
+          id_eq: memberId,
+        },
+      },
+    },
+    skip: !memberId,
+  })
+
+  return typeof data?.proposalVotedEventsConnection.totalCount === 'number'
+    ? !!data?.proposalVotedEventsConnection.totalCount
+    : undefined
 }
