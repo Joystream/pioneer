@@ -3,7 +3,10 @@ import '@joystream/types/augment/augment-api'
 import '@joystream/types/augment/augment-types'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import rpc from '@polkadot/types/interfaces/jsonrpc'
-import React, { ReactNode, useEffect, useMemo, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { firstValueFrom } from 'rxjs'
+
+import { useApiBenchmarking } from '@/api/hooks/useApiBenchmarking'
 
 import { useNetworkEndpoints } from '../../hooks/useNetworkEndpoints'
 
@@ -42,22 +45,27 @@ interface APIDisconnected extends BaseAPI {
 export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 export const ApiContextProvider = ({ children }: Props) => {
+  const [api, setApi] = useState<ApiRx>()
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
   const [endpoints] = useNetworkEndpoints()
 
-  const api = useMemo(() => {
-    const provider = new WsProvider(endpoints.nodeRpcEndpoint)
-    return new ApiRx({ provider, rpc, types, registry })
-  }, [])
+  useApiBenchmarking(api)
 
   useEffect(() => {
-    api.isReady.subscribe(() => {
+    const provider = new WsProvider(endpoints.nodeRpcEndpoint)
+    firstValueFrom(ApiRx.create({ provider, rpc, types, registry })).then(async (api) => {
+      setApi(api)
       setConnectionState('connected')
-
       api.on('connected', () => setConnectionState('connected'))
       api.on('disconnected', () => setConnectionState('disconnected'))
     })
-  }, [api])
+
+    return () => {
+      if (api) {
+        api.disconnect()
+      }
+    }
+  }, [])
 
   if (connectionState === 'connecting') {
     return (
@@ -78,7 +86,7 @@ export const ApiContextProvider = ({ children }: Props) => {
       <ApiContext.Provider
         value={{
           isConnected: true,
-          api: api,
+          api: api as ApiRx,
           connectionState,
         }}
       >
@@ -92,7 +100,7 @@ export const ApiContextProvider = ({ children }: Props) => {
       <ApiContext.Provider
         value={{
           isConnected: false,
-          api: api,
+          api: api as ApiRx,
           connectionState,
         }}
       >
