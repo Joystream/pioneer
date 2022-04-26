@@ -219,6 +219,9 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
     ...MemberFields
   }
   text
+  status {
+    __typename
+  }
 }
 
 fragment ProposalPostParents on ProposalDiscussionPost {

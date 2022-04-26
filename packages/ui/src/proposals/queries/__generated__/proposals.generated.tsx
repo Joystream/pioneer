@@ -503,6 +503,10 @@ export type ProposalWithDetailsFieldsFragment = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }
+        status:
+          | { __typename: 'ProposalDiscussionPostStatusActive' }
+          | { __typename: 'ProposalDiscussionPostStatusLocked' }
+          | { __typename: 'ProposalDiscussionPostStatusRemoved' }
       } | null
       createdInEvent: {
         __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -536,6 +540,10 @@ export type ProposalWithDetailsFieldsFragment = {
           group: { __typename: 'WorkingGroup'; name: string }
         }>
       }
+      status:
+        | { __typename: 'ProposalDiscussionPostStatusActive' }
+        | { __typename: 'ProposalDiscussionPostStatusLocked' }
+        | { __typename: 'ProposalDiscussionPostStatusRemoved' }
     }>
     mode:
       | {
@@ -631,6 +639,10 @@ export type DiscussionPostFieldsFragment = {
         group: { __typename: 'WorkingGroup'; name: string }
       }>
     }
+    status:
+      | { __typename: 'ProposalDiscussionPostStatusActive' }
+      | { __typename: 'ProposalDiscussionPostStatusLocked' }
+      | { __typename: 'ProposalDiscussionPostStatusRemoved' }
   } | null
   createdInEvent: {
     __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -664,6 +676,10 @@ export type DiscussionPostFieldsFragment = {
       group: { __typename: 'WorkingGroup'; name: string }
     }>
   }
+  status:
+    | { __typename: 'ProposalDiscussionPostStatusActive' }
+    | { __typename: 'ProposalDiscussionPostStatusLocked' }
+    | { __typename: 'ProposalDiscussionPostStatusRemoved' }
 }
 
 export type DiscussionPostWithoutReplyFieldsFragment = {
@@ -704,6 +720,10 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       group: { __typename: 'WorkingGroup'; name: string }
     }>
   }
+  status:
+    | { __typename: 'ProposalDiscussionPostStatusActive' }
+    | { __typename: 'ProposalDiscussionPostStatusLocked' }
+    | { __typename: 'ProposalDiscussionPostStatusRemoved' }
 }
 
 export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
@@ -1210,6 +1230,10 @@ export type GetProposalQuery = {
               group: { __typename: 'WorkingGroup'; name: string }
             }>
           }
+          status:
+            | { __typename: 'ProposalDiscussionPostStatusActive' }
+            | { __typename: 'ProposalDiscussionPostStatusLocked' }
+            | { __typename: 'ProposalDiscussionPostStatusRemoved' }
         } | null
         createdInEvent: {
           __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -1243,6 +1267,10 @@ export type GetProposalQuery = {
             group: { __typename: 'WorkingGroup'; name: string }
           }>
         }
+        status:
+          | { __typename: 'ProposalDiscussionPostStatusActive' }
+          | { __typename: 'ProposalDiscussionPostStatusLocked' }
+          | { __typename: 'ProposalDiscussionPostStatusRemoved' }
       }>
       mode:
         | {
@@ -1588,6 +1616,9 @@ export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
       ...MemberFields
     }
     text
+    status {
+      __typename
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
