@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
-import { TextHuge, TokenValue } from '@/common/components/typography'
+import { TextHuge, TextMedium, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 
 interface Props {
@@ -32,6 +32,15 @@ export const FundingTiles = React.memo(({ bounty }: Props) => {
           </TextHuge>
         ),
         tooltipText: t('tiles.periodLength.tooltip'),
+      },
+      {
+        title: t('tiles.duration.title'),
+        content: (
+          <TextHuge value bold>
+            {!isFundingLimited(bounty.fundingType) ? t('tiles.duration.value') : '-'}
+          </TextHuge>
+        ),
+        tooltipText: t('tiles.duration.tooltip'),
       },
       {
         title: t('tiles.bountyCreator.title'),
