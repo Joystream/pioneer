@@ -46,7 +46,7 @@ const SelectWorkingGroupApplicationBase = ({
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
-      placeholder="Select Working Group or type group name"
+      placeholder="Choose application"
       renderList={(onOptionClick) => (
         <OptionsListWorkingGroupApplication allWorkingGroupApplications={applications} onChange={onOptionClick} />
       )}
