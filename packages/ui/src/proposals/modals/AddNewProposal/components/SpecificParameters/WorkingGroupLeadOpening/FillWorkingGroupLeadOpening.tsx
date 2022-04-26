@@ -79,6 +79,7 @@ export const FillWorkingGroupLeadOpening = ({
             <SelectWorkingGroupApplication
               id="application"
               selectedApplicationId={applicationId}
+              placeholder={'Choose application'}
               onChange={selectApplication}
               disabled={typeof openingId !== 'string'}
               openingId={openingId}
