@@ -91,6 +91,10 @@ export const ApplyForRoleModal = () => {
   const stakingAccount = form.watch('stake.account')
 
   useEffect(() => {
+    form.setValue('stake.amount', opening.stake.toString())
+  }, [])
+
+  useEffect(() => {
     if (stakingAccount) {
       setStakingAccount(stakingAccount)
     }
