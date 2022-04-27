@@ -145,4 +145,5 @@ export interface Bounty {
     inBlock?: Block
     rationale?: string | null
   }
+  periodTimeLeft?: number
 }

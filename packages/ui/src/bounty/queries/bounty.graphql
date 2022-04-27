@@ -48,6 +48,9 @@ fragment BountyFields on Bounty {
     createdAt
     network
   }
+  maxFundingReachedEvent {
+    createdAt
+  }
 }
 
 fragment BountyEntryFields on BountyEntry {
@@ -98,11 +101,6 @@ fragment BountyContributionFields on BountyContribution {
     ...MemberFields
   }
 }
-
-fragment BountyMaxFundingReachedFields on BountyMaxFundingReachedEvent {
-  inBlock
-}
-
 
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
   bounties(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {

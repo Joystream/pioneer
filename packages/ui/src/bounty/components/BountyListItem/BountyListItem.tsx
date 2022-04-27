@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -6,7 +6,7 @@ import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
 import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
 import { BountyRoutes } from '@/bounty/constants'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
-import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { Bounty } from '@/bounty/types/Bounty'
 import { asPeriod } from '@/bounty/types/casts'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Arrow } from '@/common/components/icons'
@@ -21,8 +21,7 @@ export const BountyListItem = memo(
     creator,
     oracle,
     fundingType,
-    workPeriod,
-    judgingPeriod,
+    periodTimeLeft,
     stage,
     totalFunding,
     entries,
@@ -33,24 +32,12 @@ export const BountyListItem = memo(
 
     const period = asPeriod(stage)
 
-    const timeToPeriodEnd = useMemo(() => {
-      if (period === 'funding' && isFundingLimited(fundingType)) {
-        return fundingType.maxPeriod
-      }
-      if (period === 'working') {
-        return workPeriod
-      }
-      if (period === 'judgement') {
-        return judgingPeriod
-      }
-    }, [period, fundingType])
-
     const periodStatus = period === 'failed' || period === 'successful' || period === 'terminated'
     return (
       <Wrapper isTerminated={isTerminated} onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
         <BountyImage src={imageUri} />
         <Info>
-          <BountyInformations timeToEnd={timeToPeriodEnd} creator={creator} title={title} />
+          <BountyInformations timeToEnd={periodTimeLeft} creator={creator} title={title} />
           <BountyDetails
             type={period}
             oracle={oracle}

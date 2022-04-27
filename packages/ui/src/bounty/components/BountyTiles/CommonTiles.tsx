@@ -15,8 +15,6 @@ interface Props {
   period: 'working' | 'judgement' | 'expired' | 'terminated'
 }
 
-const getSecondsPast = (createdAt: string) => (new Date().getTime() - new Date(createdAt).getTime()) / 1000
-
 export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const { t } = useTranslation('bounty')
   const { data } = useGetBountyWorksCountQuery({
@@ -30,12 +28,11 @@ export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   })
 
   const periodLength = useMemo(() => {
-    const blocksLeft = bounty.workPeriod - getSecondsPast(bounty.createdAt) / SECONDS_PER_BLOCK
     switch (period) {
       case 'working':
-        return <DurationValue value={formatDuration(1000)} blocksLeft={blocksLeft} />
+        return <DurationValue value={formatDuration(bounty.workPeriod)} blocksLeft={bounty.periodTimeLeft} />
       case 'judgement':
-        return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
+        return <DurationValue value={formatDuration(bounty.judgingPeriod)} blocksLeft={bounty.periodTimeLeft} />
       case 'expired':
       case 'terminated':
         return t('tiles.periodLength.closed')
