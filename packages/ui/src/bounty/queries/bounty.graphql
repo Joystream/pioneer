@@ -99,6 +99,11 @@ fragment BountyContributionFields on BountyContribution {
   }
 }
 
+fragment BountyMaxFundingReachedFields on BountyMaxFundingReachedEvent {
+  inBlock
+}
+
+
 query GetBounties($where: BountyWhereInput, $orderBy: [BountyOrderByInput!], $offset: Int, $limit: Int) {
   bounties(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...BountyFields
