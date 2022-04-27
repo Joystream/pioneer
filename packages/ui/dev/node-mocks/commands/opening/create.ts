@@ -41,6 +41,6 @@ export const createOpeningModule = {
   command: 'opening:create',
   describe: 'Create new opening',
   handler: async () => {
-    await addOpeningCommand
+    await addOpeningCommand()
   },
 }

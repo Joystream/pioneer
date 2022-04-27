@@ -99,8 +99,8 @@ describe('UI: ContributeFundsModal', () => {
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
-  it('Displays correct bounty id', () => {
-    expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
+  it('Displays correct bounty title', () => {
+    expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
   })
 
   it('Displays correct transaction fee', () => {
