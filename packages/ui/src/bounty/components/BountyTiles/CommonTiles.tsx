@@ -7,12 +7,15 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
+import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 
 interface Props {
   bounty: Bounty
   period: 'working' | 'judgement' | 'expired' | 'terminated'
 }
+
+const getSecondsPast = (createdAt: string) => (new Date().getTime() - new Date(createdAt).getTime()) / 1000
 
 export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const { t } = useTranslation('bounty')
@@ -25,11 +28,13 @@ export const CommonTiles = React.memo(({ bounty, period }: Props) => {
       },
     },
   })
-
   const periodLength = useMemo(() => {
+    // Block left here is incorrect, instead of bounty.createdAt, it should be timestamp of BountyFundedEvent timestamp.
+    // Reason behind it is that we don't know when funding period ended
+    const blocksLeft = bounty.workPeriod - getSecondsPast(bounty.createdAt) / SECONDS_PER_BLOCK
     switch (period) {
       case 'working':
-        return <DurationValue value={formatDuration(bounty.workPeriod)} />
+        return <DurationValue value={formatDuration(1000)} blocksLeft={blocksLeft} />
       case 'judgement':
         return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
       case 'expired':
