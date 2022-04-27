@@ -14,6 +14,12 @@ import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst, stubQuery } from '../../_mocks/transactions'
 
+let mockUseHasMemberVotedOnProposal = false
+
+jest.mock('@/proposals/hooks/useHasMemberVotedOnProposal', () => ({
+  useHasMemberVotedOnProposal: () => mockUseHasMemberVotedOnProposal,
+}))
+
 const proposalData: Proposal = {
   id: '0',
   title: 'Proposal',
@@ -51,9 +57,13 @@ describe('UI: ProposalListItem', () => {
   const api = stubApi()
   stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', proposalParameters)
 
+  beforeEach(() => {
+    mockUseHasMemberVotedOnProposal = false
+  })
+
   describe('Proposal in deciding stage', () => {
     it('Member has voted already', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 16))
+      mockUseHasMemberVotedOnProposal = true
       renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
       expect(screen.queryByText('Vote')).toBeNull()
     })

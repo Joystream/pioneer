@@ -28,6 +28,12 @@ jest.mock('@/proposals/hooks/useProposalConstants', () => ({
   useProposalConstants: () => null,
 }))
 
+let mockUseHasMemberVotedOnProposal = false
+
+jest.mock('@/proposals/hooks/useHasMemberVotedOnProposal', () => ({
+  useHasMemberVotedOnProposal: () => mockUseHasMemberVotedOnProposal,
+}))
+
 describe('ProposalPreview', () => {
   const mockServer = setupMockServer()
   const api = stubApi()
@@ -110,12 +116,13 @@ describe('ProposalPreview', () => {
       })
 
       it('Member has not voted yet', async () => {
+        mockUseHasMemberVotedOnProposal = false
         renderPage()
         expect(await screen.findByText(/Vote on Proposal/i)).toBeDefined()
       })
 
       it('Member has already voted', async () => {
-        stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 16))
+        mockUseHasMemberVotedOnProposal = true
         renderPage()
         expect(await screen.findByText(/Already voted/i)).toBeDefined()
       })
