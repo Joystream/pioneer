@@ -11,12 +11,15 @@ const OLYMPIA_TESTNET_NODE_SOCKET = process.env.REACT_APP_OLYMPIA_TESTNET_NODE_S
 const OLYMPIA_TESTNET_QUERY_NODE = process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE
 const OLYMPIA_TESTNET_QUERY_NODE_SOCKET = process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET
 const OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL = process.env.REACT_APP_OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL
+const ENVIRONMENT = process.env.ENVIRONMENT
 
 export const IS_TESTNET_DEFINED =
   OLYMPIA_TESTNET_NODE_SOCKET &&
   OLYMPIA_TESTNET_QUERY_NODE &&
   OLYMPIA_TESTNET_QUERY_NODE_SOCKET &&
   OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL
+
+export const IS_IN_DEV_ENVIRONMENT = ENVIRONMENT === 'DEV'
 
 type PredefinedEndpoint = { [K in NetworkType]?: string }
 
@@ -51,11 +54,9 @@ export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> =
   nodeRpcEndpoint: NODE_RPC_ENDPOINT[network],
 })
 
-export const DEFAULT_NETWORK = (
-  IS_TESTNET_DEFINED
-    ? { type: 'olympia-testnet', endpoints: pickEndpoints('olympia-testnet') }
-    : { type: 'local', endpoints: pickEndpoints('local') }
-) as {
+export const DEFAULT_NETWORK = (IS_TESTNET_DEFINED
+  ? { type: 'olympia-testnet', endpoints: pickEndpoints('olympia-testnet') }
+  : { type: 'local', endpoints: pickEndpoints('local') }) as {
   type: NetworkType
   endpoints: NetworkEndpoints
 }

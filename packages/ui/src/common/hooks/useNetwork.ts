@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { DEFAULT_NETWORK, IS_TESTNET_DEFINED, NetworkEndpoints, NetworkType } from '@/app/config'
+import { DEFAULT_NETWORK, IS_IN_DEV_ENVIRONMENT, IS_TESTNET_DEFINED, NetworkEndpoints, NetworkType } from '@/app/config'
 import { endpointsAreDefined } from '@/common/providers/network-endpoints/provider'
 
 import { useLocalStorage } from './useLocalStorage'
@@ -12,7 +12,7 @@ export const useNetwork = () => {
   const networks = useMemo<NetworkType[]>(
     () => [
       'local',
-      'local-mocks',
+      ...(IS_IN_DEV_ENVIRONMENT ? ['local-mocks' as const] : []),
       ...(endpointsAreDefined(autoConfEndpoints) ? ['auto-conf' as const] : []),
       ...(IS_TESTNET_DEFINED ? ['olympia-testnet' as const] : []),
     ],
