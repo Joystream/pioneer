@@ -49,7 +49,7 @@ const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
 const asLockTypes = (locks: BalanceLock[]): LockType[] => locks.flatMap((lock) => lock.type ?? [])
 const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boolean) => {
   if (!lockTypeA) {
-     // Don't block transactions based on unknown locks
+    // Don't block transactions based on unknown locks
     return () => false
   }
 
@@ -62,7 +62,7 @@ const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boole
       // Vote stake should be reusable in next elections
       return false
     }
-      
+
     return lockTypeA === lockTypeB
   }
 }
