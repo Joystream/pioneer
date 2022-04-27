@@ -3,8 +3,10 @@ import { useMemo } from 'react'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { asElection } from '@/council/types/Election'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 import { useGetAllDeadLinesQuery } from '@/overview/queries'
+import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
 import { asUpcomingWorkingGroupOpening } from '@/working-groups/types'
 
 interface UseDeadlinesParams {
@@ -22,10 +24,16 @@ const initializer: Record<DeadlineNamespace, string[]> = {
 }
 
 export const useDeadlines = (params: UseDeadlinesParams) => {
+  const { groups } = useWorkingGroups()
+  const { active: activeMembership } = useMyMemberships()
+  const groupIds = useMemo(
+    () => groups.flatMap((group) => (group.leadId === activeMembership?.id ? group.id : [])),
+    [activeMembership, groups.length]
+  )
   const variables = {
-    groupId: params.groupId || {},
     proposalCreator: params.member.isCouncilMember ? undefined : { id_eq: params.member.id },
-    isLead: false,
+    isLead: groupIds.length > 0,
+    group: groupIds.length > 0 ? { id_in: groupIds } : undefined,
   }
   const { stage: electionStage } = useElectionStage()
   const { loading, data } = useGetAllDeadLinesQuery({ variables })
@@ -40,8 +48,7 @@ export const useDeadlines = (params: UseDeadlinesParams) => {
   }
 
   const deadlines = useMemo((): Record<DeadlineNamespace, any[]> => {
-    const rawElection = data?.electionRounds[0]
-    const election = rawElection && [asElection(rawElection)]
+    const election = data?.electionRounds.map(asElection) ?? []
     const proposals = data?.proposals || []
     const upcomingOpenings = data?.upcomingWorkingGroupOpenings?.map(asUpcomingWorkingGroupOpening) || []
     const openings = data?.workingGroupOpenings || []
@@ -55,7 +62,7 @@ export const useDeadlines = (params: UseDeadlinesParams) => {
         (upcomingOpening) => !storageDeadlines.upcomingOpenings.includes(upcomingOpening.id)
       ),
     }
-  }, [data, storageDeadlines])
+  }, [data, storageDeadlines, electionStage])
 
   return {
     isLoading: loading,

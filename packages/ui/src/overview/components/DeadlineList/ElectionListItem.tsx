@@ -39,7 +39,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
   const { votesTotal } = useMyCurrentVotesCount(election.cycleId)
   const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
-  const { votes } = useMyCastVotes(election.cycleId)
+  const { votes } = useMyCastVotes(electionStage === 'revealing' ? election.cycleId : undefined) ?? []
   const timeRemaining = formatDuration(remainingPeriod?.toNumber() || 0)
 
   const remainingCalculation = useMemo(() => {
@@ -57,8 +57,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
     }
   }, [])
 
-  const getCopyMessage = () => {
-    const allVotesRevealed = votes?.every((vote) => vote.voteFor)
+  const getCopyMessage = useMemo(() => {
     const urlAddress = '#/election'
     switch (electionStage) {
       case 'announcing':
@@ -81,7 +80,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
           </StyledText>
         )
       case 'revealing':
-        if (!allVotesRevealed) {
+        if (votes?.every((vote) => vote.voteFor)) {
           return null
         }
         return (
@@ -91,10 +90,9 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
           </StyledText>
         )
     }
-  }
+  }, [electionStage, election.candidates.length, canVote, votes])
 
-  const copyMessage = getCopyMessage()
-  if (!copyMessage) {
+  if (!getCopyMessage) {
     return null
   }
   return (
@@ -111,7 +109,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
             </Subscription>
             <StyledBadge>{t('deadline.election')}</StyledBadge>
           </TimeWrapper>
-          <StyledText>{getCopyMessage()}</StyledText>
+          <StyledText>{getCopyMessage}</StyledText>
         </ContentWrapper>
       </ListItem>
     </ElementWrapper>
