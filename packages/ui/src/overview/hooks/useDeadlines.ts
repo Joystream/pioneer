@@ -24,11 +24,10 @@ const initializer: Record<DeadlineNamespace, string[]> = {
 }
 
 export const useDeadlines = (params: UseDeadlinesParams) => {
-  const { groups } = useWorkingGroups()
-  const { active: activeMembership } = useMyMemberships()
+  const { isLoading: isLoadingWorkingGroup, groups } = useWorkingGroups()
   const groupIds = useMemo(
-    () => groups.flatMap((group) => (group.leadId === activeMembership?.id ? group.id : [])),
-    [activeMembership, groups.length]
+    () => groups.flatMap((group) => (group.leadId === params.member.id ? group.id : [])),
+    [params.member.id, groups.length]
   )
   const variables = {
     proposalCreator: params.member.isCouncilMember ? undefined : { id_eq: params.member.id },
@@ -36,7 +35,7 @@ export const useDeadlines = (params: UseDeadlinesParams) => {
     group: groupIds.length > 0 ? { id_in: groupIds } : undefined,
   }
   const { stage: electionStage } = useElectionStage()
-  const { loading, data } = useGetAllDeadLinesQuery({ variables })
+  const { loading, data } = useGetAllDeadLinesQuery({ variables, skip: isLoadingWorkingGroup })
   const [storageDeadlines = initializer, setStorageDeadlines] =
     useLocalStorage<Record<DeadlineNamespace, string[]>>('deadlines')
 
@@ -65,7 +64,7 @@ export const useDeadlines = (params: UseDeadlinesParams) => {
   }, [data, storageDeadlines, electionStage])
 
   return {
-    isLoading: loading,
+    isLoading: isLoadingWorkingGroup || loading,
     deadlines,
     hideForStorage,
     count: Object.values(deadlines).flat().length,
