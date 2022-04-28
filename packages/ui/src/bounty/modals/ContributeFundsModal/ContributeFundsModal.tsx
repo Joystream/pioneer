@@ -189,7 +189,7 @@ export const ContributeFundsModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.contribute.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
