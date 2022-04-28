@@ -18,9 +18,9 @@ export interface CouncilListItemProps {
 export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
   const showMemberModal = useShowMemberModal(councilor.member.id)
   const { council, isLoading } = useElectedCouncil()
-  console.log('mem', councilor.member.id)
+  console.log('mem', councilor)
   const data = useVoteStake( [councilor.member.id])
-  console.log('d', data)
+  console.log('d', data.stake)
   return (
     <CouncilListItemStyles onClick={showMemberModal}>
       <MemberInfo member={councilor.member} />
