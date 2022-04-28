@@ -19,8 +19,8 @@ interface SuccessModalProps {
 
 export const SuccessModal = ({ onClose, proposalId, proposalType, proposalTitle }: SuccessModalProps) => {
   const history = useHistory()
-  const openProposals = useCallback(() => {
-    history.push(generatePath(ProposalsRoutes.home))
+  const openProposal = useCallback(() => {
+    history.push(generatePath(ProposalsRoutes.preview, { id: proposalId }))
     onClose()
   }, [onClose, proposalId])
 
@@ -35,7 +35,7 @@ export const SuccessModal = ({ onClose, proposalId, proposalType, proposalTitle 
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost size="medium" onClick={openProposals}>
+        <ButtonGhost size="medium" onClick={openProposal}>
           See my Proposal
         </ButtonGhost>
       </ModalFooter>
