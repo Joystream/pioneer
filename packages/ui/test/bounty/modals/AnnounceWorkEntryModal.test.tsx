@@ -85,8 +85,8 @@ describe('UI: AnnounceWorkEntryModal', () => {
     expect(screen.getByText('modals.announceWorkEntry.title')).toBeInTheDocument()
   })
 
-  it('Displays correct bounty id', () => {
-    expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
+  it('Displays correct bounty title', () => {
+    expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
   })
 
   it('Displays correct member', () => {
