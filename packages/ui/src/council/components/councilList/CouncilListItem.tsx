@@ -6,6 +6,7 @@ import { TextBig, TokenValue } from '@/common/components/typography'
 import { CouncilColLayout } from '@/council/constants/styles'
 import {useElectedCouncil} from '@/council/hooks/useElectedCouncil';
 import {useVoteStake} from '@/council/hooks/useVoteStake';
+import {useGetElectionRoundQuery} from '@/council/queries';
 import { Councilor } from '@/council/types'
 import { MemberInfo } from '@/memberships/components'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
@@ -17,9 +18,9 @@ export interface CouncilListItemProps {
 export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
   const showMemberModal = useShowMemberModal(councilor.member.id)
   const { council, isLoading } = useElectedCouncil()
-  console.log('council', council)
-  const data = useVoteStake( [councilor.member.id], )
-  console.log('data', data)
+  console.log('mem', councilor.member.id)
+  const data = useVoteStake( [councilor.member.id])
+  console.log('d', data)
   return (
     <CouncilListItemStyles onClick={showMemberModal}>
       <MemberInfo member={councilor.member} />

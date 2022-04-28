@@ -44,6 +44,11 @@ export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never
 
 export type GetElectedCouncilQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', id: string }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> }> };
 
+export type GetElectionRoundQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type GetElectionRoundQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', councilElections: Array<{ __typename: 'ElectionRound', cycleId: number }> }> };
+
 export type GetVoterStakeQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   member_in?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
@@ -426,6 +431,46 @@ export function useGetElectedCouncilLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetElectedCouncilQueryHookResult = ReturnType<typeof useGetElectedCouncilQuery>;
 export type GetElectedCouncilLazyQueryHookResult = ReturnType<typeof useGetElectedCouncilLazyQuery>;
 export type GetElectedCouncilQueryResult = Apollo.QueryResult<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>;
+export const GetElectionRoundDocument = gql`
+    query GetElectionRound {
+  electedCouncils(
+    where: {endedAtBlock_eq: null}
+    orderBy: [createdAt_DESC]
+    limit: 1
+  ) {
+    councilElections {
+      cycleId
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetElectionRoundQuery__
+ *
+ * To run a query within a React component, call `useGetElectionRoundQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetElectionRoundQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetElectionRoundQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetElectionRoundQuery(baseOptions?: Apollo.QueryHookOptions<GetElectionRoundQuery, GetElectionRoundQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetElectionRoundQuery, GetElectionRoundQueryVariables>(GetElectionRoundDocument, options);
+      }
+export function useGetElectionRoundLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetElectionRoundQuery, GetElectionRoundQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetElectionRoundQuery, GetElectionRoundQueryVariables>(GetElectionRoundDocument, options);
+        }
+export type GetElectionRoundQueryHookResult = ReturnType<typeof useGetElectionRoundQuery>;
+export type GetElectionRoundLazyQueryHookResult = ReturnType<typeof useGetElectionRoundLazyQuery>;
+export type GetElectionRoundQueryResult = Apollo.QueryResult<GetElectionRoundQuery, GetElectionRoundQueryVariables>;
 export const GetVoterStakeDocument = gql`
     query GetVoterStake($id: ID!, $member_in: [ID!]) {
   candidates(where: {electionRound: {id_eq: $id}, member: {id_in: $member_in}}) {

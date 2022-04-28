@@ -13,6 +13,7 @@ import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
+import {useVoteStake} from '@/council/hooks/useVoteStake';
 import { Councilor } from '@/council/types'
 
 import { CouncilTabs } from './components/CouncilTabs'
@@ -24,6 +25,8 @@ export const Council = () => {
   const { stage: electionStage } = useElectionStage()
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
+  // const data = useVoteStake( [council.id], [] )
+  // console.log('data', data)
 
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
