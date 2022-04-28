@@ -58,6 +58,7 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
       on: {
         BOUND: 'transaction',
         UNBOUND: 'bindStakingAccount',
+        FAIL: 'requirementsFailed',
       },
     },
     bindStakingAccount: {

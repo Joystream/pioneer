@@ -9,6 +9,7 @@ import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FundedRange } from '@/bounty/components/FundedRange'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
@@ -114,18 +115,24 @@ export const ContributeFundsModal = () => {
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
       if (!activeMember) {
-        showModal<SwitchMemberModalCall>({
+        return showModal<SwitchMemberModalCall>({
           modal: 'SwitchMember',
           data: {
             originalModalName: 'BountyContributeFundsModal',
             originalModalData: { bounty },
           },
         })
-      } else {
+      }
+
+      if (fee && fee.canAfford) {
         nextStep()
       }
+
+      if (fee && !fee.canAfford) {
+        send('FAIL')
+      }
     }
-  }, [state, activeMember?.id])
+  }, [state, activeMember?.id, fee])
 
   if (state.matches(ContributeFundStates.requirementsVerification)) {
     return (
@@ -142,10 +149,20 @@ export const ContributeFundsModal = () => {
     )
   }
 
-  if (!activeMember || !transaction || !api) {
+  if (!activeMember || !transaction || !api || !fee) {
     return null
   }
   const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
+
+  if (state.matches(ContributeFundStates.requirementsFailed)) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={fee.transactionFee}
+      />
+    )
+  }
 
   if (state.matches(ContributeFundStates.success)) {
     return (

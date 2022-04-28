@@ -94,6 +94,14 @@ describe('UI: WithdrawWorkEntryModal', () => {
     expect(await getButton('modals.withdrawWorkEntry.submitButton')).not.toBeNull()
   })
 
+  it('Insufficient funds', async () => {
+    stubTransaction(api, txPath, 99999)
+
+    renderModal()
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+  })
+
   it('Displays correct bounty', () => {
     renderModal()
 

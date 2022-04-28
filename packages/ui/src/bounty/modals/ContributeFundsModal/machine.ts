@@ -22,6 +22,7 @@ type ContributeFundsMachineContext = Partial<ContributeContext | TransactionCont
 
 export enum ContributeFundStates {
   requirementsVerification = 'requirementsVerification',
+  requirementsFailed = 'requirementsFailed',
   contribute = 'contribute',
   transaction = 'transaction',
   success = 'success',
@@ -29,13 +30,14 @@ export enum ContributeFundStates {
   cancel = 'cancel',
 }
 
-type NextEvent = { type: 'NEXT' }
+type NextEvent = { type: 'NEXT' } | { type: 'FAIL' }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 
 export type ContributeFundEvents = NextEvent | SetAmountEvent
 
 export type ContributeFundsState =
   | { value: ContributeFundStates.requirementsVerification; context: EmptyObject }
+  | { value: ContributeFundStates.requirementsFailed; context: EmptyObject }
   | { value: ContributeFundStates.contribute; context: Required<ContributeContext> }
   | { value: ContributeFundStates.transaction; context: EmptyObject }
   | { value: ContributeFundStates.success; context: EmptyObject }
@@ -52,7 +54,11 @@ export const contributeFundsMachine = createMachine<
     [ContributeFundStates.requirementsVerification]: {
       on: {
         NEXT: ContributeFundStates.contribute,
+        FAIL: ContributeFundStates.requirementsFailed,
       },
+    },
+    [ContributeFundStates.requirementsFailed]: {
+      type: 'final',
     },
     [ContributeFundStates.contribute]: {
       id: ContributeFundStates.contribute,

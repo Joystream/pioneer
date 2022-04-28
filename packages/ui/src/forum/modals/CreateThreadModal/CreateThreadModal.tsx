@@ -55,6 +55,11 @@ export const CreateThreadModal = () => {
         canAfford || send('FAIL')
       }
     }
+
+    if (state.matches('beforeTransaction') && balance && minimumTransactionCost) {
+      const canAfford = balance.transferable.gte(minimumTransactionCost)
+      send(canAfford ? 'PASS' : 'FAIL')
+    }
   }, [state.value, member?.id, minimumTransactionCost, balance])
 
   if (state.matches('generalDetails') && member) {
