@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client'
+import { ObservableQuery, useApolloClient } from '@apollo/client'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { Hash } from '@polkadot/types/interfaces/types'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,8 +23,10 @@ interface Params {
 
 export const useSignAndSendTransaction = ({ transaction, signer, service, skipQueryNode = false }: Params) => {
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
+  const [queriesMountedOnInvoke, setQueriesMountedOnInvoke] = useState<ObservableQuery[]>([])
   const queryNodeStatus = useQueryNodeTransactionStatus(blockHash, skipQueryNode)
   const apolloClient = useApolloClient()
+
   const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
     transaction,
     signer,
@@ -42,9 +44,15 @@ export const useSignAndSendTransaction = ({ transaction, signer, service, skipQu
     if (!skipQueryNode && queryNodeStatus === 'confirmed' && isProcessing) {
       send('SUCCESS')
 
-      apolloClient.refetchQueries({ include: 'active' })
+      queriesMountedOnInvoke.forEach((query) => query.refetch())
     }
   }, [isProcessing, skipQueryNode, queryNodeStatus])
+
+  useEffect(() => {
+    const mountedQueries = apolloClient.getObservableQueries('active')
+
+    setQueriesMountedOnInvoke(Array.from(mountedQueries).map(([, query]) => query))
+  }, [])
 
   return {
     paymentInfo,
