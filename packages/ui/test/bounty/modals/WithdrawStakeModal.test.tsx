@@ -14,7 +14,13 @@ import { getMember } from '@/mocks/helpers'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import {
+  currentStubErrorMessage,
+  stubApi,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 const bounty = bounties[0]
 
@@ -80,7 +86,7 @@ describe('UI: WithdrawStakeModal', () => {
       await act(async () => {
         fireEvent.click(await getButton(/^modals.withdraw.stake.button$/))
       })
-      expect(await screen.findByText('common:modals.failed.description')).toBeDefined()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
 
     it('Requirements failed', async () => {

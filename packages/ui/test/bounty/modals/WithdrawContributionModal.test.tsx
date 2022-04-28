@@ -22,6 +22,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -137,7 +138,7 @@ describe('UI: WithdrawContributionModal', () => {
     await act(async () => {
       fireEvent.click(await getButton('modals.withdraw.contribution.button'))
     })
-    expect(await screen.findByText('modals.withdrawContribution.error')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {
