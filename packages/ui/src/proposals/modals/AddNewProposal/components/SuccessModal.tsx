@@ -36,7 +36,7 @@ export const SuccessModal = ({ onClose, proposalId, proposalType, proposalTitle 
       </ModalBody>
       <ModalFooter>
         <ButtonGhost size="medium" onClick={openProposals}>
-          Back to proposals
+          See my Proposal
         </ButtonGhost>
       </ModalFooter>
     </Modal>
