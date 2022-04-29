@@ -228,7 +228,7 @@ export const AnnounceWorkEntryModal = () => {
               required
               inputDisabled
             >
-              <ReadOnlyInput value={bounty.id} readOnly />
+              <ReadOnlyInput value={bounty.title} readOnly />
             </InputComponent>
           </Row>
           <Row>
@@ -271,6 +271,7 @@ export const AnnounceWorkEntryModal = () => {
                 inputWidth="s"
                 units="tJOY"
                 disabled
+                tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
                 <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>
