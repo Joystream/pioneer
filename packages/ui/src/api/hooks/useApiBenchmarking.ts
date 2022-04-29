@@ -6,12 +6,12 @@ import { benchmark } from '@/common/utils/benchmark'
 
 const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
 
-const operation = (api: ApiRx) => {
+const operation = (api: Pick<ApiRx, 'tx'>) => {
   const tx = api.tx.members.confirmStakingAccount(0, ALICE)
   return firstValueFrom(tx.paymentInfo(ALICE))
 }
 
-export const useApiBenchmarking = (api: ApiRx | undefined) => {
+export const useApiBenchmarking = (api: Pick<ApiRx, 'tx'> | undefined) => {
   useEffect(() => {
     if (process.env.REACT_APP_API_BENCHMARK?.toUpperCase() === 'TRUE' && api) {
       let waiting = false
