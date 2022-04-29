@@ -58,7 +58,7 @@ export const formDefaultValues = {
 
 export const addBountyModalSchema = Yup.object().shape({
   [AddBountyStates.generalParameters]: Yup.object().shape({
-    title: Yup.string().max(70, 'Max length is 70 characters').required(''),
+    title: Yup.string().max(70, 'Max length is 70 characters').required('Bounty title is required'),
     coverPhotoLink: Yup.string().url('Invalid URL').required(''),
     creator: MemberSchema.required(),
     description: Yup.string().required(),
@@ -82,7 +82,7 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
     workingPeriodStake: BNSchema.test(
-      minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
+      minContext('Entrant stake must be greater than ${min} JOY', 'minWorkEntrantStake')
     ).required(''),
     workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
     isWorkingPeriodOpen: Yup.boolean(),

@@ -162,6 +162,7 @@ export type BountyFieldsFragment = {
     createdAt: any
     network: Types.Network
   } | null
+  maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
 }
 
 export type BountyEntryFieldsFragment = {
@@ -508,6 +509,7 @@ export type GetBountiesQuery = {
       createdAt: any
       network: Types.Network
     } | null
+    maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
   }>
 }
 
@@ -689,6 +691,7 @@ export type GetBountyQuery = {
       createdAt: any
       network: Types.Network
     } | null
+    maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
   } | null
 }
 
@@ -929,6 +932,9 @@ export const BountyFieldsFragmentDoc = gql`
       rationale
       createdAt
       network
+    }
+    maxFundingReachedEvent {
+      createdAt
     }
   }
   ${MemberFieldsFragmentDoc}

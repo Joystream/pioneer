@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 import { registry, types } from '@joystream/types'
-import { ApiPromise, WsProvider } from '@polkadot/api'
-import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ApiPromise, ApiRx, WsProvider } from '@polkadot/api'
+import { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types'
 import { createTestKeyring } from '@polkadot/keyring/testing'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult, ITuple } from '@polkadot/types/types'
 import chalk from 'chalk'
+import { firstValueFrom } from 'rxjs'
 
 const isError = ({ event: { method } }: EventRecord) => method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
 
@@ -14,14 +15,17 @@ const hasError = (events: EventRecord[]): boolean => {
   return !!events.find(isError)
 }
 
-export const getApi = async () => {
-  const endpoint = 'ws://127.0.0.1:9944'
+type Api<T extends ApiTypes> = T extends 'promise' ? ApiPromise : ApiRx
+export const getApi = async <T extends ApiTypes>(apiType: T, endpoint = 'ws://127.0.0.1:9944'): Promise<Api<T>> => {
   process.stdout.write(`>> Connecting to API endpoint (${chalk.blue(endpoint)})... `)
   const provider = new WsProvider(endpoint)
-  const api = await ApiPromise.create({ provider, rpc: jsonrpc, types: types, registry })
+
+  const api = await (apiType === 'promise'
+    ? ApiPromise.create({ provider, rpc: jsonrpc, types, registry })
+    : firstValueFrom(ApiRx.create({ provider, rpc: jsonrpc, types, registry })))
 
   console.log(chalk.green('✔'))
-  return api
+  return api as Api<T>
 }
 
 const keyring = createTestKeyring()
@@ -63,7 +67,7 @@ export async function signAndSend(
             const hasError = isError(event)
 
             if (hasError) {
-              const [dispatchError] = (data as unknown) as ITuple<[DispatchError]>
+              const [dispatchError] = data as unknown as ITuple<[DispatchError]>
               errorType = dispatchError.type
 
               if (dispatchError.isModule) {
@@ -90,12 +94,28 @@ export async function signAndSend(
   })
 }
 
-export async function withApi<T>(callback: (api: ApiPromise) => Promise<T>) {
-  const api = await getApi()
+export const withApi = withPromiseApi('ws://127.0.0.1:9944')
 
-  const result = await callback(api)
+export function withPromiseApi(endpoint: string) {
+  return async <T>(callback: (api: ApiPromise) => Promise<T>) => {
+    const api = await getApi('promise', endpoint)
 
-  await api.disconnect()
+    const result = await callback(api)
 
-  return result
+    await api.disconnect()
+
+    return result
+  }
+}
+
+export function withRxApi(endpoint: string) {
+  return async <T>(callback: (api: ApiRx) => Promise<T>) => {
+    const api = await getApi('rxjs', endpoint)
+
+    const result = await callback(api)
+
+    await api.disconnect()
+
+    return result
+  }
 }

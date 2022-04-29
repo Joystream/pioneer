@@ -1,7 +1,10 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
+import BN from 'bn.js'
 import { useEffect, useMemo } from 'react'
 
+import { BN_ZERO } from '@/common/constants'
+import { useDefaultAfterTimeout } from '@/common/hooks/useDefaultAfterTimeout'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { Address } from '@/common/types'
@@ -15,10 +18,11 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
     whenDefined(address, (address) => transaction?.paymentInfo(address)),
     [transaction, address]
   )
+  const partialFee = useDefaultAfterTimeout<BN>(paymentInfo?.partialFee, 3000, BN_ZERO)
   const balance = useBalance(address)
 
   useEffect(() => {
-    if (status === null && (!balance || !paymentInfo)) {
+    if (status === null && (!balance || !partialFee)) {
       setStatus('loadingFees')
     }
     return () => {
@@ -26,16 +30,16 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
         setStatus(null)
       }
     }
-  }, [balance, paymentInfo])
+  }, [balance, partialFee])
 
   return useMemo(
     () =>
-      balance && paymentInfo
+      balance && partialFee
         ? {
-            transactionFee: paymentInfo.partialFee,
-            canAfford: balance.transferable.gte(paymentInfo.partialFee),
+            transactionFee: partialFee,
+            canAfford: balance.transferable.gte(partialFee),
           }
         : undefined,
-    [balance, paymentInfo]
+    [balance, partialFee]
   )
 }

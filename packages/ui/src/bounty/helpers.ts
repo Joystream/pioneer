@@ -72,3 +72,5 @@ export const statusToEntrantResult = (status: BountyEntryStatus): EntrantResult 
       return 'loser'
   }
 }
+
+export const getSecondsPast = (createdAt: string) => (new Date().getTime() - new Date(createdAt).getTime()) / 1000

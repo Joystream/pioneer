@@ -21,7 +21,7 @@ const bounty = bounties[0]
 describe('UI: WithdrawStakeModal', () => {
   const api = stubApi()
   const fee = 100
-  const transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
+  let transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -57,10 +57,22 @@ describe('UI: WithdrawStakeModal', () => {
     allAccounts: [alice, bob],
   }
 
+  beforeEach(() => {
+    transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
+  })
+
   it('Requirements passed', async () => {
     renderModal()
     expect(await screen.queryByText(`modals.withdraw.stake.description ${formatTokenValue(100)}`)).toBeInTheDocument()
     expect(await screen.queryByText('modals.withdraw.stake.button')).toBeInTheDocument()
+  })
+
+  it('Insufficient funds', async () => {
+    stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', 999999)
+
+    const { findByText } = renderModal()
+
+    expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   describe('Transaction result', () => {

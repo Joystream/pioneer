@@ -1167,6 +1167,18 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('Authorize', () => {
+      it('Fee fail before transaction', async () => {
+        await finishWarning()
+        await finishProposalType('fundingRequest')
+        stubTransaction(api, 'api.tx.utility.batch', 10000)
+        await finishStakingAccount()
+        await finishProposalDetails()
+        await finishTriggerAndDiscussion()
+        await SpecificParameters.FundingRequest.finish(100, 'bob')
+
+        expect(await screen.findByText('modals.insufficientFunds.title')).toBeInTheDocument()
+      })
+
       describe('Staking account not bound nor staking candidate', () => {
         beforeEach(async () => {
           await finishWarning()

@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 
+import { getFundingPeriodLength, getSecondsPast } from '@/bounty/helpers'
 import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
+import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { lowerFirstLetter } from '@/common/helpers'
 import { asBlock, maybeAsBlock } from '@/common/types'
 import { asMember } from '@/memberships/types'
@@ -15,13 +17,14 @@ import {
 
 import {
   Bounty,
+  BountyContribution,
   BountyPeriod,
   BountyStage,
-  WorkEntry,
-  FundingType,
-  Contributor,
   BountyWork,
-  BountyContribution,
+  Contributor,
+  FundingType,
+  isFundingLimited,
+  WorkEntry,
   WorkInfo,
 } from './Bounty'
 
@@ -102,6 +105,27 @@ export const asBountyWork =
     inBlock: asBlock(fields),
   })
 
+export const periodBlockLeft = (fields: BountyFieldsFragment) => {
+  switch (fields.stage) {
+    case 'WorkSubmission': {
+      return fields.maxFundingReachedEvent?.createdAt
+        ? fields.workPeriod - getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+        : fields.workPeriod
+    }
+    case 'Judgment': {
+      return fields.maxFundingReachedEvent?.createdAt
+        ? fields.workPeriod +
+            fields.judgingPeriod -
+            getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+        : fields.judgingPeriod
+    }
+    case 'Funding': {
+      const fundingPeriodTime = getFundingPeriodLength(asFunding(fields.fundingType))
+      return fundingPeriodTime ? fundingPeriodTime - getSecondsPast(fields.createdAt) / SECONDS_PER_BLOCK : undefined
+    }
+  }
+}
+
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title ?? '',
@@ -128,6 +152,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
     inBlock: maybeAsBlock(fields.judgment?.inBlock, fields.judgment?.createdAt, fields.judgment?.network),
     rationale: fields.judgment?.rationale,
   },
+  periodTimeLeft: periodBlockLeft(fields),
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({

@@ -275,6 +275,11 @@
       "title": "Works Submitted",
       "tooltip": "Lorem ipsum d"
     },
+    "duration": {
+      "title": "Duration",
+      "value": "Ongoing",
+      "tooltip": "Lorem ipsum d"
+    },
     "winners": {
       "title": "Winners",
       "tooltip": "Lorem ipsum d"
