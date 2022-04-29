@@ -1,5 +1,5 @@
 import { createType } from '@joystream/types'
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -50,12 +50,18 @@ describe('UI: ProposalListItem', () => {
   const server = setupMockServer()
   const api = stubApi()
   stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', proposalParameters)
-
   describe('Proposal in deciding stage', () => {
     it('Member has voted already', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 16))
+      seedMembers(server.server, 2)
+      seedProposal(
+        {
+          ...PROPOSAL_DATA,
+          votes: [{ ...voteData, voterId: '0' }],
+        },
+        server.server
+      )
       renderComponent({ proposal: proposalData, isCouncilMember: true, memberId: '0' })
-      expect(screen.queryByText('Vote')).toBeNull()
+      await waitFor(async () => expect(screen.queryByText('Vote')).toBeNull())
     })
 
     it('Member is not a council member', async () => {
@@ -73,7 +79,6 @@ describe('UI: ProposalListItem', () => {
     })
 
     it('Voting in second round', async () => {
-      stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
       stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', {
         ...proposalParameters,
         constitutionality: createType('u32', 2),
