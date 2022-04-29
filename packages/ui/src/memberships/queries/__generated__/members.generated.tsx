@@ -12,6 +12,7 @@ export type MemberFieldsFragment = {
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
+  isCouncilMember: boolean
   inviteCount: number
   createdAt: any
   metadata: {
@@ -38,6 +39,7 @@ export type MemberWithDetailsFieldsFragment = {
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
+  isCouncilMember: boolean
   inviteCount: number
   createdAt: any
   entry:
@@ -69,6 +71,7 @@ export type MemberWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -118,6 +121,7 @@ export type GetMembersQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -160,6 +164,7 @@ export type GetMemberQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     entry:
@@ -191,6 +196,7 @@ export type GetMemberQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -240,6 +246,7 @@ export type SearchMembersQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -283,6 +290,7 @@ export type GetMemberMentionQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -359,6 +367,7 @@ export const MemberFieldsFragmentDoc = gql`
     }
     isVerified
     isFoundingMember
+    isCouncilMember
     inviteCount
     roles {
       id

@@ -42,7 +42,9 @@ export type GetSidebarInfoQuery = {
 }
 
 export type GetAllDeadLinesQueryVariables = Types.Exact<{
+  proposalCreator?: Types.InputMaybe<Types.MembershipWhereInput>
   group?: Types.InputMaybe<Types.WorkingGroupWhereInput>
+  isLead: Types.Scalars['Boolean']
 }>
 
 export type GetAllDeadLinesQuery = {
@@ -65,6 +67,7 @@ export type GetAllDeadLinesQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -91,7 +94,7 @@ export type GetAllDeadLinesQuery = {
     }>
   }>
   proposals: Array<{ __typename: 'Proposal'; updatedAt?: any | null; id: string; title: string }>
-  upcomingWorkingGroupOpenings: Array<{
+  upcomingWorkingGroupOpenings?: Array<{
     __typename: 'UpcomingWorkingGroupOpening'
     id: string
     groupId: string
@@ -110,7 +113,7 @@ export type GetAllDeadLinesQuery = {
       expectedEnding?: any | null
     }
   }>
-  workingGroupOpenings: Array<{
+  workingGroupOpenings?: Array<{
     __typename: 'WorkingGroupOpening'
     id: string
     runtimeId: number
@@ -219,22 +222,29 @@ export type GetSidebarInfoQueryHookResult = ReturnType<typeof useGetSidebarInfoQ
 export type GetSidebarInfoLazyQueryHookResult = ReturnType<typeof useGetSidebarInfoLazyQuery>
 export type GetSidebarInfoQueryResult = Apollo.QueryResult<GetSidebarInfoQuery, GetSidebarInfoQueryVariables>
 export const GetAllDeadLinesDocument = gql`
-  query GetAllDeadLines($group: WorkingGroupWhereInput) {
+  query GetAllDeadLines($proposalCreator: MembershipWhereInput, $group: WorkingGroupWhereInput, $isLead: Boolean!) {
     electionRounds(where: { isFinished_eq: false }) {
       cycleId
       candidates {
         ...ElectionCandidateFields
       }
     }
-    proposals(where: { status_json: { isTypeOf_eq: "ProposalStatusDeciding" } }) {
+    proposals(
+      where: {
+        creator: $proposalCreator
+        isFinalized_eq: false
+        status_json: { isTypeOf_eq: "ProposalStatusDeciding" }
+      }
+    ) {
       updatedAt
       id
       title
     }
-    upcomingWorkingGroupOpenings(where: { group: $group }) {
+    upcomingWorkingGroupOpenings(where: { group: $group }) @include(if: $isLead) {
       ...UpcomingWorkingGroupOpeningFields
     }
-    workingGroupOpenings(where: { group: $group, status_json: { isTypeOf_eq: "OpeningStatusOpen" } }) {
+    workingGroupOpenings(where: { group: $group, status_json: { isTypeOf_eq: "OpeningStatusOpen" } })
+      @include(if: $isLead) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -255,12 +265,14 @@ export const GetAllDeadLinesDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllDeadLinesQuery({
  *   variables: {
+ *      proposalCreator: // value for 'proposalCreator'
  *      group: // value for 'group'
+ *      isLead: // value for 'isLead'
  *   },
  * });
  */
 export function useGetAllDeadLinesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetAllDeadLinesQuery, GetAllDeadLinesQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<GetAllDeadLinesQuery, GetAllDeadLinesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetAllDeadLinesQuery, GetAllDeadLinesQueryVariables>(GetAllDeadLinesDocument, options)

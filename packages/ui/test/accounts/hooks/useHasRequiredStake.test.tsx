@@ -129,12 +129,12 @@ describe('useHasRequiredStake', () => {
         locks: [
           {
             amount: new BN(100),
-            type: 'Voting',
+            type: 'Storage Worker',
           },
         ],
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(1000, 'Storage Worker')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: null,

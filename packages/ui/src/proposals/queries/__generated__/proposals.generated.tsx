@@ -16,6 +16,7 @@ export type WorkerProposalDetailsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -88,6 +89,7 @@ export type ProposalFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -120,6 +122,7 @@ export type VoteFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -157,6 +160,7 @@ export type VoteWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -199,6 +203,7 @@ export type ProposalWithDetailsFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -263,6 +268,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -300,6 +306,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -353,6 +360,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -388,6 +396,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -421,6 +430,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -476,6 +486,7 @@ export type ProposalWithDetailsFieldsFragment = {
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
+          isCouncilMember: boolean
           inviteCount: number
           createdAt: any
           metadata: {
@@ -508,6 +519,7 @@ export type ProposalWithDetailsFieldsFragment = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -556,6 +568,7 @@ export type ProposalWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -601,6 +614,7 @@ export type DiscussionPostFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -633,6 +647,7 @@ export type DiscussionPostFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -672,6 +687,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -756,6 +772,7 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -834,6 +851,7 @@ export type GetProposalsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -892,6 +910,7 @@ export type GetProposalQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -956,6 +975,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -993,6 +1013,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1046,6 +1067,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1081,6 +1103,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1114,6 +1137,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1169,6 +1193,7 @@ export type GetProposalQuery = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -1201,6 +1226,7 @@ export type GetProposalQuery = {
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
+          isCouncilMember: boolean
           inviteCount: number
           createdAt: any
           metadata: {
@@ -1249,6 +1275,7 @@ export type GetProposalQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1318,6 +1345,7 @@ export type GetVoteWithDetailsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1376,6 +1404,7 @@ export type GetProposalVotesQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1472,6 +1501,7 @@ export type GetProposalDiscussionPostMentionQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {

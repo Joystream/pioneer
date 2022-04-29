@@ -22,7 +22,7 @@ export const EditPostModal = () => {
     hideModal,
   } = useModal<EditPostModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -40,12 +40,15 @@ export const EditPostModal = () => {
   }
 
   useEffect(() => {
-    if (!state.matches('requirementsVerification')) {
-      return
+    if (state.matches('requirementsVerification')) {
+      if (feeInfo && active) {
+        feeInfo.canAfford && send('PASS')
+        !feeInfo.canAfford && send('FAIL')
+      }
     }
-    if (feeInfo && active) {
-      feeInfo.canAfford && send('PASS')
-      !feeInfo.canAfford && send('FAIL')
+
+    if (state.matches('beforeTransaction')) {
+      send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, JSON.stringify(feeInfo)])
 

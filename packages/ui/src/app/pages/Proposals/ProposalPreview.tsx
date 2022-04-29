@@ -19,7 +19,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
-import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
@@ -63,7 +62,6 @@ export const ProposalPreview = () => {
   }, [voteId])
 
   const { active } = useMyMemberships()
-  const isCouncilMember = useIsCouncilMember(active)
   const hasVoted = proposal?.votes.some(
     (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
   )
@@ -97,7 +95,7 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
-              {isCouncilMember &&
+              {active?.isCouncilMember &&
                 proposal.status === 'deciding' &&
                 (!hasVoted ? (
                   <VoteForProposalButton id={id}>Vote on Proposal</VoteForProposalButton>
