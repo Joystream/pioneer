@@ -1491,15 +1491,6 @@ export type GetProposalDiscussionPostMentionQuery = {
   } | null
 }
 
-export type GetMemberVoteCountOnProposalQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.ProposalVotedEventWhereInput>
-}>
-
-export type GetMemberVoteCountOnProposalQuery = {
-  __typename: 'Query'
-  proposalVotedEventsConnection: { __typename: 'ProposalVotedEventConnection'; totalCount: number }
-}
-
 export const VoteFieldsFragmentDoc = gql`
   fragment VoteFields on ProposalVotedEvent {
     id
@@ -2295,57 +2286,4 @@ export type GetProposalDiscussionPostMentionLazyQueryHookResult = ReturnType<
 export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
   GetProposalDiscussionPostMentionQuery,
   GetProposalDiscussionPostMentionQueryVariables
->
-export const GetMemberVoteCountOnProposalDocument = gql`
-  query GetMemberVoteCountOnProposal($where: ProposalVotedEventWhereInput) {
-    proposalVotedEventsConnection(where: $where) {
-      totalCount
-    }
-  }
-`
-
-/**
- * __useGetMemberVoteCountOnProposalQuery__
- *
- * To run a query within a React component, call `useGetMemberVoteCountOnProposalQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMemberVoteCountOnProposalQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMemberVoteCountOnProposalQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useGetMemberVoteCountOnProposalQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetMemberVoteCountOnProposalQuery, GetMemberVoteCountOnProposalQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetMemberVoteCountOnProposalQuery, GetMemberVoteCountOnProposalQueryVariables>(
-    GetMemberVoteCountOnProposalDocument,
-    options
-  )
-}
-export function useGetMemberVoteCountOnProposalLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetMemberVoteCountOnProposalQuery,
-    GetMemberVoteCountOnProposalQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetMemberVoteCountOnProposalQuery, GetMemberVoteCountOnProposalQueryVariables>(
-    GetMemberVoteCountOnProposalDocument,
-    options
-  )
-}
-export type GetMemberVoteCountOnProposalQueryHookResult = ReturnType<typeof useGetMemberVoteCountOnProposalQuery>
-export type GetMemberVoteCountOnProposalLazyQueryHookResult = ReturnType<
-  typeof useGetMemberVoteCountOnProposalLazyQuery
->
-export type GetMemberVoteCountOnProposalQueryResult = Apollo.QueryResult<
-  GetMemberVoteCountOnProposalQuery,
-  GetMemberVoteCountOnProposalQueryVariables
 >

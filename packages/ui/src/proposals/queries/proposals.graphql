@@ -322,9 +322,3 @@ query GetProposalDiscussionPostMention($id: ID!) {
     ...ProposalDiscussionPostMentionFields
   }
 }
-
-query GetMemberVoteCountOnProposal($where: ProposalVotedEventWhereInput) {
-  proposalVotedEventsConnection(where: $where) {
-    totalCount
-  }
-}
