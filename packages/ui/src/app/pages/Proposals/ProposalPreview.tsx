@@ -32,7 +32,6 @@ import { VotesContainer, VotesPreview } from '@/proposals/components/VotesPrevie
 import { getVoteStatusComponent } from '@/proposals/components/VoteStatusComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
-import { useHasMemberVotedOnProposal } from '@/proposals/hooks/useHasMemberVotedOnProposal'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
@@ -65,7 +64,9 @@ export const ProposalPreview = () => {
 
   const { active } = useMyMemberships()
   const isCouncilMember = useIsCouncilMember(active)
-  const hasVoted = useHasMemberVotedOnProposal(id, active?.id)
+  const hasVoted = proposal?.votes.some(
+    (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
+  )
 
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind

@@ -135,7 +135,7 @@ export const PROPOSAL_DATA: ProposalMock = {
     voterId: '1',
     inBlock: 0,
     rationale: '',
-    votingRound: 0,
+    votingRound: 1,
   })),
   proposalStatusUpdates: [{ newStatus: 'deciding', inBlock: 0 }],
   discussionThread: { discussionPosts: [], mode: 'ProposalDiscussionThreadModeOpen' },
