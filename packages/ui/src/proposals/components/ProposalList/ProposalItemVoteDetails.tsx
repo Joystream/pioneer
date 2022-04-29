@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { VoteDisplay } from '@/proposals/constants'
-import { useHasMemberVotedOnProposal } from '@/proposals/hooks/useHasMemberVotedOnProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
 import { Proposal, ProposalVote } from '@/proposals/types'
@@ -18,10 +17,9 @@ export interface ProposalItemVoteDetailsProps {
 
 export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }: ProposalItemVoteDetailsProps) => {
   const { votes, isLoading } = useProposalVotesByMember(proposal.id, memberId)
-  const hasVoted = useHasMemberVotedOnProposal(proposal.id, memberId)
   const constants = useProposalConstants(proposal.type)
   const constitutionality = constants?.constitutionality
-  const canVote = isCouncilMember && proposal.status === 'deciding' && !hasVoted
+  const canVote = isCouncilMember && proposal.status === 'deciding' && !votes
   return (
     <>
       {canVote && (
