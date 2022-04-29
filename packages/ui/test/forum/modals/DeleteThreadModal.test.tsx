@@ -24,6 +24,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -120,7 +121,7 @@ describe('UI: DeleteThreadModal', () => {
     await act(async () => {
       fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
     })
-    expect(await screen.findByText('modals.deleteThread.error')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

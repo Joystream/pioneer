@@ -21,6 +21,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -106,7 +107,7 @@ describe('UI: EditPostModal', () => {
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
     })
-    expect(await screen.findByText('There was a problem submitting an edit to your post.')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {
