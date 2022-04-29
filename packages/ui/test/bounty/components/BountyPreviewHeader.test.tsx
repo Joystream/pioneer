@@ -273,12 +273,26 @@ describe('UI: BountyPreviewHeader', () => {
       bounty.stage = 'failed'
     })
 
-    it('Worker', async () => {
+    it('Worker with submission', async () => {
       bounty.entries = [
         {
           ...defaultEntry,
           passed: true,
           hasSubmitted: true,
+        },
+      ]
+
+      renderHeader()
+
+      expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
+    })
+
+    it('Worker without submission', async () => {
+      bounty.entries = [
+        {
+          ...defaultEntry,
+          passed: true,
+          hasSubmitted: false,
         },
       ]
 
