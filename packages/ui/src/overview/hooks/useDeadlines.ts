@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { asElection } from '@/council/types/Election'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 import { useGetAllDeadLinesQuery } from '@/overview/queries'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
@@ -48,9 +47,9 @@ export const useDeadlines = (params: UseDeadlinesParams) => {
 
   const deadlines = useMemo((): Record<DeadlineNamespace, any[]> => {
     const election = data?.electionRounds.map(asElection) ?? []
-    const proposals = data?.proposals || []
-    const upcomingOpenings = data?.upcomingWorkingGroupOpenings?.map(asUpcomingWorkingGroupOpening) || []
-    const openings = data?.workingGroupOpenings || []
+    const proposals = data?.proposals ?? []
+    const upcomingOpenings = data?.upcomingWorkingGroupOpenings?.map(asUpcomingWorkingGroupOpening) ?? []
+    const openings = data?.workingGroupOpenings ?? []
     return {
       proposals: proposals.filter((proposal) => !storageDeadlines.proposals.includes(proposal.id)),
       elections:

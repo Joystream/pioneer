@@ -39,7 +39,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
   const { votesTotal } = useMyCurrentVotesCount(election.cycleId)
   const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
   const remainingPeriod = useElectionRemainingPeriod(electionStage)
-  const { votes } = useMyCastVotes(electionStage === 'revealing' ? election.cycleId : undefined) ?? []
+  const { votes = [] } = useMyCastVotes(electionStage === 'revealing' ? election.cycleId : undefined)
   const timeRemaining = formatDuration(remainingPeriod?.toNumber() || 0)
 
   const remainingCalculation = useMemo(() => {
@@ -80,7 +80,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
           </StyledText>
         )
       case 'revealing':
-        if (votes?.every((vote) => vote.voteFor)) {
+        if (votes.every((vote) => vote.voteFor)) {
           return null
         }
         return (
