@@ -64,7 +64,9 @@ export const ProposalPreview = () => {
 
   const { active } = useMyMemberships()
   const isCouncilMember = useIsCouncilMember(active)
-  const hasVoted = proposal?.votes.some((vote) => vote.voter.id === active?.id)
+  const hasVoted = proposal?.votes.some(
+    (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
+  )
 
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind

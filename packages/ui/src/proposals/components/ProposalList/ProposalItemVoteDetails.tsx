@@ -19,7 +19,11 @@ export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }:
   const { votes, isLoading } = useProposalVotesByMember(proposal.id, memberId)
   const constants = useProposalConstants(proposal.type)
   const constitutionality = constants?.constitutionality
-  const canVote = isCouncilMember && proposal.status === 'deciding' && !votes
+  const canVote =
+    isCouncilMember &&
+    proposal.status === 'deciding' &&
+    (!votes || !votes.some((vote) => proposal.councilApprovals < vote.votingRound))
+
   return (
     <>
       {canVote && (
