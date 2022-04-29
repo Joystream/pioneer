@@ -37,7 +37,7 @@ describe('WorkingGroup', () => {
   })
 
   it('Loads working group by url param with a hyphen', async () => {
-    renderPage('/working-groups/content-directory')
+    renderPage('/working-groups/content')
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
     expect(await screen.findByText(/current budget/i)).toBeDefined()
