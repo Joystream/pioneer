@@ -55,7 +55,7 @@ export const GeneralParametersStep = ({ activeMember, errorMessageGetter, errorC
             />
           </StyledInputComponent>
           <InputComponent id="field-description" inputSize="auto" label="Bounty description" required>
-            <CKEditor id="field-description" minRows={3} name="generalParameters.description" />
+            <CKEditor id="field-description" minRows={5} name="generalParameters.description" />
           </InputComponent>
         </RowGapBlock>
       </Row>

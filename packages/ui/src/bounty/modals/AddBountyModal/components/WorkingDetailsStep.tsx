@@ -66,7 +66,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
             falseLabel={
               <CheckBoxLabelWrapper>
                 Closed{' '}
-                <Tooltip tooltipText="Lorem ipsum...">
+                <Tooltip tooltipText="There are open bounties, where any member can participate, and closed bounties, where the creator can pre-select a set of members who can participate.">
                   <TooltipDefault />
                 </Tooltip>
               </CheckBoxLabelWrapper>

@@ -48,6 +48,9 @@ fragment BountyFields on Bounty {
     createdAt
     network
   }
+  maxFundingReachedEvent {
+    createdAt
+  }
 }
 
 fragment BountyEntryFields on BountyEntry {

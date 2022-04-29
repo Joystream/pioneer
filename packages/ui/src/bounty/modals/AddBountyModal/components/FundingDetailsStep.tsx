@@ -47,7 +47,20 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           tight
           units="tJOY"
           required
-          tooltipText="Funding period tooltip"
+          tooltipText={
+            <>
+              Bounty creator has to put up an initial bounty, called a cherry, which is split among all contributors
+              pro-rata in case bounty fails. This cherry generates an incentive for contributors, as even when the
+              funding fails, they get a benefit. In case bounty succeeds, cherry is returned to the creator in full at
+              the time, when Oracle submits judgement.{' '}
+              <TooltipExternalLink
+                href="https://joystream.gitbook.io/testnet-workspace/system/bounties#assurance-contracts-and-dominant-assurance-contracts"
+                target="_blank"
+              >
+                <TextMedium>Learn more</TextMedium> <LinkSymbol />
+              </TooltipExternalLink>
+            </>
+          }
           message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
@@ -114,8 +127,8 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
       <RowGapBlock gap={20}>
         <TextMedium bold>Funding target range *</TextMedium>
         <Subtitle>
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-          velit mollit. Exercitation veniam consequat sunt nostrud amet.
+          Define funding range. Working Period stage commences when minimal range is funded in limited funding type, and
+          maximal range for perpetual funding type.
         </Subtitle>
       </RowGapBlock>
       <ColumnGapBlock gap={20}>
@@ -130,6 +143,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           }
           validation={!isPerpetual && errorChecker('fundingMinimalRange') ? 'invalid' : undefined}
           label="Minimal range"
+          tooltipText="Cumulative funding must be above minimal range for bounty to proceed to Working Stage period in limited funding."
         >
           <InputNumber
             isInBN
@@ -140,7 +154,29 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
             isTokenValue
           />
         </InputComponent>
-        <InputComponent id="field-maxRange" tight units="tJOY" required label="Maximal range">
+        <InputComponent
+          id="field-maxRange"
+          tight
+          units="tJOY"
+          required
+          label="Maximal range"
+          tooltipText={
+            <>
+              Cumulative funding must be above maximal range for bounty to proceed to Working Stage period in perpetual
+              funding. If a contribution is made that brings the cumulative funding equal to or above the upper bound
+              (maximal range), then the difference is returned, and the bounty proceeds to the Working Period stage.
+              Lastly, if the funding period is limited and the time passes this time, then the bounty proceeds to the
+              Bounty Failed stage if there was at least one contribution made, otherwise it proceeds to the Expired
+              Funding Period stage.{' '}
+              <TooltipExternalLink
+                href="https://joystream.gitbook.io/testnet-workspace/system/bounties#concepts"
+                target="_blank"
+              >
+                <TextMedium>Learn more</TextMedium> <LinkSymbol />
+              </TooltipExternalLink>
+            </>
+          }
+        >
           <InputNumber
             isInBN
             id="field-maxRange"
