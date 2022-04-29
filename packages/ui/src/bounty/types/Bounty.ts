@@ -28,7 +28,6 @@ export type BountyEntryStatus =
   | 'BountyEntryStatusWinner'
   | 'BountyEntryStatusPassed'
   | 'BountyEntryStatusRejected'
-  | 'BountyEntryStatusCashedOut'
 
 export interface Contributor {
   hasWithdrawn: boolean
