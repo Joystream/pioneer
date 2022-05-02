@@ -1,12 +1,14 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { List, ListItem } from '../../common/components/List'
-import { Loading } from '../../common/components/Loading'
-import { ContentWithTabs } from '../../common/components/page/PageContent'
-import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
-import { Tabs } from '../../common/components/Tabs'
-import { Colors } from '../../common/constants'
+import { List, ListItem } from '@/common/components/List'
+import { ListItemLoader } from '@/common/components/ListItemLoader'
+import { ColumnGapBlock, ContentWithTabs, RowGapBlock } from '@/common/components/page/PageContent'
+import { Skeleton } from '@/common/components/Skeleton'
+import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
+import { Tabs } from '@/common/components/Tabs'
+import { Colors } from '@/common/constants'
+
 import { useMyAccounts } from '../hooks/useMyAccounts'
 import { useMyBalances } from '../hooks/useMyBalances'
 import { filterAccounts } from '../model/filterAccounts'
@@ -15,7 +17,7 @@ import { setOrder, sortAccounts, SortKey } from '../model/sortAccounts'
 import { AccountItem } from './AccountItem/AccountItem'
 
 export function Accounts() {
-  const { allAccounts, hasAccounts } = useMyAccounts()
+  const { allAccounts, hasAccounts, isLoading } = useMyAccounts()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
   const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
@@ -28,10 +30,6 @@ export function Accounts() {
     () => sortAccounts(visibleAccounts, balances, sortBy, isDescending),
     [visibleAccounts, balances, sortBy, isDescending]
   )
-
-  if (!hasAccounts) {
-    return <Loading />
-  }
 
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
 
@@ -63,11 +61,28 @@ export function Accounts() {
           <Header sortKey="transferable">Transferable balance</Header>
         </ListHeaders>
         <List>
-          {sortedAccounts.map((account) => (
-            <ListItem key={account.address} borderless>
-              <AccountItem account={account} />
-            </ListItem>
-          ))}
+          {isLoading ? (
+            sortedAccounts.map((account) => (
+              <ListItem key={account.address} borderless>
+                <AccountItem account={account} />
+              </ListItem>
+            ))
+          ) : (
+            <ListItemLoader columnsTemplate="276px repeat(4, 128px) 104px" count={4}>
+              <ColumnGapBlock gap={15}>
+                <Skeleton variant="circle" width="40px" height="40px" />
+                <RowGapBlock gap={5}>
+                  <Skeleton variant="rect" width="100px" height="10px" />
+                  <Skeleton variant="rect" width="120px" height="10px" />
+                  <Skeleton variant="rect" width="140px" height="10px" />
+                </RowGapBlock>
+              </ColumnGapBlock>
+              <Skeleton variant="text" />
+              <Skeleton variant="text" />
+              <Skeleton variant="text" />
+              <Skeleton variant="text" />
+            </ListItemLoader>
+          )}
         </List>
       </AccountsWrap>
     </ContentWithTabs>
