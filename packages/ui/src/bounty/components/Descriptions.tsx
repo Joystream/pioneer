@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ImagePlaceholder } from '@/common/components/ImagePlaceholder'
+import BrokenImg from '@/app/assets/images/BrokenImg.png'
+import DefaultImg from '@/app/assets/images/DefaultImg.png'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -16,11 +17,13 @@ export const Description = React.memo(({ imageUrl, className, title, description
   return (
     <DescriptionContainer>
       <ImageContainer>
-        {imageUrl ? (
-          <DescriptionImage src={imageUrl} className={className} />
-        ) : (
-          <ImagePlaceholder className={className} />
-        )}
+        <DescriptionImage
+          src={imageUrl ?? DefaultImg}
+          className={className}
+          onError={(e) => (
+            ((e.target as HTMLImageElement).src = BrokenImg), ((e.target as HTMLImageElement).onerror = () => undefined)
+          )}
+        />
       </ImageContainer>
       <TextHuge bold>{title}</TextHuge>
       <DescriptionText>{description}</DescriptionText>
