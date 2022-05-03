@@ -14,12 +14,13 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useProposalPostParents } from '@/proposals/hooks/useProposalPostParents'
 
 interface Props {
+  index: number
   post: ForumPost
   onEdit: () => void
   type: PostListItemType
 }
 
-export const PostContextMenu = ({ post, onEdit, type }: Props) => {
+export const PostContextMenu = ({ index, post, onEdit, type }: Props) => {
   const { api, connectionState } = useApi()
   const { showModal } = useModal()
   const { active } = useMyMemberships()
@@ -47,19 +48,19 @@ export const PostContextMenu = ({ post, onEdit, type }: Props) => {
     }
   }, [api, connectionState, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type])
 
+  const getContextMenuItems = () => {
+    const editPostAction = { text: 'Edit post', onClick: onEdit }
+    const deletePostAction = {
+      text: 'Delete post',
+      onClick: () =>
+        showModal<DeletePostModalCall>({ modal: 'DeletePost', data: { post, transaction: deletePostTransaction } }),
+    }
+    if (index === 0) {
+      return [editPostAction]
+    }
+    return [editPostAction, deletePostAction]
+  }
+
   const isActive = post.status === 'PostStatusActive'
-  return isOwn && isActive ? (
-    <ContextMenu
-      title="Post actions"
-      size="small"
-      items={[
-        { text: 'Edit post', onClick: onEdit },
-        {
-          text: 'Delete post',
-          onClick: () =>
-            showModal<DeletePostModalCall>({ modal: 'DeletePost', data: { post, transaction: deletePostTransaction } }),
-        },
-      ]}
-    />
-  ) : null
+  return isOwn && isActive ? <ContextMenu title="Post actions" size="small" items={getContextMenuItems()} /> : null
 }
