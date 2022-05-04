@@ -65,6 +65,6 @@ const GroupList = styled.section`
 `
 const WorkingGroupListStyles = styled(RowGapBlock)`
   ${ListHeaders} {
-    padding: 0px 24px;
+    padding: 0 24px;
   }
 `
