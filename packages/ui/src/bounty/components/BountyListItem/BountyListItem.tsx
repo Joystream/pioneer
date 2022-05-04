@@ -38,7 +38,7 @@ export const BountyListItem = memo(
     return (
       <Wrapper isTerminated={isTerminated} onClick={() => history.push(generatePath(BountyRoutes.bounty, { id }))}>
         <BountyImage
-          src={imageUri ?? DefaultImg}
+          src={imageUri || DefaultImg}
           onError={(e) => (
             ((e.target as HTMLImageElement).src = BrokenImg), ((e.target as HTMLImageElement).onerror = () => undefined)
           )}

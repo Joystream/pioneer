@@ -18,7 +18,7 @@ export const Description = React.memo(({ imageUrl, className, title, description
     <DescriptionContainer>
       <ImageContainer>
         <DescriptionImage
-          src={imageUrl ?? DefaultImg}
+          src={imageUrl || DefaultImg}
           className={className}
           onError={(e) => (
             ((e.target as HTMLImageElement).src = BrokenImg), ((e.target as HTMLImageElement).onerror = () => undefined)
