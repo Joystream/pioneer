@@ -1,9 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
-import { GhostRouterLink } from '@/common/components/RouterLink'
+import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { nameMapping, subtitleMapping } from '@/common/helpers'
@@ -35,11 +36,11 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
     return null
   }
   return (
-    <GroupItem as={GhostRouterLink} to={groupAddress}>
-      <GroupImageContainer>
+    <GroupItem>
+      <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
-      <GroupContentBlock>
+      <GroupContentBlock as={GhostRouterLink} to={groupAddress}>
         <GroupTitle>{nameMapping(group.name)}</GroupTitle>
         <GroupContent>{subtitleMapping(group.name)}</GroupContent>
       </GroupContentBlock>
@@ -68,7 +69,9 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           </StatsValue>
         </StatsColumn>
       </GroupStats>
-      <Arrow direction="right" className="WorkingGroupArrow" />
+      <StyledRouterLink to={groupAddress}>
+        <Arrow direction="right" className="WorkingGroupArrow" />
+      </StyledRouterLink>
     </GroupItem>
   )
 }
@@ -85,7 +88,9 @@ const GroupImageContainer = styled.div`
   cursor: pointer;
   transition: ${Transitions.all};
 `
-
+const StyledRouterLink = styled(RouterLink)`
+  color: ${Colors.Black[600]};
+`
 const GroupContentBlock = styled.article`
   display: grid;
   grid-template-rows: 24px 40px;
