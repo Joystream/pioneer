@@ -39,7 +39,7 @@ export const CreateThreadDetailsModal = ({
     <>
       <Modal onClose={hideModal} modalSize="l">
         <ModalHeader title="Create a thread" onClick={hideModal} />
-        <ModalBody>
+        <ModalBody maxHeight="65vh">
           <RowGapBlock gap={24}>
             <ForumBreadcrumbsList
               categoryBreadcrumbs={breadcrumbs ?? []}

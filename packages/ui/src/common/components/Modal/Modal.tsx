@@ -160,8 +160,10 @@ export const ModalCustomTopBar = styled(ModalTopBar)`
   padding: 4px 24px;
 `
 
-export const ModalBody = styled.div`
+export const ModalBody = styled.div<{ maxHeight?: string }>`
   display: grid;
+  overflow-y: scroll;
+  max-height: ${({ maxHeight }) => maxHeight};
   grid-area: modalbody;
   grid-row-gap: 16px;
   padding: 24px 24px 24px;
