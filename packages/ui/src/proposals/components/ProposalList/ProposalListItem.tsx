@@ -63,7 +63,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <Subscription>
-            {isPast ? 'Ended at:' : 'Created at:'} {toDDMMYY(displayDate)}ž
+            {isPast ? 'Ended at:' : 'Created at:'} {toDDMMYY(displayDate)}
           </Subscription>
           <BadgeStatus>{camelCaseToText(proposal.type)}</BadgeStatus>
         </ToggleableItemInfoTop>
