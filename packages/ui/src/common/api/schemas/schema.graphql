@@ -716,13 +716,8 @@ type Auction implements BaseGraphQLObject {
   The type of auction
   """
   auctionType: AuctionType!
-
-  """
-  Minimal step between auction bids
-  """
-  minimalBidStep: BigInt!
-  lastBid: Bid
-  lastBidId: String
+  topBid: Bid
+  topBidId: String
   bids: [Bid!]!
 
   """
@@ -736,11 +731,6 @@ type Auction implements BaseGraphQLObject {
   endedAtBlock: Int
 
   """
-  Block when auction is supposed to end
-  """
-  plannedEndAtBlock: Int
-
-  """
   Is auction canceled
   """
   isCanceled: Boolean!
@@ -750,7 +740,10 @@ type Auction implements BaseGraphQLObject {
   """
   isCompleted: Boolean!
   whitelistedMembers: [Membership!]!
-  auctionstartedeventauction: [AuctionStartedEvent!]
+  englishauctionstartedeventauction: [EnglishAuctionStartedEvent!]
+  openauctionstartedeventauction: [OpenAuctionStartedEvent!]
+  ownednfttransactionalStatusAuction: [OwnedNft!]
+  transactionalstatusupdatetransactionalStatusAuction: [TransactionalStatusUpdate!]
 }
 
 type AuctionBidCanceledEvent implements Event & BaseGraphQLObject {
@@ -790,6 +783,10 @@ type AuctionBidCanceledEvent implements Event & BaseGraphQLObject {
   memberId: String!
   video: Video!
   videoId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
 type AuctionBidCanceledEventConnection {
@@ -805,6 +802,8 @@ input AuctionBidCanceledEventCreateInput {
   indexInBlock: Float!
   member: ID!
   video: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 type AuctionBidCanceledEventEdge {
@@ -831,6 +830,10 @@ enum AuctionBidCanceledEventOrderByInput {
   member_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
 input AuctionBidCanceledEventUpdateInput {
@@ -840,6 +843,8 @@ input AuctionBidCanceledEventUpdateInput {
   indexInBlock: Float
   member: ID
   video: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 input AuctionBidCanceledEventWhereInput {
@@ -888,6 +893,8 @@ input AuctionBidCanceledEventWhereInput {
   indexInBlock_in: [Int!]
   member: MembershipWhereInput
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [AuctionBidCanceledEventWhereInput!]
   OR: [AuctionBidCanceledEventWhereInput!]
 }
@@ -938,11 +945,14 @@ type AuctionBidMadeEvent implements Event & BaseGraphQLObject {
   Bid made.
   """
   bidAmount: BigInt!
-
-  """
-  Sign of auction duration being extended by making this bid.
-  """
-  extendsAuction: Boolean!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+  previousTopBid: Bid
+  previousTopBidId: String
+  previousTopBidder: Membership
+  previousTopBidderId: String
 }
 
 type AuctionBidMadeEventConnection {
@@ -959,7 +969,10 @@ input AuctionBidMadeEventCreateInput {
   member: ID!
   video: ID!
   bidAmount: String!
-  extendsAuction: Boolean!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  previousTopBid: ID
+  previousTopBidder: ID
 }
 
 type AuctionBidMadeEventEdge {
@@ -988,8 +1001,14 @@ enum AuctionBidMadeEventOrderByInput {
   video_DESC
   bidAmount_ASC
   bidAmount_DESC
-  extendsAuction_ASC
-  extendsAuction_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  previousTopBid_ASC
+  previousTopBid_DESC
+  previousTopBidder_ASC
+  previousTopBidder_DESC
 }
 
 input AuctionBidMadeEventUpdateInput {
@@ -1000,7 +1019,10 @@ input AuctionBidMadeEventUpdateInput {
   member: ID
   video: ID
   bidAmount: String
-  extendsAuction: Boolean
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  previousTopBid: ID
+  previousTopBidder: ID
 }
 
 input AuctionBidMadeEventWhereInput {
@@ -1053,10 +1075,12 @@ input AuctionBidMadeEventWhereInput {
   bidAmount_lt: BigInt
   bidAmount_lte: BigInt
   bidAmount_in: [BigInt!]
-  extendsAuction_eq: Boolean
-  extendsAuction_in: [Boolean!]
   member: MembershipWhereInput
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  previousTopBid: BidWhereInput
+  previousTopBidder: MembershipWhereInput
   AND: [AuctionBidMadeEventWhereInput!]
   OR: [AuctionBidMadeEventWhereInput!]
 }
@@ -1105,6 +1129,10 @@ type AuctionCanceledEvent implements Event & BaseGraphQLObject {
   contentActor: ContentActor!
   video: Video!
   videoId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
 type AuctionCanceledEventConnection {
@@ -1120,6 +1148,8 @@ input AuctionCanceledEventCreateInput {
   indexInBlock: Float!
   contentActor: JSONObject!
   video: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 type AuctionCanceledEventEdge {
@@ -1144,6 +1174,10 @@ enum AuctionCanceledEventOrderByInput {
   indexInBlock_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
 input AuctionCanceledEventUpdateInput {
@@ -1153,6 +1187,8 @@ input AuctionCanceledEventUpdateInput {
   indexInBlock: Float
   contentActor: JSONObject
   video: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 input AuctionCanceledEventWhereInput {
@@ -1201,6 +1237,8 @@ input AuctionCanceledEventWhereInput {
   indexInBlock_in: [Int!]
   contentActor_json: JSONObject
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [AuctionCanceledEventWhereInput!]
   OR: [AuctionCanceledEventWhereInput!]
 }
@@ -1222,11 +1260,9 @@ input AuctionCreateInput {
   startingPrice: String!
   buyNowPrice: String
   auctionType: JSONObject!
-  minimalBidStep: String!
-  lastBid: ID
+  topBid: ID
   startsAtBlock: Float!
   endedAtBlock: Float
-  plannedEndAtBlock: Float
   isCanceled: Boolean!
   isCompleted: Boolean!
 }
@@ -1253,171 +1289,16 @@ enum AuctionOrderByInput {
   startingPrice_DESC
   buyNowPrice_ASC
   buyNowPrice_DESC
-  minimalBidStep_ASC
-  minimalBidStep_DESC
-  lastBid_ASC
-  lastBid_DESC
+  topBid_ASC
+  topBid_DESC
   startsAtBlock_ASC
   startsAtBlock_DESC
   endedAtBlock_ASC
   endedAtBlock_DESC
-  plannedEndAtBlock_ASC
-  plannedEndAtBlock_DESC
   isCanceled_ASC
   isCanceled_DESC
   isCompleted_ASC
   isCompleted_DESC
-}
-
-type AuctionStartedEvent implements Event & BaseGraphQLObject {
-  """
-  Hash of the extrinsic which caused the event to be emitted.
-  """
-  inExtrinsic: String
-
-  """
-  Blocknumber of the block in which the event was emitted.
-  """
-  inBlock: Int!
-
-  """
-  Network the block was produced in.
-  """
-  network: Network!
-
-  """
-  Index of event in block from which it was emitted.
-  """
-  indexInBlock: Int!
-
-  """
-  Filtering options for interface implementers
-  """
-  type: EventTypeOptions
-  id: ID!
-  createdAt: DateTime!
-  createdById: String!
-  updatedAt: DateTime
-  updatedById: String
-  deletedAt: DateTime
-  deletedById: String
-  version: Int!
-
-  """
-  Actor that started this auction.
-  """
-  actor: ContentActor!
-  video: Video!
-  videoId: String!
-  auction: Auction!
-  auctionId: String!
-}
-
-type AuctionStartedEventConnection {
-  totalCount: Int!
-  edges: [AuctionStartedEventEdge!]!
-  pageInfo: PageInfo!
-}
-
-input AuctionStartedEventCreateInput {
-  inExtrinsic: String
-  inBlock: Float!
-  network: Network!
-  indexInBlock: Float!
-  actor: JSONObject!
-  video: ID!
-  auction: ID!
-}
-
-type AuctionStartedEventEdge {
-  node: AuctionStartedEvent!
-  cursor: String!
-}
-
-enum AuctionStartedEventOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  inExtrinsic_ASC
-  inExtrinsic_DESC
-  inBlock_ASC
-  inBlock_DESC
-  network_ASC
-  network_DESC
-  indexInBlock_ASC
-  indexInBlock_DESC
-  video_ASC
-  video_DESC
-  auction_ASC
-  auction_DESC
-}
-
-input AuctionStartedEventUpdateInput {
-  inExtrinsic: String
-  inBlock: Float
-  network: Network
-  indexInBlock: Float
-  actor: JSONObject
-  video: ID
-  auction: ID
-}
-
-input AuctionStartedEventWhereInput {
-  id_eq: ID
-  id_in: [ID!]
-  createdAt_eq: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdById_eq: ID
-  createdById_in: [ID!]
-  updatedAt_eq: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedById_eq: ID
-  updatedById_in: [ID!]
-  deletedAt_all: Boolean
-  deletedAt_eq: DateTime
-  deletedAt_lt: DateTime
-  deletedAt_lte: DateTime
-  deletedAt_gt: DateTime
-  deletedAt_gte: DateTime
-  deletedById_eq: ID
-  deletedById_in: [ID!]
-  inExtrinsic_eq: String
-  inExtrinsic_contains: String
-  inExtrinsic_startsWith: String
-  inExtrinsic_endsWith: String
-  inExtrinsic_in: [String!]
-  inBlock_eq: Int
-  inBlock_gt: Int
-  inBlock_gte: Int
-  inBlock_lt: Int
-  inBlock_lte: Int
-  inBlock_in: [Int!]
-  network_eq: Network
-  network_in: [Network!]
-  indexInBlock_eq: Int
-  indexInBlock_gt: Int
-  indexInBlock_gte: Int
-  indexInBlock_lt: Int
-  indexInBlock_lte: Int
-  indexInBlock_in: [Int!]
-  actor_json: JSONObject
-  video: VideoWhereInput
-  auction: AuctionWhereInput
-  AND: [AuctionStartedEventWhereInput!]
-  OR: [AuctionStartedEventWhereInput!]
-}
-
-input AuctionStartedEventWhereUniqueInput {
-  id: ID!
 }
 
 union AuctionType = AuctionTypeEnglish | AuctionTypeOpen
@@ -1431,14 +1312,24 @@ type AuctionTypeEnglish {
   """
   Auction extension time
   """
-  extensionPeriod: Int
+  extensionPeriod: Int!
+
+  """
+  Block when auction is supposed to end
+  """
+  plannedEndAtBlock: Int!
+
+  """
+  Minimal step between auction bids
+  """
+  minimalBidStep: Float!
 }
 
 type AuctionTypeOpen {
   """
   Auction bid lock duration
   """
-  bidLockingTime: Int!
+  bidLockDuration: Int!
 }
 
 input AuctionUpdateInput {
@@ -1448,11 +1339,9 @@ input AuctionUpdateInput {
   startingPrice: String
   buyNowPrice: String
   auctionType: JSONObject
-  minimalBidStep: String
-  lastBid: ID
+  topBid: ID
   startsAtBlock: Float
   endedAtBlock: Float
-  plannedEndAtBlock: Float
   isCanceled: Boolean
   isCompleted: Boolean
 }
@@ -1495,12 +1384,6 @@ input AuctionWhereInput {
   buyNowPrice_lte: BigInt
   buyNowPrice_in: [BigInt!]
   auctionType_json: JSONObject
-  minimalBidStep_eq: BigInt
-  minimalBidStep_gt: BigInt
-  minimalBidStep_gte: BigInt
-  minimalBidStep_lt: BigInt
-  minimalBidStep_lte: BigInt
-  minimalBidStep_in: [BigInt!]
   startsAtBlock_eq: Int
   startsAtBlock_gt: Int
   startsAtBlock_gte: Int
@@ -1513,12 +1396,6 @@ input AuctionWhereInput {
   endedAtBlock_lt: Int
   endedAtBlock_lte: Int
   endedAtBlock_in: [Int!]
-  plannedEndAtBlock_eq: Int
-  plannedEndAtBlock_gt: Int
-  plannedEndAtBlock_gte: Int
-  plannedEndAtBlock_lt: Int
-  plannedEndAtBlock_lte: Int
-  plannedEndAtBlock_in: [Int!]
   isCanceled_eq: Boolean
   isCanceled_in: [Boolean!]
   isCompleted_eq: Boolean
@@ -1526,16 +1403,25 @@ input AuctionWhereInput {
   nft: OwnedNftWhereInput
   initialOwner: MembershipWhereInput
   winningMember: MembershipWhereInput
-  lastBid: BidWhereInput
+  topBid: BidWhereInput
   bids_none: BidWhereInput
   bids_some: BidWhereInput
   bids_every: BidWhereInput
   whitelistedMembers_none: MembershipWhereInput
   whitelistedMembers_some: MembershipWhereInput
   whitelistedMembers_every: MembershipWhereInput
-  auctionstartedeventauction_none: AuctionStartedEventWhereInput
-  auctionstartedeventauction_some: AuctionStartedEventWhereInput
-  auctionstartedeventauction_every: AuctionStartedEventWhereInput
+  englishauctionstartedeventauction_none: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventauction_some: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventauction_every: EnglishAuctionStartedEventWhereInput
+  openauctionstartedeventauction_none: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventauction_some: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventauction_every: OpenAuctionStartedEventWhereInput
+  ownednfttransactionalStatusAuction_none: OwnedNftWhereInput
+  ownednfttransactionalStatusAuction_some: OwnedNftWhereInput
+  ownednfttransactionalStatusAuction_every: OwnedNftWhereInput
+  transactionalstatusupdatetransactionalStatusAuction_none: TransactionalStatusUpdateWhereInput
+  transactionalstatusupdatetransactionalStatusAuction_some: TransactionalStatusUpdateWhereInput
+  transactionalstatusupdatetransactionalStatusAuction_every: TransactionalStatusUpdateWhereInput
   AND: [AuctionWhereInput!]
   OR: [AuctionWhereInput!]
 }
@@ -1631,6 +1517,9 @@ type Bid implements BaseGraphQLObject {
   version: Int!
   auction: Auction!
   auctionId: String!
+  nft: OwnedNft!
+  nftId: String!
+  auctionTopBid: Auction
   bidder: Membership!
   bidderId: String!
 
@@ -1648,7 +1537,16 @@ type Bid implements BaseGraphQLObject {
   Block in which the bid was placed
   """
   createdInBlock: Int!
-  auctionlastBid: [Auction!]
+
+  """
+  Index of event in block where bid was made.
+  """
+  indexInBlock: Int!
+  auctionbidmadeeventpreviousTopBid: [AuctionBidMadeEvent!]
+  bidmadecompletingauctioneventwinningBid: [BidMadeCompletingAuctionEvent!]
+  bidmadecompletingauctioneventpreviousTopBid: [BidMadeCompletingAuctionEvent!]
+  englishauctionsettledeventwinningBid: [EnglishAuctionSettledEvent!]
+  openauctionbidacceptedeventwinningBid: [OpenAuctionBidAcceptedEvent!]
 }
 
 type BidConnection {
@@ -1659,10 +1557,12 @@ type BidConnection {
 
 input BidCreateInput {
   auction: ID!
+  nft: ID!
   bidder: ID!
   amount: String!
   isCanceled: Boolean!
   createdInBlock: Float!
+  indexInBlock: Float!
 }
 
 type BidEdge {
@@ -1707,6 +1607,22 @@ type BidMadeCompletingAuctionEvent implements Event & BaseGraphQLObject {
   memberId: String!
   video: Video!
   videoId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  Price for which the NFT was bought
+  """
+  price: BigInt!
+  winningBid: Bid!
+  winningBidId: String!
+  previousTopBid: Bid
+  previousTopBidId: String
+  previousTopBidder: Membership
+  previousTopBidderId: String
+  bidders: [Membership!]!
 }
 
 type BidMadeCompletingAuctionEventConnection {
@@ -1722,6 +1638,12 @@ input BidMadeCompletingAuctionEventCreateInput {
   indexInBlock: Float!
   member: ID!
   video: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  price: String!
+  winningBid: ID!
+  previousTopBid: ID
+  previousTopBidder: ID
 }
 
 type BidMadeCompletingAuctionEventEdge {
@@ -1748,6 +1670,18 @@ enum BidMadeCompletingAuctionEventOrderByInput {
   member_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  price_ASC
+  price_DESC
+  winningBid_ASC
+  winningBid_DESC
+  previousTopBid_ASC
+  previousTopBid_DESC
+  previousTopBidder_ASC
+  previousTopBidder_DESC
 }
 
 input BidMadeCompletingAuctionEventUpdateInput {
@@ -1757,6 +1691,12 @@ input BidMadeCompletingAuctionEventUpdateInput {
   indexInBlock: Float
   member: ID
   video: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  price: String
+  winningBid: ID
+  previousTopBid: ID
+  previousTopBidder: ID
 }
 
 input BidMadeCompletingAuctionEventWhereInput {
@@ -1803,8 +1743,22 @@ input BidMadeCompletingAuctionEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
+  price_eq: BigInt
+  price_gt: BigInt
+  price_gte: BigInt
+  price_lt: BigInt
+  price_lte: BigInt
+  price_in: [BigInt!]
   member: MembershipWhereInput
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  winningBid: BidWhereInput
+  previousTopBid: BidWhereInput
+  previousTopBidder: MembershipWhereInput
+  bidders_none: MembershipWhereInput
+  bidders_some: MembershipWhereInput
+  bidders_every: MembershipWhereInput
   AND: [BidMadeCompletingAuctionEventWhereInput!]
   OR: [BidMadeCompletingAuctionEventWhereInput!]
 }
@@ -1822,6 +1776,8 @@ enum BidOrderByInput {
   deletedAt_DESC
   auction_ASC
   auction_DESC
+  nft_ASC
+  nft_DESC
   bidder_ASC
   bidder_DESC
   amount_ASC
@@ -1830,14 +1786,18 @@ enum BidOrderByInput {
   isCanceled_DESC
   createdInBlock_ASC
   createdInBlock_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
 }
 
 input BidUpdateInput {
   auction: ID
+  nft: ID
   bidder: ID
   amount: String
   isCanceled: Boolean
   createdInBlock: Float
+  indexInBlock: Float
 }
 
 input BidWhereInput {
@@ -1879,11 +1839,31 @@ input BidWhereInput {
   createdInBlock_lt: Int
   createdInBlock_lte: Int
   createdInBlock_in: [Int!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
   auction: AuctionWhereInput
+  nft: OwnedNftWhereInput
+  auctionTopBid: AuctionWhereInput
   bidder: MembershipWhereInput
-  auctionlastBid_none: AuctionWhereInput
-  auctionlastBid_some: AuctionWhereInput
-  auctionlastBid_every: AuctionWhereInput
+  auctionbidmadeeventpreviousTopBid_none: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventpreviousTopBid_some: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventpreviousTopBid_every: AuctionBidMadeEventWhereInput
+  bidmadecompletingauctioneventwinningBid_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventwinningBid_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventwinningBid_every: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventpreviousTopBid_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventpreviousTopBid_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventpreviousTopBid_every: BidMadeCompletingAuctionEventWhereInput
+  englishauctionsettledeventwinningBid_none: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventwinningBid_some: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventwinningBid_every: EnglishAuctionSettledEventWhereInput
+  openauctionbidacceptedeventwinningBid_none: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventwinningBid_some: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventwinningBid_every: OpenAuctionBidAcceptedEventWhereInput
   AND: [BidWhereInput!]
   OR: [BidWhereInput!]
 }
@@ -4749,6 +4729,10 @@ type BuyNowCanceledEvent implements Event & BaseGraphQLObject {
   Content actor acting as NFT owner.
   """
   contentActor: ContentActor!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
 type BuyNowCanceledEventConnection {
@@ -4764,6 +4748,8 @@ input BuyNowCanceledEventCreateInput {
   indexInBlock: Float!
   video: ID!
   contentActor: JSONObject!
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 type BuyNowCanceledEventEdge {
@@ -4788,6 +4774,10 @@ enum BuyNowCanceledEventOrderByInput {
   indexInBlock_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
 input BuyNowCanceledEventUpdateInput {
@@ -4797,6 +4787,8 @@ input BuyNowCanceledEventUpdateInput {
   indexInBlock: Float
   video: ID
   contentActor: JSONObject
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 input BuyNowCanceledEventWhereInput {
@@ -4845,11 +4837,186 @@ input BuyNowCanceledEventWhereInput {
   indexInBlock_in: [Int!]
   contentActor_json: JSONObject
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [BuyNowCanceledEventWhereInput!]
   OR: [BuyNowCanceledEventWhereInput!]
 }
 
 input BuyNowCanceledEventWhereUniqueInput {
+  id: ID!
+}
+
+type BuyNowPriceUpdatedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor acting as NFT owner.
+  """
+  contentActor: ContentActor!
+
+  """
+  New buy-now price.
+  """
+  newPrice: BigInt!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+}
+
+type BuyNowPriceUpdatedEventConnection {
+  totalCount: Int!
+  edges: [BuyNowPriceUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BuyNowPriceUpdatedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  contentActor: JSONObject!
+  newPrice: String!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+type BuyNowPriceUpdatedEventEdge {
+  node: BuyNowPriceUpdatedEvent!
+  cursor: String!
+}
+
+enum BuyNowPriceUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  newPrice_ASC
+  newPrice_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+}
+
+input BuyNowPriceUpdatedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  contentActor: JSONObject
+  newPrice: String
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+input BuyNowPriceUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  newPrice_eq: BigInt
+  newPrice_gt: BigInt
+  newPrice_gte: BigInt
+  newPrice_lt: BigInt
+  newPrice_lte: BigInt
+  newPrice_in: [BigInt!]
+  video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  AND: [BuyNowPriceUpdatedEventWhereInput!]
+  OR: [BuyNowPriceUpdatedEventWhereInput!]
+}
+
+input BuyNowPriceUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -6611,6 +6778,8 @@ type Channel implements BaseGraphQLObject {
   """
   createdInBlock: Int!
   collaborators: [Membership!]!
+  channelNftCollectors: [ChannelNftCollectors!]!
+  ownednftcreatorChannel: [OwnedNft!]
 }
 
 type ChannelCategoriesByNameFTSOutput {
@@ -6766,6 +6935,126 @@ type ChannelEdge {
   cursor: String!
 }
 
+type ChannelNftCollectors implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  channel: Channel!
+  channelId: String!
+  member: Membership
+  memberId: String
+  curatorGroup: CuratorGroup
+  curatorGroupId: String
+
+  """
+  Amount of NFTs owned in the channel
+  """
+  amount: Int!
+
+  """
+  Time of last NFT amount increase
+  """
+  lastIncreaseAt: DateTime!
+}
+
+type ChannelNftCollectorsConnection {
+  totalCount: Int!
+  edges: [ChannelNftCollectorsEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ChannelNftCollectorsCreateInput {
+  channel: ID!
+  member: ID
+  curatorGroup: ID
+  amount: Float!
+  lastIncreaseAt: DateTime!
+}
+
+type ChannelNftCollectorsEdge {
+  node: ChannelNftCollectors!
+  cursor: String!
+}
+
+enum ChannelNftCollectorsOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  channel_ASC
+  channel_DESC
+  member_ASC
+  member_DESC
+  curatorGroup_ASC
+  curatorGroup_DESC
+  amount_ASC
+  amount_DESC
+  lastIncreaseAt_ASC
+  lastIncreaseAt_DESC
+}
+
+input ChannelNftCollectorsUpdateInput {
+  channel: ID
+  member: ID
+  curatorGroup: ID
+  amount: Float
+  lastIncreaseAt: DateTime
+}
+
+input ChannelNftCollectorsWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  amount_eq: Int
+  amount_gt: Int
+  amount_gte: Int
+  amount_lt: Int
+  amount_lte: Int
+  amount_in: [Int!]
+  lastIncreaseAt_eq: DateTime
+  lastIncreaseAt_lt: DateTime
+  lastIncreaseAt_lte: DateTime
+  lastIncreaseAt_gt: DateTime
+  lastIncreaseAt_gte: DateTime
+  channel: ChannelWhereInput
+  member: MembershipWhereInput
+  curatorGroup: CuratorGroupWhereInput
+  AND: [ChannelNftCollectorsWhereInput!]
+  OR: [ChannelNftCollectorsWhereInput!]
+}
+
+input ChannelNftCollectorsWhereUniqueInput {
+  id: ID!
+}
+
 enum ChannelOrderByInput {
   createdAt_ASC
   createdAt_DESC
@@ -6885,6 +7174,12 @@ input ChannelWhereInput {
   collaborators_none: MembershipWhereInput
   collaborators_some: MembershipWhereInput
   collaborators_every: MembershipWhereInput
+  channelNftCollectors_none: ChannelNftCollectorsWhereInput
+  channelNftCollectors_some: ChannelNftCollectorsWhereInput
+  channelNftCollectors_every: ChannelNftCollectorsWhereInput
+  ownednftcreatorChannel_none: OwnedNftWhereInput
+  ownednftcreatorChannel_some: OwnedNftWhereInput
+  ownednftcreatorChannel_every: OwnedNftWhereInput
   AND: [ChannelWhereInput!]
   OR: [ChannelWhereInput!]
 }
@@ -7474,6 +7769,25 @@ type CuratorGroup implements BaseGraphQLObject {
   isActive: Boolean!
   curators: [Curator!]!
   channels: [Channel!]!
+  nftCollectorInChannels: [ChannelNftCollectors!]!
+  auctionbidcanceledeventownerCuratorGroup: [AuctionBidCanceledEvent!]
+  auctionbidmadeeventownerCuratorGroup: [AuctionBidMadeEvent!]
+  auctioncanceledeventownerCuratorGroup: [AuctionCanceledEvent!]
+  bidmadecompletingauctioneventownerCuratorGroup: [BidMadeCompletingAuctionEvent!]
+  buynowcanceledeventownerCuratorGroup: [BuyNowCanceledEvent!]
+  buynowpriceupdatedeventownerCuratorGroup: [BuyNowPriceUpdatedEvent!]
+  englishauctionsettledeventownerCuratorGroup: [EnglishAuctionSettledEvent!]
+  englishauctionstartedeventownerCuratorGroup: [EnglishAuctionStartedEvent!]
+  nftboughteventownerCuratorGroup: [NftBoughtEvent!]
+  nftissuedeventownerCuratorGroup: [NftIssuedEvent!]
+  nftsellordermadeeventownerCuratorGroup: [NftSellOrderMadeEvent!]
+  nftslingedbacktotheoriginalartisteventownerCuratorGroup: [NftSlingedBackToTheOriginalArtistEvent!]
+  offeracceptedeventownerCuratorGroup: [OfferAcceptedEvent!]
+  offercanceledeventownerCuratorGroup: [OfferCanceledEvent!]
+  offerstartedeventownerCuratorGroup: [OfferStartedEvent!]
+  openauctionbidacceptedeventownerCuratorGroup: [OpenAuctionBidAcceptedEvent!]
+  openauctionstartedeventownerCuratorGroup: [OpenAuctionStartedEvent!]
+  ownednftownerCuratorGroup: [OwnedNft!]
 }
 
 type CuratorGroupConnection {
@@ -7539,6 +7853,63 @@ input CuratorGroupWhereInput {
   channels_none: ChannelWhereInput
   channels_some: ChannelWhereInput
   channels_every: ChannelWhereInput
+  nftCollectorInChannels_none: ChannelNftCollectorsWhereInput
+  nftCollectorInChannels_some: ChannelNftCollectorsWhereInput
+  nftCollectorInChannels_every: ChannelNftCollectorsWhereInput
+  auctionbidcanceledeventownerCuratorGroup_none: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventownerCuratorGroup_some: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventownerCuratorGroup_every: AuctionBidCanceledEventWhereInput
+  auctionbidmadeeventownerCuratorGroup_none: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventownerCuratorGroup_some: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventownerCuratorGroup_every: AuctionBidMadeEventWhereInput
+  auctioncanceledeventownerCuratorGroup_none: AuctionCanceledEventWhereInput
+  auctioncanceledeventownerCuratorGroup_some: AuctionCanceledEventWhereInput
+  auctioncanceledeventownerCuratorGroup_every: AuctionCanceledEventWhereInput
+  bidmadecompletingauctioneventownerCuratorGroup_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventownerCuratorGroup_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventownerCuratorGroup_every: BidMadeCompletingAuctionEventWhereInput
+  buynowcanceledeventownerCuratorGroup_none: BuyNowCanceledEventWhereInput
+  buynowcanceledeventownerCuratorGroup_some: BuyNowCanceledEventWhereInput
+  buynowcanceledeventownerCuratorGroup_every: BuyNowCanceledEventWhereInput
+  buynowpriceupdatedeventownerCuratorGroup_none: BuyNowPriceUpdatedEventWhereInput
+  buynowpriceupdatedeventownerCuratorGroup_some: BuyNowPriceUpdatedEventWhereInput
+  buynowpriceupdatedeventownerCuratorGroup_every: BuyNowPriceUpdatedEventWhereInput
+  englishauctionsettledeventownerCuratorGroup_none: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventownerCuratorGroup_some: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventownerCuratorGroup_every: EnglishAuctionSettledEventWhereInput
+  englishauctionstartedeventownerCuratorGroup_none: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventownerCuratorGroup_some: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventownerCuratorGroup_every: EnglishAuctionStartedEventWhereInput
+  nftboughteventownerCuratorGroup_none: NftBoughtEventWhereInput
+  nftboughteventownerCuratorGroup_some: NftBoughtEventWhereInput
+  nftboughteventownerCuratorGroup_every: NftBoughtEventWhereInput
+  nftissuedeventownerCuratorGroup_none: NftIssuedEventWhereInput
+  nftissuedeventownerCuratorGroup_some: NftIssuedEventWhereInput
+  nftissuedeventownerCuratorGroup_every: NftIssuedEventWhereInput
+  nftsellordermadeeventownerCuratorGroup_none: NftSellOrderMadeEventWhereInput
+  nftsellordermadeeventownerCuratorGroup_some: NftSellOrderMadeEventWhereInput
+  nftsellordermadeeventownerCuratorGroup_every: NftSellOrderMadeEventWhereInput
+  nftslingedbacktotheoriginalartisteventownerCuratorGroup_none: NftSlingedBackToTheOriginalArtistEventWhereInput
+  nftslingedbacktotheoriginalartisteventownerCuratorGroup_some: NftSlingedBackToTheOriginalArtistEventWhereInput
+  nftslingedbacktotheoriginalartisteventownerCuratorGroup_every: NftSlingedBackToTheOriginalArtistEventWhereInput
+  offeracceptedeventownerCuratorGroup_none: OfferAcceptedEventWhereInput
+  offeracceptedeventownerCuratorGroup_some: OfferAcceptedEventWhereInput
+  offeracceptedeventownerCuratorGroup_every: OfferAcceptedEventWhereInput
+  offercanceledeventownerCuratorGroup_none: OfferCanceledEventWhereInput
+  offercanceledeventownerCuratorGroup_some: OfferCanceledEventWhereInput
+  offercanceledeventownerCuratorGroup_every: OfferCanceledEventWhereInput
+  offerstartedeventownerCuratorGroup_none: OfferStartedEventWhereInput
+  offerstartedeventownerCuratorGroup_some: OfferStartedEventWhereInput
+  offerstartedeventownerCuratorGroup_every: OfferStartedEventWhereInput
+  openauctionbidacceptedeventownerCuratorGroup_none: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventownerCuratorGroup_some: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventownerCuratorGroup_every: OpenAuctionBidAcceptedEventWhereInput
+  openauctionstartedeventownerCuratorGroup_none: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventownerCuratorGroup_some: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventownerCuratorGroup_every: OpenAuctionStartedEventWhereInput
+  ownednftownerCuratorGroup_none: OwnedNftWhereInput
+  ownednftownerCuratorGroup_some: OwnedNftWhereInput
+  ownednftownerCuratorGroup_every: OwnedNftWhereInput
   AND: [CuratorGroupWhereInput!]
   OR: [CuratorGroupWhereInput!]
 }
@@ -8657,7 +9028,7 @@ input ElectionRoundWhereUniqueInput {
   id: ID!
 }
 
-type EnglishAuctionCompletedEvent implements Event & BaseGraphQLObject {
+type EnglishAuctionSettledEvent implements Event & BaseGraphQLObject {
   """
   Hash of the extrinsic which caused the event to be emitted.
   """
@@ -8692,31 +9063,41 @@ type EnglishAuctionCompletedEvent implements Event & BaseGraphQLObject {
   version: Int!
   winner: Membership!
   winnerId: String!
+  winningBid: Bid!
+  winningBidId: String!
   video: Video!
   videoId: String!
+  bidders: [Membership!]!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
-type EnglishAuctionCompletedEventConnection {
+type EnglishAuctionSettledEventConnection {
   totalCount: Int!
-  edges: [EnglishAuctionCompletedEventEdge!]!
+  edges: [EnglishAuctionSettledEventEdge!]!
   pageInfo: PageInfo!
 }
 
-input EnglishAuctionCompletedEventCreateInput {
+input EnglishAuctionSettledEventCreateInput {
   inExtrinsic: String
   inBlock: Float!
   network: Network!
   indexInBlock: Float!
   winner: ID!
+  winningBid: ID!
   video: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
-type EnglishAuctionCompletedEventEdge {
-  node: EnglishAuctionCompletedEvent!
+type EnglishAuctionSettledEventEdge {
+  node: EnglishAuctionSettledEvent!
   cursor: String!
 }
 
-enum EnglishAuctionCompletedEventOrderByInput {
+enum EnglishAuctionSettledEventOrderByInput {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -8733,20 +9114,29 @@ enum EnglishAuctionCompletedEventOrderByInput {
   indexInBlock_DESC
   winner_ASC
   winner_DESC
+  winningBid_ASC
+  winningBid_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
-input EnglishAuctionCompletedEventUpdateInput {
+input EnglishAuctionSettledEventUpdateInput {
   inExtrinsic: String
   inBlock: Float
   network: Network
   indexInBlock: Float
   winner: ID
+  winningBid: ID
   video: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
-input EnglishAuctionCompletedEventWhereInput {
+input EnglishAuctionSettledEventWhereInput {
   id_eq: ID
   id_in: [ID!]
   createdAt_eq: DateTime
@@ -8791,12 +9181,183 @@ input EnglishAuctionCompletedEventWhereInput {
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
   winner: MembershipWhereInput
+  winningBid: BidWhereInput
   video: VideoWhereInput
-  AND: [EnglishAuctionCompletedEventWhereInput!]
-  OR: [EnglishAuctionCompletedEventWhereInput!]
+  bidders_none: MembershipWhereInput
+  bidders_some: MembershipWhereInput
+  bidders_every: MembershipWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  AND: [EnglishAuctionSettledEventWhereInput!]
+  OR: [EnglishAuctionSettledEventWhereInput!]
 }
 
-input EnglishAuctionCompletedEventWhereUniqueInput {
+input EnglishAuctionSettledEventWhereUniqueInput {
+  id: ID!
+}
+
+type EnglishAuctionStartedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Actor that started this auction.
+  """
+  actor: ContentActor!
+  video: Video!
+  videoId: String!
+  auction: Auction!
+  auctionId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+}
+
+type EnglishAuctionStartedEventConnection {
+  totalCount: Int!
+  edges: [EnglishAuctionStartedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input EnglishAuctionStartedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  actor: JSONObject!
+  video: ID!
+  auction: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+type EnglishAuctionStartedEventEdge {
+  node: EnglishAuctionStartedEvent!
+  cursor: String!
+}
+
+enum EnglishAuctionStartedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  auction_ASC
+  auction_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+}
+
+input EnglishAuctionStartedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  actor: JSONObject
+  video: ID
+  auction: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+input EnglishAuctionStartedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  actor_json: JSONObject
+  video: VideoWhereInput
+  auction: AuctionWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  AND: [EnglishAuctionStartedEventWhereInput!]
+  OR: [EnglishAuctionStartedEventWhereInput!]
+}
+
+input EnglishAuctionStartedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -8861,7 +9422,6 @@ enum EventTypeOptions {
   AuctionBidCanceledEvent
   AuctionBidMadeEvent
   AuctionCanceledEvent
-  AuctionStartedEvent
   BidMadeCompletingAuctionEvent
   BountyCanceledEvent
   BountyCreatedEvent
@@ -8879,6 +9439,7 @@ enum EventTypeOptions {
   BudgetSpendingEvent
   BudgetUpdatedEvent
   BuyNowCanceledEvent
+  BuyNowPriceUpdatedEvent
   CandidacyNoteSetEvent
   CandidacyStakeReleaseEvent
   CandidacyWithdrawEvent
@@ -8888,7 +9449,8 @@ enum EventTypeOptions {
   CategoryMembershipOfModeratorUpdatedEvent
   CategoryStickyThreadUpdateEvent
   CouncilorRewardUpdatedEvent
-  EnglishAuctionCompletedEvent
+  EnglishAuctionSettledEvent
+  EnglishAuctionStartedEvent
   InitialInvitationBalanceUpdatedEvent
   InitialInvitationCountUpdatedEvent
   InvitesTransferredEvent
@@ -8907,11 +9469,13 @@ enum EventTypeOptions {
   NewMissedRewardLevelReachedEvent
   NftBoughtEvent
   NftIssuedEvent
+  NftSlingedBackToTheOriginalArtistEvent
   NotEnoughCandidatesEvent
   OfferAcceptedEvent
   OfferCanceledEvent
   OfferStartedEvent
   OpenAuctionBidAcceptedEvent
+  OpenAuctionStartedEvent
   OpeningAddedEvent
   OpeningCanceledEvent
   OpeningFilledEvent
@@ -12141,17 +12705,31 @@ type Membership implements BaseGraphQLObject {
   councilMembers: [CouncilMember!]!
   whitelistedInAuctions: [Auction!]!
   ownedNfts: [OwnedNft!]!
+  nftCollectorInChannels: [ChannelNftCollectors!]!
+  memberEnglishAuctionSettledEvents: [EnglishAuctionSettledEvent!]!
+  memberOpenAuctionAcceptedBidEvents: [OpenAuctionBidAcceptedEvent!]!
+  memberBidMadeCompletingAuctionEvents: [BidMadeCompletingAuctionEvent!]!
   auctioninitialOwner: [Auction!]
   auctionwinningMember: [Auction!]
   auctionbidcanceledeventmember: [AuctionBidCanceledEvent!]
+  auctionbidcanceledeventownerMember: [AuctionBidCanceledEvent!]
   auctionbidmadeeventmember: [AuctionBidMadeEvent!]
+  auctionbidmadeeventownerMember: [AuctionBidMadeEvent!]
+  auctionbidmadeeventpreviousTopBidder: [AuctionBidMadeEvent!]
+  auctioncanceledeventownerMember: [AuctionCanceledEvent!]
   bidbidder: [Bid!]
   bidmadecompletingauctioneventmember: [BidMadeCompletingAuctionEvent!]
+  bidmadecompletingauctioneventownerMember: [BidMadeCompletingAuctionEvent!]
+  bidmadecompletingauctioneventpreviousTopBidder: [BidMadeCompletingAuctionEvent!]
   bountycreator: [Bounty!]
   bountyoracle: [Bounty!]
   bountycontributioncontributor: [BountyContribution!]
   bountyentryworker: [BountyEntry!]
-  englishauctioncompletedeventwinner: [EnglishAuctionCompletedEvent!]
+  buynowcanceledeventownerMember: [BuyNowCanceledEvent!]
+  buynowpriceupdatedeventownerMember: [BuyNowPriceUpdatedEvent!]
+  englishauctionsettledeventwinner: [EnglishAuctionSettledEvent!]
+  englishauctionsettledeventownerMember: [EnglishAuctionSettledEvent!]
+  englishauctionstartedeventownerMember: [EnglishAuctionStartedEvent!]
   forumpostauthor: [ForumPost!]
   forumpostreactionmember: [ForumPostReaction!]
   forumthreadauthor: [ForumThread!]
@@ -12165,8 +12743,17 @@ type Membership implements BaseGraphQLObject {
   membershipboughteventnewMember: [MembershipBoughtEvent!]
   membershipboughteventreferrer: [MembershipBoughtEvent!]
   nftboughteventmember: [NftBoughtEvent!]
-  nftissuedeventnewOwner: [NftIssuedEvent!]
+  nftboughteventownerMember: [NftBoughtEvent!]
+  nftissuedeventownerMember: [NftIssuedEvent!]
+  nftsellordermadeeventownerMember: [NftSellOrderMadeEvent!]
+  nftslingedbacktotheoriginalartisteventownerMember: [NftSlingedBackToTheOriginalArtistEvent!]
+  offeracceptedeventownerMember: [OfferAcceptedEvent!]
+  offercanceledeventownerMember: [OfferCanceledEvent!]
   offerstartedeventmember: [OfferStartedEvent!]
+  offerstartedeventownerMember: [OfferStartedEvent!]
+  openauctionbidacceptedeventownerMember: [OpenAuctionBidAcceptedEvent!]
+  openauctionbidacceptedeventwinningBidder: [OpenAuctionBidAcceptedEvent!]
+  openauctionstartedeventownerMember: [OpenAuctionStartedEvent!]
   postdeletedeventactor: [PostDeletedEvent!]
   postreactedeventreactingMember: [PostReactedEvent!]
   proposalcreator: [Proposal!]
@@ -12844,6 +13431,18 @@ input MembershipWhereInput {
   ownedNfts_none: OwnedNftWhereInput
   ownedNfts_some: OwnedNftWhereInput
   ownedNfts_every: OwnedNftWhereInput
+  nftCollectorInChannels_none: ChannelNftCollectorsWhereInput
+  nftCollectorInChannels_some: ChannelNftCollectorsWhereInput
+  nftCollectorInChannels_every: ChannelNftCollectorsWhereInput
+  memberEnglishAuctionSettledEvents_none: EnglishAuctionSettledEventWhereInput
+  memberEnglishAuctionSettledEvents_some: EnglishAuctionSettledEventWhereInput
+  memberEnglishAuctionSettledEvents_every: EnglishAuctionSettledEventWhereInput
+  memberOpenAuctionAcceptedBidEvents_none: OpenAuctionBidAcceptedEventWhereInput
+  memberOpenAuctionAcceptedBidEvents_some: OpenAuctionBidAcceptedEventWhereInput
+  memberOpenAuctionAcceptedBidEvents_every: OpenAuctionBidAcceptedEventWhereInput
+  memberBidMadeCompletingAuctionEvents_none: BidMadeCompletingAuctionEventWhereInput
+  memberBidMadeCompletingAuctionEvents_some: BidMadeCompletingAuctionEventWhereInput
+  memberBidMadeCompletingAuctionEvents_every: BidMadeCompletingAuctionEventWhereInput
   auctioninitialOwner_none: AuctionWhereInput
   auctioninitialOwner_some: AuctionWhereInput
   auctioninitialOwner_every: AuctionWhereInput
@@ -12853,15 +13452,33 @@ input MembershipWhereInput {
   auctionbidcanceledeventmember_none: AuctionBidCanceledEventWhereInput
   auctionbidcanceledeventmember_some: AuctionBidCanceledEventWhereInput
   auctionbidcanceledeventmember_every: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventownerMember_none: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventownerMember_some: AuctionBidCanceledEventWhereInput
+  auctionbidcanceledeventownerMember_every: AuctionBidCanceledEventWhereInput
   auctionbidmadeeventmember_none: AuctionBidMadeEventWhereInput
   auctionbidmadeeventmember_some: AuctionBidMadeEventWhereInput
   auctionbidmadeeventmember_every: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventownerMember_none: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventownerMember_some: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventownerMember_every: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventpreviousTopBidder_none: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventpreviousTopBidder_some: AuctionBidMadeEventWhereInput
+  auctionbidmadeeventpreviousTopBidder_every: AuctionBidMadeEventWhereInput
+  auctioncanceledeventownerMember_none: AuctionCanceledEventWhereInput
+  auctioncanceledeventownerMember_some: AuctionCanceledEventWhereInput
+  auctioncanceledeventownerMember_every: AuctionCanceledEventWhereInput
   bidbidder_none: BidWhereInput
   bidbidder_some: BidWhereInput
   bidbidder_every: BidWhereInput
   bidmadecompletingauctioneventmember_none: BidMadeCompletingAuctionEventWhereInput
   bidmadecompletingauctioneventmember_some: BidMadeCompletingAuctionEventWhereInput
   bidmadecompletingauctioneventmember_every: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventownerMember_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventownerMember_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventownerMember_every: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventpreviousTopBidder_none: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventpreviousTopBidder_some: BidMadeCompletingAuctionEventWhereInput
+  bidmadecompletingauctioneventpreviousTopBidder_every: BidMadeCompletingAuctionEventWhereInput
   bountycreator_none: BountyWhereInput
   bountycreator_some: BountyWhereInput
   bountycreator_every: BountyWhereInput
@@ -12874,9 +13491,21 @@ input MembershipWhereInput {
   bountyentryworker_none: BountyEntryWhereInput
   bountyentryworker_some: BountyEntryWhereInput
   bountyentryworker_every: BountyEntryWhereInput
-  englishauctioncompletedeventwinner_none: EnglishAuctionCompletedEventWhereInput
-  englishauctioncompletedeventwinner_some: EnglishAuctionCompletedEventWhereInput
-  englishauctioncompletedeventwinner_every: EnglishAuctionCompletedEventWhereInput
+  buynowcanceledeventownerMember_none: BuyNowCanceledEventWhereInput
+  buynowcanceledeventownerMember_some: BuyNowCanceledEventWhereInput
+  buynowcanceledeventownerMember_every: BuyNowCanceledEventWhereInput
+  buynowpriceupdatedeventownerMember_none: BuyNowPriceUpdatedEventWhereInput
+  buynowpriceupdatedeventownerMember_some: BuyNowPriceUpdatedEventWhereInput
+  buynowpriceupdatedeventownerMember_every: BuyNowPriceUpdatedEventWhereInput
+  englishauctionsettledeventwinner_none: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventwinner_some: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventwinner_every: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventownerMember_none: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventownerMember_some: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventownerMember_every: EnglishAuctionSettledEventWhereInput
+  englishauctionstartedeventownerMember_none: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventownerMember_some: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventownerMember_every: EnglishAuctionStartedEventWhereInput
   forumpostauthor_none: ForumPostWhereInput
   forumpostauthor_some: ForumPostWhereInput
   forumpostauthor_every: ForumPostWhereInput
@@ -12916,12 +13545,39 @@ input MembershipWhereInput {
   nftboughteventmember_none: NftBoughtEventWhereInput
   nftboughteventmember_some: NftBoughtEventWhereInput
   nftboughteventmember_every: NftBoughtEventWhereInput
-  nftissuedeventnewOwner_none: NftIssuedEventWhereInput
-  nftissuedeventnewOwner_some: NftIssuedEventWhereInput
-  nftissuedeventnewOwner_every: NftIssuedEventWhereInput
+  nftboughteventownerMember_none: NftBoughtEventWhereInput
+  nftboughteventownerMember_some: NftBoughtEventWhereInput
+  nftboughteventownerMember_every: NftBoughtEventWhereInput
+  nftissuedeventownerMember_none: NftIssuedEventWhereInput
+  nftissuedeventownerMember_some: NftIssuedEventWhereInput
+  nftissuedeventownerMember_every: NftIssuedEventWhereInput
+  nftsellordermadeeventownerMember_none: NftSellOrderMadeEventWhereInput
+  nftsellordermadeeventownerMember_some: NftSellOrderMadeEventWhereInput
+  nftsellordermadeeventownerMember_every: NftSellOrderMadeEventWhereInput
+  nftslingedbacktotheoriginalartisteventownerMember_none: NftSlingedBackToTheOriginalArtistEventWhereInput
+  nftslingedbacktotheoriginalartisteventownerMember_some: NftSlingedBackToTheOriginalArtistEventWhereInput
+  nftslingedbacktotheoriginalartisteventownerMember_every: NftSlingedBackToTheOriginalArtistEventWhereInput
+  offeracceptedeventownerMember_none: OfferAcceptedEventWhereInput
+  offeracceptedeventownerMember_some: OfferAcceptedEventWhereInput
+  offeracceptedeventownerMember_every: OfferAcceptedEventWhereInput
+  offercanceledeventownerMember_none: OfferCanceledEventWhereInput
+  offercanceledeventownerMember_some: OfferCanceledEventWhereInput
+  offercanceledeventownerMember_every: OfferCanceledEventWhereInput
   offerstartedeventmember_none: OfferStartedEventWhereInput
   offerstartedeventmember_some: OfferStartedEventWhereInput
   offerstartedeventmember_every: OfferStartedEventWhereInput
+  offerstartedeventownerMember_none: OfferStartedEventWhereInput
+  offerstartedeventownerMember_some: OfferStartedEventWhereInput
+  offerstartedeventownerMember_every: OfferStartedEventWhereInput
+  openauctionbidacceptedeventownerMember_none: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventownerMember_some: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventownerMember_every: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventwinningBidder_none: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventwinningBidder_some: OpenAuctionBidAcceptedEventWhereInput
+  openauctionbidacceptedeventwinningBidder_every: OpenAuctionBidAcceptedEventWhereInput
+  openauctionstartedeventownerMember_none: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventownerMember_some: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventownerMember_every: OpenAuctionStartedEventWhereInput
   postdeletedeventactor_none: PostDeletedEventWhereInput
   postdeletedeventactor_some: PostDeletedEventWhereInput
   postdeletedeventactor_every: PostDeletedEventWhereInput
@@ -13768,6 +14424,15 @@ type NftBoughtEvent implements Event & BaseGraphQLObject {
   videoId: String!
   member: Membership!
   memberId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  Price for which NFT was bought
+  """
+  price: BigInt!
 }
 
 type NftBoughtEventConnection {
@@ -13783,6 +14448,9 @@ input NftBoughtEventCreateInput {
   indexInBlock: Float!
   video: ID!
   member: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  price: String!
 }
 
 type NftBoughtEventEdge {
@@ -13809,6 +14477,12 @@ enum NftBoughtEventOrderByInput {
   video_DESC
   member_ASC
   member_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  price_ASC
+  price_DESC
 }
 
 input NftBoughtEventUpdateInput {
@@ -13818,6 +14492,9 @@ input NftBoughtEventUpdateInput {
   indexInBlock: Float
   video: ID
   member: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  price: String
 }
 
 input NftBoughtEventWhereInput {
@@ -13864,8 +14541,16 @@ input NftBoughtEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
+  price_eq: BigInt
+  price_gt: BigInt
+  price_gte: BigInt
+  price_lt: BigInt
+  price_lte: BigInt
+  price_in: [BigInt!]
   video: VideoWhereInput
   member: MembershipWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [NftBoughtEventWhereInput!]
   OR: [NftBoughtEventWhereInput!]
 }
@@ -13924,8 +14609,10 @@ type NftIssuedEvent implements Event & BaseGraphQLObject {
   NFT's metadata.
   """
   metadata: String!
-  newOwner: Membership
-  newOwnerId: String
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
 type NftIssuedEventConnection {
@@ -13943,7 +14630,8 @@ input NftIssuedEventCreateInput {
   video: ID!
   royalty: Float
   metadata: String!
-  newOwner: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 type NftIssuedEventEdge {
@@ -13972,8 +14660,10 @@ enum NftIssuedEventOrderByInput {
   royalty_DESC
   metadata_ASC
   metadata_DESC
-  newOwner_ASC
-  newOwner_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
 input NftIssuedEventUpdateInput {
@@ -13985,7 +14675,8 @@ input NftIssuedEventUpdateInput {
   video: ID
   royalty: Float
   metadata: String
-  newOwner: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 input NftIssuedEventWhereInput {
@@ -14045,7 +14736,8 @@ input NftIssuedEventWhereInput {
   metadata_endsWith: String
   metadata_in: [String!]
   video: VideoWhereInput
-  newOwner: MembershipWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [NftIssuedEventWhereInput!]
   OR: [NftIssuedEventWhereInput!]
 }
@@ -14090,6 +14782,10 @@ type NftSellOrderMadeEvent implements BaseGraphQLObject {
   Content actor acting as NFT owner.
   """
   contentActor: ContentActor!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 
   """
   Offer's price.
@@ -14110,6 +14806,8 @@ input NftSellOrderMadeEventCreateInput {
   indexInBlock: Float!
   video: ID!
   contentActor: JSONObject!
+  ownerMember: ID
+  ownerCuratorGroup: ID
   price: String!
 }
 
@@ -14135,6 +14833,10 @@ enum NftSellOrderMadeEventOrderByInput {
   indexInBlock_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
   price_ASC
   price_DESC
 }
@@ -14146,6 +14848,8 @@ input NftSellOrderMadeEventUpdateInput {
   indexInBlock: Float
   video: ID
   contentActor: JSONObject
+  ownerMember: ID
+  ownerCuratorGroup: ID
   price: String
 }
 
@@ -14201,11 +14905,171 @@ input NftSellOrderMadeEventWhereInput {
   price_lte: BigInt
   price_in: [BigInt!]
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [NftSellOrderMadeEventWhereInput!]
   OR: [NftSellOrderMadeEventWhereInput!]
 }
 
 input NftSellOrderMadeEventWhereUniqueInput {
+  id: ID!
+}
+
+type NftSlingedBackToTheOriginalArtistEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor who slung back the NFT.
+  """
+  contentActor: ContentActor!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+}
+
+type NftSlingedBackToTheOriginalArtistEventConnection {
+  totalCount: Int!
+  edges: [NftSlingedBackToTheOriginalArtistEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NftSlingedBackToTheOriginalArtistEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  video: ID!
+  contentActor: JSONObject!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+type NftSlingedBackToTheOriginalArtistEventEdge {
+  node: NftSlingedBackToTheOriginalArtistEvent!
+  cursor: String!
+}
+
+enum NftSlingedBackToTheOriginalArtistEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+}
+
+input NftSlingedBackToTheOriginalArtistEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  video: ID
+  contentActor: JSONObject
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+input NftSlingedBackToTheOriginalArtistEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  contentActor_json: JSONObject
+  video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  AND: [NftSlingedBackToTheOriginalArtistEventWhereInput!]
+  OR: [NftSlingedBackToTheOriginalArtistEventWhereInput!]
+}
+
+input NftSlingedBackToTheOriginalArtistEventWhereUniqueInput {
   id: ID!
 }
 
@@ -14486,6 +15350,15 @@ type OfferAcceptedEvent implements Event & BaseGraphQLObject {
   version: Int!
   video: Video!
   videoId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  Price for which the NFT was bought
+  """
+  price: BigInt
 }
 
 type OfferAcceptedEventConnection {
@@ -14500,6 +15373,9 @@ input OfferAcceptedEventCreateInput {
   network: Network!
   indexInBlock: Float!
   video: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  price: String
 }
 
 type OfferAcceptedEventEdge {
@@ -14524,6 +15400,12 @@ enum OfferAcceptedEventOrderByInput {
   indexInBlock_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  price_ASC
+  price_DESC
 }
 
 input OfferAcceptedEventUpdateInput {
@@ -14532,6 +15414,9 @@ input OfferAcceptedEventUpdateInput {
   network: Network
   indexInBlock: Float
   video: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  price: String
 }
 
 input OfferAcceptedEventWhereInput {
@@ -14578,7 +15463,15 @@ input OfferAcceptedEventWhereInput {
   indexInBlock_lt: Int
   indexInBlock_lte: Int
   indexInBlock_in: [Int!]
+  price_eq: BigInt
+  price_gt: BigInt
+  price_gte: BigInt
+  price_lt: BigInt
+  price_lte: BigInt
+  price_in: [BigInt!]
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [OfferAcceptedEventWhereInput!]
   OR: [OfferAcceptedEventWhereInput!]
 }
@@ -14627,6 +15520,10 @@ type OfferCanceledEvent implements Event & BaseGraphQLObject {
   Content actor acting as NFT owner.
   """
   contentActor: ContentActor!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
 type OfferCanceledEventConnection {
@@ -14642,6 +15539,8 @@ input OfferCanceledEventCreateInput {
   indexInBlock: Float!
   video: ID!
   contentActor: JSONObject!
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 type OfferCanceledEventEdge {
@@ -14666,6 +15565,10 @@ enum OfferCanceledEventOrderByInput {
   indexInBlock_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
 input OfferCanceledEventUpdateInput {
@@ -14675,6 +15578,8 @@ input OfferCanceledEventUpdateInput {
   indexInBlock: Float
   video: ID
   contentActor: JSONObject
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 input OfferCanceledEventWhereInput {
@@ -14723,6 +15628,8 @@ input OfferCanceledEventWhereInput {
   indexInBlock_in: [Int!]
   contentActor_json: JSONObject
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [OfferCanceledEventWhereInput!]
   OR: [OfferCanceledEventWhereInput!]
 }
@@ -14778,6 +15685,10 @@ type OfferStartedEvent implements Event & BaseGraphQLObject {
   Offer's price.
   """
   price: BigInt
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
 }
 
 type OfferStartedEventConnection {
@@ -14795,6 +15706,8 @@ input OfferStartedEventCreateInput {
   contentActor: JSONObject!
   member: ID!
   price: String
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 type OfferStartedEventEdge {
@@ -14823,6 +15736,10 @@ enum OfferStartedEventOrderByInput {
   member_DESC
   price_ASC
   price_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
 }
 
 input OfferStartedEventUpdateInput {
@@ -14834,6 +15751,8 @@ input OfferStartedEventUpdateInput {
   contentActor: JSONObject
   member: ID
   price: String
+  ownerMember: ID
+  ownerCuratorGroup: ID
 }
 
 input OfferStartedEventWhereInput {
@@ -14889,6 +15808,8 @@ input OfferStartedEventWhereInput {
   price_in: [BigInt!]
   video: VideoWhereInput
   member: MembershipWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
   AND: [OfferStartedEventWhereInput!]
   OR: [OfferStartedEventWhereInput!]
 }
@@ -14932,11 +15853,20 @@ type OpenAuctionBidAcceptedEvent implements Event & BaseGraphQLObject {
   version: Int!
 
   """
-  Content actor canceling the event.
+  Content actor that accepted the bid.
   """
   contentActor: ContentActor!
   video: Video!
   videoId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+  winningBid: Bid
+  winningBidId: String
+  winningBidder: Membership
+  winningBidderId: String
+  bidders: [Membership!]!
 }
 
 type OpenAuctionBidAcceptedEventConnection {
@@ -14952,6 +15882,10 @@ input OpenAuctionBidAcceptedEventCreateInput {
   indexInBlock: Float!
   contentActor: JSONObject!
   video: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  winningBid: ID
+  winningBidder: ID
 }
 
 type OpenAuctionBidAcceptedEventEdge {
@@ -14976,6 +15910,14 @@ enum OpenAuctionBidAcceptedEventOrderByInput {
   indexInBlock_DESC
   video_ASC
   video_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  winningBid_ASC
+  winningBid_DESC
+  winningBidder_ASC
+  winningBidder_DESC
 }
 
 input OpenAuctionBidAcceptedEventUpdateInput {
@@ -14985,6 +15927,10 @@ input OpenAuctionBidAcceptedEventUpdateInput {
   indexInBlock: Float
   contentActor: JSONObject
   video: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
+  winningBid: ID
+  winningBidder: ID
 }
 
 input OpenAuctionBidAcceptedEventWhereInput {
@@ -15033,11 +15979,183 @@ input OpenAuctionBidAcceptedEventWhereInput {
   indexInBlock_in: [Int!]
   contentActor_json: JSONObject
   video: VideoWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  winningBid: BidWhereInput
+  winningBidder: MembershipWhereInput
+  bidders_none: MembershipWhereInput
+  bidders_some: MembershipWhereInput
+  bidders_every: MembershipWhereInput
   AND: [OpenAuctionBidAcceptedEventWhereInput!]
   OR: [OpenAuctionBidAcceptedEventWhereInput!]
 }
 
 input OpenAuctionBidAcceptedEventWhereUniqueInput {
+  id: ID!
+}
+
+type OpenAuctionStartedEvent implements Event & BaseGraphQLObject {
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """
+  Actor that started this auction.
+  """
+  actor: ContentActor!
+  video: Video!
+  videoId: String!
+  auction: Auction!
+  auctionId: String!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+}
+
+type OpenAuctionStartedEventConnection {
+  totalCount: Int!
+  edges: [OpenAuctionStartedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OpenAuctionStartedEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  actor: JSONObject!
+  video: ID!
+  auction: ID!
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+type OpenAuctionStartedEventEdge {
+  node: OpenAuctionStartedEvent!
+  cursor: String!
+}
+
+enum OpenAuctionStartedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  video_ASC
+  video_DESC
+  auction_ASC
+  auction_DESC
+  ownerMember_ASC
+  ownerMember_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+}
+
+input OpenAuctionStartedEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  actor: JSONObject
+  video: ID
+  auction: ID
+  ownerMember: ID
+  ownerCuratorGroup: ID
+}
+
+input OpenAuctionStartedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  actor_json: JSONObject
+  video: VideoWhereInput
+  auction: AuctionWhereInput
+  ownerMember: MembershipWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  AND: [OpenAuctionStartedEventWhereInput!]
+  OR: [OpenAuctionStartedEventWhereInput!]
+}
+
+input OpenAuctionStartedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -15665,15 +16783,37 @@ type OwnedNft implements BaseGraphQLObject {
   metadata: String!
 
   """
-  NFT transactional status
+  NFT's non-auction transactional status (if any)
   """
-  transactionalStatus: TransactionalStatus!
+  transactionalStatus: TransactionalStatus
+  transactionalStatusAuction: Auction
+  transactionalStatusAuctionId: String
   transactionalStatusUpdates: [TransactionalStatusUpdate!]!
 
   """
   Creator royalty
   """
   creatorRoyalty: Float
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  Is NFT owned by channel
+  """
+  isOwnedByChannel: Boolean!
+  creatorChannel: Channel!
+  creatorChannelId: String!
+
+  """
+  NFT's last sale price (if any)
+  """
+  lastSalePrice: BigInt
+
+  """
+  NFT's last sale date (if any)
+  """
+  lastSaleDate: DateTime
+  bids: [Bid!]!
 }
 
 type OwnedNftConnection {
@@ -15686,7 +16826,13 @@ input OwnedNftCreateInput {
   ownerMember: ID
   metadata: String!
   transactionalStatus: JSONObject!
+  transactionalStatusAuction: ID
   creatorRoyalty: Float
+  ownerCuratorGroup: ID
+  isOwnedByChannel: Boolean!
+  creatorChannel: ID!
+  lastSalePrice: String
+  lastSaleDate: DateTime
 }
 
 type OwnedNftEdge {
@@ -15705,15 +16851,33 @@ enum OwnedNftOrderByInput {
   ownerMember_DESC
   metadata_ASC
   metadata_DESC
+  transactionalStatusAuction_ASC
+  transactionalStatusAuction_DESC
   creatorRoyalty_ASC
   creatorRoyalty_DESC
+  ownerCuratorGroup_ASC
+  ownerCuratorGroup_DESC
+  isOwnedByChannel_ASC
+  isOwnedByChannel_DESC
+  creatorChannel_ASC
+  creatorChannel_DESC
+  lastSalePrice_ASC
+  lastSalePrice_DESC
+  lastSaleDate_ASC
+  lastSaleDate_DESC
 }
 
 input OwnedNftUpdateInput {
   ownerMember: ID
   metadata: String
   transactionalStatus: JSONObject
+  transactionalStatusAuction: ID
   creatorRoyalty: Float
+  ownerCuratorGroup: ID
+  isOwnedByChannel: Boolean
+  creatorChannel: ID
+  lastSalePrice: String
+  lastSaleDate: DateTime
 }
 
 input OwnedNftWhereInput {
@@ -15753,14 +16917,33 @@ input OwnedNftWhereInput {
   creatorRoyalty_lt: Float
   creatorRoyalty_lte: Float
   creatorRoyalty_in: [Float!]
+  isOwnedByChannel_eq: Boolean
+  isOwnedByChannel_in: [Boolean!]
+  lastSalePrice_eq: BigInt
+  lastSalePrice_gt: BigInt
+  lastSalePrice_gte: BigInt
+  lastSalePrice_lt: BigInt
+  lastSalePrice_lte: BigInt
+  lastSalePrice_in: [BigInt!]
+  lastSaleDate_eq: DateTime
+  lastSaleDate_lt: DateTime
+  lastSaleDate_lte: DateTime
+  lastSaleDate_gt: DateTime
+  lastSaleDate_gte: DateTime
   video: VideoWhereInput
   auctions_none: AuctionWhereInput
   auctions_some: AuctionWhereInput
   auctions_every: AuctionWhereInput
   ownerMember: MembershipWhereInput
+  transactionalStatusAuction: AuctionWhereInput
   transactionalStatusUpdates_none: TransactionalStatusUpdateWhereInput
   transactionalStatusUpdates_some: TransactionalStatusUpdateWhereInput
   transactionalStatusUpdates_every: TransactionalStatusUpdateWhereInput
+  ownerCuratorGroup: CuratorGroupWhereInput
+  creatorChannel: ChannelWhereInput
+  bids_none: BidWhereInput
+  bids_some: BidWhereInput
+  bids_every: BidWhereInput
   AND: [OwnedNftWhereInput!]
   OR: [OwnedNftWhereInput!]
 }
@@ -19012,21 +20195,6 @@ type Query {
     where: AuctionCanceledEventWhereInput
     orderBy: [AuctionCanceledEventOrderByInput!]
   ): AuctionCanceledEventConnection!
-  auctionStartedEvents(
-    offset: Int
-    limit: Int = 50
-    where: AuctionStartedEventWhereInput
-    orderBy: [AuctionStartedEventOrderByInput!]
-  ): [AuctionStartedEvent!]!
-  auctionStartedEventByUniqueInput(where: AuctionStartedEventWhereUniqueInput!): AuctionStartedEvent
-  auctionStartedEventsConnection(
-    first: Int
-    after: String
-    last: Int
-    before: String
-    where: AuctionStartedEventWhereInput
-    orderBy: [AuctionStartedEventOrderByInput!]
-  ): AuctionStartedEventConnection!
   auctions(offset: Int, limit: Int = 50, where: AuctionWhereInput, orderBy: [AuctionOrderByInput!]): [Auction!]!
   auctionByUniqueInput(where: AuctionWhereUniqueInput!): Auction
   auctionsConnection(
@@ -19367,6 +20535,21 @@ type Query {
     where: BuyNowCanceledEventWhereInput
     orderBy: [BuyNowCanceledEventOrderByInput!]
   ): BuyNowCanceledEventConnection!
+  buyNowPriceUpdatedEvents(
+    offset: Int
+    limit: Int = 50
+    where: BuyNowPriceUpdatedEventWhereInput
+    orderBy: [BuyNowPriceUpdatedEventOrderByInput!]
+  ): [BuyNowPriceUpdatedEvent!]!
+  buyNowPriceUpdatedEventByUniqueInput(where: BuyNowPriceUpdatedEventWhereUniqueInput!): BuyNowPriceUpdatedEvent
+  buyNowPriceUpdatedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: BuyNowPriceUpdatedEventWhereInput
+    orderBy: [BuyNowPriceUpdatedEventOrderByInput!]
+  ): BuyNowPriceUpdatedEventConnection!
   candidacyNoteMetadata(
     offset: Int
     limit: Int = 50
@@ -19545,6 +20728,21 @@ type Query {
     where: ChannelCategoryWhereInput
     orderBy: [ChannelCategoryOrderByInput!]
   ): ChannelCategoryConnection!
+  channelNftCollectors(
+    offset: Int
+    limit: Int = 50
+    where: ChannelNftCollectorsWhereInput
+    orderBy: [ChannelNftCollectorsOrderByInput!]
+  ): [ChannelNftCollectors!]!
+  channelNftCollectorsByUniqueInput(where: ChannelNftCollectorsWhereUniqueInput!): ChannelNftCollectors
+  channelNftCollectorsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ChannelNftCollectorsWhereInput
+    orderBy: [ChannelNftCollectorsOrderByInput!]
+  ): ChannelNftCollectorsConnection!
   channels(offset: Int, limit: Int = 50, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): [Channel!]!
   channelByUniqueInput(where: ChannelWhereUniqueInput!): Channel
   channelsConnection(
@@ -19755,23 +20953,40 @@ type Query {
     where: ElectionRoundWhereInput
     orderBy: [ElectionRoundOrderByInput!]
   ): ElectionRoundConnection!
-  englishAuctionCompletedEvents(
+  englishAuctionSettledEvents(
     offset: Int
     limit: Int = 50
-    where: EnglishAuctionCompletedEventWhereInput
-    orderBy: [EnglishAuctionCompletedEventOrderByInput!]
-  ): [EnglishAuctionCompletedEvent!]!
-  englishAuctionCompletedEventByUniqueInput(
-    where: EnglishAuctionCompletedEventWhereUniqueInput!
-  ): EnglishAuctionCompletedEvent
-  englishAuctionCompletedEventsConnection(
+    where: EnglishAuctionSettledEventWhereInput
+    orderBy: [EnglishAuctionSettledEventOrderByInput!]
+  ): [EnglishAuctionSettledEvent!]!
+  englishAuctionSettledEventByUniqueInput(
+    where: EnglishAuctionSettledEventWhereUniqueInput!
+  ): EnglishAuctionSettledEvent
+  englishAuctionSettledEventsConnection(
     first: Int
     after: String
     last: Int
     before: String
-    where: EnglishAuctionCompletedEventWhereInput
-    orderBy: [EnglishAuctionCompletedEventOrderByInput!]
-  ): EnglishAuctionCompletedEventConnection!
+    where: EnglishAuctionSettledEventWhereInput
+    orderBy: [EnglishAuctionSettledEventOrderByInput!]
+  ): EnglishAuctionSettledEventConnection!
+  englishAuctionStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: EnglishAuctionStartedEventWhereInput
+    orderBy: [EnglishAuctionStartedEventOrderByInput!]
+  ): [EnglishAuctionStartedEvent!]!
+  englishAuctionStartedEventByUniqueInput(
+    where: EnglishAuctionStartedEventWhereUniqueInput!
+  ): EnglishAuctionStartedEvent
+  englishAuctionStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: EnglishAuctionStartedEventWhereInput
+    orderBy: [EnglishAuctionStartedEventOrderByInput!]
+  ): EnglishAuctionStartedEventConnection!
   events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: [EventOrderByInput!]): [Event!]!
   forumCategories(
     offset: Int
@@ -20279,6 +21494,23 @@ type Query {
     where: NftSellOrderMadeEventWhereInput
     orderBy: [NftSellOrderMadeEventOrderByInput!]
   ): NftSellOrderMadeEventConnection!
+  nftSlingedBackToTheOriginalArtistEvents(
+    offset: Int
+    limit: Int = 50
+    where: NftSlingedBackToTheOriginalArtistEventWhereInput
+    orderBy: [NftSlingedBackToTheOriginalArtistEventOrderByInput!]
+  ): [NftSlingedBackToTheOriginalArtistEvent!]!
+  nftSlingedBackToTheOriginalArtistEventByUniqueInput(
+    where: NftSlingedBackToTheOriginalArtistEventWhereUniqueInput!
+  ): NftSlingedBackToTheOriginalArtistEvent
+  nftSlingedBackToTheOriginalArtistEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: NftSlingedBackToTheOriginalArtistEventWhereInput
+    orderBy: [NftSlingedBackToTheOriginalArtistEventOrderByInput!]
+  ): NftSlingedBackToTheOriginalArtistEventConnection!
   nodeLocationMetadata(
     offset: Int
     limit: Int = 50
@@ -20371,6 +21603,21 @@ type Query {
     where: OpenAuctionBidAcceptedEventWhereInput
     orderBy: [OpenAuctionBidAcceptedEventOrderByInput!]
   ): OpenAuctionBidAcceptedEventConnection!
+  openAuctionStartedEvents(
+    offset: Int
+    limit: Int = 50
+    where: OpenAuctionStartedEventWhereInput
+    orderBy: [OpenAuctionStartedEventOrderByInput!]
+  ): [OpenAuctionStartedEvent!]!
+  openAuctionStartedEventByUniqueInput(where: OpenAuctionStartedEventWhereUniqueInput!): OpenAuctionStartedEvent
+  openAuctionStartedEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: OpenAuctionStartedEventWhereInput
+    orderBy: [OpenAuctionStartedEventOrderByInput!]
+  ): OpenAuctionStartedEventConnection!
   openingAddedEvents(
     offset: Int
     limit: Int = 50
@@ -26446,20 +27693,7 @@ type ThreadStatusRemoved {
 union TransactionalStatus =
     TransactionalStatusIdle
   | TransactionalStatusInitiatedOfferToMember
-  | TransactionalStatusAuction
   | TransactionalStatusBuyNow
-
-type TransactionalStatusAuction {
-  """
-  Type needs to have at least one non-relation entity. This value is not used.
-  """
-  dummy: Int
-
-  """
-  Auction
-  """
-  auction: Auction
-}
 
 type TransactionalStatusBuyNow {
   price: Float!
@@ -26497,9 +27731,11 @@ type TransactionalStatusUpdate implements BaseGraphQLObject {
   nftId: String!
 
   """
-  NFT transactional status
+  NFT's non-auction transactional status (if any)
   """
-  transactionalStatus: TransactionalStatus!
+  transactionalStatus: TransactionalStatus
+  transactionalStatusAuction: Auction
+  transactionalStatusAuctionId: String
 
   """
   Block number at which change happened
@@ -26516,6 +27752,7 @@ type TransactionalStatusUpdateConnection {
 input TransactionalStatusUpdateCreateInput {
   nft: ID!
   transactionalStatus: JSONObject!
+  transactionalStatusAuction: ID
   changedAt: Float!
 }
 
@@ -26533,6 +27770,8 @@ enum TransactionalStatusUpdateOrderByInput {
   deletedAt_DESC
   nft_ASC
   nft_DESC
+  transactionalStatusAuction_ASC
+  transactionalStatusAuction_DESC
   changedAt_ASC
   changedAt_DESC
 }
@@ -26540,6 +27779,7 @@ enum TransactionalStatusUpdateOrderByInput {
 input TransactionalStatusUpdateUpdateInput {
   nft: ID
   transactionalStatus: JSONObject
+  transactionalStatusAuction: ID
   changedAt: Float
 }
 
@@ -26576,6 +27816,7 @@ input TransactionalStatusUpdateWhereInput {
   changedAt_lte: Int
   changedAt_in: [Int!]
   nft: OwnedNftWhereInput
+  transactionalStatusAuction: AuctionWhereInput
   AND: [TransactionalStatusUpdateWhereInput!]
   OR: [TransactionalStatusUpdateWhereInput!]
 }
@@ -26831,17 +28072,20 @@ type Video implements BaseGraphQLObject {
   auctionbidcanceledeventvideo: [AuctionBidCanceledEvent!]
   auctionbidmadeeventvideo: [AuctionBidMadeEvent!]
   auctioncanceledeventvideo: [AuctionCanceledEvent!]
-  auctionstartedeventvideo: [AuctionStartedEvent!]
   bidmadecompletingauctioneventvideo: [BidMadeCompletingAuctionEvent!]
   buynowcanceledeventvideo: [BuyNowCanceledEvent!]
-  englishauctioncompletedeventvideo: [EnglishAuctionCompletedEvent!]
+  buynowpriceupdatedeventvideo: [BuyNowPriceUpdatedEvent!]
+  englishauctionsettledeventvideo: [EnglishAuctionSettledEvent!]
+  englishauctionstartedeventvideo: [EnglishAuctionStartedEvent!]
   nftboughteventvideo: [NftBoughtEvent!]
   nftissuedeventvideo: [NftIssuedEvent!]
   nftsellordermadeeventvideo: [NftSellOrderMadeEvent!]
+  nftslingedbacktotheoriginalartisteventvideo: [NftSlingedBackToTheOriginalArtistEvent!]
   offeracceptedeventvideo: [OfferAcceptedEvent!]
   offercanceledeventvideo: [OfferCanceledEvent!]
   offerstartedeventvideo: [OfferStartedEvent!]
   openauctionbidacceptedeventvideo: [OpenAuctionBidAcceptedEvent!]
+  openauctionstartedeventvideo: [OpenAuctionStartedEvent!]
 }
 
 type VideoCategoriesByNameFTSOutput {
@@ -27395,18 +28639,21 @@ input VideoWhereInput {
   auctioncanceledeventvideo_none: AuctionCanceledEventWhereInput
   auctioncanceledeventvideo_some: AuctionCanceledEventWhereInput
   auctioncanceledeventvideo_every: AuctionCanceledEventWhereInput
-  auctionstartedeventvideo_none: AuctionStartedEventWhereInput
-  auctionstartedeventvideo_some: AuctionStartedEventWhereInput
-  auctionstartedeventvideo_every: AuctionStartedEventWhereInput
   bidmadecompletingauctioneventvideo_none: BidMadeCompletingAuctionEventWhereInput
   bidmadecompletingauctioneventvideo_some: BidMadeCompletingAuctionEventWhereInput
   bidmadecompletingauctioneventvideo_every: BidMadeCompletingAuctionEventWhereInput
   buynowcanceledeventvideo_none: BuyNowCanceledEventWhereInput
   buynowcanceledeventvideo_some: BuyNowCanceledEventWhereInput
   buynowcanceledeventvideo_every: BuyNowCanceledEventWhereInput
-  englishauctioncompletedeventvideo_none: EnglishAuctionCompletedEventWhereInput
-  englishauctioncompletedeventvideo_some: EnglishAuctionCompletedEventWhereInput
-  englishauctioncompletedeventvideo_every: EnglishAuctionCompletedEventWhereInput
+  buynowpriceupdatedeventvideo_none: BuyNowPriceUpdatedEventWhereInput
+  buynowpriceupdatedeventvideo_some: BuyNowPriceUpdatedEventWhereInput
+  buynowpriceupdatedeventvideo_every: BuyNowPriceUpdatedEventWhereInput
+  englishauctionsettledeventvideo_none: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventvideo_some: EnglishAuctionSettledEventWhereInput
+  englishauctionsettledeventvideo_every: EnglishAuctionSettledEventWhereInput
+  englishauctionstartedeventvideo_none: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventvideo_some: EnglishAuctionStartedEventWhereInput
+  englishauctionstartedeventvideo_every: EnglishAuctionStartedEventWhereInput
   nftboughteventvideo_none: NftBoughtEventWhereInput
   nftboughteventvideo_some: NftBoughtEventWhereInput
   nftboughteventvideo_every: NftBoughtEventWhereInput
@@ -27416,6 +28663,9 @@ input VideoWhereInput {
   nftsellordermadeeventvideo_none: NftSellOrderMadeEventWhereInput
   nftsellordermadeeventvideo_some: NftSellOrderMadeEventWhereInput
   nftsellordermadeeventvideo_every: NftSellOrderMadeEventWhereInput
+  nftslingedbacktotheoriginalartisteventvideo_none: NftSlingedBackToTheOriginalArtistEventWhereInput
+  nftslingedbacktotheoriginalartisteventvideo_some: NftSlingedBackToTheOriginalArtistEventWhereInput
+  nftslingedbacktotheoriginalartisteventvideo_every: NftSlingedBackToTheOriginalArtistEventWhereInput
   offeracceptedeventvideo_none: OfferAcceptedEventWhereInput
   offeracceptedeventvideo_some: OfferAcceptedEventWhereInput
   offeracceptedeventvideo_every: OfferAcceptedEventWhereInput
@@ -27428,6 +28678,9 @@ input VideoWhereInput {
   openauctionbidacceptedeventvideo_none: OpenAuctionBidAcceptedEventWhereInput
   openauctionbidacceptedeventvideo_some: OpenAuctionBidAcceptedEventWhereInput
   openauctionbidacceptedeventvideo_every: OpenAuctionBidAcceptedEventWhereInput
+  openauctionstartedeventvideo_none: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventvideo_some: OpenAuctionStartedEventWhereInput
+  openauctionstartedeventvideo_every: OpenAuctionStartedEventWhereInput
   AND: [VideoWhereInput!]
   OR: [VideoWhereInput!]
 }
