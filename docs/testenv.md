@@ -1,38 +1,27 @@
 # Running the Joystream ecosystem locally
 
-The Pioneer 2 is targeted for the Olympia release and it is compatible with the runtime from the `olympia` branch.
-
-```
-https://github.com/Joystream/joystream/tree/olympia
-```
-
-However, the current version of Pioneer 2 is ahead of the olympia branch in terms of the query-node support. While the query-node related features are under development, we track the most recent changes at a forked repo:
-
-```
-https://github.com/thesan/joystream/tree/olympia
-```
-In order to use the compatible version of the Joystream ecosystem
-
 ## Prepare the dev environment
 
 ### 1. Install tools
 
 This guide assumes that [docker](https://www.docker.com/) is installed.
 
-### 2. Checkout integration branch
+### 2. Clone the Joystream repository
 
 ```shell
-git remote add thesan https://github.com/thesan/joystream
-git fetch
-git checkout -b olympia thesan/olympia
+git clone https://github.com/Joystream/joystream.git
 ```
 
-### 3. Fetch proper `joystream-node` image
+### 3. Find the relevant `joystream-node` image tag
 
-```shell
-docker pull joystream/node:258e839bac52701553b5ded593b0359dd3296ee8
-docker tag joystream/node:258e839bac52701553b5ded593b0359dd3296ee8 joystream/node:latest
-```
+1. To target the `master` branch pick the latest workflow run from: https://github.com/Joystream/joystream/actions/workflows/joystream-node-docker-dev.yml?query=branch%3Amaster+
+2. In the job column choose either the `STAGING` or `PLAYGROUND` jobs. `STAGING` uses the same chain parameters as the `Joystream testnet` while `PLAYGROUND` has value simplifying testing (like shorter elections cycles)
+3. Click on the `Check if we have pre-built image on Dockerhub` step to view the image tag.
+   E.g in: `Run export IMAGE_EXISTS=$(docker manifest inspect joystream/node:1e27c1330d5a67f347789a7849ea2176ec89702a > /dev/null ; echo $?)`, `1e27c1330d5a67f347789a7849ea2176ec89702a` is the tag we are looking for.
+
+### 3. Write the proper `joystream-node` image tag into `.env` file
+
+In the `.env` file at the root of the `joystream` repo, find the line which contains `# JOYSTREAM_NODE_TAG=latest` and replace it by `JOYSTREAM_NODE_TAG={IMAGE-TAG}` (`{IMAGE-TAG}` being the image tag found on the previous step).
 
 ## Run the ecosystem
 
