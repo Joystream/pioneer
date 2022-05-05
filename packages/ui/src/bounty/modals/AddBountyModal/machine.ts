@@ -35,7 +35,6 @@ export enum AddBountyStates {
   transaction = 'transaction',
   success = 'success',
   error = 'error',
-  canceled = 'canceled',
 }
 
 export type AddBountyState =
@@ -49,7 +48,6 @@ export type AddBountyState =
   | { value: AddBountyStates.transaction; context: Required<TransactionContext> }
   | { value: AddBountyStates.success; context: Required<TransactionContext> }
   | { value: AddBountyStates.error; context: TransactionContext }
-  | { value: AddBountyStates.canceled; context: TransactionContext }
 
 type SetThreadCategoryIdEvent = { type: 'SET_THREAD_CATEGORY_ID'; threadCategoryId?: string }
 
@@ -125,7 +123,7 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
             cond: isTransactionError,
           },
           {
-            target: [AddBountyStates.canceled],
+            target: [AddBountyStates.judgingPeriodDetails],
             cond: isTransactionCanceled,
           },
         ],
@@ -149,7 +147,7 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
             cond: isTransactionError,
           },
           {
-            target: [AddBountyStates.canceled],
+            target: [AddBountyStates.judgingPeriodDetails],
             cond: isTransactionCanceled,
           },
         ],
@@ -157,6 +155,5 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
     },
     [AddBountyStates.success]: { type: 'final' },
     [AddBountyStates.error]: { type: 'final' },
-    [AddBountyStates.canceled]: { type: 'final' },
   },
 })

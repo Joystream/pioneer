@@ -181,10 +181,6 @@ export const AddBountyModal = () => {
     )
   }
 
-  if (state.matches(AddBountyStates.canceled)) {
-    return <FailureModal onClose={hideModal}>Transaction has been canceled.</FailureModal>
-  }
-
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title="Creating New Bounty" onClick={hideModal} />
