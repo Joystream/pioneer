@@ -174,7 +174,7 @@ const BasedInputNumber = React.memo(
   ({ id, onChange, isTokenValue = false, value = '', ...props }: BaseNumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
-      if (isNaN(eventValue)) return
+      if (isNaN(eventValue) || eventValue < 0) return
 
       onChange?.(event, eventValue)
     }
