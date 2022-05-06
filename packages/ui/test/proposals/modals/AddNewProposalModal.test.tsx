@@ -229,10 +229,9 @@ describe('UI: AddNewProposalModal', () => {
 
   describe('Warning modal', () => {
     beforeEach(renderModal)
-
     it('Not checked', async () => {
       const button = await getWarningNextButton()
-
+      expect(await screen.queryByText('Do not show this message again.')).toBeDefined()
       expect(button).toBeDisabled()
     })
 
@@ -240,7 +239,7 @@ describe('UI: AddNewProposalModal', () => {
       const button = await getWarningNextButton()
 
       const checkbox = await getCheckbox()
-      fireEvent.click(checkbox)
+      fireEvent.click(checkbox as HTMLElement)
 
       expect(button).toBeEnabled()
     })
@@ -1409,7 +1408,7 @@ describe('UI: AddNewProposalModal', () => {
     })
   })
 
-  const getCheckbox = async () => await screen.findByLabelText(/I’m aware of/i)
+  const getCheckbox = async () => await screen.queryByText('I’m aware of the possible risks associated with creating a proposal.')
 
   async function finishWarning() {
     await renderModal()
@@ -1417,7 +1416,7 @@ describe('UI: AddNewProposalModal', () => {
     const button = await getWarningNextButton()
 
     const checkbox = await getCheckbox()
-    fireEvent.click(checkbox)
+    fireEvent.click(checkbox as HTMLElement)
     fireEvent.click(button as HTMLElement)
   }
 
