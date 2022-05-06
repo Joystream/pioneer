@@ -40,7 +40,6 @@ export const GeneralParametersStep = ({ activeMember, errorMessageGetter, errorC
             id="field-photo"
             label="Cover photo"
             inputSize="m"
-            required
             message={
               errorChecker('coverPhotoLink')
                 ? errorMessageGetter('coverPhotoLink')
