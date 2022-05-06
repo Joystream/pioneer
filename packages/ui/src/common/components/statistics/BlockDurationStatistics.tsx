@@ -66,15 +66,15 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   )
 }
 
-const BlocksInfo = styled(ColumnGapBlock)`
+export const BlocksInfo = styled(ColumnGapBlock)`
   margin-top: 2px;
 `
 
-const ItemRow = styled(StatisticItemSpacedContent)`
+export const ItemRow = styled(StatisticItemSpacedContent)`
   justify-content: start;
 `
 
-const NumberOfBlocks = styled(TextInlineSmall)`
+export const NumberOfBlocks = styled(TextInlineSmall)`
   font-family: ${Fonts.Grotesk};
   ${BlockIconStyles} {
     vertical-align: middle;
