@@ -813,6 +813,8 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
 
 export type GetProposalsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProposalWhereInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetProposalsQuery = {
@@ -1830,8 +1832,8 @@ export const ProposalDiscussionPostMentionFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
-  query getProposals($where: ProposalWhereInput) {
-    proposals(where: $where) {
+  query getProposals($where: ProposalWhereInput, $limit: Int, $offset: Int) {
+    proposals(where: $where, orderBy: [createdAt_DESC], limit: $limit, offset: $offset) {
       ...ProposalFields
     }
   }
@@ -1851,6 +1853,8 @@ export const GetProposalsDocument = gql`
  * const { data, loading, error } = useGetProposalsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */

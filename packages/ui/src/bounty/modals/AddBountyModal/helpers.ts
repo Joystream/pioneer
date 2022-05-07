@@ -109,14 +109,14 @@ export const createBountyParametersFactory = (state: IFormFields): BountyCreatio
     oracle: createType('BountyActor', {
       Member: createType<MemberId, 'MemberId'>(
         'MemberId',
-        Number(((state.judgingPeriodDetails.oracle as any) as Member)?.id || 0)
+        Number((state.judgingPeriodDetails.oracle as any as Member)?.id || 0)
       ),
     }),
     contract_type: createType('AssuranceContractType', contractTypeFactory(state)),
     creator: createType('BountyActor', {
       Member: createType<MemberId, 'MemberId'>(
         'MemberId',
-        Number(((state.generalParameters.creator as any) as Member)?.id || 0)
+        Number((state.generalParameters.creator as any as Member)?.id || 0)
       ),
     }),
     cherry: createType('u128', state.fundingPeriodDetails.cherry || 0),

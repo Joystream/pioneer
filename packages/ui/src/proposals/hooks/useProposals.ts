@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 
 import { ProposalWhereInput } from '@/common/api/queries'
+import { usePagination } from '@/common/hooks/usePagination'
 import { proposalStatusToTypename } from '@/proposals/model/proposalStatus'
-import { useGetProposalsQuery } from '@/proposals/queries'
+import { useGetProposalsCountQuery, useGetProposalsQuery } from '@/proposals/queries'
 import { asProposal, Proposal, ProposalStatus } from '@/proposals/types'
 
 import { ProposalFiltersState } from '../components/ProposalFilters'
@@ -17,10 +18,11 @@ export interface UseProposalsProps {
 interface UseProposals {
   isLoading: boolean
   proposals: Proposal[]
+  pagination: ReturnType<typeof usePagination>['pagination']
 }
 
 export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
-  const variables = useMemo(() => {
+  const where = useMemo(() => {
     const where: ProposalWhereInput = filters?.stage
       ? { status_json: { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) } }
       : { isFinalized_eq: status === 'past' }
@@ -51,13 +53,16 @@ export const useProposals = ({ status, filters }: UseProposalsProps): UseProposa
         where.createdAt_lte = lifetime.end
       }
     }
-    return { where }
+    return where
   }, [status, JSON.stringify(filters)])
+  const { data: proposalCount } = useGetProposalsCountQuery({ variables: { where } })
+  const { offset, pagination } = usePagination(10, proposalCount?.proposalsConnection.totalCount ?? 0, [])
 
-  const { loading, data } = useGetProposalsQuery({ variables })
+  const { loading, data } = useGetProposalsQuery({ variables: { where, offset, limit: 10 } })
 
   return {
     isLoading: loading,
     proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
+    pagination,
   }
 }
