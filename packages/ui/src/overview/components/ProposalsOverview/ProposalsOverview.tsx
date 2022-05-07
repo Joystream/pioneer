@@ -11,7 +11,7 @@ import { ProposalsTilesList } from './ProposalsTilesList'
 
 export const ProposalsOverview = () => {
   const { t } = useTranslation('overview')
-  const { proposals, isLoading: proposalsLoading } = useProposals({ status: 'active' })
+  const { proposals, isLoading: proposalsLoading } = useProposals({ status: 'active', fetchAll: true })
   const {
     toBeDecided: { count, isLoading: countLoading },
     approved: { count: approvedCount, isLoading: approvedCountLoading },

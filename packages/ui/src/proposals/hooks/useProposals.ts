@@ -13,15 +13,18 @@ type UseProposalsStatus = 'active' | 'past'
 export interface UseProposalsProps {
   status: UseProposalsStatus
   filters?: Partial<ProposalFiltersState>
+  perPage?: number
+  fetchAll?: boolean
 }
 
 interface UseProposals {
   isLoading: boolean
   proposals: Proposal[]
   pagination: ReturnType<typeof usePagination>['pagination']
+  allCount?: number
 }
 
-export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
+export const useProposals = ({ status, filters, perPage = 10, fetchAll = false }: UseProposalsProps): UseProposals => {
   const where = useMemo(() => {
     const where: ProposalWhereInput = filters?.stage
       ? { status_json: { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) } }
@@ -56,13 +59,14 @@ export const useProposals = ({ status, filters }: UseProposalsProps): UseProposa
     return where
   }, [status, JSON.stringify(filters)])
   const { data: proposalCount } = useGetProposalsCountQuery({ variables: { where } })
-  const { offset, pagination } = usePagination(10, proposalCount?.proposalsConnection.totalCount ?? 0, [])
-
-  const { loading, data } = useGetProposalsQuery({ variables: { where, offset, limit: 10 } })
+  const { offset, pagination } = usePagination(perPage, proposalCount?.proposalsConnection.totalCount ?? 0, [])
+  const paginationVariables = fetchAll ? {} : { offset, limit: perPage }
+  const { loading, data } = useGetProposalsQuery({ variables: { ...paginationVariables, where } })
 
   return {
     isLoading: loading,
-    proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
     pagination,
+    proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
+    allCount: proposalCount?.proposalsConnection.totalCount,
   }
 }
