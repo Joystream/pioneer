@@ -1,24 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { repeat } from '@/common/utils'
+
 interface ListItemLoaderProps {
   columnsTemplate: string
   children: React.ReactNode | React.ReactNode[]
   count?: number
   height?: string
+  id?: string
 }
 
-export const ListItemLoader = ({ children, count = 1, ...styleProps }: ListItemLoaderProps) => {
+export const ListItemLoader = ({ children, count = 1, id, ...styleProps }: ListItemLoaderProps) => {
   return (
-    <>
-      {Array(count)
-        .fill(null)
-        .map((_, index) => (
+    <span id={id}>
+      {repeat(
+        (index) => (
           <Wrapper key={index} {...styleProps}>
             {children}
           </Wrapper>
-        ))}
-    </>
+        ),
+        count
+      )}
+    </span>
   )
 }
 
