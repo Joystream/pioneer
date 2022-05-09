@@ -26,7 +26,7 @@ import { PostEditor } from './PostEditor'
 export type PostListItemType = 'forum' | 'proposal'
 
 interface PostListItemProps {
-  index: number
+  isFirstItem: boolean
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
@@ -40,7 +40,7 @@ interface PostListItemProps {
 }
 
 export const PostListItem = ({
-  index,
+  isFirstItem,
   post,
   isSelected,
   isPreview,
@@ -134,7 +134,7 @@ export const PostListItem = ({
                     <ReplyIcon />
                   </ButtonGhost>
                   <PostContextMenu
-                    index={index}
+                    isFirstItem={isFirstItem}
                     post={{ ...post, text: postText }}
                     onEdit={() => setEditing(true)}
                     type={type}

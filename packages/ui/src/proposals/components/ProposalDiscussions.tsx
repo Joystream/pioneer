@@ -109,7 +109,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       {discussionPosts.map((post, index) => {
         return (
           <PostListItem
-            index={index}
+            isFirstItem={index === 0}
             key={post.id}
             insertRef={getInsertRef(post.id)}
             isSelected={post.id === initialPost}

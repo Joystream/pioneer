@@ -14,13 +14,13 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useProposalPostParents } from '@/proposals/hooks/useProposalPostParents'
 
 interface Props {
-  index: number
+  isFirstItem: boolean
   post: ForumPost
   onEdit: () => void
   type: PostListItemType
 }
 
-export const PostContextMenu = ({ index, post, onEdit, type }: Props) => {
+export const PostContextMenu = ({ isFirstItem, post, onEdit, type }: Props) => {
   const { api, connectionState } = useApi()
   const { showModal } = useModal()
   const { active } = useMyMemberships()
@@ -55,7 +55,7 @@ export const PostContextMenu = ({ index, post, onEdit, type }: Props) => {
       onClick: () =>
         showModal<DeletePostModalCall>({ modal: 'DeletePost', data: { post, transaction: deletePostTransaction } }),
     }
-    if (index === 0) {
+    if (isFirstItem) {
       return [editPostAction]
     }
     return [editPostAction, deletePostAction]
