@@ -4,7 +4,6 @@ import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography/TokenValue'
-import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
 import { useMemberRowWorkDetails } from '@/memberships/hooks/useMemberRowWorkDetails'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
@@ -17,7 +16,6 @@ import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberModalTrigger, Memb
 export const MemberListItem = ({ member }: { member: Member }) => {
   const balance = useBalance(member.controllerAccount)
   const { slashed, terminated } = useMemberRowWorkDetails(member)
-  const isCouncilMember = useIsCouncilMember(member)
   const showMemberModal = useShowMemberModal(member.id)
 
   return (
@@ -32,7 +30,7 @@ export const MemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberColumn>
-        <Info>{isCouncilMember ? <CheckboxIcon /> : <CrossIcon />}</Info>
+        <Info>{member.isCouncilMember ? <CheckboxIcon /> : <CrossIcon />}</Info>
       </MemberColumn>
 
       <MemberRolesColumn>

@@ -1,11 +1,10 @@
 import { useMachine } from '@xstate/react'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TextInlineMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -17,11 +16,6 @@ import { VoteForProposalSignModal } from '@/proposals/modals/VoteForProposal/Vot
 
 import { VoteForProposalMachine as machine, VoteStatus } from './machine'
 
-const feeFallback = {
-  transactionFee: BN_ZERO,
-  canAfford: true,
-}
-
 export const VoteForProposalModal = () => {
   const { hideModal, modalData } = useModal<VoteForProposalModalCall>()
   const { api } = useApi()
@@ -31,18 +25,20 @@ export const VoteForProposalModal = () => {
     () => (active?.id ? api?.tx.proposalsEngine.vote(active?.id, modalData.id, 'Approve', '') : undefined),
     [active?.id]
   )
-  const feeInfo = useTransactionFee(active?.controllerAccount, transactionFee) ?? feeFallback
+  const feeInfo = useTransactionFee(active?.controllerAccount, transactionFee)
 
   const [state, send] = useMachine(machine)
 
-  if (isLoading || !proposal || !api || !active) {
-    return null
-  }
+  useEffect(() => {
+    if (state.matches('requirementsVerification')) {
+      if (feeInfo) {
+        send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+      }
+    }
+  }, [state.value, feeInfo?.canAfford])
 
-  if (feeInfo && !feeInfo.canAfford) {
-    return (
-      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
-    )
+  if (isLoading || !proposal || !api || !active || !feeInfo) {
+    return null
   }
 
   if (state.matches('requirementsFailed')) {

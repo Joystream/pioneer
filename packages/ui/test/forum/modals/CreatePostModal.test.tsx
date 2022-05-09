@@ -22,6 +22,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubConst,
   stubDefaultBalances,
@@ -113,7 +114,7 @@ describe('UI: CreatePostModal', () => {
       fireEvent.click(await getButton(/Sign and post/i))
     })
 
-    expect(await screen.findByText('There was a problem posting your message.')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

@@ -3,28 +3,45 @@ import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { Account } from '@/accounts/types'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Arrow } from '@/common/components/icons'
+import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import {
+  StepDescriptionColumn,
+  Stepper,
+  StepperBody,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { OpeningFormPreview } from '@/working-groups/components/OpeningFormPreview'
+import { useOpeningQuestions } from '@/working-groups/hooks/useOpeningQuestions'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { ApplicationStep } from '@/working-groups/modals/ApplyForRoleModal/ApplicationStep'
+import { baseSchema, validationSchemaFromQuestions } from '@/working-groups/modals/ApplyForRoleModal/helpers'
+import { StakeStep } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 
 import { groupToLockId } from '../../types'
 
-import { ApplyForRoleApplicationStep } from './ApplyForRoleApplicationStep'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
-import { ApplyForRoleStakeStep } from './ApplyForRoleStakeStep'
 import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
 import { applyForRoleMachine } from './machine'
 
@@ -39,7 +56,9 @@ export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
+  const { questions } = useOpeningQuestions({ id: modalData.opening.id })
   const [state, send, service] = useMachine(applyForRoleMachine)
+  const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
 
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
@@ -48,27 +67,59 @@ export const ApplyForRoleModal = () => {
     groupToLockId(opening.groupId)
   )
 
+  const schema = useMemo(() => {
+    if (questions.length) {
+      baseSchema.fields.form = validationSchemaFromQuestions(questions)
+    }
+
+    return baseSchema
+  }, [questions.length])
+
+  const balance = useBalance(stakingAccountMap?.address)
+  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+  const form = useForm({
+    resolver: useYupValidationResolver(schema, typeof state.value === 'string' ? state.value : undefined),
+    mode: 'onBlur',
+    context: {
+      minStake: opening.stake,
+      balances: balance,
+      stakeLock: groupToLockId(opening.groupId),
+      requiredAmount: opening.stake,
+      stakingStatus,
+    },
+  })
+  const stakingAccount = form.watch('stake.account')
+
+  useEffect(() => {
+    form.setValue('stake.amount', opening.stake.toString())
+  }, [])
+
+  useEffect(() => {
+    if (stakingAccount) {
+      setStakingAccount(stakingAccount)
+    }
+  }, [stakingAccount?.address])
+
+  useEffect(() => {
+    form.trigger('stake.account')
+  }, [stakingStatus])
+
   const transaction = useMemo(() => {
+    const { stake } = form.getValues()
     if (activeMember && api) {
       return api.tx[opening.groupId].applyOnOpening({
         member_id: activeMember?.id,
         opening_id: opening.runtimeId,
-        role_account_id: state.context.stake?.roleAccount?.address,
-        reward_account_id: state.context.stake?.rewardAccount?.address,
+        role_account_id: stake?.roleAccount?.address,
+        reward_account_id: stake?.rewardAccount?.address,
         stake_parameters: {
           stake: opening.stake,
-          staking_account_id: state.context.stake?.account?.address,
+          staking_account_id: stake?.account?.address,
         },
       })
     }
-  }, [
-    activeMember?.id,
-    connectionState,
-    state.context.stake?.account?.address,
-    state.context.stake?.rewardAccount?.address,
-  ])
+  }, [activeMember?.id, connectionState, state.value])
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
-  const stakingStatus = useStakingAccountStatus(state.context?.stake?.account?.address, activeMember?.id)
 
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
@@ -111,7 +162,7 @@ export const ApplyForRoleModal = () => {
 
   useEffect(() => {
     if (state.matches('beforeTransaction')) {
-      send(stakingStatus === 'free' ? 'UNBOUND' : 'BOUND')
+      feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'UNBOUND' : 'BOUND') : send('FAIL')
     }
   }, [state, stakingStatus])
 
@@ -129,25 +180,16 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state.matches('stake')) {
-    return <ApplyForRoleStakeStep opening={opening} steps={getSteps(service)} send={send} member={activeMember} />
-  }
-
-  if (state.matches('form')) {
-    return <ApplyForRoleApplicationStep opening={opening} steps={getSteps(service)} send={send} />
-  }
-
   const bindStakingAccountService = state.children.bindStakingAccount
 
-  if (state.matches('bindStakingAccount') && api && bindStakingAccountService) {
-    const stakingAccount = state.context.stake.account?.address
+  if (state.matches('bindStakingAccount') && api && bindStakingAccountService && stakingAccountMap) {
     const transaction = api.tx.members.addStakingAccountCandidate(activeMember.id)
 
     return (
       <BindStakingAccountModal
         onClose={hideModal}
         transaction={transaction}
-        signer={stakingAccount}
+        signer={stakingAccountMap.address}
         memberId={activeMember.id}
         service={bindStakingAccountService}
         steps={transactionsSteps}
@@ -159,14 +201,14 @@ export const ApplyForRoleModal = () => {
   const transactionService = state.children.transaction
 
   if (state.matches('transaction') && signer && api && transactionService) {
-    const { stake, answers } = state.context
+    const { stake, form: formFields } = form.getValues()
 
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
       member_id: activeMember?.id,
       opening_id: opening.runtimeId,
       role_account_id: stake.roleAccount.address,
       reward_account_id: stake.rewardAccount.address,
-      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
+      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields) as string[] }),
       stake_parameters: {
         stake: stake.amount,
         staking_account_id: stake.account?.address,
@@ -189,7 +231,7 @@ export const ApplyForRoleModal = () => {
         onClose={hideModal}
         transaction={transaction}
         signer={signer}
-        stake={new BN(state.context.stake.amount)}
+        stake={new BN(stake.amount)}
         service={transactionService}
         steps={transactionsSteps}
       />
@@ -197,13 +239,14 @@ export const ApplyForRoleModal = () => {
   }
 
   if (state.matches('success')) {
+    const { stake } = form.getValues()
     // The types of each working groups are the same, so either will work
     const applicationId = getDataFromEvent(state.context.transactionEvents, 'forumWorkingGroup', 'AppliedOnOpening', 1)
 
     return (
       <ApplyForRoleSuccessModal
-        stake={new BN(state.context.stake.amount)}
-        stakeAccount={state.context.stake.account}
+        stake={new BN(stake.amount)}
+        stakeAccount={stake.account}
         applicationId={new BN(applicationId ?? 0)}
         steps={getSteps(service)}
       />
@@ -218,5 +261,41 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  return null
+  return (
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+      <ModalHeader onClick={hideModal} title="Applying for role" />
+      <StepperModalBody>
+        <StepperModalWrapper>
+          <Stepper steps={getSteps(service)} />
+          <StepDescriptionColumn>
+            <OpeningFormPreview opening={opening} />
+          </StepDescriptionColumn>
+          <StepperBody>
+            <FormProvider {...form}>
+              {state.matches('stake') && (
+                <StakeStep
+                  errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
+                  errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
+                  opening={opening}
+                />
+              )}
+              {state.matches('form') && (
+                <ApplicationStep
+                  questions={questions}
+                  errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
+                  errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
+                />
+              )}
+            </FormProvider>
+          </StepperBody>
+        </StepperModalWrapper>
+      </StepperModalBody>
+      <ModalFooter>
+        <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
+          Next step
+          <Arrow direction="right" />
+        </ButtonPrimary>
+      </ModalFooter>
+    </Modal>
+  )
 }

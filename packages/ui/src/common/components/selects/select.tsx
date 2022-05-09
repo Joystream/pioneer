@@ -21,6 +21,7 @@ export const Select = <T extends any, V extends any = T>({
   renderSelected,
   renderList,
   className,
+  onBlur,
 }: SelectProps<T, V>) => {
   const [filterInput, setFilterInput] = useState('')
   const search = filterInput
@@ -36,6 +37,7 @@ export const Select = <T extends any, V extends any = T>({
     (option: T) => {
       onChange(option, () => {
         toggleOpen()
+        onBlur?.()
         setFilterInput('')
       })
     },

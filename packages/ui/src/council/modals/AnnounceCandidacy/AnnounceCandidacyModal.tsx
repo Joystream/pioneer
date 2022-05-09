@@ -188,8 +188,7 @@ export const AnnounceCandidacyModal = () => {
       //
       // stakingStatus === "other"
       // wrong account
-
-      return send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 

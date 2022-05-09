@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { List } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { Colors } from '@/common/constants'
+import { Member } from '@/memberships/types'
 import { ElectionListItem } from '@/overview/components/DeadlineList/ElectionListItem'
 import { OpeningsListItem } from '@/overview/components/DeadlineList/OpeningsListItem'
 import { ProposalListItem } from '@/overview/components/DeadlineList/ProposalListItem'
@@ -14,11 +15,13 @@ import { WorkingGroup } from '@/working-groups/types'
 
 export interface DeadlineListProps {
   workingGroup?: WorkingGroup
+  member: Member
 }
 
-export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGroup }) => {
+export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGroup, member }) => {
   const { t } = useTranslation('overview')
-  const { isLoading, deadlines, hideForStorage, count } = useDeadlines({ groupId: workingGroup?.id })
+
+  const { isLoading, deadlines, hideForStorage, count } = useDeadlines({ groupId: workingGroup?.id, member: member })
 
   if (isLoading) {
     return <Loading />
@@ -46,12 +49,12 @@ export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGr
               hideForStorage={hideForStorage('proposals')}
             />
           ))}
-          {deadlines.election?.map((elections) => (
+          {deadlines.elections?.map((election) => (
             <ElectionListItem
-              hideForStorage={hideForStorage('election')}
-              electionId={elections.id}
-              title={elections.info.title}
-              key={elections.id}
+              hideForStorage={hideForStorage('elections')}
+              key={election.cycleId}
+              election={election}
+              member={member}
             />
           ))}
           {deadlines.openings.map((opening) => (

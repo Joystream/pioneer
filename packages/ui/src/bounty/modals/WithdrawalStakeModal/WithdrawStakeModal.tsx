@@ -43,11 +43,9 @@ export const WithdrawStakeModal = () => {
 
   useEffect(() => {
     if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
-      if (transaction && feeInfo && activeMember) {
-        if (transaction && feeInfo && activeMember && entry) {
-          feeInfo.canAfford && send('NEXT')
-          !feeInfo.canAfford && send('ERROR')
-        }
+      if (transaction && feeInfo && activeMember && entry) {
+        feeInfo.canAfford && send('NEXT')
+        !feeInfo.canAfford && send('ERROR')
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford, entry])

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
@@ -15,6 +15,10 @@ export interface CheckboxProps {
 
 export function Checkbox({ id, isRequired, children, enabled = true, isChecked = false, onChange }: CheckboxProps) {
   const [isStateChecked, setStateChecked] = useState(isChecked)
+
+  useEffect(() => {
+    setStateChecked(isChecked)
+  }, [isChecked])
 
   return (
     <CheckboxLabel

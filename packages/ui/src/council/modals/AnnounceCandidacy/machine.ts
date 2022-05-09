@@ -194,6 +194,7 @@ export const announceCandidacyMachine = createMachine<
       on: {
         BOUND: 'announceCandidacyTransaction',
         REQUIRES_STAKING_CANDIDATE: 'bindStakingAccountTransaction',
+        FAIL: 'requirementsFailed',
       },
     },
     bindStakingAccountTransaction: {

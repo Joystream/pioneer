@@ -57,8 +57,9 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "fillDetails": "Please fill in all the details below.",
-      "selectAmount": "Contribution stake",
-      "selectAmountSubtitle": "This stake will be returned to you when the bounty is complete",
+      "selectAmount": "Entrant stake",
+      "selectAmountSubtitle": "Entrant stake is returned to your account automatically, when bounty is finished.",
+      "selectAmountTooltip": "Minimum entrant stake is defined by the bounty creator.",
       "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} tJOY.",
       "error": "Something went wrong",
       "success": "You have just successfully announce work entry for ”{{bounty}}”.",
@@ -272,6 +273,11 @@
     },
     "worksSubmitted": {
       "title": "Works Submitted",
+      "tooltip": "Lorem ipsum d"
+    },
+    "duration": {
+      "title": "Duration",
+      "value": "Ongoing",
       "tooltip": "Lorem ipsum d"
     },
     "winners": {

@@ -25,6 +25,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -121,7 +122,7 @@ describe('UI: DeletePostModal', () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
 
-    expect(await screen.findByText('There was a problem deleting your post.')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

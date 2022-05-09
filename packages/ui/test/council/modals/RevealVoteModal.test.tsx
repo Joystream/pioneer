@@ -11,7 +11,13 @@ import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVot
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import {
+  currentStubErrorMessage,
+  stubApi,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 describe('UI: RevealVoteModal', () => {
   const api = stubApi()
@@ -85,7 +91,7 @@ describe('UI: RevealVoteModal', () => {
 
     fireEvent.click(await getButton('Sign and reveal'))
 
-    expect(await screen.findByText(/^There was a problem revealing your vote./i)).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Multiple votes for the same candidate', async () => {

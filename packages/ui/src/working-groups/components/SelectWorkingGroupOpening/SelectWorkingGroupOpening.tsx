@@ -17,6 +17,7 @@ export const filterWorkingGroup = (filterOut: WorkingGroup | undefined) => {
 
 interface Props {
   onChange: (selected: WorkingGroupOpening) => void
+  placeholder: string
   selectedOpeningId?: string
   groupId?: string
   disabled?: boolean
@@ -28,6 +29,7 @@ interface Props {
 export const SelectWorkingGroupOpeningBase = ({
   id,
   onChange,
+  placeholder,
   selectedOpeningId,
   disabled,
   className,
@@ -52,7 +54,7 @@ export const SelectWorkingGroupOpeningBase = ({
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
-      placeholder="Select Opening to cancel"
+      placeholder={placeholder}
       renderList={(onOptionClick) => <OptionsListWorkingGroupOpening allOpenings={openings} onChange={onOptionClick} />}
       className={className}
       onSearch={() => undefined}
