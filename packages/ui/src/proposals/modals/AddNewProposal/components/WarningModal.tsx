@@ -7,6 +7,7 @@ import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 
 interface AddNewProposalWarningModalProps {
@@ -16,10 +17,14 @@ interface AddNewProposalWarningModalProps {
 export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
   const { hideModal } = useModal()
   const [isAwareChecked, setAwareChecked] = useState(false)
-
+  const [isHidingCaution, setHidingCaution] = useLocalStorage<boolean>('proposalCaution')
+  const closeModal = () => {
+    hideModal()
+    setHidingCaution(false)
+  }
   return (
     <Modal modalSize="m" modalHeight="s" onClose={hideModal}>
-      <ModalHeader onClick={hideModal} title="Caution" icon={<AlertSymbol />} />
+      <ModalHeader onClick={closeModal} title="Caution" icon={<AlertSymbol />} />
       <ModalBody>
         <TextMedium margin="s">
           A proposal is a motion to change the state or policy of the system in some way. While we encourage you to make
@@ -34,6 +39,9 @@ export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
             - you may get outright slashed, losing your entire stake. This applies only to some proposal types
           </TextMedium>
         </Info>
+        <Checkbox id="aware-of-risks" onChange={setHidingCaution} isChecked={isHidingCaution}>
+          Do not show this message again.
+        </Checkbox>
         <Checkbox id="aware-of-risks" onChange={setAwareChecked} isChecked={isAwareChecked}>
           I’m aware of the possible risks associated with creating a proposal.
         </Checkbox>
