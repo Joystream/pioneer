@@ -77,7 +77,7 @@ const mentionTypesMap: Record<string, MentionType> = {
   'member-id': 'member',
   'proposal-id': 'proposal',
   'proposal-post-id': 'proposalDiscussionEntry',
-  'thread-id': 'forumThread',
+  'forum-thread-id': 'forumThread',
   'forum-post-id': 'forumPost',
   'application-id': 'application',
   'opening-id': 'opening',
