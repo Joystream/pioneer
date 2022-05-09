@@ -24,7 +24,6 @@ export interface ProposalWithDetails extends Proposal {
   rationale: string
   createdInBlock: Block
   proposalStatusUpdates: ProposalStatusUpdates[]
-  exactExecutionBlock?: Block
   details: ProposalDetails
   discussionThread: ProposalDiscussionThread
 }

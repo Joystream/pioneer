@@ -59,6 +59,7 @@ export interface Proposal {
   createdAt: string
   endedAt?: string
   councilApprovals: number
+  exactExecutionBlock?: number
 }
 
 export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
@@ -70,6 +71,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
     councilApprovals: fields.councilApprovals,
+    exactExecutionBlock: fields.exactExecutionBlock ?? undefined,
   }
 
   if (!isProposalActive(proposal.status)) {
@@ -98,7 +100,7 @@ export const asVoteWithDetails = (voteFields: VoteWithDetailsFieldsFragment): Pr
 
 export type ProposalMention = Pick<Proposal, 'id' | 'title' | 'status' | 'type'> & {
   description: string
-  exactExecutionBlock: Block | undefined
+  exactExecutionBlock?: number
   statusSetAtBlock: Block
 }
 
@@ -113,13 +115,7 @@ export const asProposalMention = (fields: ProposalMentionFieldsFragment): Propos
     createdAt: fields.statusSetAtTime,
     network: fields.createdInEvent.network,
   }),
-  exactExecutionBlock: fields.exactExecutionBlock
-    ? asBlock({
-        inBlock: fields.exactExecutionBlock,
-        network: fields.createdInEvent.network,
-        createdAt: fields.createdAt,
-      })
-    : undefined,
+  exactExecutionBlock: fields.exactExecutionBlock ?? undefined,
 })
 
 export interface ProposalDiscussionPostMention {
