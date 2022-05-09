@@ -10,7 +10,7 @@ describe('getNextPayout', () => {
   const api = stubApi()
   stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
   stubConst(api, 'storageWorkingGroup.rewardPeriod', createType('u32', 14420))
-  stubConst(api, 'contentDirectoryWorkingGroup.rewardPeriod', createType('u32', 14430))
+  stubConst(api, 'contentWorkingGroup.rewardPeriod', createType('u32', 14430))
 
   it('Single role', () => {
     const blockNumber = new BN(14400)
@@ -26,15 +26,15 @@ describe('getNextPayout', () => {
 
   it('Multiple roles', () => {
     const blockNumber = new BN(14400)
-    const workers1 = ['forumWorkingGroup', 'storageWorkingGroup', 'contentDirectoryWorkingGroup'].map(toWorkerFragment)
+    const workers1 = ['forumWorkingGroup', 'storageWorkingGroup', 'contentWorkingGroup'].map(toWorkerFragment)
     expect(getNextPayout(workers1, blockNumber, api.api)?.toNumber()).toEqual(10)
-    const workers2 = ['storageWorkingGroup', 'contentDirectoryWorkingGroup'].map(toWorkerFragment)
+    const workers2 = ['storageWorkingGroup', 'contentWorkingGroup'].map(toWorkerFragment)
     expect(getNextPayout(workers2, blockNumber, api.api)?.toNumber()).toEqual(20)
   })
 
   it('Later block', () => {
     const blockNumber = new BN(14400 * 2)
-    const workers = ['forumWorkingGroup', 'storageWorkingGroup', 'contentDirectoryWorkingGroup'].map(toWorkerFragment)
+    const workers = ['forumWorkingGroup', 'storageWorkingGroup', 'contentWorkingGroup'].map(toWorkerFragment)
     expect(getNextPayout(workers, blockNumber, api.api)?.toNumber()).toEqual(20)
   })
 

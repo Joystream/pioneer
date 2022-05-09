@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
 
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { Address } from '@/common/types'
@@ -19,13 +20,14 @@ export const filterAccount = (filterOut: Account | Address | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOutAddress : () => true
 }
 
-interface Props extends Pick<SelectProps<Account>, 'id' | 'selected' | 'disabled'> {
-  onChange: (selected: Account) => void
+interface Props extends Pick<SelectProps<Account>, 'id' | 'selected' | 'disabled' | 'onBlur'> {
+  onChange?: (selected: Account) => void
   filter?: (option: Account) => boolean
   minBalance?: BN
+  name?: string
 }
 
-export const SelectAccount = React.memo(({ id, onChange, filter, selected, disabled }: Props) => {
+export const BaseSelectAccount = React.memo(({ id, onChange, filter, selected, disabled, onBlur }: Props) => {
   const { allAccounts } = useMyAccounts()
   const options = allAccounts.filter(filter || (() => true))
 
@@ -38,11 +40,11 @@ export const SelectAccount = React.memo(({ id, onChange, filter, selected, disab
     filteredOptions.length === 0 &&
       isValidAddress(search, keyring) &&
       (!selected || selected.address !== search) &&
-      onChange(accountOrNamed(allAccounts, search, 'Unsaved account'))
+      onChange?.(accountOrNamed(allAccounts, search, 'Unsaved account'))
   }, [filteredOptions, search, selected])
 
   const change = (selected: Account, close: () => void) => {
-    onChange(selected)
+    onChange?.(selected)
     close()
   }
 
@@ -51,6 +53,7 @@ export const SelectAccount = React.memo(({ id, onChange, filter, selected, disab
       id={id}
       selected={selected}
       onChange={change}
+      onBlur={onBlur}
       disabled={disabled}
       renderSelected={renderSelected}
       placeholder="Select account or paste account address"
@@ -65,3 +68,21 @@ const renderSelected = (option: Account) => (
     <OptionAccount option={option} />
   </SelectedOption>
 )
+
+export const SelectAccount = ({ name, ...props }: Props) => {
+  const form = useFormContext()
+
+  if (!form || !name) {
+    return <BaseSelectAccount {...props} />
+  }
+
+  return (
+    <Controller
+      name={name}
+      control={form.control}
+      render={({ field }) => (
+        <BaseSelectAccount {...props} selected={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+      )}
+    />
+  )
+}

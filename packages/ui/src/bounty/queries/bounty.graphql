@@ -48,6 +48,9 @@ fragment BountyFields on Bounty {
     createdAt
     network
   }
+  maxFundingReachedEvent {
+    createdAt
+  }
 }
 
 fragment BountyEntryFields on BountyEntry {
@@ -78,13 +81,13 @@ fragment BountyWorkFields on WorkSubmittedEvent {
   description
 }
 
-fragment BountyWorkWithDetailsFields on WorkSubmittedEvent {
-  ...BountyWorkFields
-  inBlock
-  createdAt
-  network
-  entry {
-    ...BountyEntryFields
+fragment BountyWorkWithDetailsFields on BountyEntry {
+  ...BountyEntryFields
+  works {
+    ...BountyWorkFields
+    inBlock
+    createdAt
+    network
   }
 }
 
@@ -117,13 +120,8 @@ query GetBounty($where: BountyWhereUniqueInput!) {
   }
 }
 
-query GetBountyWorks(
-  $where: WorkSubmittedEventWhereInput
-  $order: [WorkSubmittedEventOrderByInput!]
-  $offset: Int
-  $limit: Int
-) {
-  workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+query GetBountyWorks($where: BountyEntryWhereInput, $order: [BountyEntryOrderByInput!], $offset: Int, $limit: Int) {
+  bountyEntries(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
     ...BountyWorkWithDetailsFields
   }
 }

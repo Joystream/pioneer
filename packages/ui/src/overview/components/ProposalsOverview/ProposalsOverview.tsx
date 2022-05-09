@@ -11,7 +11,7 @@ import { ProposalsTilesList } from './ProposalsTilesList'
 
 export const ProposalsOverview = () => {
   const { t } = useTranslation('overview')
-  const { proposals } = useProposals({ status: 'active' })
+  const { proposals, isLoading: proposalsLoading } = useProposals({ status: 'active' })
   const {
     toBeDecided: { count, isLoading: countLoading },
     approved: { count: approvedCount, isLoading: approvedCountLoading },
@@ -34,7 +34,7 @@ export const ProposalsOverview = () => {
       title={t('proposals.title')}
       linkPath={ProposalsRoutes.current}
       infoElements={infoElements}
-      scroller={<ProposalsTilesList proposals={proposals} />}
+      scroller={<ProposalsTilesList proposals={proposals} isLoading={proposalsLoading} />}
     />
   )
 }

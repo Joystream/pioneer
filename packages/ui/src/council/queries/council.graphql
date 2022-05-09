@@ -90,6 +90,11 @@ fragment ElectionRoundFields on ElectionRound {
   }
 }
 
+fragment LatestElectionRoundFields on ElectionRound {
+  ...ElectionRoundFields
+  isFinished
+}
+
 fragment PastElectionRoundFields on ElectionRound {
   id
   cycleId
@@ -174,7 +179,7 @@ query GetElectedCouncil {
 }
 
 query GetElectionRound {
-  electedCouncils (where: { isResigned_eq: false }, orderBy: [createdAt_DESC], limit: 1) {
+  electedCouncils(where: { isResigned_eq: false }, orderBy: [createdAt_DESC], limit: 1) {
     councilElections {
       cycleId
     }
@@ -255,6 +260,12 @@ query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
 query GetCurrentElection {
   electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields
+  }
+}
+
+query GetLatestElection {
+  electionRounds(orderBy: [cycleId_DESC], limit: 1) {
+    ...LatestElectionRoundFields
   }
 }
 

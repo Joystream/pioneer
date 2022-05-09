@@ -12,7 +12,7 @@ export const colLayoutByType = (kind: MemberItemKind) => {
   const concil = 92
   const roles = 164
   const count = kind === 'Member' ? 20 : 76
-  const total = 100
+  const total = 120
 
   return kind === 'Member'
     ? `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`

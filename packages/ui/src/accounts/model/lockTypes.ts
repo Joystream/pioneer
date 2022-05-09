@@ -49,22 +49,40 @@ const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
 const asLockTypes = (locks: BalanceLock[]): LockType[] => locks.flatMap((lock) => lock.type ?? [])
 const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boolean) => {
   if (!lockTypeA) {
-    return () => false // Don't block transactions based on unknown locks
-  } else if (isRivalrous(lockTypeA)) {
+    // Don't block transactions based on unknown locks
+    return () => false
+  }
+
+  if (isRivalrous(lockTypeA)) {
     return isRivalrous
-  } else {
-    return (lockTypeB) => lockTypeA === lockTypeB
+  }
+
+  return (lockTypeB) => {
+    if (lockTypeA === 'Voting' && lockTypeB === 'Voting') {
+      // Vote stake should be reusable in next elections
+      return false
+    }
+
+    return lockTypeA === lockTypeB
   }
 }
 
-export const isRecoverable = (type: LockType, isActiveCandidate?: boolean): boolean => {
+type RecoverStakeConditions = {
+  isActiveCandidate: boolean
+  isVoteStakeLocked: boolean
+}
+
+export const isRecoverable = (type: LockType, recoverConditions?: RecoverStakeConditions): boolean => {
   if (!RECOVERABLE.includes(type)) {
     return false
   }
 
   switch (type) {
     case 'Council Candidate':
-      return !isActiveCandidate
+      return !recoverConditions?.isActiveCandidate
+
+    case 'Voting':
+      return !recoverConditions?.isVoteStakeLocked
 
     default:
       return true

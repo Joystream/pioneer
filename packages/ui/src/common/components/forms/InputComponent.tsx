@@ -1,4 +1,6 @@
+import BN from 'bn.js'
 import React from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
@@ -154,28 +156,25 @@ export const InputComponent = React.memo(
 )
 
 export const InputText = React.memo((props: InputProps) => {
-  return <Input name={props.id} type="text" autoComplete="off" {...props} />
+  const formContext = useFormContext()
+
+  if (!formContext || !props.name) {
+    return <Input type="text" autoComplete="off" {...props} />
+  }
+
+  return <Input type="text" autoComplete="off" {...props} {...formContext.register(props.name)} />
 })
 
-interface NumberInputProps extends Omit<InputProps, 'onChange'> {
+interface BaseNumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
   isTokenValue?: boolean
 }
 
-export const InputNumber = React.memo(
-  ({
-    id,
-    required,
-    validation,
-    placeholder,
-    disabled,
-    onChange,
-    isTokenValue = false,
-    value = '',
-  }: NumberInputProps) => {
+const BasedInputNumber = React.memo(
+  ({ id, onChange, isTokenValue = false, value = '', ...props }: BaseNumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
-      if (isNaN(eventValue)) return
+      if (isNaN(eventValue) || eventValue < 0) return
 
       onChange?.(event, eventValue)
     }
@@ -186,16 +185,42 @@ export const InputNumber = React.memo(
         name={id}
         type="string"
         value={isTokenValue ? formatTokenValue(value) : value}
-        required={required}
-        validation={validation}
-        placeholder={placeholder}
-        disabled={disabled}
         onChange={onInputChange}
         autoComplete="off"
+        {...props}
       />
     )
   }
 )
+
+interface InputNumberProps extends BaseNumberInputProps {
+  isInBN?: boolean
+}
+
+export const InputNumber = React.memo(({ name, isInBN = false, ...props }: InputNumberProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <BasedInputNumber {...props} />
+  }
+
+  return (
+    <Controller
+      control={formContext.control}
+      name={name}
+      render={({ field }) => {
+        return (
+          <BasedInputNumber
+            {...props}
+            value={new BN(field.value)?.toString()}
+            onChange={(_, value) => field.onChange(isInBN ? new BN(value) : value)}
+            onBlur={field.onBlur}
+          />
+        )
+      }}
+    />
+  )
+})
 
 type TextAreaProps = InputProps<HTMLTextAreaElement & HTMLInputElement>
 export const InputTextarea = React.memo(
@@ -465,6 +490,7 @@ export const InputArea = styled.div`
   height: 100%;
   justify-content: flex-start;
   align-items: center;
+  min-width: 0;
 `
 
 const InputRightSide = styled.div<DisabledInputProps>`
@@ -490,7 +516,6 @@ const InputUnits = styled.span`
   line-height: 1.5;
   font-weight: 700;
   color: ${Colors.Black[400]};
-  text-transform: uppercase;
 `
 
 export const InputNotification = styled.div<InputProps>`

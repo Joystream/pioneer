@@ -67,7 +67,7 @@ export const SetWorkingGroupLeadReward = ({
           <InputComponent
             label="Reward Amount"
             tight
-            units="JOY"
+            units="tJOY"
             inputWidth="s"
             tooltipText="Amount to be rewarded"
             message="Amount must be greater than zero"

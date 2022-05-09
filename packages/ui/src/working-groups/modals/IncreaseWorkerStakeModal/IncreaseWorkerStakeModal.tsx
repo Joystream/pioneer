@@ -42,7 +42,7 @@ export const IncreaseWorkerStakeModal = () => {
     if (balance?.transferable) {
       StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.max(
         balance?.transferable.toNumber(),
-        'Given amount exceed your transferable balance of ${max} JOY'
+        'Given amount exceed your transferable balance of ${max} tJOY'
       )
     }
     return StakeFormSchema
@@ -93,7 +93,7 @@ export const IncreaseWorkerStakeModal = () => {
         <InputComponent
           id="amount-input"
           label="Select amount for Staking"
-          units="JOY"
+          units="tJOY"
           validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
           message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           required

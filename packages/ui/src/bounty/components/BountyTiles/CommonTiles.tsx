@@ -7,6 +7,7 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
+import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 
 interface Props {
@@ -19,10 +20,8 @@ export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const { data } = useGetBountyWorksCountQuery({
     variables: {
       where: {
-        entry: {
-          bounty: {
-            id_eq: bounty.id,
-          },
+        bounty: {
+          id_eq: bounty.id,
         },
       },
     },
@@ -31,9 +30,9 @@ export const CommonTiles = React.memo(({ bounty, period }: Props) => {
   const periodLength = useMemo(() => {
     switch (period) {
       case 'working':
-        return <DurationValue value={formatDuration(bounty.workPeriod)} />
+        return <DurationValue value={formatDuration(bounty.workPeriod)} blocksLeft={bounty.periodTimeLeft} />
       case 'judgement':
-        return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
+        return <DurationValue value={formatDuration(bounty.judgingPeriod)} blocksLeft={bounty.periodTimeLeft} />
       case 'expired':
       case 'terminated':
         return t('tiles.periodLength.closed')

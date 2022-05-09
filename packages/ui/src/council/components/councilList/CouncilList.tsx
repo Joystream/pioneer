@@ -1,14 +1,14 @@
-import React, {useCallback} from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import {List} from '@/common/components/List'
-import {ListHeader, ListHeaders} from '@/common/components/List/ListHeader'
-import {Loading} from '@/common/components/Loading'
-import {RowGapBlock} from '@/common/components/page/PageContent'
-import {HeaderText, SortIconDown, SortIconUp} from '@/common/components/SortedListHeaders'
-import {CouncilColLayout} from '@/council/constants/styles'
+import { List } from '@/common/components/List'
+import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { Loading } from '@/common/components/Loading'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
+import { CouncilColLayout } from '@/council/constants/styles'
 
-import {CouncilListItem, CouncilListItemProps} from './CouncilListItem'
+import { CouncilListItem, CouncilListItemProps } from './CouncilListItem'
 
 type CouncilOrderKey = keyof CouncilListItemProps['councilor']
 export interface CouncilOrder {
@@ -52,7 +52,7 @@ export const CouncilList = ({ councilors, order, onSort, isLoading }: CouncilLis
       ) : (
         <List>
           {councilors.map((councilor, index) => (
-            <CouncilListItem key={index} councilor={councilor}/>
+            <CouncilListItem key={index} councilor={councilor} />
           ))}
         </List>
       )}

@@ -26,6 +26,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubBountyConstants,
   stubDefaultBalances,
@@ -291,8 +292,7 @@ describe('UI: SubmitJudgementModal', () => {
 
       const button = await getButton('modals.submitJudgement.authorizeModal.button')
       fireEvent.click(button)
-
-      await waitFor(() => expect(screen.queryByText('modals.submitJudgement.failedModal')).toBeInTheDocument())
+      await waitFor(() => expect(screen.queryByText(currentStubErrorMessage)).toBeInTheDocument())
     })
 
     it('Disabled when no funds for fee', async () => {

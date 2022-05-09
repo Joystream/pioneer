@@ -5,7 +5,7 @@ import { votes } from './vote'
 
 const revealVotes = () =>
   withApi(async (api) => {
-    await mapP(votes, ({ accountId, optionsId, salt }) =>
+    await mapP(votes(api), ({ accountId, optionsId, salt }) =>
       signAndSend(api.tx.referendum.revealVote(salt, optionsId), accountId)
     )
   })

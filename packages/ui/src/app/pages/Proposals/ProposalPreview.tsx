@@ -19,7 +19,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
-import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
@@ -32,7 +31,6 @@ import { VotesContainer, VotesPreview } from '@/proposals/components/VotesPrevie
 import { getVoteStatusComponent } from '@/proposals/components/VoteStatusComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
-import { useHasMemberVotedOnProposal } from '@/proposals/hooks/useHasMemberVotedOnProposal'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
@@ -64,8 +62,9 @@ export const ProposalPreview = () => {
   }, [voteId])
 
   const { active } = useMyMemberships()
-  const isCouncilMember = useIsCouncilMember(active)
-  const hasVoted = useHasMemberVotedOnProposal(id, active?.id)
+  const hasVoted = proposal?.votes.some(
+    (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
+  )
 
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
@@ -96,7 +95,7 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
-              {isCouncilMember &&
+              {active?.isCouncilMember &&
                 proposal.status === 'deciding' &&
                 (!hasVoted ? (
                   <VoteForProposalButton id={id}>Vote on Proposal</VoteForProposalButton>

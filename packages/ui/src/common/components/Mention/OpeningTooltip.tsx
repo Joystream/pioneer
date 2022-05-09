@@ -60,7 +60,7 @@ export const OpeningTooltip = ({ onMount, mention, urlAddress }: OpeningTooltipP
               <Trans t={t} i18nKey="mentions.tooltips.opening.reward">
                 <TextSmall lighter>''</TextSmall>
                 <TextMedium bold>{{ value: reward }}</TextMedium>
-                <TextMedium bold>JOY</TextMedium>
+                <TextMedium bold>tJOY</TextMedium>
               </Trans>
             </FooterRow>
             <FooterRow>

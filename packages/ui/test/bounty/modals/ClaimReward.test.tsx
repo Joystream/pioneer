@@ -18,6 +18,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -74,7 +75,8 @@ describe('UI: ClaimRewardModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(screen.queryByText(`modals.withdraw.reward.description ${formatTokenValue(reward)}`)).not.toBeNull()
+    const amount = reward.add(baseEntry.stake)
+    expect(await screen.findByText(`modals.withdraw.reward.description ${formatTokenValue(amount)}`)).toBeDefined()
     expect(await getButton('modals.withdraw.reward.button')).toBeDefined()
   })
 
@@ -92,7 +94,7 @@ describe('UI: ClaimRewardModal', () => {
     await act(async () => {
       fireEvent.click(await getButton('modals.withdraw.reward.button'))
     })
-    expect(await screen.findByText('modals.withdraw.reward.error')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

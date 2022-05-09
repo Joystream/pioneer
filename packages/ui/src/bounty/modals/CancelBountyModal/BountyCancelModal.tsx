@@ -55,7 +55,7 @@ export const BountyCancelModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.bountyCancel.title')} onClick={hideModal} />
       <ModalBody>
         <BodyContainer gap={30}>

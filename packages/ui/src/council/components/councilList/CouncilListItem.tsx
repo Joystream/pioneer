@@ -1,13 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import {TableListItem} from '@/common/components/List'
-import {TextBig, TokenValue} from '@/common/components/typography'
-import {CouncilColLayout} from '@/council/constants/styles'
-import {Councilor} from '@/council/types'
-import {MemberInfo} from '@/memberships/components'
-import {useShowMemberModal} from '@/memberships/hooks/useShowMemberModal'
-
+import { TableListItem } from '@/common/components/List'
+import { TextBig, TokenValue } from '@/common/components/typography'
+import { CouncilColLayout } from '@/council/constants/styles'
+import { Councilor } from '@/council/types'
+import { MemberInfo } from '@/memberships/components'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 export interface CouncilListItemProps {
   councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms' | 'voterStake'>

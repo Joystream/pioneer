@@ -39,6 +39,7 @@ export const CancelWorkingGroupLeadOpening = ({
           >
             <SelectWorkingGroupOpening
               id="opening"
+              placeholder="Choose opening to cancel"
               openingsPositionType="LEADER"
               onChange={(selected) => {
                 setGroupId(selected.groupId)

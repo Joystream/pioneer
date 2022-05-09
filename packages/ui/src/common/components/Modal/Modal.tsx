@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react'
-import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 
 import { useEscape } from '@/common/hooks/useEscape'
@@ -62,7 +61,7 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
 
   useEscape(() => onClose())
 
-  return ReactDOM.createPortal(
+  return (
     <ModalGlass
       modalHeight={modalHeight}
       modalSize={modalSize}
@@ -73,8 +72,7 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
       <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal" className={className}>
         {children}
       </ModalWrap>
-    </ModalGlass>,
-    document.body
+    </ModalGlass>
   )
 }
 
@@ -114,6 +112,10 @@ export const ModalGlass = styled.div<ModalProps>`
   color: ${Colors.Black[900]};
   z-index: ${ZIndex.modal};
   ${Animations.showModalBackground};
+
+  & + & {
+    display: none;
+  }
 `
 
 interface TopBarProps extends ThemedStyledProps<any, any> {

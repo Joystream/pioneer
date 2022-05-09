@@ -10,6 +10,7 @@ export interface SelectProps<T, V = T> {
   onNavigate?: KeyboardEventHandler
   onChange: (selected: T, close: () => void) => void
   onSearch?: (search: string) => void
+  onBlur?: () => void
   renderSelected: (option: V) => ReactNode
   renderList: (onOptionClick: (option: T) => void, toggle: () => void) => ReactNode
   className?: string

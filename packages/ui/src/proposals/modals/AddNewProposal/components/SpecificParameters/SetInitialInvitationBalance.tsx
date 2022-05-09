@@ -30,7 +30,7 @@ export const SetInitialInvitationBalance = ({ setAmount, amount }: FundingReques
       </Row>
       <Row>
         <RowGapBlock gap={12}>
-          <InputComponent label="Invitation Balance" tight units="JOY" required>
+          <InputComponent label="Invitation Balance" tight units="tJOY" required>
             <InputNumber
               id="amount-input"
               isTokenValue
@@ -40,7 +40,7 @@ export const SetInitialInvitationBalance = ({ setAmount, amount }: FundingReques
             />
           </InputComponent>
           <Row>
-            <TextMedium lighter>The current balance is {currentBalance?.toString()} JOY.</TextMedium>
+            <TextMedium lighter>The current balance is {currentBalance?.toString()} tJOY.</TextMedium>
           </Row>
         </RowGapBlock>
       </Row>

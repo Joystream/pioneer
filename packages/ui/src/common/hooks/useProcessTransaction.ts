@@ -52,7 +52,7 @@ const observeTransaction = (
 
       if (hasErrorEvent(events)) {
         subscription.unsubscribe()
-        send('ERROR')
+        send({ type: 'ERROR', events })
         error('Transaction error:', transactionInfo)
       } else {
         send({ type: 'FINALIZING', fee })

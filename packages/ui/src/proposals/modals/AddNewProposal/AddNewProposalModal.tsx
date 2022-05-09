@@ -24,6 +24,7 @@ import {
 } from '@/common/components/StepperModal'
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -70,6 +71,7 @@ export const AddNewProposalModal = () => {
   const minCount = useMinimumValidatorCount()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
+  const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
 
   const constants = useProposalConstants(state.context.type)
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
@@ -173,9 +175,9 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     if (state.matches('beforeTransaction')) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, stakingStatus])
+  }, [state, stakingStatus, feeInfo])
 
   useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
 
@@ -198,7 +200,7 @@ export const AddNewProposalModal = () => {
     )
   }
 
-  if (state.matches('warning')) {
+  if (state.matches('warning') && !isHidingCaution) {
     return <WarningModal onNext={() => send('NEXT')} />
   }
 

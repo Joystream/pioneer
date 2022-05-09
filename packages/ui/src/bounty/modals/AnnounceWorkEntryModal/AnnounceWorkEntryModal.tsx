@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -11,8 +11,8 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { Account } from '@/accounts/types'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
@@ -48,8 +48,7 @@ import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
 
 const schema = Yup.object().shape({
-  amount: Yup.string(),
-  account: StakingAccountSchema,
+  account: StakingAccountSchema.required(''),
 })
 
 export const AnnounceWorkEntryModal = () => {
@@ -66,12 +65,13 @@ export const AnnounceWorkEntryModal = () => {
   const balances = useMyBalances()
   const amount = bounty.entrantStake
   const [state, send] = useMachine(announceWorkEntryMachine)
-  const [account, setAccount] = useState<Account>()
-  const balance = useBalance(account?.address)
-  const stakingStatus = useStakingAccountStatus(account?.address, activeMember?.id)
-  const [isValidNext, setValidNext] = useState<boolean>(false)
+  const balance = useBalance(state.context.stakingAccount?.address)
+  const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
 
-  const { setContext, errors } = useSchema<IStakingAccountSchema>({ account, amount }, schema)
+  const { setContext, errors, isValid } = useSchema<IStakingAccountSchema>(
+    { account: state.context.stakingAccount },
+    schema
+  )
 
   useEffect(() => {
     if (balance) {
@@ -88,15 +88,15 @@ export const AnnounceWorkEntryModal = () => {
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       if (stakingStatus === 'confirmed') {
-        return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, account?.address ?? '')
+        return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? '')
       }
 
       return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, account?.address ?? ''),
-        api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, account?.address ?? ''),
+        api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
+        api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
       ])
     }
-  }, [activeMember?.id, account?.address, isConnected, stakingStatus])
+  }, [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus])
 
   const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -114,26 +114,21 @@ export const AnnounceWorkEntryModal = () => {
             originalModalData: { bounty },
           },
         })
-      } else if (api && transaction) {
+      }
+
+      if (fee && fee?.canAfford) {
         nextStep()
+      }
+
+      if (fee && !fee?.canAfford) {
+        send('FAIL')
       }
     }
 
-    if (
-      state.matches(AnnounceWorkEntryStates.contribute) &&
-      account &&
-      stakingStatus !== 'unknown' &&
-      stakingStatus !== 'other'
-    ) {
-      setValidNext(true)
-    } else {
-      setValidNext(false)
-    }
-
     if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      fee?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, stakingStatus])
+  }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee)])
 
   if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
     return (
@@ -145,13 +140,24 @@ export const AnnounceWorkEntryModal = () => {
           { name: 'Initializing server connection', state: !!api },
           { name: 'Loading member', state: !!activeMember },
           { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!fee },
         ]}
       />
     )
   }
 
-  if (!activeMember || !transaction || !api) {
+  if (!activeMember || !transaction || !api || !fee) {
     return null
+  }
+
+  if (state.matches(AnnounceWorkEntryStates.requirementsFailed)) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={fee.transactionFee}
+      />
+    )
   }
 
   if (state.matches(AnnounceWorkEntryStates.success)) {
@@ -183,7 +189,7 @@ export const AnnounceWorkEntryModal = () => {
       <BindStakingAccountModal
         onClose={hideModal}
         transaction={transaction}
-        signer={account?.address ?? ''}
+        signer={state.context.stakingAccount?.address ?? ''}
         service={state.children.bindStakingAccount}
         memberId={activeMember.id}
         steps={transactionSteps}
@@ -210,7 +216,7 @@ export const AnnounceWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.announceWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
@@ -222,7 +228,7 @@ export const AnnounceWorkEntryModal = () => {
               required
               inputDisabled
             >
-              <ReadOnlyInput value={bounty.id} readOnly />
+              <ReadOnlyInput value={bounty.title} readOnly />
             </InputComponent>
           </Row>
           <Row>
@@ -245,16 +251,12 @@ export const AnnounceWorkEntryModal = () => {
               label={t('modals.announceWorkEntry.stakingAccount.label')}
               tooltipText={t('modals.announceWorkEntry.stakingAccount.tooltip')}
               required
-              validation={stakingStatus === 'other' || hasError('account', errors) ? 'invalid' : undefined}
-              message={
-                stakingStatus === 'other'
-                  ? 'This account is bound to the another member'
-                  : getErrorMessage('account', errors) ?? ''
-              }
+              validation={hasError('account', errors) ? 'invalid' : undefined}
+              message={getErrorMessage('account', errors) ?? ''}
             >
               <SelectAccount
-                onChange={setAccount}
-                selected={account}
+                onChange={(account) => send('SET_STAKING_ACCOUNT', { account })}
+                selected={state.context.stakingAccount}
                 filter={(account) => filterByRequiredStake(amount, 'Bounties', balances[account.address])}
               />
             </InputComponent>
@@ -267,8 +269,9 @@ export const AnnounceWorkEntryModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="JOY"
+                units="tJOY"
                 disabled
+                tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
                 <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>
@@ -285,7 +288,7 @@ export const AnnounceWorkEntryModal = () => {
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValidNext} onClick={nextStep}>
+        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
           {t('modals.announceWorkEntry.nextButton')}
         </ButtonPrimary>
       </ModalFooter>

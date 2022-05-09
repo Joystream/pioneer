@@ -18,7 +18,7 @@ import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
-import { stubApi, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
+import { stubApi, stubConst, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -27,6 +27,17 @@ jest.mock('@/common/components/CKEditor', () => ({
 jest.mock('@/proposals/hooks/useProposalConstants', () => ({
   useProposalConstants: () => null,
 }))
+
+const proposalParameters = {
+  votingPeriod: createType('u32', 10),
+  gracePeriod: createType('u32', 10),
+  approvalQuorumPercentage: createType('u32', 10),
+  approvalThresholdPercentage: createType('u32', 10),
+  slashingQuorumPercentage: createType('u32', 10),
+  slashingThresholdPercentage: createType('u32', 10),
+  requiredStake: createType('Option<u128>', 1000),
+  constitutionality: createType('u32', 1),
+}
 
 describe('ProposalPreview', () => {
   const mockServer = setupMockServer()
@@ -50,7 +61,6 @@ describe('ProposalPreview', () => {
     stubProposalConstants(api)
     seedMembers(mockServer.server, 2)
     seedProposal(PROPOSAL_DATA, mockServer.server)
-    stubQuery(api, 'council.councilMembers', [])
     stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))
   })
 
@@ -106,7 +116,7 @@ describe('ProposalPreview', () => {
 
     describe('Member is a council member', () => {
       beforeEach(() => {
-        stubQuery(api, 'council.councilMembers', [{ membership_id: createType('MemberId', 0) }])
+        useMyMemberships.setActive({ ...getMember('alice'), isCouncilMember: true })
       })
 
       it('Member has not voted yet', async () => {
@@ -115,18 +125,37 @@ describe('ProposalPreview', () => {
       })
 
       it('Member has already voted', async () => {
-        stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 16))
+        seedProposal(
+          { ...PROPOSAL_DATA, votes: [{ ...PROPOSAL_DATA.votes[0], voterId: useMyMemberships.active?.id ?? '1' }] },
+          mockServer.server
+        )
+
         renderPage()
         expect(await screen.findByText(/Already voted/i)).toBeDefined()
+      })
+
+      it('Voting in second round', async () => {
+        stubConst(api, 'proposalsCodex.fundingRequestProposalParameters', {
+          ...proposalParameters,
+          constitutionality: createType('u32', 2),
+        })
+        seedProposal(
+          {
+            ...PROPOSAL_DATA,
+            councilApprovals: 1,
+            votes: [{ ...PROPOSAL_DATA.votes[0], voterId: useMyMemberships.active?.id ?? '1' }],
+          },
+          mockServer.server
+        )
+
+        renderPage()
+
+        expect(await screen.findByText(/Vote on Proposal/i)).toBeDefined()
       })
     })
   })
 
   describe('"You voted for" section', () => {
-    beforeEach(() => {
-      stubQuery(api, 'council.councilMembers', [{ membership_id: createType('MemberId', 0) }])
-    })
-
     it('No vote cast', () => {
       renderPage()
       expect(screen.queryByText(/You voted for:/i)).toBeNull()

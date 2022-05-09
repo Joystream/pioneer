@@ -83,7 +83,7 @@ export const ProposalDetailsStep = ({
             >
               <InputText
                 id="field-title"
-                value={title}
+                value={fields.title ?? ''}
                 onChange={(event) => changeField('title', event.target.value)}
               />
             </InputComponent>

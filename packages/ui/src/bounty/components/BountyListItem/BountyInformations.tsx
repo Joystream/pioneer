@@ -27,7 +27,15 @@ export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) =>
         <Title bold>{title}</Title>
       </TitleContainer>
       <BadgeDurationContainer>
-        {timeToEnd && <BlockDurationStatistics size="s" value={timeToEnd} title="Time left" hideBlockNumber />}
+        {timeToEnd && (
+          <BlockDurationStatistics
+            size="s"
+            value={timeToEnd}
+            title="Time left"
+            hideBlockNumber
+            dynamicBlockCount={timeToEnd}
+          />
+        )}
       </BadgeDurationContainer>
     </Wrapper>
   )

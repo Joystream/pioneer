@@ -25,7 +25,13 @@ export const SetMembershipPrice = ({ amount, setAmount }: Props) => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Membership price" tight units="JOY" required message="Value must be greater than zero">
+          <InputComponent
+            label="Membership price"
+            tight
+            units="tJOY"
+            required
+            message="Value must be greater than zero"
+          >
             <InputNumber
               id="amount-input"
               isTokenValue

@@ -13,8 +13,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   avatar: castQueryResult(data.metadata.avatar, 'AvatarUri')?.avatarUri,
   inviteCount: data.inviteCount,
   isFoundingMember: data.isFoundingMember,
-  // See https://github.com/Joystream/pioneer/issues/1536
-  isCouncilMember: false, // data.isCouncilMember,
+  isCouncilMember: data.isCouncilMember,
   isVerified: data.isVerified,
   rootAccount: data.rootAccount,
   controllerAccount: data.controllerAccount,

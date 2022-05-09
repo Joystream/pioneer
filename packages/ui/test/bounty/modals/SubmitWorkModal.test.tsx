@@ -48,7 +48,6 @@ describe('UI: BountySubmitModal', () => {
   let useModal: UseModal<any>
   beforeAll(async () => {
     seedMembers(mockServer.server, 2)
-
     useModal = {
       hideModal: jest.fn(),
       showModal: jest.fn(),
@@ -63,6 +62,7 @@ describe('UI: BountySubmitModal', () => {
               worker: {
                 id: getMember('bob').id,
               },
+              withdrawn: false,
             },
           ],
         },
@@ -99,6 +99,14 @@ describe('UI: BountySubmitModal', () => {
   it('Renders', async () => {
     expect(screen.queryByText('modals.submitWork.title')).toBeDefined()
     expect(screen.queryByText('modals.submitWork.button.submitWork')).toBeDefined()
+  })
+
+  it('Hides modal when entry is withdrawn', () => {
+    useModal.modalData.bounty.entries[0].withdrawn = true
+    render(<RenderModal />)
+    useModal.modalData.bounty.entries[0].withdrawn = false
+
+    expect(useModal.hideModal).toBeCalledTimes(1)
   })
 
   it('Displays correct bounty', () => {
