@@ -23,6 +23,7 @@ fragment ProposalFields on Proposal {
   }
   createdAt
   councilApprovals
+  exactExecutionBlock
 }
 
 fragment VoteFields on ProposalVotedEvent {
