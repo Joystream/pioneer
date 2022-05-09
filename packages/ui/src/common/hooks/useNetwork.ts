@@ -14,7 +14,7 @@ export const useNetwork = () => {
       'local',
       'local-mocks',
       ...(endpointsAreDefined(autoConfEndpoints) ? ['auto-conf' as const] : []),
-      ...(IS_TESTNET_DEFINED ? ['olympia-testnet' as const] : []),
+      ...(IS_TESTNET_DEFINED ? ['joystream-testnet' as const] : []),
     ],
     [autoConfEndpoints]
   )

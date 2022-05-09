@@ -57,7 +57,7 @@ yarn run build
 
 ## Running Pioneer 2 with local Joystream dev environment
 
-Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer 2 with the Olympia testnet locally.
+Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer 2 with the Joystream testnet locally.
 
 ## Coding standards
 
@@ -82,7 +82,7 @@ Both - the testnet & local development environment expects that a Joystream node
 Expected URIs:
 
 - local: `ws://127.0.0.1:9944`
-- testnet: `wss://olympia-dev.joystream.app`
+- testnet: `wss://rpc.joystream.org:9944`
 
 ### Local environment limitations
 
@@ -161,13 +161,13 @@ You can use the Polkadot apps wallet to browse the Joystream node state and call
 
 In order to use the app with Joystream API types you need to upload the correct type `defs.json` from the Joystream repo (using proper branch as well). The full path to file is: `/types/augment/all/defs.json`.
 
-For the `olympia_dev` branch the `defs.json` use this [link](https://github.com/Joystream/joystream/blob/olympia_dev/types/augment/all/defs.json):
+For the `master` branch the `defs.json` use this [link](https://github.com/Joystream/joystream/blob/master/types/augment/all/defs.json):
 
-1. Copy the contents of the [`raw view`](https://raw.githubusercontent.com/Joystream/joystream/olympia_dev/types/augment/all/defs.json).
+1. Copy the contents of the [`raw view`](https://raw.githubusercontent.com/Joystream/joystream/master/types/augment/all/defs.json).
 2. Paste to the input on Settings > Developer tab
 3. Switch to a network
    1. [local](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944)
-   2. [olympia testnet](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Folympia-dev.joystream.app%2Frpc)
+   2. [joystream testnet](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.joystream.org%3A9944)
 
 ## Using well-known accounts with Polkadot-js extension
 
@@ -190,10 +190,10 @@ By default, only `Alice`, `Alice_Stash`, `Bob` and `Bob_Stash` accounts has any 
 
 To use custom addresses add the `.env` file in `packages/ui` (example: `packages/ui/.env.example`) and set
 
-1. `REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET` example `wss://olympia-dev.joystream.app/rpc`
-2. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE` example `https://olympia-dev.joystream.app/query/server/graphql`
-3. `REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET` example `wss://olympia-dev.joystream.app/query/server/graphql`
-4. `REACT_APP_OLYMPIA_TESTNET_MEMBERSHIP_FAUCET_URL` example `https://olympia-dev.joystream.app/member/register`
+1. `REACT_APP_TESTNET_NODE_SOCKET` example `wss://rpc.joystream.org:9944`
+2. `REACT_APP_TESTNET_QUERY_NODE` example `https://query.joystream.org/graphql`
+3. `REACT_APP_TESTNET_QUERY_NODE_SOCKET` example `wss://query.joystream.org/graphql`
+4. `REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL` example `https://18.234.141.38.nip.io/member-faucet/register`
 
 Please remember to restart the webpack process after each change.
 
