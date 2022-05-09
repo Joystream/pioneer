@@ -7,13 +7,13 @@ export interface ElectedCouncil {
   id: string
   electedAt: Block
   councilors: Councilor[]
-  councilElectionRoundId: string | undefined
+  electionCycleId: number | undefined
 }
 
 export const asElectedCouncil = (fields: ElectedCouncilFieldsFragment): ElectedCouncil => ({
   id: fields.id,
   councilors: fields.councilMembers.map(asCouncilor),
-  councilElectionRoundId: fields.councilElections[0]?.id,
+  electionCycleId: fields.councilElections[0]?.cycleId,
   electedAt: asBlock({
     createdAt: fields.electedAtTime,
     inBlock: fields.electedAtBlock,

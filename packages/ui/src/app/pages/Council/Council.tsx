@@ -1,22 +1,23 @@
-import React, { useMemo, useState } from 'react'
+import React, {useMemo, useState} from 'react'
 
-import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
-import { PageLayout } from '@/app/components/PageLayout'
-import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { MainPanel } from '@/common/components/page/PageContent'
-import { SidePanel } from '@/common/components/page/SidePanel'
-import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
-import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { CouncilList, CouncilOrder } from '@/council/components/councilList'
-import { ViewElectionButton } from '@/council/components/ViewElectionButton'
-import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
-import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
-import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
-import { useElectionStage } from '@/council/hooks/useElectionStage'
-import {useVoteStake} from '@/council/hooks/useVoteStake';
-import { Councilor } from '@/council/types'
+import {PageHeaderWithHint} from '@/app/components/PageHeaderWithHint'
+import {PageLayout} from '@/app/components/PageLayout'
+import {ActivitiesBlock} from '@/common/components/Activities/ActivitiesBlock'
+import {MainPanel} from '@/common/components/page/PageContent'
+import {SidePanel} from '@/common/components/page/SidePanel'
+import {BlockDurationStatistics, MultiValueStat, Statistics} from '@/common/components/statistics'
+import {NotFoundText} from '@/common/components/typography/NotFoundText'
+import {CouncilList, CouncilOrder} from '@/council/components/councilList'
+import {ViewElectionButton} from '@/council/components/ViewElectionButton'
+import {useCouncilActivities} from '@/council/hooks/useCouncilActivities'
+import {useCouncilorWithDetails} from '@/council/hooks/useCouncilorWithDetails';
+import {useCouncilStatistics} from '@/council/hooks/useCouncilStatistics'
+import {useElectedCouncil} from '@/council/hooks/useElectedCouncil'
+import {useElectionStage} from '@/council/hooks/useElectionStage'
+import {Councilor} from '@/council/types'
 
-import { CouncilTabs } from './components/CouncilTabs'
+import {CouncilTabs} from './components/CouncilTabs'
+import {BN_ZERO} from '@/common/constants';
 
 export const Council = () => {
   const { council, isLoading } = useElectedCouncil()
@@ -24,10 +25,8 @@ export const Council = () => {
   const { activities } = useCouncilActivities()
   const { stage: electionStage } = useElectionStage()
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
-  const councilors = useMemo(() => council?.councilors.slice(0).sort(sortBy(order)) ?? [], [council])
-  // const data = useVoteStake( [council.id], [] )
-  // console.log('data', data)
-
+  const { councilors  } = useCouncilorWithDetails(council)
+  const sortedCouncilors = useMemo(() => councilors.sort(sortBy(order)), [councilors])
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
   const main = (
@@ -54,10 +53,10 @@ export const Council = () => {
         />
       </Statistics>
 
-      {!isLoading && councilors.length === 0 ? (
+      {!isLoading && sortedCouncilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
       ) : (
-        <CouncilList councilors={councilors} order={order} onSort={setOrder} isLoading={isLoading}/>
+        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isLoading}/>
       )}
     </MainPanel>
   )
@@ -73,7 +72,12 @@ export const Council = () => {
 
 const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Councilor) => number) => {
   const direction = isDescending ? -1 : 1
-  return key === 'member'
-    ? (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
-    : (a, b) => (a[key] - b[key]) * direction
+  switch (key) {
+    case 'member':
+      return (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
+    case 'voterStake':
+      return (a, b) => ((a[key]) ?? BN_ZERO).gte(b[key] ?? BN_ZERO) ? 1 : -1 * direction
+    default:
+      return (a, b) => (a[key] - b[key]) * direction
+  }
 }

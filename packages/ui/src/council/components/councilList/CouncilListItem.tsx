@@ -1,26 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TableListItem } from '@/common/components/List'
-import { TextBig, TokenValue } from '@/common/components/typography'
-import { CouncilColLayout } from '@/council/constants/styles'
-import {useElectedCouncil} from '@/council/hooks/useElectedCouncil';
-import {useVoteStake} from '@/council/hooks/useVoteStake';
-import {useGetElectionRoundQuery} from '@/council/queries';
-import { Councilor } from '@/council/types'
-import { MemberInfo } from '@/memberships/components'
-import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
+import {TableListItem} from '@/common/components/List'
+import {TextBig, TokenValue} from '@/common/components/typography'
+import {CouncilColLayout} from '@/council/constants/styles'
+import {Councilor} from '@/council/types'
+import {MemberInfo} from '@/memberships/components'
+import {useShowMemberModal} from '@/memberships/hooks/useShowMemberModal'
 
 
 export interface CouncilListItemProps {
-  councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms'>
+  councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms' | 'voterStake'>
 }
 export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
   const showMemberModal = useShowMemberModal(councilor.member.id)
-  const { council, isLoading } = useElectedCouncil()
-  console.log('mem', councilor)
-  const data = useVoteStake( [councilor.member.id])
-  console.log('d', data.stake)
   return (
     <CouncilListItemStyles onClick={showMemberModal}>
       <MemberInfo member={councilor.member} />
@@ -30,7 +23,7 @@ export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
       </TextBig>
 
       <TextBig as="h5" bold>
-        <TokenValue value={councilor.stake} />
+        <TokenValue value={councilor.voterStake} />
       </TextBig>
 
       <TextBig as="h5" bold>

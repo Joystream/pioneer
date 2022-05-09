@@ -45,7 +45,7 @@ fragment ElectedCouncilFields on ElectedCouncil {
   electedAtTime
   electedAtNetwork
   councilElections {
-    id
+    cycleId
   }
   councilMembers {
     ...CouncilMemberFields
@@ -174,15 +174,16 @@ query GetElectedCouncil {
 }
 
 query GetElectionRound {
-  electedCouncils (where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
+  electedCouncils (where: { isResigned_eq: false }, orderBy: [createdAt_DESC], limit: 1) {
     councilElections {
       cycleId
     }
   }
 }
 
-query GetVoterStake($id: ID!, $member_in: [ID!]) {
-  candidates(where: { electionRound: { id_eq: $id }, member: { id_in: $member_in } }) {
+query GetCouncilorVoterStake($electionRound: ElectionRoundWhereInput!) {
+  candidates(where: { electionRound: $electionRound, status_eq: ELECTED }) {
+    memberId
     votesReceived {
       stake
     }

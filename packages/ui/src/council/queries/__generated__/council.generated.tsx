@@ -17,7 +17,7 @@ export type PastCouncilRewardPaidEventFieldsFragment = { __typename: 'RewardPaid
 
 export type PastCouncilNewMissedRewardLevelReachedEventFieldsFragment = { __typename: 'NewMissedRewardLevelReachedEvent', groupId: string, workerId: string, newMissedRewardAmount: any };
 
-export type ElectedCouncilFieldsFragment = { __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', id: string }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> };
+export type ElectedCouncilFieldsFragment = { __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', cycleId: number }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> };
 
 export type PastCouncilFieldsFragment = { __typename: 'ElectedCouncil', id: string, endedAtBlock?: number | null, endedAtNetwork?: Types.Network | null, endedAtTime?: any | null };
 
@@ -42,20 +42,19 @@ export type FundingRequestApprovedFragment = { __typename: 'ProposalExecutedEven
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetElectedCouncilQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', id: string }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> }> };
+export type GetElectedCouncilQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', id: string, electedAtBlock: number, electedAtTime: any, electedAtNetwork: Types.Network, councilElections: Array<{ __typename: 'ElectionRound', cycleId: number }>, councilMembers: Array<{ __typename: 'CouncilMember', id: string, unpaidReward: any, stake: any, member: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, inviteCount: number, createdAt: any, councilMembers: Array<{ __typename: 'CouncilMember' }>, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }> } }> }> };
 
 export type GetElectionRoundQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type GetElectionRoundQuery = { __typename: 'Query', electedCouncils: Array<{ __typename: 'ElectedCouncil', councilElections: Array<{ __typename: 'ElectionRound', cycleId: number }> }> };
 
-export type GetVoterStakeQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  member_in?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+export type GetCouncilorVoterStakeQueryVariables = Types.Exact<{
+  electionRound: Types.ElectionRoundWhereInput;
 }>;
 
 
-export type GetVoterStakeQuery = { __typename: 'Query', candidates: Array<{ __typename: 'Candidate', votesReceived: Array<{ __typename: 'CastVote', stake: any }> }> };
+export type GetCouncilorVoterStakeQuery = { __typename: 'Query', candidates: Array<{ __typename: 'Candidate', memberId: string, votesReceived: Array<{ __typename: 'CastVote', stake: any }> }> };
 
 export type GetPastCouncilsQueryVariables = Types.Exact<{
   offset?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -260,7 +259,7 @@ export const ElectedCouncilFieldsFragmentDoc = gql`
   electedAtTime
   electedAtNetwork
   councilElections {
-    id
+    cycleId
   }
   councilMembers {
     ...CouncilMemberFields
@@ -434,7 +433,7 @@ export type GetElectedCouncilQueryResult = Apollo.QueryResult<GetElectedCouncilQ
 export const GetElectionRoundDocument = gql`
     query GetElectionRound {
   electedCouncils(
-    where: {endedAtBlock_eq: null}
+    where: {isResigned_eq: false}
     orderBy: [createdAt_DESC]
     limit: 1
   ) {
@@ -471,9 +470,10 @@ export function useGetElectionRoundLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetElectionRoundQueryHookResult = ReturnType<typeof useGetElectionRoundQuery>;
 export type GetElectionRoundLazyQueryHookResult = ReturnType<typeof useGetElectionRoundLazyQuery>;
 export type GetElectionRoundQueryResult = Apollo.QueryResult<GetElectionRoundQuery, GetElectionRoundQueryVariables>;
-export const GetVoterStakeDocument = gql`
-    query GetVoterStake($id: ID!, $member_in: [ID!]) {
-  candidates(where: {electionRound: {id_eq: $id}, member: {id_in: $member_in}}) {
+export const GetCouncilorVoterStakeDocument = gql`
+    query GetCouncilorVoterStake($electionRound: ElectionRoundWhereInput!) {
+  candidates(where: {electionRound: $electionRound, status_eq: ELECTED}) {
+    memberId
     votesReceived {
       stake
     }
@@ -482,33 +482,32 @@ export const GetVoterStakeDocument = gql`
     `;
 
 /**
- * __useGetVoterStakeQuery__
+ * __useGetCouncilorVoterStakeQuery__
  *
- * To run a query within a React component, call `useGetVoterStakeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetVoterStakeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCouncilorVoterStakeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilorVoterStakeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetVoterStakeQuery({
+ * const { data, loading, error } = useGetCouncilorVoterStakeQuery({
  *   variables: {
- *      id: // value for 'id'
- *      member_in: // value for 'member_in'
+ *      electionRound: // value for 'electionRound'
  *   },
  * });
  */
-export function useGetVoterStakeQuery(baseOptions: Apollo.QueryHookOptions<GetVoterStakeQuery, GetVoterStakeQueryVariables>) {
+export function useGetCouncilorVoterStakeQuery(baseOptions: Apollo.QueryHookOptions<GetCouncilorVoterStakeQuery, GetCouncilorVoterStakeQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetVoterStakeQuery, GetVoterStakeQueryVariables>(GetVoterStakeDocument, options);
+        return Apollo.useQuery<GetCouncilorVoterStakeQuery, GetCouncilorVoterStakeQueryVariables>(GetCouncilorVoterStakeDocument, options);
       }
-export function useGetVoterStakeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVoterStakeQuery, GetVoterStakeQueryVariables>) {
+export function useGetCouncilorVoterStakeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilorVoterStakeQuery, GetCouncilorVoterStakeQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetVoterStakeQuery, GetVoterStakeQueryVariables>(GetVoterStakeDocument, options);
+          return Apollo.useLazyQuery<GetCouncilorVoterStakeQuery, GetCouncilorVoterStakeQueryVariables>(GetCouncilorVoterStakeDocument, options);
         }
-export type GetVoterStakeQueryHookResult = ReturnType<typeof useGetVoterStakeQuery>;
-export type GetVoterStakeLazyQueryHookResult = ReturnType<typeof useGetVoterStakeLazyQuery>;
-export type GetVoterStakeQueryResult = Apollo.QueryResult<GetVoterStakeQuery, GetVoterStakeQueryVariables>;
+export type GetCouncilorVoterStakeQueryHookResult = ReturnType<typeof useGetCouncilorVoterStakeQuery>;
+export type GetCouncilorVoterStakeLazyQueryHookResult = ReturnType<typeof useGetCouncilorVoterStakeLazyQuery>;
+export type GetCouncilorVoterStakeQueryResult = Apollo.QueryResult<GetCouncilorVoterStakeQuery, GetCouncilorVoterStakeQueryVariables>;
 export const GetPastCouncilsDocument = gql`
     query GetPastCouncils($offset: Int, $limit: Int, $orderBy: [ElectedCouncilOrderByInput!]) {
   electedCouncils(
