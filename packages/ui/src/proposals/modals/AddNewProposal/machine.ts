@@ -931,6 +931,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         BOUND: 'transaction',
         REQUIRES_STAKING_CANDIDATE: 'bindStakingAccount',
+        FAIL: 'requirementsFailed',
       },
     },
     bindStakingAccount: {

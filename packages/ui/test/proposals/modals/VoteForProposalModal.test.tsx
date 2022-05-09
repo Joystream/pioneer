@@ -17,13 +17,13 @@ import { getMember } from '@/mocks/helpers'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 
 import { getButton } from '../../_helpers/getButton'
-import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -163,7 +163,7 @@ describe('UI: Vote for Proposal Modal', () => {
       })
 
       expect(await screen.findByText('Success')).toBeDefined()
-      expect(await getButton(/See my proposal/i)).toBeDefined()
+      expect(await getButton(/Back to proposals/i)).toBeDefined()
     })
 
     it('Error', async () => {
@@ -175,9 +175,7 @@ describe('UI: Vote for Proposal Modal', () => {
       })
 
       expect(await screen.findByText('Failure')).toBeDefined()
-      expect(
-        includesTextWithMarkup(screen.getByText, `There was a problem while Approve proposal "${PROPOSAL_DATA.title}".`)
-      ).toBeInTheDocument()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
   })
 

@@ -229,10 +229,9 @@ describe('UI: AddNewProposalModal', () => {
 
   describe('Warning modal', () => {
     beforeEach(renderModal)
-
     it('Not checked', async () => {
       const button = await getWarningNextButton()
-
+      expect(await screen.queryByText('Do not show this message again.')).toBeDefined()
       expect(button).toBeDisabled()
     })
 
@@ -240,7 +239,7 @@ describe('UI: AddNewProposalModal', () => {
       const button = await getWarningNextButton()
 
       const checkbox = await getCheckbox()
-      fireEvent.click(checkbox)
+      fireEvent.click(checkbox as HTMLElement)
 
       expect(button).toBeEnabled()
     })
@@ -1167,6 +1166,18 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('Authorize', () => {
+      it('Fee fail before transaction', async () => {
+        await finishWarning()
+        await finishProposalType('fundingRequest')
+        stubTransaction(api, 'api.tx.utility.batch', 10000)
+        await finishStakingAccount()
+        await finishProposalDetails()
+        await finishTriggerAndDiscussion()
+        await SpecificParameters.FundingRequest.finish(100, 'bob')
+
+        expect(await screen.findByText('modals.insufficientFunds.title')).toBeInTheDocument()
+      })
+
       describe('Staking account not bound nor staking candidate', () => {
         beforeEach(async () => {
           await finishWarning()
@@ -1397,7 +1408,7 @@ describe('UI: AddNewProposalModal', () => {
     })
   })
 
-  const getCheckbox = async () => await screen.findByLabelText(/I’m aware of/i)
+  const getCheckbox = async () => await screen.queryByText('I’m aware of the possible risks associated with creating a proposal.')
 
   async function finishWarning() {
     await renderModal()
@@ -1405,7 +1416,7 @@ describe('UI: AddNewProposalModal', () => {
     const button = await getWarningNextButton()
 
     const checkbox = await getCheckbox()
-    fireEvent.click(checkbox)
+    fireEvent.click(checkbox as HTMLElement)
     fireEvent.click(button as HTMLElement)
   }
 

@@ -1,6 +1,6 @@
-import { ProposalVoteKind } from '@/common/api/queries'
+import { ProposalDiscussionPostStatus, ProposalVoteKind } from '@/common/api/queries'
 import { asBlock, Block } from '@/common/types'
-import { ForumPost } from '@/forum/types'
+import { ForumPost, PostStatusTypename } from '@/forum/types'
 import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalStatus } from '@/proposals/model/proposalStatus'
 import {
@@ -80,6 +80,10 @@ export interface ProposalDiscussionThread {
   whitelistIds?: string[]
 }
 
+const asDiscussionPostStatus = (status: ProposalDiscussionPostStatus['__typename']) => {
+  return status.replace('ProposalDiscussion', '') as PostStatusTypename
+}
+
 const asForumComment = (fields: DiscussionPostFieldsFragment): ForumPost => ({
   id: fields.id,
   createdAt: fields.createdAt,
@@ -88,5 +92,5 @@ const asForumComment = (fields: DiscussionPostFieldsFragment): ForumPost => ({
   author: asMember(fields.author),
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumComment(fields.repliesTo) } : {}),
-  status: 'PostStatusActive',
+  status: asDiscussionPostStatus(fields.status.__typename),
 })

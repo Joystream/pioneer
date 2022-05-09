@@ -3,7 +3,6 @@ import React from 'react'
 import { List } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { useIsCouncilMember } from '@/memberships/hooks/useIsCouncilMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalColLayout, ProposalsListHeaders, ProposalListHeader } from '@/proposals/constants'
 import { Proposal } from '@/proposals/types'
@@ -17,7 +16,7 @@ export interface ProposalListProps {
 
 export const ProposalList = ({ proposals, isPast }: ProposalListProps) => {
   const { active } = useMyMemberships()
-  const isCouncilMember = useIsCouncilMember(active)
+  const isCouncilMember = active?.isCouncilMember
 
   if (!proposals.length) {
     return <NotFoundText>No proposals matching search criteria</NotFoundText>

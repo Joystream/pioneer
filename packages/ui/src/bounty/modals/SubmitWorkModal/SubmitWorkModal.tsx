@@ -148,7 +148,7 @@ export const SubmitWorkModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.submitWork.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>

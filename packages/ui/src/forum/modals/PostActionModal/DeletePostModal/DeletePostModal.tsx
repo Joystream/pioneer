@@ -22,7 +22,7 @@ export const DeletePostModal = () => {
     hideModal,
   } = useModal<DeletePostModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -30,12 +30,15 @@ export const DeletePostModal = () => {
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {
-    if (!state.matches('requirementsVerification')) {
-      return
+    if (state.matches('requirementsVerification')) {
+      if (transaction && feeInfo && active) {
+        feeInfo.canAfford && send('PASS')
+        !feeInfo.canAfford && send('FAIL')
+      }
     }
-    if (transaction && feeInfo && active) {
-      feeInfo.canAfford && send('PASS')
-      !feeInfo.canAfford && send('FAIL')
+
+    if (state.matches('beforeTransaction')) {
+      send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, transaction, feeInfo?.canAfford])
 

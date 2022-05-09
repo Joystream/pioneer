@@ -18,8 +18,7 @@ fragment MemberFields on Membership {
   }
   isVerified
   isFoundingMember
-  # isCouncilMember
-  # See https://github.com/Joystream/pioneer/issues/1536
+  isCouncilMember
   inviteCount
   roles {
     id

@@ -2,13 +2,18 @@
 import { MembershipMetadata } from '@joystream/metadata-protobuf'
 
 import { metadataToBytes } from '../../../../src/common/model/JoystreamNode'
-import memberData from '../../../../src/mocks/data/raw/members.json'
+import members from '../../../../src/mocks/data/raw/members.json'
 import { getSudoAccount } from '../../data/addresses'
 import { signAndSend, withApi } from '../../lib/api'
 
 export const createMembersCommand = async () => {
   await withApi(async (api) => {
-    const members = memberData
+    const nextId = await api.query.members.nextMemberId()
+
+    if (Number(nextId) > 0) {
+      console.log('Some members were already added')
+      return
+    }
 
     const createMembers = members.map((member) => {
       return api.tx.members.buyMembership({

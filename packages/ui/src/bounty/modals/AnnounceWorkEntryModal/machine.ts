@@ -20,6 +20,7 @@ interface TransactionContext extends ContributionContext {
 
 export enum AnnounceWorkEntryStates {
   requirementsVerification = 'requirementsVerification',
+  requirementsFailed = 'requirementsFailed',
   beforeTransaction = 'beforeTransaction',
   bindStakingAccount = 'bindStakingAccount',
   contribute = 'contribute',
@@ -29,13 +30,14 @@ export enum AnnounceWorkEntryStates {
   cancel = 'cancel',
 }
 
-type NextEvent = { type: 'NEXT' } | { type: 'BOUND' } | { type: 'REQUIRES_STAKING_CANDIDATE' }
+type NextEvent = { type: 'NEXT' } | { type: 'BOUND' } | { type: 'REQUIRES_STAKING_CANDIDATE' } | { type: 'FAIL' }
 type SetStakingAccountEvent = { type: 'SET_STAKING_ACCOUNT'; account: Account }
 
 export type AnnounceWorkEntryEvents = NextEvent | SetStakingAccountEvent
 
 export type AnnounceWorkEntryState =
   | { value: AnnounceWorkEntryStates.requirementsVerification; context: EmptyObject }
+  | { value: AnnounceWorkEntryStates.requirementsFailed; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.bindStakingAccount; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.beforeTransaction; context: EmptyObject }
   | { value: AnnounceWorkEntryStates.contribute; context: Required<ContributionContext> }
@@ -54,7 +56,11 @@ export const announceWorkEntryMachine = createMachine<
     [AnnounceWorkEntryStates.requirementsVerification]: {
       on: {
         NEXT: AnnounceWorkEntryStates.contribute,
+        FAIL: AnnounceWorkEntryStates.requirementsFailed,
       },
+    },
+    [AnnounceWorkEntryStates.requirementsFailed]: {
+      type: 'final',
     },
     [AnnounceWorkEntryStates.contribute]: {
       id: AnnounceWorkEntryStates.contribute,
@@ -72,6 +78,7 @@ export const announceWorkEntryMachine = createMachine<
       on: {
         BOUND: AnnounceWorkEntryStates.transaction,
         REQUIRES_STAKING_CANDIDATE: AnnounceWorkEntryStates.bindStakingAccount,
+        FAIL: 'requirementsFailed',
       },
     },
     [AnnounceWorkEntryStates.bindStakingAccount]: {

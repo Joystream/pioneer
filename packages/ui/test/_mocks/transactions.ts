@@ -25,12 +25,20 @@ const createSuccessEvents = (data: any[], section: string, method: string) => [
   },
 ]
 
+export const currentStubErrorMessage = 'Balance too low to send value.'
+const findMetaError = () => ({
+  docs: [currentStubErrorMessage],
+})
+
 const createErrorEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: {
       index: '0x0001',
-      data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+      data: [
+        { Module: { index: new BN(5), error: new BN(3) }, isModule: true, registry: { findMetaError } },
+        { weight: 190949000, class: 'Normal', paysFee: 'Yes' },
+      ],
       section: 'system',
       method: 'ExtrinsicFailed',
     },

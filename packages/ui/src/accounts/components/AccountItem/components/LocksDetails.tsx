@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 
 import { LockItem } from '@/accounts/components/AccountItem/components/LockItem'
+import { useIsVoteStakeLocked } from '@/accounts/hooks/useIsVoteStakeLocked'
 import { isRecoverable } from '@/accounts/model/lockTypes'
 import { Balances } from '@/accounts/types'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -23,12 +24,11 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
     [election, address]
   )
 
-  const isVoteStakeLocked = useMemo(() => {
-    const candidate = votes?.find((vote) => vote.castBy === address)?.voteFor
-    // Lock stake if the vote was cast: in current election or to winning candidate
-    // Enable stake recovery if election is finished
-    return !!candidate && (!election?.isFinished || candidate.isCouncilMember)
-  }, [votes, address, election])
+  const candidate = useMemo(() => {
+    return votes?.find((vote) => vote.castBy === address)?.voteFor
+  }, [votes])
+
+  const isVoteStakeLocked = !!useIsVoteStakeLocked(candidate, { isElectionFinished: election?.isFinished })
 
   if (!balance || !balance.locks.length) {
     return <TextMedium light>No locks found.</TextMedium>

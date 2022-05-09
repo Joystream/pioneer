@@ -22,9 +22,9 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
-import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -65,17 +65,13 @@ export type BaseProposalParams = Exclude<
 
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
-const feeFallback = {
-  transactionFee: BN_ZERO,
-  canAfford: true,
-}
-
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const minCount = useMinimumValidatorCount()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
+  const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
 
   const constants = useProposalConstants(state.context.type)
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
@@ -116,7 +112,7 @@ export const AddNewProposalModal = () => {
     }
   }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState, stakingStatus])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction) ?? feeFallback
+  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -129,7 +125,13 @@ export const AddNewProposalModal = () => {
         })
       }
 
-      return send('NEXT')
+      if (feeInfo && feeInfo.canAfford) {
+        return send('NEXT')
+      }
+
+      if (feeInfo && !feeInfo.canAfford) {
+        return send('FAIL')
+      }
     }
 
     if (state.matches('requiredStakeVerification')) {
@@ -173,9 +175,9 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     if (state.matches('beforeTransaction')) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, stakingStatus])
+  }, [state, stakingStatus, feeInfo])
 
   useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
 
@@ -184,11 +186,11 @@ export const AddNewProposalModal = () => {
     setIsExecutionError(false)
   }, [send])
 
-  if (!api || !activeMember || !transaction || state.matches('requirementsVerification')) {
+  if (!api || !activeMember || !transaction || !feeInfo || state.matches('requirementsVerification')) {
     return null
   }
 
-  if (feeInfo && !feeInfo.canAfford) {
+  if (state.matches('requirementsFailed')) {
     return (
       <InsufficientFundsModal
         onClose={hideModal}
@@ -198,7 +200,7 @@ export const AddNewProposalModal = () => {
     )
   }
 
-  if (state.matches('warning')) {
+  if (state.matches('warning') && !isHidingCaution) {
     return <WarningModal onNext={() => send('NEXT')} />
   }
 

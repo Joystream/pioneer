@@ -31,6 +31,7 @@ type CreateThreadState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'generalDetails'; context: DetailsContext }
+  | { value: 'beforeTransaction'; context: TransactionContext }
   | { value: 'transaction'; context: TransactionContext }
   | { value: 'success'; context: Required<CreateThreadContext> }
   | { value: 'error'; context: CreateThreadContext & { transactionEvents: EventRecord[] } }
@@ -76,6 +77,12 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
             description: (_, event) => event.description,
           }),
         },
+      },
+    },
+    beforeTransaction: {
+      on: {
+        NEXT: 'transaction',
+        FAIL: 'requirementsFailed',
       },
     },
     transaction: {

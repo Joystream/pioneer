@@ -23,7 +23,7 @@ export const OverviewMain = () => {
           {/*//TODO value has to be added*/}
           <EarnedAndReward earnedTitle={t('totalEarned')} rewardTitle={t('totalOwed')} />
           <SectionsWrapper>
-            <DeadlineList />
+            <DeadlineList member={active} />
           </SectionsWrapper>
         </>
       )

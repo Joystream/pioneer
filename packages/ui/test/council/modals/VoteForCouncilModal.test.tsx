@@ -29,6 +29,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -233,7 +234,7 @@ describe('UI: Vote for Council Modal', () => {
     fireEvent.click(await getNextStepButton())
     fireEvent.click(await getButton('Sign and send'))
 
-    expect(await screen.findByText(/^There was a problem casting your vote./i)).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   function renderModal() {
