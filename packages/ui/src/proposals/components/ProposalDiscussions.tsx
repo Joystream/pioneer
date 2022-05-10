@@ -51,7 +51,10 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
     }
   }, [postsRefs, initialPost])
 
-  const discussionPosts = useMemo(() => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'), [thread])
+  const discussionPosts = useMemo(
+    () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
+    [thread]
+  )
 
   const getTransaction = (postText: string, isEditable: boolean) => {
     if (api && active && thread) {
