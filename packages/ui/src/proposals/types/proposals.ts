@@ -23,6 +23,12 @@ export type ProposalStatus =
   | 'cancelled'
   | 'canceledByRuntime'
 
+type CurrentProposalStatus = Extract<ProposalStatus, 'deciding' | 'gracing' | 'dormant'>
+const currentProposalStatusArray: CurrentProposalStatus[] = ['deciding', 'dormant', 'gracing']
+
+export const isActiveProposalStatus = (status: ProposalStatus): status is CurrentProposalStatus =>
+  currentProposalStatusArray.includes(status as CurrentProposalStatus)
+
 export type ProposalType =
   | 'signal'
   | 'runtimeUpgrade'
