@@ -50,6 +50,7 @@ export type PastCouncilProposalsFieldsFragment = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }
@@ -701,6 +702,7 @@ export type GetPastCouncilMembersQuery = {
       statusSetAtTime: any
       createdAt: any
       councilApprovals: number
+      exactExecutionBlock?: number | null
       status:
         | { __typename: 'ProposalStatusCanceledByRuntime' }
         | { __typename: 'ProposalStatusCancelled' }
@@ -783,6 +785,7 @@ export type GetPastCouncilProposalsQuery = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }

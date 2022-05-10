@@ -42,6 +42,7 @@ export type ProposalFieldsFragment = {
   statusSetAtTime: any
   createdAt: any
   councilApprovals: number
+  exactExecutionBlock?: number | null
   status:
     | { __typename: 'ProposalStatusCanceledByRuntime' }
     | { __typename: 'ProposalStatusCancelled' }
@@ -189,6 +190,7 @@ export type ProposalWithDetailsFieldsFragment = {
   statusSetAtTime: any
   createdAt: any
   councilApprovals: number
+  exactExecutionBlock?: number | null
   votes: Array<{
     __typename: 'ProposalVotedEvent'
     id: string
@@ -826,6 +828,7 @@ export type GetProposalsQuery = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }
@@ -918,6 +921,7 @@ export type GetProposalQuery = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     votes: Array<{
       __typename: 'ProposalVotedEvent'
       id: string
@@ -1589,6 +1593,7 @@ export const ProposalFieldsFragmentDoc = gql`
     }
     createdAt
     councilApprovals
+    exactExecutionBlock
   }
   ${MemberFieldsFragmentDoc}
 `
