@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
-import { TextHuge, TextMedium, TokenValue } from '@/common/components/typography'
+import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 
 interface Props {

@@ -7,7 +7,6 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
 import { TextHuge, TokenValue } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
-import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 
 interface Props {

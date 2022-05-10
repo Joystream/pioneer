@@ -23,7 +23,6 @@ import {
   BountyWork,
   Contributor,
   FundingType,
-  isFundingLimited,
   WorkEntry,
   WorkInfo,
 } from './Bounty'

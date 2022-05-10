@@ -199,7 +199,9 @@ export const AddNewProposalModal = () => {
       />
     )
   }
-
+  if (isHidingCaution) {
+    send('NEXT')
+  }
   if (state.matches('warning') && !isHidingCaution) {
     return <WarningModal onNext={() => send('NEXT')} />
   }
