@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
@@ -49,6 +49,17 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
   const rewardPeriod = useRewardPeriod(opening.groupId)
   const isHired = application.status === 'ApplicationStatusAccepted'
 
+  const applicationStatus = useMemo(() => {
+    switch (application.status) {
+      case 'ApplicationStatusAccepted':
+        return 'Hired'
+      case 'ApplicationStatusWithdrawn':
+        return 'Withdrawn'
+      default:
+        return 'Pending'
+    }
+  }, [application.status])
+
   return (
     <ApplicationItemWrap past={past}>
       <ApplicationItemInfo>
@@ -77,7 +88,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig value>{isHired ? 'Yes' : 'No'}</TextInlineBig>
-          <Subscription>{!isHired ? 'Pending' : 'Hired'}</Subscription>
+          <Subscription>{applicationStatus}</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
       <ButtonGhost square size="medium" onClick={showApplicationModal}>
