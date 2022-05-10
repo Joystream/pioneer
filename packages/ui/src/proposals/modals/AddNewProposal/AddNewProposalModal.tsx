@@ -137,6 +137,10 @@ export const AddNewProposalModal = () => {
     if (state.matches('requiredStakeVerification')) {
       return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
+
+    if (state.matches('warning') && isHidingCaution) {
+      send('NEXT')
+    }
   }, [state, activeMember?.id, JSON.stringify(feeInfo)])
 
   useEffect((): any => {

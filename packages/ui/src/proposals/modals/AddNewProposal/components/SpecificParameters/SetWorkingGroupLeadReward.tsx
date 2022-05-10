@@ -2,9 +2,10 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
+import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
@@ -64,12 +65,21 @@ export const SetWorkingGroupLeadReward = ({
             />
           </InputComponent>
           <SelectedMember label="Working Group Lead" member={lead} disabled />
+          {group && (
+            <Info>
+              <TextMedium>
+                Current reward per block for {group?.name} Working Group Lead is{' '}
+                {<TokenValue value={group?.leadWorker?.rewardPerBlock} />}
+              </TextMedium>
+            </Info>
+          )}
+
           <InputComponent
-            label="Reward Amount"
+            label="Reward Amount Per Block"
             tight
             units="tJOY"
             inputWidth="s"
-            tooltipText="Amount to be rewarded"
+            tooltipText="Reward per block amount that is awarded to working group lead’s reward account"
             message="Amount must be greater than zero"
             required
             disabled={isDisabled}

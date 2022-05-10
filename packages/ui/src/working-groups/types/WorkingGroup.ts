@@ -28,6 +28,7 @@ export interface DetailedWorkingGroup extends WorkingGroup {
     id: string
     runtimeId: number
     stake: BN
+    rewardPerBlock: BN
   }
 }
 
@@ -55,6 +56,7 @@ export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment
           id: group.leader.id,
           runtimeId: group.leader.runtimeId,
           stake: new BN(group.leader.stake),
+          rewardPerBlock: new BN(group.leader.rewardPerBlock),
         },
       }
     : {}),

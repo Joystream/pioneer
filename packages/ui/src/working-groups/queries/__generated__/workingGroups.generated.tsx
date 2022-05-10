@@ -191,6 +191,7 @@ export type WorkingGroupDetailedFieldsFragment = {
     runtimeId: number
     stake: any
     membershipId: string
+    rewardPerBlock: any
     isActive: boolean
   } | null
   metadata?: {
@@ -965,6 +966,7 @@ export type GetWorkingGroupQuery = {
       runtimeId: number
       stake: any
       membershipId: string
+      rewardPerBlock: any
       isActive: boolean
     } | null
     metadata?: {
@@ -1421,6 +1423,7 @@ export const WorkingGroupDetailedFieldsFragmentDoc = gql`
       runtimeId
       stake
       membershipId
+      rewardPerBlock
     }
   }
   ${WorkingGroupFieldsFragmentDoc}
