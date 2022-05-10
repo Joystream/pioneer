@@ -574,16 +574,6 @@ export type GetElectedCouncilQuery = {
   }>
 }
 
-export type GetElectionRoundQueryVariables = Types.Exact<{ [key: string]: never }>
-
-export type GetElectionRoundQuery = {
-  __typename: 'Query'
-  electedCouncils: Array<{
-    __typename: 'ElectedCouncil'
-    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
-  }>
-}
-
 export type GetCouncilorVoterStakeQueryVariables = Types.Exact<{
   electionRound: Types.ElectionRoundWhereInput
 }>
@@ -1573,46 +1563,6 @@ export function useGetElectedCouncilLazyQuery(
 export type GetElectedCouncilQueryHookResult = ReturnType<typeof useGetElectedCouncilQuery>
 export type GetElectedCouncilLazyQueryHookResult = ReturnType<typeof useGetElectedCouncilLazyQuery>
 export type GetElectedCouncilQueryResult = Apollo.QueryResult<GetElectedCouncilQuery, GetElectedCouncilQueryVariables>
-export const GetElectionRoundDocument = gql`
-  query GetElectionRound {
-    electedCouncils(where: { isResigned_eq: false }, orderBy: [createdAt_DESC], limit: 1) {
-      councilElections {
-        cycleId
-      }
-    }
-  }
-`
-
-/**
- * __useGetElectionRoundQuery__
- *
- * To run a query within a React component, call `useGetElectionRoundQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetElectionRoundQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetElectionRoundQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetElectionRoundQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetElectionRoundQuery, GetElectionRoundQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetElectionRoundQuery, GetElectionRoundQueryVariables>(GetElectionRoundDocument, options)
-}
-export function useGetElectionRoundLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetElectionRoundQuery, GetElectionRoundQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetElectionRoundQuery, GetElectionRoundQueryVariables>(GetElectionRoundDocument, options)
-}
-export type GetElectionRoundQueryHookResult = ReturnType<typeof useGetElectionRoundQuery>
-export type GetElectionRoundLazyQueryHookResult = ReturnType<typeof useGetElectionRoundLazyQuery>
-export type GetElectionRoundQueryResult = Apollo.QueryResult<GetElectionRoundQuery, GetElectionRoundQueryVariables>
 export const GetCouncilorVoterStakeDocument = gql`
   query GetCouncilorVoterStake($electionRound: ElectionRoundWhereInput!) {
     candidates(where: { electionRound: $electionRound, status_eq: ELECTED }) {

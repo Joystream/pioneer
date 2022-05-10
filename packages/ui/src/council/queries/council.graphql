@@ -178,14 +178,6 @@ query GetElectedCouncil {
   }
 }
 
-query GetElectionRound {
-  electedCouncils(where: { isResigned_eq: false }, orderBy: [createdAt_DESC], limit: 1) {
-    councilElections {
-      cycleId
-    }
-  }
-}
-
 query GetCouncilorVoterStake($electionRound: ElectionRoundWhereInput!) {
   candidates(where: { electionRound: $electionRound, status_eq: ELECTED }) {
     memberId
