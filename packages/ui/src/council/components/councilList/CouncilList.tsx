@@ -34,7 +34,6 @@ export const CouncilList = ({ councilors, order, onSort, isLoading }: CouncilLis
     (key: CouncilOrderKey) => onSort({ key, isDescending: order.key === key && !order.isDescending }),
     [order, onSort]
   )
-
   return (
     <CouncilListStyles gap={4}>
       <ListHeaders $colLayout={CouncilColLayout}>

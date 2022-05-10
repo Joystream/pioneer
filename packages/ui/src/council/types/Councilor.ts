@@ -1,3 +1,5 @@
+import BN from 'bn.js'
+
 import { CouncilMemberFieldsFragment } from '@/council/queries'
 import { asMember, Member } from '@/memberships/types'
 
@@ -7,6 +9,7 @@ export interface Councilor {
   numberOfTerms: number
   unpaidReward: number
   stake: number
+  voterStake?: BN
 }
 
 export const asCouncilor = (fields: CouncilMemberFieldsFragment): Councilor => ({

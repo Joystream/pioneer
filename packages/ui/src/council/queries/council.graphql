@@ -44,6 +44,9 @@ fragment ElectedCouncilFields on ElectedCouncil {
   electedAtBlock
   electedAtTime
   electedAtNetwork
+  councilElections {
+    cycleId
+  }
   councilMembers {
     ...CouncilMemberFields
   }
@@ -172,6 +175,15 @@ fragment FundingRequestApproved on ProposalExecutedEvent {
 query GetElectedCouncil {
   electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
     ...ElectedCouncilFields
+  }
+}
+
+query GetCouncilorVoterStake($electionRound: ElectionRoundWhereInput!) {
+  candidates(where: { electionRound: $electionRound, status_eq: ELECTED }) {
+    memberId
+    votesReceived {
+      stake
+    }
   }
 }
 
