@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -18,6 +18,7 @@ import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
+import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
@@ -36,11 +37,12 @@ import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
+import { isActiveProposalStatus } from '@/proposals/types'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, proposal } = useProposal(id)
-
+  const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
@@ -50,6 +52,17 @@ export const ProposalPreview = () => {
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
+  const notVoted = useMemo(() => {
+    if (!proposal || !isActiveProposalStatus(proposal.status)) {
+      return
+    }
+
+    const votedMembers = Array.from(votes.map.values())
+      .flat()
+      .map((vote) => vote.voter)
+    const councilMembers = council?.councilors.map((councilor) => councilor.member)
+    return councilMembers?.filter((member) => !votedMembers.some((voted) => voted.id === member.id)) ?? []
+  }, [council, proposal])
 
   useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
 
@@ -164,7 +177,7 @@ export const ProposalPreview = () => {
         <SidePanel scrollable>
           <RowGapBlock gap={36}>
             {myVoteStatus && <VotesContainer>You voted for: {getVoteStatusComponent(myVoteStatus)}</VotesContainer>}
-            <VotesPreview votes={votes} />
+            <VotesPreview votes={votes} notVoted={notVoted} />
 
             <ProposalHistory proposal={proposal} />
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ProposalVoteKind } from '@/common/api/queries'
@@ -12,6 +12,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 import { isDefined } from '@/common/utils'
 import { MemberInfo } from '@/memberships/components'
+import { Member } from '@/memberships/types'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { ProposalVote } from '@/proposals/types'
 
@@ -21,25 +22,17 @@ interface VotePreviewProps {
   kind: string
   count?: number
   votes?: ProposalVote[]
+  members?: Member[]
 }
 
-export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
+export const VotePreview = ({ kind, count, votes, members }: VotePreviewProps) => {
   const [isOpen, toggle] = useToggle()
   const { showModal } = useModal()
 
-  return (
-    <VoteType>
-      <VoteTypeHeader kind={kind}>
-        <h6>{KindToTitle.get(kind) ?? kind}</h6>
-        <div>
-          <TextInlineMedium bold>{isDefined(count) ? count : '-'}</TextInlineMedium>{' '}
-          <TextInlineMedium lighter>vote{plural(count)}</TextInlineMedium>
-        </div>
-        <DropDownButton isDropped={isOpen} onClick={toggle} />
-      </VoteTypeHeader>
-
-      <DropDownToggle isDropped={isOpen}>
-        {votes?.map(({ voter, id }, index) => (
+  const votesToShow = useMemo(() => {
+    switch (true) {
+      case !!votes?.length:
+        return votes?.map(({ voter, id }, index) => (
           <VoteListItem key={index}>
             <MemberInfo key={index} member={voter} memberSize="s" />
 
@@ -50,8 +43,30 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
               <FileIcon />
             </ButtonGhost>
           </VoteListItem>
-        ))}
-      </DropDownToggle>
+        ))
+      case !!members?.length:
+        return members?.map((member, index) => (
+          <VoteListItem key={index}>
+            <MemberInfo key={index} member={member} memberSize="s" />
+          </VoteListItem>
+        ))
+      default:
+        return null
+    }
+  }, [members?.length, votes?.length])
+
+  return (
+    <VoteType>
+      <VoteTypeHeader kind={kind}>
+        <h6>{KindToTitle.get(kind) ?? kind}</h6>
+        <div>
+          <TextInlineMedium bold>{isDefined(count) ? count : '-'}</TextInlineMedium>{' '}
+          <TextInlineMedium lighter>vote{plural(count)}</TextInlineMedium>
+        </div>
+        {votesToShow && <DropDownButton isDropped={isOpen} onClick={toggle} />}
+      </VoteTypeHeader>
+
+      <DropDownToggle isDropped={isOpen}>{votesToShow}</DropDownToggle>
     </VoteType>
   )
 }
