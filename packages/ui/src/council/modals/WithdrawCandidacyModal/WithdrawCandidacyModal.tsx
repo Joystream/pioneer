@@ -15,6 +15,7 @@ export const WithdrawCandidacyModal = () => {
   const { hideModal, modalData } = useModal<WithdrawCandidacyModalCall>()
   const { member } = modalData
   const onClose = hideModal
+
   const [state, send] = useMachine(machine)
   const onNext = useCallback(() => send('NEXT'), [send])
 

@@ -50,7 +50,12 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
     () => (transactionFactory ? transactionFactory(amount) : api?.tx?.balances?.transfer(toAddress, amount)),
     [toAddress, amount, connectionState, transactionFactory]
   )
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+    transaction,
+    signer: fromAddress,
+    service,
+    skipQueryNode: true,
+  })
 
   const isDisabled = !isReady || balanceFrom?.transferable.lt(amount.add(paymentInfo?.partialFee || BN_ZERO))
 

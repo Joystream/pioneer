@@ -22,74 +22,81 @@ fragment BountyFields on Bounty {
       target
     }
   }
-  contractType {
-    ... on BountyContractClosed {
-      whitelist {
-        id
-      }
+  entrantWhitelist {
+    members {
+      id
     }
   }
   workPeriod
   judgingPeriod
   stage
+  isTerminated
   totalFunding
   discussionThreadId
   contributions {
-    amount
-    contributor {
-      ...MemberFields
-    }
+    ...BountyContributionFields
   }
   entries {
-    id
-    bountyId
-    worker {
-      ...MemberFields
-    }
-    workSubmitted
-    status {
-      ... on BountyEntryStatusWinner {
-        reward
-      }
-    }
-    works {
-      id
-      title
-      description
-    }
-    stake
-    works {
-      id
-    }
+    ...BountyEntryWithDetailsFields
   }
   createdInEvent {
     inBlock
+  }
+  judgment {
+    inBlock
+    rationale
+    createdAt
+    network
+  }
+  maxFundingReachedEvent {
+    createdAt
+  }
+}
+
+fragment BountyEntryFields on BountyEntry {
+  id
+  worker {
+    ...MemberFields
+  }
+  workSubmitted
+  status {
+    ... on BountyEntryStatusWinner {
+      reward
+    }
+  }
+  withdrawnInEvent {
+    inBlock
+  }
+}
+fragment BountyEntryWithDetailsFields on BountyEntry {
+  ...BountyEntryFields
+  works {
+    ...BountyWorkFields
   }
 }
 
 fragment BountyWorkFields on WorkSubmittedEvent {
   id
-  description
   title
-  inBlock
-  createdAt
-  network
-  entry {
-    worker {
-      ...MemberFields
-    }
-    status {
-      __typename
-      ... on BountyEntryStatusWinner {
-        reward
-      }
-    }
+  description
+}
+
+fragment BountyWorkWithDetailsFields on BountyEntry {
+  ...BountyEntryFields
+  works {
+    ...BountyWorkFields
+    inBlock
+    createdAt
+    network
   }
 }
 
 fragment BountyContributionFields on BountyContribution {
   id
   amount
+  withdrawnInEvent {
+    id
+  }
   contributor {
     ...MemberFields
   }
@@ -113,14 +120,9 @@ query GetBounty($where: BountyWhereUniqueInput!) {
   }
 }
 
-query GetBountyWorks(
-  $where: WorkSubmittedEventWhereInput
-  $order: [WorkSubmittedEventOrderByInput!]
-  $offset: Int
-  $limit: Int
-) {
-  workSubmittedEvents(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
-    ...BountyWorkFields
+query GetBountyWorks($where: BountyEntryWhereInput, $order: [BountyEntryOrderByInput!], $offset: Int, $limit: Int) {
+  bountyEntries(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
+    ...BountyWorkWithDetailsFields
   }
 }
 
@@ -144,16 +146,16 @@ query GetUserBountyStatistics($memberId: ID!) {
   }
 }
 
-query GetUserBountyTabsInformations($memberId: ID!) {
-  bountiesConnection(where: { creator: { id_eq: $memberId } }) {
+query GetUserBountyTabsInformations($memberIds: [ID!]) {
+  bountiesConnection(where: { creator: { id_in: $memberIds } }) {
     totalCount
   }
 
-  bountyContributionsConnection(where: { contributor: { id_eq: $memberId } }) {
+  bountyContributionsConnection(where: { contributor: { id_in: $memberIds } }) {
     totalCount
   }
 
-  bountyEntriesConnection(where: { worker: { id_eq: $memberId } }) {
+  bountyEntriesConnection(where: { worker: { id_in: $memberIds } }) {
     totalCount
   }
 }

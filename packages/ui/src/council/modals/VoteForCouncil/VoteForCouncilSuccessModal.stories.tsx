@@ -28,7 +28,7 @@ const Template: Story<Props> = ({ id, hideModal, showModal }) => {
     <MemoryRouter>
       <MockApolloProvider members council>
         <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <VoteForCouncilSuccessModal />
+          <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
         </ModalContext.Provider>
       </MockApolloProvider>
     </MemoryRouter>

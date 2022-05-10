@@ -35,9 +35,12 @@ export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNav
     }
   }, [navigation.post, navigation.page, idsResults.data, where])
 
+  const getPostsQuery = () =>
+    getPosts({ variables: { where, offset, limit: POSTS_PER_PAGE, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
+
   useEffect(() => {
     if (isDefined(offset)) {
-      getPosts({ variables: { where, offset, limit: POSTS_PER_PAGE, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
+      getPostsQuery()
     } else {
       getPostIds({ variables: { where, limit: 100000, orderBy: ForumPostOrderByInput.CreatedAtAsc } })
     }

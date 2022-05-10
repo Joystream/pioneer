@@ -1,3 +1,6 @@
+import { useMemo } from 'react'
+import { concatMap, map, Observable, of } from 'rxjs'
+
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { ElectionStage } from '@/council/types/Election'
@@ -9,24 +12,33 @@ interface UseElectionStage {
 
 export const useElectionStage = (): UseElectionStage => {
   const { api } = useApi()
-  const electionStage = useObservable(api?.query.referendum.stage(), [api])
-  const councilStage = useObservable(api?.query.council.stage(), [api])
+  const stageObservable = useMemo(
+    () =>
+      api?.query.council.stage().pipe(
+        concatMap(({ stage: councilStage }): Observable<ElectionStage> => {
+          if (councilStage.isAnnouncing) {
+            return of('announcing')
+          } else if (councilStage.isElection) {
+            return api.query.referendum.stage().pipe(
+              map((electionStage) => {
+                if (electionStage.isVoting) {
+                  return 'voting'
+                } else if (electionStage.isRevealing) {
+                  return 'revealing'
+                } else {
+                  return 'inactive'
+                }
+              })
+            )
+          } else {
+            return of('inactive')
+          }
+        })
+      ),
+    [api]
+  )
 
-  if (!councilStage || !electionStage) {
-    return { isLoading: true, stage: 'inactive' }
-  }
+  const stage = useObservable(stageObservable, [stageObservable])
 
-  if (!councilStage || !electionStage || councilStage.stage.isIdle) {
-    return { isLoading: false, stage: 'inactive' }
-  }
-
-  if (councilStage.stage.isAnnouncing) {
-    return { isLoading: false, stage: 'announcing' }
-  }
-
-  if (electionStage.isVoting) {
-    return { isLoading: false, stage: 'voting' }
-  }
-
-  return { isLoading: false, stage: 'revealing' }
+  return { isLoading: !stage, stage: stage ?? 'inactive' }
 }

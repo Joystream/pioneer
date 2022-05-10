@@ -17,7 +17,8 @@ export const filterWorkingGroup = (filterOut: WorkingGroup | undefined) => {
 
 interface Props {
   onChange: (selected: WorkingGroupOpening) => void
-  selectedOpeningId?: number
+  placeholder: string
+  selectedOpeningId?: string
   groupId?: string
   disabled?: boolean
   className?: string
@@ -28,6 +29,7 @@ interface Props {
 export const SelectWorkingGroupOpeningBase = ({
   id,
   onChange,
+  placeholder,
   selectedOpeningId,
   disabled,
   className,
@@ -36,7 +38,7 @@ export const SelectWorkingGroupOpeningBase = ({
 }: Props) => {
   const { openings } = useOpenings({ type: 'open', groupId, openingsPositionType })
   const selectedOpening = useMemo(
-    () => openings.find((opening) => opening.runtimeId === selectedOpeningId),
+    () => openings.find((opening) => opening.id === selectedOpeningId),
     [selectedOpeningId, openings.length]
   )
 
@@ -52,7 +54,7 @@ export const SelectWorkingGroupOpeningBase = ({
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
-      placeholder="Select Opening to cancel"
+      placeholder={placeholder}
       renderList={(onOptionClick) => <OptionsListWorkingGroupOpening allOpenings={openings} onChange={onOptionClick} />}
       className={className}
       onSearch={() => undefined}

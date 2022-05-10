@@ -5,7 +5,6 @@ export function useMemberRowWorkDetails(member: Member) {
   const { data } = useGetMemberRowDetailsQuery({
     variables: { workerId_in: member.roles.map(({ id }) => id) },
   })
-
   return {
     slashed: data?.stakeSlashedEventsConnection.totalCount,
     terminated:

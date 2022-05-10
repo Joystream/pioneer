@@ -9,7 +9,7 @@ export default {
   component: FillWorkingGroupLeadOpening,
 } as Meta
 
-const FillWorkingGroupLeadOpeningTemnplate: Story = () => {
+const FillWorkingGroupLeadOpeningTemplate: Story = () => {
   const [applicationsId, setApplicationId] = useState<any>('')
   const [openingId, setOpeningId] = useState<any>('')
   return (
@@ -19,9 +19,10 @@ const FillWorkingGroupLeadOpeningTemnplate: Story = () => {
         setApplicationId={setApplicationId}
         openingId={openingId}
         setOpeningId={setOpeningId}
+        setWorkingGroupId={() => undefined}
       />
     </MockApolloProvider>
   )
 }
 
-export const Default = FillWorkingGroupLeadOpeningTemnplate.bind({})
+export const Default = FillWorkingGroupLeadOpeningTemplate.bind({})

@@ -46,7 +46,7 @@ export const ProposalTile = React.memo(({ proposalId }: TileProps) => {
       </Title>
       <Badge>{proposal.status}</Badge>
       {blocksToEnd && (
-        <TimeLabel lighter>
+        <TimeLabel lighter as="div">
           {t('proposals.timeLeft')} {<DurationValue value={formatDuration(blocksToEnd)} />}
         </TimeLabel>
       )}

@@ -116,7 +116,15 @@ describe('UI: Announce Candidacy Modal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      const switchMemberModalCall = {
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'AnnounceCandidateModal',
+        },
+      }
+
+      expect(useModal.showModal).toBeCalledTimes(2)
+      expect(useModal.showModal).toBeCalledWith({ ...switchMemberModalCall })
     })
 
     it('Transaction fee', async () => {
@@ -177,7 +185,7 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingAmount(2)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, 'Minimum stake amount is 10 JOY')).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Minimum stake amount is 10 tJOY')).toBeInTheDocument()
         })
 
         it('Higher than maximal balance', async () => {
@@ -187,7 +195,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(
-            includesTextWithMarkup(getByText, 'You have no 10,000 JOY on any of your accounts.')
+            includesTextWithMarkup(getByText, 'You have no 10,000 tJOY on any of your accounts.')
           ).toBeInTheDocument()
         })
       })

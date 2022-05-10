@@ -107,14 +107,27 @@ export type GetForumEventsQuery = {
     | { __typename: 'AnnouncingPeriodStartedEvent' }
     | { __typename: 'ApplicationWithdrawnEvent' }
     | { __typename: 'AppliedOnOpeningEvent' }
+    | { __typename: 'AuctionBidCanceledEvent' }
+    | { __typename: 'AuctionBidMadeEvent' }
+    | { __typename: 'AuctionCanceledEvent' }
+    | { __typename: 'AuctionStartedEvent' }
+    | { __typename: 'BidMadeCompletingAuctionEvent' }
+    | { __typename: 'BountyCanceledEvent' }
     | { __typename: 'BountyCreatedEvent' }
+    | { __typename: 'BountyCreatorCherryWithdrawalEvent' }
+    | { __typename: 'BountyFundedEvent' }
+    | { __typename: 'BountyFundingWithdrawalEvent' }
     | { __typename: 'BountyMaxFundingReachedEvent' }
+    | { __typename: 'BountyRemovedEvent' }
+    | { __typename: 'BountyVetoedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
     | { __typename: 'BudgetRefillPlannedEvent' }
     | { __typename: 'BudgetSetEvent' }
     | { __typename: 'BudgetSpendingEvent' }
+    | { __typename: 'BudgetUpdatedEvent' }
+    | { __typename: 'BuyNowCanceledEvent' }
     | { __typename: 'CandidacyNoteSetEvent' }
     | { __typename: 'CandidacyStakeReleaseEvent' }
     | { __typename: 'CandidacyWithdrawEvent' }
@@ -144,6 +157,7 @@ export type GetForumEventsQuery = {
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent' }
+    | { __typename: 'EnglishAuctionCompletedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -160,10 +174,17 @@ export type GetForumEventsQuery = {
     | { __typename: 'NewCouncilElectedEvent' }
     | { __typename: 'NewCouncilNotElectedEvent' }
     | { __typename: 'NewMissedRewardLevelReachedEvent' }
+    | { __typename: 'NftBoughtEvent' }
+    | { __typename: 'NftIssuedEvent' }
     | { __typename: 'NotEnoughCandidatesEvent' }
+    | { __typename: 'OfferAcceptedEvent' }
+    | { __typename: 'OfferCanceledEvent' }
+    | { __typename: 'OfferStartedEvent' }
+    | { __typename: 'OpenAuctionBidAcceptedEvent' }
     | { __typename: 'OpeningAddedEvent' }
     | { __typename: 'OpeningCanceledEvent' }
     | { __typename: 'OpeningFilledEvent' }
+    | { __typename: 'OracleJudgmentSubmittedEvent' }
     | {
         __typename: 'PostAddedEvent'
         id: string
@@ -264,7 +285,10 @@ export type GetForumEventsQuery = {
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
+    | { __typename: 'WorkEntrantFundsWithdrawnEvent' }
     | { __typename: 'WorkEntryAnnouncedEvent' }
+    | { __typename: 'WorkEntrySlashedEvent' }
+    | { __typename: 'WorkEntryWithdrawnEvent' }
     | { __typename: 'WorkSubmittedEvent' }
     | { __typename: 'WorkerExitedEvent' }
     | { __typename: 'WorkerRewardAccountUpdatedEvent' }

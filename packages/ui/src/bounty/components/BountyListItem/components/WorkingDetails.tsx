@@ -22,7 +22,7 @@ export const WorkingDetails = memo(({ totalFunding, entrantStake, entrants, work
       <DetailBox title={t('tabs.bounty')}>
         <TokenValue size="l" value={totalFunding} />
       </DetailBox>
-      {entrants?.length && (
+      {!!entrants?.length && (
         <DetailBox title={t('entries')}>
           <MemberStack members={entrants} max={5} />
         </DetailBox>

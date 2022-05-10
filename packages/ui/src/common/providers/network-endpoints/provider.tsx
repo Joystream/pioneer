@@ -1,99 +1,87 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 
-import {
-  MEMBERSHIP_FAUCET_ENDPOINT,
-  NetworkType,
-  NODE_RPC_ENDPOINT,
-  OLYMPIA_TESTNET_CONFIG_ENDPOINT,
-  QUERY_NODE_ENDPOINT,
-  QUERY_NODE_ENDPOINT_SUBSCRIPTION,
-} from '@/app/config'
+import { DEFAULT_NETWORK, NetworkEndpoints, pickEndpoints } from '@/app/config'
 import { Loading } from '@/common/components/Loading'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
 import { isDefined, objectEquals } from '@/common/utils'
 
-import { localEndpoints, NetworkEndpoints, NetworkEndpointsContext } from './context'
+import { NetworkEndpointsContext } from './context'
 
 interface Props {
   children: ReactNode
 }
 
 export const NetworkEndpointsProvider = ({ children }: Props) => {
-  const [network, setNetwork] = useNetwork()
-  const [endpoints, setEndpoints] = useState<Partial<NetworkEndpoints>>({})
-  const [storedNetworkConfig, storeNetworkConfig] = useLocalStorage<Partial<NetworkEndpoints>>('network_config')
+  const { network, setNetwork } = useNetwork()
+  const [endpoints, setEndpoints] = useState<NetworkEndpoints>()
+  const [autoConfEndpoints, storeAutoConfEndpoints] = useLocalStorage<NetworkEndpoints>('auto_network_config')
   const [isLoading, setIsLoading] = useState(false)
 
   const updateNetworkConfig = useCallback(
-    async (configEndpoint: string, fallbackOnLocalEndpoints = false) => {
+    async (configEndpoint: string) => {
       setIsLoading(true)
+      let config
       try {
-        const config = await (await fetch(configEndpoint)).json()
-
-        const newNetworkConfig = {
-          queryNodeEndpointSubscription: config['graphql_server_websocket'],
-          queryNodeEndpoint: config['graphql_server'],
-          membershipFaucetEndpoint: config['member_faucet'],
-          nodeRpcEndpoint: config['websocket_rpc'],
-        }
-
-        const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newNetworkConfig)(storedNetworkConfig ?? {})
-        const shouldUpdateNetwork = network !== 'olympia-testnet'
-
-        if (shouldUpdateConfig) {
-          storeNetworkConfig(newNetworkConfig)
-        }
-        if (shouldUpdateNetwork) {
-          setNetwork('olympia-testnet')
-        }
-        if (shouldUpdateConfig || shouldUpdateNetwork) {
-          return window.location.reload()
-        }
-        setIsLoading(false)
+        config = await (await fetch(configEndpoint)).json()
       } catch (err) {
         setIsLoading(false)
         const errMsg = `Failed to fetch the network configuration from ${configEndpoint}.`
-
-        if (fallbackOnLocalEndpoints) {
-          setEndpoints(localEndpoints)
-          throw new Error(`${errMsg} Falling back on the local endpoints.`)
-        } else {
-          throw new Error(errMsg)
-        }
+        throw new Error(`${errMsg}`)
       }
+
+      const newAutoConfEndpoints = {
+        queryNodeEndpointSubscription: config['graphql_server_websocket'],
+        queryNodeEndpoint: config['graphql_server'],
+        membershipFaucetEndpoint: config['member_faucet'],
+        nodeRpcEndpoint: config['websocket_rpc'],
+      }
+
+      if (!endpointsAreDefined(newAutoConfEndpoints)) {
+        setIsLoading(false)
+        throw new Error('fetched config missing endpoints')
+      }
+
+      const shouldUpdateConfig = !objectEquals<Partial<NetworkEndpoints>>(newAutoConfEndpoints)(autoConfEndpoints ?? {})
+      const shouldUpdateNetwork = network !== 'auto-conf'
+
+      if (shouldUpdateConfig) {
+        storeAutoConfEndpoints(newAutoConfEndpoints)
+      }
+      if (shouldUpdateNetwork) {
+        setNetwork('auto-conf')
+      }
+      if (shouldUpdateConfig || shouldUpdateNetwork) {
+        return window.location.reload()
+      }
+      setIsLoading(false)
     },
     [network]
   )
 
   useEffect(() => {
-    const endpoints = overrideMissingEndpoints(network, storedNetworkConfig ?? {})
+    const endpoints = pickEndpoints(network)
 
-    if (OLYMPIA_TESTNET_CONFIG_ENDPOINT && network === 'olympia-testnet' && !endpointsAreDefined(endpoints)) {
-      updateNetworkConfig(OLYMPIA_TESTNET_CONFIG_ENDPOINT, true)
-    } else {
+    if (endpointsAreDefined(endpoints)) {
       setEndpoints(endpoints)
+    } else if (network === 'auto-conf' && endpointsAreDefined(autoConfEndpoints)) {
+      setEndpoints(autoConfEndpoints)
+    } else {
+      setNetwork(DEFAULT_NETWORK.type)
+      setEndpoints(DEFAULT_NETWORK.endpoints)
     }
-  }, [network, updateNetworkConfig])
+  }, [network])
 
   if (!endpointsAreDefined(endpoints) || isLoading) {
     return <Loading text="Loading network endpoints" />
   }
 
   return (
-    <NetworkEndpointsContext.Provider value={[overrideMissingEndpoints(network, endpoints), updateNetworkConfig]}>
+    <NetworkEndpointsContext.Provider value={[endpoints, updateNetworkConfig]}>
       {children}
     </NetworkEndpointsContext.Provider>
   )
 }
 
-const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints>): endpoints is NetworkEndpoints =>
+export const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints> = {}): endpoints is NetworkEndpoints =>
   Object.values(endpoints).length === 4 && Object.values(endpoints).every(isDefined)
-
-const overrideMissingEndpoints = <R extends Partial<NetworkEndpoints>>(network: NetworkType, endpoints: R) =>
-  ({
-    queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network] ?? endpoints.queryNodeEndpointSubscription,
-    queryNodeEndpoint: QUERY_NODE_ENDPOINT[network] ?? endpoints.queryNodeEndpoint,
-    membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT[network] ?? endpoints.membershipFaucetEndpoint,
-    nodeRpcEndpoint: NODE_RPC_ENDPOINT[network] ?? endpoints.nodeRpcEndpoint,
-  } as R)

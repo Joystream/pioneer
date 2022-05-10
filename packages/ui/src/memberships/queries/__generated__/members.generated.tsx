@@ -12,6 +12,7 @@ export type MemberFieldsFragment = {
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
+  isCouncilMember: boolean
   inviteCount: number
   createdAt: any
   metadata: {
@@ -38,6 +39,7 @@ export type MemberWithDetailsFieldsFragment = {
   handle: string
   isVerified: boolean
   isFoundingMember: boolean
+  isCouncilMember: boolean
   inviteCount: number
   createdAt: any
   entry:
@@ -69,6 +71,7 @@ export type MemberWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -118,6 +121,7 @@ export type GetMembersQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -160,6 +164,7 @@ export type GetMemberQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     entry:
@@ -191,6 +196,7 @@ export type GetMemberQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -226,6 +232,7 @@ export type GetMemberQuery = {
 export type SearchMembersQueryVariables = Types.Exact<{
   text: Types.Scalars['String']
   limit?: Types.InputMaybe<Types.Scalars['Int']>
+  validIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type SearchMembersQuery = {
@@ -239,6 +246,7 @@ export type SearchMembersQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -282,6 +290,7 @@ export type GetMemberMentionQuery = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -327,6 +336,18 @@ export type GetMemberRowDetailsQuery = {
   terminatedWorkerEventsConnection: { __typename: 'TerminatedWorkerEventConnection'; totalCount: number }
 }
 
+export type GetMemberActionDetailsQueryVariables = Types.Exact<{
+  workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
+}>
+
+export type GetMemberActionDetailsQuery = {
+  __typename: 'Query'
+  stakeSlashedEventsConnection: { __typename: 'StakeSlashedEventConnection'; totalCount: number }
+  terminatedLeaderEventsConnection: { __typename: 'TerminatedLeaderEventConnection'; totalCount: number }
+  terminatedWorkerEventsConnection: { __typename: 'TerminatedWorkerEventConnection'; totalCount: number }
+  memberInvitedEventsConnection: { __typename: 'MemberInvitedEventConnection'; totalCount: number }
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Membership {
     id
@@ -346,6 +367,7 @@ export const MemberFieldsFragmentDoc = gql`
     }
     isVerified
     isFoundingMember
+    isCouncilMember
     inviteCount
     roles {
       id
@@ -505,8 +527,8 @@ export type GetMemberQueryHookResult = ReturnType<typeof useGetMemberQuery>
 export type GetMemberLazyQueryHookResult = ReturnType<typeof useGetMemberLazyQuery>
 export type GetMemberQueryResult = Apollo.QueryResult<GetMemberQuery, GetMemberQueryVariables>
 export const SearchMembersDocument = gql`
-  query SearchMembers($text: String!, $limit: Int) {
-    memberships(where: { handle_contains: $text }, limit: $limit) {
+  query SearchMembers($text: String!, $limit: Int, $validIds: [ID!]) {
+    memberships(where: { handle_contains: $text, id_in: $validIds }, limit: $limit) {
       ...MemberFields
     }
   }
@@ -527,6 +549,7 @@ export const SearchMembersDocument = gql`
  *   variables: {
  *      text: // value for 'text'
  *      limit: // value for 'limit'
+ *      validIds: // value for 'validIds'
  *   },
  * });
  */
@@ -752,4 +775,61 @@ export type GetMemberRowDetailsLazyQueryHookResult = ReturnType<typeof useGetMem
 export type GetMemberRowDetailsQueryResult = Apollo.QueryResult<
   GetMemberRowDetailsQuery,
   GetMemberRowDetailsQueryVariables
+>
+export const GetMemberActionDetailsDocument = gql`
+  query GetMemberActionDetails($workerId_in: [ID!]!) {
+    stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    memberInvitedEventsConnection(where: { invitingMember: { id_in: $workerId_in } }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetMemberActionDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetMemberActionDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberActionDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberActionDetailsQuery({
+ *   variables: {
+ *      workerId_in: // value for 'workerId_in'
+ *   },
+ * });
+ */
+export function useGetMemberActionDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberActionDetailsQuery, GetMemberActionDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberActionDetailsQuery, GetMemberActionDetailsQueryVariables>(
+    GetMemberActionDetailsDocument,
+    options
+  )
+}
+export function useGetMemberActionDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberActionDetailsQuery, GetMemberActionDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberActionDetailsQuery, GetMemberActionDetailsQueryVariables>(
+    GetMemberActionDetailsDocument,
+    options
+  )
+}
+export type GetMemberActionDetailsQueryHookResult = ReturnType<typeof useGetMemberActionDetailsQuery>
+export type GetMemberActionDetailsLazyQueryHookResult = ReturnType<typeof useGetMemberActionDetailsLazyQuery>
+export type GetMemberActionDetailsQueryResult = Apollo.QueryResult<
+  GetMemberActionDetailsQuery,
+  GetMemberActionDetailsQueryVariables
 >

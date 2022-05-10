@@ -33,14 +33,14 @@ const actorsMapFunction = (el: BountyActorItem) => {
   if (isEntrant(el)) {
     return (
       <ValueText lighter>
-        Work entries
+        Works submitted
         <CountValue bold dark>
           {el.count}
         </CountValue>
       </ValueText>
     )
   }
-  return <ValueText lighter>Work withdrawn</ValueText>
+  return <ValueText lighter>Entry withdrawn</ValueText>
 }
 
 export const BountyActorsList = memo(

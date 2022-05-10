@@ -22,7 +22,7 @@ interface BountyData {
   bountyEntries: RawBountyEntryMock[]
 }
 
-const NUMBER_OF_BOUNTIES = 8
+const NUMBER_OF_BOUNTIES = 12
 
 export const generateBounties = (
   mocks: DependOnMocks = {
@@ -57,6 +57,11 @@ const bountyStage = randomFromWeightedSet(
 
 const generateBounty = (mocks: DependOnMocks): Reducer<BountyData, any> => (data, _, bountyIndex) => {
   // Generate the bounty
+  const stage = bountyStage()
+  const creatorId =
+    bountyIndex < 3 ? String(bountyIndex % 2) : Math.random() < 0.7 ? randomMember(mocks.members).id : undefined
+  const oracleId =
+    bountyIndex < 3 ? String((bountyIndex + 1) % 2) : Math.random() < 0.7 ? randomMember(mocks.members).id : undefined
   const bounty = {
     id: String(bountyIndex),
     createdAt: faker.date.recent(20),
@@ -64,17 +69,20 @@ const generateBounty = (mocks: DependOnMocks): Reducer<BountyData, any> => (data
     description: randomMarkdown(),
     cherry: String(randomFromRange(1, 5) * 1000),
     entrantStake: String(randomFromRange(1, 5) * 1000),
-    ...(datatype.boolean() ? { creatorId: randomMember(mocks.members).id } : {}),
-    ...(datatype.boolean() ? { oracleId: randomMember(mocks.members).id } : {}),
+    creatorId: creatorId,
+    oracleId: oracleId,
     fundingType: generateBountyFundingType(),
-    contractType: generateBountyContractType(mocks.members.map(({ id }) => id)),
+    entrantWhitelist: datatype.boolean()
+      ? random.arrayElements(mocks.members, randomFromRange(1, 10)).map(({ id }) => id)
+      : undefined,
     workPeriod: randomFromRange(5, 20),
     judgingPeriod: randomFromRange(5, 20),
-    stage: bountyStage(),
+    stage,
     totalFunding: String(randomFromRange(5, 10) * 1000),
     discussionThreadId: random.arrayElement(mocks.forumThreads).id,
     createdInEvent: randomRawBlock(),
     ...(datatype.boolean() ? { maxFundingReachedEvent: randomRawBlock() } : {}),
+    isTerminated: Math.random() < 0.2 && ['Funding', 'Expired', 'Successful', 'Failed'].includes(stage),
   }
 
   // Generate the bounty contributions
@@ -107,14 +115,10 @@ const generateEntry = (mocks: DependOnMocks, bounty: RawBountyMock) => (entryInd
     [1, { type: 'Withdrawn' }],
     [1, { type: 'Winner', reward: String(Number(bounty.totalFunding) / randomFromRange(1, 3)) }],
     [1, { type: 'Passed' }],
-    [1, { type: 'Rejected' }],
-    [1, { type: 'CashedOut' }]
+    [1, { type: 'Rejected' }]
   )
   const worker = randomMember(mocks.members)
-  const works = repeat(
-    () => ({ ...randomRawBlock(), title: lorem.sentence(), description: randomMessage() }),
-    randomFromRange(0, 5)
-  )
+  const works = repeat(generateWork, randomFromRange(0, 5))
 
   return {
     id: `${bounty.id}:${entryIndex}`,
@@ -129,6 +133,8 @@ const generateEntry = (mocks: DependOnMocks, bounty: RawBountyMock) => (entryInd
   }
 }
 
+export const generateWork = () => ({ ...randomRawBlock(), title: lorem.sentence(), description: randomMessage() })
+
 const generateBountyFundingType = (isPerpetual = datatype.boolean()) =>
   isPerpetual
     ? {
@@ -140,12 +146,4 @@ const generateBountyFundingType = (isPerpetual = datatype.boolean()) =>
         minFundingAmount: String(randomFromRange(5, 7) * 1000),
         maxFundingAmount: String(randomFromRange(8, 10) * 1000),
         fundingPeriod: randomFromRange(5, 20),
-      }
-
-const generateBountyContractType = (memberIds: string[], isOpen = datatype.boolean()) =>
-  isOpen
-    ? { type: 'Open' }
-    : {
-        type: 'Closed',
-        whitelistIds: random.arrayElements(memberIds, randomFromRange(1, 10)),
       }

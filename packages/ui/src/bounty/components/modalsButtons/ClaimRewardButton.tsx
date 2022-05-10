@@ -1,30 +1,36 @@
-import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BountyHeaderButtonsProps } from '@/bounty/components/BountyPreviewHeader/types'
 import { ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
-interface Props {
-  bountyId: string
-  entryId: string
-  reward: BN
-}
-
-export const ClaimRewardButton = React.memo(({ bountyId, entryId, reward }: Props) => {
+export const ClaimRewardButton = React.memo(({ bounty, validMemberIds }: BountyHeaderButtonsProps) => {
+  const { active } = useMyMemberships()
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
+
   const submitWorkModal = useCallback(() => {
+    if (!active || !validMemberIds.includes(active.id)) {
+      return showModal<SwitchMemberModalCall>({
+        modal: 'SwitchMember',
+        data: {
+          noCreateButton: true,
+          membersToShow: validMemberIds,
+          originalModalName: 'ClaimReward',
+          originalModalData: { bounty },
+        },
+      })
+    }
+
     showModal<ClaimRewardModalCall>({
       modal: 'ClaimReward',
-      data: {
-        bountyId,
-        entryId,
-        reward,
-      },
+      data: { bounty },
     })
-  }, [])
+  }, [validMemberIds, active])
 
   return (
     <TransactionButton style="primary" size="large" onClick={submitWorkModal}>

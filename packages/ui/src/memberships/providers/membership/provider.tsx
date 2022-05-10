@@ -1,4 +1,3 @@
-import { ApolloQueryResult } from '@apollo/client'
 import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -23,7 +22,6 @@ export interface MyMemberships {
   helpers: {
     getMemberIdByBoundAccountAddress: (address: Address) => Member['id'] | undefined
   }
-  refetch?: () => Promise<ApolloQueryResult<unknown>>
 }
 
 export const MembershipContextProvider = (props: Props) => {
@@ -36,9 +34,8 @@ export const MembershipContextProvider = (props: Props) => {
     data,
     loading,
     error: err,
-    refetch,
   } = useGetMembersQuery({
-    variables: { where: { rootAccount_in: addresses, controllerAccount_in: addresses } },
+    variables: { where: { controllerAccount_in: addresses } },
     skip: addresses.length < 1,
   })
 
@@ -80,7 +77,6 @@ export const MembershipContextProvider = (props: Props) => {
     helpers: {
       getMemberIdByBoundAccountAddress,
     },
-    refetch,
   }
 
   return <MembershipContext.Provider value={value}>{props.children}</MembershipContext.Provider>

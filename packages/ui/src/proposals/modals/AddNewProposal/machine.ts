@@ -38,8 +38,7 @@ import { SetInitialInvitationBalanceParameters } from './components/SpecificPara
 import { SetInitialInvitationCountParameters } from './components/SpecificParameters/SetInitialInvitationCount'
 import {
   CancelWorkingGroupLeadOpeningParameters,
-  StakingPolicyAndRewardParameters,
-  WorkingGroupAndOpeningDetailsParameters,
+  CreateWorkingGroupLeadOpeningParameters,
 } from './components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 interface ProposalTypeContext {
@@ -70,7 +69,6 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | EmptyObject
     | SignalParameters
     | FundingRequestParameters
-    | WorkingGroupAndOpeningDetailsParameters
     | CancelWorkingGroupLeadOpeningParameters
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
@@ -81,7 +79,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | SetWorkingGroupLeadRewardParameters
     | SetCouncilBudgetIncrementParameters
     | SetMembershipLeadInvitationParameters
-    | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | CreateWorkingGroupLeadOpeningParameters
     | UpdateWorkingGroupBudgetParameters
     | SetInitialInvitationCountParameters
     | SetMaxValidatorCountParameters
@@ -109,10 +107,6 @@ interface SetReferralCutContext extends SpecificParametersContext {
   specifics: SetReferralCutParameters
 }
 
-interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
-  specifics: WorkingGroupAndOpeningDetailsParameters
-}
-
 interface FillWorkingGroupLeadOpeningContext extends SpecificParametersContext {
   specifics: FillWorkingGroupLeadOpeningParameters
 }
@@ -121,8 +115,8 @@ interface CancelWorkingGroupLeadOpeningContext extends SpecificParametersContext
   specifics: CancelWorkingGroupLeadOpeningParameters
 }
 
-interface StakingPolicyAndRewardContext extends SpecificParametersContext {
-  specifics: StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters
+interface CreateWorkingGroupLeadOpeningContext extends SpecificParametersContext {
+  specifics: CreateWorkingGroupLeadOpeningParameters
 }
 
 interface RuntimeUpgradeContext extends SpecificParametersContext {
@@ -186,12 +180,11 @@ export type AddNewProposalContext = Partial<
     SpecificParametersContext &
     SignalContext &
     FundingRequestContext &
-    WorkingGroupLeadOpeningContext &
+    CreateWorkingGroupLeadOpeningContext &
     CancelWorkingGroupLeadOpeningContext &
     FillWorkingGroupLeadOpeningContext &
     SetCouncilBudgetIncrementContext &
     SetCouncilorRewardContext &
-    StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
@@ -236,12 +229,20 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'setCouncilorReward' }; context: SetCouncilorRewardContext }
   | { value: { specificParameters: 'setMembershipLeadInvitationQuota' }; context: SetMembershipLeadInvitationContext }
   | {
-      value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
-      context: WorkingGroupLeadOpeningContext
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndDescription' } }
+      context: CreateWorkingGroupLeadOpeningContext
+    }
+  | {
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'durationAndProcess' } }
+      context: CreateWorkingGroupLeadOpeningContext
+    }
+  | {
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'applicationForm' } }
+      context: CreateWorkingGroupLeadOpeningContext
     }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
-      context: StakingPolicyAndRewardContext
+      context: CreateWorkingGroupLeadOpeningContext
     }
   | { value: { specificParameters: 'fillWorkingGroupLeadOpening' }; context: FillWorkingGroupLeadOpeningContext }
   | {
@@ -259,6 +260,7 @@ export type AddNewProposalState =
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+type SetReferralCutEvent = { type: 'SET_REFERRAL_CUT'; referralCut: number }
 type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
 type SetBudgetUpdateKindEvent = { type: 'SET_BUDGET_UPDATE_KIND'; kind: UpdateKind }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
@@ -269,10 +271,13 @@ type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscu
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
+type SetDuration = { type: 'SET_DURATION'; duration: CreateWorkingGroupLeadOpeningParameters['duration'] }
+type SetDetails = { type: 'SET_DETAILS'; details: string }
+type SetQuestions = { type: 'SET_QUESTIONS'; questions: CreateWorkingGroupLeadOpeningParameters['questions'] }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: GroupIdName }
 type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
-type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: number }
-type SetApplicationId = { type: 'SET_APPLICATION_ID'; applicationId: number }
+type SetOpeningIdEvent = { type: 'SET_OPENING_ID'; openingId: string }
+type SetApplicationId = { type: 'SET_APPLICATION_ID'; applicationId: string }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
@@ -303,12 +308,16 @@ export type AddNewProposalEvent =
   | SetWorkingGroupEvent
   | SetWorkerEvent
   | SetShortDescriptionEvent
+  | SetDuration
+  | SetDetails
+  | SetQuestions
   | SetStakingAmount
   | SetLeavingUnstakingPeriod
   | SetRewardPerBlock
   | SetRuntime
   | SetSlashingAmount
   | SetInvitationCount
+  | SetReferralCutEvent
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
@@ -353,7 +362,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         SET_TYPE: {
           actions: assign({
             specifics: (context, event) => {
-              if (context.type !== (event as SetTypeEvent).proposalType) {
+              const pickedType = (event as SetTypeEvent).proposalType
+              if (context.type !== pickedType) {
+                if (pickedType === 'createWorkingGroupLeadOpening') {
+                  return { duration: { isLimited: true, length: 43200 } }
+                }
                 return {}
               }
 
@@ -499,10 +512,10 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
         setReferralCut: {
           on: {
-            SET_AMOUNT: {
+            SET_REFERRAL_CUT: {
               actions: assign({
                 specifics: (context, event) => {
-                  return { ...context.specifics, amount: event.amount }
+                  return { ...context.specifics, referralCut: event.referralCut }
                 },
               }),
             },
@@ -692,12 +705,12 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         createWorkingGroupLeadOpening: {
-          initial: 'workingGroupAndOpeningDetails',
+          initial: 'workingGroupAndDescription',
           states: {
-            workingGroupAndOpeningDetails: {
+            workingGroupAndDescription: {
               meta: {
                 isStep: true,
-                stepTitle: 'Working group & Opening details',
+                stepTitle: 'Working group & Description',
                 cond: isType('createWorkingGroupLeadOpening'),
               },
               on: {
@@ -706,6 +719,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     specifics: (context, event) => ({
                       ...context.specifics,
                       groupId: event.groupId,
+                    }),
+                  }),
+                },
+                SET_TITLE: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      title: event.title,
                     }),
                   }),
                 },
@@ -725,6 +746,52 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     }),
                   }),
                 },
+                NEXT: 'durationAndProcess',
+              },
+            },
+            durationAndProcess: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Duration & Process',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                SET_DURATION: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      duration: event.duration,
+                    }),
+                  }),
+                },
+                SET_DETAILS: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      details: event.details,
+                    }),
+                  }),
+                },
+                BACK: 'workingGroupAndDescription',
+                NEXT: 'applicationForm',
+              },
+            },
+            applicationForm: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Application Form',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                SET_QUESTIONS: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      questions: event.questions,
+                    }),
+                  }),
+                },
+                BACK: 'durationAndProcess',
                 NEXT: 'stakingPolicyAndReward',
               },
             },
@@ -759,6 +826,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     }),
                   }),
                 },
+                BACK: 'applicationForm',
               },
             },
           },
@@ -779,6 +847,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   openingId: event.openingId,
+                }),
+              }),
+            },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
                 }),
               }),
             },
@@ -855,6 +931,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         BOUND: 'transaction',
         REQUIRES_STAKING_CANDIDATE: 'bindStakingAccount',
+        FAIL: 'requirementsFailed',
       },
     },
     bindStakingAccount: {
@@ -886,15 +963,19 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         onDone: [
           {
             target: 'success',
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            actions: assign({
+              proposalId: (_, event) =>
+                Number(getDataFromEvent(event.data.events, 'proposalsCodex', 'ProposalCreated') ?? -1),
+            }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode !== 'closed',
           },
           {
             target: 'discussionTransaction',
             actions: assign({
               transactionEvents: (context, event) => event.data.events,
-              discussionId: (_, event) =>
-                parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 1)?.toString() ?? '-1'),
+              discussionId: (_, event) => {
+                return parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 0)?.toString() ?? '-1')
+              },
             }),
             cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode === 'closed',
           },

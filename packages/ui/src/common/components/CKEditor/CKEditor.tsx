@@ -1,11 +1,12 @@
 import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
 import React, { Ref, RefObject, useEffect, useRef } from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
 
 import { useMentions } from '@/common/hooks/useMentions'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 
-export interface CKEditorProps {
+export interface BaseCKEditorProps {
   id?: string
   maxRows?: number
   minRows?: number
@@ -17,7 +18,7 @@ export interface CKEditorProps {
   inline?: boolean
 }
 
-export const CKEditor = React.forwardRef(
+const BaseCKEditor = React.forwardRef(
   (
     { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
     ref?: Ref<HTMLDivElement>
@@ -86,8 +87,9 @@ export const CKEditor = React.forwardRef(
               onChange(event, editor)
             }
           })
-
           viewDocument.on('focus', (event: EventInfo) => {
+            const displayData = editor.getData()
+            editor.setData(displayData)
             if (onFocus) {
               onFocus(event, editor)
             }
@@ -114,4 +116,28 @@ export const CKEditor = React.forwardRef(
       </>
     )
   }
+)
+
+export interface CKEditorProps extends BaseCKEditorProps {
+  name?: string
+}
+
+export const CKEditor = React.memo(
+  React.forwardRef(({ name, ...props }: CKEditorProps) => {
+    const formContext = useFormContext()
+
+    if (!formContext || !name) {
+      return <BaseCKEditor {...props} />
+    }
+
+    return (
+      <Controller
+        name={name}
+        control={formContext.control}
+        render={({ field }) => (
+          <BaseCKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
+        )}
+      />
+    )
+  })
 )

@@ -11,27 +11,26 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
-import { Worker } from '../../types'
+import { WorkerWithDetails } from '../../types'
 
 interface Props {
   onClose: () => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
-  worker: Worker
+  worker: WorkerWithDetails
   service: ActorRef<any>
 }
 
 export const LeaveRoleSignModal = ({ onClose, transaction, worker, service }: Props) => {
   const { allAccounts } = useMyAccounts()
-  const signer = accountOrNamed(allAccounts, worker.membership.controllerAccount, 'Controller account')
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
+  const signer = accountOrNamed(allAccounts, worker.roleAccount, 'Role account')
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signer?.address ?? '',
     service,
   })
-
   return (
     <TransactionModal service={service} onClose={onClose}>
       <ModalBody>

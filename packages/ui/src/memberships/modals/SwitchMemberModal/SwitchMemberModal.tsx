@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
-import { Notification, NotificationComponent } from '../../../common/components/Notification'
-import { BorderRad, Colors, RemoveScrollbar, Transitions } from '../../../common/constants'
-import { useModal } from '../../../common/hooks/useModal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Notification, NotificationComponent } from '@/common/components/Notification'
+import { BorderRad, Colors, RemoveScrollbar, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/types'
+
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
 import { AddMembershipButtonSwitch } from '../../components/AddMembershipButtonSwitch'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
@@ -13,12 +15,23 @@ import { BuyMembershipModalCall } from '../BuyMembershipModal'
 
 export const SwitchMemberModal = () => {
   const { members, setActive, active } = useMyMemberships()
-  const { showModal, hideModal } = useModal()
-  const count = members.length
+  const { showModal, hideModal, modalData } = useModal<SwitchMemberModalCall>()
+  const count = modalData?.membersToShow ? modalData.membersToShow.length : members.length
   const switchMember = (member: Member) => {
     setActive(member)
     hideModal()
+    if (modalData?.originalModalName) {
+      showModal({ modal: modalData.originalModalName, data: modalData?.originalModalData })
+    }
   }
+
+  const filteredMembers = useMemo(() => {
+    if (modalData?.membersToShow) {
+      return members.filter((member) => modalData.membersToShow?.includes(member.id))
+    }
+
+    return members
+  }, [members, modalData?.membersToShow])
 
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
@@ -26,7 +39,7 @@ export const SwitchMemberModal = () => {
       <SwitchModalBody>
         <MembershipsCount count={count} />
         <MembersList>
-          {members.map((member) => (
+          {filteredMembers.map((member) => (
             <MemberItem
               key={member.handle}
               onClick={() => switchMember(member)}
@@ -38,14 +51,16 @@ export const SwitchMemberModal = () => {
           ))}
         </MembersList>
       </SwitchModalBody>
-      <SwitchModalFooter>
-        <AddMembershipButtonSwitch
-          onClick={() => {
-            hideModal()
-            showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
-          }}
-        />
-      </SwitchModalFooter>
+      {!modalData?.noCreateButton && (
+        <SwitchModalFooter>
+          <AddMembershipButtonSwitch
+            onClick={() => {
+              hideModal()
+              showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
+            }}
+          />
+        </SwitchModalFooter>
+      )}
     </Modal>
   )
 }

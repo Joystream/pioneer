@@ -16,7 +16,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubBountyConstants,
@@ -49,7 +49,7 @@ describe('UI: ContributeFundsModal', () => {
   const api = stubApi()
   stubBountyConstants(api)
   const fee = 888
-  const transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
+  let transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -83,6 +83,7 @@ describe('UI: ContributeFundsModal', () => {
   }
 
   beforeEach(() => {
+    transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
     renderResult = render(<Modal />)
   })
 
@@ -90,8 +91,16 @@ describe('UI: ContributeFundsModal', () => {
     expect(screen.getByText('modals.contribute.title')).toBeInTheDocument()
   })
 
-  it('Displays correct bounty id', () => {
-    expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
+  it('Insufficient funds', async () => {
+    stubTransaction(api, 'api.tx.bounty.fundBounty', 99999)
+    renderResult.unmount()
+    render(<Modal />)
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+  })
+
+  it('Displays correct bounty title', () => {
+    expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
   })
 
   it('Displays correct transaction fee', () => {
@@ -145,18 +154,20 @@ describe('UI: ContributeFundsModal', () => {
   }
 
   const Modal = () => (
-    <ModalContext.Provider value={useModal}>
-      <MockKeyringProvider>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider value={useMembership}>
-            <AccountsContext.Provider value={useAccounts}>
-              <BalancesContext.Provider value={useBalances}>
-                <ContributeFundsModal />
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MockKeyringProvider>
-    </ModalContext.Provider>
+    <MockApolloProvider>
+      <ModalContext.Provider value={useModal}>
+        <MockKeyringProvider>
+          <ApiContext.Provider value={api}>
+            <MembershipContext.Provider value={useMembership}>
+              <AccountsContext.Provider value={useAccounts}>
+                <BalancesContext.Provider value={useBalances}>
+                  <ContributeFundsModal />
+                </BalancesContext.Provider>
+              </AccountsContext.Provider>
+            </MembershipContext.Provider>
+          </ApiContext.Provider>
+        </MockKeyringProvider>
+      </ModalContext.Provider>
+    </MockApolloProvider>
   )
 })

@@ -1,6 +1,8 @@
+import BN from 'bn.js'
 import { useMemo } from 'react'
 
 import { useGetUserBountyStatisticsQuery } from '@/bounty/queries'
+import { BN_ZERO } from '@/common/constants'
 
 export const useUserBountiesStatistics = (memberId: string) => {
   const { data, loading } = useGetUserBountyStatisticsQuery({
@@ -17,7 +19,10 @@ export const useUserBountiesStatistics = (memberId: string) => {
       return prev
     }, 0)
 
-    const amountContributed = data?.bountyContributions.reduce((prev, current) => prev + current.amount, 0)
+    const amountContributed = data?.bountyContributions.reduce(
+      (prev, current) => prev.add(new BN(current.amount)),
+      BN_ZERO
+    )
 
     return {
       amountContributed,

@@ -1,5 +1,4 @@
 import { useMachine } from '@xstate/react'
-import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -76,7 +75,7 @@ export const OnBoardingModal = () => {
         if (error) {
           send({ type: 'ERROR' })
         } else {
-          setMembershipData({ id: new BN(memberId).toString(), blockHash: blockHash })
+          setMembershipData({ id: parseInt(memberId, 16).toString(), blockHash: blockHash })
         }
       } catch (err) {
         send({ type: 'ERROR' })
@@ -94,11 +93,12 @@ export const OnBoardingModal = () => {
     }
   }, [JSON.stringify(membershipData), transactionStatus])
 
-  if (isLoading || !status || status === 'finished') {
-    return null
+  if (state.matches('success')) {
+    const { form } = state.context
+    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
   }
 
-  if (state.matches('transaction')) {
+  if (state.matches('transaction') && transactionStatus === 'rejected') {
     return (
       <WaitModal
         onClose={hideModal}
@@ -108,9 +108,8 @@ export const OnBoardingModal = () => {
     )
   }
 
-  if (state.matches('success')) {
-    const { form } = state.context
-    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
+  if (isLoading || !status || status === 'finished') {
+    return null
   }
 
   if (state.matches('error')) {

@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -16,7 +17,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { seedForumCategories, seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
@@ -24,7 +25,7 @@ import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
   stubApi,
@@ -77,7 +78,10 @@ describe('UI: AddNewBountyModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
 
-    seedMembers(server.server)
+    seedMembers(server.server, 2)
+    seedForumCategories(server.server, [
+      { parentId: null, status: { __typename: 'CategoryStatusActive' }, moderatorIds: [] },
+    ])
 
     useAccounts = {
       isLoading: false,
@@ -104,7 +108,12 @@ describe('UI: AddNewBountyModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'AddBounty',
+        },
+      })
     })
   })
 
@@ -136,10 +145,6 @@ describe('UI: AddNewBountyModal', () => {
           title: 'Judging Period Details',
           type: 'next',
         },
-        {
-          title: 'Forum Thread',
-          type: 'next',
-        },
       ])
     })
   })
@@ -158,7 +163,8 @@ describe('UI: AddNewBountyModal', () => {
 
         await fillGeneralParameters(false)
 
-        expect(await getNextButton()).not.toBeDisabled()
+        const nextButton = await getNextButton()
+        await waitFor(() => expect(nextButton).not.toBeDisabled())
       })
     })
 
@@ -253,60 +259,25 @@ describe('UI: AddNewBountyModal', () => {
       })
 
       it('Renders', async () => {
-        expect(await screen.queryAllByText('Oralce')).toBeDefined()
-        expect(await getNextButton()).toBeDisabled()
+        expect(await screen.findByText('Oracle')).toBeInTheDocument()
+        expect(await getCreateButton()).toBeDisabled()
       })
 
       it('Valid form', async () => {
         await fillJudgingPeriod(false)
 
-        expect(await getNextButton()).not.toBeDisabled()
+        expect(await getCreateButton()).not.toBeDisabled()
       })
 
       describe('Invalid form', () => {
         it('No oracle', async () => {
           await fillField('field-periodLength', 100)
 
-          expect(await getNextButton()).toBeDisabled()
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('No period length', async () => {
           await selectFromDropdown('Oracle', 'bob')
-
-          expect(await getNextButton()).toBeDisabled()
-        })
-      })
-    })
-
-    describe('Forum Thread', () => {
-      beforeEach(async () => {
-        renderModal()
-        await fillGeneralParameters()
-        await fillFundingPeriod()
-        await fillWorkingPeriod()
-        await fillJudgingPeriod()
-      })
-
-      it('Renders', async () => {
-        expect(await screen.queryAllByText('Topic')).toBeDefined()
-        expect(await getCreateButton()).toBeDisabled()
-      })
-
-      it('Valid form', async () => {
-        await fillForumThread(false)
-
-        expect(await getCreateButton()).not.toBeDisabled()
-      })
-
-      describe('Invalid form', () => {
-        it('No topic', async () => {
-          await fillField('field-description', 'Description')
-
-          expect(await getCreateButton()).toBeDisabled()
-        })
-
-        it('No description', async () => {
-          await fillField('field-topic', 'Topic')
 
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -320,7 +291,6 @@ describe('UI: AddNewBountyModal', () => {
         await fillFundingPeriod()
         await fillWorkingPeriod()
         await fillJudgingPeriod()
-        await fillForumThread()
       })
 
       it('Renders', async () => {
@@ -337,7 +307,10 @@ describe('UI: AddNewBountyModal', () => {
       })
 
       it('Success', async () => {
-        stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+        stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated', [
+          createType('CategoryId', 0),
+          createType('ThreadId', 1337),
+        ])
         const button = await getThreadTxButton()
         fireEvent.click(button)
 
@@ -352,7 +325,6 @@ describe('UI: AddNewBountyModal', () => {
         await fillFundingPeriod()
         await fillWorkingPeriod()
         await fillJudgingPeriod()
-        await fillForumThread()
         await fillForumThreadTransaction()
       })
 
@@ -381,7 +353,7 @@ describe('UI: AddNewBountyModal', () => {
 
   const fillGeneralParameters = async (proceedToNextStep = true) => {
     await fillField('field-title', 'Title')
-    await fillField('field-photo', 'Photo')
+    await fillField('field-photo', 'https://photo.com')
     await fillField('field-description', 'Description')
 
     if (proceedToNextStep) {
@@ -424,32 +396,25 @@ describe('UI: AddNewBountyModal', () => {
     await selectFromDropdown('Oracle', 'bob')
 
     if (proceedToNextStep) {
-      await goToNext()
-
-      await waitFor(async () => expect(await screen.queryByText(/^Topic$/)).toBeDefined())
-    }
-  }
-
-  const fillForumThread = async (proceedToNextStep = true) => {
-    await fillField('field-topic', 'Topic')
-    await fillField('field-description', 'Description')
-
-    if (proceedToNextStep) {
       await createBounty()
 
-      await waitFor(async () => expect(await screen.queryByText(/^Sign transaction and Create$/i)).toBeDefined())
+      await waitFor(async () => expect(await screen.queryByText(/^Create Forum Thread$/i)).toBeDefined())
     }
   }
 
   const fillForumThreadTransaction = async () => {
     const button = await getThreadTxButton()
-    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated')
+    stubTransactionSuccess(forumThreadTransaction, 'forum', 'ThreadCreated', [
+      createType('CategoryId', 0),
+      createType('ThreadId', 1337),
+    ])
     fireEvent.click(button)
   }
 
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     fireEvent.change(amountInput, { target: { value } })
+    fireEvent.blur(amountInput)
   }
 
   const triggerSwitch = async (label: string | RegExp) => {
@@ -462,6 +427,7 @@ describe('UI: AddNewBountyModal', () => {
   const goToNext = async () => {
     const nextButton = await getNextButton()
 
+    await waitFor(() => expect(nextButton).not.toBeDisabled())
     fireEvent.click(nextButton)
   }
 
@@ -478,19 +444,19 @@ describe('UI: AddNewBountyModal', () => {
     return render(
       <MemoryRouter>
         <ModalContext.Provider value={useModal}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
+          <MockKeyringProvider>
+            <AccountsContext.Provider value={useAccounts}>
+              <ApiContext.Provider value={api}>
+                <BalancesContextProvider>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <MockApolloProvider>
                       <AddBountyModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
+                    </MockApolloProvider>
+                  </MembershipContext.Provider>
+                </BalancesContextProvider>
+              </ApiContext.Provider>
+            </AccountsContext.Provider>
+          </MockKeyringProvider>
         </ModalContext.Provider>
       </MemoryRouter>
     )

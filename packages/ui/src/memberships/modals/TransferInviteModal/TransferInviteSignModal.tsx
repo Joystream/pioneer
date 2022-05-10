@@ -11,7 +11,7 @@ import { ModalBody, ModalFooter, SignTransferContainer, TransactionInfoContainer
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
 
@@ -33,7 +33,7 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
     [sourceMember.id, targetMember.id, amount, connectionState]
   )
   const signerAddress = sourceMember.controllerAccount
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signerAddress,
     service,
@@ -48,7 +48,7 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
         <SignTransferContainer>
           <TextMedium margin="m">
             You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of {formatTokenValue(fee)}{' '}
-            JOY will be applied to the transaction.
+            tJOY will be applied to the transaction.
           </TextMedium>
           <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
             <SelectedAccount

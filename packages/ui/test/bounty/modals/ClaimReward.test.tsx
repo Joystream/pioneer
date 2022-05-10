@@ -13,10 +13,12 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
 import { getButton } from '../../_helpers/getButton'
+import { baseBounty, baseEntry } from '../../_mocks/bounty'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -29,10 +31,9 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 }))
 
 describe('UI: ClaimRewardModal', () => {
+  const reward = new BN(100_000)
   const modalData: ModalCallData<ClaimRewardModalCall> = {
-    bountyId: '1',
-    entryId: '0',
-    reward: new BN(100000),
+    bounty: { ...baseBounty, entries: [{ ...baseEntry, status: 'BountyEntryStatusWinner', winner: true, reward }] },
   }
 
   const api = stubApi()
@@ -74,9 +75,8 @@ describe('UI: ClaimRewardModal', () => {
   it('Requirements passed', async () => {
     renderModal()
 
-    expect(
-      screen.queryByText(`modals.withdraw.reward.description ${formatTokenValue(modalData.reward)}`)
-    ).not.toBeNull()
+    const amount = reward.add(baseEntry.stake)
+    expect(await screen.findByText(`modals.withdraw.reward.description ${formatTokenValue(amount)}`)).toBeDefined()
     expect(await getButton('modals.withdraw.reward.button')).toBeDefined()
   })
 
@@ -94,7 +94,7 @@ describe('UI: ClaimRewardModal', () => {
     await act(async () => {
       fireEvent.click(await getButton('modals.withdraw.reward.button'))
     })
-    expect(await screen.findByText('modals.withdraw.reward.error')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

@@ -16,6 +16,7 @@ import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
   const { proposals, isLoading } = useProposals({ status: 'active' })
+
   const { activities } = useProposalsActivities()
 
   return (

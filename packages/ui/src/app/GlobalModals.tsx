@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react'
+import React, { memo, ReactElement, useMemo } from 'react'
+import ReactDOM from 'react-dom'
 
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
@@ -18,7 +19,9 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
+import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
@@ -30,6 +33,7 @@ import { VoteForCouncilModal, VoteForCouncilModalCall } from '@/council/modals/V
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
+import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
@@ -66,6 +70,7 @@ export type ModalNames =
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
   | ModalName<CreateThreadModalCall>
+  | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
   | ModalName<EditPostModalCall>
   | ModalName<PostHistoryModalCall>
@@ -107,6 +112,7 @@ const modals: Record<ModalNames, ReactElement> = {
   AddNewProposalModal: <AddNewProposalModal />,
   VoteRationaleModal: <VoteRationale />,
   CreateThreadModal: <CreateThreadModal />,
+  DeleteThreadModal: <DeleteThreadModal />,
   DeletePost: <DeletePostModal />,
   EditPost: <EditPostModal />,
   PostHistory: <PostHistoryModal />,
@@ -136,10 +142,19 @@ const modals: Record<ModalNames, ReactElement> = {
 }
 
 export const GlobalModals = () => {
-  const { modal } = useModal()
+  const { modal, hideModal } = useModal()
+  const { status } = useTransactionStatus()
+  const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
-  if (modal && modal in modals) {
-    return modals[modal as ModalNames]
+  if (Modal) {
+    return ReactDOM.createPortal(
+      <>
+        <Modal />
+        {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
+      </>,
+      document.body
+    )
   }
+
   return null
 }

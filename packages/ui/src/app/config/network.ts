@@ -1,33 +1,58 @@
-export type NetworkType = 'local' | 'local-mocks' | 'olympia-testnet'
+export type NetworkType = 'local' | 'local-mocks' | 'joystream-testnet' | 'auto-conf'
 
-export const OLYMPIA_TESTNET_CONFIG_ENDPOINT =
-  process.env.REACT_APP_OLYMPIA_TESTNET_CONFIG_ENDPOINT ?? 'https://3.93.173.102.nip.io/network/config.json'
+export interface NetworkEndpoints {
+  queryNodeEndpointSubscription: string
+  queryNodeEndpoint: string
+  membershipFaucetEndpoint: string
+  nodeRpcEndpoint: string
+}
 
-const OLYMPIA_TESTNET_NODE_SOCKET = process.env.REACT_APP_OLYMPIA_TESTNET_NODE_SOCKET
-const OLYMPIA_TESTNET_QUERY_NODE = process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE
-const OLYMPIA_TESTNET_QUERY_NODE_SOCKET = process.env.REACT_APP_OLYMPIA_TESTNET_QUERY_NODE_SOCKET
-const MEMBERSHIP_FAUCET_URL = process.env.REACT_APP_MEMBERSHIP_FAUCET_URL
+const TESTNET_NODE_SOCKET = process.env.REACT_APP_TESTNET_NODE_SOCKET
+const TESTNET_QUERY_NODE = process.env.REACT_APP_TESTNET_QUERY_NODE
+const TESTNET_QUERY_NODE_SOCKET = process.env.REACT_APP_TESTNET_QUERY_NODE_SOCKET
+const TESTNET_MEMBERSHIP_FAUCET_URL = process.env.REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL
 
-export const QUERY_NODE_ENDPOINT_SUBSCRIPTION: Record<NetworkType, string | undefined> = {
+export const IS_TESTNET_DEFINED =
+  TESTNET_NODE_SOCKET && TESTNET_QUERY_NODE && TESTNET_QUERY_NODE_SOCKET && TESTNET_MEMBERSHIP_FAUCET_URL
+
+type PredefinedEndpoint = { [K in NetworkType]?: string }
+
+const QUERY_NODE_ENDPOINT_SUBSCRIPTION: PredefinedEndpoint = {
   local: 'ws://localhost:8081/graphql',
   'local-mocks': 'ws://localhost:8081/graphql',
-  'olympia-testnet': OLYMPIA_TESTNET_QUERY_NODE_SOCKET,
+  'joystream-testnet': TESTNET_QUERY_NODE_SOCKET,
 }
 
-export const QUERY_NODE_ENDPOINT: Record<NetworkType, string | undefined> = {
+const QUERY_NODE_ENDPOINT: PredefinedEndpoint = {
   local: 'http://localhost:8081/graphql',
   'local-mocks': 'http://localhost:8081/graphql',
-  'olympia-testnet': OLYMPIA_TESTNET_QUERY_NODE,
+  'joystream-testnet': TESTNET_QUERY_NODE,
 }
 
-export const MEMBERSHIP_FAUCET_ENDPOINT: Record<NetworkType, string | undefined> = {
+const MEMBERSHIP_FAUCET_ENDPOINT: PredefinedEndpoint = {
   local: 'http://localhost:3002/register',
   'local-mocks': 'http://localhost:3002/register',
-  'olympia-testnet': MEMBERSHIP_FAUCET_URL,
+  'joystream-testnet': TESTNET_MEMBERSHIP_FAUCET_URL,
 }
 
-export const NODE_RPC_ENDPOINT: Record<NetworkType, string | undefined> = {
+const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
   local: 'ws://127.0.0.1:9944',
   'local-mocks': 'ws://127.0.0.1:9944',
-  'olympia-testnet': OLYMPIA_TESTNET_NODE_SOCKET,
+  'joystream-testnet': TESTNET_NODE_SOCKET,
+}
+
+export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({
+  queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
+  queryNodeEndpoint: QUERY_NODE_ENDPOINT[network],
+  membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT[network],
+  nodeRpcEndpoint: NODE_RPC_ENDPOINT[network],
+})
+
+export const DEFAULT_NETWORK = (
+  IS_TESTNET_DEFINED
+    ? { type: 'joystream-testnet', endpoints: pickEndpoints('joystream-testnet') }
+    : { type: 'local', endpoints: pickEndpoints('local') }
+) as {
+  type: NetworkType
+  endpoints: NetworkEndpoints
 }

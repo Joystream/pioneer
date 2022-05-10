@@ -12,7 +12,7 @@ import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/compo
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
@@ -27,7 +27,7 @@ interface Props {
 
 export const VoteForProposalSignModal = ({ service, signer, transaction, voteStatus, proposalTitle }: Props) => {
   const { allAccounts } = useMyAccounts()
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
 
   const signDisabled = !isReady

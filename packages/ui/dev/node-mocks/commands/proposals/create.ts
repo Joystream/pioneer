@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import { access, readFile } from 'fs/promises'
 import { isAbsolute, resolve } from 'path'
 
 import { createType } from '@joystream/types'
 import yargs from 'yargs'
 
+import { getDataFromEvent } from '../../../../src/common/model/JoystreamNode'
 import memberData from '../../../../src/mocks/data/raw/members.json'
 import { signAndSend, withApi } from '../../lib/api'
 import { createMembersCommand } from '../members/create'
@@ -42,7 +44,12 @@ const createProposal = (args: Args) => {
     const proposalDetails = await specificParams(args)
 
     const tx = api.tx.proposalsCodex.createProposal(commonParams, proposalDetails)
-    await signAndSend(tx, address)
+    const events = await signAndSend(tx, address)
+
+    const proposalId = Number(getDataFromEvent(events, 'proposalsCodex', 'ProposalCreated'))
+    const proposalData = getDataFromEvent(events, 'proposalsCodex', 'ProposalCreated', 1)
+    const threadId = Number(getDataFromEvent(events, 'proposalsDiscussion', 'ThreadCreated'))
+    console.log({ proposalId, ...proposalData?.toJSON(), threadId })
   })
 }
 

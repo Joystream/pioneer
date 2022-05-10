@@ -1,9 +1,18 @@
-import { Vec, Option, Tuple, BTreeSet, UInt } from '@polkadot/types'
-import { bool, u64, u32, Null, Bytes } from '@polkadot/types/primitive'
-import { JoyStructDecorated, JoyEnum, ChannelId, MemberId, Balance, Hash, BlockNumber, BalanceOf } from '../common'
+import { Vec, Option, Tuple, BTreeSet, UInt } from "@polkadot/types";
+import { GenericAccountId as AccountId } from "@polkadot/types/generic/AccountId";
+import { bool, u8, u32, u64, Null, Bytes } from "@polkadot/types/primitive";
 
-import { GenericAccountId as AccountId } from '@polkadot/types/generic/AccountId'
-import { DataObjectId, DataObjectCreationParameters } from '../storage'
+import {
+  JoyStructDecorated,
+  JoyEnum,
+  ChannelId,
+  MemberId,
+  Balance,
+  Hash,
+  BlockNumber,
+  BalanceOf,
+} from "../common";
+import { DataObjectId, DataObjectCreationParameters } from "../storage";
 
 export class CuratorId extends u64 {}
 export class CuratorGroupId extends u64 {}
@@ -195,15 +204,6 @@ export class VideoUpdateParameters extends JoyStructDecorated({
   enable_comments: Option.with(bool),
 }) {}
 
-export class VideoMigrationConfig extends JoyStructDecorated({
-  current_id: VideoId,
-  final_id: VideoId,
-}) {}
-export class ChannelMigrationConfig extends JoyStructDecorated({
-  current_id: ChannelId,
-  final_id: ChannelId,
-}) {}
-
 export class VideoPostType extends JoyEnum({
   Description: Null,
   Comment: VideoPostId,
@@ -245,6 +245,8 @@ export class PullPayment extends JoyStructDecorated({
 
 export class ModeratorSet extends BTreeSet.with(MemberId) {}
 
+export class NftMetadata extends Vec.with(u8) {}
+
 export const contentTypes = {
   CuratorId,
   CuratorGroupId,
@@ -269,8 +271,6 @@ export const contentTypes = {
   VideoUpdateParameters,
   MaxNumber,
   IsCensored,
-  VideoMigrationConfig,
-  ChannelMigrationConfig,
   // Added in Olympia:
   VideoPostId,
   ReactionId,
@@ -298,6 +298,7 @@ export const contentTypes = {
   CurrencyAmount,
   InitTransactionalStatus,
   NftIssuanceParameters,
-}
+  NftMetadata,
+};
 
-export default contentTypes
+export default contentTypes;

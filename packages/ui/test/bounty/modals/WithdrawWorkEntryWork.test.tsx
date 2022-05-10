@@ -17,9 +17,10 @@ import bounties from '@/mocks/data/raw/bounties.json'
 import entries from '@/mocks/data/raw/bountyEntries.json'
 import { getMember } from '@/mocks/helpers'
 
+import { generateWork } from '../../../dev/query-node-mocks/generators/generateBounties'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockKeyringProvider, MockApolloProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubDefaultBalances,
@@ -30,7 +31,7 @@ import {
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
-const entry = { ...baseEntry, worker: getMember('bob') }
+const entry = { ...baseEntry, worker: getMember('bob'), works: [generateWork()] }
 
 const defaultBalance = {
   total: BN_ZERO,
@@ -46,8 +47,7 @@ describe('UI: WithdrawWorkEntryModal', () => {
     showModal: jest.fn(),
     modal: null,
     modalData: {
-      bounty: { ...bounty },
-      entry: { ...entry },
+      bounty: { ...bounty, entries: [entry] },
     },
   }
 
@@ -56,7 +56,7 @@ describe('UI: WithdrawWorkEntryModal', () => {
   let tx = stubTransaction(api, txPath)
 
   const useMyMemberships: MyMemberships = {
-    active: getMember('alice'),
+    active: getMember('bob'),
     members: [getMember('alice'), getMember('bob')],
     setActive: (member) => (useMyMemberships.active = member),
 
@@ -94,6 +94,14 @@ describe('UI: WithdrawWorkEntryModal', () => {
     expect(await getButton('modals.withdrawWorkEntry.submitButton')).not.toBeNull()
   })
 
+  it('Insufficient funds', async () => {
+    stubTransaction(api, txPath, 99999)
+
+    renderModal()
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+  })
+
   it('Displays correct bounty', () => {
     renderModal()
 
@@ -103,21 +111,19 @@ describe('UI: WithdrawWorkEntryModal', () => {
   it('Displays correct member', () => {
     renderModal()
 
-    expect(screen.queryByText(useModal.modalData.entry.worker.handle)).not.toBeNull()
+    expect(screen.queryByText(entry.worker.handle)).not.toBeNull()
   })
 
   it('Displays correct works', () => {
     renderModal()
 
-    useModal.modalData.entry.works.map((work: { title: string }) =>
-      expect(screen.queryByText(work.title)).not.toBeNull()
-    )
+    entry.works.map((work: { title: string }) => expect(screen.queryByText(work.title)).not.toBeNull())
   })
 
   it('Displays correct stake amount', () => {
     renderModal()
 
-    expect(screen.queryByText(formatTokenValue(useModal.modalData.entry.stake))).not.toBeNull()
+    expect(screen.queryByText(formatTokenValue(entry.stake))).not.toBeNull()
   })
 
   describe('Transaction result', () => {
@@ -158,8 +164,8 @@ describe('UI: WithdrawWorkEntryModal', () => {
 
   const renderModal = () => {
     render(
-      <ModalContext.Provider value={useModal}>
-        <MockQueryNodeProviders>
+      <MockApolloProvider>
+        <ModalContext.Provider value={useModal}>
           <MockKeyringProvider>
             <AccountsContext.Provider value={useAccounts}>
               <MembershipContext.Provider value={useMyMemberships}>
@@ -171,8 +177,8 @@ describe('UI: WithdrawWorkEntryModal', () => {
               </MembershipContext.Provider>
             </AccountsContext.Provider>
           </MockKeyringProvider>
-        </MockQueryNodeProviders>
-      </ModalContext.Provider>
+        </ModalContext.Provider>
+      </MockApolloProvider>
     )
   }
 })

@@ -27,13 +27,11 @@ query GetSidebarInfo($memberId: ID!) {
     }
   }
 
-  candidacyNoteMetadata(
-    where: {
-      candidacynoteseteventnoteMetadata_every: { candidate: { status_eq: ACTIVE, member: { id_eq: $memberId } } }
+  candidates(where: { status_eq: ACTIVE, member: { id_eq: $memberId } }) {
+    noteMetadata {
+      id
+      header
     }
-  ) {
-    id
-    header
   }
 
   proposals(where: { creator: { id_eq: $memberId } }) {
@@ -45,5 +43,30 @@ query GetSidebarInfo($memberId: ID!) {
     posts {
       id
     }
+  }
+}
+
+query GetAllDeadLines($proposalCreator: MembershipWhereInput, $group: WorkingGroupWhereInput, $isLead: Boolean!) {
+  electionRounds(where: { isFinished_eq: false }) {
+    cycleId
+    candidates {
+      ...ElectionCandidateFields
+    }
+  }
+  proposals(
+    where: { creator: $proposalCreator, isFinalized_eq: false, status_json: { isTypeOf_eq: "ProposalStatusDeciding" } }
+  ) {
+    updatedAt
+    id
+    title
+  }
+
+  upcomingWorkingGroupOpenings(where: { group: $group }) @include(if: $isLead) {
+    ...UpcomingWorkingGroupOpeningFields
+  }
+
+  workingGroupOpenings(where: { group: $group, status_json: { isTypeOf_eq: "OpeningStatusOpen" } })
+    @include(if: $isLead) {
+    ...WorkingGroupOpeningFields
   }
 }

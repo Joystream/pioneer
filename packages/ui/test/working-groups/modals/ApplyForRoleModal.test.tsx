@@ -1,7 +1,8 @@
+import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -9,10 +10,12 @@ import { interpret } from 'xstate'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -24,7 +27,7 @@ import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/typ
 
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { getButton } from '../../_helpers/getButton'
-import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
+import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -41,6 +44,8 @@ import {
 } from '../../_mocks/transactions'
 
 const useHasRequiredStake = { hasRequiredStake: true }
+
+configure({ testIdAttribute: 'id' })
 
 jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
   return {
@@ -76,6 +81,7 @@ describe('UI: ApplyForRoleModal', () => {
   let batchTx: any
   let bindAccountTx: any
   let applyTransaction: any
+  let applyOnOpeningTxMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -107,6 +113,8 @@ describe('UI: ApplyForRoleModal', () => {
       available: 2000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+    applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
+
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
       api,
@@ -138,7 +146,13 @@ describe('UI: ApplyForRoleModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalData: useModal.modalData,
+          originalModalName: 'ApplyForRoleModal',
+        },
+      })
     })
 
     it('Insufficient funds', async () => {
@@ -168,8 +182,7 @@ describe('UI: ApplyForRoleModal', () => {
       renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '50' } })
+      await fillFieldByLabel(/Select amount for staking/i, '50')
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
@@ -179,8 +192,9 @@ describe('UI: ApplyForRoleModal', () => {
       renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '2000' } })
+      await fillFieldByLabel(/Select amount for staking/i, '2000')
+      await selectFromDropdownWithId('role-account', 'alice')
+      await selectFromDropdownWithId('reward-account', 'bob')
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -204,9 +218,9 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
+      await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
+      await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -214,16 +228,6 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   describe('Authorize', () => {
-    async function fillSteps() {
-      await renderModal()
-      await fillAndSubmitStakeStep()
-
-      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.click(await getNextStepButton())
-    }
-
     describe('Staking account is not nor staking candidate', () => {
       it('Bind account step', async () => {
         await fillSteps()
@@ -387,16 +391,75 @@ describe('UI: ApplyForRoleModal', () => {
     })
   })
 
+  it('Parameters', async () => {
+    stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
+    stubTransactionFailure(batchTx)
+
+    await fillSteps('bob')
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(/^Sign transaction/i))
+    })
+
+    await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
+
+    const [beforeTransactionParam] = last(applyOnOpeningTxMock.mock.calls)
+    expect(beforeTransactionParam.opening_id).toBe(1)
+
+    expect(beforeTransactionParam.member_id).toBe(useMyMemberships.active?.id)
+    expect(beforeTransactionParam.role_account_id).toBe(alice.address)
+    expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
+
+    expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
+    expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
+
+    await act(async () => {
+      fireEvent.click(await screen.findByText(/^Sign transaction/i))
+    })
+
+    const [transactionParam] = last(applyOnOpeningTxMock.mock.calls)
+
+    expect(transactionParam.opening_id).toBe(1)
+
+    expect(transactionParam.member_id).toBe(useMyMemberships.active?.id)
+    expect(transactionParam.role_account_id).toBe(alice.address)
+    expect(transactionParam.reward_account_id).toBe(alice.address)
+
+    expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
+    expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
+
+    expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
+      answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],
+    })
+  })
+
   async function getNextStepButton() {
     return getButton(/Next step/i)
   }
 
-  async function fillAndSubmitStakeStep() {
-    await selectFromDropdown('Select account for Staking', 'alice')
-    const input = await screen.findByLabelText(/Select amount for staking/i)
-    fireEvent.change(input, { target: { value: '2000' } })
+  async function fillAndSubmitStakeStep(stakingAccount = 'alice') {
+    await selectFromDropdown('Select account for Staking', stakingAccount)
+    await fillFieldByLabel(/Select amount for staking/i, '2000')
+    await selectFromDropdownWithId('role-account', 'alice')
+    await selectFromDropdownWithId('reward-account', 'alice')
     fireEvent.click(await getNextStepButton())
     await screen.findByText('Application')
+  }
+
+  async function fillSteps(stakingAccount = 'alice') {
+    await renderModal()
+    await fillAndSubmitStakeStep(stakingAccount)
+
+    await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
+    await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
+    await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
+    fireEvent.click(await getNextStepButton())
+  }
+
+  async function fillFieldByLabel(label: string | RegExp, value: number | string) {
+    const amountInput = await screen.findByLabelText(label)
+    fireEvent.change(amountInput, { target: { value } })
+    fireEvent.blur(amountInput)
   }
 
   function renderModal() {

@@ -37,7 +37,7 @@ describe('WorkingGroup', () => {
   })
 
   it('Loads working group by url param with a hyphen', async () => {
-    renderPage('/working-groups/content-directory')
+    renderPage('/working-groups/content')
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
     expect(await screen.findByText(/current budget/i)).toBeDefined()
@@ -47,8 +47,8 @@ describe('WorkingGroup', () => {
     renderPage()
     await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
 
-    expect(await screen.findAllByText(/^forum Working Group regular$/i)).toHaveLength(2)
-    expect(await screen.findAllByText(/^forum Working Group$/i)).toHaveLength(2)
+    expect(await screen.findAllByText(OPENING_DATA.metadata.title)).toHaveLength(2)
+    expect(await screen.findAllByText(UPCOMING_OPENING.metadata.title)).toHaveLength(2)
   })
 
   function renderPage(path = '/working-groups/forum') {

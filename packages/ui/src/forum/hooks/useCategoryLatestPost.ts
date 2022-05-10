@@ -5,7 +5,7 @@ import { useGetForumPostsLazyQuery, useGetForumThreadsQuery } from '@/forum/quer
 import { asForumPost, asForumThread } from '@/forum/types'
 
 export const useCategoryLatestPost = (category_eq: string) => {
-  const { data: threadData } = useGetForumThreadsQuery({
+  const { data: threadData, loading: loadingThreads } = useGetForumThreadsQuery({
     variables: {
       where: { category: { id_eq: category_eq } },
       orderBy: ForumThreadOrderByInput.UpdatedAtDesc,
@@ -25,8 +25,12 @@ export const useCategoryLatestPost = (category_eq: string) => {
       })
   }, [threadData])
 
-  const [fetchPost, { data: postData }] = useGetForumPostsLazyQuery()
+  const [fetchPost, { data: postData, loading: loadingPosts }] = useGetForumPostsLazyQuery()
   const rawPost = postData?.forumPosts[0]
 
-  return { post: rawPost && asForumPost(rawPost), thread: threadData && asForumThread(threadData?.forumThreads[0]) }
+  return {
+    isLoading: loadingPosts || loadingThreads,
+    post: rawPost && asForumPost(rawPost),
+    thread: threadData?.forumThreads.length ? asForumThread(threadData?.forumThreads[0]) : undefined,
+  }
 }

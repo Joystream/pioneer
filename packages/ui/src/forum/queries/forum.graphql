@@ -176,8 +176,13 @@ fragment ForumPostMentionFields on ForumPost {
   }
 }
 
-query GetForumCategories($where: ForumCategoryWhereInput) {
-  forumCategories(where: $where) {
+query GetForumCategories(
+  $where: ForumCategoryWhereInput
+  $orderBy: [ForumCategoryOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  forumCategories(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...ForumCategoryFields
   }
 }

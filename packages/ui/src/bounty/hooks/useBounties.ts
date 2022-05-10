@@ -17,7 +17,7 @@ export interface QueryExtraFilter<T> {
 }
 
 export interface UseBountiesProps {
-  order: SortOrder<BountyOrderByInput>
+  order?: SortOrder<BountyOrderByInput>
   perPage?: number
   filters?: BountyFiltersState
   status: BountyStatus
@@ -25,7 +25,7 @@ export interface UseBountiesProps {
 }
 
 export const useBounties = ({ order, perPage = 10, filters, status, extraFilter }: UseBountiesProps) => {
-  const orderBy = toQueryOrderByInput<BountyOrderByInput>(order)
+  const orderBy = order ? toQueryOrderByInput<BountyOrderByInput>(order) : BountyOrderByInput.CreatedAtDesc
   const { data: dataCount } = useGetBountiesCountQuery()
   const totalCountPerPage = dataCount?.bountiesConnection.totalCount
   const { offset, pagination } = usePagination(perPage, totalCountPerPage ?? 0, [order])
@@ -37,18 +37,7 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
       where.title_contains = filters.search
     }
 
-    if (status === 'past') {
-      where.stage_eq = BountyStage['Terminated']
-    } else {
-      where.stage_in = [
-        BountyStage['Funding'],
-        BountyStage['WorkSubmission'],
-        BountyStage['Judgment'],
-        BountyStage['Expired'],
-        BountyStage['Successful'],
-        BountyStage['Failed'],
-      ]
-    }
+    where.isTerminated_eq = status === 'past'
 
     if (filters?.period) {
       switch (filters?.period) {
@@ -64,8 +53,14 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
         case 'Expired':
           where.stage_eq = BountyStage['Expired']
           break
-        case 'Withdrawal':
-          where.stage_in = [BountyStage['Successful'], BountyStage['Failed']]
+        case 'Terminated-funding':
+          where.stage_eq = BountyStage['Funding']
+          break
+        case 'Terminated-failed':
+          where.stage_eq = BountyStage['Failed']
+          break
+        case 'Terminated-successful':
+          where.stage_eq = BountyStage['Successful']
           break
       }
     }
@@ -83,7 +78,7 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
     }
 
     return { where, orderBy, limit: perPage, offset }
-  }, [status, JSON.stringify(filters)])
+  }, [status, JSON.stringify(filters), extraFilter?.path, JSON.stringify(extraFilter?.value)])
 
   const { loading, data } = useGetBountiesQuery({ variables })
 

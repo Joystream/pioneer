@@ -11,62 +11,63 @@ export interface WorkingGroupImageProps {
 
 export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImageProps) => {
   switch (groupName) {
-    case 'bandwidth':
+    case 'Distribution':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
-          <rect x="42.8284" y="42.8281" width="22" height="22" fill={Colors.Black[500]} />
-          <circle cx="54" cy="54" r="2" fill={Colors.White} />
+          <rect width="108" height="108" rx="2" fill="#F9FAFC" stroke="#E8EDF6" />
+          <rect x="42.8284" y="42.8281" width="22" height="22" fill="#5D6B80" />
+          <circle cx="54" cy="54" r="2" fill="white" />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M53.8284 24L60.2426 30.4142L57.4142 33.2426L55.8284 31.6569V47.8284H51.8284V31.6569L50.2426 33.2426L47.4142 30.4142L53.8284 24Z"
-            fill={Colors.Blue[500]}
+            fill="#3F38FF"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M55.8284 42.8281V47.8281H51.8284V42.8281H55.8284Z"
-            fill={Colors.Black[900]}
+            fill="black"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
-            d="M53.8284 83.6572L60.2426 77.243L57.4142 74.4146L55.8284 76.0004V59.8288H51.8284V76.0004L50.2426 74.4146L47.4142 77.243L53.8284 83.6572Z"
-            fill={Colors.Blue[500]}
+            d="M53.8284 83.6562L60.2426 77.242L57.4142 74.4136L55.8284 75.9994V59.8278H51.8284V75.9994L50.2426 74.4136L47.4142 77.242L53.8284 83.6562Z"
+            fill="#3F38FF"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M83.6567 53.8283L77.2425 60.2425L74.4141 57.4141L75.9999 55.8283L59.8283 55.8283L59.8283 51.8283L75.9999 51.8283L74.4141 50.2425L77.2425 47.4141L83.6567 53.8283Z"
-            fill={Colors.Blue[500]}
+            fill="#3F38FF"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M24 53.8283L30.4142 60.2425L33.2426 57.4141L31.6569 55.8283L47.8284 55.8283L47.8284 51.8283L31.6569 51.8283L33.2426 50.2425L30.4142 47.4141L24 53.8283Z"
-            fill={Colors.Blue[500]}
+            fill="#3F38FF"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M55.8284 59.8281V64.8281H51.8284V59.8281H55.8284Z"
-            fill={Colors.Black[900]}
+            fill="black"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M47.8284 55.8281L42.8284 55.8281L42.8284 51.8281L47.8284 51.8281L47.8284 55.8281Z"
-            fill={Colors.Black[900]}
+            fill="black"
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M64.8284 55.8281L59.8284 55.8281L59.8284 51.8281L64.8284 51.8281L64.8284 55.8281Z"
-            fill={Colors.Black[900]}
+            fill="black"
           />
         </WorkingGroupImageTag>
       )
-    case 'storage':
+    case 'Storage':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path fillRule="evenodd" clipRule="evenodd" d="M53 37H73V39H53V37Z" fill={Colors.White} />
@@ -97,7 +98,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           <circle cx="57" cy="56" r="2" fill={Colors.White} />
         </WorkingGroupImageTag>
       )
-    case 'forum':
+    case 'Forum':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path d="M44 53.9256V29H60H88.021V53.9256H85L75.8506 59.5V53.9256H44Z" fill={Colors.Black[500]} />
@@ -114,7 +115,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           <path fillRule="evenodd" clipRule="evenodd" d="M28.021 58H55.021V60H28.021V58Z" fill={Colors.White} />
         </WorkingGroupImageTag>
       )
-    case 'membership':
+    case 'Membership':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
@@ -141,7 +142,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           />
         </WorkingGroupImageTag>
       )
-    case 'content directory':
+    case 'Content':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
@@ -181,7 +182,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           <rect x="76.8925" y="72.7002" width="3.76344" height="3.5" fill={Colors.White} />
         </WorkingGroupImageTag>
       )
-    case 'discovery':
+    case 'Discovery':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
@@ -220,7 +221,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           <path d="M27 57C27 52.0294 31.0294 48 36 48" stroke={Colors.White} strokeWidth="2" />
         </WorkingGroupImageTag>
       )
-    case 'operations':
+    case 'Operations Alpha':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
@@ -257,7 +258,74 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           />
         </WorkingGroupImageTag>
       )
-    case 'council':
+    case 'Operations Beta':
+      return (
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
+          <rect width="108" height="108" rx="2" fill="#F9FAFC" />
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M56.3526 44.6441C53.437 45.9898 51.2287 48.0333 49.6286 50.3485C46.8887 54.3128 46 58.9452 46 61.9789V63.7892L47.629 64.5988C50.0971 65.8255 56.5607 68 64.5 68C72.4393 68 78.9029 65.8255 81.371 64.5988L83 63.7892V61.9789C83 58.9452 82.1113 54.3128 79.3714 50.3485C77.7713 48.0333 75.563 45.9898 72.6474 44.6441C70.3787 46.3269 67.5575 47.3243 64.5 47.3243C61.4425 47.3243 58.6213 46.3269 56.3526 44.6441ZM53.4 33.9459C53.4 27.9007 58.3696 23 64.5 23C70.6304 23 75.6 27.9007 75.6 33.9459C75.6 39.9912 70.6304 44.8919 64.5 44.8919C58.3696 44.8919 53.4 39.9912 53.4 33.9459Z"
+            fill="#5D6B80"
+          />
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M66.2929 81.8301C66.6835 81.4395 66.6835 80.8064 66.2929 80.4159L51.6779 65.8008L47.8 69.6786L62.4151 84.2937C62.8056 84.6842 63.4388 84.6842 63.8293 84.2937L66.2929 81.8301Z"
+            fill="#3F38FF"
+          />
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M56.2 58.6C56.2 67.2156 49.2156 74.2 40.6 74.2C31.9844 74.2 25 67.2156 25 58.6C25 49.9844 31.9844 43 40.6 43C49.2156 43 56.2 49.9844 56.2 58.6Z"
+            fill="#3F38FF"
+          />
+          <path d="M29.8 58.6008C29.8 52.6361 34.6354 47.8008 40.6 47.8008" stroke="white" strokeWidth="2" />
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M53.9133 66.7356C55.3638 64.3669 56.2 61.5812 56.2 58.6001C56.2 54.3874 54.5302 50.5647 51.8163 47.7578C50.988 48.5615 50.2608 49.4339 49.6286 50.3487C46.8887 54.3129 46 58.9454 46 61.979V63.7894L47.629 64.599C48.849 65.2053 51.0452 66.0432 53.9133 66.7356Z"
+            fill="black"
+          />
+        </WorkingGroupImageTag>
+      )
+    case 'Operations Gamma':
+      return (
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
+          <rect width="108" height="108" rx="2" fill="#F9FAFC" />
+          <path
+            d="M66 36C63.6266 36 61.3065 36.7038 59.3332 38.0224C57.3598 39.3409 55.8217 41.2151 54.9135 43.4078C54.0052 45.6005 53.7676 48.0133 54.2306 50.3411C54.6936 52.6689 55.8365 54.807 57.5147 56.4853C59.193 58.1635 61.3311 59.3064 63.6589 59.7694C65.9867 60.2324 68.3995 59.9948 70.5922 59.0865C72.7849 58.1783 74.6591 56.6402 75.9776 54.6668C77.2962 52.6934 78 50.3734 78 48C77.9963 44.8185 76.7308 41.7684 74.4812 39.5188C72.2316 37.2692 69.1815 36.0037 66 36ZM66 53.3333C64.9452 53.3333 63.914 53.0205 63.037 52.4345C62.1599 51.8485 61.4763 51.0155 61.0726 50.041C60.669 49.0664 60.5634 47.9941 60.7691 46.9595C60.9749 45.9249 61.4829 44.9746 62.2288 44.2288C62.9746 43.4829 63.925 42.9749 64.9595 42.7691C65.9941 42.5634 67.0664 42.669 68.041 43.0726C69.0155 43.4763 69.8485 44.1599 70.4345 45.037C71.0205 45.914 71.3333 46.9452 71.3333 48C71.3317 49.414 70.7693 50.7696 69.7695 51.7695C68.7696 52.7693 67.414 53.3317 66 53.3333Z"
+            fill="#5D6B80"
+          />
+          <path
+            d="M66 51C67.6569 51 69 49.6569 69 48C69 46.3431 67.6569 45 66 45C64.3431 45 63 46.3431 63 48C63 49.6569 64.3431 51 66 51Z"
+            fill="#5D6B80"
+          />
+          <path
+            d="M66.0001 26C61.6489 26 57.3955 27.2903 53.7776 29.7077C50.1597 32.1251 47.3399 35.561 45.6748 39.581C44.0097 43.6009 43.574 48.0244 44.4229 52.292C45.2717 56.5596 47.367 60.4796 50.4438 63.5564C53.5205 66.6331 57.4406 68.7284 61.7082 69.5773C65.9757 70.4262 70.3992 69.9905 74.4192 68.3254C78.4392 66.6602 81.8751 63.8404 84.2925 60.2225C86.7099 56.6047 88.0001 52.3512 88.0001 48C87.9935 42.1673 85.6736 36.5753 81.5492 32.4509C77.4248 28.3266 71.8329 26.0066 66.0001 26ZM66.0001 62.6667C63.0993 62.6667 60.2637 61.8065 57.8518 60.1949C55.4399 58.5833 53.56 56.2927 52.4499 53.6127C51.3398 50.9327 51.0494 47.9837 51.6153 45.1387C52.1812 42.2936 53.5781 39.6803 55.6292 37.6291C57.6804 35.5779 60.2938 34.1811 63.1388 33.6151C65.9839 33.0492 68.9328 33.3397 71.6128 34.4498C74.2928 35.5599 76.5834 37.4397 78.195 39.8516C79.8066 42.2636 80.6668 45.0992 80.6668 48C80.6623 51.8885 79.1157 55.6164 76.3661 58.366C73.6165 61.1155 69.8886 62.6622 66.0001 62.6667Z"
+            fill="#5D6B80"
+          />
+          <path
+            d="M53.3595 49.668L41.9449 49.668L26.1544 39.668L26.1544 77.5571L41.9449 67.5571L53.3595 67.5571C55.7045 67.5571 57.9534 66.6147 59.6115 64.9373C61.2696 63.2599 62.2012 60.9848 62.2012 58.6125C62.2012 56.2403 61.2696 53.9652 59.6115 52.2878C57.9534 50.6103 55.7045 49.668 53.3595 49.668Z"
+            fill="#3F38FF"
+          />
+          <path
+            d="M52.5924 68.957L44.6967 68.957L44.6967 81.3503C44.6967 81.9026 45.1444 82.3503 45.6967 82.3503L51.5924 82.3503C52.1447 82.3503 52.5924 81.9026 52.5924 81.3503L52.5924 68.957Z"
+            fill="#3F38FF"
+          />
+          <path
+            d="M24.3959 54.2188L24.3959 63.0106C23.23 63.0106 22.1119 62.5475 21.2875 61.7231C20.4631 60.8987 19.9999 59.7806 19.9999 58.6147C19.9999 57.4488 20.4631 56.3307 21.2875 55.5063C22.1119 54.6819 23.23 54.2187 24.3959 54.2188Z"
+            fill="#3F38FF"
+          />
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M59.6117 64.9373C58.4551 66.1073 57.0111 66.9197 55.4475 67.3042C53.6196 66.3049 51.9329 65.0457 50.4438 63.5566C47.3671 60.4798 45.2718 56.5598 44.4229 52.2922C44.2499 51.4224 44.1302 50.546 44.0635 49.668H51.016H51.4287H53.3595C55.7045 49.668 57.9534 50.6103 59.6115 52.2878C59.7518 52.4297 59.8869 52.5759 60.0167 52.7262C60.12 52.8643 60.229 52.9981 60.3434 53.1272C61.5412 54.6878 62.2012 56.6158 62.2012 58.6125C62.2012 59.7769 61.9768 60.9178 61.5522 61.9762C61.5522 61.9762 61.5523 61.9762 61.5523 61.9762C61.1119 63.0741 60.456 64.0832 59.6117 64.9373Z"
+            fill="black"
+          />
+        </WorkingGroupImageTag>
+      )
+    case 'Council':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
@@ -290,7 +358,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           />
         </WorkingGroupImageTag>
       )
-    case 'gateway':
+    case 'Gateway':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path

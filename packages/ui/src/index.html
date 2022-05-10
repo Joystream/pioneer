@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
     <title>Joystream Governance App</title>
-    <script>
-      var global = window
-    </script>
   </head>
+
   <body>
     <div id="app"></div>
+
+    <script>
+      // Usersnap script:
+      var global = window
+      window.onUsersnapCXLoad = function (api) {
+        api.init()
+      }
+      var script = document.createElement('script')
+      script.defer = 1
+      script.src =
+        'https://widget.usersnap.com/global/load/6e7b3746-b1a3-4dec-9e40-2fe82a6fd468?onload=onUsersnapCXLoad'
+      document.getElementsByTagName('head')[0].appendChild(script)
+    </script>
   </body>
 </html>

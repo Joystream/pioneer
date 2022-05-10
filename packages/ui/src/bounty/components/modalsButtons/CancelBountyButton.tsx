@@ -1,29 +1,41 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BountyHeaderButtonsProps } from '@/bounty/components/BountyPreviewHeader/types'
 import { BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
-import { Bounty } from '@/bounty/types/Bounty'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
-import { Member } from '@/memberships/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
-interface Props {
-  bounty: Bounty
-  creator: Member
-}
-
-export const CancelBountyButton = React.memo(({ bounty, creator }: Props) => {
+export const CancelBountyButton = React.memo(({ bounty, validMemberIds }: BountyHeaderButtonsProps) => {
+  const { active } = useMyMemberships()
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const bountyCancelModal = useCallback(() => {
+    if (!active || !validMemberIds.includes(active.id)) {
+      return showModal<SwitchMemberModalCall>({
+        modal: 'SwitchMember',
+        data: {
+          noCreateButton: true,
+          membersToShow: validMemberIds,
+          originalModalName: 'BountyCancel',
+          originalModalData: {
+            bounty,
+            creator: bounty.creator,
+          },
+        },
+      })
+    }
+
     showModal<BountyCancelModalCall>({
       modal: 'BountyCancel',
       data: {
         bounty,
-        creator,
+        creator: bounty.creator,
       },
     })
-  }, [])
+  }, [validMemberIds, active])
 
   return (
     <TransactionButton style="primary" size="large" onClick={bountyCancelModal}>

@@ -1,29 +1,39 @@
 import BN from 'bn.js'
 
+import { getFundingPeriodLength, getSecondsPast } from '@/bounty/helpers'
 import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
+import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { lowerFirstLetter } from '@/common/helpers'
+import { asBlock, maybeAsBlock } from '@/common/types'
 import { asMember } from '@/memberships/types'
 
-import { BountyContributionFieldsFragment, BountyFieldsFragment, BountyWorkFieldsFragment } from '../queries'
+import {
+  BountyContributionFieldsFragment,
+  BountyEntryWithDetailsFieldsFragment,
+  BountyFieldsFragment,
+  BountyWorkFieldsFragment,
+  BountyWorkWithDetailsFieldsFragment,
+} from '../queries'
 
 import {
   Bounty,
+  BountyContribution,
   BountyPeriod,
   BountyStage,
-  WorkEntry,
-  FundingType,
-  ContractType,
-  Contributor,
   BountyWork,
-  BountyEntryStatus,
-  BountyContribution,
+  Contributor,
+  FundingType,
+  isFundingLimited,
+  WorkEntry,
+  WorkInfo,
 } from './Bounty'
 
 export const asPeriod = (stage: BountyStage): BountyPeriod => {
   switch (stage) {
     case 'successful':
+      return 'successful'
     case 'failed':
-      return 'withdrawal'
+      return 'failed'
     case 'workSubmission':
       return 'working'
     case 'judgment':
@@ -50,73 +60,82 @@ const asStage = (stageField: SchemaBountyStage): BountyStage => {
   return lowerFirstLetter(`${stageField}`) as BountyStage
 }
 
-const asEntries = (entriesFields: BountyFieldsFragment['entries']): WorkEntry[] | undefined => {
-  return entriesFields?.map((entry) => {
-    return {
-      id: entry.id,
-      bountyId: entry.bountyId,
-      worker: asMember(entry.worker),
-      hasSubmitted: entry.workSubmitted,
-      status: asBountyEntryStatus(entry.status),
-      winner: entry.status.__typename === 'BountyEntryStatusWinner',
-      works: entry.works?.map((work) => ({ id: work.id, title: work.title, description: work.description })),
-      passed: entry.status.__typename === 'BountyEntryStatusPassed',
-      rejected: entry.status.__typename === 'BountyEntryStatusRejected',
-      withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
-      stake: entry.stake,
-    }
+const asWorkInfo = (work: BountyWorkFieldsFragment): WorkInfo => ({
+  id: work.id,
+  title: work.title ?? '',
+  description: work.description ?? '',
+})
+
+const asEntry = (bountyId: string, stake: BN): ((entry: BountyEntryWithDetailsFieldsFragment) => WorkEntry) => {
+  return (entry) => ({
+    id: entry.id,
+    bountyId,
+    stake,
+    worker: asMember(entry.worker),
+    hasSubmitted: entry.workSubmitted,
+    status: entry.status.__typename,
+    winner: entry.status.__typename === 'BountyEntryStatusWinner',
+    works: entry.works?.map(asWorkInfo),
+    passed: entry.status.__typename === 'BountyEntryStatusPassed',
+    rejected: entry.status.__typename === 'BountyEntryStatusRejected',
+    withdrawn: entry.status.__typename === 'BountyEntryStatusWithdrawn',
+    hasCashedOut: !!entry.withdrawnInEvent,
+    reward: 'reward' in entry.status ? new BN(entry.status.reward) : undefined,
   })
 }
 
-const asContractType = (type: BountyFieldsFragment['contractType']): ContractType => {
-  return type.__typename === 'BountyContractOpen'
-    ? 'ContractOpen'
-    : {
-        whitelist: type.whitelist?.map((member) => member.id) || [],
-      }
-}
+export const asContributor = ({
+  amount,
+  contributor,
+  withdrawnInEvent,
+}: BountyContributionFieldsFragment): Contributor => ({
+  hasWithdrawn: !!withdrawnInEvent?.id,
+  amount,
+  actor: contributor ? asMember(contributor) : undefined,
+})
 
-export const asContributors = (contributors: BountyFieldsFragment['contributions']): Contributor[] => {
-  return (
-    contributors?.map(({ amount, contributor }) => ({
-      amount,
-      actor: contributor ? asMember(contributor) : undefined,
-    })) || []
-  )
-}
+export const asBountyWork =
+  (worker: BountyWorkWithDetailsFieldsFragment['worker'], entryStatus: BountyWorkWithDetailsFieldsFragment['status']) =>
+  (fields: NonNullable<BountyWorkWithDetailsFieldsFragment['works']>[number]): BountyWork => ({
+    id: fields.id,
+    title: fields.title ?? '',
+    description: fields.description ?? '',
+    worker: asMember(worker),
+    status: entryStatus.__typename,
+    inBlock: asBlock(fields),
+  })
 
-const asBountyEntryStatus = (field: BountyWorkFieldsFragment['entry']['status']): BountyEntryStatus => {
-  if (field.__typename === 'BountyEntryStatusWinner') {
-    return {
-      reward: field.reward,
+export const periodBlockLeft = (fields: BountyFieldsFragment) => {
+  switch (fields.stage) {
+    case 'WorkSubmission': {
+      return fields.maxFundingReachedEvent?.createdAt
+        ? fields.workPeriod - getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+        : fields.workPeriod
+    }
+    case 'Judgment': {
+      return fields.maxFundingReachedEvent?.createdAt
+        ? fields.workPeriod +
+            fields.judgingPeriod -
+            getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+        : fields.judgingPeriod
+    }
+    case 'Funding': {
+      const fundingPeriodTime = getFundingPeriodLength(asFunding(fields.fundingType))
+      return fundingPeriodTime ? fundingPeriodTime - getSecondsPast(fields.createdAt) / SECONDS_PER_BLOCK : undefined
     }
   }
-
-  return field.__typename
 }
-
-export const asBountyWork = (fields: BountyWorkFieldsFragment): BountyWork => ({
-  id: fields.id,
-  title: fields.title,
-  description: fields.description,
-  worker: asMember(fields.entry.worker),
-  status: asBountyEntryStatus(fields.entry.status),
-  inBlock: {
-    number: fields.inBlock,
-    network: fields.network,
-    timestamp: fields.createdAt,
-  },
-})
 
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
-  title: fields.title,
-  description: fields.description,
-  imageUri: fields.bannerImageUri,
+  title: fields.title ?? '',
+  description: fields.description ?? '',
+  imageUri: fields.bannerImageUri ?? undefined,
   createdAt: fields.createdAt,
-  discussionThreadId: fields.discussionThreadId,
+  discussionThreadId: fields.discussionThreadId ?? undefined,
   cherry: new BN(fields.cherry),
   entrantStake: new BN(fields.entrantStake),
+  entrantWhitelist: fields.entrantWhitelist?.members.map((member) => member.id),
   // undefined creator/oracle means that it's council, not member
   creator: fields.creator ? asMember(fields.creator) : undefined,
   oracle: fields.oracle ? asMember(fields.oracle) : undefined,
@@ -124,11 +143,16 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   workPeriod: fields.workPeriod,
   judgingPeriod: fields.judgingPeriod,
   stage: asStage(fields.stage),
+  isTerminated: fields.isTerminated,
   totalFunding: new BN(fields.totalFunding),
-  entries: asEntries(fields.entries),
-  contractType: asContractType(fields.contractType),
-  contributors: asContributors(fields.contributions),
+  entries: fields.entries?.map(asEntry(fields.id, new BN(fields.entrantStake))),
+  contributors: fields.contributions?.map(asContributor) ?? [],
   inBlock: fields.createdInEvent.inBlock,
+  judgement: {
+    inBlock: maybeAsBlock(fields.judgment?.inBlock, fields.judgment?.createdAt, fields.judgment?.network),
+    rationale: fields.judgment?.rationale,
+  },
+  periodTimeLeft: periodBlockLeft(fields),
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonLink } from '@/common/components/buttons'
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'
@@ -24,11 +24,14 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
   const rewardPeriod = useRewardPeriod(opening.groupId)
   return (
     <RowGapBlock gap={24}>
-      <Row>
+      <BadgesRow space={8}>
+        <BadgeStatus inverted size="l">
+          {opening.groupName}
+        </BadgeStatus>
         <BadgeStatus inverted size="l">
           {opening.type}
         </BadgeStatus>
-      </Row>
+      </BadgesRow>
       <Row>
         <RowGapBlock gap={8}>
           <h4>{opening.title}</h4>
@@ -75,7 +78,7 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
         <RowGapBlock gap={4}>
           <Label>Stake required</Label>
           <TextInlineHuge>
-            <TokenValue value={200_000} />
+            <TokenValue value={opening.stake} />
           </TextInlineHuge>
         </RowGapBlock>
       </Row>

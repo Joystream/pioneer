@@ -26,6 +26,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -110,7 +111,7 @@ describe('UI: ChangeRoleModal', () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
       fireEvent.click(await getButton('Sign and change role account'))
-      expect(await screen.findByText('There was a problem changing the role account.')).toBeDefined()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
   })
 
@@ -138,7 +139,7 @@ describe('UI: ChangeRoleModal', () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
       fireEvent.click(await getButton('Sign and change reward account'))
-      expect(await screen.findByText('There was a problem changing the reward account.')).toBeDefined()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
   })
 

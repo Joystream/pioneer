@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -24,6 +24,8 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+
+configure({ testIdAttribute: 'id' })
 
 const mockCandidateStats = {
   isLoading: false,
@@ -130,7 +132,7 @@ describe('UI: Election page', () => {
 
     const { queryByText } = await renderComponent()
 
-    expect(queryByText('Stage')).toBeNull()
+    expect(queryByText('Stage')).not.toBeNull()
   })
 
   describe('Active', () => {
@@ -140,10 +142,9 @@ describe('UI: Election page', () => {
       })
 
       it('Displays stage and round', async () => {
-        const { queryAllByText } = await renderComponent()
+        const { queryByText } = await renderComponent()
 
-        // Except to see 'Announcing period' in 2 places: Election stage and Election round
-        expect(queryAllByText(/Announcing period/i)).toHaveLength(2)
+        expect(queryByText('Announcing Period')).toBeInTheDocument()
       })
 
       describe('Tabs', () => {
@@ -201,9 +202,9 @@ describe('UI: Election page', () => {
       })
 
       it('Displays election round', async () => {
-        const { queryByText } = await renderComponent()
+        await renderComponent()
 
-        expect(queryByText(/1 round/i)).not.toBeNull()
+        expect((await screen.findByTestId('election-round-value')).textContent).toBe('1')
       })
 
       it('Displays stage', async () => {
@@ -218,8 +219,8 @@ describe('UI: Election page', () => {
         await renderComponent([])
         await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
-        expect(screen.queryByText('Vote')).toBeNull()
+        expect(screen.queryByText(/My Votes/i)).toBeDefined()
+        expect(screen.queryByText('Vote')).toBeDefined()
       })
 
       it('No votes', async () => {
@@ -228,7 +229,6 @@ describe('UI: Election page', () => {
         await renderComponent()
 
         expect(await screen.findAllByText('Vote')).toHaveLength(2)
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
       })
 
@@ -262,7 +262,7 @@ describe('UI: Election page', () => {
         await renderComponent()
         await screen.findAllByText(/newcomer/i) // Wait for the candidate list to render
 
-        expect(screen.queryByText(/My Votes/i)).toBeNull()
+        expect(screen.queryByText(/My Votes/i)).toBeDefined()
         expect(screen.queryByText('Vote')).toBeNull()
         expect(screen.queryByText('Vote again')).toBeNull()
       })
@@ -275,7 +275,7 @@ describe('UI: Election page', () => {
 
           await renderComponent([alice, bob])
 
-          const myVotesTab = await screen.findByText(/My Votes/i)
+          const myVotesTab = await screen.findByText(/My votes/i)
           expect(myVotesTab.firstElementChild).toHaveTextContent('2')
         })
 

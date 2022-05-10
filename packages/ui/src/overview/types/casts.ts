@@ -1,4 +1,7 @@
-import { GetSidebarInfoQuery } from '@/overview/queries/__generated__/overview.generated'
+import BN from 'bn.js'
+
+import { BN_ZERO } from '@/common/constants'
+import { GetSidebarInfoQuery } from '@/overview/queries'
 import {
   OverviewSidebarApplication,
   OverviewSidebarCandidacy,
@@ -10,7 +13,7 @@ import { asWorkingGroupName } from '@/working-groups/types'
 
 const asOverviewSidebarRole = (data: GetSidebarInfoQuery['workers'][number]): OverviewSidebarRole => ({
   role: asWorkingGroupName(data.group.name),
-  reward: data.payouts.reduce((prev, next) => prev + next.amount.toNumber(), 0),
+  reward: data.payouts.reduce((prev, next) => prev.add(new BN(next.amount)), BN_ZERO),
   isLead: data.isLead,
 })
 
@@ -26,15 +29,13 @@ const asOverviewSidebarApplication = (
   expectedEndingDate: data.opening.metadata.expectedEnding,
 })
 
-const asOverviewSidebarCandidacy = (
-  data: GetSidebarInfoQuery['candidacyNoteMetadata'][number]
-): OverviewSidebarCandidacy => ({
-  title: data.header || 'Title',
-  id: data.id,
+const asOverviewSidebarCandidacy = (data: GetSidebarInfoQuery['candidates'][number]): OverviewSidebarCandidacy => ({
+  id: data.noteMetadata.id,
+  title: data.noteMetadata.header || 'Title',
 })
 
 export const asOverviewSidebarInformation = (data: GetSidebarInfoQuery): OverviewSidebarInformations => ({
-  candidatures: data.candidacyNoteMetadata.map(asOverviewSidebarCandidacy),
+  candidatures: data.candidates.map(asOverviewSidebarCandidacy),
   applications: data.workingGroupApplications.map(asOverviewSidebarApplication),
   proposals: data.proposals.map((proposal) => proposal.id),
   roles: data.workers.map(asOverviewSidebarRole),

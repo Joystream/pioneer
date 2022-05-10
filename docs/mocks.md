@@ -18,6 +18,7 @@ Available commands:
 - `yarn workspace ui node-mocks set-budget` - Set membership Working Group budget
 - `yarn workspace ui node-mocks opening:create` - Create an opening
 - `yarn workspace ui node-mocks opening:fill` - Fill existing opening
+- `yarn workspace ui node-mocks upcoming-opening:create` - Create an upcoming opening
 - `yarn workspace ui node-mocks transfer` - Transfer tokens between accounts
 
 To show help:
@@ -42,8 +43,9 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       ```
 
 2. _(optional)_ Change the starting Council/Referendum stage (the default is `Announcing`):
-   - Run `yarn workspace ui helpers setChainSpec -s <stage> [-d <duration>]` (the stages are lowercase)
-   - For the `voting` and `revealing` stages the `duration` option set the number of blocks this stage will last.
+   - Run `yarn workspace ui helpers setChainSpec -s <stage> [-d <duration>]`
+      - The `stage` parameter (required) can be either `idle`, `announcing`, `voting`, or `revealing` (these should be lowercase)
+      - The `duration` parameter (optional) set the number of blocks this stage will last.
 
 3. Start the node:
    - Either with docker compose: `docker-compose up node`

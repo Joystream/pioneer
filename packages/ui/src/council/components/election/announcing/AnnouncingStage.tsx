@@ -27,7 +27,7 @@ export const AnnouncingStage = ({ election, isLoading }: AnnouncingStageProps) =
     const myCandidates = allCandidates?.filter(({ isMyCandidate }) => isMyCandidate)
 
     return [allCandidates, myCandidates]
-  }, [myMemberIds.length, election?.candidates.length])
+  }, [myMemberIds.length, election?.candidates])
 
   return (
     <>

@@ -37,11 +37,10 @@ export const NewThreadPost = React.forwardRef(
     const { showModal } = useModal()
     const [editorRef, setEditorRef] = useState<RefObject<HTMLDivElement>>(useRef<HTMLDivElement>(null))
 
-    const onSuccess = useCallback(() => {
+    const onSuccess = useCallback(async () => {
       setText('')
       setEditorRef({ ...editorRef })
       setEditable(false)
-      removeReply()
     }, [])
 
     if (!active) {
@@ -83,7 +82,7 @@ export const NewThreadPost = React.forwardRef(
               transaction &&
                 showModal<CreatePostModalCall>({
                   modal: 'CreatePost',
-                  data: { postText, replyTo, transaction, isEditable, onSuccess },
+                  data: { module: 'proposalsDiscussion', postText, replyTo, transaction, isEditable, onSuccess },
                 })
             }}
             disabled={postText === ''}
@@ -110,5 +109,6 @@ const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
     ref={editorRef}
     onChange={(_, editor) => setNewText(editor.getData())}
     onReady={(editor) => editor.setData('')}
+    onFocus={() => undefined}
   />
 ))

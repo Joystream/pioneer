@@ -1,8 +1,8 @@
 import React from 'react'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
 import { Colors } from '../src/common/constants'
-import { I18nextProvider } from "react-i18next";
-import { i18next } from "../src/services/i18n";
+import { I18nextProvider } from 'react-i18next'
+import { i18next } from '../src/services/i18n'
 
 const stylesWrapperDecorator = (styleFn) => (
   <div>
@@ -20,7 +20,9 @@ const i18nextDecorator = (Story) => (
 )
 
 export const decorators = [stylesWrapperDecorator, i18nextDecorator]
-
+window.jest = {
+  fn: (callback) => callback,
+}
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   backgrounds: {

@@ -30,6 +30,7 @@ export type WorkerFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -69,6 +70,7 @@ export type PastWorkerFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -137,6 +139,7 @@ export type WorkerDetailedFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -174,7 +177,7 @@ export type WorkingGroupFieldsFragment = {
     statusMessage?: string | null
   } | null
   workers: Array<{ __typename: 'Worker'; stake: any }>
-  leader?: { __typename: 'Worker'; membershipId: string } | null
+  leader?: { __typename: 'Worker'; membershipId: string; isActive: boolean } | null
 }
 
 export type WorkingGroupDetailedFieldsFragment = {
@@ -182,7 +185,14 @@ export type WorkingGroupDetailedFieldsFragment = {
   id: string
   name: string
   budget: any
-  leader?: { __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string } | null
+  leader?: {
+    __typename: 'Worker'
+    id: string
+    runtimeId: number
+    stake: any
+    membershipId: string
+    isActive: boolean
+  } | null
   metadata?: {
     __typename: 'WorkingGroupMetadata'
     about?: string | null
@@ -243,7 +253,7 @@ export type GetWorkingGroupsQuery = {
       statusMessage?: string | null
     } | null
     workers: Array<{ __typename: 'Worker'; stake: any }>
-    leader?: { __typename: 'Worker'; membershipId: string } | null
+    leader?: { __typename: 'Worker'; membershipId: string; isActive: boolean } | null
   }>
 }
 
@@ -273,6 +283,7 @@ export type GetWorkersQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -322,6 +333,7 @@ export type GetPastWorkersQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -406,6 +418,7 @@ export type GetDetailedWorkersQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -465,6 +478,7 @@ export type GetWorkerQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -516,6 +530,7 @@ export type GetRewardsQuery = {
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
+  title?: string | null
   applicationDetails?: string | null
   shortDescription?: string | null
   description?: string | null
@@ -536,6 +551,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     applicationDetails?: string | null
     shortDescription?: string | null
     description?: string | null
@@ -580,6 +596,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -601,6 +618,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     applicationDetails?: string | null
     shortDescription?: string | null
     description?: string | null
@@ -657,6 +675,7 @@ export type GetWorkingGroupOpeningsQuery = {
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -722,6 +741,7 @@ export type GetWorkingGroupOpeningQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -743,6 +763,7 @@ export type GetWorkingGroupOpeningQuery = {
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -767,6 +788,7 @@ export type WorkingGroupOpeningMentionFieldsFragment = {
   rewardPerBlock: any
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     shortDescription?: string | null
     description?: string | null
     hiringLimit?: number | null
@@ -793,6 +815,7 @@ export type GetWorkingGroupOpeningMentionQuery = {
     rewardPerBlock: any
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       shortDescription?: string | null
       description?: string | null
       hiringLimit?: number | null
@@ -820,6 +843,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -841,6 +865,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
     type: Types.WorkingGroupOpeningType
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       shortDescription?: string | null
       description?: string | null
     }
@@ -866,6 +891,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -887,6 +913,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
       type: Types.WorkingGroupOpeningType
       metadata: {
         __typename: 'WorkingGroupOpeningMetadata'
+        title?: string | null
         shortDescription?: string | null
         description?: string | null
       }
@@ -932,7 +959,14 @@ export type GetWorkingGroupQuery = {
     id: string
     name: string
     budget: any
-    leader?: { __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string } | null
+    leader?: {
+      __typename: 'Worker'
+      id: string
+      runtimeId: number
+      stake: any
+      membershipId: string
+      isActive: boolean
+    } | null
     metadata?: {
       __typename: 'WorkingGroupMetadata'
       about?: string | null
@@ -949,12 +983,19 @@ export type WorkingGroupApplicationFieldsFragment = {
   id: string
   runtimeId: number
   stakingAccount: string
+  stake: any
+  answers: Array<{
+    __typename: 'ApplicationFormQuestionAnswer'
+    answer: string
+    question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+  }>
   opening: {
     __typename: 'WorkingGroupOpening'
     id: string
     type: Types.WorkingGroupOpeningType
     rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; id: string; name: string }
+    metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
   }
   applicant: {
     __typename: 'Membership'
@@ -965,6 +1006,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -1001,12 +1043,19 @@ export type GetWorkingGroupApplicationsQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
+    stake: any
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
     applicant: {
       __typename: 'Membership'
@@ -1017,6 +1066,7 @@ export type GetWorkingGroupApplicationsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1077,12 +1127,19 @@ export type GetWorkingGroupApplicationQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
+    stake: any
+    answers: Array<{
+      __typename: 'ApplicationFormQuestionAnswer'
+      answer: string
+      question: { __typename: 'ApplicationFormQuestion'; question?: string | null }
+    }>
     opening: {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
       rewardPerBlock: any
       group: { __typename: 'WorkingGroup'; id: string; name: string }
+      metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
     applicant: {
       __typename: 'Membership'
@@ -1093,6 +1150,7 @@ export type GetWorkingGroupApplicationQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1159,6 +1217,7 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
+    title?: string | null
     applicationDetails?: string | null
     shortDescription?: string | null
     description?: string | null
@@ -1184,6 +1243,7 @@ export type GetUpcomingWorkingGroupOpeningQuery = {
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -1212,6 +1272,7 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
+      title?: string | null
       applicationDetails?: string | null
       shortDescription?: string | null
       description?: string | null
@@ -1347,6 +1408,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     }
     leader {
       membershipId
+      isActive
     }
   }
   ${WorkingGroupMetadataFieldsFragmentDoc}
@@ -1382,6 +1444,7 @@ export const RewardPaidEventFieldsFragmentDoc = gql`
 `
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+    title
     applicationDetails
     shortDescription
     description
@@ -1450,6 +1513,7 @@ export const WorkingGroupOpeningMentionFieldsFragmentDoc = gql`
     type
     rewardPerBlock
     metadata {
+      title
       shortDescription
       description
       hiringLimit
@@ -1480,6 +1544,7 @@ export const WorkingGroupApplicationMentionFieldsFragmentDoc = gql`
     opening {
       type
       metadata {
+        title
         shortDescription
         description
       }
@@ -1491,6 +1556,12 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
     runtimeId
+    answers {
+      answer
+      question {
+        question
+      }
+    }
     opening {
       id
       group {
@@ -1499,6 +1570,9 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       }
       type
       rewardPerBlock
+      metadata {
+        expectedEnding
+      }
     }
     applicant {
       ...MemberFields
@@ -1512,6 +1586,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       inBlock
       network
     }
+    stake
   }
   ${MemberFieldsFragmentDoc}
 `

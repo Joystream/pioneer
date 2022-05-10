@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ActorRef, State, Subscription } from 'xstate'
 
@@ -16,14 +17,18 @@ const getIsPendingStatus = (status: TransactionStateValue | null): boolean => {
 }
 
 export const TransactionContextProvider = ({ children }: Props) => {
-  const [transactionService, setService] = useState<ActorRef<TransactionEvent, State<TxContext>>>()
+  const [transactionService, setService] = useState<ActorRef<TransactionEvent, State<TxContext>> | null>(null)
   const [status, setStatus] = useState<TransactionStateValue | null>(null)
+  const [transactionEvents, setTransactionEvents] = useState<EventRecord[] | null>(null)
 
   useEffect(() => {
     let subscription: Subscription
 
     if (transactionService) {
-      subscription = transactionService.subscribe((state) => setStatus(state.value as TransactionStateValue))
+      subscription = transactionService.subscribe((state) => {
+        setStatus(state.value as TransactionStateValue)
+        setTransactionEvents(state.context.events ?? null)
+      })
     } else {
       setStatus(null)
     }
@@ -35,7 +40,9 @@ export const TransactionContextProvider = ({ children }: Props) => {
     <TransactionContext.Provider
       value={{
         isTransactionPending: getIsPendingStatus(status),
+        transactionEvents,
         status,
+        setStatus,
         setService,
       }}
     >

@@ -90,7 +90,7 @@ export const StakeStep = ({
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="JOY"
+            units="tJOY"
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
             message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
             required

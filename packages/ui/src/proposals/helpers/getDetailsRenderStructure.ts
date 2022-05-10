@@ -1,5 +1,6 @@
 import { omit } from 'lodash'
 
+import { nameMapping } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
 import {
   ProposalDetails,
@@ -34,6 +35,7 @@ export type RenderType =
   | 'Divider'
   | 'ProposalLink'
   | 'OpeningLink'
+  | 'Percentage'
 
 export interface RenderNode {
   label?: string
@@ -80,7 +82,7 @@ const groupMapper: Mapper<GroupDetail, 'group'> = (value): RenderNode[] => {
   return [
     {
       label: 'Working Group',
-      value: value.name,
+      value: nameMapping(value.name),
       renderType: 'Text',
     },
   ]
@@ -148,6 +150,23 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
     },
   ]
 }
+
+const percentageMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
+  const defaultLabel = 'Percentage'
+  const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
+    setReferralCut: 'Proposed referral cut',
+  }
+  const overriddenLabel = type && overriddenLabelsBy[type]
+
+  return [
+    {
+      label: overriddenLabel || defaultLabel,
+      renderType: 'Percentage',
+      value,
+    },
+  ]
+}
+
 const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
   const defaultLabel = 'Amount'
   const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
@@ -197,6 +216,8 @@ const openingLinkMapper: Mapper<OpeningLinkDetail, 'openingId'> = (value) => {
   ]
 }
 
+const percentageProposalsAmount: ProposalType[] = ['setReferralCut']
+
 const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   destinations: destinationsMapper,
   newBytecodeId: newBytecodeIdMapper,
@@ -216,6 +237,10 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {
   const value = proposalDetails[key as keyof typeof proposalDetails]
+
+  if (percentageProposalsAmount.includes(proposalDetails.type as ProposalType) && key === 'amount') {
+    return percentageMapper((value as any).toNumber(), proposalDetails.type)
+  }
 
   if (!mappers[key]) {
     return

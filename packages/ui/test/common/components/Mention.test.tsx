@@ -312,7 +312,7 @@ describe('UI: Mention', () => {
       status: 'deciding',
       type: 'signal',
       description: 'test-desc',
-      exactExecutionBlock: mockBlock,
+      exactExecutionBlock: mockBlock.number,
       statusSetAtBlock: mockBlock,
     }
     const props: ProposalTooltipProps = {

@@ -23,6 +23,7 @@ fragment ProposalFields on Proposal {
   }
   createdAt
   councilApprovals
+  exactExecutionBlock
 }
 
 fragment VoteFields on ProposalVotedEvent {
@@ -219,6 +220,9 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
     ...MemberFields
   }
   text
+  status {
+    __typename
+  }
 }
 
 fragment ProposalPostParents on ProposalDiscussionPost {

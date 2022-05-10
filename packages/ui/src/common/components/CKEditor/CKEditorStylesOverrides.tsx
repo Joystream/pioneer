@@ -6,6 +6,7 @@ const EDITOR_LINE_HEIGHT = 1.5
 const EDITOR_LINE_SPACING = 1
 
 export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxRows: number }>`
+
   .ck.ck-editor {
     width: 100%;
   }
@@ -97,5 +98,7 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
     --ck-color-button-save: ${Colors.Blue[500]};
     --ck-color-button-cancel: ${Colors.Red[500]};
     --ck-color-focus-outer-shadow: transparent;
+    --ck-color-mention-background: ${Colors.Blue[100]};
+    --ck-color-mention-text: ${Colors.Blue[500]};
   }
 `

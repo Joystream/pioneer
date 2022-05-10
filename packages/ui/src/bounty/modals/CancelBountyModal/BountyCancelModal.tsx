@@ -23,6 +23,10 @@ export const BountyCancelModal = () => {
   const [state, send] = useMachine(bountyCancelMachine)
   const { hideModal, modalData } = useModal<BountyCancelModalCall>()
 
+  if (!modalData?.creator) {
+    return null
+  }
+
   if (state.matches(BountyCancelStates.transaction)) {
     return (
       <AuthorizationModal
@@ -51,7 +55,7 @@ export const BountyCancelModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.bountyCancel.title')} onClick={hideModal} />
       <ModalBody>
         <BodyContainer gap={30}>

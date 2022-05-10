@@ -29,6 +29,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -129,7 +130,13 @@ describe('UI: Vote for Council Modal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalData: { id: '0-0' },
+          originalModalName: 'VoteForCouncil',
+        },
+      })
     })
 
     it('Insufficient funds', async () => {
@@ -216,7 +223,7 @@ describe('UI: Vote for Council Modal', () => {
     fireEvent.click(await getButton('Sign and send'))
 
     expect(await screen.findByText(/^You have just successfully voted for the Candidate/i)).toBeDefined()
-    expect(await getButton('See my Vote')).toBeDefined()
+    expect(await getButton('Back to Candidates')).toBeDefined()
   })
 
   it('Transaction error', async () => {
@@ -227,7 +234,7 @@ describe('UI: Vote for Council Modal', () => {
     fireEvent.click(await getNextStepButton())
     fireEvent.click(await getButton('Sign and send'))
 
-    expect(await screen.findByText(/^There was a problem casting your vote./i)).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   function renderModal() {

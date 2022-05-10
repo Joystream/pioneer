@@ -19,7 +19,7 @@
         "label": "Fee sending from account",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
-      "feeInfo": "Fees of {{value}} JOY will be applied to the transaction"
+      "feeInfo": "Fees of {{value}} tJOY will be applied to the transaction"
     },
     "contribute": {
       "title": "Contribute",
@@ -31,12 +31,12 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "stakingAccount": {
-        "label": "Staking account",
+        "label": "Account for contributing",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "selectAmount": "Select amount for contributing",
-      "selectAmountSubtitle": "You must contribute at least {{value}} JOY.",
-      "authorizeDescription": "You contribute {{value}} JOY",
+      "selectAmountSubtitle": "You must contribute at least {{value}} tJOY.",
+      "authorizeDescription": "You contribute {{value}} tJOY",
       "error": "Something went wrong",
       "success": "You have just successfully contribute {{bounty}}”.",
       "successButton": "Back to bounty"
@@ -57,11 +57,12 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "fillDetails": "Please fill in all the details below.",
-      "selectAmount": "Contribution stake",
-      "selectAmountSubtitle": "This stake will be returned to you when the bounty is complete",
-      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY.",
+      "selectAmount": "Entrant stake",
+      "selectAmountSubtitle": "Entrant stake is returned to your account automatically, when bounty is finished.",
+      "selectAmountTooltip": "Minimum entrant stake is defined by the bounty creator.",
+      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} tJOY.",
       "error": "Something went wrong",
-      "success": "You have just successfully announce work entry for {{bounty}}”.",
+      "success": "You have just successfully announce work entry for ”{{bounty}}”.",
       "successButton": "Back to bounty"
     },
     "bountyCancel": {
@@ -82,7 +83,7 @@
         "title": "Authorize transaction",
         "informationBox": {
           "info1": "You are canceling your bounty",
-          "info2": "Fees of {fee} JOY will be applied to the transaction."
+          "info2": "Fees of {fee} tJOY will be applied to the transaction."
         },
         "accountInput": {
           "label": "Fee sending from account",
@@ -113,14 +114,19 @@
       "validation": {
         "maxLengthMessage": "Max length is 70 characters",
         "max70": "MAX 70"
-      }
+      },
+      "success": {
+        "message": "You have just successfully submitted a work!",
+        "button": "Go to Current Bounties"
+      },
+      "error": "There was a problem submitting your work."
     },
     "withdraw": {
-      "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
+      "extraDescription": "Cherry of {{amount}} tJOY is added to your original contribution.",
       "extraTooltipInformation": "This bounty was created with a cherry, which gets split among all contributors equally in the case when bounty fails",
       "contribution": {
         "title": "Withdraw Contribution",
-        "description": "You intend to withdraw {{value}} JOY contribution locks from accounts.",
+        "description": "You intend to withdraw {{value}} tJOY contribution locks from accounts.",
         "button": "Withdraw Contribution",
         "stakingFrom": "Staking from bounty",
         "amountTitle": "Contribution amount"
@@ -130,14 +136,14 @@
         "description": "You intend to withdraw {{value}} stake locks from accounts.",
         "button": "Withdraw Stake",
         "stakingFrom": "Staking from bounty",
-        "amountTitle": "Stake  amount"
+        "amountTitle": "Stake amount"
       },
       "reward": {
         "title": "Claim Reward",
         "description": "You intend to claim reward",
         "button": "Claim Reward",
         "stakingFrom": "Reward from bounty",
-        "amountTitle": "Reward amount",
+        "amountTitle": "Amount",
         "success": "You have successfully claimed your reward.",
         "error": "There was a problem while claiming your reward."
       }
@@ -174,7 +180,9 @@
         "pickWinner": "Pick a winner or mark bounty as failed",
         "winnerNoReward": "Some winner do not have reward amount",
         "amountTooLow": "Distributed amount must equal total reward",
-        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it."
+        "amountTooHigh": "Distributed amount exceed total reward! Please decrease it",
+        "rationaleMissing": "Please fill out the rationale",
+        "noSlashedWorkerSelected": "Please select worker to slash or remove the option"
       },
       "authorizeModal": {
         "description": "You are announcing Bounty winners",
@@ -267,6 +275,11 @@
       "title": "Works Submitted",
       "tooltip": "Lorem ipsum d"
     },
+    "duration": {
+      "title": "Duration",
+      "value": "Ongoing",
+      "tooltip": "Lorem ipsum d"
+    },
     "winners": {
       "title": "Winners",
       "tooltip": "Lorem ipsum d"
@@ -291,7 +304,8 @@
   "tabs": {
     "bounty": "Bounty",
     "works": "Works",
-    "winners": "Winners"
+    "winners": "Winners",
+    "slashed": "Slashed"
   },
   "workTab": {
     "filter": {
@@ -315,7 +329,8 @@
     "limited": "Limited",
     "withdrawalPeriod": "Withdrawal period",
     "fundingPeriod": "Funding Period",
-    "terminated": "Terminated"
+    "terminated": "Terminated",
+    "successful": "Successful"
   },
   "buttons": {
     "announceEntry": "Announce Entry",

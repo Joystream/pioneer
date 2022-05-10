@@ -31,6 +31,7 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
     transaction,
     signer: signer,
     service,
+    skipQueryNode: true,
   })
   const { allAccounts } = useMyAccounts()
   const recoverAccount = accountOrNamed(allAccounts, address, 'Recover account')
@@ -39,7 +40,7 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
     <TransactionModal service={service} onClose={onClose} title="Recover balances">
       <ModalBody>
         <TextMedium>
-          You intend to recover <TokenValue value={lock.amount} /> stake lock from account.
+          You intend to recover <TokenValue value={lock.amount} /> stake.
         </TextMedium>
         <RowGapBlock gap={8}>
           <ListHeaders $colLayout={lockInfoLayout}>
@@ -48,7 +49,7 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
             <ListHeader>Recoverable stake</ListHeader>
           </ListHeaders>
           <InputComponent inputSize="l" disabled>
-            <AccountLockInfo account={recoverAccount} amount={lock.amount} lockType={'Voting'} />
+            <AccountLockInfo account={recoverAccount} amount={lock.amount} lockType={lock.type} />
           </InputComponent>
         </RowGapBlock>
       </ModalBody>

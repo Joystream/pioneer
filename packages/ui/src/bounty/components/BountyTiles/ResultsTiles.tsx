@@ -1,9 +1,11 @@
+import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
 import { TextHuge, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { MemberStack } from '@/memberships/components/MemberStack'
 
@@ -14,13 +16,22 @@ interface Props {
 export const ResultsTiles = React.memo(({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
 
+  const unwithdrawnFunds = useMemo(() => {
+    const withdrawnContributionsAmount = bounty.contributors.reduce(
+      (prev, next) => (next.hasWithdrawn ? prev.add(new BN(next.amount)) : prev),
+      BN_ZERO
+    )
+
+    return bounty.totalFunding.sub(withdrawnContributionsAmount)
+  }, [bounty])
+
   const firstRow = useMemo(
     () => [
       {
         title: t('tiles.stage.title'),
         content: (
           <TextHuge value bold>
-            {t('bountyFields.withdrawalPeriod')}
+            {t(bounty.stage === 'successful' ? 'bountyFields.successful' : 'bountyFields.withdrawalPeriod')}
           </TextHuge>
         ),
         tooltipText: t('tiles.stage.tooltip'),
@@ -62,7 +73,7 @@ export const ResultsTiles = React.memo(({ bounty }: Props) => {
     return [
       {
         title: t('tiles.unwithdrawnFunds.title'),
-        content: <TokenValue value={bounty.totalFunding} size="l" />,
+        content: <TokenValue value={unwithdrawnFunds} size="l" />,
         tooltipText: t('tiles.unwithdrawnFunds.tooltip'),
       },
       {
@@ -82,7 +93,7 @@ export const ResultsTiles = React.memo(({ bounty }: Props) => {
         tooltipText: t('tiles.winners.tooltip'),
       },
     ]
-  }, [t, bounty])
+  }, [t, bounty, unwithdrawnFunds])
 
   return <TileSection firstRow={firstRow} secondRow={secondRow} />
 })

@@ -1,5 +1,6 @@
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -8,7 +9,9 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -18,37 +21,48 @@ import { CreatePostModalCall } from '.'
 import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
-  const {
-    modalData: { postText, replyTo, transaction, isEditable, onSuccess },
-    hideModal,
-  } = useModal<CreatePostModalCall>()
+  const { t } = useTranslation('accounts')
+  const { modalData, hideModal } = useModal<CreatePostModalCall>()
+  const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
 
   const hideModalAfterSuccess = useCallback(() => {
     onSuccess()
     hideModal()
   }, [])
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
 
-  const postDeposit = api?.consts.forum.postDeposit.toBn()
-
+  const postDeposit = api?.consts[module].postDeposit.toBn()
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  const requiredAmount = useMemo(
+    () => feeInfo && api && feeInfo.transactionFee.add(postDeposit ?? BN_ZERO),
+    [feeInfo, postDeposit]
+  )
 
   useEffect(() => {
-    if (!state.matches('requirementsVerification')) {
+    if (!(feeInfo && requiredAmount && active && balance)) {
       return
     }
-    if (feeInfo && postDeposit && active && balance) {
-      const canAfford = isEditable
-        ? balance.transferable.gte(feeInfo.transactionFee.add(postDeposit))
-        : feeInfo.canAfford
-      canAfford && send('PASS')
-      !canAfford && send('FAIL')
+
+    if (state.matches('requirementsVerification')) {
+      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+        send('PASS')
+      } else {
+        send('FAIL')
+      }
+    }
+
+    if (state.matches('beforeTransaction')) {
+      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+        send('PASS')
+      } else {
+        send('FAIL')
+      }
     }
   }, [state.value, JSON.stringify(feeInfo), postDeposit, balance])
 
@@ -85,9 +99,25 @@ export const CreatePostModal = () => {
     return <SuccessModal onClose={hideModalAfterSuccess} text="Your post has been submitted." />
   }
 
-  if (state.matches('requirementsFailed') && active && feeInfo) {
+  if (state.matches('requirementsFailed') && feeInfo && requiredAmount && active) {
     return (
-      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={requiredAmount}>
+        <TextMedium margin="s">
+          {t('modals.insufficientFunds.feeInfo1')}
+          {feeInfo.transactionFee.gtn(0) && (
+            <>
+              <TokenValue value={feeInfo.transactionFee} />
+              {t('modals.insufficientFunds.feeInfo2')}
+            </>
+          )}
+          {postDeposit?.gtn(0) && (
+            <>
+              {feeInfo.transactionFee.gtn(0) && <> and</>} <TokenValue value={postDeposit} /> available to deposit to
+              make the post editable
+            </>
+          )}
+        </TextMedium>
+      </InsufficientFundsModal>
     )
   }
 

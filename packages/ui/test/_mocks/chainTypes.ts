@@ -3,6 +3,7 @@ import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { TypeRegistry } from '@polkadot/types'
 import BN from 'bn.js'
 
+import { lockTypes } from '@/accounts/model/lockTypes'
 import { LockType } from '@/accounts/types'
 
 const typeRegistry = new TypeRegistry()
@@ -19,31 +20,13 @@ export const createBalance = (value: number) => {
   return createType('Balance', new BN(value))
 }
 
-const LOCK_TYPE_TO_ID: Record<LockType, number> = {
-  Staking: 0, //This is wrong, but for test it might be OK
-  Voting: 0,
-  'Council Candidate': 1,
-  Councilor: 2,
-  Validation: 3,
-  Nomination: 4,
-  Proposals: 5,
-  'Storage Worker': 6,
-  'Content Directory Worker': 7,
-  'Forum Worker': 8,
-  'Membership Worker': 9,
-  Invitation: 10,
-  'Staking Candidate': 11,
-  Bounties: 12,
-  'Gateway Worker': 13,
-  'Distribution Worker': 14,
-} as const
+const asLockIdentifier = Object.fromEntries(
+  Object.entries(lockTypes).map(([id, type]) => [type, createType('Bytes', id)])
+)
 
-export const creteLockIdentifier = (type: LockType) =>
-  createType('LockIdentifier', new Uint8Array(new Array(8).fill(LOCK_TYPE_TO_ID[type])))
-
-export const createBalanceLock = (amount: number, type: LockType = 'Staking Candidate') =>
+export const createBalanceLock = (amount: number, type: LockType = 'Bound Staking Account') =>
   createType('BalanceLock', {
-    id: creteLockIdentifier(type),
+    id: asLockIdentifier[type],
     amount: createBalance(amount),
     reasons: createType('Reasons', 'all'),
   })

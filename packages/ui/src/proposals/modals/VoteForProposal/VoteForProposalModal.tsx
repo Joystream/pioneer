@@ -29,17 +29,13 @@ export const VoteForProposalModal = () => {
 
   const [state, send] = useMachine(machine)
 
-  useEffect((): any => {
+  useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (feeInfo && feeInfo.canAfford) {
-        return send('PASS')
-      }
-
-      if (feeInfo && !feeInfo.canAfford) {
-        return send('FAIL')
+      if (feeInfo) {
+        send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
       }
     }
-  }, [state, JSON.stringify(feeInfo)])
+  }, [state.value, feeInfo?.canAfford])
 
   if (isLoading || !proposal || !api || !active || !feeInfo) {
     return null
@@ -84,7 +80,15 @@ export const VoteForProposalModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} voteStatus={state.context.voteStatus} proposalTitle={proposal.title} />
+    const proposalId = modalData.id
+    return (
+      <SuccessModal
+        onClose={hideModal}
+        voteStatus={state.context.voteStatus}
+        proposalTitle={proposal.title}
+        proposalId={proposalId}
+      />
+    )
   }
 
   if (state.matches('error')) {

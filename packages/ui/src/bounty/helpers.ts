@@ -1,9 +1,9 @@
 import {
   BountyEntryStatus,
   BountyPeriod,
+  BountyPeriodFilters,
   EntrantResult,
   FundingType,
-  isBountyEntryStatusWinner,
   isFundingLimited,
 } from '@/bounty/types/Bounty'
 import { Colors } from '@/common/constants'
@@ -12,7 +12,8 @@ export const BountyPeriodColorMapper: Record<BountyPeriod, string> = {
   funding: Colors.Orange[500],
   working: Colors.Blue[500],
   judgement: Colors.Purple[200],
-  withdrawal: Colors.Green[500],
+  successful: Colors.Green[500],
+  failed: Colors.Red[300],
   expired: Colors.Red[300],
   terminated: Colors.Red[500],
 }
@@ -41,7 +42,15 @@ export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
   },
 }
 
-export const bountyPeriods: BountyPeriod[] = ['funding', 'working', 'judgement', 'withdrawal', 'expired']
+export const bountyPeriods: BountyPeriodFilters[] = [
+  'funding',
+  'working',
+  'judgement',
+  'expired',
+  'Terminated - failed',
+  'Terminated - successful',
+  'Terminated - funding',
+]
 
 export const sortingOptions = ['Latest', 'Earliest']
 
@@ -52,11 +61,16 @@ export const getFundingPeriodLength = (funding: FundingType) => {
 }
 
 export const statusToEntrantResult = (status: BountyEntryStatus): EntrantResult => {
-  if (isBountyEntryStatusWinner(status)) {
-    return 'winner'
+  switch (status) {
+    case 'BountyEntryStatusWinner':
+      return 'winner'
+
+    case 'BountyEntryStatusPassed':
+      return 'slashed'
+
+    default:
+      return 'loser'
   }
-  if (status === 'BountyEntryStatusRejected') {
-    return 'slashed'
-  }
-  return 'loser'
 }
+
+export const getSecondsPast = (createdAt: string) => (new Date().getTime() - new Date(createdAt).getTime()) / 1000

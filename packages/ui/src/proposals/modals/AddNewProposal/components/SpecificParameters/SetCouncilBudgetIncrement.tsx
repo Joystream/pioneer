@@ -36,7 +36,7 @@ export const SetCouncilBudgetIncrement = ({ amount, setAmount: setBudgetIncremen
           <InputComponent
             label="New Council Budget Increment Value"
             tight
-            units="JOY"
+            units="tJOY"
             required
             message="Value must be greater than zero"
           >

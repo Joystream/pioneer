@@ -6,6 +6,7 @@ import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
+import { nameMapping } from '@/common/helpers'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
@@ -53,13 +54,12 @@ export function WorkingGroup() {
       )
     }
   }
-
   return (
     <PageLayout
       header={
         <PageHeaderWrapper>
           <PreviousPage>
-            <PageTitle>{group?.name ?? name.replace(/-/, ' ')}</PageTitle>
+            <PageTitle>{nameMapping(group?.name ?? name)}</PageTitle>
             {group?.status && (
               <StatusGroup>
                 <StatusBadge>{group?.status}</StatusBadge>
@@ -72,7 +72,7 @@ export function WorkingGroup() {
       main={displayTabsContent()}
       sidebar={displayTabsSidebar()}
       sidebarScrollable
-      lastBreadcrumb={group?.name}
+      lastBreadcrumb={nameMapping(group?.name ?? name)}
     />
   )
 }

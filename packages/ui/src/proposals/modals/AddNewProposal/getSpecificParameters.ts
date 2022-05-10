@@ -1,9 +1,13 @@
+import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { ProposalDetailsOf } from '@joystream/types/augment'
-import { WorkingGroupDef, WorkingGroupKey } from '@joystream/types/common'
+import { WorkingGroupKey } from '@joystream/types/common'
+import { ProposalDetails } from '@joystream/types/src/proposals'
 import { ApiRx } from '@polkadot/api'
-import { ITuple } from '@polkadot/types/types'
 
+import { BN_ZERO } from '@/common/constants'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
+import { last } from '@/common/utils'
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { GroupIdName } from '@/working-groups/types'
@@ -15,24 +19,15 @@ const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
   membershipWorkingGroup: 'Membership',
   distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
+  operationsWorkingGroupAlpha: 'OperationsAlpha',
+  operationsWorkingGroupBeta: 'OperationsBeta',
+  operationsWorkingGroupGamma: 'OperationsGamma',
 }
 
-type SpecificParameters<PARAM extends string> = Extract<keyof ProposalDetailsOf, `as${PARAM}`> extends `${infer KEY}`
-  ? KEY extends keyof ProposalDetailsOf
-    ? ProposalDetailsOf[KEY] extends ITuple<infer TUPLE>
-      ? TUPLE
-      : ProposalDetailsOf[KEY]
-    : never
-  : never
-
-const buildSpecificParams = <PARAM extends string>(name: PARAM, params: SpecificParameters<PARAM>) => {
-  return {
-    [name]: params,
-  }
-}
+const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
-  if (!groupId) return null
+  if (!groupId) return undefined
 
   return GroupIdToGroupParam[groupId]
 }
@@ -46,24 +41,37 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
 
   switch (state.context.type) {
     case 'signal': {
-      return createType('ProposalDetailsOf', buildSpecificParams('Signal', createType('Text', specifics?.signal ?? '')))
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        Signal: createType('Text', specifics?.signal ?? ''),
+      })
     }
     case 'fundingRequest': {
-      return createType('ProposalDetailsOf', {
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         FundingRequest: [{ amount: specifics?.amount, account: specifics?.account?.address }],
       })
     }
     case 'runtimeUpgrade': {
-      return createType('ProposalDetailsOf', {
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         RuntimeUpgrade: createType('Bytes', [
           specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array(),
         ]),
       })
     }
     case 'createWorkingGroupLeadOpening': {
-      return createType('ProposalDetailsOf', {
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         CreateWorkingGroupLeadOpening: {
-          description: specifics?.description,
+          description: metadataToBytes(OpeningMetadata, {
+            title: specifics?.title,
+            shortDescription: specifics?.shortDescription,
+            description: specifics?.description,
+            hiringLimit: 1,
+            expectedEndingTimestamp: specifics?.duration?.isLimited ? specifics.duration.length : undefined,
+            applicationDetails: specifics?.details,
+            applicationFormQuestions: specifics?.questions?.map(({ questionField, shortValue }) => ({
+              question: questionField,
+              type: OpeningMetadata.ApplicationFormQuestion.InputType[shortValue ? 'TEXT' : 'TEXTAREA'],
+            })),
+          }),
           stake_policy: {
             stake_amount: specifics?.stakingAmount,
             leaving_unstaking_period: specifics?.leavingUnstakingPeriod,
@@ -74,92 +82,108 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
       })
     }
     case 'decreaseWorkingGroupLeadStake': {
-      return createType('ProposalDetailsOf', {
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         DecreaseWorkingGroupLeadStake: [
-          specifics?.workerId,
-          specifics?.stakingAmount,
-          getWorkingGroupParam(specifics?.groupId),
+          specifics?.workerId ?? 0,
+          specifics?.stakingAmount ?? BN_ZERO,
+          getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
         ],
       })
     }
     case 'slashWorkingGroupLead': {
-      return createType('ProposalDetailsOf', {
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         SlashWorkingGroupLead: [
-          specifics?.workerId,
-          specifics?.stakingAmount,
-          getWorkingGroupParam(specifics?.groupId),
+          specifics?.workerId ?? 0,
+          specifics?.slashingAmount ?? BN_ZERO,
+          getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
         ],
       })
     }
     case 'terminateWorkingGroupLead': {
-      return createType('ProposalDetailsOf', {
-        TerminateWorkingGroupLead: [
-          specifics?.workerId,
-          specifics?.stakingAmount,
-          getWorkingGroupParam(specifics?.groupId),
-        ],
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        TerminateWorkingGroupLead: {
+          worker_id: specifics?.workerId,
+          working_group: getWorkingGroupParam(specifics?.groupId),
+          slashing_amount: specifics?.slashingAmount,
+        },
       })
     }
     case 'setWorkingGroupLeadReward': {
-      return createType('ProposalDetailsOf', {
-        SlashWorkingGroupLead: [
-          specifics?.workerId,
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetWorkingGroupLeadReward: [
+          specifics?.workerId ?? 0,
           specifics?.rewardPerBlock,
-          getWorkingGroupParam(specifics?.groupId),
+          getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
         ],
       })
     }
     case 'cancelWorkingGroupLeadOpening': {
-      return createType('ProposalDetailsOf', {
-        CancelWorkingGroupLeadOpening: [specifics?.openingId, WorkingGroupDef.Forum],
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        CancelWorkingGroupLeadOpening: [
+          specifics?.openingId ? idToRuntimeId(specifics.openingId) : 0,
+          getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
+        ],
       })
     }
     case 'setCouncilorReward': {
-      return createType('ProposalDetailsOf', { SetCouncilorReward: specifics?.amount })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetCouncilorReward: specifics?.amount ?? BN_ZERO,
+      })
     }
     case 'setCouncilBudgetIncrement': {
-      return createType('ProposalDetailsOf', { SetCouncilBudgetIncrement: specifics?.amount })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetCouncilBudgetIncrement: specifics?.amount ?? BN_ZERO,
+      })
     }
     case 'fillWorkingGroupLeadOpening': {
-      return createType('ProposalDetailsOf', {
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         FillWorkingGroupLeadOpening: {
-          opening_id: specifics?.openingId,
-          successful_application_id: specifics?.applicationId,
-          workingGroup: WorkingGroupDef.Forum,
+          opening_id: specifics?.openingId ? idToRuntimeId(specifics.openingId) : 0,
+          successful_application_id: specifics?.applicationId ? idToRuntimeId(specifics.applicationId) : 0,
+          working_group: getWorkingGroupParam(specifics?.groupId),
         },
       })
     }
     case 'updateWorkingGroupBudget': {
-      return createType(
-        'ProposalDetailsOf',
-        buildSpecificParams('UpdateWorkingGroupBudget', [
-          createType('Balance', specifics?.budgetUpdate ?? 0),
-          createType('WorkingGroup', getWorkingGroupParam(specifics?.groupId)),
-          createType('BalanceKind', specifics?.budgetUpdateKind ?? 'Positive'),
-        ])
-      )
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        UpdateWorkingGroupBudget: [
+          specifics?.budgetUpdate ?? BN_ZERO,
+          getWorkingGroupParam(specifics?.groupId) ?? 'Distribution',
+          specifics?.budgetUpdateKind ?? 'Positive',
+        ],
+      })
     }
     case 'setMembershipLeadInvitationQuota': {
-      return createType('ProposalDetailsOf', { SetMembershipLeadInvitationQuota: specifics?.amount })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetMembershipLeadInvitationQuota: specifics?.amount ?? BN_ZERO,
+      })
     }
     case 'setReferralCut': {
-      return createType('ProposalDetailsOf', { SetReferralCut: specifics?.amount?.toNumber() })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetReferralCut: specifics?.referralCut ?? 0,
+      })
     }
     case 'setInitialInvitationBalance': {
-      return createType('ProposalDetailsOf', { SetInitialInvitationBalance: specifics?.amount })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetInitialInvitationBalance: specifics?.amount ?? BN_ZERO,
+      })
     }
     case 'setInitialInvitationCount': {
-      return createType('ProposalDetailsOf', {
-        SetInitialInvitationCount: [specifics?.invitationCount],
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetInitialInvitationCount: specifics?.invitationCount ?? BN_ZERO,
       })
     }
     case 'setMaxValidatorCount': {
-      return createType('ProposalDetailsOf', { SetMaxValidatorCount: specifics?.amount?.toNumber() })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetMaxValidatorCount: specifics?.amount?.toNumber() ?? 0,
+      })
     }
     case 'setMembershipPrice': {
-      return createType('ProposalDetailsOf', { SetMembershipPrice: specifics?.amount?.toNumber() })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+        SetMembershipPrice: specifics?.amount?.toNumber() ?? 0,
+      })
     }
     default:
-      return createType('ProposalDetailsOf', { Signal: '' })
+      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', { Signal: '' })
   }
 }

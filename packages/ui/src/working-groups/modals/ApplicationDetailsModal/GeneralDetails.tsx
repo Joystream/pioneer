@@ -29,7 +29,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
     <SidePaneRow>
       <SidePaneLabel text="Your stake" />
       <SidePaneText>
-        <TokenValue value={new BN(100000)} />
+        <TokenValue value={new BN(application.stake)} />
       </SidePaneText>
     </SidePaneRow>
     <SidePaneRow>

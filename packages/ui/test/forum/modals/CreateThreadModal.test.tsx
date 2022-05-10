@@ -73,7 +73,13 @@ describe('CreateThreadModal', () => {
     it('No active member', () => {
       useMyMemberships.active = undefined
       renderModal()
-      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+      expect(useModal.showModal).toBeCalledWith({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: 'CreateThreadModal',
+          originalModalData: useModal.modalData,
+        },
+      })
     })
 
     it('Insufficient funds for minimum fee', async () => {
@@ -130,7 +136,7 @@ describe('CreateThreadModal', () => {
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
         await screen.findByText(
-          'Insufficient funds to cover the thread creation. You need at least 10000 JOY on your account for this action.'
+          'Insufficient funds to cover the thread creation. You need at least 10000 tJOY on your account for this action.'
         )
       ).toBeDefined()
     })
@@ -146,7 +152,7 @@ describe('CreateThreadModal', () => {
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
         await screen.findByText(
-          'Insufficient funds to cover the thread creation. You need at least 1200 JOY on your account for this action.'
+          'Insufficient funds to cover the thread creation. You need at least 1200 tJOY on your account for this action.'
         )
       ).toBeDefined()
     })

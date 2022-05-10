@@ -41,7 +41,7 @@ export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps)
       <AccountDetailsWrap>
         <DetailsInfo>
           {lockIcon(lock.type)}
-          <DetailsName>{lock.type}</DetailsName>
+          <DetailsName>{lock.type ?? 'Unknown lock'}</DetailsName>
         </DetailsInfo>
         <div />
         {isRecoverable ? <div /> : null}

@@ -13,7 +13,7 @@ import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/compo
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { ForumPost } from '@/forum/types'
@@ -58,7 +58,7 @@ export const PostActionSignModal = ({
   replyTo,
   onClose,
 }: PostActionSignModalProps) => {
-  const { isReady, paymentInfo, sign } = useSignAndSendQueryNodeTransaction({
+  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({
     transaction,
     signer: controllerAccount.address,
     service,

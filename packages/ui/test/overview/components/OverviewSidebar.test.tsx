@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import * as faker from 'faker'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
 import { MembershipContext } from '@/memberships/providers/membership/context'
-import { seedMembers, seedProposal } from '@/mocks/data'
-import mockProposals from '@/mocks/data/raw/proposals.json'
+import { seedMembers, seedProposals } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 import { OverviewSidebar } from '@/overview/components/OverviewSidebar/OverviewSidebar'
 import { OverviewSidebarInformations } from '@/overview/types/Overview'
@@ -46,11 +46,19 @@ describe('UI: OverviewSidebar', () => {
     title: 'Proposal 1',
     id: '1',
     creatorId: useMyMemberships.active.id,
+    details: {
+      type: 'setMembershipPrice',
+      data: {
+        newPrice: 4322,
+      },
+    },
+    discussionThread: { mode: 'ProposalDiscussionThreadModeOpen', discussionPosts: [] },
+    votes: [],
   }
 
   beforeAll(() => {
-    seedMembers(server.server)
-    seedProposal({ ...mockProposals[0], ...proposal }, server.server)
+    seedMembers(server.server, 1)
+    seedProposals(server.server, [proposal])
   })
 
   it('Renders empty states', () => {
@@ -64,7 +72,7 @@ describe('UI: OverviewSidebar', () => {
 
   it('Renders roles', () => {
     const role = 'Forum'
-    const reward = 1000
+    const reward = new BN(1000)
     useOverviewSidebarInformationMock.informations.roles = [
       {
         reward,

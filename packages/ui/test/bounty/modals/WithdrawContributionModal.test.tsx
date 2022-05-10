@@ -22,6 +22,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -37,11 +38,13 @@ describe('UI: WithdrawContributionModal', () => {
   const contributor: Contributor = {
     actor: getMember('alice'),
     amount: new BN('10000'),
+    hasWithdrawn: false,
   }
 
   const bounty: Bounty = {
     id: 'bounty 1',
     contributors: [contributor],
+    totalFunding: new BN('11000'),
   } as Bounty
   const modalData: ModalCallData<BountyWithdrawContributionModalCall> = {
     bounty: {
@@ -99,16 +102,18 @@ describe('UI: WithdrawContributionModal', () => {
       modalData: { bounty },
     } = useModal
 
-    const amountFromCherry = bounty.cherry / bounty.contributors.length
     const activeMemberContribute =
       bounty.contributors.find((contribution: Contributor) => contribution.actor?.id === useMyMemberships.active?.id)
         ?.amount ?? BN_ZERO
-    const expected = formatTokenValue(activeMemberContribute.toNumber() + amountFromCherry)
+
+    const amountFromCherry = bounty.cherry.mul(activeMemberContribute.div(bounty.totalFunding))
+    const expected = formatTokenValue(activeMemberContribute.toNumber() + amountFromCherry.toNumber())
 
     bounty.stage = 'failed'
     renderModal()
 
     const amountContainer = screen.getByText('modals.common.amount')?.nextSibling
+
     expect(
       screen.queryByText(
         `modals.withdraw.contribution.description ${formatTokenValue(
@@ -133,7 +138,7 @@ describe('UI: WithdrawContributionModal', () => {
     await act(async () => {
       fireEvent.click(await getButton('modals.withdraw.contribution.button'))
     })
-    expect(await screen.findByText('modals.withdrawContribution.error')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

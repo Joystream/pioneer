@@ -12,7 +12,7 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
@@ -30,7 +30,7 @@ interface SignProps {
 export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signer,
     service,

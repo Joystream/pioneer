@@ -31,6 +31,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
 
   const navigation = { post: query.get('post'), page: query.get('page') }
   const { isLoading: isLoadingPosts, posts, page, pageCount } = useForumThreadPosts(threadId, navigation)
+
   const isReady = useMemo(() => !(isLoading || isLoadingPosts), [posts, pageCount])
   const setPage = useCallback(
     (page: number) => history.replace({ pathname, search: page > 1 ? `page=${page}` : '' }),

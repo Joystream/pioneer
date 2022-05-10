@@ -2,12 +2,11 @@ import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
 import { BountyEmptyFilter } from '@/bounty/components/BountiesFilters'
-import { bountyPeriods } from '@/bounty/helpers'
 import { useBounties, UseBountiesProps } from '@/bounty/hooks/useBounties'
 import { asPeriod } from '@/bounty/types/casts'
 import { seedMembers } from '@/mocks/data'
 
-import { seedBountyThread, seedSafeBounties } from '../../_mocks/bounty/helpers'
+import { seedSafeBounties } from '../../_mocks/bounty/helpers'
 import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -25,13 +24,12 @@ describe('useBounties', () => {
 
   beforeAll(() => {
     seedMembers(mockServer.server, 2)
-    seedBountyThread(mockServer.server)
     seedSafeBounties(mockServer.server, [
       { title: mockTitles[0], stage: 'Funding' },
       { title: mockTitles[1], stage: 'WorkSubmission' },
       { stage: 'Judgment' },
       { stage: 'Expired' },
-      { stage: 'Terminated' },
+      { isTerminated: true },
     ])
   })
 
@@ -43,7 +41,7 @@ describe('useBounties', () => {
       })
       expect(result.bounties.length).toBeGreaterThan(0)
       result.bounties.forEach((bounty) => {
-        expect(bountyPeriods.includes(asPeriod(bounty.stage))).toBeTruthy()
+        expect(bounty.isTerminated).toBeFalsy()
       })
     })
 
@@ -54,7 +52,7 @@ describe('useBounties', () => {
       })
       expect(result.bounties.length).toBeGreaterThan(0)
       result.bounties.forEach((bounty) => {
-        expect(bounty.stage === 'terminated').toBeTruthy()
+        expect(bounty.isTerminated).toBeTruthy()
       })
     })
   })
@@ -70,7 +68,7 @@ describe('useBounties', () => {
       })
       expect(result.bounties.length).toBeGreaterThan(0)
       result.bounties.forEach((bounty) => {
-        expect(bountyPeriods.includes(asPeriod(bounty.stage))).toBeTruthy()
+        expect(bounty.isTerminated).toBeFalsy()
       })
     })
 

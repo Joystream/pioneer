@@ -28,7 +28,7 @@ export const AccountMoveFundsLocks = memo(
         {accountsWithIncompatibleLocks
           .find((el) => el.address === address)
           ?.locks.map((lock) => (
-            <InlineLockIconWrapper title={lock.toString()}>{lockIcon(lock)}</InlineLockIconWrapper>
+            <InlineLockIconWrapper title={lock ?? 'Unknown lock'}>{lockIcon(lock)}</InlineLockIconWrapper>
           ))}
       </AccountLocksWrapper>
     )

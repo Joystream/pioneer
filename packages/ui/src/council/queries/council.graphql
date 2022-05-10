@@ -77,6 +77,7 @@ fragment ElectionCandidateFields on Candidate {
     description
   }
   status
+  stakingAccountId
 }
 
 fragment ElectionRoundFields on ElectionRound {
@@ -84,6 +85,11 @@ fragment ElectionRoundFields on ElectionRound {
   candidates {
     ...ElectionCandidateFields
   }
+}
+
+fragment LatestElectionRoundFields on ElectionRound {
+  ...ElectionRoundFields
+  isFinished
 }
 
 fragment PastElectionRoundFields on ElectionRound {
@@ -237,6 +243,12 @@ query GetCurrentElection {
   }
 }
 
+query GetLatestElection {
+  electionRounds(orderBy: [cycleId_DESC], limit: 1) {
+    ...LatestElectionRoundFields
+  }
+}
+
 query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
   electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
     ...PastElectionRoundFields
@@ -268,7 +280,7 @@ query GetElectionCandidatesIds($electionCycleId: Int!) {
 }
 
 query GetCurrentCandidateIdByMember($memberId: ID!) {
-  candidates(where: { member: { id_eq: $memberId } }, orderBy: [electionRound_DESC], limit: 1) {
+  candidates(where: { member: { id_eq: $memberId } }, limit: 1) {
     id
   }
 }

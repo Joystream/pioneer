@@ -20,9 +20,13 @@ import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/compone
 import { TerminateWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/TerminateWorkingGroupLead'
 import { UpdateWorkingGroupBudget } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/UpdateWorkingGroupBudget'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
-import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import {
+  ApplicationForm,
+  DurationAndProcess,
+  StakingPolicyAndReward,
+  WorkingGroupAndDescription,
+} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
-import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
   AddNewProposalContext,
   AddNewProposalEvent,
@@ -32,7 +36,11 @@ import {
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 
-interface SpecificParametersStepProps {
+export interface ExecutionProps {
+  setIsExecutionError: (value: boolean) => void
+}
+
+interface SpecificParametersStepProps extends ExecutionProps {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
 }
@@ -50,11 +58,26 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
-      return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'): {
+      return !!(specifics?.groupId && specifics?.title && specifics.description && specifics.shortDescription)
+    }
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'): {
+      return (
+        !!specifics?.details &&
+        ((specifics?.duration?.isLimited === true && !!specifics?.duration?.length) ||
+          specifics?.duration?.isLimited === false)
+      )
+    }
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'): {
+      const questions = specifics?.questions
+      return !!(questions?.[0] && questions?.every((question) => question.questionField))
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
-      return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
+      return !!(
+        specifics?.stakingAmount?.toNumber() &&
+        specifics.leavingUnstakingPeriod &&
+        specifics.rewardPerBlock?.toNumber()
+      )
     }
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
       return !!specifics?.openingId
@@ -97,13 +120,13 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
       )
     }
     case state.matches('specificParameters.setReferralCut'): {
-      return !!(specifics?.amount && specifics?.amount.gtn(0))
+      return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
     }
     case state.matches('specificParameters.terminateWorkingGroupLead'): {
       return !!(specifics?.groupId && specifics.workerId !== undefined)
     }
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
-      return !!(specifics?.applicationId && specifics?.openingId)
+      return typeof specifics?.applicationId === 'string' && typeof specifics?.openingId === 'string'
     }
     case state.matches('specificParameters.updateWorkingGroupBudget'): {
       return !!(
@@ -130,7 +153,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   }
 }
 
-export const SpecificParametersStep = ({ send, state }: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({ send, state, setIsExecutionError }: SpecificParametersStepProps) => {
   const {
     context: { specifics },
   } = state
@@ -173,20 +196,39 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         <FillWorkingGroupLeadOpening
           applicationId={specifics?.applicationId}
           openingId={specifics?.openingId}
-          setApplicationId={(applicationId: number) => send('SET_APPLICATION_ID', { applicationId })}
-          setOpeningId={(openingId: number) => send('SET_OPENING_ID', { openingId })}
+          setApplicationId={(applicationId) => send('SET_APPLICATION_ID', { applicationId })}
+          setOpeningId={(openingId) => send('SET_OPENING_ID', { openingId })}
+          setWorkingGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
         />
       )
     }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'):
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
       return (
-        <CreateWorkingGroupLeadOpening
+        <WorkingGroupAndDescription
+          title={state.context.specifics?.title}
           description={state.context.specifics?.description}
           shortDescription={state.context.specifics?.shortDescription}
           groupId={state.context.specifics?.groupId}
+          setTitle={(title) => send('SET_TITLE', { title })}
           setDescription={(description) => send('SET_DESCRIPTION', { description })}
           setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
+      return (
+        <DurationAndProcess
+          duration={state.context.specifics?.duration}
+          details={state.context.specifics?.details}
+          setDuration={(duration) => send('SET_DURATION', { duration })}
+          setDetails={(details) => send('SET_DETAILS', { details })}
+        />
+      )
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
+      return (
+        <ApplicationForm
+          questions={state.context.specifics?.questions}
+          setQuestions={(questions) => send('SET_QUESTIONS', { questions })}
         />
       )
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):
@@ -209,6 +251,8 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
             send('SET_LEAVING_UNSTAKING_PERIOD', { leavingUnstakingPeriod })
           }
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
+          setIsExecutionError={setIsExecutionError}
+          workingGroupId={state.context.specifics?.groupId}
         />
       )
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
@@ -275,8 +319,9 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-          amount={state.context.specifics?.amount}
+          setReferralCut={(referralCut) => send('SET_REFERRAL_CUT', { referralCut })}
+          referralCut={state.context.specifics?.referralCut}
+          setIsExecutionError={setIsExecutionError}
         />
       )
     }

@@ -87,6 +87,7 @@ fragment WorkingGroupFields on WorkingGroup {
   }
   leader {
     membershipId
+    isActive
   }
 }
 
@@ -170,6 +171,7 @@ query GetRewards($where: RewardPaidEventWhereInput) {
 }
 
 fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+  title
   applicationDetails
   shortDescription
   description
@@ -265,6 +267,7 @@ fragment WorkingGroupOpeningMentionFields on WorkingGroupOpening {
   type
   rewardPerBlock
   metadata {
+    title
     shortDescription
     description
     hiringLimit
@@ -300,6 +303,7 @@ fragment WorkingGroupApplicationMentionFields on WorkingGroupApplication {
   opening {
     type
     metadata {
+      title
       shortDescription
       description
     }
@@ -337,6 +341,12 @@ query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
 fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   id
   runtimeId
+  answers {
+    answer
+    question {
+      question
+    }
+  }
   opening {
     id
     group {
@@ -345,6 +355,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     }
     type
     rewardPerBlock
+    metadata {
+      expectedEnding
+    }
   }
   applicant {
     ...MemberFields
@@ -358,6 +371,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     inBlock
     network
   }
+  stake
 }
 
 query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {

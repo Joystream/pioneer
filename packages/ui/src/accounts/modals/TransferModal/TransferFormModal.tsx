@@ -122,7 +122,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             disabled={isValueDisabled}
             required
             inputWidth="s"
-            units="JOY"
+            units="tJOY"
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
             message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           >

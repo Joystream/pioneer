@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineExtraSmall } from '@/common/components/typography'
+import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { ForumRoutes } from '@/forum/constant'
@@ -14,9 +14,11 @@ import { MemberInfo } from '@/memberships/components'
 import { CategoryItemFieldProps } from './CategoryListItem'
 
 export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { post, thread } = useCategoryLatestPost(categoryId)
+  const { post, thread, isLoading } = useCategoryLatestPost(categoryId)
 
-  if (!post) return <Loading />
+  if (isLoading) return <Loading />
+
+  if (!post) return <TextMedium>-</TextMedium>
 
   return (
     <PostInfoStyles>

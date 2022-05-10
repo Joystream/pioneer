@@ -8,9 +8,11 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
+import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
 
+import { useNetworkEndpoints } from './useNetworkEndpoints'
 import { useObservable } from './useObservable'
 import { useTransactionStatus } from './useTransactionStatus'
 
@@ -27,6 +29,7 @@ const observeTransaction = (
   transaction: Observable<ISubmittableResult>,
   send: Sender<any>,
   fee: BN,
+  nodeRpcEndpoint: string,
   setBlockHash?: SetBlockHash
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
@@ -37,14 +40,23 @@ const observeTransaction = (
     }
 
     if (status.isInBlock) {
-      const hash = status.asInBlock
-      setBlockHash && setBlockHash(hash.toString())
+      const hash = status.asInBlock.toString()
+      const transactionInfo = [
+        events.map((event) => event.event.method).join(', '),
+        `on network: ${nodeRpcEndpoint}`,
+        `in block: ${hash}`,
+        `more details at: https://polkadot.js.org/apps/?rpc=${nodeRpcEndpoint}#/explorer/query/${hash}`,
+      ].join('\n')
+
+      setBlockHash && setBlockHash(hash)
 
       if (hasErrorEvent(events)) {
         subscription.unsubscribe()
-        send('ERROR')
+        send({ type: 'ERROR', events })
+        error('Transaction error:', transactionInfo)
       } else {
         send({ type: 'FINALIZING', fee })
+        info('Successful transaction:', transactionInfo)
       }
     }
 
@@ -78,6 +90,8 @@ export const useProcessTransaction = ({
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
+  const [endpoints] = useNetworkEndpoints()
+
   useEffect(() => {
     setService(service)
   }, [])
@@ -90,7 +104,13 @@ export const useProcessTransaction = ({
     const fee = paymentInfo.partialFee.toBn()
 
     web3FromAddress(signer).then((extension) => {
-      observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee, setBlockHash)
+      observeTransaction(
+        transaction.signAndSend(signer, { signer: extension.signer }),
+        send,
+        fee,
+        endpoints.nodeRpcEndpoint,
+        setBlockHash
+      )
     })
     send('SIGN_EXTERNAL')
   }, [state.value.toString(), paymentInfo])

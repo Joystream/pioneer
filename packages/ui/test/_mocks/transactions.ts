@@ -4,7 +4,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of, asyncScheduler, scheduled } from 'rxjs'
+import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
@@ -25,12 +25,20 @@ const createSuccessEvents = (data: any[], section: string, method: string) => [
   },
 ]
 
+export const currentStubErrorMessage = 'Balance too low to send value.'
+const findMetaError = () => ({
+  docs: [currentStubErrorMessage],
+})
+
 const createErrorEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: {
       index: '0x0001',
-      data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+      data: [
+        { Module: { index: new BN(5), error: new BN(3) }, isModule: true, registry: { findMetaError } },
+        { weight: 190949000, class: 'Normal', paysFee: 'Yes' },
+      ],
       section: 'system',
       method: 'ExtrinsicFailed',
     },
@@ -200,6 +208,15 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
       constitutionality: new BN(10),
     })
   }
+  set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
+  set(
+    api,
+    'api.query.members.membershipPrice',
+    () =>
+      new Observable((subscriber) => {
+        subscriber.next(new BN(100))
+      })
+  )
 }
 
 export const stubBountyConstants = (api: UseApi) => {
@@ -210,6 +227,7 @@ export const stubBountyConstants = (api: UseApi) => {
     minWorkEntrantStake: createType('BalanceOf', 10),
     bountyLockId: createType('LockIdentifier', 1),
   })
+  set(api, 'api.consts.members.candidateStake', new BN(200))
 }
 
 export const stubCouncilAndReferendum = (
@@ -244,7 +262,9 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
         frozenFee: new BN(0),
         frozenMisc: new BN(0),
         isVesting: false,
-        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Staking Candidate')],
+        lockedBreakdown: lockedBalance.eq(BN_ZERO)
+          ? []
+          : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
         reservedBalance: new BN(0),
         vestedBalance: new BN(0),
         vestedClaimable: new BN(0),

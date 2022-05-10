@@ -44,7 +44,7 @@ const votes = rawVotes.filter(fromLastElection).map((vote) => [
   },
 ])
 
-const DefaultDurations = { voting: 5, revealing: 7 }
+const DefaultDurations = { idle: 27, announcing: 15, voting: 5, revealing: 7 }
 
 const handler = (args: TransferArgs) => {
   const pathName = `${__dirname}/data/chain-spec.json`
@@ -61,10 +61,20 @@ const handler = (args: TransferArgs) => {
   // Mock the chain data
   membership.members = members
   council.announcementPeriodNr = CYCLE_ID
-  referendum.votes = votes
+
+  const electionStarted = stage === 'voting' || stage === 'revealing'
+
+  if (!electionStarted && isDefined(args.duration)) {
+    council.stage.changed_at = args.duration - DefaultDurations[stage]
+  }
+
+  referendum.votes = []
+  if (stage === 'revealing') {
+    referendum.votes = votes
+  }
 
   council.candidates = []
-  if (stage === 'voting' || stage === 'revealing') {
+  if (electionStarted) {
     council.candidates = candidates
     council.stage.stage.Election.candidates_count = candidates.length
 
@@ -77,7 +87,7 @@ const handler = (args: TransferArgs) => {
   writeFileSync(pathName, JSON.stringify(spec, null, 2))
 }
 
-const stages = ['announcing' as const, 'voting' as const, 'revealing' as const]
+const stages = ['idle' as const, 'announcing' as const, 'voting' as const, 'revealing' as const]
 const options = {
   duration: { type: 'number', alias: 'd' },
   stage: { choices: stages, alias: 's', demand: true },

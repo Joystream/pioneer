@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { TooltipContainer } from '@/common/components/Tooltip'
@@ -10,29 +11,41 @@ import { Label } from './Label'
 export interface Props {
   isRequired?: boolean
   disabled?: boolean
-  checked: boolean
-  onChange: (value: boolean) => void
+  checked?: boolean
+  onChange?: (value: boolean) => void
   trueLabel: ReactNode
   falseLabel: ReactNode
+  hasNoOffState?: boolean
+  onBlur?: any
 }
 
-export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: Props) {
+function BaseToggleCheckbox({
+  isRequired,
+  disabled,
+  checked,
+  onChange,
+  trueLabel,
+  falseLabel,
+  hasNoOffState = false,
+  onBlur,
+}: Props) {
   const onClick = (setValue: boolean) => () => {
     if (disabled !== true) {
-      onChange(setValue)
+      onChange?.(setValue)
     }
   }
 
   return (
     <ToggleContainer groupDisabled={disabled}>
       <ToggleLabel onClick={onClick(true)}>{trueLabel}</ToggleLabel>
-      <ToggleStyledInput isChecked={checked}>
+      <ToggleStyledInput isChecked={checked ?? false} hasNoOffState={hasNoOffState}>
         <ToggleInput
           type="checkbox"
           disabled={disabled}
           checked={checked}
-          onChange={(event) => onChange(event.currentTarget.checked)}
+          onChange={(event) => onChange?.(event.currentTarget.checked)}
           required={isRequired}
+          onBlur={onBlur}
         />
       </ToggleStyledInput>
       <ToggleLabel onClick={onClick(false)}>{falseLabel}</ToggleLabel>
@@ -40,14 +53,27 @@ export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLa
   )
 }
 
-const ToggleLabel = styled.button`
-  outline: none;
-  font-family: ${Fonts.Inter};
-  font-size: 14px;
-  line-height: 20px;
-  color: ${Colors.Black[900]};
-  cursor: pointer;
-`
+interface CheckboxProps extends Props {
+  name?: string
+}
+
+export const ToggleCheckbox = ({ name, ...props }: CheckboxProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <BaseToggleCheckbox {...props} />
+  }
+
+  return (
+    <Controller
+      control={formContext.control}
+      name={name}
+      render={({ field }) => (
+        <BaseToggleCheckbox {...props} checked={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+      )}
+    />
+  )
+}
 
 const ToggleInput = styled.input`
   position: absolute;
@@ -59,8 +85,16 @@ const ToggleInput = styled.input`
 
 interface ToggleStyledInputProps {
   isChecked: boolean
+  hasNoOffState: boolean
 }
-
+const ToggleLabel = styled.button`
+  outline: none;
+  font-family: ${Fonts.Inter};
+  font-size: 14px;
+  line-height: 20px;
+  color: ${Colors.Black[900]};
+  cursor: pointer;
+`
 const checkedBoxStyles = css`
   background-color: ${Colors.Blue[500]};
 
@@ -81,13 +115,13 @@ const ToggleStyledInput = styled.label<ToggleStyledInputProps>`
   margin: 0 10px;
   position: relative;
   border-radius: ${BorderRad.full};
-  background-color: ${Colors.Black[300]};
+  background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[500] : Colors.Black[300])};
   cursor: pointer;
   transition: ${Transitions.all};
 
   &:hover,
   &:focus {
-    background-color: ${Colors.Black[200]};
+    background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[400] : Colors.Black[200])};
   }
 
   &:after {

@@ -62,7 +62,7 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
             <TextInlineHuge dark value bold>
               {formatTokenValue(constants?.election.minCandidacyStake)}
             </TextInlineHuge>{' '}
-            JOY
+            tJOY
           </TextMedium>
         </RowGapBlock>
       </Row>

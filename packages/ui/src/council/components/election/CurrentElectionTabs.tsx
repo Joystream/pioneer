@@ -43,7 +43,7 @@ export const CurrentElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTa
     })
   }
 
-  if ((stage === 'voting' || stage === 'revealing') && myVotes) {
+  if ((stage === 'voting' || stage === 'revealing') && typeof myVotes === 'number') {
     tabs.push({ title: 'My votes', count: myVotes, active: tab === 'myVotes', onClick: () => onSetTab('myVotes') })
   }
 

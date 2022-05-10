@@ -1,10 +1,11 @@
 import { useMachine } from '@xstate/react'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
@@ -15,15 +16,16 @@ import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import {
   Modal,
-  ModalHeader,
   ModalFooter,
-  TransactionInfoContainer,
+  ModalHeader,
   ScrolledModalBody,
   ScrolledModalContainer,
+  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium, TextBig, TokenValue } from '@/common/components/typography'
+import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
+import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -36,7 +38,7 @@ export const WithdrawWorkEntryModal = () => {
   const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
-    modalData: { bounty, entry },
+    modalData: { bounty },
     hideModal,
   } = useModal<BountyWithdrawWorkEntryModalCall>()
 
@@ -45,16 +47,61 @@ export const WithdrawWorkEntryModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
+  const entry = useMemo(
+    () => activeMember && bounty.entries?.find((entry) => entry.worker.id === activeMember.id && !entry.withdrawn),
+    [activeMember?.id]
+  )
+
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
+    if (api && connectionState === 'connected' && activeMember && entry) {
       return api.tx.bounty.withdrawWorkEntry(activeMember.id, bounty.id, entry.id)
     }
-  }, [JSON.stringify(activeMember), connectionState])
+  }, [activeMember?.id, entry?.id, connectionState])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  if (!api || !activeMember || !transaction || !feeInfo) {
-    return null
+  useEffect(() => {
+    if (state.matches(WithdrawWorkModalState.requirementsVerification)) {
+      if (feeInfo && feeInfo.canAfford) {
+        send('NEXT')
+      }
+
+      if (feeInfo && !feeInfo.canAfford) {
+        send('FAIL')
+      }
+    }
+  }, [feeInfo, state])
+
+  if (
+    !api ||
+    !activeMember ||
+    !transaction ||
+    !feeInfo ||
+    state.matches(WithdrawWorkModalState.requirementsVerification)
+  ) {
+    return (
+      <WaitModal
+        title={t('common:modals.wait.title')}
+        description={t('common:modals.wait.description')}
+        onClose={hideModal}
+        requirements={[
+          { name: 'API', state: !!api },
+          { name: 'Loading member', state: !!activeMember },
+          { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!feeInfo },
+        ]}
+      />
+    )
+  }
+
+  if (state.matches(WithdrawWorkModalState.requirementsFailed)) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
+    )
   }
 
   if (state.matches(WithdrawWorkModalState.transaction)) {
@@ -93,7 +140,7 @@ export const WithdrawWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.withdrawWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
@@ -121,9 +168,9 @@ export const WithdrawWorkEntryModal = () => {
             disabled
             label={t('modals.withdrawWorkEntry.memberInput.label')}
             tooltipText={t('modals.withdrawWorkEntry.memberInput.tooltipText')}
-            member={entry.worker}
+            member={entry?.worker}
           />
-          {entry.works?.map((work, index) => (
+          {entry?.works?.map((work, index) => (
             <Container key={work.id} label={t('modals.withdrawWorkEntry.workInput', { value: index + 1 })} disabled>
               <TextMedium value bold>
                 {work.title}
@@ -131,7 +178,7 @@ export const WithdrawWorkEntryModal = () => {
             </Container>
           ))}
           <Container disabled label={t('modals.withdrawWorkEntry.stakeInput')} inputSize="l">
-            <TokenValue value={entry.stake} size="s" />
+            <TokenValue value={entry?.stake} size="s" />
           </Container>
         </ScrolledModalContainer>
       </ScrolledModalBody>

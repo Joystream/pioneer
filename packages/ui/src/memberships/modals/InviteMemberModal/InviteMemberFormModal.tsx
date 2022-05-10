@@ -2,6 +2,10 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
@@ -32,21 +36,23 @@ const InviteMemberSchema = Yup.object().shape({
   rootAccount: NewAddressSchema('rootAccount'),
   controllerAccount: NewAddressSchema('controllerAccount'),
   avatarUri: AvatarURISchema,
-  name: Yup.string().required(),
-  handle: HandleSchema.required(),
+  name: Yup.string(),
+  handle: HandleSchema.required('Membership handle is required'),
 })
+
+const initializer = {
+  name: '',
+  handle: '',
+  about: '',
+  avatarUri: '',
+  hasTerms: false,
+}
 
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
+  const { active } = useMyMemberships()
   const keyring = useKeyring()
 
-  const initializer = {
-    name: '',
-    handle: '',
-    about: '',
-    avatarUri: '',
-    hasTerms: false,
-  }
   const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, InviteMemberSchema)
   const { isValid, errors, setContext } = validation
 
@@ -55,6 +61,10 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const onCreate = () => onSubmit(fields)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle, api])
+
+  useEffect(() => {
+    return active && changeField('invitor', active)
+  }, [active])
 
   useEffect(() => {
     setContext({ size: potentialMemberIdSize, keyring })
@@ -66,7 +76,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <InputComponent label="Inviting member" inputSize="l">
-            <SelectMember onChange={(member) => changeField('invitor', member)} />
+            <SelectMember selected={fields.invitor} onChange={(member) => changeField('invitor', member)} />
           </InputComponent>
 
           <Row>
@@ -84,7 +94,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
             >
               <InputText
                 id="root-account"
-                placeholder="Type"
+                placeholder="Enter the account of the person being invited."
                 value={rootAccount?.address ?? ''}
                 onChange={(event) => changeField('rootAccount', { name: undefined, address: event.target.value })}
               />
@@ -102,20 +112,9 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
             >
               <InputText
                 id="controller-account"
-                placeholder="Type"
+                placeholder="Enter the account of the person being invited."
                 value={controllerAccount?.address ?? ''}
                 onChange={(event) => changeField('controllerAccount', { name: undefined, address: event.target.value })}
-              />
-            </InputComponent>
-          </Row>
-
-          <Row>
-            <InputComponent id="member-name" label="Member Name" required>
-              <InputText
-                id="member-name"
-                placeholder="Type"
-                value={name}
-                onChange={(event) => changeField('name', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -125,6 +124,18 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               id="member-handle"
               label="Membership handle"
               required
+              tooltipText={
+                <>
+                  Membership handle is the primary way of how members are displayed throughout all interfaces of the
+                  platform. Membership handle can be updated any time by the account holder.
+                  <TooltipExternalLink
+                    target="_blank"
+                    href="https://joystream.gitbook.io/testnet-workspace/system/memberships#membership"
+                  >
+                    Learn more <LinkSymbol />
+                  </TooltipExternalLink>
+                </>
+              }
               validation={hasError('handle', errors) ? 'invalid' : undefined}
               message={hasError('handle', errors) ? getErrorMessage('handle', errors) : 'Do not use same handles'}
             >
@@ -133,6 +144,17 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 placeholder="Type"
                 value={handle}
                 onChange={(event) => changeField('handle', event.target.value)}
+              />
+            </InputComponent>
+          </Row>
+
+          <Row>
+            <InputComponent id="member-name" label="Member Name">
+              <InputText
+                id="member-name"
+                placeholder="Type"
+                value={name}
+                onChange={(event) => changeField('name', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -152,7 +174,6 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
             <InputComponent
               id="member-avatar"
               label="Member Avatar"
-              required
               value={avatarUri}
               validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
               message={

@@ -7,7 +7,7 @@ import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '
 
 export type GroupIdName = Extract<
   keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
-  `${string}WorkingGroup`
+  `${string}WorkingGroup` | `${string}WorkingGroup${string}`
 >
 export interface WorkingGroup {
   id: GroupIdName
@@ -20,6 +20,7 @@ export interface WorkingGroup {
   statusMessage?: string
   budget: BN
   averageStake: BN
+  isActive: boolean
 }
 
 export interface DetailedWorkingGroup extends WorkingGroup {
@@ -42,6 +43,7 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     budget: new BN(group.budget),
     averageStake: getAverageStake(group.workers),
     leadId: group.leader?.membershipId,
+    isActive: group.leader?.isActive ?? false,
   }
 }
 

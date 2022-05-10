@@ -9,7 +9,7 @@ import { IncreaseWorkerStakeModal } from '@/working-groups/modals/IncreaseWorker
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubDefaultBalances,
@@ -166,13 +166,15 @@ describe('UI: IncreaseWorkerStakeModal', () => {
 
   const renderModal = () => {
     render(
-      <MockKeyringProvider>
-        <ApiContext.Provider value={api}>
-          <ModalContext.Provider value={mockModalContext}>
-            <IncreaseWorkerStakeModal />
-          </ModalContext.Provider>
-        </ApiContext.Provider>
-      </MockKeyringProvider>
+      <MockApolloProvider>
+        <MockKeyringProvider>
+          <ApiContext.Provider value={api}>
+            <ModalContext.Provider value={mockModalContext}>
+              <IncreaseWorkerStakeModal />
+            </ModalContext.Provider>
+          </ApiContext.Provider>
+        </MockKeyringProvider>
+      </MockApolloProvider>
     )
   }
 })

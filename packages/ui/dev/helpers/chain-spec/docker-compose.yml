@@ -19,7 +19,7 @@ services:
   build:
     <<: *default
     entrypoint: ''
-    command: bash -c './node build-spec --dev > /data/chain-spec.json'
+    command: bash -c './node build-spec --dev > /data/chain-spec.json && chmod 666 /data/chain-spec.json'
 
   validate:
     <<: *default

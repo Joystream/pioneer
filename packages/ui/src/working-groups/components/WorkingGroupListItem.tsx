@@ -7,6 +7,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { nameMapping, subtitleMapping } from '@/common/helpers'
 import { MemberInfoAvatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
@@ -26,16 +27,21 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
   const { member: lead } = useMember(group.leadId)
-  const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
-
+  // const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
+  const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
+  const isLeadActive = lead && group.isActive
+  //TODO this validation has to be deleted when Gateway working group will be ready
+  if (group.name === 'Gateway') {
+    return null
+  }
   return (
     <GroupItem as={GhostRouterLink} to={groupAddress}>
       <GroupImageContainer>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle>{group.name}</GroupTitle>
-        {group.about && <GroupContent>{group.about}</GroupContent>}
+        <GroupTitle>{nameMapping(group.name)}</GroupTitle>
+        <GroupContent>{subtitleMapping(group.name)}</GroupContent>
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
@@ -54,9 +60,9 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {lead ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
+            {isLeadActive ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} fixedSize /> : 'None'}
           </StatsValue>
-          <Subscription>WG Lead</Subscription>
+          <Subscription>{isLeadActive ? 'WG Lead' : 'No leader'}</Subscription>
         </StatsColumn>
       </GroupStats>
       <Arrow direction="right" className="WorkingGroupArrow" />

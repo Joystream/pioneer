@@ -3,6 +3,7 @@ import { css } from 'styled-components'
 export const Colors = {
   White: '#FFFFFF',
   Grey: '#8C96A6',
+  LightGrey: '#A7AEB7',
   LogoPurple: '#4038FF',
 
   Black: {

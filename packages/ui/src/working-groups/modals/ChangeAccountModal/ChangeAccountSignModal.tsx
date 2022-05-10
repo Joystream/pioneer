@@ -10,7 +10,7 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { WorkerWithDetails } from '@/working-groups/types'
 
@@ -26,7 +26,7 @@ interface Props {
 export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, service, transaction, title, buttonLabel }) => {
   const { allAccounts } = useMyAccounts()
   const signer = accountOrNamed(allAccounts, worker.membership.controllerAccount, 'Controller account')
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signer?.address ?? '',
     service,

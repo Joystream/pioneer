@@ -19,7 +19,7 @@ export const OverviewInfoElement = ({ value, label, isLoading }: Props) => {
           <Loading />
         </LoadingBox>
       ) : (
-        <Value black bold value>
+        <Value black bold value as="div">
           {value}
         </Value>
       )}

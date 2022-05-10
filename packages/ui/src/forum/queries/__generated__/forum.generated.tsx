@@ -259,6 +259,7 @@ export type ForumPostFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -297,6 +298,7 @@ export type ForumPostFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -343,6 +345,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -416,6 +419,7 @@ export type ForumThreadMentionFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -449,6 +453,7 @@ export type ForumPostMentionFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -469,6 +474,9 @@ export type ForumPostMentionFieldsFragment = {
 
 export type GetForumCategoriesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ForumCategoryWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.ForumCategoryOrderByInput> | Types.ForumCategoryOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetForumCategoriesQuery = {
@@ -810,6 +818,7 @@ export type GetForumPostsQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -848,6 +857,7 @@ export type GetForumPostsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -992,6 +1002,7 @@ export type GetForumPostMentionQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1031,6 +1042,7 @@ export type GetForumThreadMentionQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1257,8 +1269,13 @@ export const ForumPostMentionFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
 `
 export const GetForumCategoriesDocument = gql`
-  query GetForumCategories($where: ForumCategoryWhereInput) {
-    forumCategories(where: $where) {
+  query GetForumCategories(
+    $where: ForumCategoryWhereInput
+    $orderBy: [ForumCategoryOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    forumCategories(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       ...ForumCategoryFields
     }
   }
@@ -1278,6 +1295,9 @@ export const GetForumCategoriesDocument = gql`
  * const { data, loading, error } = useGetForumCategoriesQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

@@ -153,7 +153,12 @@ export const AnnounceCandidacyModal = () => {
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
       if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+        return showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'AnnounceCandidateModal',
+          },
+        })
       }
 
       if (feeInfo) {
@@ -183,8 +188,7 @@ export const AnnounceCandidacyModal = () => {
       //
       // stakingStatus === "other"
       // wrong account
-
-      return send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 

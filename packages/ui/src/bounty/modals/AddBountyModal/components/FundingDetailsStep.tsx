@@ -1,77 +1,39 @@
-import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
-import * as Yup from 'yup'
 
-import { FundingPeriodDetailsContext, GeneralParametersContext } from '@/bounty/modals/AddBountyModal/machine'
-import { InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
+import { InputNumber, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
-import { Tooltip, TooltipContainer, TooltipDefault } from '@/common/components/Tooltip'
+import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, Colors } from '@/common/constants'
-import { useSchema } from '@/common/hooks/useSchema'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
-import { Address } from '@/common/types'
+import { ValidationHelpers } from '@/common/utils/validation'
 
-export interface FundingDetailsStepProps extends Omit<FundingPeriodDetailsContext, keyof GeneralParametersContext> {
-  setFundingMaximalRange: (fundingMaximalRange: BN) => void
-  setFundingMinimalRange: (fundingMinimalRange: BN) => void
-  setCherry: (cherry: BN) => void
-  setFundingPeriodLength: (fundingPeriodLength: BN) => void
-  setFundingPeriodType: (fundingPeriodType: string) => void
-  account?: Address
-  maxCherryLimit: number
+export interface FundingDetailsStepProps extends ValidationHelpers {
   minCherryLimit: number
 }
 
-const baseSchema = Yup.object().shape({
-  cherry: Yup.number(),
-  fundingMaximalRange: Yup.number(),
-  fundingMinimalRange: Yup.number().lessThan(
-    Yup.ref('fundingMaximalRange'),
-    'Minimal range cannot be greater than maximal'
-  ),
-})
+export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorChecker }: FundingDetailsStepProps) => {
+  const form = useFormContext()
+  const [isPerpetual, fundingPeriodLength, maximalRange] = form.watch([
+    `${AddBountyStates.fundingPeriodDetails}.isPerpetual`,
+    `${AddBountyStates.fundingPeriodDetails}.fundingPeriodLength`,
+    `${AddBountyStates.fundingPeriodDetails}.fundingMaximalRange`,
+  ])
 
-export const FundingDetailsStep = ({
-  fundingMaximalRange,
-  fundingMinimalRange,
-  cherry,
-  fundingPeriodLength,
-  fundingPeriodType,
-  setCherry,
-  setFundingPeriodType,
-  setFundingPeriodLength,
-  setFundingMinimalRange,
-  setFundingMaximalRange,
-  maxCherryLimit,
-  minCherryLimit,
-}: FundingDetailsStepProps) => {
-  const switchCheckbox = (isSet: boolean) => {
-    if (isSet) {
-      return setFundingPeriodType('limited')
+  useEffect(() => {
+    if (isPerpetual) {
+      form.setValue('fundingPeriodDetails.fundingMinimalRange', BN_ZERO)
+      form.trigger('fundingPeriodDetails.fundingMinimalRange')
     }
-    setFundingPeriodType('perpetual')
-    setFundingMinimalRange(BN_ZERO)
-  }
+  }, [isPerpetual])
 
-  const schema = useMemo(() => {
-    baseSchema.fields.cherry = baseSchema.fields.cherry
-      .min(minCherryLimit, 'Cherry must be greater than minimum of ${min} JOY')
-      .max(maxCherryLimit, 'Cherry of ${max} JOY exceeds your balance')
-
-    return baseSchema
-  }, [maxCherryLimit, minCherryLimit])
-
-  const { errors } = useSchema(
-    {
-      cherry: cherry?.toNumber(),
-      fundingMinimalRange: fundingMinimalRange?.toNumber(),
-      fundingMaximalRange: fundingMaximalRange?.toNumber(),
-    },
-    schema
-  )
+  useEffect(() => {
+    form.trigger('fundingPeriodDetails.fundingMinimalRange')
+  }, [maximalRange])
 
   return (
     <RowGapBlock gap={24}>
@@ -83,49 +45,66 @@ export const FundingDetailsStep = ({
           id="field-cherry"
           label="Cherry"
           tight
-          units="JOY"
+          units="tJOY"
           required
-          tooltipText="Funding period tooltip"
-          message={
-            hasError('cherry', errors) ? getErrorMessage('cherry', errors) : `Minimum Cherry - ${minCherryLimit} JOY`
+          tooltipText={
+            <>
+              Bounty creator has to put up an initial bounty, called a cherry, which is split among all contributors
+              pro-rata in case bounty fails. This cherry generates an incentive for contributors, as even when the
+              funding fails, they get a benefit. In case bounty succeeds, cherry is returned to the creator in full at
+              the time, when Oracle submits judgement.{' '}
+              <TooltipExternalLink
+                href="https://joystream.gitbook.io/testnet-workspace/system/bounties#assurance-contracts-and-dominant-assurance-contracts"
+                target="_blank"
+              >
+                <TextMedium>Learn more</TextMedium> <LinkSymbol />
+              </TooltipExternalLink>
+            </>
           }
-          validation={hasError('cherry', errors) ? 'invalid' : undefined}
+          message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
+          validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
-          <InputNumber
-            id="field-cherry"
-            isTokenValue
-            value={cherry?.toString()}
-            placeholder="0"
-            onChange={(_, value) => setCherry(new BN(value))}
-          />
+          <InputNumber isInBN id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
         </InputComponent>
       </RowGapBlock>
       <RowGapBlock gap={20}>
         <InlineToggleWrap>
-          <Label>Discussion mode :</Label>
+          <Label>Funding period :</Label>
           <ToggleCheckbox
-            falseLabel={
-              <CheckBoxLabelWrapper>
-                Perpetual
-                <Tooltip tooltipText="Lorem ipsum...">
-                  <TooltipDefault />
-                </Tooltip>
-              </CheckBoxLabelWrapper>
-            }
             trueLabel={
               <CheckBoxLabelWrapper>
-                <StyledParagraph>Limited</StyledParagraph>
-                <Tooltip tooltipText="Lorem ipsum...">
+                Perpetual
+                <Tooltip
+                  tooltipText={
+                    <>
+                      The funding period type refers to how funds are collected for the benefit of a bounty, and there
+                      are fundamentally two types: Perpetual: new contributors can join on an ongoing basis before a
+                      target which sets the upper bound for how much can be contributed. Limited: The funding lasts for
+                      no longer than a given number of blocks, called the funding period. There is a lower bound and
+                      upper bound for how much must be contributed.{' '}
+                      <TooltipExternalLink
+                        href="https://joystream.gitbook.io/testnet-workspace/system/bounties#funding-period-type"
+                        target="_blank"
+                      >
+                        <TextMedium>Learn more</TextMedium> <LinkSymbol />
+                      </TooltipExternalLink>
+                    </>
+                  }
+                >
                   <TooltipDefault />
                 </Tooltip>
               </CheckBoxLabelWrapper>
             }
-            checked={fundingPeriodType === 'limited'}
-            onChange={switchCheckbox}
+            falseLabel={
+              <CheckBoxLabelWrapper>
+                <StyledParagraph>Limited</StyledParagraph>
+              </CheckBoxLabelWrapper>
+            }
+            name="fundingPeriodDetails.isPerpetual"
           />
         </InlineToggleWrap>
       </RowGapBlock>
-      {fundingPeriodType === 'limited' && (
+      {!isPerpetual && (
         <RowGapBlock gap={20}>
           <InputComponent
             label="Funding period length"
@@ -136,11 +115,11 @@ export const FundingDetailsStep = ({
             message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
             <InputNumber
-              value={fundingPeriodLength?.toString()}
-              placeholder="0"
+              isInBN
               id="field-periodLength"
+              name="fundingPeriodDetails.fundingPeriodLength"
+              placeholder="0"
               isTokenValue
-              onChange={(_, value) => setFundingPeriodLength(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>
@@ -148,37 +127,62 @@ export const FundingDetailsStep = ({
       <RowGapBlock gap={20}>
         <TextMedium bold>Funding target range *</TextMedium>
         <Subtitle>
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-          velit mollit. Exercitation veniam consequat sunt nostrud amet.
+          Define funding range. Working Period stage commences when minimal range is funded in limited funding type, and
+          maximal range for perpetual funding type.
         </Subtitle>
       </RowGapBlock>
       <ColumnGapBlock gap={20}>
         <InputComponent
           id="field-minRange"
           tight
-          units="JOY"
+          units="tJOY"
           required
-          disabled={fundingPeriodType === 'perpetual'}
-          message={hasError('fundingMinimalRange', errors) ? getErrorMessage('fundingMinimalRange', errors) : ' '}
-          validation={hasError('fundingMinimalRange', errors) ? 'invalid' : undefined}
+          disabled={isPerpetual}
+          message={
+            !isPerpetual && errorChecker('fundingMinimalRange') ? errorMessageGetter('fundingMinimalRange') : ' '
+          }
+          validation={!isPerpetual && errorChecker('fundingMinimalRange') ? 'invalid' : undefined}
           label="Minimal range"
+          tooltipText="Cumulative funding must be above minimal range for bounty to proceed to Working Stage period in limited funding."
         >
           <InputNumber
-            isTokenValue
+            isInBN
             id="field-minRange"
-            disabled={fundingPeriodType === 'perpetual'}
-            value={fundingMinimalRange?.toString()}
+            name="fundingPeriodDetails.fundingMinimalRange"
+            disabled={isPerpetual}
             placeholder="0"
-            onChange={(_, value) => setFundingMinimalRange(new BN(value))}
+            isTokenValue
           />
         </InputComponent>
-        <InputComponent id="field-maxRange" tight units="JOY" required label="Maximal range">
+        <InputComponent
+          id="field-maxRange"
+          tight
+          units="tJOY"
+          required
+          label="Maximal range"
+          tooltipText={
+            <>
+              Cumulative funding must be above maximal range for bounty to proceed to Working Stage period in perpetual
+              funding. If a contribution is made that brings the cumulative funding equal to or above the upper bound
+              (maximal range), then the difference is returned, and the bounty proceeds to the Working Period stage.
+              Lastly, if the funding period is limited and the time passes this time, then the bounty proceeds to the
+              Bounty Failed stage if there was at least one contribution made, otherwise it proceeds to the Expired
+              Funding Period stage.{' '}
+              <TooltipExternalLink
+                href="https://joystream.gitbook.io/testnet-workspace/system/bounties#concepts"
+                target="_blank"
+              >
+                <TextMedium>Learn more</TextMedium> <LinkSymbol />
+              </TooltipExternalLink>
+            </>
+          }
+        >
           <InputNumber
-            isTokenValue
+            isInBN
             id="field-maxRange"
-            value={fundingMaximalRange?.toString()}
+            name="fundingPeriodDetails.fundingMaximalRange"
             placeholder="0"
-            onChange={(_, value) => setFundingMaximalRange(new BN(value))}
+            isTokenValue
           />
         </InputComponent>
       </ColumnGapBlock>

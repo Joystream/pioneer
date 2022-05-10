@@ -33,14 +33,14 @@ export const Council = ({ className }: Props) => (
       fill="#8C96A6"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M70.9472 64.5162C68.6333 64.073 66.8614 63.4202 65.9686 62.9762L65 62.4945V61.4173C65 59.6122 65.5284 56.8557 67.1575 54.4969C67.2501 54.3628 67.3461 54.2304 67.4455 54.0996L67.6405 54.2417L70.9472 64.5162Z"
       fill="black"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M40.5545 54.0996C40.654 54.2304 40.7499 54.3628 40.8425 54.4969C42.4716 56.8557 43 59.6121 43 61.4173V62.4945L42.0314 62.9762C41.1387 63.4202 39.3667 64.073 37.0529 64.5162L40.3596 54.2417L40.5545 54.0996Z"
       fill="black"
     />

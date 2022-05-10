@@ -27,8 +27,8 @@ export const FailureModal = ({ children, onClose, events }: FailureModalProps) =
         <ModalTitle as="h4">
           <span className="red-title">Oh no!</span> Failure
         </ModalTitle>
-        <ResultText>{children}</ResultText>
-        {!!errorEvents && errorEvents.map((event, i) => <EventErrorMessage key={i} event={event} />)}
+        {!errorEvents.length && <ResultText>{children}</ResultText>}
+        {!!errorEvents.length && errorEvents.map((event, i) => <EventErrorMessage key={i} event={event} />)}
       </ResultModalBody>
     </Modal>
   )

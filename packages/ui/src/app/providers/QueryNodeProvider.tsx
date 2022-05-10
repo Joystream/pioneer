@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const QueryNodeProvider = ({ children }: Props) => {
-  const [network] = useNetwork()
+  const { network } = useNetwork()
   const [endpoints] = useNetworkEndpoints()
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>()
 

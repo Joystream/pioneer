@@ -7,25 +7,47 @@ import {
   isTransactionSuccess,
   transactionMachine,
 } from '@/common/model/machines/index'
-import { EmptyObject } from '@/common/types'
 
-interface TransactionContext {
+interface MachineContext {
+  validateBeforeTransaction: boolean
+}
+
+interface TransactionContext extends MachineContext {
   transactionEvents?: EventRecord[]
 }
 
 type PostActionState =
-  | { value: 'requirementsVerification'; context: EmptyObject }
-  | { value: 'requirementsFailed'; context: EmptyObject }
-  | { value: 'transaction'; context: EmptyObject }
-  | { value: 'success'; context: EmptyObject }
+  | { value: 'requirementsVerification'; context: MachineContext }
+  | { value: 'requirementsFailed'; context: MachineContext }
+  | { value: 'beforeTransaction'; context: MachineContext }
+  | { value: 'transaction'; context: MachineContext }
+  | { value: 'success'; context: MachineContext }
   | { value: 'error'; context: Required<TransactionContext> }
 
 export type ActionEvents = { type: 'FAIL' } | { type: 'PASS' }
 
 export const defaultTransactionModalMachine = createMachine<TransactionContext, ActionEvents, PostActionState>({
   initial: 'requirementsVerification',
+  context: {
+    validateBeforeTransaction: false,
+  },
   states: {
     requirementsVerification: {
+      on: {
+        PASS: [
+          {
+            target: 'beforeTransaction',
+            cond: (context) => context.validateBeforeTransaction,
+          },
+          {
+            target: 'transaction',
+            cond: (context) => !context.validateBeforeTransaction,
+          },
+        ],
+        FAIL: 'requirementsFailed',
+      },
+    },
+    beforeTransaction: {
       on: {
         PASS: 'transaction',
         FAIL: 'requirementsFailed',

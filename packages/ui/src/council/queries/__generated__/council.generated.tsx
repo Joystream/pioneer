@@ -19,6 +19,7 @@ export type CouncilMemberFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     councilMembers: Array<{ __typename: 'CouncilMember' }>
@@ -49,6 +50,7 @@ export type PastCouncilProposalsFieldsFragment = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }
@@ -96,6 +98,7 @@ export type PastCouncilProposalsFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -148,6 +151,7 @@ export type ElectedCouncilFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       councilMembers: Array<{ __typename: 'CouncilMember' }>
@@ -190,6 +194,7 @@ export type ElectionCandidateFieldsFragment = {
   id: string
   stake: any
   status: Types.CandidacyStatus
+  stakingAccountId: string
   member: {
     __typename: 'Membership'
     id: string
@@ -199,6 +204,7 @@ export type ElectionCandidateFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -232,6 +238,7 @@ export type ElectionRoundFieldsFragment = {
     id: string
     stake: any
     status: Types.CandidacyStatus
+    stakingAccountId: string
     member: {
       __typename: 'Membership'
       id: string
@@ -241,6 +248,53 @@ export type ElectionRoundFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+    }
+    noteMetadata: {
+      __typename: 'CandidacyNoteMetadata'
+      header?: string | null
+      bulletPoints: Array<string>
+      bannerImageUri?: string | null
+      description?: string | null
+    }
+  }>
+}
+
+export type LatestElectionRoundFieldsFragment = {
+  __typename: 'ElectionRound'
+  isFinished: boolean
+  cycleId: number
+  candidates: Array<{
+    __typename: 'Candidate'
+    id: string
+    stake: any
+    status: Types.CandidacyStatus
+    stakingAccountId: string
+    member: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -290,6 +344,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
     stake: any
     id: string
     status: Types.CandidacyStatus
+    stakingAccountId: string
     member: {
       __typename: 'Membership'
       id: string
@@ -299,6 +354,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -349,6 +405,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -386,6 +443,7 @@ export type CastVoteFieldsFragment = {
     id: string
     stake: any
     status: Types.CandidacyStatus
+    stakingAccountId: string
     member: {
       __typename: 'Membership'
       id: string
@@ -395,6 +453,7 @@ export type CastVoteFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -492,6 +551,7 @@ export type GetElectedCouncilQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         councilMembers: Array<{ __typename: 'CouncilMember' }>
@@ -613,6 +673,7 @@ export type GetPastCouncilMembersQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -641,6 +702,7 @@ export type GetPastCouncilMembersQuery = {
       statusSetAtTime: any
       createdAt: any
       councilApprovals: number
+      exactExecutionBlock?: number | null
       status:
         | { __typename: 'ProposalStatusCanceledByRuntime' }
         | { __typename: 'ProposalStatusCancelled' }
@@ -688,6 +750,7 @@ export type GetPastCouncilMembersQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -722,6 +785,7 @@ export type GetPastCouncilProposalsQuery = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }
@@ -769,6 +833,7 @@ export type GetPastCouncilProposalsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -818,6 +883,7 @@ export type GetCurrentElectionQuery = {
       id: string
       stake: any
       status: Types.CandidacyStatus
+      stakingAccountId: string
       member: {
         __typename: 'Membership'
         id: string
@@ -827,6 +893,58 @@ export type GetCurrentElectionQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+      }
+      noteMetadata: {
+        __typename: 'CandidacyNoteMetadata'
+        header?: string | null
+        bulletPoints: Array<string>
+        bannerImageUri?: string | null
+        description?: string | null
+      }
+    }>
+  }>
+}
+
+export type GetLatestElectionQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetLatestElectionQuery = {
+  __typename: 'Query'
+  electionRounds: Array<{
+    __typename: 'ElectionRound'
+    isFinished: boolean
+    cycleId: number
+    candidates: Array<{
+      __typename: 'Candidate'
+      id: string
+      stake: any
+      status: Types.CandidacyStatus
+      stakingAccountId: string
+      member: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -899,6 +1017,7 @@ export type GetPastElectionQuery = {
       stake: any
       id: string
       status: Types.CandidacyStatus
+      stakingAccountId: string
       member: {
         __typename: 'Membership'
         id: string
@@ -908,6 +1027,7 @@ export type GetPastElectionQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -965,6 +1085,7 @@ export type GetCandidateQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1041,6 +1162,7 @@ export type GetCouncilVotesQuery = {
       id: string
       stake: any
       status: Types.CandidacyStatus
+      stakingAccountId: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1050,6 +1172,7 @@ export type GetCouncilVotesQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -1276,6 +1399,7 @@ export const ElectionCandidateFieldsFragmentDoc = gql`
       description
     }
     status
+    stakingAccountId
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -1287,6 +1411,13 @@ export const ElectionRoundFieldsFragmentDoc = gql`
     }
   }
   ${ElectionCandidateFieldsFragmentDoc}
+`
+export const LatestElectionRoundFieldsFragmentDoc = gql`
+  fragment LatestElectionRoundFields on ElectionRound {
+    ...ElectionRoundFields
+    isFinished
+  }
+  ${ElectionRoundFieldsFragmentDoc}
 `
 export const PastElectionRoundFieldsFragmentDoc = gql`
   fragment PastElectionRoundFields on ElectionRound {
@@ -1779,6 +1910,48 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
   GetCurrentElectionQuery,
   GetCurrentElectionQueryVariables
 >
+export const GetLatestElectionDocument = gql`
+  query GetLatestElection {
+    electionRounds(orderBy: [cycleId_DESC], limit: 1) {
+      ...LatestElectionRoundFields
+    }
+  }
+  ${LatestElectionRoundFieldsFragmentDoc}
+`
+
+/**
+ * __useGetLatestElectionQuery__
+ *
+ * To run a query within a React component, call `useGetLatestElectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestElectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestElectionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetLatestElectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestElectionQuery, GetLatestElectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestElectionQuery, GetLatestElectionQueryVariables>(GetLatestElectionDocument, options)
+}
+export function useGetLatestElectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestElectionQuery, GetLatestElectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestElectionQuery, GetLatestElectionQueryVariables>(
+    GetLatestElectionDocument,
+    options
+  )
+}
+export type GetLatestElectionQueryHookResult = ReturnType<typeof useGetLatestElectionQuery>
+export type GetLatestElectionLazyQueryHookResult = ReturnType<typeof useGetLatestElectionLazyQuery>
+export type GetLatestElectionQueryResult = Apollo.QueryResult<GetLatestElectionQuery, GetLatestElectionQueryVariables>
 export const GetPastElectionsDocument = gql`
   query GetPastElections($offset: Int, $limit: Int, $orderBy: [ElectionRoundOrderByInput!]) {
     electionRounds(where: { isFinished_eq: true }, offset: $offset, limit: $limit, orderBy: $orderBy) {
@@ -1998,7 +2171,7 @@ export type GetElectionCandidatesIdsQueryResult = Apollo.QueryResult<
 >
 export const GetCurrentCandidateIdByMemberDocument = gql`
   query GetCurrentCandidateIdByMember($memberId: ID!) {
-    candidates(where: { member: { id_eq: $memberId } }, orderBy: [electionRound_DESC], limit: 1) {
+    candidates(where: { member: { id_eq: $memberId } }, limit: 1) {
       id
     }
   }

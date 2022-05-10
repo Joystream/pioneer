@@ -5,7 +5,8 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
-import { Bounty, BountyEntryStatusWinner, WorkEntry } from '@/bounty/types/Bounty'
+import { Bounty, WorkEntry } from '@/bounty/types/Bounty'
+import { BN_ZERO } from '@/common/constants'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { Member } from '@/memberships/types'
@@ -28,6 +29,7 @@ const defaultEntry: WorkEntry = {
   bountyId: '0',
   stake: new BN(10),
   withdrawn: false,
+  hasCashedOut: false,
 }
 
 describe('UI: BountyPreviewHeader', () => {
@@ -52,20 +54,19 @@ describe('UI: BountyPreviewHeader', () => {
       maxAmount: new BN(10),
       maxPeriod: 9,
     },
-    contractType: {
-      whitelist: ['16'],
-    },
+    entrantWhitelist: ['16'],
     entries: [],
     contributors: [],
     workPeriod: 10,
     judgingPeriod: 10,
     stage: 'expired',
+    isTerminated: false,
     totalFunding: new BN(10),
     discussionThreadId: '1',
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,
-    members: [],
+    members: [{ ...activeMember }],
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
@@ -100,14 +101,20 @@ describe('UI: BountyPreviewHeader', () => {
       bounty.fundingType = {
         target: new BN(1),
       }
-      bounty.contractType = {
-        whitelist: ['12'],
-      }
+      bounty.entrantWhitelist = ['12']
 
       renderHeader()
 
       expect(await screen.queryByText('bountyFields.cherry')).toBeDefined()
       expect(await screen.queryByText('bountyFields.entrantStake')).toBeDefined()
+    })
+
+    it('No contributors', async () => {
+      bounty.totalFunding = BN_ZERO
+
+      renderHeader()
+
+      expect(await getButton('buttons.cancelBounty')).toBeDefined()
     })
 
     it('Other', async () => {
@@ -116,11 +123,11 @@ describe('UI: BountyPreviewHeader', () => {
         maxPeriod: 1,
         maxAmount: new BN(2),
       }
-      bounty.contractType = 'ContractOpen'
+      bounty.entrantWhitelist = undefined
 
       renderHeader()
 
-      expect(await getButton('buttons.contributeFunds')).toBeDefined()
+      expect(await getButton('buttons.cancelBounty')).toBeDefined()
     })
   })
 
@@ -130,9 +137,7 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('Closed and member out of whitelist', async () => {
-      bounty.contractType = {
-        whitelist: ['3'],
-      }
+      bounty.entrantWhitelist = ['3']
 
       renderHeader()
 
@@ -140,9 +145,7 @@ describe('UI: BountyPreviewHeader', () => {
     })
 
     it('Closed and member in whitelist', async () => {
-      bounty.contractType = {
-        whitelist: ['0'],
-      }
+      bounty.entrantWhitelist = ['0']
 
       renderHeader()
 
@@ -151,7 +154,7 @@ describe('UI: BountyPreviewHeader', () => {
 
     describe('Open', () => {
       beforeEach(() => {
-        bounty.contractType = 'ContractOpen'
+        bounty.entrantWhitelist = undefined
       })
 
       it('No entry', async () => {
@@ -226,10 +229,9 @@ describe('UI: BountyPreviewHeader', () => {
         {
           ...defaultEntry,
           hasSubmitted: true,
-          status: {
-            reward: 1000,
-          } as BountyEntryStatusWinner,
+          status: 'BountyEntryStatusWinner',
           winner: true,
+          reward: new BN(1000),
         },
       ]
 
@@ -254,20 +256,6 @@ describe('UI: BountyPreviewHeader', () => {
       expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
     })
 
-    it('Contributor', async () => {
-      bounty.entries = []
-      bounty.contributors = [
-        {
-          actor: activeMember,
-          amount: new BN(1222),
-        },
-      ]
-
-      renderHeader()
-
-      expect(await getButton('buttons.contributorWithdrawStake')).toBeDefined()
-    })
-
     it('Other', async () => {
       bounty.entries = []
       bounty.contributors = []
@@ -285,10 +273,11 @@ describe('UI: BountyPreviewHeader', () => {
       bounty.stage = 'failed'
     })
 
-    it('Worker', async () => {
+    it('Worker with submission', async () => {
       bounty.entries = [
         {
           ...defaultEntry,
+          passed: true,
           hasSubmitted: true,
         },
       ]
@@ -298,10 +287,40 @@ describe('UI: BountyPreviewHeader', () => {
       expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
     })
 
+    it('Worker without submission', async () => {
+      bounty.entries = [
+        {
+          ...defaultEntry,
+          passed: true,
+          hasSubmitted: false,
+        },
+      ]
+
+      renderHeader()
+
+      expect(await getButton('buttons.loserWithdrawStake')).toBeDefined()
+    })
+
+    it('Worker after cashout', async () => {
+      bounty.entries = [
+        {
+          ...defaultEntry,
+          hasSubmitted: true,
+          passed: true,
+          hasCashedOut: true,
+        },
+      ]
+
+      renderHeader()
+
+      expect(screen.queryByText('buttons.loserWithdrawStake')).toBeNull()
+    })
+
     it('Contributor', async () => {
       bounty.entries = []
       bounty.contributors = [
         {
+          hasWithdrawn: false,
           actor: activeMember,
           amount: new BN(1222),
         },
@@ -310,6 +329,21 @@ describe('UI: BountyPreviewHeader', () => {
       renderHeader()
 
       expect(await getButton('buttons.contributorWithdrawStake')).toBeDefined()
+    })
+
+    it('Contributor after withdrawal', async () => {
+      bounty.entries = []
+      bounty.contributors = [
+        {
+          hasWithdrawn: true,
+          actor: activeMember,
+          amount: new BN(1222),
+        },
+      ]
+
+      renderHeader()
+
+      expect(screen.queryByText('buttons.contributorWithdrawStake')).toBeNull()
     })
 
     it('Other', async () => {

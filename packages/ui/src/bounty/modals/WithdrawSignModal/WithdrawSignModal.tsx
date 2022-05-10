@@ -14,6 +14,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -24,9 +25,11 @@ export interface Props {
   service: ActorRef<any>
   controllerAccount: Account
   type: 'stake' | 'contribution' | 'reward'
+  reward?: BN
+  stake?: BN
   amount: BN
-  isContributor?: boolean
   bounty?: Bounty
+  isContributor?: boolean
 }
 
 export const WithdrawSignModal = ({
@@ -35,9 +38,11 @@ export const WithdrawSignModal = ({
   service,
   controllerAccount,
   type,
+  reward,
+  stake,
   amount,
-  isContributor,
   bounty,
+  isContributor,
 }: Props) => {
   const { t } = useTranslation('bounty')
   const { allAccounts } = useMyAccounts()
@@ -48,8 +53,8 @@ export const WithdrawSignModal = ({
     signer: controllerAccount.address,
   })
 
-  const extraAmount = bounty && isContributor ? bounty.cherry.toNumber() / (bounty.contributors.length || 1) : 0
-  const bountyFailedInfo = bounty?.stage === 'failed' && isContributor
+  const extraAmount = bounty && isContributor ? bounty.cherry.mul(amount.div(bounty.totalFunding)) : BN_ZERO
+  const bountyFailedInfo = bounty?.stage === 'failed' && !!isContributor
 
   return (
     <TransactionModal onClose={onClose} service={service} title={t(`modals.withdraw.${type}.title`)}>
@@ -61,22 +66,28 @@ export const WithdrawSignModal = ({
               })
             : ''
         }`}</TextMedium>
+
         <WithdrawInfo
           account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')}
-          stakingFromTitle={t(`modals.withdraw.${type}.stakingFrom`)}
           amountTitle={t(`modals.withdraw.${type}.amountTitle`)}
-          amount={amount.addn(extraAmount)}
+          rows={[
+            ...(stake ? [{ stakingFromTitle: t('modals.withdraw.stake.stakingFrom'), amount: stake }] : []),
+            ...(reward ? [{ stakingFromTitle: t('modals.withdraw.reward.stakingFrom'), amount: reward }] : []),
+            ...(!stake && !reward
+              ? [{ stakingFromTitle: t(`modals.withdraw.${type}.stakingFrom`), amount: amount.add(extraAmount) }]
+              : []),
+          ]}
         />
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
           <TransactionInfo
             title={t('modals.common.amount')}
-            value={amount.addn(extraAmount)}
+            value={amount.add(extraAmount)}
             tooltipText={bountyFailedInfo ? t('modals.withdraw.extraTooltipInformation') : undefined}
           />
           <TransactionInfo
-            title={t('modals.common.transactionFee.title')}
+            title={t('modals.common.transactionFee.label')}
             value={paymentInfo?.partialFee.toBn()}
             tooltipText={t('modals.common.transactionFee.tooltip')}
           />

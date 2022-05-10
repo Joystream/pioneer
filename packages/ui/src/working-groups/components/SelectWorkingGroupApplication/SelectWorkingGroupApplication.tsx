@@ -12,18 +12,20 @@ import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupAppl
 
 interface Props {
   onChange: (selected: WorkingGroupApplication) => void
-  selectedApplicationId?: number
+  selectedApplicationId?: string
+  placeholder: string
   applicationsStatus?: ApplicationStatus
   disabled?: boolean
   className?: string
   id?: string
-  openingId?: number
+  openingId?: string
 }
 
 const SelectWorkingGroupApplicationBase = ({
   id,
   onChange,
   selectedApplicationId,
+  placeholder,
   disabled,
   className,
   openingId,
@@ -31,7 +33,7 @@ const SelectWorkingGroupApplicationBase = ({
 }: Props) => {
   const { applications } = useApplications({ applicationsStatus, openingId })
   const selectedApplication = useMemo(
-    () => applications?.find((application) => application.runtimeId === selectedApplicationId),
+    () => applications?.find((application) => application.id === selectedApplicationId),
     [selectedApplicationId, applications?.length]
   )
 
@@ -39,7 +41,6 @@ const SelectWorkingGroupApplicationBase = ({
     onChange(selected)
     close()
   }
-
   return (
     <Select
       id={id}
@@ -47,7 +48,7 @@ const SelectWorkingGroupApplicationBase = ({
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
-      placeholder="Select Working Group or type group name"
+      placeholder={placeholder}
       renderList={(onOptionClick) => (
         <OptionsListWorkingGroupApplication allWorkingGroupApplications={applications} onChange={onOptionClick} />
       )}

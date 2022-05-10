@@ -12,7 +12,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useSignAndSendQueryNodeTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
@@ -35,7 +35,7 @@ export const SignTransactionModal = ({
 }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendQueryNodeTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)
   const transferable = balance?.transferable

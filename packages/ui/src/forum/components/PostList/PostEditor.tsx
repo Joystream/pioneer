@@ -42,7 +42,7 @@ export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) =>
           )
         }
         if (type === 'proposal' && proposalPostData.threadId) {
-          return api.tx.proposalsDiscussion.updatePost(post.id, proposalPostData.threadId, text)
+          return api.tx.proposalsDiscussion.updatePost(proposalPostData.threadId, post.id, text)
         }
       }
     },

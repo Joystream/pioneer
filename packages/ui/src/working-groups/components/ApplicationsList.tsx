@@ -1,14 +1,16 @@
-import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '../../common/components/BadgeStatus/BadgeStatus'
-import { ButtonGhost } from '../../common/components/buttons'
-import { FileIcon } from '../../common/components/icons/FileIcon'
-import { List, ListItem } from '../../common/components/List'
-import { TextInlineBig, TokenValue } from '../../common/components/typography'
-import { Subscription } from '../../common/components/typography/Subscription'
-import { useModal } from '../../common/hooks/useModal'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
+import { ButtonGhost } from '@/common/components/buttons'
+import { FileIcon } from '@/common/components/icons/FileIcon'
+import { List, ListItem } from '@/common/components/List'
+import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { Subscription } from '@/common/components/typography/Subscription'
+import { isInFuture } from '@/common/helpers'
+import { useModal } from '@/common/hooks/useModal'
+import { relativeTime } from '@/common/model/relativeTime'
+
 import { openingTitle } from '../helpers'
 import { useRewardPeriod } from '../hooks/useRewardPeriod'
 import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
@@ -40,37 +42,42 @@ export const ApplicationsList = ({ applications, pastApplications }: Props) => (
 
 const ApplicationListItem = ({ application, past }: { application: WorkingGroupApplication; past?: boolean }) => {
   const { showModal } = useModal()
+  const { opening } = application
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { applicationId: application.id } })
   }, [application.id])
-  const rewardPeriod = useRewardPeriod(application.opening.groupId)
+  const rewardPeriod = useRewardPeriod(opening.groupId)
+  const isHired = application.status === 'ApplicationStatusAccepted'
 
   return (
     <ApplicationItemWrap past={past}>
       <ApplicationItemInfo>
         <ToggleableItemInfoTop>
           <ApplicationID title={application.id}>ID: {application.runtimeId}</ApplicationID>
-          <Subscription>Time left: 6 days 23 minutes</Subscription>
-          <BadgeStatus>LEAD</BadgeStatus>
+          {isInFuture(opening.expectedEnding) && (
+            <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          )}
+          <BadgeStatus>{opening.groupName}</BadgeStatus>
+          {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
         </ToggleableItemInfoTop>
         <Title onClick={showApplicationModal}>{openingTitle(application)}</Title>
       </ApplicationItemInfo>
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={rewardPeriod?.mul(application.opening.rewardPerBlock)} />
+            <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(100)} />
+            <TokenValue value={application.stake} />
           </TextInlineBig>
           <Subscription>Staked</Subscription>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextInlineBig value>No</TextInlineBig>
-          <Subscription>Hired</Subscription>
+          <TextInlineBig value>{isHired ? 'Yes' : 'No'}</TextInlineBig>
+          <Subscription>{!isHired ? 'Pending' : 'Hired'}</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
       <ButtonGhost square size="medium" onClick={showApplicationModal}>

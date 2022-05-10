@@ -6,6 +6,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { BN_ZERO } from '@/common/constants'
+import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -34,7 +35,7 @@ const defaultBalance = {
   locks: [],
 }
 
-describe('UI: ContributeFundsModal', () => {
+describe('UI: AnnounceWorkEntryModal', () => {
   let renderResult: RenderResult
   const api = stubApi()
   stubBountyConstants(api)
@@ -73,6 +74,10 @@ describe('UI: ContributeFundsModal', () => {
   }
 
   beforeEach(() => {
+    stubTransaction(api, 'api.tx.utility.batch', fee)
+    stubTransaction(api, 'api.tx.members.addStakingAccountCandidate')
+    stubTransaction(api, 'api.tx.members.confirmStakingAccount')
+
     renderResult = render(<Modal />)
   })
 
@@ -80,8 +85,16 @@ describe('UI: ContributeFundsModal', () => {
     expect(screen.getByText('modals.announceWorkEntry.title')).toBeInTheDocument()
   })
 
-  it('Displays correct bounty id', () => {
-    expect(screen.getByDisplayValue(bounty.id)).toBeInTheDocument()
+  it('Displays correct bounty title', () => {
+    expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
+  })
+
+  it('Insufficient funds', async () => {
+    stubTransaction(api, 'api.tx.utility.batch', 9999999)
+    renderResult.unmount()
+    render(<Modal />)
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Displays correct member', () => {
@@ -96,11 +109,7 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555
-    const expected = String(value)
-    const input = screen.getByLabelText('modals.announceWorkEntry.selectAmount')
-    fireEvent.input(input, { target: { value } })
-
+    const expected = formatTokenValue(bounty.entrantStake)
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
