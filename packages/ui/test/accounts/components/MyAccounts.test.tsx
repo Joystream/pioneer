@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { cleanup, render, within } from '@testing-library/react'
+import { cleanup, configure, render, within } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
@@ -19,9 +19,10 @@ import { getMember } from '../../_mocks/members'
 import { MockApiProvider, MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[]; isLoading: boolean } = {
   hasAccounts: false,
   allAccounts: [],
+  isLoading: false,
 }
 
 jest.mock('@/accounts/hooks/useMyAccounts', () => {
@@ -38,6 +39,8 @@ const useBalance = {
 
 jest.mock('@/accounts/hooks/useBalance', () => useBalance)
 
+configure({ testIdAttribute: 'id' })
+
 describe('UI: Accounts list', () => {
   const mockServer = setupMockServer({ noCleanupAfterEach: true })
 
@@ -45,6 +48,7 @@ describe('UI: Accounts list', () => {
 
   beforeEach(async () => {
     useMyAccounts.hasAccounts = false
+    useMyAccounts.isLoading = false
     useMyAccounts.allAccounts.splice(0)
   })
 
@@ -52,12 +56,14 @@ describe('UI: Accounts list', () => {
 
   describe('with empty keyring', () => {
     it('Shows loading screen', async () => {
+      useMyAccounts.isLoading = true
       const profile = render(
         <KeyringContext.Provider value={new Keyring()}>
           <Accounts />
         </KeyringContext.Provider>
       )
-      expect(profile.getByText(/^Loading/i)).toBeDefined()
+
+      expect(profile.getByTestId('accountItemLoading')).toBeDefined()
     })
   })
 
@@ -74,7 +80,7 @@ describe('UI: Accounts list', () => {
       const aliceBox = (await findByText(shortenAddress(aliceAddress)))?.parentNode?.parentNode
       expect(aliceBox).toBeDefined()
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
-      expect(aliceBox?.nextSibling?.textContent).toBe('-')
+      expect(aliceBox?.nextSibling).toHaveAttribute('id', 'tokenValueSkeleton')
     })
 
     it('Renders balance value', async () => {

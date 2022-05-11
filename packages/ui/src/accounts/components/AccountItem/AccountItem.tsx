@@ -10,6 +10,7 @@ import { Account } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Skeleton } from '@/common/components/Skeleton'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 
@@ -22,6 +23,7 @@ interface AccountItemDataProps {
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
   const balance = useBalance(address)
+
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   const [isDropped, setDropped] = useState(false)
@@ -31,7 +33,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
-        <ValueAndLocks align="end">
+        <ValueAndLocks align={balance?.locked && 'end'}>
           <TokenValue value={balance?.locked} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
@@ -73,6 +75,11 @@ export const AccountItemWrap = styled.div`
   height: ${Sizes.accountHeight};
   padding: 16px 8px 16px 16px;
   margin-left: -1px;
+
+  ${Skeleton} {
+    min-width: 100%;
+    height: 1.2rem;
+  }
 `
 
 const AccountControls = styled.div`
