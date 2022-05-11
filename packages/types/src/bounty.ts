@@ -1,21 +1,5 @@
-import {
-  Null,
-  u32,
-  u64,
-  bool,
-  Option,
-  BTreeSet,
-  BTreeMap,
-} from "@polkadot/types";
-
-import {
-  JoyEnum,
-  JoyStructDecorated,
-  MemberId,
-  AccountId,
-  Balance,
-  BlockNumber,
-} from "./common";
+import { Null, u32, u64, bool, Option, BTreeSet, BTreeMap } from '@polkadot/types'
+import { JoyEnum, JoyStructDecorated, MemberId, AccountId, Balance, BlockNumber } from './common'
 
 export class BountyId extends u64 {}
 export class EntryId extends u64 {}
@@ -67,17 +51,14 @@ export class OracleWorkEntryJudgment extends JoyEnum({
   Rejected: Null,
 }) {}
 
-export class OracleJudgment extends BTreeMap.with(
-  EntryId,
-  OracleWorkEntryJudgment
-) {}
+export class OracleJudgment extends BTreeMap.with(EntryId, OracleWorkEntryJudgment) {}
 
 export class Entry extends JoyStructDecorated({
   member_id: MemberId,
   staking_account_id: AccountId,
   submitted_at: BlockNumber,
   work_submitted: bool,
-  oracle_judgment_result: Option.with(OracleJudgment),
+  oracle_judgment_result: Option.with(OracleWorkEntryJudgment),
 }) {}
 
 export class BountyMilestone_Created extends JoyStructDecorated({
@@ -85,11 +66,9 @@ export class BountyMilestone_Created extends JoyStructDecorated({
   has_contributions: bool,
 }) {}
 
-export class BountyMilestone_BountyMaxFundingReached extends JoyStructDecorated(
-  {
-    max_funding_reached_at: BlockNumber,
-  }
-) {}
+export class BountyMilestone_BountyMaxFundingReached extends JoyStructDecorated({
+  max_funding_reached_at: BlockNumber,
+}) {}
 
 export class BountyMilestone_WorkSubmitted extends JoyStructDecorated({
   work_period_started_at: BlockNumber,
@@ -133,6 +112,6 @@ export const bountyTypes = {
   BountyMilestone_JudgmentSubmitted,
   BountyMilestone,
   Bounty,
-};
+}
 
-export default bountyTypes;
+export default bountyTypes

@@ -66,7 +66,6 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'AuctionBidCanceledEvent' }
     | { __typename: 'AuctionBidMadeEvent' }
     | { __typename: 'AuctionCanceledEvent' }
-    | { __typename: 'AuctionStartedEvent' }
     | { __typename: 'BidMadeCompletingAuctionEvent' }
     | { __typename: 'BountyCanceledEvent' }
     | { __typename: 'BountyCreatedEvent' }
@@ -84,6 +83,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'BudgetSpendingEvent' }
     | { __typename: 'BudgetUpdatedEvent' }
     | { __typename: 'BuyNowCanceledEvent' }
+    | { __typename: 'BuyNowPriceUpdatedEvent' }
     | { __typename: 'CandidacyNoteSetEvent' }
     | { __typename: 'CandidacyStakeReleaseEvent' }
     | {
@@ -98,7 +98,8 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: any }
-    | { __typename: 'EnglishAuctionCompletedEvent' }
+    | { __typename: 'EnglishAuctionSettledEvent' }
+    | { __typename: 'EnglishAuctionStartedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -130,11 +131,13 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'NewMissedRewardLevelReachedEvent' }
     | { __typename: 'NftBoughtEvent' }
     | { __typename: 'NftIssuedEvent' }
+    | { __typename: 'NftSlingedBackToTheOriginalArtistEvent' }
     | { __typename: 'NotEnoughCandidatesEvent'; id: string; createdAt: any }
     | { __typename: 'OfferAcceptedEvent' }
     | { __typename: 'OfferCanceledEvent' }
     | { __typename: 'OfferStartedEvent' }
     | { __typename: 'OpenAuctionBidAcceptedEvent' }
+    | { __typename: 'OpenAuctionStartedEvent' }
     | { __typename: 'OpeningAddedEvent' }
     | { __typename: 'OpeningCanceledEvent' }
     | { __typename: 'OpeningFilledEvent' }
