@@ -1,19 +1,19 @@
 import BN from 'bn.js'
-import React, {ReactNode, useCallback} from 'react'
+import React, { ReactNode, useCallback } from 'react'
+import { Event, EventData } from 'xstate/lib/types'
+import { ValidationError } from 'yup'
 
-import {Event, EventData} from 'xstate/lib/types';
-import {SelectAccount} from '@/accounts/components/SelectAccount'
-import {filterByRequiredStake} from '@/accounts/components/SelectAccount/helpers'
-import {useMyBalances} from '@/accounts/hooks/useMyBalances'
-import {Account, LockType} from '@/accounts/types'
-import {InputComponent, InputNumber} from '@/common/components/forms'
-import {getErrorMessage, hasError} from '@/common/components/forms/FieldError'
-import {Row} from '@/common/components/Modal'
-import {RowGapBlock} from '@/common/components/page/PageContent'
-import {TextMedium, ValueInJoys} from '@/common/components/typography'
-import {formatTokenValue} from '@/common/model/formatters'
-import {VoteForCouncilEvent} from '@/council/modals/VoteForCouncil/machine';
-import {ValidationError} from 'yup';
+import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { Account, LockType } from '@/accounts/types'
+import { InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { Row } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { formatTokenValue } from '@/common/model/formatters'
+import { VoteForCouncilEvent } from '@/council/modals/VoteForCouncil/machine'
 
 export interface StakeStepProps {
   stakeLock: LockType
@@ -70,15 +70,17 @@ export const StakeStep = ({
             tight
             units="tJOY"
             validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
-            message={(state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '}
+            message={
+              (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '
+            }
             required
           >
             <InputNumber
               id="amount-input"
               isTokenValue
-              value={(state.context.stake?.toString())}
+              value={state.context.stake?.toString()}
               placeholder={formatTokenValue(minStake)}
-              onChange={(_,value) => send('SET_STAKE', { stake: new BN(value) })}
+              onChange={(_, value) => send('SET_STAKE', { stake: new BN(value) })}
             />
           </InputComponent>
         </RowGapBlock>

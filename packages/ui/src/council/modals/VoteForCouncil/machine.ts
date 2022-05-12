@@ -1,8 +1,8 @@
 import { EventRecord } from '@polkadot/types/interfaces'
-import BN from 'bn.js';
-import {assign, createMachine, State, StateSchema, Typestate} from 'xstate'
+import BN from 'bn.js'
+import { assign, createMachine, State, StateSchema, Typestate } from 'xstate'
 
-import {Account} from '@/accounts/types';
+import { Account } from '@/accounts/types'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -10,7 +10,6 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-
 
 export interface VoteContext {
   stake?: BN
@@ -28,8 +27,8 @@ type VoteForCouncilState =
 
 type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
-type StakeEvent = { type: 'SET_STAKE', stake: BN }
-type AccountEvent = { type: 'SET_ACCOUNT', account: Account }
+type StakeEvent = { type: 'SET_STAKE'; stake: BN }
+type AccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 export type VoteForCouncilEvent = FailEvent | PassEvent | StakeEvent | AccountEvent
 
 export type VoteForCouncilMachineState = State<
@@ -37,7 +36,7 @@ export type VoteForCouncilMachineState = State<
   VoteForCouncilEvent,
   StateSchema<VoteContext>,
   Typestate<VoteContext>
-  >
+>
 
 export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteForCouncilEvent, VoteForCouncilState>({
   initial: 'requirementsVerification',

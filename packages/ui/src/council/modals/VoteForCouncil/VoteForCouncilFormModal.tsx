@@ -1,25 +1,24 @@
 import BN from 'bn.js'
-import React, {useCallback, useEffect} from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-import {Event, EventData} from 'xstate/lib/types'
+import { Event, EventData } from 'xstate/lib/types'
+import * as Yup from 'yup'
 
-import {StakeStep} from '@/accounts/components/StakeStep'
-import {Account} from '@/accounts/types'
-import {ButtonPrimary} from '@/common/components/buttons'
-import {Arrow} from '@/common/components/icons'
-import {Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody} from '@/common/components/Modal'
-import {useModal} from '@/common/hooks/useModal'
-import {useCandidate} from '@/council/hooks/useCandidate'
-import {useMyCastVotes} from '@/council/hooks/useMyCastVotes'
-import {VoteForCouncilEvent, VoteForCouncilMachineState} from '@/council/modals/VoteForCouncil/machine';
+import { StakeStep } from '@/accounts/components/StakeStep'
+import { Account } from '@/accounts/types'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Arrow } from '@/common/components/icons'
+import { Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody } from '@/common/components/Modal'
+import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
+import { BNSchema, minContext } from '@/common/utils/validation'
+import { useCandidate } from '@/council/hooks/useCandidate'
+import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
+import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
+import { AccountSchema } from '@/memberships/model/validation'
 
-import {CandidacyReview} from './components/CandidacyReview'
-import {VoteForCouncilModalCall} from './types'
-import {useSchema} from '@/common/hooks/useSchema';
-import * as Yup from 'yup';
-import {AccountSchema} from '@/memberships/model/validation';
-import {BNSchema, minContext} from '@/common/utils/validation';
-
+import { CandidacyReview } from './components/CandidacyReview'
+import { VoteForCouncilModalCall } from './types'
 
 export interface VoteForCouncilFormModalProps {
   minStake: BN
@@ -44,8 +43,8 @@ export const VoteForCouncilFormModal = ({ minStake, send, state }: VoteForCounci
   )
 
   useEffect(() => {
-    setContext({minStake})
-  },[])
+    setContext({ minStake })
+  }, [])
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">

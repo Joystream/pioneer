@@ -15,11 +15,10 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'
 import { useCommitment } from '@/council/hooks/useCommitment'
-import {VoteContext, VoteForCouncilMachineState} from '@/council/modals/VoteForCouncil/machine';
+import { VoteContext, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 import { TransactionContext } from '@/proposals/modals/AddNewProposal/machine'
 
 import { VoteForCouncilModalCall } from './types'
-
 
 interface Props {
   service: ActorRef<TransactionEvent, State<TransactionContext>>
