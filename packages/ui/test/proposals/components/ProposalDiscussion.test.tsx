@@ -149,7 +149,6 @@ describe('UI: Proposal discussion', () => {
 
     it('Member not selected', async () => {
       renderComponent({ ...baseThread })
-      expect(screen.queryByText(/Pick an active membership to post in this thread/i)).toBeDefined()
       expect(screen.queryByText('Create post')).toBeNull()
     })
   })
