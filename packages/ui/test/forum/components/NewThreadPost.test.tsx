@@ -89,7 +89,7 @@ describe('UI: Add new post', () => {
       })
       expect(useModal.modal).toEqual('CreatePost')
       expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(false)
+      expect(useModal.modalData.isEditable).toEqual(true)
       expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
 
@@ -113,7 +113,7 @@ describe('UI: Add new post', () => {
       })
       expect(useModal.modal).toEqual('CreatePost')
       expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(false)
+      expect(useModal.modalData.isEditable).toEqual(true)
       expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
   })
