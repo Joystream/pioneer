@@ -6,7 +6,7 @@ import { Icon, StyledIcon } from '../Icon'
 
 export const LockIcon = React.memo(({ className }: StyledIcon) => (
   <Icon
-    size="24"
+    size="20"
     viewBox="0 0 24 24"
     preserveAspectRatio="xMidYMid meet"
     fill="none"
