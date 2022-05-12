@@ -1,26 +1,19 @@
 import BN from 'bn.js'
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react'
-import * as Yup from 'yup'
+import React, {ReactNode, useCallback} from 'react'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { Account, LockType } from '@/accounts/types'
-import { InputComponent, InputNumber } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
-import { Row } from '@/common/components/Modal'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
-import { useForm } from '@/common/hooks/useForm'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
-import { AccountSchema } from '@/memberships/model/validation'
-import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
-
-const StakeStepFormSchema = Yup.object().shape({
-  account: AccountSchema.required(),
-  amount: Yup.number().required(),
-})
+import {Event, EventData} from 'xstate/lib/types';
+import {SelectAccount} from '@/accounts/components/SelectAccount'
+import {filterByRequiredStake} from '@/accounts/components/SelectAccount/helpers'
+import {useMyBalances} from '@/accounts/hooks/useMyBalances'
+import {Account, LockType} from '@/accounts/types'
+import {InputComponent, InputNumber} from '@/common/components/forms'
+import {getErrorMessage, hasError} from '@/common/components/forms/FieldError'
+import {Row} from '@/common/components/Modal'
+import {RowGapBlock} from '@/common/components/page/PageContent'
+import {TextMedium, ValueInJoys} from '@/common/components/typography'
+import {formatTokenValue} from '@/common/model/formatters'
+import {VoteForCouncilEvent} from '@/council/modals/VoteForCouncil/machine';
+import {ValidationError} from 'yup';
 
 export interface StakeStepProps {
   stakeLock: LockType
@@ -28,7 +21,9 @@ export interface StakeStepProps {
   accountsFilter?: (option: Account) => boolean
   accountText?: ReactNode
   amountText?: ReactNode
-  onChange: (isValid: boolean, fields: StakeStepFormFields) => void
+  send: (event: Event<VoteForCouncilEvent>, payload?: EventData | undefined) => void
+  state: any
+  errors: ValidationError[]
 }
 
 export const StakeStep = ({
@@ -37,35 +32,18 @@ export const StakeStep = ({
   accountsFilter,
   accountText = defaultAccountText,
   amountText = defaultAmountText(minStake),
-  onChange,
+  send,
+  state,
+  errors,
 }: StakeStepProps) => {
   const balances = useMyBalances()
-  const [amount, setAmount] = useNumberInput(0, minStake)
-  const schema = useMemo(() => {
-    StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
-      minStake.toNumber(),
-      'You need at least ${min} stake'
-    )
-    return StakeStepFormSchema
-  }, [minStake])
-
-  const { changeField, validation, fields } = useForm<StakeStepFormFields>({}, schema)
-  const { isValid, errors } = validation
-
-  useEffect(() => {
-    changeField('amount', amount)
-  }, [amount])
-
-  const stake = new BN(fields.amount ?? minStake)
+  // const { isValid, errors, setContext } = useSchema({ ...state.context }, StakeStepFormSchema)
   const selectAccountFilter = useCallback(
     (account: Account) =>
       (!accountsFilter || accountsFilter(account)) &&
-      filterByRequiredStake(stake, stakeLock, balances[account.address]),
-    [accountsFilter, stake.toString(), JSON.stringify(balances)]
+      filterByRequiredStake(state.context.stake ?? minStake, stakeLock, balances[account.address]),
+    [accountsFilter, state.context.stake?.toString(), JSON.stringify(balances)]
   )
-
-  useEffect(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -74,8 +52,8 @@ export const StakeStep = ({
           <InputComponent label="Select account for Staking" required inputSize="l">
             <SelectAccount
               id="account-select"
-              onChange={(account) => changeField('account', account)}
-              selected={fields.account}
+              onChange={(account) => send('SET_ACCOUNT', { account })}
+              selected={state.context.account}
               minBalance={minStake}
               filter={selectAccountFilter}
             />
@@ -91,15 +69,16 @@ export const StakeStep = ({
             label="Select amount for Staking"
             tight
             units="tJOY"
-            validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
+            validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
+            message={(state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '}
             required
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={(state.context.stake?.toString())}
               placeholder={formatTokenValue(minStake)}
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_,value) => send('SET_STAKE', { stake: new BN(value) })}
             />
           </InputComponent>
         </RowGapBlock>

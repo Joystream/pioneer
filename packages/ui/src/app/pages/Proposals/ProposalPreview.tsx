@@ -52,7 +52,7 @@ export const ProposalPreview = () => {
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
 
   useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
-
+  console.log('proposal', proposal)
   const { showModal } = useModal()
 
   useEffect(() => {

@@ -1,30 +1,41 @@
 import BN from 'bn.js'
-import React, { useCallback, useState } from 'react'
+import React, {useCallback, useEffect} from 'react'
 import styled from 'styled-components'
-import { Event, EventData } from 'xstate/lib/types'
+import {Event, EventData} from 'xstate/lib/types'
 
-import { StakeStep } from '@/accounts/components/StakeStep'
-import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody } from '@/common/components/Modal'
-import { useModal } from '@/common/hooks/useModal'
-import { useCandidate } from '@/council/hooks/useCandidate'
-import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
-import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
+import {StakeStep} from '@/accounts/components/StakeStep'
+import {Account} from '@/accounts/types'
+import {ButtonPrimary} from '@/common/components/buttons'
+import {Arrow} from '@/common/components/icons'
+import {Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody} from '@/common/components/Modal'
+import {useModal} from '@/common/hooks/useModal'
+import {useCandidate} from '@/council/hooks/useCandidate'
+import {useMyCastVotes} from '@/council/hooks/useMyCastVotes'
+import {VoteForCouncilEvent, VoteForCouncilMachineState} from '@/council/modals/VoteForCouncil/machine';
 
-import { CandidacyReview } from './components/CandidacyReview'
-import { StakeEvent, VoteForCouncilModalCall } from './types'
+import {CandidacyReview} from './components/CandidacyReview'
+import {VoteForCouncilModalCall} from './types'
+import {useSchema} from '@/common/hooks/useSchema';
+import * as Yup from 'yup';
+import {AccountSchema} from '@/memberships/model/validation';
+import {BNSchema, minContext} from '@/common/utils/validation';
+
 
 export interface VoteForCouncilFormModalProps {
   minStake: BN
-  send: (event: Event<StakeEvent>, payload?: EventData | undefined) => void
+  send: (event: Event<VoteForCouncilEvent>, payload?: EventData | undefined) => void
+  state?: VoteForCouncilMachineState
 }
 
-export const VoteForCouncilFormModal = ({ minStake, send }: VoteForCouncilFormModalProps) => {
+const StakeStepFormSchema = Yup.object().shape({
+  account: AccountSchema.required(),
+  stake: BNSchema.test(minContext('You need at least ${min} stake', 'minStake')).required(),
+})
+
+export const VoteForCouncilFormModal = ({ minStake, send, state }: VoteForCouncilFormModalProps) => {
   const { hideModal, modalData } = useModal<VoteForCouncilModalCall>()
   const { candidate } = useCandidate(modalData.id)
-
+  const { isValid, setContext, errors } = useSchema({ ...state?.context }, StakeStepFormSchema)
   const { votes } = useMyCastVotes(candidate?.cycleId)
   const alreadyVotedAccounts = votes?.map(({ castBy }) => castBy)
   const accountsFilter = useCallback(
@@ -32,16 +43,9 @@ export const VoteForCouncilFormModal = ({ minStake, send }: VoteForCouncilFormMo
     [alreadyVotedAccounts?.length]
   )
 
-  const [isValid, setValid] = useState(false)
-  const [stake, setStake] = useState<StakeStepFormFields | null>(null)
-
-  const onStakeStepChange = useCallback(
-    (isValid: boolean, fields: StakeStepFormFields) => {
-      setValid(isValid)
-      setStake(fields)
-    },
-    [setValid, setStake]
-  )
+  useEffect(() => {
+    setContext({minStake})
+  },[])
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -53,12 +57,14 @@ export const VoteForCouncilFormModal = ({ minStake, send }: VoteForCouncilFormMo
             stakeLock="Voting"
             minStake={minStake}
             accountsFilter={accountsFilter}
-            onChange={onStakeStepChange}
+            send={send}
+            state={state}
+            errors={errors}
           />
         </ScrollableModalColumn>
       </VoteForCouncilModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={() => send('SET_STAKE', { stake })} size="medium">
+        <ButtonPrimary disabled={!isValid} onClick={() => send('PASS')} size="medium">
           Next step
           <Arrow direction="right" />
         </ButtonPrimary>
