@@ -75,7 +75,7 @@ export const announceCandidacyMachine = createMachine<
   AnnounceCandidacyEvent,
   AnnounceCandidacyState
 >({
-  initial: 'staking',
+  initial: 'rewardAccount',
   states: {
     requirementsVerification: {
       on: {

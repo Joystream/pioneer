@@ -44,13 +44,13 @@ import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/compone
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/AnnounceCandidacyTransaction'
 import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
-import { AnnounceCandidacyFrom } from '@/council/modals/AnnounceCandidacy/helpers'
+import { AnnounceCandidacyFrom, getAnnounceCandidacyFormInitialState } from '@/council/modals/AnnounceCandidacy/helpers'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidacyStatus, ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
+import { AccountSchema, IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
@@ -99,6 +99,9 @@ const baseSchema = Yup.object().shape({
       .test(maxContext('Insufficient funds to cover staking', 'controllerAccountBalance'))
       .required(''),
   }),
+  rewardAccount: Yup.object().shape({
+    rewardAccount: AccountSchema.required(),
+  }),
   'candidateProfile.titleAndBulletPoints': Yup.object().shape({
     title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.'),
     bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
@@ -134,14 +137,7 @@ export const AnnounceCandidacyModal = () => {
       controllerAccountBalance: balances[activeMember?.controllerAccount ?? '']?.transferable,
     } as Conditions,
     mode: 'onChange',
-    defaultValues: {
-      staking: {
-        amount: constants?.election.minCandidacyStake ?? undefined,
-      },
-      'candidateProfile.titleAndBulletPoints': {
-        bulletPoints: [],
-      },
-    },
+    defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),
   })
   const stakingAccount = form.watch('staking.account')
 
@@ -379,9 +375,7 @@ export const AnnounceCandidacyModal = () => {
                   )}
                 />
               )}
-              {state.matches('rewardAccount') && (
-                <RewardAccountStep account={state.context.rewardAccount} setAccount={() => undefined} />
-              )}
+              {state.matches('rewardAccount') && <RewardAccountStep />}
               {state.matches('candidateProfile.titleAndBulletPoints') && (
                 <TitleAndBulletPointsStep
                   title={state.context.title}
@@ -418,7 +412,7 @@ export const AnnounceCandidacyModal = () => {
               disabled={form.formState.isValid}
             />
           )}
-          <ButtonPrimary onClick={() => send('NEXT')} size="medium">
+          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>

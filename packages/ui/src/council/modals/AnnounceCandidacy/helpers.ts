@@ -19,3 +19,21 @@ export interface AnnounceCandidacyFrom {
     banner?: string
   }
 }
+
+export const getAnnounceCandidacyFormInitialState = (minStake: BN) => ({
+  staking: {
+    amount: minStake ?? undefined,
+    account: undefined,
+  },
+  rewardAccount: {
+    rewardAccount: undefined,
+  },
+  'candidateProfile.titleAndBulletPoints': {
+    title: undefined,
+    bulletPoints: [],
+  },
+  'candidateProfile.summaryAndBanner': {
+    summary: undefined,
+    banner: undefined,
+  },
+})
