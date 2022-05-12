@@ -12,7 +12,9 @@ export interface AnnounceCandidacyFrom {
   }
   'candidateProfile.titleAndBulletPoints': {
     title?: string
-    bulletPoints: string[]
+    bulletPoint1?: string
+    bulletPoint2?: string
+    bulletPoint3?: string
   }
   'candidateProfile.summaryAndBanner': {
     summary?: string
@@ -30,10 +32,18 @@ export const getAnnounceCandidacyFormInitialState = (minStake: BN) => ({
   },
   'candidateProfile.titleAndBulletPoints': {
     title: undefined,
-    bulletPoints: [],
+    bulletPoint1: undefined,
+    bulletPoint2: undefined,
+    bulletPoint3: undefined,
   },
   'candidateProfile.summaryAndBanner': {
     summary: undefined,
     banner: undefined,
   },
 })
+
+export const getBulletPoints = (fields: AnnounceCandidacyFrom) => {
+  return Object.entries(fields['candidateProfile.titleAndBulletPoints'])
+    .filter(([field, value]) => field.startsWith('bulletPoint') && value)
+    .map(([, value]) => value)
+}

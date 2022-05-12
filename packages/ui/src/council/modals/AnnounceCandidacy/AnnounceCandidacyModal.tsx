@@ -1,7 +1,6 @@
 import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import { at } from 'lodash'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { StateValueMap } from 'xstate'
@@ -26,6 +25,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { last } from '@/common/utils'
 import {
   BNSchema,
   enhancedGetErrorMessage,
@@ -44,7 +44,11 @@ import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/compone
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/AnnounceCandidacyTransaction'
 import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
-import { AnnounceCandidacyFrom, getAnnounceCandidacyFormInitialState } from '@/council/modals/AnnounceCandidacy/helpers'
+import {
+  AnnounceCandidacyFrom,
+  getAnnounceCandidacyFormInitialState,
+  getBulletPoints,
+} from '@/council/modals/AnnounceCandidacy/helpers'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidacyStatus, ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -62,7 +66,7 @@ const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member):
   info: {
     title: context['candidateProfile.titleAndBulletPoints'].title ?? '',
     summary: context['candidateProfile.summaryAndBanner'].summary ?? '',
-    bulletPoints: context['candidateProfile.titleAndBulletPoints'].bulletPoints,
+    bulletPoints: getBulletPoints(context),
     bannerUri: context['candidateProfile.summaryAndBanner'].banner ?? '',
   },
   member,
@@ -82,9 +86,7 @@ const machineStateConverter = (state: string | StateValueMap): string => {
     return state
   }
 
-  const path = Object.keys(state).flat().join('.')
-
-  return `${path}.${at(state, path)}`
+  return last(Object.entries(state).flat()) as string
 }
 
 interface Conditions extends IStakingAccountSchema {
@@ -102,9 +104,9 @@ const baseSchema = Yup.object().shape({
   rewardAccount: Yup.object().shape({
     rewardAccount: AccountSchema.required(),
   }),
-  'candidateProfile.titleAndBulletPoints': Yup.object().shape({
-    title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.'),
-    bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
+  titleAndBulletPoints: Yup.object().shape({
+    title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.').required(''),
+    bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.').required(''),
     bulletPoint2: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
     bulletPoint3: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
   }),
@@ -132,7 +134,7 @@ export const AnnounceCandidacyModal = () => {
       stakingStatus,
       requiredAmount: stakingStatus === 'free' ? boundingLock : BN_ZERO,
       stakeLock: 'Council Candidate',
-      balances: { ...balance, transferable: new BN(1000000) },
+      balances: balance,
       minStake: constants?.election.minCandidacyStake as BN,
       controllerAccountBalance: balances[activeMember?.controllerAccount ?? '']?.transferable,
     } as Conditions,
@@ -192,7 +194,7 @@ export const AnnounceCandidacyModal = () => {
         activeMember.id,
         metadataToBytes(CouncilCandidacyNoteMetadata, {
           header: formValues['candidateProfile.titleAndBulletPoints'].title,
-          bulletPoints: formValues['candidateProfile.titleAndBulletPoints'].bulletPoints,
+          bulletPoints: getBulletPoints(formValues),
           bannerImageUri: formValues['candidateProfile.summaryAndBanner'].banner,
           description: formValues['candidateProfile.summaryAndBanner'].summary,
         })
@@ -378,10 +380,11 @@ export const AnnounceCandidacyModal = () => {
               {state.matches('rewardAccount') && <RewardAccountStep />}
               {state.matches('candidateProfile.titleAndBulletPoints') && (
                 <TitleAndBulletPointsStep
-                  title={state.context.title}
-                  setTitle={() => undefined}
-                  bulletPoints={state.context.bulletPoints}
-                  setBulletPoints={() => undefined}
+                  errorChecker={enhancedHasError(form.formState.errors, machineStateConverter(state.value))}
+                  errorMessageGetter={enhancedGetErrorMessage(
+                    form.formState.errors,
+                    machineStateConverter(state.value)
+                  )}
                 />
               )}
               {state.matches('candidateProfile.summaryAndBanner') && (
