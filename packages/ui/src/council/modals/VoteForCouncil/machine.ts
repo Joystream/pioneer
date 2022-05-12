@@ -21,7 +21,7 @@ type VoteForCouncilState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
-  | { value: 'transaction'; context: Omit<VoteContext, 'transactionEvents'> }
+  | { value: 'transaction'; context: VoteContext }
   | { value: 'success'; context: VoteContext }
   | { value: 'error'; context: VoteContext }
 
