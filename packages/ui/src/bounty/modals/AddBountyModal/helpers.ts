@@ -82,7 +82,7 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
     workingPeriodStake: BNSchema.test(
-      minContext('Entrant stake must be greater than ${min} JOY', 'minWorkEntrantStake')
+      minContext('Minimum Entrant stake must be greater than ${min} JOY', 'minWorkEntrantStake')
     ).required(''),
     workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
     isWorkingPeriodOpen: Yup.boolean(),
