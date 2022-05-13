@@ -3,8 +3,6 @@ import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import { StateValueMap } from 'xstate'
-import * as Yup from 'yup'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -25,15 +23,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { last } from '@/common/utils'
-import {
-  BNSchema,
-  enhancedGetErrorMessage,
-  enhancedHasError,
-  maxContext,
-  minContext,
-  useYupValidationResolver,
-} from '@/common/utils/validation'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
@@ -46,15 +36,17 @@ import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy
 import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
 import {
   AnnounceCandidacyFrom,
+  baseSchema,
   getAnnounceCandidacyFormInitialState,
   getBulletPoints,
+  machineStateConverter,
 } from '@/council/modals/AnnounceCandidacy/helpers'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidacyStatus, ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { AccountSchema, IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
+import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
@@ -64,10 +56,10 @@ const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member):
   rewardAccount: context.rewardAccount.rewardAccount?.address ?? '',
   stake: context.staking.amount ?? BN_ZERO,
   info: {
-    title: context['candidateProfile.titleAndBulletPoints'].title ?? '',
-    summary: context['candidateProfile.summaryAndBanner'].summary ?? '',
+    title: context.titleAndBulletPoints.title ?? '',
+    summary: context.summaryAndBanner.summary ?? '',
     bulletPoints: getBulletPoints(context),
-    bannerUri: context['candidateProfile.summaryAndBanner'].banner ?? '',
+    bannerUri: context.summaryAndBanner.banner ?? '',
   },
   member,
   cycleId: 0,
@@ -81,36 +73,10 @@ const transactionSteps = [
   { title: 'Set candidacy note' },
 ]
 
-const machineStateConverter = (state: string | StateValueMap): string => {
-  if (typeof state === 'string') {
-    return state
-  }
-
-  return last(Object.entries(state).flat()) as string
-}
-
 interface Conditions extends IStakingAccountSchema {
   minStake: BN
   controllerAccountBalance: BN
 }
-
-const baseSchema = Yup.object().shape({
-  staking: Yup.object().shape({
-    account: StakingAccountSchema.required(),
-    amount: BNSchema.test(minContext('Minimal stake amount is ${min} tJOY', 'minStake'))
-      .test(maxContext('Insufficient funds to cover staking', 'controllerAccountBalance'))
-      .required(''),
-  }),
-  rewardAccount: Yup.object().shape({
-    rewardAccount: AccountSchema.required(),
-  }),
-  titleAndBulletPoints: Yup.object().shape({
-    title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.').required(''),
-    bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.').required(''),
-    bulletPoint2: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
-    bulletPoint3: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
-  }),
-})
 
 export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
@@ -154,7 +120,6 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [Boolean(constants?.election.minCandidacyStake), stakingStatus, Boolean(balance)])
 
-  // console.log('form', form.formState.isValid, form.formState.errors, stakingStatus)
   const addStakingAccountCandidateTransaction = useMemo(() => {
     if (activeMember && api) {
       return api.tx.members.addStakingAccountCandidate(activeMember.id)
@@ -193,10 +158,10 @@ export const AnnounceCandidacyModal = () => {
       return api.tx.council.setCandidacyNote(
         activeMember.id,
         metadataToBytes(CouncilCandidacyNoteMetadata, {
-          header: formValues['candidateProfile.titleAndBulletPoints'].title,
+          header: formValues.titleAndBulletPoints.title,
           bulletPoints: getBulletPoints(formValues),
-          bannerImageUri: formValues['candidateProfile.summaryAndBanner'].banner,
-          description: formValues['candidateProfile.summaryAndBanner'].summary,
+          bannerImageUri: formValues.summaryAndBanner.banner,
+          description: formValues.summaryAndBanner.summary,
         })
       )
     }
@@ -209,31 +174,6 @@ export const AnnounceCandidacyModal = () => {
   }, [connectionState, candidacyNoteTransaction, announceCandidacyTransaction])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
-
-  // const isValidNext = useMemo(() => {
-  //   return true
-  //   if (
-  //     state.matches('staking') &&
-  //     !!state.context.stakingAccount &&
-  //     state.context.stakingAmount &&
-  //     stakingStatus !== 'unknown' &&
-  //     stakingStatus !== 'other'
-  //   ) {
-  //     return true
-  //   } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
-  //     return true
-  //   } else if (
-  //     state.matches('candidateProfile.titleAndBulletPoints') &&
-  //     state.context.title &&
-  //     state.context.bulletPoints.length
-  //   ) {
-  //     return true
-  //   } else if (state.matches('candidateProfile.summaryAndBanner') && state.context.summary) {
-  //     return true
-  //   }
-  //
-  //   return false
-  // }, [JSON.stringify(state.value), JSON.stringify(state.context), activeMember?.id, stakingStatus])
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -387,14 +327,7 @@ export const AnnounceCandidacyModal = () => {
                   )}
                 />
               )}
-              {state.matches('candidateProfile.summaryAndBanner') && (
-                <SummaryAndBannerStep
-                  summary={state.context.summary}
-                  setSummary={() => undefined}
-                  banner={state.context.banner}
-                  setBanner={() => undefined}
-                />
-              )}
+              {state.matches('candidateProfile.summaryAndBanner') && <SummaryAndBannerStep />}
             </FormProvider>
           </StepperBody>
         </StepperProposalWrapper>
@@ -412,7 +345,7 @@ export const AnnounceCandidacyModal = () => {
           {state.matches('candidateProfile.summaryAndBanner') && (
             <PreviewButtons
               candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
-              disabled={form.formState.isValid}
+              disabled={!form.formState.isValid}
             />
           )}
           <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">

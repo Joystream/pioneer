@@ -9,25 +9,6 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-// interface RewardAccountContext extends Required<StakingContext> {
-//   rewardAccount?: Account
-// }
-//
-// interface TitleAndBulletPointsContext extends Required<RewardAccountContext> {
-//   title?: string
-//   bulletPoints: string[]
-// }
-
-// interface SummaryAndBannerContext extends Required<TitleAndBulletPointsContext> {
-//   summary?: string
-//   banner?: string
-// }
-
-// export interface FinalAnnounceCandidacyContext extends Required<TitleAndBulletPointsContext> {
-//   summary: string
-//   banner?: string
-// }
-
 export interface TransactionContext {
   transactionEvents?: EventRecord[]
 }
@@ -50,25 +31,12 @@ export type AnnounceCandidacyState =
   | { value: 'success'; context: TransactionContext }
   | { value: 'error'; context: TransactionContext }
 
-// type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
-// type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
-// type SetTitleEvent = { type: 'SET_TITLE'; title: string }
-// type SetBulletPointsEvent = { type: 'SET_BULLET_POINTS'; bulletPoints: string[] }
-// type SetSummaryEvent = { type: 'SET_SUMMARY'; summary: string }
-// type SetBannerEvent = { type: 'SET_BANNER'; banner: string }
-
 type AnnounceCandidacyEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
   | { type: 'NEXT' }
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
-// | SetAccountEvent
-// | SetAmountEvent
-// | SetTitleEvent
-// | SetBulletPointsEvent
-// | SetSummaryEvent
-// | SetBannerEvent
 
 export const announceCandidacyMachine = createMachine<
   TransactionContext,
