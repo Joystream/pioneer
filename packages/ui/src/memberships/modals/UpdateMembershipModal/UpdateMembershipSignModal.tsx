@@ -1,5 +1,4 @@
 import { MembershipMetadata } from '@joystream/metadata-protobuf'
-import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
@@ -7,6 +6,7 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { Api } from '@/api/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Label } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
@@ -33,7 +33,7 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
   return fields.some((field) => !!object[field])
 }
 
-function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, api: ApiRx | undefined, member: Member) {
+function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, api: Api | undefined, member: Member) {
   const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
 

@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { firstValueFrom } from 'rxjs'
 
 import { useApiBenchmarking } from '@/api/hooks/useApiBenchmarking'
+import { Api } from '@/api/types'
 import { ProxyApi } from '@/proxyApi'
 
 import { useNetworkEndpoints } from '../../hooks/useNetworkEndpoints'
@@ -15,7 +16,7 @@ interface Props {
 type ConnectionState = 'connecting' | 'connected' | 'disconnected'
 
 interface BaseAPI {
-  api?: ProxyApi
+  api?: Api
   isConnected: boolean
   connectionState: ConnectionState
 }
@@ -27,13 +28,13 @@ interface APIConnecting extends BaseAPI {
 }
 
 interface APIConnected extends BaseAPI {
-  api: ProxyApi
+  api: Api
   isConnected: true
   connectionState: 'connected'
 }
 
 interface APIDisconnected extends BaseAPI {
-  api: ProxyApi
+  api: Api
   isConnected: false
   connectionState: 'disconnected'
 }
@@ -41,7 +42,7 @@ interface APIDisconnected extends BaseAPI {
 export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 export const ApiContextProvider = ({ children }: Props) => {
-  const [api, setApi] = useState<ProxyApi>()
+  const [api, setApi] = useState<Api>()
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
   const [endpoints] = useNetworkEndpoints()
 
@@ -75,7 +76,7 @@ export const ApiContextProvider = ({ children }: Props) => {
       <ApiContext.Provider
         value={{
           isConnected: true,
-          api: api as ProxyApi,
+          api: api as Api,
           connectionState,
         }}
       >
@@ -89,7 +90,7 @@ export const ApiContextProvider = ({ children }: Props) => {
       <ApiContext.Provider
         value={{
           isConnected: false,
-          api: api as ProxyApi,
+          api: api as Api,
           connectionState,
         }}
       >

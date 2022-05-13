@@ -1,17 +1,18 @@
-import { ApiRx } from '@polkadot/api'
 import { useEffect } from 'react'
 import { firstValueFrom } from 'rxjs'
 
 import { benchmark } from '@/common/utils/benchmark'
 
+import { Api } from '../types'
+
 const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
 
-const operation = (api: Pick<ApiRx, 'tx'>) => {
+const operation = (api: Api) => {
   const tx = api.tx.members.confirmStakingAccount(0, ALICE)
   return firstValueFrom(tx.paymentInfo(ALICE))
 }
 
-export const useApiBenchmarking = (api: Pick<ApiRx, 'tx'> | undefined) => {
+export const useApiBenchmarking = (api: Api | undefined) => {
   useEffect(() => {
     if (process.env.REACT_APP_API_BENCHMARK?.toUpperCase() === 'TRUE' && api) {
       let waiting = false

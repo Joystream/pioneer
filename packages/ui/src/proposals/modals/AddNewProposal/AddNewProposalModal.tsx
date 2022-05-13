@@ -1,5 +1,4 @@
 import { createType } from '@joystream/types'
-import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -10,6 +9,7 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { Api } from '@/api/types'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
@@ -59,7 +59,7 @@ import { ProposalConstants, ProposalType } from '@/proposals/types'
 import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
 
 export type BaseProposalParams = Exclude<
-  Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
+  Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
 

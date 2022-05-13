@@ -44,7 +44,7 @@ export class ProxyApi extends Events {
   constructor(
     messages: Observable<RawWorkerMessageEvent>,
     postMessage: PostMessage<ClientMessage>,
-    consts: ApiRx['consts']
+    consts: ProxyApi['consts']
   ) {
     super()
     {

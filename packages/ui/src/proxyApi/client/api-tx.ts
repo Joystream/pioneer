@@ -1,16 +1,16 @@
-import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
 import { filter, map, Observable } from 'rxjs'
 
+import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
 import { PostMessage, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
 
 type ObservableMethods = typeof ObservableMethods[number]
 
-export type TxModule = keyof ApiRx['tx']
+export type TxModule = keyof ProxyApi['tx']
 
 export type ClientTxMessage = {
   messageType: 'tx'

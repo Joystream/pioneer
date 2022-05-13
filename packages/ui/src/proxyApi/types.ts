@@ -1,6 +1,6 @@
-import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 
+import { ProxyApi } from '.'
 import { ClientQueryMessage, WorkerQueryMessage } from './client/api-query'
 import { ClientTxMessage, WorkerTxMessage } from './client/api-tx'
 import { ClientProxyMessage, WorkerProxyMessage } from './models/payload'
@@ -23,7 +23,7 @@ export type RawClientMessageEvent = MessageEvent<{
 
 export type RawMessageEvent = RawWorkerMessageEvent | RawClientMessageEvent
 
-export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ApiRx['consts'] } }
+export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ProxyApi['consts'] } }
 export type ClientInitMessage = { messageType: 'init'; payload: string }
 export type WorkerConnectMessage = { messageType: 'isConnected'; payload: boolean }
 

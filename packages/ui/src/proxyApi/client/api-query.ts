@@ -1,8 +1,8 @@
-import { ApiRx } from '@polkadot/api'
 import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
 import { filter, Observable, map } from 'rxjs'
 
+import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
 import { ApiKinds, PostMessage, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
@@ -12,7 +12,7 @@ export type ApiQueryKinds = Exclude<ApiKinds, 'tx'>
 export type ClientQueryMessage<K = ApiQueryKinds> = K extends ApiQueryKinds
   ? {
       messageType: K
-      module: keyof ApiRx[K]
+      module: keyof ProxyApi[K]
       path: string[]
       callId: string
       payload: AnyTuple

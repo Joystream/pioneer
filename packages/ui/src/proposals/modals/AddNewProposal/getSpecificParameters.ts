@@ -3,8 +3,8 @@ import { createType } from '@joystream/types'
 import { ProposalDetailsOf } from '@joystream/types/augment'
 import { WorkingGroupKey } from '@joystream/types/common'
 import { ProposalDetails } from '@joystream/types/src/proposals'
-import { ApiRx } from '@polkadot/api'
 
+import { Api } from '@/api/types'
 import { BN_ZERO } from '@/common/constants'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
@@ -32,7 +32,7 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
   return GroupIdToGroupParam[groupId]
 }
 
-export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): ProposalDetailsOf => {
+export const getSpecificParameters = (api: Api, state: AddNewProposalMachineState): ProposalDetailsOf => {
   if (!isValidSpecificParameters(state)) {
     return createType('ProposalDetailsOf', { Signal: '' })
   }
