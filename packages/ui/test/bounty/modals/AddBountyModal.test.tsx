@@ -414,7 +414,6 @@ describe('UI: AddNewBountyModal', () => {
   async function fillField(id: string, value: number | string) {
     const amountInput = await screen.getByTestId(id)
     fireEvent.change(amountInput, { target: { value } })
-    fireEvent.blur(amountInput)
   }
 
   const triggerSwitch = async (label: string | RegExp) => {
