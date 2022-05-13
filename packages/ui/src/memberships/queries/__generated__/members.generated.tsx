@@ -28,6 +28,13 @@ export type MemberFieldsFragment = {
     isLead: boolean
     group: { __typename: 'WorkingGroup'; name: string }
   }>
+  stakingaccountaddedeventmember?: Array<{
+    __typename: 'StakingAccountAddedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+    account: string
+  }> | null
 }
 
 export type MemberWithDetailsFieldsFragment = {
@@ -87,6 +94,13 @@ export type MemberWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }>
   metadata: {
     __typename: 'MemberMetadata'
@@ -101,6 +115,13 @@ export type MemberWithDetailsFieldsFragment = {
     isLead: boolean
     group: { __typename: 'WorkingGroup'; name: string }
   }>
+  stakingaccountaddedeventmember?: Array<{
+    __typename: 'StakingAccountAddedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+    account: string
+  }> | null
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
@@ -137,6 +158,13 @@ export type GetMembersQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }>
 }
 
@@ -212,6 +240,13 @@ export type GetMemberQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }>
     metadata: {
       __typename: 'MemberMetadata'
@@ -226,6 +261,13 @@ export type GetMemberQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
 }
 
@@ -262,6 +304,13 @@ export type SearchMembersQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }>
 }
 
@@ -306,6 +355,13 @@ export type GetMemberMentionQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
 }
 
@@ -378,6 +434,12 @@ export const MemberFieldsFragmentDoc = gql`
       isLead
     }
     createdAt
+    stakingaccountaddedeventmember {
+      createdAt
+      inBlock
+      network
+      account
+    }
   }
 `
 export const MemberWithDetailsFieldsFragmentDoc = gql`

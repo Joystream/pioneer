@@ -32,6 +32,13 @@ export type WorkerProposalDetailsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -105,6 +112,13 @@ export type ProposalFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -138,6 +152,13 @@ export type VoteFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -176,6 +197,13 @@ export type VoteWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -219,6 +247,13 @@ export type ProposalWithDetailsFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
   createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -284,6 +319,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -322,6 +364,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -376,6 +425,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -412,6 +468,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -446,6 +509,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -502,6 +572,13 @@ export type ProposalWithDetailsFieldsFragment = {
             isLead: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
         }
         status:
           | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -539,6 +616,13 @@ export type ProposalWithDetailsFieldsFragment = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       status:
         | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -592,6 +676,13 @@ export type ProposalWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -638,6 +729,13 @@ export type DiscussionPostFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     status:
       | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -675,6 +773,13 @@ export type DiscussionPostFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -719,6 +824,13 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -808,6 +920,13 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -887,6 +1006,13 @@ export type GetProposalsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -946,6 +1072,13 @@ export type GetProposalQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
     }>
     createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -1011,6 +1144,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1049,6 +1189,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1103,6 +1250,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1139,6 +1293,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1173,6 +1334,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1229,6 +1397,13 @@ export type GetProposalQuery = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
           status:
             | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1266,6 +1441,13 @@ export type GetProposalQuery = {
             isLead: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
         }
         status:
           | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1319,6 +1501,13 @@ export type GetProposalQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }
@@ -1389,6 +1578,13 @@ export type GetVoteWithDetailsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }
@@ -1448,6 +1644,13 @@ export type GetProposalVotesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -1545,6 +1748,13 @@ export type GetProposalDiscussionPostMentionQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }

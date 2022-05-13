@@ -29,6 +29,12 @@ fragment MemberFields on Membership {
     isLead
   }
   createdAt
+  stakingaccountaddedeventmember {
+    createdAt
+    inBlock
+    network
+    account
+  }
 }
 
 fragment MemberWithDetailsFields on Membership {

@@ -2,6 +2,11 @@ import { Address, Block } from '../../common/types'
 
 type ID = string
 
+export interface BoundAccountEvent {
+  createdAtBlock: Block
+  account: Address
+}
+
 export interface MemberRole {
   id: string
   groupName: string
@@ -25,6 +30,7 @@ export interface Member {
   invitedBy?: ID
   referredBy?: ID
   createdAt: string
+  boundAccountsEvents?: BoundAccountEvent[]
 }
 
 export type GenesisEntry = {
