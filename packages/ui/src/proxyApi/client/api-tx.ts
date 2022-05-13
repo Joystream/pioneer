@@ -10,11 +10,11 @@ import { apiInterfaceProxy } from '../utils/proxy'
 
 type ObservableMethods = typeof ObservableMethods[number]
 
-type Module = keyof ApiRx['tx']
+export type TxModule = keyof ApiRx['tx']
 
 export type ClientTxMessage = {
   messageType: 'tx'
-  module: Module
+  module: TxModule
   txKey: string
   txId: string
 } & (
@@ -38,18 +38,19 @@ export const tx = (messages: Observable<RawWorkerMessageEvent>, postMessage: Pos
   )
 
   return apiInterfaceProxy<'tx'>((module, txKey) => (...params) => {
-    const txId = uniqueId(`tx.${module}.${txKey}.`)
+    const transaction = {
+      kind: 'SubmittableExtrinsicProxy',
+      txId: uniqueId(`tx.${module}.${txKey}.`),
+      ...Object.fromEntries(ObservableMethods.map(addObservableMethodEntry)),
+    }
 
-    const _messages = txMessages.pipe(filter((message) => message?.txId === txId)) as Observable<WorkerTxMessage>
-
+    const _messages = txMessages.pipe(filter(({ txId }) => txId === transaction.txId)) as Observable<WorkerTxMessage>
     const _postMessage = (message: Pick<ClientTxMessage, 'method' | 'payload'>) =>
-      postMessage({ messageType: 'tx', module, txKey, txId, ...message })
+      postMessage({ messageType: 'tx', module, txKey, txId: transaction.txId, ...message })
 
     _postMessage({ method: 'transaction', payload: params })
 
-    return {
-      ...Object.fromEntries(ObservableMethods.map(addObservableMethodEntry)),
-    }
+    return transaction
 
     function addObservableMethodEntry(method: ObservableMethods) {
       return [

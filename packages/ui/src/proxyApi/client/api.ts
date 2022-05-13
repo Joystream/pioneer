@@ -5,14 +5,11 @@ import { distinctUntilChanged, filter, fromEvent, map, Observable } from 'rxjs'
 import { firstWhere } from '@/common/utils/rx'
 
 import { deserializeMessage, serializePayload, WorkerProxyMessage } from '../models/payload'
-import { PostMessage, RawWorkerMessageEvent } from '../types'
+import { ClientMessage, PostMessage, RawWorkerMessageEvent, WorkerConnectMessage, WorkerInitMessage } from '../types'
 import { workerApi as launchWorker } from '../worker'
 
 import { query } from './api-query'
 import { tx } from './api-tx'
-
-export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ApiRx['consts'] } }
-export type WorkerConnectMessage = { messageType: 'isConnected'; payload: boolean }
 
 export class ProxyApi extends Events {
   isConnected = true
@@ -32,7 +29,7 @@ export class ProxyApi extends Events {
       filter(({ data }) => data.messageType === 'proxy'),
       deserializeMessage<WorkerProxyMessage>()
     )
-    const postMessage: PostMessage = (message) =>
+    const postMessage: PostMessage<ClientMessage> = (message) =>
       worker.postMessage({ ...message, payload: serializePayload(message.payload, workerProxyMessages, postMessage) })
 
     postMessage({ messageType: 'init', payload: providerEndpoint })
@@ -44,7 +41,11 @@ export class ProxyApi extends Events {
     )
   }
 
-  constructor(messages: Observable<RawWorkerMessageEvent>, postMessage: PostMessage, consts: ApiRx['consts']) {
+  constructor(
+    messages: Observable<RawWorkerMessageEvent>,
+    postMessage: PostMessage<ClientMessage>,
+    consts: ApiRx['consts']
+  ) {
     super()
     {
       this.consts = consts

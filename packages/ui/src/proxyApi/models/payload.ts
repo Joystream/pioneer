@@ -10,7 +10,7 @@ import { AnyObject } from '@/common/types'
 import { mapObject } from '@/common/utils/object'
 import { recursiveProxy } from '@/common/utils/proxy'
 
-import { AnyMessage, PostMessage, RawMessageEvent } from '../types'
+import { AnyMessage, PostMessage, RawMessageEvent, TransactionsRecord } from '../types'
 
 export interface WorkerProxyMessage {
   messageType: 'proxy'
@@ -28,7 +28,7 @@ export interface ClientProxyMessage {
 export const serializePayload = (
   payload: any,
   messages?: Observable<WorkerProxyMessage>,
-  postMessage?: PostMessage<any>
+  postMessage?: PostMessage<ClientProxyMessage>
 ): any => {
   if (typeof payload === 'function') {
     return
@@ -39,6 +39,8 @@ export const serializePayload = (
   } else if (payload instanceof BN) {
     // TODO add support for Long
     return { type: 'BN', value: payload.toArray() }
+  } else if (payload.kind === 'SubmittableExtrinsicProxy') {
+    return { kind: payload.kind, txId: payload.txId }
   } else if (isSigner(payload)) {
     return serializeProxy(payload, {}, 'signer', messages, postMessage)
   } else {
@@ -49,7 +51,8 @@ export const serializePayload = (
 export const deserializePayload = <T>(
   payload: any,
   messages?: Observable<ClientProxyMessage>,
-  postMessage?: PostMessage<any>
+  postMessage?: PostMessage<WorkerProxyMessage>,
+  transactionsRecord?: TransactionsRecord
 ): T => {
   if (typeof payload !== 'object' || payload === null) {
     return payload
@@ -57,10 +60,12 @@ export const deserializePayload = <T>(
     return deserializeCodec(payload) as unknown as T
   } else if (payload.type === 'BN') {
     return new BN(payload.value) as unknown as T
+  } else if (transactionsRecord && payload.kind === 'SubmittableExtrinsicProxy') {
+    return transactionsRecord[payload.txId] as unknown as T
   } else if (payload.kind === 'proxy') {
     return deserializeProxy(payload.json, payload.proxyId, messages, postMessage)
   } else {
-    return mapObject(payload, (payload) => deserializePayload(payload, messages, postMessage)) as T
+    return mapObject(payload, (payload) => deserializePayload(payload, messages, postMessage, transactionsRecord)) as T
   }
 }
 
@@ -74,7 +79,7 @@ const serializeProxy = (
   json: AnyObject = {},
   name = '',
   messages?: Observable<WorkerProxyMessage>,
-  postMessage?: PostMessage<any>
+  postMessage?: PostMessage<ClientProxyMessage>
 ) => {
   if (!messages || !postMessage) {
     throw Error('Serializing proxies from the Web Worker is not supported yet')
@@ -91,14 +96,14 @@ const deserializeProxy = (
   json: any,
   proxyId: string,
   messages?: Observable<ClientProxyMessage>,
-  postMessage?: PostMessage<any>
+  postMessage?: PostMessage<WorkerProxyMessage>
 ) => {
   if (!messages || !postMessage) {
     throw Error('Deserializing object is currently only supported from the Web Worker')
   }
 
   return new Proxy(json, {
-    get(json, prop) {
+    get(json, prop: string) {
       return prop in json
         ? json[prop]
         : (...payload: AnyTuple) => {
