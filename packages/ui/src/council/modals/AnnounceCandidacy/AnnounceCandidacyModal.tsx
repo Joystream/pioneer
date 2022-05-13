@@ -114,6 +114,10 @@ export const AnnounceCandidacyModal = () => {
   }, [stakingAccount])
 
   useEffect(() => {
+    form.trigger(machineStateConverter(state.value))
+  }, [machineStateConverter(state.value)])
+
+  useEffect(() => {
     if (state.matches('staking')) {
       form.trigger('staking.amount')
       form.trigger('staking.account')

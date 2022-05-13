@@ -29,22 +29,22 @@ export interface AnnounceCandidacyFrom {
 
 export const baseSchema = Yup.object().shape({
   staking: Yup.object().shape({
-    account: StakingAccountSchema.required(),
+    account: StakingAccountSchema.required('This field is required'),
     amount: BNSchema.test(minContext('Minimal stake amount is ${min} tJOY', 'minStake'))
       .test(maxContext('Insufficient funds to cover staking', 'controllerAccountBalance'))
-      .required(''),
+      .required('This field is required'),
   }),
   rewardAccount: Yup.object().shape({
-    rewardAccount: AccountSchema.required(),
+    rewardAccount: AccountSchema.required('This field is required'),
   }),
   titleAndBulletPoints: Yup.object().shape({
-    title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.').required(''),
-    bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.').required(''),
+    title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.').required('This field is required'),
+    bulletPoint1: Yup.string().trim().max(120, 'Maximum length is 120 symbols.').required('This field is required'),
     bulletPoint2: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
     bulletPoint3: Yup.string().trim().max(120, 'Maximum length is 120 symbols.'),
   }),
   summaryAndBanner: Yup.object().shape({
-    summary: Yup.string().trim().required(''),
+    summary: Yup.string().trim().required('This field is required'),
     banner: Yup.string().trim(),
   }),
 })
