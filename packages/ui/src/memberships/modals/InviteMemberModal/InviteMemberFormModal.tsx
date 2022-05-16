@@ -1,9 +1,11 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
@@ -19,7 +21,6 @@ import {
 } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
-import { useForm } from '../../../common/hooks/useForm'
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
@@ -40,35 +41,55 @@ const InviteMemberSchema = Yup.object().shape({
   handle: HandleSchema.required('Membership handle is required'),
 })
 
-const initializer = {
+const formDefaultValues = {
   name: '',
   handle: '',
   about: '',
   avatarUri: '',
   hasTerms: false,
+  invitor: undefined,
 }
 
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const { active } = useMyMemberships()
   const keyring = useKeyring()
+  const [formHandleMap, setFormHandleMap] = useState<MemberFormFields>()
+  // const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, InviteMemberSchema)
+  // const { isValid, errors, setContext } = validation
 
-  const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, InviteMemberSchema)
-  const { isValid, errors, setContext } = validation
+  const handleHash = blake2AsHex(formHandleMap)
+  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
+    formHandleMap,
+    api,
+  ])
 
-  const { rootAccount, controllerAccount, handle, name, avatarUri, about } = fields
+  const form = useForm({
+    resolver: useYupValidationResolver(InviteMemberSchema),
+    context: { size: potentialMemberIdSize, keyring },
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: formDefaultValues,
+  })
 
-  const onCreate = () => onSubmit(fields)
-  const handleHash = blake2AsHex(handle)
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle, api])
+  const handle = form.watch('handle')
+
+  const { rootAccount, controllerAccount, name, avatarUri, about, invitor, errors } = form.getValues()
 
   useEffect(() => {
-    return active && changeField('invitor', active)
-  }, [active])
+    if (handle) {
+      setFormHandleMap(handle)
+    }
+  }, [handle])
+  // useEffect(() => {
+  //   return active && changeField('invitor', active)
+  // }, [active])
 
-  useEffect(() => {
-    setContext({ size: potentialMemberIdSize, keyring })
-  }, [potentialMemberIdSize?.toString()])
+  // useEffect(() => {
+  //   setContext({ size: potentialMemberIdSize, keyring })
+  // }, [potentialMemberIdSize?.toString()])
+
+  const onCreate = () => onSubmit(form.getValues() as any)
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -76,7 +97,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <InputComponent label="Inviting member" inputSize="l">
-            <SelectMember selected={fields.invitor} onChange={(member) => changeField('invitor', member)} />
+            <SelectMember selected={invitor} onChange={(member) => form.setValue('invitor', member)} />
           </InputComponent>
 
           <Row>
@@ -95,8 +116,9 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               <InputText
                 id="root-account"
                 placeholder="Enter the account of the person being invited."
+                name="rootAccount"
                 value={rootAccount?.address ?? ''}
-                onChange={(event) => changeField('rootAccount', { name: undefined, address: event.target.value })}
+                onChange={(event) => form.setValue('rootAccount', { name: undefined, address: event.target.value })}
               />
             </InputComponent>
           </Row>
@@ -114,7 +136,9 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="controller-account"
                 placeholder="Enter the account of the person being invited."
                 value={controllerAccount?.address ?? ''}
-                onChange={(event) => changeField('controllerAccount', { name: undefined, address: event.target.value })}
+                onChange={(event) =>
+                  form.setValue('controllerAccount', { name: undefined, address: event.target.value })
+                }
               />
             </InputComponent>
           </Row>
@@ -139,34 +163,19 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               validation={hasError('handle', errors) ? 'invalid' : undefined}
               message={hasError('handle', errors) ? getErrorMessage('handle', errors) : 'Do not use same handles'}
             >
-              <InputText
-                id="member-handle"
-                placeholder="Type"
-                value={handle}
-                onChange={(event) => changeField('handle', event.target.value)}
-              />
+              <InputText id="member-handle" placeholder="Type" name="handle" />
             </InputComponent>
           </Row>
 
           <Row>
             <InputComponent id="member-name" label="Member Name">
-              <InputText
-                id="member-name"
-                placeholder="Type"
-                value={name}
-                onChange={(event) => changeField('name', event.target.value)}
-              />
+              <InputText id="member-name" placeholder="Type" name="name" />
             </InputComponent>
           </Row>
 
           <Row>
             <InputComponent id="member-about" label="About member" inputSize="l">
-              <InputTextarea
-                id="member-about"
-                value={about}
-                placeholder="Type"
-                onChange={(event) => changeField('about', event.target.value)}
-              />
+              <InputTextarea id="member-about" placeholder="Type" name="about" />
             </InputComponent>
           </Row>
 
@@ -183,17 +192,13 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               }
               placeholder="Image URL"
             >
-              <InputText
-                id="member-avatar"
-                value={avatarUri}
-                onChange={(event) => changeField('avatarUri', event.target.value)}
-              />
+              <InputText id="member-avatar" name="avatarUri" />
             </InputComponent>
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
+        <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
           Invite a Member
         </ButtonPrimary>
       </ModalFooter>
