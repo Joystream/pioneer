@@ -61,7 +61,11 @@ export const ProposalPreview = () => {
       .flat()
       .map((vote) => vote.voter)
     const councilMembers = council?.councilors.map((councilor) => councilor.member)
-    return councilMembers?.filter((member) => !votedMembers.some((voted) => voted.id === member.id)) ?? []
+    return (
+      councilMembers?.filter(
+        (member) => !votedMembers.some((voted) => voted.id === member.id) && member.id !== proposal.proposer.id
+      ) ?? []
+    )
   }, [council, proposal])
 
   useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
