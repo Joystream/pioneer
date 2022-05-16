@@ -38,7 +38,7 @@ export const serializePayload = (
     return serializeCodec(payload)
   } else if (payload instanceof BN) {
     // TODO add support for Long
-    return { type: 'BN', value: payload.toArray() }
+    return { kind: 'BN', value: payload.toArray() }
   } else if (payload.kind === 'SubmittableExtrinsicProxy') {
     return { kind: payload.kind, txId: payload.txId }
   } else if (isSigner(payload)) {
@@ -48,24 +48,24 @@ export const serializePayload = (
   }
 }
 
-export const deserializePayload = <T>(
+export const deserializePayload = (
   payload: any,
   messages?: Observable<ClientProxyMessage>,
   postMessage?: PostMessage<WorkerProxyMessage>,
   transactionsRecord?: TransactionsRecord
-): T => {
+): any => {
   if (typeof payload !== 'object' || payload === null) {
     return payload
   } else if (isSerializedCodec(payload)) {
-    return deserializeCodec(payload) as unknown as T
-  } else if (payload.type === 'BN') {
-    return new BN(payload.value) as unknown as T
+    return deserializeCodec(payload)
+  } else if (payload.kind === 'BN') {
+    return new BN(payload.value)
   } else if (transactionsRecord && payload.kind === 'SubmittableExtrinsicProxy') {
-    return transactionsRecord[payload.txId] as unknown as T
+    return transactionsRecord[payload.txId]
   } else if (payload.kind === 'proxy') {
     return deserializeProxy(payload.json, payload.proxyId, messages, postMessage)
   } else {
-    return mapObject(payload, (payload) => deserializePayload(payload, messages, postMessage, transactionsRecord)) as T
+    return mapObject(payload, (payload) => deserializePayload(payload, messages, postMessage, transactionsRecord))
   }
 }
 
