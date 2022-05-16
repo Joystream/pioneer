@@ -223,23 +223,16 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Input
 })
 
 type TextAreaProps = InputProps<HTMLTextAreaElement & HTMLInputElement>
-export const InputTextarea = React.memo(
-  ({ id, value, required, validation, placeholder, disabled, onChange }: TextAreaProps) => {
-    return (
-      <Textarea
-        id={id}
-        name={id}
-        value={value ?? ''}
-        required={required}
-        validation={validation}
-        placeholder={placeholder}
-        disabled={disabled}
-        onChange={onChange}
-        autoComplete="off"
-      />
-    )
+
+export const InputTextarea = React.memo(({ name, ...props }: TextAreaProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <Textarea {...props} />
   }
-)
+
+  return <Textarea {...props} {...formContext.register(name)} />
+})
 
 const InputWithNothing = css<InputProps>`
   padding: 0 16px 1px 16px;
