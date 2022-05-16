@@ -13,7 +13,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
-import { VoteForCouncilEvent } from '@/council/modals/VoteForCouncil/machine'
+import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 
 export interface StakeStepProps {
   stakeLock: LockType
@@ -22,7 +22,7 @@ export interface StakeStepProps {
   accountText?: ReactNode
   amountText?: ReactNode
   send: (event: Event<VoteForCouncilEvent>, payload?: EventData | undefined) => void
-  state: any
+  state: VoteForCouncilMachineState
   errors: ValidationError[]
 }
 
