@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { EventData, Event } from 'xstate/lib/types'
 import * as Yup from 'yup'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -17,51 +18,29 @@ import {
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
-import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
+import { useSchema } from '@/common/hooks/useSchema'
 import { ProposalPreview } from '@/proposals/modals/VoteForProposal/components/ProposalPreview/ProposalPreview'
-import { VoteStatus } from '@/proposals/modals/VoteForProposal/machine'
+import { VoteContext, VoteForProposalEvent } from '@/proposals/modals/VoteForProposal/machine'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
 import { ProposalWithDetails } from '@/proposals/types'
 
-interface FormFields {
-  voteStatus?: VoteStatus
-  rationale?: string
-}
-
 interface Props {
-  setStatus: (status: VoteStatus) => void
-  setRationale: (rationale: string) => void
-  onNext: () => void
-  proposalTitle: string
-  proposalType: string
-  proposalRationale: string
-  proposalDetails?: ProposalWithDetails['details']
+  proposal: ProposalWithDetails
+  send: (event: Event<VoteForProposalEvent>, payload?: EventData) => void
+  context: VoteContext
 }
 
 const FormSchema = Yup.object().shape({
-  voteStatus: Yup.string().required(),
   rationale: Yup.string().required(),
+  voteStatus: Yup.mixed().oneOf(['Approve', 'Reject', 'Abstain', 'Slash']),
 })
 
-export const VoteForProposalModalForm = ({
-  setStatus,
-  setRationale,
-  onNext,
-  proposalTitle,
-  proposalType,
-  proposalRationale,
-  proposalDetails,
-}: Props) => {
+export const VoteForProposalModalForm = ({ proposal, send, context }: Props) => {
   const { hideModal } = useModal<VoteForProposalModalCall>()
-  const { fields, changeField, validation } = useForm<FormFields>({}, FormSchema)
-  const { isValid } = validation
-  const isRejected = fields.voteStatus === 'Reject' || fields.voteStatus === 'Slash'
+  const { isValid } = useSchema({ ...context }, FormSchema)
 
-  const setVoteStatus = (status: VoteStatus) => {
-    changeField('voteStatus', status)
-    setStatus(status)
-  }
+  const isRejected = context.voteStatus === 'Reject' || context.voteStatus === 'Slash'
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -69,10 +48,10 @@ export const VoteForProposalModalForm = ({
       <VoteForProposalModalBody>
         <ProposalPreviewColumn>
           <ProposalPreview
-            proposalTitle={proposalTitle}
-            proposalType={proposalType}
-            proposalRationale={proposalRationale}
-            proposalDetails={proposalDetails}
+            proposalTitle={proposal.title}
+            proposalType={proposal.type}
+            proposalRationale={proposal.rationale}
+            proposalDetails={proposal.details}
           />
         </ProposalPreviewColumn>
         <ScrollableModalColumn>
@@ -86,20 +65,24 @@ export const VoteForProposalModalForm = ({
               <ButtonsGroup>
                 <ButtonPrimary
                   size="medium"
-                  onClick={() => setVoteStatus('Approve')}
-                  outlined={fields.voteStatus !== 'Approve'}
+                  onClick={() => send('SET_VOTE_STATUS', { status: 'Approve' })}
+                  outlined={context.voteStatus !== 'Approve'}
                 >
                   <VerifiedMemberIcon />
                   Approve
                 </ButtonPrimary>
-                <ButtonPrimary size="medium" onClick={() => setVoteStatus('Reject')} outlined={!isRejected}>
+                <ButtonPrimary
+                  size="medium"
+                  onClick={() => send('SET_VOTE_STATUS', { status: 'Reject' })}
+                  outlined={!isRejected}
+                >
                   <CrossIcon />
                   Reject
                 </ButtonPrimary>
                 <ButtonPrimary
                   size="medium"
-                  onClick={() => setVoteStatus('Abstain')}
-                  outlined={fields.voteStatus !== 'Abstain'}
+                  onClick={() => send('SET_VOTE_STATUS', { status: 'Abstain' })}
+                  outlined={context.voteStatus !== 'Abstain'}
                 >
                   <CrossIcon />
                   Abstain
@@ -112,8 +95,8 @@ export const VoteForProposalModalForm = ({
                 <ToggleCheckbox
                   falseLabel="No"
                   trueLabel="Yes"
-                  checked={fields.voteStatus === 'Slash'}
-                  onChange={(isSet) => setVoteStatus(isSet ? 'Slash' : 'Reject')}
+                  checked={context.voteStatus === 'Slash'}
+                  onChange={(isSet) => send('SET_VOTE_STATUS', { status: isSet ? 'Slash' : 'Reject' })}
                 />
                 <Tooltip tooltipText="Lorem ipsum...">
                   <TooltipDefault />
@@ -124,10 +107,7 @@ export const VoteForProposalModalForm = ({
               <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
                 <CKEditor
                   id="field-rationale"
-                  onChange={(event, editor) => {
-                    changeField('rationale', editor.getData())
-                    setRationale(editor.getData())
-                  }}
+                  onChange={(_, editor) => send('SET_RATIONALE', { rationale: editor.getData() })}
                 />
               </InputComponent>
             </Row>
@@ -135,7 +115,7 @@ export const VoteForProposalModalForm = ({
         </ScrollableModalColumn>
       </VoteForProposalModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={onNext} size="medium">
+        <ButtonPrimary disabled={!isValid} onClick={() => send('PASS')} size="medium">
           Sign transaction and Vote
           <Arrow direction="right" />
         </ButtonPrimary>
