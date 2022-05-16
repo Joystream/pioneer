@@ -32,7 +32,7 @@ export interface NewPostProps {
 export const NewThreadPost = React.forwardRef(
   ({ getTransaction, replyTo, removeReply, replyToLink }: NewPostProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const [postText, setText] = useState('')
-    const [isEditable, setEditable] = useState(false)
+    const [isEditable, setEditable] = useState(true)
     const { active } = useMyMemberships()
     const { showModal } = useModal()
     const [editorRef, setEditorRef] = useState<RefObject<HTMLDivElement>>(useRef<HTMLDivElement>(null))
