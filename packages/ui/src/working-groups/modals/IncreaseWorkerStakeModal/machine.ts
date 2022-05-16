@@ -1,25 +1,26 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
+import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-import { IncreaseStakeFormFields } from '@/working-groups/modals/IncreaseWorkerStakeModal/IncreaseWorkerStakeModal'
 
 interface IncreaseStakeContext {
-  form?: IncreaseStakeFormFields
+  stake?: BN
   transactionEvents?: EventRecord[]
 }
 
 type IncreaseStakeState =
   | { value: 'prepare'; context: EmptyObject }
-  | { value: 'transaction'; context: { form: IncreaseStakeFormFields } }
+  | { value: 'transaction'; context: IncreaseStakeContext }
   | { value: 'success'; context: Required<IncreaseStakeContext> }
-  | { value: 'error'; context: { form: IncreaseStakeFormFields; transactionEvents: EventRecord[] } }
+  | { value: 'error'; context: Required<IncreaseStakeContext> }
 
 export type IncreaseStakeEvent =
   | { type: 'PASS' }
   | { type: 'FAIL' }
-  | { type: 'DONE'; form: IncreaseStakeFormFields }
+  | { type: 'DONE'; stake: BN }
+  | { type: 'SET_STAKE'; stake: BN }
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
 
@@ -28,9 +29,11 @@ export const increaseStakeMachine = createMachine<IncreaseStakeContext, Increase
   states: {
     prepare: {
       on: {
-        DONE: {
+        SET_STAKE: {
+          actions: assign({ stake: (_, event) => event.stake }),
+        },
+        PASS: {
           target: 'transaction',
-          actions: assign({ form: (_, event) => event.form }),
         },
       },
     },
