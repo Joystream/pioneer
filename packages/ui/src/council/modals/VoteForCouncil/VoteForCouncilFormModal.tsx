@@ -23,7 +23,7 @@ import { VoteForCouncilModalCall } from './types'
 export interface VoteForCouncilFormModalProps {
   minStake: BN
   send: (event: Event<VoteForCouncilEvent>, payload?: EventData | undefined) => void
-  state?: VoteForCouncilMachineState
+  state: VoteForCouncilMachineState
 }
 
 const StakeStepFormSchema = Yup.object().shape({
@@ -50,7 +50,7 @@ export const VoteForCouncilFormModal = ({ minStake, send, state }: VoteForCounci
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Vote for council" />
       <VoteForCouncilModalBody>
-        <CandidacyReview candidate={candidate} minStake={minStake} />
+        <CandidacyReview candidate={candidate} minStake={minStake} state={state} />
         <ScrollableModalColumn>
           <StakeStep
             stakeLock="Voting"
