@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { useProposal } from '@/proposals/hooks/useProposal'
+import { ProposalWithDetails } from '@/proposals/types'
 
 import { VoteForProposalModalForm } from './VoteForProposalModalForm'
 
@@ -25,17 +26,7 @@ interface Props {
 
 const ConnectedVoteForProposalModalForm = ({ id }: { id: string }) => {
   const { proposal } = useProposal(id)
-  return (
-    <VoteForProposalModalForm
-      onNext={() => true}
-      setRationale={() => true}
-      setStatus={() => true}
-      proposalTitle={proposal?.title || ''}
-      proposalType={proposal?.type || ''}
-      proposalRationale={proposal?.rationale || ''}
-      proposalDetails={proposal?.details}
-    />
-  )
+  return <VoteForProposalModalForm context={{}} send={() => undefined} proposal={proposal as ProposalWithDetails} />
 }
 
 const Template: Story<Props> = ({ id, hideModal, showModal }) => {
