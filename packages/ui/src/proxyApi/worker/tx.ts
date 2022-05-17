@@ -3,7 +3,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import { Observable } from 'rxjs'
 
-import { ClientTxMessage, TxModule, WorkerTxMessage } from '../client/api-tx'
+import { ClientTxMessage, TxModule, WorkerTxMessage } from '../client/tx'
 import { PostMessage } from '../types'
 
 export const transactionsRecord: Record<string, SubmittableExtrinsic<'rxjs'>> = {}

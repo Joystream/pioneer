@@ -1,8 +1,8 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 
 import { ProxyApi } from '.'
-import { ClientQueryMessage, WorkerQueryMessage } from './client/api-query'
-import { ClientTxMessage, WorkerTxMessage } from './client/api-tx'
+import { ClientQueryMessage, WorkerQueryMessage } from './client/query'
+import { ClientTxMessage, WorkerTxMessage } from './client/tx'
 import { ClientProxyMessage, WorkerProxyMessage } from './models/payload'
 
 export type TransactionsRecord = Record<string, SubmittableExtrinsic<'rxjs'>>

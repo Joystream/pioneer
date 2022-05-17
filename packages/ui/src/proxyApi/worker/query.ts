@@ -1,7 +1,7 @@
 import { ApiRx } from '@polkadot/api'
 import { invoke } from 'lodash'
 
-import { ApiQueryKinds, ClientQueryMessage, WorkerQueryMessage } from '../client/api-query'
+import { ApiQueryKinds, ClientQueryMessage, WorkerQueryMessage } from '../client/query'
 import { PostMessage } from '../types'
 
 export const query = <K extends ApiQueryKinds>(

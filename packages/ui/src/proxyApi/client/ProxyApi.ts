@@ -8,8 +8,8 @@ import { deserializeMessage, serializePayload, WorkerProxyMessage } from '../mod
 import { ClientMessage, PostMessage, RawWorkerMessageEvent, WorkerConnectMessage, WorkerInitMessage } from '../types'
 import { workerApi as launchWorker } from '../worker'
 
-import { query } from './api-query'
-import { tx } from './api-tx'
+import { query } from './query'
+import { tx } from './tx'
 
 export class ProxyApi extends Events {
   isConnected = true
