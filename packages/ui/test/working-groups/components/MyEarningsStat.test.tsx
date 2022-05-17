@@ -46,7 +46,7 @@ describe('MyEarningsStat', () => {
   it('Loading', () => {
     renderStat()
 
-    expect(screen.queryAllByTestId('tokenValueSkeleton').length).toBe(2)
+    expect(screen.getAllByText('-').length).toBe(2)
   })
 
   it('Loaded', async () => {
@@ -87,7 +87,7 @@ describe('MyEarningsStat', () => {
 
     renderStat()
 
-    await waitForElementToBeRemoved(() => screen.queryAllByTestId('tokenValueSkeleton')[0])
+    await waitForElementToBeRemoved(() => screen.getAllByText('-')[0])
 
     expect(screen.getByText('100')).toBeDefined()
     expect(screen.getByText('600')).toBeDefined()
