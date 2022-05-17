@@ -20,7 +20,7 @@ export const SlashedTab = ({ bounty }: Props) => {
           {slashedWorkers
             .filter((entry) => entry.rejected)
             .map((entry) => (
-              <BountySlashedListItem entrant={entry.worker} inBlock={randomBlock()} link="xd" />
+              <BountySlashedListItem entrant={entry.worker} stake={entry.stake} inBlock={randomBlock()} link="" />
             ))}
         </List>
       )
