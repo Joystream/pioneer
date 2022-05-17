@@ -79,7 +79,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       {isPast && (
         <StageField>
           <Subscription>
-            {'Created at:'} {toDDMMYY(new Date(proposal.createdAt))}
+            {'Ended at:'} {toDDMMYY(displayDate)}
           </Subscription>
         </StageField>
       )}

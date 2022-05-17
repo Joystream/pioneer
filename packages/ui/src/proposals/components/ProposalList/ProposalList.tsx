@@ -31,7 +31,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast }: ProposalListPr
         {getSortProps ? <SortHeader {...getSortProps('title')}>Title</SortHeader> : <ProposalListHeader />}
         <ProposalListHeader>Stage</ProposalListHeader>
         <ProposalListHeader>Proposer</ProposalListHeader>
-        {isPast && getSortProps ? <SortHeader {...getSortProps('createdAt')}>Created</SortHeader> : null}
+        {isPast && getSortProps ? <SortHeader {...getSortProps('createdAt')}>Ended</SortHeader> : null}
         {isCouncilMember && <ProposalListHeader>My vote</ProposalListHeader>}
       </ProposalsListHeaders>
       <List as="div">
