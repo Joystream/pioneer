@@ -1,8 +1,6 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
-import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
-import { Account } from '@/accounts/types'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -11,49 +9,21 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-interface StakingContext {
-  stakingAccount?: Account
-  stakingAmount?: BN
-}
-
-interface RewardAccountContext extends Required<StakingContext> {
-  rewardAccount?: Account
-}
-
-interface TitleAndBulletPointsContext extends Required<RewardAccountContext> {
-  title?: string
-  bulletPoints: string[]
-}
-
-interface SummaryAndBannerContext extends Required<TitleAndBulletPointsContext> {
-  summary?: string
-  banner?: string
-}
-
-export interface FinalAnnounceCandidacyContext extends Required<TitleAndBulletPointsContext> {
-  summary: string
-  banner?: string
-}
-
-export interface TransactionContext extends FinalAnnounceCandidacyContext {
+export interface TransactionContext {
   transactionEvents?: EventRecord[]
 }
-
-export type AnnounceCandidacyContext = Partial<
-  StakingContext & RewardAccountContext & TitleAndBulletPointsContext & SummaryAndBannerContext & TransactionContext
->
 
 export type AnnounceCandidacyState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'requiredStakeVerification'; context: EmptyObject }
   | { value: 'requiredStakeFailed'; context: EmptyObject }
-  | { value: 'staking'; context: StakingContext }
-  | { value: 'rewardAccount'; context: RewardAccountContext }
-  | { value: 'candidateProfile'; context: RewardAccountContext }
-  | { value: 'candidateProfile.titleAndBulletPoints'; context: TitleAndBulletPointsContext }
-  | { value: 'candidateProfile.summaryAndBanner'; context: SummaryAndBannerContext }
-  | { value: 'candidateProfile.finishCandidateProfile'; context: FinalAnnounceCandidacyContext }
+  | { value: 'staking'; context: EmptyObject }
+  | { value: 'rewardAccount'; context: EmptyObject }
+  | { value: 'candidateProfile'; context: EmptyObject }
+  | { value: 'candidateProfile.titleAndBulletPoints'; context: EmptyObject }
+  | { value: 'candidateProfile.summaryAndBanner'; context: EmptyObject }
+  | { value: 'candidateProfile.finishCandidateProfile'; context: EmptyObject }
   | { value: 'beforeTransaction'; context: TransactionContext }
   | { value: 'bindStakingAccountTransaction'; context: TransactionContext }
   | { value: 'announceCandidacyTransaction'; context: TransactionContext }
@@ -61,35 +31,19 @@ export type AnnounceCandidacyState =
   | { value: 'success'; context: TransactionContext }
   | { value: 'error'; context: TransactionContext }
 
-type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
-type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
-type SetTitleEvent = { type: 'SET_TITLE'; title: string }
-type SetBulletPointsEvent = { type: 'SET_BULLET_POINTS'; bulletPoints: string[] }
-type SetSummaryEvent = { type: 'SET_SUMMARY'; summary: string }
-type SetBannerEvent = { type: 'SET_BANNER'; banner: string }
-
 type AnnounceCandidacyEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
   | { type: 'NEXT' }
   | { type: 'BOUND' }
   | { type: 'REQUIRES_STAKING_CANDIDATE' }
-  | SetAccountEvent
-  | SetAmountEvent
-  | SetTitleEvent
-  | SetBulletPointsEvent
-  | SetSummaryEvent
-  | SetBannerEvent
 
 export const announceCandidacyMachine = createMachine<
-  AnnounceCandidacyContext,
+  TransactionContext,
   AnnounceCandidacyEvent,
   AnnounceCandidacyState
 >({
   initial: 'requirementsVerification',
-  context: {
-    bulletPoints: [],
-  },
   states: {
     requirementsVerification: {
       on: {
@@ -111,17 +65,6 @@ export const announceCandidacyMachine = createMachine<
       on: {
         NEXT: {
           target: 'rewardAccount',
-          cond: (context) => !!(context.stakingAccount && context.stakingAmount),
-        },
-        SET_ACCOUNT: {
-          actions: assign({
-            stakingAccount: (context, event) => event.account,
-          }),
-        },
-        SET_AMOUNT: {
-          actions: assign({
-            stakingAmount: (context, event) => event.amount,
-          }),
         },
       },
     },
@@ -132,12 +75,6 @@ export const announceCandidacyMachine = createMachine<
         BACK: '#staking',
         NEXT: {
           target: 'candidateProfile',
-          cond: (context) => !!context.rewardAccount,
-        },
-        SET_ACCOUNT: {
-          actions: assign({
-            rewardAccount: (context, event) => event.account,
-          }),
         },
       },
     },
@@ -152,16 +89,6 @@ export const announceCandidacyMachine = createMachine<
             NEXT: {
               target: 'summaryAndBanner',
             },
-            SET_TITLE: {
-              actions: assign({
-                title: (context, event) => event.title,
-              }),
-            },
-            SET_BULLET_POINTS: {
-              actions: assign({
-                bulletPoints: (context, event) => event.bulletPoints,
-              }),
-            },
           },
         },
         summaryAndBanner: {
@@ -170,16 +97,6 @@ export const announceCandidacyMachine = createMachine<
             BACK: 'titleAndBulletPoints',
             NEXT: {
               target: 'finishCandidateProfile',
-            },
-            SET_SUMMARY: {
-              actions: assign({
-                summary: (context, event) => event.summary,
-              }),
-            },
-            SET_BANNER: {
-              actions: assign({
-                banner: (context, event) => event.banner,
-              }),
             },
           },
         },

@@ -223,6 +223,7 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Input
 })
 
 type TextAreaProps = InputProps<HTMLTextAreaElement & HTMLInputElement>
+
 export const InputTextarea = React.memo(({ name, ...props }: TextAreaProps) => {
   const formContext = useFormContext()
 
