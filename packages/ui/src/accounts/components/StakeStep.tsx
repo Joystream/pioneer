@@ -37,7 +37,7 @@ export const StakeStep = ({
   errors,
 }: StakeStepProps) => {
   const balances = useMyBalances()
-  // const { isValid, errors, setContext } = useSchema({ ...state.context }, StakeStepFormSchema)
+
   const selectAccountFilter = useCallback(
     (account: Account) =>
       (!accountsFilter || accountsFilter(account)) &&
