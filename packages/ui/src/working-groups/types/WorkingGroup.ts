@@ -18,9 +18,9 @@ export interface WorkingGroup {
   status?: string
   description?: string
   statusMessage?: string
-  budget: BN
-  averageStake: BN
-  isActive: boolean
+  budget?: BN
+  averageStake?: BN
+  isActive?: boolean
 }
 
 export interface DetailedWorkingGroup extends WorkingGroup {
