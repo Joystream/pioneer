@@ -87,8 +87,8 @@ export const PostListItem = ({
   }, [])
 
   const onReply = (): void => {
-    if (active) return replyToPost()
-    return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+    if (!active) showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+    return replyToPost()
   }
 
   return (
