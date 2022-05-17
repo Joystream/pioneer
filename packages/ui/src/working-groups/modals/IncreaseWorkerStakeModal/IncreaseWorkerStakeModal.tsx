@@ -42,6 +42,10 @@ export const IncreaseWorkerStakeModal = () => {
     setContext({ minAddStake, totalBalance: balance?.transferable })
   }, [balance?.transferable.toString()])
 
+  useEffect(() => {
+    send('SET_STAKE', { stake: new BN(minAddStake) })
+  }, [])
+
   const onSubmit = () => {
     send({ type: 'PASS' })
   }
