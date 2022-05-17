@@ -13,7 +13,7 @@ import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
-import { VoteForCouncilMachine } from './machine'
+import { VoteForCouncilMachine, VoteForCouncilMachineState } from './machine'
 import { VoteForCouncilModalCall } from './types'
 import { VoteForCouncilFormModal } from './VoteForCouncilFormModal'
 import { VoteForCouncilSignModal } from './VoteForCouncilSignModal'
@@ -86,9 +86,9 @@ export const VoteForCouncilModal = () => {
       />
     )
   } else if (state.matches('stake')) {
-    return <VoteForCouncilFormModal minStake={minStake} send={send} />
+    return <VoteForCouncilFormModal minStake={minStake} send={send} state={state as VoteForCouncilMachineState} />
   } else if (state.matches('transaction')) {
-    return <VoteForCouncilSignModal stake={state.context.stake} service={state.children.transaction} />
+    return <VoteForCouncilSignModal state={state as VoteForCouncilMachineState} service={state.children.transaction} />
   }
 
   return null
