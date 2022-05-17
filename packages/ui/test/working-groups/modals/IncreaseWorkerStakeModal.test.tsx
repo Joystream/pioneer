@@ -75,7 +75,6 @@ describe('UI: IncreaseWorkerStakeModal', () => {
 
       const input = await getStakeInput()
       const submitButton = await getButton('Increase Stake')
-
       expect(input?.value).toBe('200')
       expect(submitButton).not.toBeDisabled()
     })
