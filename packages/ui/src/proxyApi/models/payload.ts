@@ -3,7 +3,7 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import { AnyTuple, Codec } from '@polkadot/types/types'
 import { Constructor } from '@polkadot/util/types'
 import BN from 'bn.js'
-import { get, merge, uniqueId } from 'lodash'
+import { get, isFunction, merge, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
 import { AnyObject } from '@/common/types'
@@ -150,12 +150,17 @@ const deserializeCodec = (serialized: SerializedCodec) => {
 
   if (serialized.type === 'EventRecord') {
     return recursiveProxy(codec, {
-      get: (target, path) => get(target, path) ?? get(serialized.value, path),
+      get: (target, path) =>
+        bindIfFunction(get(target, path) ?? get(serialized.value, path), () =>
+          path.length > 1 ? get(target, path.slice(0, -1)) : target
+        ),
     })
   }
 
   return codec
 }
+
+const bindIfFunction = (value: any, getContext: () => any) => (isFunction(value) ? value.bind(getContext()) : value)
 
 const isSerializedCodec = (obj: any): obj is SerializedCodec =>
   'kind' in obj && obj.kind === 'codec' && 'type' in obj && typeof obj.type === 'string' && 'value' in obj
