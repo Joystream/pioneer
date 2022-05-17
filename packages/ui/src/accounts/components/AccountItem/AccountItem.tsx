@@ -32,13 +32,13 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
     <AccountItemWrapper onClick={() => setDropped(!isDropped)}>
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
-        <TokenValue value={balance?.total} />
+        <TokenValue value={balance?.total} isLoading={balance?.total === undefined} />
         <ValueAndLocks align={balance?.locked && 'end'}>
-          <TokenValue value={balance?.locked} />
+          <TokenValue value={balance?.locked} isLoading={balance?.locked === undefined} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
-        <TokenValue value={balance?.recoverable} />
-        <TokenValue value={balance?.transferable} />
+        <TokenValue value={balance?.recoverable} isLoading={balance?.recoverable === undefined} />
+        <TokenValue value={balance?.transferable} isLoading={balance?.transferable === undefined} />
         <AccountControls>
           <TransferButton to={account} />
           <TransferButton from={account} disabled={isSendDisabled} />
