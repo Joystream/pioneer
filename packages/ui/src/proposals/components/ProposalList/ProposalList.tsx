@@ -1,11 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { sortingOptions } from '@/bounty/helpers'
 import { ProposalOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
+import { SortHeader } from '@/common/components/List/SortHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { SimpleSelect } from '@/common/components/selects'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -20,13 +18,8 @@ export interface ProposalListProps {
   isPast?: boolean
 }
 
-const SelectWrapper = styled.div`
-  max-width: 150px;
-`
-
 export const ProposalList = ({ proposals, getSortProps, isPast }: ProposalListProps) => {
   const { active } = useMyMemberships()
-  const { onSort, isDescending } = getSortProps?.('createdAt') || {}
   const isCouncilMember = active?.isCouncilMember
 
   if (!proposals.length) {
@@ -35,19 +28,11 @@ export const ProposalList = ({ proposals, getSortProps, isPast }: ProposalListPr
   return (
     <RowGapBlock gap={4}>
       <ProposalsListHeaders $colLayout={ProposalColLayout}>
-        <ProposalListHeader />
+        {getSortProps ? <SortHeader {...getSortProps('title')}>Title</SortHeader> : <ProposalListHeader />}
         <ProposalListHeader>Stage</ProposalListHeader>
         <ProposalListHeader>Proposer</ProposalListHeader>
+        {isPast && getSortProps ? <SortHeader {...getSortProps('createdAt')}>Created</SortHeader> : null}
         {isCouncilMember && <ProposalListHeader>My vote</ProposalListHeader>}
-        {getSortProps && onSort ? (
-          <SelectWrapper>
-            <SimpleSelect
-              options={sortingOptions}
-              value={isDescending ? sortingOptions[0] : sortingOptions[1]}
-              onChange={onSort}
-            />
-          </SelectWrapper>
-        ) : null}
       </ProposalsListHeaders>
       <List as="div">
         {proposals.map((proposal) => (

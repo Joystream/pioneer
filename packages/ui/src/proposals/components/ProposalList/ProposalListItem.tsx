@@ -76,6 +76,13 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
+      {isPast && (
+        <StageField>
+          <Subscription>
+            {'Created at:'} {toDDMMYY(new Date(proposal.createdAt))}
+          </Subscription>
+        </StageField>
+      )}
       <StageField>
         <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
       </StageField>
