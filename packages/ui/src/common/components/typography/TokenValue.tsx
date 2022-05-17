@@ -15,11 +15,16 @@ interface ValueSizingProps {
 interface ValueProps extends ValueSizingProps {
   value?: BN | number | null
   className?: string
+  isLoading?: boolean
 }
 
-export const TokenValue = React.memo(({ className, value, size }: ValueProps) => {
-  if (value === null || !isDefined(value)) {
+export const TokenValue = React.memo(({ className, value, size, isLoading }: ValueProps) => {
+  if (isLoading) {
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
+  }
+
+  if (value === null || !isDefined(value)) {
+    return <span>-</span>
   }
 
   return (
