@@ -130,20 +130,7 @@ export const BuyMembershipForm = ({
       setFormHandleMap(handle)
     }
   }, [handle])
-  // useEffect(() => {
-  //   return active && form.setValue('invitor', active)
-  // }, [active])
-  // useEffect(() => {
-  //   setContext({ size: potentialMemberIdSize })
-  // }, [potentialMemberIdSize?.toString()])
-  //
-  // const onCreate = () => {
-  //   if (!controllerAccount || !rootAccount) {
-  //     return
-  //   }
-  //
-  //   onSubmit(fields)
-  // }
+
   const hasError = enhancedHasError(form.formState.errors)
   const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
   const onCreate = () => onSubmit(form.getValues())
