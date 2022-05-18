@@ -12,24 +12,17 @@ export default {
   title: 'Proposals/VoteForProposal/VoteForProposalModalForm',
   component: VoteForProposalModalForm,
   argTypes: {
-    hideModal: { action: 'hideModal' },
-    showModal: { action: 'showModal' },
+    send: { action: 'send' },
   },
 } as Meta
 
-interface Props {
-  id: string
-  hideModal: () => void
-  showModal: () => void
-}
-
-const Template: Story<Props> = () => {
+const Template: Story = ({ send }) => {
   return (
     <MemoryRouter>
-      <MockApolloProvider members council proposals workingGroups workers>
+      <MockApolloProvider>
         <VoteForProposalModalForm
           context={{}}
-          send={() => undefined}
+          send={send}
           proposal={rawProposals[0] as unknown as ProposalWithDetails}
         />
       </MockApolloProvider>
