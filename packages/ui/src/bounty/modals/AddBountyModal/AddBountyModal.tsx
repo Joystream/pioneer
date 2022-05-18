@@ -15,12 +15,12 @@ import { JudgingDetailsStep } from '@/bounty/modals/AddBountyModal/components/Ju
 import { SuccessModal } from '@/bounty/modals/AddBountyModal/components/SuccessModal'
 import { WorkingDetailsStep } from '@/bounty/modals/AddBountyModal/components/WorkingDetailsStep'
 import {
+  AddBountyFrom,
   addBountyModalSchema,
   Conditions,
   createBountyMetadataFactory,
   createBountyParametersFactory,
   formDefaultValues,
-  IFormFields,
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
@@ -54,7 +54,10 @@ export const AddBountyModal = () => {
   const balance = useBalance(activeMember?.controllerAccount)
   const bountyApi = api?.consts.bounty
   const form = useForm({
-    resolver: useYupValidationResolver(addBountyModalSchema, typeof state.value === 'string' ? state.value : undefined),
+    resolver: useYupValidationResolver<AddBountyFrom>(
+      addBountyModalSchema,
+      typeof state.value === 'string' ? state.value : undefined
+    ),
     context: {
       isThreadCategoryLoading,
       minCherryLimit: bountyApi?.minCherryLimit,
@@ -117,7 +120,7 @@ export const AddBountyModal = () => {
   if (state.matches(AddBountyStates.createThread) && threadCategory) {
     const {
       [AddBountyStates.generalParameters]: { title, creator },
-    } = form.getValues()
+    } = form.getValues() as AddBountyFrom
     const transaction = api.tx.forum.createThread(
       activeMember.id,
       threadCategory.id,
@@ -143,11 +146,11 @@ export const AddBountyModal = () => {
   }
 
   if (state.matches(AddBountyStates.transaction)) {
-    const fromFields = form.getValues()
+    const fromFields = form.getValues() as AddBountyFrom
     const service = state.children.transaction
     const transaction = api.tx.bounty.createBounty(
-      createBountyParametersFactory(fromFields as IFormFields),
-      metadataToBytes(BountyMetadata, createBountyMetadataFactory(fromFields as IFormFields, state.context.newThreadId))
+      createBountyParametersFactory(fromFields),
+      metadataToBytes(BountyMetadata, createBountyMetadataFactory(fromFields, state.context.newThreadId))
     )
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
 
