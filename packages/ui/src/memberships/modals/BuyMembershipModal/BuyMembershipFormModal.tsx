@@ -1,7 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -20,7 +20,6 @@ import {
   LabelLink,
   ToggleCheckbox,
 } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
@@ -41,7 +40,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
+import { AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -114,8 +113,8 @@ export const BuyMembershipForm = ({
     mode: 'onChange',
     defaultValues: formDefaultValues,
   })
-  // const { isValid, errors, setContext } = validation
-  const [rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer] = form.watch([
+
+  const [rootAccount, controllerAccount, handle, isReferred, avatarUri, referrer] = form.watch([
     'rootAccount',
     'controllerAccount',
     'handle',
@@ -146,7 +145,6 @@ export const BuyMembershipForm = ({
                 <ToggleCheckbox
                   trueLabel="Yes"
                   falseLabel="No"
-                  // name="isReferred"
                   onChange={(isReferred) => form.setValue('isReferred', isReferred)}
                   checked={isReferred ?? false}
                 />
