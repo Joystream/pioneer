@@ -1,6 +1,7 @@
 import { useApolloClient } from '@apollo/client'
 import React, { FC, useEffect, useState } from 'react'
 
+import { NetworkEndpoints, pickEndpoints } from '@/app/config'
 import {
   seedApplications,
   seedBounties,
@@ -61,7 +62,7 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
     if (!('MockServer' in window)) {
       const glob = global as any
       glob.MockServer = {}
-      MockServer.server = makeServer('storybook')
+      MockServer.server = makeServer('storybook', pickEndpoints('local') as NetworkEndpoints)
       fixAssociations(MockServer.server)
     }
 
