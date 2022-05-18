@@ -41,7 +41,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+import { AccountSchema, AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -57,8 +57,8 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
 }
 
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: AccountSchema.required('This field is required'),
-  controllerAccount: AccountSchema.required('This field is required'),
+  rootAccount: NewAddressSchema('rootAccount').required('This field is required'),
+  controllerAccount: NewAddressSchema('rootAccount').required('This field is required'),
   avatarUri: AvatarURISchema,
   name: Yup.string().required('This field is required'),
   handle: HandleSchema.required('This field is required'),
@@ -101,7 +101,7 @@ export const BuyMembershipForm = ({
     referrer: undefined,
     hasTerms: false,
   }
-  // const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
+
   const [formHandleMap, setFormHandleMap] = useState('')
   const handleHash = blake2AsHex(formHandleMap)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
@@ -151,109 +151,108 @@ export const BuyMembershipForm = ({
   return (
     <>
       <ScrolledModalBody>
-        <ScrolledModalContainer>
-          <Row>
-            <InlineToggleWrap>
-              <Label>I was referred by a member: </Label>
-              <ToggleCheckbox
-                trueLabel="Yes"
-                falseLabel="No"
-                name={'isReferred'}
-                // onChange={(isSet) => changeField('isReferred', isSet)}
-                // checked={isReferred ?? false}
-              />
-            </InlineToggleWrap>
-            {isReferred && (
-              <InputComponent required inputSize="l">
-                <SelectMember
-                  onChange={(member) => form.setValue('referrer', member)}
-                  disabled={!isReferred}
-                  selected={referrer}
+        <FormProvider {...form}>
+          <ScrolledModalContainer>
+            <Row>
+              <InlineToggleWrap>
+                <Label>I was referred by a member: </Label>
+                <ToggleCheckbox
+                  trueLabel="Yes"
+                  falseLabel="No"
+                  // name="isReferred"
+                  onChange={(isReferred) => form.setValue('isReferred', isReferred)}
+                  checked={isReferred ?? false}
                 />
-              </InputComponent>
-            )}
-          </Row>
-          <Row>
-            <TextMedium dark>Please fill in all the details below.</TextMedium>
-          </Row>
-          {type === 'general' && (
-            <>
-              <Row>
-                <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
-                  <SelectAccount onChange={(account) => form.setValue('rootAccount', account)} selected={rootAccount} />
-                </InputComponent>
-              </Row>
-              <Row>
-                <InputComponent
-                  label="Controller account"
-                  required
-                  inputSize="l"
-                  tooltipText="Something about controller account"
-                >
-                  <SelectAccount
-                    onChange={(account) => form.setValue('controllerAccount', account)}
-                    selected={controllerAccount}
+              </InlineToggleWrap>
+              {isReferred && (
+                <InputComponent required inputSize="l">
+                  <SelectMember
+                    onChange={(member) => form.setValue('referrer', member)}
+                    disabled={!isReferred}
+                    selected={referrer}
                   />
                 </InputComponent>
-              </Row>
-            </>
-          )}
-          <Row>
-            <InputComponent id="member-name" label="Member Name" required>
-              <InputText
+              )}
+            </Row>
+            <Row>
+              <TextMedium dark>Please fill in all the details below.</TextMedium>
+            </Row>
+            {type === 'general' && (
+              <>
+                <Row>
+                  <InputComponent
+                    label="Root account"
+                    required
+                    inputSize="l"
+                    tooltipText="Something about root accounts"
+                  >
+                    <SelectAccount
+                      onChange={(account) => form.setValue('rootAccount', account)}
+                      selected={rootAccount}
+                    />
+                  </InputComponent>
+                </Row>
+                <Row>
+                  <InputComponent
+                    label="Controller account"
+                    required
+                    inputSize="l"
+                    tooltipText="Something about controller account"
+                  >
+                    <SelectAccount
+                      onChange={(account) => form.setValue('controllerAccount', account)}
+                      selected={controllerAccount}
+                    />
+                  </InputComponent>
+                </Row>
+              </>
+            )}
+            <Row>
+              <InputComponent
                 id="member-name"
-                placeholder="Type"
-                name="name"
-                // value={name}
-                // onChange={(event) => changeField('name', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-          <Row>
-            <InputComponent id="membership-handle" label="Membership handle" required>
-              <InputText
+                label="Member Name"
+                required
+                validation={hasError('name') ? 'invalid' : undefined}
+                message={hasError('name') ? getErrorMessage('name') : ''}
+              >
+                <InputText id="member-name" placeholder="Type" name="name" />
+              </InputComponent>
+            </Row>
+            <Row>
+              <InputComponent
                 id="membership-handle"
-                placeholder="Type"
-                name="handle"
-                // value={handle}
-                // onChange={(event) => changeField('handle', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-          <Row>
-            <InputComponent id="member-about" label="About member" inputSize="l">
-              <InputTextarea
-                id="member-about"
-                placeholder="Type"
-                name="about"
-                // value={about}
-                // onChange={(event) => changeField('about', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-          <Row>
-            <InputComponent
-              id="member-avatar"
-              label="Member Avatar"
-              required
-              value={avatarUri}
-              validation={hasError('avatarUri') ? 'invalid' : undefined}
-              message={
-                hasError('avatarUri')
-                  ? getErrorMessage('avatarUri')
-                  : 'Paste an URL of your avatar image. Text lorem ipsum.'
-              }
-              placeholder="Image URL"
-            >
-              <InputText
+                label="Membership handle"
+                required
+                validation={hasError('handle') ? 'invalid' : undefined}
+                message={hasError('handle') ? getErrorMessage('handle') : ''}
+              >
+                <InputText id="membership-handle" placeholder="Type" name="handle" />
+              </InputComponent>
+            </Row>
+            <Row>
+              <InputComponent id="member-about" label="About member" inputSize="l">
+                <InputTextarea id="member-about" placeholder="Type" name="about" />
+              </InputComponent>
+            </Row>
+            <Row>
+              <InputComponent
                 id="member-avatar"
-                name="avatarUri"
-                // value={avatarUri}
-                // onChange={(event) => changeField('avatarUri', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-        </ScrolledModalContainer>
+                label="Member Avatar"
+                required
+                value={avatarUri}
+                validation={hasError('avatarUri') ? 'invalid' : undefined}
+                message={
+                  hasError('avatarUri')
+                    ? getErrorMessage('avatarUri')
+                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
+                }
+                placeholder="Image URL"
+              >
+                <InputText id="member-avatar" name="avatarUri" />
+              </InputComponent>
+            </Row>
+          </ScrolledModalContainer>
+        </FormProvider>
       </ScrolledModalBody>
       <ModalFooter twoColumns>
         <ModalFooterGroup left>

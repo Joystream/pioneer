@@ -33,11 +33,11 @@ export const OnBoardingModal = () => {
 
   const step = useMemo(() => {
     switch (status) {
-      // case 'installPlugin':
-      //   return <OnBoardingPlugin />
+      case 'installPlugin':
+        return <OnBoardingPlugin />
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setMembershipAccount} />
-      case 'installPlugin':
+      case 'createMembership':
         return (
           <OnBoardingMembership
             setMembershipAccount={setMembershipAccount as SetMembershipAccount}
