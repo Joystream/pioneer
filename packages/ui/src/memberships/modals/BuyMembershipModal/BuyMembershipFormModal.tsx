@@ -1,6 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -36,8 +37,8 @@ import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
-import { useForm } from '@/common/hooks/useForm'
 import { useObservable } from '@/common/hooks/useObservable'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
@@ -56,11 +57,11 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
 }
 
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: AccountSchema.required(),
-  controllerAccount: AccountSchema.required(),
+  rootAccount: AccountSchema.required('This field is required'),
+  controllerAccount: AccountSchema.required('This field is required'),
   avatarUri: AvatarURISchema,
-  name: Yup.string().required(),
-  handle: HandleSchema.required(),
+  name: Yup.string().required('This field is required'),
+  handle: HandleSchema.required('This field is required'),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
@@ -89,7 +90,7 @@ export const BuyMembershipForm = ({
   const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
 
-  const initializer = {
+  const formDefaultValues = {
     name: '',
     rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
     controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
@@ -100,26 +101,52 @@ export const BuyMembershipForm = ({
     referrer: undefined,
     hasTerms: false,
   }
-  const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
-  const { isValid, errors, setContext } = validation
-  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
-  const handleHash = blake2AsHex(handle)
+  // const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
+  const [formHandleMap, setFormHandleMap] = useState('')
+  const handleHash = blake2AsHex(formHandleMap)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    handle,
+    formHandleMap,
     connectionState,
   ])
-
+  const form = useForm<MemberFormFields>({
+    resolver: useYupValidationResolver(CreateMemberSchema),
+    context: { size: potentialMemberIdSize },
+    mode: 'onChange',
+    defaultValues: formDefaultValues,
+  })
+  // const { isValid, errors, setContext } = validation
+  const [rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer] = form.watch([
+    'rootAccount',
+    'controllerAccount',
+    'handle',
+    'name',
+    'isReferred',
+    'avatarUri',
+    'about',
+    'referrer',
+  ])
   useEffect(() => {
-    setContext({ size: potentialMemberIdSize })
-  }, [potentialMemberIdSize?.toString()])
-
-  const onCreate = () => {
-    if (!controllerAccount || !rootAccount) {
-      return
+    if (handle) {
+      setFormHandleMap(handle)
     }
-
-    onSubmit(fields)
-  }
+  }, [handle])
+  // useEffect(() => {
+  //   return active && form.setValue('invitor', active)
+  // }, [active])
+  // useEffect(() => {
+  //   setContext({ size: potentialMemberIdSize })
+  // }, [potentialMemberIdSize?.toString()])
+  //
+  // const onCreate = () => {
+  //   if (!controllerAccount || !rootAccount) {
+  //     return
+  //   }
+  //
+  //   onSubmit(fields)
+  // }
+  const hasError = enhancedHasError(form.formState.errors)
+  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
+  const onCreate = () => onSubmit(form.getValues())
 
   return (
     <>
@@ -131,14 +158,15 @@ export const BuyMembershipForm = ({
               <ToggleCheckbox
                 trueLabel="Yes"
                 falseLabel="No"
-                onChange={(isSet) => changeField('isReferred', isSet)}
-                checked={isReferred ?? false}
+                name={'isReferred'}
+                // onChange={(isSet) => changeField('isReferred', isSet)}
+                // checked={isReferred ?? false}
               />
             </InlineToggleWrap>
             {isReferred && (
               <InputComponent required inputSize="l">
                 <SelectMember
-                  onChange={(member) => changeField('referrer', member)}
+                  onChange={(member) => form.setValue('referrer', member)}
                   disabled={!isReferred}
                   selected={referrer}
                 />
@@ -152,7 +180,7 @@ export const BuyMembershipForm = ({
             <>
               <Row>
                 <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
-                  <SelectAccount onChange={(account) => changeField('rootAccount', account)} selected={rootAccount} />
+                  <SelectAccount onChange={(account) => form.setValue('rootAccount', account)} selected={rootAccount} />
                 </InputComponent>
               </Row>
               <Row>
@@ -163,7 +191,7 @@ export const BuyMembershipForm = ({
                   tooltipText="Something about controller account"
                 >
                   <SelectAccount
-                    onChange={(account) => changeField('controllerAccount', account)}
+                    onChange={(account) => form.setValue('controllerAccount', account)}
                     selected={controllerAccount}
                   />
                 </InputComponent>
@@ -175,8 +203,9 @@ export const BuyMembershipForm = ({
               <InputText
                 id="member-name"
                 placeholder="Type"
-                value={name}
-                onChange={(event) => changeField('name', event.target.value)}
+                name="name"
+                // value={name}
+                // onChange={(event) => changeField('name', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -185,8 +214,9 @@ export const BuyMembershipForm = ({
               <InputText
                 id="membership-handle"
                 placeholder="Type"
-                value={handle}
-                onChange={(event) => changeField('handle', event.target.value)}
+                name="handle"
+                // value={handle}
+                // onChange={(event) => changeField('handle', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -194,9 +224,10 @@ export const BuyMembershipForm = ({
             <InputComponent id="member-about" label="About member" inputSize="l">
               <InputTextarea
                 id="member-about"
-                value={about}
                 placeholder="Type"
-                onChange={(event) => changeField('about', event.target.value)}
+                name="about"
+                // value={about}
+                // onChange={(event) => changeField('about', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -206,18 +237,19 @@ export const BuyMembershipForm = ({
               label="Member Avatar"
               required
               value={avatarUri}
-              validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
+              validation={hasError('avatarUri') ? 'invalid' : undefined}
               message={
-                hasError('avatarUri', errors)
-                  ? getErrorMessage('avatarUri', errors)
+                hasError('avatarUri')
+                  ? getErrorMessage('avatarUri')
                   : 'Paste an URL of your avatar image. Text lorem ipsum.'
               }
               placeholder="Image URL"
             >
               <InputText
                 id="member-avatar"
-                value={avatarUri}
-                onChange={(event) => changeField('avatarUri', event.target.value)}
+                name="avatarUri"
+                // value={avatarUri}
+                // onChange={(event) => changeField('avatarUri', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -231,7 +263,7 @@ export const BuyMembershipForm = ({
               Change account
             </ButtonGhost>
           )}
-          <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
+          <Checkbox id={'privacy-policy-agreement'} onChange={(hasTerms) => form.setValue('hasTerms', hasTerms)}>
             <TextMedium colorInherit>
               I agree to the{' '}
               <LabelLink to={TermsRoutes.termsOfService} target="_blank">
@@ -266,7 +298,7 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
+          <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
             Create a Membership
           </ButtonPrimary>
         </ModalFooterGroup>
