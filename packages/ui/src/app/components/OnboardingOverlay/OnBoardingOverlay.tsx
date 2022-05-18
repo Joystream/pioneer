@@ -11,7 +11,7 @@ import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { Colors, ZIndex } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
@@ -79,46 +79,57 @@ export const OnBoardingOverlay = () => {
   const steps = asOnBoardingSteps(onBoardingSteps, status)
 
   return (
-    <MainWrapper>
-      <Wrapper>
-        <TextContainer>
-          <TextHuge bold>Become a member</TextHuge>
-          <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
-        </TextContainer>
-        <StepperContainer>
-          <HorizontalStepper steps={steps} />
-        </StepperContainer>
-        <ButtonContainer>
-          <ButtonPrimary size="large" onClick={openOnBoardingModal}>
-            Join now
-          </ButtonPrimary>
-        </ButtonContainer>
-      </Wrapper>
-      <StyledDropDown isDropped={isOpen}>
-        <DropdownContent>
-          <DrawerContainer title="What are the benefits?">
-            <BenefitsTable />
-          </DrawerContainer>
-          <DrawerContainer title="How to become a member?">
-            <VerticalStaticStepper steps={innerStaticStepperSteps} />
-            <ButtonPrimary onClick={openOnBoardingModal} size="large">
-              Continue
+    <>
+      <TopSpace />
+      <MainWrapper>
+        <Wrapper>
+          <TextContainer>
+            <TextHuge bold>Become a member</TextHuge>
+            <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
+          </TextContainer>
+          <StepperContainer>
+            <HorizontalStepper steps={steps} />
+          </StepperContainer>
+          <ButtonContainer>
+            <ButtonPrimary size="large" onClick={openOnBoardingModal}>
+              Join now
             </ButtonPrimary>
-          </DrawerContainer>
-        </DropdownContent>
-      </StyledDropDown>
-    </MainWrapper>
+          </ButtonContainer>
+        </Wrapper>
+        <StyledDropDown isDropped={isOpen}>
+          <DropdownContent>
+            <DrawerContainer title="What are the benefits?">
+              <BenefitsTable />
+            </DrawerContainer>
+            <DrawerContainer title="How to become a member?">
+              <VerticalStaticStepper steps={innerStaticStepperSteps} />
+              <ButtonPrimary onClick={openOnBoardingModal} size="large">
+                Continue
+              </ButtonPrimary>
+            </DrawerContainer>
+          </DropdownContent>
+        </StyledDropDown>
+      </MainWrapper>
+    </>
   )
 }
 
+const TopSpace = styled.div`
+  width: calc(100% - 226px);
+  height: 90px;
+`
+
 const MainWrapper = styled.div`
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: calc(100% - 226px);
+  z-index: ${ZIndex.navbar};
 `
 
 const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.Black[700]};
   position: absolute;
-  z-index: 84;
+  z-index: ${ZIndex.navbarInner};
 `
 
 const DropdownContent = styled.div`

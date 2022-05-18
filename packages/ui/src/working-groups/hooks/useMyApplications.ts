@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { whenDefined } from '@/common/utils'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { useGetWorkingGroupApplicationsQuery } from '../queries'
@@ -11,12 +12,12 @@ interface UseMyApplications {
 }
 
 export function useMyApplications(): UseMyApplications {
-  const { members } = useMyMemberships()
+  const { members, active } = useMyMemberships()
   const params = {
     variables: {
       where: {
         applicant: {
-          id_in: members.map((m) => m.id),
+          id_in: whenDefined(active?.id, (id) => [id]) ?? members.map((members) => members.id),
         },
       },
     },

@@ -26,9 +26,6 @@ export interface UseBountiesProps {
 
 export const useBounties = ({ order, perPage = 10, filters, status, extraFilter }: UseBountiesProps) => {
   const orderBy = order ? toQueryOrderByInput<BountyOrderByInput>(order) : BountyOrderByInput.CreatedAtDesc
-  const { data: dataCount } = useGetBountiesCountQuery()
-  const totalCountPerPage = dataCount?.bountiesConnection.totalCount
-  const { offset, pagination } = usePagination(perPage, totalCountPerPage ?? 0, [order])
 
   const variables = useMemo(() => {
     const where: BountyWhereInput = {}
@@ -77,10 +74,15 @@ export const useBounties = ({ order, perPage = 10, filters, status, extraFilter 
       set(where, extraFilter.path, extraFilter.value)
     }
 
-    return { where, orderBy, limit: perPage, offset }
+    return { where, orderBy }
   }, [status, JSON.stringify(filters), extraFilter?.path, JSON.stringify(extraFilter?.value)])
 
-  const { loading, data } = useGetBountiesQuery({ variables })
+  const { data: dataCount } = useGetBountiesCountQuery({ variables })
+  const totalCountPerPage = dataCount?.bountiesConnection.totalCount
+
+  const { offset, pagination } = usePagination(perPage, totalCountPerPage ?? 0, [order])
+
+  const { loading, data } = useGetBountiesQuery({ variables: { ...variables, offset, limit: perPage } })
 
   return {
     isLoading: loading,

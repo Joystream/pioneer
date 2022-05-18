@@ -59,7 +59,7 @@ export const formDefaultValues = {
 export const addBountyModalSchema = Yup.object().shape({
   [AddBountyStates.generalParameters]: Yup.object().shape({
     title: Yup.string().max(70, 'Max length is 70 characters').required('Bounty title is required'),
-    coverPhotoLink: Yup.string().url('Invalid URL').required(''),
+    coverPhotoLink: Yup.string().url('Invalid URL'),
     creator: MemberSchema.required(),
     description: Yup.string().required(),
   }),

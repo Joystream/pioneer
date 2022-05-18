@@ -6,6 +6,7 @@ import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { Pagination } from '@/common/components/Pagination'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
@@ -15,7 +16,7 @@ import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities
 import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
-  const { proposals, isLoading } = useProposals({ status: 'active' })
+  const { proposals, isLoading, pagination } = useProposals({ status: 'active' })
 
   const { activities } = useProposalsActivities()
 
@@ -40,6 +41,7 @@ export const Proposals = () => {
             ) : (
               <ProposalList proposals={proposals} />
             )}
+            <Pagination {...pagination} />
           </MainPanel>
         ) : (
           <MainPanel>

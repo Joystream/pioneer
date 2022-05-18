@@ -10,6 +10,5 @@ export const useElectedCouncil = () => {
   }
 
   const rawCouncil = data?.electedCouncils[0]
-
   return { isLoading: loading, council: rawCouncil && asElectedCouncil(rawCouncil) }
 }

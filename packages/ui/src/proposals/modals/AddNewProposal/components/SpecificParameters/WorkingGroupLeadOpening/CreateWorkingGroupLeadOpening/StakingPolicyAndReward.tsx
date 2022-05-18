@@ -4,8 +4,10 @@ import * as Yup from 'yup'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { LinkSymbol } from '@/common/components/icons/symbols/LinkSymbol'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useBlockInput } from '@/common/hooks/useBlockInput'
@@ -99,10 +101,23 @@ export const StakingPolicyAndReward = ({
           </InputComponent>
           <InputComponent
             id="leaving-unstaking-period"
-            label="Leaving unstaking period"
+            label="Role cooldown period"
+            sublabel="Period where candidate remains in the role with full access after resigning"
             units="blocks"
             inputSize="s"
-            tooltipText="Number of blocks that need to pass from the ending block of the active role of member, for the stake to be recoverable."
+            tooltipText={
+              <>
+                Role cooldown period, also referred to as "unstaking period" sets a block count, during which the most
+                recent member is retained in the role, but staking status is set to unstaking - where final removal of
+                worker and staking lock occurs after leaving unstaking period{' '}
+                <TooltipExternalLink
+                  href="https://joystream.gitbook.io/testnet-workspace/system/working-groups#leave-worker-role"
+                  target="_blank"
+                >
+                  <TextMedium>Learn more</TextMedium> <LinkSymbol />
+                </TooltipExternalLink>
+              </>
+            }
             validation={hasError('block', errors) ? 'invalid' : undefined}
             message={
               hasError('block', errors)

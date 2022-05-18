@@ -58,6 +58,7 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
         <MembershipContext.Provider value={membershipContext}>
           <Container>
             <PostListItem
+              isFirstItem={true}
               post={{ ...post, lastEditedAt, text, reaction, repliesTo }}
               isThreadActive={isThreadActive}
               type="forum"

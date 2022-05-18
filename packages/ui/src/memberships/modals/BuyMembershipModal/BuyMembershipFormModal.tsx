@@ -103,7 +103,6 @@ export const BuyMembershipForm = ({
   const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
   const { isValid, errors, setContext } = validation
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
-
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
     handle,
