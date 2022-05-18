@@ -67,20 +67,20 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
 
   return (
     <Modal onClose={onClose} modalSize="l">
-      <ModalHeader title={t('modals.bounty.cancel.authorization.title')} onClick={onClose} />
+      <ModalHeader title={t('modals.bountyCancel.authorization.title')} onClick={onClose} />
       <ModalBody>
         <RowGapBlock gap={20}>
           <div>
-            <TextMedium light>{t('modals.bounty.cancel.authorization.informationBox.info1')}</TextMedium>
+            <TextMedium light>{t('modals.bountyCancel.authorization.informationBox.info1')}</TextMedium>
             <TextMedium light>
-              {t('modals.bounty.cancel.authorization.informationBox.info1', { fee: paymentInfo?.partialFee || '-' })}
+              {t('modals.bountyCancel.authorization.informationBox.info2', { fee: paymentInfo?.partialFee || '-' })}
             </TextMedium>
           </div>
           <InputComponent
-            label={t('modals.bounty.cancel.authorization.accountInput.label')}
+            label={t('modals.bountyCancel.authorization.accountInput.label')}
             required
             inputSize="l"
-            tooltipText={t('modals.bounty.cancel.authorization.accountInput.tooltipText')}
+            tooltipText={t('modals.bountyCancel.authorization.accountInput.tooltipText')}
           >
             <SelectAccount
               filter={accountsFilter}
