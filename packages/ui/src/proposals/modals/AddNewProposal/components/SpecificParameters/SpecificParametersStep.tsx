@@ -158,12 +158,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
     case state.matches('specificParameters.fundingRequest'):
       return <FundingRequest />
     case state.matches('specificParameters.runtimeUpgrade'):
-      return (
-        <RuntimeUpgrade
-          runtime={state.context.specifics?.runtime}
-          setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
-        />
-      )
+      return <RuntimeUpgrade />
     case state.matches('specificParameters.setCouncilorReward'):
       return (
         <SetCouncilorReward

@@ -503,15 +503,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           },
         },
         fundingRequest: {},
-        runtimeUpgrade: {
-          on: {
-            SET_RUNTIME: {
-              actions: assign({
-                specifics: (context, event) => ({ ...context.specifics, runtime: event.runtime }),
-              }),
-            },
-          },
-        },
+        runtimeUpgrade: {},
         setCouncilBudgetIncrement: {
           on: {
             SET_AMOUNT: {

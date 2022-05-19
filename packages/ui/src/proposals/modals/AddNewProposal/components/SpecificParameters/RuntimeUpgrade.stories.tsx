@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -10,11 +10,9 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [runtime, setRuntime] = useState<ArrayBuffer>()
-
   return (
     <MockApolloProvider members workingGroups>
-      <RuntimeUpgrade runtime={runtime} setRuntime={setRuntime} />
+      <RuntimeUpgrade />
     </MockApolloProvider>
   )
 }

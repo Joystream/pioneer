@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDropzone, DropEvent } from 'react-dropzone'
+import { useFormContext } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { Label } from '@/common/components/forms'
@@ -10,10 +11,6 @@ import { BorderRad, Colors, Transitions } from '@/common/constants'
 
 export interface RuntimeUpgradeParameters {
   runtime?: ArrayBuffer
-}
-
-interface RuntimeUpgradeProps extends RuntimeUpgradeParameters {
-  setRuntime: (runtime: ArrayBuffer) => void
 }
 
 interface DragResponseProps {
@@ -69,10 +66,11 @@ const validator = (file: ValidatedFile) => {
   return null
 }
 
-export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
+export const RuntimeUpgrade = () => {
+  const { setValue } = useFormContext()
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length) {
-      setRuntime(await acceptedFiles[0].arrayBuffer())
+      setValue('runtimeUpgrade.runtime', await acceptedFiles[0].arrayBuffer())
     }
   }, [])
 

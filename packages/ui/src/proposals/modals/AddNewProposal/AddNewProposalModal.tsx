@@ -121,6 +121,9 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       amount: BNSchema.test(moreThanMixed(0, '')).required(),
       account: AccountSchema.required(),
     }),
+    runtimeUpgrade: Yup.object().shape({
+      runtime: Yup.mixed().required(),
+    }),
   })
 }
 
