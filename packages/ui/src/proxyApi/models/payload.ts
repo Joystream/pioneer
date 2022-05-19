@@ -3,11 +3,10 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import { AnyTuple, Codec } from '@polkadot/types/types'
 import { Constructor } from '@polkadot/util/types'
 import BN from 'bn.js'
-import { get, isFunction, merge, uniqueId } from 'lodash'
+import { get, isArray, isFunction, merge, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
 import { AnyObject } from '@/common/types'
-import { mapObject } from '@/common/utils/object'
 import { recursiveProxy } from '@/common/utils/proxy'
 
 import { AnyMessage, PostMessage, RawMessageEvent, TransactionsRecord } from '../types'
@@ -30,42 +29,88 @@ export const serializePayload = (
   messages?: Observable<WorkerProxyMessage>,
   postMessage?: PostMessage<ClientProxyMessage>
 ): any => {
-  if (typeof payload === 'function') {
-    return
-  } else if (typeof payload !== 'object' || payload === null) {
-    return payload
-  } else if (isCodec(payload)) {
-    return serializeCodec(payload)
-  } else if (payload instanceof BN) {
-    // TODO add support for Long
-    return { kind: 'BN', value: payload.toArray() }
-  } else if (payload.kind === 'SubmittableExtrinsicProxy') {
-    return { kind: payload.kind, txId: payload.txId }
-  } else if (isSigner(payload)) {
-    return serializeProxy(payload, {}, 'signer', messages, postMessage)
-  } else {
-    return mapObject(payload, (payload) => serializePayload(payload, messages, postMessage))
+  const stack: AnyObject[] = []
+  const result = serializeValue(payload)
+
+  while (stack.length) {
+    const current = stack.pop() as AnyObject
+    if (Array.isArray(current)) {
+      for (let index = 0; index < current.length; index++) {
+        current[index] = serializeValue(current[index])
+      }
+    } else {
+      for (const key of Object.keys(current)) {
+        current[key] = serializeValue(current[key])
+      }
+    }
+  }
+
+  return result
+
+  function serializeValue(value: any) {
+    if (typeof value === 'function') {
+      return undefined
+    } else if (typeof value !== 'object' || value === null) {
+      return value
+    } else if (isCodec(value)) {
+      return serializeCodec(value)
+    } else if (value instanceof BN) {
+      return { kind: 'BN', value: value.toArray() }
+    } else if (value.kind === 'SubmittableExtrinsicProxy') {
+      return { kind: value.kind, txId: value.txId }
+    } else if (isSigner(value)) {
+      return serializeProxy(value, {}, 'signer', messages, postMessage)
+    } else {
+      const result = isArray(value) ? [...value] : { ...value }
+      stack.push(result)
+      return result
+    }
   }
 }
 
+// WARNING this mutate the serialized payload
 export const deserializePayload = (
   payload: any,
   messages?: Observable<ClientProxyMessage>,
   postMessage?: PostMessage<WorkerProxyMessage>,
   transactionsRecord?: TransactionsRecord
 ): any => {
-  if (typeof payload !== 'object' || payload === null) {
-    return payload
-  } else if (isSerializedCodec(payload)) {
-    return deserializeCodec(payload)
-  } else if (payload.kind === 'BN') {
-    return new BN(payload.value)
-  } else if (transactionsRecord && payload.kind === 'SubmittableExtrinsicProxy') {
-    return transactionsRecord[payload.txId]
-  } else if (payload.kind === 'proxy') {
-    return deserializeProxy(payload.json, payload.proxyId, messages, postMessage)
-  } else {
-    return mapObject(payload, (payload) => deserializePayload(payload, messages, postMessage, transactionsRecord))
+  const stack: AnyObject[] = []
+  const result = deserializeValue(payload)
+
+  while (stack.length) {
+    const current = stack.pop() as AnyObject
+    if (Array.isArray(current)) {
+      for (let index = 0; index < current.length; index++) {
+        current[index] = deserializeValue(current[index])
+      }
+    } else {
+      for (const key of Object.keys(current)) {
+        current[key] = deserializeValue(current[key])
+      }
+    }
+  }
+
+  return result
+
+  function deserializeValue(value: any) {
+    if (typeof value !== 'object' || value === null) {
+      return value
+    } else if ('kind' in value) {
+      switch (value.kind) {
+        case 'codec':
+          return deserializeCodec(value)
+        case 'BN':
+          return new BN(value.value)
+        case 'SubmittableExtrinsicProxy':
+          return transactionsRecord?.[value.txId]
+        case 'proxy':
+          return deserializeProxy(value.json, value.proxyId, messages, postMessage)
+      }
+    }
+
+    stack.push(value)
+    return value
   }
 }
 
@@ -161,8 +206,5 @@ const deserializeCodec = (serialized: SerializedCodec) => {
 }
 
 const bindIfFunction = (value: any, getContext: () => any) => (isFunction(value) ? value.bind(getContext()) : value)
-
-const isSerializedCodec = (obj: any): obj is SerializedCodec =>
-  'kind' in obj && obj.kind === 'codec' && 'type' in obj && typeof obj.type === 'string' && 'value' in obj
 
 const isSigner = (obj: any) => typeof obj.signPayload === 'function' && typeof obj.signRaw === 'function'
