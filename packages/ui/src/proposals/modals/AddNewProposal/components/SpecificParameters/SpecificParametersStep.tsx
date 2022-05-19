@@ -159,12 +159,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
     case state.matches('specificParameters.setCouncilorReward'):
       return <SetCouncilorReward />
     case state.matches('specificParameters.setCouncilBudgetIncrement'):
-      return (
-        <SetCouncilBudgetIncrement
-          amount={state.context.specifics?.amount}
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-        />
-      )
+      return <SetCouncilBudgetIncrement />
     case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
       return (
         <FillWorkingGroupLeadOpening

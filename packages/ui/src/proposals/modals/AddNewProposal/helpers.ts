@@ -1,3 +1,13 @@
+import BN from 'bn.js'
+
+import { Account } from '@/accounts/types'
+import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
+import { Member } from '@/memberships/types'
+import { UpdateKind } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
+import { ProposalType } from '@/proposals/types'
+import { GroupIdName } from '@/working-groups/types'
+
 export const defaultProposalValues = {
   proposalType: {
     type: undefined,
@@ -12,4 +22,109 @@ export const defaultProposalValues = {
   triggerAndDiscussion: {
     discussionWhitelist: [],
   },
+}
+
+export interface AddNewProposalForm {
+  proposalType: {
+    type?: ProposalType
+  }
+  stakingAccount: {
+    stakingAccount?: Account
+  }
+  proposalDetails: {
+    title?: string
+    rationale?: string
+  }
+  triggerAndDiscussion: {
+    discussionWhitelist: Member[]
+    isDiscussionClosed: boolean
+    trigger: boolean
+    triggerBlock?: number
+  }
+  signal: {
+    signal?: string
+  }
+  fundingRequest: {
+    amount: BN
+    account: Account
+  }
+  runtimeUpgrade: {
+    runtime?: ArrayBuffer
+  }
+  setCouncilorReward: {
+    amount?: BN
+  }
+  setCouncilBudgetIncrement: {
+    amount?: BN
+  }
+  fillWorkingGroupLeadOpening: {
+    openingId?: string
+    applicationId?: string
+    groupId?: GroupIdName
+  }
+  workingGroupAndDescription: {
+    title?: string
+    description?: string
+    shortDescription?: string
+    groupId?: GroupIdName
+  }
+  durationAndProcess: {
+    details?: string
+    duration?: OpeningDurationProps['value']
+  }
+  applicationForm: {
+    questions?: QuestionValueProps[]
+  }
+  cancelWorkingGroupLeadOpening: {
+    groupId?: GroupIdName
+    openingId?: string
+  }
+  stakingPolicyAndReward: {
+    stakingAmount?: BN
+    leavingUnstakingPeriod?: number
+    rewardPerBlock?: BN
+  }
+  decreaseWorkingGroupLeadStake: {
+    stakingAmount?: BN
+    groupId?: GroupIdName
+    workerId?: number
+  }
+  slashWorkingGroupLead: {
+    slashingAmount?: BN
+    groupId?: GroupIdName
+    workerId?: number
+  }
+  terminateWorkingGroupLead: {
+    slashingAmount?: BN
+    groupId?: GroupIdName
+    workerId?: number
+  }
+  setWorkingGroupLeadReward: {
+    rewardPerBlock?: BN
+    groupId?: GroupIdName
+    workerId?: number
+  }
+  updateWorkingGroupBudget: {
+    budgetUpdate?: BN
+    budgetUpdateKind?: UpdateKind
+    groupId?: GroupIdName
+  }
+  setInitialInvitationCount: {
+    invitationCount?: BN
+  }
+  setReferralCut: {
+    referralCut?: number
+  }
+  setMembershipLeadInvitationQuota: {
+    amount?: BN
+  }
+  setInitialInvitationBalance: {
+    amount?: BN
+  }
+  setMaxValidatorCount: {
+    validatorCount?: BN
+  }
+  setMembershipPrice: {
+    amount?: BN
+  }
 }

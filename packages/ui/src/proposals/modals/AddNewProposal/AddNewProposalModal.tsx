@@ -62,7 +62,7 @@ import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/Succe
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
+import { AddNewProposalForm, defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import {
   AddNewProposalEvent,
@@ -127,6 +127,9 @@ const schemaFactory = (props: SchemaFactoryProps) => {
     setCouncilorReward: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, '')).required(),
     }),
+    setCouncilBudgetIncrement: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, '')).required(),
+    }),
   })
 }
 
@@ -138,7 +141,7 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
-  const [formMap, setFormMap] = useState<[Account, ProposalType] | []>([])
+  const [formMap, setFormMap] = useState<Partial<[Account, ProposalType]>>([])
 
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
@@ -150,8 +153,8 @@ export const AddNewProposalModal = () => {
   )
   const balance = useBalance(formMap[0]?.address)
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
-  const form = useForm({
-    resolver: useYupValidationResolver(
+  const form = useForm<AddNewProposalForm>({
+    resolver: useYupValidationResolver<AddNewProposalForm>(
       schemaFactory({
         proposalDetails: {
           titleMaxLength: api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0,
@@ -188,7 +191,7 @@ export const AddNewProposalModal = () => {
   }, [stakingStatus])
 
   useEffect(() => {
-    form.trigger(machineStateConverter(state.value))
+    form.trigger(machineStateConverter(state.value) as keyof AddNewProposalForm)
   }, [state.value])
 
   const transactionsSteps = useMemo(
@@ -197,28 +200,32 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const txBaseParams: BaseProposalParams = {
-    member_id: activeMember?.id,
-    title: state.context.title,
-    description: state.context.rationale,
-    ...(state.context.stakingAccount ? { staking_account_id: state.context.stakingAccount.address } : {}),
-    ...(state.context.triggerBlock ? { exact_execution_block: state.context.triggerBlock } : {}),
-  }
-
   const transaction = useMemo(() => {
-    if (activeMember && api) {
-      const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
+    if (state.matches('transaction')) {
+      if (activeMember && api) {
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
+          form.getValues() as AddNewProposalForm
+        const txBaseParams: BaseProposalParams = {
+          member_id: activeMember?.id,
+          title: proposalDetails.title,
+          description: proposalDetails.rationale,
+          ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
+          ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
+        }
 
-      if (stakingStatus === 'confirmed') {
-        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+        const txSpecificParameters = getSpecificParameters(api, specifics, form.formState.isValid)
+
+        if (stakingStatus === 'confirmed') {
+          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
+          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+        ])
       }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
-        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-      ])
     }
-  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState, stakingStatus])
+  }, [state.value, connectionState, stakingStatus])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -264,7 +271,7 @@ export const AddNewProposalModal = () => {
     setIsExecutionError(false)
   }, [send])
 
-  if (!api || !activeMember || !transaction || !feeInfo || state.matches('requirementsVerification')) {
+  if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
     return null
   }
 

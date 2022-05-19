@@ -95,7 +95,7 @@ export const AnnounceCandidacyModal = () => {
   const balance = useBalance(stakingAccountMap?.address)
 
   const form = useForm({
-    resolver: useYupValidationResolver(baseSchema, machineStateConverter(state.value)),
+    resolver: useYupValidationResolver<AnnounceCandidacyFrom>(baseSchema, machineStateConverter(state.value)),
     context: {
       stakingStatus,
       requiredAmount: stakingStatus === 'free' ? boundingLock : BN_ZERO,
@@ -114,7 +114,7 @@ export const AnnounceCandidacyModal = () => {
   }, [stakingAccount])
 
   useEffect(() => {
-    form.trigger(machineStateConverter(state.value))
+    form.trigger(machineStateConverter(state.value) as keyof AnnounceCandidacyFrom)
   }, [machineStateConverter(state.value)])
 
   useEffect(() => {
@@ -254,7 +254,7 @@ export const AnnounceCandidacyModal = () => {
       <BindStakingAccountModal
         onClose={hideModal}
         transaction={addStakingAccountCandidateTransaction}
-        signer={stakingAccount.address}
+        signer={stakingAccount?.address ?? ''}
         service={state.children.bindStakingAccountTransaction}
         memberId={activeMember.id}
         steps={transactionSteps}
@@ -268,7 +268,7 @@ export const AnnounceCandidacyModal = () => {
         onClose={hideModal}
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}
-        stake={form.watch('staking.amount')}
+        stake={form.watch('staking.amount') ?? BN_ZERO}
         service={state.children.announceCandidacyTransaction}
         steps={transactionSteps}
       />

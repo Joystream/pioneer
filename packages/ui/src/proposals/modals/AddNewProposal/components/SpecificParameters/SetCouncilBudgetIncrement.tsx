@@ -10,19 +10,7 @@ export interface SetCouncilBudgetIncrementParameters {
   amount?: BN
 }
 
-interface Props extends SetCouncilBudgetIncrementParameters {
-  setAmount: (amount: BN) => void
-}
-
-const MAX_AMOUNT = Math.pow(2, 128)
-
-export const SetCouncilBudgetIncrement = ({ amount, setAmount: setBudgetIncrement }: Props) => {
-  const onChange = (_: any, value: number) => {
-    if (Number(value) < MAX_AMOUNT) {
-      setBudgetIncrement(new BN(value))
-    }
-  }
-
+export const SetCouncilBudgetIncrement = () => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -40,7 +28,7 @@ export const SetCouncilBudgetIncrement = ({ amount, setAmount: setBudgetIncremen
             required
             message="Value must be greater than zero"
           >
-            <InputNumber id="amount-input" value={amount?.toString()} placeholder="0" onChange={onChange} />
+            <InputNumber id="amount-input" isInBN name="setCouncilBudgetIncrement.amount" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>
