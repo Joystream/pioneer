@@ -49,9 +49,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   const specifics = state.context.specifics
 
   switch (true) {
-    case state.matches('specificParameters.fundingRequest'): {
-      return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
-    }
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
@@ -159,14 +156,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
     case state.matches('specificParameters.signal'):
       return <Signal />
     case state.matches('specificParameters.fundingRequest'):
-      return (
-        <FundingRequest
-          account={state.context.specifics?.account}
-          amount={state.context.specifics?.amount}
-          setAccount={(account) => send('SET_ACCOUNT', { account })}
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-        />
-      )
+      return <FundingRequest />
     case state.matches('specificParameters.runtimeUpgrade'):
       return (
         <RuntimeUpgrade

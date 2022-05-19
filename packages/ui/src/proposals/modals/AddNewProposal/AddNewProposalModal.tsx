@@ -36,17 +36,19 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
 import {
+  BNSchema,
   enhancedGetErrorMessage,
   enhancedHasError,
   maxContext,
   minContext,
+  moreThanMixed,
   useYupValidationResolver,
 } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
+import { AccountSchema, IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
@@ -114,6 +116,10 @@ const schemaFactory = (props: SchemaFactoryProps) => {
     }),
     signal: Yup.object().shape({
       signal: Yup.string().required().trim(),
+    }),
+    fundingRequest: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, '')).required(),
+      account: AccountSchema.required(),
     }),
   })
 }
