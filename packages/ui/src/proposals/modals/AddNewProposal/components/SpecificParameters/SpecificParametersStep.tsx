@@ -49,9 +49,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   const specifics = state.context.specifics
 
   switch (true) {
-    case state.matches('specificParameters.signal'): {
-      return !!specifics?.signal
-    }
     case state.matches('specificParameters.fundingRequest'): {
       return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
     }
@@ -160,7 +157,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
 
   switch (true) {
     case state.matches('specificParameters.signal'):
-      return <Signal signal={state.context.specifics?.signal} setSignal={(signal) => send('SET_SIGNAL', { signal })} />
+      return <Signal />
     case state.matches('specificParameters.fundingRequest'):
       return (
         <FundingRequest

@@ -54,10 +54,7 @@ import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/comp
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
-import {
-  isValidSpecificParameters,
-  SpecificParametersStep,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
+import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
@@ -115,6 +112,9 @@ const schemaFactory = (props: SchemaFactoryProps) => {
         then: Yup.array().min(1).required(),
       }),
     }),
+    signal: Yup.object().shape({
+      signal: Yup.string().required().trim(),
+    }),
   })
 }
 
@@ -128,7 +128,6 @@ export const AddNewProposalModal = () => {
   const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
   const [formMap, setFormMap] = useState<[Account, ProposalType] | []>([])
 
-  const [isValidNext, setValidNext] = useState<boolean>(false)
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
@@ -239,40 +238,6 @@ export const AddNewProposalModal = () => {
       send('NEXT')
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo)])
-
-  useEffect((): any => {
-    if (state.matches('proposalType') && state.context.type) {
-      return setValidNext(true)
-    }
-
-    if (
-      state.matches('generalParameters.stakingAccount') &&
-      state.context.stakingAccount &&
-      stakingStatus !== 'unknown' &&
-      stakingStatus !== 'other'
-    ) {
-      return setValidNext(true)
-    }
-
-    if (state.matches('generalParameters.proposalDetails')) {
-      return
-    }
-
-    if (
-      state.matches('generalParameters.triggerAndDiscussion') &&
-      state.context.triggerBlock !== undefined &&
-      state.context.discussionMode &&
-      state.context.discussionWhitelist
-    ) {
-      return setValidNext(true)
-    }
-
-    if (state.matches('specificParameters')) {
-      return setValidNext(isValidSpecificParameters(state as AddNewProposalMachineState, minCount))
-    }
-
-    return setValidNext(false)
-  }, [state, activeMember?.id, stakingStatus])
 
   useEffect(() => {
     if (state.matches('beforeTransaction')) {
@@ -391,7 +356,7 @@ export const AddNewProposalModal = () => {
     errorChecker: enhancedHasError(form.formState.errors, machineStateConverter(state.value)),
     errorMessageGetter: enhancedGetErrorMessage(form.formState.errors, machineStateConverter(state.value)),
   }
-
+  // console.log(machineStateConverter(state.value), ' value signal ')
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader

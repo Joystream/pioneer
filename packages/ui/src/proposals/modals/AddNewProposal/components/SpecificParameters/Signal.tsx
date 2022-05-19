@@ -10,12 +10,7 @@ export interface SignalParameters {
   signal?: string
 }
 
-interface SignalProps {
-  signal?: string
-  setSignal: (signal: string) => void
-}
-
-export const Signal = ({ signal, setSignal }: SignalProps) => {
+export const Signal = () => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -27,11 +22,7 @@ export const Signal = ({ signal, setSignal }: SignalProps) => {
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent label="Signal" required inputSize="auto" id="signal">
-            <CKEditor
-              id="signal"
-              onReady={(editor) => editor.setData(signal || '')}
-              onChange={(event, editor) => setSignal(editor.getData())}
-            />
+            <CKEditor id="signal" name="signal.signal" />
           </InputComponent>
         </RowGapBlock>
       </Row>

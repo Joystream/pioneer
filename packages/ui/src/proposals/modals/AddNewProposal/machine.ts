@@ -265,7 +265,6 @@ type SetBudgetUpdateEvent = { type: 'SET_BUDGET_UPDATE'; amount: BN }
 type SetBudgetUpdateKindEvent = { type: 'SET_BUDGET_UPDATE_KIND'; kind: UpdateKind }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
-type SetSignalEvent = { type: 'SET_SIGNAL'; signal: string }
 type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalTrigger | undefined }
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
@@ -298,7 +297,6 @@ export type AddNewProposalEvent =
   | SetAmountEvent
   | SetTitleEvent
   | SetRationaleEvent
-  | SetSignalEvent
   | SetBudgetUpdateEvent
   | SetBudgetUpdateKindEvent
   | SetTriggerBlockEvent
@@ -481,17 +479,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             { target: 'setInitialInvitationCount', cond: isType('setInitialInvitationCount') },
           ],
         },
-        signal: {
-          on: {
-            SET_SIGNAL: {
-              actions: assign({
-                specifics: (context, event) => {
-                  return { ...context.specifics, signal: event.signal }
-                },
-              }),
-            },
-          },
-        },
+        signal: {},
         setMaxValidatorCount: {
           on: {
             SET_AMOUNT: {
