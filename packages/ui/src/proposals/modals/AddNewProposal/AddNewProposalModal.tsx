@@ -130,6 +130,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
     setCouncilBudgetIncrement: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, '')).required(),
     }),
+    fillWorkingGroupLeadOpening: Yup.object().shape({
+      openingId: Yup.string().required(),
+      applicationId: Yup.string().required(),
+      groupId: Yup.string().required(),
+    }),
   })
 }
 

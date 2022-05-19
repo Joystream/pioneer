@@ -626,34 +626,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
-        fillWorkingGroupLeadOpening: {
-          on: {
-            SET_APPLICATION_ID: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  applicationId: event.applicationId,
-                }),
-              }),
-            },
-            SET_OPENING_ID: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  openingId: event.openingId,
-                }),
-              }),
-            },
-            SET_WORKING_GROUP: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  groupId: event.groupId,
-                }),
-              }),
-            },
-          },
-        },
+        fillWorkingGroupLeadOpening: {},
         createWorkingGroupLeadOpening: {
           initial: 'workingGroupAndDescription',
           states: {

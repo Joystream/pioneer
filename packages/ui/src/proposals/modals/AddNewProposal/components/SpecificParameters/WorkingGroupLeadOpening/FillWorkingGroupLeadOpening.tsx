@@ -1,4 +1,5 @@
 import React, { Children, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { WorkingGroupOpeningType } from '@/common/api/queries'
@@ -9,7 +10,6 @@ import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { SelectWorkingGroupApplication } from '@/working-groups/components/SelectWorkingGroupApplication/SelectWorkingGroupApplication'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
-import { GroupIdName } from '@/working-groups/types'
 import { ApplicationAnswer, WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export interface FillWorkingGroupLeadOpeningParameters {
@@ -17,25 +17,19 @@ export interface FillWorkingGroupLeadOpeningParameters {
   applicationId?: string
 }
 
-interface Props extends FillWorkingGroupLeadOpeningParameters {
-  setOpeningId: (openingId: string) => void
-  setApplicationId: (applicationId: string) => void
-  setWorkingGroupId: (workingGroupId: GroupIdName) => void
-}
-
-export const FillWorkingGroupLeadOpening = ({
-  openingId,
-  setOpeningId,
-  applicationId,
-  setApplicationId,
-  setWorkingGroupId,
-}: Props) => {
+export const FillWorkingGroupLeadOpening = () => {
   const [answers, setAnswer] = useState<ApplicationAnswer[]>([])
+  const { setValue, watch } = useFormContext()
+  const [openingId, applicationId] = watch([
+    '.fillWorkingGroupLeadOpening.openingId',
+    'fillWorkingGroupLeadOpening.applicationId',
+  ])
 
   const selectApplication = (selected: WorkingGroupApplication) => {
-    setApplicationId(selected.id)
+    setValue('fillWorkingGroupLeadOpening.applicationId', selected.id, { shouldValidate: true })
     setAnswer(selected.answers)
   }
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -58,8 +52,8 @@ export const FillWorkingGroupLeadOpening = ({
               placeholder="Choose opening to fill"
               selectedOpeningId={openingId}
               onChange={(selected) => {
-                setWorkingGroupId(selected.groupId)
-                setOpeningId(selected.id)
+                setValue('fillWorkingGroupLeadOpening.openingId', selected.id, { shouldValidate: true })
+                setValue('fillWorkingGroupLeadOpening.groupId', selected.groupId, { shouldValidate: true })
               }}
               openingsPositionType={WorkingGroupOpeningType.Leader}
             />
