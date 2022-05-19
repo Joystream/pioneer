@@ -40,7 +40,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
+import { AccountSchema, AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -56,8 +56,8 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
 }
 
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: NewAddressSchema('rootAccount').required('This field is required'),
-  controllerAccount: NewAddressSchema('rootAccount').required('This field is required'),
+  rootAccount: AccountSchema.required('This field is required'),
+  controllerAccount: AccountSchema.required('This field is required'),
   avatarUri: AvatarURISchema,
   name: Yup.string().required('This field is required'),
   handle: HandleSchema.required('This field is required'),
@@ -123,6 +123,10 @@ export const BuyMembershipForm = ({
       setFormHandleMap(handle)
     }
   }, [handle])
+
+  useEffect(() => {
+    form.trigger('handle')
+  }, [potentialMemberIdSize])
 
   const hasError = enhancedHasError(form.formState.errors)
   const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
@@ -205,8 +209,8 @@ export const BuyMembershipForm = ({
             <Row>
               <InputComponent
                 id="member-avatar"
-                label="Member Avatar"
                 required
+                label="Member Avatar"
                 validation={hasError('avatarUri') ? 'invalid' : undefined}
                 message={
                   hasError('avatarUri')
@@ -229,7 +233,10 @@ export const BuyMembershipForm = ({
               Change account
             </ButtonGhost>
           )}
-          <Checkbox id={'privacy-policy-agreement'} onChange={(hasTerms) => form.setValue('hasTerms', hasTerms)}>
+          <Checkbox
+            id={'privacy-policy-agreement'}
+            onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
+          >
             <TextMedium colorInherit>
               I agree to the{' '}
               <LabelLink to={TermsRoutes.termsOfService} target="_blank">
