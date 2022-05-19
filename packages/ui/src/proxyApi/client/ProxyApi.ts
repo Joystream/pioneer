@@ -1,6 +1,6 @@
 import { ApiRx } from '@polkadot/api'
 import { Events } from '@polkadot/api/base/Events'
-import { distinctUntilChanged, filter, fromEvent, map, Observable } from 'rxjs'
+import { distinctUntilChanged, filter, fromEvent, map, Observable, share } from 'rxjs'
 
 import { firstWhere } from '@/common/utils/rx'
 
@@ -27,7 +27,8 @@ export class ProxyApi extends Events {
 
     const workerProxyMessages = messages.pipe(
       filter(({ data }) => data.messageType === 'proxy'),
-      deserializeMessage<WorkerProxyMessage>()
+      deserializeMessage<WorkerProxyMessage>(),
+      share()
     )
     const postMessage: PostMessage<ClientMessage> = (message) =>
       worker.postMessage({ ...message, payload: serializePayload(message.payload, workerProxyMessages, postMessage) })
@@ -37,7 +38,8 @@ export class ProxyApi extends Events {
     return messages.pipe(
       firstWhere(({ data }) => data.messageType === 'init'),
       deserializeMessage<WorkerInitMessage>(),
-      map(({ payload }) => new ProxyApi(messages, postMessage, payload.consts))
+      map(({ payload }) => new ProxyApi(messages, postMessage, payload.consts)),
+      share()
     )
   }
 

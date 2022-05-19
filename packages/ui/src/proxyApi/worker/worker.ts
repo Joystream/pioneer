@@ -3,7 +3,7 @@ import '@joystream/types/augment/augment-api'
 import '@joystream/types/augment/augment-types'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import rpc from '@polkadot/types/interfaces/jsonrpc'
-import { BehaviorSubject, filter, first, fromEvent } from 'rxjs'
+import { BehaviorSubject, filter, first, fromEvent, share } from 'rxjs'
 
 import { isDefined } from '@/common/utils'
 import { firstWhere } from '@/common/utils/rx'
@@ -23,7 +23,8 @@ const messages = fromEvent<RawClientMessageEvent>(self, 'message')
 
 const clientProxyMessage = messages.pipe(
   filter(({ data }) => data.messageType === 'proxy'),
-  deserializeMessage<ClientProxyMessage>()
+  deserializeMessage<ClientProxyMessage>(),
+  share()
 )
 
 messages.subscribe(({ data }) => {

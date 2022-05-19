@@ -1,6 +1,6 @@
 import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
-import { filter, Observable, map } from 'rxjs'
+import { filter, Observable, map, share } from 'rxjs'
 
 import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
@@ -34,7 +34,8 @@ export const query = <K extends ApiQueryKinds>(
 ) => {
   const queryMessages = messages.pipe(
     filter(({ data }) => data.messageType === apiKind),
-    deserializeMessage<WorkerQueryMessage<K>>()
+    deserializeMessage<WorkerQueryMessage<K>>(),
+    share()
   )
 
   return apiInterfaceProxy<K>((module, ...path) => (...params) => {
@@ -50,7 +51,8 @@ export const query = <K extends ApiQueryKinds>(
 
     return queryMessages.pipe(
       filter((message) => message.callId === callId),
-      map(({ payload }) => payload)
+      map(({ payload }) => payload),
+      share()
     )
   })
 }

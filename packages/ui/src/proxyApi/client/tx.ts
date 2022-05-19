@@ -1,7 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
-import { filter, map, Observable } from 'rxjs'
+import { filter, map, Observable, share } from 'rxjs'
 
 import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
@@ -34,7 +34,8 @@ const ObservableMethods = ['paymentInfo', 'signAndSend'] as const
 export const tx = (messages: Observable<RawWorkerMessageEvent>, postMessage: PostMessage<ClientTxMessage>) => {
   const txMessages = messages.pipe(
     filter(({ data }) => data.messageType === 'tx'),
-    deserializeMessage<WorkerTxMessage>()
+    deserializeMessage<WorkerTxMessage>(),
+    share()
   )
 
   return apiInterfaceProxy<'tx'>((module, txKey) => (...params) => {
@@ -44,7 +45,10 @@ export const tx = (messages: Observable<RawWorkerMessageEvent>, postMessage: Pos
       ...Object.fromEntries(ObservableMethods.map(addObservableMethodEntry)),
     }
 
-    const _messages = txMessages.pipe(filter(({ txId }) => txId === transaction.txId)) as Observable<WorkerTxMessage>
+    const _messages = txMessages.pipe(
+      filter(({ txId }) => txId === transaction.txId),
+      share()
+    ) as Observable<WorkerTxMessage>
     const _postMessage = (message: Pick<ClientTxMessage, 'method' | 'payload'>) =>
       postMessage({ messageType: 'tx', module, txKey, txId: transaction.txId, ...message })
 
@@ -60,7 +64,8 @@ export const tx = (messages: Observable<RawWorkerMessageEvent>, postMessage: Pos
           _postMessage({ method: { key: method, id: callId }, payload: params })
           return _messages.pipe(
             filter((message) => message.callId === callId),
-            map(({ payload }) => payload)
+            map(({ payload }) => payload),
+            share()
           )
         },
       ]
