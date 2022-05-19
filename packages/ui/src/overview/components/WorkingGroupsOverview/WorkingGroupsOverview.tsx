@@ -20,7 +20,7 @@ export const WorkingGroupsOverview = () => {
   const groupsCount = useMemo(() => groups.length, [groups])
 
   const totalBudget = useMemo(
-    () => groups.reduce((previous, current) => previous.add(current.budget), BN_ZERO),
+    () => groups.reduce((previous, current) => previous.add(current.budget ?? BN_ZERO), BN_ZERO),
     [groups]
   )
 

@@ -58,11 +58,12 @@ export const SideBar = () => {
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
-            <NavigationLinksItem>
-              <NavigationLink to={OverviewRoutes.overview} icon={<OverviewIcon />}>
-                Overview
-              </NavigationLink>
-            </NavigationLinksItem>
+            {/*Uncomment to see whole overview section*/}
+            {/*<NavigationLinksItem>*/}
+            {/*  <NavigationLink to={OverviewRoutes.overview} icon={<OverviewIcon />}>*/}
+            {/*    Overview*/}
+            {/*  </NavigationLink>*/}
+            {/*</NavigationLinksItem>*/}
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile

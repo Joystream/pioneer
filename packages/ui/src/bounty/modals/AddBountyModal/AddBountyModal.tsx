@@ -66,8 +66,7 @@ export const AddBountyModal = () => {
       maxWhitelistSize: bountyApi?.closedContractSizeLimit,
       minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
     } as Conditions,
-    mode: 'onBlur',
-    reValidateMode: 'onChange',
+    mode: 'onChange',
     defaultValues: formDefaultValues,
   })
 

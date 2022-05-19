@@ -2,18 +2,14 @@ import React from 'react'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
-import { Loading } from '@/common/components/Loading'
 import { WorkingGroupsList } from '@/working-groups/components/WorkingGroupsList'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
+import { WorkingGroup } from '@/working-groups/types'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
 export const WorkingGroups = () => {
-  const { isLoading, groups } = useWorkingGroups()
-
-  if (isLoading) {
-    return <Loading />
-  }
+  const { groups = defaultGroups } = useWorkingGroups()
 
   return (
     <PageLayout
@@ -22,3 +18,42 @@ export const WorkingGroups = () => {
     />
   )
 }
+
+const defaultGroups: WorkingGroup[] = [
+  {
+    id: 'storageWorkingGroup',
+    name: 'Storage',
+  },
+  {
+    id: 'membershipWorkingGroup',
+    name: 'Membership',
+  },
+  {
+    id: 'contentWorkingGroup',
+    name: 'Content',
+  },
+  {
+    id: 'forumWorkingGroup',
+    name: 'Forum',
+  },
+  {
+    id: 'operationsWorkingGroupAlpha',
+    name: 'Operations Alpha',
+  },
+  {
+    id: 'gatewayWorkingGroup',
+    name: 'Gateway',
+  },
+  {
+    id: 'distributionWorkingGroup',
+    name: 'Distribution',
+  },
+  {
+    id: 'operationsWorkingGroupBeta',
+    name: 'Operations Beta',
+  },
+  {
+    id: 'operationsWorkingGroupGamma',
+    name: 'Operations Gamma',
+  },
+]
