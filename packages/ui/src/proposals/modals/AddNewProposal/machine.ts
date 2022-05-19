@@ -597,15 +597,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
-        setCouncilorReward: {
-          on: {
-            SET_AMOUNT: {
-              actions: assign({
-                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
-              }),
-            },
-          },
-        },
+        setCouncilorReward: {},
         setWorkingGroupLeadReward: {
           on: {
             SET_REWARD_PER_BLOCK: {

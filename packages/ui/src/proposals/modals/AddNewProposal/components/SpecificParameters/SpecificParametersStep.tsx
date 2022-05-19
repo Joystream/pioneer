@@ -83,9 +83,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
         specifics.amount.gtn(minimumValidatorCount?.toNumber() || 0)
       )
     }
-    case state.matches('specificParameters.setCouncilorReward'): {
-      return !!(specifics?.amount && specifics.amount.gtn(0))
-    }
     case state.matches('specificParameters.setCouncilBudgetIncrement'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
@@ -160,12 +157,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
     case state.matches('specificParameters.runtimeUpgrade'):
       return <RuntimeUpgrade />
     case state.matches('specificParameters.setCouncilorReward'):
-      return (
-        <SetCouncilorReward
-          amount={state.context.specifics?.amount}
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-        />
-      )
+      return <SetCouncilorReward />
     case state.matches('specificParameters.setCouncilBudgetIncrement'):
       return (
         <SetCouncilBudgetIncrement
