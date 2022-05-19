@@ -79,6 +79,16 @@ export interface MemberFormFields {
   invitor?: Member
 }
 
+const formDefaultValues = {
+  name: '',
+  handle: '',
+  about: '',
+  avatarUri: '',
+  isReferred: false,
+  referrer: undefined,
+  hasTerms: false,
+}
+
 export const BuyMembershipForm = ({
   onSubmit,
   membershipPrice,
@@ -88,18 +98,6 @@ export const BuyMembershipForm = ({
 }: BuyMembershipFormProps) => {
   const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
-
-  const formDefaultValues = {
-    name: '',
-    rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
-    controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
-    handle: '',
-    about: '',
-    avatarUri: '',
-    isReferred: false,
-    referrer: undefined,
-    hasTerms: false,
-  }
 
   const [formHandleMap, setFormHandleMap] = useState('')
   const handleHash = blake2AsHex(formHandleMap)
@@ -111,19 +109,15 @@ export const BuyMembershipForm = ({
     resolver: useYupValidationResolver(CreateMemberSchema),
     context: { size: potentialMemberIdSize },
     mode: 'onChange',
-    defaultValues: formDefaultValues,
+    defaultValues: {
+      ...formDefaultValues,
+      rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
+      controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
+    },
   })
 
-  const [rootAccount, controllerAccount, handle, isReferred, avatarUri, referrer] = form.watch([
-    'rootAccount',
-    'controllerAccount',
-    'handle',
-    'name',
-    'isReferred',
-    'avatarUri',
-    'about',
-    'referrer',
-  ])
+  const [handle, isReferred, referrer] = form.watch(['handle', 'isReferred', 'referrer'])
+
   useEffect(() => {
     if (handle) {
       setFormHandleMap(handle)
@@ -142,17 +136,12 @@ export const BuyMembershipForm = ({
             <Row>
               <InlineToggleWrap>
                 <Label>I was referred by a member: </Label>
-                <ToggleCheckbox
-                  trueLabel="Yes"
-                  falseLabel="No"
-                  onChange={(isReferred) => form.setValue('isReferred', isReferred)}
-                  checked={isReferred ?? false}
-                />
+                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isReferred" />
               </InlineToggleWrap>
               {isReferred && (
                 <InputComponent required inputSize="l">
                   <SelectMember
-                    onChange={(member) => form.setValue('referrer', member)}
+                    onChange={(member) => form.setValue('referrer', member, { shouldValidate: true })}
                     disabled={!isReferred}
                     selected={referrer}
                   />
@@ -171,10 +160,7 @@ export const BuyMembershipForm = ({
                     inputSize="l"
                     tooltipText="Something about root accounts"
                   >
-                    <SelectAccount
-                      onChange={(account) => form.setValue('rootAccount', account)}
-                      selected={rootAccount}
-                    />
+                    <SelectAccount name="rootAccount" />
                   </InputComponent>
                 </Row>
                 <Row>
@@ -184,10 +170,7 @@ export const BuyMembershipForm = ({
                     inputSize="l"
                     tooltipText="Something about controller account"
                   >
-                    <SelectAccount
-                      onChange={(account) => form.setValue('controllerAccount', account)}
-                      selected={controllerAccount}
-                    />
+                    <SelectAccount name="controllerAccount" />
                   </InputComponent>
                 </Row>
               </>
@@ -224,7 +207,6 @@ export const BuyMembershipForm = ({
                 id="member-avatar"
                 label="Member Avatar"
                 required
-                value={avatarUri}
                 validation={hasError('avatarUri') ? 'invalid' : undefined}
                 message={
                   hasError('avatarUri')
