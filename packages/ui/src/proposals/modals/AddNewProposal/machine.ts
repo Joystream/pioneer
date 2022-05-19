@@ -357,7 +357,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         NEXT: {
           target: 'requiredStakeVerification',
-          cond: (context) => !!context.type,
         },
         SET_TYPE: {
           actions: assign({
@@ -394,7 +393,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             BACK: '#proposalType',
             NEXT: {
               target: 'proposalDetails',
-              cond: (context) => !!context.stakingAccount,
             },
             SET_ACCOUNT: {
               actions: assign({
@@ -409,7 +407,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             BACK: 'stakingAccount',
             NEXT: {
               target: 'triggerAndDiscussion',
-              cond: (context) => !!context.title && !!context.rationale,
             },
             SET_TITLE: {
               actions: assign({
@@ -429,10 +426,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             BACK: 'proposalDetails',
             NEXT: {
               target: 'finishGeneralParameters',
-              cond: (context) =>
-                context.discussionMode !== undefined &&
-                context.discussionWhitelist !== undefined &&
-                context.triggerBlock !== undefined,
             },
             SET_TRIGGER_BLOCK: {
               actions: assign({

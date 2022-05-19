@@ -135,7 +135,11 @@ export const CKEditor = React.memo(
         name={name}
         control={formContext.control}
         render={({ field }) => (
-          <BaseCKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
+          <BaseCKEditor
+            {...props}
+            onReady={(editor) => editor.setData(field.value ?? '')}
+            onChange={(_, editor) => field.onChange(editor.getData())}
+          />
         )}
       />
     )

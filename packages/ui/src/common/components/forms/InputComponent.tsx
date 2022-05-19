@@ -212,7 +212,7 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Input
         return (
           <BasedInputNumber
             {...props}
-            value={new BN(field.value)?.toString()}
+            value={new BN(field.value)?.toString() ?? ''}
             onChange={(_, value) => field.onChange(isInBN ? new BN(value) : value)}
             onBlur={field.onBlur}
           />

@@ -3,13 +3,17 @@ import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { Account } from '@/accounts/types'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
@@ -22,15 +26,27 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
+import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
+import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
+import {
+  enhancedGetErrorMessage,
+  enhancedHasError,
+  maxContext,
+  minContext,
+  useYupValidationResolver,
+} from '@/common/utils/validation'
+import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
@@ -47,14 +63,14 @@ import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/Succe
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
+import { defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import {
   AddNewProposalEvent,
   addNewProposalMachine,
   AddNewProposalMachineState,
-  ProposalTrigger,
 } from '@/proposals/modals/AddNewProposal/machine'
-import { ProposalConstants, ProposalType } from '@/proposals/types'
+import { ProposalType } from '@/proposals/types'
 
 import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
 
@@ -65,24 +81,105 @@ export type BaseProposalParams = Exclude<
 
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
+interface SchemaFactoryProps {
+  proposalDetails: {
+    titleMaxLength: number
+    rationaleMaxLength: number
+  }
+}
+
+const schemaFactory = (props: SchemaFactoryProps) => {
+  return Yup.object().shape({
+    proposalType: Yup.object().shape({
+      type: Yup.string().required(),
+    }),
+    stakingAccount: Yup.object().shape({
+      stakingAccount: StakingAccountSchema.required(),
+    }),
+    proposalDetails: Yup.object().shape({
+      title: Yup.string().required().max(props.proposalDetails.titleMaxLength),
+      rationale: Yup.string().required().max(props.proposalDetails.rationaleMaxLength),
+    }),
+    triggerAndDiscussion: Yup.object().shape({
+      trigger: Yup.boolean(),
+      triggerBlock: Yup.number().when('trigger', {
+        is: true,
+        then: Yup.number()
+          .test(minContext('The minimum block number is ${min}', 'minTriggerBlock'))
+          .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock'))
+          .required(),
+      }),
+      isDiscussionClosed: Yup.boolean(),
+      discussionWhitelist: Yup.array().when('isDiscussionClosed', {
+        is: true,
+        then: Yup.array().min(1).required(),
+      }),
+    }),
+  })
+}
+
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const minCount = useMinimumValidatorCount()
+  const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
+  const [formMap, setFormMap] = useState<[Account, ProposalType] | []>([])
 
-  const constants = useProposalConstants(state.context.type)
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    constants?.requiredStake.toNumber() || 0,
-    'Proposals'
-  )
   const [isValidNext, setValidNext] = useState<boolean>(false)
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
-  const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const constants = useProposalConstants(formMap[1])
+  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
+    constants?.requiredStake.toNumber() || 0,
+    'Proposals'
+  )
+  const balance = useBalance(formMap[0]?.address)
+  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
+  const form = useForm({
+    resolver: useYupValidationResolver(
+      schemaFactory({
+        proposalDetails: {
+          titleMaxLength: api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0,
+          rationaleMaxLength: api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0,
+        },
+      }),
+      machineStateConverter(state.value)
+    ),
+    mode: 'onChange',
+    context: {
+      stakeLock: 'Proposals',
+      balances: balance,
+      stakingStatus,
+      requiredAmount: constants?.requiredStake,
+      maxTriggerBlock: getMaxBlock(currentBlock),
+      minTriggerBlock: currentBlock
+        ? currentBlock.addn(constants?.votingPeriod ?? 0).addn(constants?.gracePeriod ?? 0)
+        : BN_ZERO,
+    } as IStakingAccountSchema,
+    defaultValues: defaultProposalValues,
+  })
+
+  const mapDependencies = form.watch(['stakingAccount.stakingAccount', 'proposalType.type'])
+  // console.log(form.formState.errors, form.formState.isValid, 'xd', state.context.type)
+  useEffect(() => {
+    setFormMap(mapDependencies)
+    if (state.matches('proposalType')) {
+      send('SET_TYPE', { proposalType: mapDependencies[1] })
+    }
+  }, [JSON.stringify(mapDependencies)])
+
+  useEffect(() => {
+    form.trigger('stakingAccount')
+  }, [stakingStatus])
+
+  useEffect(() => {
+    form.trigger(machineStateConverter(state.value))
+  }, [state.value])
+
   const transactionsSteps = useMemo(
     () =>
       state.context.discussionMode === 'closed' ? [...minimalSteps, { title: 'Set discussion mode' }] : minimalSteps,
@@ -290,6 +387,11 @@ export const AddNewProposalModal = () => {
     )
   }
 
+  const validationHelpers = {
+    errorChecker: enhancedHasError(form.formState.errors, machineStateConverter(state.value)),
+    errorMessageGetter: enhancedGetErrorMessage(form.formState.errors, machineStateConverter(state.value)),
+  }
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader
@@ -303,46 +405,26 @@ export const AddNewProposalModal = () => {
             <ProposalConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
           <StyledStepperBody>
-            {state.matches('proposalType') && (
-              <ProposalTypeStep
-                type={state.context.type}
-                setType={(proposalType) => send('SET_TYPE', { proposalType })}
-              />
-            )}
-            {state.matches('generalParameters.stakingAccount') && (
-              <StakingAccountStep
-                member={activeMember}
-                requiredStake={constants?.requiredStake as BN}
-                account={state.context.stakingAccount}
-                setAccount={(account) => send('SET_ACCOUNT', { account })}
-              />
-            )}
-            {state.matches('generalParameters.proposalDetails') && (
-              <ProposalDetailsStep
-                proposer={activeMember}
-                title={state.context.title}
-                rationale={state.context.rationale}
-                setTitle={(title) => send('SET_TITLE', { title })}
-                setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
-                setValidNext={setValidNext}
-              />
-            )}
-            {state.matches('generalParameters.triggerAndDiscussion') && (
-              <TriggerAndDiscussionStep
-                params={{ constants: constants as ProposalConstants, ...state.context }}
-                setTriggerBlock={(triggerBlock?: ProposalTrigger) => send('SET_TRIGGER_BLOCK', { triggerBlock })}
-                setDiscussionMode={(mode) => send('SET_DISCUSSION_MODE', { mode })}
-                setDiscussionWhitelist={(whitelist) => send('SET_DISCUSSION_WHITELIST', { whitelist })}
-              />
-            )}
-            {state.matches('specificParameters') && (
-              <SpecificParametersStep
-                state={state as AddNewProposalMachineState}
-                send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
-                setIsExecutionError={setIsExecutionError}
-              />
-            )}
-            {isExecutionError && <ExecutionRequirementsWarning />}
+            <FormProvider {...form}>
+              {state.matches('proposalType') && <ProposalTypeStep />}
+              {state.matches('generalParameters.stakingAccount') && (
+                <StakingAccountStep {...validationHelpers} requiredStake={constants?.requiredStake as BN} />
+              )}
+              {state.matches('generalParameters.proposalDetails') && (
+                <ProposalDetailsStep proposer={activeMember} {...validationHelpers} />
+              )}
+              {state.matches('generalParameters.triggerAndDiscussion') && (
+                <TriggerAndDiscussionStep {...validationHelpers} />
+              )}
+              {state.matches('specificParameters') && (
+                <SpecificParametersStep
+                  state={state as AddNewProposalMachineState}
+                  send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
+                  setIsExecutionError={setIsExecutionError}
+                />
+              )}
+              {isExecutionError && <ExecutionRequirementsWarning />}
+            </FormProvider>
           </StyledStepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
@@ -361,7 +443,11 @@ export const AddNewProposalModal = () => {
               I understand the implications of overriding the execution constraints validation.
             </Checkbox>
           )}
-          <ButtonPrimary disabled={!isValidNext || !warningAccepted} onClick={() => send('NEXT')} size="medium">
+          <ButtonPrimary
+            disabled={!form.formState.isValid || !warningAccepted}
+            onClick={() => send('NEXT')}
+            size="medium"
+          >
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
