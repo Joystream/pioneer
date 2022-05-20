@@ -2,7 +2,6 @@ import BN from 'bn.js'
 
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
 import { Member } from '@/memberships/types'
 import { UpdateKind } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
 import { ProposalType } from '@/proposals/types'
@@ -70,7 +69,8 @@ export interface AddNewProposalForm {
   }
   durationAndProcess: {
     details?: string
-    duration?: OpeningDurationProps['value']
+    duration?: number
+    isLimited: boolean
   }
   applicationForm: {
     questions?: QuestionValueProps[]

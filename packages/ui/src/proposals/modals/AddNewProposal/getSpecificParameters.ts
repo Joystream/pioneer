@@ -73,8 +73,8 @@ export const getSpecificParameters = (
             shortDescription: specifics?.workingGroupAndDescription.shortDescription,
             description: specifics?.workingGroupAndDescription.description,
             hiringLimit: 1,
-            expectedEndingTimestamp: specifics?.durationAndProcess.duration?.isLimited
-              ? specifics.durationAndProcess.duration.length
+            expectedEndingTimestamp: specifics?.durationAndProcess?.isLimited
+              ? specifics.durationAndProcess?.duration
               : undefined,
             applicationDetails: specifics?.durationAndProcess.details,
             applicationFormQuestions: specifics?.applicationForm.questions?.map(({ questionField, shortValue }) => ({

@@ -141,6 +141,14 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       shortDescription: Yup.string().required(),
       groupId: Yup.string().required(),
     }),
+    durationAndProcess: Yup.object().shape({
+      details: Yup.string().required(),
+      isLimited: Yup.boolean(),
+      length: Yup.number().when('isLimited', {
+        is: true,
+        then: Yup.number().required(),
+      }),
+    }),
   })
 }
 
