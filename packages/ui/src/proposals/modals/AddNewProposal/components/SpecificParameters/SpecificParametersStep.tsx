@@ -53,13 +53,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
-      return !!(
-        specifics?.stakingAmount?.toNumber() &&
-        specifics.leavingUnstakingPeriod &&
-        specifics.rewardPerBlock?.toNumber()
-      )
-    }
     case state.matches('specificParameters.setMaxValidatorCount'): {
       return !!(
         specifics?.amount &&
@@ -154,20 +147,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):
       return <CancelWorkingGroupLeadOpening />
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
-      return (
-        <StakingPolicyAndReward
-          stakingAmount={state.context.specifics?.stakingAmount}
-          leavingUnstakingPeriod={state.context.specifics?.leavingUnstakingPeriod}
-          rewardPerBlock={state.context.specifics?.rewardPerBlock}
-          setStakingAmount={(stakingAmount) => send('SET_STAKING_AMOUNT', { stakingAmount })}
-          setLeavingUnstakingPeriod={(leavingUnstakingPeriod) =>
-            send('SET_LEAVING_UNSTAKING_PERIOD', { leavingUnstakingPeriod })
-          }
-          setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
-          setIsExecutionError={setIsExecutionError}
-          workingGroupId={state.context.specifics?.groupId}
-        />
-      )
+      return <StakingPolicyAndReward {...validationHelpers} />
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
       return (
         <DecreaseWorkingGroupLeadStake

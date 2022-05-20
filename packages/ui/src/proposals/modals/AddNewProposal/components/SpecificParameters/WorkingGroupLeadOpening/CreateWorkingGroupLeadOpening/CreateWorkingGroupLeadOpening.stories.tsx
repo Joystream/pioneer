@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import BN from 'bn.js'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -32,21 +31,9 @@ const ApplicationFormTemplate: Story = () => {
 }
 
 const StakingTemplate: Story = () => {
-  const [stakingAmount, setStakingAmount] = useState(new BN(0))
-  const [leavingUnstakingPeriod, setLeavingUnstakingPeriod] = useState(0)
-  const [rewardPerBlock, setRewardPerBlock] = useState(new BN(0))
-
   return (
     <MockApolloProvider members workingGroups>
-      <StakingPolicyAndReward
-        stakingAmount={stakingAmount}
-        setStakingAmount={setStakingAmount}
-        leavingUnstakingPeriod={leavingUnstakingPeriod}
-        setLeavingUnstakingPeriod={setLeavingUnstakingPeriod}
-        rewardPerBlock={rewardPerBlock}
-        setRewardPerBlock={setRewardPerBlock}
-        setIsExecutionError={() => undefined}
-      />
+      <StakingPolicyAndReward errorMessageGetter={() => undefined} errorChecker={() => false} />
     </MockApolloProvider>
   )
 }

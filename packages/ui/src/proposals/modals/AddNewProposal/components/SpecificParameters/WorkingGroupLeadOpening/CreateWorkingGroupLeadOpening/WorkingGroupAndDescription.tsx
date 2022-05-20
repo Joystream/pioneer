@@ -31,9 +31,10 @@ export const WorkingGroupAndDescription = ({ errorMessageGetter, errorChecker }:
             <SelectWorkingGroup
               id="working-group-select"
               selectedGroupId={watch('workingGroupAndDescription.groupId')}
-              onChange={(selected) =>
+              onChange={(selected) => {
                 setValue('workingGroupAndDescription.groupId', selected.id, { shouldValidate: true })
-              }
+                setValue('groupId', selected.id)
+              }}
             />
           </InputComponent>
           <InputComponent

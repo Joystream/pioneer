@@ -3,7 +3,7 @@ import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm, FormProvider, FieldError } from 'react-hook-form'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -70,6 +70,7 @@ import {
   AddNewProposalMachineState,
 } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
+import { GroupIdName } from '@/working-groups/types'
 
 import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
 
@@ -89,6 +90,7 @@ interface SchemaFactoryProps {
 
 const schemaFactory = (props: SchemaFactoryProps) => {
   return Yup.object().shape({
+    groupId: Yup.string(),
     proposalType: Yup.object().shape({
       type: Yup.string().required(),
     }),
@@ -164,6 +166,15 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       groupId: Yup.string().required(),
       openingId: Yup.string().required(),
     }),
+    stakingPolicyAndReward: Yup.object().shape({
+      stakingAmount: BNSchema.test(
+        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake')
+      ).required(),
+      leavingUnstakingPeriod: BNSchema.test(
+        minContext('Input must be greater than ${min} for proposal to execute', 'minUnstakingPeriodLimit')
+      ).required(),
+      rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required(),
+    }),
   })
 }
 
@@ -175,7 +186,8 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
-  const [formMap, setFormMap] = useState<Partial<[Account, ProposalType]>>([])
+  const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName]>>([])
+  const workingGroupConsts = api?.consts[formMap[2] as GroupIdName]
 
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
@@ -199,6 +211,8 @@ export const AddNewProposalModal = () => {
     ),
     mode: 'onChange',
     context: {
+      leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
+      minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',
       balances: balance,
       stakingStatus,
@@ -211,7 +225,7 @@ export const AddNewProposalModal = () => {
     defaultValues: defaultProposalValues,
   })
 
-  const mapDependencies = form.watch(['stakingAccount.stakingAccount', 'proposalType.type'])
+  const mapDependencies = form.watch(['stakingAccount.stakingAccount', 'proposalType.type', 'groupId'])
   // console.log(form.formState.errors, form.formState.isValid, 'xd', state.context.type)
   useEffect(() => {
     setFormMap(mapDependencies)
@@ -227,6 +241,19 @@ export const AddNewProposalModal = () => {
   useEffect(() => {
     form.trigger(machineStateConverter(state.value) as keyof AddNewProposalForm)
   }, [state.value])
+
+  useEffect(() => {
+    if (machineStateConverter(state.value) === 'stakingPolicyAndReward') {
+      if (
+        form.formState.errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
+        (form.formState.errors.stakingPolicyAndReward?.stakingAmount as FieldError)?.type === 'minContext'
+      ) {
+        setIsExecutionError(true)
+      } else {
+        setIsExecutionError(false)
+      }
+    }
+  }, [JSON.stringify(form.formState.errors)])
 
   const transactionsSteps = useMemo(
     () =>
@@ -463,7 +490,7 @@ export const AddNewProposalModal = () => {
             </Checkbox>
           )}
           <ButtonPrimary
-            disabled={!form.formState.isValid || !warningAccepted}
+            disabled={!form.formState.isValid && !warningAccepted}
             onClick={() => send('NEXT')}
             size="medium"
           >

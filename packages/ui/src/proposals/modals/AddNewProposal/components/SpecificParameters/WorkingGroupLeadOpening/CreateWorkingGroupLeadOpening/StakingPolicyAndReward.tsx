@@ -1,76 +1,18 @@
-import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
-import * as Yup from 'yup'
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols/LinkSymbol'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
-import { useBlockInput } from '@/common/hooks/useBlockInput'
-import { useSchema } from '@/common/hooks/useSchema'
 import { formatBlocksToDuration } from '@/common/model/formatters'
-import { ExecutionProps } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
-import { StakingPolicyAndRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
-import { GroupIdName } from '@/working-groups/types'
+import { ValidationHelpers } from '@/common/utils/validation'
 
-interface Props extends StakingPolicyAndRewardParameters, ExecutionProps {
-  setStakingAmount(stakingAmount: BN): void
-  setLeavingUnstakingPeriod(leavingUnstakingPeriod: number): void
-  setRewardPerBlock(rewardPerBlockId: BN): void
-  workingGroupId?: string
-}
-
-const baseSchema = Yup.object().shape({
-  block: Yup.number(),
-  rewardPerBlock: Yup.number().min(1, 'Amount must be greater than zero'),
-  stakingAmount: Yup.number(),
-})
-
-export const StakingPolicyAndReward = ({
-  stakingAmount,
-  leavingUnstakingPeriod,
-  setStakingAmount,
-  setLeavingUnstakingPeriod,
-  setRewardPerBlock,
-  rewardPerBlock,
-  setIsExecutionError,
-  workingGroupId = 'forumWorkingGroup',
-}: Props) => {
-  const { api } = useApi()
-  const [block, updateBlock] = useBlockInput(0, 100_000, new BN(leavingUnstakingPeriod || 0))
-  const workingGroupConsts = api?.consts[workingGroupId as GroupIdName]
-
-  const schema = useMemo(() => {
-    if (workingGroupConsts) {
-      baseSchema.fields.stakingAmount = baseSchema.fields.stakingAmount.min(
-        workingGroupConsts.leaderOpeningStake.toNumber(),
-        'Input must be greater than ${min} for proposal to execute'
-      )
-      baseSchema.fields.block = baseSchema.fields.block.min(
-        workingGroupConsts.minUnstakingPeriodLimit.toNumber() + 1,
-        'Input must be greater than ${min} for proposal to execute'
-      )
-    }
-    return baseSchema
-  }, [workingGroupConsts])
-
-  const { errors } = useSchema(
-    {
-      block: block.toNumber() === 0 ? undefined : block.toNumber(),
-      rewardPerBlock: rewardPerBlock?.toNumber(),
-      stakingAmount: stakingAmount?.toNumber(),
-    },
-    schema
-  )
-
-  useEffect(() => setLeavingUnstakingPeriod(block.toNumber()), [block.toNumber()])
-  useEffect(() => {
-    setIsExecutionError(!!errors.length && errors[0].path !== 'rewardPerBlock')
-  }, [errors])
+export const StakingPolicyAndReward = ({ errorChecker, errorMessageGetter }: ValidationHelpers) => {
+  const { watch } = useFormContext()
+  const leavingUnstakingPeriod = watch('stakingPolicyAndReward.leavingUnstakingPeriod')
 
   return (
     <RowGapBlock gap={24}>
@@ -88,15 +30,15 @@ export const StakingPolicyAndReward = ({
             tooltipText="Minimum staking requirement for all applicants to this role"
             units="tJOY"
             tight
-            validation={hasError('stakingAmount', errors) ? 'invalid' : undefined}
-            message={hasError('stakingAmount', errors) ? getErrorMessage('stakingAmount', errors) : ' '}
+            validation={errorChecker('stakingAmount') ? 'invalid' : undefined}
+            message={errorChecker('stakingAmount') ? errorMessageGetter('stakingAmount') : ' '}
           >
             <InputNumber
               id="staking-amount"
               isTokenValue
-              value={stakingAmount?.toString()}
               placeholder="0"
-              onChange={(_, value) => setStakingAmount(new BN(value))}
+              name="stakingPolicyAndReward.stakingAmount"
+              isInBN
             />
           </InputComponent>
           <InputComponent
@@ -118,21 +60,17 @@ export const StakingPolicyAndReward = ({
                 </TooltipExternalLink>
               </>
             }
-            validation={hasError('block', errors) ? 'invalid' : undefined}
+            validation={errorChecker('leavingUnstakingPeriod') ? 'invalid' : undefined}
             message={
-              hasError('block', errors)
-                ? getErrorMessage('block', errors)
+              errorChecker('leavingUnstakingPeriod')
+                ? errorMessageGetter('leavingUnstakingPeriod')
                 : leavingUnstakingPeriod
                 ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}`
                 : ' '
             }
             tight
           >
-            <InputNumber
-              id="leaving-unstaking-period"
-              value={leavingUnstakingPeriod?.toString()}
-              onChange={(event) => updateBlock(event.target.value)}
-            />
+            <InputNumber id="leaving-unstaking-period" name="stakingPolicyAndReward.leavingUnstakingPeriod" isInBN />
           </InputComponent>
           <InputComponent
             id="reward-per-block"
@@ -140,16 +78,15 @@ export const StakingPolicyAndReward = ({
             units="tJOY"
             tooltipText="Reward in tJOY tokens for the Working group lead"
             tight
-            validation={hasError('rewardPerBlock', errors) ? 'invalid' : undefined}
-            message={hasError('rewardPerBlock', errors) ? getErrorMessage('rewardPerBlock', errors) : ' '}
+            validation={errorChecker('rewardPerBlock') ? 'invalid' : undefined}
+            message={errorChecker('rewardPerBlock') ? errorMessageGetter('rewardPerBlock') : ' '}
             required
           >
             <InputNumber
               id="reward-per-block"
               isTokenValue
-              value={rewardPerBlock?.toString()}
+              name="stakingPolicyAndReward.rewardPerBlock"
               placeholder="0"
-              onChange={(_, value) => setRewardPerBlock(new BN(value))}
             />
           </InputComponent>
         </RowGapBlock>

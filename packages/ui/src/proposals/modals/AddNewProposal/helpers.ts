@@ -8,6 +8,7 @@ import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
 export const defaultProposalValues = {
+  groupId: undefined,
   proposalType: {
     type: undefined,
   },
@@ -24,6 +25,7 @@ export const defaultProposalValues = {
 }
 
 export interface AddNewProposalForm {
+  groupId?: GroupIdName
   proposalType: {
     type?: ProposalType
   }
