@@ -53,10 +53,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'): {
-      const questions = specifics?.questions
-      return !!(questions?.[0] && questions?.every((question) => question.questionField))
-    }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
       return !!(
         specifics?.stakingAmount?.toNumber() &&
@@ -157,12 +153,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
       return <DurationAndProcess />
     case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
-      return (
-        <ApplicationForm
-          questions={state.context.specifics?.questions}
-          setQuestions={(questions) => send('SET_QUESTIONS', { questions })}
-        />
-      )
+      return <ApplicationForm />
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):
       return (
         <CancelWorkingGroupLeadOpening

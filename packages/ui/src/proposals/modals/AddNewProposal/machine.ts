@@ -674,14 +674,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 cond: isType('createWorkingGroupLeadOpening'),
               },
               on: {
-                SET_QUESTIONS: {
-                  actions: assign({
-                    specifics: (context, event) => ({
-                      ...context.specifics,
-                      questions: event.questions,
-                    }),
-                  }),
-                },
                 BACK: 'durationAndProcess',
                 NEXT: 'stakingPolicyAndReward',
               },

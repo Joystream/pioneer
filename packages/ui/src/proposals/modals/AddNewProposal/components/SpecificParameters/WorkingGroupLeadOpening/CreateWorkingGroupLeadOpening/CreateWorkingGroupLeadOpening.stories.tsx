@@ -2,7 +2,6 @@ import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React, { useState } from 'react'
 
-import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { ApplicationForm, DurationAndProcess, StakingPolicyAndReward, WorkingGroupAndDescription } from '.'
@@ -29,8 +28,7 @@ const DurationAndProcessTemplate: Story = () => {
 }
 
 const ApplicationFormTemplate: Story = () => {
-  const [questions, setQuestions] = useState<QuestionValueProps[]>()
-  return <ApplicationForm questions={questions} setQuestions={setQuestions} />
+  return <ApplicationForm />
 }
 
 const StakingTemplate: Story = () => {

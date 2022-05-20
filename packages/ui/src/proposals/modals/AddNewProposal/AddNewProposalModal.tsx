@@ -149,6 +149,17 @@ const schemaFactory = (props: SchemaFactoryProps) => {
         then: Yup.number().required(),
       }),
     }),
+    applicationForm: Yup.object().shape({
+      questions: Yup.array()
+        .of(
+          Yup.object({
+            questionField: Yup.string().required(),
+            shortValue: Yup.boolean(),
+          })
+        )
+        .min(1)
+        .required(),
+    }),
   })
 }
 
