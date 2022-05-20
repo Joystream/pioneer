@@ -7,6 +7,7 @@ import { useGetCouncilByMemberIdQuery } from '@/council/queries'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { Member } from '@/memberships/types'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
+import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
 
 interface LockDateProps {
   address: Address
@@ -65,6 +66,23 @@ export const CouncilorLockDate = ({ memberId }: LockDateProps) => {
   // })
 
   const block = randomBlock()
+
+  return <BlockTime block={block} layout="column" />
+}
+
+export const ProposalLockDate = ({ memberId }: LockDateProps) => {
+  const { data } = useGetLatestProposalByMemberIdQuery({ variables: { memberId } })
+
+  const eventData = data?.proposals[0].createdInEvent
+  if (!eventData) {
+    return null
+  }
+
+  const block = asBlock({
+    createdAt: eventData.createdAt,
+    inBlock: eventData.inBlock,
+    network: eventData.network,
+  })
 
   return <BlockTime block={block} layout="column" />
 }

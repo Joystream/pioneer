@@ -325,3 +325,13 @@ query GetProposalDiscussionPostMention($id: ID!) {
     ...ProposalDiscussionPostMentionFields
   }
 }
+
+query GetLatestProposalByMemberId($memberId: ID) {
+  proposals(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+  }
+}

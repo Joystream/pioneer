@@ -1759,6 +1759,18 @@ export type GetProposalDiscussionPostMentionQuery = {
   } | null
 }
 
+export type GetLatestProposalByMemberIdQueryVariables = Types.Exact<{
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+}>
+
+export type GetLatestProposalByMemberIdQuery = {
+  __typename: 'Query'
+  proposals: Array<{
+    __typename: 'Proposal'
+    createdInEvent: { __typename: 'ProposalCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
+}
+
 export const VoteFieldsFragmentDoc = gql`
   fragment VoteFields on ProposalVotedEvent {
     id
@@ -2557,4 +2569,56 @@ export type GetProposalDiscussionPostMentionLazyQueryHookResult = ReturnType<
 export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
   GetProposalDiscussionPostMentionQuery,
   GetProposalDiscussionPostMentionQueryVariables
+>
+export const GetLatestProposalByMemberIdDocument = gql`
+  query GetLatestProposalByMemberId($memberId: ID) {
+    proposals(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+      createdInEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+`
+
+/**
+ * __useGetLatestProposalByMemberIdQuery__
+ *
+ * To run a query within a React component, call `useGetLatestProposalByMemberIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestProposalByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestProposalByMemberIdQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetLatestProposalByMemberIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>(
+    GetLatestProposalByMemberIdDocument,
+    options
+  )
+}
+export function useGetLatestProposalByMemberIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>(
+    GetLatestProposalByMemberIdDocument,
+    options
+  )
+}
+export type GetLatestProposalByMemberIdQueryHookResult = ReturnType<typeof useGetLatestProposalByMemberIdQuery>
+export type GetLatestProposalByMemberIdLazyQueryHookResult = ReturnType<typeof useGetLatestProposalByMemberIdLazyQuery>
+export type GetLatestProposalByMemberIdQueryResult = Apollo.QueryResult<
+  GetLatestProposalByMemberIdQuery,
+  GetLatestProposalByMemberIdQueryVariables
 >
