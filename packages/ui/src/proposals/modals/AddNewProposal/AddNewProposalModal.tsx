@@ -160,6 +160,10 @@ const schemaFactory = (props: SchemaFactoryProps) => {
         .min(1)
         .required(),
     }),
+    cancelWorkingGroupLeadOpening: Yup.object().shape({
+      groupId: Yup.string().required(),
+      openingId: Yup.string().required(),
+    }),
   })
 }
 

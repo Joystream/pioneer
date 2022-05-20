@@ -60,9 +60,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
         specifics.rewardPerBlock?.toNumber()
       )
     }
-    case state.matches('specificParameters.cancelWorkingGroupLeadOpening'): {
-      return !!specifics?.openingId
-    }
     case state.matches('specificParameters.setMaxValidatorCount'): {
       return !!(
         specifics?.amount &&
@@ -155,14 +152,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
       return <ApplicationForm />
     case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):
-      return (
-        <CancelWorkingGroupLeadOpening
-          groupId={state.context.specifics?.groupId}
-          openingId={state.context.specifics?.openingId}
-          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-          setOpeningId={(openingId) => send('SET_OPENING_ID', { openingId })}
-        />
-      )
+      return <CancelWorkingGroupLeadOpening />
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
       return (
         <StakingPolicyAndReward

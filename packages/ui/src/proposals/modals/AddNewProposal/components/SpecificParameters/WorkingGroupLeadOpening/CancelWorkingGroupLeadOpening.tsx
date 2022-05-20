@@ -1,23 +1,14 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { CancelWorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 
-interface CancelWorkingGroupLeadStakeProps extends CancelWorkingGroupLeadOpeningParameters {
-  setGroupId(groupId: string): void
-  setOpeningId(openingId?: string): void
-}
-
-export const CancelWorkingGroupLeadOpening = ({
-  openingId,
-  groupId,
-  setOpeningId,
-  setGroupId,
-}: CancelWorkingGroupLeadStakeProps) => {
+export const CancelWorkingGroupLeadOpening = () => {
+  const { watch, setValue } = useFormContext()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -34,7 +25,9 @@ export const CancelWorkingGroupLeadOpening = ({
             required
             inputSize="l"
             tooltipText={
-              groupId ? 'Please select an opening ID for Working Group' : 'Please first select Working Group'
+              watch('cancelWorkingGroupLeadOpening.groupId')
+                ? 'Please select an opening ID for Working Group'
+                : 'Please first select Working Group'
             }
           >
             <SelectWorkingGroupOpening
@@ -42,10 +35,10 @@ export const CancelWorkingGroupLeadOpening = ({
               placeholder="Choose opening to cancel"
               openingsPositionType="LEADER"
               onChange={(selected) => {
-                setGroupId(selected.groupId)
-                setOpeningId(selected.id)
+                setValue('cancelWorkingGroupLeadOpening.groupId', selected.groupId, { shouldValidate: true })
+                setValue('cancelWorkingGroupLeadOpening.openingId', selected.id, { shouldValidate: true })
               }}
-              selectedOpeningId={openingId}
+              selectedOpeningId={watch('cancelWorkingGroupLeadOpening.openingId')}
             />
           </InputComponent>
         </RowGapBlock>
