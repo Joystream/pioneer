@@ -170,3 +170,13 @@ query GetBountyContributors(
     ...BountyContributionFields
   }
 }
+
+query GetLatestBountyByMemberId($memberId: ID) {
+  bounties(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+  }
+}

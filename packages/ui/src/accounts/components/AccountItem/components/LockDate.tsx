@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
 import { BlockTime } from '@/common/components/BlockTime'
 import { Address, asBlock } from '@/common/types'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
@@ -74,6 +75,23 @@ export const ProposalLockDate = ({ memberId }: LockDateProps) => {
   const { data } = useGetLatestProposalByMemberIdQuery({ variables: { memberId } })
 
   const eventData = data?.proposals[0].createdInEvent
+  if (!eventData) {
+    return null
+  }
+
+  const block = asBlock({
+    createdAt: eventData.createdAt,
+    inBlock: eventData.inBlock,
+    network: eventData.network,
+  })
+
+  return <BlockTime block={block} layout="column" />
+}
+
+export const BountyLockDate = ({ memberId }: LockDateProps) => {
+  const { data } = useGetLatestBountyByMemberIdQuery({ variables: { memberId } })
+
+  const eventData = data?.bounties[0].createdInEvent
   if (!eventData) {
     return null
   }

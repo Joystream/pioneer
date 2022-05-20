@@ -5,7 +5,13 @@ import { TextMedium } from '@/common/components/typography'
 import { Address } from '@/common/types'
 import { Member } from '@/memberships/types'
 
-import { BoundAccountLockData, CouncilCandidateLockDate, CouncilorLockDate, ProposalLockDate } from './LockDate'
+import {
+  BoundAccountLockData,
+  BountyLockDate,
+  CouncilCandidateLockDate,
+  CouncilorLockDate,
+  ProposalLockDate,
+} from './LockDate'
 
 interface LockDateProps {
   lockType: LockType
@@ -27,6 +33,9 @@ export const LockDateWrapper = ({ lockType, address, memberId, boundMembership }
 
     case 'Proposals':
       return <ProposalLockDate address={address} memberId={memberId} />
+
+    case 'Bounties':
+      return <BountyLockDate address={address} memberId={memberId} />
 
     default:
       return <TextMedium value>Unknown</TextMedium>

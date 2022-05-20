@@ -960,6 +960,18 @@ export type GetBountyContributorsQuery = {
   }>
 }
 
+export type GetLatestBountyByMemberIdQueryVariables = Types.Exact<{
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+}>
+
+export type GetLatestBountyByMemberIdQuery = {
+  __typename: 'Query'
+  bounties: Array<{
+    __typename: 'Bounty'
+    createdInEvent: { __typename: 'BountyCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
+}
+
 export const BountyContributionFieldsFragmentDoc = gql`
   fragment BountyContributionFields on BountyContribution {
     id
@@ -1461,4 +1473,56 @@ export type GetBountyContributorsLazyQueryHookResult = ReturnType<typeof useGetB
 export type GetBountyContributorsQueryResult = Apollo.QueryResult<
   GetBountyContributorsQuery,
   GetBountyContributorsQueryVariables
+>
+export const GetLatestBountyByMemberIdDocument = gql`
+  query GetLatestBountyByMemberId($memberId: ID) {
+    bounties(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+      createdInEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+`
+
+/**
+ * __useGetLatestBountyByMemberIdQuery__
+ *
+ * To run a query within a React component, call `useGetLatestBountyByMemberIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestBountyByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestBountyByMemberIdQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetLatestBountyByMemberIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>(
+    GetLatestBountyByMemberIdDocument,
+    options
+  )
+}
+export function useGetLatestBountyByMemberIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>(
+    GetLatestBountyByMemberIdDocument,
+    options
+  )
+}
+export type GetLatestBountyByMemberIdQueryHookResult = ReturnType<typeof useGetLatestBountyByMemberIdQuery>
+export type GetLatestBountyByMemberIdLazyQueryHookResult = ReturnType<typeof useGetLatestBountyByMemberIdLazyQuery>
+export type GetLatestBountyByMemberIdQueryResult = Apollo.QueryResult<
+  GetLatestBountyByMemberIdQuery,
+  GetLatestBountyByMemberIdQueryVariables
 >
