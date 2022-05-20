@@ -2,6 +2,7 @@ import { u32 } from '@polkadot/types'
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
+import { ValidationHelpers } from '@/common/utils/validation'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -40,7 +41,7 @@ export interface ExecutionProps {
   setIsExecutionError: (value: boolean) => void
 }
 
-interface SpecificParametersStepProps extends ExecutionProps {
+interface SpecificParametersStepProps extends ExecutionProps, ValidationHelpers {
   send: (event: AddNewProposalEvent['type'], payload: any) => void
   state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
 }
@@ -51,9 +52,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   switch (true) {
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
-    }
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'): {
-      return !!(specifics?.groupId && specifics?.title && specifics.description && specifics.shortDescription)
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'): {
       return (
@@ -141,7 +139,12 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   }
 }
 
-export const SpecificParametersStep = ({ send, state, setIsExecutionError }: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({
+  send,
+  state,
+  setIsExecutionError,
+  ...validationHelpers
+}: SpecificParametersStepProps) => {
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal />
@@ -157,18 +160,7 @@ export const SpecificParametersStep = ({ send, state, setIsExecutionError }: Spe
       return <FillWorkingGroupLeadOpening />
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
-      return (
-        <WorkingGroupAndDescription
-          title={state.context.specifics?.title}
-          description={state.context.specifics?.description}
-          shortDescription={state.context.specifics?.shortDescription}
-          groupId={state.context.specifics?.groupId}
-          setTitle={(title) => send('SET_TITLE', { title })}
-          setDescription={(description) => send('SET_DESCRIPTION', { description })}
-          setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
-          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-        />
-      )
+      return <WorkingGroupAndDescription {...validationHelpers} />
     case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
       return (
         <DurationAndProcess

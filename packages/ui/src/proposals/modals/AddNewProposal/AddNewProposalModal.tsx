@@ -135,6 +135,12 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       applicationId: Yup.string().required(),
       groupId: Yup.string().required(),
     }),
+    workingGroupAndDescription: Yup.object().shape({
+      title: Yup.string().required().max(55, 'Max length is 55 characters'),
+      description: Yup.string().required(),
+      shortDescription: Yup.string().required(),
+      groupId: Yup.string().required(),
+    }),
   })
 }
 
@@ -410,6 +416,7 @@ export const AddNewProposalModal = () => {
                   state={state as AddNewProposalMachineState}
                   send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
                   setIsExecutionError={setIsExecutionError}
+                  {...validationHelpers}
                 />
               )}
               {isExecutionError && <ExecutionRequirementsWarning />}

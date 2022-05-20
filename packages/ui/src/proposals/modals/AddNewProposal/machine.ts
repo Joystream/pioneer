@@ -637,38 +637,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 cond: isType('createWorkingGroupLeadOpening'),
               },
               on: {
-                SET_WORKING_GROUP: {
-                  actions: assign({
-                    specifics: (context, event) => ({
-                      ...context.specifics,
-                      groupId: event.groupId,
-                    }),
-                  }),
-                },
-                SET_TITLE: {
-                  actions: assign({
-                    specifics: (context, event) => ({
-                      ...context.specifics,
-                      title: event.title,
-                    }),
-                  }),
-                },
-                SET_SHORT_DESCRIPTION: {
-                  actions: assign({
-                    specifics: (context, event) => ({
-                      ...context.specifics,
-                      shortDescription: event.shortDescription,
-                    }),
-                  }),
-                },
-                SET_DESCRIPTION: {
-                  actions: assign({
-                    specifics: (context, event) => ({
-                      ...context.specifics,
-                      description: event.description,
-                    }),
-                  }),
-                },
                 NEXT: 'durationAndProcess',
               },
             },

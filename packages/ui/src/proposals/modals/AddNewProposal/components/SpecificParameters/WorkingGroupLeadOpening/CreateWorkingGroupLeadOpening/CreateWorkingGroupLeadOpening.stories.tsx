@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { GroupIdName } from '@/working-groups/types'
 
 import { ApplicationForm, DurationAndProcess, StakingPolicyAndReward, WorkingGroupAndDescription } from '.'
 
@@ -15,23 +14,9 @@ export default {
 } as Meta
 
 const WorkingGroupAndDescriptionTemplate: Story = () => {
-  const [title, setTitle] = useState('')
-  const [shortDescription, setShortDescription] = useState('')
-  const [description, setDescription] = useState('')
-  const [groupId, setGroupId] = useState<GroupIdName>()
-
   return (
     <MockApolloProvider members council forum proposals workers workingGroups>
-      <WorkingGroupAndDescription
-        title={title}
-        setTitle={setTitle}
-        description={description}
-        shortDescription={shortDescription}
-        groupId={groupId}
-        setDescription={setDescription}
-        setShortDescription={setShortDescription}
-        setGroupId={setGroupId}
-      />
+      <WorkingGroupAndDescription errorMessageGetter={() => undefined} errorChecker={() => false} />
     </MockApolloProvider>
   )
 }

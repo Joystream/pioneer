@@ -1,40 +1,16 @@
 import React from 'react'
-import * as Yup from 'yup'
+import { useFormContext } from 'react-hook-form'
 
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useSchema } from '@/common/hooks/useSchema'
-import { WorkingGroupAndDescriptionParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
+import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
 
-interface Props extends WorkingGroupAndDescriptionParameters {
-  setTitle(title: string): void
-  setDescription(description: string): void
-  setShortDescription(shortDescription: string): void
-  setGroupId(groupId: GroupIdName): void
-}
-
-const schema = Yup.object().shape({
-  title: Yup.string().max(55, 'Max length is 55 characters'),
-})
-
-export const WorkingGroupAndDescription = ({
-  groupId,
-  setGroupId,
-  title,
-  setTitle,
-  description,
-  setDescription,
-  shortDescription,
-  setShortDescription,
-}: Props) => {
-  const { errors } = useSchema({ title }, schema)
-
+export const WorkingGroupAndDescription = ({ errorMessageGetter, errorChecker }: ValidationHelpers) => {
+  const { watch, setValue } = useFormContext()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -54,8 +30,10 @@ export const WorkingGroupAndDescription = ({
           >
             <SelectWorkingGroup
               id="working-group-select"
-              selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              selectedGroupId={watch('workingGroupAndDescription.groupId')}
+              onChange={(selected) =>
+                setValue('workingGroupAndDescription.groupId', selected.id, { shouldValidate: true })
+              }
             />
           </InputComponent>
           <InputComponent
@@ -63,29 +41,16 @@ export const WorkingGroupAndDescription = ({
             label="Opening title"
             required
             inputSize="m"
-            message={hasError('title', errors) ? getErrorMessage('title', errors) : 'MAX 55'}
-            validation={hasError('title', errors) ? 'invalid' : undefined}
+            message={errorChecker('title') ? errorMessageGetter('title') : 'MAX 55'}
+            validation={errorChecker('title') ? 'invalid' : undefined}
           >
-            <InputText
-              id="opening-title"
-              value={title ?? ''}
-              onChange={(event) => setTitle(event.target.value)}
-              placeholder="Opening title"
-            />
+            <InputText id="opening-title" name="workingGroupAndDescription.title" placeholder="Opening title" />
           </InputComponent>
           <InputComponent id="short-description" label="Short description" required inputSize="l">
-            <InputTextarea
-              id="short-description"
-              value={shortDescription}
-              onChange={(event) => setShortDescription(event.target.value)}
-            />
+            <InputTextarea id="short-description" name="workingGroupAndDescription.shortDescription" />
           </InputComponent>
           <InputComponent label="Description" required inputSize="auto" id="field-description">
-            <CKEditor
-              id="field-description"
-              onReady={(editor) => editor.setData(description || '')}
-              onChange={(event, editor) => setDescription(editor.getData())}
-            />
+            <CKEditor id="field-description" name="workingGroupAndDescription.description" />
           </InputComponent>
         </RowGapBlock>
       </Row>

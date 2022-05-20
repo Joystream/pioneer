@@ -80,5 +80,7 @@ export const machineStateConverter = (state: string | StateValueMap): string => 
     return state
   }
 
-  return last(Object.entries(state).flat()) as string
+  const lastState = last(Object.entries(state).flat())
+
+  return typeof lastState === 'string' ? lastState : machineStateConverter(lastState)
 }
