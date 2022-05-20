@@ -589,6 +589,21 @@ export type FundingRequestApprovedFragment = {
   }
 }
 
+export type GetCouncilByMemberIdQueryVariables = Types.Exact<{
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+}>
+
+export type GetCouncilByMemberIdQuery = {
+  __typename: 'Query'
+  electedCouncils: Array<{
+    __typename: 'ElectedCouncil'
+    id: string
+    electedAtBlock: number
+    electedAtTime: any
+    electedAtNetwork: Types.Network
+  }>
+}
+
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetElectedCouncilQuery = {
@@ -1629,6 +1644,61 @@ export const FundingRequestApprovedFragmentDoc = gql`
     }
   }
 `
+export const GetCouncilByMemberIdDocument = gql`
+  query GetCouncilByMemberId($memberId: ID) {
+    electedCouncils(
+      where: { councilMembers_some: { member: { id_eq: $memberId } } }
+      orderBy: [createdAt_DESC]
+      limit: 1
+    ) {
+      id
+      electedAtBlock
+      electedAtTime
+      electedAtNetwork
+    }
+  }
+`
+
+/**
+ * __useGetCouncilByMemberIdQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilByMemberIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilByMemberIdQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetCouncilByMemberIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCouncilByMemberIdQuery, GetCouncilByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilByMemberIdQuery, GetCouncilByMemberIdQueryVariables>(
+    GetCouncilByMemberIdDocument,
+    options
+  )
+}
+export function useGetCouncilByMemberIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilByMemberIdQuery, GetCouncilByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilByMemberIdQuery, GetCouncilByMemberIdQueryVariables>(
+    GetCouncilByMemberIdDocument,
+    options
+  )
+}
+export type GetCouncilByMemberIdQueryHookResult = ReturnType<typeof useGetCouncilByMemberIdQuery>
+export type GetCouncilByMemberIdLazyQueryHookResult = ReturnType<typeof useGetCouncilByMemberIdLazyQuery>
+export type GetCouncilByMemberIdQueryResult = Apollo.QueryResult<
+  GetCouncilByMemberIdQuery,
+  GetCouncilByMemberIdQueryVariables
+>
 export const GetElectedCouncilDocument = gql`
   query GetElectedCouncil {
     electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {

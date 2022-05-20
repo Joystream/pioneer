@@ -105,9 +105,3 @@ query GetNewCandidateEvents($candidateId: ID) {
     ...NewCandidateEventFields
   }
 }
-
-# query NewCouncilElectedEvent($candidateId: ID) {
-#   newCouncilElectedEvents(where: { candidate: { id_eq: $candidateId } }) {
-#     ...NewCandidateEventFields
-#   }
-# }
