@@ -40,6 +40,8 @@ export type NewCandidateEventFieldsFragment = {
   __typename: 'NewCandidateEvent'
   id: string
   createdAt: any
+  inBlock: number
+  network: Types.Network
   candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
 }
 
@@ -115,6 +117,8 @@ export type GetCouncilEventsQuery = {
         __typename: 'NewCandidateEvent'
         id: string
         createdAt: any
+        inBlock: number
+        network: Types.Network
         candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
       }
     | {
@@ -194,6 +198,22 @@ export type GetCouncilEventsQuery = {
   >
 }
 
+export type GetNewCandidateEventsQueryVariables = Types.Exact<{
+  candidateId?: Types.InputMaybe<Types.Scalars['ID']>
+}>
+
+export type GetNewCandidateEventsQuery = {
+  __typename: 'Query'
+  newCandidateEvents: Array<{
+    __typename: 'NewCandidateEvent'
+    id: string
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+    candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
+  }>
+}
+
 export const NewCouncilElectedEventFieldsFragmentDoc = gql`
   fragment NewCouncilElectedEventFields on NewCouncilElectedEvent {
     id
@@ -239,6 +259,8 @@ export const NewCandidateEventFieldsFragmentDoc = gql`
   fragment NewCandidateEventFields on NewCandidateEvent {
     id
     createdAt
+    inBlock
+    network
     candidate {
       member {
         id
@@ -342,3 +364,52 @@ export function useGetCouncilEventsLazyQuery(
 export type GetCouncilEventsQueryHookResult = ReturnType<typeof useGetCouncilEventsQuery>
 export type GetCouncilEventsLazyQueryHookResult = ReturnType<typeof useGetCouncilEventsLazyQuery>
 export type GetCouncilEventsQueryResult = Apollo.QueryResult<GetCouncilEventsQuery, GetCouncilEventsQueryVariables>
+export const GetNewCandidateEventsDocument = gql`
+  query GetNewCandidateEvents($candidateId: ID) {
+    newCandidateEvents(where: { candidate: { id_eq: $candidateId } }) {
+      ...NewCandidateEventFields
+    }
+  }
+  ${NewCandidateEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetNewCandidateEventsQuery__
+ *
+ * To run a query within a React component, call `useGetNewCandidateEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNewCandidateEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNewCandidateEventsQuery({
+ *   variables: {
+ *      candidateId: // value for 'candidateId'
+ *   },
+ * });
+ */
+export function useGetNewCandidateEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetNewCandidateEventsQuery, GetNewCandidateEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetNewCandidateEventsQuery, GetNewCandidateEventsQueryVariables>(
+    GetNewCandidateEventsDocument,
+    options
+  )
+}
+export function useGetNewCandidateEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetNewCandidateEventsQuery, GetNewCandidateEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetNewCandidateEventsQuery, GetNewCandidateEventsQueryVariables>(
+    GetNewCandidateEventsDocument,
+    options
+  )
+}
+export type GetNewCandidateEventsQueryHookResult = ReturnType<typeof useGetNewCandidateEventsQuery>
+export type GetNewCandidateEventsLazyQueryHookResult = ReturnType<typeof useGetNewCandidateEventsLazyQuery>
+export type GetNewCandidateEventsQueryResult = Apollo.QueryResult<
+  GetNewCandidateEventsQuery,
+  GetNewCandidateEventsQueryVariables
+>

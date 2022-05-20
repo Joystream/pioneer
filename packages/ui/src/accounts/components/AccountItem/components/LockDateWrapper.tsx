@@ -19,6 +19,8 @@ export const LockDateWrapper = ({ lockType, address, memberId, boundMembership }
     case 'Bound Staking Account':
       return <BoundAccountLockData address={address} boundMembership={boundMembership} />
 
+    case 'Council Candidate':
+      return <CouncilCandidateLockDate address={address} memberId={memberId} />
     default:
       return <TextMedium value>Unknown</TextMedium>
   }

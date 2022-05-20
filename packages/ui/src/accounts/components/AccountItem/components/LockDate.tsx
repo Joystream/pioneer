@@ -26,3 +26,21 @@ export const BoundAccountLockData = ({ address, boundMembership }: BoundLockDate
 
   return <BlockTime block={block} layout="column" />
 }
+
+export const CouncilCandidateLockDate = ({ memberId }: LockDateProps) => {
+  const { candidateId } = useCandidateIdByMember(memberId || '-1')
+  const { data } = useGetNewCandidateEventsQuery({ variables: { candidateId } })
+
+  const eventData = data?.newCandidateEvents[0]
+
+  if (!eventData) {
+    return null
+  }
+  const block = asBlock({
+    createdAt: eventData.createdAt,
+    inBlock: eventData.inBlock,
+    network: eventData.network,
+  })
+
+  return <BlockTime block={block} layout="column" />
+}

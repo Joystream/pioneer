@@ -37,6 +37,8 @@ fragment CouncilorRewardUpdatedEventFields on CouncilorRewardUpdatedEvent {
 fragment NewCandidateEventFields on NewCandidateEvent {
   id
   createdAt
+  inBlock
+  network
   candidate {
     member {
       id
@@ -97,3 +99,15 @@ query GetCouncilEvents {
     }
   }
 }
+
+query GetNewCandidateEvents($candidateId: ID) {
+  newCandidateEvents(where: { candidate: { id_eq: $candidateId } }) {
+    ...NewCandidateEventFields
+  }
+}
+
+# query NewCouncilElectedEvent($candidateId: ID) {
+#   newCouncilElectedEvents(where: { candidate: { id_eq: $candidateId } }) {
+#     ...NewCandidateEventFields
+#   }
+# }
