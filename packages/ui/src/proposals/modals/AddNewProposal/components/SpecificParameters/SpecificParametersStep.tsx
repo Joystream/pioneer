@@ -50,12 +50,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
-    case state.matches('specificParameters.setCouncilBudgetIncrement'): {
-      return !!(specifics?.amount && specifics.amount.gtn(0))
-    }
-    case state.matches('specificParameters.setMembershipPrice'): {
-      return !!(specifics?.amount && specifics?.amount.gtn(0))
-    }
     default:
       return false
   }
@@ -106,12 +100,7 @@ export const SpecificParametersStep = ({ send, state, ...validationHelpers }: Sp
     case state.matches('specificParameters.setMaxValidatorCount'):
       return <SetMaxValidatorCount {...validationHelpers} />
     case state.matches('specificParameters.setMembershipPrice'): {
-      return (
-        <SetMembershipPrice
-          setAmount={(amount) => send('SET_AMOUNT', { amount })}
-          amount={state.context.specifics?.amount}
-        />
-      )
+      return <SetMembershipPrice />
     }
     default:
       return null

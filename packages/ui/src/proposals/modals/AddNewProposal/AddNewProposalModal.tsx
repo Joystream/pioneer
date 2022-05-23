@@ -226,6 +226,9 @@ const schemaFactory = (props: SchemaFactoryProps) => {
         .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}'))
         .required('Field is required'),
     }),
+    setMembershipPrice: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+    }),
   })
 }
 
@@ -280,7 +283,7 @@ export const AddNewProposalModal = () => {
   })
 
   const mapDependencies = form.watch(['stakingAccount.stakingAccount', 'proposalType.type', 'groupId'])
-  // console.log(form.formState.errors, form.formState.isValid, 'xd', state.value)
+
   useEffect(() => {
     setFormMap(mapDependencies)
     if (state.matches('proposalType')) {
