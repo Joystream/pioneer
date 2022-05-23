@@ -57,6 +57,7 @@ import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/comp
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
+import { MAX_VALIDATOR_COUNT } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
@@ -220,13 +221,18 @@ const schemaFactory = (props: SchemaFactoryProps) => {
     setInitialInvitationBalance: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
     }),
+    setMaxValidatorCount: Yup.object().shape({
+      amount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount'))
+        .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}'))
+        .required('Field is required'),
+    }),
   })
 }
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
-  const minCount = useMinimumValidatorCount()
+  const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
@@ -257,6 +263,7 @@ export const AddNewProposalModal = () => {
     ),
     mode: 'onChange',
     context: {
+      minimumValidatorCount,
       maximumReferralCut,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,

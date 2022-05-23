@@ -8,10 +8,7 @@ import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/Spe
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
 import { SetCouncilorReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilorReward'
-import {
-  MAX_VALIDATOR_COUNT,
-  SetMaxValidatorCount,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
+import { SetMaxValidatorCount } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 import { SetMembershipPrice } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipPrice'
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
@@ -53,13 +50,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.runtimeUpgrade'): {
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
-    case state.matches('specificParameters.setMaxValidatorCount'): {
-      return !!(
-        specifics?.amount &&
-        specifics.amount.ltn(MAX_VALIDATOR_COUNT) &&
-        specifics.amount.gtn(minimumValidatorCount?.toNumber() || 0)
-      )
-    }
     case state.matches('specificParameters.setCouncilBudgetIncrement'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
@@ -83,9 +73,8 @@ export const SpecificParametersStep = ({ send, state, ...validationHelpers }: Sp
       return <SetCouncilorReward />
     case state.matches('specificParameters.setCouncilBudgetIncrement'):
       return <SetCouncilBudgetIncrement />
-    case state.matches('specificParameters.fillWorkingGroupLeadOpening'): {
+    case state.matches('specificParameters.fillWorkingGroupLeadOpening'):
       return <FillWorkingGroupLeadOpening />
-    }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
       return <WorkingGroupAndDescription {...validationHelpers} />
     case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
@@ -108,21 +97,14 @@ export const SpecificParametersStep = ({ send, state, ...validationHelpers }: Sp
       return <UpdateWorkingGroupBudget />
     case state.matches('specificParameters.setInitialInvitationCount'):
       return <SetInitialInvitationCount />
-    case state.matches('specificParameters.setReferralCut'): {
+    case state.matches('specificParameters.setReferralCut'):
       return <SetReferralCut {...validationHelpers} />
-    }
     case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
       return <SetMembershipLeadInvitationQuota />
-    case state.matches('specificParameters.setInitialInvitationBalance'): {
+    case state.matches('specificParameters.setInitialInvitationBalance'):
       return <SetInitialInvitationBalance />
-    }
     case state.matches('specificParameters.setMaxValidatorCount'):
-      return (
-        <SetMaxValidatorCount
-          setValidatorCount={(amount) => send('SET_AMOUNT', { amount })}
-          validatorCount={state.context.specifics?.amount}
-        />
-      )
+      return <SetMaxValidatorCount {...validationHelpers} />
     case state.matches('specificParameters.setMembershipPrice'): {
       return (
         <SetMembershipPrice
