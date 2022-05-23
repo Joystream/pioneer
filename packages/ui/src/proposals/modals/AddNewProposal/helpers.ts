@@ -24,6 +24,9 @@ export const defaultProposalValues = {
   updateWorkingGroupBudget: {
     isPositive: true,
   },
+  setInitialInvitationCount: {
+    invitationCount: 0,
+  },
 }
 
 export interface AddNewProposalForm {

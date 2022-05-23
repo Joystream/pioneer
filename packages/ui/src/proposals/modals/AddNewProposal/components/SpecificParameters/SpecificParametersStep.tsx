@@ -75,9 +75,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.setMembershipPrice'): {
       return !!(specifics?.amount && specifics?.amount.gtn(0))
     }
-    case state.matches('specificParameters.setInitialInvitationCount'): {
-      return !!specifics?.invitationCount
-    }
     default:
       return false
   }
@@ -124,12 +121,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.updateWorkingGroupBudget'):
       return <UpdateWorkingGroupBudget />
     case state.matches('specificParameters.setInitialInvitationCount'):
-      return (
-        <SetInitialInvitationCount
-          setNewCount={(count) => send('SET_INVITATION_COUNT', { count })}
-          invitationCount={state.context.specifics?.invitationCount}
-        />
-      )
+      return <SetInitialInvitationCount />
     case state.matches('specificParameters.setReferralCut'): {
       return (
         <SetReferralCut
