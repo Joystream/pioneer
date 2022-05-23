@@ -11,20 +11,8 @@ export interface SetMembershipLeadInvitationParameters {
   amount?: BN
 }
 
-interface Props extends SetMembershipLeadInvitationParameters {
-  setAmount: (amount: BN) => void
-}
-
-const MAX_VALUE = Math.pow(2, 32) - 1
-
-export const SetMembershipLeadInvitationQuota = ({ amount, setAmount }: Props) => {
+export const SetMembershipLeadInvitationQuota = () => {
   const { isLoading, group } = useWorkingGroup({ name: 'membershipWorkingGroup' })
-
-  const setInvitationQuota = (_: any, value: number) => {
-    if (Number(value) < MAX_VALUE) {
-      setAmount(new BN(value))
-    }
-  }
 
   return (
     <RowGapBlock gap={24}>
@@ -50,10 +38,10 @@ export const SetMembershipLeadInvitationQuota = ({ amount, setAmount }: Props) =
           >
             <InputNumber
               id="amount-input"
+              name="setMembershipLeadInvitationQuota.amount"
               isTokenValue
-              value={amount?.toString()}
+              isInBN
               placeholder="0"
-              onChange={setInvitationQuota}
               disabled={isLoading || !group?.leadId}
             />
           </InputComponent>

@@ -39,6 +39,7 @@ import {
   BNSchema,
   enhancedGetErrorMessage,
   enhancedHasError,
+  lessThanMixed,
   maxContext,
   minContext,
   moreThanMixed,
@@ -87,6 +88,8 @@ interface SchemaFactoryProps {
     rationaleMaxLength: number
   }
 }
+
+const MAX_U32 = Math.pow(2, 32) - 1
 
 const schemaFactory = (props: SchemaFactoryProps) => {
   return Yup.object().shape({
@@ -207,6 +210,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       referralCut: Yup.number()
         .test(maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut'))
         .max(100, 'Value exceed maximal percentage')
+        .required(),
+    }),
+    setMembershipLeadInvitationQuota: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero'))
+        .test(lessThanMixed(MAX_U32, 'Maximal value allowed is ${max}'))
         .required(),
     }),
   })
