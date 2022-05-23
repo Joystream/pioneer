@@ -9,6 +9,7 @@ import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/c
 import { Member } from '@/memberships/types'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
+import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
 interface LockDateProps {
   address: Address
@@ -92,6 +93,31 @@ export const BountyLockDate = ({ memberId }: LockDateProps) => {
   const { data } = useGetLatestBountyByMemberIdQuery({ variables: { memberId } })
 
   const eventData = data?.bounties[0].createdInEvent
+  if (!eventData) {
+    return null
+  }
+
+  const block = asBlock({
+    createdAt: eventData.createdAt,
+    inBlock: eventData.inBlock,
+    network: eventData.network,
+  })
+
+  return <BlockTime block={block} layout="column" />
+}
+
+export const WorkingGroupLockDate = ({ memberId }: LockDateProps) => {
+  const { data } = useGetWorkingGroupApplicationsQuery({
+    variables: {
+      where: {
+        applicant: {
+          id_eq: memberId,
+        },
+      },
+    },
+  })
+
+  const eventData = data?.workingGroupApplications[0].createdInEvent
   if (!eventData) {
     return null
   }
