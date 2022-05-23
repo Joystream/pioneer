@@ -4,7 +4,7 @@ import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
 import { BlockTime } from '@/common/components/BlockTime'
 import { Address, asBlock } from '@/common/types'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
-import { useGetCouncilByMemberIdQuery, useGetCouncilVotesQuery } from '@/council/queries'
+import { useGetCouncilorElectionEventQuery, useGetCouncilVotesQuery } from '@/council/queries'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useGetMemberInvitedEventsQuery } from '@/memberships/queries'
 import { Member } from '@/memberships/types'
@@ -53,22 +53,18 @@ export const CouncilCandidateLockDate = ({ memberId }: LockDateProps) => {
 }
 
 export const CouncilorLockDate = ({ memberId }: LockDateProps) => {
-  // TODO: Uncomment when nested gql queries work correctly
+  const { data } = useGetCouncilorElectionEventQuery({ variables: { memberId } })
 
-  // const { data } = useGetCouncilByMemberIdQuery({ variables: { memberId }})
+  const eventData = data?.memberships[0]?.councilMembers[0]?.electedInCouncil
+  if (!eventData) {
+    return null
+  }
 
-  // const eventData = data?.electedCouncils[0]
-  // if (!eventData) {
-  //   return null
-  // }
-
-  // const block = asBlock({
-  //   createdAt: eventData.electedAtTime,
-  //   inBlock: eventData.electedAtBlock,
-  //   network: eventData.electedAtNetwork,
-  // })
-
-  const block = randomBlock()
+  const block = asBlock({
+    createdAt: eventData.electedAtTime,
+    inBlock: eventData.electedAtBlock,
+    network: eventData.electedAtNetwork,
+  })
 
   return <BlockTime block={block} layout="column" />
 }

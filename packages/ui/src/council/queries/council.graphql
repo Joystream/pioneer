@@ -169,19 +169,6 @@ fragment FundingRequestApproved on ProposalExecutedEvent {
   }
 }
 
-query GetCouncilByMemberId($memberId: ID) {
-  electedCouncils(
-    where: { councilMembers_some: { member: { id_eq: $memberId } } }
-    orderBy: [createdAt_DESC]
-    limit: 1
-  ) {
-    id
-    electedAtBlock
-    electedAtTime
-    electedAtNetwork
-  }
-}
-
 query GetElectedCouncil {
   electedCouncils(where: { endedAtBlock_eq: null }, orderBy: [createdAt_DESC], limit: 1) {
     ...ElectedCouncilFields
@@ -390,5 +377,17 @@ query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
   }
   budgetSpendingEvents(where: { inBlock_gte: $startBlock, inBlock_lte: $endBlock }) {
     ...CouncilSpendingEventFields
+  }
+}
+
+query GetCouncilorElectionEvent($memberId: ID) {
+  memberships(where: { id_eq: $memberId }) {
+    councilMembers {
+      electedInCouncil {
+        electedAtBlock
+        electedAtTime
+        electedAtNetwork
+      }
+    }
   }
 }
