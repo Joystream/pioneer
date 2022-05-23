@@ -15,33 +15,34 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'
 import { useCommitment } from '@/council/hooks/useCommitment'
+import { VoteContext, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 import { TransactionContext } from '@/proposals/modals/AddNewProposal/machine'
 
-import { StakeFormFields, VoteForCouncilModalCall } from './types'
+import { VoteForCouncilModalCall } from './types'
 
 interface Props {
   service: ActorRef<TransactionEvent, State<TransactionContext>>
-  stake: StakeFormFields
+  state: VoteForCouncilMachineState
 }
 
-export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
+export const VoteForCouncilSignModal = ({ state, service }: Props) => {
   const { api } = useApi()
   const { hideModal, modalData } = useModal<VoteForCouncilModalCall>()
-
-  const { commitment, isVoteStored } = useCommitment(stake.account.address, modalData.id)
+  const { stake, account } = state.context as Required<VoteContext>
+  const { commitment, isVoteStored } = useCommitment(account.address, modalData.id)
 
   const transaction = useMemo(() => {
     if (commitment) {
-      return api?.tx.referendum.vote(commitment, stake.amount)
+      return api?.tx.referendum.vote(commitment, stake)
     }
-  }, [commitment, stake.amount])
+  }, [commitment, stake])
 
   const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
     service,
     transaction,
-    signer: stake.account.address,
+    signer: account.address,
   })
-  const stakingAmount = new BN(stake.amount)
+  const stakingAmount = new BN(stake)
 
   return (
     <TransactionModal onClose={hideModal} service={service}>
@@ -53,7 +54,7 @@ export const VoteForCouncilSignModal = ({ stake, service }: Props) => {
         </TextMedium>
 
         <InputComponent label="Staking and fee sending from account" inputSize="l">
-          <SelectedAccount account={stake.account} />
+          <SelectedAccount account={account} />
         </InputComponent>
       </ModalBody>
 

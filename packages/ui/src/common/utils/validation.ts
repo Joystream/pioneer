@@ -2,7 +2,7 @@ import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
 import { at } from 'lodash'
 import { useCallback } from 'react'
-import { FieldErrors, Resolver } from 'react-hook-form'
+import { FieldErrors, FieldValues, Resolver } from 'react-hook-form'
 import * as Yup from 'yup'
 import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
@@ -80,7 +80,10 @@ interface IFormError {
   message: string
 }
 
-export const useYupValidationResolver = (validationSchema: AnyObjectSchema, path?: string): Resolver =>
+export const useYupValidationResolver = <T extends FieldValues>(
+  validationSchema: AnyObjectSchema,
+  path?: string
+): Resolver<T> =>
   useCallback(
     async (data, context) => {
       let values

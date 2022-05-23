@@ -104,8 +104,9 @@
         "bountyId": "Bounty ID",
         "memberId": "Member ID",
         "workTitle": "Work Title",
+        "workSubtitle": "Remember to add a link to your work",
         "workTitlePlaceholder": "Type",
-        "entryDescription": "Entry description"
+        "entryDescription": "Description of Completed Work"
       },
       "button": {
         "submitWork": "Submit Work"
