@@ -217,6 +217,9 @@ const schemaFactory = (props: SchemaFactoryProps) => {
         .test(lessThanMixed(MAX_U32, 'Maximal value allowed is ${max}'))
         .required(),
     }),
+    setInitialInvitationBalance: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+    }),
   })
 }
 

@@ -12,11 +12,7 @@ export interface SetInitialInvitationBalanceParameters {
   amount?: BN
 }
 
-interface FundingRequestProps extends SetInitialInvitationBalanceParameters {
-  setAmount: (amount: BN) => void
-}
-
-export const SetInitialInvitationBalance = ({ setAmount, amount }: FundingRequestProps) => {
+export const SetInitialInvitationBalance = () => {
   const { api } = useApi()
   const currentBalance = useObservable(api?.query.members.initialInvitationBalance(), [])
 
@@ -33,10 +29,10 @@ export const SetInitialInvitationBalance = ({ setAmount, amount }: FundingReques
           <InputComponent label="Invitation Balance" tight units="tJOY" required>
             <InputNumber
               id="amount-input"
+              name="setInitialInvitationBalance.amount"
               isTokenValue
-              value={amount?.toString()}
+              isInBN
               placeholder="0"
-              onChange={(_, value) => setAmount(new BN(value))}
             />
           </InputComponent>
           <Row>
