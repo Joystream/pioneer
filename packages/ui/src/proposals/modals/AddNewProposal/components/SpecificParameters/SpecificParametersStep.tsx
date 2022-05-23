@@ -71,14 +71,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
         typeof specifics.workerId === 'number'
       )
     }
-    case state.matches('specificParameters.slashWorkingGroupLead'): {
-      return !!(
-        specifics?.slashingAmount &&
-        specifics?.slashingAmount.gtn(0) &&
-        specifics.groupId &&
-        specifics.workerId !== undefined
-      )
-    }
     case state.matches('specificParameters.setReferralCut'): {
       return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
     }
@@ -143,16 +135,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
       return <DecreaseWorkingGroupLeadStake />
     case state.matches('specificParameters.slashWorkingGroupLead'):
-      return (
-        <SlashWorkingGroupLead
-          slashingAmount={state.context.specifics?.slashingAmount}
-          groupId={state.context.specifics?.groupId}
-          workerId={state.context.specifics?.workerId}
-          setSlashingAmount={(slashingAmount) => send('SET_SLASHING_AMOUNT', { slashingAmount })}
-          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
-        />
-      )
+      return <SlashWorkingGroupLead />
     case state.matches('specificParameters.terminateWorkingGroupLead'):
       return (
         <TerminateWorkingGroupLead

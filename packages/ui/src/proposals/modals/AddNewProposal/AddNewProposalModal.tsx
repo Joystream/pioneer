@@ -180,6 +180,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       stakingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
       workerId: Yup.number().required(),
     }),
+    slashWorkingGroupLead: Yup.object().shape({
+      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      groupId: Yup.string().required(),
+      workerId: Yup.number().required(),
+    }),
   })
 }
 

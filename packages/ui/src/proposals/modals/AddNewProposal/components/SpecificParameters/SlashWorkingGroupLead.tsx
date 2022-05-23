@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -19,26 +20,16 @@ export interface SlashWorkingGroupLeadParameters {
   workerId?: number
 }
 
-interface SlashWorkingGroupLeadProps extends SlashWorkingGroupLeadParameters {
-  setSlashingAmount: (amount: BN) => void
-  setGroupId(groupId: string): void
-  setWorkerId(workerId?: number): void
-}
-
-export const SlashWorkingGroupLead = ({
-  slashingAmount,
-  groupId,
-  setSlashingAmount,
-  setGroupId,
-  setWorkerId,
-}: SlashWorkingGroupLeadProps) => {
+export const SlashWorkingGroupLead = () => {
+  const { setValue, watch } = useFormContext()
+  const [groupId] = watch(['slashWorkingGroupLead.groupId'])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setSlashingAmount(BN_ZERO)
-    setWorkerId(group?.leadWorker?.runtimeId)
+    setValue('slashWorkingGroupLead.slashingAmount', BN_ZERO, { shouldValidate: true })
+    setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
   }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
@@ -59,7 +50,7 @@ export const SlashWorkingGroupLead = ({
           >
             <SelectWorkingGroup
               selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              onChange={(selected) => setValue('slashWorkingGroupLead.groupId', selected.id)}
               disableNoLead
             />
           </InputComponent>
@@ -84,10 +75,10 @@ export const SlashWorkingGroupLead = ({
           >
             <InputNumber
               id="amount-input"
+              name="slashWorkingGroupLead.slashingAmount"
               isTokenValue
-              value={slashingAmount?.toString()}
+              isInBN
               placeholder="0"
-              onChange={(_, value) => setSlashingAmount(new BN(value))}
               disabled={isDisabled}
             />
           </InputComponent>
