@@ -43,57 +43,57 @@ export const NewThreadPost = React.forwardRef(
       setEditable(false)
     }, [])
 
+    if (!active) {
+      return <TextBig ref={ref}>Pick an active membership to post in this thread</TextBig>
+    }
+
     return (
-      <>
-        {active && (
-          <RowGapBlock gap={8} ref={ref}>
-            {replyTo && (
-              <Reply>
-                <ReplyBadge>
-                  <div>
-                    <ArrowReplyIcon />{' '}
-                    <Badge>
-                      <Link to={replyToLink}>Replies to {replyTo.author.handle}</Link>
-                    </Badge>
-                  </div>
-                  <div>
-                    <ButtonPrimary size="small" square onClick={removeReply}>
-                      <CrossIcon />
-                    </ButtonPrimary>
-                  </div>
-                </ReplyBadge>
-                <MarkdownPreview markdown={replyTo.text} size="s" isReply />
-              </Reply>
-            )}
-            <InputComponent
-              inputSize="auto"
-              message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
-            >
-              <EditorMemo setNewText={setText} editorRef={editorRef} />
-            </InputComponent>
-            <ButtonsGroup>
-              <TransactionButton
-                style="primary"
-                size="medium"
-                onClick={() => {
-                  const transaction = getTransaction(postText, isEditable)
-                  transaction &&
-                    showModal<CreatePostModalCall>({
-                      modal: 'CreatePost',
-                      data: { module: 'proposalsDiscussion', postText, replyTo, transaction, isEditable, onSuccess },
-                    })
-                }}
-                disabled={postText === ''}
-              >
-                {replyTo ? 'Post a reply' : 'Create post'}
-              </TransactionButton>
-              <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
-                Keep editable
-              </Checkbox>
-            </ButtonsGroup>
-          </RowGapBlock>
+      <RowGapBlock gap={8} ref={ref}>
+        {replyTo && (
+          <Reply>
+            <ReplyBadge>
+              <div>
+                <ArrowReplyIcon />{' '}
+                <Badge>
+                  <Link to={replyToLink}>Replies to {replyTo.author.handle}</Link>
+                </Badge>
+              </div>
+              <div>
+                <ButtonPrimary size="small" square onClick={removeReply}>
+                  <CrossIcon />
+                </ButtonPrimary>
+              </div>
+            </ReplyBadge>
+            <MarkdownPreview markdown={replyTo.text} size="s" isReply />
+          </Reply>
         )}
-      </>
+        <InputComponent
+          inputSize="auto"
+          message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
+        >
+          <EditorMemo setNewText={setText} editorRef={editorRef} />
+        </InputComponent>
+        <ButtonsGroup>
+          <TransactionButton
+            style="primary"
+            size="medium"
+            onClick={() => {
+              const transaction = getTransaction(postText, isEditable)
+              transaction &&
+                showModal<CreatePostModalCall>({
+                  modal: 'CreatePost',
+                  data: { module: 'proposalsDiscussion', postText, replyTo, transaction, isEditable, onSuccess },
+                })
+            }}
+            disabled={postText === ''}
+          >
+            {replyTo ? 'Post a reply' : 'Create post'}
+          </TransactionButton>
+          <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
+            Keep editable
+          </Checkbox>
+        </ButtonsGroup>
+      </RowGapBlock>
     )
   }
 )

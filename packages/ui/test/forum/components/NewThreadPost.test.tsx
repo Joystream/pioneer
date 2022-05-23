@@ -64,6 +64,11 @@ describe('UI: Add new post', () => {
     replyToLink: '',
   }
 
+  it('No selected membership', async () => {
+    renderEditor(props)
+    expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
+  })
+
   it('Empty post text', async () => {
     useMyMemberships.setActive(getMember('alice'))
     renderEditor(props)
