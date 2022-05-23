@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
-import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
+import { InviteMembershipFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { AccountSchema } from '@/memberships/model/validation'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
@@ -16,7 +16,7 @@ import { Member } from '../../types'
 
 interface Props {
   onClose: () => void
-  onAccept: (amount?: BN, from?: Member, to?: Member) => void
+  onAccept: (amount: BN, from: Member, to: Member) => void
   icon: ReactElement
   member?: Member
 }
@@ -37,7 +37,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
     to: AccountSchema.required('This field is required'),
   })
 
-  const form = useForm<MemberFormFields>({
+  const form = useForm<InviteMembershipFormFields>({
     resolver: useYupValidationResolver(TransferInviteSchema),
     mode: 'onChange',
     defaultValues: formDefaultValues,
@@ -59,7 +59,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
   )
   const onSubmit = () => {
     const values = form.getValues()
-    onAccept(new BN(values.amount ?? 0), values.from, values.to)
+    onAccept(new BN(values.amount), values.from as Member, values.to)
   }
 
   return (

@@ -77,9 +77,12 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
-  to?: Member
+}
+
+export interface InviteMembershipFormFields {
+  to: Member
   from?: Member
-  amount?: number
+  amount: number
 }
 
 export const BuyMembershipForm = ({
