@@ -10,6 +10,7 @@ import {
   BountyLockDate,
   CouncilCandidateLockDate,
   CouncilorLockDate,
+  InvitationLockDate,
   ProposalLockDate,
   VoteLockDate,
   WorkingGroupLockDate,
@@ -41,6 +42,9 @@ export const LockDateWrapper = React.memo(({ lockType, address, memberId, boundM
 
     case 'Bounties':
       return <BountyLockDate address={address} memberId={memberId} />
+
+    case 'Invitation':
+      return <InvitationLockDate address={address} memberId={memberId} />
 
     case 'Storage Worker':
     case 'Content Directory Worker':

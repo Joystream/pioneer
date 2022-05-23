@@ -161,3 +161,11 @@ query GetMemberActionDetails($workerId_in: [ID!]!) {
     totalCount
   }
 }
+
+query GetMemberInvitedEvents($memberId: ID) {
+  memberInvitedEvents(where: { invitingMember: { id_eq: $memberId } }, orderBy: [createdAt_DESC]) {
+    createdAt
+    inBlock
+    network
+  }
+}

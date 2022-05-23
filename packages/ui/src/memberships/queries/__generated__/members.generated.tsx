@@ -404,6 +404,20 @@ export type GetMemberActionDetailsQuery = {
   memberInvitedEventsConnection: { __typename: 'MemberInvitedEventConnection'; totalCount: number }
 }
 
+export type GetMemberInvitedEventsQueryVariables = Types.Exact<{
+  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+}>
+
+export type GetMemberInvitedEventsQuery = {
+  __typename: 'Query'
+  memberInvitedEvents: Array<{
+    __typename: 'MemberInvitedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+  }>
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Membership {
     id
@@ -894,4 +908,54 @@ export type GetMemberActionDetailsLazyQueryHookResult = ReturnType<typeof useGet
 export type GetMemberActionDetailsQueryResult = Apollo.QueryResult<
   GetMemberActionDetailsQuery,
   GetMemberActionDetailsQueryVariables
+>
+export const GetMemberInvitedEventsDocument = gql`
+  query GetMemberInvitedEvents($memberId: ID) {
+    memberInvitedEvents(where: { invitingMember: { id_eq: $memberId } }, orderBy: [createdAt_DESC]) {
+      createdAt
+      inBlock
+      network
+    }
+  }
+`
+
+/**
+ * __useGetMemberInvitedEventsQuery__
+ *
+ * To run a query within a React component, call `useGetMemberInvitedEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberInvitedEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberInvitedEventsQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetMemberInvitedEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>(
+    GetMemberInvitedEventsDocument,
+    options
+  )
+}
+export function useGetMemberInvitedEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>(
+    GetMemberInvitedEventsDocument,
+    options
+  )
+}
+export type GetMemberInvitedEventsQueryHookResult = ReturnType<typeof useGetMemberInvitedEventsQuery>
+export type GetMemberInvitedEventsLazyQueryHookResult = ReturnType<typeof useGetMemberInvitedEventsLazyQuery>
+export type GetMemberInvitedEventsQueryResult = Apollo.QueryResult<
+  GetMemberInvitedEventsQuery,
+  GetMemberInvitedEventsQueryVariables
 >
