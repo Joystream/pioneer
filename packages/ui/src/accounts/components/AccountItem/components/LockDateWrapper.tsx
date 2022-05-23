@@ -11,6 +11,7 @@ import {
   CouncilCandidateLockDate,
   CouncilorLockDate,
   ProposalLockDate,
+  VoteLockDate,
   WorkingGroupLockDate,
 } from './LockDate'
 
@@ -31,6 +32,9 @@ export const LockDateWrapper = React.memo(({ lockType, address, memberId, boundM
 
     case 'Councilor':
       return <CouncilorLockDate address={address} memberId={memberId} />
+
+    case 'Voting':
+      return <VoteLockDate address={address} memberId={memberId} />
 
     case 'Proposals':
       return <ProposalLockDate address={address} memberId={memberId} />

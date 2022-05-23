@@ -4,7 +4,7 @@ import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
 import { BlockTime } from '@/common/components/BlockTime'
 import { Address, asBlock } from '@/common/types'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
-import { useGetCouncilByMemberIdQuery } from '@/council/queries'
+import { useGetCouncilByMemberIdQuery, useGetCouncilVotesQuery } from '@/council/queries'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { Member } from '@/memberships/types'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
@@ -118,6 +118,24 @@ export const WorkingGroupLockDate = ({ memberId }: LockDateProps) => {
   })
 
   const eventData = data?.workingGroupApplications[0].createdInEvent
+  if (!eventData) {
+    return null
+  }
+
+  const block = asBlock({
+    createdAt: eventData.createdAt,
+    inBlock: eventData.inBlock,
+    network: eventData.network,
+  })
+
+  return <BlockTime block={block} layout="column" />
+}
+
+export const VoteLockDate = ({ address }: LockDateProps) => {
+  const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
+  const votesData = data?.castVotes[0]?.castEvent
+  const eventData = votesData && votesData[0]
+
   if (!eventData) {
     return null
   }
