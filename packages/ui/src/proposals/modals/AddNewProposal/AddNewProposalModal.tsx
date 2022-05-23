@@ -203,6 +203,12 @@ const schemaFactory = (props: SchemaFactoryProps) => {
     setInitialInvitationCount: Yup.object().shape({
       invitationCount: BNSchema.required(),
     }),
+    setReferralCut: Yup.object().shape({
+      referralCut: Yup.number()
+        .test(maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut'))
+        .max(100, 'Value exceed maximal percentage')
+        .required(),
+    }),
   })
 }
 
@@ -210,6 +216,7 @@ export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const minCount = useMinimumValidatorCount()
+  const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -239,6 +246,7 @@ export const AddNewProposalModal = () => {
     ),
     mode: 'onChange',
     context: {
+      maximumReferralCut,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',
@@ -276,6 +284,14 @@ export const AddNewProposalModal = () => {
         form.formState.errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
         (form.formState.errors.stakingPolicyAndReward?.stakingAmount as FieldError)?.type === 'minContext'
       ) {
+        setIsExecutionError(true)
+      } else {
+        setIsExecutionError(false)
+      }
+    }
+
+    if (machineStateConverter(state.value) === 'setReferralCut') {
+      if (form.formState.errors.setReferralCut?.referralCut?.type === 'maxContext') {
         setIsExecutionError(true)
       } else {
         setIsExecutionError(false)

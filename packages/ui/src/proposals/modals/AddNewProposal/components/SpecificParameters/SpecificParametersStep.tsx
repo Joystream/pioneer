@@ -63,9 +63,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.setCouncilBudgetIncrement'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
-    case state.matches('specificParameters.setReferralCut'): {
-      return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
-    }
     case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
@@ -80,12 +77,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
   }
 }
 
-export const SpecificParametersStep = ({
-  send,
-  state,
-  setIsExecutionError,
-  ...validationHelpers
-}: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({ send, state, ...validationHelpers }: SpecificParametersStepProps) => {
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal />
@@ -123,13 +115,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.setInitialInvitationCount'):
       return <SetInitialInvitationCount />
     case state.matches('specificParameters.setReferralCut'): {
-      return (
-        <SetReferralCut
-          setReferralCut={(referralCut) => send('SET_REFERRAL_CUT', { referralCut })}
-          referralCut={state.context.specifics?.referralCut}
-          setIsExecutionError={setIsExecutionError}
-        />
-      )
+      return <SetReferralCut {...validationHelpers} />
     }
     case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
       return (
