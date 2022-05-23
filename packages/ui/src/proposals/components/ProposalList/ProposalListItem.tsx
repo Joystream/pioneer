@@ -78,9 +78,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
       {isPast && (
         <StageField>
-          <Subscription>
-            {'Ended at:'} {toDDMMYY(displayDate)}
-          </Subscription>
+          <Subscription>{toDDMMYY(displayDate)}</Subscription>
         </StageField>
       )}
       <StageField>

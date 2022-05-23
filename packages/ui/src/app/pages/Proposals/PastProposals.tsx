@@ -24,7 +24,7 @@ export const PastProposals = () => {
 
   const { types, stages } = usePastProposals()
 
-  const { order, getSortProps } = useSort<ProposalOrderByInput>('createdAt')
+  const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
 
   const { isLoading, proposals, pagination } = useProposals({ order: order, status: 'past', filters })
 

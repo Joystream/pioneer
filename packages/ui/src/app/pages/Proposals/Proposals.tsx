@@ -18,7 +18,7 @@ import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities
 import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
-  const { order, getSortProps } = useSort<ProposalOrderByInput>('createdAt')
+  const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
 
   const { proposals, isLoading, pagination } = useProposals({ order: order, status: 'active' })
 
