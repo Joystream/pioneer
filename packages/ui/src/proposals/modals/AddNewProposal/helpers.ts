@@ -3,7 +3,6 @@ import BN from 'bn.js'
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { Member } from '@/memberships/types'
-import { UpdateKind } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -21,6 +20,9 @@ export const defaultProposalValues = {
   },
   triggerAndDiscussion: {
     discussionWhitelist: [],
+  },
+  updateWorkingGroupBudget: {
+    isPositive: true,
   },
 }
 
@@ -108,7 +110,7 @@ export interface AddNewProposalForm {
   }
   updateWorkingGroupBudget: {
     budgetUpdate?: BN
-    budgetUpdateKind?: UpdateKind
+    isPositive: boolean
     groupId?: GroupIdName
   }
   setInitialInvitationCount: {

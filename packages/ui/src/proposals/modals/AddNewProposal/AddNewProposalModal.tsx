@@ -195,6 +195,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       groupId: Yup.string().required(),
       workerId: Yup.number().required(),
     }),
+    updateWorkingGroupBudget: Yup.object().shape({
+      isPositive: Yup.boolean(),
+      groupId: Yup.string().required(),
+      budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+    }),
   })
 }
 

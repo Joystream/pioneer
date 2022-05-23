@@ -1,6 +1,6 @@
-import { BalanceKind } from '@joystream/types/common'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -15,40 +15,19 @@ import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGro
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { GroupIdName } from '@/working-groups/types'
 
-export type UpdateKind = keyof typeof BalanceKind.typeDefinitions
-
 export interface UpdateWorkingGroupBudgetParameters {
   budgetUpdate?: BN
-  budgetUpdateKind?: UpdateKind
   groupId?: GroupIdName
 }
 
-interface UpdateWorkingGroupBudgetProps extends UpdateWorkingGroupBudgetParameters {
-  setBudgetUpdate: (amount: BN) => void
-  setBudgetUpdateKind: (kind: UpdateKind) => void
-  setGroupId(groupId: string): void
-}
-
-export const UpdateWorkingGroupBudget = ({
-  budgetUpdate,
-  setBudgetUpdate,
-  setBudgetUpdateKind,
-  groupId,
-  setGroupId,
-}: UpdateWorkingGroupBudgetProps) => {
+export const UpdateWorkingGroupBudget = () => {
+  const { setValue, watch } = useFormContext()
+  const [groupId] = watch(['updateWorkingGroupBudget.groupId'])
   const { group } = useWorkingGroup({ name: groupId })
 
-  const [updateKind, setUpdateKind] = useState<UpdateKind>('Positive')
-
-  const isDisabled = !group
-
   useEffect(() => {
-    setBudgetUpdate(BN_ZERO)
+    setValue('updateWorkingGroupBudget.budgetUpdate', BN_ZERO, { shouldValidate: true })
   }, [groupId])
-
-  useEffect(() => {
-    setBudgetUpdateKind(updateKind)
-  }, [updateKind])
 
   return (
     <RowGapBlock gap={24}>
@@ -70,7 +49,9 @@ export const UpdateWorkingGroupBudget = ({
             <SelectWorkingGroup
               id="working-group"
               selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              onChange={(selected) =>
+                setValue('updateWorkingGroupBudget.groupId', selected.id, { shouldValidate: true })
+              }
             />
           </InputComponent>
           {group && (
@@ -84,12 +65,7 @@ export const UpdateWorkingGroupBudget = ({
 
           <InlineToggleWrap>
             <Label>Decrease budget: </Label>
-            <ToggleCheckbox
-              falseLabel="No"
-              trueLabel="Yes"
-              checked={updateKind === 'Negative'}
-              onChange={(isSet) => setUpdateKind(isSet ? 'Negative' : 'Positive')}
-            />
+            <ToggleCheckbox falseLabel="Yes" trueLabel="No" name="updateWorkingGroupBudget.isPositive" />
             <Tooltip tooltipText="Lorem ipsum...">
               <TooltipDefault />
             </Tooltip>
@@ -103,15 +79,15 @@ export const UpdateWorkingGroupBudget = ({
             tooltipText="Signed amount change in budget. If budget_update is non-negative, then this amount is reduced from the council budget and credited to the group budget, otherwise the reverse."
             required
             message="Value must be greater than zero"
-            disabled={isDisabled}
+            disabled={!group}
           >
             <InputNumber
               id="amount-input"
+              name="updateWorkingGroupBudget.budgetUpdate"
               isTokenValue
-              value={budgetUpdate?.toString()}
+              isInBN
               placeholder="0"
-              onChange={(_, value) => setBudgetUpdate(new BN(value))}
-              disabled={isDisabled}
+              disabled={!group}
             />
           </InputComponent>
         </RowGapBlock>

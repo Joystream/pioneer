@@ -66,14 +66,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.setReferralCut'): {
       return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
     }
-    case state.matches('specificParameters.updateWorkingGroupBudget'): {
-      return !!(
-        specifics?.groupId &&
-        specifics?.budgetUpdate &&
-        specifics.budgetUpdate.gtn(0) &&
-        specifics.budgetUpdateKind
-      )
-    }
     case state.matches('specificParameters.setMembershipLeadInvitationQuota'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
@@ -130,15 +122,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.setWorkingGroupLeadReward'):
       return <SetWorkingGroupLeadReward />
     case state.matches('specificParameters.updateWorkingGroupBudget'):
-      return (
-        <UpdateWorkingGroupBudget
-          setBudgetUpdate={(amount) => send('SET_BUDGET_UPDATE', { amount })}
-          setBudgetUpdateKind={(kind) => send('SET_BUDGET_UPDATE_KIND', { kind })}
-          budgetUpdate={state.context.specifics?.budgetUpdate}
-          groupId={state.context.specifics?.groupId}
-          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-        />
-      )
+      return <UpdateWorkingGroupBudget />
     case state.matches('specificParameters.setInitialInvitationCount'):
       return (
         <SetInitialInvitationCount

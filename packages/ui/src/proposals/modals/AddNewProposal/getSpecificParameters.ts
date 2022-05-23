@@ -165,7 +165,7 @@ export const getSpecificParameters = (
         UpdateWorkingGroupBudget: [
           specifics?.updateWorkingGroupBudget.budgetUpdate ?? BN_ZERO,
           getWorkingGroupParam(specifics?.updateWorkingGroupBudget.groupId) ?? 'Distribution',
-          specifics?.updateWorkingGroupBudget.budgetUpdateKind ?? 'Positive',
+          specifics?.updateWorkingGroupBudget.isPositive ? 'Positive' : 'Negative',
         ],
       })
     }
