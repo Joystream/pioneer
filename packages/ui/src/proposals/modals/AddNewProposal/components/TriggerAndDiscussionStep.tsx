@@ -32,6 +32,7 @@ export const TriggerAndDiscussionStep = ({ errorMessageGetter, errorChecker }: V
       { shouldValidate: true }
     )
   }
+
   return (
     <RowGapBlock gap={24}>
       <Row>

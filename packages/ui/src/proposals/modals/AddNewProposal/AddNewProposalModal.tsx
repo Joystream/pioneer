@@ -102,8 +102,10 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       stakingAccount: StakingAccountSchema.required(),
     }),
     proposalDetails: Yup.object().shape({
-      title: Yup.string().required().max(props.proposalDetails.titleMaxLength),
-      rationale: Yup.string().required().max(props.proposalDetails.rationaleMaxLength),
+      title: Yup.string().required().max(props.proposalDetails.titleMaxLength, 'Title exceeds maximum length'),
+      rationale: Yup.string()
+        .required()
+        .max(props.proposalDetails.rationaleMaxLength, 'Rationale exceeds maximum length'),
     }),
     triggerAndDiscussion: Yup.object().shape({
       trigger: Yup.boolean(),
@@ -327,33 +329,31 @@ export const AddNewProposalModal = () => {
   )
 
   const transaction = useMemo(() => {
-    if (state.matches('transaction')) {
-      if (activeMember && api) {
-        const {
-          proposalDetails,
-          triggerAndDiscussion,
-          stakingAccount,
-          ...specifics
-        } = form.getValues() as AddNewProposalForm
-        const txBaseParams: BaseProposalParams = {
-          member_id: activeMember?.id,
-          title: proposalDetails.title,
-          description: proposalDetails.rationale,
-          ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
-          ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
-        }
-
-        const txSpecificParameters = getSpecificParameters(api, specifics, form.formState.isValid)
-
-        if (stakingStatus === 'confirmed') {
-          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
-        }
-
-        return api.tx.utility.batch([
-          api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
-          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-        ])
+    if (activeMember && api) {
+      const {
+        proposalDetails,
+        triggerAndDiscussion,
+        stakingAccount,
+        ...specifics
+      } = form.getValues() as AddNewProposalForm
+      const txBaseParams: BaseProposalParams = {
+        member_id: activeMember?.id,
+        title: proposalDetails?.title,
+        description: proposalDetails?.rationale,
+        ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
+        ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
       }
+
+      const txSpecificParameters = getSpecificParameters(api, specifics, form.formState.isValid)
+
+      if (stakingStatus === 'confirmed') {
+        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+      }
+
+      return api.tx.utility.batch([
+        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
+        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+      ])
     }
   }, [state.value, connectionState, stakingStatus])
 
@@ -559,7 +559,7 @@ export const AddNewProposalModal = () => {
             </Checkbox>
           )}
           <ButtonPrimary
-            disabled={!form.formState.isValid && !warningAccepted}
+            disabled={!form.formState.isValid || !warningAccepted}
             onClick={() => send('NEXT')}
             size="medium"
           >

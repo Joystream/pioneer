@@ -185,7 +185,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -348,7 +348,7 @@ describe('UI: AddNewProposalModal', () => {
 
           await fillProposalDetails()
 
-          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Title exceeds maximum length/i)).toBeDefined()
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
@@ -359,7 +359,7 @@ describe('UI: AddNewProposalModal', () => {
 
           await fillProposalDetails()
 
-          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Rationale exceeds maximum length/i)).toBeDefined()
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
@@ -371,8 +371,8 @@ describe('UI: AddNewProposalModal', () => {
 
           await fillProposalDetails()
 
-          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
-          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Title exceeds maximum length/i)).toBeDefined()
+          expect(await screen.findByText(/Rationale exceeds maximum length/i)).toBeDefined()
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
@@ -403,7 +403,7 @@ describe('UI: AddNewProposalModal', () => {
             await triggerYes()
             await fillTriggerBlock(10)
 
-            expect(await screen.getByText('The minimum block number is 20.')).toBeDefined()
+            await waitFor(async () => expect(await screen.getByText('The minimum block number is 20')).toBeDefined())
 
             const button = await getNextStepButton()
             expect(button).toBeDisabled()
@@ -413,7 +413,7 @@ describe('UI: AddNewProposalModal', () => {
             await triggerYes()
             await fillTriggerBlock(9999999999999)
 
-            expect(await screen.getByText(/(^The maximum block number is).*/i)).toBeDefined()
+            await waitFor(async () => expect(await screen.getByText(/(^The maximum block number is)*/i)).toBeDefined())
             const button = await getNextStepButton()
             expect(button).toBeDisabled()
           })
@@ -421,8 +421,6 @@ describe('UI: AddNewProposalModal', () => {
           it('Valid block number', async () => {
             await triggerYes()
             await fillTriggerBlock(30)
-
-            expect(await screen.getByText(/^≈.*/i)).toBeDefined()
 
             const button = await getNextStepButton()
             expect(button).not.toBeDisabled()
@@ -1469,7 +1467,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getWarningNextButton() {
-    return (await screen.findByText('Create A Proposal')).parentElement
+    return await getButton('Create A Proposal')
   }
 
   async function getPreviousStepButton() {
