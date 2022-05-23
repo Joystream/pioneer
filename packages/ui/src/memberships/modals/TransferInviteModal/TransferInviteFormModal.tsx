@@ -1,31 +1,66 @@
 import BN from 'bn.js'
-import React, { ReactElement, useCallback, useState } from 'react'
+import React, { ReactElement, useCallback, useEffect } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import * as Yup from 'yup'
+
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
+import { AccountSchema } from '@/memberships/model/validation'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Row, TransactionAmount } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
-import { useNumberInput } from '../../../common/hooks/useNumberInput'
-import { formatTokenValue } from '../../../common/model/formatters'
 import { filterMember, SelectMember } from '../../components/SelectMember'
 import { Member } from '../../types'
 
 interface Props {
   onClose: () => void
-  onAccept: (amount: BN, from: Member, to: Member) => void
+  onAccept: (amount?: BN, from?: Member, to?: Member) => void
   icon: ReactElement
   member?: Member
 }
 
-export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Props) {
-  const [from, setFrom] = useState<Member | undefined>(member)
-  const [to, setTo] = useState<Member>()
-  const [amount, setAmount] = useNumberInput(0)
-  const filterRecipient = useCallback(filterMember(from), [from])
+const formDefaultValues = {
+  from: undefined,
+  amount: undefined,
+  to: undefined,
+}
 
-  const isAmountValid = !from || parseInt(amount) <= from.inviteCount
-  const isDisabled = !amount || !isAmountValid || !from || !to
-  const isShowError = amount && !isAmountValid
+export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Props) {
+  const filterRecipient = useCallback(filterMember(member), [member])
+  const TransferInviteSchema = Yup.object().shape({
+    from: AccountSchema.required('This field is required'),
+    amount: Yup.number()
+      .max(member?.inviteCount ?? 0, `You only have ${member?.inviteCount} invites left.`)
+      .required('This field is required'),
+    to: AccountSchema.required('This field is required'),
+  })
+
+  const form = useForm<MemberFormFields>({
+    resolver: useYupValidationResolver(TransferInviteSchema),
+    mode: 'onChange',
+    defaultValues: formDefaultValues,
+  })
+
+  useEffect(() => {
+    return form.setValue('from', member)
+  }, [member])
+
+  const [from, to] = form.watch(['from', 'to'])
+  const hasError = enhancedHasError(form.formState.errors)
+  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
+
+  const setReceiverAccount = useCallback(
+    (member: Member) => {
+      form.setValue('to', member, { shouldValidate: true })
+    },
+    [form.setValue]
+  )
+  const onSubmit = () => {
+    const values = form.getValues()
+    onAccept(new BN(values.amount ?? 0), values.from, values.to)
+  }
 
   return (
     <Modal onClose={onClose} modalSize="m">
@@ -34,40 +69,43 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
         <Row>
           <TextMedium margin="s">Transfer Invites to a member.</TextMedium>
         </Row>
-        <InputComponent label="From" inputSize="l" disabled={!!member}>
-          <SelectMember onChange={setFrom} disabled={!!member} selected={from} />
-        </InputComponent>
-        <TransactionAmount>
-          <InputComponent
-            id="amount-input"
-            label="Number of Invites"
-            required
-            validation={isShowError ? 'invalid' : undefined}
-            message={
-              isShowError
-                ? `You only have ${from?.inviteCount} invites left.`
-                : `You have ${from?.inviteCount} invites.`
-            }
-            inputWidth="s"
-          >
-            <InputNumber
-              id="amount-input"
-              value={formatTokenValue(amount)}
-              placeholder="0"
-              onChange={(event) => setAmount(event.target.value)}
+        <FormProvider {...form}>
+          <InputComponent label="From" inputSize="l" disabled={!!member}>
+            <SelectMember
+              onChange={(member) => form.setValue('from', member, { shouldValidate: true })}
+              disabled={!!member}
+              selected={from}
             />
           </InputComponent>
-        </TransactionAmount>
-        <InputComponent label="To" inputSize="l" required>
-          <SelectMember onChange={setTo} filter={filterRecipient} selected={to} />
-        </InputComponent>
+          <TransactionAmount>
+            <InputComponent
+              id="amount-input"
+              label="Number of Invites"
+              required
+              validation={hasError('amount') ? 'invalid' : undefined}
+              message={hasError('amount') ? getErrorMessage('amount') : `You have ${member?.inviteCount} invites.`}
+              inputWidth="s"
+            >
+              <InputNumber id="amount-input" placeholder="0" name="amount" />
+            </InputComponent>
+          </TransactionAmount>
+          <InputComponent
+            label="To"
+            inputSize="l"
+            required
+            validation={hasError('controllerAccount') ? 'invalid' : undefined}
+            message={hasError('to') ? getErrorMessage('to') : ' '}
+          >
+            <SelectMember
+              onChange={(receiverAccount) => setReceiverAccount(receiverAccount)}
+              filter={filterRecipient}
+              selected={to}
+            />
+          </InputComponent>
+        </FormProvider>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary
-          size="medium"
-          onClick={() => from && to && onAccept(new BN(amount), from, to)}
-          disabled={isDisabled}
-        >
+        <ButtonPrimary size="medium" onClick={onSubmit} disabled={!form.formState.isValid}>
           Transfer Invites
         </ButtonPrimary>
       </ModalFooter>

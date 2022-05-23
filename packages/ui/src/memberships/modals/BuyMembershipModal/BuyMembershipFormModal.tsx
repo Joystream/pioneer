@@ -77,6 +77,9 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  to?: Member
+  from?: Member
+  amount?: number
 }
 
 export const BuyMembershipForm = ({
