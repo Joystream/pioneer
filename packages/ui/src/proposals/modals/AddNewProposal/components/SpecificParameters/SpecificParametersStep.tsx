@@ -63,14 +63,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
     case state.matches('specificParameters.setCouncilBudgetIncrement'): {
       return !!(specifics?.amount && specifics.amount.gtn(0))
     }
-    case state.matches('specificParameters.setWorkingGroupLeadReward'): {
-      return !!(
-        specifics?.rewardPerBlock &&
-        specifics?.rewardPerBlock.gtn(0) &&
-        specifics.groupId &&
-        typeof specifics.workerId === 'number'
-      )
-    }
     case state.matches('specificParameters.setReferralCut'): {
       return typeof specifics?.referralCut === 'number' && specifics.referralCut < 101
     }
@@ -136,16 +128,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.terminateWorkingGroupLead'):
       return <TerminateWorkingGroupLead />
     case state.matches('specificParameters.setWorkingGroupLeadReward'):
-      return (
-        <SetWorkingGroupLeadReward
-          rewardPerBlock={state.context.specifics?.rewardPerBlock}
-          groupId={state.context.specifics?.groupId}
-          workerId={state.context.specifics?.workerId}
-          setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
-          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
-        />
-      )
+      return <SetWorkingGroupLeadReward />
     case state.matches('specificParameters.updateWorkingGroupBudget'):
       return (
         <UpdateWorkingGroupBudget

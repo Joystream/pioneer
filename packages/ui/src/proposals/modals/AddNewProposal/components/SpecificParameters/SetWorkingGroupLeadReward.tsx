@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -18,26 +19,16 @@ export interface SetWorkingGroupLeadRewardParameters {
   workerId?: number
 }
 
-interface SetWorkingGroupLeadRewardProps extends SetWorkingGroupLeadRewardParameters {
-  setRewardPerBlock: (amount: BN) => void
-  setGroupId(groupId: string): void
-  setWorkerId(workerId?: number): void
-}
-
-export const SetWorkingGroupLeadReward = ({
-  rewardPerBlock,
-  groupId,
-  setRewardPerBlock,
-  setGroupId,
-  setWorkerId,
-}: SetWorkingGroupLeadRewardProps) => {
+export const SetWorkingGroupLeadReward = () => {
+  const { setValue, watch } = useFormContext()
+  const [groupId] = watch(['setWorkingGroupLeadReward.groupId'])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setWorkerId(group?.leadWorker?.runtimeId)
+    setValue('setWorkingGroupLeadReward.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
   }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
@@ -60,7 +51,9 @@ export const SetWorkingGroupLeadReward = ({
             <SelectWorkingGroup
               id="working-group"
               selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              onChange={(selected) =>
+                setValue('setWorkingGroupLeadReward.groupId', selected.id, { shouldValidate: true })
+              }
               disableNoLead
             />
           </InputComponent>
@@ -86,10 +79,10 @@ export const SetWorkingGroupLeadReward = ({
           >
             <InputNumber
               id="amount-input"
+              name="setWorkingGroupLeadReward.rewardPerBlock"
+              isInBN
               isTokenValue
-              value={rewardPerBlock?.toString()}
               placeholder="0"
-              onChange={(_, value) => setRewardPerBlock(new BN(value))}
               disabled={isDisabled}
             />
           </InputComponent>

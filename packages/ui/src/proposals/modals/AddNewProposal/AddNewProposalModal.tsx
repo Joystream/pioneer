@@ -190,6 +190,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       groupId: Yup.string().required(),
       workerId: Yup.number().required(),
     }),
+    setWorkingGroupLeadReward: Yup.object().shape({
+      rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      groupId: Yup.string().required(),
+      workerId: Yup.number().required(),
+    }),
   })
 }
 
