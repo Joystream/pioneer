@@ -1,20 +1,24 @@
 import React from 'react'
 
 import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
+import { Network } from '@/common/api/queries'
 import { BlockTime } from '@/common/components/BlockTime'
-import { Address, asBlock } from '@/common/types'
+import { TextMedium } from '@/common/components/typography'
+import { Address, asBlock, Block } from '@/common/types'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
 import { useGetCouncilorElectionEventQuery, useGetCouncilVotesQuery } from '@/council/queries'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useGetMemberInvitedEventsQuery } from '@/memberships/queries'
 import { Member } from '@/memberships/types'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
 import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
-interface LockDateProps {
-  address: Address
+interface PropsWithMemberId {
   memberId?: string
+}
+
+interface PropsWithAddress {
+  address?: Address
 }
 
 interface BoundLockDateProps {
@@ -22,7 +26,23 @@ interface BoundLockDateProps {
   boundMembership?: Member
 }
 
-export const BoundAccountLockData = ({ address, boundMembership }: BoundLockDateProps) => {
+interface LockDateProps {
+  createdAt?: string
+  inBlock?: number
+  network?: Network
+}
+
+const LockDate = React.memo(({ createdAt, inBlock, network }: LockDateProps) => {
+  if (!createdAt || !inBlock || !network) {
+    return <TextMedium value>Unknown</TextMedium>
+  }
+
+  const block = asBlock({ createdAt, inBlock, network })
+
+  return <BlockTime block={block} layout="column" />
+})
+
+export const BoundAccountLockDate = React.memo(({ address, boundMembership }: BoundLockDateProps) => {
   const boundLockEvent = boundMembership?.boundAccountsEvents?.find((event) => event.account === address)
   const block = boundLockEvent?.createdAtBlock
 
@@ -31,79 +51,45 @@ export const BoundAccountLockData = ({ address, boundMembership }: BoundLockDate
   }
 
   return <BlockTime block={block} layout="column" />
-}
+})
 
-export const CouncilCandidateLockDate = ({ memberId }: LockDateProps) => {
+export const CouncilCandidateLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { candidateId } = useCandidateIdByMember(memberId || '-1')
   const { data } = useGetNewCandidateEventsQuery({ variables: { candidateId } })
 
   const eventData = data?.newCandidateEvents[0]
 
-  if (!eventData) {
-    return null
-  }
+  return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
+})
 
-  const block = asBlock({
-    createdAt: eventData.createdAt,
-    inBlock: eventData.inBlock,
-    network: eventData.network,
-  })
-
-  return <BlockTime block={block} layout="column" />
-}
-
-export const CouncilorLockDate = ({ memberId }: LockDateProps) => {
+export const CouncilorLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { data } = useGetCouncilorElectionEventQuery({ variables: { memberId } })
-
   const eventData = data?.memberships[0]?.councilMembers[0]?.electedInCouncil
-  if (!eventData) {
-    return null
-  }
 
-  const block = asBlock({
-    createdAt: eventData.electedAtTime,
-    inBlock: eventData.electedAtBlock,
-    network: eventData.electedAtNetwork,
-  })
+  return (
+    <LockDate
+      createdAt={eventData?.electedAtTime}
+      inBlock={eventData?.electedAtBlock}
+      network={eventData?.electedAtNetwork}
+    />
+  )
+})
 
-  return <BlockTime block={block} layout="column" />
-}
-
-export const ProposalLockDate = ({ memberId }: LockDateProps) => {
+export const ProposalLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { data } = useGetLatestProposalByMemberIdQuery({ variables: { memberId } })
-
   const eventData = data?.proposals[0].createdInEvent
-  if (!eventData) {
-    return null
-  }
 
-  const block = asBlock({
-    createdAt: eventData.createdAt,
-    inBlock: eventData.inBlock,
-    network: eventData.network,
-  })
+  return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
+})
 
-  return <BlockTime block={block} layout="column" />
-}
-
-export const BountyLockDate = ({ memberId }: LockDateProps) => {
+export const BountyLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { data } = useGetLatestBountyByMemberIdQuery({ variables: { memberId } })
-
   const eventData = data?.bounties[0].createdInEvent
-  if (!eventData) {
-    return null
-  }
 
-  const block = asBlock({
-    createdAt: eventData.createdAt,
-    inBlock: eventData.inBlock,
-    network: eventData.network,
-  })
+  return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
+})
 
-  return <BlockTime block={block} layout="column" />
-}
-
-export const WorkingGroupLockDate = ({ memberId }: LockDateProps) => {
+export const WorkingGroupLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
@@ -113,52 +99,21 @@ export const WorkingGroupLockDate = ({ memberId }: LockDateProps) => {
       },
     },
   })
-
   const eventData = data?.workingGroupApplications[0].createdInEvent
-  if (!eventData) {
-    return null
-  }
 
-  const block = asBlock({
-    createdAt: eventData.createdAt,
-    inBlock: eventData.inBlock,
-    network: eventData.network,
-  })
+  return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
+})
 
-  return <BlockTime block={block} layout="column" />
-}
-
-export const VoteLockDate = ({ address }: LockDateProps) => {
+export const VoteLockDate = React.memo(({ address }: PropsWithAddress) => {
   const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
-  const votesData = data?.castVotes[0]?.castEvent
-  const eventData = votesData && votesData[0]
+  const eventData = data?.castVotes[0]?.castEvent?.[0]
 
-  if (!eventData) {
-    return null
-  }
+  return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
+})
 
-  const block = asBlock({
-    createdAt: eventData.createdAt,
-    inBlock: eventData.inBlock,
-    network: eventData.network,
-  })
-
-  return <BlockTime block={block} layout="column" />
-}
-
-export const InvitationLockDate = ({ memberId }: LockDateProps) => {
+export const InvitationLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { data } = useGetMemberInvitedEventsQuery({ variables: { memberId } })
   const eventData = data?.memberInvitedEvents[0]
 
-  if (!eventData) {
-    return null
-  }
-
-  const block = asBlock({
-    createdAt: eventData.createdAt,
-    inBlock: eventData.inBlock,
-    network: eventData.network,
-  })
-
-  return <BlockTime block={block} layout="column" />
-}
+  return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
+})

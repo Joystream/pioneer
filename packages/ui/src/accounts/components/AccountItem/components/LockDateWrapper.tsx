@@ -6,7 +6,7 @@ import { Address } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 import {
-  BoundAccountLockData,
+  BoundAccountLockDate,
   BountyLockDate,
   CouncilCandidateLockDate,
   CouncilorLockDate,
@@ -16,36 +16,37 @@ import {
   WorkingGroupLockDate,
 } from './LockDate'
 
-interface LockDateProps {
+interface LockDateWrapperProps {
   lockType: LockType
   address: Address
   memberId?: string
   boundMembership?: Member
 }
 
-export const LockDateWrapper = React.memo(({ lockType, address, memberId, boundMembership }: LockDateProps) => {
+export const LockDateWrapper = React.memo(({ lockType, address, memberId, boundMembership }: LockDateWrapperProps) => {
   switch (lockType) {
     case 'Bound Staking Account':
-      return <BoundAccountLockData address={address} boundMembership={boundMembership} />
+      return <BoundAccountLockDate address={address} boundMembership={boundMembership} />
 
     case 'Council Candidate':
-      return <CouncilCandidateLockDate address={address} memberId={memberId} />
+      return <CouncilCandidateLockDate memberId={memberId} />
 
     case 'Councilor':
-      return <CouncilorLockDate address={address} memberId={memberId} />
+      return <CouncilorLockDate memberId={memberId} />
 
     case 'Voting':
-      return <VoteLockDate address={address} memberId={memberId} />
+      return <VoteLockDate address={address} />
 
     case 'Proposals':
-      return <ProposalLockDate address={address} memberId={memberId} />
+      return <ProposalLockDate memberId={memberId} />
 
     case 'Bounties':
-      return <BountyLockDate address={address} memberId={memberId} />
+      return <BountyLockDate memberId={memberId} />
 
     case 'Invitation':
-      return <InvitationLockDate address={address} memberId={memberId} />
+      return <InvitationLockDate memberId={memberId} />
 
+    // TODO: handle it in more elegant way
     case 'Storage Worker':
     case 'Content Directory Worker':
     case 'Forum Worker':
@@ -55,7 +56,7 @@ export const LockDateWrapper = React.memo(({ lockType, address, memberId, boundM
     case 'HR Worker':
     case 'Marketing Worker':
     case 'Distribution Worker':
-      return <WorkingGroupLockDate address={address} memberId={memberId} />
+      return <WorkingGroupLockDate memberId={memberId} />
 
     default:
       return <TextMedium value>Unknown</TextMedium>
