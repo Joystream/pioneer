@@ -71,14 +71,6 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState, min
         typeof specifics.workerId === 'number'
       )
     }
-    case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
-      return !!(
-        specifics?.stakingAmount &&
-        specifics?.stakingAmount.gtn(0) &&
-        specifics.groupId &&
-        specifics.workerId !== undefined
-      )
-    }
     case state.matches('specificParameters.slashWorkingGroupLead'): {
       return !!(
         specifics?.slashingAmount &&
@@ -149,16 +141,7 @@ export const SpecificParametersStep = ({
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
       return <StakingPolicyAndReward {...validationHelpers} />
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
-      return (
-        <DecreaseWorkingGroupLeadStake
-          stakingAmount={state.context.specifics?.stakingAmount}
-          groupId={state.context.specifics?.groupId}
-          workerId={state.context.specifics?.workerId}
-          setStakingAmount={(stakingAmount) => send('SET_STAKING_AMOUNT', { stakingAmount })}
-          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
-          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
-        />
-      )
+      return <DecreaseWorkingGroupLeadStake />
     case state.matches('specificParameters.slashWorkingGroupLead'):
       return (
         <SlashWorkingGroupLead

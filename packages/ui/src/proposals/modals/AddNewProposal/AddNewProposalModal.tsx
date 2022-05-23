@@ -175,6 +175,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       ).required(),
       rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required(),
     }),
+    decreaseWorkingGroupLeadStake: Yup.object().shape({
+      groupId: Yup.string().required(),
+      stakingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      workerId: Yup.number().required(),
+    }),
   })
 }
 
@@ -226,7 +231,7 @@ export const AddNewProposalModal = () => {
   })
 
   const mapDependencies = form.watch(['stakingAccount.stakingAccount', 'proposalType.type', 'groupId'])
-  // console.log(form.formState.errors, form.formState.isValid, 'xd', state.context.type)
+  // console.log(form.formState.errors, form.formState.isValid, 'xd', state.value)
   useEffect(() => {
     setFormMap(mapDependencies)
     if (state.matches('proposalType')) {
@@ -264,8 +269,12 @@ export const AddNewProposalModal = () => {
   const transaction = useMemo(() => {
     if (state.matches('transaction')) {
       if (activeMember && api) {
-        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-          form.getValues() as AddNewProposalForm
+        const {
+          proposalDetails,
+          triggerAndDiscussion,
+          stakingAccount,
+          ...specifics
+        } = form.getValues() as AddNewProposalForm
         const txBaseParams: BaseProposalParams = {
           member_id: activeMember?.id,
           title: proposalDetails.title,
