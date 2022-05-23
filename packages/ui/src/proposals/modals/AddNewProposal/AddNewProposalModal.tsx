@@ -185,6 +185,11 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       groupId: Yup.string().required(),
       workerId: Yup.number().required(),
     }),
+    terminateWorkingGroupLead: Yup.object().shape({
+      slashingAmount: BNSchema,
+      groupId: Yup.string().required(),
+      workerId: Yup.number().required(),
+    }),
   })
 }
 

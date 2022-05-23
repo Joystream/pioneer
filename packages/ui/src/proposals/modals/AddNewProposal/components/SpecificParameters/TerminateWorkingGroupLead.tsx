@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -19,19 +20,9 @@ export interface TerminateWorkingGroupLeadParameters {
   workerId?: number
 }
 
-interface TerminateWorkingGroupLeadProps extends TerminateWorkingGroupLeadParameters {
-  setSlashingAmount: (amount: BN) => void
-  setGroupId(groupId: GroupIdName): void
-  setWorkerId(workerId?: number): void
-}
-
-export const TerminateWorkingGroupLead = ({
-  slashingAmount,
-  groupId,
-  setSlashingAmount,
-  setGroupId,
-  setWorkerId,
-}: TerminateWorkingGroupLeadProps) => {
+export const TerminateWorkingGroupLead = () => {
+  const { setValue, watch } = useFormContext()
+  const [groupId] = watch(['terminateWorkingGroupLead.groupId'])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
@@ -40,8 +31,8 @@ export const TerminateWorkingGroupLead = ({
   const [showSlash, setShowSlash] = useState(false)
 
   useEffect(() => {
-    setSlashingAmount(BN_ZERO)
-    setWorkerId(group?.leadWorker?.runtimeId)
+    setValue('terminateWorkingGroupLead.slashingAmount', BN_ZERO, { shouldValidate: true })
+    setValue('terminateWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
   }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
@@ -64,7 +55,9 @@ export const TerminateWorkingGroupLead = ({
             <SelectWorkingGroup
               id="working-group"
               selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              onChange={(selected) =>
+                setValue('terminateWorkingGroupLead.groupId', selected.id, { shouldValidate: true })
+              }
               disableNoLead
             />
           </InputComponent>
@@ -94,10 +87,10 @@ export const TerminateWorkingGroupLead = ({
             >
               <InputNumber
                 id="amount-input"
+                name="terminateWorkingGroupLead.slashingAmount"
                 isTokenValue
-                value={slashingAmount?.toString()}
+                isInBN
                 placeholder="0"
-                onChange={(_, value) => setSlashingAmount(new BN(value))}
                 disabled={isDisabled}
               />
             </InputComponent>
