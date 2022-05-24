@@ -6,10 +6,12 @@ import { lockIcon } from '@/accounts/components/AccountLocks'
 import { BalanceLock } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
 import { Address } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
-import { useGetCouncilorElectionEventQuery } from '@/council/queries'
-import { useMember } from '@/memberships/hooks/useMembership'
+import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
+import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
+import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { BalanceAmount } from '../BalanceAmount'
@@ -29,14 +31,15 @@ import {
   ValueCell,
 } from '../styles'
 
-interface CouncilorLockItemProps {
+interface CouncilCandidateLockItemProps {
   lock: BalanceLock
   address: Address
   isRecoverable?: boolean
 }
 
-export const CouncilorLockItem = ({ lock, address, isRecoverable }: CouncilorLockItemProps) => {
+export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: CouncilCandidateLockItemProps) => {
   const { push } = useHistory()
+  const { showModal } = useModal()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
@@ -44,17 +47,25 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: CouncilorLoc
   const [isDropped, setDropped] = useState(false)
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
-  const { member } = useMember(memberId)
-  const { data } = useGetCouncilorElectionEventQuery({ variables: { memberId } })
-  const eventData = data?.memberships[0]?.councilMembers[0]?.electedInCouncil
-  const councilId = eventData?.id
+  const { candidateId } = useCandidateIdByMember(memberId || '-1')
+  const { data } = useGetNewCandidateEventsQuery({ variables: { candidateId } })
 
-  const goToCouncil = useCallback(() => {
-    if (member?.isCouncilMember) {
-      return push(CouncilRoutes.council)
+  const eventData = data?.newCandidateEvents[0]
+  const electionId = eventData?.candidate.electionRoundId
+
+  const goToCandidate = useCallback(() => {
+    if (!candidateId) {
+      return null
     }
-    return push(generatePath(CouncilRoutes.pastCouncils, { id: councilId }))
-  }, [councilId, member?.isCouncilMember])
+    showModal<CandidacyPreviewModalCall>({
+      modal: 'CandidacyPreview',
+      data: { id: candidateId },
+    })
+  }, [candidateId])
+
+  const goToElection = useCallback(() => {
+    return push(generatePath(CouncilRoutes.pastCouncils, { id: electionId }))
+  }, [electionId])
 
   const recoverButton = useMemo(
     () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
@@ -83,11 +94,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: CouncilorLoc
       <StyledDropDown isDropped={isDropped}>
         <div>
           <DetailLabel>Lock date</DetailLabel>
-          <LockDate
-            createdAt={eventData?.electedAtTime}
-            inBlock={eventData?.electedAtBlock}
-            network={eventData?.electedAtNetwork}
-          />
+          <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
 
         <div>
@@ -97,7 +104,8 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: CouncilorLoc
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
 
         <LocksButtons>
-          <LockLinkButton label="Show Council" onClick={goToCouncil} />
+          {candidateId && <LockLinkButton label="Show Candidacy" onClick={goToCandidate} />}
+          <LockLinkButton label="Show Election" onClick={goToElection} />
           {recoverButton}
         </LocksButtons>
       </StyledDropDown>

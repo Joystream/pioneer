@@ -4,7 +4,7 @@ import { BalanceLock } from '@/accounts/types'
 import { TextMedium } from '@/common/components/typography'
 import { Address } from '@/common/types'
 
-import { BoundAccountLockItem, CouncilorLockItem } from './lockItems'
+import { BoundAccountLockItem, CouncilCandidateLockItem, CouncilorLockItem } from './lockItems'
 
 interface LockItemWrapperProps {
   lock: BalanceLock
@@ -18,8 +18,8 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
     case 'Bound Staking Account':
       return <BoundAccountLockItem {...props} />
 
-    // case 'Council CandiItem':
-    //   return <CouncilCandidateLockItem memberId={memberId} />
+    case 'Council Candidate':
+      return <CouncilCandidateLockItem {...props} />
 
     case 'Councilor':
       return <CouncilorLockItem {...props} />

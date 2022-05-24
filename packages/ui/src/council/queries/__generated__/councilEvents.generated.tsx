@@ -42,7 +42,11 @@ export type NewCandidateEventFieldsFragment = {
   createdAt: any
   inBlock: number
   network: Types.Network
-  candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
+  candidate: {
+    __typename: 'Candidate'
+    electionRoundId: string
+    member: { __typename: 'Membership'; id: string; handle: string }
+  }
 }
 
 export type NotEnoughCandidatesEventFieldsFragment = {
@@ -119,7 +123,11 @@ export type GetCouncilEventsQuery = {
         createdAt: any
         inBlock: number
         network: Types.Network
-        candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
+        candidate: {
+          __typename: 'Candidate'
+          electionRoundId: string
+          member: { __typename: 'Membership'; id: string; handle: string }
+        }
       }
     | {
         __typename: 'NewCouncilElectedEvent'
@@ -210,7 +218,11 @@ export type GetNewCandidateEventsQuery = {
     createdAt: any
     inBlock: number
     network: Types.Network
-    candidate: { __typename: 'Candidate'; member: { __typename: 'Membership'; id: string; handle: string } }
+    candidate: {
+      __typename: 'Candidate'
+      electionRoundId: string
+      member: { __typename: 'Membership'; id: string; handle: string }
+    }
   }>
 }
 
@@ -266,6 +278,7 @@ export const NewCandidateEventFieldsFragmentDoc = gql`
         id
         handle
       }
+      electionRoundId
     }
   }
 `
