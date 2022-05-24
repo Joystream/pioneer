@@ -1767,6 +1767,7 @@ export type GetLatestProposalByMemberIdQuery = {
   __typename: 'Query'
   proposals: Array<{
     __typename: 'Proposal'
+    id: string
     createdInEvent: { __typename: 'ProposalCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
@@ -2573,6 +2574,7 @@ export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
 export const GetLatestProposalByMemberIdDocument = gql`
   query GetLatestProposalByMemberId($memberId: ID) {
     proposals(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+      id
       createdInEvent {
         createdAt
         inBlock
