@@ -37,7 +37,6 @@ import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
-import { isActiveProposalStatus } from '@/proposals/types'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
@@ -53,7 +52,11 @@ export const ProposalPreview = () => {
   const [currentVotingRound, setVotingRound] = useState(0)
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
   const notVoted = useMemo(() => {
-    if (!proposal || !isActiveProposalStatus(proposal.status)) {
+    if (
+      !proposal ||
+      !['deciding', 'dormant'].includes(proposal.status) ||
+      currentVotingRound < votingRounds.length - 1
+    ) {
       return
     }
 
@@ -61,11 +64,7 @@ export const ProposalPreview = () => {
       .flat()
       .map((vote) => vote.voter)
     const councilMembers = council?.councilors.map((councilor) => councilor.member)
-    return (
-      councilMembers?.filter(
-        (member) => !votedMembers.some((voted) => voted.id === member.id) && member.id !== proposal.proposer.id
-      ) ?? []
-    )
+    return councilMembers?.filter((member) => !votedMembers.some((voted) => voted.id === member.id)) ?? []
   }, [council, proposal])
 
   useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
