@@ -1441,6 +1441,7 @@ export type GetCouncilorElectionEventQuery = {
       __typename: 'CouncilMember'
       electedInCouncil: {
         __typename: 'ElectedCouncil'
+        id: string
         electedAtBlock: number
         electedAtTime: any
         electedAtNetwork: Types.Network
@@ -2751,6 +2752,7 @@ export const GetCouncilorElectionEventDocument = gql`
     memberships(where: { id_eq: $memberId }) {
       councilMembers {
         electedInCouncil {
+          id
           electedAtBlock
           electedAtTime
           electedAtNetwork

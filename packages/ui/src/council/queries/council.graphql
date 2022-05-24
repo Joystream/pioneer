@@ -384,6 +384,7 @@ query GetCouncilorElectionEvent($memberId: ID) {
   memberships(where: { id_eq: $memberId }) {
     councilMembers {
       electedInCouncil {
+        id
         electedAtBlock
         electedAtTime
         electedAtNetwork

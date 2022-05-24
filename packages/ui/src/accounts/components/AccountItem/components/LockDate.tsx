@@ -32,7 +32,7 @@ interface LockDateProps {
   network?: Network
 }
 
-const LockDate = React.memo(({ createdAt, inBlock, network }: LockDateProps) => {
+export const LockDate = React.memo(({ createdAt, inBlock, network }: LockDateProps) => {
   if (!createdAt || !inBlock || !network) {
     return <TextMedium value>Unknown</TextMedium>
   }
@@ -62,18 +62,18 @@ export const CouncilCandidateLockDate = React.memo(({ memberId }: PropsWithMembe
   return <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
 })
 
-export const CouncilorLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
-  const { data } = useGetCouncilorElectionEventQuery({ variables: { memberId } })
-  const eventData = data?.memberships[0]?.councilMembers[0]?.electedInCouncil
+// export const CouncilorLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
+//   const { data } = useGetCouncilorElectionEventQuery({ variables: { memberId } })
+//   const eventData = data?.memberships[0]?.councilMembers[0]?.electedInCouncil
 
-  return (
-    <LockDate
-      createdAt={eventData?.electedAtTime}
-      inBlock={eventData?.electedAtBlock}
-      network={eventData?.electedAtNetwork}
-    />
-  )
-})
+//   return (
+//     <LockDate
+//       createdAt={eventData?.electedAtTime}
+//       inBlock={eventData?.electedAtBlock}
+//       network={eventData?.electedAtNetwork}
+//     />
+//   )
+// })
 
 export const ProposalLockDate = React.memo(({ memberId }: PropsWithMemberId) => {
   const { data } = useGetLatestProposalByMemberIdQuery({ variables: { memberId } })
