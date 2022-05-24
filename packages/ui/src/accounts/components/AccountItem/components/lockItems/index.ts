@@ -1,3 +1,6 @@
 export * from './BoundAccountLockItem'
 export * from './CouncilorLockItem'
 export * from './CouncilCandidateLockItem'
+export * from './ProposalLockItem'
+export * from './BountyLockItem'
+export * from './WorkingGroupLockItem'

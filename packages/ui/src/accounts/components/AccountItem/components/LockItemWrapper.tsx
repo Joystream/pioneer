@@ -10,6 +10,7 @@ import {
   CouncilCandidateLockItem,
   CouncilorLockItem,
   ProposalLockItem,
+  WorkingGroupLockItem,
 } from './lockItems'
 
 interface LockItemWrapperProps {
@@ -43,16 +44,16 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
     //   return <InvitationLockItem memberId={memberId} />
 
     // // TODO: handle it in more elegant way
-    // case 'Storage Worker':
-    // case 'Content Directory Worker':
-    // case 'Forum Worker':
-    // case 'Membership Worker':
-    // case 'Gateway Worker':
-    // case 'Builders Worker':
-    // case 'HR Worker':
-    // case 'Marketing Worker':
-    // case 'Distribution Worker':
-    //   return <WorkingGroupLockItem memberId={memberId} />
+    case 'Storage Worker':
+    case 'Content Directory Worker':
+    case 'Forum Worker':
+    case 'Membership Worker':
+    case 'Gateway Worker':
+    case 'Builders Worker':
+    case 'HR Worker':
+    case 'Marketing Worker':
+    case 'Distribution Worker':
+      return <WorkingGroupLockItem {...props} />
 
     default:
       return <TextMedium value>Unknown</TextMedium>

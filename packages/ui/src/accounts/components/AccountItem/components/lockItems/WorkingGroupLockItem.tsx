@@ -4,12 +4,12 @@ import { generatePath, useHistory } from 'react-router-dom'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { BalanceLock } from '@/accounts/types'
-import { BountyRoutes } from '@/bounty/constants'
-import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
 import { Address } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
+import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
 import { BalanceAmount } from '../BalanceAmount'
 import { LockDate } from '../LockDate'
@@ -28,13 +28,13 @@ import {
   ValueCell,
 } from '../styles'
 
-interface BountyLockItemProps {
+interface WorkingGroupLockItemProps {
   lock: BalanceLock
   address: Address
   isRecoverable?: boolean
 }
 
-export const BountyLockItem = ({ lock, address, isRecoverable }: BountyLockItemProps) => {
+export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: WorkingGroupLockItemProps) => {
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
@@ -43,17 +43,25 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: BountyLockItemP
   const [isDropped, setDropped] = useState(false)
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
-  const { data } = useGetLatestBountyByMemberIdQuery({ variables: { memberId } })
-  const bounty = data?.bounties[0]
-  const eventData = bounty?.createdInEvent
-  const bountyId = bounty?.id
+  const { data } = useGetWorkingGroupApplicationsQuery({
+    variables: {
+      where: {
+        applicant: {
+          id_eq: memberId,
+        },
+      },
+    },
+  })
+  const application = data?.workingGroupApplications[0]
+  const eventData = application?.createdInEvent
+  const openingId = application?.opening.id
 
-  const goToBounty = useCallback(() => {
-    if (!bountyId) {
+  const goToOpening = useCallback(() => {
+    if (!openingId) {
       return null
     }
-    return push(generatePath(BountyRoutes.bounty, { id: bountyId }))
-  }, [bountyId])
+    return push(generatePath(WorkingGroupsRoutes.openingById, { id: openingId }))
+  }, [openingId])
 
   const recoverButton = useMemo(
     () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
@@ -92,7 +100,7 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: BountyLockItemP
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
 
         <LocksButtons>
-          {bountyId && <LockLinkButton label="Show Bounty" onClick={goToBounty} />}
+          {openingId && <LockLinkButton label="Show Opening" onClick={goToOpening} />}
           {recoverButton}
         </LocksButtons>
       </StyledDropDown>

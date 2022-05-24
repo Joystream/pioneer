@@ -44,8 +44,9 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: ProposalLockI
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
   const { data } = useGetLatestProposalByMemberIdQuery({ variables: { memberId } })
-  const eventData = data?.proposals[0]?.createdInEvent
-  const proposalId = data?.proposals[0]?.id
+  const proposal = data?.proposals[0]
+  const eventData = proposal?.createdInEvent
+  const proposalId = proposal?.id
 
   const goToProposal = useCallback(() => {
     if (!proposalId) {
@@ -91,7 +92,7 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: ProposalLockI
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
 
         <LocksButtons>
-          {proposalId && <LockLinkButton label="Show Council" onClick={goToProposal} />}
+          {proposalId && <LockLinkButton label="Show Proposal" onClick={goToProposal} />}
           {recoverButton}
         </LocksButtons>
       </StyledDropDown>
