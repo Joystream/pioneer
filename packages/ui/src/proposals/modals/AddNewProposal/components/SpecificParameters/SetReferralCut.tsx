@@ -10,10 +10,6 @@ import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { ValidationHelpers } from '@/common/utils/validation'
 
-export interface SetReferralCutParameters {
-  referralCut?: number
-}
-
 export const SetReferralCut = ({ errorMessageGetter, errorChecker }: ValidationHelpers) => {
   const { api, connectionState } = useApi()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent

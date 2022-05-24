@@ -12,11 +12,6 @@ import { SelectWorkingGroupApplication } from '@/working-groups/components/Selec
 import { SelectWorkingGroupOpening } from '@/working-groups/components/SelectWorkingGroupOpening/SelectWorkingGroupOpening'
 import { ApplicationAnswer, WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
-export interface FillWorkingGroupLeadOpeningParameters {
-  openingId?: string
-  applicationId?: string
-}
-
 export const FillWorkingGroupLeadOpening = () => {
   const [answers, setAnswer] = useState<ApplicationAnswer[]>([])
   const { setValue, watch } = useFormContext()

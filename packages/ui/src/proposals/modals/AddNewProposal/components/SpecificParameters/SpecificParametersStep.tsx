@@ -1,6 +1,4 @@
-import { u32 } from '@polkadot/types'
 import React from 'react'
-import { State, Typestate } from 'xstate'
 
 import { ValidationHelpers } from '@/common/utils/validation'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
@@ -25,37 +23,16 @@ import {
   WorkingGroupAndDescription,
 } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
-import {
-  AddNewProposalContext,
-  AddNewProposalEvent,
-  AddNewProposalMachineState,
-} from '@/proposals/modals/AddNewProposal/machine'
+import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 
-export interface ExecutionProps {
-  setIsExecutionError: (value: boolean) => void
+interface SpecificParametersStepProps extends ValidationHelpers {
+  state: AddNewProposalMachineState
 }
 
-interface SpecificParametersStepProps extends ExecutionProps, ValidationHelpers {
-  send: (event: AddNewProposalEvent['type'], payload: any) => void
-  state: State<AddNewProposalContext, AddNewProposalEvent, any, Typestate<AddNewProposalContext>>
-}
-
-export const isValidSpecificParameters = (state: AddNewProposalMachineState, minimumValidatorCount?: u32): boolean => {
-  const specifics = state.context.specifics
-
-  switch (true) {
-    case state.matches('specificParameters.runtimeUpgrade'): {
-      return !!specifics?.runtime && specifics.runtime.byteLength !== 0
-    }
-    default:
-      return false
-  }
-}
-
-export const SpecificParametersStep = ({ send, state, ...validationHelpers }: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({ state, ...validationHelpers }: SpecificParametersStepProps) => {
   switch (true) {
     case state.matches('specificParameters.signal'):
       return <Signal />

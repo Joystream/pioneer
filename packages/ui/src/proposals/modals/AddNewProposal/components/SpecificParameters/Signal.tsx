@@ -6,10 +6,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
-export interface SignalParameters {
-  signal?: string
-}
-
 export const Signal = () => {
   return (
     <RowGapBlock gap={24}>

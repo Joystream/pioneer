@@ -5,7 +5,6 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider, FieldError } from 'react-hook-form'
 import styled from 'styled-components'
-import * as Yup from 'yup'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -35,21 +34,12 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
-import {
-  BNSchema,
-  enhancedGetErrorMessage,
-  enhancedHasError,
-  lessThanMixed,
-  maxContext,
-  minContext,
-  moreThanMixed,
-  useYupValidationResolver,
-} from '@/common/utils/validation'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { AccountSchema, IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
+import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
@@ -57,20 +47,15 @@ import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/comp
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
-import { MAX_VALIDATOR_COUNT } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { AddNewProposalForm, defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
+import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import {
-  AddNewProposalEvent,
-  addNewProposalMachine,
-  AddNewProposalMachineState,
-} from '@/proposals/modals/AddNewProposal/machine'
+import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -82,157 +67,6 @@ export type BaseProposalParams = Exclude<
 >
 
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
-
-interface SchemaFactoryProps {
-  proposalDetails: {
-    titleMaxLength: number
-    rationaleMaxLength: number
-  }
-}
-
-const MAX_U32 = Math.pow(2, 32) - 1
-
-const schemaFactory = (props: SchemaFactoryProps) => {
-  return Yup.object().shape({
-    groupId: Yup.string(),
-    proposalType: Yup.object().shape({
-      type: Yup.string().required(),
-    }),
-    stakingAccount: Yup.object().shape({
-      stakingAccount: StakingAccountSchema.required(),
-    }),
-    proposalDetails: Yup.object().shape({
-      title: Yup.string().required().max(props.proposalDetails.titleMaxLength, 'Title exceeds maximum length'),
-      rationale: Yup.string()
-        .required()
-        .max(props.proposalDetails.rationaleMaxLength, 'Rationale exceeds maximum length'),
-    }),
-    triggerAndDiscussion: Yup.object().shape({
-      trigger: Yup.boolean(),
-      triggerBlock: Yup.number().when('trigger', {
-        is: true,
-        then: Yup.number()
-          .test(minContext('The minimum block number is ${min}', 'minTriggerBlock'))
-          .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock'))
-          .required(),
-      }),
-      isDiscussionClosed: Yup.boolean(),
-      discussionWhitelist: Yup.array().when('isDiscussionClosed', {
-        is: true,
-        then: Yup.array().required(),
-      }),
-    }),
-    signal: Yup.object().shape({
-      signal: Yup.string().required().trim(),
-    }),
-    fundingRequest: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required(),
-      account: AccountSchema.required(),
-    }),
-    runtimeUpgrade: Yup.object().shape({
-      runtime: Yup.mixed().required(),
-    }),
-    setCouncilorReward: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required(),
-    }),
-    setCouncilBudgetIncrement: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required(),
-    }),
-    fillWorkingGroupLeadOpening: Yup.object().shape({
-      openingId: Yup.string().required(),
-      applicationId: Yup.string().required(),
-      groupId: Yup.string().required(),
-    }),
-    workingGroupAndDescription: Yup.object().shape({
-      title: Yup.string().required().max(55, 'Max length is 55 characters'),
-      description: Yup.string().required(),
-      shortDescription: Yup.string().required(),
-      groupId: Yup.string().required(),
-    }),
-    durationAndProcess: Yup.object().shape({
-      details: Yup.string().required(),
-      isLimited: Yup.boolean(),
-      duration: Yup.number().when('isLimited', {
-        is: true,
-        then: Yup.number().required(),
-      }),
-    }),
-    applicationForm: Yup.object().shape({
-      questions: Yup.array()
-        .of(
-          Yup.object({
-            questionField: Yup.string().required(),
-            shortValue: Yup.boolean(),
-          })
-        )
-        .min(1)
-        .required(),
-    }),
-    cancelWorkingGroupLeadOpening: Yup.object().shape({
-      groupId: Yup.string().required(),
-      openingId: Yup.string().required(),
-    }),
-    stakingPolicyAndReward: Yup.object().shape({
-      stakingAmount: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake')
-      ).required(),
-      leavingUnstakingPeriod: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'minUnstakingPeriodLimit')
-      ).required(),
-      rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required(),
-    }),
-    decreaseWorkingGroupLeadStake: Yup.object().shape({
-      groupId: Yup.string().required(),
-      stakingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-      workerId: Yup.number().required(),
-    }),
-    slashWorkingGroupLead: Yup.object().shape({
-      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-      groupId: Yup.string().required(),
-      workerId: Yup.number().required(),
-    }),
-    terminateWorkingGroupLead: Yup.object().shape({
-      slashingAmount: BNSchema,
-      groupId: Yup.string().required(),
-      workerId: Yup.number().required(),
-    }),
-    setWorkingGroupLeadReward: Yup.object().shape({
-      rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-      groupId: Yup.string().required(),
-      workerId: Yup.number().required(),
-    }),
-    updateWorkingGroupBudget: Yup.object().shape({
-      isPositive: Yup.boolean(),
-      groupId: Yup.string().required(),
-      budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-    }),
-    setInitialInvitationCount: Yup.object().shape({
-      invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-    }),
-    setReferralCut: Yup.object().shape({
-      referralCut: Yup.number()
-        .test(maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut'))
-        .max(100, 'Value exceed maximal percentage')
-        .required(),
-    }),
-    setMembershipLeadInvitationQuota: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero'))
-        .test(lessThanMixed(MAX_U32, 'Maximal value allowed is ${max}'))
-        .required(),
-    }),
-    setInitialInvitationBalance: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-    }),
-    setMaxValidatorCount: Yup.object().shape({
-      validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount'))
-        .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}'))
-        .required('Field is required'),
-    }),
-    setMembershipPrice: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-    }),
-  })
-}
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
@@ -258,12 +92,10 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
   const form = useForm<AddNewProposalForm>({
     resolver: useYupValidationResolver<AddNewProposalForm>(
-      schemaFactory({
-        proposalDetails: {
-          titleMaxLength: api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0,
-          rationaleMaxLength: api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0,
-        },
-      }),
+      schemaFactory(
+        api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0,
+        api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0
+      ),
       machineStateConverter(state.value)
     ),
     mode: 'onChange',
@@ -341,6 +173,7 @@ export const AddNewProposalModal = () => {
     if (activeMember && api) {
       const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
         form.getValues() as AddNewProposalForm
+
       const txBaseParams: BaseProposalParams = {
         member_id: activeMember?.id,
         title: proposalDetails?.title,
@@ -356,7 +189,7 @@ export const AddNewProposalModal = () => {
       }
 
       return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
+        api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
         api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
       ])
     }
@@ -427,8 +260,8 @@ export const AddNewProposalModal = () => {
     )
   }
 
-  if (state.matches('warning') && !isHidingCaution) {
-    return <WarningModal onNext={() => send('NEXT')} />
+  if (state.matches('warning')) {
+    return isHidingCaution ? null : <WarningModal onNext={() => send('NEXT')} />
   }
 
   if (state.matches('requiredStakeFailed')) {
@@ -474,8 +307,11 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('discussionTransaction')) {
+    const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
     const threadMode = createType('ThreadMode', {
-      closed: state.context.discussionWhitelist.map((member) => createType('MemberId', Number.parseInt(member.id))),
+      closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
+        createType('MemberId', Number.parseInt(member.id))
+      ),
     })
     const transaction = api.tx.proposalsDiscussion.changeThreadMode(
       activeMember.id,
@@ -495,12 +331,13 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('success')) {
+    const { proposalDetails, proposalType } = form.getValues() as AddNewProposalForm
     return (
       <SuccessModal
         onClose={hideModal}
         proposalId={state.context.proposalId}
-        proposalType={state.context.type as ProposalType}
-        proposalTitle={state.context.title as string}
+        proposalType={proposalType.type as ProposalType}
+        proposalTitle={proposalDetails.title as string}
       />
     )
   }
@@ -517,7 +354,7 @@ export const AddNewProposalModal = () => {
     errorChecker: enhancedHasError(form.formState.errors, machineStateConverter(state.value)),
     errorMessageGetter: enhancedGetErrorMessage(form.formState.errors, machineStateConverter(state.value)),
   }
-  // console.log(!form.formState.isValid || !warningAccepted, 'warningAccepted', warningAccepted)
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader
@@ -543,12 +380,7 @@ export const AddNewProposalModal = () => {
                 <TriggerAndDiscussionStep {...validationHelpers} />
               )}
               {state.matches('specificParameters') && (
-                <SpecificParametersStep
-                  state={state as AddNewProposalMachineState}
-                  send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
-                  setIsExecutionError={setIsExecutionError}
-                  {...validationHelpers}
-                />
+                <SpecificParametersStep state={state as AddNewProposalMachineState} {...validationHelpers} />
               )}
               {isExecutionError && <ExecutionRequirementsWarning />}
             </FormProvider>

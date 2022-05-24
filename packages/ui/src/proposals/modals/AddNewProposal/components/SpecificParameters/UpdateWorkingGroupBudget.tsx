@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -13,12 +12,6 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
-
-export interface UpdateWorkingGroupBudgetParameters {
-  budgetUpdate?: BN
-  groupId?: GroupIdName
-}
 
 export const UpdateWorkingGroupBudget = () => {
   const { setValue, watch } = useFormContext()

@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -6,10 +5,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { ValidationHelpers } from '@/common/utils/validation'
-
-export interface SetMaxValidatorCountParameters {
-  validatorCount?: BN
-}
 
 export const MAX_VALIDATOR_COUNT = 300
 

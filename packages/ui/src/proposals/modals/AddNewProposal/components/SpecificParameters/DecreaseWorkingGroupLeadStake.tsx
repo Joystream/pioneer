@@ -14,13 +14,6 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
-
-export interface DecreaseWorkingGroupLeadStakeParameters {
-  stakingAmount?: BN
-  groupId?: GroupIdName
-  workerId?: number
-}
 
 export const DecreaseWorkingGroupLeadStake = () => {
   const { setValue, watch } = useFormContext()

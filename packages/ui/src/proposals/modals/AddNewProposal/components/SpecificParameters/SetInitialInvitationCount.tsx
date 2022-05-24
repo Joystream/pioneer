@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -7,10 +6,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
-
-export interface SetInitialInvitationCountParameters {
-  invitationCount?: BN
-}
 
 export const SetInitialInvitationCount = () => {
   const { api } = useApi()

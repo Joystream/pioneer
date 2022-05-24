@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -6,10 +5,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
-
-export interface SetMembershipLeadInvitationParameters {
-  amount?: BN
-}
 
 export const SetMembershipLeadInvitationQuota = () => {
   const { isLoading, group } = useWorkingGroup({ name: 'membershipWorkingGroup' })

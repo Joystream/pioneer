@@ -1,17 +1,10 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-
-export interface FundingRequestParameters {
-  amount?: BN
-  account?: Account
-}
 
 export const FundingRequest = () => {
   return (

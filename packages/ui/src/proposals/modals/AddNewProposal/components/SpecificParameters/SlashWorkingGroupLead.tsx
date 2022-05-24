@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -12,13 +11,6 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
-
-export interface SlashWorkingGroupLeadParameters {
-  slashingAmount?: BN
-  groupId?: GroupIdName
-  workerId?: number
-}
 
 export const SlashWorkingGroupLead = () => {
   const { setValue, watch } = useFormContext()

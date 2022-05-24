@@ -9,10 +9,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 
-export interface RuntimeUpgradeParameters {
-  runtime?: ArrayBuffer
-}
-
 interface DragResponseProps {
   isDragActive?: boolean
   isDragAccept?: boolean
