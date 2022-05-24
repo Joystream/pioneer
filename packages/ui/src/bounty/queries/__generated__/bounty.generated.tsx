@@ -968,6 +968,7 @@ export type GetLatestBountyByMemberIdQuery = {
   __typename: 'Query'
   bounties: Array<{
     __typename: 'Bounty'
+    id: string
     createdInEvent: { __typename: 'BountyCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
@@ -1477,6 +1478,7 @@ export type GetBountyContributorsQueryResult = Apollo.QueryResult<
 export const GetLatestBountyByMemberIdDocument = gql`
   query GetLatestBountyByMemberId($memberId: ID) {
     bounties(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+      id
       createdInEvent {
         createdAt
         inBlock
