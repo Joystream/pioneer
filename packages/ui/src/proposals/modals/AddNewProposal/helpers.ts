@@ -24,8 +24,8 @@ export const defaultProposalValues = {
   updateWorkingGroupBudget: {
     isPositive: true,
   },
-  setInitialInvitationCount: {
-    invitationCount: 0,
+  durationAndProcess: {
+    isLimited: false,
   },
 }
 

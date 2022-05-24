@@ -42,6 +42,7 @@ export const SetMembershipLeadInvitationQuota = () => {
               isTokenValue
               isInBN
               placeholder="0"
+              maxAllowedValue={Math.pow(2, 32) - 1}
               disabled={isLoading || !group?.leadId}
             />
           </InputComponent>

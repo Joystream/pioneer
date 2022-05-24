@@ -119,7 +119,7 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       isDiscussionClosed: Yup.boolean(),
       discussionWhitelist: Yup.array().when('isDiscussionClosed', {
         is: true,
-        then: Yup.array().min(1).required(),
+        then: Yup.array().required(),
       }),
     }),
     signal: Yup.object().shape({
@@ -152,7 +152,7 @@ const schemaFactory = (props: SchemaFactoryProps) => {
     durationAndProcess: Yup.object().shape({
       details: Yup.string().required(),
       isLimited: Yup.boolean(),
-      length: Yup.number().when('isLimited', {
+      duration: Yup.number().when('isLimited', {
         is: true,
         then: Yup.number().required(),
       }),
@@ -207,7 +207,7 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
     }),
     setInitialInvitationCount: Yup.object().shape({
-      invitationCount: BNSchema.required(),
+      invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
     }),
     setReferralCut: Yup.object().shape({
       referralCut: Yup.number()
@@ -224,7 +224,7 @@ const schemaFactory = (props: SchemaFactoryProps) => {
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
     }),
     setMaxValidatorCount: Yup.object().shape({
-      amount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount'))
+      validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount'))
         .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}'))
         .required('Field is required'),
     }),
@@ -243,7 +243,7 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
-  const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName]>>([])
+  const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName, boolean]>>([])
   const workingGroupConsts = api?.consts[formMap[2] as GroupIdName]
 
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
@@ -284,12 +284,21 @@ export const AddNewProposalModal = () => {
     defaultValues: defaultProposalValues,
   })
 
-  const mapDependencies = form.watch(['stakingAccount.stakingAccount', 'proposalType.type', 'groupId'])
+  const mapDependencies = form.watch([
+    'stakingAccount.stakingAccount',
+    'proposalType.type',
+    'groupId',
+    'triggerAndDiscussion.isDiscussionClosed',
+  ])
 
   useEffect(() => {
     setFormMap(mapDependencies)
     if (state.matches('proposalType')) {
       send('SET_TYPE', { proposalType: mapDependencies[1] })
+    }
+
+    if (state.matches('generalParameters.triggerAndDiscussion')) {
+      send('SET_DISCUSSION_MODE', { mode: mapDependencies[3] ? 'closed' : 'open' })
     }
   }, [JSON.stringify(mapDependencies)])
 
@@ -330,12 +339,8 @@ export const AddNewProposalModal = () => {
 
   const transaction = useMemo(() => {
     if (activeMember && api) {
-      const {
-        proposalDetails,
-        triggerAndDiscussion,
-        stakingAccount,
-        ...specifics
-      } = form.getValues() as AddNewProposalForm
+      const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
+        form.getValues() as AddNewProposalForm
       const txBaseParams: BaseProposalParams = {
         member_id: activeMember?.id,
         title: proposalDetails?.title,
@@ -344,7 +349,7 @@ export const AddNewProposalModal = () => {
         ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
       }
 
-      const txSpecificParameters = getSpecificParameters(api, specifics, form.formState.isValid)
+      const txSpecificParameters = getSpecificParameters(api, specifics)
 
       if (stakingStatus === 'confirmed') {
         return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
@@ -355,7 +360,7 @@ export const AddNewProposalModal = () => {
         api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
       ])
     }
-  }, [state.value, connectionState, stakingStatus])
+  }, [state.value, connectionState, stakingStatus, form.formState.isValidating])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -401,6 +406,13 @@ export const AddNewProposalModal = () => {
     setIsExecutionError(false)
   }, [send])
 
+  const shouldDisableNext = useMemo(() => {
+    if (isExecutionError) {
+      return !form.formState.isValid && !warningAccepted
+    }
+    return !form.formState.isValid
+  }, [form.formState.isValid, isExecutionError, warningAccepted])
+
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
     return null
   }
@@ -440,7 +452,7 @@ export const AddNewProposalModal = () => {
       <BindStakingAccountModal
         onClose={hideModal}
         transaction={transaction}
-        signer={state.context.stakingAccount.address}
+        signer={formMap[0]?.address ?? ''}
         service={state.children.bindStakingAccount}
         memberId={activeMember.id}
         steps={transactionsSteps}
@@ -505,7 +517,7 @@ export const AddNewProposalModal = () => {
     errorChecker: enhancedHasError(form.formState.errors, machineStateConverter(state.value)),
     errorMessageGetter: enhancedGetErrorMessage(form.formState.errors, machineStateConverter(state.value)),
   }
-  // console.log(machineStateConverter(state.value), ' value signal ')
+  // console.log(!form.formState.isValid || !warningAccepted, 'warningAccepted', warningAccepted)
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader
@@ -558,11 +570,7 @@ export const AddNewProposalModal = () => {
               I understand the implications of overriding the execution constraints validation.
             </Checkbox>
           )}
-          <ButtonPrimary
-            disabled={!form.formState.isValid || !warningAccepted}
-            onClick={() => send('NEXT')}
-            size="medium"
-          >
+          <ButtonPrimary disabled={shouldDisableNext} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>

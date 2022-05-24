@@ -30,22 +30,15 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
 
   return GroupIdToGroupParam[groupId]
 }
-
 export const getSpecificParameters = (
   api: ApiRx,
-  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>,
-  isFormValid: boolean
+  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
 ): ProposalDetailsOf => {
-  if (!isFormValid || !specifics.proposalType.type) {
+  if (!specifics.proposalType.type) {
     return createType('ProposalDetailsOf', { Signal: '' })
   }
 
-  switch (
-    specifics.proposalType.type as keyof Omit<
-      AddNewProposalForm,
-      'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails' | 'proposalType'
-    >
-  ) {
+  switch (specifics.proposalType.type) {
     case 'signal': {
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         Signal: createType('Text', specifics.signal?.signal ?? ''),
@@ -65,7 +58,7 @@ export const getSpecificParameters = (
         ]),
       })
     }
-    case 'stakingPolicyAndReward': {
+    case 'createWorkingGroupLeadOpening': {
       return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: metadataToBytes(OpeningMetadata, {

@@ -9,6 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { ValidationHelpers } from '@/common/utils/validation'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -16,10 +17,11 @@ import { Member } from '@/memberships/types'
 
 export const TriggerAndDiscussionStep = ({ errorMessageGetter, errorChecker }: ValidationHelpers) => {
   const { watch, setValue } = useFormContext()
-  const [discussionWhitelist, isDiscussionClosed, trigger] = watch([
+  const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
     'triggerAndDiscussion.isDiscussionClosed',
     'triggerAndDiscussion.trigger',
+    'triggerAndDiscussion.triggerBlock',
   ])
 
   const addMemberToWhitelist = (member: Member) => {
@@ -54,7 +56,11 @@ export const TriggerAndDiscussionStep = ({ errorMessageGetter, errorChecker }: V
             units="block"
             inputSize="s"
             validation={errorChecker('triggerBlock') ? 'invalid' : undefined}
-            message={errorChecker('triggerBlock') ? errorMessageGetter('triggerBlock') : undefined}
+            message={
+              errorChecker('triggerBlock')
+                ? errorMessageGetter('triggerBlock')
+                : triggerBlock && `≈ ${inBlocksDate(triggerBlock)}`
+            }
           >
             <InputNumber id="triggerBlock" placeholder="0" name="triggerAndDiscussion.triggerBlock" />
           </InputComponent>

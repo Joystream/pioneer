@@ -59,7 +59,13 @@ export const SetReferralCut = ({ errorMessageGetter, errorChecker }: ValidationH
               </TextMedium>
             }
           >
-            <InputNumber id="amount-input" isTokenValue name="setReferralCut.referralCut" placeholder="0" />
+            <InputNumber
+              id="amount-input"
+              isTokenValue
+              name="setReferralCut.referralCut"
+              placeholder="0"
+              maxAllowedValue={Math.pow(2, 8)}
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>

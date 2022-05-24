@@ -168,13 +168,14 @@ export const InputText = React.memo((props: InputProps) => {
 interface BaseNumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
   isTokenValue?: boolean
+  maxAllowedValue?: number
 }
 
 const BasedInputNumber = React.memo(
-  ({ id, onChange, isTokenValue = false, value = '', ...props }: BaseNumberInputProps) => {
+  ({ id, onChange, isTokenValue = false, value = '', maxAllowedValue, ...props }: BaseNumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
-      if (isNaN(eventValue) || eventValue < 0) return
+      if (isNaN(eventValue) || eventValue < 0 || (maxAllowedValue && !(eventValue < maxAllowedValue))) return
 
       onChange?.(event, eventValue)
     }
@@ -213,7 +214,7 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Input
           <BasedInputNumber
             {...props}
             value={new BN(field.value)?.toString() ?? ''}
-            onChange={(_, value) => field.onChange(isInBN ? new BN(value) : value)}
+            onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
             onBlur={field.onBlur}
           />
         )

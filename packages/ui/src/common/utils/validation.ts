@@ -107,6 +107,21 @@ export const useYupValidationResolver = <T extends FieldValues>(
           errors: {},
         }
       } catch (errors: any) {
+        // console.log(
+        //   errors,
+        //   errors.inner?.reduce(
+        //     (allErrors: Record<string, IFormError>, currentError: ValidationError) => ({
+        //       ...allErrors,
+        //       [currentError.path as string]: {
+        //         type: currentError.type ?? 'validation',
+        //         message: currentError.message,
+        //       },
+        //     }),
+        //     {}
+        //   ),
+        //   'erry',
+        //   path
+        // )
         return {
           values: {},
           errors: errors.inner?.reduce(

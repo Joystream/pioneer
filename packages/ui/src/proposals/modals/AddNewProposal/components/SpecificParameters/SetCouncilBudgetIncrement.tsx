@@ -28,7 +28,13 @@ export const SetCouncilBudgetIncrement = () => {
             required
             message="Value must be greater than zero"
           >
-            <InputNumber id="amount-input" isInBN name="setCouncilBudgetIncrement.amount" placeholder="0" />
+            <InputNumber
+              id="amount-input"
+              isInBN
+              name="setCouncilBudgetIncrement.amount"
+              placeholder="0"
+              maxAllowedValue={Math.pow(2, 128)}
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>

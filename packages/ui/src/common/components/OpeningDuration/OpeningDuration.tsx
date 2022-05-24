@@ -18,7 +18,8 @@ export interface OpeningDurationProps {
 
 export const OpeningDuration = React.memo(({ label }: OpeningDurationProps) => {
   const { watch } = useFormContext()
-  const [isLimited, length] = watch(['durationAndProcess.isLimited', 'durationAndProcess.length'])
+  const [isLimited, duration] = watch(['durationAndProcess.isLimited', 'durationAndProcess.duration'])
+
   return (
     <>
       <ToggleCheckbox
@@ -44,13 +45,13 @@ export const OpeningDuration = React.memo(({ label }: OpeningDurationProps) => {
             required
             units="blocks"
             inputSize="m"
-            message={length?.length ? `≈ ${inBlocksDate(length.length)}` : ''}
+            message={duration?.length ? `≈ ${inBlocksDate(duration.length)}` : ''}
             tight
           >
             <InputNumber
               id="field-period-length"
               placeholder="type number of blocks here"
-              name="durationAndProcess.length"
+              name="durationAndProcess.duration"
             />
           </InputComponent>
         </InputWrapper>

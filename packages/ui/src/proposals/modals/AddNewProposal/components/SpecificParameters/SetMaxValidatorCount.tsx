@@ -34,7 +34,13 @@ export const SetMaxValidatorCount = ({ errorChecker, errorMessageGetter }: Valid
             units="tJOY"
             required
           >
-            <InputNumber id="amount-input" name="setMaxValidatorCount.amount" isTokenValue isInBN placeholder="0" />
+            <InputNumber
+              id="amount-input"
+              name="setMaxValidatorCount.validatorCount"
+              isTokenValue
+              isInBN
+              placeholder="0"
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>
