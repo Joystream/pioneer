@@ -1,4 +1,5 @@
-import { createType, registry } from '@joystream/types'
+import { createType } from '@joystream/types'
+import { TypeRegistry } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces'
 import { AnyTuple, Codec } from '@polkadot/types/types'
 import { Constructor } from '@polkadot/util/types'
@@ -171,7 +172,7 @@ interface SerializedCodec {
 }
 
 const serializeCodec = (codec: Codec) => {
-  const type = registry.getClassName(codec.constructor as Constructor)
+  const type = (codec as any).meta?.type ?? codec.registry.getClassName(codec.constructor as Constructor)
 
   if (!type) {
     throw new Error('Unrecognized codec object')
@@ -186,7 +187,7 @@ const serializeCodec = (codec: Codec) => {
   return { kind: 'codec', type, value: codec.toJSON() }
 }
 
-const isCodec = (obj: any): obj is Codec => obj.constructor?.name && registry.hasClass(obj.constructor.name)
+const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' && obj.registry instanceof TypeRegistry
 
 const isEventRecord = (type: string, codec: Codec): codec is EventRecord => type === 'EventRecord'
 
