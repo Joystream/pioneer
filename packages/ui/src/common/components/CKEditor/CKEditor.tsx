@@ -1,6 +1,6 @@
 import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
 import React, { Ref, RefObject, useEffect, useRef } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { useMentions } from '@/common/hooks/useMentions'
 
@@ -88,8 +88,6 @@ const BaseCKEditor = React.forwardRef(
             }
           })
           viewDocument.on('focus', (event: EventInfo) => {
-            const displayData = editor.getData()
-            editor.setData(displayData)
             if (onFocus) {
               onFocus(event, editor)
             }
@@ -129,18 +127,12 @@ export const CKEditor = React.memo(
     if (!formContext || !name) {
       return <BaseCKEditor {...props} />
     }
-
+    const value = formContext.watch(name)
     return (
-      <Controller
-        name={name}
-        control={formContext.control}
-        render={({ field }) => (
-          <BaseCKEditor
-            {...props}
-            onReady={(editor) => editor.setData(field.value ?? '')}
-            onChange={(_, editor) => field.onChange(editor.getData())}
-          />
-        )}
+      <BaseCKEditor
+        {...props}
+        onReady={(editor) => editor.setData(value ?? '')}
+        onChange={(_, editor) => formContext.setValue(name, editor.getData(), { shouldValidate: true })}
       />
     )
   })
