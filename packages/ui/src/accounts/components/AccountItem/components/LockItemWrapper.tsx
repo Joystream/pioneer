@@ -10,6 +10,7 @@ import {
   CouncilCandidateLockItem,
   CouncilorLockItem,
   ProposalLockItem,
+  VoteLockItem,
   WorkingGroupLockItem,
 } from './lockItems'
 
@@ -31,8 +32,8 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
     case 'Councilor':
       return <CouncilorLockItem {...props} />
 
-    // case 'Voting':
-    //   return <VoteLockItem address={address} />
+    case 'Voting':
+      return <VoteLockItem {...props} />
 
     case 'Proposals':
       return <ProposalLockItem {...props} />
