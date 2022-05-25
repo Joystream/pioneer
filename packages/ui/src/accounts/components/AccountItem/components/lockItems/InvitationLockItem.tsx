@@ -1,4 +1,3 @@
-import faker from 'faker'
 import React, { useMemo, useState } from 'react'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
@@ -21,7 +20,6 @@ import {
 
 import { BalanceAmount } from './BalanceAmount'
 import { LockDate } from './LockDate'
-import { LockRecoveryTime } from './LockRecoveryTime'
 import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 

@@ -1,4 +1,3 @@
-import faker from 'faker'
 import React, { useCallback, useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 
@@ -26,7 +25,6 @@ import {
 import { BalanceAmount } from './BalanceAmount'
 import { LockDate } from './LockDate'
 import { LockLinkButton } from './LockLinkButton'
-import { LockRecoveryTime } from './LockRecoveryTime'
 import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
