@@ -22,7 +22,11 @@ export const VotesPreview = ({ votes, notVoted }: VotesPreviewProps) => (
     <VotePreview kind={Reject} count={votes.count.reject} votes={votes.map.get(Reject)} />
     <VotePreview kind={Slash} count={votes.count.slash} votes={votes.map.get(Slash)} />
     <VotePreview kind={Abstain} count={votes.count.abstain} votes={votes.map.get(Abstain)} />
-    <VotePreview kind="Not Voted" count={notVoted?.length ?? 0} votes={notVoted?.map((voter) => ({ voter })) ?? []} />
+    <VotePreview
+      kind="Not Voted"
+      count={notVoted?.length ?? votes.count.remain}
+      votes={notVoted?.map((voter) => ({ voter })) ?? []}
+    />
   </VotesContainer>
 )
 
