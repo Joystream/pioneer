@@ -2,11 +2,13 @@ import React from 'react'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
+import { ProposalOrderByInput } from '@/common/api/queries'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
+import { useSort } from '@/common/hooks/useSort'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
@@ -16,7 +18,9 @@ import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities
 import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
-  const { proposals, isLoading, pagination } = useProposals({ status: 'active' })
+  const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
+
+  const { proposals, isLoading, pagination } = useProposals({ order: order, status: 'active' })
 
   const { activities } = useProposalsActivities()
 
@@ -39,7 +43,7 @@ export const Proposals = () => {
                 description="We are searching through all past proposals to find what your are looking for."
               />
             ) : (
-              <ProposalList proposals={proposals} />
+              <ProposalList getSortProps={getSortProps} proposals={proposals} />
             )}
             <Pagination {...pagination} />
           </MainPanel>

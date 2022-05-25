@@ -1,12 +1,14 @@
 import React, { useRef, useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { ProposalOrderByInput } from '@/common/api/queries'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
+import { useSort } from '@/common/hooks/useSort'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { ProposalEmptyFilter, ProposalFilters } from '@/proposals/components/ProposalFilters'
 import { ProposalList } from '@/proposals/components/ProposalList'
@@ -21,7 +23,10 @@ export const PastProposals = () => {
   const [filters, setFilters] = useState(ProposalEmptyFilter)
 
   const { types, stages } = usePastProposals()
-  const { isLoading, proposals, pagination } = useProposals({ status: 'past', filters })
+
+  const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
+
+  const { isLoading, proposals, pagination } = useProposals({ order: order, status: 'past', filters })
 
   const { activities } = useProposalsActivities()
 
@@ -41,7 +46,7 @@ export const PastProposals = () => {
               description="We are searching through all past proposals to find what your are looking for. "
             />
           ) : (
-            <ProposalList proposals={proposals} isPast />
+            <ProposalList getSortProps={getSortProps} proposals={proposals} isPast />
           )}
           <Pagination {...pagination} />
         </MainPanel>
