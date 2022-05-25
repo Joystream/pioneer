@@ -83,13 +83,10 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProp
             network={eventData?.electedAtNetwork}
           />
         </div>
-
         <div>
           <LockReleaseTime value={faker.date.soon(1).toISOString()} />
         </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-
         <LocksButtons>
           <LockLinkButton label="Show Council" onClick={goToCouncil} />
           {recoverButton}

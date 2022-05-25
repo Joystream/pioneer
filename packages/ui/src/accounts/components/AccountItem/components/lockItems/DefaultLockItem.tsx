@@ -60,9 +60,7 @@ export const DefaultLockItem = ({ lock, address, isRecoverable }: LockItemProps)
           <DetailLabel>Lock date</DetailLabel>
           <LockDate />
         </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-
         <LocksButtons>{recoverButton}</LocksButtons>
       </StyledDropDown>
     </DetailsItemVoteWrapper>

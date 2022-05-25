@@ -90,13 +90,10 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockI
           <DetailLabel>Lock date</DetailLabel>
           <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
-
         <div>
           <LockReleaseTime value={faker.date.soon(1).toISOString()} />
         </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-
         <LocksButtons>
           {candidateId && <LockLinkButton label="Show Candidacy" onClick={goToCandidate} />}
           <LockLinkButton label="Show Election" onClick={goToElection} />

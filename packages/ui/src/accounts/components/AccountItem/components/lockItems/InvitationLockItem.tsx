@@ -66,10 +66,6 @@ export const InvitationLockItem = ({ lock, address, isRecoverable }: LockItemPro
           <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
 
-        <div>
-          <LockReleaseTime value={faker.date.soon(1).toISOString()} />
-        </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
 
         <LocksButtons>{recoverButton}</LocksButtons>

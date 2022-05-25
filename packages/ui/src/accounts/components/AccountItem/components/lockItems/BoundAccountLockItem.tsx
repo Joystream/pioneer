@@ -66,14 +66,11 @@ export const BoundAccountLockItem = ({ lock, address, isRecoverable }: LockItemP
           <DetailLabel>Lock date</DetailLabel>
           {block ? <BlockTime block={block} layout="column" /> : <TextMedium value>Unknown</TextMedium>}
         </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-
         <div>
           <DetailLabel>Bound to:</DetailLabel>
           {boundMembership && <MemberInfo member={boundMembership} onlyTop />}
         </div>
-
         <LocksButtons>{recoverButton}</LocksButtons>
       </StyledDropDown>
     </DetailsItemVoteWrapper>

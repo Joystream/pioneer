@@ -78,18 +78,11 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockItemProps) =>
           <DetailLabel>Lock date</DetailLabel>
           <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
-
-        <div>
-          <LockReleaseTime value={faker.date.soon(1).toISOString()} />
-        </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-
         <div>
           <DetailLabel>Voted for:</DetailLabel>
           {voteFor && <MemberInfo member={asMember(voteFor)} onlyTop />}
         </div>
-
         <LocksButtons>
           {electionId && <LockLinkButton label="Show Election" onClick={goToElection} />}
           {recoverButton}

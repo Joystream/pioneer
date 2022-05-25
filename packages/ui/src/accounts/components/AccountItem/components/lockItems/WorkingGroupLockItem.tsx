@@ -86,13 +86,10 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemP
           <DetailLabel>Lock date</DetailLabel>
           <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
-
         <div>
           <LockReleaseTime value={faker.date.soon(1).toISOString()} />
         </div>
-
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-
         <LocksButtons>
           {openingId && <LockLinkButton label="Show Opening" onClick={goToOpening} />}
           {recoverButton}
