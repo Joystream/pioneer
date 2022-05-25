@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { BalanceLock } from '@/accounts/types'
-import { TextMedium } from '@/common/components/typography'
 import { Address } from '@/common/types'
 
 import {
@@ -9,6 +8,7 @@ import {
   BountyLockItem,
   CouncilCandidateLockItem,
   CouncilorLockItem,
+  DefaultLockItem,
   InvitationLockItem,
   ProposalLockItem,
   VoteLockItem,
@@ -58,6 +58,6 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
       return <WorkingGroupLockItem {...props} />
 
     default:
-      return <TextMedium value>Unknown</TextMedium>
+      return <DefaultLockItem {...props} />
   }
 })
