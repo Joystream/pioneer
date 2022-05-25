@@ -9,6 +9,7 @@ import {
   BountyLockItem,
   CouncilCandidateLockItem,
   CouncilorLockItem,
+  InvitationLockItem,
   ProposalLockItem,
   VoteLockItem,
   WorkingGroupLockItem,
@@ -41,8 +42,8 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
     case 'Bounties':
       return <BountyLockItem {...props} />
 
-    // case 'Invitation':
-    //   return <InvitationLockItem memberId={memberId} />
+    case 'Invitation':
+      return <InvitationLockItem {...props} />
 
     // // TODO: handle it in more elegant way
     case 'Storage Worker':
