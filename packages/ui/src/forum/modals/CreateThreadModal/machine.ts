@@ -41,8 +41,6 @@ export type CreateThreadEvent =
   | { type: 'PASS'; memberId: string; categoryId: string; controllerAccount: Account }
   | { type: 'NEXT' }
   | { type: 'BACK' }
-  | { type: 'SET_TOPIC'; topic: string }
-  | { type: 'SET_DESCRIPTION'; description: string }
 
 export const createThreadMachine = createMachine<CreateThreadContext, CreateThreadEvent, CreateThreadState>({
   initial: 'requirementsVerification',
@@ -65,17 +63,6 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
       on: {
         NEXT: {
           target: 'transaction',
-          cond: (context) => !!(context.topic && context.description),
-        },
-        SET_TOPIC: {
-          actions: assign({
-            topic: (_, event) => event.topic,
-          }),
-        },
-        SET_DESCRIPTION: {
-          actions: assign({
-            description: (_, event) => event.description,
-          }),
         },
       },
     },
