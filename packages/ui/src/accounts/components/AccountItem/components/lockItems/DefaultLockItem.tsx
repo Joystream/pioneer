@@ -5,9 +5,6 @@ import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { BalanceAmount } from '../BalanceAmount'
-import { LockDate } from '../LockDate'
-import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -20,6 +17,9 @@ import {
   ValueCell,
 } from '../styles'
 
+import { BalanceAmount } from './BalanceAmount'
+import { LockDate } from './LockDate'
+import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const DefaultLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {

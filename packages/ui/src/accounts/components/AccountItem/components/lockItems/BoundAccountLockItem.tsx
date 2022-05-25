@@ -7,8 +7,6 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { BalanceAmount } from '../BalanceAmount'
-import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -21,6 +19,8 @@ import {
   ValueCell,
 } from '../styles'
 
+import { BalanceAmount } from './BalanceAmount'
+import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const BoundAccountLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {

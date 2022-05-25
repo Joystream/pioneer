@@ -7,9 +7,6 @@ import { TokenValue } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useGetMemberInvitedEventsQuery } from '@/memberships/queries'
 
-import { BalanceAmount } from '../BalanceAmount'
-import { LockDate } from '../LockDate'
-import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -22,7 +19,10 @@ import {
   ValueCell,
 } from '../styles'
 
+import { BalanceAmount } from './BalanceAmount'
+import { LockDate } from './LockDate'
 import { LockRecoveryTime } from './LockRecoveryTime'
+import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const InvitationLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {

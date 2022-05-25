@@ -9,10 +9,6 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
 
-import { BalanceAmount } from '../BalanceAmount'
-import { LockDate } from '../LockDate'
-import { LockLinkButton } from '../LockLinkButton'
-import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -25,7 +21,11 @@ import {
   ValueCell,
 } from '../styles'
 
+import { BalanceAmount } from './BalanceAmount'
+import { LockDate } from './LockDate'
+import { LockLinkButton } from './LockLinkButton'
 import { LockRecoveryTime } from './LockRecoveryTime'
+import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
