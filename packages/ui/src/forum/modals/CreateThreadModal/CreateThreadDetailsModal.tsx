@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import * as Yup from 'yup'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
@@ -14,6 +16,7 @@ import {
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { ForumBreadcrumbsList } from '@/forum/components/ForumBreadcrumbsList'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { CategoryBreadcrumb } from '@/forum/types'
@@ -24,55 +27,81 @@ interface Props {
   description: string
   setTopic: (t: string) => void
   setDescription: (d: string) => void
-  onSubmit: () => void
+  onSubmit: (params: ThreadFormFields) => void
   breadcrumbs?: CategoryBreadcrumb[]
   author: Member
 }
 
-export const CreateThreadDetailsModal = ({
-  topic,
-  description,
-  setTopic,
-  setDescription,
-  onSubmit,
-  breadcrumbs,
-  author,
-}: Props) => {
-  const isValid = useMemo(() => !!(topic && description), [topic, description])
+const CreateThreadSchema = Yup.object().shape({
+  topic: Yup.string().required('This field is required'),
+  description: Yup.string().required('This field is required'),
+})
+
+export interface ThreadFormFields {
+  topic: string
+  description: string
+}
+
+const formDefaultValues = {
+  topic: '',
+  description: '',
+}
+
+export const CreateThreadDetailsModal = ({ description, onSubmit, breadcrumbs, author }: Props) => {
   const { hideModal } = useModal()
+
+  const form = useForm<ThreadFormFields>({
+    resolver: useYupValidationResolver(CreateThreadSchema),
+    mode: 'onChange',
+    defaultValues: formDefaultValues,
+  })
+
+  const hasError = enhancedHasError(form.formState.errors)
+  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
+  const onCreate = () => onSubmit(form.getValues())
 
   return (
     <>
       <ScrolledModal onClose={hideModal} modalSize="l">
         <ModalHeader title="Create a thread" onClick={hideModal} />
         <ScrolledModalBody>
-          <ScrolledModalContainer>
-            <RowGapBlock gap={24}>
-              <ForumBreadcrumbsList
-                categoryBreadcrumbs={breadcrumbs ?? []}
-                threadBreadcrumb={{ id: '-1', title: 'New Thread' }}
-                nonInteractive
-              />
-              <RowGapBlock gap={16}>
-                <TextMedium light>Please make sure your title will be clear for users</TextMedium>
-                <InputComponent label="Topic of the thread" id="field-topic">
-                  <InputText id="field-topic" value={topic} onChange={(event) => setTopic(event.target.value)} />
-                </InputComponent>
-                <InputComponent label="Description" required inputSize="auto" id="field-description">
-                  <CKEditor
+          <FormProvider {...form}>
+            <ScrolledModalContainer>
+              <RowGapBlock gap={24}>
+                <ForumBreadcrumbsList
+                  categoryBreadcrumbs={breadcrumbs ?? []}
+                  threadBreadcrumb={{ id: '-1', title: 'New Thread' }}
+                  nonInteractive
+                />
+                <RowGapBlock gap={16}>
+                  <TextMedium light>Please make sure your title will be clear for users</TextMedium>
+                  <InputComponent
+                    label="Topic of the thread"
+                    id="field-topic"
+                    validation={hasError('topic') ? 'invalid' : undefined}
+                    message={hasError('topic') ? getErrorMessage('topic') : ''}
+                  >
+                    <InputText id="field-topic" name="topic" />
+                  </InputComponent>
+                  <InputComponent
+                    label="Description"
+                    required
+                    inputSize="auto"
                     id="field-description"
-                    onChange={(_, editor) => setDescription(editor.getData())}
-                    onReady={(editor) => editor.setData(description ?? '')}
-                  />
-                </InputComponent>
+                    validation={hasError('description') ? 'invalid' : undefined}
+                    message={hasError('description') ? getErrorMessage('description') : ''}
+                  >
+                    <CKEditor id="field-description" name="description" />
+                  </InputComponent>
+                </RowGapBlock>
               </RowGapBlock>
-            </RowGapBlock>
-          </ScrolledModalContainer>
+            </ScrolledModalContainer>
+          </FormProvider>
         </ScrolledModalBody>
         <ModalFooter>
           <ButtonsGroup align="right">
             <PreviewPostButton author={author} postText={description} />
-            <ButtonPrimary onClick={onSubmit} size="medium" disabled={!isValid}>
+            <ButtonPrimary onClick={onCreate} size="medium" disabled={!form.formState.isValid}>
               Next step
               <Arrow direction="right" />
             </ButtonPrimary>
