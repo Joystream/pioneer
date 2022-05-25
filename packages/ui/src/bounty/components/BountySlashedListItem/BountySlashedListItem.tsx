@@ -3,8 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -14,12 +12,11 @@ import { Member } from '@/memberships/types'
 
 export interface BountySlashedListItemProps {
   entrant: Member
-  inBlock: Block
-  link: string
+  inBlock?: Block
   stake: BN
 }
 
-export const BountySlashedListItem = ({ link, entrant, inBlock, stake }: BountySlashedListItemProps) => {
+export const BountySlashedListItem = ({ entrant, inBlock, stake }: BountySlashedListItemProps) => {
   return (
     <Wrapper>
       <Header>
@@ -29,8 +26,7 @@ export const BountySlashedListItem = ({ link, entrant, inBlock, stake }: BountyS
             <TextMedium bold>Slashed</TextMedium>
             <TokenValue value={stake} />
           </RowGapBlock>
-          <BlockTime block={inBlock} layout="column" />
-          <CopyButtonTemplate textToCopy={link} square size="medium" icon={<LinkIcon />} title="Copy link" />
+          {inBlock && <BlockTime block={inBlock} layout="column" />}
         </HeaderInfo>
       </Header>
     </Wrapper>

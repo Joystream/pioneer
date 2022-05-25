@@ -26,8 +26,7 @@ const Template: Story<BountySlashedListItemProps> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  entrant: members[0] as unknown as Member,
+  entrant: (members[0] as unknown) as Member,
   inBlock: randomBlock(),
-  link: 'url',
   stake: BN_ZERO,
 }
