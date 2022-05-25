@@ -29,7 +29,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   rootAccount: data.rootAccount,
   controllerAccount: data.controllerAccount,
   boundAccounts: [...data?.boundAccounts],
-  boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent),
+  boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
 })
