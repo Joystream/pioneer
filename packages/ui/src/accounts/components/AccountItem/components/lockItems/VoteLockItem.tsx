@@ -14,7 +14,6 @@ import { asMember } from '@/memberships/types'
 import { BalanceAmount } from '../BalanceAmount'
 import { LockDate } from '../LockDate'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockReleaseTime } from '../LockReleaseDate'
 import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
@@ -28,6 +27,7 @@ import {
   ValueCell,
 } from '../styles'
 
+import { LockRecoveryTime } from './LockRecoveryTime'
 import { LockItemProps } from './types'
 
 export const VoteLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {

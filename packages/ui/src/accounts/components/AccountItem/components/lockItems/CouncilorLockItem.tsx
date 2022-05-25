@@ -13,7 +13,6 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BalanceAmount } from '../BalanceAmount'
 import { LockDate } from '../LockDate'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockReleaseTime } from '../LockReleaseDate'
 import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
@@ -27,6 +26,7 @@ import {
   ValueCell,
 } from '../styles'
 
+import { LockRecoveryTime } from './LockRecoveryTime'
 import { LockItemProps } from './types'
 
 export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
@@ -82,7 +82,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProp
           />
         </div>
         <div>
-          <LockReleaseTime value={faker.date.soon(1).toISOString()} />
+          <LockRecoveryTime value={faker.date.soon(1).toISOString()} />
         </div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         <LocksButtons>

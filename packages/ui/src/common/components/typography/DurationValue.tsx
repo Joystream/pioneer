@@ -71,7 +71,7 @@ const Days = styled.div<{ unit?: string; tiny?: boolean }>`
 
 const Unit = styled.span<{ tiny?: boolean }>`
   display: inline-block;
-  font-size: ${({ tiny }) => (tiny ? '12px' : '20px')};
+  font-size: ${({ tiny }) => (tiny ? '12px' : '14px')};
   line-height: 20px;
   font-weight: 400;
   color: ${Colors.Black[400]};
