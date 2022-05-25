@@ -43,9 +43,7 @@ export const InvitationLockItem = ({ lock, address, isRecoverable }: LockItemPro
 
   return (
     <DetailsItemVoteWrapper>
-      <AccountDetailsWrap
-      // onClick={() => setDropped(!isDropped)}
-      >
+      <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
         <TitleCell>
           {lockIcon(lock.type)}
           <DetailsName>{lock.type ?? 'Unknown lock'}</DetailsName>

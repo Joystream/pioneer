@@ -64,9 +64,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemP
 
   return (
     <DetailsItemVoteWrapper>
-      <AccountDetailsWrap
-      // onClick={() => setDropped(!isDropped)}
-      >
+      <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
         <TitleCell>
           {lockIcon(lock.type)}
           <DetailsName>{lock.type ?? 'Unknown lock'}</DetailsName>

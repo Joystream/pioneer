@@ -38,9 +38,7 @@ export const DefaultLockItem = ({ lock, address, isRecoverable }: LockItemProps)
 
   return (
     <DetailsItemVoteWrapper>
-      <AccountDetailsWrap
-      // onClick={() => setDropped(!isDropped)}
-      >
+      <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
         <TitleCell>
           {lockIcon(lock.type)}
           <DetailsName>{lock.type ?? 'Unknown lock'}</DetailsName>
