@@ -3,12 +3,10 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { BalanceLock } from '@/accounts/types'
 import { BountyRoutes } from '@/bounty/constants'
 import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
-import { Address } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { BalanceAmount } from '../BalanceAmount'
@@ -28,13 +26,9 @@ import {
   ValueCell,
 } from '../styles'
 
-interface BountyLockItemProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
+import { LockItemProps } from './types'
 
-export const BountyLockItem = ({ lock, address, isRecoverable }: BountyLockItemProps) => {
+export const BountyLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },

@@ -2,10 +2,8 @@ import faker from 'faker'
 import React, { useMemo, useState } from 'react'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { BalanceLock } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
-import { Address } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useGetMemberInvitedEventsQuery } from '@/memberships/queries'
 
@@ -25,13 +23,9 @@ import {
   ValueCell,
 } from '../styles'
 
-interface InvitationLockItemProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
+import { LockItemProps } from './types'
 
-export const InvitationLockItem = ({ lock, address, isRecoverable }: InvitationLockItemProps) => {
+export const InvitationLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()

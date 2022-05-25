@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from 'react'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { BalanceLock } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
-import { Address } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { BalanceAmount } from '../BalanceAmount'
@@ -22,13 +20,9 @@ import {
   ValueCell,
 } from '../styles'
 
-interface DefaultLockItemProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
+import { LockItemProps } from './types'
 
-export const DefaultLockItem = ({ lock, address, isRecoverable }: DefaultLockItemProps) => {
+export const DefaultLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()

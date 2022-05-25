@@ -3,10 +3,8 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { BalanceLock } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
-import { Address } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
@@ -28,13 +26,9 @@ import {
   ValueCell,
 } from '../styles'
 
-interface ProposalLockItemProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
+import { LockItemProps } from './types'
 
-export const ProposalLockItem = ({ lock, address, isRecoverable }: ProposalLockItemProps) => {
+export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },

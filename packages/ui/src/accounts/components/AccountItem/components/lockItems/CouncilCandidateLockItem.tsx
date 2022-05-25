@@ -3,11 +3,9 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { BalanceLock } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { Address } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
@@ -31,13 +29,9 @@ import {
   ValueCell,
 } from '../styles'
 
-interface CouncilCandidateLockItemProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
+import { LockItemProps } from './types'
 
-export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: CouncilCandidateLockItemProps) => {
+export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()
   const { showModal } = useModal()
   const {

@@ -3,10 +3,8 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { BalanceLock } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
-import { Address } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
@@ -28,13 +26,9 @@ import {
   ValueCell,
 } from '../styles'
 
-interface WorkingGroupLockItemProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
+import { LockItemProps } from './types'
 
-export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: WorkingGroupLockItemProps) => {
+export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
