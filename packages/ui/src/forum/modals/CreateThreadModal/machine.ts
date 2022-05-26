@@ -13,8 +13,6 @@ import {
 import { EmptyObject } from '@/common/types'
 
 interface DetailsContext {
-  topic?: string
-  description?: string
   categoryId?: string
   memberId?: string
   controllerAccount?: Account
