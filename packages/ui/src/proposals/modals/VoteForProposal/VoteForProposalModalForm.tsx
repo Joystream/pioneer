@@ -33,7 +33,7 @@ interface Props {
 
 const FormSchema = Yup.object().shape({
   rationale: Yup.string().required(),
-  voteStatus: Yup.mixed().oneOf(['Approve', 'Reject', 'Abstain', 'Slash']),
+  voteStatus: Yup.mixed().oneOf(['Approve', 'Reject', 'Abstain', 'Slash']).required(),
 })
 
 export const VoteForProposalModalForm = ({ proposal, send, context }: Props) => {

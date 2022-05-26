@@ -108,6 +108,24 @@ describe('UI: Vote for Proposal Modal', () => {
       expect(await getButton(/^Abstain/i)).toBeDefined()
     })
 
+    it('No rationale', async () => {
+      await renderModal()
+
+      await act(async () => {
+        fireEvent.click(await getButton(/^Approve/i))
+      })
+
+      expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+    })
+
+    it('No vote type selected', async () => {
+      await renderModal()
+
+      await fillRationale()
+
+      expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+    })
+
     it('Filled', async () => {
       await renderModal()
 
