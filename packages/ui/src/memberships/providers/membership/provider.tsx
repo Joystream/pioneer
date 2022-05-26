@@ -1,6 +1,7 @@
-import React, { ReactNode, useCallback, useMemo, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { error } from '@/common/logger'
 import { Address } from '@/common/types'
 
@@ -26,9 +27,15 @@ export interface MyMemberships {
 
 export const MembershipContextProvider = (props: Props) => {
   const [active, setActive] = useState<Member>()
+  const [recentMembership, setRecentMembership] = useLocalStorage<string>('recentMembership')
 
   const { allAccounts, isLoading: isLoadingAccounts } = useMyAccounts()
   const addresses = allAccounts.map((account) => account.address)
+
+  const setActiveMembership = useCallback((active: Member) => {
+    setActive(active)
+    setRecentMembership(active.id)
+  }, [])
 
   const {
     data,
@@ -44,6 +51,14 @@ export const MembershipContextProvider = (props: Props) => {
   }
 
   const members = useMemo(() => (data?.memberships ?? []).map(asMember), [loading, JSON.stringify(data?.memberships)])
+
+  useEffect(() => {
+    if (recentMembership) {
+      const membership = members.find((member) => member.id === recentMembership)
+
+      membership && setActive(membership)
+    }
+  }, [recentMembership, members])
 
   const boundAccountsMap: { [index: Address]: Member['id'] } = useMemo(
     () =>
@@ -70,7 +85,7 @@ export const MembershipContextProvider = (props: Props) => {
 
   const value = {
     active,
-    setActive,
+    setActive: setActiveMembership,
     members,
     hasMembers: !!members.length,
     isLoading: loading || isLoadingAccounts,
