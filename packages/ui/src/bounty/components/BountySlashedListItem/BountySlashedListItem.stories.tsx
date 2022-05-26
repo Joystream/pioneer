@@ -6,6 +6,7 @@ import {
   BountySlashedListItem,
   BountySlashedListItemProps,
 } from '@/bounty/components/BountySlashedListItem/BountySlashedListItem'
+import { BN_ZERO } from '@/common/constants'
 import { Member } from '@/memberships/types'
 import members from '@/mocks/data/raw/members.json'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
@@ -25,7 +26,7 @@ const Template: Story<BountySlashedListItemProps> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  entrant: members[0] as unknown as Member,
+  entrant: (members[0] as unknown) as Member,
   inBlock: randomBlock(),
-  link: 'url',
+  stake: BN_ZERO,
 }
