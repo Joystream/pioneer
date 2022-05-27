@@ -15,6 +15,7 @@ import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { RationalePreview } from '@/proposals/components/RationalePreview'
 
 interface Props {
   bounty: Bounty
@@ -38,6 +39,7 @@ export const BountySuccessful = React.memo(({ bounty }: Props) => {
     <>
       <MainPanel>
         <ResultsTiles bounty={bounty} />
+        {bounty.judgement?.rationale && <RationalePreview rationale={bounty.judgement.rationale} />}
         <ResultsTabs setActive={setActive} active={active} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}

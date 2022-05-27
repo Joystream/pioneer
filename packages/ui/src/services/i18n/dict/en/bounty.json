@@ -83,7 +83,7 @@
         "title": "Authorize transaction",
         "informationBox": {
           "info1": "You are canceling your bounty",
-          "info2": "Fees of {fee} tJOY will be applied to the transaction."
+          "info2": "Fees of {{fee}} tJOY will be applied to the transaction."
         },
         "accountInput": {
           "label": "Fee sending from account",
@@ -93,7 +93,7 @@
       },
       "success": {
         "message": "You have just successfully canceled bounty!",
-        "button": "Go to Current Bounties"
+        "button": "Ok acknowledged"
       },
       "error": "There was a problem canceling bounty."
     },
@@ -104,8 +104,9 @@
         "bountyId": "Bounty ID",
         "memberId": "Member ID",
         "workTitle": "Work Title",
+        "workSubtitle": "Remember to add a link to your work",
         "workTitlePlaceholder": "Type",
-        "entryDescription": "Entry description"
+        "entryDescription": "Description of Completed Work"
       },
       "button": {
         "submitWork": "Submit Work"

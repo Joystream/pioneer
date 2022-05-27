@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import {fireEvent, render, screen, waitFor} from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -85,17 +85,17 @@ describe('UI: BuyMembershipModal', () => {
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+      fireEvent.change(screen.getByLabelText(/member name/i), {target: {value: 'Bobby Bob'}})
+      fireEvent.change(screen.getByLabelText(/Membership handle/i), {target: {value: 'realbobbybob'}})
+      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
-    expect(await findSubmitButton()).not.toBeDisabled()
+    await waitFor(async () => expect(await findSubmitButton()).not.toBeDisabled())
   })
 
   it('Disables button when invalid avatar URL', async () => {
     renderModal()
-
-    expect(await findSubmitButton()).toBeDisabled()
+    const submitButton = await findSubmitButton()
+    expect(submitButton).toBeDisabled()
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
@@ -104,10 +104,10 @@ describe('UI: BuyMembershipModal', () => {
     fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
     fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(await findSubmitButton()).toBeDisabled()
+    await waitFor(() => expect(submitButton).toBeDisabled())
 
     fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-    expect(await findSubmitButton()).not.toBeDisabled()
+    await waitFor(() => expect(submitButton).not.toBeDisabled())
   })
 
   describe('Authorize step', () => {

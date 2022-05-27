@@ -66,8 +66,7 @@ export const AddBountyModal = () => {
       maxWhitelistSize: bountyApi?.closedContractSizeLimit,
       minWorkEntrantStake: bountyApi?.minWorkEntrantStake,
     } as Conditions,
-    mode: 'onBlur',
-    reValidateMode: 'onChange',
+    mode: 'onChange',
     defaultValues: formDefaultValues,
   })
 
@@ -120,7 +119,7 @@ export const AddBountyModal = () => {
   if (state.matches(AddBountyStates.createThread) && threadCategory) {
     const {
       [AddBountyStates.generalParameters]: { title, creator },
-    } = form.getValues()
+    } = form.getValues() as AddBountyFrom
     const transaction = api.tx.forum.createThread(
       activeMember.id,
       threadCategory.id,

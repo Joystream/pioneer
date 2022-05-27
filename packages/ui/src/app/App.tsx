@@ -43,7 +43,8 @@ export const App = () => (
       <Screen>
         <OnBoardingOverlay />
         <Switch>
-          <Route path={OverviewRoutes.overview} component={OverviewModule} />
+          {/*// Uncomment to see whole overview section*/}
+          {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
           <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
           <Route path={ProposalsRoutes.home} component={ProposalsModule} />
           <Route path={CouncilRoutes.council} component={CouncilModule} />
@@ -57,7 +58,7 @@ export const App = () => (
           <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
           <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
           <Route exact path="/404" component={NotFound} />
-          <Redirect exact from="/" to={OverviewRoutes.overview} />
+          <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
           <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
           <Redirect from="*" to="/404" />
         </Switch>

@@ -39,11 +39,11 @@ export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
             - you may get outright slashed, losing your entire stake. This applies only to some proposal types
           </TextMedium>
         </Info>
-        <Checkbox id="aware-of-risks" onChange={setHidingCaution} isChecked={isHidingCaution}>
-          Do not show this message again.
-        </Checkbox>
         <Checkbox id="aware-of-risks" onChange={setAwareChecked} isChecked={isAwareChecked}>
           I’m aware of the possible risks associated with creating a proposal.
+        </Checkbox>
+        <Checkbox id="aware-of-risks" onChange={setHidingCaution} isChecked={isHidingCaution}>
+          Do not show this message again.
         </Checkbox>
       </ModalBody>
       <ModalFooter>
