@@ -5,6 +5,7 @@ import { Event, EventData } from 'xstate/lib/types'
 import * as Yup from 'yup'
 
 import { StakeStep } from '@/accounts/components/StakeStep'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
@@ -15,7 +16,7 @@ import { BNSchema, minContext } from '@/common/utils/validation'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
-import { AccountSchema } from '@/memberships/model/validation'
+import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 import { CandidacyReview } from './components/CandidacyReview'
 import { VoteForCouncilModalCall } from './types'
@@ -27,15 +28,22 @@ export interface VoteForCouncilFormModalProps {
 }
 
 const StakeStepFormSchema = Yup.object().shape({
-  account: AccountSchema.required(),
+  account: StakingAccountSchema.required(),
   stake: BNSchema.test(minContext('You need at least ${min} stake', 'minStake')).required(),
 })
+
+interface IFormContext extends IStakingAccountSchema {
+  minStake: BN
+}
 
 export const VoteForCouncilFormModal = ({ minStake, send, state }: VoteForCouncilFormModalProps) => {
   const { hideModal, modalData } = useModal<VoteForCouncilModalCall>()
   const { candidate } = useCandidate(modalData.id)
-  const { isValid, setContext, errors } = useSchema({ ...state?.context }, StakeStepFormSchema)
+  const { isValid, setContext, errors } = useSchema<IFormContext>({ ...state?.context }, StakeStepFormSchema)
   const { votes } = useMyCastVotes(candidate?.cycleId)
+
+  const stakingAccountBalance = useBalance(state.context.account?.address)
+
   const alreadyVotedAccounts = votes?.map(({ castBy }) => castBy)
   const accountsFilter = useCallback(
     ({ address }: Account) => !!alreadyVotedAccounts && !alreadyVotedAccounts.includes(address),
@@ -43,8 +51,16 @@ export const VoteForCouncilFormModal = ({ minStake, send, state }: VoteForCounci
   )
 
   useEffect(() => {
-    setContext({ minStake })
-  }, [])
+    if (stakingAccountBalance) {
+      setContext({
+        minStake,
+        stakingStatus: 'confirmed',
+        balances: stakingAccountBalance,
+        stakeLock: 'Voting',
+        requiredAmount: state.context.stake ?? minStake,
+      })
+    }
+  }, [JSON.stringify(stakingAccountBalance), state.context.stake, minStake])
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
