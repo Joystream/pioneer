@@ -71,7 +71,8 @@ export const UpdateWorkingGroupBudget = () => {
             inputWidth="s"
             tooltipText="Signed amount change in budget. If budget_update is non-negative, then this amount is reduced from the council budget and credited to the group budget, otherwise the reverse."
             required
-            message="Value must be greater than zero"
+            name="updateWorkingGroupBudget.budgetUpdate"
+            message="Amount must be greater than zero"
             disabled={!group}
           >
             <InputNumber

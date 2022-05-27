@@ -6,10 +6,9 @@ import { InputComponent, InputText, InputTextarea } from '@/common/components/fo
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 
-export const WorkingGroupAndDescription = ({ errorMessageGetter, errorChecker }: ValidationHelpers) => {
+export const WorkingGroupAndDescription = () => {
   const { watch, setValue } = useFormContext()
   return (
     <RowGapBlock gap={24}>
@@ -42,15 +41,26 @@ export const WorkingGroupAndDescription = ({ errorMessageGetter, errorChecker }:
             label="Opening title"
             required
             inputSize="m"
-            message={errorChecker('title') ? errorMessageGetter('title') : 'MAX 55'}
-            validation={errorChecker('title') ? 'invalid' : undefined}
+            name="workingGroupAndDescription.title"
           >
             <InputText id="opening-title" name="workingGroupAndDescription.title" placeholder="Opening title" />
           </InputComponent>
-          <InputComponent id="short-description" label="Short description" required inputSize="l">
+          <InputComponent
+            id="short-description"
+            label="Short description"
+            name="workingGroupAndDescription.shortDescription"
+            required
+            inputSize="l"
+          >
             <InputTextarea id="short-description" name="workingGroupAndDescription.shortDescription" />
           </InputComponent>
-          <InputComponent label="Description" required inputSize="auto" id="field-description">
+          <InputComponent
+            label="Description"
+            required
+            inputSize="auto"
+            id="field-description"
+            name="workingGroupAndDescription.description"
+          >
             <CKEditor id="field-description" name="workingGroupAndDescription.description" />
           </InputComponent>
         </RowGapBlock>

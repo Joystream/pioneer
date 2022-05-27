@@ -61,6 +61,7 @@ export const SlashWorkingGroupLead = () => {
             units="tJOY"
             inputWidth="s"
             tooltipText="Amount to be slashed"
+            name="slashWorkingGroupLead.slashingAmount"
             message="Amount must be greater than zero"
             required
             disabled={isDisabled}

@@ -21,7 +21,13 @@ export const SetInitialInvitationCount = () => {
       </Row>
       <RowGapBlock gap={12}>
         <Row>
-          <InputComponent label="New Count" tight required id="count-input">
+          <InputComponent
+            name="setInitialInvitationCount.invitationCount"
+            label="New Count"
+            tight
+            required
+            id="count-input"
+          >
             <InputNumber
               id="count-input"
               isTokenValue

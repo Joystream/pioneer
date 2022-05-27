@@ -8,9 +8,8 @@ import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
-import { ValidationHelpers } from '@/common/utils/validation'
 
-export const SetReferralCut = ({ errorMessageGetter, errorChecker }: ValidationHelpers) => {
+export const SetReferralCut = () => {
   const { api, connectionState } = useApi()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
@@ -33,12 +32,8 @@ export const SetReferralCut = ({ errorMessageGetter, errorChecker }: ValidationH
             label="Referral Cut"
             tight
             units="%"
-            validation={errorChecker('referralCut') ? 'invalid' : undefined}
-            message={
-              errorChecker('referralCut')
-                ? errorMessageGetter('referralCut')
-                : `Enter value below ${maximumReferralCut ? maximumReferralCut.toNumber() + 1 : 100}%`
-            }
+            message={`Enter value below ${maximumReferralCut ? maximumReferralCut.toNumber() + 1 : 100}%`}
+            name="setReferralCut.referralCut"
             required
             tooltipText={
               <TextMedium>

@@ -10,12 +10,11 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
-import { ValidationHelpers } from '@/common/utils/validation'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
-export const TriggerAndDiscussionStep = ({ errorMessageGetter, errorChecker }: ValidationHelpers) => {
+export const TriggerAndDiscussionStep = () => {
   const { watch, setValue } = useFormContext()
   const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
@@ -55,14 +54,15 @@ export const TriggerAndDiscussionStep = ({ errorMessageGetter, errorChecker }: V
           <InputComponent
             units="block"
             inputSize="s"
-            validation={errorChecker('triggerBlock') ? 'invalid' : undefined}
-            message={
-              errorChecker('triggerBlock')
-                ? errorMessageGetter('triggerBlock')
-                : triggerBlock && `≈ ${inBlocksDate(triggerBlock)}`
-            }
+            name="triggerAndDiscussion.triggerBlock"
+            message={triggerBlock && `≈ ${inBlocksDate(triggerBlock)}`}
           >
-            <InputNumber id="triggerBlock" placeholder="0" name="triggerAndDiscussion.triggerBlock" />
+            <InputNumber
+              id="triggerBlock"
+              placeholder="0"
+              name="triggerAndDiscussion.triggerBlock"
+              maxAllowedValue={Math.pow(2, 32)}
+            />
           </InputComponent>
         )}
       </RowGapBlock>

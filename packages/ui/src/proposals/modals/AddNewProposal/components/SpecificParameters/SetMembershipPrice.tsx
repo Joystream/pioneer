@@ -22,6 +22,7 @@ export const SetMembershipPrice = () => {
             units="tJOY"
             required
             message="Value must be greater than zero"
+            name="setMembershipPrice.amount"
           >
             <InputNumber id="amount-input" name="setMembershipPrice.amount" isTokenValue isInBN placeholder="0" />
           </InputComponent>

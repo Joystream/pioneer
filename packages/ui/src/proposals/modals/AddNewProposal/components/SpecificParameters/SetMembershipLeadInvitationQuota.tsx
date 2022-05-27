@@ -25,6 +25,7 @@ export const SetMembershipLeadInvitationQuota = () => {
             units="tJOY"
             required
             disabled={isLoading || !group?.leadId}
+            name="setMembershipLeadInvitationQuota.amount"
             message={
               !group?.leadId
                 ? "Proposal can't be created because there's no working group lead"

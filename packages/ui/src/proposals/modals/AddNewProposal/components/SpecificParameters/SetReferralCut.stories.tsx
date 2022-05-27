@@ -12,7 +12,7 @@ export default {
 const Template: Story = () => {
   return (
     <MockApolloProvider>
-      <SetReferralCut errorChecker={() => false} errorMessageGetter={() => undefined} />
+      <SetReferralCut />
     </MockApolloProvider>
   )
 }

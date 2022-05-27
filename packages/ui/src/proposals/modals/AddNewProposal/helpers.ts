@@ -144,14 +144,14 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
   return Yup.object().shape({
     groupId: Yup.string(),
     proposalType: Yup.object().shape({
-      type: Yup.string().required(),
+      type: Yup.string().required('Field is required'),
     }),
     stakingAccount: Yup.object().shape({
-      stakingAccount: StakingAccountSchema.required(),
+      stakingAccount: StakingAccountSchema.required('Field is required'),
     }),
     proposalDetails: Yup.object().shape({
-      title: Yup.string().required().max(titleMaxLength, 'Title exceeds maximum length'),
-      rationale: Yup.string().required().max(rationaleMaxLength, 'Rationale exceeds maximum length'),
+      title: Yup.string().required('Field is required').max(titleMaxLength, 'Title exceeds maximum length'),
+      rationale: Yup.string().required('Field is required').max(rationaleMaxLength, 'Rationale exceeds maximum length'),
     }),
     triggerAndDiscussion: Yup.object().shape({
       trigger: Yup.boolean(),
@@ -160,114 +160,116 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
         then: Yup.number()
           .test(minContext('The minimum block number is ${min}', 'minTriggerBlock'))
           .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock'))
-          .required(),
+          .required('Field is required'),
       }),
       isDiscussionClosed: Yup.boolean(),
       discussionWhitelist: Yup.array().when('isDiscussionClosed', {
         is: true,
-        then: Yup.array().required(),
+        then: Yup.array().required('Field is required'),
       }),
     }),
     signal: Yup.object().shape({
-      signal: Yup.string().required().trim(),
+      signal: Yup.string().required('Field is required').trim(),
     }),
     fundingRequest: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required(),
-      account: AccountSchema.required(),
+      amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
+      account: AccountSchema.required('Field is required'),
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
         .test('byteLength', 'Invalid input', (value: ArrayBuffer) => value.byteLength !== 0)
-        .required(),
+        .required('Field is required'),
     }),
     setCouncilorReward: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required(),
+      amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
     }),
     setCouncilBudgetIncrement: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required(),
+      amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
     }),
     fillWorkingGroupLeadOpening: Yup.object().shape({
-      openingId: Yup.string().required(),
-      applicationId: Yup.string().required(),
-      groupId: Yup.string().required(),
+      openingId: Yup.string().required('Field is required'),
+      applicationId: Yup.string().required('Field is required'),
+      groupId: Yup.string().required('Field is required'),
     }),
     workingGroupAndDescription: Yup.object().shape({
-      title: Yup.string().required().max(55, 'Max length is 55 characters'),
-      description: Yup.string().required(),
-      shortDescription: Yup.string().required(),
-      groupId: Yup.string().required(),
+      title: Yup.string().required('Field is required').max(55, 'Max length is 55 characters'),
+      description: Yup.string().required('Field is required'),
+      shortDescription: Yup.string().required('Field is required'),
+      groupId: Yup.string().required('Field is required'),
     }),
     durationAndProcess: Yup.object().shape({
-      details: Yup.string().required(),
+      details: Yup.string().required('Field is required'),
       isLimited: Yup.boolean(),
       duration: Yup.number().when('isLimited', {
         is: true,
-        then: Yup.number().required(),
+        then: Yup.number().required('Field is required'),
       }),
     }),
     applicationForm: Yup.object().shape({
       questions: Yup.array()
         .of(
           Yup.object({
-            questionField: Yup.string().required(),
+            questionField: Yup.string().required('Field is required'),
             shortValue: Yup.boolean(),
           })
         )
         .min(1)
-        .required(),
+        .required('Field is required'),
     }),
     cancelWorkingGroupLeadOpening: Yup.object().shape({
-      groupId: Yup.string().required(),
-      openingId: Yup.string().required(),
+      groupId: Yup.string().required('Field is required'),
+      openingId: Yup.string().required('Field is required'),
     }),
     stakingPolicyAndReward: Yup.object().shape({
       stakingAmount: BNSchema.test(
         minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake')
-      ).required(),
+      ).required('Field is required'),
       leavingUnstakingPeriod: BNSchema.test(
         minContext('Input must be greater than ${min} for proposal to execute', 'minUnstakingPeriodLimit')
-      ).required(),
-      rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required(),
+      ).required('Field is required'),
+      rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Field is required'),
     }),
     decreaseWorkingGroupLeadStake: Yup.object().shape({
-      groupId: Yup.string().required(),
-      stakingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-      workerId: Yup.number().required(),
+      groupId: Yup.string().required('Field is required'),
+      stakingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      workerId: Yup.number().required('Field is required'),
     }),
     slashWorkingGroupLead: Yup.object().shape({
-      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-      groupId: Yup.string().required(),
-      workerId: Yup.number().required(),
+      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      groupId: Yup.string().required('Field is required'),
+      workerId: Yup.number().required('Field is required'),
     }),
     terminateWorkingGroupLead: Yup.object().shape({
       slashingAmount: BNSchema,
-      groupId: Yup.string().required(),
-      workerId: Yup.number().required(),
+      groupId: Yup.string().required('Field is required'),
+      workerId: Yup.number().required('Field is required'),
     }),
     setWorkingGroupLeadReward: Yup.object().shape({
-      rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
-      groupId: Yup.string().required(),
-      workerId: Yup.number().required(),
+      rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      groupId: Yup.string().required('Field is required'),
+      workerId: Yup.number().required('Field is required'),
     }),
     updateWorkingGroupBudget: Yup.object().shape({
       isPositive: Yup.boolean(),
-      groupId: Yup.string().required(),
-      budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      groupId: Yup.string().required('Field is required'),
+      budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     setInitialInvitationCount: Yup.object().shape({
-      invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(
+        'Field is required'
+      ),
     }),
     setReferralCut: Yup.object().shape({
       referralCut: Yup.number()
         .test(maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut'))
         .max(100, 'Value exceed maximal percentage')
-        .required(),
+        .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     setInitialInvitationBalance: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     setMaxValidatorCount: Yup.object().shape({
       validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount'))
@@ -275,7 +277,7 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
         .required('Field is required'),
     }),
     setMembershipPrice: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(),
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
   })
 }

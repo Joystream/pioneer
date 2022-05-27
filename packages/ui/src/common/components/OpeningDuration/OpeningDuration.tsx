@@ -46,6 +46,7 @@ export const OpeningDuration = React.memo(({ label }: OpeningDurationProps) => {
             units="blocks"
             inputSize="m"
             message={duration?.length ? `≈ ${inBlocksDate(duration.length)}` : ''}
+            name="durationAndProcess.duration"
             tight
           >
             <InputNumber

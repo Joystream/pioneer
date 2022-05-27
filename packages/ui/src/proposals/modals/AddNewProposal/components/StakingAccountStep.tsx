@@ -11,13 +11,12 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ValidationHelpers } from '@/common/utils/validation'
 
-interface StakingAccountStepProps extends ValidationHelpers {
+interface StakingAccountStepProps {
   requiredStake: BN
 }
 
-export const StakingAccountStep = ({ requiredStake, errorChecker, errorMessageGetter }: StakingAccountStepProps) => {
+export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) => {
   const balances = useMyBalances()
 
   return (
@@ -54,8 +53,7 @@ export const StakingAccountStep = ({ requiredStake, errorChecker, errorMessageGe
             }
             inputSize="l"
             required
-            validation={errorChecker('stakingAccount') ? 'invalid' : undefined}
-            message={errorChecker('stakingAccount') ? errorMessageGetter('stakingAccount') : undefined}
+            name="stakingAccount.stakingAccount"
           >
             <SelectAccount
               name="stakingAccount.stakingAccount"

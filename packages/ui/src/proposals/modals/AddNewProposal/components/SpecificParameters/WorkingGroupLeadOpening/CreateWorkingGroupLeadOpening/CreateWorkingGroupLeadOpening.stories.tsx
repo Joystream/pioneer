@@ -13,7 +13,7 @@ export default {
 const WorkingGroupAndDescriptionTemplate: Story = () => {
   return (
     <MockApolloProvider members council forum proposals workers workingGroups>
-      <WorkingGroupAndDescription errorMessageGetter={() => undefined} errorChecker={() => false} />
+      <WorkingGroupAndDescription />
     </MockApolloProvider>
   )
 }
@@ -33,7 +33,7 @@ const ApplicationFormTemplate: Story = () => {
 const StakingTemplate: Story = () => {
   return (
     <MockApolloProvider members workingGroups>
-      <StakingPolicyAndReward errorMessageGetter={() => undefined} errorChecker={() => false} />
+      <StakingPolicyAndReward />
     </MockApolloProvider>
   )
 }

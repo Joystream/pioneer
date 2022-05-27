@@ -8,9 +8,8 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { formatBlocksToDuration } from '@/common/model/formatters'
-import { ValidationHelpers } from '@/common/utils/validation'
 
-export const StakingPolicyAndReward = ({ errorChecker, errorMessageGetter }: ValidationHelpers) => {
+export const StakingPolicyAndReward = () => {
   const { watch } = useFormContext()
   const leavingUnstakingPeriod = watch('stakingPolicyAndReward.leavingUnstakingPeriod')
 
@@ -30,8 +29,7 @@ export const StakingPolicyAndReward = ({ errorChecker, errorMessageGetter }: Val
             tooltipText="Minimum staking requirement for all applicants to this role"
             units="tJOY"
             tight
-            validation={errorChecker('stakingAmount') ? 'invalid' : undefined}
-            message={errorChecker('stakingAmount') ? errorMessageGetter('stakingAmount') : ' '}
+            name="stakingPolicyAndReward.stakingAmount"
           >
             <InputNumber
               id="staking-amount"
@@ -60,14 +58,8 @@ export const StakingPolicyAndReward = ({ errorChecker, errorMessageGetter }: Val
                 </TooltipExternalLink>
               </>
             }
-            validation={errorChecker('leavingUnstakingPeriod') ? 'invalid' : undefined}
-            message={
-              errorChecker('leavingUnstakingPeriod')
-                ? errorMessageGetter('leavingUnstakingPeriod')
-                : leavingUnstakingPeriod
-                ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}`
-                : ' '
-            }
+            message={leavingUnstakingPeriod ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}` : ' '}
+            name="stakingPolicyAndReward.leavingUnstakingPeriod"
             tight
           >
             <InputNumber id="leaving-unstaking-period" name="stakingPolicyAndReward.leavingUnstakingPeriod" isInBN />
@@ -78,8 +70,7 @@ export const StakingPolicyAndReward = ({ errorChecker, errorMessageGetter }: Val
             units="tJOY"
             tooltipText="Reward in tJOY tokens for the Working group lead"
             tight
-            validation={errorChecker('rewardPerBlock') ? 'invalid' : undefined}
-            message={errorChecker('rewardPerBlock') ? errorMessageGetter('rewardPerBlock') : ' '}
+            name="stakingPolicyAndReward.rewardPerBlock"
             required
           >
             <InputNumber

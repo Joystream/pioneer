@@ -21,7 +21,13 @@ export const SetInitialInvitationBalance = () => {
       </Row>
       <Row>
         <RowGapBlock gap={12}>
-          <InputComponent label="Invitation Balance" tight units="tJOY" required>
+          <InputComponent
+            name="setInitialInvitationBalance.amount"
+            label="Invitation Balance"
+            tight
+            units="tJOY"
+            required
+          >
             <InputNumber
               id="amount-input"
               name="setInitialInvitationBalance.amount"

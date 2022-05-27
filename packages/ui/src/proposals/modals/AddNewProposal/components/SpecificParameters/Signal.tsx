@@ -17,7 +17,7 @@ export const Signal = () => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Signal" required inputSize="auto" id="signal">
+          <InputComponent label="Signal" name="signal.signal" required inputSize="auto" id="signal">
             <CKEditor id="signal" name="signal.signal" />
           </InputComponent>
         </RowGapBlock>

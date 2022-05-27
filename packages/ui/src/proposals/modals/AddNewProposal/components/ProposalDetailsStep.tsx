@@ -8,16 +8,15 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
 
-interface ProposalDetailsStepProps extends ValidationHelpers {
+interface ProposalDetailsStepProps {
   proposer: Member
 }
 
-export const ProposalDetailsStep = ({ proposer, errorMessageGetter, errorChecker }: ProposalDetailsStepProps) => {
+export const ProposalDetailsStep = ({ proposer }: ProposalDetailsStepProps) => {
   const [showRationale, setShowRationale] = useState<boolean>(false)
 
   return (
@@ -32,14 +31,7 @@ export const ProposalDetailsStep = ({ proposer, errorMessageGetter, errorChecker
         <Row>
           <RowGapBlock gap={20}>
             <SelectedMember label="Proposer" member={proposer} disabled />
-            <InputComponent
-              label="Proposal title"
-              required
-              inputSize="m"
-              id="field-title"
-              validation={errorChecker('title') ? 'invalid' : undefined}
-              message={errorChecker('title') ? errorMessageGetter('title') : undefined}
-            >
+            <InputComponent label="Proposal title" required inputSize="m" id="field-title" name="proposalDetails.title">
               <InputText id="field-title" name="proposalDetails.title" />
             </InputComponent>
             <InputComponent
@@ -47,8 +39,7 @@ export const ProposalDetailsStep = ({ proposer, errorMessageGetter, errorChecker
               required
               inputSize="auto"
               id="field-rationale"
-              validation={errorChecker('rationale') ? 'invalid' : undefined}
-              message={errorChecker('rationale') ? errorMessageGetter('rationale') : undefined}
+              name="proposalDetails.rationale"
             >
               <CKEditor id="field-rationale" minRows={5} name="proposalDetails.rationale" />
             </InputComponent>

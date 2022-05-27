@@ -4,11 +4,10 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { ValidationHelpers } from '@/common/utils/validation'
 
 export const MAX_VALIDATOR_COUNT = 300
 
-export const SetMaxValidatorCount = ({ errorChecker, errorMessageGetter }: ValidationHelpers) => {
+export const SetMaxValidatorCount = () => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -20,10 +19,8 @@ export const SetMaxValidatorCount = ({ errorChecker, errorMessageGetter }: Valid
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            validation={errorChecker('amount') ? 'invalid' : undefined}
-            message={
-              (errorChecker('amount') ? errorMessageGetter('amount') : undefined) || 'Amount must be greater than zero'
-            }
+            message={'Amount must be greater than zero'}
+            name="setMaxValidatorCount.validatorCount"
             label="Amount"
             tight
             units="tJOY"

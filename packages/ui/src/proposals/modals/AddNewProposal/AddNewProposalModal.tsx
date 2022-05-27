@@ -34,7 +34,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
@@ -350,11 +350,6 @@ export const AddNewProposalModal = () => {
     )
   }
 
-  const validationHelpers = {
-    errorChecker: enhancedHasError(form.formState.errors, machineStateConverter(state.value)),
-    errorMessageGetter: enhancedGetErrorMessage(form.formState.errors, machineStateConverter(state.value)),
-  }
-
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader
@@ -371,16 +366,12 @@ export const AddNewProposalModal = () => {
             <FormProvider {...form}>
               {state.matches('proposalType') && <ProposalTypeStep />}
               {state.matches('generalParameters.stakingAccount') && (
-                <StakingAccountStep {...validationHelpers} requiredStake={constants?.requiredStake as BN} />
+                <StakingAccountStep requiredStake={constants?.requiredStake as BN} />
               )}
-              {state.matches('generalParameters.proposalDetails') && (
-                <ProposalDetailsStep proposer={activeMember} {...validationHelpers} />
-              )}
-              {state.matches('generalParameters.triggerAndDiscussion') && (
-                <TriggerAndDiscussionStep {...validationHelpers} />
-              )}
+              {state.matches('generalParameters.proposalDetails') && <ProposalDetailsStep proposer={activeMember} />}
+              {state.matches('generalParameters.triggerAndDiscussion') && <TriggerAndDiscussionStep />}
               {state.matches('specificParameters') && (
-                <SpecificParametersStep state={state as AddNewProposalMachineState} {...validationHelpers} />
+                <SpecificParametersStep matches={state.matches as AddNewProposalMachineState['matches']} />
               )}
               {isExecutionError && <ExecutionRequirementsWarning />}
             </FormProvider>

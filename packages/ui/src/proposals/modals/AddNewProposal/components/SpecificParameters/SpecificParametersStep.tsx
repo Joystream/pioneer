@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { ValidationHelpers } from '@/common/utils/validation'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -28,55 +27,55 @@ import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/ma
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 
-interface SpecificParametersStepProps extends ValidationHelpers {
-  state: AddNewProposalMachineState
+interface SpecificParametersStepProps {
+  matches: AddNewProposalMachineState['matches']
 }
 
-export const SpecificParametersStep = ({ state, ...validationHelpers }: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps) => {
   switch (true) {
-    case state.matches('specificParameters.signal'):
+    case matches('specificParameters.signal'):
       return <Signal />
-    case state.matches('specificParameters.fundingRequest'):
+    case matches('specificParameters.fundingRequest'):
       return <FundingRequest />
-    case state.matches('specificParameters.runtimeUpgrade'):
+    case matches('specificParameters.runtimeUpgrade'):
       return <RuntimeUpgrade />
-    case state.matches('specificParameters.setCouncilorReward'):
+    case matches('specificParameters.setCouncilorReward'):
       return <SetCouncilorReward />
-    case state.matches('specificParameters.setCouncilBudgetIncrement'):
+    case matches('specificParameters.setCouncilBudgetIncrement'):
       return <SetCouncilBudgetIncrement />
-    case state.matches('specificParameters.fillWorkingGroupLeadOpening'):
+    case matches('specificParameters.fillWorkingGroupLeadOpening'):
       return <FillWorkingGroupLeadOpening />
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
-      return <WorkingGroupAndDescription {...validationHelpers} />
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
+    case matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
+      return <WorkingGroupAndDescription />
+    case matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
       return <DurationAndProcess />
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
+    case matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
       return <ApplicationForm />
-    case state.matches('specificParameters.cancelWorkingGroupLeadOpening'):
+    case matches('specificParameters.cancelWorkingGroupLeadOpening'):
       return <CancelWorkingGroupLeadOpening />
-    case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
-      return <StakingPolicyAndReward {...validationHelpers} />
-    case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
+    case matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
+      return <StakingPolicyAndReward />
+    case matches('specificParameters.decreaseWorkingGroupLeadStake'):
       return <DecreaseWorkingGroupLeadStake />
-    case state.matches('specificParameters.slashWorkingGroupLead'):
+    case matches('specificParameters.slashWorkingGroupLead'):
       return <SlashWorkingGroupLead />
-    case state.matches('specificParameters.terminateWorkingGroupLead'):
+    case matches('specificParameters.terminateWorkingGroupLead'):
       return <TerminateWorkingGroupLead />
-    case state.matches('specificParameters.setWorkingGroupLeadReward'):
+    case matches('specificParameters.setWorkingGroupLeadReward'):
       return <SetWorkingGroupLeadReward />
-    case state.matches('specificParameters.updateWorkingGroupBudget'):
+    case matches('specificParameters.updateWorkingGroupBudget'):
       return <UpdateWorkingGroupBudget />
-    case state.matches('specificParameters.setInitialInvitationCount'):
+    case matches('specificParameters.setInitialInvitationCount'):
       return <SetInitialInvitationCount />
-    case state.matches('specificParameters.setReferralCut'):
-      return <SetReferralCut {...validationHelpers} />
-    case state.matches('specificParameters.setMembershipLeadInvitationQuota'):
+    case matches('specificParameters.setReferralCut'):
+      return <SetReferralCut />
+    case matches('specificParameters.setMembershipLeadInvitationQuota'):
       return <SetMembershipLeadInvitationQuota />
-    case state.matches('specificParameters.setInitialInvitationBalance'):
+    case matches('specificParameters.setInitialInvitationBalance'):
       return <SetInitialInvitationBalance />
-    case state.matches('specificParameters.setMaxValidatorCount'):
-      return <SetMaxValidatorCount {...validationHelpers} />
-    case state.matches('specificParameters.setMembershipPrice'): {
+    case matches('specificParameters.setMaxValidatorCount'):
+      return <SetMaxValidatorCount />
+    case matches('specificParameters.setMembershipPrice'): {
       return <SetMembershipPrice />
     }
     default:

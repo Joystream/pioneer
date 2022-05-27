@@ -23,7 +23,13 @@ export const DurationAndProcess = () => {
           </TextBig>
           <OpeningDuration label="Expected length of the application period" />
 
-          <InputComponent label="Application process" required inputSize="auto" id="field-details">
+          <InputComponent
+            label="Application process"
+            required
+            inputSize="auto"
+            id="field-details"
+            name="durationAndProcess.details"
+          >
             <CKEditor id="field-details" name="durationAndProcess.details" />
           </InputComponent>
         </RowGapBlock>

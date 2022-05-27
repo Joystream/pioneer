@@ -65,6 +65,7 @@ export const SetWorkingGroupLeadReward = () => {
             units="tJOY"
             inputWidth="s"
             tooltipText="Reward per block amount that is awarded to working group lead’s reward account"
+            name="setWorkingGroupLeadReward.rewardPerBlock"
             message="Amount must be greater than zero"
             required
             disabled={isDisabled}

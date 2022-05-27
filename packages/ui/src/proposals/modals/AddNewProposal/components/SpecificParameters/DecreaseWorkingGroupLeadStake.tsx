@@ -78,6 +78,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
               tooltipText="Amount by which to decrease stake."
               required
               disabled={isDisabled}
+              name="decreaseWorkingGroupLeadStake.stakingAmount"
               message="Amount must be greater than zero"
             >
               <InputNumber

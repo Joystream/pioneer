@@ -21,6 +21,7 @@ export const SetCouncilBudgetIncrement = () => {
             tight
             units="tJOY"
             required
+            name="setCouncilBudgetIncrement.amount"
             message="Value must be greater than zero"
           >
             <InputNumber
