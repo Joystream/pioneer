@@ -70,8 +70,8 @@ const EmptyStateWrapper = styled.div`
 `
 
 const StyledTile = styled(StatisticItem)`
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 280px;
+  max-width: 280px;
   position: relative;
 `
 
@@ -79,6 +79,7 @@ const ValueWrapper = styled.div`
   display: flex;
   column-gap: 5px;
   align-items: center;
+  justify-content: space-between;
   margin-top: 10px;
 
   ${TextSmall} {
