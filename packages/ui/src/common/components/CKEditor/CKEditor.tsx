@@ -18,7 +18,7 @@ export interface BaseCKEditorProps {
   inline?: boolean
 }
 
-const BaseCKEditor = React.forwardRef(
+export const BaseCKEditor = React.forwardRef(
   (
     { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
     ref?: Ref<HTMLDivElement>
@@ -120,20 +120,18 @@ export interface CKEditorProps extends BaseCKEditorProps {
   name?: string
 }
 
-export const CKEditor = React.memo(
-  React.forwardRef(({ name, ...props }: CKEditorProps) => {
-    const formContext = useFormContext()
+export const CKEditor = React.memo(({ name, ...props }: CKEditorProps) => {
+  const formContext = useFormContext()
 
-    if (!formContext || !name) {
-      return <BaseCKEditor {...props} />
-    }
-    const value = formContext.watch(name)
-    return (
-      <BaseCKEditor
-        {...props}
-        onReady={(editor) => editor.setData(value ?? '')}
-        onChange={(_, editor) => formContext.setValue(name, editor.getData(), { shouldValidate: true })}
-      />
-    )
-  })
-)
+  if (!formContext || !name) {
+    return <BaseCKEditor {...props} />
+  }
+  const value = formContext.watch(name)
+  return (
+    <BaseCKEditor
+      {...props}
+      onReady={(editor) => editor.setData(value ?? '')}
+      onChange={(_, editor) => formContext.setValue(name, editor.getData(), { shouldValidate: true })}
+    />
+  )
+})

@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -8,15 +7,7 @@ import { TextMedium } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
-export interface SetInitialInvitationCountParameters {
-  invitationCount?: BN
-}
-
-interface InvitationCountProps extends SetInitialInvitationCountParameters {
-  setNewCount: (count: BN | undefined) => void
-}
-
-export const SetInitialInvitationCount = ({ setNewCount, invitationCount }: InvitationCountProps) => {
+export const SetInitialInvitationCount = () => {
   const { api } = useApi()
   const currentCount = useObservable(api?.query.members.initialInvitationCount(), [])
 
@@ -30,13 +21,19 @@ export const SetInitialInvitationCount = ({ setNewCount, invitationCount }: Invi
       </Row>
       <RowGapBlock gap={12}>
         <Row>
-          <InputComponent label="New Count" tight required id="count-input">
+          <InputComponent
+            name="setInitialInvitationCount.invitationCount"
+            label="New Count"
+            tight
+            required
+            id="count-input"
+          >
             <InputNumber
               id="count-input"
               isTokenValue
-              value={invitationCount?.toString()}
+              isInBN
+              name="setInitialInvitationCount.invitationCount"
               placeholder="0"
-              onChange={(_, value) => setNewCount(new BN(value))}
             />
           </InputComponent>
         </Row>

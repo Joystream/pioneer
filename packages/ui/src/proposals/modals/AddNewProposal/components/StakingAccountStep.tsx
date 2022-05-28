@@ -4,8 +4,6 @@ import React from 'react'
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
-import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
@@ -13,23 +11,13 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
-import { Member } from '@/memberships/types'
 
 interface StakingAccountStepProps {
   requiredStake: BN
-  account?: Account
-  setAccount: (account: Account) => void
-  member: Member
 }
 
-export const StakingAccountStep = ({
-  requiredStake,
-  account: chosenAccount,
-  setAccount,
-  member,
-}: StakingAccountStepProps) => {
+export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) => {
   const balances = useMyBalances()
-  const status = useStakingAccountStatus(chosenAccount?.address, member.id)
 
   return (
     <RowGapBlock gap={24}>
@@ -65,12 +53,10 @@ export const StakingAccountStep = ({
             }
             inputSize="l"
             required
-            validation={status === 'other' ? 'invalid' : undefined}
-            message={status === 'other' ? 'This account is bound to the another member' : undefined}
+            name="stakingAccount.stakingAccount"
           >
             <SelectAccount
-              onChange={(account) => setAccount(account)}
-              selected={chosenAccount}
+              name="stakingAccount.stakingAccount"
               minBalance={requiredStake}
               filter={(account) => filterByRequiredStake(requiredStake, 'Proposals', balances[account.address])}
             />

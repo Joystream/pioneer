@@ -1,10 +1,11 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
+import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
@@ -88,7 +89,20 @@ export const InputComponent = React.memo(
     className,
     children,
     borderless,
+    name,
   }: InputComponentProps) => {
+    const formContext = useFormContext()
+
+    const validationStatus = useMemo(() => {
+      if (!formContext || !name) return validation
+      return enhancedHasError(formContext?.formState?.errors)(name) ? 'invalid' : validation
+    }, [JSON.stringify(formContext?.formState?.errors), name, validation])
+
+    const validationMessage = useMemo(() => {
+      if (!formContext || !name) return message
+      return enhancedGetErrorMessage(formContext?.formState?.errors)(name) ?? message
+    }, [JSON.stringify(formContext?.formState?.errors), name, message])
+
     return (
       <InputElement className={className} inputSize={inputSize} inputWidth={inputWidth} tight={tight}>
         {label && (
@@ -116,7 +130,7 @@ export const InputComponent = React.memo(
           units={units}
           icon={icon}
           iconRight={iconRight}
-          validation={validation}
+          validation={validationStatus}
           disabled={disabled || inputDisabled}
           inputSize={inputSize}
           borderless={borderless}
@@ -130,24 +144,24 @@ export const InputComponent = React.memo(
             </InputRightSide>
           )}
         </InputContainer>
-        {message && (
-          <InputNotification validation={validation}>
-            {validation === 'invalid' && (
+        {validationMessage && (
+          <InputNotification validation={validationStatus}>
+            {validationStatus === 'invalid' && (
               <InputNotificationIcon>
                 <AlertSymbol />
               </InputNotificationIcon>
             )}
-            {validation === 'warning' && (
+            {validationStatus === 'warning' && (
               <InputNotificationIcon>
                 <AlertSymbol />
               </InputNotificationIcon>
             )}
-            {validation === 'valid' && (
+            {validationStatus === 'valid' && (
               <InputNotificationIcon>
                 <SuccessSymbol />
               </InputNotificationIcon>
             )}
-            <InputNotificationMessage>{message}</InputNotificationMessage>
+            <InputNotificationMessage>{validationMessage}</InputNotificationMessage>
           </InputNotification>
         )}
       </InputElement>
@@ -168,13 +182,14 @@ export const InputText = React.memo((props: InputProps) => {
 interface BaseNumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
   isTokenValue?: boolean
+  maxAllowedValue?: number
 }
 
 const BasedInputNumber = React.memo(
-  ({ id, onChange, isTokenValue = false, value = '', ...props }: BaseNumberInputProps) => {
+  ({ id, onChange, isTokenValue = false, value = '', maxAllowedValue, ...props }: BaseNumberInputProps) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventValue = +cleanInputValue(event.target.value)
-      if (isNaN(eventValue) || eventValue < 0) return
+      if (isNaN(eventValue) || eventValue < 0 || (maxAllowedValue && !(eventValue < maxAllowedValue))) return
 
       onChange?.(event, eventValue)
     }
@@ -212,8 +227,8 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Input
         return (
           <BasedInputNumber
             {...props}
-            value={new BN(field.value)?.toString()}
-            onChange={(_, value) => field.onChange(isInBN ? new BN(value) : value)}
+            value={new BN(field.value)?.toString() ?? ''}
+            onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
             onBlur={field.onBlur}
           />
         )

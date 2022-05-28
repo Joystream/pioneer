@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -6,15 +5,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
-export interface SetCouncilorRewardParameters {
-  amount?: BN
-}
-
-interface Props extends SetCouncilorRewardParameters {
-  setAmount: (amount: BN) => void
-}
-
-export const SetCouncilorReward = ({ amount, setAmount }: Props) => {
+export const SetCouncilorReward = () => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -25,14 +16,8 @@ export const SetCouncilorReward = ({ amount, setAmount }: Props) => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="New Councilor Reward" tight units="tJOY" required>
-            <InputNumber
-              id="amount-input"
-              isTokenValue
-              value={amount?.toString()}
-              placeholder="0"
-              onChange={(_, value) => setAmount(new BN(value))}
-            />
+          <InputComponent label="New Councilor Reward" tight units="tJOY" required name="setCouncilorReward.amount">
+            <InputNumber id="amount-input" isTokenValue isInBN name="setCouncilorReward.amount" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

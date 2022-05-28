@@ -1,13 +1,11 @@
 import { Meta, Story } from '@storybook/react'
-import BN from 'bn.js'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
-import { GroupIdName } from '@/working-groups/types'
 
 export default {
   title: 'Proposals/AddNewProposalModal/DecreaseWorkingGroupLeadStake',
@@ -15,10 +13,6 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [stakingAmount, setStakingAmount] = useState<BN>()
-  const [groupId, setGroupId] = useState<GroupIdName>()
-  const [, setWorkerId] = useState<number>()
-
   return (
     <MockApolloProvider members workingGroups workers>
       <StepperModalBody>
@@ -28,13 +22,7 @@ const Template: Story = () => {
             <ProposalConstantsWrapper constants={null} />
           </StepDescriptionColumn>
           <StepperBody>
-            <DecreaseWorkingGroupLeadStake
-              stakingAmount={stakingAmount}
-              setStakingAmount={setStakingAmount}
-              groupId={groupId}
-              setGroupId={setGroupId}
-              setWorkerId={setWorkerId}
-            />
+            <DecreaseWorkingGroupLeadStake />
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
