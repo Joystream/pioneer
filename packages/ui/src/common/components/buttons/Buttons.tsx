@@ -58,6 +58,14 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
   )
 }
 
+export function ButtonPrev({ className, children, size, square, onClick, outlined }: ButtonProps) {
+  return (
+    <ButtonPrimaryStyles className={className} size={size} square={square} onClick={onClick} outlined={outlined}>
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
+    </ButtonPrimaryStyles>
+  )
+}
+
 export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>

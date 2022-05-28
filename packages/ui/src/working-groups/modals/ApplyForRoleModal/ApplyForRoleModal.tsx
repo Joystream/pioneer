@@ -13,7 +13,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonPrev } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -291,6 +291,11 @@ export const ApplyForRoleModal = () => {
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
+        {/* <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium"> */}
+        <ButtonPrev onClick={() => send('PREV')} size="medium">
+          <Arrow direction="left" />
+          Prev step
+        </ButtonPrev>
         <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
           Next step
           <Arrow direction="right" />
