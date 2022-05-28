@@ -29,6 +29,7 @@ export type ApplyForRoleEvent =
   | { type: 'PASS' }
   | { type: 'BOUND' }
   | { type: 'UNBOUND' }
+  | { type: 'PREV' }
   | { type: 'NEXT' }
 
 export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
@@ -50,12 +51,14 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
     form: {
       meta: { isStep: true, stepTitle: 'Form' },
       on: {
+        PREV: 'stake',
         NEXT: 'beforeTransaction',
       },
     },
     beforeTransaction: {
       id: 'beforeTransaction',
       on: {
+        PREV: 'form',
         BOUND: 'transaction',
         UNBOUND: 'bindStakingAccount',
         FAIL: 'requirementsFailed',
