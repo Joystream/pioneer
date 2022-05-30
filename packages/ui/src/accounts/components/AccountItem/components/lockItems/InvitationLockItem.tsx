@@ -31,7 +31,7 @@ export const InvitationLockItem = ({ lock, address, isRecoverable }: LockItemPro
   const [isDropped, setDropped] = useState(false)
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
-  const { data } = useGetMemberInvitedEventsQuery({ variables: { memberId } })
+  const { data } = useGetMemberInvitedEventsQuery({ variables: { lockAccount: address } })
   const eventData = data?.memberInvitedEvents[0]
 
   const recoverButton = useMemo(

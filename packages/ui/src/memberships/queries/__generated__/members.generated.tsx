@@ -405,7 +405,7 @@ export type GetMemberActionDetailsQuery = {
 }
 
 export type GetMemberInvitedEventsQueryVariables = Types.Exact<{
-  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
 }>
 
 export type GetMemberInvitedEventsQuery = {
@@ -910,8 +910,8 @@ export type GetMemberActionDetailsQueryResult = Apollo.QueryResult<
   GetMemberActionDetailsQueryVariables
 >
 export const GetMemberInvitedEventsDocument = gql`
-  query GetMemberInvitedEvents($memberId: ID) {
-    memberInvitedEvents(where: { invitingMember: { id_eq: $memberId } }, orderBy: [createdAt_DESC]) {
+  query GetMemberInvitedEvents($lockAccount: String) {
+    memberInvitedEvents(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
       createdAt
       inBlock
       network
@@ -931,7 +931,7 @@ export const GetMemberInvitedEventsDocument = gql`
  * @example
  * const { data, loading, error } = useGetMemberInvitedEventsQuery({
  *   variables: {
- *      memberId: // value for 'memberId'
+ *      lockAccount: // value for 'lockAccount'
  *   },
  * });
  */

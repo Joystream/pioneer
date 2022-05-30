@@ -39,7 +39,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProp
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
   const { member } = useMember(memberId)
-  const { data } = useGetCouncilorElectionEventQuery({ variables: { memberId } })
+  const { data } = useGetCouncilorElectionEventQuery({ variables: { lockAccount: address } })
   const eventData = data?.memberships[0]?.councilMembers[0]?.electedInCouncil
   const councilId = eventData?.id
 

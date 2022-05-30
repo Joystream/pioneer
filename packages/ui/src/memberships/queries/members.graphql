@@ -162,8 +162,8 @@ query GetMemberActionDetails($workerId_in: [ID!]!) {
   }
 }
 
-query GetMemberInvitedEvents($memberId: ID) {
-  memberInvitedEvents(where: { invitingMember: { id_eq: $memberId } }, orderBy: [createdAt_DESC]) {
+query GetMemberInvitedEvents($lockAccount: String) {
+  memberInvitedEvents(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
     createdAt
     inBlock
     network

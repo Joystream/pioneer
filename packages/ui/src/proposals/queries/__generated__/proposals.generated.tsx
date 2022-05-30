@@ -1760,7 +1760,7 @@ export type GetProposalDiscussionPostMentionQuery = {
 }
 
 export type GetLatestProposalByMemberIdQueryVariables = Types.Exact<{
-  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
 }>
 
 export type GetLatestProposalByMemberIdQuery = {
@@ -2572,8 +2572,8 @@ export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
   GetProposalDiscussionPostMentionQueryVariables
 >
 export const GetLatestProposalByMemberIdDocument = gql`
-  query GetLatestProposalByMemberId($memberId: ID) {
-    proposals(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+  query GetLatestProposalByMemberId($lockAccount: String) {
+    proposals(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
       id
       createdInEvent {
         createdAt
@@ -2596,7 +2596,7 @@ export const GetLatestProposalByMemberIdDocument = gql`
  * @example
  * const { data, loading, error } = useGetLatestProposalByMemberIdQuery({
  *   variables: {
- *      memberId: // value for 'memberId'
+ *      lockAccount: // value for 'lockAccount'
  *   },
  * });
  */

@@ -42,7 +42,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockI
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
   const { candidateId } = useCandidateIdByMember(memberId || '-1')
-  const { data } = useGetNewCandidateEventsQuery({ variables: { candidateId } })
+  const { data } = useGetNewCandidateEventsQuery({ variables: { lockAccount: address } })
 
   const eventData = data?.newCandidateEvents[0]
   const electionId = eventData?.candidate.electionRoundId

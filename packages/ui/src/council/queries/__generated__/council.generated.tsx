@@ -1430,7 +1430,7 @@ export type GetPastCouncilStatsQuery = {
 }
 
 export type GetCouncilorElectionEventQueryVariables = Types.Exact<{
-  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
 }>
 
 export type GetCouncilorElectionEventQuery = {
@@ -2748,8 +2748,8 @@ export type GetPastCouncilStatsQueryResult = Apollo.QueryResult<
   GetPastCouncilStatsQueryVariables
 >
 export const GetCouncilorElectionEventDocument = gql`
-  query GetCouncilorElectionEvent($memberId: ID) {
-    memberships(where: { id_eq: $memberId }) {
+  query GetCouncilorElectionEvent($lockAccount: String) {
+    memberships(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
       councilMembers {
         electedInCouncil {
           id
@@ -2774,7 +2774,7 @@ export const GetCouncilorElectionEventDocument = gql`
  * @example
  * const { data, loading, error } = useGetCouncilorElectionEventQuery({
  *   variables: {
- *      memberId: // value for 'memberId'
+ *      lockAccount: // value for 'lockAccount'
  *   },
  * });
  */

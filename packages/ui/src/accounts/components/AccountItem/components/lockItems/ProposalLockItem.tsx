@@ -37,7 +37,7 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps
   const [isDropped, setDropped] = useState(false)
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
-  const { data } = useGetLatestProposalByMemberIdQuery({ variables: { memberId } })
+  const { data } = useGetLatestProposalByMemberIdQuery({ variables: { lockAccount: address } })
   const proposal = data?.proposals[0]
   const eventData = proposal?.createdInEvent
   const proposalId = proposal?.id

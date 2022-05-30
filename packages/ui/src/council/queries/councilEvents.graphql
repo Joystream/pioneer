@@ -101,8 +101,8 @@ query GetCouncilEvents {
   }
 }
 
-query GetNewCandidateEvents($candidateId: ID) {
-  newCandidateEvents(where: { candidate: { id_eq: $candidateId } }) {
+query GetNewCandidateEvents($lockAccount: String) {
+  newCandidateEvents(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
     ...NewCandidateEventFields
   }
 }

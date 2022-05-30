@@ -207,7 +207,7 @@ export type GetCouncilEventsQuery = {
 }
 
 export type GetNewCandidateEventsQueryVariables = Types.Exact<{
-  candidateId?: Types.InputMaybe<Types.Scalars['ID']>
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
 }>
 
 export type GetNewCandidateEventsQuery = {
@@ -378,8 +378,8 @@ export type GetCouncilEventsQueryHookResult = ReturnType<typeof useGetCouncilEve
 export type GetCouncilEventsLazyQueryHookResult = ReturnType<typeof useGetCouncilEventsLazyQuery>
 export type GetCouncilEventsQueryResult = Apollo.QueryResult<GetCouncilEventsQuery, GetCouncilEventsQueryVariables>
 export const GetNewCandidateEventsDocument = gql`
-  query GetNewCandidateEvents($candidateId: ID) {
-    newCandidateEvents(where: { candidate: { id_eq: $candidateId } }) {
+  query GetNewCandidateEvents($lockAccount: String) {
+    newCandidateEvents(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
       ...NewCandidateEventFields
     }
   }
@@ -398,7 +398,7 @@ export const GetNewCandidateEventsDocument = gql`
  * @example
  * const { data, loading, error } = useGetNewCandidateEventsQuery({
  *   variables: {
- *      candidateId: // value for 'candidateId'
+ *      lockAccount: // value for 'lockAccount'
  *   },
  * });
  */

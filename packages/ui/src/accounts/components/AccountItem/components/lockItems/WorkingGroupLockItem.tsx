@@ -40,9 +40,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemP
   const { data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
-        applicant: {
-          id_eq: memberId,
-        },
+        stakingAccount_eq: address,
       },
     },
   })
