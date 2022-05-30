@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BalanceLock } from '@/accounts/types'
+import { BalanceLock, WorkerLocks, WorkerLockType } from '@/accounts/types'
 import { Address } from '@/common/types'
 
 import {
@@ -45,19 +45,11 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
     case 'Invitation':
       return <InvitationLockItem {...props} />
 
-    // // TODO: handle it in more elegant way
-    case 'Storage Worker':
-    case 'Content Directory Worker':
-    case 'Forum Worker':
-    case 'Membership Worker':
-    case 'Gateway Worker':
-    case 'Builders Worker':
-    case 'HR Worker':
-    case 'Marketing Worker':
-    case 'Distribution Worker':
-      return <WorkingGroupLockItem {...props} />
-
     default:
-      return <DefaultLockItem {...props} />
+      return WorkerLocks.includes(lockType as WorkerLockType) ? (
+        <WorkingGroupLockItem {...props} />
+      ) : (
+        <DefaultLockItem {...props} />
+      )
   }
 })
