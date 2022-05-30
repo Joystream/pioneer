@@ -4,9 +4,9 @@ import { asBlock } from '@/common/types'
 import { useGetMemberInvitedEventsQuery } from '@/memberships/queries'
 
 import { LockItem } from '../LockItem'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const InvitationLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const InvitationLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { data } = useGetMemberInvitedEventsQuery({ variables: { lockAccount: address } })
   const eventData = data?.memberInvitedEvents[0]
   const createdInEvent = eventData && asBlock(eventData)

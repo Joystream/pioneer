@@ -8,9 +8,9 @@ import { asBlock } from '@/common/types'
 
 import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const BountyLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { push } = useHistory()
 
   const { data } = useGetLatestBountyEntryQuery({ variables: { lockAccount: address } })

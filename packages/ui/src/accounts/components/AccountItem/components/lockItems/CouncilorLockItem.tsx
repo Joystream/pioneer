@@ -10,9 +10,9 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },

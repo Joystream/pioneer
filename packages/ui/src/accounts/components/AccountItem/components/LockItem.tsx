@@ -23,9 +23,9 @@ import {
   TitleCell,
   ValueCell,
 } from './styles'
-import { LockItemProps } from './types'
+import { LockDetailsProps } from './types'
 
-interface Props extends LockItemProps {
+interface LockItemProps extends LockDetailsProps {
   createdInEvent?: Block
   recoveryTime?: string
   memberInfo?: Member
@@ -40,7 +40,7 @@ export const LockItem = ({
   recoveryTime,
   memberInfo,
   linkButtons,
-}: Props) => {
+}: LockItemProps) => {
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()

@@ -3,9 +3,9 @@ import React from 'react'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { LockItem } from '../LockItem'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const BoundAccountLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const BoundAccountLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { members } = useMyMemberships()
 
   const boundMembership = members.find((m) => m.boundAccounts.includes(String(address)))

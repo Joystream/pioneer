@@ -8,9 +8,9 @@ import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
 import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { push } = useHistory()
   const { data } = useGetWorkingGroupApplicationsQuery({
     variables: {

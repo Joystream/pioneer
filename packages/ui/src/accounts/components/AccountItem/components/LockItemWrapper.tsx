@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { BalanceLock, WorkerLocks, WorkerLockType } from '@/accounts/types'
-import { Address } from '@/common/types'
+import { WorkerLocks, WorkerLockType } from '@/accounts/types'
 
 import { LockItem } from './LockItem'
 import {
@@ -14,14 +13,9 @@ import {
   VoteLockItem,
   WorkingGroupLockItem,
 } from './lockItems'
+import { LockDetailsProps } from './types'
 
-interface LockItemWrapperProps {
-  lock: BalanceLock
-  address: Address
-  isRecoverable?: boolean
-}
-
-export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
+export const LockItemWrapper = React.memo((props: LockDetailsProps) => {
   const lockType = props.lock.type
   switch (lockType) {
     case 'Bound Staking Account':

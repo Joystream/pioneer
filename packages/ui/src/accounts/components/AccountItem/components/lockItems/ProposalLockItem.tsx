@@ -8,9 +8,9 @@ import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
 
 import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const ProposalLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { push } = useHistory()
 
   const { data } = useGetLatestProposalByMemberIdQuery({ variables: { lockAccount: address } })

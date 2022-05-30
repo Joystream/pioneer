@@ -8,9 +8,9 @@ import { asMember } from '@/memberships/types'
 
 import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
-import { LockItemProps } from '../types'
+import { LockDetailsProps } from '../types'
 
-export const VoteLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { push } = useHistory()
   const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
   const vote = data?.castVotes[0]
