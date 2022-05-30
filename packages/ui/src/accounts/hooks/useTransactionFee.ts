@@ -16,7 +16,7 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
   const { status, setStatus } = useTransactionStatus()
   const paymentInfo = useObservable(
     whenDefined(address, (address) => transaction?.paymentInfo(address)),
-    [transaction, address]
+    [address, JSON.stringify(transaction)]
   )
   const partialFee = useDefaultAfterTimeout<BN>(paymentInfo?.partialFee, 3000, BN_ZERO)
   const balance = useBalance(address)
@@ -30,7 +30,7 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
         setStatus(null)
       }
     }
-  }, [balance, partialFee])
+  }, [JSON.stringify(balance), partialFee?.toString()])
 
   return useMemo(
     () =>
@@ -40,6 +40,6 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
             canAfford: balance.transferable.gte(partialFee),
           }
         : undefined,
-    [balance, partialFee]
+    [JSON.stringify(balance), partialFee?.toString()]
   )
 }

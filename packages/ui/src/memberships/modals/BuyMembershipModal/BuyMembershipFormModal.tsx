@@ -40,7 +40,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
+import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
