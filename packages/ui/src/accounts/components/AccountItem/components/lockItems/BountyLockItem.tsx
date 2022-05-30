@@ -4,7 +4,7 @@ import { generatePath, useHistory } from 'react-router-dom'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { BountyRoutes } from '@/bounty/constants'
-import { useGetLatestBountyByMemberIdQuery } from '@/bounty/queries'
+import { useGetLatestBountyEntryQuery } from '@/bounty/queries'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -37,10 +37,10 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockItemProps) 
   const [isDropped, setDropped] = useState(false)
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
-  const { data } = useGetLatestBountyByMemberIdQuery({ variables: { memberId } })
-  const bounty = data?.bounties[0]
-  const eventData = bounty?.createdInEvent
-  const bountyId = bounty?.id
+  const { data } = useGetLatestBountyEntryQuery({ variables: { lockAccount: address } })
+  const entry = data?.bountyEntries[0]
+  const eventData = entry?.announcedInEvent
+  const bountyId = entry?.bountyId
 
   const goToBounty = useCallback(() => {
     if (!bountyId) {

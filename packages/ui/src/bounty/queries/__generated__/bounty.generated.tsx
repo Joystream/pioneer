@@ -960,16 +960,17 @@ export type GetBountyContributorsQuery = {
   }>
 }
 
-export type GetLatestBountyByMemberIdQueryVariables = Types.Exact<{
-  memberId?: Types.InputMaybe<Types.Scalars['ID']>
+export type GetLatestBountyEntryQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
 }>
 
-export type GetLatestBountyByMemberIdQuery = {
+export type GetLatestBountyEntryQuery = {
   __typename: 'Query'
-  bounties: Array<{
-    __typename: 'Bounty'
+  bountyEntries: Array<{
+    __typename: 'BountyEntry'
     id: string
-    createdInEvent: { __typename: 'BountyCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    bountyId: string
+    announcedInEvent: { __typename: 'WorkEntryAnnouncedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
 
@@ -1475,11 +1476,12 @@ export type GetBountyContributorsQueryResult = Apollo.QueryResult<
   GetBountyContributorsQuery,
   GetBountyContributorsQueryVariables
 >
-export const GetLatestBountyByMemberIdDocument = gql`
-  query GetLatestBountyByMemberId($memberId: ID) {
-    bounties(where: { creator: { id_eq: $memberId } }, orderBy: [createdAt_DESC], limit: 1) {
+export const GetLatestBountyEntryDocument = gql`
+  query GetLatestBountyEntry($lockAccount: String) {
+    bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
       id
-      createdInEvent {
+      bountyId
+      announcedInEvent {
         createdAt
         inBlock
         network
@@ -1489,42 +1491,42 @@ export const GetLatestBountyByMemberIdDocument = gql`
 `
 
 /**
- * __useGetLatestBountyByMemberIdQuery__
+ * __useGetLatestBountyEntryQuery__
  *
- * To run a query within a React component, call `useGetLatestBountyByMemberIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetLatestBountyByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetLatestBountyEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestBountyEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetLatestBountyByMemberIdQuery({
+ * const { data, loading, error } = useGetLatestBountyEntryQuery({
  *   variables: {
- *      memberId: // value for 'memberId'
+ *      lockAccount: // value for 'lockAccount'
  *   },
  * });
  */
-export function useGetLatestBountyByMemberIdQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>
+export function useGetLatestBountyEntryQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>(
-    GetLatestBountyByMemberIdDocument,
+  return Apollo.useQuery<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>(
+    GetLatestBountyEntryDocument,
     options
   )
 }
-export function useGetLatestBountyByMemberIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>
+export function useGetLatestBountyEntryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetLatestBountyByMemberIdQuery, GetLatestBountyByMemberIdQueryVariables>(
-    GetLatestBountyByMemberIdDocument,
+  return Apollo.useLazyQuery<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>(
+    GetLatestBountyEntryDocument,
     options
   )
 }
-export type GetLatestBountyByMemberIdQueryHookResult = ReturnType<typeof useGetLatestBountyByMemberIdQuery>
-export type GetLatestBountyByMemberIdLazyQueryHookResult = ReturnType<typeof useGetLatestBountyByMemberIdLazyQuery>
-export type GetLatestBountyByMemberIdQueryResult = Apollo.QueryResult<
-  GetLatestBountyByMemberIdQuery,
-  GetLatestBountyByMemberIdQueryVariables
+export type GetLatestBountyEntryQueryHookResult = ReturnType<typeof useGetLatestBountyEntryQuery>
+export type GetLatestBountyEntryLazyQueryHookResult = ReturnType<typeof useGetLatestBountyEntryLazyQuery>
+export type GetLatestBountyEntryQueryResult = Apollo.QueryResult<
+  GetLatestBountyEntryQuery,
+  GetLatestBountyEntryQueryVariables
 >
