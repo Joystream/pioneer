@@ -8,7 +8,7 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 
-interface VoteContext {
+export interface VoteContext {
   voteStatus?: VoteStatus
   rationale?: string
 }
@@ -28,7 +28,7 @@ type VoteForProposalState =
 type PassEvent = { type: 'PASS' }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type VerificationEvent = { type: 'NEXT' } | { type: 'FAIL' }
-type VoteForProposalEvent = PassEvent | SetRationaleEvent | SetVoteStatus | VerificationEvent
+export type VoteForProposalEvent = PassEvent | SetRationaleEvent | SetVoteStatus | VerificationEvent
 export type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
 type SetVoteStatus = { type: 'SET_VOTE_STATUS'; status: VoteStatus }
 

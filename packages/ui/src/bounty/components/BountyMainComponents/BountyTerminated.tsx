@@ -11,6 +11,7 @@ import { useBountyPreviewTabViaUrlParameter } from '@/bounty/hooks/useBountyPrev
 import { useBountyWithdrawns } from '@/bounty/hooks/useBountyWithdrawns'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { RationalePreview } from '@/proposals/components/RationalePreview'
 
 interface Props {
   bounty: Bounty
@@ -30,6 +31,7 @@ export const BountyTerminated = React.memo(({ bounty }: Props) => {
     <>
       <MainPanel>
         <CommonTiles bounty={bounty} period="terminated" />
+        {bounty.judgement?.rationale && <RationalePreview rationale={bounty.judgement.rationale} />}
         <CommonTabs active={active} setActive={setActive} />
         <ContentWithSidePanel>
           {active === 'Bounty' && <BountyTab bounty={bounty} />}

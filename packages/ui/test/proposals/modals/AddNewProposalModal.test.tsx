@@ -348,7 +348,7 @@ describe('UI: AddNewProposalModal', () => {
 
           await fillProposalDetails()
 
-          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Title exceeds maximum length/i)).toBeDefined()
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
@@ -359,7 +359,7 @@ describe('UI: AddNewProposalModal', () => {
 
           await fillProposalDetails()
 
-          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Rationale exceeds maximum length/i)).toBeDefined()
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
@@ -371,8 +371,8 @@ describe('UI: AddNewProposalModal', () => {
 
           await fillProposalDetails()
 
-          expect(await screen.findByText(/Title exceeds maximum length./i)).toBeDefined()
-          expect(await screen.findByText(/Rationale exceeds maximum length./i)).toBeDefined()
+          expect(await screen.findByText(/Title exceeds maximum length/i)).toBeDefined()
+          expect(await screen.findByText(/Rationale exceeds maximum length/i)).toBeDefined()
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
         })
@@ -403,17 +403,18 @@ describe('UI: AddNewProposalModal', () => {
             await triggerYes()
             await fillTriggerBlock(10)
 
-            expect(await screen.getByText('The minimum block number is 20.')).toBeDefined()
+            await waitFor(async () => expect(await screen.getByText('The minimum block number is 20')).toBeDefined())
 
             const button = await getNextStepButton()
             expect(button).toBeDisabled()
           })
 
           it('Invalid block number: too high', async () => {
-            await triggerYes()
-            await fillTriggerBlock(9999999999999)
-
-            expect(await screen.getByText(/(^The maximum block number is).*/i)).toBeDefined()
+            await act(async () => {
+              await triggerYes()
+              await fillTriggerBlock(99999999999999)
+            })
+            expect(screen.queryAllByText(/(^The maximum block number is \d*)*/i)).toBeDefined()
             const button = await getNextStepButton()
             expect(button).toBeDisabled()
           })
@@ -546,13 +547,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Invalid - over 100 percent', async () => {
           await SpecificParameters.fillAmount(200)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('200')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -718,7 +719,8 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillDetails('Lorem ipsum')
           expect(await getNextStepButton()).toBeEnabled()
 
-          await fillField('field-period-length', '')
+          await toggleCheckBox(true)
+          await fillField('field-period-length', '0')
           expect(await getNextStepButton()).toBeDisabled()
 
           await toggleCheckBox(false)
@@ -807,7 +809,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(0)
@@ -839,7 +841,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -858,7 +860,7 @@ describe('UI: AddNewProposalModal', () => {
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asSetMaxValidatorCount.toJSON()
-          expect(parameters).toEqual(amount)
+          await waitFor(() => expect(parameters).toEqual(amount))
         })
       })
 
@@ -897,7 +899,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -907,7 +909,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await SpecificParameters.fillAmount(Math.pow(2, 128))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -934,7 +936,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -965,7 +967,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -976,7 +978,7 @@ describe('UI: AddNewProposalModal', () => {
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
           await SpecificParameters.fillAmount(Math.pow(2, 32))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
         })
 
@@ -1040,7 +1042,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.findByLabelText(/^New Count$/i, { selector: 'input' })).toHaveValue('')
+          expect(await screen.findByLabelText(/^New Count$/i, { selector: 'input' })).toHaveValue('0')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -1071,7 +1073,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.fillAmount(0)
@@ -1101,7 +1103,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -1469,7 +1471,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getWarningNextButton() {
-    return (await screen.findByText('Create A Proposal')).parentElement
+    return await getButton('Create A Proposal')
   }
 
   async function getPreviousStepButton() {

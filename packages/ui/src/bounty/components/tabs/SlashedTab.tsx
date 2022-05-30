@@ -5,7 +5,6 @@ import { Bounty } from '@/bounty/types/Bounty'
 import { List } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 interface Props {
   bounty: Bounty
@@ -20,7 +19,7 @@ export const SlashedTab = ({ bounty }: Props) => {
           {slashedWorkers
             .filter((entry) => entry.rejected)
             .map((entry) => (
-              <BountySlashedListItem entrant={entry.worker} inBlock={randomBlock()} link="xd" />
+              <BountySlashedListItem entrant={entry.worker} stake={entry.stake} inBlock={bounty.judgement?.inBlock} />
             ))}
         </List>
       )

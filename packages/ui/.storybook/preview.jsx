@@ -1,8 +1,9 @@
 import React from 'react'
-import { GlobalStyle } from '../src/app/providers/GlobalStyle'
-import { Colors } from '../src/common/constants'
+import { GlobalStyle } from '@/app/providers/GlobalStyle'
+import { Colors } from '@/common/constants'
 import { I18nextProvider } from 'react-i18next'
 import { i18next } from '../src/services/i18n'
+import { useForm, FormProvider } from 'react-hook-form'
 
 const stylesWrapperDecorator = (styleFn) => (
   <div>
@@ -19,7 +20,18 @@ const i18nextDecorator = (Story) => (
   </React.Suspense>
 )
 
-export const decorators = [stylesWrapperDecorator, i18nextDecorator]
+const RHFDecorator = (Story) => {
+  const form = useForm()
+  return (
+    <React.Suspense fallback="Loading RHF context">
+      <FormProvider {...form}>
+        <Story />
+      </FormProvider>
+    </React.Suspense>
+  )
+}
+
+export const decorators = [stylesWrapperDecorator, i18nextDecorator, RHFDecorator]
 window.jest = {
   fn: (callback) => callback,
 }

@@ -21,7 +21,7 @@ import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 jest.mock('@/proposals/hooks/useProposalConstants', () => ({

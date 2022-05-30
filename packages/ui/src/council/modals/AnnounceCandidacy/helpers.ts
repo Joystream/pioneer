@@ -3,7 +3,6 @@ import { StateValueMap } from 'xstate'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
-import { last } from '@/common/utils'
 import { BNSchema, maxContext, minContext } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
@@ -75,10 +74,5 @@ export const getBulletPoints = (fields: AnnounceCandidacyFrom) => {
     .map(([, value]) => value)
 }
 
-export const machineStateConverter = (state: string | StateValueMap): string => {
-  if (typeof state === 'string') {
-    return state
-  }
-
-  return last(Object.entries(state).flat()) as string
-}
+export const machineStateConverter = (state: string | StateValueMap): string =>
+  typeof state === 'string' ? state : machineStateConverter(Object.values(state)[0])
