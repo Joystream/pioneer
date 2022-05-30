@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../constants'
-import { useToggle } from '../../hooks/useToggle'
+// import { useToggle } from '../../hooks/useToggle'
 import { isFunction } from '../../utils'
 import { Arrow, Icon } from '../icons'
 
@@ -12,10 +12,12 @@ interface ToggleableItemProps {
   children: ReactNode | ((isOpen: boolean) => ReactNode)
   absoluteToggle?: boolean
   className?: string
+  isOpen: boolean
+  toggleOpen: () => void
 }
 
-export const ToggleableItem = ({ children, absoluteToggle, className }: ToggleableItemProps) => {
-  const [isOpen, toggleOpen] = useToggle()
+export const ToggleableItem = ({ children, absoluteToggle, className, isOpen, toggleOpen }: ToggleableItemProps) => {
+  // const [isOpen, toggleOpen] = useToggle()
 
   return (
     <Toggle isOpen={isOpen} absoluteToggle={absoluteToggle} className={className}>
