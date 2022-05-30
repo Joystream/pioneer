@@ -64,6 +64,8 @@ export const LocksButtons = styled.div`
   grid-column: 4;
   justify-self: end;
   align-self: end;
+  display: flex;
+  column-gap: 10px;
 `
 
 export const DetailLabel = styled(Label)`
