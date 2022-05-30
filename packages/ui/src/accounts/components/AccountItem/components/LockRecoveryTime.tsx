@@ -3,7 +3,7 @@ import React from 'react'
 import { formatDurationDate } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 
-import { DetailLabel } from '../styles'
+import { DetailLabel } from './styles'
 
 interface LockRecoveryTimeProps {
   value: string
