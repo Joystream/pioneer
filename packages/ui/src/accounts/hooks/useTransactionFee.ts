@@ -16,7 +16,7 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
   const { status, setStatus } = useTransactionStatus()
   const paymentInfo = useObservable(
     whenDefined(address, (address) => transaction?.paymentInfo(address)),
-    [address, JSON.stringify(transaction)]
+    [address, transaction]
   )
   const partialFee = useDefaultAfterTimeout<BN>(paymentInfo?.partialFee, 3000, BN_ZERO)
   const balance = useBalance(address)
