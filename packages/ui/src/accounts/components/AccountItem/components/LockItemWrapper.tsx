@@ -3,12 +3,12 @@ import React from 'react'
 import { BalanceLock, WorkerLocks, WorkerLockType } from '@/accounts/types'
 import { Address } from '@/common/types'
 
+import { LockItem } from './LockItem'
 import {
   BoundAccountLockItem,
   BountyLockItem,
   CouncilCandidateLockItem,
   CouncilorLockItem,
-  DefaultLockItem,
   InvitationLockItem,
   ProposalLockItem,
   VoteLockItem,
@@ -49,7 +49,7 @@ export const LockItemWrapper = React.memo((props: LockItemWrapperProps) => {
       return WorkerLocks.includes(lockType as WorkerLockType) ? (
         <WorkingGroupLockItem {...props} />
       ) : (
-        <DefaultLockItem {...props} />
+        <LockItem {...props} />
       )
   }
 })

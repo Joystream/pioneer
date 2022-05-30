@@ -4,7 +4,7 @@ import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 
-export const DetailsItemVoteWrapper = styled.div`
+export const LockWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;

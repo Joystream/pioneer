@@ -1,22 +1,17 @@
 import React from 'react'
 
-import { Network } from '@/common/api/queries'
 import { BlockTime } from '@/common/components/BlockTime'
 import { TextMedium } from '@/common/components/typography'
-import { asBlock } from '@/common/types'
+import { Block } from '@/common/types'
 
 interface LockDateProps {
-  createdAt?: string
-  inBlock?: number
-  network?: Network
+  createdInEvent?: Block
 }
 
-export const LockDate = React.memo(({ createdAt, inBlock, network }: LockDateProps) => {
-  if (!createdAt || !inBlock || !network) {
+export const LockDate = React.memo(({ createdInEvent }: LockDateProps) => {
+  if (!createdInEvent) {
     return <TextMedium value>Unknown</TextMedium>
   }
 
-  const block = asBlock({ createdAt, inBlock, network })
-
-  return <BlockTime block={block} layout="column" />
+  return <BlockTime block={createdInEvent} layout="column" />
 })
