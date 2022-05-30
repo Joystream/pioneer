@@ -9,6 +9,10 @@ import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
+import { BalanceAmount } from '../BalanceAmount'
+import { LockDate } from '../LockDate'
+import { LockLinkButton } from '../LockLinkButton'
+import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -20,13 +24,9 @@ import {
   TitleCell,
   ValueCell,
 } from '../styles'
+import { LockItemProps } from '../types'
 
-import { BalanceAmount } from './BalanceAmount'
-import { LockDate } from './LockDate'
-import { LockLinkButton } from './LockLinkButton'
 import { LockRecoveryTime } from './LockRecoveryTime'
-import { RecoverButton } from './RecoverButton'
-import { LockItemProps } from './types'
 
 export const BountyLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()

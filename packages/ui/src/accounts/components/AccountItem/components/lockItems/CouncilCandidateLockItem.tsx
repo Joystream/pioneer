@@ -12,6 +12,10 @@ import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/typ
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
+import { BalanceAmount } from '../BalanceAmount'
+import { LockDate } from '../LockDate'
+import { LockLinkButton } from '../LockLinkButton'
+import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -23,13 +27,9 @@ import {
   TitleCell,
   ValueCell,
 } from '../styles'
+import { LockItemProps } from '../types'
 
-import { BalanceAmount } from './BalanceAmount'
-import { LockDate } from './LockDate'
-import { LockLinkButton } from './LockLinkButton'
 import { LockRecoveryTime } from './LockRecoveryTime'
-import { RecoverButton } from './RecoverButton'
-import { LockItemProps } from './types'
 
 export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()

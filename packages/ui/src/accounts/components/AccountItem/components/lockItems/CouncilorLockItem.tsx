@@ -10,6 +10,10 @@ import { useGetCouncilorElectionEventQuery } from '@/council/queries'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
+import { BalanceAmount } from '../BalanceAmount'
+import { LockDate } from '../LockDate'
+import { LockLinkButton } from '../LockLinkButton'
+import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -21,13 +25,9 @@ import {
   TitleCell,
   ValueCell,
 } from '../styles'
+import { LockItemProps } from '../types'
 
-import { BalanceAmount } from './BalanceAmount'
-import { LockDate } from './LockDate'
-import { LockLinkButton } from './LockLinkButton'
 import { LockRecoveryTime } from './LockRecoveryTime'
-import { RecoverButton } from './RecoverButton'
-import { LockItemProps } from './types'
 
 export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()

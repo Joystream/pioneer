@@ -10,6 +10,10 @@ import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { asMember } from '@/memberships/types'
 
+import { BalanceAmount } from '../BalanceAmount'
+import { LockDate } from '../LockDate'
+import { LockLinkButton } from '../LockLinkButton'
+import { RecoverButton } from '../RecoverButton'
 import {
   AccountDetailsWrap,
   ButtonsCell,
@@ -21,12 +25,7 @@ import {
   TitleCell,
   ValueCell,
 } from '../styles'
-
-import { BalanceAmount } from './BalanceAmount'
-import { LockDate } from './LockDate'
-import { LockLinkButton } from './LockLinkButton'
-import { RecoverButton } from './RecoverButton'
-import { LockItemProps } from './types'
+import { LockItemProps } from '../types'
 
 export const VoteLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()

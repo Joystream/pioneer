@@ -3,7 +3,7 @@ import React from 'react'
 
 import { TokenValue } from '@/common/components/typography'
 
-import { BalanceDetails, DetailLabel } from '../styles'
+import { BalanceDetails, DetailLabel } from './styles'
 
 interface BalanceAmountProps {
   amount: BN
