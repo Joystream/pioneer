@@ -1,35 +1,18 @@
 import faker from 'faker'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 
-import { lockIcon } from '@/accounts/components/AccountLocks'
-import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
-import { TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { asBlock } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { BalanceAmount } from '../BalanceAmount'
-import { LockDate } from '../LockDate'
+import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
-import { RecoverButton } from '../RecoverButton'
-import {
-  AccountDetailsWrap,
-  ButtonsCell,
-  DetailLabel,
-  DetailsItemVoteWrapper,
-  DetailsName,
-  LocksButtons,
-  StyledDropDown,
-  TitleCell,
-  ValueCell,
-} from '../styles'
 import { LockItemProps } from '../types'
-
-import { LockRecoveryTime } from './LockRecoveryTime'
 
 export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
   const { push } = useHistory()
@@ -38,14 +21,16 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockI
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
 
-  const [isDropped, setDropped] = useState(false)
-
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
   const { candidateId } = useCandidateIdByMember(memberId || '-1')
   const { data } = useGetNewCandidateEventsQuery({ variables: { lockAccount: address } })
 
   const eventData = data?.newCandidateEvents[0]
+  const createdInEvent = eventData && asBlock(eventData)
+
   const electionId = eventData?.candidate.electionRoundId
+
+  const recoveryTime = faker.date.soon(1).toISOString()
 
   const goToCandidate = useCallback(() => {
     if (!candidateId) {
@@ -61,43 +46,23 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockI
     return push(generatePath(CouncilRoutes.pastCouncils, { id: electionId }))
   }, [electionId])
 
-  const recoverButton = useMemo(
-    () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
-    [memberId, lock, address, isRecoverable]
-  )
+  const linkButtons = useMemo(() => {
+    return (
+      <>
+        <LockLinkButton label="View candidate" onClick={goToCandidate} />
+        <LockLinkButton label="View election" onClick={goToElection} />
+      </>
+    )
+  }, [])
 
   return (
-    <DetailsItemVoteWrapper>
-      <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
-        <TitleCell>
-          {lockIcon(lock.type)}
-          <DetailsName>{lock.type ?? 'Unknown lock'}</DetailsName>
-        </TitleCell>
-        {!isDropped && (
-          <ValueCell isRecoverable={isRecoverable}>
-            <TokenValue value={lock.amount} />
-          </ValueCell>
-        )}
-        <ButtonsCell>
-          {!isDropped && recoverButton}
-          <DropDownButton onClick={() => setDropped(!isDropped)} isDropped={isDropped} />
-        </ButtonsCell>
-      </AccountDetailsWrap>
-      <StyledDropDown isDropped={isDropped}>
-        <div>
-          <DetailLabel>Lock date</DetailLabel>
-          <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
-        </div>
-        <div>
-          <LockRecoveryTime value={faker.date.soon(1).toISOString()} />
-        </div>
-        <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
-        <LocksButtons>
-          {candidateId && <LockLinkButton label="Show Candidacy" onClick={goToCandidate} />}
-          <LockLinkButton label="Show Election" onClick={goToElection} />
-          {recoverButton}
-        </LocksButtons>
-      </StyledDropDown>
-    </DetailsItemVoteWrapper>
+    <LockItem
+      lock={lock}
+      address={address}
+      isRecoverable={isRecoverable}
+      createdInEvent={createdInEvent}
+      recoveryTime={recoveryTime}
+      linkButtons={linkButtons}
+    />
   )
 }
