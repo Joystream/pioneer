@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { Account } from '@/accounts/types'
-import { VotingSymbol } from '@/common/components/icons/symbols'
+import { CherrySymbol, BountyEntrySymbol } from '@/common/components/icons/symbols'
 import { BalanceInfoInRow, InfoTitle, InfoValue, LockedAccount } from '@/common/components/Modal'
 import { TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors, Sizes } from '@/common/constants'
@@ -18,6 +18,7 @@ export interface WithdrawInfoProps {
 export interface WithdrawInfoRow {
   stakingFromTitle: string
   amount: BN
+  type?: 'cherry' | 'entry'
 }
 
 export const WithdrawInfo = React.memo(({ account, amountTitle, rows }: WithdrawInfoProps) => {
@@ -35,10 +36,10 @@ export const WithdrawInfo = React.memo(({ account, amountTitle, rows }: Withdraw
             <TextSmall lighter>{amountTitle}</TextSmall>
           </DataWrapper>
           {Children.toArray(
-            rows.map(({ stakingFromTitle, amount }) => (
+            rows.map(({ stakingFromTitle, amount, type = 'entry' }) => (
               <>
                 <TitleWithIcon>
-                  <VotingSymbol />
+                  {type === 'cherry' ? <CherrySymbol /> : <BountyEntrySymbol />}
                   <InfoTitle>{stakingFromTitle}</InfoTitle>
                 </TitleWithIcon>
                 <InfoValue>

@@ -12,6 +12,7 @@ import { WithdrawInfo } from '@/bounty/components/WithdrawInfo/WithdrawInfo'
 import { Bounty } from '@/bounty/types/Bounty'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
@@ -59,25 +60,30 @@ export const WithdrawSignModal = ({
   return (
     <TransactionModal onClose={onClose} service={service} title={t(`modals.withdraw.${type}.title`)}>
       <ModalBody>
-        <TextMedium light>{`${t(`modals.withdraw.${type}.description`, { value: formatTokenValue(amount) })} ${
-          bountyFailedInfo
-            ? t('modals.withdraw.extraDescription', {
-                amount: formatTokenValue(extraAmount),
-              })
-            : ''
-        }`}</TextMedium>
+        <RowGapBlock gap={40}>
+          <TextMedium light>{`${t(`modals.withdraw.${type}.description`, { value: formatTokenValue(amount) })} ${
+            bountyFailedInfo
+              ? t('modals.withdraw.extraDescription', {
+                  amount: formatTokenValue(extraAmount),
+                })
+              : ''
+          }`}</TextMedium>
 
-        <WithdrawInfo
-          account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')}
-          amountTitle={t(`modals.withdraw.${type}.amountTitle`)}
-          rows={[
-            ...(stake ? [{ stakingFromTitle: t('modals.withdraw.stake.stakingFrom'), amount: stake }] : []),
-            ...(reward ? [{ stakingFromTitle: t('modals.withdraw.reward.stakingFrom'), amount: reward }] : []),
-            ...(!stake && !reward
-              ? [{ stakingFromTitle: t(`modals.withdraw.${type}.stakingFrom`), amount: amount.add(extraAmount) }]
-              : []),
-          ]}
-        />
+          <WithdrawInfo
+            account={accountOrNamed(allAccounts, controllerAccount.address, 'Account')}
+            amountTitle={t(`modals.withdraw.${type}.amountTitle`)}
+            rows={[
+              ...(stake ? [{ stakingFromTitle: t('modals.withdraw.stake.stakingFrom'), amount: stake }] : []),
+              ...(reward ? [{ stakingFromTitle: t('modals.withdraw.reward.stakingFrom'), amount: reward }] : []),
+              ...(extraAmount.gtn(0)
+                ? [{ stakingFromTitle: 'Cherry', amount: extraAmount, type: 'cherry' as const }]
+                : []),
+              ...(!stake && !reward
+                ? [{ stakingFromTitle: t(`modals.withdraw.${type}.stakingFrom`), amount: amount }]
+                : []),
+            ]}
+          />
+        </RowGapBlock>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
