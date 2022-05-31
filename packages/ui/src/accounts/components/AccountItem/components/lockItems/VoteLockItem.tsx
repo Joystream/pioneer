@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo } from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { generatePath } from 'react-router-dom'
 
 import { asBlock } from '@/common/types'
-import { CouncilRoutes } from '@/council/constants'
+import { ElectionRoutes } from '@/council/constants'
 import { useGetCouncilVotesQuery } from '@/council/queries'
 import { asMember } from '@/memberships/types'
 
@@ -11,7 +11,6 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
-  const { push } = useHistory()
   const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
   const vote = data?.castVotes[0]
   const eventData = vote?.castEvent?.[0]
@@ -21,11 +20,13 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
   const voteForMember = voteFor && asMember(voteFor)
 
   const electionId = vote?.electionRound.cycleId
-  const goToElection = useCallback(() => {
-    return push(generatePath(CouncilRoutes.pastCouncils, { id: electionId }))
+  const goToElectionButton = useMemo(() => {
+    if (!electionId) {
+      return null
+    }
+    const electionPath = generatePath(ElectionRoutes.pastElection, { id: electionId })
+    return <LockLinkButton label="Show Election" to={electionPath} />
   }, [electionId])
-
-  const linkButton = useMemo(() => <LockLinkButton label="Show Election" onClick={goToElection} />, [goToElection])
 
   return (
     <LockItem
@@ -34,7 +35,7 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
       memberInfo={voteForMember}
-      linkButtons={linkButton}
+      linkButtons={goToElectionButton}
     />
   )
 }

@@ -1,6 +1,6 @@
 import faker from 'faker'
-import React, { useCallback, useMemo } from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { generatePath } from 'react-router-dom'
 
 import { asBlock } from '@/common/types'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -11,8 +11,6 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const ProposalLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
-  const { push } = useHistory()
-
   const { data } = useGetLatestProposalByMemberIdQuery({ variables: { lockAccount: address } })
   const proposal = data?.proposals[0]
   const eventData = proposal?.createdInEvent
@@ -21,14 +19,13 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: LockDetailsPr
   const recoveryTime = faker.date.soon(1).toISOString()
 
   const proposalId = proposal?.id
-  const goToProposal = useCallback(() => {
+  const goToProposalButton = useMemo(() => {
     if (!proposalId) {
       return null
     }
-    return push(generatePath(ProposalsRoutes.preview, { id: proposalId }))
+    const proposalPath = generatePath(ProposalsRoutes.preview, { id: proposalId })
+    return <LockLinkButton label="Show Proposal" to={proposalPath} />
   }, [proposalId])
-
-  const linkButton = useMemo(() => <LockLinkButton label="Show Proposal" onClick={goToProposal} />, [goToProposal])
 
   return (
     <LockItem
@@ -37,7 +34,7 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: LockDetailsPr
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
       recoveryTime={recoveryTime}
-      linkButtons={linkButton}
+      linkButtons={goToProposalButton}
     />
   )
 }

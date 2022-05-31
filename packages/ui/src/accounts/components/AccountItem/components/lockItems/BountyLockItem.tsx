@@ -1,6 +1,6 @@
 import faker from 'faker'
-import React, { useCallback, useMemo } from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { generatePath } from 'react-router-dom'
 
 import { BountyRoutes } from '@/bounty/constants'
 import { useGetLatestBountyEntryQuery } from '@/bounty/queries'
@@ -11,8 +11,6 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
-  const { push } = useHistory()
-
   const { data } = useGetLatestBountyEntryQuery({ variables: { lockAccount: address } })
   const entry = data?.bountyEntries[0]
   const eventData = entry?.announcedInEvent
@@ -21,14 +19,14 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProp
   const recoveryTime = faker.date.soon(1).toISOString()
 
   const bountyId = entry?.bountyId
-  const goToBounty = useCallback(() => {
+
+  const goToBountyButton = useMemo(() => {
     if (!bountyId) {
       return null
     }
-    return push(generatePath(BountyRoutes.bounty, { id: bountyId }))
+    const bountyPath = generatePath(BountyRoutes.bounty, { id: bountyId })
+    return <LockLinkButton label="Show Bounty" to={bountyPath} />
   }, [bountyId])
-
-  const linkButton = useMemo(() => <LockLinkButton label="Show Bounty" onClick={goToBounty} />, [goToBounty])
 
   return (
     <LockItem
@@ -37,7 +35,7 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProp
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
       recoveryTime={recoveryTime}
-      linkButtons={linkButton}
+      linkButtons={goToBountyButton}
     />
   )
 }

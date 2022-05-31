@@ -1,6 +1,6 @@
 import faker from 'faker'
-import React, { useCallback, useMemo } from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { generatePath } from 'react-router-dom'
 
 import { asBlock } from '@/common/types'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
@@ -11,7 +11,6 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
-  const { push } = useHistory()
   const { data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
@@ -26,14 +25,13 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
   const recoveryTime = faker.date.soon(1).toISOString()
 
   const openingId = application?.opening.id
-  const goToOpening = useCallback(() => {
+  const goToOpeningButton = useMemo(() => {
     if (!openingId) {
       return null
     }
-    return push(generatePath(WorkingGroupsRoutes.openingById, { id: openingId }))
+    const openingPath = generatePath(WorkingGroupsRoutes.openingById, { id: openingId })
+    return <LockLinkButton label="Show Opening" to={openingPath} />
   }, [openingId])
-
-  const linkButton = useMemo(() => <LockLinkButton label="Show Opening" onClick={goToOpening} />, [goToOpening])
 
   return (
     <LockItem
@@ -42,7 +40,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
       recoveryTime={recoveryTime}
-      linkButtons={linkButton}
+      linkButtons={goToOpeningButton}
     />
   )
 }
