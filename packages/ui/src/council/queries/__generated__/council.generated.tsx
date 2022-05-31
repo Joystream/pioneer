@@ -1435,18 +1435,15 @@ export type GetCouncilorElectionEventQueryVariables = Types.Exact<{
 
 export type GetCouncilorElectionEventQuery = {
   __typename: 'Query'
-  memberships: Array<{
-    __typename: 'Membership'
-    councilMembers: Array<{
-      __typename: 'CouncilMember'
-      electedInCouncil: {
-        __typename: 'ElectedCouncil'
-        id: string
-        electedAtBlock: number
-        electedAtTime: any
-        electedAtNetwork: Types.Network
-      }
-    }>
+  councilMembers: Array<{
+    __typename: 'CouncilMember'
+    electedInCouncil: {
+      __typename: 'ElectedCouncil'
+      id: string
+      electedAtBlock: number
+      electedAtTime: any
+      electedAtNetwork: Types.Network
+    }
   }>
 }
 
@@ -2749,14 +2746,12 @@ export type GetPastCouncilStatsQueryResult = Apollo.QueryResult<
 >
 export const GetCouncilorElectionEventDocument = gql`
   query GetCouncilorElectionEvent($lockAccount: String) {
-    memberships(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
-      councilMembers {
-        electedInCouncil {
-          id
-          electedAtBlock
-          electedAtTime
-          electedAtNetwork
-        }
+    councilMembers(where: { stakingAccountId_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      electedInCouncil {
+        id
+        electedAtBlock
+        electedAtTime
+        electedAtNetwork
       }
     }
   }
