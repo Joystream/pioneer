@@ -1,93 +1,94 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useMemo, useState } from 'react'
 
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { isRecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
-import { BalanceLock } from '@/accounts/types'
-import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
-import { BorderRad, Colors } from '@/common/constants'
-import { useModal } from '@/common/hooks/useModal'
-import { Address } from '@/common/types'
+import { Block } from '@/common/types'
+import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { Member } from '@/memberships/types'
 
-type DetailsItemDataProps = {
-  lock: BalanceLock
-  isRecoverable?: boolean
-  address?: Address
+import { BalanceAmount } from './BalanceAmount'
+import { LockDate } from './LockDate'
+import { LockRecoveryTime } from './LockRecoveryTime'
+import { RecoverButton } from './RecoverButton'
+import {
+  AccountDetailsWrap,
+  ButtonsCell,
+  DetailLabel,
+  LockWrapper,
+  DetailsName,
+  LocksButtons,
+  StyledDropDown,
+  TitleCell,
+  ValueCell,
+} from './styles'
+import { LockDetailsProps } from './types'
+
+interface LockItemProps extends LockDetailsProps {
+  createdInEvent?: Block
+  recoveryTime?: string
+  memberInfo?: Member
+  linkButtons?: React.ReactNode
 }
 
-export const LockItem = ({ lock, isRecoverable, address }: DetailsItemDataProps) => {
-  const { showModal } = useModal()
+export const LockItem = ({
+  lock,
+  address,
+  isRecoverable,
+  createdInEvent,
+  recoveryTime,
+  memberInfo,
+  linkButtons,
+}: LockItemProps) => {
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
 
-  const onClick = () => {
-    if (!address) return
-    const memberId = getMemberIdByBoundAccountAddress(address)
-    if (!memberId) return
+  const [isDropped, setDropped] = useState(false)
 
-    if (isRecoverableLock(lock)) {
-      showModal<RecoverBalanceModalCall>({
-        modal: 'RecoverBalance',
-        data: { address, lock, memberId },
-      })
-    }
-  }
+  const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
+
+  const recoverButton = useMemo(
+    () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
+    [memberId, lock, address, isRecoverable]
+  )
 
   return (
-    <DetailsItemVoteWrapper>
-      <AccountDetailsWrap>
-        <DetailsInfo>
+    <LockWrapper>
+      <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
+        <TitleCell>
           {lockIcon(lock.type)}
           <DetailsName>{lock.type ?? 'Unknown lock'}</DetailsName>
-        </DetailsInfo>
-        <div />
-        {isRecoverable ? <div /> : null}
-        <TokenValue value={lock.amount} />
-        {isRecoverable && (
-          <>
-            <div />
-            <TransactionButton style="primary" size="small" onClick={onClick}>
-              Recover
-            </TransactionButton>
-          </>
+        </TitleCell>
+        {!isDropped && (
+          <ValueCell isRecoverable={isRecoverable}>
+            <TokenValue value={lock.amount} />
+          </ValueCell>
         )}
+        <ButtonsCell>
+          {!isDropped && recoverButton}
+          <DropDownButton onClick={() => setDropped(!isDropped)} isDropped={isDropped} />
+        </ButtonsCell>
       </AccountDetailsWrap>
-    </DetailsItemVoteWrapper>
+      <StyledDropDown isDropped={isDropped}>
+        <div>
+          <DetailLabel>Lock date</DetailLabel>
+          <LockDate createdInEvent={createdInEvent} />
+        </div>
+        <div>{recoveryTime && <LockRecoveryTime value={recoveryTime} />}</div>
+        <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
+        {memberInfo && (
+          <div>
+            <DetailLabel>Bound to:</DetailLabel>
+            <MemberInfo member={memberInfo} onlyTop />
+          </div>
+        )}
+        <LocksButtons>
+          {linkButtons}
+          {recoverButton}
+        </LocksButtons>
+      </StyledDropDown>
+    </LockWrapper>
   )
 }
-
-const DetailsItemVoteWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
-
-const AccountDetailsWrap = styled.div`
-  display: grid;
-  grid-template-columns: 260px repeat(4, 132px) 86px;
-  grid-template-rows: 1fr;
-  justify-content: space-between;
-  justify-items: end;
-  align-items: center;
-  width: 100%;
-  padding: 4px 16px;
-  height: 46px;
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-`
-
-const DetailsInfo = styled.div`
-  display: flex;
-  width: 100%;
-  column-gap: 16px;
-`
-
-const DetailsName = styled.h6`
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  color: ${Colors.Black[900]};
-`

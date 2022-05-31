@@ -30,8 +30,8 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   const [isDropped, setDropped] = useState(false)
 
   return (
-    <AccountItemWrapper onClick={() => setDropped(!isDropped)}>
-      <AccountItemWrap key={address}>
+    <AccountItemWrapper>
+      <AccountItemWrap key={address} onClick={() => setDropped(!isDropped)}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} isLoading={!isDefined(balance?.total)} />
         <ValueAndLocks align={balance?.locked && 'end'}>

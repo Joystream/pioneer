@@ -32,6 +32,13 @@ export type WorkerProposalDetailsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -106,6 +113,13 @@ export type ProposalFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -139,6 +153,13 @@ export type VoteFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -177,6 +198,13 @@ export type VoteWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -221,6 +249,13 @@ export type ProposalWithDetailsFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
   createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -286,6 +321,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -324,6 +366,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -378,6 +427,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -414,6 +470,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -448,6 +511,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -504,6 +574,13 @@ export type ProposalWithDetailsFieldsFragment = {
             isLead: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
         }
         status:
           | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -541,6 +618,13 @@ export type ProposalWithDetailsFieldsFragment = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       status:
         | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -594,6 +678,13 @@ export type ProposalWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -640,6 +731,13 @@ export type DiscussionPostFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     status:
       | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -677,6 +775,13 @@ export type DiscussionPostFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -721,6 +826,13 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -810,6 +922,13 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -893,6 +1012,13 @@ export type GetProposalsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -953,6 +1079,13 @@ export type GetProposalQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
     }>
     createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -1018,6 +1151,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1056,6 +1196,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1110,6 +1257,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1146,6 +1300,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1180,6 +1341,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1236,6 +1404,13 @@ export type GetProposalQuery = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
           status:
             | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1273,6 +1448,13 @@ export type GetProposalQuery = {
             isLead: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
         }
         status:
           | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1326,6 +1508,13 @@ export type GetProposalQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }
@@ -1396,6 +1585,13 @@ export type GetVoteWithDetailsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }
@@ -1455,6 +1651,13 @@ export type GetProposalVotesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -1552,8 +1755,28 @@ export type GetProposalDiscussionPostMentionQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
+}
+
+export type GetLatestProposalByMemberIdQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetLatestProposalByMemberIdQuery = {
+  __typename: 'Query'
+  proposals: Array<{
+    __typename: 'Proposal'
+    id: string
+    createdInEvent: { __typename: 'ProposalCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
 }
 
 export const VoteFieldsFragmentDoc = gql`
@@ -2358,4 +2581,57 @@ export type GetProposalDiscussionPostMentionLazyQueryHookResult = ReturnType<
 export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
   GetProposalDiscussionPostMentionQuery,
   GetProposalDiscussionPostMentionQueryVariables
+>
+export const GetLatestProposalByMemberIdDocument = gql`
+  query GetLatestProposalByMemberId($lockAccount: String) {
+    proposals(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      id
+      createdInEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+`
+
+/**
+ * __useGetLatestProposalByMemberIdQuery__
+ *
+ * To run a query within a React component, call `useGetLatestProposalByMemberIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestProposalByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestProposalByMemberIdQuery({
+ *   variables: {
+ *      lockAccount: // value for 'lockAccount'
+ *   },
+ * });
+ */
+export function useGetLatestProposalByMemberIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>(
+    GetLatestProposalByMemberIdDocument,
+    options
+  )
+}
+export function useGetLatestProposalByMemberIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>(
+    GetLatestProposalByMemberIdDocument,
+    options
+  )
+}
+export type GetLatestProposalByMemberIdQueryHookResult = ReturnType<typeof useGetLatestProposalByMemberIdQuery>
+export type GetLatestProposalByMemberIdLazyQueryHookResult = ReturnType<typeof useGetLatestProposalByMemberIdLazyQuery>
+export type GetLatestProposalByMemberIdQueryResult = Apollo.QueryResult<
+  GetLatestProposalByMemberIdQuery,
+  GetLatestProposalByMemberIdQueryVariables
 >

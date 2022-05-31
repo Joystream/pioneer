@@ -44,6 +44,13 @@ export type BountyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
   oracle?: {
     __typename: 'Membership'
@@ -70,6 +77,13 @@ export type BountyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
   fundingType:
     | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
@@ -108,6 +122,13 @@ export type BountyFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
   }> | null
   entries?: Array<{
@@ -145,6 +166,13 @@ export type BountyFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     status:
       | { __typename: 'BountyEntryStatusPassed' }
@@ -194,6 +222,13 @@ export type BountyEntryFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
@@ -239,6 +274,13 @@ export type BountyEntryWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
@@ -294,6 +336,13 @@ export type BountyWorkWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
@@ -334,6 +383,13 @@ export type BountyContributionFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
 }
 
@@ -386,6 +442,13 @@ export type GetBountiesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
     oracle?: {
       __typename: 'Membership'
@@ -412,6 +475,13 @@ export type GetBountiesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
     fundingType:
       | {
@@ -455,6 +525,13 @@ export type GetBountiesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       } | null
     }> | null
     entries?: Array<{
@@ -492,6 +569,13 @@ export type GetBountiesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       status:
         | { __typename: 'BountyEntryStatusPassed' }
@@ -568,6 +652,13 @@ export type GetBountyQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
     oracle?: {
       __typename: 'Membership'
@@ -594,6 +685,13 @@ export type GetBountyQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
     fundingType:
       | {
@@ -637,6 +735,13 @@ export type GetBountyQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       } | null
     }> | null
     entries?: Array<{
@@ -674,6 +779,13 @@ export type GetBountyQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       status:
         | { __typename: 'BountyEntryStatusPassed' }
@@ -742,6 +854,13 @@ export type GetBountyWorksQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     status:
       | { __typename: 'BountyEntryStatusPassed' }
@@ -830,7 +949,28 @@ export type GetBountyContributorsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
+  }>
+}
+
+export type GetLatestBountyEntryQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetLatestBountyEntryQuery = {
+  __typename: 'Query'
+  bountyEntries: Array<{
+    __typename: 'BountyEntry'
+    id: string
+    bountyId: string
+    announcedInEvent: { __typename: 'WorkEntryAnnouncedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
 
@@ -1335,4 +1475,58 @@ export type GetBountyContributorsLazyQueryHookResult = ReturnType<typeof useGetB
 export type GetBountyContributorsQueryResult = Apollo.QueryResult<
   GetBountyContributorsQuery,
   GetBountyContributorsQueryVariables
+>
+export const GetLatestBountyEntryDocument = gql`
+  query GetLatestBountyEntry($lockAccount: String) {
+    bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      id
+      bountyId
+      announcedInEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+`
+
+/**
+ * __useGetLatestBountyEntryQuery__
+ *
+ * To run a query within a React component, call `useGetLatestBountyEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestBountyEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestBountyEntryQuery({
+ *   variables: {
+ *      lockAccount: // value for 'lockAccount'
+ *   },
+ * });
+ */
+export function useGetLatestBountyEntryQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>(
+    GetLatestBountyEntryDocument,
+    options
+  )
+}
+export function useGetLatestBountyEntryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>(
+    GetLatestBountyEntryDocument,
+    options
+  )
+}
+export type GetLatestBountyEntryQueryHookResult = ReturnType<typeof useGetLatestBountyEntryQuery>
+export type GetLatestBountyEntryLazyQueryHookResult = ReturnType<typeof useGetLatestBountyEntryLazyQuery>
+export type GetLatestBountyEntryQueryResult = Apollo.QueryResult<
+  GetLatestBountyEntryQuery,
+  GetLatestBountyEntryQueryVariables
 >

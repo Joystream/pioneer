@@ -326,3 +326,14 @@ query GetProposalDiscussionPostMention($id: ID!) {
     ...ProposalDiscussionPostMentionFields
   }
 }
+
+query GetLatestProposalByMemberId($lockAccount: String) {
+  proposals(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    id
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+  }
+}

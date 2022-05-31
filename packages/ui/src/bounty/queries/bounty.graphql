@@ -170,3 +170,15 @@ query GetBountyContributors(
     ...BountyContributionFields
   }
 }
+
+query GetLatestBountyEntry($lockAccount: String) {
+  bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    id
+    bountyId
+    announcedInEvent {
+      createdAt
+      inBlock
+      network
+    }
+  }
+}

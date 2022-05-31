@@ -4,7 +4,18 @@ import { asWorkingGroupName } from '@/working-groups/types'
 
 import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
 
-import { Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
+import { BoundAccountEvent, Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
+
+const asBoundAccountsEvent = (
+  fields: NonNullable<MemberFieldsFragment['stakingaccountaddedeventmember']>[0]
+): BoundAccountEvent => ({
+  createdAtBlock: asBlock({
+    createdAt: fields.createdAt,
+    inBlock: fields.inBlock,
+    network: fields.network,
+  }),
+  account: fields.account,
+})
 
 export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member => ({
   id: data.id,
@@ -18,6 +29,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   rootAccount: data.rootAccount,
   controllerAccount: data.controllerAccount,
   boundAccounts: [...data?.boundAccounts],
+  boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
 })

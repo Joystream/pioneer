@@ -29,6 +29,12 @@ fragment MemberFields on Membership {
     isLead
   }
   createdAt
+  stakingaccountaddedeventmember {
+    createdAt
+    inBlock
+    network
+    account
+  }
 }
 
 fragment MemberWithDetailsFields on Membership {
@@ -153,5 +159,13 @@ query GetMemberActionDetails($workerId_in: [ID!]!) {
   }
   memberInvitedEventsConnection(where: { invitingMember: { id_in: $workerId_in } }) {
     totalCount
+  }
+}
+
+query GetMemberInvitedEvents($lockAccount: String) {
+  memberInvitedEvents(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    createdAt
+    inBlock
+    network
   }
 }
