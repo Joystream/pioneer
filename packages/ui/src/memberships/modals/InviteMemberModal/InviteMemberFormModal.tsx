@@ -58,10 +58,10 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
 
   const handleHash = blake2AsHex(formHandleMap)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    formHandleMap,
+    handleHash,
     api,
   ])
-
+  // console.log(potentialMemberIdSize?.toString(), ' membersize with ', handleHash, blake2AsHex('bwhm8'))
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(InviteMemberSchema),
     context: { size: potentialMemberIdSize, keyring },
@@ -69,12 +69,11 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
     defaultValues: formDefaultValues,
   })
 
-  const [handle, invitor, rootAccount, controllerAccount, avatarUri] = form.watch([
+  const [handle, invitor, rootAccount, controllerAccount] = form.watch([
     'handle',
     'invitor',
     'rootAccount',
     'controllerAccount',
-    'avatarUri',
   ])
 
   useEffect(() => {
@@ -82,12 +81,23 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       setFormHandleMap(handle)
     }
   }, [handle])
+
+  useEffect(() => {
+    // console.log(
+    //   'effeact',
+    //   potentialMemberIdSize && potentialMemberIdSize.toString() !== '0',
+    //   potentialMemberIdSize?.toString() !== '0'
+    // )
+    if (potentialMemberIdSize && handle) {
+      // console.log('trigger handle', potentialMemberIdSize)
+      form.trigger('handle')
+    }
+  }, [potentialMemberIdSize])
+
   useEffect(() => {
     return active && form.setValue('invitor', active)
   }, [active])
 
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
   const onCreate = () => onSubmit(form.getValues())
 
   return (
@@ -97,7 +107,10 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
         <FormProvider {...form}>
           <ScrolledModalContainer>
             <InputComponent label="Inviting member" inputSize="l">
-              <SelectMember selected={invitor} onChange={(member) => form.setValue('invitor', member)} />
+              <SelectMember
+                selected={invitor}
+                onChange={(member) => form.setValue('invitor', member, { shouldValidate: true })}
+              />
             </InputComponent>
 
             <Row>
@@ -110,8 +123,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="root-account"
                 required
                 tooltipText="Something about root accounts"
-                validation={hasError('rootAccount.address') ? 'invalid' : undefined}
-                message={hasError('rootAccount.address') ? getErrorMessage('rootAccount.address') : ' '}
+                name="rootAccount"
               >
                 <InputText
                   id="root-account"
@@ -134,8 +146,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="controller-account"
                 required
                 tooltipText="Something about controller accounts"
-                validation={hasError('controllerAccount') ? 'invalid' : undefined}
-                message={hasError('controllerAccount') ? getErrorMessage('controllerAccount') : ' '}
+                name="controllerAccount"
               >
                 <InputText
                   id="controller-account"
@@ -169,8 +180,8 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                     </TooltipExternalLink>
                   </>
                 }
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : 'Do not use same handles'}
+                name="handle"
+                message={potentialMemberIdSize === undefined && handle ? 'Validating...' : ''}
               >
                 <InputText id="member-handle" placeholder="Type" name="handle" />
               </InputComponent>
@@ -189,18 +200,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
             </Row>
 
             <Row>
-              <InputComponent
-                id="member-avatar"
-                label="Member Avatar"
-                name="avatarUri"
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={
-                  hasError('avatarUri')
-                    ? getErrorMessage('avatarUri')
-                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                }
-                placeholder="Image URL"
-              >
+              <InputComponent id="member-avatar" label="Member Avatar" name="avatarUri" placeholder="Image URL">
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
