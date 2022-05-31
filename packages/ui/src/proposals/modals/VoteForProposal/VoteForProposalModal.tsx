@@ -14,7 +14,7 @@ import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/typ
 import { VoteForProposalModalForm } from '@/proposals/modals/VoteForProposal/VoteForProposalModalForm'
 import { VoteForProposalSignModal } from '@/proposals/modals/VoteForProposal/VoteForProposalSignModal'
 
-import { VoteForProposalMachine as machine, VoteStatus } from './machine'
+import { VoteForProposalMachine as machine } from './machine'
 
 export const VoteForProposalModal = () => {
   const { hideModal, modalData } = useModal<VoteForProposalModalCall>()
@@ -48,17 +48,7 @@ export const VoteForProposalModal = () => {
   }
 
   if (state.matches('vote')) {
-    return (
-      <VoteForProposalModalForm
-        proposalTitle={proposal.title}
-        proposalType={proposal.type}
-        proposalRationale={proposal.rationale}
-        proposalDetails={proposal.details}
-        setStatus={(status: VoteStatus) => send('SET_VOTE_STATUS', { status })}
-        setRationale={(rationale: string) => send('SET_RATIONALE', { rationale })}
-        onNext={() => send('PASS')}
-      />
-    )
+    return <VoteForProposalModalForm proposal={proposal} send={send} context={state.context} />
   }
 
   if (state.matches('transaction')) {

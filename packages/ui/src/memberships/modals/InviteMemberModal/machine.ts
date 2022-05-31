@@ -1,5 +1,6 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
-import { assign, createMachine } from 'xstate'
+import { assign, createMachine, State, Typestate } from 'xstate'
+import { StateSchema } from 'xstate/lib/types'
 
 import {
   isTransactionCanceled,
@@ -35,6 +36,13 @@ export type InviteMemberEvent =
   | { type: 'DONE'; form: MemberFormFields }
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
+
+export type InviteMemberMachineState = State<
+  FormContext,
+  InviteMemberEvent,
+  StateSchema<FormContext>,
+  Typestate<FormContext>
+>
 
 export const inviteMemberMachine = createMachine<Context, InviteMemberEvent, InviteMemberState>({
   initial: 'requirementsVerification',

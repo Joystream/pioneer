@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { formatDuration } from '@/common/components/statistics'
+import { BlockIcon } from '@/common/components/icons'
+import { BlocksInfo, formatDuration, NumberOfBlocks } from '@/common/components/statistics'
 import { Colors, Fonts, SECONDS_PER_BLOCK } from '@/common/constants'
+import { plural } from '@/common/helpers'
+import { formatTokenValue } from '@/common/model/formatters'
 import { intersperse } from '@/common/utils'
 
 interface DurationValueProps {
@@ -46,6 +49,12 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
       ) : (
         <Days>None</Days>
       )}
+      <BlocksInfo gap={8}>
+        <BlockIcon />
+        <NumberOfBlocks lighter>
+          {formatTokenValue(blocksLeft)} block{plural(value)}
+        </NumberOfBlocks>
+      </BlocksInfo>
     </>
   )
 }

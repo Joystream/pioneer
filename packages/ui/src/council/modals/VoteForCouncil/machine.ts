@@ -1,6 +1,8 @@
 import { EventRecord } from '@polkadot/types/interfaces'
-import { assign, createMachine } from 'xstate'
+import BN from 'bn.js'
+import { assign, createMachine, State, StateSchema, Typestate } from 'xstate'
 
+import { Account } from '@/accounts/types'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -9,10 +11,9 @@ import {
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-import { StakeEvent, StakeFormFields } from './types'
-
-interface VoteContext {
-  stake: StakeFormFields
+export interface VoteContext {
+  stake?: BN
+  account?: Account
   transactionEvents: EventRecord[]
 }
 
@@ -20,13 +21,22 @@ type VoteForCouncilState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
-  | { value: 'transaction'; context: Pick<VoteContext, 'stake'> }
+  | { value: 'transaction'; context: VoteContext }
   | { value: 'success'; context: VoteContext }
   | { value: 'error'; context: VoteContext }
 
 type FailEvent = { type: 'FAIL' }
 type PassEvent = { type: 'PASS' }
-type VoteForCouncilEvent = FailEvent | PassEvent | StakeEvent
+type StakeEvent = { type: 'SET_STAKE'; stake: BN }
+type AccountEvent = { type: 'SET_ACCOUNT'; account: Account }
+export type VoteForCouncilEvent = FailEvent | PassEvent | StakeEvent | AccountEvent
+
+export type VoteForCouncilMachineState = State<
+  VoteContext,
+  VoteForCouncilEvent,
+  StateSchema<VoteContext>,
+  Typestate<VoteContext>
+>
 
 export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteForCouncilEvent, VoteForCouncilState>({
   initial: 'requirementsVerification',
@@ -43,9 +53,12 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
     stake: {
       on: {
         SET_STAKE: {
-          target: 'transaction',
           actions: assign({ stake: (_, event) => event.stake }),
         },
+        SET_ACCOUNT: {
+          actions: assign({ account: (_, event) => event.account }),
+        },
+        PASS: 'transaction',
       },
     },
 

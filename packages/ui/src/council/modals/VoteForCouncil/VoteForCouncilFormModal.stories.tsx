@@ -4,6 +4,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { ModalContext } from '@/common/providers/modal/context'
+import { VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { VoteForCouncilFormModal, VoteForCouncilFormModalProps } from './VoteForCouncilFormModal'
@@ -23,15 +24,16 @@ interface Props extends Omit<VoteForCouncilFormModalProps, 'minStake'> {
   minStake: number
   hideModal: () => void
   showModal: () => void
+  state: VoteForCouncilMachineState
 }
 
-const Template: Story<Props> = ({ minStake, id, send, hideModal, showModal }) => {
+const Template: Story<Props> = ({ minStake, id, send, hideModal, showModal, state }) => {
   const modalData = { id }
   return (
     <MemoryRouter>
       <MockApolloProvider members council>
         <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <VoteForCouncilFormModal minStake={new BN(minStake)} send={send} />
+          <VoteForCouncilFormModal minStake={new BN(minStake)} send={send} state={state} />
         </ModalContext.Provider>
       </MockApolloProvider>
     </MemoryRouter>

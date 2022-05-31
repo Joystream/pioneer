@@ -1,6 +1,6 @@
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -10,10 +10,10 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { useApi } from '@/common/hooks/useApi'
-import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
+import { BNSchema, maxContext, minContext } from '@/common/utils/validation'
 import { IncreaseWorkerStakeSignModal } from '@/working-groups/modals/IncreaseWorkerStakeModal/IncreaseWorkerStakeSignModal'
 import { increaseStakeMachine } from '@/working-groups/modals/IncreaseWorkerStakeModal/machine'
 import { SuccessModal } from '@/working-groups/modals/IncreaseWorkerStakeModal/SuccessModal'
@@ -21,11 +21,13 @@ import { IncreaseWorkerStakeModalCall } from '@/working-groups/modals/IncreaseWo
 import { getGroup } from '@/working-groups/model/getGroup'
 
 export interface IncreaseStakeFormFields {
-  amount?: string
+  stake: BN
 }
 
 const StakeFormSchema = Yup.object().shape({
-  amount: Yup.number().required(),
+  stake: BNSchema.test(minContext('You need at least ${min} stake', 'minAddStake'))
+    .test(maxContext('Given amount exceed your transferable balance of ${max} tJOY', 'totalBalance'))
+    .required(),
 })
 
 export const IncreaseWorkerStakeModal = () => {
@@ -34,39 +36,27 @@ export const IncreaseWorkerStakeModal = () => {
   const [state, send] = useMachine(increaseStakeMachine)
   const { minStake, stake, group, runtimeId, roleAccount } = modalData.worker
   const minAddStake = minStake - stake
-  const [amount, setAmount] = useNumberInput(0, minAddStake)
   const balance = useBalance(roleAccount)
-
-  const schema = useMemo(() => {
-    StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.min(minAddStake, 'You need at least ${min} stake')
-    if (balance?.transferable) {
-      StakeFormSchema.fields.amount = StakeFormSchema.fields.amount.max(
-        balance?.transferable.toNumber(),
-        'Given amount exceed your transferable balance of ${max} tJOY'
-      )
-    }
-    return StakeFormSchema
-  }, [minAddStake.toString(), balance?.transferable.toString()])
-
-  const { changeField, validation, fields } = useForm<IncreaseStakeFormFields>({ amount: undefined }, schema)
-  const { isValid, errors } = validation
+  const { isValid, setContext, errors } = useSchema({ ...state?.context }, StakeFormSchema)
+  useEffect(() => {
+    setContext({ minAddStake, totalBalance: balance?.transferable })
+  }, [balance?.transferable.toString()])
 
   useEffect(() => {
-    changeField('amount', amount)
-  }, [amount])
+    send('SET_STAKE', { stake: new BN(minAddStake) })
+  }, [])
 
   const onSubmit = () => {
-    send({ type: 'DONE', form: fields })
+    send({ type: 'PASS' })
   }
-
   if (state.matches('transaction')) {
     const workerGroup = api && getGroup(api, group.id)
-    const transaction = workerGroup?.increaseStake(runtimeId, new BN(state.context.form.amount || 0))
+    const transaction = workerGroup?.increaseStake(runtimeId, new BN(state.context.stake || 0))
     return (
       <IncreaseWorkerStakeSignModal
         onClose={hideModal}
         service={state.children.transaction}
-        amount={new BN(state.context.form.amount || 0)}
+        amount={new BN(state.context.stake || 0)}
         transaction={transaction}
         worker={modalData.worker}
         workerBalance={balance?.transferable}
@@ -75,7 +65,7 @@ export const IncreaseWorkerStakeModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} amount={state.context.form.amount || '0'} />
+    return <SuccessModal onClose={hideModal} amount={state.context.stake.toString() || '0'} />
   }
 
   if (state.matches('error')) {
@@ -94,15 +84,18 @@ export const IncreaseWorkerStakeModal = () => {
           id="amount-input"
           label="Select amount for Staking"
           units="tJOY"
-          validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-          message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
+          validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
+          message={
+            (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '
+          }
           required
         >
           <InputNumber
             id="amount-input"
-            value={formatTokenValue(amount)}
-            placeholder={modalData.worker?.minStake.toString()}
-            onChange={(event) => setAmount(event.target.value)}
+            isTokenValue
+            value={state.context.stake?.toString()}
+            placeholder={formatTokenValue(modalData.worker?.minStake)}
+            onChange={(_, value) => send('SET_STAKE', { stake: new BN(value) })}
           />
         </InputComponent>
       </ModalBody>

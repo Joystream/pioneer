@@ -1,7 +1,9 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import { createMemoryHistory, MemoryHistory } from 'history'
+import { set } from 'lodash'
 import React from 'react'
 import { Router } from 'react-router'
 import { interpret } from 'xstate'
@@ -58,6 +60,7 @@ describe('UI: Announce Candidacy Modal', () => {
     modal: null,
     modalData: undefined,
   }
+  set(api, 'api.consts.members.candidateStake', new BN(200))
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -185,7 +188,7 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingAmount(2)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, 'Minimum stake amount is 10 tJOY')).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Minimal stake amount is 10 tJOY')).toBeInTheDocument()
         })
 
         it('Higher than maximal balance', async () => {
@@ -194,9 +197,7 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingAmount(10000)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(
-            includesTextWithMarkup(getByText, 'You have no 10,000 tJOY on any of your accounts.')
-          ).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Insufficient funds to cover staking')).toBeInTheDocument()
         })
       })
 
@@ -250,6 +251,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillBulletPoint(
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua!Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
         )
+
         expect(screen.queryByText(/^maximum length is \d+ symbols/i)).not.toBeNull()
         expect(await getNextStepButton()).toBeDisabled()
       })
@@ -574,7 +576,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillTitle(value: string) {
     const titleInput = await screen.getByTestId('title')
 
-    act(() => {
+    await act(() => {
       fireEvent.change(titleInput, { target: { value } })
     })
   }
@@ -582,7 +584,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillBulletPoint(value: string) {
     const bulletPointInput = await screen.getByTestId('bulletPoint1')
 
-    act(() => {
+    await act(() => {
       fireEvent.change(bulletPointInput, { target: { value } })
     })
   }
@@ -599,7 +601,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillSummary(goNext?: boolean) {
     const summaryInput = await screen.findByLabelText(/Summary/i)
 
-    act(() => {
+    await act(() => {
       fireEvent.change(summaryInput, { target: { value: 'Some summary' } })
     })
 
@@ -615,7 +617,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function clickNextButton() {
     const button = await getNextStepButton()
 
-    act(() => {
+    await act(() => {
       fireEvent.click(button as HTMLElement)
     })
   }
