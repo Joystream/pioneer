@@ -1,3 +1,5 @@
+import { BN_ZERO } from '@polkadot/util'
+import BN from 'bn.js'
 import faker from 'faker'
 import React, { useCallback, useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
@@ -5,6 +7,8 @@ import { generatePath, useHistory } from 'react-router-dom'
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CouncilRoutes } from '@/council/constants'
 import { useGetCouncilorElectionEventQuery } from '@/council/queries'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -30,6 +34,7 @@ import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+  const { api } = useApi()
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
@@ -54,6 +59,19 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProp
     () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
     [memberId, lock, address, isRecoverable]
   )
+
+  const recoveryTime = useMemo(() => {
+    if (!eventData || !api) {
+      return null
+    }
+    const startTime = new Date(eventData.electedAtTime).getTime()
+    const idleDuration = api.consts.council.idlePeriodDuration
+    const electionDuration = api.consts.referendum.voteStageDuration?.add(api.consts.referendum.revealStageDuration)
+    const duration = idleDuration.add(electionDuration).toNumber() * MILLISECONDS_PER_BLOCK
+    const endDate = new Date(startTime + duration).toISOString()
+
+    return endDate
+  }, [eventData?.electedAtBlock, api])
 
   return (
     <DetailsItemVoteWrapper>
@@ -81,9 +99,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockItemProp
             network={eventData?.electedAtNetwork}
           />
         </div>
-        <div>
-          <LockRecoveryTime value={faker.date.soon(1).toISOString()} />
-        </div>
+        <div>{recoveryTime && <LockRecoveryTime value={recoveryTime} />}</div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         <LocksButtons>
           <LockLinkButton label="Show Council" onClick={goToCouncil} />

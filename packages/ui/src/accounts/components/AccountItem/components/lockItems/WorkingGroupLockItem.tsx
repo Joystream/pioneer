@@ -5,6 +5,8 @@ import { generatePath, useHistory } from 'react-router-dom'
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
@@ -29,6 +31,7 @@ import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+  const { api } = useApi()
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
@@ -62,6 +65,10 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemP
     [memberId, lock, address, isRecoverable]
   )
 
+  const recoveryTime = useMemo(() => {
+    return application?.opening.metadata.expectedEnding
+  }, [application])
+
   return (
     <DetailsItemVoteWrapper>
       <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
@@ -84,9 +91,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockItemP
           <DetailLabel>Lock date</DetailLabel>
           <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
-        <div>
-          <LockRecoveryTime value={faker.date.soon(1).toISOString()} />
-        </div>
+        <div>{recoveryTime && <LockRecoveryTime value={recoveryTime} />}</div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         <LocksButtons>
           {openingId && <LockLinkButton label="Show Opening" onClick={goToOpening} />}

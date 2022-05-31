@@ -5,7 +5,9 @@ import { generatePath, useHistory } from 'react-router-dom'
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CouncilRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
@@ -32,6 +34,7 @@ import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+  const { api } = useApi()
   const { push } = useHistory()
   const { showModal } = useModal()
   const {
@@ -65,6 +68,18 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockI
     () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
     [memberId, lock, address, isRecoverable]
   )
+
+  const recoveryTime = useMemo(() => {
+    if (!eventData || !api) {
+      return null
+    }
+    const startTime = new Date(eventData.createdAt).getTime()
+    const electionDuration = api.consts.referendum.voteStageDuration?.add(api.consts.referendum.revealStageDuration)
+    const durationTime = electionDuration.toNumber() * MILLISECONDS_PER_BLOCK
+    const endDate = new Date(startTime + durationTime).toISOString()
+
+    return endDate
+  }, [eventData?.createdAt, api])
 
   return (
     <DetailsItemVoteWrapper>

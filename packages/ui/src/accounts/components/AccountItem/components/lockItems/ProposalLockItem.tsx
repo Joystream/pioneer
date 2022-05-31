@@ -5,6 +5,8 @@ import { generatePath, useHistory } from 'react-router-dom'
 import { lockIcon } from '@/accounts/components/AccountLocks'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useGetLatestProposalByMemberIdQuery } from '@/proposals/queries'
@@ -29,6 +31,7 @@ import { RecoverButton } from './RecoverButton'
 import { LockItemProps } from './types'
 
 export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps) => {
+  const { api } = useApi()
   const { push } = useHistory()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
@@ -54,6 +57,19 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps
     [memberId, lock, address, isRecoverable]
   )
 
+  const recoveryTime = useMemo(() => {
+    if (!eventData || !api || isRecoverable) {
+      return null
+    }
+    const startTime = new Date(eventData.createdAt).getTime()
+    // All proposal types has the same constants so any can be used
+    const proposalParameters = api.consts.proposalsCodex.signalProposalParameters
+    const duration = proposalParameters.votingPeriod.toNumber() + proposalParameters.gracePeriod.toNumber()
+    const endDate = new Date(startTime + duration * MILLISECONDS_PER_BLOCK).toISOString()
+
+    return endDate
+  }, [eventData?.createdAt, api, isRecoverable])
+
   return (
     <DetailsItemVoteWrapper>
       <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
@@ -76,9 +92,7 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: LockItemProps
           <DetailLabel>Lock date</DetailLabel>
           <LockDate createdAt={eventData?.createdAt} inBlock={eventData?.inBlock} network={eventData?.network} />
         </div>
-        <div>
-          <LockRecoveryTime value={faker.date.soon(1).toISOString()} />
-        </div>
+        <div>{recoveryTime && <LockRecoveryTime value={recoveryTime} />}</div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         <LocksButtons>
           {proposalId && <LockLinkButton label="Show Proposal" onClick={goToProposal} />}

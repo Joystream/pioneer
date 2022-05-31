@@ -37,6 +37,7 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockItemProps) 
   const [isDropped, setDropped] = useState(false)
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
+  // include bounty periods (funding, working, judging) and maxFundingReachedEvent in entry query
   const { data } = useGetLatestBountyByMemberIdQuery({ variables: { memberId } })
   const bounty = data?.bounties[0]
   const eventData = bounty?.createdInEvent
