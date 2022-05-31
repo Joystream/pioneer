@@ -1,29 +1,25 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
+import { ButtonGhost } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Arrow } from '@/common/components/icons'
-import { useModal } from '@/common/hooks/useModal'
-import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 
 interface LockLinkButtonProps {
   label: string
-  to: string
-  candidateId?: string
+  to?: string
+  onClick?: () => void
 }
 
-export const LockLinkButton = React.memo(({ label, to, candidateId }: LockLinkButtonProps) => {
-  const { showModal } = useModal()
-
-  useEffect(() => {
-    if (candidateId) {
-      showModal<CandidacyPreviewModalCall>({ modal: 'CandidacyPreview', data: { id: candidateId } })
-    }
-  }, [candidateId])
-
-  return (
+export const LockLinkButton = React.memo(({ label, to, onClick }: LockLinkButtonProps) => {
+  return to ? (
     <LinkButtonGhost size="medium" to={to}>
       {label}
       <Arrow direction="right" />
     </LinkButtonGhost>
+  ) : (
+    <ButtonGhost size="medium" onClick={onClick}>
+      {label}
+      <Arrow direction="right" />
+    </ButtonGhost>
   )
 })

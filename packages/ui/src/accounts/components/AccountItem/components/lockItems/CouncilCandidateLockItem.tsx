@@ -2,9 +2,11 @@ import faker from 'faker'
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
+import { useModal } from '@/common/hooks/useModal'
 import { asBlock } from '@/common/types'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
+import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -13,6 +15,7 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
+  const { showModal } = useModal()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
@@ -28,18 +31,32 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
 
   const recoveryTime = faker.date.soon(1).toISOString()
 
-  const linkButtons = useMemo(() => {
+  const goToCandidateButton = useMemo(() => {
+    if (!candidateId) {
+      return null
+    }
+    const goToCandidate = () =>
+      showModal<CandidacyPreviewModalCall>({
+        modal: 'CandidacyPreview',
+        data: { id: candidateId },
+      })
+    return <LockLinkButton label="Show Candidacy" onClick={goToCandidate} />
+  }, [candidateId])
+
+  const goToElectionButton = useMemo(() => {
     if (!electionId) {
       return null
     }
     const electionPath = generatePath(ElectionRoutes.pastElection, { id: electionId })
-    return (
-      <>
-        <LockLinkButton label="Show Candidacy" to={electionPath} candidateId={candidateId} />
-        <LockLinkButton label="Show Election" to={electionPath} />
-      </>
-    )
+    return <LockLinkButton label="Show Election" to={electionPath} />
   }, [electionId])
+
+  const linkButtons = (
+    <>
+      {goToCandidateButton}
+      {goToElectionButton}
+    </>
+  )
 
   return (
     <LockItem
