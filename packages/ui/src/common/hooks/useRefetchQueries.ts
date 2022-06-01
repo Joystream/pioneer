@@ -1,19 +1,20 @@
-import { RefetchQueriesOptions, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { DependencyList, useEffect, useRef } from 'react'
 
 interface RefetchOptions {
   when?: boolean
   after?: boolean
-  refetchQueriesOptions?: RefetchQueriesOptions<any, any>
+  interval?: number
+  include?: 'all' | 'active' | string[]
 }
 
 const DefaultOptions: RefetchOptions = {
   when: true,
-  refetchQueriesOptions: { include: 'active' },
+  include: 'active',
 }
 
 export const useRefetchQueries = (
-  { when = true, after, refetchQueriesOptions = { include: 'active' } } = DefaultOptions,
+  { when = true, after, interval, include = 'active' } = DefaultOptions,
   deps?: DependencyList
 ) => {
   const apolloClient = useApolloClient()
@@ -21,7 +22,17 @@ export const useRefetchQueries = (
 
   useEffect(() => {
     if (couldRefetchNext.current && when) {
-      apolloClient.refetchQueries(refetchQueriesOptions)
+      if (interval) {
+        const handler = setInterval(() => {
+          apolloClient.refetchQueries({ include })
+        }, interval)
+
+        return () => {
+          clearInterval(handler)
+        }
+      } else {
+        apolloClient.refetchQueries({ include })
+      }
     }
     couldRefetchNext.current = after !== false
   }, deps)
