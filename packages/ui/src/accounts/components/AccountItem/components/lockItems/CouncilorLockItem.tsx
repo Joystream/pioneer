@@ -1,7 +1,8 @@
-import faker from 'faker'
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
+import { useApi } from '@/common/hooks/useApi'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
 import { useGetCouncilorElectionEventQuery } from '@/council/queries'
@@ -13,6 +14,7 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
+  const { api } = useApi()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
@@ -29,7 +31,18 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       network: eventData.electedAtNetwork,
     })
 
-  const recoveryTime = faker.date.soon(1).toISOString()
+  const idlePeriodDuration = api?.consts.council.idlePeriodDuration.toNumber()
+
+  const recoveryTime = useMemo(() => {
+    if (!eventData || !idlePeriodDuration) {
+      return null
+    }
+    const startTime = Date.parse(eventData.electedAtTime)
+    const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK
+    const endDate = new Date(startTime + idleDurationTime).toISOString()
+
+    return endDate
+  }, [eventData?.electedAtTime, idlePeriodDuration])
 
   const councilId = eventData?.id
   const councilPath = useMemo(() => {

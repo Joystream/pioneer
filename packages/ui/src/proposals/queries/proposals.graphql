@@ -335,5 +335,6 @@ query GetLatestProposalByMemberId($lockAccount: String) {
       inBlock
       network
     }
+    exactExecutionBlock
   }
 }

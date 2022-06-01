@@ -1,8 +1,9 @@
-import faker from 'faker'
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
@@ -15,6 +16,7 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
+  const { api } = useApi()
   const { showModal } = useModal()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
@@ -28,8 +30,20 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
   const createdInEvent = eventData && asBlock(eventData)
 
   const electionId = eventData?.candidate.electionRoundId
+  const electionStart = eventData?.candidate.electionRound.referendumStageVoting?.createdAt
+  const voteStageDuration = api?.consts.referendum?.voteStageDuration.toNumber()
+  const revealStageDuration = api?.consts.referendum?.revealStageDuration.toNumber()
 
-  const recoveryTime = faker.date.soon(1).toISOString()
+  const recoveryTime = useMemo(() => {
+    if (!electionStart || !voteStageDuration || !revealStageDuration) {
+      return null
+    }
+    const startTime = Date.parse(electionStart)
+    const durationTime = (voteStageDuration + revealStageDuration) * MILLISECONDS_PER_BLOCK
+    const endDate = new Date(startTime + durationTime).toISOString()
+
+    return endDate
+  }, [electionStart, voteStageDuration, revealStageDuration])
 
   const goToCandidateButton = useMemo(() => {
     if (!candidateId) {

@@ -1775,6 +1775,7 @@ export type GetLatestProposalByMemberIdQuery = {
   proposals: Array<{
     __typename: 'Proposal'
     id: string
+    exactExecutionBlock?: number | null
     createdInEvent: { __typename: 'ProposalCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
@@ -2591,6 +2592,7 @@ export const GetLatestProposalByMemberIdDocument = gql`
         inBlock
         network
       }
+      exactExecutionBlock
     }
   }
 `
