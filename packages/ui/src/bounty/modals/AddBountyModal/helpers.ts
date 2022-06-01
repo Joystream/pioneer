@@ -44,7 +44,7 @@ export interface AddBountyFrom {
   }
   [AddBountyStates.workingPeriodDetails]: {
     isWorkingPeriodOpen: boolean
-    workingPeriodWhitelist: number[]
+    workingPeriodWhitelist: Member[]
     workingPeriodLength?: BN
     workingPeriodStake?: BN
   }
@@ -158,8 +158,8 @@ const contractTypeFactory = (state: AddBountyFrom) => {
   }
 
   const whiteList =
-    state.workingPeriodDetails.workingPeriodWhitelist?.map((memberId) =>
-      createType<MemberId, 'MemberId'>('MemberId', Number(memberId))
+    state.workingPeriodDetails.workingPeriodWhitelist?.map((member) =>
+      createType<MemberId, 'MemberId'>('MemberId', Number(member.id))
     ) ?? []
   return {
     Closed: createType<AssuranceContractType_Closed, 'AssuranceContractType_Closed'>(
