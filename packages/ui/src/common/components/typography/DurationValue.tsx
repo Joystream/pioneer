@@ -6,15 +6,16 @@ import { BlocksInfo, formatDuration, NumberOfBlocks } from '@/common/components/
 import { Colors, Fonts, SECONDS_PER_BLOCK } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
-import { intersperse } from '@/common/utils'
+import { intersperse, isDefined } from '@/common/utils'
 
 interface DurationValueProps {
   value: [number | string, string][]
   tiny?: boolean
   blocksLeft?: number
+  callbackOnTimeout?: () => void
 }
 
-export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) => {
+export const DurationValue = ({ value, tiny, blocksLeft, callbackOnTimeout }: DurationValueProps) => {
   const [countDown, setCountDown] = useState<number | undefined>(blocksLeft)
 
   useEffect(() => {
@@ -25,17 +26,23 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
     const interval = setInterval(
       () =>
         setCountDown((oldTimeLeft) => {
-          const newTimeLeft = (oldTimeLeft as number) - 60 / SECONDS_PER_BLOCK
-          return newTimeLeft <= 0 ? 0 : newTimeLeft
+          const newTimeLeft = (oldTimeLeft as number) - 1
+          if (Math.floor(newTimeLeft) <= 0) {
+            callbackOnTimeout?.()
+
+            clearInterval(interval)
+          }
+
+          return Math.floor(newTimeLeft)
         }),
-      1000 * 60
+      1000 * SECONDS_PER_BLOCK
     )
 
     return () => clearInterval(interval)
   }, [])
 
-  const formattedCountDown = formatDuration(countDown ?? 0)
-  const valueToShow = countDown ? formattedCountDown : value
+  const formattedCountDown = countDown ? formatDuration(countDown ?? 0) : []
+  const valueToShow = isDefined(countDown) ? formattedCountDown : value
 
   return (
     <>
@@ -47,12 +54,12 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
           (index) => <Separator key={index} tiny={tiny} />
         )
       ) : (
-        <Days>None</Days>
+        <Days>{isDefined(countDown) ? 'Pending' : 'None'}</Days>
       )}
       <BlocksInfo gap={8}>
         <BlockIcon />
         <NumberOfBlocks lighter>
-          {formatTokenValue(blocksLeft)} block{plural(value)}
+          {formatTokenValue(countDown)} block{plural(value)}
         </NumberOfBlocks>
       </BlocksInfo>
     </>
