@@ -31,18 +31,18 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       network: eventData.electedAtNetwork,
     })
 
+  const idlePeriodDuration = api?.consts.council.idlePeriodDuration.toNumber()
+
   const recoveryTime = useMemo(() => {
-    if (!eventData || !api) {
+    if (!eventData || !idlePeriodDuration) {
       return null
     }
-    const startTime = new Date(eventData.electedAtTime).getTime()
-    const idleDuration = api.consts.council.idlePeriodDuration
-    const electionDuration = api.consts.referendum.voteStageDuration?.add(api.consts.referendum.revealStageDuration)
-    const duration = idleDuration.add(electionDuration).toNumber() * MILLISECONDS_PER_BLOCK
-    const endDate = new Date(startTime + duration).toISOString()
+    const startTime = Date.parse(eventData.electedAtTime)
+    const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK
+    const endDate = new Date(startTime + idleDurationTime).toISOString()
 
     return endDate
-  }, [eventData?.electedAtBlock, api])
+  }, [eventData?.electedAtTime, idlePeriodDuration])
 
   const councilId = eventData?.id
   const councilPath = useMemo(() => {
