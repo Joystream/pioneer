@@ -31,8 +31,8 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
 
   const electionId = eventData?.candidate.electionRoundId
   const electionStart = eventData?.candidate.electionRound.referendumStageVoting?.createdAt
-  const voteStageDuration = api?.consts.referendum.voteStageDuration.toNumber()
-  const revealStageDuration = api?.consts.referendum.revealStageDuration.toNumber()
+  const voteStageDuration = api?.consts.referendum?.voteStageDuration.toNumber()
+  const revealStageDuration = api?.consts.referendum?.revealStageDuration.toNumber()
 
   const recoveryTime = useMemo(() => {
     if (!electionStart || !voteStageDuration || !revealStageDuration) {
