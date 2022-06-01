@@ -1,4 +1,3 @@
-import faker from 'faker'
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
@@ -22,7 +21,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
   const eventData = application?.createdInEvent
   const createdInEvent = eventData && asBlock(eventData)
 
-  const recoveryTime = faker.date.soon(1).toISOString()
+  const recoveryTime = application?.opening.metadata.expectedEnding
 
   const openingId = application?.opening.id
   const goToOpeningButton = useMemo(() => {
