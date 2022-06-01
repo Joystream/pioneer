@@ -1,9 +1,10 @@
-import faker from 'faker'
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
 import { BountyRoutes } from '@/bounty/constants'
-import { useGetLatestBountyEntryQuery } from '@/bounty/queries'
+import { GetLatestBountyEntryQuery, useGetLatestBountyEntryQuery } from '@/bounty/queries'
+import { isFundingLimited } from '@/bounty/types/Bounty'
+import { asBountyFunding } from '@/bounty/types/casts'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 
@@ -26,7 +27,12 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProp
     if (!workPeriod || !judgingPeriod) {
       return null
     }
-    const fundindPeriodEndTime = new Date(fundingPeriodEnd).getTime()
+    const fundindPeriodEndTime = getFundingPeriodEnd(bounty)
+
+    if (!fundindPeriodEndTime) {
+      return null
+    }
+
     const durationTime = (workPeriod + judgingPeriod) * MILLISECONDS_PER_BLOCK
     const endDate = new Date(fundindPeriodEndTime + durationTime).toISOString()
 
@@ -53,4 +59,13 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProp
       linkButtons={goToBountyButton}
     />
   )
+}
+
+const getFundingPeriodEnd = (bounty: GetLatestBountyEntryQuery['bountyEntries'][0]['bounty']) => {
+  const bountyFunding = asBountyFunding(bounty.fundingType)
+  if (bounty.maxFundingReachedEvent) {
+    return Date.parse(bounty.maxFundingReachedEvent.createdAt)
+  } else if (isFundingLimited(bountyFunding)) {
+    return Date.parse(bounty.createdAt) + bountyFunding.maxPeriod * MILLISECONDS_PER_BLOCK
+  }
 }
