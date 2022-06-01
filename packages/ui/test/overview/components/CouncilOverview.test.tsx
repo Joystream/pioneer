@@ -49,7 +49,7 @@ describe('UI: Council overview', () => {
       await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 3000 })
 
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
-      expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min- blocks')
+      expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
     })
 
     it('Displays council members', async () => {
@@ -84,7 +84,7 @@ describe('UI: Council overview', () => {
 
     it('Displays time to Next Election', () => {
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
-      expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min- blocks')
+      expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
     })
 
     it('Displays election round', async () => {
@@ -127,7 +127,7 @@ describe('UI: Council overview', () => {
     it('Displays time to Next Election', async () => {
       await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
-      expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min- blocks')
+      expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
     })
 
     it('Displays election round', async () => {
