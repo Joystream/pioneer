@@ -49,12 +49,14 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
       ) : (
         <Days>None</Days>
       )}
-      <BlocksInfo gap={8}>
-        <BlockIcon />
-        <NumberOfBlocks lighter>
-          {formatTokenValue(blocksLeft)} block{plural(value)}
-        </NumberOfBlocks>
-      </BlocksInfo>
+      {blocksLeft && (
+        <BlocksInfo gap={8}>
+          <BlockIcon />
+          <NumberOfBlocks lighter>
+            {formatTokenValue(blocksLeft)} block{plural(value)}
+          </NumberOfBlocks>
+        </BlocksInfo>
+      )}
     </>
   )
 }
