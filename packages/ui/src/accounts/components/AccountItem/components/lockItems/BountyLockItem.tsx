@@ -4,6 +4,7 @@ import { generatePath } from 'react-router-dom'
 
 import { BountyRoutes } from '@/bounty/constants'
 import { useGetLatestBountyEntryQuery } from '@/bounty/queries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 
 import { LockItem } from '../LockItem'
@@ -16,7 +17,21 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProp
   const eventData = entry?.announcedInEvent
   const createdInEvent = eventData && asBlock(eventData)
 
-  const recoveryTime = faker.date.soon(1).toISOString()
+  const bounty = entry?.bounty
+  const fundingPeriodEnd = bounty?.maxFundingReachedEvent?.createdAt
+  const workPeriod = bounty?.workPeriod
+  const judgingPeriod = bounty?.judgingPeriod
+
+  const recoveryTime = useMemo(() => {
+    if (!workPeriod || !judgingPeriod) {
+      return null
+    }
+    const fundindPeriodEndTime = new Date(fundingPeriodEnd).getTime()
+    const durationTime = (workPeriod + judgingPeriod) * MILLISECONDS_PER_BLOCK
+    const endDate = new Date(fundindPeriodEndTime + durationTime).toISOString()
+
+    return endDate
+  }, [fundingPeriodEnd, workPeriod, judgingPeriod])
 
   const bountyId = entry?.bountyId
 

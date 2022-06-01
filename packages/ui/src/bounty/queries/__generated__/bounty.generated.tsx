@@ -970,6 +970,12 @@ export type GetLatestBountyEntryQuery = {
     __typename: 'BountyEntry'
     id: string
     bountyId: string
+    bounty: {
+      __typename: 'Bounty'
+      workPeriod: number
+      judgingPeriod: number
+      maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+    }
     announcedInEvent: { __typename: 'WorkEntryAnnouncedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
@@ -1481,6 +1487,13 @@ export const GetLatestBountyEntryDocument = gql`
     bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
       id
       bountyId
+      bounty {
+        workPeriod
+        judgingPeriod
+        maxFundingReachedEvent {
+          createdAt
+        }
+      }
       announcedInEvent {
         createdAt
         inBlock
