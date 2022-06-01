@@ -30,18 +30,20 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
   const createdInEvent = eventData && asBlock(eventData)
 
   const electionId = eventData?.candidate.electionRoundId
+  const electionStart = eventData?.candidate.electionRound.referendumStageVoting?.createdAt
+  const voteStageDuration = api?.consts.referendum.voteStageDuration.toNumber()
+  const revealStageDuration = api?.consts.referendum.revealStageDuration.toNumber()
 
   const recoveryTime = useMemo(() => {
-    if (!eventData || !api) {
+    if (!electionStart || !voteStageDuration || !revealStageDuration) {
       return null
     }
-    const startTime = new Date(eventData.createdAt).getTime()
-    const electionDuration = api.consts.referendum.voteStageDuration?.add(api.consts.referendum.revealStageDuration)
-    const durationTime = electionDuration.toNumber() * MILLISECONDS_PER_BLOCK
+    const startTime = Date.parse(electionStart)
+    const durationTime = (voteStageDuration + revealStageDuration) * MILLISECONDS_PER_BLOCK
     const endDate = new Date(startTime + durationTime).toISOString()
 
     return endDate
-  }, [eventData?.createdAt, api])
+  }, [electionStart, voteStageDuration, revealStageDuration])
 
   const goToCandidateButton = useMemo(() => {
     if (!candidateId) {
