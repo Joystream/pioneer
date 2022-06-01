@@ -40,7 +40,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, NewAddressSchema, ReferrerSchema } from '../../model/validation'
+import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -87,6 +87,12 @@ const formDefaultValues = {
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
+}
+
+export interface InviteMembershipFormFields {
+  to: Member
+  from?: Member
+  amount: number
 }
 
 export const BuyMembershipForm = ({
