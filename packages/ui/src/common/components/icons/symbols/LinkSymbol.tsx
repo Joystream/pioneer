@@ -3,9 +3,7 @@ import styled from 'styled-components'
 
 import { Colors, Transitions } from '../../../constants'
 
-interface SymbolProps {
-  className?: string
-}
+import { SymbolProps } from './common'
 
 export function LinkSymbol({ className }: SymbolProps) {
   return (

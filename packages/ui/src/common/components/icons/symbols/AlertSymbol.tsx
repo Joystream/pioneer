@@ -1,11 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { Colors, Transitions } from '../../../constants'
+import { Colors } from '../../../constants'
 
-interface SymbolProps {
-  className?: string
-}
+import { Symbol, SymbolProps } from './common'
 
 export function AlertSymbol({ className }: SymbolProps) {
   return (
@@ -31,18 +28,3 @@ export function AlertSymbol({ className }: SymbolProps) {
     </Symbol>
   )
 }
-
-export const Symbol = styled.svg`
-  height: 16px;
-  width: 16px;
-  position: relative;
-
-  .blackPart {
-    fill: ${Colors.Black[900]};
-    transition: ${Transitions.all};
-  }
-  .primaryPart {
-    fill: ${Colors.Blue[500]};
-    transition: ${Transitions.all};
-  }
-`
