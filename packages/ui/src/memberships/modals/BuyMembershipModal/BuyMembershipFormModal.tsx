@@ -1,5 +1,4 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -35,9 +34,8 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
@@ -102,18 +100,14 @@ export const BuyMembershipForm = ({
   changeMembershipAccount,
   type,
 }: BuyMembershipFormProps) => {
-  const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
 
   const [formHandleMap, setFormHandleMap] = useState('')
-  const handleHash = blake2AsHex(formHandleMap)
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    formHandleMap,
-    connectionState,
-  ])
+  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
+
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
-    context: { size: potentialMemberIdSize },
+    context: { size: data?.membershipsConnection.totalCount },
     mode: 'onChange',
     defaultValues: {
       ...formDefaultValues,
@@ -131,8 +125,10 @@ export const BuyMembershipForm = ({
   }, [handle])
 
   useEffect(() => {
-    form.trigger('handle')
-  }, [potentialMemberIdSize])
+    if (formHandleMap && (data?.membershipsConnection.totalCount || form.formState.errors.handle)) {
+      form.trigger('handle')
+    }
+  }, [data?.membershipsConnection.totalCount])
 
   const hasError = enhancedHasError(form.formState.errors)
   const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)

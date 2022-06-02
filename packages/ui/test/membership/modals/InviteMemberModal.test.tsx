@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -82,10 +82,28 @@ describe('UI: InviteMemberModal', () => {
     expect(await screen.findByText('Invite a member')).toBeDefined()
   })
 
+  it('Validates handle', async () => {
+    renderModal()
+    const submitButton = await getButton(/^Invite a member$/i)
+    expect(submitButton).toBeDisabled()
+
+    await selectFromDropdown('Inviting member', 'alice')
+    fireEvent.change(getInput(/Root account/i), {
+      target: { value: bobStash.address },
+    })
+    fireEvent.change(getInput(/Controller account/i), {
+      target: { value: controllerAddress },
+    })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'alice' } })
+
+    await waitFor(() => expect(submitButton).not.toBeEnabled())
+  })
+
   it('Enables button', async () => {
     renderModal()
-
-    expect(await getButton(/^Invite a member$/i)).toBeDisabled()
+    const submitButton = await getButton(/^Invite a member$/i)
+    expect(submitButton).toBeDisabled()
 
     await selectFromDropdown('Inviting member', 'alice')
     fireEvent.change(getInput(/Root account/i), {
@@ -97,7 +115,7 @@ describe('UI: InviteMemberModal', () => {
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
-    expect(await getButton(/^Invite a member$/i)).toBeEnabled()
+    await waitFor(() => expect(submitButton).toBeEnabled())
   })
 
   it('Disables button when one of addresses is invalid', async () => {
