@@ -1,10 +1,10 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons'
-import { TextMedium } from '@/common/components/typography'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { Block } from '@/common/types'
 import { MemberInfo } from '@/memberships/components'
@@ -12,19 +12,21 @@ import { Member } from '@/memberships/types'
 
 export interface BountySlashedListItemProps {
   entrant: Member
-  inBlock: Block
-  link: string
+  inBlock?: Block
+  stake: BN
 }
 
-export const BountySlashedListItem = ({ link, entrant, inBlock }: BountySlashedListItemProps) => {
+export const BountySlashedListItem = ({ entrant, inBlock, stake }: BountySlashedListItemProps) => {
   return (
     <Wrapper>
       <Header>
         <MemberInfo size="s" member={entrant} />
         <HeaderInfo>
-          <TextMedium bold>Slashed</TextMedium>
-          <BlockTime block={inBlock} layout="column" />
-          <CopyButtonTemplate textToCopy={link} square size="medium" icon={<LinkIcon />} title="Copy link" />
+          <RowGapBlock gap={4}>
+            <TextMedium bold>Slashed</TextMedium>
+            <TokenValue value={stake} />
+          </RowGapBlock>
+          {inBlock && <BlockTime block={inBlock} layout="column" />}
         </HeaderInfo>
       </Header>
     </Wrapper>
@@ -38,7 +40,7 @@ const Wrapper = styled.div`
   max-height: 250px;
   row-gap: 24px;
   margin: 12px 0;
-  padding: 12px 0;
+  padding: 6px 0 34px 0;
 `
 
 const Header = styled.div`

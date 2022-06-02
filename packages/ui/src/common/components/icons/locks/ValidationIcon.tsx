@@ -2,15 +2,11 @@ import React from 'react'
 
 import { Colors } from '@/common/constants'
 
-import { Icon } from '../Icon'
+import { Icon, StyledIcon } from '../Icon'
 
-interface ValidationIconProps {
-  className?: string
-}
-
-export const ValidationIcon = React.memo(({ className }: ValidationIconProps) => (
+export const ValidationIcon = React.memo(({ className }: StyledIcon) => (
   <Icon
-    size="16"
+    size="20"
     viewBox="0 0 24 24"
     preserveAspectRatio="xMidYMid meet"
     fill="none"

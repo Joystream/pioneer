@@ -13,14 +13,7 @@ fragment BountyFields on Bounty {
     ...MemberFields
   }
   fundingType {
-    ... on BountyFundingLimited {
-      minFundingAmount
-      maxFundingAmount
-      fundingPeriod
-    }
-    ... on BountyFundingPerpetual {
-      target
-    }
+    ...FundingTypeFields
   }
   entrantWhitelist {
     members {
@@ -50,6 +43,17 @@ fragment BountyFields on Bounty {
   }
   maxFundingReachedEvent {
     createdAt
+  }
+}
+
+fragment FundingTypeFields on BountyFundingType {
+  ... on BountyFundingLimited {
+    minFundingAmount
+    maxFundingAmount
+    fundingPeriod
+  }
+  ... on BountyFundingPerpetual {
+    target
   }
 }
 
@@ -168,5 +172,28 @@ query GetBountyContributors(
 ) {
   bountyContributions(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
     ...BountyContributionFields
+  }
+}
+
+query GetLatestBountyEntry($lockAccount: String) {
+  bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    id
+    bountyId
+    bounty {
+      createdAt
+      fundingType {
+        ...FundingTypeFields
+      }
+      workPeriod
+      judgingPeriod
+      maxFundingReachedEvent {
+        createdAt
+      }
+    }
+    announcedInEvent {
+      createdAt
+      inBlock
+      network
+    }
   }
 }

@@ -20,8 +20,11 @@ interface UseMyThreads {
 export const useWatchlistedThreads = ({ page, threadsPerPage = 5 }: UseMyThreadsProps): UseMyThreads => {
   const [watchlist] = useLocalStorage<string[]>(FORUM_WATCHLIST)
 
+  const status_json = {
+    isTypeOf_not: 'ThreadStatusModerated',
+  }
   const variables = {
-    where: { id_in: watchlist ?? [] },
+    where: { id_in: watchlist ?? [], status_json },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
     orderBy: [ForumThreadOrderByInput.IsStickyDesc, ForumThreadOrderByInput.UpdatedAtDesc],

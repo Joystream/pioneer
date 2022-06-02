@@ -2,7 +2,7 @@ import { createType } from '@joystream/types'
 import React, { MutableRefObject, Ref, useCallback, useMemo, useRef, useState } from 'react'
 
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { CKEditor } from '@/common/components/CKEditor'
+import { BaseCKEditor } from '@/common/components/CKEditor'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -95,7 +95,7 @@ interface MemoEditorProps {
 }
 
 const EditorMemo = React.memo(({ setNewText, initialText, editorRef }: MemoEditorProps) => (
-  <CKEditor
+  <BaseCKEditor
     ref={editorRef}
     inline
     id="editor"

@@ -21,8 +21,11 @@ interface UseMyThreads {
 export const useMyThreads = ({ page, threadsPerPage = 5, order }: UseMyThreadsProps): UseMyThreads => {
   const { members, active } = useMyMemberships()
 
+  const status_json = {
+    isTypeOf_not: 'ThreadStatusModerated',
+  }
   const variables = {
-    where: { author: { id_in: whenDefined(active?.id, (id) => [id]) ?? members.map((m) => m.id) } },
+    where: { author: { id_in: whenDefined(active?.id, (id) => [id]) ?? members.map((m) => m.id) }, status_json },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
     orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(order)],

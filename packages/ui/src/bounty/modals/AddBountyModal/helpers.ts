@@ -28,9 +28,33 @@ export interface Conditions {
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
 }
 
-export type IFormFields = Required<typeof formDefaultValues>
+export interface AddBountyFrom {
+  [AddBountyStates.generalParameters]: {
+    creator?: Member
+    title?: string
+    coverPhotoLink?: string
+    description?: string
+  }
+  [AddBountyStates.fundingPeriodDetails]: {
+    isPerpetual: boolean
+    cherry?: BN
+    fundingPeriodLength?: BN
+    fundingMinimalRange?: BN
+    fundingMaximalRange?: BN
+  }
+  [AddBountyStates.workingPeriodDetails]: {
+    isWorkingPeriodOpen: boolean
+    workingPeriodWhitelist: Member[]
+    workingPeriodLength?: BN
+    workingPeriodStake?: BN
+  }
+  [AddBountyStates.judgingPeriodDetails]: {
+    oracle?: Member
+    judgingPeriodLength?: BN
+  }
+}
 
-export const formDefaultValues = {
+export const formDefaultValues: AddBountyFrom = {
   [AddBountyStates.generalParameters]: {
     creator: undefined,
     title: undefined,
@@ -104,7 +128,7 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
 })
 
-export const createBountyParametersFactory = (state: IFormFields): BountyCreationParameters =>
+export const createBountyParametersFactory = (state: AddBountyFrom): BountyCreationParameters =>
   createType<BountyCreationParameters, 'BountyCreationParameters'>('BountyCreationParameters', {
     oracle: createType('BountyActor', {
       Member: createType<MemberId, 'MemberId'>(
@@ -126,7 +150,7 @@ export const createBountyParametersFactory = (state: IFormFields): BountyCreatio
     judging_period: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
   })
 
-const contractTypeFactory = (state: IFormFields) => {
+const contractTypeFactory = (state: AddBountyFrom) => {
   if (state.workingPeriodDetails.isWorkingPeriodOpen) {
     return {
       Open: null,
@@ -134,8 +158,8 @@ const contractTypeFactory = (state: IFormFields) => {
   }
 
   const whiteList =
-    state.workingPeriodDetails.workingPeriodWhitelist?.map((memberId) =>
-      createType<MemberId, 'MemberId'>('MemberId', Number(memberId))
+    state.workingPeriodDetails.workingPeriodWhitelist?.map((member) =>
+      createType<MemberId, 'MemberId'>('MemberId', Number(member.id))
     ) ?? []
   return {
     Closed: createType<AssuranceContractType_Closed, 'AssuranceContractType_Closed'>(
@@ -145,7 +169,7 @@ const contractTypeFactory = (state: IFormFields) => {
   }
 }
 
-const fundingTypeFactory = (state: IFormFields) => {
+const fundingTypeFactory = (state: AddBountyFrom) => {
   if (state.fundingPeriodDetails.isPerpetual) {
     return {
       Perpetual: createType('FundingType_Perpetual', {
@@ -163,7 +187,7 @@ const fundingTypeFactory = (state: IFormFields) => {
   }
 }
 
-export const createBountyMetadataFactory = (state: IFormFields, newThreadId: ThreadId): IBountyMetadata => ({
+export const createBountyMetadataFactory = (state: AddBountyFrom, newThreadId: ThreadId): IBountyMetadata => ({
   title: state.generalParameters.title,
   description: state.generalParameters.description,
   bannerImageUri: state.generalParameters.coverPhotoLink,

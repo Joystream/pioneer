@@ -10,13 +10,14 @@ import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
 export interface TokenValueStatProps extends StatisticItemProps {
   value?: number | BN | null
+  isLoading?: boolean
   textColor?: string
 }
 
 export const TokenValueStat: FC<TokenValueStatProps> = (props) => {
   return (
     <StatisticItem {...props}>
-      <TotalValue value={props.value} textColor={props.textColor} />
+      <TotalValue value={props.value} textColor={props.textColor} isLoading={props.isLoading} />
       {props.children}
     </StatisticItem>
   )

@@ -49,12 +49,14 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
       ) : (
         <Days>None</Days>
       )}
-      <BlocksInfo gap={8}>
-        <BlockIcon />
-        <NumberOfBlocks lighter>
-          {formatTokenValue(blocksLeft)} block{plural(value)}
-        </NumberOfBlocks>
-      </BlocksInfo>
+      {blocksLeft && (
+        <BlocksInfo gap={8}>
+          <BlockIcon />
+          <NumberOfBlocks lighter>
+            {formatTokenValue(blocksLeft)} block{plural(value)}
+          </NumberOfBlocks>
+        </BlocksInfo>
+      )}
     </>
   )
 }
@@ -80,7 +82,7 @@ const Days = styled.div<{ unit?: string; tiny?: boolean }>`
 
 const Unit = styled.span<{ tiny?: boolean }>`
   display: inline-block;
-  font-size: ${({ tiny }) => (tiny ? '12px' : '20px')};
+  font-size: ${({ tiny }) => (tiny ? '12px' : '14px')};
   line-height: 20px;
   font-weight: 400;
   color: ${Colors.Black[400]};

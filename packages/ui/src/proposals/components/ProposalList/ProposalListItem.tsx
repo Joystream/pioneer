@@ -62,9 +62,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
     >
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
-          <Subscription>
-            {isPast ? 'Ended at:' : 'Created at:'} {toDDMMYY(displayDate)}
-          </Subscription>
+          {!isPast && <Subscription>Created at: {toDDMMYY(displayDate)}</Subscription>}
           <BadgeStatus>{camelCaseToText(proposal.type)}</BadgeStatus>
         </ToggleableItemInfoTop>
         <ToggleableItemTitle>{proposal.title}</ToggleableItemTitle>
@@ -76,6 +74,11 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
+      {isPast && (
+        <StageField>
+          <Subscription>{toDDMMYY(displayDate)}</Subscription>
+        </StageField>
+      )}
       <StageField>
         <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
       </StageField>

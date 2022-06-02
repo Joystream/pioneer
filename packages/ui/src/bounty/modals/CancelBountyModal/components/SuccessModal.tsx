@@ -20,7 +20,8 @@ export const SuccessModal = ({ onClose }: Props) => {
 
   const goToCurrentBounties = useCallback(() => {
     history.push(generatePath(BountyRoutes.currentBounties))
-  }, [])
+    onClose()
+  }, [onClose])
 
   return (
     <Modal modalSize="s" modalHeight="s" onClose={onClose}>
@@ -31,7 +32,7 @@ export const SuccessModal = ({ onClose }: Props) => {
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost disabled onClick={goToCurrentBounties} size="medium">
+        <ButtonGhost onClick={goToCurrentBounties} size="medium">
           {t('modals.bountyCancel.success.button')}
         </ButtonGhost>
       </ModalFooter>

@@ -14,9 +14,7 @@ export default {
   component: CreateThreadDetailsModal,
 } as Meta
 
-const Template: Story = ({ breadcrumbs }) => {
-  const [topic, setTopic] = useState('')
-  const [description, setDescription] = useState('')
+const Template: Story = ({ breadcrumbs, send }) => {
   return (
     <>
       <HashRouter>
@@ -29,15 +27,7 @@ const Template: Story = ({ breadcrumbs }) => {
               modal: null,
             }}
           >
-            <CreateThreadDetailsModal
-              topic={topic}
-              description={description}
-              setTopic={setTopic}
-              setDescription={setDescription}
-              onSubmit={() => null}
-              breadcrumbs={breadcrumbs}
-              author={getMember('alice')}
-            />
+            <CreateThreadDetailsModal breadcrumbs={breadcrumbs} author={getMember('alice')} send={send} />
           </ModalContext.Provider>
         </MockApolloProvider>
       </HashRouter>

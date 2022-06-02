@@ -83,7 +83,7 @@
         "title": "Authorize transaction",
         "informationBox": {
           "info1": "You are canceling your bounty",
-          "info2": "Fees of {fee} tJOY will be applied to the transaction."
+          "info2": "Fees of {{fee}} tJOY will be applied to the transaction."
         },
         "accountInput": {
           "label": "Fee sending from account",
@@ -93,7 +93,7 @@
       },
       "success": {
         "message": "You have just successfully canceled bounty!",
-        "button": "Go to Current Bounties"
+        "button": "Ok acknowledged"
       },
       "error": "There was a problem canceling bounty."
     },
@@ -104,8 +104,9 @@
         "bountyId": "Bounty ID",
         "memberId": "Member ID",
         "workTitle": "Work Title",
+        "workSubtitle": "Remember to add a link to your work",
         "workTitlePlaceholder": "Type",
-        "entryDescription": "Entry description"
+        "entryDescription": "Description of Completed Work"
       },
       "button": {
         "submitWork": "Submit Work"
@@ -126,7 +127,7 @@
       "extraTooltipInformation": "This bounty was created with a cherry, which gets split among all contributors equally in the case when bounty fails",
       "contribution": {
         "title": "Withdraw Contribution",
-        "description": "You intend to withdraw {{value}} tJOY contribution locks from accounts.",
+        "description": "You intend to withdraw {{value}} tJOY from stake lock and cherry from account.",
         "button": "Withdraw Contribution",
         "stakingFrom": "Staking from bounty",
         "amountTitle": "Contribution amount"

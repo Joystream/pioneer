@@ -13,6 +13,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
+import { isDefined } from '@/common/utils'
 
 import { LocksDetails } from './components/LocksDetails'
 
@@ -29,16 +30,16 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   const [isDropped, setDropped] = useState(false)
 
   return (
-    <AccountItemWrapper onClick={() => setDropped(!isDropped)}>
-      <AccountItemWrap key={address}>
+    <AccountItemWrapper>
+      <AccountItemWrap key={address} onClick={() => setDropped(!isDropped)}>
         <AccountInfo account={account} />
-        <TokenValue value={balance?.total} />
+        <TokenValue value={balance?.total} isLoading={!isDefined(balance?.total)} />
         <ValueAndLocks align={balance?.locked && 'end'}>
-          <TokenValue value={balance?.locked} />
+          <TokenValue value={balance?.locked} isLoading={!isDefined(balance?.locked)} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
-        <TokenValue value={balance?.recoverable} />
-        <TokenValue value={balance?.transferable} />
+        <TokenValue value={balance?.recoverable} isLoading={!isDefined(balance?.recoverable)} />
+        <TokenValue value={balance?.transferable} isLoading={!isDefined(balance?.transferable)} />
         <AccountControls>
           <TransferButton to={account} />
           <TransferButton from={account} disabled={isSendDisabled} />

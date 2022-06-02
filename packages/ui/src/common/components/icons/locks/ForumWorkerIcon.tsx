@@ -2,15 +2,11 @@ import React from 'react'
 
 import { Colors } from '@/common/constants'
 
-import { Icon } from '../Icon'
+import { Icon, StyledIcon } from '../Icon'
 
-interface ForumWorkerIconProps {
-  className?: string
-}
-
-export const ForumWorkerIcon = React.memo(({ className }: ForumWorkerIconProps) => (
+export const ForumWorkerIcon = React.memo(({ className }: StyledIcon) => (
   <Icon
-    size="16"
+    size="20"
     viewBox="0 0 24 24"
     preserveAspectRatio="xMidYMid meet"
     fill="none"
@@ -28,7 +24,7 @@ export const ForumWorkerIcon = React.memo(({ className }: ForumWorkerIconProps) 
     <path
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M1.99998 1.09998L1.09998 1.99998V13.5555L1.99998 14.4555H4.65553V17.1111L6.05476 17.8599L11.1614 14.4555L15.3761 14.4555C15.1365 14.0245 15 13.5282 15 13C15 12.8835 15.0066 12.7686 15.0196 12.6555L10.8889 12.6555L10.3896 12.8067L6.45553 15.4294V13.5555L5.55553 12.6555H2.89998V2.89998H17.1V10.1373C17.3841 10.0481 17.6864 10 18 10C18.3136 10 18.6159 10.0481 18.9 10.1373V1.99998L18 1.09998H1.99998Z"
+      d="M1.99998 1.09998H1.09998V13.5555V14.4555H4.65553V17.1111V18.5L11.1614 14.4555L15.3761 14.4555C15.1365 14.0245 15 13.5282 15 13C15 12.8835 15.0066 12.7686 15.0196 12.6555L10.8889 12.6555L6.45553 15.4294V13.5555V12.6555H2.89998V2.89998H17.1V10.1373C17.3841 10.0481 17.6864 10 18 10C18.3136 10 18.6159 10.0481 18.9 10.1373V1.09998H18H1.99998Z"
       fill={Colors.Black[900]}
     />
   </Icon>

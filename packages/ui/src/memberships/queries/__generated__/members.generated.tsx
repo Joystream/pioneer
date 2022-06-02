@@ -28,6 +28,13 @@ export type MemberFieldsFragment = {
     isLead: boolean
     group: { __typename: 'WorkingGroup'; name: string }
   }>
+  stakingaccountaddedeventmember?: Array<{
+    __typename: 'StakingAccountAddedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+    account: string
+  }> | null
 }
 
 export type MemberWithDetailsFieldsFragment = {
@@ -87,6 +94,13 @@ export type MemberWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }>
   metadata: {
     __typename: 'MemberMetadata'
@@ -101,6 +115,13 @@ export type MemberWithDetailsFieldsFragment = {
     isLead: boolean
     group: { __typename: 'WorkingGroup'; name: string }
   }>
+  stakingaccountaddedeventmember?: Array<{
+    __typename: 'StakingAccountAddedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+    account: string
+  }> | null
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
@@ -137,6 +158,13 @@ export type GetMembersQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }>
 }
 
@@ -212,6 +240,13 @@ export type GetMemberQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }>
     metadata: {
       __typename: 'MemberMetadata'
@@ -226,6 +261,13 @@ export type GetMemberQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
 }
 
@@ -262,6 +304,13 @@ export type SearchMembersQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }>
 }
 
@@ -306,6 +355,13 @@ export type GetMemberMentionQuery = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
 }
 
@@ -348,6 +404,20 @@ export type GetMemberActionDetailsQuery = {
   memberInvitedEventsConnection: { __typename: 'MemberInvitedEventConnection'; totalCount: number }
 }
 
+export type GetMemberInvitedEventsQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetMemberInvitedEventsQuery = {
+  __typename: 'Query'
+  memberInvitedEvents: Array<{
+    __typename: 'MemberInvitedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+  }>
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Membership {
     id
@@ -378,6 +448,12 @@ export const MemberFieldsFragmentDoc = gql`
       isLead
     }
     createdAt
+    stakingaccountaddedeventmember {
+      createdAt
+      inBlock
+      network
+      account
+    }
   }
 `
 export const MemberWithDetailsFieldsFragmentDoc = gql`
@@ -832,4 +908,54 @@ export type GetMemberActionDetailsLazyQueryHookResult = ReturnType<typeof useGet
 export type GetMemberActionDetailsQueryResult = Apollo.QueryResult<
   GetMemberActionDetailsQuery,
   GetMemberActionDetailsQueryVariables
+>
+export const GetMemberInvitedEventsDocument = gql`
+  query GetMemberInvitedEvents($lockAccount: String) {
+    memberInvitedEvents(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      createdAt
+      inBlock
+      network
+    }
+  }
+`
+
+/**
+ * __useGetMemberInvitedEventsQuery__
+ *
+ * To run a query within a React component, call `useGetMemberInvitedEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberInvitedEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberInvitedEventsQuery({
+ *   variables: {
+ *      lockAccount: // value for 'lockAccount'
+ *   },
+ * });
+ */
+export function useGetMemberInvitedEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>(
+    GetMemberInvitedEventsDocument,
+    options
+  )
+}
+export function useGetMemberInvitedEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberInvitedEventsQuery, GetMemberInvitedEventsQueryVariables>(
+    GetMemberInvitedEventsDocument,
+    options
+  )
+}
+export type GetMemberInvitedEventsQueryHookResult = ReturnType<typeof useGetMemberInvitedEventsQuery>
+export type GetMemberInvitedEventsLazyQueryHookResult = ReturnType<typeof useGetMemberInvitedEventsLazyQuery>
+export type GetMemberInvitedEventsQueryResult = Apollo.QueryResult<
+  GetMemberInvitedEventsQuery,
+  GetMemberInvitedEventsQueryVariables
 >

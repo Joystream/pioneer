@@ -1,16 +1,13 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import EditableInputList from '@/common/components/EditableInputList/EditableInputList'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { ApplicationFormParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 
-interface Props extends ApplicationFormParameters {
-  setQuestions(questions: ApplicationFormParameters['questions']): void
-}
-
-export const ApplicationForm = ({ questions, setQuestions }: Props) => {
+export const ApplicationForm = () => {
+  const { watch, setValue } = useFormContext()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -23,8 +20,8 @@ export const ApplicationForm = ({ questions, setQuestions }: Props) => {
         <EditableInputList
           title="Application form"
           buttonText="Add new question"
-          value={questions}
-          onChange={setQuestions}
+          value={watch('applicationForm.questions')}
+          onChange={(questions) => setValue('applicationForm.questions', questions, { shouldValidate: true })}
         />
       </Row>
     </RowGapBlock>

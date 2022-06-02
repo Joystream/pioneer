@@ -197,6 +197,7 @@ export const SubmitWorkModal = () => {
                 <InputComponent
                   id="field-description"
                   label={t('modals.submitWork.submitWorkInput.entryDescription')}
+                  sublabel={t('modals.submitWork.submitWorkInput.workSubtitle')}
                   inputSize="auto"
                   required
                 >

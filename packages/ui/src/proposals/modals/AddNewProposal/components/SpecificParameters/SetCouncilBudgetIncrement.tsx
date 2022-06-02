@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -6,23 +5,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
-export interface SetCouncilBudgetIncrementParameters {
-  amount?: BN
-}
-
-interface Props extends SetCouncilBudgetIncrementParameters {
-  setAmount: (amount: BN) => void
-}
-
-const MAX_AMOUNT = Math.pow(2, 128)
-
-export const SetCouncilBudgetIncrement = ({ amount, setAmount: setBudgetIncrement }: Props) => {
-  const onChange = (_: any, value: number) => {
-    if (Number(value) < MAX_AMOUNT) {
-      setBudgetIncrement(new BN(value))
-    }
-  }
-
+export const SetCouncilBudgetIncrement = () => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -38,9 +21,16 @@ export const SetCouncilBudgetIncrement = ({ amount, setAmount: setBudgetIncremen
             tight
             units="tJOY"
             required
+            name="setCouncilBudgetIncrement.amount"
             message="Value must be greater than zero"
           >
-            <InputNumber id="amount-input" value={amount?.toString()} placeholder="0" onChange={onChange} />
+            <InputNumber
+              id="amount-input"
+              isInBN
+              name="setCouncilBudgetIncrement.amount"
+              placeholder="0"
+              maxAllowedValue={Math.pow(2, 128)}
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>
