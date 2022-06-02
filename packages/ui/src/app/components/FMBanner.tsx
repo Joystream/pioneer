@@ -31,7 +31,7 @@ export const FMBanner = () => {
           <TextMedium>
             $tJOY can be <StyledLink>converted</StyledLink> to BCH, (Bitcoin cash cryptocurrency) immediately, whereas
             $JOY will be allocated shortly after mainnet launch, assuming the contributor has reached the{' '}
-            <StyledLink>Founding Member</StyledLink> status, buy accruing $15k USD worth of $JOY.
+            <StyledLink>Founding Member</StyledLink> status, by accruing $15k USD worth of $JOY.
           </TextMedium>
           <TextMedium>
             $tJOY balances have no relationship to mainnet $JOY balances, there will be no conversion of any kind.
