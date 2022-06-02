@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import {
   CustomLinkIcon,
@@ -19,7 +19,7 @@ import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 
-type Socials =
+export type Socials =
   | 'email'
   | 'twitter'
   | 'telegram'
@@ -51,20 +51,21 @@ export const socialMediaList = Object.keys(socialToIcon) as (keyof typeof social
 interface Props {
   social: Socials
   onClick?: () => void
+  active?: boolean
 }
 
-export const SocialMediaTile = ({ social, onClick }: Props) => {
+export const SocialMediaTile = React.memo(({ social, onClick, active }: Props) => {
   return (
-    <Wrapper onClick={onClick}>
+    <Wrapper onClick={onClick} active={active}>
       <RowGapBlock align="center" gap={2}>
         {socialToIcon[social]}
         <TextMedium value>{capitalizeFirstLetter(social)}</TextMedium>
       </RowGapBlock>
     </Wrapper>
   )
-}
+})
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ active?: boolean }>`
   display: grid;
   cursor: pointer;
   user-select: none;
@@ -74,10 +75,6 @@ const Wrapper = styled.div`
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.m};
   text-align: center;
-
-  > div {
-  }
-
   svg {
     path {
       fill: ${Colors.Black[300]};
@@ -93,4 +90,16 @@ const Wrapper = styled.div`
       }
     }
   }
+
+  ${({ active }) =>
+    active &&
+    css`
+      border: 1px solid ${Colors.Blue[400]};
+      svg {
+        path {
+          fill: ${Colors.Blue[400]};
+        }
+      }
+      pointer-events: none;
+    `}
 `

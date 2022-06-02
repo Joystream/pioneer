@@ -9,7 +9,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { TermsRoutes } from '@/app/constants/routes'
-import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, CloseButton } from '@/common/components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -35,8 +35,9 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextBig, TextMedium } from '@/common/components/typography'
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
-import { socialMediaList, SocialMediaTile } from '@/memberships/components/SocialMediaTile'
+import { socialMediaList, SocialMediaTile, Socials } from '@/memberships/components/SocialMediaTile'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -103,6 +104,7 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
+  const [chosenSocial, setChosenSocial] = useState<Socials[]>([])
 
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
@@ -229,9 +231,27 @@ export const BuyMembershipForm = ({
             <SocialMediaInput>
               <TextBig bold>Social Profiles</TextBig>
               <TextMedium>This will help us to contact you</TextMedium>
+              {chosenSocial.map((social) => (
+                <SocialMediaInputBox key={social + 1 + 'input'}>
+                  <InputComponent id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
+                    <InputText name={social} />
+                  </InputComponent>
+                  <CloseButton
+                    onClick={() => {
+                      setChosenSocial((prev) => prev.filter((prevSocial) => prevSocial !== social))
+                      form.resetField(social as keyof MemberFormFields)
+                    }}
+                  />
+                </SocialMediaInputBox>
+              ))}
               <div>
                 {socialMediaList.map((social, index) => (
-                  <SocialMediaTile social={social} key={'social' + index} />
+                  <SocialMediaTile
+                    active={chosenSocial.some((chosen) => chosen === social)}
+                    social={social}
+                    key={'social' + index}
+                    onClick={() => setChosenSocial((prev) => [...prev, social])}
+                  />
                 ))}
               </div>
             </SocialMediaInput>
@@ -306,9 +326,19 @@ const SocialMediaInput = styled.div`
   display: grid;
   gap: 10px;
 
-  > div {
+  > :last-child {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+`
+
+const SocialMediaInputBox = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: end;
+
+  button {
+    margin-bottom: 15px;
   }
 `
