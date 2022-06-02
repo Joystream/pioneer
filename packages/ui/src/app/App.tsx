@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
 
+import { FMBanner } from '@/app/components/FMBanner'
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
@@ -70,6 +71,7 @@ export const App = () => (
       <ConnectionStatus />
       <ExtensionWarning />
     </NotificationsHolder>
+    <FMBanner />
   </Providers>
 )
 
