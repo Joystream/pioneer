@@ -1,6 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -33,8 +34,9 @@ import {
 } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium } from '@/common/components/typography'
+import { TextBig, TextMedium } from '@/common/components/typography'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { socialMediaList, SocialMediaTile } from '@/memberships/components/SocialMediaTile'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -224,6 +226,15 @@ export const BuyMembershipForm = ({
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
+            <SocialMediaInput>
+              <TextBig bold>Social Profiles</TextBig>
+              <TextMedium>This will help us to contact you</TextMedium>
+              <div>
+                {socialMediaList.map((social, index) => (
+                  <SocialMediaTile social={social} key={'social' + index} />
+                ))}
+              </div>
+            </SocialMediaInput>
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -290,3 +301,14 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
+
+const SocialMediaInput = styled.div`
+  display: grid;
+  gap: 10px;
+
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+`
