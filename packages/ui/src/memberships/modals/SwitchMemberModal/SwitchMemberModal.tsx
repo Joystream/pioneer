@@ -9,9 +9,11 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/ty
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
 import { AddMembershipButtonSwitch } from '../../components/AddMembershipButtonSwitch'
+import { SignOutButton } from '../../components/SignOutButton'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { Member } from '../../types'
 import { BuyMembershipModalCall } from '../BuyMembershipModal'
+import { SignOutModalCall } from '../SignOutModal'
 
 export const SwitchMemberModal = () => {
   const { members, setActive, active } = useMyMemberships()
@@ -59,6 +61,12 @@ export const SwitchMemberModal = () => {
               showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
             }}
           />
+          <SignOutButton
+            onClick={() => {
+              hideModal()
+              showModal<SignOutModalCall>({ modal: 'SignOut' })
+            }}
+          />
         </SwitchModalFooter>
       )}
     </Modal>
@@ -90,6 +98,8 @@ const SwitchModalFooter = styled(ModalFooter)`
   width: 100%;
   height: auto;
   padding: 16px;
+  grid-auto-flow: row;
+  justify-items: start;
 `
 
 const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`

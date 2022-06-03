@@ -19,7 +19,7 @@ export interface MyMemberships {
   hasMembers: boolean
   isLoading: boolean
   active: Member | undefined
-  setActive: (member: Member) => void
+  setActive: (member: Member | undefined) => void
   helpers: {
     getMemberIdByBoundAccountAddress: (address: Address) => Member['id'] | undefined
   }
@@ -94,5 +94,5 @@ export const MembershipContextProvider = (props: Props) => {
     },
   }
 
-  return <MembershipContext.Provider value={value}>{props.children}</MembershipContext.Provider>
+  return <MembershipContext.Provider value={value as any}>{props.children}</MembershipContext.Provider>
 }

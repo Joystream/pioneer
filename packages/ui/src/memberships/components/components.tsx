@@ -49,6 +49,7 @@ interface MemberPhotoProps {
   small?: boolean
   noArea?: boolean
   fixedSize?: boolean
+  big?: boolean
 }
 
 export const MemberPhoto = styled.div<MemberPhotoProps>`
@@ -58,6 +59,8 @@ export const MemberPhoto = styled.div<MemberPhotoProps>`
   align-items: center;
   max-width: ${({ small }) => (small ? '24px' : '40px')};
   max-height: ${({ small }) => (small ? '24px' : '40px')};
+  max-width: ${({ big }) => (big ? '80px' : '40px')};
+  max-height: ${({ big }) => (big ? '80px' : '40px')};
   ${({ noArea }) =>
     !noArea &&
     css`
