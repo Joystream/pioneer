@@ -17,7 +17,7 @@ export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) =>
     <Wrapper>
       <TitleContainer>
         {creator && (
-          <TextMedium bold>
+          <TextMedium as="div" bold>
             {creator.handle}
             <AvatarWrapper>
               <MemberInfoAvatar member={creator} avatarUri={creator.avatar} />
