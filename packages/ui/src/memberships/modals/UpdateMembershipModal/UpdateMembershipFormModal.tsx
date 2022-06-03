@@ -1,4 +1,3 @@
-import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -18,10 +17,9 @@ import {
   ScrolledModalContainer,
 } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
 import { WithNullableValues } from '@/common/types/form'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
 import { Member } from '../../types'
@@ -43,16 +41,10 @@ const UpdateMemberSchema = Yup.object().shape({
 })
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
-  const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
   const [handleMap, setHandleMap] = useState<string>(member.handle)
-  const handleHash = blake2AsHex(handleMap)
-
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    handleMap,
-    connectionState,
-  ])
-  const context = { size: potentialMemberIdSize, isHandleChanged: handleMap !== member.handle }
+  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
+  const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
 
   const form = useForm({
     resolver: useYupValidationResolver(UpdateMemberSchema),

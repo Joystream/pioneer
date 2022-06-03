@@ -45,6 +45,11 @@ fragment NewCandidateEventFields on NewCandidateEvent {
       handle
     }
     electionRoundId
+    electionRound {
+      referendumStageVoting {
+        createdAt
+      }
+    }
   }
 }
 

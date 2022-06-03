@@ -44,7 +44,7 @@ export const asPeriod = (stage: BountyStage): BountyPeriod => {
   }
 }
 
-const asFunding = (field: BountyFundingType): FundingType => {
+export const asBountyFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
     return { target: new BN(field.target) }
   }
@@ -113,7 +113,9 @@ export const periodBlockLeft = (fields: BountyFieldsFragment) => {
       }
 
       if (fields.fundingType.__typename === 'BountyFundingLimited') {
-        return fields.workPeriod + (getFundingPeriodLength(asFunding(fields.fundingType)) ?? 0) - blockSinceCreation
+        return (
+          fields.workPeriod + (getFundingPeriodLength(asBountyFunding(fields.fundingType)) ?? 0) - blockSinceCreation
+        )
       }
 
       return fields.workPeriod
@@ -130,7 +132,7 @@ export const periodBlockLeft = (fields: BountyFieldsFragment) => {
       if (fields.fundingType.__typename === 'BountyFundingLimited') {
         return (
           fields.workPeriod +
-          (getFundingPeriodLength(asFunding(fields.fundingType)) ?? 0) +
+          (getFundingPeriodLength(asBountyFunding(fields.fundingType)) ?? 0) +
           fields.judgingPeriod -
           blockSinceCreation
         )
@@ -139,7 +141,7 @@ export const periodBlockLeft = (fields: BountyFieldsFragment) => {
       return fields.judgingPeriod
     }
     case 'Funding': {
-      const fundingPeriodTime = getFundingPeriodLength(asFunding(fields.fundingType))
+      const fundingPeriodTime = getFundingPeriodLength(asBountyFunding(fields.fundingType))
       return fundingPeriodTime ? fundingPeriodTime - blockSinceCreation : undefined
     }
   }
@@ -158,7 +160,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   // undefined creator/oracle means that it's council, not member
   creator: fields.creator ? asMember(fields.creator) : undefined,
   oracle: fields.oracle ? asMember(fields.oracle) : undefined,
-  fundingType: asFunding(fields.fundingType),
+  fundingType: asBountyFunding(fields.fundingType),
   workPeriod: fields.workPeriod,
   judgingPeriod: fields.judgingPeriod,
   stage: asStage(fields.stage),

@@ -27,7 +27,7 @@ import { LockDetailsProps } from './types'
 
 interface LockItemProps extends LockDetailsProps {
   createdInEvent?: Block
-  recoveryTime?: string
+  recoveryTime?: string | null
   memberInfo?: Member
   linkButtons?: React.ReactNode
 }

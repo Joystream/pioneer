@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import {fireEvent, render, screen, waitFor} from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -85,9 +85,9 @@ describe('UI: BuyMembershipModal', () => {
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
-      fireEvent.change(screen.getByLabelText(/member name/i), {target: {value: 'Bobby Bob'}})
-      fireEvent.change(screen.getByLabelText(/Membership handle/i), {target: {value: 'realbobbybob'}})
-      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
+    fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
     await waitFor(async () => expect(await findSubmitButton()).not.toBeDisabled())
   })

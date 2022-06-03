@@ -46,6 +46,10 @@ export type NewCandidateEventFieldsFragment = {
     __typename: 'Candidate'
     electionRoundId: string
     member: { __typename: 'Membership'; id: string; handle: string }
+    electionRound: {
+      __typename: 'ElectionRound'
+      referendumStageVoting?: { __typename: 'ReferendumStageVoting'; createdAt: any } | null
+    }
   }
 }
 
@@ -128,6 +132,10 @@ export type GetCouncilEventsQuery = {
           __typename: 'Candidate'
           electionRoundId: string
           member: { __typename: 'Membership'; id: string; handle: string }
+          electionRound: {
+            __typename: 'ElectionRound'
+            referendumStageVoting?: { __typename: 'ReferendumStageVoting'; createdAt: any } | null
+          }
         }
       }
     | {
@@ -225,6 +233,10 @@ export type GetNewCandidateEventsQuery = {
       __typename: 'Candidate'
       electionRoundId: string
       member: { __typename: 'Membership'; id: string; handle: string }
+      electionRound: {
+        __typename: 'ElectionRound'
+        referendumStageVoting?: { __typename: 'ReferendumStageVoting'; createdAt: any } | null
+      }
     }
   }>
 }
@@ -282,6 +294,11 @@ export const NewCandidateEventFieldsFragmentDoc = gql`
         handle
       }
       electionRoundId
+      electionRound {
+        referendumStageVoting {
+          createdAt
+        }
+      }
     }
   }
 `
