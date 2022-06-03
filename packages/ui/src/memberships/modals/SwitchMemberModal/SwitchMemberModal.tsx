@@ -61,12 +61,14 @@ export const SwitchMemberModal = () => {
               showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
             }}
           />
-          <SignOutButton
-            onClick={() => {
-              hideModal()
-              showModal<SignOutModalCall>({ modal: 'SignOut' })
-            }}
-          />
+          {active ? (
+            <SignOutButton
+              onClick={() => {
+                hideModal()
+                showModal<SignOutModalCall>({ modal: 'SignOut' })
+              }}
+            />
+          ) : null}
         </SwitchModalFooter>
       )}
     </Modal>
