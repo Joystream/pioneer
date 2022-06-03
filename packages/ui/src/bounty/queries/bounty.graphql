@@ -150,7 +150,7 @@ query GetUserBountyStatistics($memberId: ID!) {
   }
 }
 
-query GetUserBountyTabsInformations($memberIds: [ID!]) {
+query GetUserBountyTabsInformation($memberIds: [ID!]) {
   bountiesConnection(where: { creator: { id_in: $memberIds } }) {
     totalCount
   }

@@ -12,7 +12,7 @@ interface Props {
   timeToEnd?: number
 }
 
-export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) => {
+export const BountyInformation = memo(({ creator, timeToEnd, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
