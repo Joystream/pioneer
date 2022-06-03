@@ -22,7 +22,7 @@ export const PastCouncilWorkingGroupsItem = ({ workingGroup, totalBudget }: Prop
         <TokenValue value={workingGroup.totalMissedReward} />
         <TokenValue value={workingGroup.budget} />
         <TextMedium bold>
-          {!totalBudget.eqn(0) ? workingGroup.budget.muln(100).div(totalBudget).toNumber() : 0}%
+          {!totalBudget.isZero() ? workingGroup.budget.muln(100).div(totalBudget).toNumber() : 0}%
         </TextMedium>
       </PastCouncilWorkingGroupWrap>
     </PastCouncilWorkingGroupWrapper>

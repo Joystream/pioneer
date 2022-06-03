@@ -17,6 +17,7 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { error } from '@/common/logger'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
 
@@ -54,7 +55,16 @@ export const WithdrawSignModal = ({
     signer: controllerAccount.address,
   })
 
-  const extraAmount = bounty && isContributor ? bounty.cherry.mul(amount.div(bounty.totalFunding)) : BN_ZERO
+  if (bounty && isContributor && bounty.totalFunding.isZero()) {
+    error('Bounty totalFunding is 0')
+  }
+  const extraAmount =
+    bounty && isContributor
+      ? !bounty.totalFunding.isZero()
+        ? bounty.cherry.mul(amount.div(bounty.totalFunding))
+        : undefined
+      : BN_ZERO
+
   const bountyFailedInfo = bounty?.stage === 'failed' && !!isContributor
 
   return (
@@ -75,7 +85,7 @@ export const WithdrawSignModal = ({
             rows={[
               ...(stake ? [{ stakingFromTitle: t('modals.withdraw.stake.stakingFrom'), amount: stake }] : []),
               ...(reward ? [{ stakingFromTitle: t('modals.withdraw.reward.stakingFrom'), amount: reward }] : []),
-              ...(extraAmount.gtn(0)
+              ...(extraAmount?.gtn(0)
                 ? [{ stakingFromTitle: 'Cherry', amount: extraAmount, type: 'cherry' as const }]
                 : []),
               ...(!stake && !reward
@@ -89,7 +99,7 @@ export const WithdrawSignModal = ({
         <TransactionInfoContainer>
           <TransactionInfo
             title={t('modals.common.amount')}
-            value={amount.add(extraAmount)}
+            value={extraAmount ? amount.add(extraAmount) : amount}
             tooltipText={bountyFailedInfo ? t('modals.withdraw.extraTooltipInformation') : undefined}
           />
           <TransactionInfo
