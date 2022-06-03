@@ -39,8 +39,6 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
 
   return (
     <RoleToggle absoluteToggle isOpen={isOpen} toggleOpen={toggleOpen}>
-      {/* {(isOpen) => {
-        return ( */}
       <MemberRoleToggleContainer>
         <MemberRoleTitleContainer onClick={toggleOpen}>
           <h5>{workerRoleTitle(role)}</h5>
