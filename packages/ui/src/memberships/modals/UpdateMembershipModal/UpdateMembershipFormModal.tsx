@@ -56,6 +56,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       avatarUri: typeof member.avatar === 'string' ? member.avatar : '',
       rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
       controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
+      // email: 'I really work',
     },
     context,
     mode: 'onChange',
@@ -152,6 +153,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
+            {/*<SocialMediaSelector initialSocials={['email']} />*/}
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>

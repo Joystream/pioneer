@@ -1,7 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -9,7 +8,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { TermsRoutes } from '@/app/constants/routes'
-import { ButtonGhost, ButtonPrimary, CloseButton } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -34,10 +33,9 @@ import {
 } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextBig, TextMedium } from '@/common/components/typography'
-import { capitalizeFirstLetter } from '@/common/helpers'
+import { TextMedium } from '@/common/components/typography'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
-import { socialMediaList, SocialMediaTile, Socials } from '@/memberships/components/SocialMediaTile'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -104,7 +102,6 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
-  const [chosenSocial, setChosenSocial] = useState<Socials[]>([])
 
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
@@ -228,33 +225,7 @@ export const BuyMembershipForm = ({
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
-            <SocialMediaInput>
-              <TextBig bold>Social Profiles</TextBig>
-              <TextMedium>This will help us to contact you</TextMedium>
-              {chosenSocial.map((social) => (
-                <SocialMediaInputBox key={social + 1 + 'input'}>
-                  <InputComponent id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
-                    <InputText name={social} />
-                  </InputComponent>
-                  <CloseButton
-                    onClick={() => {
-                      setChosenSocial((prev) => prev.filter((prevSocial) => prevSocial !== social))
-                      form.resetField(social as keyof MemberFormFields)
-                    }}
-                  />
-                </SocialMediaInputBox>
-              ))}
-              <div>
-                {socialMediaList.map((social, index) => (
-                  <SocialMediaTile
-                    active={chosenSocial.some((chosen) => chosen === social)}
-                    social={social}
-                    key={'social' + index}
-                    onClick={() => setChosenSocial((prev) => [...prev, social])}
-                  />
-                ))}
-              </div>
-            </SocialMediaInput>
+            <SocialMediaSelector />
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -321,24 +292,3 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
-
-const SocialMediaInput = styled.div`
-  display: grid;
-  gap: 10px;
-
-  > :last-child {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-`
-
-const SocialMediaInputBox = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: end;
-
-  button {
-    margin-bottom: 15px;
-  }
-`
