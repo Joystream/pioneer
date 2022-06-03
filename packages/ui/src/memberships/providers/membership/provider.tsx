@@ -32,9 +32,9 @@ export const MembershipContextProvider = (props: Props) => {
   const { allAccounts, isLoading: isLoadingAccounts } = useMyAccounts()
   const addresses = allAccounts.map((account) => account.address)
 
-  const setActiveMembership = useCallback((active: Member) => {
+  const setActiveMembership = useCallback((active: Member | undefined) => {
     setActive(active)
-    setRecentMembership(active.id)
+    setRecentMembership(active ? active.id : '')
   }, [])
 
   const {
@@ -94,5 +94,5 @@ export const MembershipContextProvider = (props: Props) => {
     },
   }
 
-  return <MembershipContext.Provider value={value as any}>{props.children}</MembershipContext.Provider>
+  return <MembershipContext.Provider value={value}>{props.children}</MembershipContext.Provider>
 }
