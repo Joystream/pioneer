@@ -85,9 +85,6 @@ export type BountyFieldsFragment = {
       account: string
     }> | null
   } | null
-  fundingType:
-    | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
-    | { __typename: 'BountyFundingPerpetual'; target: number }
   entrantWhitelist?: {
     __typename: 'BountyEntrantWhitelist'
     members: Array<{ __typename: 'Membership'; id: string }>
@@ -191,20 +188,17 @@ export type BountyFieldsFragment = {
     network: Types.Network
   } | null
   maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+  fundingType:
+    | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
+    | { __typename: 'BountyFundingPerpetual'; target: number }
 }
 
-export type FundingTypeFields_BountyFundingLimited_Fragment = {
-  __typename: 'BountyFundingLimited'
-  minFundingAmount: number
-  maxFundingAmount: number
-  fundingPeriod: number
+export type BountyFundingTypeFieldsFragment = {
+  __typename: 'Bounty'
+  fundingType:
+    | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
+    | { __typename: 'BountyFundingPerpetual'; target: number }
 }
-
-export type FundingTypeFields_BountyFundingPerpetual_Fragment = { __typename: 'BountyFundingPerpetual'; target: number }
-
-export type FundingTypeFieldsFragment =
-  | FundingTypeFields_BountyFundingLimited_Fragment
-  | FundingTypeFields_BountyFundingPerpetual_Fragment
 
 export type BountyEntryFieldsFragment = {
   __typename: 'BountyEntry'
@@ -496,14 +490,6 @@ export type GetBountiesQuery = {
         account: string
       }> | null
     } | null
-    fundingType:
-      | {
-          __typename: 'BountyFundingLimited'
-          minFundingAmount: number
-          maxFundingAmount: number
-          fundingPeriod: number
-        }
-      | { __typename: 'BountyFundingPerpetual'; target: number }
     entrantWhitelist?: {
       __typename: 'BountyEntrantWhitelist'
       members: Array<{ __typename: 'Membership'; id: string }>
@@ -607,6 +593,14 @@ export type GetBountiesQuery = {
       network: Types.Network
     } | null
     maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+    fundingType:
+      | {
+          __typename: 'BountyFundingLimited'
+          minFundingAmount: number
+          maxFundingAmount: number
+          fundingPeriod: number
+        }
+      | { __typename: 'BountyFundingPerpetual'; target: number }
   }>
 }
 
@@ -706,14 +700,6 @@ export type GetBountyQuery = {
         account: string
       }> | null
     } | null
-    fundingType:
-      | {
-          __typename: 'BountyFundingLimited'
-          minFundingAmount: number
-          maxFundingAmount: number
-          fundingPeriod: number
-        }
-      | { __typename: 'BountyFundingPerpetual'; target: number }
     entrantWhitelist?: {
       __typename: 'BountyEntrantWhitelist'
       members: Array<{ __typename: 'Membership'; id: string }>
@@ -817,6 +803,14 @@ export type GetBountyQuery = {
       network: Types.Network
     } | null
     maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+    fundingType:
+      | {
+          __typename: 'BountyFundingLimited'
+          minFundingAmount: number
+          maxFundingAmount: number
+          fundingPeriod: number
+        }
+      | { __typename: 'BountyFundingPerpetual'; target: number }
   } | null
 }
 
@@ -988,6 +982,7 @@ export type GetLatestBountyEntryQuery = {
       createdAt: any
       workPeriod: number
       judgingPeriod: number
+      maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
       fundingType:
         | {
             __typename: 'BountyFundingLimited'
@@ -996,21 +991,22 @@ export type GetLatestBountyEntryQuery = {
             fundingPeriod: number
           }
         | { __typename: 'BountyFundingPerpetual'; target: number }
-      maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
     }
     announcedInEvent: { __typename: 'WorkEntryAnnouncedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
 
-export const FundingTypeFieldsFragmentDoc = gql`
-  fragment FundingTypeFields on BountyFundingType {
-    ... on BountyFundingLimited {
-      minFundingAmount
-      maxFundingAmount
-      fundingPeriod
-    }
-    ... on BountyFundingPerpetual {
-      target
+export const BountyFundingTypeFieldsFragmentDoc = gql`
+  fragment BountyFundingTypeFields on Bounty {
+    fundingType {
+      ... on BountyFundingLimited {
+        minFundingAmount
+        maxFundingAmount
+        fundingPeriod
+      }
+      ... on BountyFundingPerpetual {
+        target
+      }
     }
   }
 `
@@ -1077,9 +1073,7 @@ export const BountyFieldsFragmentDoc = gql`
     oracle {
       ...MemberFields
     }
-    fundingType {
-      ...FundingTypeFields
-    }
+    ...BountyFundingTypeFields
     entrantWhitelist {
       members {
         id
@@ -1111,7 +1105,7 @@ export const BountyFieldsFragmentDoc = gql`
     }
   }
   ${MemberFieldsFragmentDoc}
-  ${FundingTypeFieldsFragmentDoc}
+  ${BountyFundingTypeFieldsFragmentDoc}
   ${BountyContributionFieldsFragmentDoc}
   ${BountyEntryWithDetailsFieldsFragmentDoc}
 `
@@ -1517,9 +1511,7 @@ export const GetLatestBountyEntryDocument = gql`
       bountyId
       bounty {
         createdAt
-        fundingType {
-          ...FundingTypeFields
-        }
+        ...BountyFundingTypeFields
         workPeriod
         judgingPeriod
         maxFundingReachedEvent {
@@ -1533,7 +1525,7 @@ export const GetLatestBountyEntryDocument = gql`
       }
     }
   }
-  ${FundingTypeFieldsFragmentDoc}
+  ${BountyFundingTypeFieldsFragmentDoc}
 `
 
 /**
