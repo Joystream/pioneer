@@ -110,15 +110,17 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   .markdown-preview ol li {
     counter-increment: ol-list-counter;
   }
+  
+  .markdown-preview ol li p {
+    margin-top: 0;
+  }
 
   .markdown-preview ol li::before {
     content: counter(ol-list-counter)'.';
     position: absolute;
     left: -20px;
-    top: 8px;
     font-family: ${Fonts.Grotesk};
     font-size: ${normalFontSize};
-    line-height: 24px;
     font-weight: 700;
     color: ${normalColor};
   }
