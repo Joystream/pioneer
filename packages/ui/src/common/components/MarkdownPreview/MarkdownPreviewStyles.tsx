@@ -115,6 +115,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     content: counter(ol-list-counter)'.';
     position: absolute;
     left: -20px;
+    top: 8px;
     font-family: ${Fonts.Grotesk};
     font-size: ${normalFontSize};
     line-height: 24px;
@@ -165,17 +166,20 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   }
 
   .markdown-preview ul > li:before {
-    content: url('data:image/svg+xml;charset=UTF-8, <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="16" width="16" viewBox="0 0 16 16"><path d="M8.13804 9.3253L3.67065 4.85791L2.66669 5.86187L8.13804 11.3332L13.6094 5.86187L12.6054 4.85791L8.13804 9.3253Z" fill="rgb(64, 75, 90)"></path></svg>');
+    content: '• ';
     position: absolute;
-    top: 50%;
-    left: -26px;
+    left: -14px;
     width: 16px;
     height: 16px;
-    transform: translateY(-50%) rotate(-90deg);
+    top: -1px;
   }
+
   .markdown-preview blockquote {
     margin: 0;
     padding: 0;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
   }
 `
 
