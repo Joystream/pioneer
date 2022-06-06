@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -13,6 +13,8 @@ export const StakingPolicyAndReward = () => {
   const { watch } = useFormContext()
   const leavingUnstakingPeriod = watch('stakingPolicyAndReward.leavingUnstakingPeriod')
 
+  const maxAllowedForStakingAmount = 200
+  const [stakingAmount, setStakingAmount] = useState(0)
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -30,6 +32,12 @@ export const StakingPolicyAndReward = () => {
             units="tJOY"
             tight
             name="stakingPolicyAndReward.stakingAmount"
+            validation={stakingAmount < maxAllowedForStakingAmount ? 'invalid' : undefined}
+            message={
+              stakingAmount < maxAllowedForStakingAmount
+                ? 'Staking Amount have to be bigger than ${maxAllowedForStakingAmount}.'
+                : undefined
+            }
           >
             <InputNumber
               id="staking-amount"
@@ -37,6 +45,10 @@ export const StakingPolicyAndReward = () => {
               placeholder="0"
               name="stakingPolicyAndReward.stakingAmount"
               isInBN
+              maxAllowedValue={maxAllowedForStakingAmount}
+              onChange={(e: any) => {
+                setStakingAmount(e.target.value)
+              }}
             />
           </InputComponent>
           <InputComponent
