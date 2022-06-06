@@ -64,7 +64,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
         })}
       </div>
       {chosenSocial.map((social, index) => (
-        <InputComponent id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
+        <InputComponent key={'social' + index} id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
           <InputText id={'social-input-' + index} name={social} placeholder={socialToPlaceholder[social]} />
         </InputComponent>
       ))}
