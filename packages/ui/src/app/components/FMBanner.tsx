@@ -63,7 +63,8 @@ const StyledLink = styled(Link)`
 `
 
 const Container = styled.div<{ open: boolean }>`
-  display: ${({ open }) => !open && 'none'};
+  /* display: ${({ open }) => !open && 'none'}; */
+  display: none;
   background-color: ${Colors.Black[800]};
   border-radius: ${BorderRad.l};
   width: 80%;
