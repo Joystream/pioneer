@@ -233,7 +233,7 @@ const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDisc
   // Animate selection:
   &,
   ${Reply} {
-    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} 1 0.5s ease-in-out;
+    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} 1.5s ease-in-out;
   }
 
   @keyframes flashSelection {
