@@ -13,6 +13,8 @@ export const StakingPolicyAndReward = () => {
   const { watch } = useFormContext()
   const leavingUnstakingPeriod = watch('stakingPolicyAndReward.leavingUnstakingPeriod')
 
+  // Here we can define minimum value of Staking
+  const maxAllowedValueForStakingAmount = 200
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -37,6 +39,7 @@ export const StakingPolicyAndReward = () => {
               placeholder="0"
               name="stakingPolicyAndReward.stakingAmount"
               isInBN
+              maxAllowedValue={maxAllowedValueForStakingAmount}
             />
           </InputComponent>
           <InputComponent
