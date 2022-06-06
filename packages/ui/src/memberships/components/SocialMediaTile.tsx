@@ -83,12 +83,6 @@ const Wrapper = styled.div<{ active?: boolean }>`
 
   :hover {
     border: 1px solid ${Colors.Blue[400]};
-
-    svg {
-      path {
-        fill: ${Colors.Blue[400]};
-      }
-    }
   }
 
   ${({ active }) =>
@@ -100,6 +94,5 @@ const Wrapper = styled.div<{ active?: boolean }>`
           fill: ${Colors.Blue[400]};
         }
       }
-      pointer-events: none;
     `}
 `

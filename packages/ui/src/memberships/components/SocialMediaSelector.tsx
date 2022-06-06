@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
-import { CloseButton } from '@/common/components/buttons'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
@@ -31,33 +30,43 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
   const [chosenSocial, setChosenSocial] = useState<Socials[]>(initialSocials ?? [])
   const form = useFormContext()
 
+  const selectSocial = useCallback(
+    (social: Socials) => () => {
+      setChosenSocial((prev) => [...prev, social])
+    },
+    []
+  )
+
+  const removeSocial = useCallback(
+    (social: Socials) => () => {
+      setChosenSocial((prev) => prev.filter((prevSocial) => prevSocial !== social))
+      form?.resetField(social as keyof MemberFormFields)
+    },
+    [form.resetField]
+  )
+
   return (
     <SocialMediaInput>
       <TextBig bold>Social Profiles</TextBig>
       <TextMedium>This will help us to contact you</TextMedium>
 
       <div>
-        {socialMediaList.map((social, index) => (
-          <SocialMediaTile
-            active={chosenSocial.some((chosen) => chosen === social)}
-            social={social}
-            key={'social' + index}
-            onClick={() => setChosenSocial((prev) => [...prev, social])}
-          />
-        ))}
+        {socialMediaList.map((social, index) => {
+          const isActive = chosenSocial.some((chosen) => chosen === social)
+          return (
+            <SocialMediaTile
+              active={isActive}
+              social={social}
+              key={'social' + index}
+              onClick={!isActive ? selectSocial(social) : removeSocial(social)}
+            />
+          )
+        })}
       </div>
-      {chosenSocial.map((social) => (
-        <SocialMediaInputBox key={social + 1 + 'input'}>
-          <InputComponent id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
-            <InputText name={social} placeholder={socialToPlaceholder[social]} />
-          </InputComponent>
-          <CloseButton
-            onClick={() => {
-              setChosenSocial((prev) => prev.filter((prevSocial) => prevSocial !== social))
-              form?.resetField(social as keyof MemberFormFields)
-            }}
-          />
-        </SocialMediaInputBox>
+      {chosenSocial.map((social, index) => (
+        <InputComponent id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
+          <InputText id={'social-input-' + index} name={social} placeholder={socialToPlaceholder[social]} />
+        </InputComponent>
       ))}
     </SocialMediaInput>
   )
@@ -71,15 +80,5 @@ const SocialMediaInput = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-  }
-`
-
-const SocialMediaInputBox = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: end;
-
-  button {
-    margin-bottom: 15px;
   }
 `
