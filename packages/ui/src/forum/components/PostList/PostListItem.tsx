@@ -122,7 +122,7 @@ export const PostListItem = ({
               onSuccessfulEdit={onSuccessfulEdit}
             />
           ) : (
-            <MarkdownPreview markdown={postText} append={editionTime} size="s" />
+            <MarkdownPreview markdown={postText} append={editionTime} size="m" />
           )}
         </MessageBody>
         <ForumPostRow>
@@ -228,11 +228,12 @@ const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDisc
       padding: 24px;
     `};
   scroll-margin: 48px;
-
+  width: 60%;
+  margin: 0 auto;
   // Animate selection:
   &,
   ${Reply} {
-    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} 1.5s ease-in-out;
+    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} 1 0.5s ease-in-out;
   }
 
   @keyframes flashSelection {
