@@ -183,6 +183,36 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     color: #6a737d;
     border-left: 0.25em solid #dfe2e5;
   }
+
+  .markdown-preview table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .markdown-preview table th {
+    font-weight: 600;
+  }
+  
+  .markdown-preview table th,
+  .markdown-preview table td {
+    padding: 6px 13px;
+    border: 1px solid #d0d7de;
+  }
+  
+  .markdown-preview table tr {
+    background-color: #ffffff;
+    border-top: 1px solid hsla(210,18%,87%,1);
+  }
+  
+  .markdown-preview table tr:nth-child(2n) {
+    background-color: #f6f8fa;
+  }
 `
 
 interface MarkdownCollapsibleContainerProps {
