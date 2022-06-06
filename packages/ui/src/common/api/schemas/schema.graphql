@@ -12367,6 +12367,7 @@ type MemberMetadata implements BaseGraphQLObject {
   Short text chosen by member to share information about themselves
   """
   about: String
+  externalResources: [MembershipExternalResource!]
   memberinvitedeventmetadata: [MemberInvitedEvent!]
   memberprofileupdatedeventnewMetadata: [MemberProfileUpdatedEvent!]
   membershipmetadata: [Membership!]
@@ -12445,6 +12446,9 @@ input MemberMetadataWhereInput {
   about_startsWith: String
   about_endsWith: String
   about_in: [String!]
+  externalResources_none: MembershipExternalResourceWhereInput
+  externalResources_some: MembershipExternalResourceWhereInput
+  externalResources_every: MembershipExternalResourceWhereInput
   memberinvitedeventmetadata_none: MemberInvitedEventWhereInput
   memberinvitedeventmetadata_some: MemberInvitedEventWhereInput
   memberinvitedeventmetadata_every: MemberInvitedEventWhereInput
@@ -13004,6 +13008,114 @@ type MembershipEntryPaid {
   The event the membership was bought in
   """
   membershipBoughtEvent: MembershipBoughtEvent
+}
+
+type MembershipExternalResource implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  type: MembershipExternalResourceType!
+  value: String!
+  memberMetadata: MemberMetadata!
+  memberMetadataId: String!
+}
+
+type MembershipExternalResourceConnection {
+  totalCount: Int!
+  edges: [MembershipExternalResourceEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MembershipExternalResourceCreateInput {
+  type: MembershipExternalResourceType!
+  value: String!
+  memberMetadata: ID!
+}
+
+type MembershipExternalResourceEdge {
+  node: MembershipExternalResource!
+  cursor: String!
+}
+
+enum MembershipExternalResourceOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  type_ASC
+  type_DESC
+  value_ASC
+  value_DESC
+  memberMetadata_ASC
+  memberMetadata_DESC
+}
+
+enum MembershipExternalResourceType {
+  EMAIL
+  HYPERLINK
+  TWITTER
+  TELEGRAM
+  DISCORD
+  FACEBOOK
+  YOUTUBE
+  MATRIX
+  IRC
+  WECHAT
+  WHATSAPP
+}
+
+input MembershipExternalResourceUpdateInput {
+  type: MembershipExternalResourceType
+  value: String
+  memberMetadata: ID
+}
+
+input MembershipExternalResourceWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  type_eq: MembershipExternalResourceType
+  type_in: [MembershipExternalResourceType!]
+  value_eq: String
+  value_contains: String
+  value_startsWith: String
+  value_endsWith: String
+  value_in: [String!]
+  memberMetadata: MemberMetadataWhereInput
+  AND: [MembershipExternalResourceWhereInput!]
+  OR: [MembershipExternalResourceWhereInput!]
+}
+
+input MembershipExternalResourceWhereUniqueInput {
+  id: ID!
 }
 
 enum MembershipOrderByInput {
@@ -21340,6 +21452,23 @@ type Query {
     where: MembershipBoughtEventWhereInput
     orderBy: [MembershipBoughtEventOrderByInput!]
   ): MembershipBoughtEventConnection!
+  membershipExternalResources(
+    offset: Int
+    limit: Int = 50
+    where: MembershipExternalResourceWhereInput
+    orderBy: [MembershipExternalResourceOrderByInput!]
+  ): [MembershipExternalResource!]!
+  membershipExternalResourceByUniqueInput(
+    where: MembershipExternalResourceWhereUniqueInput!
+  ): MembershipExternalResource
+  membershipExternalResourcesConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: MembershipExternalResourceWhereInput
+    orderBy: [MembershipExternalResourceOrderByInput!]
+  ): MembershipExternalResourceConnection!
   membershipPriceUpdatedEvents(
     offset: Int
     limit: Int = 50
