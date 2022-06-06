@@ -54,8 +54,12 @@ export const FMBanner = () => {
           Don't show this again
         </Checkbox>
         <ButtonsGroup>
-          <ButtonSecondary size="medium">Speak with Community Integrators</ButtonSecondary>
-          <ButtonPrimary size="medium">Learn more</ButtonPrimary>
+          <ButtonSecondary size="medium">
+            <ButtonLink href="https://discord.com/invite/nmWPBJNT5x">Speak with Community Integrators</ButtonLink>
+          </ButtonSecondary>
+          <ButtonPrimary size="medium">
+            <ButtonLink href="https://www.joystream.org/start-here/what-is-joystream/">Learn more</ButtonLink>
+          </ButtonPrimary>
         </ButtonsGroup>
       </BottomContainer>
     </Container>
@@ -66,6 +70,11 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   font-family: Inter;
   font-size: 14px;
+`
+
+const ButtonLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `
 
 const Container = styled.div<{ open: boolean }>`
