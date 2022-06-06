@@ -11524,6 +11524,7 @@ export type MemberMetadata = BaseGraphQlObject & {
   createdById: Scalars['String']
   deletedAt?: Maybe<Scalars['DateTime']>
   deletedById?: Maybe<Scalars['String']>
+  externalResources?: Maybe<Array<MembershipExternalResource>>
   id: Scalars['ID']
   memberinvitedeventmetadata?: Maybe<Array<MemberInvitedEvent>>
   memberprofileupdatedeventnewMetadata?: Maybe<Array<MemberProfileUpdatedEvent>>
@@ -11598,6 +11599,9 @@ export type MemberMetadataWhereInput = {
   deletedAt_lte?: InputMaybe<Scalars['DateTime']>
   deletedById_eq?: InputMaybe<Scalars['ID']>
   deletedById_in?: InputMaybe<Array<Scalars['ID']>>
+  externalResources_every?: InputMaybe<MembershipExternalResourceWhereInput>
+  externalResources_none?: InputMaybe<MembershipExternalResourceWhereInput>
+  externalResources_some?: InputMaybe<MembershipExternalResourceWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   memberinvitedeventmetadata_every?: InputMaybe<MemberInvitedEventWhereInput>
@@ -12252,6 +12256,117 @@ export type MembershipEntryPaid = {
   __typename: 'MembershipEntryPaid'
   /** The event the membership was bought in */
   membershipBoughtEvent?: Maybe<MembershipBoughtEvent>
+}
+
+export type MembershipExternalResource = BaseGraphQlObject & {
+  __typename: 'MembershipExternalResource'
+  createdAt: Scalars['DateTime']
+  createdById: Scalars['String']
+  deletedAt?: Maybe<Scalars['DateTime']>
+  deletedById?: Maybe<Scalars['String']>
+  id: Scalars['ID']
+  memberMetadata: MemberMetadata
+  memberMetadataId: Scalars['String']
+  type: MembershipExternalResourceType
+  updatedAt?: Maybe<Scalars['DateTime']>
+  updatedById?: Maybe<Scalars['String']>
+  value: Scalars['String']
+  version: Scalars['Int']
+}
+
+export type MembershipExternalResourceConnection = {
+  __typename: 'MembershipExternalResourceConnection'
+  edges: Array<MembershipExternalResourceEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+}
+
+export type MembershipExternalResourceCreateInput = {
+  memberMetadata: Scalars['ID']
+  type: MembershipExternalResourceType
+  value: Scalars['String']
+}
+
+export type MembershipExternalResourceEdge = {
+  __typename: 'MembershipExternalResourceEdge'
+  cursor: Scalars['String']
+  node: MembershipExternalResource
+}
+
+export enum MembershipExternalResourceOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  MemberMetadataAsc = 'memberMetadata_ASC',
+  MemberMetadataDesc = 'memberMetadata_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  ValueAsc = 'value_ASC',
+  ValueDesc = 'value_DESC',
+}
+
+export enum MembershipExternalResourceType {
+  Discord = 'DISCORD',
+  Email = 'EMAIL',
+  Facebook = 'FACEBOOK',
+  Hyperlink = 'HYPERLINK',
+  Irc = 'IRC',
+  Matrix = 'MATRIX',
+  Telegram = 'TELEGRAM',
+  Twitter = 'TWITTER',
+  Wechat = 'WECHAT',
+  Whatsapp = 'WHATSAPP',
+  Youtube = 'YOUTUBE',
+}
+
+export type MembershipExternalResourceUpdateInput = {
+  memberMetadata?: InputMaybe<Scalars['ID']>
+  type?: InputMaybe<MembershipExternalResourceType>
+  value?: InputMaybe<Scalars['String']>
+}
+
+export type MembershipExternalResourceWhereInput = {
+  AND?: InputMaybe<Array<MembershipExternalResourceWhereInput>>
+  OR?: InputMaybe<Array<MembershipExternalResourceWhereInput>>
+  createdAt_eq?: InputMaybe<Scalars['DateTime']>
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>
+  createdById_eq?: InputMaybe<Scalars['ID']>
+  createdById_in?: InputMaybe<Array<Scalars['ID']>>
+  deletedAt_all?: InputMaybe<Scalars['Boolean']>
+  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
+  deletedById_eq?: InputMaybe<Scalars['ID']>
+  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
+  id_eq?: InputMaybe<Scalars['ID']>
+  id_in?: InputMaybe<Array<Scalars['ID']>>
+  memberMetadata?: InputMaybe<MemberMetadataWhereInput>
+  type_eq?: InputMaybe<MembershipExternalResourceType>
+  type_in?: InputMaybe<Array<MembershipExternalResourceType>>
+  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
+  updatedById_eq?: InputMaybe<Scalars['ID']>
+  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+  value_contains?: InputMaybe<Scalars['String']>
+  value_endsWith?: InputMaybe<Scalars['String']>
+  value_eq?: InputMaybe<Scalars['String']>
+  value_in?: InputMaybe<Array<Scalars['String']>>
+  value_startsWith?: InputMaybe<Scalars['String']>
+}
+
+export type MembershipExternalResourceWhereUniqueInput = {
+  id: Scalars['ID']
 }
 
 export enum MembershipOrderByInput {
@@ -18913,6 +19028,9 @@ export type Query = {
   membershipBoughtEvents: Array<MembershipBoughtEvent>
   membershipBoughtEventsConnection: MembershipBoughtEventConnection
   membershipByUniqueInput?: Maybe<Membership>
+  membershipExternalResourceByUniqueInput?: Maybe<MembershipExternalResource>
+  membershipExternalResources: Array<MembershipExternalResource>
+  membershipExternalResourcesConnection: MembershipExternalResourceConnection
   membershipPriceUpdatedEventByUniqueInput?: Maybe<MembershipPriceUpdatedEvent>
   membershipPriceUpdatedEvents: Array<MembershipPriceUpdatedEvent>
   membershipPriceUpdatedEventsConnection: MembershipPriceUpdatedEventConnection
@@ -20939,6 +21057,26 @@ export type QueryMembershipBoughtEventsConnectionArgs = {
 
 export type QueryMembershipByUniqueInputArgs = {
   where: MembershipWhereUniqueInput
+}
+
+export type QueryMembershipExternalResourceByUniqueInputArgs = {
+  where: MembershipExternalResourceWhereUniqueInput
+}
+
+export type QueryMembershipExternalResourcesArgs = {
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<MembershipExternalResourceOrderByInput>>
+  where?: InputMaybe<MembershipExternalResourceWhereInput>
+}
+
+export type QueryMembershipExternalResourcesConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<MembershipExternalResourceOrderByInput>>
+  where?: InputMaybe<MembershipExternalResourceWhereInput>
 }
 
 export type QueryMembershipPriceUpdatedEventByUniqueInputArgs = {

@@ -49,6 +49,17 @@ export type MemberWithDetailsFieldsFragment = {
   isCouncilMember: boolean
   inviteCount: number
   createdAt: any
+  metadata: {
+    __typename: 'MemberMetadata'
+    name?: string | null
+    about?: string | null
+    externalResources?: Array<{
+      __typename: 'MembershipExternalResource'
+      type: Types.MembershipExternalResourceType
+      value: string
+    }> | null
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+  }
   entry:
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
     | {
@@ -102,12 +113,6 @@ export type MemberWithDetailsFieldsFragment = {
       account: string
     }> | null
   }>
-  metadata: {
-    __typename: 'MemberMetadata'
-    name?: string | null
-    about?: string | null
-    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-  }
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -195,6 +200,17 @@ export type GetMemberQuery = {
     isCouncilMember: boolean
     inviteCount: number
     createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      externalResources?: Array<{
+        __typename: 'MembershipExternalResource'
+        type: Types.MembershipExternalResourceType
+        value: string
+      }> | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
       | {
@@ -248,12 +264,6 @@ export type GetMemberQuery = {
         account: string
       }> | null
     }>
-    metadata: {
-      __typename: 'MemberMetadata'
-      name?: string | null
-      about?: string | null
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -459,6 +469,20 @@ export const MemberFieldsFragmentDoc = gql`
 export const MemberWithDetailsFieldsFragmentDoc = gql`
   fragment MemberWithDetailsFields on Membership {
     ...MemberFields
+    metadata {
+      name
+      about
+      externalResources {
+        type
+        value
+      }
+      avatar {
+        __typename
+        ... on AvatarUri {
+          avatarUri
+        }
+      }
+    }
     entry {
       ... on MembershipEntryInvited {
         memberInvitedEvent {

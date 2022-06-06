@@ -1,4 +1,5 @@
-import { Address, Block } from '../../common/types'
+import { MembershipExternalResourceType } from '@/common/api/queries'
+import { Address, Block } from '@/common/types'
 
 type ID = string
 
@@ -51,8 +52,14 @@ export type MemberEntry = GenesisEntry | InvitedEntry | PaidEntry
 // Temporary fix for: https://github.com/Joystream/pioneer/issues/1493
 export type InvitedMember = Member // & { entry: InvitedEntry }
 
+interface MembershipExternalResource {
+  source: MembershipExternalResourceType
+  value: string
+}
+
 export interface MemberWithDetails extends Member {
   about?: string
   entry: MemberEntry
   invitees: InvitedMember[]
+  externalResources?: MembershipExternalResource[]
 }
