@@ -24,14 +24,20 @@ export const FMBanner = () => {
             Joystream platform currently runs on testnet
           </TextExtraHuge>
           <TextMedium>
-            Testnet participants <StyledLink>earn</StyledLink> a combination of our testnet token{' '}
-            <StyledLink>$tJOY</StyledLink>, and allocation of our mainnet token $JOY (which will come to life upon
-            mainnet launch).
+            Testnet participants{' '}
+            <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/testnet-rewards">earn</StyledLink>{' '}
+            a combination of our testnet token{' '}
+            <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/usdtjoy">$tJOY</StyledLink>, and
+            allocation of our mainnet token $JOY (which will come to life upon mainnet launch).
           </TextMedium>
           <TextMedium>
-            $tJOY can be <StyledLink>converted</StyledLink> to BCH, (Bitcoin cash cryptocurrency) immediately, whereas
-            $JOY will be allocated shortly after mainnet launch, assuming the contributor has reached the{' '}
-            <StyledLink>Founding Member</StyledLink> status, by accruing $15k USD worth of $JOY.
+            $tJOY can be <StyledLink href="https://www.joystream.org/cashout/">converted</StyledLink> to BCH, (Bitcoin
+            cash cryptocurrency) immediately, whereas $JOY will be allocated shortly after mainnet launch, assuming the
+            contributor has reached the{' '}
+            <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/founding-member-program#stages">
+              Founding Member
+            </StyledLink>{' '}
+            status, by accruing $15k USD worth of $JOY.
           </TextMedium>
           <TextMedium>
             $tJOY balances have no relationship to mainnet $JOY balances, there will be no conversion of any kind.
