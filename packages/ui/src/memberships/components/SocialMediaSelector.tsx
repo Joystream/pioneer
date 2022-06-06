@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { socialMediaList, SocialMediaTile, Socials } from '@/memberships/components/SocialMediaTile'
+import { socialMediaList, SocialMediaTile, Socials } from '@/memberships/components/SocialMediaTile/SocialMediaTile'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
 const socialToPlaceholder: Record<Socials, string> = {

@@ -48,13 +48,13 @@ const socialToIcon: Record<Socials, React.ReactElement> = {
 
 export const socialMediaList = Object.keys(socialToIcon) as (keyof typeof socialToIcon)[]
 
-interface Props {
+export interface SocialMediaTileProps {
   social: Socials
   onClick?: () => void
   active?: boolean
 }
 
-export const SocialMediaTile = React.memo(({ social, onClick, active }: Props) => {
+export const SocialMediaTile = React.memo(({ social, onClick, active }: SocialMediaTileProps) => {
   return (
     <Wrapper onClick={onClick} active={active}>
       <RowGapBlock align="center" gap={2}>
