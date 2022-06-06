@@ -89,7 +89,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   const isTransferDisabled = isZero || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
+  const setHalf = () => setAmount(transferableBalance.divn(2).toString())
   const onClick = () => {
     if (amount && recipient && sender) {
       onAccept(new BN(amount), sender, recipient)

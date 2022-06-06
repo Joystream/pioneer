@@ -139,6 +139,10 @@ export const ProposalPreview = () => {
               >
                 {camelCaseToText(proposal.status)}
               </BadgeStatus>
+              <TextMedium>
+                <TextInlineMedium lighter>ID: </TextInlineMedium>
+                <TextInlineMedium bold>{proposal.id}</TextInlineMedium>{' '}
+              </TextMedium>
               {blocksToProposalExecution && (
                 <TextMedium>
                   <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}

@@ -8,6 +8,7 @@ import { FundingType, isFundingLimited } from '@/bounty/types/Bounty'
 import { ProgressBar, ProgressBarWithRange } from '@/common/components/Progress'
 import { TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { error } from '@/common/logger'
 
 interface Props {
   fundingType: FundingType
@@ -20,6 +21,10 @@ export const FundingDetails = memo(({ fundingType, totalFunding, cherry }: Props
 
   if (!isFundingLimited(fundingType)) {
     const { target } = fundingType
+    if (target.isZero()) {
+      error('Bounty target is 0')
+      return null
+    }
     const currentProgress = totalFunding.muln(100).div(target).toNumber() / 100
     const color = currentProgress < 1 ? Colors.Orange[300] : Colors.Blue[500]
     return (
