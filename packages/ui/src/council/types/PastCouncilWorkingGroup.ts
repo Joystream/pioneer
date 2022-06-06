@@ -43,7 +43,7 @@ export const asPastCouncilWorkingGroup =
     name: asWorkingGroupName(fields.name),
     totalPaidReward: rewardPaidEvents
       .filter((rewardEvent) => rewardEvent.groupId === fields.id)
-      .reduce((a, b) => a.addn(b.amount), BN_ZERO),
+      .reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO),
     totalMissedReward: getTotalMissedReward(newMissedRewardLevelReachedEvents, fields.id),
     budget: new BN(budgetSetEvents.find((budgetEvent) => budgetEvent.groupId === fields.id)?.newBudget ?? 0),
   })
