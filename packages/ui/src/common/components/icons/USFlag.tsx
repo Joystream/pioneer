@@ -5,7 +5,7 @@ import { Icon } from '@/common/components/icons/Icon'
 export const USFlag = ({ className }: { className?: string }) => {
   return (
     <Icon size="16px" height="16" viewBox="0 0 16 16" className={className}>
-      <g clip-path="url(#clip0_9478_345222)">
+      <g clipPath="url(#clip0_9478_345222)">
         <path
           d="M21 0.666667C21 0.160208 20.5898 -0.25 20.0833 -0.25H8.16667V8.91667H-1V15.3333C-1 15.8398 -0.589792 16.25 -0.0833333 16.25H20.0833C20.5898 16.25 21 15.8398 21 15.3333V0.666667Z"
           fill="#B41F30"
