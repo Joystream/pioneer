@@ -18,7 +18,7 @@ export const useRefetchQueries = (
   deps?: DependencyList
 ) => {
   const apolloClient = useApolloClient()
-  const couldRefetchNext = useRef(typeof after === undefined)
+  const couldRefetchNext = useRef(typeof after === 'undefined')
 
   useEffect(() => {
     if (couldRefetchNext.current && when) {
