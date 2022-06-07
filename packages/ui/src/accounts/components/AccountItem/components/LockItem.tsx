@@ -80,7 +80,7 @@ export const LockItem = ({
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         {memberInfo && (
           <div>
-            <DetailLabel>Bound to:</DetailLabel>
+            <DetailLabel>{lock.type === 'Voting' ? 'Voted for' : 'Bound to:'}</DetailLabel>
             <MemberInfo member={memberInfo} onlyTop />
           </div>
         )}
