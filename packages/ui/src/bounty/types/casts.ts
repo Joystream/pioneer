@@ -118,7 +118,7 @@ export const periodBlockLeft = (fields: BountyFieldsFragment) => {
         )
       }
 
-      return fields.workPeriod
+      return undefined
     }
     case 'Judgment': {
       if (fields.maxFundingReachedEvent?.createdAt) {
@@ -138,7 +138,7 @@ export const periodBlockLeft = (fields: BountyFieldsFragment) => {
         )
       }
 
-      return fields.judgingPeriod
+      return undefined
     }
     case 'Funding': {
       const fundingPeriodTime = getFundingPeriodLength(asBountyFunding(fields.fundingType))

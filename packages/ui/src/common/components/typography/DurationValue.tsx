@@ -12,10 +12,9 @@ interface DurationValueProps {
   value: [number | string, string][]
   tiny?: boolean
   blocksLeft?: number
-  callbackOnTimeout?: () => void
 }
 
-export const DurationValue = ({ value, tiny, blocksLeft, callbackOnTimeout }: DurationValueProps) => {
+export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) => {
   const [countDown, setCountDown] = useState<number | undefined>(blocksLeft)
 
   useEffect(() => {
@@ -28,8 +27,6 @@ export const DurationValue = ({ value, tiny, blocksLeft, callbackOnTimeout }: Du
         setCountDown((oldTimeLeft) => {
           const newTimeLeft = (oldTimeLeft as number) - 1
           if (Math.floor(newTimeLeft) <= 0) {
-            callbackOnTimeout?.()
-
             clearInterval(interval)
           }
 
