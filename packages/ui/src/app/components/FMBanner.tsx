@@ -81,7 +81,7 @@ const Container = styled.div<{ open: boolean }>`
   display: ${({ open }) => !open && 'none'};
   background-color: ${Colors.Black[800]};
   border-radius: ${BorderRad.l};
-  width: 80%;
+  left: 246px;
   position: absolute;
   bottom: 100px;
   right: 20px;
