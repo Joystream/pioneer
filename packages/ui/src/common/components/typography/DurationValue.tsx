@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { BlockIcon } from '@/common/components/icons'
@@ -93,7 +93,7 @@ const Unit = styled.span<{ tiny?: boolean }>`
   font-family: ${Fonts.Grotesk};
 `
 
-const Separator = styled((props) => <span {...props}>:</span>)`
+const Separator = styled<(props: { tiny?: boolean }) => ReactElement>(() => <span>:</span>)`
   display: inline-block;
   color: ${({ tiny }) => (tiny ? `${Colors.Black[400]}` : `${Colors.Black[900]}`)};
   margin: ${({ tiny }) => (tiny ? '0' : '0 8px')};
