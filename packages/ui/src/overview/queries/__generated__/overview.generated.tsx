@@ -18,9 +18,9 @@ export type GetSidebarInfoQuery = {
     __typename: 'Worker'
     isLead: boolean
     group: { __typename: 'WorkingGroup'; name: string }
-    payouts: Array<{ __typename: 'RewardPaidEvent'; amount: any }>
+    payouts: Array<{ __typename: 'RewardPaidEvent'; amount: string }>
   }>
-  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; id: string }>
+  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; id: string }>
   workingGroupApplications: Array<{
     __typename: 'WorkingGroupApplication'
     opening: {
@@ -55,7 +55,7 @@ export type GetAllDeadLinesQuery = {
     candidates: Array<{
       __typename: 'Candidate'
       id: string
-      stake: any
+      stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
       member: {
@@ -106,9 +106,9 @@ export type GetAllDeadLinesQuery = {
     id: string
     groupId: string
     expectedStart?: any | null
-    stakeAmount?: any | null
-    rewardPerBlock?: any | null
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    stakeAmount?: string | null
+    rewardPerBlock?: string | null
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -126,10 +126,10 @@ export type GetAllDeadLinesQuery = {
     runtimeId: number
     groupId: string
     type: Types.WorkingGroupOpeningType
-    stakeAmount: any
-    rewardPerBlock: any
+    stakeAmount: string
+    rewardPerBlock: string
     unstakingPeriod: number
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'

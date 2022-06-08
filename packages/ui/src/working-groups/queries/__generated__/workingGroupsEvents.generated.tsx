@@ -31,7 +31,7 @@ export type BudgetSpendingActivityEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
   id: string
   createdAt: any
-  amount: any
+  amount: string
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
@@ -39,7 +39,7 @@ export type StakeDecreasedEventFieldsFragment = {
   __typename: 'StakeDecreasedEvent'
   id: string
   createdAt: any
-  amount: any
+  amount: string
   worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
@@ -47,7 +47,7 @@ export type StakeIncreasedEventFieldsFragment = {
   __typename: 'StakeIncreasedEvent'
   id: string
   createdAt: any
-  amount: any
+  amount: string
   worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
@@ -129,7 +129,7 @@ export type BudgetSetEventFieldsFragment = {
   __typename: 'BudgetSetEvent'
   id: string
   createdAt: any
-  newBudget: any
+  newBudget: string
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
@@ -153,7 +153,7 @@ export type WorkerRewardAmountUpdatedEventFragment = {
   __typename: 'WorkerRewardAmountUpdatedEvent'
   id: string
   createdAt: any
-  newRewardPerBlock: any
+  newRewardPerBlock: string
 }
 
 export type WorkerRewardAccountUpdatedEventFragment = {
@@ -196,14 +196,14 @@ export type GetMemberRoleEventsQuery = {
     __typename: 'StakeDecreasedEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   stakeIncreasedEvents: Array<{
     __typename: 'StakeIncreasedEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   stakeSlashedEvents: Array<{
@@ -259,7 +259,7 @@ export type GetMemberRoleEventsQuery = {
     __typename: 'WorkerRewardAmountUpdatedEvent'
     id: string
     createdAt: any
-    newRewardPerBlock: any
+    newRewardPerBlock: string
   }>
 }
 
@@ -295,21 +295,21 @@ export type GetGroupEventsQuery = {
     __typename: 'BudgetSpendingEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     group: { __typename: 'WorkingGroup'; name: string }
   }>
   stakeDecreasedEvents: Array<{
     __typename: 'StakeDecreasedEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   stakeIncreasedEvents: Array<{
     __typename: 'StakeIncreasedEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   openingAddedEvents: Array<{
@@ -361,7 +361,7 @@ export type GetGroupEventsQuery = {
     __typename: 'BudgetSetEvent'
     id: string
     createdAt: any
-    newBudget: any
+    newBudget: string
     group: { __typename: 'WorkingGroup'; name: string }
   }>
   stakeSlashedEvents: Array<{
@@ -420,14 +420,14 @@ export type GetWorkerEventsQuery = {
     __typename: 'StakeDecreasedEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   stakeIncreasedEvents: Array<{
     __typename: 'StakeIncreasedEvent'
     id: string
     createdAt: any
-    amount: any
+    amount: string
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
   }>
   stakeSlashedEvents: Array<{
@@ -523,14 +523,14 @@ export type GetOpeningsEventsQuery = {
         __typename: 'BudgetSetEvent'
         id: string
         createdAt: any
-        newBudget: any
+        newBudget: string
         group: { __typename: 'WorkingGroup'; name: string }
       }
     | {
         __typename: 'BudgetSpendingEvent'
         id: string
         createdAt: any
-        amount: any
+        amount: string
         group: { __typename: 'WorkingGroup'; name: string }
       }
     | { __typename: 'BudgetUpdatedEvent' }
@@ -633,14 +633,14 @@ export type GetOpeningsEventsQuery = {
         __typename: 'StakeDecreasedEvent'
         id: string
         createdAt: any
-        amount: any
+        amount: string
         worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
       }
     | {
         __typename: 'StakeIncreasedEvent'
         id: string
         createdAt: any
-        amount: any
+        amount: string
         worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
       }
     | { __typename: 'StakeReleasedEvent' }
