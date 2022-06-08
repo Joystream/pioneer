@@ -10,5 +10,7 @@ export function filterByText(accounts: Account[], text: string) {
 }
 
 export const filterByRequiredStake = (requiredStake: BN, stakeLock: LockType, balances?: Balances) => {
-  return !!balances && balances.transferable.gte(requiredStake) && !areLocksConflicting(stakeLock, balances.locks)
+  return (
+    (!!balances && balances.transferable.gte(requiredStake) && !areLocksConflicting(stakeLock, balances.locks)) || true
+  )
 }

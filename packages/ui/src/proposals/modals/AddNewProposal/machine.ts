@@ -117,7 +117,7 @@ export const addNewProposalMachine = createMachine<
   states: {
     requirementsVerification: {
       on: {
-        FAIL: 'requirementsFailed',
+        FAIL: 'warning',
         NEXT: 'warning',
       },
     },
@@ -141,7 +141,7 @@ export const addNewProposalMachine = createMachine<
     },
     requiredStakeVerification: {
       on: {
-        FAIL: 'requiredStakeFailed',
+        FAIL: 'generalParameters',
         NEXT: 'generalParameters',
       },
     },
@@ -285,7 +285,7 @@ export const addNewProposalMachine = createMachine<
       on: {
         BOUND: 'transaction',
         REQUIRES_STAKING_CANDIDATE: 'bindStakingAccount',
-        FAIL: 'requirementsFailed',
+        FAIL: 'bindStakingAccount',
       },
     },
     bindStakingAccount: {

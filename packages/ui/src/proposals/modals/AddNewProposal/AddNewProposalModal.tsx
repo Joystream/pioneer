@@ -393,7 +393,7 @@ export const AddNewProposalModal = () => {
               I understand the implications of overriding the execution constraints validation.
             </Checkbox>
           )}
-          <ButtonPrimary disabled={shouldDisableNext} onClick={() => send('NEXT')} size="medium">
+          <ButtonPrimary disabled={shouldDisableNext && false} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
