@@ -227,7 +227,7 @@ export const asWorkerRewardAmountUpdatedActivity: GroupActivityCast<
 > = (fragment): WorkerRewardAmountUpdatedActivity => ({
   eventType: fragment.__typename,
   ...asBaseActivity(fragment),
-  newAmount: fragment.newRewardPerBlock,
+  newAmount: new BN(fragment.newRewardPerBlock),
 })
 
 type WorkingGroupEventFields =

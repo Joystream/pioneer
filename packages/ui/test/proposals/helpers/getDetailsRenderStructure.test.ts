@@ -11,7 +11,7 @@ describe('getDetailsRenderStructure()', () => {
       destinations: [
         {
           account: alice.address,
-          amount: 20,
+          amount: new BN(20),
         },
       ],
     })
@@ -41,16 +41,16 @@ describe('getDetailsRenderStructure()', () => {
       destinations: [
         {
           account: alice.address,
-          amount: 20,
+          amount: new BN(20),
         },
         {
           account: bob.address,
-          amount: 30,
+          amount: new BN(30),
         },
 
         {
           account: aliceStash.address,
-          amount: 10,
+          amount: new BN(10),
         },
       ],
     })

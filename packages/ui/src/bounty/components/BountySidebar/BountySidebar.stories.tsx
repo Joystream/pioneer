@@ -34,8 +34,8 @@ const Template: Story<BountySidebarProps> = (args) => (
 export const Default = Template.bind({})
 Default.args = {
   contributors: [
-    { actor: getMember('alice'), amount: new BN(1000), hasWithdrawn: false },
-    { actor: getMember('bob'), amount: new BN(7500), hasWithdrawn: false },
+    { actor: getMember('alice'), amount: '1000', hasWithdrawn: false },
+    { actor: getMember('bob'), amount: '7500', hasWithdrawn: false },
   ],
   entrants: [
     { actor: getMember('alice'), count: 2 },

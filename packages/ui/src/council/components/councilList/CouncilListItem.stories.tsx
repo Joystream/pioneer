@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { getMember } from '@/mocks/helpers'
@@ -16,8 +17,8 @@ export const Default = Template.bind({})
 Default.args = {
   councilor: {
     member: getMember('alice'),
-    unpaidReward: 13923,
-    stake: 130923,
+    unpaidReward: new BN(13923),
+    stake: new BN(130923),
     numberOfTerms: 2,
   },
 }
