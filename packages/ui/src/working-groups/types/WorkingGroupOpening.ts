@@ -81,14 +81,14 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
     title: fields.metadata?.title ?? `${groupName} Working Group`,
     groupId: fields.groupId as GroupIdName,
     groupName: groupName,
-    budget: fields.group.budget,
+    budget: new BN(fields.group.budget),
     createdAtBlock: asBlock(fields.createdInEvent),
-    rewardPerBlock: fields.rewardPerBlock,
+    rewardPerBlock: new BN(fields.rewardPerBlock ?? 0),
     expectedEnding: fields.metadata.expectedEnding,
     shortDescription: fields.metadata.shortDescription || '',
     description: fields.metadata?.description ?? '',
     details: fields.metadata?.applicationDetails ?? '',
-    stake: fields.stakeAmount,
+    stake: new BN(fields.stakeAmount ?? 0),
   }
 }
 
