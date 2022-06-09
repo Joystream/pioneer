@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -17,7 +17,7 @@ import { Label, TextInlineMedium, TextMedium } from '@/common/components/typogra
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
-import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
+import { formatBlocksToDuration, formatTokenValue, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { MemberInfo } from '@/memberships/components'
@@ -41,7 +41,8 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
-  const { proposal } = useProposal(id)
+  const history = useHistory()
+  const { isLoading, proposal } = useProposal(id)
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
@@ -52,7 +53,7 @@ export const ProposalPreview = () => {
   const [currentVotingRound, setVotingRound] = useState(0)
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
-  useRefetchQueries({ interval: 6000, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
+  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
   const notVoted = useMemo(() => {
     if (
       !proposal ||
@@ -100,7 +101,10 @@ export const ProposalPreview = () => {
       />
     )
   }
-
+  if (!proposal) {
+    if (!isLoading) history.replace('/404')
+    return <Loading />
+  }
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}

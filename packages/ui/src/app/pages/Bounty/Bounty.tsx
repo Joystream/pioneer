@@ -8,13 +8,17 @@ import { BountyRouteParams } from '@/bounty/constants'
 import { useBounty } from '@/bounty/hooks/useBounty'
 import { Loading } from '@/common/components/Loading'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 
 export const Bounty = () => {
   const { id } = useParams<BountyRouteParams>()
   const history = useHistory()
   const { isLoading, bounty } = useBounty(id)
 
-  useRefetchQueries({ when: bounty && !bounty.isTerminated, interval: 6000, include: ['GetBounty'] }, [bounty])
+  useRefetchQueries(
+    { when: bounty && !bounty.isTerminated, interval: MILLISECONDS_PER_BLOCK, include: ['GetBounty'] },
+    [bounty]
+  )
 
   if (!bounty) {
     if (!isLoading) history.replace('/404')
