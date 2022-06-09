@@ -19,8 +19,8 @@ export interface Worker {
   status: WorkerStatusTypename
   isLead: boolean
   rewardPerBlock: BN
-  owedReward: number
-  stake: number
+  owedReward: string
+  stake: string
 }
 
 export interface WorkerWithDetails extends Worker {
@@ -30,7 +30,7 @@ export interface WorkerWithDetails extends Worker {
   rewardAccount: Address
   stakeAccount: Address
   hiredAtBlock: Block
-  minStake: number
+  minStake: string
 }
 
 export interface PastWorker {
@@ -54,23 +54,24 @@ export const asWorkerBaseInfo = (fields: WorkerFieldsFragment): WorkerBaseInfo =
   applicationId: fields.applicationId,
 })
 
-export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
-  id: fields.id,
-  runtimeId: fields.runtimeId,
-  group: {
-    id: fields.group.id as GroupIdName,
-    name: asWorkingGroupName(fields.group.name),
-  },
-  membership: {
-    id: fields.membership.id,
-    controllerAccount: fields.membership.controllerAccount,
-  },
-  status: fields.status.__typename,
-  isLead: fields.isLead,
-  rewardPerBlock: new BN(fields.rewardPerBlock),
-  stake: fields.stake,
-  owedReward: fields.missingRewardAmount,
-})
+export const asWorker = (fields: WorkerFieldsFragment): Worker =>
+  <Worker>{
+    id: fields.id,
+    runtimeId: fields.runtimeId,
+    group: {
+      id: fields.group.id as GroupIdName,
+      name: asWorkingGroupName(fields.group.name),
+    },
+    membership: {
+      id: fields.membership.id,
+      controllerAccount: fields.membership.controllerAccount,
+    },
+    status: fields.status.__typename,
+    isLead: fields.isLead,
+    rewardPerBlock: new BN(fields.rewardPerBlock),
+    stake: fields.stake,
+    owedReward: fields.missingRewardAmount,
+  }
 
 export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),

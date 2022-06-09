@@ -7,8 +7,8 @@ export interface Councilor {
   id: string
   member: Member
   numberOfTerms: number
-  unpaidReward: number
-  stake: number
+  unpaidReward: string
+  stake: string
   voterStake?: BN
 }
 

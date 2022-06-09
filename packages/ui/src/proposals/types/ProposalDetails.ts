@@ -20,7 +20,7 @@ type ProposalDetailsNew<Type extends ProposalType, Details> = { type: Type } & D
 export type DestinationsDetail = {
   destinations?: {
     account: string
-    amount: number
+    amount: string
   }[]
 }
 export type NewByteCodeIdDetail = {

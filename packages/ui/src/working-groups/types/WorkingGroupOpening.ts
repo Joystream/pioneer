@@ -26,9 +26,9 @@ export interface BaseOpening {
   description: string
   details: string
   createdAtBlock: Block
-  stake: BN
-  budget: number
-  rewardPerBlock: BN
+  stake: string
+  budget: string
+  rewardPerBlock: string
 }
 
 export interface UpcomingWorkingGroupOpening extends BaseOpening {
@@ -45,7 +45,7 @@ export interface WorkingGroupOpeningApplication {
 export interface WorkingGroupOpening extends BaseOpening {
   runtimeId: number
   leadId?: string | null
-  budget: number
+  budget: string
   type: WorkingGroupOpeningType
   status: Status
   applicants: number
@@ -83,22 +83,23 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
     groupName: groupName,
     budget: fields.group.budget,
     createdAtBlock: asBlock(fields.createdInEvent),
-    rewardPerBlock: new BN(fields.rewardPerBlock),
+    rewardPerBlock: fields.rewardPerBlock,
     expectedEnding: fields.metadata.expectedEnding,
     shortDescription: fields.metadata.shortDescription || '',
     description: fields.metadata?.description ?? '',
     details: fields.metadata?.applicationDetails ?? '',
-    stake: new BN(fields.stakeAmount),
+    stake: fields.stakeAmount,
   }
 }
 
 export const asUpcomingWorkingGroupOpening = (
   fields: UpcomingWorkingGroupOpeningFieldsFragment
-): UpcomingWorkingGroupOpening => ({
-  ...asBaseOpening(fields),
-  hiringLimit: fields.metadata?.hiringLimit ?? 0,
-  expectedStart: fields.expectedStart,
-})
+): UpcomingWorkingGroupOpening =>
+  <UpcomingWorkingGroupOpening>{
+    ...asBaseOpening(fields),
+    hiringLimit: fields.metadata?.hiringLimit ?? 0,
+    expectedStart: fields.expectedStart,
+  }
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => {
   const groupName = asWorkingGroupName(fields.group.name)
@@ -152,7 +153,7 @@ export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment
 export interface WorkingGroupOpeningMention {
   id: string
   type: string
-  rewardPerBlock: number
+  rewardPerBlock: string
   applicants: number
   shortDescription?: string | undefined | null
   description?: string | undefined | null
