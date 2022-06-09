@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
+import { ReplyIcon } from '@/common/components/icons'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
@@ -27,7 +28,8 @@ export const ThreadCard = () => {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna
       </TextMedium>
-      <ColumnGapBlock>
+      <ColumnGapBlock gap={8}>
+        <ReplyIcon />
         <CountBadge count={2} />
       </ColumnGapBlock>
     </Box>
@@ -62,6 +64,15 @@ const Box = styled.div`
       justify-content: end;
       gap: 5px;
       flex: 2;
+    }
+  }
+
+  > *:last-child {
+    svg {
+      :hover {
+        color: ${Colors.LogoPurple};
+        cursor: pointer;
+      }
     }
   }
 `
