@@ -18,6 +18,7 @@ interface TextProps {
   inter?: boolean
   error?: boolean
   truncate?: boolean
+  truncateLines?: number
 }
 
 const TextValueStyle = css`
@@ -70,6 +71,13 @@ const TextTruncateStyle = css`
   text-overflow: ellipsis;
 `
 
+const TextTruncateLines = css<TextProps>`
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: ${({ truncateLines }) => truncateLines};
+`
+
 const TextMargins = css<TextProps>`
   margin-bottom: ${({ margin }) => {
     switch (margin) {
@@ -103,6 +111,7 @@ const TextAllStyles = css<TextProps>`
   ${({ normalWeight }) => normalWeight && TextNormalWeightStyle};
   ${({ error }) => error && TextErrorStyle}
   ${({ truncate }) => truncate && TextTruncateStyle};
+  ${({ truncateLines }) => truncateLines && TextTruncateLines};
   ${TextMargins};
 `
 
