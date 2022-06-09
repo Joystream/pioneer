@@ -69,6 +69,7 @@ const Box = styled.div`
 
   > *:last-child {
     svg {
+      color: ${Colors.Black[400]};
       :hover {
         color: ${Colors.LogoPurple};
         cursor: pointer;
