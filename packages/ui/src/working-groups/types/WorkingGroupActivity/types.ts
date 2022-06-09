@@ -112,5 +112,5 @@ export interface WorkerRewardAccountUpdatedActivity extends BaseActivity {
 
 export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
   eventType: 'WorkerRewardAmountUpdatedEvent'
-  newAmount: string
+  newAmount: BN
 }

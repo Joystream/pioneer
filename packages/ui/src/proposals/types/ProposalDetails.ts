@@ -20,7 +20,7 @@ type ProposalDetailsNew<Type extends ProposalType, Details> = { type: Type } & D
 export type DestinationsDetail = {
   destinations?: {
     account: string
-    amount: string
+    amount: BN
   }[]
 }
 export type NewByteCodeIdDetail = {
@@ -154,7 +154,10 @@ export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
     type: 'fundingRequest',
-    destinations: fragment.destinationsList?.destinations.map((d) => ({ account: d.account, amount: d.amount })),
+    destinations: fragment.destinationsList?.destinations.map((d) => ({
+      account: d.account,
+      amount: new BN(d.amount),
+    })),
   }
 }
 

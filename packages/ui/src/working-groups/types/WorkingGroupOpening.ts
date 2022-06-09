@@ -26,9 +26,9 @@ export interface BaseOpening {
   description: string
   details: string
   createdAtBlock: Block
-  stake: string
-  budget: string
-  rewardPerBlock: string
+  stake: BN
+  budget: BN
+  rewardPerBlock: BN
 }
 
 export interface UpcomingWorkingGroupOpening extends BaseOpening {
@@ -45,7 +45,7 @@ export interface WorkingGroupOpeningApplication {
 export interface WorkingGroupOpening extends BaseOpening {
   runtimeId: number
   leadId?: string | null
-  budget: string
+  budget: BN
   type: WorkingGroupOpeningType
   status: Status
   applicants: number
@@ -94,12 +94,11 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
 
 export const asUpcomingWorkingGroupOpening = (
   fields: UpcomingWorkingGroupOpeningFieldsFragment
-): UpcomingWorkingGroupOpening =>
-  <UpcomingWorkingGroupOpening>{
-    ...asBaseOpening(fields),
-    hiringLimit: fields.metadata?.hiringLimit ?? 0,
-    expectedStart: fields.expectedStart,
-  }
+): UpcomingWorkingGroupOpening => ({
+  ...asBaseOpening(fields),
+  hiringLimit: fields.metadata?.hiringLimit ?? 0,
+  expectedStart: fields.expectedStart,
+})
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => {
   const groupName = asWorkingGroupName(fields.group.name)
@@ -153,7 +152,7 @@ export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment
 export interface WorkingGroupOpeningMention {
   id: string
   type: string
-  rewardPerBlock: string
+  rewardPerBlock: BN
   applicants: number
   shortDescription?: string | undefined | null
   description?: string | undefined | null
@@ -169,7 +168,7 @@ export const asWorkingGroupOpeningMention = (
 ): WorkingGroupOpeningMention => ({
   id: fields.id,
   type: fields.type as WorkingGroupOpeningType,
-  rewardPerBlock: fields.rewardPerBlock,
+  rewardPerBlock: new BN(fields.rewardPerBlock),
   shortDescription: fields.metadata?.shortDescription,
   description: fields.metadata?.description,
   expectedEnding: fields.metadata?.expectedEnding,

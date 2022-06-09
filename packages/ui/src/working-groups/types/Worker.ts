@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { BN_ZERO } from '@/common/constants'
 import { Address, asBlock, Block } from '@/common/types'
 import { castQueryResult } from '@/common/utils/casting'
 import { asMember, Member } from '@/memberships/types'
@@ -19,8 +20,8 @@ export interface Worker {
   status: WorkerStatusTypename
   isLead: boolean
   rewardPerBlock: BN
-  owedReward: string
-  stake: string
+  owedReward: BN
+  stake: BN
 }
 
 export interface WorkerWithDetails extends Worker {
@@ -30,7 +31,7 @@ export interface WorkerWithDetails extends Worker {
   rewardAccount: Address
   stakeAccount: Address
   hiredAtBlock: Block
-  minStake: string
+  minStake: BN
 }
 
 export interface PastWorker {
@@ -54,24 +55,23 @@ export const asWorkerBaseInfo = (fields: WorkerFieldsFragment): WorkerBaseInfo =
   applicationId: fields.applicationId,
 })
 
-export const asWorker = (fields: WorkerFieldsFragment): Worker =>
-  <Worker>{
-    id: fields.id,
-    runtimeId: fields.runtimeId,
-    group: {
-      id: fields.group.id as GroupIdName,
-      name: asWorkingGroupName(fields.group.name),
-    },
-    membership: {
-      id: fields.membership.id,
-      controllerAccount: fields.membership.controllerAccount,
-    },
-    status: fields.status.__typename,
-    isLead: fields.isLead,
-    rewardPerBlock: new BN(fields.rewardPerBlock),
-    stake: fields.stake,
-    owedReward: fields.missingRewardAmount,
-  }
+export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
+  id: fields.id,
+  runtimeId: fields.runtimeId,
+  group: {
+    id: fields.group.id as GroupIdName,
+    name: asWorkingGroupName(fields.group.name),
+  },
+  membership: {
+    id: fields.membership.id,
+    controllerAccount: fields.membership.controllerAccount,
+  },
+  status: fields.status.__typename,
+  isLead: fields.isLead,
+  rewardPerBlock: new BN(fields.rewardPerBlock),
+  stake: new BN(fields.stake),
+  owedReward: new BN(fields.missingRewardAmount || BN_ZERO),
+})
 
 export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),
@@ -80,7 +80,7 @@ export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): Worke
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,
-  minStake: fields.application.opening.stakeAmount,
+  minStake: new BN(fields.application.opening.stakeAmount),
   hiredAtBlock: asBlock(fields.entry),
 })
 
