@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
@@ -78,6 +79,6 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
     case 'voterStake':
       return (a, b) => ((a[key] ?? BN_ZERO).gte(b[key] ?? BN_ZERO) ? 1 : -1 * direction)
     default:
-      return (a, b) => (a[key] - b[key]) * direction
+      return (a, b) => new BN(a[key]).sub(new BN(b[key])).muln(direction).toNumber()
   }
 }
