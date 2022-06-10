@@ -62,8 +62,8 @@ export const SwitchMemberModal = () => {
               hideModal()
               showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
             }}
-            subtitleText="New Member"
-            titleText="Create a New Membership"
+            titleText="New Member"
+            subtitleText="Create a New Membership"
           />
           {active ? (
             <DetailsButton
@@ -72,8 +72,8 @@ export const SwitchMemberModal = () => {
                 hideModal()
                 showModal<SignOutModalCall>({ modal: 'SignOut' })
               }}
-              subtitleText="Sign Out"
-              titleText="Sign out of the active Membership"
+              titleText="Sign Out"
+              subtitleText="Sign out of the active Membership"
             />
           ) : null}
         </SwitchModalFooter>

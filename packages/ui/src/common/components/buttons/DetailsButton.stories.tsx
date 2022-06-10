@@ -4,7 +4,7 @@ import React from 'react'
 import { DetailsButton, DetailsButtonProps } from '@/common/components/buttons/DetailsButton'
 import { SignOutIcon } from '@/common/components/page/Sidebar/LinksIcons/SignOutIcon'
 
-import { Row, TemplateBlock } from '../storybookParts/previewStyles'
+import { BlackBlock } from '../storybookParts/previewStyles'
 
 export default {
   title: 'Common/Buttons/DetailsButton',
@@ -12,11 +12,9 @@ export default {
 } as Meta
 
 const Template: Story<DetailsButtonProps> = (args) => (
-  <TemplateBlock>
-    <Row>
-      <DetailsButton {...args} />
-    </Row>
-  </TemplateBlock>
+  <BlackBlock>
+    <DetailsButton {...args} />
+  </BlackBlock>
 )
 
 export const DetailsButtonComponent = Template.bind({})
