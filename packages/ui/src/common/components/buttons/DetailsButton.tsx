@@ -1,30 +1,31 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { SignOutIcon } from '@/common/components/page/Sidebar/LinksIcons/SignOutIcon'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
 
-import { TextSmall } from '../../common/components/typography'
-import { BorderRad, Colors, Transitions } from '../../common/constants'
+import { TextSmall } from '../typography'
 
-interface Props {
+export interface DetailsButtonProps {
   onClick: () => void
+  icon: React.ReactNode
+  disabled?: boolean
+  titleText: string
+  subtitleText: string
 }
 
-export const SignOutButton = ({ onClick }: Props) => {
+export const DetailsButton = ({ onClick, icon, disabled, titleText, subtitleText }: DetailsButtonProps) => {
   return (
-    <SignOut onClick={onClick}>
-      <SignOutImage>
-        <IconWrapper>
-          <SignOutIcon />
-        </IconWrapper>
-      </SignOutImage>
-      <SignOutTitle>Sign Out</SignOutTitle>
-      <SignOutText>Sign out of the active Membership</SignOutText>
-    </SignOut>
+    <DetailsButtonWrapper onClick={onClick} disabled={disabled}>
+      <ImageWrapper>
+        <IconWrapper>{icon}</IconWrapper>
+      </ImageWrapper>
+      <TitleText>{titleText}</TitleText>
+      <SubtitleText>{subtitleText}</SubtitleText>
+    </DetailsButtonWrapper>
   )
 }
 
-const SignOutImage = styled.span`
+const ImageWrapper = styled.span`
   display: flex;
   grid-area: createicon;
   justify-content: center;
@@ -53,19 +54,19 @@ const IconWrapper = styled.div`
   background-color: ${Colors.Black[75]};
 `
 
-const SignOutTitle = styled.h6`
+const TitleText = styled.h6`
   grid-area: createtitle;
   color: ${Colors.Black[75]};
   transition: ${Transitions.all};
 `
 
-const SignOutText = styled(TextSmall)`
+const SubtitleText = styled(TextSmall)`
   grid-area: createtext;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
 `
 
-const SignOut = styled.button`
+const DetailsButtonWrapper = styled.button`
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-template-rows: 20px 18px;
@@ -88,14 +89,14 @@ const SignOut = styled.button`
     outline: none;
     background-color: ${Colors.Black[600]};
 
-    ${SignOutImage} {
+    ${ImageWrapper} {
       background-color: ${Colors.Black[500]};
       color: ${Colors.Black[50]};
     }
-    ${SignOutTitle} {
+    ${TitleText} {
       color: ${Colors.Black[50]};
     }
-    ${SignOutText} {
+    ${SubtitleText} {
       color: ${Colors.Black[300]};
     }
   }
