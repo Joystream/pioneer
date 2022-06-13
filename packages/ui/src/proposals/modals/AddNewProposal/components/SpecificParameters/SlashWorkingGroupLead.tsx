@@ -20,9 +20,13 @@ export const SlashWorkingGroupLead = () => {
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setValue('slashWorkingGroupLead.slashingAmount', BN_ZERO, { shouldValidate: true })
-    setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
-  }, [groupId, group?.leadWorker?.runtimeId])
+    if (group) {
+      setValue('slashWorkingGroupLead.slashingAmount', group?.leadWorker?.stake.divn(2) ?? BN_ZERO, {
+        shouldValidate: true,
+      })
+      setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
+    }
+  }, [group?.id])
 
   return (
     <RowGapBlock gap={24}>
@@ -72,6 +76,7 @@ export const SlashWorkingGroupLead = () => {
               isTokenValue
               isInBN
               placeholder="0"
+              maxAllowedValue={group?.leadWorker?.stake.toNumber()}
               disabled={isDisabled}
             />
           </InputComponent>
