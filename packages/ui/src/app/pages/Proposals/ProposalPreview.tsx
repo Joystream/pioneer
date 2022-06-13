@@ -104,10 +104,6 @@ export const ProposalPreview = () => {
       />
     )
   }
-  if (!proposal) {
-    if (!isLoading) history.replace('/404')
-    return <Loading />
-  }
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}
