@@ -88,6 +88,9 @@ export const ProposalPreview = () => {
   const myVoteStatus = myVote?.voteKind
 
   if (!proposal || !votes) {
+    if (!proposal && !isLoading) {
+      history.replace('/404')
+    }
     return (
       <PageLayout
         lastBreadcrumb={id}
