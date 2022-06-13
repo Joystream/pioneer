@@ -32,9 +32,11 @@ export const DecreaseWorkingGroupLeadStake = () => {
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setStakingAmount(BN_ZERO)
-    setValue('decreaseWorkingGroupLeadStake.workerId', group?.leadWorker?.runtimeId)
-  }, [groupId, group?.leadWorker?.runtimeId])
+    if (group) {
+      setStakingAmount(group.leadWorker?.stake.divn(2) ?? BN_ZERO)
+      setValue('decreaseWorkingGroupLeadStake.workerId', group.leadWorker?.runtimeId)
+    }
+  }, [group?.id])
 
   return (
     <RowGapBlock gap={24}>
@@ -88,6 +90,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
                 isInBN
                 placeholder="0"
                 disabled={isDisabled}
+                maxAllowedValue={group?.leadWorker?.stake.toNumber()}
               />
             </InputComponent>
             <AmountButtons>
