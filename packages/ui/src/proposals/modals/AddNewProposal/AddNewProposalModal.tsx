@@ -139,10 +139,6 @@ export const AddNewProposalModal = () => {
   }, [stakingStatus])
 
   useEffect(() => {
-    form.trigger(machineStateConverter(state.value) as keyof AddNewProposalForm)
-  }, [machineStateConverter(state.value)])
-
-  useEffect(() => {
     if (machineStateConverter(state.value) === 'stakingPolicyAndReward') {
       if (
         form.formState.errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
