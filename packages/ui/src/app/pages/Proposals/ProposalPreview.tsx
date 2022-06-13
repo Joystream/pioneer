@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -16,7 +16,8 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
-import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { formatBlocksToDuration, formatTokenValue, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { MemberInfo } from '@/memberships/components'
@@ -40,17 +41,19 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
+  const history = useHistory()
   const { isLoading, proposal } = useProposal(id)
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
-
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
+
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
+  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
   const notVoted = useMemo(() => {
     if (
       !proposal ||
@@ -84,7 +87,10 @@ export const ProposalPreview = () => {
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
 
-  if (isLoading || !proposal || !votes) {
+  if (!proposal || !votes) {
+    if (!proposal && !isLoading) {
+      history.replace('/404')
+    }
     return (
       <PageLayout
         lastBreadcrumb={id}
@@ -98,7 +104,6 @@ export const ProposalPreview = () => {
       />
     )
   }
-
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}
