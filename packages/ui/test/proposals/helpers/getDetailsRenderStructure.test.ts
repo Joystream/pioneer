@@ -20,7 +20,7 @@ describe('getDetailsRenderStructure()', () => {
       structure: [
         {
           label: 'amount',
-          value: 20,
+          value: new BN(20),
           renderType: 'Amount',
         },
         {
@@ -59,7 +59,7 @@ describe('getDetailsRenderStructure()', () => {
       structure: [
         {
           label: 'amount',
-          value: 20,
+          value: new BN(20),
           renderType: 'Amount',
         },
         {
@@ -72,7 +72,7 @@ describe('getDetailsRenderStructure()', () => {
         },
         {
           label: 'amount',
-          value: 30,
+          value: new BN(30),
           renderType: 'Amount',
         },
         {
@@ -85,7 +85,7 @@ describe('getDetailsRenderStructure()', () => {
         },
         {
           label: 'amount',
-          value: 10,
+          value: new BN(10),
           renderType: 'Amount',
         },
         {
