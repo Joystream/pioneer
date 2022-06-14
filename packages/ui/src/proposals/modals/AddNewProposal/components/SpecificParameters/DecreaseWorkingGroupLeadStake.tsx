@@ -16,8 +16,11 @@ import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGro
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const DecreaseWorkingGroupLeadStake = () => {
-  const { setValue, watch } = useFormContext()
-  const [groupId] = watch(['decreaseWorkingGroupLeadStake.groupId'])
+  const { setValue, watch, formState, setError, clearErrors } = useFormContext()
+  const [groupId, stakingAmount] = watch([
+    'decreaseWorkingGroupLeadStake.groupId',
+    'decreaseWorkingGroupLeadStake.stakingAmount',
+  ])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
@@ -37,6 +40,19 @@ export const DecreaseWorkingGroupLeadStake = () => {
       setValue('decreaseWorkingGroupLeadStake.workerId', group.leadWorker?.runtimeId)
     }
   }, [group?.id])
+
+  useEffect(() => {
+    if (!stakingAmount || !group || formState.isValidating || !formState.isValid) return
+
+    if (stakingAmount?.gte(group.leadWorker?.stake)) {
+      return setError('decreaseWorkingGroupLeadStake.stakingAmount', {
+        type: 'custom',
+        message: 'Amount must be lower than current lead reward',
+      })
+    }
+
+    return clearErrors('decreaseWorkingGroupLeadStake.stakingAmount')
+  }, [stakingAmount?.toString(), formState.isValidating])
 
   return (
     <RowGapBlock gap={24}>
@@ -90,7 +106,6 @@ export const DecreaseWorkingGroupLeadStake = () => {
                 isInBN
                 placeholder="0"
                 disabled={isDisabled}
-                maxAllowedValue={group?.leadWorker?.stake.toNumber()}
               />
             </InputComponent>
             <AmountButtons>

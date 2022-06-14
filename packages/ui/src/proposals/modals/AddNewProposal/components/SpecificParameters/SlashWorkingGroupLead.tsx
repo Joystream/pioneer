@@ -13,8 +13,8 @@ import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGro
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const SlashWorkingGroupLead = () => {
-  const { setValue, watch } = useFormContext()
-  const [groupId] = watch(['slashWorkingGroupLead.groupId'])
+  const { setValue, watch, setError, clearErrors, formState } = useFormContext()
+  const [groupId, slashingAmount] = watch(['slashWorkingGroupLead.groupId', 'slashWorkingGroupLead.slashingAmount'])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
   const isDisabled = !group || (group && !group.leadId)
@@ -27,6 +27,19 @@ export const SlashWorkingGroupLead = () => {
       setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
     }
   }, [group?.id])
+
+  useEffect(() => {
+    if (!slashingAmount || !group || formState.isValidating || !formState.isValid) return
+
+    if (slashingAmount?.gte(group.leadWorker?.stake)) {
+      return setError('slashWorkingGroupLead.slashingAmount', {
+        type: 'custom',
+        message: 'Amount must be lower than current lead reward',
+      })
+    }
+
+    return clearErrors('decreaseWorkingGroupLeadStake.stakingAmount')
+  }, [slashingAmount?.toString(), formState.isValidating])
 
   return (
     <RowGapBlock gap={24}>
@@ -76,7 +89,6 @@ export const SlashWorkingGroupLead = () => {
               isTokenValue
               isInBN
               placeholder="0"
-              maxAllowedValue={group?.leadWorker?.stake.toNumber()}
               disabled={isDisabled}
             />
           </InputComponent>
