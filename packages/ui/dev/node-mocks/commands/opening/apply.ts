@@ -3,10 +3,8 @@ import { AnyNumber } from '@polkadot/types/types'
 
 import { getDataFromEvent, metadataToBytes } from '../../../../src/common/model/JoystreamNode'
 import memberData from '../../../../src/mocks/data/raw/members.json'
-import { GroupIdName } from '../../../../src/working-groups/types'
+import { GROUP, GroupIdName } from '../../consts'
 import { signAndSend, withApi } from '../../lib/api'
-
-const GROUP = 'membershipWorkingGroup'
 
 interface Params {
   openingId?: AnyNumber
@@ -17,7 +15,7 @@ export const applyOnOpeningCommand = async ({ openingId = 0, group = GROUP }: Pa
   await withApi(async (api) => {
     const alice = memberData[0]
 
-    const tx = api.tx[GROUP].applyOnOpening({
+    const tx = api.tx[group].applyOnOpening({
       member_id: alice.id,
       opening_id: openingId,
       role_account_id: alice.controllerAccount,
