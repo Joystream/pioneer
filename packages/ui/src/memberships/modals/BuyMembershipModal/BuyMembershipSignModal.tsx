@@ -48,18 +48,19 @@ export const BuyMembershipSignModal = ({
     signer: fromAddress,
     service,
   })
-  const [hasFunds, setHasFunds] = useState(false)
+  const [hasFunds, setHasFunds] = useState(true)
   const balance = useBalance(fromAddress)
+  const validationInfo = balance?.transferable && paymentInfo?.partialFee && membershipPrice
 
   useEffect(() => {
-    if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
+    if (validationInfo) {
       const requiredBalance = paymentInfo.partialFee.add(membershipPrice)
       const hasFunds = balance.transferable.gte(requiredBalance)
       setHasFunds(hasFunds)
     }
   }, [fromAddress, balance])
 
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady || !hasFunds || !validationInfo
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -75,8 +76,8 @@ export const BuyMembershipSignModal = ({
           <InputComponent
             label="Sending from account"
             inputSize="l"
-            validation={hasFunds ? undefined : 'invalid'}
-            message={hasFunds ? undefined : getMessage(paymentInfo?.partialFee)}
+            validation={hasFunds && balance ? undefined : 'invalid'}
+            message={hasFunds && balance ? undefined : getMessage(paymentInfo?.partialFee)}
           >
             {initialSigner ? (
               <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
