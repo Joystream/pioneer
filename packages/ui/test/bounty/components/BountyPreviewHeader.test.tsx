@@ -322,7 +322,7 @@ describe('UI: BountyPreviewHeader', () => {
         {
           hasWithdrawn: false,
           actor: activeMember,
-          amount: '1222',
+          amount: new BN(1222),
         },
       ]
 
@@ -337,7 +337,7 @@ describe('UI: BountyPreviewHeader', () => {
         {
           hasWithdrawn: true,
           actor: activeMember,
-          amount: '1222',
+          amount: new BN(1222),
         },
       ]
 

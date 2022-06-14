@@ -30,7 +30,7 @@ const accounts = {
 
 const contributor: Contributor = {
   actor: getMember('alice'),
-  amount: '10000',
+  amount: new BN(10000),
   hasWithdrawn: false,
 }
 

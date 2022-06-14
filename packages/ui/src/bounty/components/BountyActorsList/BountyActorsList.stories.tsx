@@ -25,8 +25,8 @@ export const ContributorsList = Template.bind({})
 ContributorsList.args = {
   title: 'CONTRIBUTORS',
   elements: [
-    { actor: getMember('alice'), amount: '1000' },
-    { actor: getMember('bob'), amount: '7000' },
+    { actor: getMember('alice'), amount: new BN(1000) },
+    { actor: getMember('bob'), amount: new BN(7000) },
   ],
 }
 
