@@ -55,5 +55,9 @@ export const BuyMembershipModal = () => {
     )
   }
 
+  if (state.matches('canceled')) {
+    hideModal()
+  }
+
   return null
 }
