@@ -3,6 +3,8 @@ import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { CopyButtonTemplate } from '@/common/components/buttons'
+import { LinkIcon } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -11,6 +13,7 @@ import { TextSmall } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { toDDMMYY } from '@/common/utils/dates'
+import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -53,6 +56,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         return 'Proposal was rejected by council. Rationale can be checked in proposal details, and nothing further can happen.'
     }
   }
+
   return (
     <ProposalItem
       as={GhostRouterLink}
@@ -62,6 +66,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
     >
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
+          <Subscription>{`ID: ${proposal.id}`}</Subscription>
           {!isPast && <Subscription>Created at: {toDDMMYY(displayDate)}</Subscription>}
           <BadgeStatus>{camelCaseToText(proposal.type)}</BadgeStatus>
         </ToggleableItemInfoTop>
@@ -74,17 +79,28 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         </Tooltip>
       </StageField>
       <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
-      {isPast && (
-        <StageField>
-          <Subscription>{toDDMMYY(displayDate)}</Subscription>
-        </StageField>
-      )}
+      <StageField>{isPast && <Subscription>{toDDMMYY(displayDate)}</Subscription>}</StageField>
       <StageField>
         <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
       </StageField>
+      <CopyButton
+        square
+        size="small"
+        textToCopy={getUrl({ route: ProposalsRoutes.preview, params: { id: proposal.id } })}
+        icon={<LinkIcon />}
+      />
     </ProposalItem>
   )
 }
+
+const CopyButton = styled(CopyButtonTemplate)`
+  justify-self: end;
+  visibility: hidden;
+  transition: none;
+  & svg {
+    transition: none !important;
+  }
+`
 
 const ProposalItem = styled(TableListItem)`
   grid-column-gap: 36px;
@@ -92,6 +108,9 @@ const ProposalItem = styled(TableListItem)`
   background-color: ${({ $isPast }: { $isPast?: boolean }) => ($isPast ? Colors.Black[50] : Colors.White)};
   grid-template-rows: unset;
   height: 86px;
+  &:hover ${CopyButton} {
+    visibility: visible;
+  }
 `
 
 export const StageField = styled.div`

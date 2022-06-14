@@ -33,12 +33,12 @@ export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil =>
 })
 
 export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment[]) =>
-  spendingEvents.reduce((a, b) => a.addn(b.amount), BN_ZERO)
+  spendingEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)
 
 export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragment[]) => {
   return fundingRequests.reduce((sum, fundingRequest) => {
     const details = asProposalDetails(fundingRequest.proposal.details as DetailsFragment) as FundingRequestDetails
-    const amount = details.destinations?.reduce((a, b) => a.addn(b.amount), BN_ZERO) || BN_ZERO
+    const amount = details.destinations?.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO) || BN_ZERO
 
     return sum.add(amount)
   }, BN_ZERO)

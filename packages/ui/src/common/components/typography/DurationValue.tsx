@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { BlockIcon } from '@/common/components/icons'
@@ -6,7 +6,7 @@ import { BlocksInfo, formatDuration, NumberOfBlocks } from '@/common/components/
 import { Colors, Fonts, SECONDS_PER_BLOCK } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
-import { intersperse } from '@/common/utils'
+import { intersperse, isDefined } from '@/common/utils'
 
 interface DurationValueProps {
   value: [number | string, string][]
@@ -25,17 +25,21 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
     const interval = setInterval(
       () =>
         setCountDown((oldTimeLeft) => {
-          const newTimeLeft = (oldTimeLeft as number) - 60 / SECONDS_PER_BLOCK
-          return newTimeLeft <= 0 ? 0 : newTimeLeft
+          const newTimeLeft = (oldTimeLeft as number) - 1
+          if (Math.floor(newTimeLeft) <= 0) {
+            clearInterval(interval)
+          }
+
+          return Math.floor(newTimeLeft)
         }),
-      1000 * 60
+      1000 * SECONDS_PER_BLOCK
     )
 
     return () => clearInterval(interval)
   }, [])
 
-  const formattedCountDown = formatDuration(countDown ?? 0)
-  const valueToShow = countDown ? formattedCountDown : value
+  const formattedCountDown = countDown ? formatDuration(countDown ?? 0) : []
+  const valueToShow = isDefined(countDown) ? formattedCountDown : value
 
   return (
     <>
@@ -47,7 +51,7 @@ export const DurationValue = ({ value, tiny, blocksLeft }: DurationValueProps) =
           (index) => <Separator key={index} tiny={tiny} />
         )
       ) : (
-        <Days>None</Days>
+        <Days>{isDefined(countDown) ? 'Pending' : 'None'}</Days>
       )}
       {blocksLeft && (
         <BlocksInfo gap={8}>
@@ -89,7 +93,7 @@ const Unit = styled.span<{ tiny?: boolean }>`
   font-family: ${Fonts.Grotesk};
 `
 
-const Separator = styled((props) => <span {...props}>:</span>)`
+const Separator = styled<(props: { tiny?: boolean }) => ReactElement>(() => <span>:</span>)`
   display: inline-block;
   color: ${({ tiny }) => (tiny ? `${Colors.Black[400]}` : `${Colors.Black[900]}`)};
   margin: ${({ tiny }) => (tiny ? '0' : '0 8px')};
