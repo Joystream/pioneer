@@ -7,6 +7,7 @@ import BN from 'bn.js'
 import { get, isArray, isFunction, merge, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
+import { error } from '@/common/logger'
 import { AnyObject } from '@/common/types'
 import { recursiveProxy } from '@/common/utils/proxy'
 
@@ -172,10 +173,11 @@ interface SerializedCodec {
 }
 
 const serializeCodec = (codec: Codec) => {
-  const type = (codec as any).meta?.type ?? codec.registry.getClassName(codec.constructor as Constructor)
+  const type =
+    (codec as any).meta?.type ?? codec.registry.getClassName(codec.constructor as Constructor) ?? codec.toRawType()
 
   if (!type) {
-    throw new Error('Unrecognized codec object')
+    error('Unrecognized codec object', codec, codec.toHuman())
   }
 
   if (isEventRecord(type, codec)) {
