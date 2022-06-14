@@ -17,6 +17,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import BN from 'bn.js';
 
 configure({ testIdAttribute: 'id' })
 
@@ -39,8 +40,8 @@ describe('UI: IncreaseWorkerStakeModal', () => {
     hideModal: jest.fn(),
     modalData: {
       worker: {
-        minStake: 300,
-        stake: 100,
+        minStake: new BN(300),
+        stake: new BN(100),
         roleAccount: alice.address,
         id: 'workerId',
         group: {

@@ -32,7 +32,7 @@ export type BountyEntryStatus =
 export interface Contributor {
   hasWithdrawn: boolean
   actor: Member | undefined
-  amount: string
+  amount: BN
 }
 
 export const isContributor = (actor: BountyActorItem): actor is Contributor => {
