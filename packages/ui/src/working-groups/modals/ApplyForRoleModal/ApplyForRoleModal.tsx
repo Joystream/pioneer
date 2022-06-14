@@ -1,5 +1,4 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
-import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
@@ -13,6 +12,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
+import { Api } from '@/api/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
@@ -46,7 +46,7 @@ import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
 import { applyForRoleMachine } from './machine'
 
 export type OpeningParams = Exclude<
-  Parameters<ApiRx['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
+  Parameters<Api['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
   string | Uint8Array
 >
 
