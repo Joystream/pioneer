@@ -81,7 +81,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
               required
               disabled={isDisabled}
               name="decreaseWorkingGroupLeadStake.stakingAmount"
-              message="Amount must be greater than zero"
+              message="Amount must be greater than zero and less than current stake"
             >
               <InputNumber
                 id="amount-input"

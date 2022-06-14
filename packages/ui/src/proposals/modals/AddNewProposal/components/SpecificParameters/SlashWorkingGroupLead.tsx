@@ -66,7 +66,7 @@ export const SlashWorkingGroupLead = () => {
             inputWidth="s"
             tooltipText="Amount to be slashed"
             name="slashWorkingGroupLead.slashingAmount"
-            message="Amount must be greater than zero"
+            message="Amount must be greater than zero and less than current stake"
             required
             disabled={isDisabled}
           >
