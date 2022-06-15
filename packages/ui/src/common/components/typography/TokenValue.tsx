@@ -26,7 +26,6 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
   if (value === null || !isDefined(value)) {
     return <span>-</span>
   }
-
   return (
     <ValueInJoys className={className} size={size}>
       {formatTokenValue(value)}

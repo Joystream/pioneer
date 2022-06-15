@@ -1,3 +1,5 @@
+import { CurrencyName } from '@/app/constants/currency'
+
 export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
 
@@ -53,3 +55,12 @@ export const subtitleMapping = (value: string) => {
       return value
   }
 }
+
+// export const currencyName = (value: number) => {
+//   const valueCalculation = value // value calculation if needed
+// if (valueCalculation >= 1) { //here should be added correct condition checking
+//   return `${valueCalculation} + ${CurrencyName.integerValue}`
+// } if (valueCalculation < 1) {
+//   return `${valueCalculation} + ${CurrencyName.decimalsValue}`
+//   }
+// }
