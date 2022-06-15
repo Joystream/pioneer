@@ -4,6 +4,7 @@ import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -62,7 +63,7 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             validation={errorChecker('amount') ? 'invalid' : undefined}
             message={(errorChecker('amount') ? errorMessageGetter('amount') : undefined) || ' '}
             required

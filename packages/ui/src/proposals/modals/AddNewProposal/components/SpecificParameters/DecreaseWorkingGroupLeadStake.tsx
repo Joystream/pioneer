@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
@@ -65,7 +66,10 @@ export const DecreaseWorkingGroupLeadStake = () => {
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.leadWorker?.stake)} tJOY</TextInlineMedium>.
+                <TextInlineMedium bold>
+                  {formatTokenValue(group.leadWorker?.stake)} {CurrencyName.integerValue}
+                </TextInlineMedium>
+                .
               </TextMedium>
             </Info>
           )}
@@ -73,7 +77,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
             <InputComponent
               label="Decrease Stake Amount"
               tight
-              units="tJOY"
+              units={CurrencyName.integerValue}
               inputWidth="s"
               tooltipText="Amount by which to decrease stake."
               required

@@ -5,6 +5,7 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { CurrencyName } from '@/app/constants/currency'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, SignTransferContainer, TransactionInfoContainer } from '@/common/components/Modal'
@@ -48,7 +49,7 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
         <SignTransferContainer>
           <TextMedium margin="m">
             You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of {formatTokenValue(fee)}{' '}
-            tJOY will be applied to the transaction.
+            {CurrencyName.integerValue} will be applied to the transaction.
           </TextMedium>
           <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
             <SelectedAccount

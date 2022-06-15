@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextMedium, TextHuge, TextInlineHuge } from '@/common/components/typography'
@@ -62,7 +63,7 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
             <TextInlineHuge dark value bold>
               {formatTokenValue(constants?.election.minCandidacyStake)}
             </TextInlineHuge>{' '}
-            tJOY
+            {CurrencyName.integerValue}
           </TextMedium>
         </RowGapBlock>
       </Row>

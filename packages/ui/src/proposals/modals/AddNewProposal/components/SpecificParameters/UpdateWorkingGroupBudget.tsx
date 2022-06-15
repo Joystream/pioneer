@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
@@ -51,7 +52,10 @@ export const UpdateWorkingGroupBudget = () => {
             <Info>
               <TextMedium>
                 Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.budget)} tJOY</TextInlineMedium>.
+                <TextInlineMedium bold>
+                  {formatTokenValue(group.budget)} {CurrencyName.integerValue}
+                </TextInlineMedium>
+                .
               </TextMedium>
             </Info>
           )}
@@ -67,7 +71,7 @@ export const UpdateWorkingGroupBudget = () => {
           <InputComponent
             label="Budget Update"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             inputWidth="s"
             tooltipText="Signed amount change in budget. If budget_update is non-negative, then this amount is reduced from the council budget and credited to the group budget, otherwise the reverse."
             required

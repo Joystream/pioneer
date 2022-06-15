@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -23,7 +24,7 @@ export const SetMaxValidatorCount = () => {
             name="setMaxValidatorCount.validatorCount"
             label="Amount"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
           >
             <InputNumber

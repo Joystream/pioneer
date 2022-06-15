@@ -6,6 +6,7 @@ import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
@@ -73,7 +74,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
           <InputComponent
             id="amount-input"
             label="Select amount for Staking"
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
             message={errorChecker('amount') ? errorMessageGetter('amount') : undefined}
             validation={errorChecker('amount') ? 'invalid' : undefined}

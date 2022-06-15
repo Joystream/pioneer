@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import * as Yup from 'yup'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { CurrencyName } from '@/app/constants/currency'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { PickedTransferIcon } from '@/common/components/icons/TransferIcons'
@@ -122,7 +123,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             disabled={isValueDisabled}
             required
             inputWidth="s"
-            units="tJOY"
+            units={CurrencyName.integerValue}
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
             message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           >
