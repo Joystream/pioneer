@@ -110,7 +110,7 @@ export const BaseCKEditor = React.forwardRef(
     return (
       <>
         <CKEditorStylesOverrides maxRows={maxRows} minRows={minRows} />
-        <div ref={elementRef} />
+        <div className="ckeditor-anchor" ref={elementRef} />
       </>
     )
   }
