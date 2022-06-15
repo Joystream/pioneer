@@ -89,7 +89,7 @@ export const asContributor = ({
   withdrawnInEvent,
 }: BountyContributionFieldsFragment): Contributor => ({
   hasWithdrawn: !!withdrawnInEvent?.id,
-  amount,
+  amount: new BN(amount),
   actor: contributor ? asMember(contributor) : undefined,
 })
 

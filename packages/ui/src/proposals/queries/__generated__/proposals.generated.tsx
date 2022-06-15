@@ -380,7 +380,7 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'FundingRequestProposalDetails'
         destinationsList?: {
           __typename: 'FundingRequestDestinationsList'
-          destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+          destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
         } | null
       }
     | { __typename: 'LockBlogPostProposalDetails' }
@@ -1210,7 +1210,7 @@ export type GetProposalQuery = {
           __typename: 'FundingRequestProposalDetails'
           destinationsList?: {
             __typename: 'FundingRequestDestinationsList'
-            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
           } | null
         }
       | { __typename: 'LockBlogPostProposalDetails' }
