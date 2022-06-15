@@ -46,7 +46,8 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
   font-family: ${Fonts.Grotesk};
 
   &:after {
-    content: ${CurrencyName.integerValue};
+    content: '${CurrencyName.integerValue}';
+    //content: 'test';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
