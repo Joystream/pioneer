@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Skeleton } from '@/common/components/Skeleton'
 import { isDefined } from '@/common/utils'
 
@@ -45,7 +46,7 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
   font-family: ${Fonts.Grotesk};
 
   &:after {
-    content: 'tJOY';
+    content: ${CurrencyName.integerValue};
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
