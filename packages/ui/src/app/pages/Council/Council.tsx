@@ -76,9 +76,7 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
   switch (key) {
     case 'member':
       return (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
-    case 'voterStake':
-      return (a, b) => ((a[key] ?? BN_ZERO).gte(b[key] ?? BN_ZERO) ? 1 : -1 * direction)
     default:
-      return (a, b) => new BN(a[key]).sub(new BN(b[key])).muln(direction).toNumber()
+      return (a, b) => (new BN(a[key] ?? 0).gte(new BN(b[key] ?? 0)) ? 1 : -1) * direction
   }
 }
