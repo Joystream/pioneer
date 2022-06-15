@@ -11,6 +11,7 @@ import { baseMock, testProposals } from '../../_mocks/proposals'
 import { MockApolloProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubProposalConstants } from '../../_mocks/transactions'
+import BN from 'bn.js';
 
 const decidingProposalMock: ProposalMock = {
   ...baseMock,
@@ -26,7 +27,7 @@ const decidingProposalMock: ProposalMock = {
         destinations: [
           {
             account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-            amount: 5000,
+            amount: new BN(5000),
           },
         ],
       },
@@ -72,7 +73,7 @@ const dormantProposalMock = {
         destinations: [
           {
             account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-            amount: 5000,
+            amount: new BN(5000),
           },
         ],
       },
