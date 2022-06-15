@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -25,7 +26,7 @@ export const SetInitialInvitationBalance = () => {
             name="setInitialInvitationBalance.amount"
             label="Invitation Balance"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
           >
             <InputNumber
@@ -37,7 +38,9 @@ export const SetInitialInvitationBalance = () => {
             />
           </InputComponent>
           <Row>
-            <TextMedium lighter>The current balance is {currentBalance?.toString()} tJOY.</TextMedium>
+            <TextMedium lighter>
+              The current balance is {currentBalance?.toString()} {CurrencyName.integerValue}.
+            </TextMedium>
           </Row>
         </RowGapBlock>
       </Row>

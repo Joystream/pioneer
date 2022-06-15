@@ -7,6 +7,7 @@ import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account, LockType } from '@/accounts/types'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
@@ -68,7 +69,7 @@ export const StakeStep = ({
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
             message={
               (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '

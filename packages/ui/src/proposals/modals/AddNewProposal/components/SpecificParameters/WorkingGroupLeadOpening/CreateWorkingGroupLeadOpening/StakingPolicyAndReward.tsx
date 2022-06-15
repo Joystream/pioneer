@@ -1,6 +1,7 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols/LinkSymbol'
 import { Row } from '@/common/components/Modal'
@@ -27,7 +28,7 @@ export const StakingPolicyAndReward = () => {
             id="staking-amount"
             label="Staking amount *"
             tooltipText="Minimum staking requirement for all applicants to this role"
-            units="tJOY"
+            units={CurrencyName.integerValue}
             tight
             name="stakingPolicyAndReward.stakingAmount"
           >
@@ -67,8 +68,8 @@ export const StakingPolicyAndReward = () => {
           <InputComponent
             id="reward-per-block"
             label="Reward amount per Block"
-            units="tJOY"
-            tooltipText="Reward in tJOY tokens for the Working group lead"
+            units={CurrencyName.integerValue}
+            tooltipText={`Reward in ${CurrencyName.integerValue} tokens for the Working group lead`}
             tight
             name="stakingPolicyAndReward.rewardPerBlock"
             required

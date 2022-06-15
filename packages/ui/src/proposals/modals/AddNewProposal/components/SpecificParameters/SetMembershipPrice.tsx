@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -19,7 +20,7 @@ export const SetMembershipPrice = () => {
           <InputComponent
             label="Membership price"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
             message="Value must be greater than zero"
             name="setMembershipPrice.amount"

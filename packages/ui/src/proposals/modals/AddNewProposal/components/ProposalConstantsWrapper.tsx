@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
@@ -65,7 +66,8 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Required Stake</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.requiredStake)}</TextInlineMedium> tJOY
+          <TextInlineMedium dark>{formatTokenValue(constants?.requiredStake)}</TextInlineMedium>{' '}
+          {CurrencyName.integerValue}
         </TextMedium>
       </RowGapBlock>
     </Row>

@@ -13,6 +13,7 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
@@ -269,7 +270,7 @@ export const AnnounceWorkEntryModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="tJOY"
+                units={CurrencyName.integerValue}
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
