@@ -1,16 +1,13 @@
-import { web3Accounts, web3AccountsSubscribe } from '@polkadot/extension-dapp'
-import { documentReadyPromise } from '@polkadot/extension-dapp/util'
-import {
-  Injected,
-  InjectedWindowProvider,
-  InjectedExtensionInfo,
-  InjectedAccount,
-  InjectedExtension,
-} from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
+import {
+  enableSingleExtension,
+  getAccountsFromExtensions,
+  getWindowExtension,
+  web3AccountsSubscribe,
+} from '@/accounts/providers/accounts/helpers'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useObservable } from '@/common/hooks/useObservable'
 import { error } from '@/common/logger'
@@ -33,47 +30,6 @@ interface Props {
   children: ReactNode
 }
 
-type InjectedExtensionRaw = Record<string, InjectedWindowProvider>
-
-function getWindowExtension(
-  originName: string,
-  extensionName: string
-): Promise<[InjectedExtensionInfo, Injected | void]> {
-  const injectedExtensions = Object.entries((window as any).injectedWeb3 as InjectedExtensionRaw)
-
-  const [name, { version, enable }] =
-    injectedExtensions.find(([name]) => name === extensionName) ?? injectedExtensions[0]
-
-  return Promise.all([
-    { name, version },
-    // eslint-disable-next-line no-console
-    enable(originName).catch((error): void => console.error(`Error initializing ${extensionName}: ${error.message}`)),
-  ])
-}
-
-const enableSingleExtension = ([info, extension]: [
-  InjectedExtensionInfo,
-  Injected | void
-]): Promise<InjectedExtension> => {
-  return documentReadyPromise((): Promise<InjectedExtension> => {
-    if (extension) {
-      extension.accounts.subscribe = (cb: (accounts: InjectedAccount[]) => void | Promise<void>) => {
-        // eslint-disable-next-line no-console
-        extension.accounts.get().then(cb).catch(console.error)
-
-        return () => {
-          // no need for unsub
-        }
-      }
-    }
-
-    return Promise.resolve({
-      ...info,
-      ...extension,
-    } as InjectedExtension)
-  })
-}
-
 function isKeyringLoaded(keyring: Keyring) {
   try {
     return !!keyring.keyring
@@ -92,15 +48,15 @@ const loadKeysFromExtension = async (
     return onInitializationFailure()
   }
 
-  await enableSingleExtension(extension)
+  const enabledExtension = await enableSingleExtension(extension)
 
-  const injectedAccounts = await web3Accounts()
+  const injectedAccounts = await getAccountsFromExtensions([enabledExtension])
 
   if (!isKeyringLoaded(keyring)) {
     keyring.loadAll({ isDevelopment: false }, injectedAccounts)
   }
 
-  await web3AccountsSubscribe((accounts) => {
+  await web3AccountsSubscribe(enabledExtension, (accounts) => {
     const current = keyring.getAccounts()
 
     const addresses = accounts.map(({ address }) => address)
