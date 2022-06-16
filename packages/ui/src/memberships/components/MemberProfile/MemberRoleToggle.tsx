@@ -136,6 +136,7 @@ const MemberRoleTitleContainer = styled.div`
   min-height: 56px;
   align-items: center;
   padding: 8px 16px;
+  cursor: pointer;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};

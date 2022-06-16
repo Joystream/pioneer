@@ -18,9 +18,9 @@ export const ToggleableItem = ({ children, absoluteToggle, className }: Toggleab
   const [isOpen, toggleOpen] = useToggle()
 
   return (
-    <Toggle isOpen={isOpen} absoluteToggle={absoluteToggle} className={className}>
+    <Toggle onClick={toggleOpen} isOpen={isOpen} absoluteToggle={absoluteToggle} className={className}>
       {isFunction(children) ? children(isOpen) : children}
-      <ToggleButton onClick={toggleOpen} absoluteToggle={absoluteToggle} isOpen={isOpen} size="small" square>
+      <ToggleButton absoluteToggle={absoluteToggle} isOpen={isOpen} size="small" square>
         <Arrow direction="down" />
       </ToggleButton>
     </Toggle>
