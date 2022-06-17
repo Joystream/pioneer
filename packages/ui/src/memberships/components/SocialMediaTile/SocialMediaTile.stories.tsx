@@ -26,11 +26,11 @@ const Template: Story<SocialMediaTileProps> = (props) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  social: 'discord',
+  social: 'DISCORD',
 }
 
 export const Active = Template.bind({})
 Active.args = {
-  social: 'discord',
+  social: 'DISCORD',
   active: true,
 }

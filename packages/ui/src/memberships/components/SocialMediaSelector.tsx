@@ -9,17 +9,17 @@ import { socialMediaList, SocialMediaTile, Socials } from '@/memberships/compone
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
 const socialToPlaceholder: Record<Socials, string> = {
-  link: 'Enter URL',
-  wechat: 'Enter Username',
-  irc: 'Enter Username',
-  whatsapp: 'Enter Username',
-  matrix: 'Enter Username',
-  youtube: 'Enter channel name',
-  facebook: 'Enter Username',
-  discord: 'Enter Member handle',
-  telegram: 'Enter Username',
-  twitter: 'Enter Username',
-  email: 'Enter Email',
+  HYPERLINK: 'Enter URL',
+  WECHAT: 'Enter Username',
+  IRC: 'Enter Username',
+  WHATSAPP: 'Enter Username',
+  MATRIX: 'Enter Username',
+  YOUTUBE: 'Enter channel name',
+  FACEBOOK: 'Enter Username',
+  DISCORD: 'Enter Member handle',
+  TELEGRAM: 'Enter Username',
+  TWITTER: 'Enter Username',
+  EMAIL: 'Enter Email',
 }
 
 interface Props {
@@ -40,7 +40,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
   const removeSocial = useCallback(
     (social: Socials) => () => {
       setChosenSocial((prev) => prev.filter((prevSocial) => prevSocial !== social))
-      form?.resetField(social as keyof MemberFormFields)
+      form?.resetField(`externalResources.${social}` as keyof MemberFormFields)
     },
     [form.resetField]
   )
@@ -64,8 +64,17 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
         })}
       </div>
       {chosenSocial.map((social, index) => (
-        <InputComponent key={'social' + index} id={social + 1} inputSize="m" label={capitalizeFirstLetter(social)}>
-          <InputText id={'social-input-' + index} name={social} placeholder={socialToPlaceholder[social]} />
+        <InputComponent
+          key={'social' + index}
+          id={social + 1}
+          inputSize="m"
+          label={capitalizeFirstLetter(social.toLowerCase())}
+        >
+          <InputText
+            id={'social-input-' + index}
+            name={`externalResources.${social}`}
+            placeholder={socialToPlaceholder[social]}
+          />
         </InputComponent>
       ))}
     </SocialMediaInput>

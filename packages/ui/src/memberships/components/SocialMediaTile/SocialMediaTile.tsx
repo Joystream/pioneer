@@ -1,3 +1,4 @@
+import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -19,31 +20,22 @@ import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 
-export type Socials =
-  | 'email'
-  | 'twitter'
-  | 'telegram'
-  | 'discord'
-  | 'facebook'
-  | 'youtube'
-  | 'matrix'
-  | 'irc'
-  | 'wechat'
-  | 'whatsapp'
-  | 'link'
+import ResourceType = MembershipMetadata.ExternalResource.ResourceType
+
+export type Socials = keyof typeof ResourceType
 
 const socialToIcon: Record<Socials, React.ReactElement> = {
-  email: <EmailIcon />,
-  twitter: <TwitterIcon />,
-  telegram: <TelegramIcon />,
-  discord: <DiscordIcon />,
-  facebook: <FacebookIcon />,
-  youtube: <YoutubeIcon />,
-  matrix: <MatrixIcon />,
-  irc: <IRCIcon />,
-  wechat: <WechatIcon />,
-  whatsapp: <WhatsappIcon />,
-  link: <CustomLinkIcon />,
+  EMAIL: <EmailIcon />,
+  TWITTER: <TwitterIcon />,
+  TELEGRAM: <TelegramIcon />,
+  DISCORD: <DiscordIcon />,
+  FACEBOOK: <FacebookIcon />,
+  YOUTUBE: <YoutubeIcon />,
+  MATRIX: <MatrixIcon />,
+  IRC: <IRCIcon />,
+  WECHAT: <WechatIcon />,
+  WHATSAPP: <WhatsappIcon />,
+  HYPERLINK: <CustomLinkIcon />,
 }
 
 export const socialMediaList = Object.keys(socialToIcon) as (keyof typeof socialToIcon)[]
@@ -59,7 +51,7 @@ export const SocialMediaTile = React.memo(({ social, onClick, active }: SocialMe
     <Wrapper onClick={onClick} active={active}>
       <RowGapBlock align="center" gap={2}>
         {socialToIcon[social]}
-        <TextMedium value>{capitalizeFirstLetter(social)}</TextMedium>
+        <TextMedium value>{capitalizeFirstLetter(social.toLowerCase())}</TextMedium>
       </RowGapBlock>
     </Wrapper>
   )

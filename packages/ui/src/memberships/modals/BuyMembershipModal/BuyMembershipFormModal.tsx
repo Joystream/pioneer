@@ -34,6 +34,7 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { definedValues } from '@/common/utils'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector'
 import { useGetMembersCountQuery } from '@/memberships/queries'
@@ -76,6 +77,7 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  externalResources: Record<string, string>
 }
 
 const formDefaultValues = {
@@ -86,6 +88,7 @@ const formDefaultValues = {
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
+  externalResources: {},
 }
 
 export interface InviteMembershipFormFields {
@@ -133,7 +136,10 @@ export const BuyMembershipForm = ({
 
   const hasError = enhancedHasError(form.formState.errors)
   const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
-  const onCreate = () => onSubmit(form.getValues())
+  const onCreate = () => {
+    const values = form.getValues()
+    onSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+  }
 
   return (
     <>
