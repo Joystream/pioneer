@@ -1133,7 +1133,15 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - group selected, amount automatically filled', async () => {
+        it('Invalid - group selected, amount lower than current stake filled with positive', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(100)
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid - group selected, amount automatically filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
 
