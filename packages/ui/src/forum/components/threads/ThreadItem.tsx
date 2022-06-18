@@ -31,7 +31,7 @@ export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemConten
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
   const repliesCount = thread.visiblePostsCount - 1
   const content = originalPost?.text
-  const threadAddress = `${ForumRoutes.thread}/${thread.id}`
+  const threadAddress = `${ForumRoutes.popularThread}/${thread.id}`
 
   if (isLoading) {
     return (
