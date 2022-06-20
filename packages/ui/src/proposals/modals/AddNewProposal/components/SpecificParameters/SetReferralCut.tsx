@@ -6,7 +6,7 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
@@ -22,8 +22,9 @@ export const SetReferralCut = () => {
           <h4>Specific parameters</h4>
           <TextMedium lighter>
             {' '}
-            Set referral cut as % from price of creating new membership, currently set as {membershipPrice?.toString()}{' '}
-            {CurrencyName.integerValue}
+            {/*Set referral cut as % from price of creating new membership, currently set as {membershipPrice?.toString()}{' '}*/}
+            {/*{CurrencyName.integerValue} das*/}
+            <TokenValue value={membershipPrice} />
           </TextMedium>
         </RowGapBlock>
       </Row>

@@ -38,16 +38,15 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
     service,
   })
   const plural = amount.gt(new BN(1))
-  const name = targetMember.name
+  const handle = targetMember.handle
   const fee = paymentInfo?.partialFee.toBn()
-
   return (
     <TransactionModal service={service} onClose={onClose}>
       <ModalBody>
         <SignTransferContainer>
           <TextMedium margin="m">
-            You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of{' '}
-            <TokenValue value={fee} /> will be applied to the transaction
+            You intend to transfer {amount.toString()} invite{plural && 's'} to {handle}. Fee of{' '}
+            <TokenValue value={fee} /> will be applied to the transaction.
           </TextMedium>
           <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
             <SelectedAccount
