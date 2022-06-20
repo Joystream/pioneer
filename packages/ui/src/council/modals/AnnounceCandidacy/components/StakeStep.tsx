@@ -67,8 +67,8 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>
             <TextMedium>
-              You must stake <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to announce candidacy. his stake
-              will be return to you if your candidacy fails as a result of the council voting.
+              You must stake <TokenValue value={minStake} /> to announce candidacy. his stake will be return to you if
+              your candidacy fails as a result of the council voting.
             </TextMedium>
           </RowGapBlock>
           <InputComponent

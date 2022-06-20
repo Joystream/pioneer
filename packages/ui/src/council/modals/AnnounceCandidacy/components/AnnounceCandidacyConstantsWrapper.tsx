@@ -3,7 +3,7 @@ import React from 'react'
 import { CurrencyName } from '@/app/constants/currency'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Label, TextMedium, TextHuge, TextInlineHuge } from '@/common/components/typography'
+import { Label, TextMedium, TextHuge, TextInlineHuge, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { CouncilConstants } from '@/council/types/CouncilConstants'
 
@@ -61,9 +61,8 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
           <Label>Min. Candidate Stake</Label>
           <TextMedium lighter>
             <TextInlineHuge dark value bold>
-              {formatTokenValue(constants?.election.minCandidacyStake)}
+              <TokenValue value={constants?.election.minCandidacyStake} />
             </TextInlineHuge>{' '}
-            {CurrencyName.integerValue}
           </TextMedium>
         </RowGapBlock>
       </Row>

@@ -12,7 +12,7 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { TextMedium, TokenValue, ValueInJoys } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 
@@ -100,7 +100,11 @@ const defaultAmountText = (minStake: BN) => (
   <RowGapBlock gap={8}>
     <h4>2. Stake</h4>
     <TextMedium light>
-      You must stake at least <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys>.
+      You must stake at least{' '}
+      <ValueInJoys>
+        <TokenValue value={minStake} />
+      </ValueInJoys>
+      .
     </TextMedium>
   </RowGapBlock>
 )

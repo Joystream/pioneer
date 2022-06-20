@@ -22,8 +22,6 @@ export const SetReferralCut = () => {
           <h4>Specific parameters</h4>
           <TextMedium lighter>
             {' '}
-            {/*Set referral cut as % from price of creating new membership, currently set as {membershipPrice?.toString()}{' '}*/}
-            {/*{CurrencyName.integerValue} das*/}
             <TokenValue value={membershipPrice} />
           </TextMedium>
         </RowGapBlock>
