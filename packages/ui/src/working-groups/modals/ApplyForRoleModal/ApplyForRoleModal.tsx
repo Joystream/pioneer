@@ -13,7 +13,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api/types'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -291,10 +291,20 @@ export const ApplyForRoleModal = () => {
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-          Next step
-          <Arrow direction="right" />
-        </ButtonPrimary>
+        <ButtonsGroup align="left">
+          {state.matches('form') && (
+            <ButtonGhost onClick={() => send('PREV')} size="medium">
+              <Arrow direction="left" />
+              Previous step
+            </ButtonGhost>
+          )}
+        </ButtonsGroup>
+        <ButtonsGroup align="right">
+          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
+            Next step
+            <Arrow direction="right" />
+          </ButtonPrimary>
+        </ButtonsGroup>
       </ModalFooter>
     </Modal>
   )
