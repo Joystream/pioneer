@@ -1,12 +1,14 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { web3FromAddress } from '@polkadot/extension-dapp'
 import { Hash } from '@polkadot/types/interfaces/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
+import { getWalletBySource } from 'injectweb3-connect'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
+
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 
 import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
@@ -91,28 +93,37 @@ export const useProcessTransaction = ({
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
+  const { allAccounts } = useMyAccounts()
 
   useEffect(() => {
     setService(service)
   }, [])
 
   useEffect(() => {
-    if (!state.matches('signing') || !transaction || !paymentInfo) {
-      return
-    }
+    const fn = async () => {
+      const hasSigner = allAccounts.find((acc) => acc.address === signer)
+      const wallet = getWalletBySource(hasSigner?.source ?? '')
 
-    const fee = paymentInfo.partialFee.toBn()
+      if (!state.matches('signing') || !transaction || !paymentInfo || !wallet) {
+        return
+      }
 
-    web3FromAddress(signer).then((extension) => {
+      const fee = paymentInfo.partialFee.toBn()
+
+      await wallet?.enable('Pioneer')
+
       observeTransaction(
-        transaction.signAndSend(signer, { signer: extension.signer }),
+        transaction.signAndSend(signer, { signer: wallet.signer }),
         send,
         fee,
         endpoints.nodeRpcEndpoint,
         setBlockHash
       )
-    })
-    send('SIGN_EXTERNAL')
+
+      send('SIGN_EXTERNAL')
+    }
+
+    fn()
   }, [state.value.toString(), paymentInfo])
 
   return {
