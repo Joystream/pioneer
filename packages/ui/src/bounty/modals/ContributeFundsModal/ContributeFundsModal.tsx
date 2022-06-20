@@ -49,7 +49,9 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const schema = Yup.object().shape({
-  amount: BNSchema.test(minContext('${min} tJOY is smallest allowed contribution', 'minAmount')),
+  amount: BNSchema.test(
+    minContext('${min}' + `'${CurrencyName.integerValue} is smallest allowed contribution'`, 'minAmount')
+  ),
 })
 
 export const ContributeFundsModal = () => {

@@ -27,7 +27,12 @@ export interface IncreaseStakeFormFields {
 
 const StakeFormSchema = Yup.object().shape({
   stake: BNSchema.test(minContext('You need at least ${min} stake', 'minAddStake'))
-    .test(maxContext('Given amount exceed your transferable balance of ${max} tJOY', 'totalBalance'))
+    .test(
+      maxContext(
+        'Given amount exceed your transferable balance of' + '${max}' + `'${CurrencyName.integerValue}'`,
+        'totalBalance'
+      )
+    )
     .required(),
 })
 

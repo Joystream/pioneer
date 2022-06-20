@@ -1,4 +1,4 @@
 export const CurrencyName = {
-  integerValue: 'tJOY',
+  integerValue: 'dd',
   decimalsValue: 'tBDH',
 } as const
