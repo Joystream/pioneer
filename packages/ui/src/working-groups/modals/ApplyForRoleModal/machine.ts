@@ -23,6 +23,7 @@ type ApplyForRoleState =
   | { value: 'transaction'; context: EmptyObject }
   | { value: 'success'; context: Required<ApplyForRoleContext> }
   | { value: 'error'; context: Required<ApplyForRoleContext> }
+  | { value: 'canceled'; context: Required<ApplyForRoleContext> }
 
 export type ApplyForRoleEvent =
   | { type: 'FAIL' }
