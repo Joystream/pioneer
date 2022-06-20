@@ -46,6 +46,7 @@ export const Select = <T extends any, V extends any = T>({
 
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
+      // TODO: figure out a way to enable clicking on the links in Tooltips
       if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
         toggleOpen()
         setFilterInput('')
