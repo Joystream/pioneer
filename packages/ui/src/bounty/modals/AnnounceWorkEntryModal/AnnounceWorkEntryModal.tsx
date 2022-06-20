@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
@@ -254,10 +253,12 @@ export const AnnounceWorkEntryModal = () => {
               validation={hasError('account', errors) ? 'invalid' : undefined}
               message={getErrorMessage('account', errors) ?? ''}
             >
-              <SelectAccount
+              <SelectStakingAccount
+                name="workEntry.stakingAccount"
                 onChange={(account) => send('SET_STAKING_ACCOUNT', { account })}
                 selected={state.context.stakingAccount}
-                filter={(account) => filterByRequiredStake(amount, 'Bounties', balances[account.address])}
+                minBalance={amount}
+                lockType="Bounties"
               />
             </InputComponent>
           </Row>
