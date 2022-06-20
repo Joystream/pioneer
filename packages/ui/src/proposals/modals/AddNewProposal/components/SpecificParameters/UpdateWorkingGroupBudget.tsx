@@ -7,20 +7,47 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const UpdateWorkingGroupBudget = () => {
-  const { setValue, watch } = useFormContext()
-  const [groupId] = watch(['updateWorkingGroupBudget.groupId'])
+  const { setValue, watch, setError, formState, clearErrors } = useFormContext()
+  const [groupId, isPositive, budgetUpdate] = watch([
+    'updateWorkingGroupBudget.groupId',
+    'updateWorkingGroupBudget.isPositive',
+    'updateWorkingGroupBudget.budgetUpdate',
+  ])
   const { group } = useWorkingGroup({ name: groupId })
 
   useEffect(() => {
-    setValue('updateWorkingGroupBudget.budgetUpdate', BN_ZERO, { shouldValidate: true })
-  }, [groupId])
+    if (group) {
+      setValue('updateWorkingGroupBudget.budgetUpdate', isPositive ? group.budget?.addn(1) : group.budget?.subn(1), {
+        shouldValidate: true,
+      })
+    }
+  }, [group?.id])
+
+  useEffect(() => {
+    if (!budgetUpdate || !group || formState.isValidating || !formState.isValid) return
+
+    if (isPositive && budgetUpdate?.lte(group.budget)) {
+      return setError('updateWorkingGroupBudget.budgetUpdate', {
+        type: 'custom',
+        message: 'Amount must be greater then current budget',
+      })
+    }
+
+    if (!isPositive && budgetUpdate?.gte(group.budget)) {
+      return setError('updateWorkingGroupBudget.budgetUpdate', {
+        type: 'custom',
+        message: 'Amount must be lower then current budget',
+      })
+    }
+
+    return clearErrors('updateWorkingGroupBudget.budgetUpdate')
+  }, [budgetUpdate?.toString(), formState.isValidating, isPositive])
 
   return (
     <RowGapBlock gap={24}>

@@ -135,12 +135,12 @@ export const AddNewProposalModal = () => {
   }, [JSON.stringify(mapDependencies)])
 
   useEffect(() => {
-    form.trigger('stakingAccount')
+    form.trigger('stakingAccount.stakingAccount')
   }, [stakingStatus])
 
   useEffect(() => {
-    form.trigger(machineStateConverter(state.value) as keyof AddNewProposalForm)
-  }, [state.value])
+    form.trigger([])
+  }, [machineStateConverter(state.value)])
 
   useEffect(() => {
     if (machineStateConverter(state.value) === 'stakingPolicyAndReward') {
