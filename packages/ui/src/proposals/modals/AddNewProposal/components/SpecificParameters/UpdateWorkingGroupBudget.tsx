@@ -7,7 +7,7 @@ import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -53,7 +53,7 @@ export const UpdateWorkingGroupBudget = () => {
               <TextMedium>
                 Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
                 <TextInlineMedium bold>
-                  {formatTokenValue(group.budget)} {CurrencyName.integerValue}
+                  <TokenValue value={group.budget} />
                 </TextInlineMedium>
                 .
               </TextMedium>
