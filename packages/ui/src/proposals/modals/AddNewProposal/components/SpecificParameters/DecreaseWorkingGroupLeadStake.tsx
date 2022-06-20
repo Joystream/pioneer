@@ -7,7 +7,7 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -85,7 +85,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
                 <TextInlineMedium bold>
-                  {formatTokenValue(group.leadWorker?.stake)} {CurrencyName.integerValue}
+                  <TokenValue value={group.leadWorker?.stake} />
                 </TextInlineMedium>
                 .
               </TextMedium>

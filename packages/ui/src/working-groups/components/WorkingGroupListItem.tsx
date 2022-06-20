@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Arrow } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { TextMedium, TokenValue, ValueInJoys } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { nameMapping, subtitleMapping } from '@/common/helpers'
 import { MemberHandle, MemberInfo } from '@/memberships/components'
@@ -50,7 +50,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            <ValueInJoys>{group?.budget?.toString()}</ValueInJoys>
+            <TokenValue value={group?.budget} />
           </StatsValue>
         </StatsColumn>
         <StatsColumn>
