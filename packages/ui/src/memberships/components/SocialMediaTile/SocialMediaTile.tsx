@@ -20,9 +20,7 @@ import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 
-import ResourceType = MembershipMetadata.ExternalResource.ResourceType
-
-export type Socials = keyof typeof ResourceType
+export type Socials = keyof typeof MembershipMetadata.ExternalResource.ResourceType
 
 const socialToIcon: Record<Socials, React.ReactElement> = {
   EMAIL: <EmailIcon />,

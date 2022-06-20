@@ -1,4 +1,4 @@
-import { Account } from '../../../accounts/types'
+import { Account } from '@/accounts/types'
 
 export interface UpdateMemberForm {
   id: string
@@ -8,4 +8,5 @@ export interface UpdateMemberForm {
   about?: string
   rootAccount?: Account
   controllerAccount?: Account
+  externalResources: Record<string, string>
 }

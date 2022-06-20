@@ -18,19 +18,21 @@ import {
 } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { WithNullableValues } from '@/common/types/form'
+import { definedValues } from '@/common/utils'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
-import { Member } from '../../types'
+import { MemberWithDetails } from '../../types'
 
 import { UpdateMemberForm } from './types'
-import { changedOrNull, hasAnyEdits } from './utils'
+import { changedOrNull, hasAnyEdits, membershipExternalResourceToObject } from './utils'
 
 interface Props {
   onClose: () => void
   onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
-  member: Member
+  member: MemberWithDetails
 }
 
 const UpdateMemberSchema = Yup.object().shape({
@@ -56,7 +58,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       avatarUri: typeof member.avatar === 'string' ? member.avatar : '',
       rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
       controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
-      // email: 'I really work',
+      externalResources: membershipExternalResourceToObject(member.externalResources) ?? {},
     },
     context,
     mode: 'onChange',
@@ -79,7 +81,13 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
 
   const onCreate = () => {
     if (canUpdate) {
-      onSubmit(changedOrNull<UpdateMemberForm>(form.getValues(), member))
+      const values = form.getValues()
+      onSubmit(
+        changedOrNull<UpdateMemberForm>(
+          { ...values, externalResources: { ...definedValues(values.externalResources) } },
+          member
+        )
+      )
     }
   }
 
@@ -153,7 +161,11 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
-            {/*<SocialMediaSelector initialSocials={['email']} />*/}
+            <SocialMediaSelector
+              initialSocials={
+                member.externalResources ? member.externalResources.map((resource) => resource.source) : []
+              }
+            />
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>

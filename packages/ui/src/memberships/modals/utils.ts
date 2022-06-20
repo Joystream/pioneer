@@ -4,8 +4,6 @@ import BN from 'bn.js'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
-import ResourceType = MembershipMetadata.ExternalResource.ResourceType
-
 export const getMessage = (fee?: BN) => {
   return `Insufficient funds to cover the membership creation. You need at least ${fee?.toString()} tJOY on your account for this action.`
 }
@@ -24,10 +22,13 @@ export const toMemberTransactionParams = (formData: MemberFormFields) => ({
   referrer_id: formData.referrer?.id,
 })
 
-const toExternalResources = (
+export const toExternalResources = (
   resources: MemberFormFields['externalResources']
 ): MembershipMetadata.IExternalResource[] =>
   Object.entries(resources).map(([social, value]) => ({
-    type: ResourceType[social.toUpperCase() as keyof typeof ResourceType],
+    type:
+      MembershipMetadata.ExternalResource.ResourceType[
+        social.toUpperCase() as keyof typeof MembershipMetadata.ExternalResource.ResourceType
+      ],
     value,
   }))
