@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { TransferModalCall } from '@/accounts/modals/TransferModal'
 import { ProfileRoutes } from '@/app/constants/routes'
+import { ModalNames } from '@/app/GlobalModals'
 import { Tooltip, TooltipExternalLink, TooltipLink } from '@/common/components/Tooltip'
 import { TextInlineMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -16,7 +18,7 @@ interface Props {
 }
 
 export const AccountLockTooltip = ({ locks, children }: Props) => {
-  const { showModal } = useModal()
+  const { modal: originalModalName, modalData: originalModalData, showModal } = useModal()
   const tooltipTexts = useMemo(() => {
     const texts: React.ReactElement[] = []
 
@@ -24,7 +26,17 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
       texts.push(
         <li>
           This account is bounded to another membership.{' '}
-          <LinkText onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
+          <LinkText
+            onClick={() =>
+              showModal<SwitchMemberModalCall>({
+                modal: 'SwitchMember',
+                data: {
+                  originalModalName: originalModalName as ModalNames,
+                  originalModalData,
+                },
+              })
+            }
+          >
             Change membership
           </LinkText>{' '}
           to use this account.
@@ -65,7 +77,9 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
       texts.push(
         <li>
           This account does not have enough tokens. You can{' '}
-          <LinkText onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>move funds</LinkText>{' '}
+          <LinkText onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })}>
+            move funds
+          </LinkText>{' '}
           from other accounts to meet the requirements.
           <br />
         </li>
