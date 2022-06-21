@@ -1,15 +1,18 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useRef } from 'react'
 import styled from 'styled-components'
 
+import { MembershipExternalResourceType } from '@/common/api/queries'
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
-import { FilterSelect, SelectContainer } from '@/common/components/selects'
+import { FilterSelect, SelectContainer, SimpleSelect } from '@/common/components/selects'
 import { objectEquals } from '@/common/utils'
 import { MemberRole } from '@/memberships/types'
 
 import { SelectMemberRoles } from '../SelectMemberRoles'
+
+export type MemberSearchFilter = keyof typeof MembershipExternalResourceType | 'Membership'
 
 export interface MemberListFilter {
   search: string
@@ -17,6 +20,7 @@ export interface MemberListFilter {
   council: boolean | null
   onlyVerified: boolean
   onlyFounder: boolean
+  searchFilter: MemberSearchFilter
 }
 
 type FilterKey = keyof MemberListFilter
@@ -44,18 +48,32 @@ export const MemberListEmptyFilter: MemberListFilter = {
   council: null,
   onlyVerified: false,
   onlyFounder: false,
+  searchFilter: 'Membership',
 }
 
 const isFilterEmpty = objectEquals(MemberListEmptyFilter, { depth: 2 })
 
+const searchFilterOptions: MemberSearchFilter[] = [
+  'Facebook',
+  'Email',
+  'Discord',
+  'Irc',
+  'Telegram',
+  'Wechat',
+  'Whatsapp',
+  'Twitter',
+  'Membership',
+  'Youtube',
+]
+
 export interface MemberListFiltersProps {
-  searchSlot?: React.RefObject<HTMLDivElement>
   memberCount?: number
   onApply: (value: MemberListFilter) => void
 }
 
-export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
+export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
+  const searchSlot = useRef<HTMLDivElement>(null)
   const { search, roles, council, onlyVerified, onlyFounder } = filters
 
   const applyFilters = () => onApply(filters)
@@ -71,66 +89,95 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
   }
 
   return (
-    <MembersFilterBox
-      searchSlot={searchSlot}
-      search={search}
-      onApply={applyFilters}
-      onClear={clear}
-      onSearch={onSearch}
-    >
-      <FieldsHeader>
-        <ItemCount count={memberCount}>All members</ItemCount>
-      </FieldsHeader>
-
-      <SelectMemberRoles
-        value={roles}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'roles', value })
-          onApply({ ...filters, roles: value })
-        }}
+    <Wrapper>
+      <div ref={searchSlot}>
+        <SimpleSelect
+          // todo add rendering with icon after merge of first PR
+          options={searchFilterOptions}
+          value={filters.searchFilter}
+          onChange={(value: MemberSearchFilter | null) =>
+            value && dispatch({ type: 'change', field: 'searchFilter', value })
+          }
+        />
+      </div>
+      <MembersFilterBox
+        searchSlot={searchSlot}
+        search={search}
         onApply={applyFilters}
-        onClear={() => {
-          dispatch({ type: 'change', field: 'roles', value: [] })
-          onApply({ ...filters, roles: [] })
-        }}
-      />
+        onClear={clear}
+        onSearch={onSearch}
+      >
+        <FieldsHeader>
+          <ItemCount count={memberCount}>All members</ItemCount>
+        </FieldsHeader>
 
-      <FilterSelect
-        title="Council Members"
-        options={[true, false]}
-        renderOption={(value) => (value ? 'Yes' : 'No')}
-        value={council}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'council', value })
-          onApply({ ...filters, council: value })
-        }}
-      />
-
-      <ToggleContainer>
-        <FilterLabel>Member Type</FilterLabel>
-        <TogglableIcon
-          value={onlyVerified}
+        <SelectMemberRoles
+          value={roles}
           onChange={(value) => {
-            dispatch({ type: 'change', field: 'onlyVerified', value })
-            onApply({ ...filters, onlyVerified: value })
+            dispatch({ type: 'change', field: 'roles', value })
+            onApply({ ...filters, roles: value })
           }}
-        >
-          <VerifiedMemberIcon />
-        </TogglableIcon>
+          onApply={applyFilters}
+          onClear={() => {
+            dispatch({ type: 'change', field: 'roles', value: [] })
+            onApply({ ...filters, roles: [] })
+          }}
+        />
 
-        <TogglableIcon
-          value={onlyFounder}
+        <FilterSelect
+          title="Council Members"
+          options={[true, false]}
+          renderOption={(value) => (value ? 'Yes' : 'No')}
+          value={council}
           onChange={(value) => {
-            dispatch({ type: 'change', field: 'onlyFounder', value })
-            onApply({ ...filters, onlyFounder: value })
+            dispatch({ type: 'change', field: 'council', value })
+            onApply({ ...filters, council: value })
           }}
-        >
-          <FounderMemberIcon />
-        </TogglableIcon>
-      </ToggleContainer>
-    </MembersFilterBox>
+        />
+
+        <ToggleContainer>
+          <FilterLabel>Member Type</FilterLabel>
+          <TogglableIcon
+            value={onlyVerified}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'onlyVerified', value })
+              onApply({ ...filters, onlyVerified: value })
+            }}
+          >
+            <VerifiedMemberIcon />
+          </TogglableIcon>
+
+          <TogglableIcon
+            value={onlyFounder}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'onlyFounder', value })
+              onApply({ ...filters, onlyFounder: value })
+            }}
+          >
+            <FounderMemberIcon />
+          </TogglableIcon>
+        </ToggleContainer>
+      </MembersFilterBox>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  display: grid;
+  row-gap: 10px;
+
+  > *:first-child {
+    display: flex;
+    width: 400px;
+    flex-direction: row-reverse;
+
+    label {
+      > *:first-child {
+        height: 100%;
+      }
+    }
+  }
+`
 
 const MembersFilterBox = styled(FilterBox)`
   height: 72px;

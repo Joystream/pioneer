@@ -199,7 +199,7 @@ export const SelectContainer = styled.label<SimpleSelectSizingProps>`
   }
 
   ${Toggle} {
-    border: 1px solid ${Colors.Black[200]};
+    border: 1px solid ${Colors.Black[300]};
     cursor: pointer;
   }
 
