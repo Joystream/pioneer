@@ -4,7 +4,7 @@ import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
@@ -39,7 +39,7 @@ export const SetInitialInvitationBalance = () => {
           </InputComponent>
           <Row>
             <TextMedium lighter>
-              The current balance is {currentBalance?.toString()} {CurrencyName.integerValue}.
+              The current balance is <TokenValue value={currentBalance ?? null} />.
             </TextMedium>
           </Row>
         </RowGapBlock>
