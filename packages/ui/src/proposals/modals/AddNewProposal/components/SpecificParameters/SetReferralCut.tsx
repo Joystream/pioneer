@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
@@ -22,7 +21,8 @@ export const SetReferralCut = () => {
           <h4>Specific parameters</h4>
           <TextMedium lighter>
             {' '}
-            <TokenValue value={membershipPrice} />
+            Set referral cut as % from price of creating new membership, currently set as{' '}
+            <TokenValue value={membershipPrice ?? null} />
           </TextMedium>
         </RowGapBlock>
       </Row>
