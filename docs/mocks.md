@@ -19,6 +19,7 @@ Available commands:
 - `yarn workspace ui node-mocks opening:create` - Create an opening
 - `yarn workspace ui node-mocks opening:fill` - Fill existing opening
 - `yarn workspace ui node-mocks upcoming-opening:create` - Create an upcoming opening
+- `yarn workspace ui node-mocks forumCategory:create` - Create a forum category
 - `yarn workspace ui node-mocks transfer` - Transfer tokens between accounts
 
 To show help:
