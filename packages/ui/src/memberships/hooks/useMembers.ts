@@ -1,10 +1,10 @@
+import { MembershipExternalResourceType, MembershipOrderByInput, MembershipWhereInput } from '@/common/api/queries'
 import { usePagination } from '@/common/hooks/usePagination'
-import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
+import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
 
-import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
 import { asMember } from '../types'
 
 export const MEMBERS_PER_PAGE = 10
@@ -42,13 +42,46 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
 
 type FilterGqlInput = Pick<
   MembershipWhereInput,
-  'id_eq' | 'roles_some' | 'isVerified_eq' | 'isFoundingMember_eq' | 'handle_contains' | 'isCouncilMember_eq'
+  | 'id_eq'
+  | 'roles_some'
+  | 'isVerified_eq'
+  | 'isFoundingMember_eq'
+  | 'handle_contains'
+  | 'isCouncilMember_eq'
+  | 'metadata'
 >
 
-const filterToGqlInput = ({ search, roles, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
-  ...(search ? { handle_contains: search } : {}),
+const filterToGqlInput = ({
+  search,
+  roles,
+  council,
+  onlyVerified,
+  onlyFounder,
+  searchFilter,
+}: MemberListFilter): FilterGqlInput => ({
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
   ...(council === null ? {} : { isCouncilMember_eq: council }),
   ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
+  ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
 })
+
+const searchFilterToGqlInput = (
+  searchFilter: NonNullable<MemberListFilter['searchFilter']>,
+  search: MemberListFilter['search']
+): MembershipWhereInput => {
+  if (searchFilter === 'Membership') {
+    return {
+      handle_contains: search,
+    }
+  } else {
+    return {
+      metadata: {
+        externalResources_some: {
+          type_eq: MembershipExternalResourceType[searchFilter as keyof typeof MembershipExternalResourceType],
+          value_contains: search,
+        },
+      },
+    }
+  }
+}
