@@ -2,10 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TableListItemAsLinkHover } from '@/common/components/List'
+import { BorderRad, Fonts, Sizes, Transitions, Colors } from '@/common/constants'
 
-import { BorderRad, Fonts, Sizes, Transitions, Colors } from '../../../common/constants'
-
-type MemberItemKind = 'Member' | 'MyMember'
+type MemberItemKind = 'Member' | 'MyMember' | 'MemberWithExternal'
 export const colLayoutByType = (kind: MemberItemKind) => {
   const id = 48
   const name = 194
@@ -14,9 +13,13 @@ export const colLayoutByType = (kind: MemberItemKind) => {
   const count = kind === 'Member' ? 20 : 76
   const total = 120
 
-  return kind === 'Member'
-    ? `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`
-    : `${name}px ${roles}px ${count}px ${count}px 96px 80px 46px`
+  switch (kind) {
+    case 'MemberWithExternal':
+    case 'Member':
+      return `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`
+    case 'MyMember':
+      return `${name}px ${roles}px ${count}px ${count}px 96px 80px 46px`
+  }
 }
 
 export const Info = styled.span`
@@ -40,21 +43,22 @@ export const MemberModalTrigger = styled.div`
   cursor: pointer;
 `
 
-export const MemberItemWrap = styled.div`
+export const MemberItemWrap = styled.div<{ kind: MemberItemKind }>`
   display: grid;
   position: relative;
-  grid-template-columns: ${({ kind }: { kind: MemberItemKind }) => colLayoutByType(kind)};
+  grid-template-columns: ${({ kind }) => colLayoutByType(kind)};
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;
   align-items: center;
   width: 100%;
-  height: ${Sizes.accountHeight};
+  min-height: ${Sizes.accountHeight};
   padding: 16px 0 16px 14px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
 
+  ${({ kind }) => kind === 'MemberWithExternal' && 'border-bottom: none;'};
   ${TableListItemAsLinkHover}
 `
 
