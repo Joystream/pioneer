@@ -7,6 +7,11 @@ import { ClientProxyMessage, WorkerProxyMessage } from './models/payload'
 
 export type TransactionsRecord = Record<string, SubmittableExtrinsic<'rxjs'>>
 
+export interface ProxyPromisePayload<T = any> {
+  error?: any
+  result?: T
+}
+
 export type PostMessage<Message extends AnyMessage = AnyMessage> = (message: Message) => void
 
 export type ApiKinds = 'derive' | 'query' | 'rpc' | 'tx'
