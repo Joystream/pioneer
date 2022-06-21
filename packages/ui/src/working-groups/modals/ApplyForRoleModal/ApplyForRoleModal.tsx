@@ -79,7 +79,7 @@ export const ApplyForRoleModal = () => {
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
   const form = useForm({
     resolver: useYupValidationResolver(schema, typeof state.value === 'string' ? state.value : undefined),
-    mode: 'onBlur',
+    mode: 'onChange',
     context: {
       minStake: opening.stake,
       balances: balance,
@@ -103,6 +103,10 @@ export const ApplyForRoleModal = () => {
   useEffect(() => {
     form.trigger('stake.account')
   }, [stakingStatus])
+
+  useEffect(() => {
+    form.trigger([])
+  }, [state.value])
 
   const transaction = useMemo(() => {
     const { stake } = form.getValues()
