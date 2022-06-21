@@ -188,7 +188,7 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingAmount(2)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, 'Minimal stake amount is 10 tJOY')).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, "Minimal stake amount is 10'tJOY'")).toBeInTheDocument()
         })
 
         it('Higher than maximal balance', async () => {
