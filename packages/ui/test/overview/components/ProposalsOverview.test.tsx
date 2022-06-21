@@ -1,4 +1,5 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import BN from 'bn.js'
 import { ProposalMock } from 'dev/query-node-mocks/generators/generateProposals'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -11,7 +12,6 @@ import { baseMock, testProposals } from '../../_mocks/proposals'
 import { MockApolloProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubProposalConstants } from '../../_mocks/transactions'
-import BN from 'bn.js';
 
 const decidingProposalMock: ProposalMock = {
   ...baseMock,
