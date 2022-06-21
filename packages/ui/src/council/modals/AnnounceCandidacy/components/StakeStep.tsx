@@ -49,7 +49,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
           >
-            <SelectStakingAccount name="staking.account" minBalance={stake} lockType="Council Candidate" />
+            <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>
