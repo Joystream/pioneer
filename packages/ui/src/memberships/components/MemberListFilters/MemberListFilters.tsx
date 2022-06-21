@@ -4,10 +4,14 @@ import styled from 'styled-components'
 import { MembershipExternalResourceType } from '@/common/api/queries'
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
-import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
+import { CheckboxIcon, FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
-import { FilterSelect, SelectContainer, SimpleSelect } from '@/common/components/selects'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons'
+import { FilterSelect, OptionContainer, OptionProps, SelectContainer, SimpleSelect } from '@/common/components/selects'
+import { TextInlineMedium } from '@/common/components/typography'
 import { objectEquals } from '@/common/utils'
+import { socialToIcon } from '@/memberships/components/SocialMediaTile/SocialMediaTile'
 import { MemberRole } from '@/memberships/types'
 
 import { SelectMemberRoles } from '../SelectMemberRoles'
@@ -51,6 +55,27 @@ export const MemberListEmptyFilter: MemberListFilter = {
   searchFilter: 'Membership',
 }
 
+const memberListIcons = {
+  ...socialToIcon,
+  MEMBERSHIP: <MyProfileIcon />,
+}
+
+const renderSocialOption = (option: MemberSearchFilter, props?: OptionProps, key?: any) =>
+  props ? (
+    <StyledOptionContainer key={key} {...props}>
+      {memberListIcons[option.toUpperCase() as keyof typeof memberListIcons] ?? <span />}
+      <TextInlineMedium>{option}</TextInlineMedium>
+      {props.selected && <CheckboxIcon />}
+    </StyledOptionContainer>
+  ) : (
+    <SelectedOptionWrapper gap={10} align="center">
+      {memberListIcons[option.toUpperCase() as keyof typeof memberListIcons]}
+      <TextInlineMedium value bold>
+        {option}
+      </TextInlineMedium>
+    </SelectedOptionWrapper>
+  )
+
 const isFilterEmpty = objectEquals(MemberListEmptyFilter, { depth: 2 })
 
 const searchFilterOptions: MemberSearchFilter[] = [
@@ -92,9 +117,9 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
     <Wrapper>
       <div ref={searchSlot}>
         <SimpleSelect
-          // todo add rendering with icon after merge of first PR
           options={searchFilterOptions}
           value={filters.searchFilter}
+          renderOption={renderSocialOption}
           onChange={(value: MemberSearchFilter | null) =>
             value && dispatch({ type: 'change', field: 'searchFilter', value })
           }
@@ -211,5 +236,19 @@ const ToggleContainer = styled.div`
 
   & > :first-child {
     grid-column: span 2;
+  }
+`
+
+const StyledOptionContainer = styled(OptionContainer)`
+  grid-template-columns: 30px auto 30px;
+  height: 40px;
+  svg {
+    color: #c4cad6;
+  }
+`
+
+const SelectedOptionWrapper = styled(ColumnGapBlock)`
+  svg {
+    color: #c4cad6;
   }
 `

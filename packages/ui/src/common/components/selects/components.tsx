@@ -224,6 +224,9 @@ export const Selected = styled.div`
 
 const OptionFocused = css`
   color: ${Colors.Blue[500]};
+  path {
+    fill: ${Colors.Blue[500]};
+  }
 `
 export const OptionContainer = styled.div`
   display: grid;
