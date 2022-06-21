@@ -35,12 +35,12 @@ export const useStakingAccountsLocks = (
       optionLocks.push('boundMembership')
     }
 
-    if (isRecoverable(lockType, recoveryConditions)) {
-      optionLocks.push('recoverableLock')
-    }
-
     if (areLocksConflicting(lockType, balance.locks)) {
-      optionLocks.push('rivalrousLock')
+      if (isRecoverable(lockType, recoveryConditions)) {
+        optionLocks.push('recoverableLock')
+      } else {
+        optionLocks.push('rivalrousLock')
+      }
     }
 
     return { ...account, optionLocks }
