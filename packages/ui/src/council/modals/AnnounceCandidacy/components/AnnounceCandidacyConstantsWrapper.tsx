@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { CurrencyName } from '@/app/constants/currency'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Label, TextMedium, TextHuge, TextInlineHuge, TokenValue } from '@/common/components/typography'
+import { Label, TextHuge, TextInlineHuge, TextMedium, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { CouncilConstants } from '@/council/types/CouncilConstants'
 

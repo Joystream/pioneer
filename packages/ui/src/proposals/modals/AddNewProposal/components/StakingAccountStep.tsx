@@ -10,7 +10,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue, ValueInJoys } from '@/common/components/typography'
-import { formatTokenValue } from '@/common/model/formatters'
 
 interface StakingAccountStepProps {
   requiredStake: BN

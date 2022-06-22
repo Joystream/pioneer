@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import {CurrencyName} from '@/app/constants/currency';
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyActorsList } from '@/bounty/components/BountyActorsList/BountyActorsList'
 
 import { getMember } from '../../_mocks/members'

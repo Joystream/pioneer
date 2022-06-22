@@ -47,7 +47,6 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
 
   &:after {
     content: '${CurrencyName.integerValue}';
-    //content: 'test';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
