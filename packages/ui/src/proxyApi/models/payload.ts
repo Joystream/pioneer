@@ -11,7 +11,7 @@ import { error } from '@/common/logger'
 import { AnyObject } from '@/common/types'
 import { recursiveProxy } from '@/common/utils/proxy'
 
-import { AnyMessage, PostMessage, RawMessageEvent, TransactionsRecord } from '../types'
+import { AnyMessage, PostMessage, ProxyPromisePayload, RawMessageEvent, TransactionsRecord } from '../types'
 
 export interface WorkerProxyMessage {
   messageType: 'proxy'
@@ -23,7 +23,7 @@ export interface WorkerProxyMessage {
 export interface ClientProxyMessage {
   messageType: 'proxy'
   proxyId: string
-  payload: any
+  payload: ProxyPromisePayload
 }
 
 export const serializePayload = (
@@ -133,8 +133,14 @@ const serializeProxy = (
   }
 
   const proxyId = uniqueId(`${name}.`)
-  messages.pipe(filter((message) => message.proxyId === proxyId)).subscribe(({ method, payload: params }) => {
-    obj[method](...params).then((payload: any) => postMessage({ messageType: 'proxy', proxyId, payload }))
+  messages.pipe(filter((message) => message.proxyId === proxyId)).subscribe(async ({ method, payload: params }) => {
+    try {
+      const result = await obj[method](...params)
+      postMessage({ messageType: 'proxy', proxyId, payload: { result } })
+    } catch (err: any) {
+      const error: string = err.message ?? String(err)
+      postMessage({ messageType: 'proxy', proxyId, payload: { error } })
+    }
   })
   return { kind: 'proxy', proxyId, json }
 }
@@ -153,14 +159,10 @@ const deserializeProxy = (
     get(json, prop: string) {
       return prop in json
         ? json[prop]
-        : (...payload: AnyTuple) => {
-            postMessage({ messageType: 'proxy', proxyId, method: prop, payload })
-            return firstValueFrom(
-              messages.pipe(
-                filter((message) => message.proxyId === proxyId),
-                map(({ payload }) => payload)
-              )
-            )
+        : async (...params: AnyTuple) => {
+            postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
+            const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
+            return payload.error ? Promise.reject(payload.error) : payload.result
           }
     },
   })
