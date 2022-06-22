@@ -11079,10 +11079,10 @@ ini@^1.3.5, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
-injectweb3-connect@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/injectweb3-connect/-/injectweb3-connect-1.1.0.tgz#88bbf3c002cbb4dc9f25b30969802f0d5285bfce"
-  integrity sha512-3YECS8np0e2dSQxCenv/COkzdzKG3dk6YxFgS28vuL9y3kiwmNL2qzHTyqaiR+h8dV9bfWN5xekCPyh4cRc1mA==
+injectweb3-connect@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/injectweb3-connect/-/injectweb3-connect-1.1.1.tgz#5e4604a66d61ed274f4d799cfbcf4654706a24fa"
+  integrity sha512-X639j5TWP7gQocu6NxFy3DgWIr+BbaOO2iXas5GMAoWGAGcU0Aqq5lVaoKZggLHr5g9p+cylD716uAqUGNteTg==
   dependencies:
     "@polkadot/api" "^8.8.2"
     "@polkadot/extension-dapp" "^0.44.1"

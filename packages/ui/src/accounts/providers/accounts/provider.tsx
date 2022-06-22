@@ -1,26 +1,25 @@
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
-import { getWalletBySource } from 'injectweb3-connect'
+import { Wallet } from 'injectweb3-connect'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useObservable } from '@/common/hooks/useObservable'
-import { error } from '@/common/logger'
-import { SelectWalletModal } from '@/common/modals/SelectWalletModal/SelectWalletModal'
 
 import { Account } from '../../types'
 
 import { AccountsContext } from './context'
 
-type ExtensionError = 'NO_EXTENSION' | 'ENABLE_EXTENSION'
+type ExtensionError = 'NO_EXTENSION' | 'APP_REJECTED'
 
 export interface UseAccounts {
   allAccounts: Account[]
   hasAccounts: boolean
   isLoading: boolean
   error?: ExtensionError
-  setWallet?: (wallet: string) => void
+  wallet?: Wallet
+  setWallet?: (wallet: Wallet) => void
 }
 
 interface Props {
@@ -35,23 +34,8 @@ function isKeyringLoaded(keyring: Keyring) {
   }
 }
 
-const loadKeysFromExtension = async (
-  keyring: Keyring,
-  selectedExtension: string,
-  onInitializationFailure: (error?: Error) => void
-) => {
-  const wallet = getWalletBySource(selectedExtension)
-
-  if (!wallet) return
-  try {
-    await wallet.enable('Pioneer')
-  } catch (e) {
-    return onInitializationFailure(e as Error)
-  }
-
-  if (!wallet.extension) {
-    return onInitializationFailure()
-  }
+const loadKeysFromExtension = async (keyring: Keyring, wallet: Wallet) => {
+  await wallet.enable('Pioneer')
 
   const injectedAccounts = await wallet.getAccounts()
 
@@ -102,17 +86,17 @@ const onExtensionLoaded = (onSuccess: (selectedExtension?: string) => void, onFa
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
   const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
-  const [extensionUnavailable, setExtensionUnavailable] = useState(false)
-  const [selectedWallet, setSelectedWallet] = useState<string | undefined>(undefined)
-  const [failedWallet, setFailedWallet] = useState<string[]>([])
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
+  const [extensionError, setExtensionError] = useState<ExtensionError>()
 
   useEffect(
     onExtensionLoaded(
       (possibleExtension) => {
         setIsExtensionLoaded(true)
-        setSelectedWallet(possibleExtension)
+
+        // setSelectedWallet(possibleExtension)
       },
-      () => setExtensionUnavailable(true)
+      () => setExtensionError('NO_EXTENSION')
     ),
     []
   )
@@ -122,14 +106,12 @@ export const AccountsContextProvider = (props: Props) => {
       return
     }
 
-    loadKeysFromExtension(keyring, selectedWallet, (error) => {
-      setSelectedWallet(undefined)
-      if (error?.message.includes('not allowed to interact')) {
-      }
-    }).catch((error: Error) => {
+    setExtensionError(undefined)
+    loadKeysFromExtension(keyring, selectedWallet).catch((error: Error) => {
       setSelectedWallet(undefined)
 
-      if (error?.message.includes('not allowed to interact')) {
+      if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
+        setExtensionError('APP_REJECTED')
       }
     })
   }, [isExtensionLoaded, selectedWallet])
@@ -161,15 +143,11 @@ export const AccountsContextProvider = (props: Props) => {
     hasAccounts,
     isLoading: !isExtensionLoaded || !accounts,
     setWallet: setSelectedWallet,
+    wallet: selectedWallet,
+    error: extensionError,
   }
 
-  if (extensionUnavailable) {
-    value.error = 'NO_EXTENSION'
-    value.isLoading = false
-  }
-
-  if (isExtensionLoaded && !selectedWallet) {
-    value.error = 'ENABLE_EXTENSION'
+  if (extensionError || !selectedWallet?.extension) {
     value.isLoading = false
   }
 

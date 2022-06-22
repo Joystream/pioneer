@@ -1,28 +1,33 @@
-import React, { useCallback, useState } from 'react'
+import { getAllWallets, Wallet } from 'injectweb3-connect'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonPrimary } from '@/common/components/buttons'
-import { PolkadotIcon } from '@/common/components/icons/PolkadotIcon'
-import { LinkSymbol } from '@/common/components/icons/symbols'
-import { ScrolledModalBody } from '@/common/components/Modal'
-import { TextExtraHuge, TextMedium, TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
-import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoardingModal'
-import { List, ListItem } from '@/common/components/List'
-import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
-import { getAllWallets, Wallet } from 'injectweb3-connect'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import { List, ListItem } from '@/common/components/List'
+import { ScrolledModalBody } from '@/common/components/Modal'
+import { TextBig, TextExtraHuge, TextMedium, TextSmall } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
+import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
+import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoardingModal'
 
 export const OnBoardingPlugin = () => {
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
-  const { setWallet } = useMyAccounts()
+  const { setWallet, error } = useMyAccounts()
   const handleClick = useCallback(() => {
     if (!selectedWallet?.installed && selectedWallet?.installUrl) {
       window.open(selectedWallet.installUrl, '_blank')
     } else if (selectedWallet?.installed) {
-      setWallet?.(selectedWallet.extensionName)
+      setWallet?.(selectedWallet)
     }
   }, [selectedWallet])
+
+  useEffect(() => {
+    if (error === 'APP_REJECTED') {
+      setSelectedWallet(undefined)
+    }
+  }, [error])
 
   return (
     <>
@@ -42,6 +47,17 @@ export const OnBoardingPlugin = () => {
             </ListItem>
           </List>
         </Wrapper>
+        {error === 'APP_REJECTED' && (
+          <RedBox>
+            <TextBig bold value>
+              Extension is blocking Pioneer from access
+            </TextBig>
+            <TextMedium lighter>
+              Change the settings of the wallet browser plugin to allow it access to dao.joystream.org and reload the
+              page
+            </TextMedium>
+          </RedBox>
+        )}
       </ScrolledModalBody>
       <OnBoardingTextFooter
         text="Please reload the page after installing the plugin!"
@@ -83,4 +99,14 @@ const StyledButton = styled(ButtonPrimary)`
   path {
     fill: ${Colors.White} !important;
   }
+`
+
+const RedBox = styled.div`
+  display: grid;
+  width: 90%;
+  gap: 5px;
+  margin-bottom: 20px;
+  padding: 16px 24px;
+  background-color: ${Colors.Negative[50]};
+  align-self: center;
 `
