@@ -1,18 +1,13 @@
-import { AnimatePresence } from 'framer-motion'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React from 'react'
 
 import { PageHeader, PageHeaderProps } from '@/app/components/PageHeader'
-import { HintButton } from '@/common/components/buttons/HintButton'
-import { VideoHint } from '@/common/components/VideoHint'
-import { videoHints, VideoHintType } from '@/common/constants/videoHints'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { useToggle } from '@/common/hooks/useToggle'
+import { VideoHintType } from '@/common/constants/videoHints'
 
 interface PageHeaderWithHintProps extends PageHeaderProps {
   hintType: VideoHintType
 }
 
-export const PageHeaderWithHint = ({ title, hintType, buttons, tabs }: PageHeaderWithHintProps) => {
+export const PageHeaderWithHint = ({ title, buttons, tabs }: PageHeaderWithHintProps) => {
   //TODO has to be uncomment when movies will be ready
 
   // const [hintFinished, setHintFinished] = useLocalStorage<boolean>(hintType + '-hint')

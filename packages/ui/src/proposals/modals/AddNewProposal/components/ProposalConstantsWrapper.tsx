@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { CurrencyName } from '@/app/constants/currency'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'

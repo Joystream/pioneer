@@ -1,5 +1,3 @@
-import { CurrencyName } from '@/app/constants/currency'
-
 export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
 

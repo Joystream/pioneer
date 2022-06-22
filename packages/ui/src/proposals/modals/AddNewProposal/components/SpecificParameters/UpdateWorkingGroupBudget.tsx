@@ -10,7 +10,6 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { formatTokenValue } from '@/common/model/formatters'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
