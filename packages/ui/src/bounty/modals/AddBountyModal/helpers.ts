@@ -11,6 +11,7 @@ import BN from 'bn.js'
 import Long from 'long'
 import * as Yup from 'yup'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
@@ -88,7 +89,12 @@ export const addBountyModalSchema = Yup.object().shape({
     description: Yup.string().required(),
   }),
   [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
-    cherry: BNSchema.test(minContext('Cherry must be greater than minimum of ${min} JOY', 'minCherryLimit'))
+    cherry: BNSchema.test(
+      minContext(
+        'Cherry must be greater than minimum of' + '${min}' + `'${CurrencyName.integerValue}`,
+        'minCherryLimit'
+      )
+    )
       .test(maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit'))
       .required(''),
     fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero')).required(''),

@@ -14,7 +14,7 @@ interface ValueSizingProps {
 }
 
 interface ValueProps extends ValueSizingProps {
-  value?: BN | number | null
+  value?: BN | null
   className?: string
   isLoading?: boolean
 }
@@ -24,7 +24,7 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
   }
 
-  if (value === null || !isDefined(value)) {
+  if (!value) {
     return <span>-</span>
   }
   return (

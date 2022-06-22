@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
+import {CurrencyName} from '@/app/constants/currency';
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -25,6 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -136,7 +138,7 @@ describe('CreateThreadModal', () => {
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
         await screen.findByText(
-          'Insufficient funds to cover the thread creation. You need at least 10000 tJOY on your account for this action.'
+          `Insufficient funds to cover the thread creation. You need at least 10000 ${CurrencyName.integerValue} on your account for this action.`
         )
       ).toBeDefined()
     })
@@ -152,7 +154,7 @@ describe('CreateThreadModal', () => {
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
         await screen.findByText(
-          'Insufficient funds to cover the thread creation. You need at least 1200 tJOY on your account for this action.'
+          `Insufficient funds to cover the thread creation. You need at least 1200 ${CurrencyName.integerValue} on your account for this action.`
         )
       ).toBeDefined()
     })
