@@ -391,3 +391,14 @@ query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
     ...CouncilSpendingEventFields
   }
 }
+
+query GetCouncilorElectionEvent($lockAccount: String) {
+  councilMembers(where: { stakingAccountId_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    electedInCouncil {
+      id
+      electedAtBlock
+      electedAtTime
+      electedAtNetwork
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
@@ -13,13 +14,12 @@ export interface OpeningDurationValue {
 
 export interface OpeningDurationProps {
   label: string
-  value: OpeningDurationValue | undefined
-  onChange: (value: OpeningDurationValue) => void
 }
 
-export const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ label, value, onChange }) => {
-  const isLimited = value?.isLimited ?? true
-  const length = value?.length
+export const OpeningDuration = React.memo(({ label }: OpeningDurationProps) => {
+  const { watch } = useFormContext()
+  const [isLimited, duration] = watch(['durationAndProcess.isLimited', 'durationAndProcess.duration'])
+
   return (
     <>
       <ToggleCheckbox
@@ -34,8 +34,7 @@ export const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ lab
           </LabelWrapper>
         }
         falseLabel={!isLimited ? <StyledLabel>Unlimited</StyledLabel> : 'Unlimited'}
-        onChange={() => onChange({ isLimited: !isLimited, length })}
-        checked={isLimited}
+        name="durationAndProcess.isLimited"
         hasNoOffState
       />
       {isLimited && (
@@ -46,14 +45,14 @@ export const OpeningDuration: React.FC<OpeningDurationProps> = React.memo(({ lab
             required
             units="blocks"
             inputSize="m"
-            message={value?.length ? `≈ ${inBlocksDate(value.length)}` : ''}
+            message={duration?.length ? `≈ ${inBlocksDate(duration.length)}` : ''}
+            name="durationAndProcess.duration"
             tight
           >
             <InputNumber
               id="field-period-length"
               placeholder="type number of blocks here"
-              value={value?.length?.toString()}
-              onChange={(_, length) => onChange({ isLimited, length: length || undefined })}
+              name="durationAndProcess.duration"
             />
           </InputComponent>
         </InputWrapper>

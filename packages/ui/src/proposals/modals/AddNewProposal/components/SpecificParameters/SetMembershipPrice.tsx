@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -6,15 +5,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
-export interface SetMembershipPriceParameters {
-  amount?: BN
-}
-
-interface Props extends SetMembershipPriceParameters {
-  setAmount: (amount: BN) => void
-}
-
-export const SetMembershipPrice = ({ amount, setAmount }: Props) => {
+export const SetMembershipPrice = () => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -31,14 +22,9 @@ export const SetMembershipPrice = ({ amount, setAmount }: Props) => {
             units="tJOY"
             required
             message="Value must be greater than zero"
+            name="setMembershipPrice.amount"
           >
-            <InputNumber
-              id="amount-input"
-              isTokenValue
-              value={amount?.toString()}
-              placeholder="0"
-              onChange={(_, value) => setAmount(new BN(value))}
-            />
+            <InputNumber id="amount-input" name="setMembershipPrice.amount" isTokenValue isInBN placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

@@ -146,7 +146,7 @@ export const WorkingGroupOpening = () => {
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
-              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
+              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.stake} />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>

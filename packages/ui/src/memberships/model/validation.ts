@@ -14,7 +14,7 @@ export const MemberSchema = Yup.object()
 export const AvatarURISchema = Yup.string().url('Invalid url address')
 
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
-  return testContext?.options?.context?.size?.lte(new BN(0)) ?? false
+  return testContext?.options?.context?.size ? testContext?.options?.context?.size === 0 : true
 })
 
 export const ReferrerSchema = Yup.object().when('isReferred', (isReferred: boolean, schema: AnySchema) => {

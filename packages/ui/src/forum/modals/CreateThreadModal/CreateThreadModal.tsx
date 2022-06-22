@@ -1,5 +1,6 @@
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -9,12 +10,18 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useYupValidationResolver } from '@/common/utils/validation'
 import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { CreateThreadModalCall } from '.'
-import { CreateThreadDetailsModal } from './CreateThreadDetailsModal'
+import {
+  CreateThreadDetailsModal,
+  CreateThreadSchema,
+  formDefaultValues,
+  ThreadFormFields,
+} from './CreateThreadDetailsModal'
 import { CreateThreadSignModal } from './CreateThreadSignModal'
 import { CreateThreadSuccessModal } from './CreateThreadSuccessModal'
 import { createThreadMachine } from './machine'
@@ -37,6 +44,12 @@ export const CreateThreadModal = () => {
     () => postDeposit && threadDeposit && baseTransactionFee?.transactionFee.add(postDeposit).add(threadDeposit),
     [postDeposit, threadDeposit, baseTransactionFee?.transactionFee.toString()]
   )
+
+  const form = useForm<ThreadFormFields>({
+    resolver: useYupValidationResolver(CreateThreadSchema),
+    mode: 'onChange',
+    defaultValues: formDefaultValues,
+  })
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
@@ -61,23 +74,17 @@ export const CreateThreadModal = () => {
       send(canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, member?.id, minimumTransactionCost, balance])
-
   if (state.matches('generalDetails') && member) {
     return (
-      <CreateThreadDetailsModal
-        topic={state.context.topic ?? ''}
-        description={state.context.description ?? ''}
-        setTopic={(topic) => send({ type: 'SET_TOPIC', topic })}
-        setDescription={(description) => send({ type: 'SET_DESCRIPTION', description })}
-        onSubmit={() => send('NEXT')}
-        breadcrumbs={breadcrumbs}
-        author={member}
-      />
+      <FormProvider {...form}>
+        <CreateThreadDetailsModal breadcrumbs={breadcrumbs} author={member} send={send} />
+      </FormProvider>
     )
   }
 
   if (state.matches('transaction') && api && postDeposit && threadDeposit) {
-    const { memberId, categoryId, topic, description, controllerAccount } = state.context
+    const { topic, description } = form.getValues()
+    const { memberId, categoryId, controllerAccount } = state.context
     const transaction = api.tx.forum.createThread(memberId, categoryId, topic, description, null)
     const service = state.children.transaction
     return (

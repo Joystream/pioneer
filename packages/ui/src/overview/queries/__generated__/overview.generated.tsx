@@ -83,6 +83,13 @@ export type GetAllDeadLinesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'

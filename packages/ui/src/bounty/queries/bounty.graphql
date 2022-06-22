@@ -12,16 +12,7 @@ fragment BountyFields on Bounty {
   oracle {
     ...MemberFields
   }
-  fundingType {
-    ... on BountyFundingLimited {
-      minFundingAmount
-      maxFundingAmount
-      fundingPeriod
-    }
-    ... on BountyFundingPerpetual {
-      target
-    }
-  }
+  ...BountyFundingTypeFields
   entrantWhitelist {
     members {
       id
@@ -50,6 +41,19 @@ fragment BountyFields on Bounty {
   }
   maxFundingReachedEvent {
     createdAt
+  }
+}
+
+fragment BountyFundingTypeFields on Bounty {
+  fundingType {
+    ... on BountyFundingLimited {
+      minFundingAmount
+      maxFundingAmount
+      fundingPeriod
+    }
+    ... on BountyFundingPerpetual {
+      target
+    }
   }
 }
 
@@ -146,7 +150,7 @@ query GetUserBountyStatistics($memberId: ID!) {
   }
 }
 
-query GetUserBountyTabsInformations($memberIds: [ID!]) {
+query GetUserBountyTabsInformation($memberIds: [ID!]) {
   bountiesConnection(where: { creator: { id_in: $memberIds } }) {
     totalCount
   }
@@ -168,5 +172,26 @@ query GetBountyContributors(
 ) {
   bountyContributions(where: $where, orderBy: $order, offset: $offset, limit: $limit) {
     ...BountyContributionFields
+  }
+}
+
+query GetLatestBountyEntry($lockAccount: String) {
+  bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    id
+    bountyId
+    bounty {
+      createdAt
+      ...BountyFundingTypeFields
+      workPeriod
+      judgingPeriod
+      maxFundingReachedEvent {
+        createdAt
+      }
+    }
+    announcedInEvent {
+      createdAt
+      inBlock
+      network
+    }
   }
 }

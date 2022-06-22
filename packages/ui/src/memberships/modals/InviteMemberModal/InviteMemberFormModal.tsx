@@ -1,16 +1,10 @@
-import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import * as Yup from 'yup'
 
+import { ButtonPrimary } from '@/common/components/buttons'
+import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { InputComponent, InputText, InputTextarea } from '../../../common/components/forms'
-import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import {
   ModalFooter,
   ModalHeader,
@@ -18,11 +12,14 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
   Row,
-} from '../../../common/components/Modal'
-import { TextMedium } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useKeyring } from '../../../common/hooks/useKeyring'
-import { useObservable } from '../../../common/hooks/useObservable'
+} from '@/common/components/Modal'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { TextMedium } from '@/common/components/typography'
+import { useKeyring } from '@/common/hooks/useKeyring'
+import { useYupValidationResolver } from '@/common/utils/validation'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useGetMembersCountQuery } from '@/memberships/queries'
+
 import { SelectMember } from '../../components/SelectMember'
 import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../model/validation'
 import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
@@ -51,30 +48,23 @@ const formDefaultValues = {
 }
 
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
-  const { api } = useApi()
   const { active } = useMyMemberships()
   const keyring = useKeyring()
   const [formHandleMap, setFormHandleMap] = useState('')
-
-  const handleHash = blake2AsHex(formHandleMap)
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    formHandleMap,
-    api,
-  ])
+  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(InviteMemberSchema),
-    context: { size: potentialMemberIdSize, keyring },
+    context: { size: data?.membershipsConnection.totalCount, keyring },
     mode: 'onChange',
     defaultValues: formDefaultValues,
   })
 
-  const [handle, invitor, rootAccount, controllerAccount, avatarUri] = form.watch([
+  const [handle, invitor, rootAccount, controllerAccount] = form.watch([
     'handle',
     'invitor',
     'rootAccount',
     'controllerAccount',
-    'avatarUri',
   ])
 
   useEffect(() => {
@@ -82,12 +72,17 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       setFormHandleMap(handle)
     }
   }, [handle])
+
+  useEffect(() => {
+    if (formHandleMap && (data?.membershipsConnection.totalCount || form.formState.errors.handle)) {
+      form.trigger('handle')
+    }
+  }, [data?.membershipsConnection.totalCount])
+
   useEffect(() => {
     return active && form.setValue('invitor', active)
   }, [active])
 
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
   const onCreate = () => onSubmit(form.getValues())
 
   return (
@@ -97,7 +92,10 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
         <FormProvider {...form}>
           <ScrolledModalContainer>
             <InputComponent label="Inviting member" inputSize="l">
-              <SelectMember selected={invitor} onChange={(member) => form.setValue('invitor', member)} />
+              <SelectMember
+                selected={invitor}
+                onChange={(member) => form.setValue('invitor', member, { shouldValidate: true })}
+              />
             </InputComponent>
 
             <Row>
@@ -110,8 +108,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="root-account"
                 required
                 tooltipText="Something about root accounts"
-                validation={hasError('rootAccount.address') ? 'invalid' : undefined}
-                message={hasError('rootAccount.address') ? getErrorMessage('rootAccount.address') : ' '}
+                name="rootAccount"
               >
                 <InputText
                   id="root-account"
@@ -134,8 +131,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="controller-account"
                 required
                 tooltipText="Something about controller accounts"
-                validation={hasError('controllerAccount') ? 'invalid' : undefined}
-                message={hasError('controllerAccount') ? getErrorMessage('controllerAccount') : ' '}
+                name="controllerAccount"
               >
                 <InputText
                   id="controller-account"
@@ -169,8 +165,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                     </TooltipExternalLink>
                   </>
                 }
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : 'Do not use same handles'}
+                name="handle"
               >
                 <InputText id="member-handle" placeholder="Type" name="handle" />
               </InputComponent>
@@ -189,18 +184,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
             </Row>
 
             <Row>
-              <InputComponent
-                id="member-avatar"
-                label="Member Avatar"
-                name="avatarUri"
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={
-                  hasError('avatarUri')
-                    ? getErrorMessage('avatarUri')
-                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                }
-                placeholder="Image URL"
-              >
+              <InputComponent id="member-avatar" label="Member Avatar" name="avatarUri" placeholder="Image URL">
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>

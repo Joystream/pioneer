@@ -1,4 +1,5 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 import { CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 
@@ -13,15 +14,13 @@ import { proposalDescriptions } from '@/proposals/model/proposalDescriptions'
 import { enabledProposals } from '@/proposals/model/proposalDetails'
 import { ProposalType } from '@/proposals/types'
 
-interface ProposalTypeStepProps {
-  type?: ProposalType
-  setType: (type: ProposalType) => void
-}
+export const ProposalTypeStep = () => {
+  const { setValue, watch } = useFormContext()
+  const chosenType = watch('proposalType.type')
 
-export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStepProps) => {
   function selectType(type: ProposalType) {
     if (enabledProposals.includes(type)) {
-      setType(type)
+      setValue('proposalType.type', type, { shouldValidate: true })
     }
   }
 

@@ -23,9 +23,8 @@ export const maxContext = (msg: string, contextPath: string): Yup.TestConfig<any
     if (!value) {
       return true
     }
-
-    const validationValue = this.options.context?.[contextPath]
-    if (validationValue && new BN(validationValue).lt(new BN(value))) {
+    const validationValue = new BN(this.options.context?.[contextPath])
+    if (validationValue && validationValue.lt(new BN(value))) {
       return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
     }
 
@@ -41,8 +40,8 @@ export const minContext = (msg: string, contextPath: string): Yup.TestConfig<any
       return true
     }
 
-    const validationValue = this.options.context?.[contextPath]
-    if (validationValue && new BN(validationValue).gt(new BN(value))) {
+    const validationValue = new BN(this.options.context?.[contextPath])
+    if (validationValue && validationValue.gt(new BN(value))) {
       return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
     }
 
@@ -56,6 +55,7 @@ export const lessThanMixed = (
 ): Yup.TestConfig<any, AnyObject> => ({
   message,
   name: 'lessThanMixed',
+  params: { less },
   exclusive: false,
   test(value: BN) {
     return !value || !isBn(value) || value.lt(new BN(this.resolve(less)))

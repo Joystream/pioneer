@@ -16,12 +16,12 @@ const getErrorMeta = (error: DispatchError) => {
 
 export const toDispatchError = (event: EventRecord) => {
   if (isModuleEvent(event.event, 'utility', 'BatchInterrupted')) {
-    const [, error] = event.event.data
+    const error = event.event.data[1]
     return getErrorMeta(error)
   }
 
   if (isModuleEvent(event.event, 'system', 'ExtrinsicFailed')) {
-    const [error] = event.event.data
+    const error = event.event.data[0]
     return getErrorMeta(error)
   }
 }

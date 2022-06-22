@@ -36,6 +36,13 @@ export type CouncilMemberFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -114,6 +121,13 @@ export type PastCouncilProposalsFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }
 }
@@ -169,6 +183,13 @@ export type ElectedCouncilFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -221,6 +242,13 @@ export type ElectionCandidateFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
@@ -265,6 +293,13 @@ export type ElectionRoundFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -311,6 +346,13 @@ export type LatestElectionRoundFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -371,6 +413,13 @@ export type PastElectionRoundDetailedFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -422,6 +471,13 @@ export type ElectionCandidateDetailedFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
@@ -470,6 +526,13 @@ export type CastVoteFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -570,6 +633,13 @@ export type GetElectedCouncilQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
     }>
   }>
@@ -704,6 +774,13 @@ export type GetPastCouncilMembersQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
   proposalVotedEvents: Array<{
@@ -781,6 +858,13 @@ export type GetPastCouncilMembersQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
     }
   }>
@@ -864,6 +948,13 @@ export type GetPastCouncilProposalsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -924,6 +1015,13 @@ export type GetCurrentElectionQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -975,6 +1073,13 @@ export type GetLatestElectionQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -1058,6 +1163,13 @@ export type GetPastElectionQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -1116,6 +1228,13 @@ export type GetCandidateQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -1203,6 +1322,13 @@ export type GetCouncilVotesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -1319,6 +1445,24 @@ export type GetPastCouncilStatsQuery = {
   proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
   proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
   budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent'; amount: any; type?: Types.EventTypeOptions | null }>
+}
+
+export type GetCouncilorElectionEventQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetCouncilorElectionEventQuery = {
+  __typename: 'Query'
+  councilMembers: Array<{
+    __typename: 'CouncilMember'
+    electedInCouncil: {
+      __typename: 'ElectedCouncil'
+      id: string
+      electedAtBlock: number
+      electedAtTime: any
+      electedAtNetwork: Types.Network
+    }
+  }>
 }
 
 export const PastCouncilProposalsFieldsFragmentDoc = gql`
@@ -2671,4 +2815,57 @@ export type GetPastCouncilStatsLazyQueryHookResult = ReturnType<typeof useGetPas
 export type GetPastCouncilStatsQueryResult = Apollo.QueryResult<
   GetPastCouncilStatsQuery,
   GetPastCouncilStatsQueryVariables
+>
+export const GetCouncilorElectionEventDocument = gql`
+  query GetCouncilorElectionEvent($lockAccount: String) {
+    councilMembers(where: { stakingAccountId_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      electedInCouncil {
+        id
+        electedAtBlock
+        electedAtTime
+        electedAtNetwork
+      }
+    }
+  }
+`
+
+/**
+ * __useGetCouncilorElectionEventQuery__
+ *
+ * To run a query within a React component, call `useGetCouncilorElectionEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCouncilorElectionEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCouncilorElectionEventQuery({
+ *   variables: {
+ *      lockAccount: // value for 'lockAccount'
+ *   },
+ * });
+ */
+export function useGetCouncilorElectionEventQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCouncilorElectionEventQuery, GetCouncilorElectionEventQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCouncilorElectionEventQuery, GetCouncilorElectionEventQueryVariables>(
+    GetCouncilorElectionEventDocument,
+    options
+  )
+}
+export function useGetCouncilorElectionEventLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCouncilorElectionEventQuery, GetCouncilorElectionEventQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCouncilorElectionEventQuery, GetCouncilorElectionEventQueryVariables>(
+    GetCouncilorElectionEventDocument,
+    options
+  )
+}
+export type GetCouncilorElectionEventQueryHookResult = ReturnType<typeof useGetCouncilorElectionEventQuery>
+export type GetCouncilorElectionEventLazyQueryHookResult = ReturnType<typeof useGetCouncilorElectionEventLazyQuery>
+export type GetCouncilorElectionEventQueryResult = Apollo.QueryResult<
+  GetCouncilorElectionEventQuery,
+  GetCouncilorElectionEventQueryVariables
 >

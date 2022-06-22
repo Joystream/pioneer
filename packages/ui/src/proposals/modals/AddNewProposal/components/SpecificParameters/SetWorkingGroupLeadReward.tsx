@@ -1,5 +1,5 @@
-import BN from 'bn.js'
 import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -10,34 +10,17 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
 
-export interface SetWorkingGroupLeadRewardParameters {
-  rewardPerBlock?: BN
-  groupId?: GroupIdName
-  workerId?: number
-}
-
-interface SetWorkingGroupLeadRewardProps extends SetWorkingGroupLeadRewardParameters {
-  setRewardPerBlock: (amount: BN) => void
-  setGroupId(groupId: string): void
-  setWorkerId(workerId?: number): void
-}
-
-export const SetWorkingGroupLeadReward = ({
-  rewardPerBlock,
-  groupId,
-  setRewardPerBlock,
-  setGroupId,
-  setWorkerId,
-}: SetWorkingGroupLeadRewardProps) => {
+export const SetWorkingGroupLeadReward = () => {
+  const { setValue, watch } = useFormContext()
+  const [groupId] = watch(['setWorkingGroupLeadReward.groupId'])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setWorkerId(group?.leadWorker?.runtimeId)
+    setValue('setWorkingGroupLeadReward.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
   }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
@@ -60,7 +43,9 @@ export const SetWorkingGroupLeadReward = ({
             <SelectWorkingGroup
               id="working-group"
               selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              onChange={(selected) =>
+                setValue('setWorkingGroupLeadReward.groupId', selected.id, { shouldValidate: true })
+              }
               disableNoLead
             />
           </InputComponent>
@@ -80,16 +65,17 @@ export const SetWorkingGroupLeadReward = ({
             units="tJOY"
             inputWidth="s"
             tooltipText="Reward per block amount that is awarded to working group lead’s reward account"
+            name="setWorkingGroupLeadReward.rewardPerBlock"
             message="Amount must be greater than zero"
             required
             disabled={isDisabled}
           >
             <InputNumber
               id="amount-input"
+              name="setWorkingGroupLeadReward.rewardPerBlock"
+              isInBN
               isTokenValue
-              value={rewardPerBlock?.toString()}
               placeholder="0"
-              onChange={(_, value) => setRewardPerBlock(new BN(value))}
               disabled={isDisabled}
             />
           </InputComponent>

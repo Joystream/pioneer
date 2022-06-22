@@ -1,5 +1,5 @@
-import BN from 'bn.js'
 import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -11,35 +11,35 @@ import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
 
-export interface SlashWorkingGroupLeadParameters {
-  slashingAmount?: BN
-  groupId?: GroupIdName
-  workerId?: number
-}
-
-interface SlashWorkingGroupLeadProps extends SlashWorkingGroupLeadParameters {
-  setSlashingAmount: (amount: BN) => void
-  setGroupId(groupId: string): void
-  setWorkerId(workerId?: number): void
-}
-
-export const SlashWorkingGroupLead = ({
-  slashingAmount,
-  groupId,
-  setSlashingAmount,
-  setGroupId,
-  setWorkerId,
-}: SlashWorkingGroupLeadProps) => {
+export const SlashWorkingGroupLead = () => {
+  const { setValue, watch, setError, clearErrors, formState } = useFormContext()
+  const [groupId, slashingAmount] = watch(['slashWorkingGroupLead.groupId', 'slashWorkingGroupLead.slashingAmount'])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setSlashingAmount(BN_ZERO)
-    setWorkerId(group?.leadWorker?.runtimeId)
-  }, [groupId, group?.leadWorker?.runtimeId])
+    if (group) {
+      setValue('slashWorkingGroupLead.slashingAmount', group?.leadWorker?.stake.divn(2) ?? BN_ZERO, {
+        shouldValidate: true,
+      })
+      setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
+    }
+  }, [group?.id])
+
+  useEffect(() => {
+    if (!slashingAmount || !group || formState.isValidating || !formState.isValid) return
+
+    if (slashingAmount?.gte(group.leadWorker?.stake)) {
+      return setError('slashWorkingGroupLead.slashingAmount', {
+        type: 'custom',
+        message: 'Amount must be lower than current lead reward',
+      })
+    }
+
+    return clearErrors('decreaseWorkingGroupLeadStake.stakingAmount')
+  }, [slashingAmount?.toString(), formState.isValidating])
 
   return (
     <RowGapBlock gap={24}>
@@ -59,7 +59,7 @@ export const SlashWorkingGroupLead = ({
           >
             <SelectWorkingGroup
               selectedGroupId={groupId}
-              onChange={(selected) => setGroupId(selected.id)}
+              onChange={(selected) => setValue('slashWorkingGroupLead.groupId', selected.id)}
               disableNoLead
             />
           </InputComponent>
@@ -78,16 +78,17 @@ export const SlashWorkingGroupLead = ({
             units="tJOY"
             inputWidth="s"
             tooltipText="Amount to be slashed"
-            message="Amount must be greater than zero"
+            name="slashWorkingGroupLead.slashingAmount"
+            message="Amount must be greater than zero and less than current stake"
             required
             disabled={isDisabled}
           >
             <InputNumber
               id="amount-input"
+              name="slashWorkingGroupLead.slashingAmount"
               isTokenValue
-              value={slashingAmount?.toString()}
+              isInBN
               placeholder="0"
-              onChange={(_, value) => setSlashingAmount(new BN(value))}
               disabled={isDisabled}
             />
           </InputComponent>

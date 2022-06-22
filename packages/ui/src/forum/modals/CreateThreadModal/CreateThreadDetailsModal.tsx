@@ -1,45 +1,55 @@
-import React, { useMemo } from 'react'
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
+import * as Yup from 'yup'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import {
+  ModalFooter,
+  ModalHeader,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-  ModalFooter,
-  ModalHeader,
 } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 import { ForumBreadcrumbsList } from '@/forum/components/ForumBreadcrumbsList'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
+import { CreateThreadEvent } from '@/forum/modals/CreateThreadModal/machine'
 import { CategoryBreadcrumb } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
 interface Props {
-  topic: string
-  description: string
-  setTopic: (t: string) => void
-  setDescription: (d: string) => void
-  onSubmit: () => void
   breadcrumbs?: CategoryBreadcrumb[]
   author: Member
+  send: (event: CreateThreadEvent['type']) => void
 }
 
-export const CreateThreadDetailsModal = ({
-  topic,
-  description,
-  setTopic,
-  setDescription,
-  onSubmit,
-  breadcrumbs,
-  author,
-}: Props) => {
-  const isValid = useMemo(() => !!(topic && description), [topic, description])
+export const CreateThreadSchema = Yup.object().shape({
+  topic: Yup.string().required('This field is required'),
+  description: Yup.string().required('This field is required'),
+})
+
+export interface ThreadFormFields {
+  topic: string
+  description: string
+}
+
+export const formDefaultValues = {
+  topic: '',
+  description: '',
+}
+
+export const CreateThreadDetailsModal = ({ breadcrumbs, author, send }: Props) => {
   const { hideModal } = useModal()
+  const { formState, getValues } = useFormContext()
+
+  const hasError = enhancedHasError(formState.errors)
+  const getErrorMessage = enhancedGetErrorMessage(formState.errors)
 
   return (
     <>
@@ -55,15 +65,23 @@ export const CreateThreadDetailsModal = ({
               />
               <RowGapBlock gap={16}>
                 <TextMedium light>Please make sure your title will be clear for users</TextMedium>
-                <InputComponent label="Topic of the thread" id="field-topic">
-                  <InputText id="field-topic" value={topic} onChange={(event) => setTopic(event.target.value)} />
+                <InputComponent
+                  label="Topic of the thread"
+                  id="field-topic"
+                  validation={hasError('topic') ? 'invalid' : undefined}
+                  message={hasError('topic') ? getErrorMessage('topic') : ''}
+                >
+                  <InputText id="field-topic" name="topic" />
                 </InputComponent>
-                <InputComponent label="Description" required inputSize="auto" id="field-description">
-                  <CKEditor
-                    id="field-description"
-                    onChange={(_, editor) => setDescription(editor.getData())}
-                    onReady={(editor) => editor.setData(description ?? '')}
-                  />
+                <InputComponent
+                  label="Description"
+                  required
+                  inputSize="auto"
+                  id="field-description"
+                  validation={hasError('description') ? 'invalid' : undefined}
+                  message={hasError('description') ? getErrorMessage('description') : ''}
+                >
+                  <CKEditor id="field-description" name="description" />
                 </InputComponent>
               </RowGapBlock>
             </RowGapBlock>
@@ -71,8 +89,8 @@ export const CreateThreadDetailsModal = ({
         </ScrolledModalBody>
         <ModalFooter>
           <ButtonsGroup align="right">
-            <PreviewPostButton author={author} postText={description} />
-            <ButtonPrimary onClick={onSubmit} size="medium" disabled={!isValid}>
+            <PreviewPostButton author={author} postText={getValues().description} />
+            <ButtonPrimary onClick={() => send('NEXT')} size="medium" disabled={!formState.isValid}>
               Next step
               <Arrow direction="right" />
             </ButtonPrimary>

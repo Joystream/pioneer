@@ -257,8 +257,8 @@ fragment ProposalDiscussionPostMentionFields on ProposalDiscussionPost {
   }
 }
 
-query getProposals($where: ProposalWhereInput, $limit: Int, $offset: Int) {
-  proposals(where: $where, orderBy: [createdAt_DESC], limit: $limit, offset: $offset) {
+query getProposals($where: ProposalWhereInput, $orderBy: [ProposalOrderByInput!], $limit: Int, $offset: Int) {
+  proposals(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
     ...ProposalFields
   }
 }
@@ -324,5 +324,17 @@ query GetProposalMention($id: ID!) {
 query GetProposalDiscussionPostMention($id: ID!) {
   proposalPost: proposalDiscussionPostByUniqueInput(where: { id: $id }) {
     ...ProposalDiscussionPostMentionFields
+  }
+}
+
+query GetLatestProposalByMemberId($lockAccount: String) {
+  proposals(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    id
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+    exactExecutionBlock
   }
 }

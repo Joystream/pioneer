@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
@@ -10,17 +10,9 @@ export default {
 } as Meta
 
 const FillWorkingGroupLeadOpeningTemplate: Story = () => {
-  const [applicationsId, setApplicationId] = useState<any>('')
-  const [openingId, setOpeningId] = useState<any>('')
   return (
     <MockApolloProvider members workingGroups>
-      <FillWorkingGroupLeadOpening
-        applicationId={applicationsId}
-        setApplicationId={setApplicationId}
-        openingId={openingId}
-        setOpeningId={setOpeningId}
-        setWorkingGroupId={() => undefined}
-      />
+      <FillWorkingGroupLeadOpening />
     </MockApolloProvider>
   )
 }

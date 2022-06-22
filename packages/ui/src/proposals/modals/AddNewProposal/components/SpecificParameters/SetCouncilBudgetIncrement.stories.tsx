@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import BN from 'bn.js'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
@@ -11,11 +10,9 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [amount, setAmount] = useState<BN>()
-
   return (
     <MockApolloProvider members workingGroups workers>
-      <SetCouncilBudgetIncrement setAmount={setAmount} amount={amount} />
+      <SetCouncilBudgetIncrement />
     </MockApolloProvider>
   )
 }

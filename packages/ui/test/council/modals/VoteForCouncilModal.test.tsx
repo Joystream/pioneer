@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, findByText, fireEvent, queryByText, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -33,6 +34,7 @@ import {
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
+  stubQuery,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
@@ -122,6 +124,16 @@ describe('UI: Vote for Council Modal', () => {
     stubDefaultBalances(api)
     stubCouncilConstants(api, { minStake: 500 })
     tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
+
+    stubQuery(
+      api,
+      'members.stakingAccountIdMemberStatus',
+      createType('StakingAccountMemberBinding', {
+        member_id: 0,
+        confirmed: false,
+      })
+    )
+    stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
   })
 
   describe('Requirements', () => {
@@ -196,7 +208,7 @@ describe('UI: Vote for Council Modal', () => {
     it('Valid fields', async () => {
       renderModal()
 
-      await fillStakeStep(2000)
+      await fillStakeStep(500)
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
     })
@@ -205,11 +217,11 @@ describe('UI: Vote for Council Modal', () => {
   it('Transaction sign', async () => {
     renderModal()
 
-    await fillStakeStep(2000)
+    await fillStakeStep(500)
     fireEvent.click(await getNextStepButton())
 
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
-    expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('2,000')
+    expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500')
     expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
     expect(await getButton('Sign and send')).toBeDefined()
   })
@@ -218,7 +230,7 @@ describe('UI: Vote for Council Modal', () => {
     stubTransactionSuccess(tx, 'referendum', 'VoteCast')
     renderModal()
 
-    await fillStakeStep(2000)
+    await fillStakeStep(500)
     fireEvent.click(await getNextStepButton())
     fireEvent.click(await getButton('Sign and send'))
 
@@ -230,7 +242,7 @@ describe('UI: Vote for Council Modal', () => {
     stubTransactionFailure(tx)
     renderModal()
 
-    await fillStakeStep(2000)
+    await fillStakeStep(500)
     fireEvent.click(await getNextStepButton())
     fireEvent.click(await getButton('Sign and send'))
 

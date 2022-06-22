@@ -1,9 +1,9 @@
-import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { useMachine } from '@xstate/react'
 import React from 'react'
 
 import { Account } from '@/accounts/types'
+import { Api } from '@/api/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -22,7 +22,7 @@ import { changeAccountMachine } from './machine'
 
 const getTransaction = (
   worker: WorkerWithDetails,
-  api: ApiRx,
+  api: Api,
   modalType: ModalTypes,
   selectedAddress: Address
 ): SubmittableExtrinsic<'rxjs'> => {

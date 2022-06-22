@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { CKEditor } from '@/common/components/CKEditor'
+import { BaseCKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { ArrowReplyIcon, CrossIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -104,7 +104,7 @@ interface MemoEditorProps {
 }
 
 const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
-  <CKEditor
+  <BaseCKEditor
     id="newPostEditor"
     ref={editorRef}
     onChange={(_, editor) => setNewText(editor.getData())}

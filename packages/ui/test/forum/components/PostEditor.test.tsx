@@ -16,7 +16,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { stubApi } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 const post: ForumPost = {

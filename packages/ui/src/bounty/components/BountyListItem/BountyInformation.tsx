@@ -12,12 +12,12 @@ interface Props {
   timeToEnd?: number
 }
 
-export const BountyInformations = memo(({ creator, timeToEnd, title }: Props) => {
+export const BountyInformation = memo(({ creator, timeToEnd, title }: Props) => {
   return (
     <Wrapper>
       <TitleContainer>
         {creator && (
-          <TextMedium bold>
+          <TextMedium as="div" bold>
             {creator.handle}
             <AvatarWrapper>
               <MemberInfoAvatar member={creator} avatarUri={creator.avatar} />

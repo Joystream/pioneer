@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import BrokenImg from '@/app/assets/images/BrokenImg.png'
 import DefaultImg from '@/app/assets/images/DefaultImg.png'
 import { BountyDetails } from '@/bounty/components/BountyListItem/BountyDetails'
-import { BountyInformations } from '@/bounty/components/BountyListItem/BountyInformations'
+import { BountyInformation } from '@/bounty/components/BountyListItem/BountyInformation'
 import { BountyRoutes } from '@/bounty/constants'
 import { BountyPeriodColorMapper } from '@/bounty/helpers'
 import { Bounty } from '@/bounty/types/Bounty'
@@ -44,7 +44,7 @@ export const BountyListItem = memo(
           )}
         />
         <Info>
-          <BountyInformations timeToEnd={periodTimeLeft} creator={creator} title={title} />
+          <BountyInformation timeToEnd={periodTimeLeft} creator={creator} title={title} />
           <BountyDetails
             type={period}
             oracle={oracle}

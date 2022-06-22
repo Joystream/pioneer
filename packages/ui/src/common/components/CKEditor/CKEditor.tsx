@@ -1,6 +1,6 @@
 import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
 import React, { Ref, RefObject, useEffect, useRef } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { useMentions } from '@/common/hooks/useMentions'
 
@@ -18,7 +18,7 @@ export interface BaseCKEditorProps {
   inline?: boolean
 }
 
-const BaseCKEditor = React.forwardRef(
+export const BaseCKEditor = React.forwardRef(
   (
     { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
     ref?: Ref<HTMLDivElement>
@@ -88,8 +88,6 @@ const BaseCKEditor = React.forwardRef(
             }
           })
           viewDocument.on('focus', (event: EventInfo) => {
-            const displayData = editor.getData()
-            editor.setData(displayData)
             if (onFocus) {
               onFocus(event, editor)
             }
@@ -112,7 +110,7 @@ const BaseCKEditor = React.forwardRef(
     return (
       <>
         <CKEditorStylesOverrides maxRows={maxRows} minRows={minRows} />
-        <div ref={elementRef} />
+        <div className="ckeditor-anchor" ref={elementRef} />
       </>
     )
   }
@@ -122,22 +120,18 @@ export interface CKEditorProps extends BaseCKEditorProps {
   name?: string
 }
 
-export const CKEditor = React.memo(
-  React.forwardRef(({ name, ...props }: CKEditorProps) => {
-    const formContext = useFormContext()
+export const CKEditor = React.memo(({ name, ...props }: CKEditorProps) => {
+  const formContext = useFormContext()
 
-    if (!formContext || !name) {
-      return <BaseCKEditor {...props} />
-    }
-
-    return (
-      <Controller
-        name={name}
-        control={formContext.control}
-        render={({ field }) => (
-          <BaseCKEditor {...props} onBlur={field.onBlur} onChange={(_, editor) => field.onChange(editor.getData())} />
-        )}
-      />
-    )
-  })
-)
+  if (!formContext || !name) {
+    return <BaseCKEditor {...props} />
+  }
+  const value = formContext.watch(name)
+  return (
+    <BaseCKEditor
+      {...props}
+      onReady={(editor) => editor.setData(value ?? '')}
+      onChange={(_, editor) => formContext.setValue(name, editor.getData(), { shouldValidate: true })}
+    />
+  )
+})

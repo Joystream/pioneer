@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { Children, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost } from '@/common/components/buttons'
@@ -72,7 +72,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
         )}
       </HeaderWrapper>
       <ItemsWrapper ref={wrapperRef} className={className}>
-        {items}
+        {Children.toArray(items)}
       </ItemsWrapper>
     </Wrapper>
   )
@@ -81,7 +81,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
 const Wrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  padding: 10px 8px;
+  padding: 10px 18px;
 `
 
 const HeaderWrapper = styled.div`
@@ -94,7 +94,6 @@ const ItemsWrapper = styled.div`
   display: flex;
   column-gap: 16px;
   flex-wrap: nowrap;
-  overflow-x: hidden;
   height: min-content;
   width: 100%;
   padding: 10px 0;

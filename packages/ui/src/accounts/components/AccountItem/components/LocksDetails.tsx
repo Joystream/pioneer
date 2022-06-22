@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { LockItem } from '@/accounts/components/AccountItem/components/LockItem'
+import { LockItemWrapper } from '@/accounts/components/AccountItem/components/LockItemWrapper'
 import { useIsVoteStakeLocked } from '@/accounts/hooks/useIsVoteStakeLocked'
 import { isRecoverable } from '@/accounts/model/lockTypes'
 import { Balances } from '@/accounts/types'
@@ -28,7 +28,10 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
     return votes?.find((vote) => vote.castBy === address)?.voteFor
   }, [votes])
 
-  const isVoteStakeLocked = !!useIsVoteStakeLocked(candidate, { isElectionFinished: election?.isFinished })
+  const isVoteStakeLocked = !!useIsVoteStakeLocked(candidate, {
+    isLatestElection: !!candidate,
+    isElectionFinished: election?.isFinished,
+  })
 
   if (!balance || !balance.locks.length) {
     return <TextMedium light>No locks found.</TextMedium>
@@ -43,12 +46,12 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
       <RowGapBlock gap={8}>
         {nonRecoverable.length > 0 && <Label>Account Locks:</Label>}
         {nonRecoverable.map((lock, index) => (
-          <LockItem key={index} lock={lock} />
+          <LockItemWrapper key={index} lock={lock} address={address} />
         ))}
 
         {recoverable.length > 0 && <Label>Recoverable Locks:</Label>}
         {recoverable.map((lock, index) => (
-          <LockItem key={index} lock={lock} isRecoverable address={address} />
+          <LockItemWrapper key={index} lock={lock} address={address} isRecoverable />
         ))}
       </RowGapBlock>
     </>

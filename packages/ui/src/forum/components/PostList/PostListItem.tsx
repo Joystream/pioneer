@@ -19,6 +19,8 @@ import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
@@ -52,6 +54,7 @@ export const PostListItem = ({
   isDiscussion,
   repliesToLink,
 }: PostListItemProps) => {
+  const { active } = useMyMemberships()
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postText, setPostText] = useState<string>(text)
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
@@ -85,6 +88,11 @@ export const PostListItem = ({
     setPostLastEditedAt(new Date().toISOString())
   }, [])
 
+  const onReply = (): void => {
+    if (!active) showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+    return replyToPost()
+  }
+
   return (
     <ForumPostBlock ref={ref} isSelected={isSelected} isDiscussion={isDiscussion}>
       <ForumPostStyles>
@@ -114,7 +122,7 @@ export const PostListItem = ({
               onSuccessfulEdit={onSuccessfulEdit}
             />
           ) : (
-            <MarkdownPreview markdown={postText} append={editionTime} size="s" />
+            <MarkdownPreview markdown={postText} append={editionTime} size="m" />
           )}
         </MessageBody>
         <ForumPostRow>
@@ -130,7 +138,7 @@ export const PostListItem = ({
               />
               {isThreadActive && (
                 <>
-                  <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={replyToPost}>
+                  <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={onReply}>
                     <ReplyIcon />
                   </ButtonGhost>
                   <PostContextMenu
@@ -220,7 +228,8 @@ const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDisc
       padding: 24px;
     `};
   scroll-margin: 48px;
-
+  width: 60%;
+  margin: 0 auto;
   // Animate selection:
   &,
   ${Reply} {
