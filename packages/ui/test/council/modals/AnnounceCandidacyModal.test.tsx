@@ -11,6 +11,7 @@ import { interpret } from 'xstate'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import {CurrencyName} from '@/app/constants/currency';
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -188,7 +189,7 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingAmount(2)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, "Minimal stake amount is 10'tJOY'")).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Minimal stake amount is 10'+`'${CurrencyName.integerValue}'`)).toBeInTheDocument()
         })
 
         it('Higher than maximal balance', async () => {

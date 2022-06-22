@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Image from '@/app/assets/images/FMImage.png'
-import { CurrencyName } from '@/app/constants/currency'
 import { ButtonPrimary, ButtonSecondary, ButtonsGroup, CloseButton } from '@/common/components/buttons'
 import { Checkbox } from '@/common/components/forms'
 import { USFlag } from '@/common/components/icons/USFlag'
@@ -28,29 +27,24 @@ export const FMBanner = () => {
             Testnet participants{' '}
             <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/testnet-rewards">earn</StyledLink>{' '}
             a combination of our testnet token{' '}
-            <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/usdtjoy">
-              ${CurrencyName.integerValue}
-            </StyledLink>
-            , and allocation of our mainnet token ${CurrencyName.integerValue} (which will come to life upon mainnet
-            launch).
+            <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/usdtjoy">$tJOY</StyledLink>, and
+            allocation of our mainnet token $JOY (which will come to life upon mainnet launch).
           </TextMedium>
           <TextMedium>
-            ${CurrencyName.integerValue} can be{' '}
-            <StyledLink href="https://www.joystream.org/cashout/">converted</StyledLink> to BCH, (Bitcoin cash
-            cryptocurrency) immediately, whereas ${CurrencyName.integerValue} will be allocated shortly after mainnet
-            launch, assuming the contributor has reached the{' '}
+            $tJOY can be <StyledLink href="https://www.joystream.org/cashout/">converted</StyledLink> to BCH, (Bitcoin
+            cash cryptocurrency) immediately, whereas $JOY will be allocated shortly after mainnet launch, assuming the
+            contributor has reached the{' '}
             <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/founding-member-program#stages">
               Founding Member
             </StyledLink>{' '}
-            status, by accruing $15k USD worth of ${CurrencyName.integerValue}.
+            status, by accruing $15k USD worth of $JOY.
           </TextMedium>
           <TextMedium>
-            ${CurrencyName.integerValue} balances have no relationship to mainnet ${CurrencyName.integerValue} balances,
-            there will be no conversion of any kind.
+            $tJOY balances have no relationship to mainnet $JOY balances, there will be no conversion of any kind.
           </TextMedium>
           <TextMedium>
             <USFlag />
-            US residents are not eligible for {CurrencyName.integerValue} tokens.
+            US residents are not eligible for JOY tokens.
           </TextMedium>
         </TextBox>
         <CloseButton onClick={toggle} />

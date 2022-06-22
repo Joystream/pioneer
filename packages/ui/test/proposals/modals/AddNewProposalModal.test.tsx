@@ -10,6 +10,7 @@ import { interpret } from 'xstate'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import {CurrencyName} from '@/app/constants/currency';
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
@@ -1060,7 +1061,7 @@ describe('UI: AddNewProposalModal', () => {
       })
       describe('Type - Set Initial Invitation Balance', () => {
         beforeAll(() => {
-          stubQuery(api, 'members.initialInvitationBalance', createType('Balance', new BN(2137)))
+          stubQuery(api, 'members.initialInvitationBalance', createType('Balance',2137))
         })
 
         beforeEach(async () => {
@@ -1091,7 +1092,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Displays current balance', async () => {
-          expect(await screen.queryByText('The current balance is 2137 tJOY.')).toBeDefined()
+          expect(await screen.queryByText(`The current balance is 2137 ${CurrencyName.integerValue}.`)).toBeDefined()
         })
       })
       describe('Type - Set Membership price', () => {
