@@ -27,17 +27,21 @@ const useOnBoarding = (): UseOnBoarding => {
   const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
-
+  console.log(isConnected, isLoadingMembers, isLoadingAccounts)
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
   }
-
+  console.log('after')
   if (totalBalance.gtn(0)) {
     return { isLoading: false, status: 'finished' }
   }
 
-  if (accountsError === 'EXTENSION') {
+  if (accountsError === 'NO_EXTENSION') {
     return { isLoading: false, status: 'installPlugin' }
+  }
+
+  if (accountsError === 'ENABLE_EXTENSION') {
+    return { isLoading: false, status: 'enableExtension' }
   }
 
   if (!hasMembers && (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount))) {

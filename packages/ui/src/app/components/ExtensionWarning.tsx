@@ -10,7 +10,7 @@ export function ExtensionWarning() {
   const [showNotification, setShowNotification] = useState(false)
 
   useEffect(() => {
-    if (error === 'EXTENSION') {
+    if (error === 'NO_EXTENSION') {
       setShowNotification(true)
     }
   }, [error])
@@ -27,8 +27,8 @@ export function ExtensionWarning() {
     return (
       <SideNotification
         onClick={() => setShowNotification(false)}
-        title={'Extension unavailable'}
-        message={'You need a Polkadot.js extension to use this site.'}
+        title="Extension unavailable"
+        message="You need a Polkadot ecosystem extension to use this site."
         isError
       />
     )

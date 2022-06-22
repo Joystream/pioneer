@@ -13,13 +13,14 @@ import { Account } from '../../types'
 
 import { AccountsContext } from './context'
 
-type Error = 'EXTENSION'
+type ExtensionError = 'NO_EXTENSION' | 'ENABLE_EXTENSION'
 
 export interface UseAccounts {
   allAccounts: Account[]
   hasAccounts: boolean
   isLoading: boolean
-  error?: Error
+  error?: ExtensionError
+  setWallet?: (wallet: string) => void
 }
 
 interface Props {
@@ -37,14 +38,20 @@ function isKeyringLoaded(keyring: Keyring) {
 const loadKeysFromExtension = async (
   keyring: Keyring,
   selectedExtension: string,
-  onInitializationFailure: () => void
+  onInitializationFailure: (error?: Error) => void
 ) => {
   const wallet = getWalletBySource(selectedExtension)
-  if (!wallet?.installed) {
-    return onInitializationFailure()
+
+  if (!wallet) return
+  try {
+    await wallet.enable('Pioneer')
+  } catch (e) {
+    return onInitializationFailure(e as Error)
   }
 
-  await wallet.enable('Pioneer')
+  if (!wallet.extension) {
+    return onInitializationFailure()
+  }
 
   const injectedAccounts = await wallet.getAccounts()
 
@@ -79,7 +86,7 @@ const onExtensionLoaded = (onSuccess: (selectedExtension?: string) => void, onFa
     const extensionsKeys = Object.keys((window as any)?.injectedWeb3 ?? {})
     if (extensionsKeys.length) {
       clearInterval(intervalId)
-      onSuccess(extensionsKeys.length === 1 ? extensionsKeys[0] : undefined)
+      onSuccess(undefined)
     } else {
       timeElapsed += interval
       if (timeElapsed >= timeout) {
@@ -115,10 +122,16 @@ export const AccountsContextProvider = (props: Props) => {
       return
     }
 
-    loadKeysFromExtension(keyring, selectedWallet, () => {
-      setFailedWallet((prev) => [...prev, selectedWallet])
+    loadKeysFromExtension(keyring, selectedWallet, (error) => {
       setSelectedWallet(undefined)
-    }).catch(error)
+      if (error?.message.includes('not allowed to interact')) {
+      }
+    }).catch((error: Error) => {
+      setSelectedWallet(undefined)
+
+      if (error?.message.includes('not allowed to interact')) {
+      }
+    })
   }, [isExtensionLoaded, selectedWallet])
 
   const accounts = useObservable(
@@ -143,23 +156,33 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value: UseAccounts = { allAccounts, hasAccounts, isLoading: !isExtensionLoaded || !accounts }
+  const value: UseAccounts = {
+    allAccounts,
+    hasAccounts,
+    isLoading: !isExtensionLoaded || !accounts,
+    setWallet: setSelectedWallet,
+  }
 
   if (extensionUnavailable) {
-    value.error = 'EXTENSION'
+    value.error = 'NO_EXTENSION'
+    value.isLoading = false
+  }
+
+  if (isExtensionLoaded && !selectedWallet) {
+    value.error = 'ENABLE_EXTENSION'
     value.isLoading = false
   }
 
   return (
     <AccountsContext.Provider value={value}>
-      {!selectedWallet && isExtensionLoaded && (
-        <SelectWalletModal
-          availableWallets={Object.keys((window as any).injectedWeb3).filter(
-            (wallet) => !failedWallet.includes(wallet)
-          )}
-          onWalletSelect={(wallet) => setSelectedWallet(wallet)}
-        />
-      )}
+      {/*{!selectedWallet && isExtensionLoaded && (*/}
+      {/*  <SelectWalletModal*/}
+      {/*    availableWallets={Object.keys((window as any).injectedWeb3).filter(*/}
+      {/*      (wallet) => !failedWallet.includes(wallet)*/}
+      {/*    )}*/}
+      {/*    onWalletSelect={(wallet) => setSelectedWallet(wallet)}*/}
+      {/*  />*/}
+      {/*)}*/}
       {props.children}
     </AccountsContext.Provider>
   )

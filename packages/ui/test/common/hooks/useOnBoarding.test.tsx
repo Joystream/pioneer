@@ -67,7 +67,7 @@ describe('useOnBoarding', () => {
       })
 
       it('Install plugin', async () => {
-        useMyAccounts.error = 'EXTENSION'
+        useMyAccounts.error = 'NO_EXTENSION'
 
         const { isLoading, status } = await renderUseOnBoarding()
 

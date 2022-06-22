@@ -20,17 +20,17 @@ import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
   {
-    title: 'Add Polkadot plugin',
+    title: 'Select Wallet',
     type: 'next',
-    id: 'installPlugin',
+    id: ['installPlugin', 'enableExtension'],
   },
   {
-    title: 'Connect a Polkadot account',
+    title: 'Create or select account',
     type: 'next',
     id: 'addAccount',
   },
   {
-    title: 'Create membership for FREE',
+    title: 'Create membership',
     type: 'next',
     id: 'createMembership',
   },
@@ -38,8 +38,7 @@ export const onBoardingSteps: StepperStep[] = [
 
 const innerStaticStepperSteps = [
   {
-    title: 'Install Polkadot extension',
-    subtitle: ['and create account', 'then connect it to your joystream membership'],
+    title: 'Install Wallet extension',
   },
   {
     title: 'Create or select a Polkadot account',
@@ -50,7 +49,9 @@ const innerStaticStepperSteps = [
 ]
 
 export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
-  const activeIndex = steps.findIndex((step) => step?.id === status)
+  const activeIndex = steps.findIndex((step) =>
+    typeof step?.id === 'string' ? step.id === status : step.id?.includes(status)
+  )
   if (activeIndex === -1) return steps.map((step) => ({ ...step, type: 'next' }))
 
   return steps.map((step, index) => {
@@ -67,6 +68,7 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 export const OnBoardingOverlay = () => {
   const { showModal } = useModal<OnBoardingModalCall>()
   const { isLoading, status } = useOnBoarding()
+  console.log(status, ' onb')
   const [isOpen, toggle] = useToggle()
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })

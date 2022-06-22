@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
@@ -7,6 +7,7 @@ import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
 import { ModalFooter, ResultText, ScrolledModal } from '@/common/components/Modal'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -19,21 +20,23 @@ import { onBoardingMachine } from '@/common/modals/OnBoardingModal/machine'
 import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
-import { SetMembershipAccount } from '@/common/providers/onboarding/types'
+import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
-  const { isLoading, status, membershipAccount, setMembershipAccount } = useOnBoarding()
+  const { status, membershipAccount, setMembershipAccount } = useOnBoarding()
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
   const [endpoints] = useNetworkEndpoints()
+  const statusRef = useRef<OnBoardingStatus>()
 
   const step = useMemo(() => {
-    switch (status) {
+    switch (status ?? statusRef.current) {
       case 'installPlugin':
+      case 'enableExtension':
         return <OnBoardingPlugin />
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setMembershipAccount} />
@@ -88,6 +91,12 @@ export const OnBoardingModal = () => {
   }, [endpoints.membershipFaucetEndpoint, JSON.stringify(state)])
 
   useEffect(() => {
+    if (status) {
+      statusRef.current = status
+    }
+  }, [status])
+
+  useEffect(() => {
     if (membershipData?.blockHash && transactionStatus === 'confirmed') {
       send('SUCCESS')
     }
@@ -108,7 +117,7 @@ export const OnBoardingModal = () => {
     )
   }
 
-  if (isLoading || !status || status === 'finished') {
+  if (!statusRef.current || status === 'finished') {
     return null
   }
 
@@ -124,7 +133,7 @@ export const OnBoardingModal = () => {
   return (
     <StyledModal onClose={hideModal} modalSize="l" modalHeight="m">
       <StepperWrapper>
-        <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status)} />
+        <HorizontalStepper steps={asOnBoardingSteps(onBoardingSteps, status ?? statusRef.current)} />
         <StyledCloseButton onClick={hideModal} />
       </StepperWrapper>
       {step}
@@ -132,10 +141,13 @@ export const OnBoardingModal = () => {
   )
 }
 
-export const OnBoardingTextFooter = ({ text }: { text: string }) => (
+export const OnBoardingTextFooter = ({ text, button }: { text: string; button?: React.ReactNode }) => (
   <OnBoardingTextFooterWrapper>
-    <WarningIcon />
-    <TextMedium>{text}</TextMedium>
+    <ColumnGapBlock gap={5}>
+      <WarningIcon />
+      <TextMedium>{text}</TextMedium>
+    </ColumnGapBlock>
+    {button}
   </OnBoardingTextFooterWrapper>
 )
 
@@ -165,6 +177,6 @@ const OnBoardingTextFooterWrapper = styled(ModalFooter)`
   display: flex;
   grid-column-gap: 5px;
   justify-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: ${Colors.Black[100]};
 `

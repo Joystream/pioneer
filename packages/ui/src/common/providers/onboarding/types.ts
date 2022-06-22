@@ -1,4 +1,4 @@
-export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'createMembership' | 'finished'
+export type OnBoardingStatus = 'installPlugin' | 'addAccount' | 'createMembership' | 'finished' | 'enableExtension'
 export type SetMembershipAccount = (value: string | undefined) => void
 
 export interface UseOnBoarding {

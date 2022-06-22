@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -8,31 +8,56 @@ import { ScrolledModalBody } from '@/common/components/Modal'
 import { TextExtraHuge, TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoardingModal'
+import { List, ListItem } from '@/common/components/List'
+import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
+import { getAllWallets, Wallet } from 'injectweb3-connect'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 
 export const OnBoardingPlugin = () => {
-  const openLink = useCallback(() => {
-    window.open('https://polkadot.js.org/extension/', '_blank')
-  }, [])
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
+  const { setWallet } = useMyAccounts()
+  const handleClick = useCallback(() => {
+    if (!selectedWallet?.installed && selectedWallet?.installUrl) {
+      window.open(selectedWallet.installUrl, '_blank')
+    } else if (selectedWallet?.installed) {
+      setWallet?.(selectedWallet.extensionName)
+    }
+  }, [selectedWallet])
 
   return (
     <>
       <ScrolledModalBody>
         <Wrapper>
-          <TextMedium lighter>
-            Connect your Polkadot.js plugin with Joystream and then create your membership to partake and vote for
-            council elections, create proposals, participate in bounties, forum discussions, and many other features.
-            The plugin is available on Firefox and Chrome.
-          </TextMedium>
-          <PolkadotIcon />
-          <TextExtraHuge bold>Install Polkadot plugin</TextExtraHuge>
-          <TextSmall>Please enable Polkadot extension or install it using following plugin link.</TextSmall>
-          <ButtonPrimary onClick={openLink} size="large">
-            <LinkSymbol />
-            Install extension
-          </ButtonPrimary>
+          <TextExtraHuge bold>Select Wallet</TextExtraHuge>
+          <TextSmall>Select which wallet you want to use to connect with.</TextSmall>
+          <List>
+            <ListItem>
+              {getAllWallets().map((wallet) => (
+                <ConnectWalletItem
+                  wallet={wallet}
+                  onClick={() => setSelectedWallet(wallet)}
+                  selected={selectedWallet?.extensionName === wallet.extensionName}
+                />
+              ))}
+            </ListItem>
+          </List>
         </Wrapper>
       </ScrolledModalBody>
-      <OnBoardingTextFooter text="Please reload the page after installing the plugin!" />
+      <OnBoardingTextFooter
+        text="Please reload the page after installing the plugin!"
+        button={
+          <StyledButton disabled={!selectedWallet} onClick={handleClick} size="large">
+            {selectedWallet?.installed ? (
+              'Select Wallet'
+            ) : (
+              <>
+                <LinkSymbol />
+                Install extension
+              </>
+            )}
+          </StyledButton>
+        }
+      />
     </>
   )
 }
@@ -41,6 +66,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
   width: 100%;
   max-width: 640px;
   height: 100%;
@@ -48,25 +74,13 @@ const Wrapper = styled.div`
   padding: 36px 0 24px;
   text-align: center;
 
-  > *:first-child {
-    margin-bottom: 52px;
-  }
-
   > *:nth-child(2) {
-    margin-bottom: 10px;
+    color: ${Colors.Black[400]};
   }
+`
 
-  > *:nth-child(4) {
-    color: ${Colors.Black[500]};
-    max-width: 250px;
-    text-align: center;
-    margin-top: 8px;
-    margin-bottom: 30px;
-  }
-
-  > button {
-    path {
-      fill: ${Colors.White} !important;
-    }
+const StyledButton = styled(ButtonPrimary)`
+  path {
+    fill: ${Colors.White} !important;
   }
 `
