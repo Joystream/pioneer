@@ -37,9 +37,7 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
         <RowGapBlock gap={4}>
           <Label>Voting period</Label>
           <TextMedium lighter>
-            <TextInlineHuge dark value bold>
-              {formatTokenValue(constants?.election.votingPeriod)}
-            </TextInlineHuge>{' '}
+            <TokenValue value={constants?.election.minCandidacyStake} />
             blocks
           </TextMedium>
         </RowGapBlock>

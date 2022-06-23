@@ -63,7 +63,7 @@ Default.args = {
     [bob.address]: balanceMock(),
     [bobStash.address]: balanceMock(),
   },
-  requiredStake: 1000,
+  requiredStake: new BN(1000),
   onClose: () => undefined,
   onManageAccountsClick: () => undefined,
 }

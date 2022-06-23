@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -14,7 +15,7 @@ import { ModalBody } from './styles'
 export interface MoveFoundsLockedModalProps {
   onClose: () => void
   onManageAccountsClick: () => void
-  requiredStake: number
+  requiredStake: BN
   balances: AddressToBalanceMap
 }
 

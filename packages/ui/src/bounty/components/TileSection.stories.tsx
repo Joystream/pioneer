@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -55,11 +56,11 @@ const firstRow = [
 const secondRow = [
   {
     title: 'Funded',
-    content: <TokenValue value={9999} size="l" />,
+    content: <TokenValue value={new BN(9999)} size="l" />,
   },
   {
     title: 'Cherry',
-    content: <TokenValue value={9999} size="l" />,
+    content: <TokenValue value={new BN(9999)} size="l" />,
   },
   {
     title: 'Works',

@@ -80,7 +80,7 @@ export const WinnersSelection = ({
             />
             <RowGapBlock gap={5}>
               <TextSmall light>{t('modals.submitJudgement.progressBar.totalReward')}</TextSmall>
-              <TokenValue size="s" value={bountyFunding.toNumber()} />
+              <TokenValue size="s" value={bountyFunding} />
             </RowGapBlock>
             <ButtonGhost size="small" onClick={handleEqualDistribution}>
               {t('modals.submitJudgement.progressBar.distributeEqually')}

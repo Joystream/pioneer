@@ -6,6 +6,7 @@ import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 import members from '@/mocks/data/raw/members.json'
+import BN from 'bn.js';
 
 const alice = members[0]
 
@@ -41,11 +42,11 @@ describe('TileSection', () => {
   const secondRow = [
     {
       title: 'Funded',
-      content: <TokenValue value={9999} size="l" />,
+      content: <TokenValue value={new BN(9999)} size="l" />,
     },
     {
       title: 'Cherry',
-      content: <TokenValue value={9999} size="l" />,
+      content: <TokenValue value={new BN(9999)} size="l" />,
     },
     {
       title: 'Works',
