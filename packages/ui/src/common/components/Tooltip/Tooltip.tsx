@@ -11,6 +11,7 @@ import { DefaultTooltip } from './TooltipDefault'
 
 export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 'position'> {
   absolute?: boolean
+  maxWidth?: boolean
   children: React.ReactNode
 }
 
@@ -35,6 +36,7 @@ export interface DarkTooltipInnerItemProps {
 
 export const Tooltip = ({
   absolute,
+  maxWidth,
   children,
   tooltipText,
   tooltipOpen = false,
@@ -92,8 +94,8 @@ export const Tooltip = ({
     tooltipLinkURL && (tooltipLinkURL.startsWith('http://') || tooltipLinkURL.startsWith('https://'))
 
   return (
-    <TooltipContainer absolute={absolute}>
-      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0}>
+    <TooltipContainer absolute={absolute} maxWidth={maxWidth}>
+      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0} maxWidth={maxWidth}>
         {children}
       </TooltipComponent>
       {isTooltipActive &&
@@ -301,7 +303,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
   }
 `
 
-export const TooltipComponent = styled.i`
+export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -311,6 +313,7 @@ export const TooltipComponent = styled.i`
   font-style: normal;
   background-color: transparent;
   padding: 0;
+  width: ${({ maxWidth }) => (maxWidth ? '100%' : 'initial')};
 
   &:hover,
   &:focus {
@@ -322,13 +325,13 @@ export const TooltipComponent = styled.i`
   }
 `
 
-export const TooltipContainer = styled.div<{ absolute?: boolean }>`
+export const TooltipContainer = styled.div<{ absolute?: boolean; maxWidth?: boolean }>`
   display: flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
   justify-content: center;
   align-items: center;
-  width: fit-content;
+  width: ${({ maxWidth }) => (maxWidth ? '100%' : 'fit-content')};
   height: fit-content;
   text-transform: none;
 `

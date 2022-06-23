@@ -89,7 +89,11 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
     return <LocksList>{texts}</LocksList>
   }, [JSON.stringify(locks)])
 
-  return <Tooltip tooltipText={tooltipTexts}>{children}</Tooltip>
+  return (
+    <Tooltip tooltipText={tooltipTexts} maxWidth>
+      {children}
+    </Tooltip>
+  )
 }
 
 const LinkText = styled(TextInlineMedium)`
