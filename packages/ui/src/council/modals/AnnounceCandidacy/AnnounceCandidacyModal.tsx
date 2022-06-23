@@ -86,7 +86,7 @@ export const AnnounceCandidacyModal = () => {
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
+  const { hasRequiredStake } = useHasRequiredStake(
     constants?.election.minCandidacyStake.toNumber() || 0,
     'Council Candidate'
   )
@@ -239,9 +239,7 @@ export const AnnounceCandidacyModal = () => {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        accountsWithCompatibleLocks,
-        accountsWithTransferableBalance,
-        requiredStake: (constants?.election.minCandidacyStake as BN).toNumber(),
+        requiredStake: constants?.election.minCandidacyStake as BN,
         lock: 'Council Candidate',
       },
     })

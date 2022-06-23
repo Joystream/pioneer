@@ -61,11 +61,8 @@ export const ApplyForRoleModal = () => {
   const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
 
   const opening = modalData.opening
-  const requiredStake = opening.stake.toNumber()
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    requiredStake,
-    groupToLockId(opening.groupId)
-  )
+  const requiredStake = opening.stake
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake.toNumber(), groupToLockId(opening.groupId))
 
   const schema = useMemo(() => {
     if (questions.length) {
@@ -130,8 +127,6 @@ export const ApplyForRoleModal = () => {
       showModal<MoveFundsModalCall>({
         modal: 'MoveFundsModal',
         data: {
-          accountsWithCompatibleLocks,
-          accountsWithTransferableBalance,
           requiredStake,
           lock: 'Forum Worker',
         },

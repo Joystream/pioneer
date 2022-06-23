@@ -7,10 +7,9 @@ import * as Yup from 'yup'
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
@@ -61,7 +60,6 @@ export const AnnounceWorkEntryModal = () => {
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const balances = useMyBalances()
   const amount = bounty.entrantStake
   const [state, send] = useMachine(announceWorkEntryMachine)
   const balance = useBalance(state.context.stakingAccount?.address)
@@ -150,13 +148,15 @@ export const AnnounceWorkEntryModal = () => {
   }
 
   if (state.matches(AnnounceWorkEntryStates.requirementsFailed)) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={fee.transactionFee}
-      />
-    )
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake: amount,
+        lock: 'Bounties',
+      },
+    })
+
+    return null
   }
 
   if (state.matches(AnnounceWorkEntryStates.success)) {

@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -29,12 +30,9 @@ export const VoteForCouncilModal = () => {
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
-  const requiredStake = minStake?.toNumber() ?? 0
+  const requiredStake = minStake as BN
 
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    requiredStake,
-    'Voting'
-  )
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake?.toNumber(), 'Voting')
 
   const transaction = useMemo(() => api?.tx.referendum.vote('', requiredStake), [requiredStake])
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
@@ -51,8 +49,6 @@ export const VoteForCouncilModal = () => {
         })
       } else if (!hasRequiredStake) {
         const data = {
-          accountsWithCompatibleLocks,
-          accountsWithTransferableBalance,
           requiredStake,
           lock: 'Voting' as LockType,
         }
