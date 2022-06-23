@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -64,6 +65,7 @@ export const AnnounceWorkEntryModal = () => {
   const [state, send] = useMachine(announceWorkEntryMachine)
   const balance = useBalance(state.context.stakingAccount?.address)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const { hasRequiredStake } = useHasRequiredStake(amount.toNumber() || 0, 'Bounties')
 
   const { setContext, errors, isValid } = useSchema<IStakingAccountSchema>(
     { account: state.context.stakingAccount },
@@ -100,7 +102,6 @@ export const AnnounceWorkEntryModal = () => {
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
-
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
       if (!activeMember) {
@@ -112,20 +113,16 @@ export const AnnounceWorkEntryModal = () => {
           },
         })
       }
-
-      if (fee && fee?.canAfford) {
-        nextStep()
-      }
-
-      if (fee && !fee?.canAfford) {
-        send('FAIL')
+      if (fee) {
+        const areFundsSufficient = fee.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
     }
 
     if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
       fee?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee)])
+  }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee), hasRequiredStake])
 
   if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
     return (
