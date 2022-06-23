@@ -9,13 +9,14 @@ import { OptionAccount } from './OptionAccount'
 interface Props {
   options: AccountOption[]
   onChange: (option: AccountOption) => void
+  className?: string
 }
 
-export const OptionListAccount = React.memo(({ options, onChange }: Props) => {
+export const OptionListAccount = React.memo(({ options, onChange, className }: Props) => {
   const freeAccounts = options.filter((option) => (option.optionLocks ? option.optionLocks?.length === 0 : true))
   const lockedAccounts = options.filter((option) => !!option.optionLocks?.length)
   return (
-    <OptionsListComponent>
+    <OptionsListComponent className={className}>
       {freeAccounts.map((option) => (
         <Option key={option.address} onClick={() => onChange && onChange(option)}>
           <OptionAccount option={option} />
