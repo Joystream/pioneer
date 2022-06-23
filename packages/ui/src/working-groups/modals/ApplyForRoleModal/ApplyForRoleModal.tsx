@@ -10,7 +10,6 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -62,6 +61,7 @@ export const ApplyForRoleModal = () => {
 
   const opening = modalData.opening
   const requiredStake = opening.stake
+
   const { hasRequiredStake } = useHasRequiredStake(requiredStake.toNumber(), groupToLockId(opening.groupId))
 
   const schema = useMemo(() => {
@@ -119,39 +119,20 @@ export const ApplyForRoleModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
-    if (!state.matches('requirementsVerification')) {
-      return
-    }
-
-    if (!hasRequiredStake) {
-      showModal<MoveFundsModalCall>({
-        modal: 'MoveFundsModal',
-        data: {
-          requiredStake,
-          lock: 'Forum Worker',
-        },
-      })
-
-      return
-    }
-
-    if (activeMember && feeInfo?.canAfford) {
-      send('PASS')
-      return
-    }
-
-    if (!activeMember && hasRequiredStake) {
-      showModal<SwitchMemberModalCall>({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: 'ApplyForRoleModal',
-          originalModalData: modalData,
-        },
-      })
-    }
-
-    if (feeInfo && !feeInfo.canAfford) {
-      send('FAIL')
+    if (state.matches('requirementsVerification')) {
+      if (!activeMember) {
+        showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'ApplyForRoleModal',
+            originalModalData: modalData,
+          },
+        })
+      }
+      if (feeInfo) {
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'PASS' : 'FAIL')
+      }
     }
   }, [state.value, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
@@ -161,18 +142,20 @@ export const ApplyForRoleModal = () => {
     }
   }, [state, stakingStatus])
 
-  if (!activeMember || !feeInfo || !hasRequiredStake) {
+  if (!activeMember || !feeInfo) {
     return null
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake,
+        lock: 'Forum Worker',
+      },
+    })
+
+    return null
   }
 
   const bindStakingAccountService = state.children.bindStakingAccount
