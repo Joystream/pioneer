@@ -23,6 +23,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
+import { SelectWalletModal, SelectWalletModalCall } from '@/common/modals/SelectWalletModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
@@ -100,6 +101,7 @@ export type ModalNames =
   | ModalName<SubmitJudgementModalCall>
   | ModalName<BountyWithdrawWorkEntryModalCall>
   | ModalName<SignOutModalCall>
+  | ModalName<SelectWalletModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -143,6 +145,7 @@ const modals: Record<ModalNames, ReactElement> = {
   WithdrawStakeModal: <WithdrawStakeModal />,
   SubmitJudgementModal: <SubmitJudgementModal />,
   SignOut: <SignOutModal />,
+  SelectWalletModal: <SelectWalletModal />,
 }
 
 export const GlobalModals = () => {
