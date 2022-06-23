@@ -22,7 +22,7 @@ export const onBoardingSteps: StepperStep[] = [
   {
     title: 'Select Wallet',
     type: 'next',
-    id: ['installPlugin', 'enableExtension'],
+    id: 'installPlugin',
   },
   {
     title: 'Create or select account',
@@ -49,9 +49,7 @@ const innerStaticStepperSteps = [
 ]
 
 export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
-  const activeIndex = steps.findIndex((step) =>
-    typeof step?.id === 'string' ? step.id === status : step.id?.includes(status)
-  )
+  const activeIndex = steps.findIndex((step) => step.id === status)
   if (activeIndex === -1) return steps.map((step) => ({ ...step, type: 'next' }))
 
   return steps.map((step, index) => {
@@ -68,8 +66,8 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 export const OnBoardingOverlay = () => {
   const { showModal } = useModal<OnBoardingModalCall>()
   const { isLoading, status } = useOnBoarding()
-  console.log(status, ' onb')
   const [isOpen, toggle] = useToggle()
+
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
   }, [])

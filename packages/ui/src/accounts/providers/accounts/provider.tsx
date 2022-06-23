@@ -1,6 +1,6 @@
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
-import { Wallet } from 'injectweb3-connect'
+import { getWalletBySource, Wallet } from 'injectweb3-connect'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
@@ -94,7 +94,10 @@ export const AccountsContextProvider = (props: Props) => {
       (possibleExtension) => {
         setIsExtensionLoaded(true)
 
-        // setSelectedWallet(possibleExtension)
+        if (possibleExtension) {
+          const possibleWallet = getWalletBySource(possibleExtension)
+          setSelectedWallet(possibleWallet)
+        }
       },
       () => setExtensionError('NO_EXTENSION')
     ),
@@ -151,17 +154,5 @@ export const AccountsContextProvider = (props: Props) => {
     value.isLoading = false
   }
 
-  return (
-    <AccountsContext.Provider value={value}>
-      {/*{!selectedWallet && isExtensionLoaded && (*/}
-      {/*  <SelectWalletModal*/}
-      {/*    availableWallets={Object.keys((window as any).injectedWeb3).filter(*/}
-      {/*      (wallet) => !failedWallet.includes(wallet)*/}
-      {/*    )}*/}
-      {/*    onWalletSelect={(wallet) => setSelectedWallet(wallet)}*/}
-      {/*  />*/}
-      {/*)}*/}
-      {props.children}
-    </AccountsContext.Provider>
-  )
+  return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>
 }

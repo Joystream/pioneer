@@ -101,7 +101,7 @@ const StyledButton = styled(ButtonPrimary)`
   }
 `
 
-const RedBox = styled.div`
+export const RedBox = styled.div`
   display: grid;
   width: 90%;
   gap: 5px;

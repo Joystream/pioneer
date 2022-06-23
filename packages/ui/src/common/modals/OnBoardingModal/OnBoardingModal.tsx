@@ -36,7 +36,6 @@ export const OnBoardingModal = () => {
   const step = useMemo(() => {
     switch (status ?? statusRef.current) {
       case 'installPlugin':
-      case 'enableExtension':
         return <OnBoardingPlugin />
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setMembershipAccount} />

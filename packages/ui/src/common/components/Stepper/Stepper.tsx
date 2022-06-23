@@ -40,7 +40,7 @@ export const Stepper = ({ steps, theme = 'dark' }: StepperProps) => {
           key={index}
           theme={StepperTheme[theme]}
           {...step}
-          id={typeof step.id === 'object' ? step.id[0] : step.id}
+          id={step.id}
         >
           <StepNumber>
             <StepNumberText value>{getStepFace(step)}</StepNumberText>
