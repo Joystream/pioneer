@@ -4,7 +4,7 @@ import { ActorRef, State, Subscription } from 'xstate'
 
 import { TransactionContext as TxContext, TransactionEvent, TransactionStateValue } from '@/common/model/machines'
 
-import { TransactionContext } from './context'
+import { TransactionStatusContext } from './context'
 
 interface Props {
   children: ReactNode
@@ -16,7 +16,7 @@ const getIsPendingStatus = (status: TransactionStateValue | null): boolean => {
   return !!status && PENDING_STATUS.includes(status)
 }
 
-export const TransactionContextProvider = ({ children }: Props) => {
+export const TransactionStatusProvider = ({ children }: Props) => {
   const [transactionService, setService] = useState<ActorRef<TransactionEvent, State<TxContext>> | null>(null)
   const [status, setStatus] = useState<TransactionStateValue | null>(null)
   const [transactionEvents, setTransactionEvents] = useState<EventRecord[] | null>(null)
@@ -37,7 +37,7 @@ export const TransactionContextProvider = ({ children }: Props) => {
   }, [transactionService])
 
   return (
-    <TransactionContext.Provider
+    <TransactionStatusContext.Provider
       value={{
         isTransactionPending: getIsPendingStatus(status),
         transactionEvents,
@@ -47,6 +47,6 @@ export const TransactionContextProvider = ({ children }: Props) => {
       }}
     >
       {children}
-    </TransactionContext.Provider>
+    </TransactionStatusContext.Provider>
   )
 }
